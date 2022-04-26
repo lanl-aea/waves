@@ -1,0 +1,33 @@
+.. _build:
+
+********************
+Activate Environment
+********************
+
+.. include:: ../README.rst
+   :start-after: env-start-do-not-remove
+   :end-before: env-end-do-not-remove
+
+*****************
+Configure Project
+*****************
+
+.. include:: ../README.rst
+   :start-after: config-start-do-not-remove
+   :end-before: config-end-do-not-remove
+
+*****
+Build
+*****
+
+.. include:: ../README.rst
+   :start-after: build-start-do-not-remove
+   :end-before: build-end-do-not-remove
+
+****
+Test
+****
+
+.. include:: ../README.rst
+   :start-after: test-start-do-not-remove
+   :end-before: test-end-do-not-remove
