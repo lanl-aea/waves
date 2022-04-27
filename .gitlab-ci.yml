@@ -43,6 +43,8 @@ environment:
     - export HTTPS_PROXY=$HTTP_PROXY
     # Re-build the Conda environment on changes to environment files
     - conda create --prefix ${environment_path} --file environment.yml ${conda_options}
+    # Remove write permissions from group to avoid accidental environment changes
+    - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
     - cp ${PWD}/modulefiles/* ${aea_modulefiles}
   only:
