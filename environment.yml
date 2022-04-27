@@ -1,0 +1,6 @@
+scons
+sphinx
+setuptools
+sphinxcontrib-bibtex
+sphinx-argparse
+sphinx_rtd_theme
