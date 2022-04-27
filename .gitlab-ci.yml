@@ -1,0 +1,56 @@
+workflow:
+  rules:  # Do not create pipelines for tag updates
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: always
+
+before_script:
+  # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
+  - aea_projects='/projects'
+  - aea_deploy_directory="${aea_projects}/python"
+  - aea_modulefiles=${aea_deploy_directory}/modulefiles
+  - environment='scons-simulation-env'
+  - environment_path="${aea_deploy_directory}/${environment}"
+  - conda_options='--yes --channel conda-forge'
+  # Activate the project specific environment from the project specific modulefile
+  - module use ${PWD}/modulefiles
+  - module load ${environment}
+  # Build the Conda environment if it's missing
+  # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
+  - |
+      if [[ ! -d ${environment_path} ]]; then
+          export ALL_PROXY="proxyout.lanl.gov:8080"
+          export HTTP_PROXY="http://$ALL_PROXY"
+          export HTTPS_PROXY=$HTTP_PROXY
+          conda create --prefix ${environment_path} --file environment.yml ${conda_options};
+          unset ALL_PROXY
+          unset HTTP_PROXY
+          unset HTTPS_PROXY
+      fi
+
+stages:
+  - environment
+  - build
+  - deploy
+
+environment:
+  stage: environment
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Re-build the Conda environment on changes to environment files
+    - conda create --prefix ${environment_path} --file environment.yml ${conda_options}
+    # place the common modulefiles in an accessible location
+    - cp ${PWD}/modulefiles/* ${aea_modulefiles}
+  only:
+    refs:
+      - main
+      - dev
+    changes:
+      - "modulefiles/*"
+      - "environment.yml"
+  tags:
+    - sstelmo-shell-aea
