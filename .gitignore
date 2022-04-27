@@ -1,0 +1,29 @@
+# Project files
+build/
+*.tar.bz2
+
+# Temp files
+*.swp
+
+# Abaqus output files
+*.com
+*.dat
+*.msg
+*.odb
+*.prt
+*.sim
+*.sta
+*.rpy*
+*.cae
+*.jnl
+
+# parameter study utility output templates
+parameter_study_meta.txt
+
+# Sphinx/Python
+__pycache__/
+test_results.xml
+conda-bld/
+
+# MacOSX
+.DS_Store
