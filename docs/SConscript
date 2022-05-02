@@ -24,6 +24,8 @@ documentation_file_list = [
 
 # TODO: Find the sphinx-build program with scons
 # TODO: os agnostic pathsep for the html directory
-env.Command(target=['documentation', 'html/index.html'],
-            source=documentation_file_list,
-            action="sphinx-build -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
+sphinx_build = env.Command(
+    target=['documentation', 'html/index.html'],
+    source=documentation_file_list,
+    action="sphinx-build -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
+Clean(sphinx_build, 'html/')
