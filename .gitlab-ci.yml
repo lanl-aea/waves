@@ -56,3 +56,49 @@ environment:
       - "environment.yml"
   tags:
     - sstelmo-shell-aea
+
+# It MUST be called pages
+pages:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - rm -rf public && mkdir -p public
+    - cp docs/_static/index.html public
+    # FIXME: (1) Without setting this to false, Git webserver API calls to re-git.lanl.gov will throw errors about
+    # self-signed certificates. Work on CI server and Gitlab webserver configurations so that this is no longer
+    # necessary. There is a matching "FIXME: (1)" tag where the process is reversed that must also be removed when this
+    # is fixed.
+    - git config --local http.sslVerify false
+    # Every documentation version must be re-built for *every* gitlab-pages job execution
+    # Reference: https://gitlab.com/gitlab-org/gitlab/-/issues/33822
+    - git fetch origin
+    - git branch -a
+    # TODO: add back "main dev" after main is updated with the documentation files
+    - documentation_branches="dev"
+    - |
+        for ref in ${documentation_branches}; do
+            # TODO: match the branch to the correct module. unload/load for each branch.
+            git checkout $ref
+            git reset --hard origin/$ref
+            mkdir -p public/$ref
+            # Clean old build directory
+            rm -rf build/ || true
+            # Build documentation 
+            # TODO: limit build to documentation
+            scons
+            # Copy documentation to the pages artifact directory
+            cp -r build/docs/html/* public/$ref
+        done
+    # FIXME: (1) Reset the repository Git configuration to preserve ssl verifications. Remove when the server(s)
+    # configurations no longer require us to drop ssl verifications.
+    - git config --local http.sslVerify true
+  artifacts:
+    paths:
+      # It MUST be called public
+      - public
+  tags:
+    - sstelmo-shell-aea
+  only:
+    - main
+    - dev
