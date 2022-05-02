@@ -88,24 +88,6 @@ A minimal environment for the scons-simulation project Gitlab-CI jobs is maintai
 .. env-end-do-not-remove
 
 *****************
-Configure Project
-*****************
-
-.. config-start-do-not-remove
-
-3. Configure the SCons build
-
-   .. code-block::
-
-      $ pwd
-      path/to/local/git/clone/scons-simulation
-      $ scons configure
-
-The configuration log is found in the build directory as ``config.log``.
-
-.. config-end-do-not-remove
-
-*****************
 Build Simulations
 *****************
 
@@ -115,25 +97,25 @@ Build Simulations
 
    .. code-block::
 
-      $ scons list
+      $ WIP
 
 5. Build all targets
 
    .. code-block::
 
-      $ scons build
+      $ scons
 
 6. Build a specific target
 
    .. code-block::
 
-      $ scons build --target <target name>
+      $ scons <target name>
 
 7. Remove the build target artifacts
 
    .. code-block::
 
-      $ scons clean
+      $ scons --clean
 
 .. build-end-do-not-remove
 
@@ -156,7 +138,7 @@ scripts.
 
       $ pwd
       path/to/local/git/clone/scons-simulation
-      $ scons build --target <target_1_name> <target-2_name>
+      $ scons <target_1_name> <target-2_name>
 
 6. Run all tests
 
@@ -184,6 +166,6 @@ The documentation build is also automated with SCons as the ``documentation`` ta
 
    .. code-block::
 
-      $ scons build --target documentation
+      $ WIP 
 
 .. docs-end-do-not-remove
