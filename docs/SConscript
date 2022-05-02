@@ -17,6 +17,6 @@ documentation_file_list = [
     '_static/custom.css'
 ]
 
-sphinx = Builder(action=f"sphinx-build -W -b html ${{TARGET.dir}} ${{TARGET.dir}}/html")
+sphinx = Builder(action=f"sphinx-build -b html ${{TARGET.dir}} ${{TARGET.dir}}/html")
 env.Append(BUILDERS = {'Sphinx': sphinx})
 env.Sphinx(target='index.html', source=documentation_file_list)
