@@ -12,4 +12,4 @@ env = Environment(ENV=os.environ.copy(), PROJECT_NAME=project_name.lower(), VERS
 
 # Add target/build sub-directories
 SConscript(dirs='.', variant_dir='build', duplicate=False)
-SConscript(dirs='docs', variant_dir='build/docs')
+SConscript(dirs='docs', variant_dir='build/docs', exports='env')

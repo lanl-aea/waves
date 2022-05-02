@@ -2,13 +2,8 @@
 
 import os
 
-# Set project global variables
-project_name = 'SCons-simulation'
-# TODO: recover from Git tags. Probably using Python setuptools_scm.
-VERSION='0.1.1+dev'
-
-# Inherit user's full environment and set project variables
-env = Environment(ENV=os.environ.copy(), PROJECT_NAME=project_name.lower(), VERSION=VERSION)
+# Inherit the parent construction environment
+Import('env')
 
 # Perform variable substitution on Sphinx configuration file
 env.Substfile("conf.py.in", SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'], '@VERSION@': env['VERSION']})
