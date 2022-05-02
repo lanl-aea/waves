@@ -15,6 +15,7 @@ env.Substfile("conf.py.in", SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'], '
 
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
+    'conf.py',
     'changelog.rst',
     'index.rst',
     'project_brief.txt',
@@ -31,5 +32,5 @@ documentation_file_list = [
 # TODO: Find the sphinx-build program with scons
 # TODO: os agnostic pathsep for the html directory
 env.Command(target=['documentation', 'html/index.html'],
-            source=['conf.py'] + documentation_file_list,
+            source=documentation_file_list,
             action="sphinx-build -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
