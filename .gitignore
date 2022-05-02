@@ -2,6 +2,9 @@
 build/
 *.tar.bz2
 
+# SCons files
+.sconsign.dblite
+
 # Temp files
 *.swp
 
