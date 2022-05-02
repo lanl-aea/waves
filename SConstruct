@@ -1,7 +1,14 @@
 #! /usr/bin/env python
 
 import os
-env = Environment(ENV=os.environ.copy())
+
+# Set project global variables
+project_name = 'SCons-simulation'
+# TODO: recover from Git tags. Probably using Python setuptools_scm.
+VERSION='0.1.1+dev'
+
+# Inherit user's full environment and set project variables
+env = Environment(ENV=os.environ.copy(), PROJECT_NAME=project_name.lower(), VERSION=VERSION)
 
 SConscript(dirs='.', variant_dir='build', duplicate=False)
 SConscript(dirs='docs', variant_dir='build/docs')

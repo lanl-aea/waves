@@ -1,10 +1,19 @@
 #! /usr/bin/env python
 
 import os
-env = Environment(ENV=os.environ.copy())
 
-env.Substfile("conf.py.in", SUBST_DICT={'@PROJECT_NAME@': 'scons-simulation', '@VERSION@': '0.1.1+dev'})
+# Set project global variables
+project_name = 'SCons-simulation'
+# TODO: recover from Git tags. Probably using Python setuptools_scm.
+VERSION='0.1.1+dev'
 
+# Inherit user's full environment and set project variables
+env = Environment(ENV=os.environ.copy(), PROJECT_NAME=project_name.lower(), VERSION=VERSION)
+
+# Perform variable substitution on Sphinx configuration file
+env.Substfile("conf.py.in", SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'], '@VERSION@': env['VERSION']})
+
+# Explicit Sphinx documentation dependency list
 documentation_file_list = [
     'changelog.rst',
     'index.rst',
