@@ -5,6 +5,7 @@ import os
 # Set project global variables
 project_name = 'SCons-simulation'
 # TODO: recover from Git tags. Probably using Python setuptools_scm.
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/1
 VERSION='0.1.1+dev'
 
 # Inherit user's full environment and set project variables

@@ -14,12 +14,12 @@ mock_modules = ['abaqus', 'abaqusConstants', 'mesh']
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
-# TODO: Set version to clean Git tag or else use meta data in version
 release = VERSION
 version = release
 
 # ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # TODO: add abaqus wrapper
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/2
 #bash_scripts = [abaqus_wrapper]
 bash_scripts = []
 script_options = [[]]
@@ -29,7 +29,7 @@ for script, options in zip(bash_scripts, script_options):
     stdout, stderr = message_command.communicate()
     exit_code = message_command.returncode
     # TODO: Check for non-zero exit code and raise an error after simulation.sh is given an '-h' flag option
-    # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/72
+    # https://re-git.lanl.gov/kbrindley/cmake-simulation/-/issues/72
     with open(f'{pathlib.Path(script).stem}_message.txt', 'w') as script_message_file:
         command_line_example = f"$ ./{buildsystem_dir}/{pathlib.Path(script).name}"
         for option in options:

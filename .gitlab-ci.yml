@@ -6,6 +6,7 @@ workflow:
 
 before_script:
   # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
+  # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/7
   - aea_projects='/projects'
   - aea_deploy_directory="${aea_projects}/python"
   - aea_modulefiles=${aea_deploy_directory}/modulefiles
@@ -17,6 +18,7 @@ before_script:
   - module load ${environment}
   # Build the Conda environment if it's missing
   # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
+  # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/8
   - |
       if [[ ! -d ${environment_path} ]]; then
           export ALL_PROXY="proxyout.lanl.gov:8080"
@@ -79,6 +81,7 @@ pages:
     - |
         for ref in ${documentation_branches}; do
             # TODO: match the branch to the correct module. unload/load for each branch.
+            # https://re-git.lanl.gov/kbrindley/scons-simulation/-/boards
             git checkout $ref
             git reset --hard origin/$ref
             mkdir -p public/$ref
@@ -86,6 +89,7 @@ pages:
             scons --clean
             # Build documentation
             # TODO: limit build to documentation
+            # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
             scons
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref
