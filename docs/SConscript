@@ -1,1 +1,19 @@
 Command("conf.py", "conf.py.in", Copy("$TARGET", "$SOURCE"))
+
+documentation_file_list = [
+    'changelog.rst',
+    'index.rst',
+    'project_brief.txt',
+    'references.bib',
+    'release_philosophy.rst',
+    'targets.txt',
+    'model_repository_user.rst',
+    'build.txt',
+    'documentation.txt',
+    'zreferences.rst',
+    '_static/custom.css'
+]
+
+sphinx = Builder(action=f"sphinx-build -W -b html ${{TARGET.dir}} ${{TARGET.dir}}/html")
+env.Append(BUILDERS = {'Sphinx': sphinx})
+env.Sphinx(target='html/index.html', source=documentation_file_list)
