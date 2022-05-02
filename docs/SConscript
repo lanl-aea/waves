@@ -1,0 +1,1 @@
+Command("conf.py", "conf.py.in", Copy("$TARGET", "$SOURCE"))
