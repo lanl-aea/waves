@@ -6,7 +6,7 @@ import subprocess
 
 # -- Project information -----------------------------------------------------
 # Meta data from SCons project
-project = '@APPNAME@'
+project = '@PROJECT_NAME@'
 VERSION = '@VERSION@'
 
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules.

@@ -1,9 +1,7 @@
 import os
 env = Environment(ENV=os.environ.copy())
 
-Command(target="conf.py",
-        source="conf.py.in",
-        action=Copy("$TARGET", "$SOURCE"))
+env.Substfile("conf.py.in", SUBST_DICT={'@PROJECT_NAME@': 'scons-simulation', '@VERSION@': '0.1.1+dev'})
 
 documentation_file_list = [
     'changelog.rst',
