@@ -83,8 +83,8 @@ pages:
             git reset --hard origin/$ref
             mkdir -p public/$ref
             # Clean old build directory
-            rm -rf build/ || true
-            # Build documentation 
+            scons --clean
+            # Build documentation
             # TODO: limit build to documentation
             scons
             # Copy documentation to the pages artifact directory
