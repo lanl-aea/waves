@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+
 import os
 env = Environment(ENV=os.environ.copy())
 
