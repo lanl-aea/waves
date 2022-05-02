@@ -21,6 +21,6 @@ documentation_file_list = [
 
 # TODO: Find the sphinx-build program with scons
 # TODO: os agnostic pathsep for the html directory
-sphinx = Builder(action="sphinx-build -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
-env.Append(BUILDERS = {'Sphinx': sphinx})
-env.Sphinx(target='index.html', source=documentation_file_list)
+env.Command(target='index.html',
+            source=documentation_file_list,
+            action="sphinx-build -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
