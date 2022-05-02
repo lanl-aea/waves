@@ -1,5 +1,5 @@
 .. README targets
-.. include:: ../README.rst
+.. include:: ../README.txt
    :start-after: target-start-do-not-remove
    :end-before: target-end-do-not-remove
 

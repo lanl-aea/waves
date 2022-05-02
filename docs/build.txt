@@ -4,7 +4,7 @@
 Activate Environment
 ********************
 
-.. include:: ../README.rst
+.. include:: ../README.txt
    :start-after: env-start-do-not-remove
    :end-before: env-end-do-not-remove
 
@@ -12,7 +12,7 @@ Activate Environment
 Configure Project
 *****************
 
-.. include:: ../README.rst
+.. include:: ../README.txt
    :start-after: config-start-do-not-remove
    :end-before: config-end-do-not-remove
 
@@ -20,7 +20,7 @@ Configure Project
 Build
 *****
 
-.. include:: ../README.rst
+.. include:: ../README.txt
    :start-after: build-start-do-not-remove
    :end-before: build-end-do-not-remove
 
@@ -28,6 +28,6 @@ Build
 Test
 ****
 
-.. include:: ../README.rst
+.. include:: ../README.txt
    :start-after: test-start-do-not-remove
    :end-before: test-end-do-not-remove
