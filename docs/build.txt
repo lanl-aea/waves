@@ -8,14 +8,6 @@ Activate Environment
    :start-after: env-start-do-not-remove
    :end-before: env-end-do-not-remove
 
-*****************
-Configure Project
-*****************
-
-.. include:: ../README.txt
-   :start-after: config-start-do-not-remove
-   :end-before: config-end-do-not-remove
-
 *****
 Build
 *****
