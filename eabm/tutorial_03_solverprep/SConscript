@@ -32,14 +32,14 @@ mesh = env.AbaqusJournal(
 
 # SolverPrep
 abaqus_input_list = [
-    "single_element_compression.inp",
-    "amplitudes.inp",
-    "assembly.inp",
-    "boundary.inp",
-    "field_output.inp",
-    "materials.inp",
-    "parts.inp",
-    "history_output.inp"
+    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/single_element_compression.inp",
+    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/amplitudes.inp",
+    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/assembly.inp",
+    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/boundary.inp",
+    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/field_output.inp",
+    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/materials.inp",
+    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/parts.inp",
+    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/history_output.inp"
 ]
 solverprep = list()
 for abaqus_input in abaqus_input_list:
