@@ -9,6 +9,11 @@ Changelog
 0.1.2 (unreleased)
 ******************
 
+New Features
+============
+- Add the SCons target definition equivalent to the ECMF and CMake-simulation "Tutorial 01: geometry" (:issue:`10`,
+  :merge:`3`). By `Kyle Brindley`_.
+
 ******************
 0.1.1 (2022-05-03)
 ******************
