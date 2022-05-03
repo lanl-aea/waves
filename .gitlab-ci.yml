@@ -124,8 +124,7 @@ pages:
     # Reference: https://gitlab.com/gitlab-org/gitlab/-/issues/33822
     - git fetch origin
     - git branch -a
-    # TODO: add back "main dev" after main is updated with the documentation files
-    - documentation_branches="dev"
+    - documentation_branches="main dev"
     - |
         for ref in ${documentation_branches}; do
             # TODO: match the branch to the correct module. unload/load for each branch.
