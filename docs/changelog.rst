@@ -15,6 +15,8 @@ New Features
   :merge:`3`). By `Kyle Brindley`_.
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation "Tutorial 02: partition and mesh"
   (:issue:`11`, :merge:`4`). By `Kyle Brindley`_.
+- Add the SCons target definition equivalent to the ECMF and CMake-simulation "Tutorial 03: solverprep" (:issue:`14`,
+  :merge:`6`). By `Kyle Brindley`_.
 
 Documentation
 =============
