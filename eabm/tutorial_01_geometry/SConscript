@@ -8,4 +8,4 @@ journal_options = ""
 
 tutorial_01_geometry = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{env['PROJECT_DIR']}/eabm/abaqus/{journal_file}.py"])
+    source=[f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/{journal_file}.py"])
