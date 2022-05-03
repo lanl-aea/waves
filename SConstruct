@@ -1,18 +1,11 @@
 #! /usr/bin/env python
 
 import os
-import subprocess
-import re
-
-version_regex = r'([0-9]+)\.([0-9]+)\.([0-9]+)(\..*)'
-setuptools_scm_stdout = subprocess.check_output('python -m setuptools_scm')
-major, minor, micro, dev = re.search(version_regex, setuptools_scm_stdout).groups()
+import setuptools_scm
 
 # Set project global variables
 project_name = 'SCons-simulation'
-version = f"{major}.{minor}.{micro}"
-if dev:
-    version = f"{version}{dev}"
+version = setuptools_scm.get_version() 
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(), PROJECT_NAME=project_name.lower(), VERSION=version)
