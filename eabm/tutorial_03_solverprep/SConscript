@@ -45,9 +45,12 @@ abaqus_input_list = [
 ]
 solverprep = list()
 for abaqus_input in abaqus_input_list:
-    solverprep.append(env.Substfile(
-        str(abaqus_input),
-        SUBST_DICT={}))
+    solverprep.append(Substfile(str(abaqus_input)))
+    solverprep.append(
+        Command(
+            target=abaqus_input.with_suffix('').name,
+            source=str(abaqus_input.with_suffix('')),
+            action=Move('${TARGET}', '${SOURCE}')))
 
 # Collector alias
 env.Alias('tutorial_02_partition_mesh', [geometry, partition, mesh] + solverprep)
