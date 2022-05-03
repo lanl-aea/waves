@@ -4,6 +4,11 @@ workflow:
       when: never
     - when: always
 
+stages:
+  - environment
+  - version
+  - deploy
+
 before_script:
   # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
   # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/7
@@ -30,11 +35,6 @@ before_script:
           unset HTTPS_PROXY
       fi
 
-stages:
-  - environment
-  - build
-  - deploy
-
 environment:
   stage: environment
   variables:
@@ -58,6 +58,40 @@ environment:
       - "environment.yml"
   tags:
     - sstelmo-shell-aea
+
+microbump:
+  stage: version
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    # Conditionally "bump" micro version number. setuptools_scm already bumps number, just need to strip local version.
+    - old_version=$(python setup.py --version)
+    # First capture group is the major.minor.micro numbers
+    # Second capture group is everything following micro
+    - version_regex='\([0-9]\+\.[0-9]\+\.[0-9]\+\)\(.*\)'
+    # Returns clean production tag regardless if tagged already
+    - production_version=$(echo ${old_version} | sed "s/${version_regex}/\1/g")
+    # Catch unexpected production version regex and exit with error if suffix is found
+    - suffix=$(echo ${production_version} | sed "s/${version_regex}/\2/g")
+    - |
+        if [ -n "${suffix}" ]; then
+            echo "Could not resolve the production version from ${old_version}. Left with ${production_version} and ${suffix}."
+            exit 1
+        fi
+    - developer_version=${production_version}+dev
+    # Tag production commit and previous developer commit. Continue if already tagged.
+    - git config user.name "${GITLAB_USER_NAME}"
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - git remote add oauth2-origin https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@re-git.lanl.gov/${CI_PROJECT_PATH}.git
+    - git tag -a ${production_version} -m "production release ${production_version}" || true
+    # Assume last merge was dev->main. Pick previous.
+    - last_merge_hash=$(git log --pretty=format:"%H" --merges -n 2 | tail -n 1)
+    - git tag -a ${developer_version} -m "developer pre-release ${developer_version}" ${last_merge_hash} || true
+    - git push oauth2-origin --tags
+  tags:
+    - sstelmo-shell-aea
+  only:
+    - main
 
 # It MUST be called pages
 pages:
