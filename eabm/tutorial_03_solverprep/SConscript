@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import pathlib
+
 # Inherit the parent construction environment
 Import('env')
 
@@ -32,19 +34,19 @@ mesh = env.AbaqusJournal(
 
 # SolverPrep
 abaqus_input_list = [
-    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/single_element_compression.inp.in",
-    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/amplitudes.inp.in",
-    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/assembly.inp.in",
-    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/boundary.inp.in",
-    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/field_output.inp.in",
-    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/materials.inp.in",
-    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/parts.inp.in",
-    f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/history_output.inp.in"
+    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "single_element_compression.inp.in",
+    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "amplitudes.inp.in",
+    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "assembly.inp.in",
+    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "boundary.inp.in",
+    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "field_output.inp.in",
+    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "materials.inp.in",
+    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "parts.inp.in",
+    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "history_output.inp.in"
 ]
 solverprep = list()
 for abaqus_input in abaqus_input_list:
     solverprep.append(env.Substfile(
-        abaqus_input,
+        str(abaqus_input),
         SUBST_DICT={}))
 
 # Collector alias
