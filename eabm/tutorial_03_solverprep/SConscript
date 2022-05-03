@@ -51,6 +51,12 @@ for abaqus_input in abaqus_input_list:
             target=abaqus_input.with_suffix('').name,
             source=str(abaqus_input.with_suffix('')),
             action=Move('${TARGET}', '${SOURCE}')))
+# This AlwaysBuild means that the build/**/*.inp files are always re-created and moved.
+# It's required because the Substfile command will find it's targets missing and re-run, but Move will not re-run,
+# leaving build output in the source directory.
+# TODO: Find another way to avoid creating files in the source directory with Substfile
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/16
+env.AlwaysBuild(solverprep)
 
 # Collector alias
 env.Alias('tutorial_02_partition_mesh', [geometry, partition, mesh] + solverprep)
