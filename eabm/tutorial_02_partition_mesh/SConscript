@@ -31,4 +31,4 @@ mesh = env.AbaqusJournal(
     journal_options=journal_options)
 
 # Collector alias
-env.Alias('tutorial_02_partition_mesh', [geometry, partition, mesh])
+env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh])
