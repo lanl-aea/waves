@@ -5,6 +5,10 @@ import pathlib
 # Inherit the parent construction environment
 Import('env')
 
+# Set project-wide paths with os-agnostic path separators
+project_dir = pathlib.Path(env['PROJECT_DIR'])
+abaqus_source_abspath = project_dir / env['ABAQUS_SOURCE_DIR']
+
 # Simulation variables
 model = "single_element"
 
@@ -13,7 +17,7 @@ journal_file = f"{model}_geometry"
 journal_options = ""
 geometry = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.log"],
-    source=[f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/{journal_file}.py"],
+    source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options)
 
 # Partition
@@ -21,7 +25,7 @@ journal_file = f"{model}_partition"
 journal_options = ""
 partition = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.log"],
-    source=[f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/{journal_file}.py", f"{model}_geometry.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
     journal_options=journal_options)
 
 # Mesh
@@ -29,19 +33,19 @@ journal_file = f"{model}_mesh"
 journal_options = ""
 mesh = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.inp", f"{journal_file}.jnl", f"{journal_file}.log"],
-    source=[f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/{journal_file}.py", f"{model}_partition.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options)
 
 # SolverPrep
 abaqus_input_list = [
-    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "single_element_compression.inp.in",
-    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "amplitudes.inp.in",
-    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "assembly.inp.in",
-    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "boundary.inp.in",
-    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "field_output.inp.in",
-    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "materials.inp.in",
-    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "parts.inp.in",
-    pathlib.Path(env['PROJECT_DIR']) / env['ABAQUS_SOURCE_DIR'] / "history_output.inp.in"
+    abaqus_source_abspath / "single_element_compression.inp.in",
+    abaqus_source_abspath / "amplitudes.inp.in",
+    abaqus_source_abspath / "assembly.inp.in",
+    abaqus_source_abspath / "boundary.inp.in",
+    abaqus_source_abspath / "field_output.inp.in",
+    abaqus_source_abspath / "materials.inp.in",
+    abaqus_source_abspath / "parts.inp.in",
+    abaqus_source_abspath / "history_output.inp.in"
 ]
 solverprep = list()
 for abaqus_input in abaqus_input_list:
