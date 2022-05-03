@@ -1,0 +1,3 @@
+.. include:: ../README.txt
+   :start-after: description-start-do-not-remove
+   :end-before: description-end-do-not-remove

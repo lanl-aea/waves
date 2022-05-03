@@ -1,0 +1,156 @@
+workflow:
+  rules:  # Do not create pipelines for tag updates
+    - if: $CI_COMMIT_TAG
+      when: never
+    - when: always
+
+stages:
+  - environment
+  - version
+  - test
+  - deploy
+
+before_script:
+  # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
+  # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/7
+  - aea_projects='/projects'
+  - aea_deploy_directory="${aea_projects}/python"
+  - aea_modulefiles=${aea_deploy_directory}/modulefiles
+  - environment='scons-simulation-env'
+  - environment_path="${aea_deploy_directory}/${environment}"
+  - conda_options='--yes --channel conda-forge'
+  # Activate the project specific environment from the project specific modulefile
+  - module use ${PWD}/modulefiles
+  - module load ${environment}
+  # Build the Conda environment if it's missing
+  # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
+  # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/8
+  - |
+      if [[ ! -d ${environment_path} ]]; then
+          export ALL_PROXY="proxyout.lanl.gov:8080"
+          export HTTP_PROXY="http://$ALL_PROXY"
+          export HTTPS_PROXY=$HTTP_PROXY
+          conda create --prefix ${environment_path} --file environment.yml ${conda_options};
+          unset ALL_PROXY
+          unset HTTP_PROXY
+          unset HTTPS_PROXY
+      fi
+
+environment:
+  stage: environment
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Re-build the Conda environment on changes to environment files
+    - conda create --prefix ${environment_path} --file environment.yml ${conda_options}
+    # Remove write permissions from group to avoid accidental environment changes
+    - chmod -R 755 ${environment_path}
+    # place the common modulefiles in an accessible location
+    - cp ${PWD}/modulefiles/* ${aea_modulefiles}
+  only:
+    refs:
+      - main
+      - dev
+    changes:
+      - "modulefiles/*"
+      - "environment.yml"
+  tags:
+    - sstelmo-shell-aea
+
+microbump:
+  stage: version
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    # Conditionally "bump" micro version number. setuptools_scm already bumps number, just need to strip local version.
+    - old_version=$(python -m setuptools_scm)
+    # First capture group is the major.minor.micro numbers
+    # Second capture group is everything following micro
+    - version_regex='\([0-9]\+\.[0-9]\+\.[0-9]\+\)\(.*\)'
+    # Returns clean production tag regardless if tagged already
+    - production_version=$(echo ${old_version} | sed "s/${version_regex}/\1/g")
+    # Catch unexpected production version regex and exit with error if suffix is found
+    - suffix=$(echo ${production_version} | sed "s/${version_regex}/\2/g")
+    - |
+        if [ -n "${suffix}" ]; then
+            echo "Could not resolve the production version from ${old_version}. Left with ${production_version} and ${suffix}."
+            exit 1
+        fi
+    - developer_version=${production_version}+dev
+    # Tag production commit and previous developer commit. Continue if already tagged.
+    - git config user.name "${GITLAB_USER_NAME}"
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - git remote add oauth2-origin https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@re-git.lanl.gov/${CI_PROJECT_PATH}.git
+    - git tag -a ${production_version} -m "production release ${production_version}" || true
+    # Assume last merge was dev->main. Pick previous.
+    - last_merge_hash=$(git log --pretty=format:"%H" --merges -n 2 | tail -n 1)
+    - git tag -a ${developer_version} -m "developer pre-release ${developer_version}" ${last_merge_hash} || true
+    - git push oauth2-origin --tags
+  tags:
+    - sstelmo-shell-aea
+  only:
+    - main
+
+test:
+  # TODO: replace with conda build recipe when there is something to package
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - scons
+  tags:
+    - sstelmo-shell-aea
+  only:
+    # TODO: add dev/main branches when there is something to package
+    - merge_requests
+
+# It MUST be called pages
+pages:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - rm -rf public && mkdir -p public
+    - cp docs/_static/index.html public
+    # FIXME: (1) Without setting this to false, Git webserver API calls to re-git.lanl.gov will throw errors about
+    # self-signed certificates. Work on CI server and Gitlab webserver configurations so that this is no longer
+    # necessary. There is a matching "FIXME: (1)" tag where the process is reversed that must also be removed when this
+    # is fixed.
+    - git config --local http.sslVerify false
+    # Every documentation version must be re-built for *every* gitlab-pages job execution
+    # Reference: https://gitlab.com/gitlab-org/gitlab/-/issues/33822
+    - git fetch origin
+    - git branch -a
+    # TODO: add back "main dev" after main is updated with the documentation files
+    - documentation_branches="dev"
+    - |
+        for ref in ${documentation_branches}; do
+            # TODO: match the branch to the correct module. unload/load for each branch.
+            # https://re-git.lanl.gov/kbrindley/scons-simulation/-/boards
+            git checkout $ref
+            git reset --hard origin/$ref
+            mkdir -p public/$ref
+            # Clean old build directory
+            scons --clean
+            # Build documentation
+            # TODO: limit build to documentation
+            # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
+            scons
+            # Copy documentation to the pages artifact directory
+            cp -r build/docs/html/* public/$ref
+        done
+    # FIXME: (1) Reset the repository Git configuration to preserve ssl verifications. Remove when the server(s)
+    # configurations no longer require us to drop ssl verifications.
+    - git config --local http.sslVerify true
+  artifacts:
+    paths:
+      # It MUST be called public
+      - public
+  tags:
+    - sstelmo-shell-aea
+  only:
+    - main
+    - dev

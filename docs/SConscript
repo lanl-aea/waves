@@ -1,0 +1,38 @@
+#! /usr/bin/env python
+
+# Inherit the parent construction environment
+Import('env')
+
+# Perform variable substitution on Sphinx configuration file
+env.Substfile("conf.py.in", SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'], '@VERSION@': env['VERSION']})
+
+# Explicit Sphinx documentation dependency list
+documentation_file_list = [
+    'conf.py',
+    'changelog.rst',
+    'index.rst',
+    'project_brief.txt',
+    'references.bib',
+    'release_philosophy.rst',
+    'targets.txt',
+    'model_repository_user.rst',
+    'build.txt',
+    'documentation.txt',
+    'zreferences.rst',
+    '_static/custom.css'
+]
+
+# TODO: Find the sphinx-build program with scons
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/3
+# TODO: os agnostic pathsep for the html directory
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/4
+sphinx_build = env.Command(
+    # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
+    # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/5
+    target=['dummy_file_name', 'html/index.html'],
+    source=documentation_file_list,
+    action="sphinx-build -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
+env.Clean(sphinx_build, 'html/')
+# TODO: Figure out why alias is recognized, but not built
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
+env.Alias('documentation', targets=sphinx_build)

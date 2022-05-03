@@ -1,0 +1,132 @@
+#%Module3.2.10
+
+# Prereqs and conflicts
+conflict aea-release
+conflict aea-beta
+conflict waf-simulation-env
+
+# Set AEA standard software version and environment names
+set cubit_version "Cubit-15.8"
+set matlab_version "R2021b"
+set anaconda_version "2020.07"
+set python_version "3.8"
+set environment "scons-simulation-env"
+
+# Get current hostname
+set hostname [info hostname]
+
+# Set host specific environment information
+set projects ""
+set software_prefix ""
+set cubit_path ""
+set matlab_path ""
+set abaqus_path ""
+set anaconda_path ""
+# HPC case
+if { [ string match "sn-rfe?.lanl.gov" $hostname ] ||
+     [ string match "sn???.localdomain" $hostname ] } {
+    set software_prefix "/usr/projects/hpcsoft/common/x86_64"
+    set projects "/usr/projects/ea"
+    set cubit_path "$projects/Cubit/$cubit_version"
+    set abaqus_path "$projects/abaqus/Commands"
+
+    module load intel
+# W-13 machine cases
+} elseif { [ string match "*.lanl.gov" $hostname ] } {
+    set software_prefix "/apps"
+    set projects "/projects"
+    set cubit_path "$software_prefix/$cubit_version"
+    set matlab_path "$software_prefix/matlab/$matlab_version/bin"
+    set abaqus_path "$software_prefix/abaqus/Commands"
+# Error out
+} else {
+    error "Unknown or unsupported host"
+}
+set anaconda_path "$software_prefix/anaconda/$anaconda_version-python-$python_version"
+set anaconda_bin "$anaconda_path/bin"
+set environment_path "$projects/python/$environment"
+set environment_bin "$environment_path/bin"
+set environment_man "$environment_path/share/man"
+set environment_lib "$environment_path/lib64"
+set cubit_bin "$cubit_path/bin"
+
+# Set the bash environment variables similarly to HPC anaconda module
+# Reference - sn-rfe.lanl.gov:/usr/projects/hpcsoft/modulefiles/toss3/snow/tools/python/3.8-anaconda-2020.07
+prepend-path PATH "$environment_bin:$anaconda_bin"
+prepend-path MANPATH "$environment_man"
+
+# Set the bash environment variables for commonly used AEA software
+append-path PATH "$abaqus_path"
+append-path PATH "$cubit_path"
+append-path PATH "$cubit_bin"
+append-path PATH "$matlab_path"
+append-path PYTHONPATH "$cubit_bin"
+
+# Set the bash environment variables for deployed AEA libraries
+prepend-path LD_LIBRARY_PATH "$environment_lib"
+
+# Activate the Conda environment
+# Variables and functions from $anaconda_path/etc/profile.d/conda.sh initialization script that must be unset
+set conda_variables "CONDA_SHLVL CONDA_EXE _CE_CONDA CONDA_PYTHON_EXE"
+set conda_functions "__add_sys_prefix_to_path __conda_hashr __conda_activate __conda_reactivate conda"
+if { [module-info mode load] || [module-info mode switch2] } {
+    puts stdout "source $anaconda_path/etc/profile.d/conda.sh; conda activate $projects/python/$environment;"
+} elseif { [module-info mode remove] && ![module-info mode switch3] } {
+    # TODO: use "getenv" when module v4.0 is available
+    # https://modules.readthedocs.io/en/latest/modulefile.html#mfcmd-getenv
+    if {[info exists env(CONDA_SHLVL)]} {
+        set conda_shlvl $env(CONDA_SHLVL)
+    } else {
+        set conda_shlvl 1
+    }
+    puts stdout "for ((i=1;i<=$conda_shlvl+1;i++)); do conda deactivate; done;"
+    puts stdout "unset -f $conda_functions;"
+    puts stdout "unset $conda_variables;"
+}
+
+# Set help information
+module-whatis "Configure the common scons bash and Conda environments"
+proc ModulesHelp {} {
+    global hostname
+    global environment
+    global software_prefix
+    global projects
+    global anaconda_version
+    global python_version
+    global anaconda_path
+    global anaconda_bin
+    global environment_path
+    global environment_bin
+    global environment_man
+    global environment_lib
+    global cubit_version
+    global abaqus_path
+    global matlab_path
+    global cubit_path
+    global cubit_bin
+
+    puts stderr "\nscons modulefiles debugging information"
+    puts stderr "hostname: $hostname"
+    puts stderr "environment: $environment"
+    puts stderr "software_prefix: $software_prefix"
+    puts stderr "projects: $projects"
+    puts stderr "anaconda_version: $anaconda_version"
+    puts stderr "python_version: $python_version"
+    puts stderr "anaconda_path: $anaconda_path"
+    puts stderr "environment_path: $environment_path"
+    puts stderr "cubit_version: $cubit_version"
+    puts stderr "abaqus_path: $abaqus_path"
+    puts stderr "matlab_path: $matlab_path"
+
+    puts stderr "\n\nModifies environment variables"
+    puts stderr "PATH prepended with: $environment_bin:$anaconda_bin"
+    puts stderr "PATH appended with: $abaqus_path:$cubit_path:$cubit_bin:$matlab_path"
+    puts stderr "PYTHONPATH appended with: $cubit_bin"
+    puts stderr "MANPATH prepended with: $environment_man"
+    puts stderr "LD_LIBRARY_PATH prepended with: $environment_lib"
+
+    puts stderr "\n\nSets aliases:"
+    puts stderr "ipy\t\t open ipython"
+    puts stderr "nb\t\t open a jupyter notebook server"
+
+}
