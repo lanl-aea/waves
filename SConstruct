@@ -23,17 +23,19 @@ abaqus_journal = Builder(
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': abaqus_journal})
 
-# Add target/build sub-directories
+# Add top-level SCons script
 SConscript(dirs='.', variant_dir=variant_dir_base, duplicate=False)
 
+# Add documentation target
 source_dir = 'docs'
 build_dir = os.path.join(variant_dir_base, source_dir)
 SConscript(dirs=source_dir, variant_dir=build_dir, exports='env')
 
-source_dir = 'eabm/tutorial_01_geometry'
-build_dir = os.path.join(variant_dir_base, source_dir)
-SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
-
-source_dir = 'eabm/tutorial_02_partition_mesh'
-build_dir = os.path.join(variant_dir_base, source_dir)
-SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+# Add simulation targets
+eabm_simulation_directories = [
+    'eabm/tutorial_01_geometry',
+    'eabm/tutorial_02_partition_mesh'
+]
+for source_dir in eabm_simulation_directories:
+    build_dir = os.path.join(variant_dir_base, source_dir)
+    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
