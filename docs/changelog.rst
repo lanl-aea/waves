@@ -13,6 +13,8 @@ New Features
 ============
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation "Tutorial 01: geometry" (:issue:`10`,
   :merge:`3`). By `Kyle Brindley`_.
+- Add the SCons target definition equivalent to the ECMF and CMake-simulation "Tutorial 02: partition and mesh"
+  (:issue:`11`, :merge:`4`). By `Kyle Brindley`_.
 
 ******************
 0.1.1 (2022-05-03)
