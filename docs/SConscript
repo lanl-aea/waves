@@ -4,7 +4,8 @@
 Import('env')
 
 # Perform variable substitution on Sphinx configuration file
-env.Substfile("conf.py.in",
+env.Substfile(
+    "conf.py.in",
     SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'],
                 '@VERSION@': env['VERSION'],
                 '@PROJECT_DIR@': env['PROJECT_DIR'],
