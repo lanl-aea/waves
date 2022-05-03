@@ -34,7 +34,8 @@ SConscript(dirs=source_dir, variant_dir=build_dir, exports='env')
 # Add simulation targets
 eabm_simulation_directories = [
     'eabm/tutorial_01_geometry',
-    'eabm/tutorial_02_partition_mesh'
+    'eabm/tutorial_02_partition_mesh',
+    'eabm/tutorial_03_solverprep'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = os.path.join(variant_dir_base, source_dir)
