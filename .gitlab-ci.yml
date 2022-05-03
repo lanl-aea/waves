@@ -65,7 +65,7 @@ microbump:
     GIT_STRATEGY: clone
   script:
     # Conditionally "bump" micro version number. setuptools_scm already bumps number, just need to strip local version.
-    - old_version=$(python setup.py --version)
+    - old_version=$(python -m setuptools_scm)
     # First capture group is the major.minor.micro numbers
     # Second capture group is everything following micro
     - version_regex='\([0-9]\+\.[0-9]\+\.[0-9]\+\)\(.*\)'
