@@ -16,6 +16,10 @@ New Features
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation "Tutorial 02: partition and mesh"
   (:issue:`11`, :merge:`4`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Add Abaqus journal file API to documentation (:issue:`12`, :merge:`5`). By `Kyle Brindley`_.
+
 ******************
 0.1.1 (2022-05-03)
 ******************

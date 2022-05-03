@@ -25,7 +25,7 @@
    :caption: Model Repository
 
    model_repository_user
-..    model_repository_api
+   model_repository_api
 
 .. toctree::
    :caption: Help & Reference

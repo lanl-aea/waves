@@ -4,7 +4,11 @@
 Import('env')
 
 # Perform variable substitution on Sphinx configuration file
-env.Substfile("conf.py.in", SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'], '@VERSION@': env['VERSION']})
+env.Substfile("conf.py.in",
+    SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'],
+                '@VERSION@': env['VERSION'],
+                '@PROJECT_DIR@': env['PROJECT_DIR'],
+                '@ABAQUS_SOURCE_DIR@': env['ABAQUS_SOURCE_DIR']})
 
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
