@@ -15,7 +15,9 @@ env = Environment(ENV=os.environ.copy(),
                   ABAQUS_SOURCE_DIR=abaqus_source_dir)
 
 # Custom Builders
-abaqus_journal = Builder(action='abaqus cae -noGui ${SOURCE.abspath} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1', chdir=1)
+abaqus_journal = Builder(
+    chdir=1,
+    action='abaqus cae -noGui ${SOURCE.abspath} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1')
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': abaqus_journal})
