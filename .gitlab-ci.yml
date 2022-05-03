@@ -100,7 +100,7 @@ test:
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons
+    - scons --keep-going
   tags:
     - sstelmo-shell-aea
   only:
