@@ -20,6 +20,7 @@ documentation_file_list = [
     'release_philosophy.rst',
     'targets.txt',
     'model_repository_user.rst',
+    'model_repository_api.rst',
     'build.txt',
     'documentation.txt',
     'zreferences.rst',
