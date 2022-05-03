@@ -1,13 +1,16 @@
 #! /usr/bin/env python
 
+import pathlib
+
 # Inherit the parent construction environment
 Import('env')
+project_dir = pathlib.Path(env['PROJECT_DIR'])
 
 journal_file = "single_element_geometry"
 journal_options = ""
 
 tutorial_01_geometry = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.log"],
-    source=[f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/{journal_file}.py"],
+    source=[f"{env['PROJECT_DIR'] / env['ABAQUS_SOURCE_DIR'] / journal_file}.py"],
     journal_options=journal_options)
 env.Alias('${SOURCE_DIR.srcdir}', targets=tutorial_01_geometry)
