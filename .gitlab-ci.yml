@@ -7,6 +7,7 @@ workflow:
 stages:
   - environment
   - version
+  - test
   - deploy
 
 before_script:
@@ -92,6 +93,19 @@ microbump:
     - sstelmo-shell-aea
   only:
     - main
+
+test:
+  # TODO: replace with conda build recipe when there is something to package
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - scons
+  tags:
+    - sstelmo-shell-aea
+  only:
+    # TODO: add dev/main branches when there is something to package
+    - merge_requests
 
 # It MUST be called pages
 pages:
