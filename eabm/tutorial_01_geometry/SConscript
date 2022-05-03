@@ -10,3 +10,4 @@ tutorial_01_geometry = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.log"],
     source=[f"{env['PROJECT_DIR']}/{env['ABAQUS_SOURCE_DIR']}/{journal_file}.py"],
     journal_options=journal_options)
+env.Alias('tutorial_01_geometry', targets=tutorial_01_geometry)
