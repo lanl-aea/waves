@@ -59,4 +59,4 @@ for abaqus_input in abaqus_input_list:
 env.AlwaysBuild(solverprep)
 
 # Collector alias
-env.Alias('tutorial_02_partition_mesh', [geometry, partition, mesh] + solverprep)
+env.Alias('tutorial_03_partition_mesh', [geometry, partition, mesh] + solverprep)
