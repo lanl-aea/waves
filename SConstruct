@@ -33,3 +33,7 @@ SConscript(dirs=source_dir, variant_dir=build_dir, exports='env')
 source_dir = 'eabm/tutorial_01_geometry'
 build_dir = os.path.join(variant_dir_base, source_dir)
 SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+
+source_dir = 'eabm/tutorial_02_partition_mesh'
+build_dir = os.path.join(variant_dir_base, source_dir)
+SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
