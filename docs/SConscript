@@ -37,7 +37,7 @@ sphinx_build = env.Command(
     # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/5
     target=['dummy_file_name', 'html/index.html'],
     source=documentation_file_list,
-    action="sphinx-build -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
+    action="sphinx-build -W -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
 env.Clean(sphinx_build, 'html/')
 # TODO: Figure out why alias is recognized, but not built
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
