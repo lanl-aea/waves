@@ -15,8 +15,8 @@ model = "single_element"
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
-tutorial_01_geometry = env.AbaqusJournal(
+geometry = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.log"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options)
-env.Alias('${SOURCE_DIR.srcdir}', tutorial_01_geometry)
+env.Alias('${SOURCE_DIR.srcdir}', [geometry])
