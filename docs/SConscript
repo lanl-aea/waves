@@ -41,4 +41,4 @@ sphinx_build = env.Command(
 env.Clean(sphinx_build, 'html/')
 # TODO: Figure out why alias is recognized, but not built
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
-env.Alias('documentation', targets=sphinx_build)
+env.Alias('documentation', sphinx_build)
