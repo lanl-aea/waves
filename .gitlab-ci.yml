@@ -141,7 +141,7 @@ pages:
             # Build documentation
             # TODO: limit build to documentation
             # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
-            scons
+            scons documentation
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref
         done

@@ -166,6 +166,6 @@ The documentation build is also automated with SCons as the ``documentation`` ta
 
    .. code-block::
 
-      $ WIP 
+      $ scons documentation 
 
 .. docs-end-do-not-remove

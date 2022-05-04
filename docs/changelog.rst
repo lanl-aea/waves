@@ -20,6 +20,10 @@ New Features
 - Link the SCons man pages to the expected man page directory of the Conda environment (:issue:`15`, :merge:`7`). By
   `Kyle Brindley`_.
 
+Bug fixes
+=========
+- Fix the documentation alias declaration (:issue:`6`, :merge:`8`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add Abaqus journal file API to documentation (:issue:`12`, :merge:`5`). By `Kyle Brindley`_.
