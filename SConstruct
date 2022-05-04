@@ -29,9 +29,8 @@ env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal})
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
 
 # Add documentation target
-source_dir = 'docs'
-build_dir = variant_dir_base / source_dir
-SConscript(dirs=source_dir, variant_dir=str(build_dir), exports='env')
+build_dir = variant_dir_base / documentation_source_dir
+SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
 
 # Add simulation targets
 eabm_simulation_directories = [
