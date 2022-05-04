@@ -16,8 +16,7 @@ env.Substfile(
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
     'conf.py',
-    # TODO: find a more robust method to link to the README.txt target without assuming relative paths
-    str(pathlib.Path(Dir('..').abspath) / 'README.txt'),
+    'README.txt',
     'changelog.rst',
     'index.rst',
     'project_brief.txt',
