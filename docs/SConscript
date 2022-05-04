@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import pathlib
+
 # Inherit the parent construction environment
 Import('env')
 
@@ -14,6 +16,7 @@ env.Substfile(
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
     'conf.py',
+    str(pathlib.Path(Dir('..').abspath) / 'README.txt'),
     'changelog.rst',
     'index.rst',
     'project_brief.txt',
@@ -32,12 +35,14 @@ documentation_file_list = [
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/3
 # TODO: os agnostic pathsep for the html directory
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/4
+sphinx_options = '-W'
 sphinx_build = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/5
     target=['dummy_file_name', 'html/index.html'],
     source=documentation_file_list,
-    action="sphinx-build -W -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html")
+    action="sphinx-build ${sphinx_options} -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html",
+    sphinx_options=sphinx_options)
 env.Clean(sphinx_build, 'html/')
 # TODO: Figure out why alias is recognized, but not built
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
