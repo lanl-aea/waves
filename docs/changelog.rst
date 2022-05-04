@@ -17,6 +17,8 @@ New Features
   (:issue:`11`, :merge:`4`). By `Kyle Brindley`_.
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation "Tutorial 03: solverprep" (:issue:`14`,
   :merge:`6`). By `Kyle Brindley`_.
+- Link the SCons man pages to the expected man page directory of the Conda environment (:issue:`15`, :merge:`7`). By
+  `Kyle Brindley`_.
 
 Documentation
 =============
