@@ -50,6 +50,10 @@ environment:
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
     - cp ${PWD}/modulefiles/* ${aea_modulefiles}
+    # Link SCons man pages to the expected MANPATH location
+    - ln ${environment_path}/scons.1 ${environment_path}/man/man1/scons.1
+    - ln ${environment_path}/sconsign.1 ${environment_path}/man/man1/sconsign.1
+    - ln ${environment_path}/scons-time.1 ${environment_path}/man/man1/scons-time.1
   only:
     refs:
       - main
