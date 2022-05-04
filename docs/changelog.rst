@@ -9,6 +9,10 @@ Changelog
 0.1.3 (unreleased)
 ******************
 
+New Features
+============
+- Append the Abaqus journal Builder managed targets automatically (:issue:`18`, :merge:`10`). By `Kyle Brindley`_.
+
 ******************
 0.1.2 (2022-05-04)
 ******************
