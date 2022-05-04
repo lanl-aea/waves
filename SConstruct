@@ -33,8 +33,10 @@ def abaqus_journal_modify_targets(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    target.append(f"{source[0]}.jnl")
-    target.append(f"{source[0]}.log")
+    journal_file = pathlib.Path(source[0].path).name
+    journal_file = pathlib.Path(journal_file)
+    target.append(f"{str(journal_file.with_suffix('.jnl'))}")
+    target.append(f"{str(journal_file.with_suffix('.log'))}")
     return target, source
 
 
