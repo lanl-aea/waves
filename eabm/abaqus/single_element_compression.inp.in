@@ -1,0 +1,44 @@
+**
+*HEADING
+Compressing a single element
+**
+**
+*INCLUDE, INPUT=parts.inp
+**
+*ASSEMBLY,NAME=A
+*INCLUDE, INPUT=assembly.inp
+*END ASSEMBLY
+**
+*INCLUDE, INPUT=materials.inp
+**
+*NSET,NSET=TOP_BC
+A.single_element.top_right
+A.single_element.top_left
+**
+*BOUNDARY,OP=NEW
+*INCLUDE,INPUT=boundary.inp
+**
+*INCLUDE,INPUT=amplitudes.inp
+**
+*CONSTRAINT CONTROLS, PRINT=YES
+*************************************************************************
+**  STEP-1 LOAD STEP
+*************************************************************************
+*STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
+Compress cushions and pads.
+*STATIC
+.005, 1.00, 0.000001, 0.5
+**
+*BOUNDARY,OP=MOD, AMPLITUDE=SINGLE_ELEMENT
+TOP_BC,2,2,-1.0
+**
+*MONITOR, DOF=2, NODE=A.single_element.top_right
+**
+*OUTPUT, HISTORY, FREQUENCY=1
+*INCLUDE,INPUT=history_output.inp
+**
+*OUTPUT, FIELD, FREQUENCY=3
+*INCLUDE,INPUT=field_output.inp
+**
+*END STEP
+**

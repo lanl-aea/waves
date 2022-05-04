@@ -50,6 +50,10 @@ environment:
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
     - cp ${PWD}/modulefiles/* ${aea_modulefiles}
+    # Link SCons man pages to the expected MANPATH location
+    - ln ${environment_path}/scons.1 ${environment_path}/man/man1/scons.1
+    - ln ${environment_path}/sconsign.1 ${environment_path}/man/man1/sconsign.1
+    - ln ${environment_path}/scons-time.1 ${environment_path}/man/man1/scons-time.1
   only:
     refs:
       - main
@@ -100,7 +104,7 @@ test:
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons
+    - scons --keep-going
   tags:
     - sstelmo-shell-aea
   only:
@@ -124,8 +128,7 @@ pages:
     # Reference: https://gitlab.com/gitlab-org/gitlab/-/issues/33822
     - git fetch origin
     - git branch -a
-    # TODO: add back "main dev" after main is updated with the documentation files
-    - documentation_branches="dev"
+    - documentation_branches="main dev"
     - |
         for ref in ${documentation_branches}; do
             # TODO: match the branch to the correct module. unload/load for each branch.
@@ -138,7 +141,7 @@ pages:
             # Build documentation
             # TODO: limit build to documentation
             # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
-            scons
+            scons documentation
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref
         done
