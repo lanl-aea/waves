@@ -21,13 +21,6 @@
 ..    parameter_study_api
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Model Repository
-
-   model_repository_user
-   model_repository_api
-
-.. toctree::
    :caption: Help & Reference
    :maxdepth: 2
 

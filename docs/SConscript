@@ -10,8 +10,7 @@ env.Substfile(
     "conf.py.in",
     SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'],
                 '@VERSION@': env['VERSION'],
-                '@PROJECT_DIR@': env['PROJECT_DIR'],
-                '@ABAQUS_SOURCE_DIR@': env['ABAQUS_SOURCE_DIR']})
+                '@PROJECT_DIR@': env['PROJECT_DIR']})
 
 # Write shell script help messages to documentation build files
 abaqus_wrapper_node = env.Command(
@@ -33,8 +32,6 @@ documentation_file_list = [
     'devops.rst',
     'documentation.txt',
     'index.rst',
-    'model_repository_api.rst',
-    'model_repository_user.rst',
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
