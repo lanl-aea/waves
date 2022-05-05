@@ -5,8 +5,6 @@ import pathlib
 
 import setuptools_scm
 
-import waves
-
 # Variables required when WAVES is not installed as a package
 # TODO: (1) Separate EABM and WAVES definitions
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
