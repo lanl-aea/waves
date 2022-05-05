@@ -19,6 +19,7 @@ variant_dir_base = pathlib.Path('build')
 # Set project internal variables
 project_name = 'SCons-EABM'
 abaqus_source_dir = pathlib.Path('abaqus')
+documentation_source_dir = 'docs'
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
@@ -33,8 +34,12 @@ env = Environment(ENV=os.environ.copy(),
 env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(),
                      'AbaqusSolver': waves.builders.abaqus_solver()})
 
-# TODO: Add separate README and documentation build for EABM
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/26
+# Add top-level SCons script
+SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
+
+# Add documentation target
+build_dir = variant_dir_base / documentation_source_dir
+SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
 
 # Add simulation targets
 eabm_simulation_directories = [
