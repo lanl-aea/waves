@@ -26,8 +26,7 @@ env = Environment(ENV=os.environ.copy(),
                   PROJECT_NAME=project_name.lower(),
                   # TODO: Figure out how to use the SCons-simulation version from a subdirectory
                   # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/31
-                  #VERSION=setuptools_scm.get_version(),
-                  VERSION='uknown',
+                  VERSION=setuptools_scm.get_version(root='..'),
                   PROJECT_DIR=Dir('.').abspath,
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
 
