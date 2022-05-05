@@ -2,7 +2,11 @@
 Build System API
 ################
 
-.. automodule:: waves
+**************
+SCons Builders
+**************
+
+.. automodule:: waves.builders
     :members:
     :show-inheritance:
-    :synopsis: WAVES Analysis for Validated Engineering Simulations 
+    :synopsis: WAVES Analysis for Validated Engineering Simulations
