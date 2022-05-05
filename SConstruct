@@ -45,7 +45,8 @@ SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='e
 eabm_simulation_directories = [
     'tutorial_01_geometry',
     'tutorial_02_partition_mesh',
-    'tutorial_03_solverprep'
+    'tutorial_03_solverprep',
+    'tutorial_04_simulation'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / eabm_source_dir / source_dir
