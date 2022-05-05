@@ -8,12 +8,15 @@
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
+.. _SCons-simulation: https://kbrindley.re-pages.lanl.gov/scons-simulation/main/
+.. _SCons-simulation repository: https://re-git.lanl.gov/kbrindley/scons-simulation
+.. _Scons-EABM: https://re-git.lanl.gov/kbrindley/scons-simulation/-/tree/dev/eabm
 
 .. target-end-do-not-remove
 
-##############
-SCons-Simulation
-##############
+################
+SCons-simulation
+################
 
 .. inclusion-marker-do-not-remove
 
@@ -27,8 +30,13 @@ Testing `SCons`_ as a build system for simulations. Evaluating `SCons`_ features
 features and behavior. The related `cmake-simulation`_ project established the feasibility of using a build system like
 `CMake`_ in place of the `ECMF`_.
 
-The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_ covers build system
-concepts, command line options, and project definition.
+A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
+`SCons-simulation`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
+repositories. The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_
+covers build system concepts, command line options, and project definition.
+
+This project includes a template `SCons-EABM`_ which is used for the tutorials and for integration and regression
+testing of the `SCons-simulation`_ extensions to SCons.
 
 .. project-description-end-do-not-remove
 
@@ -37,6 +45,12 @@ Documentation
 
 * Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/main/
 * Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/dev/
+
+The `SCons-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
+like.
+
+* `SCons-EABM`_ Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/SCons-EABM/main/
+* `SCons-EABM`_ Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/SCons-EABM/dev/
 
 Developers
 ==========
@@ -97,24 +111,35 @@ Build Simulations
 
    .. code-block::
 
+      $ pwd
+      path/to/local/git/clone/scons-simulation/
+      $ cd eabm
+      $ pwd
+      path/to/local/git/clone/scons-simulation/eabm
       $ WIP
 
 5. Build all targets
 
    .. code-block::
 
+      $ pwd
+      path/to/local/git/clone/scons-simulation/eabm
       $ scons
 
 6. Build a specific target
 
    .. code-block::
 
+      $ pwd
+      path/to/local/git/clone/scons-simulation/eabm
       $ scons <target name>
 
 7. Remove the build target artifacts
 
    .. code-block::
 
+      $ pwd
+      path/to/local/git/clone/scons-simulation/eabm
       $ scons --clean
 
 .. build-end-do-not-remove
@@ -137,13 +162,15 @@ scripts.
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation
+      path/to/local/git/clone/scons-simulation/eabm
       $ scons <target_1_name> <target-2_name>
 
 6. Run all tests
 
    .. code-block::
 
+      $ pwd
+      path/to/local/git/clone/scons-simulation/eabm
       WIP
 
 A full list of test names can be generated with the following command.
@@ -162,10 +189,20 @@ Documentation
 
 The documentation build is also automated with SCons as the ``documentation`` target.
 
-5. Build the documentation target
+5. Build the `SCons-simulation`_ documentation
 
    .. code-block::
 
-      $ scons documentation 
+      $ pwd
+      path/to/local/git/clone/scons-simulation/
+      $ scons documentation
+
+6. Build the `SCons-EABM`_ documentation
+
+   .. code-block::
+
+      $ pwd
+      path/to/local/git/clone/scons-simulation/eabm
+      $ scons documentation
 
 .. docs-end-do-not-remove
