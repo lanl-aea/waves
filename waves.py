@@ -1,17 +1,5 @@
 #! /usr/bin/env python
 """WAVES Analysis for Validated Engineering Simulations
-
-Builders:
-
-* abaqus_journal - This builder requires that the journal file to execute is the first source in the list
-
-
-.. code-block::
-
-   import waves
-   env.Environment()
-   env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal})
-   AbaqusJournal(target=my_journal.cae, source=my_journal.py, journal_options='')
 """
 
 import pathlib
@@ -35,8 +23,30 @@ def _abaqus_journal_emitter(target, source, env):
     return target, source
 
 
-# TODO: Turn this into a function or class that can take a docstring
-abaqus_journal = SCons.Builder.Builder(
-    chdir=1,
-    action='abaqus cae -noGui ${SOURCE.abspath} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
-    emitter=_abaqus_journal_emitter)
+def abaqus_journal():
+    """Abaqus journal file SCons builder
+
+    This builder requires that the journal file to execute is the first source in the list. The builder returned by this
+    function accepts all SCons Builder arguments and adds the ``journal_options`` string. The Builder emitter will
+    append the builder managed targets automatically.
+
+    .. code-block::
+       :caption: Abaqus journal builder action
+       :name: abaqus_journal_action
+
+       abaqus cae -noGui ${SOURCE.abspath} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1
+
+    .. code-block::
+       :caption: SConstruct
+       :name: abaqus_journal_example
+    
+       import waves
+       env.Environment()
+       env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal()})
+       AbaqusJournal(target=my_journal.cae, source=my_journal.py, journal_options='')
+    """
+    abaqus_journal_builder = SCons.Builder.Builder(
+        chdir=1,
+        action='abaqus cae -noGui ${SOURCE.abspath} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
+        emitter=_abaqus_journal_emitter)
+    return abaqus_journal_builder
