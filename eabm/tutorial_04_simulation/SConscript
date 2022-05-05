@@ -51,7 +51,7 @@ abaqus_input_template_list = [
 abaqus_input_list = [abaqus_input.with_suffix('') for abaqus_input in abaqus_input_template_list]
 solverprep = list()
 for template_file, input_file in zip(abaqus_input_template_list, abaqus_input_list):
-    solverprep.append(Substfile(str(template)))
+    solverprep.append(Substfile(str(template_file)))
     solverprep.append(
         Command(
             target=input_file.name,
