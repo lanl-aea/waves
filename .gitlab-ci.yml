@@ -105,6 +105,7 @@ test:
     GIT_STRATEGY: clone
   script:
     - scons --keep-going
+    - cd eabm && scons --keep-going
   tags:
     - sstelmo-shell-aea
   only:
@@ -135,15 +136,18 @@ pages:
             # https://re-git.lanl.gov/kbrindley/scons-simulation/-/boards
             git checkout $ref
             git reset --hard origin/$ref
-            mkdir -p public/$ref
-            # Clean old build directory
+            mkdir -p public/$ref/scons-eabm
+            # Clean and build documentation
             scons --clean
-            # Build documentation
-            # TODO: limit build to documentation
-            # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
             scons documentation
+            # Build EABM documentation
+            cd eabm
+            scons --clean
+            scons documentation
+            cd ..
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref
+            cp -r eabm/build/docs/html/* public/$ref/scons-eabm
         done
     # FIXME: (1) Reset the repository Git configuration to preserve ssl verifications. Remove when the server(s)
     # configurations no longer require us to drop ssl verifications.

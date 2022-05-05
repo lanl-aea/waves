@@ -2,6 +2,7 @@ import sys
 import os
 import argparse
 import inspect
+import shutil
 import re
 
 import abaqus
@@ -61,7 +62,14 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     :returns: ``output_file``.cae, ``output_file``.inp
     """
 
-    abaqus.openMdb(pathName='{}.cae'.format(input_file))
+    input_with_extension = '{}.cae'.format(input_file)
+    output_with_extension = '{}.cae'.format(output_file)
+
+    # Avoid modifying the contents or timestamp on the input file.
+    # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
+    shutil.copyfile(input_with_extension, output_with_extension)
+
+    abaqus.openMdb(pathName=output_with_extension)
 
     p = abaqus.mdb.models[model_name].parts[part_name]
     a = abaqus.mdb.models[model_name].rootAssembly
@@ -86,7 +94,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     model_object = abaqus.mdb.models[model_name]
     export_mesh(model_object, part_name, output_file)
 
-    abaqus.mdb.saveAs(pathName='{}.cae'.format(output_file))
+    abaqus.mdb.save()
 
 if __name__ == '__main__':
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE

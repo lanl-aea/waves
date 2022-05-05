@@ -6,19 +6,12 @@
 
 .. toctree::
    :maxdepth: 2
-   :caption: Build System
+   :caption: Model Repository
 
    user
    theory
    api
    devops
-
-.. .. toctree::
-..    :maxdepth: 2
-..    :caption: Parameter Study Utility
-..
-..    parameter_study_cli
-..    parameter_study_api
 
 .. toctree::
    :caption: Help & Reference
