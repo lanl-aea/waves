@@ -67,6 +67,7 @@ env.AlwaysBuild(solverprep)
 
 # Abaqus Solve
 # TODO: Add a datacheck simulation
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/30
 job_name = 'single_element_compression'
 abaqus_options = ''
 abaqus_input_names = [abaqus_input.name for abaqus_input in abaqus_input_list]
