@@ -31,7 +31,8 @@ env = Environment(ENV=os.environ.copy(),
                   abaqus_wrapper=str(abaqus_wrapper))
 
 # Add custom builders
-env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal()})
+env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal(),
+                     'AbaqusSolver': waves.abaqus_solver()})
 
 # Add top-level SCons script
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
