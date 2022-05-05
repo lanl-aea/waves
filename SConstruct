@@ -6,6 +6,11 @@ import pathlib
 import setuptools_scm
 import waves
 
+# Variables required when WAVES is not installed as a package
+# TODO: (1) Separate EABM and WAVES definitions
+waves_source_dir = pathlib.Path('waves')
+abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
+
 # TODO: make this available for overwrite from a command line option
 variant_dir_base = pathlib.Path('build')
 
@@ -20,7 +25,9 @@ env = Environment(ENV=os.environ.copy(),
                   PROJECT_NAME=project_name.lower(),
                   VERSION=setuptools_scm.get_version(),
                   PROJECT_DIR=Dir('.').abspath,
-                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
+                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
+                  # TODO: (1) Separate EABM and WAVES definitions
+                  abaqus_wrapper=str(abaqus_wrapper))
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal()})
