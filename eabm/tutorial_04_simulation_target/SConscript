@@ -1,0 +1,66 @@
+#! /usr/bin/env python
+
+import pathlib
+
+# Inherit the parent construction environment
+Import('env')
+
+# Set project-wide paths with os-agnostic path separators
+project_dir = pathlib.Path(env['PROJECT_DIR'])
+abaqus_source_abspath = project_dir / env['ABAQUS_SOURCE_DIR']
+
+# Simulation variables
+model = "single_element"
+
+# Geometry
+journal_file = f"{model}_geometry"
+journal_options = ""
+geometry = env.AbaqusJournal(
+    target=[f"{journal_file}.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py"],
+    journal_options=journal_options)
+
+# Partition
+journal_file = f"{model}_partition"
+journal_options = ""
+partition = env.AbaqusJournal(
+    target=[f"{journal_file}.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+    journal_options=journal_options)
+
+# Mesh
+journal_file = f"{model}_mesh"
+journal_options = ""
+mesh = env.AbaqusJournal(
+    target=[f"{journal_file}.cae", f"{journal_file}.inp"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
+    journal_options=journal_options)
+
+# SolverPrep
+abaqus_input_list = [
+    abaqus_source_abspath / "single_element_compression.inp.in",
+    abaqus_source_abspath / "amplitudes.inp.in",
+    abaqus_source_abspath / "assembly.inp.in",
+    abaqus_source_abspath / "boundary.inp.in",
+    abaqus_source_abspath / "field_output.inp.in",
+    abaqus_source_abspath / "materials.inp.in",
+    abaqus_source_abspath / "parts.inp.in",
+    abaqus_source_abspath / "history_output.inp.in"
+]
+solverprep = list()
+for abaqus_input in abaqus_input_list:
+    solverprep.append(Substfile(str(abaqus_input)))
+    solverprep.append(
+        Command(
+            target=abaqus_input.with_suffix('').name,
+            source=str(abaqus_input.with_suffix('')),
+            action=Move('${TARGET}', '${SOURCE}')))
+# This AlwaysBuild means that the build/**/*.inp files are always re-created and moved.
+# It's required because the Substfile command will find it's targets missing and re-run, but Move will not re-run,
+# leaving build output in the source directory.
+# TODO: Find another way to avoid creating files in the source directory with Substfile
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/16
+env.AlwaysBuild(solverprep)
+
+# Collector alias
+env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep)
