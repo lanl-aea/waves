@@ -8,12 +8,15 @@
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
+.. _SCons-simulation: https://kbrindley.re-pages.lanl.gov/scons-simulation/main/
+.. _SCons-simulation repository: https://re-git.lanl.gov/kbrindley/scons-simulation
+.. _Scons-EABM: https://re-git.lanl.gov/kbrindley/scons-simulation/-/tree/dev/eabm
 
 .. target-end-do-not-remove
 
-##############
-SCons-Simulation
-##############
+##########
+SCons-EABM
+##########
 
 .. inclusion-marker-do-not-remove
 
@@ -23,20 +26,19 @@ Description
 
 .. project-description-start-do-not-remove
 
-Testing `SCons`_ as a build system for simulations. Evaluating `SCons`_ features and behavior against `CMake`_ and `ECMF`_
-features and behavior. The related `cmake-simulation`_ project established the feasibility of using a build system like
-`CMake`_ in place of the `ECMF`_.
-
-The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_ covers build system
-concepts, command line options, and project definition.
+The `SCons-EABM`_ contains the demonstration engineering analysis baseline model (EABM) that matches the
+`SCons-simulation`_ collection of build system utilities. Besides the handful of command line utilities,
+`SCons-simulations` also included custom SCons builders that are commonly re-used in model simulation (modsim)
+repositories. This EABM is used in the `SCons-simulation`_ tutorials as well as the `SCons-simulation repository`_
+integration and system tests.
 
 .. project-description-end-do-not-remove
 
 Documentation
 =============
 
-* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/main/
-* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/dev/
+* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/SCons-EABM/main/
+* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/SCons-EABM/dev/
 
 Developers
 ==========
@@ -144,7 +146,7 @@ scripts.
 
    .. code-block::
 
-      WIP
+      scons --keep-going 
 
 A full list of test names can be generated with the following command.
 
@@ -166,6 +168,6 @@ The documentation build is also automated with SCons as the ``documentation`` ta
 
    .. code-block::
 
-      $ scons documentation 
+      $ scons documentation
 
 .. docs-end-do-not-remove
