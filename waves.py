@@ -7,9 +7,8 @@ import SCons.Builder
 # TODO: (1) Separate EABM and WAVES definitions
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
 # TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
-waves_source_dir = pathlib.Path('waves')
+waves_source_dir = pathlib.Path(__file__).parent.resolve() / 'waves'
 abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
-abaqus_wrapper = abaqus_wrapper.resolve()
 
 
 def _abaqus_journal_emitter(target, source, env):
