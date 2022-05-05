@@ -4,6 +4,7 @@ import os
 import pathlib
 
 import setuptools_scm
+
 import waves
 
 # Variables required when WAVES is not installed as a package
@@ -14,6 +15,7 @@ abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
 abaqus_wrapper = abaqus_wrapper.resolve()
 
 # TODO: make this available for overwrite from a command line option
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/25
 variant_dir_base = pathlib.Path('build')
 
 # Set project internal variables
