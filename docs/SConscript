@@ -11,7 +11,9 @@ env.Substfile(
     SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'],
                 '@VERSION@': env['VERSION'],
                 '@PROJECT_DIR@': env['PROJECT_DIR'],
-                '@ABAQUS_SOURCE_DIR@': env['ABAQUS_SOURCE_DIR']})
+                '@ABAQUS_SOURCE_DIR@': env['ABAQUS_SOURCE_DIR'],
+                # TODO: (1) Separate EABM and WAVES definitions
+                '@abaqus_wrapper@': env['abaqus_wrapper']})
 
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
