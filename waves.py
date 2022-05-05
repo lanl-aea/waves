@@ -4,6 +4,13 @@ import pathlib
 
 import SCons.Builder
 
+# TODO: (1) Separate EABM and WAVES definitions
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
+# TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
+waves_source_dir = pathlib.Path('waves')
+abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
+abaqus_wrapper = abaqus_wrapper.resolve()
+
 
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
@@ -37,7 +44,7 @@ def abaqus_journal():
     .. code-block::
        :caption: SConstruct
        :name: abaqus_journal_example
-    
+
        import waves
        env.Environment()
        env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal()})
@@ -48,3 +55,46 @@ def abaqus_journal():
         action='abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
+
+
+def _abaqus_solver_emitter(target, source, env):
+    """Appends the abaqus_solver builder target list with the builder managed targets
+    """
+    if not 'job_name' in env:
+        raise RuntimeError('Builder is missing required keyword argument "job_name".')
+    builder_suffixes = ['touch', 'log']
+    abaqus_simulation_suffixes = ['odb', 'dat', 'sta', 'msg', 'com', 'prt']
+    suffixes = builder_suffixes + abaqus_simulation_suffixes
+    for suffix in suffixes:
+        target.append(f"{env['job_name']}.{suffix}")
+    return target, source
+
+
+def abaqus_solver():
+    """Abaqus solver SCons builder
+
+    This builder requires that the root input file is the first source in the list. The builder returned by this
+    functions accepts all SCons Builder arguments and adds the required string argument ``job_name`` and optional string
+    argument ``abaqus_options``.  The Builder emitter will append common Abaqus output files as targets automatically
+    from the ``job_name``, e.g. ``job_name.odb``, ``job_name.dat``, ``job_name.sta``, etc.
+
+    .. code-block::
+       :caption: Abaqus journal builder action
+       :name: abaqus_solver_action
+
+       abaqus_wrapper ${job_name} abaqus -job ${job_name} -input ${SOURCE} ${abaqus_options}'
+
+    .. code-block::
+       :caption: SConstruct
+       :name: abaqus_solver_example
+
+       import waves
+       env.Environment()
+       env.Append(BUILDERS={'AbaqusSolver': waves.abaqus_solver()})
+       AbaqusSolver(target=[], source=input.inp, job_name='my_job', abaqus_options='-cpus 4')
+    """
+    abaqus_solver_builder = SCons.Builder.Builder(
+        chdir=1,
+        action=f'{abaqus_wrapper} ${{job_name}} abaqus -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}',
+        emitter=_abaqus_solver_emitter)
+    return abaqus_solver_builder

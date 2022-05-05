@@ -1,0 +1,63 @@
+#! /usr/bin/env bash
+# Make bash script more like high-level languages.
+set -Eeuo pipefail
+
+# Get this script's file name
+script=`basename "$0"`
+
+usage="${script}
+Usage: ./${script} job_name abaqus_program [abaqus_options [abaqus_options...]]"
+help_output='
+Executes the abaqus program against the provided options, providing a non-zero exit
+code for simulation errors reported in the interactive output. The "-interactive"
+option is always appended to avoid exiting the wrapper script before the simulation
+is complete. The "-ask_delete no" option is always appended for overwriting existing
+files in programmatic execution, such as in automated build systems. It is expected
+that this script is only called from a build system that manages out-of-date targets.
+
+  required positional arguments:
+    job_name        Job name. Used to produce the ${job_name}.touch and redirect STDOUT
+                    and STDERR ${job_name}.log
+    abaqus_program  Abaqus executable on PATH or absolute path
+    abaqus_options  Everything after the second positional argument is passed on directly
+                    as an option to the abaqus command. The options should specify
+                    everything except "-interactive" and "-ask_delete no", which are
+                    always appended'
+
+# Parse arguments
+# TODO: Add a getopts interface with a '-h' option
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/22
+if [ "$#" -eq 0 ]; then
+    printf "%s\n" "${usage}"
+    printf "%s\n" "${help_output}"
+    exit 0
+elif [ "$#" -lt 2 ]; then
+    printf "%s\n" "${usage}"
+    printf "%s\n" "${help_output}"
+    exit 1
+fi
+job=$1
+abaqus_program=$2
+abaqus_options=${@:3}
+
+# Verify abaqus path
+if [ ! "$(command -v ${abaqus_program})" ]; then
+    echo "Command '${abaqus_program}' not found."
+    exit 2
+fi
+
+# Run abaqus against the provided options and redirect interactive output to log file
+# Use interactive to avoid sleep and wait statements
+touch ${job}.touch
+${abaqus_program} ${abaqus_options} -interactive -ask_delete no >> ${job}.log 2>&1
+touch ${job}.touch
+
+# Check commands for common error codes
+set +e
+error_pattern='ERROR'
+error_matches=$(grep ${error_pattern} ${job}.log)
+if [ ! -z "${error_matches}" ]; then
+    echo "Found errors in ${job}.log"
+    echo "${error_matches}"
+    exit 5
+fi

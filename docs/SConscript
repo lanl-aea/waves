@@ -13,9 +13,17 @@ env.Substfile(
                 '@PROJECT_DIR@': env['PROJECT_DIR'],
                 '@ABAQUS_SOURCE_DIR@': env['ABAQUS_SOURCE_DIR']})
 
+# Write shell script help messages to documentation build files
+abaqus_wrapper_node = env.Command(
+    chdir=1,
+    target='abaqus_wrapper_message.txt',
+    source=env['abaqus_wrapper'],
+    action='${SOURCE.abspath} > abaqus_wrapper_message.txt')
+
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
     'conf.py',
+    'abaqus_wrapper_message.txt',
     'README.txt',  # Copied from README.rst to docs build directory by root SConscript
     'api.rst',
     'build.txt',

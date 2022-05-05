@@ -37,7 +37,8 @@ mesh = env.AbaqusJournal(
     journal_options=journal_options)
 
 # SolverPrep
-abaqus_input_list = [
+abaqus_input_template_list = [
+    # The root input file MUST be first for the AbaqusSolver Builder
     abaqus_source_abspath / "single_element_compression.inp.in",
     abaqus_source_abspath / "amplitudes.inp.in",
     abaqus_source_abspath / "assembly.inp.in",
@@ -47,13 +48,14 @@ abaqus_input_list = [
     abaqus_source_abspath / "parts.inp.in",
     abaqus_source_abspath / "history_output.inp.in"
 ]
+abaqus_input_list = [abaqus_input.with_suffix('') for abaqus_input in abaqus_input_template_list]
 solverprep = list()
-for abaqus_input in abaqus_input_list:
-    solverprep.append(Substfile(str(abaqus_input)))
+for template_file, input_file in zip(abaqus_input_template_list, abaqus_input_list):
+    solverprep.append(Substfile(str(template_file)))
     solverprep.append(
         Command(
-            target=abaqus_input.with_suffix('').name,
-            source=str(abaqus_input.with_suffix('')),
+            target=input_file.name,
+            source=str(input_file),
 # This AlwaysBuild means that the build/**/*.inp files are always re-created and moved.
 # It's required because the Substfile command will find it's targets missing and re-run, but Move will not re-run,
 # leaving build output in the source directory. Fortunately, the md5sum checking of SCons prevents this from always
@@ -63,5 +65,17 @@ for abaqus_input in abaqus_input_list:
             action=Copy('${TARGET}', '${SOURCE}')))
 env.AlwaysBuild(solverprep)
 
+# Abaqus Solve
+# TODO: Add a datacheck simulation
+job_name = 'single_element_compression'
+abaqus_options = ''
+abaqus_input_names = [abaqus_input.name for abaqus_input in abaqus_input_list]
+abaqus_input_names.append(f"{journal_file}.inp")
+solve = env.AbaqusSolver(
+    target=[],
+    source=abaqus_input_names,
+    job_name=job_name,
+    abaqus_options=abaqus_options)
+
 # Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep)
+env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh, solve] + solverprep)

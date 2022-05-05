@@ -32,5 +32,5 @@ a failed simulation and provide robust wait criteria to determine target complet
 
 The abaqus wrapper command line options and behavior are described in the usage message as
 
-.. .. literalinclude:: abaqus_wrapper_message.txt
-..    :language: bash
+.. literalinclude:: abaqus_wrapper_message.txt
+   :language: bash
