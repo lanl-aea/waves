@@ -4,6 +4,12 @@ import pathlib
 
 import SCons.Builder
 
+# TODO: (1) Separate EABM and WAVES definitions
+# TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
+waves_source_dir = pathlib.Path('waves')
+abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
+abaqus_wrapper = abaqus_wrapper.resolve()
+
 
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
@@ -37,7 +43,7 @@ def abaqus_journal():
     .. code-block::
        :caption: SConstruct
        :name: abaqus_journal_example
-    
+
        import waves
        env.Environment()
        env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal()})
@@ -58,5 +64,29 @@ def _abaqus_solver_emitter(target, source, env):
 
 def abaqus_solver():
     """Abaqus solver SCons builder
+
+    This builder requires that the root input file is the first source in the list. The builder returned by this
+    functions accepts all SCons Builder arguments and adds the required string argument ``job_name`` and optional string
+    argument ``abaqus_options``.  The Builder emitter will append common Abaqus output files as targets automatically
+    from the ``job_name``, e.g. ``job_name.odb``, ``job_name.dat``, ``job_name.sta``, etc.
+
+    .. code-block::
+       :caption: Abaqus journal builder action
+       :name: abaqus_journal_action
+
+       abaqus_wrapper ${job_name} abaqus -job ${job_name} -input ${SOURCE} ${abaqus_options}'
+
+    .. code-block::
+       :caption: SConstruct
+       :name: abaqus_journal_example
+
+       import waves
+       env.Environment()
+       env.Append(BUILDERS={'AbaqusSolver': waves.abaqus_solver()})
+       AbaqusSolver(target=[], source=input.inp, job_name='my_job', abaqus_options='-cpus 4')
     """
-    pass
+    abaqus_solver_builder = SCons.Builder.Builder(
+        chdir=1,
+        action=f'{abaqus_wrapper} ${{job_name}} abaqus -job ${{job_name}} -input ${{SOURCE}} ${{abaqus_options}}',
+        emitter=_abaqus_solver_emitter)
+    return abaqus_solver_builder

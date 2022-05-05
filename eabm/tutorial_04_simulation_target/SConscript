@@ -62,5 +62,7 @@ for abaqus_input in abaqus_input_list:
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/16
 env.AlwaysBuild(solverprep)
 
+# Abaqus simulation
+
 # Collector alias
 env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep)
