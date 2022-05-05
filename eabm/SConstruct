@@ -1,0 +1,44 @@
+#! /usr/bin/env python
+
+import os
+import sys
+import pathlib
+
+import setuptools_scm
+# Only required when WAVES is not installed as a package
+sys.path.insert(0, str(pathlib.Path('..').resolve()))
+import waves
+
+# TODO: make this available for overwrite from a command line option
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/25
+variant_dir_base = pathlib.Path('build')
+
+# Set project internal variables
+project_name = 'SCons-EABM'
+abaqus_source_dir = pathlib.Path('abaqus')
+
+# Inherit user's full environment and set project variables
+env = Environment(ENV=os.environ.copy(),
+                  PROJECT_NAME=project_name.lower(),
+                  # TODO: Figure out how to use the SCons-simulation version from a subdirectory
+                  #VERSION=setuptools_scm.get_version(),
+                  VERSION='uknown',
+                  PROJECT_DIR=Dir('.').abspath,
+                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
+
+# Add custom builders
+env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal(),
+                     'AbaqusSolver': waves.abaqus_solver()})
+
+# TODO: Add separate README and documentation build for EABM
+
+# Add simulation targets
+eabm_simulation_directories = [
+    'tutorial_01_geometry',
+    'tutorial_02_partition_mesh',
+    'tutorial_03_solverprep',
+    'tutorial_04_simulation'
+]
+for source_dir in eabm_simulation_directories:
+    build_dir = variant_dir_base / source_dir
+    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
