@@ -27,6 +27,8 @@ Bug fixes
 Documentation
 =============
 - Add SCons custom builder documentation for the build system (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
+- Separate the Scons build system documentation from the associated SCons-EABM documentation (:issue:`26`, :merge:`16`).
+  By `Kyle Brindley`_.
 
 Internal Changes
 ================
