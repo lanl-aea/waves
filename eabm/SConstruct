@@ -30,8 +30,8 @@ env = Environment(ENV=os.environ.copy(),
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
 
 # Add custom builders
-env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal(),
-                     'AbaqusSolver': waves.abaqus_solver()})
+env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(),
+                     'AbaqusSolver': waves.builders.abaqus_solver()})
 
 # TODO: Add separate README and documentation build for EABM
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/26
