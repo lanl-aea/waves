@@ -4,6 +4,7 @@ import os
 import pathlib
 
 import setuptools_scm
+import waves
 
 # TODO: make this available for overwrite from a command line option
 variant_dir_base = pathlib.Path('build')
@@ -21,42 +22,15 @@ env = Environment(ENV=os.environ.copy(),
                   PROJECT_DIR=Dir('.').abspath,
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
 
-
-# =========================================================================================== WILL BE MOVED TO WAVES ===
-# Custom Builders
-def abaqus_journal_modify_targets(target, source, env):
-    """Appends the abaqus_journal builder target list with the builder managed targets
-
-    Appends ``source[0]``.jnl and ``source[0]``.log to the ``target`` list. The abaqus_journal Builder requires that the
-    journal file to execute is the first source in the list.
-
-    :return: target, source
-    :rtype: tuple with two lists
-    """
-    journal_file = pathlib.Path(source[0].path).name
-    journal_file = pathlib.Path(journal_file)
-    target.append(f"{str(journal_file.with_suffix('.jnl'))}")
-    target.append(f"{str(journal_file.with_suffix('.log'))}")
-    return target, source
-
-
-# TODO: Turn this into a function or class that can take a docstring
-abaqus_journal = Builder(
-    chdir=1,
-    action='abaqus cae -noGui ${SOURCE.abspath} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
-    emitter=abaqus_journal_modify_targets)
-
-# =================================================================================================== RETURN TO EABM ===
 # Add custom builders
-env.Append(BUILDERS={'AbaqusJournal': abaqus_journal})
+env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal()})
 
 # Add top-level SCons script
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
 
 # Add documentation target
-source_dir = 'docs'
-build_dir = variant_dir_base / source_dir
-SConscript(dirs=source_dir, variant_dir=str(build_dir), exports='env')
+build_dir = variant_dir_base / documentation_source_dir
+SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
 
 # Add simulation targets
 eabm_simulation_directories = [

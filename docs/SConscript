@@ -16,17 +16,23 @@ env.Substfile(
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
     'conf.py',
-    'README.txt',
+    'README.txt',  # Copied from README.rst to docs build directory by root SConscript
+    'api.rst',
+    'build.txt',
     'changelog.rst',
+    'contribution.txt',
+    'dependencies.txt',
+    'devops.rst',
+    'documentation.txt',
     'index.rst',
+    'model_repository_api.rst',
+    'model_repository_user.rst',
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
     'targets.txt',
-    'model_repository_user.rst',
-    'model_repository_api.rst',
-    'build.txt',
-    'documentation.txt',
+    'theory.rst',
+    'user.rst',
     'zreferences.rst',
     '_static/custom.css'
 ]
