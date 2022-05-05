@@ -28,6 +28,11 @@ Documentation
 =============
 - Add SCons custom builder documentation for the build system (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Remove the dummy ``{job_name}.touch`` file from the Abaqus wrapper. SCons does not automatically delete target file(s)
+  when the build fails like GNU Make or CMake does (:issue:`24`, :merge:`14`). By `Kyle Brindley`_.
+
 ******************
 0.1.2 (2022-05-04)
 ******************
