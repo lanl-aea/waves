@@ -80,13 +80,13 @@ def abaqus_solver():
 
     .. code-block::
        :caption: Abaqus journal builder action
-       :name: abaqus_journal_action
+       :name: abaqus_solver_action
 
        abaqus_wrapper ${job_name} abaqus -job ${job_name} -input ${SOURCE} ${abaqus_options}'
 
     .. code-block::
        :caption: SConstruct
-       :name: abaqus_journal_example
+       :name: abaqus_solver_example
 
        import waves
        env.Environment()
