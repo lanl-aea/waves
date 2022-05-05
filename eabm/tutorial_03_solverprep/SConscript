@@ -54,7 +54,7 @@ for abaqus_input in abaqus_input_list:
         Command(
             target=abaqus_input.with_suffix('').name,
             source=str(abaqus_input.with_suffix('')),
-            action=Move('${TARGET}', '${SOURCE}')))
+            action=Copy('${TARGET}', '${SOURCE}')))
 # This AlwaysBuild means that the build/**/*.inp files are always re-created and moved.
 # It's required because the Substfile command will find it's targets missing and re-run, but Move will not re-run,
 # leaving build output in the source directory.
