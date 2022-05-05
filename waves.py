@@ -62,7 +62,7 @@ def _abaqus_solver_emitter(target, source, env):
     """
     if not 'job_name' in env:
         raise RuntimeError('Builder is missing required keyword argument "job_name".')
-    builder_suffixes = ['touch', 'log']
+    builder_suffixes = ['log']
     abaqus_simulation_suffixes = ['odb', 'dat', 'sta', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
     for suffix in suffixes:

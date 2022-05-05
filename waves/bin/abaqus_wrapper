@@ -16,8 +16,8 @@ files in programmatic execution, such as in automated build systems. It is expec
 that this script is only called from a build system that manages out-of-date targets.
 
   required positional arguments:
-    job_name        Job name. Used to produce the ${job_name}.touch and redirect STDOUT
-                    and STDERR ${job_name}.log
+    job_name        Job name. Used to redirect STDOUT and STDERR to
+                    ${job_name}.log
     abaqus_program  Abaqus executable on PATH or absolute path
     abaqus_options  Everything after the second positional argument is passed on directly
                     as an option to the abaqus command. The options should specify
@@ -48,9 +48,7 @@ fi
 
 # Run abaqus against the provided options and redirect interactive output to log file
 # Use interactive to avoid sleep and wait statements
-touch ${job}.touch
 ${abaqus_program} ${abaqus_options} -interactive -ask_delete no >> ${job}.log 2>&1
-touch ${job}.touch
 
 # Check commands for common error codes
 set +e
