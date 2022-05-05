@@ -10,6 +10,7 @@ import waves
 # TODO: (1) Separate EABM and WAVES definitions
 waves_source_dir = pathlib.Path('waves')
 abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
+abaqus_wrapper = abaqus_wrapper.resolve()
 
 # TODO: make this available for overwrite from a command line option
 variant_dir_base = pathlib.Path('build')
