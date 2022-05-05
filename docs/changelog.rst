@@ -16,6 +16,8 @@ New Features
   Brindley`_.
 - Add a variable to pass through additional Abaqus command line arguments to the Abaqus journal file builder
   (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
+- Add the SCons target definition equivalent to the ECMF and CMake-simulation Abaqus simulation execution (:issue:`21`,
+  :merge:`13`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
