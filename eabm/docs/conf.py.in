@@ -1,0 +1,52 @@
+import sys
+import os
+import pathlib
+import unittest.mock
+import subprocess
+
+# -- Project information -----------------------------------------------------
+# Meta data from SCons project
+project = '@PROJECT_NAME@'
+VERSION = '@VERSION@'
+project_dir = pathlib.Path('@PROJECT_DIR@').resolve()
+abaqus_source_dir = '@ABAQUS_SOURCE_DIR@'
+
+# Add paths to API/CLI files
+sys.path.insert(0, str(project_dir))
+sys.path.insert(0, str(project_dir / abaqus_source_dir))
+
+# Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules.
+mock_modules = ['abaqus', 'abaqusConstants', 'mesh']
+for mod_name in mock_modules:
+    sys.modules[mod_name] = unittest.mock.Mock()
+
+release = VERSION
+version = release
+
+# ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
+# -- Project Variables -------------------------------------------------------
+rst_prolog = f'.. |project| replace:: {project}\n.. include:: targets.txt'
+
+# -- General configuration ---------------------------------------------------
+# Add custom style sheet to make the html docs wider
+def setup(app):
+    app.add_css_file('custom.css')
+
+# Add any Sphinx extension module names here, as strings.
+extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.bibtex', 'sphinx.ext.extlinks', 'sphinxarg.ext']
+
+bibtex_bibfiles = ['references.bib']
+
+# Links to PRs, Jira issues.
+extlinks = {
+     "merge": ("https://re-git.lanl.gov/kbrindley/scons-simulation/-/merge_requests/%s", "MERGE-"),
+     "issue": ("https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/%s", "ISSUE-"),
+}
+
+templates_path = ['_templates']
+source_suffix = ['.rst']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+# -- Options for HTML output -------------------------------------------------
+html_theme = 'sphinx_rtd_theme'
+html_static_path = ['_static']
