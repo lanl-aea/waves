@@ -1,0 +1,9 @@
+************
+Dependencies
+************
+
+The Python package dependencies are found in the ``environment.yml`` file.
+
+The EABM in this project also requires:
+
+#. Abaqus

@@ -1,0 +1,39 @@
+***********************
+Contribution Guidelines
+***********************
+
+W-13 python projects, including the |project| project, use the `Gitlab Flow`_ workflow model.
+
+Git Commit Message
+==================
+
+Begin Git commit messages with one of the following headings:
+
+* BUG: bug fix
+* DOC: documentation
+* FEAT: feature
+* MAINT: maintenance
+* TST: tests
+* REL: release
+* WIP: work-in-progress
+
+For example:
+
+.. code:: bash
+
+   git commit -m "FEAT: short intent of new feature"
+   git commit -m "BUG: fixes nasty bug"
+   git commit -m "DOC: adds documentation for feature"
+
+reStructured Text
+=================
+
+`Sphinx`_ reads in docstrings and other special portions of the code as
+reStructured text. Developers should follow styles in this `Sphinx style
+guide`_.
+
+Style Guide
+===========
+
+This project does not yet have a full style guide. Generally, wherever a style can't be inferred from surrounding code
+this project falls back to `PEP-8`_-like styles. There are two notable exceptions to the notional PEP-8 fall back:
