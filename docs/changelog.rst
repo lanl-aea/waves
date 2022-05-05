@@ -17,6 +17,11 @@ New Features
 - Add a variable to pass through additional Abaqus command line arguments to the Abaqus journal file builder
   (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
 
+Bug fixes
+=========
+- Avoid modifying the contents or timestamp of input files in Abaqus journal files (:issue:`17`, :merge:`12`). By `Kyle
+  Brindley`_.
+
 Documentation
 =============
 - Add SCons custom builder documentation for the build system (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
