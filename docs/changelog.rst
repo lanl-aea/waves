@@ -12,6 +12,14 @@ Changelog
 New Features
 ============
 - Append the Abaqus journal Builder managed targets automatically (:issue:`18`, :merge:`10`). By `Kyle Brindley`_.
+- Separate the common custom builders from the EABM SCons project definition (:issue:`19`, :merge:`11`). By `Kyle
+  Brindley`_.
+- Add a variable to pass through additional Abaqus command line arguments to the Abaqus journal file builder
+  (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add SCons custom builder documentation for the build system (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
 
 ******************
 0.1.2 (2022-05-04)
