@@ -93,6 +93,6 @@ def abaqus_solver():
     """
     abaqus_solver_builder = SCons.Builder.Builder(
         chdir=1,
-        action=f'{abaqus_wrapper} ${{job_name}} abaqus -job ${{job_name}} -input ${{SOURCE}} ${{abaqus_options}}',
+        action=f'{abaqus_wrapper} ${{job_name}} abaqus -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}',
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
