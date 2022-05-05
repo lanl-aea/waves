@@ -48,3 +48,15 @@ def abaqus_journal():
         action='abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
+
+
+def _abaqus_solver_emitter(target, source, env):
+    """Appends the abaqus_solver builder target list with the builder managed targets
+    """
+    pass
+
+
+def abaqus_solver():
+    """Abaqus solver SCons builder
+    """
+    pass
