@@ -29,7 +29,8 @@ env = Environment(ENV=os.environ.copy(),
                   PROJECT_NAME=project_name.lower(),
                   VERSION=setuptools_scm.get_version(),
                   PROJECT_DIR=Dir('.').abspath,
-                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
+                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
+                  abaqus_wrapper=str(abaqus_wrapper))
 
 # Add top-level SCons script
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
