@@ -1,4 +1,18 @@
 #! /usr/bin/env python
+"""WAVES Analysis for Validated Engineering Simulations
+
+Builders:
+
+* abaqus_journal - This builder requires that the journal file to execute is the first source in the list
+
+
+.. code-block::
+
+   import waves
+   env.Environment()
+   env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal})
+   AbaqusJournal(target=my_journal.cae, source=my_journal.py, journal_options='')
+"""
 
 import pathlib
 
