@@ -1,6 +1,4 @@
 #! /usr/bin/env python
-"""WAVES Analysis for Validated Engineering Simulations
-"""
 
 import pathlib
 
