@@ -25,14 +25,14 @@ def abaqus_journal():
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds the ``journal_options`` string. The Builder emitter will
-    append the builder managed targets automatically.
+    function accepts all SCons Builder arguments and adds the ``journal_options`` and ``abaqus_options`` string
+    arguments. The Builder emitter will append the builder managed targets automatically.
 
     .. code-block::
        :caption: Abaqus journal builder action
        :name: abaqus_journal_action
 
-       abaqus cae -noGui ${SOURCE.abspath} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1
+       abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -45,6 +45,6 @@ def abaqus_journal():
     """
     abaqus_journal_builder = SCons.Builder.Builder(
         chdir=1,
-        action='abaqus cae -noGui ${SOURCE.abspath} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
+        action='abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
