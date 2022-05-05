@@ -29,14 +29,7 @@ env = Environment(ENV=os.environ.copy(),
                   PROJECT_NAME=project_name.lower(),
                   VERSION=setuptools_scm.get_version(),
                   PROJECT_DIR=Dir('.').abspath,
-                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
-                  # TODO: (1) Separate EABM and WAVES definitions
-                  # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
-                  abaqus_wrapper=str(abaqus_wrapper))
-
-# Add custom builders
-env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal(),
-                     'AbaqusSolver': waves.abaqus_solver()})
+                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
 
 # Add top-level SCons script
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
@@ -44,14 +37,3 @@ SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_s
 # Add documentation target
 build_dir = variant_dir_base / documentation_source_dir
 SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
-
-# Add simulation targets
-eabm_simulation_directories = [
-    'tutorial_01_geometry',
-    'tutorial_02_partition_mesh',
-    'tutorial_03_solverprep',
-    'tutorial_04_simulation'
-]
-for source_dir in eabm_simulation_directories:
-    build_dir = variant_dir_base / eabm_source_dir / source_dir
-    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
