@@ -7,9 +7,8 @@ import SCons.Builder
 # TODO: (1) Separate EABM and WAVES definitions
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
 # TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
-waves_source_dir = pathlib.Path('waves')
+waves_source_dir = pathlib.Path(__file__).parent.resolve()
 abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
-abaqus_wrapper = abaqus_wrapper.resolve()
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -47,7 +46,7 @@ def abaqus_journal():
 
        import waves
        env.Environment()
-       env.Append(BUILDERS={'AbaqusJournal': waves.abaqus_journal()})
+       env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
        AbaqusJournal(target=my_journal.cae, source=my_journal.py, journal_options='')
     """
     abaqus_journal_builder = SCons.Builder.Builder(
@@ -90,7 +89,7 @@ def abaqus_solver():
 
        import waves
        env.Environment()
-       env.Append(BUILDERS={'AbaqusSolver': waves.abaqus_solver()})
+       env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
        AbaqusSolver(target=[], source=input.inp, job_name='my_job', abaqus_options='-cpus 4')
     """
     abaqus_solver_builder = SCons.Builder.Builder(
