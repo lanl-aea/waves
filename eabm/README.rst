@@ -37,8 +37,8 @@ repository`_ integration and system tests.
 Documentation
 =============
 
-* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/SCons-EABM/main/
-* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/SCons-EABM/dev/
+* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/main/scons-eabm/
+* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/dev/scons-eabm/
 
 Developers
 ==========

@@ -49,8 +49,8 @@ Documentation
 The `SCons-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
-* `SCons-EABM`_ Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/SCons-EABM/main/
-* `SCons-EABM`_ Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/SCons-EABM/dev/
+* `SCons-EABM`_ Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/main/scons-eabm/
+* `SCons-EABM`_ Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/dev/scons-eabm/
 
 Developers
 ==========
