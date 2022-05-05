@@ -28,7 +28,7 @@ Description
 
 The `SCons-EABM`_ contains the demonstration engineering analysis baseline model (EABM) that matches the
 `SCons-simulation`_ collection of build system utilities. Besides the handful of command line utilities,
-`SCons-simulations` also included custom SCons builders that are commonly re-used in model simulation (modsim)
+`SCons-simulation` also included custom SCons builders that are commonly re-used in model simulation (modsim)
 repositories. This EABM is used in the `SCons-simulation`_ tutorials as well as the `SCons-simulation repository`_
 integration and system tests.
 
