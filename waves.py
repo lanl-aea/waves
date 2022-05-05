@@ -5,6 +5,7 @@ import pathlib
 import SCons.Builder
 
 # TODO: (1) Separate EABM and WAVES definitions
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
 # TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
 waves_source_dir = pathlib.Path('waves')
 abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
