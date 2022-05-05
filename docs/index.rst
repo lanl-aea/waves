@@ -4,14 +4,14 @@
 
 .. include:: project_brief.txt
 
-.. .. toctree::
-..    :maxdepth: 2
-..    :caption: Build System
-..
-..    user
-..    theory
-..    api
-..    devops
+.. toctree::
+   :maxdepth: 2
+   :caption: Build System
+
+   user
+   theory
+   api
+   devops
 
 .. .. toctree::
 ..    :maxdepth: 2

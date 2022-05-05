@@ -12,6 +12,7 @@ project_dir = pathlib.Path('@PROJECT_DIR@').resolve()
 abaqus_source_dir = '@ABAQUS_SOURCE_DIR@'
 
 # Add paths to API/CLI files
+sys.path.insert(0, str(project_dir))
 sys.path.insert(0, str(project_dir / abaqus_source_dir))
 
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules.
