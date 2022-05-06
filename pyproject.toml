@@ -11,6 +11,9 @@ classifiers = [
 ]
 dynamic = ["version"]
 
+[tool.setuptools.packages.find]
+exclude = ['eabm', 'modulefiles']
+
 [project.scripts]
 parameter_study = "waves.parameter_study:main"
 
