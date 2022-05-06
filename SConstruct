@@ -43,3 +43,6 @@ SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_s
 # Add documentation target
 build_dir = variant_dir_base / documentation_source_dir
 SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
+
+# Add pytests
+SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)
