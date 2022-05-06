@@ -52,6 +52,7 @@ test:
     - waves/pytest.ini
     - waves/tests/*.py
     - eabm/
+    - docs/
   imports:
     - waves
   commands:
