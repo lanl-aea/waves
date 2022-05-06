@@ -15,6 +15,7 @@ before_script:
   # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/7
   - aea_projects='/projects'
   - aea_deploy_directory="${aea_projects}/python"
+  - aea_conda_channel="${aea_deploy_directory}/aea-conda"
   - aea_modulefiles=${aea_deploy_directory}/modulefiles
   - environment='scons-simulation-env'
   - environment_path="${aea_deploy_directory}/${environment}"
@@ -98,8 +99,7 @@ microbump:
   only:
     - main
 
-test:
-  # TODO: replace with conda build recipe when there is something to package
+fast-test:
   stage: test
   variables:
     GIT_STRATEGY: clone
@@ -109,8 +109,60 @@ test:
   tags:
     - sstelmo-shell-aea
   only:
-    # TODO: add dev/main branches when there is something to package
     - merge_requests
+
+conda-build:
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    # Set the LANL internal proxies
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    # TODO: Run the Conda build from an SCons target(s)
+    - output_folder='conda-build-artifacts'
+    - mkdir ${output_folder}
+    - VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - conda-build-artifacts/linux-64/waves-*-*.tar.bz2
+  tags:
+    - sstelmo-shell-aea
+  only:
+    - merge_requests
+    - main
+    - dev
+
+deploy:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    # Build alternate OS packages (assumes original built on linux-64)
+    - conda convert conda-build-artifacts/linux-64/waves-*-*.tar.bz2 --platform osx-64 --output-dir conda-build-artifacts
+    - conda convert conda-build-artifacts/linux-64/waves-*-*.tar.bz2 --platform win-64 --output-dir conda-build-artifacts
+    # Copy Conda package to AEA Conda Channel
+    - cp conda-build-artifacts/linux-64/waves-*-*.tar.bz2 ${aea_conda_channel}/linux-64
+    - cp conda-build-artifacts/osx-64/waves-*-*.tar.bz2 ${aea_conda_channel}/osx-64
+    - cp conda-build-artifacts/win-64/waves-*-*.tar.bz2 ${aea_conda_channel}/win-64
+    # Change group for access by all W-13 staff and prevent accidental modification by institutional account in CI jobs
+    - chgrp w13users ${aea_conda_channel}/*-64/waves-*-*.tar.bz2 || true
+    - chmod 555 ${aea_conda_channel}/*-64/waves-*-*.tar.bz2 || true
+    # Update the AEA Conda Channel index
+    - conda index ${aea_conda_channel}
+    # Troubleshooting conda channel deploy and index update
+    - conda search --channel file://${aea_conda_channel}/ --override-channels waves
+  tags:
+    - sstelmo-shell-aea
+  only:
+    - main
+    - dev
 
 # It MUST be called pages
 pages:

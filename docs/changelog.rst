@@ -6,8 +6,22 @@ Changelog
 #########
 
 ******************
-0.1.4 (unreleased)
+0.1.5 (unreleased)
 ******************
+
+******************
+0.1.4 (2022-05-06)
+******************
+
+New Features
+============
+- Add parameter study module and tests (:issue:`27`, :merge:`19`). By `Kyle Brindley`_.
+- Add Conda build recipe (:issue:`35`, :merge:`21`). By `Kyle Brindley`_.
+- Deploy Conda package as "waves" to AEA Conda channel (:issue:`36`, :merge:`22`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Use SCons-simulation repository version in SCons-EABM documentation (:issue:`31`, :merge:`18`). By `Kyle Brindley`_.
 
 ******************
 0.1.3 (2022-05-05)

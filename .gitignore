@@ -5,6 +5,12 @@ build/
 # SCons files
 .sconsign.dblite
 
+# Python distribution/packaging files
+_version.py
+*.egg-info
+dist/
+conda-build-artifacts/
+
 # EABM files
 # TODO: Find another way to avoid creating files in the source directory with Substfile
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/16

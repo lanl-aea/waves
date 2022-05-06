@@ -1,0 +1,66 @@
+package:
+  name: waves
+  # TODO: Figure out how to use pyproject.toml or setup.py and a Conda build Jinja template
+  version: {{ VERSION }}
+
+source:
+  path: '..'
+
+build:
+  script:
+    # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
+    # deprecated setup.py solutions
+    - {{ PYTHON }} setup.py install
+    # TODO: install shell scripts from pyproject.toml if possible
+    - cp waves/bin/* ${PREFIX}/bin
+  script_env:
+    - VERSION
+  ignore_run_exports:
+    - python_abi
+
+requirements:
+  build:
+    - python {{ python }}
+    - git
+    - build
+    - setuptools
+    - setuptools_scm
+  host:
+    - python
+    - build
+    - setuptools
+    - setuptools_scm
+  run:
+    - python
+    - pyyaml
+    - scons
+
+test:
+  requires:
+    - pytest
+    - pytest-xdist
+    - pyyaml
+    - scons
+    - setuptools_scm
+    - sphinx
+    - sphinx-argparse
+    - sphinx_rtd_theme
+    - sphinxcontrib-bibtex
+  source_files:
+    - SConstruct
+    - SConscript
+    - README.rst
+    # TODO: find the installed shell scripts to use and stop copying these files
+    - waves/bin/
+    - waves/SConscript
+    - waves/pytest.ini
+    - waves/tests/*.py
+    - eabm/
+    - docs/
+  imports:
+    - waves
+  commands:
+    # TODO: Test from the as installed directory where possible, e.g. waves pytests
+    - scons --keep-going
+    # Test the SCons-EABM targets and tests
+    - cd eabm && scons --keep-going
