@@ -3,10 +3,20 @@
 # Inherit the parent construction environment
 Import('env')
 
+# Explicitly list all waves python package source files
+waves_source_list = [
+    'conftest.py',
+    'pytest.ini',
+    '__init__.py',
+    'parameter_study.py',
+    'builders.py',
+    'tests/test_parameter_generator.py',
+    'tests/test_cartesian_product.py'
+]
+
 pytest_node = env.Command(
     chdir='waves',
     target='test_results.xml',
-    source=['pytest.ini', 'conftest.py'],
+    source=waves_source_list,
     action='pytest')
-
 env.Alias('pytest', pytest_node)
