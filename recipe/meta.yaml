@@ -1,8 +1,6 @@
-{% set data = load_setup_py_data() %}
-
 package:
   name: waves
-  version: {{ data.get('version') }}
+  version: {{ VERSION }}
 
 source:
   path: '..'
@@ -10,6 +8,8 @@ source:
 build:
   script:
     - {{ PYTHON }} setup.py install
+  script_env:
+    - VERSION
   ignore_run_exports:
     - python_abi
 
