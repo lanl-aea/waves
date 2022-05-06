@@ -46,3 +46,9 @@ SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='e
 
 # Add pytests
 SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)
+
+# Add conda build target
+conda_build = env.Command(
+    target=['dist/', 'WAVES.egg-info'],
+    source=['recipe/metal.yaml', 'conda_build_config.yaml'],
+    action='conda build recipe --no-anaconda-upload --output-folder ./conda-bld')
