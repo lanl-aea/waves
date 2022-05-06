@@ -98,8 +98,7 @@ microbump:
   only:
     - main
 
-test:
-  # TODO: replace with conda build recipe when there is something to package
+fast-test:
   stage: test
   variables:
     GIT_STRATEGY: clone
@@ -109,8 +108,27 @@ test:
   tags:
     - sstelmo-shell-aea
   only:
-    # TODO: add dev/main branches when there is something to package
     - merge_requests
+
+conda-build:
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - umask 0022
+    - output_folder='./conda-build-artifacts'
+    - mkdir -p ${output_folder}
+    - VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /tmp/${USER}-conda-build --output-folder ${output_folder}'
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - ${output_folder}/linux-64/waves-*-*.tar.bz2
+  tags:
+    - sstelmo-shell-aea
+  only:
+    - merge_requests
+    - main
+    - dev
 
 # It MUST be called pages
 pages:
