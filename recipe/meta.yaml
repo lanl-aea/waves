@@ -48,6 +48,7 @@ test:
     - SConstruct
     - SConscript
     - README.rst
+    - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
     - eabm/
