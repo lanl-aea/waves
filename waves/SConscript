@@ -1,0 +1,11 @@
+#! /usr/bin/env python
+
+# Inherit the parent construction environment
+Import('env')
+
+pytest_node = env.Command(
+    target='test_results.xml',
+    source=['pytest.ini', 'conftest.py'],
+    action='cd ${TARGET.dir} && pytest')
+
+env.Alias('pytest', pytest_node)
