@@ -53,6 +53,7 @@ conda_build_targets = [f"{package_prefix}-py3-none-any.whl", f"{package_prefix}.
 conda_build = env.Command(
     target=conda_build_targets,
     source=['recipe/metal.yaml', 'recipe/conda_build_config.yaml'],
-    action='conda build recipe --croot /tmp/conda-build --no-anaconda-upload --output-folder ./conda-build-artifacts')
+    action='conda build recipe --channel conda-forge --no-anaconda-upload --croot /tmp/conda-build ' \
+                              '--output-folder ./conda-build-artifacts')
 env.Ignore('dist', conda_build_targets)
 env.Alias('conda-build', conda_build)
