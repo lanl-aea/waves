@@ -52,3 +52,4 @@ conda_build = env.Command(
     target=['dist/', 'WAVES.egg-info'],
     source=['recipe/metal.yaml', 'conda_build_config.yaml'],
     action='conda build recipe --no-anaconda-upload --output-folder ./conda-bld')
+env.Alias('conda-build', conda_build)
