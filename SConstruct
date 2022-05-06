@@ -2,8 +2,15 @@
 
 import os
 import pathlib
+import warnings
 
 import setuptools_scm
+
+# Ignore the version warning message associated with 'x.y.z+dev' Git tags
+warnings.filterwarnings(action='ignore',
+                        message='tag',
+                        category=UserWarning,
+                        module='setuptools_scm')
 
 # Variables required when WAVES is not installed as a package
 # TODO: (1) Separate EABM and WAVES definitions
@@ -36,3 +43,6 @@ SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_s
 # Add documentation target
 build_dir = variant_dir_base / documentation_source_dir
 SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
+
+# Add pytests
+SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)

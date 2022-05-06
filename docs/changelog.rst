@@ -9,6 +9,10 @@ Changelog
 0.1.4 (unreleased)
 ******************
 
+New Features
+============
+- Add parameter study module and tests (:issue:`27`, :merge:`19`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Use SCons-simulation repository version in SCons-EABM documentation (:issue:`31`, :merge:`18`). By `Kyle Brindley`_.
