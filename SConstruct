@@ -62,6 +62,7 @@ SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='e
 SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)
 
 # Add conda build target
+# TODO: fix the SCons conda build target and use it instead of hardcoding the conda build commands in .gitlab-ci.yml
 # TODO: add a ``--croot`` switch, prefering /scratch/$USER/conda-build when available
 # TODO: add a ``--croot`` command line option
 package_prefix = f"dist/{project_name.upper()}-{env['VERSION']}"

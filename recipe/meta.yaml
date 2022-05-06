@@ -1,5 +1,6 @@
 package:
   name: waves
+  # TODO: Figure out how to use pyproject.toml or setup.py and a Conda build Jinja template
   version: {{ VERSION }}
 
 source:
@@ -7,6 +8,8 @@ source:
 
 build:
   script:
+    # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
+    # deprecated setup.py solutions
     - {{ PYTHON }} setup.py install
   script_env:
     - VERSION
