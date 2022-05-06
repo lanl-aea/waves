@@ -9,7 +9,7 @@ source:
 
 build:
   script:
-    - {{ PYTHON }} -m build
+    - {{ PYTHON }} setup.py install
   ignore_run_exports:
     - python_abi
 
