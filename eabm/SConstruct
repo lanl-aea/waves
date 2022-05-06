@@ -12,6 +12,14 @@ except ModuleNotFoundError:
     sys.path.insert(0, str(pathlib.Path('..').resolve()))
     import waves
 
+try:
+    version = setuptools_scm.get_version(root='..')
+# Only required for SCons-EABM in the SCons-simulation repository.
+# Most EABMs only need ``setuptools_scm.get_version()`` to find their version number.
+except LookupError:
+    from waves import _version
+    version = _version.version
+
 # TODO: make this available for overwrite from a command line option
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/25
 variant_dir_base = pathlib.Path('build')
@@ -26,7 +34,7 @@ env = Environment(ENV=os.environ.copy(),
                   PROJECT_NAME=project_name.lower(),
                   # TODO: Figure out how to use the SCons-simulation version from a subdirectory
                   # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/31
-                  VERSION=setuptools_scm.get_version(root='..'),
+                  VERSION=version,
                   PROJECT_DIR=Dir('.').abspath,
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
 

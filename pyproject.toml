@@ -1,14 +1,16 @@
 [build-system]
 requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "WAVES"
 description = "WAVES Analysis for Validated Engineering Simulations"
 readme = "README.rst"
-classifiers = [
-    "Programming Language:: Python :: 3"
-]
+classifiers = ["Programming Language:: Python :: 3"]
 dynamic = ["version"]
+
+[tool.setuptools.packages.find]
+exclude = ['eabm', 'modulefiles']
 
 [project.scripts]
 parameter_study = "waves.parameter_study:main"
