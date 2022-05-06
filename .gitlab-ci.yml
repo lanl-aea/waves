@@ -121,8 +121,8 @@ conda-build:
     - export HTTPS_PROXY=$HTTP_PROXY
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
-    - output_folder='./conda-build-artifacts'
-    - mkdir -p ${output_folder}
+    - output_folder='conda-build-artifacts'
+    - mkdir ${output_folder}
     - VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
   artifacts:
     expire_in: '2 hrs'
