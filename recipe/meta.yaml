@@ -36,6 +36,9 @@ test:
     - pytest-xdist
     - scons
   source_files:
+    - SConstruct
+    - SConscript
+    - README.rst
     - waves/pytest.ini
     - waves/tests/*.py
     - eabm/
