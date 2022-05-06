@@ -46,6 +46,7 @@ test:
     - waves
   commands:
     # Test the Python package as installed in the environment
+    - cp SConstruct SConscript README.rst ${SP_DIR}/waves
     - cd ${SP_DIR}/waves
     - scons
     # Test the EABM stub CMake targets and tests
