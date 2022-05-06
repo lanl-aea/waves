@@ -55,7 +55,6 @@ test:
     - waves
   commands:
     # TODO: Test from the as installed directory where possible, e.g. waves pytests
-    - scons
-    # Test the EABM stub CMake targets and tests
-    - cd eabm
-    - scons
+    - scons --keep-going
+    # Test the SCons-EABM targets and tests
+    - cd eabm && scons --keep-going
