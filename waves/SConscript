@@ -4,8 +4,9 @@
 Import('env')
 
 pytest_node = env.Command(
+    chdir='waves',
     target='test_results.xml',
     source=['pytest.ini', 'conftest.py'],
-    action='cd ${TARGET.dir} && pytest')
+    action='pytest')
 
 env.Alias('pytest', pytest_node)
