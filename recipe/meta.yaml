@@ -1,13 +1,15 @@
+{% set data = load_setup_py_data() %}
+
 package:
   name: waves
-  version: {{ VERSION }}
+  version: {{ data.get('version') }}
 
 source:
   path: '..'
 
 build:
   script:
-    - {{ PYTHON }} -m build 
+    - {{ PYTHON }} -m build
   ignore_run_exports:
     - python_abi
 
@@ -25,7 +27,7 @@ requirements:
   run:
     - python
     - pyyaml
-    - scons 
+    - scons
 
 test:
   requires:
@@ -43,5 +45,5 @@ test:
     - cd ${SP_DIR}/waves
     - scons
     # Test the EABM stub CMake targets and tests
-    - cd eabm 
+    - cd eabm
     - scons
