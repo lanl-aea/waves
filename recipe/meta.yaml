@@ -54,6 +54,8 @@ test:
     - waves/bin/
     - waves/SConscript
     - waves/pytest.ini
+    # TODO: required by the SCons target definition, but probably not required by conda build pytests.
+    - waves/conftest.py
     - waves/tests/*.py
     - eabm/
     - docs/
