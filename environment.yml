@@ -5,3 +5,6 @@ sphinx
 sphinx-argparse
 sphinx_rtd_theme
 sphinxcontrib-bibtex
+pyyaml
+pytest
+pytest-xdist
