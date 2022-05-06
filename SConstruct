@@ -12,6 +12,20 @@ warnings.filterwarnings(action='ignore',
                         category=UserWarning,
                         module='setuptools_scm')
 
+# Versioning is more complicated than ``setuptools_scm.get_version()`` to allow us to build and run tests in the Conda
+# package directory, where setuptools_scm can't version from Git. This logic is reveresed from the waves.__init__
+# logic. We do this to re-use SCons build target commands during Conda packaging to avoid hard coding target commands in
+# the Conda recipe. This is not necessary in an EABM project definition.
+try:
+    version = setuptools_scm.get_version()
+except LookupError:
+    try:
+        from importlib.metadata import version, PackageNotFoundError
+        version = version("waves")
+    except PackageNotFoundError:
+        from waves import _version
+        version = _version.version
+
 # Variables required when WAVES is not installed as a package
 # TODO: (1) Separate EABM and WAVES definitions
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
@@ -32,7 +46,7 @@ documentation_source_dir = 'docs'
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   PROJECT_NAME=project_name.lower(),
-                  VERSION=setuptools_scm.get_version(),
+                  VERSION=version,
                   PROJECT_DIR=Dir('.').abspath,
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
                   abaqus_wrapper=str(abaqus_wrapper))

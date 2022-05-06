@@ -35,6 +35,7 @@ test:
     - pytest
     - pytest-xdist
     - scons
+    - setuptools_scm
   source_files:
     - SConstruct
     - SConscript
