@@ -1,8 +1,14 @@
 from importlib.metadata import version, PackageNotFoundError
 import pathlib
+import warnings
 
 from waves import builders
 from waves import parameter_study
+
+warnings.filterwarnings(action='ignore',
+                        message='tag',
+                        category=UserWarning,
+                        module='setuptools_scm')
 
 try:
     __version__ = version("waves")

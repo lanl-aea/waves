@@ -2,8 +2,15 @@
 
 import os
 import pathlib
+import warnings
 
 import setuptools_scm
+
+# Ignore the version warning message associated with 'x.y.z+dev' Git tags
+warnings.filterwarnings(action='ignore',
+                        message='tag',
+                        category=UserWarning,
+                        module='setuptools_scm')
 
 # Variables required when WAVES is not installed as a package
 # TODO: (1) Separate EABM and WAVES definitions
