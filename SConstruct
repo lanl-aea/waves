@@ -62,12 +62,14 @@ SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='e
 SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)
 
 # Add conda build target
+# TODO: add a ``--croot`` switch, prefering /scratch/$USER/conda-build when available
+# TODO: add a ``--croot`` command line option
 package_prefix = f"dist/{project_name.upper()}-{env['VERSION']}"
 conda_build_targets = [f"{package_prefix}-py3-none-any.whl", f"{package_prefix}.tar.gz"]
 conda_build = env.Command(
     target=conda_build_targets,
     source=['recipe/metal.yaml', 'recipe/conda_build_config.yaml'],
-    action='conda build recipe --channel conda-forge --no-anaconda-upload --croot /tmp/conda-build ' \
+    action='conda build recipe --channel conda-forge --no-anaconda-upload --croot /tmp/${USER}-conda-build ' \
                               '--output-folder ./conda-build-artifacts')
 env.Ignore('dist', conda_build_targets)
 env.Alias('conda-build', conda_build)
