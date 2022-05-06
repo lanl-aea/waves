@@ -118,7 +118,7 @@ conda-build:
     - umask 0022
     - output_folder='./conda-build-artifacts'
     - mkdir -p ${output_folder}
-    - VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /tmp/${USER}-conda-build --output-folder ${output_folder}'
+    - VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /tmp/${USER}-conda-build --output-folder ${output_folder}
   artifacts:
     expire_in: '2 hrs'
     paths:
