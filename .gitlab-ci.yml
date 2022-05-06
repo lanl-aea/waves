@@ -128,7 +128,7 @@ conda-build:
   artifacts:
     expire_in: '2 hrs'
     paths:
-      - ${output_folder}/linux-64/waves-*-*.tar.bz2
+      - conda-build-artifacts/linux-64/waves-*-*.tar.bz2
   tags:
     - sstelmo-shell-aea
   only:
