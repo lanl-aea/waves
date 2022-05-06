@@ -34,8 +34,13 @@ test:
   requires:
     - pytest
     - pytest-xdist
+    - pyyaml
     - scons
     - setuptools_scm
+    - sphinx
+    - sphinx-argparse
+    - sphinx_rtd_theme
+    - sphinxcontrib-bibtex
   source_files:
     - SConstruct
     - SConscript
