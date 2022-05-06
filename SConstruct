@@ -48,7 +48,7 @@ SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='e
 SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)
 
 # Add conda build target
-package_prefix = f"{project_name.upper()}-{env['VERSION']}"
+package_prefix = f"dist/{project_name.upper()}-{env['VERSION']}"
 conda_build_targets = [f"{package_prefix}-py3-none-any.whl", f"{package_prefix}.tar.gz"]
 conda_build = env.Command(
     target=conda_build_targets,
