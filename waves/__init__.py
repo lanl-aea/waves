@@ -1,4 +1,6 @@
 from importlib.metadata import version, PackageNotFoundError
+import pathlib
+
 from waves import builders
 from waves import parameter_study
 
@@ -10,4 +12,4 @@ except PackageNotFoundError:
         __version__ = _version.version
     except ImportError:
         import setuptools_scm
-        __version__ = setuptools_scm.get_version()
+        __version__ = setuptools_scm.get_version(root=pathlib.Path(__file__).parent.parent)
