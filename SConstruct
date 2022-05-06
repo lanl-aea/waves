@@ -24,7 +24,7 @@ abaqus_wrapper = abaqus_wrapper.resolve()
 variant_dir_base = pathlib.Path('build')
 
 # Set project internal variables
-project_name = 'SCons-simulation'
+project_name = 'WAVES'
 eabm_source_dir = pathlib.Path('eabm')
 abaqus_source_dir = eabm_source_dir / 'abaqus'
 documentation_source_dir = 'docs'
@@ -48,8 +48,11 @@ SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='e
 SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)
 
 # Add conda build target
+package_prefix = f"dist/{project_name.upper()}-{env['VERSION']}"
+conda_build_targets = [f"{package_prefix}-py3-none-any.whl", f"{package_prefix}.tar.gz"]
 conda_build = env.Command(
-    target=['dist/', 'WAVES.egg-info'],
+    target=conda_build_targets,
     source=['recipe/metal.yaml', 'conda_build_config.yaml'],
     action='conda build recipe --no-anaconda-upload --output-folder ./conda-bld')
+env.Ignore('dist', conda_build_targets)
 env.Alias('conda-build', conda_build)
