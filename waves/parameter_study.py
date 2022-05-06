@@ -16,11 +16,7 @@ import itertools
 import yaml
 
 #========================================================================================================== SETTINGS ===
-# Files normally found in a project's root settings.py, __init__.py, or configuration.py file(s)
-# Assign some hard coded script specific meta data
-__version__ = '0.1.2'
-__author__ = 'Kyle Brindley <kbrindley@lanl.gov>'
-PROJECT_NAME_SHORT = 'parameter_study'
+# Files normally found in a project's root settings.py file(s)
 template_delimiter = '@'
 
 
@@ -84,7 +80,6 @@ def get_parser():
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
-
 class ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
