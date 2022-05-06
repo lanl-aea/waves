@@ -46,19 +46,7 @@ test:
   imports:
     - waves
   commands:
-    # TODO: package these files
-    - cp SConstruct SConscript README.rst ${SP_DIR}/waves
-    - cp waves/SConscript ${SP_DIR}/waves
-    - cp docs/SConscript ${SP_DIR}/waves/docs
-    - cp eabm/docs/SConscript ${SP_DIR}/waves/eabm/docs
-    - cp eabm/SConstruct ${SP_DIR}/waves/eabm
-    - cp eabm/SConscript ${SP_DIR}/waves/eabm
-    - cp eabm/tutorial_01_geometry/SConscript ${SP_DIR}/waves/eabm/tutorial_01_geometry
-    - cp eabm/tutorial_02_partition_mesh/SConscript ${SP_DIR}/waves/eabm/tutorial_02_partition_mesh
-    - cp eabm/tutorial_03_solverprep/SConscript ${SP_DIR}/waves/eabm/tutorial_03_solverprep
-    - cp eabm/tutorial_04_simulation/SConscript ${SP_DIR}/waves/eabm/tutorial_04_simulation
-    # Test the Python package as installed in the environment
-    - cd ${SP_DIR}/waves
+    # TODO: Test from the as installed directory where possible, e.g. waves pytests
     - scons
     # Test the EABM stub CMake targets and tests
     - cd eabm
