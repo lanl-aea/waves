@@ -31,8 +31,9 @@ waves_source_dir = pathlib.Path('waves')
 abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
 abaqus_wrapper = abaqus_wrapper.resolve()
 
-# Set an out-of-source build directory. Accept "variant_dir" from command line options.
-variant_dir_base = pathlib.Path(ARGUMENTS.get('variant_dir', 'build'))
+# Accept command line variables with fall back default values
+variables = Variables(None, ARGUMENTS)
+variables.Add('variant_dir_base', default='build')
 
 # Set project internal variables
 project_name = 'WAVES'
@@ -42,6 +43,7 @@ documentation_source_dir = 'docs'
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
+                  variables=variables,
                   PROJECT_NAME=project_name.lower(),
                   VERSION=version,
                   PROJECT_DIR=Dir('.').abspath,
