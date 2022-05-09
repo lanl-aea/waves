@@ -37,5 +37,7 @@ mesh = env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options)
 
-# Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh])
+# Collector alias based on parent directory name
+parent_directory = pathlib.Path('.').parent.name
+workflow = geometry + partition + mesh
+env.Alias(parent_directory, workflow)

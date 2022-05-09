@@ -104,8 +104,8 @@ fast-test:
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons --keep-going
-    - cd eabm && scons --keep-going
+    - scons . --keep-going
+    - cd eabm && scons . --keep-going
   tags:
     - sstelmo-shell-aea
   only:
@@ -190,11 +190,11 @@ pages:
             git reset --hard origin/$ref
             mkdir -p public/$ref/scons-eabm
             # Clean and build documentation
-            scons --clean
+            scons . --clean
             scons documentation
             # Build EABM documentation
             cd eabm
-            scons --clean
+            scons . --clean
             scons documentation
             cd ..
             # Copy documentation to the pages artifact directory

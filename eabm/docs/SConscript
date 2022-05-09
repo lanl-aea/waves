@@ -48,6 +48,5 @@ sphinx_build = env.Command(
     action="sphinx-build ${sphinx_options} -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html",
     sphinx_options=sphinx_options)
 env.Clean(sphinx_build, 'html/')
-# TODO: Figure out why alias is recognized, but not built
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
 env.Alias('documentation', sphinx_build)
+env.Default(sphinx_build)

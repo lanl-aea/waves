@@ -81,5 +81,7 @@ solve = env.AbaqusSolver(
     job_name=job_name,
     abaqus_options='')
 
-# Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep + [datacheck, solve])
+# Collector alias based on parent directory name
+parent_directory = pathlib.Path('.').parent.name
+workflow = geometry + partition + mesh + solverprep + datacheck + solve
+env.Alias(parent_directory, workflow)
