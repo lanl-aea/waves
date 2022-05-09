@@ -20,7 +20,6 @@ geometry = env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options)
-env.Alias('${SOURCE_DIR.srcdir}', [geometry])
 
 # Collector alias and remove target(s) from default execution
 workflow = [geometry]
