@@ -9,6 +9,10 @@ Changelog
 0.1.5 (unreleased)
 ******************
 
+New Features
+============
+- Add an Abaqus datacheck prior to solving the simulation target (:issue:`30`, :merge:`26`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Avoid build file creation in the source directory during copy/substitution operations, e.g. SolverPrep (:issue:`16`,

@@ -64,17 +64,22 @@ for source_file in abaqus_source_list:
         solverprep.append(Substfile(source_file.name))
 
 # Abaqus Solve
-# TODO: Add a datacheck simulation
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/30
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
-abaqus_options = ''
+datacheck_name = f"{job_name}_DATACHECK"
+datacheck = env.AbaqusSolver(
+    target=[],
+    source=solve_source_list,
+    job_name=datacheck_name,
+    abaqus_options='-datacheck')
+
+solve_source_list.append([f"{datacheck_name}.odb"])
 solve = env.AbaqusSolver(
     target=[],
     source=solve_source_list,
     job_name=job_name,
-    abaqus_options=abaqus_options)
+    abaqus_options='')
 
 # Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh, solve] + solverprep)
+env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep + [datacheck, solve])
