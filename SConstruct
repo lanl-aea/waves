@@ -27,8 +27,6 @@ except LookupError:
         version = _version.version
 
 # Variables required when WAVES is not installed as a package
-# TODO: (1) Separate EABM and WAVES definitions
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
 waves_source_dir = pathlib.Path('waves')
 abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
 abaqus_wrapper = abaqus_wrapper.resolve()
