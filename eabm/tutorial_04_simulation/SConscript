@@ -68,9 +68,10 @@ solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_so
 solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
 datacheck_name = f"{job_name}_DATACHECK"
+datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
 abaqus_options='-double both'
 datacheck = env.AbaqusSolver(
-    target=[],
+    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
     source=solve_source_list,
     job_name=datacheck_name,
     abaqus_options=f'{abaqus_options} -datacheck')
