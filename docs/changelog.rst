@@ -15,6 +15,7 @@ New Features
 - Limit the EABM default targets to the documentation. Requires simulation targets to be specified in the SCons command
   line arguments to avoid building all simulations from a bare ``scons`` execution (:issue:`32`, :merge:`27`). By `Kyle
   Brindley`_.
+- Make the variant (build) directory a command line variable option (:issue:`25`, :merge:`29`). By `Kyle Brindley`_.
 
 Bug fixes
 =========

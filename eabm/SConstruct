@@ -20,9 +20,13 @@ except LookupError:
     from waves import _version
     version = _version.version
 
-# TODO: make this available for overwrite from a command line option
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/25
-variant_dir_base = pathlib.Path('build')
+# Accept command line variables with fall back default values
+variables = Variables(None, ARGUMENTS)
+variables.Add(
+    PathVariable('variant_dir_base',
+        help='SCons variant (build) root directory. Relative or absolute path.',
+        default='build',
+        validator=PathVariable.PathAccept))
 
 # Set project internal variables
 project_name = 'SCons-EABM'
@@ -31,12 +35,17 @@ documentation_source_dir = 'docs'
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
+                  variables=variables,
                   PROJECT_NAME=project_name.lower(),
-                  # TODO: Figure out how to use the SCons-simulation version from a subdirectory
-                  # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/31
                   VERSION=version,
                   PROJECT_DIR=Dir('.').abspath,
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
+
+# Add project command line variable options to help message
+Help(variables.GenerateHelpText(env))
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(),

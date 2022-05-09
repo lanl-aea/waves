@@ -95,6 +95,13 @@ Build Simulations
 
 .. build-start-do-not-remove
 
+3. View project specific command line options
+
+   .. code-block::
+
+      $ scons -h
+      ...
+
 This project limits the default target list to the documentation with the `SCons`_ ``Default`` command. Simulation
 targets must be specified directly on the command line. The `SCons`_ all targets default, ``.``, may also be specified
 to build literally every target in the repository. Simulation targets may be specified by output file name or by target
