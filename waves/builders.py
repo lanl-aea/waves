@@ -74,7 +74,7 @@ def abaqus_solver():
     This builder requires that the root input file is the first source in the list. The builder returned by this
     functions accepts all SCons Builder arguments and adds the required string argument ``job_name`` and optional string
     argument ``abaqus_options``.  The Builder emitter will append common Abaqus output files as targets automatically
-    from the ``job_name``, e.g. ``job_name.odb``, ``job_name.dat``, ``job_name.sta``, etc.
+    from the ``job_name``, e.g. ``job_name.odb``, ``job_name.dat``, ``job_name.msg``, etc.
 
     .. code-block::
        :caption: Abaqus journal builder action
