@@ -16,6 +16,8 @@ New Features
   line arguments to avoid building all simulations from a bare ``scons`` execution (:issue:`32`, :merge:`27`). By `Kyle
   Brindley`_.
 - Make the variant (build) directory a command line variable option (:issue:`25`, :merge:`29`). By `Kyle Brindley`_.
+- Build the project internal variables into a substitution dictionary that can be passed to SConscript files
+  (:issue:`13`, :merge:`30`). By `Kyle Brindley`_.
 
 Bug fixes
 =========

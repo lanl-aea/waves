@@ -6,9 +6,9 @@ import subprocess
 
 # -- Project information -----------------------------------------------------
 # Meta data from SCons project
-project = '@PROJECT_NAME@'
-VERSION = '@VERSION@'
-project_dir = pathlib.Path('@PROJECT_DIR@').resolve()
+project = '@project_name@'
+VERSION = '@version@'
+project_dir = pathlib.Path('@project_dir@').resolve()
 
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
