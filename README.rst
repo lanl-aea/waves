@@ -107,6 +107,13 @@ Build Simulations
 
 .. build-start-do-not-remove
 
+3. View project specific command line options
+
+   .. code-block::
+
+      $ scons -h
+      ...
+
 4. View the available targets (e.g. the simulations themselves and their intermediate build steps)
 
    .. code-block::
