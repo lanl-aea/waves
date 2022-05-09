@@ -33,7 +33,11 @@ abaqus_wrapper = abaqus_wrapper.resolve()
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
-variables.Add('variant_dir_base', default='build')
+variables.Add(
+    PathVariable('variant_dir_base',
+        help='Variant (build) root directory',
+        default='build',
+        validator=PathVariable.PathAccept))
 
 # Set project internal variables
 project_name = 'WAVES'
@@ -49,6 +53,9 @@ env = Environment(ENV=os.environ.copy(),
                   PROJECT_DIR=Dir('.').abspath,
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
                   abaqus_wrapper=str(abaqus_wrapper))
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add documentation target
 build_dir = variant_dir_base / documentation_source_dir

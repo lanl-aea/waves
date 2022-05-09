@@ -22,7 +22,11 @@ except LookupError:
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
-variables.Add('variant_dir_base', default='build')
+variables.Add(
+    PathVariable('variant_dir_base',
+        help='Variant (build) root directory',
+        default='build',
+        validator=PathVariable.PathAccept))
 
 # Set project internal variables
 project_name = 'SCons-EABM'
@@ -36,6 +40,9 @@ env = Environment(ENV=os.environ.copy(),
                   VERSION=version,
                   PROJECT_DIR=Dir('.').abspath,
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(),
