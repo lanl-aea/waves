@@ -34,8 +34,6 @@ variables.Add(
         default='build',
         validator=PathVariable.PathAccept))
 
-# Set project internal variables
-
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
@@ -53,7 +51,7 @@ project_variables = {
     'version': version,
     'abaqus_source_dir': 'eabm/abaqus',
     'abaqus_wrapper': str(pathlib.Path(f'{waves_source_dir}/bin/abaqus_wrapper').resolve())
-} 
+}
 project_substitution_dictionary = dict()
 for key, value in project_variables.items():
     env[key] = value
