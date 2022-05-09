@@ -49,6 +49,8 @@ abaqus_source_list = [
     f"#/{abaqus_source_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
+# TODO: Write copy/substitute function that accepts a list of strings or pathlib.Path objects
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/28
 solverprep = list()
 for source_file in abaqus_source_list:
     # Copy all files in list to build directory without changing extension
