@@ -38,7 +38,7 @@ mesh = env.AbaqusJournal(
     journal_options=journal_options)
 
 # SolverPrep
-abaqus_input_list = [
+abaqus_source_list = [
     f"#/{abaqus_source_dir}/single_element_compression.inp.in",
     f"#/{abaqus_source_dir}/amplitudes.inp.in",
     f"#/{abaqus_source_dir}/assembly.inp.in",
@@ -48,18 +48,18 @@ abaqus_input_list = [
     f"#/{abaqus_source_dir}/parts.inp.in",
     f"#/{abaqus_source_dir}/history_output.inp.in"
 ]
+abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 solverprep = list()
-for abaqus_input in abaqus_input_list:
-    abaqus_input_path = pathlib.Path(abaqus_input)
+for source_file in abaqus_source_list:
     # Copy all files in list to build directory without changing extension
     solverprep.append(
         Command(
-            target=abaqus_input_path.name,
-            source=abaqus_input,
+            target=source_file.name,
+            source=str(source_file),
             action=Copy('${TARGET}', '${SOURCE}')))
     # Run substitution dictionary on anything with *.in template extension
-    if abaqus_input_path.suffix == '.in':
-        solverprep.append(Substfile(abaqus_input_path.name))
+    if source_file.suffix == '.in':
+        solverprep.append(Substfile(source_file.name))
 
 # Collector alias
 env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep)
