@@ -11,11 +11,6 @@ _version.py
 dist/
 conda-build-artifacts/
 
-# EABM files
-# TODO: Find another way to avoid creating files in the source directory with Substfile
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/16
-eabm/abaqus/*.inp
-
 # Temp files
 *.swp
 
