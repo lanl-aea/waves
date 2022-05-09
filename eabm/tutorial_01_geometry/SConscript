@@ -21,7 +21,9 @@ geometry = env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options)
 
-# Collector alias and remove target(s) from default execution
+# Collector alias based on parent directory name
+parent_directory = pathlib.Path('.').parent.name
 workflow = geometry
-env.Alias('${SOURCE_DIR.srcdir}', workflow)
-env.Ignore('${SOURCE_DIR.srcdir}', workflow)
+env.Alias(parent_directory, workflow)
+# Remove simulation target(s) from default execution
+env.Ignore(parent_directory, workflow)
