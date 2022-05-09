@@ -25,5 +25,3 @@ geometry = env.AbaqusJournal(
 parent_directory = pathlib.Path('.').parent.name
 workflow = geometry
 env.Alias(parent_directory, workflow)
-# Remove simulation target(s) from default execution
-env.Ignore('.', workflow)
