@@ -12,6 +12,9 @@ Changelog
 New Features
 ============
 - Add an Abaqus datacheck prior to solving the simulation target (:issue:`30`, :merge:`26`). By `Kyle Brindley`_.
+- Limit the EABM default targets to the documentation. Requires simulation targets to be specified in the SCons command
+  line arguments to avoid building all simulations from a bare ``scons`` execution (:issue:`32`, :merge:`27`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
