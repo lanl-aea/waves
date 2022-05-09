@@ -31,9 +31,8 @@ waves_source_dir = pathlib.Path('waves')
 abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
 abaqus_wrapper = abaqus_wrapper.resolve()
 
-# TODO: make this available for overwrite from a command line option
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/25
-variant_dir_base = pathlib.Path('build')
+# Set an out-of-source build directory. Accept "variant_dir" from command line options.
+variant_dir_base = pathlib.Path(ARGUMENTS.get('variant_dir', 'build'))
 
 # Set project internal variables
 project_name = 'WAVES'
