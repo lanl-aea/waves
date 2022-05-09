@@ -26,4 +26,4 @@ parent_directory = pathlib.Path('.').parent.name
 workflow = geometry
 env.Alias(parent_directory, workflow)
 # Remove simulation target(s) from default execution
-env.Ignore(parent_directory, workflow)
+env.Ignore('.', workflow)
