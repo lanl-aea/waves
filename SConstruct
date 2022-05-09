@@ -26,11 +26,6 @@ except LookupError:
         from waves import _version
         version = _version.version
 
-# Variables required when WAVES is not installed as a package
-waves_source_dir = pathlib.Path('waves')
-abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
-abaqus_wrapper = abaqus_wrapper.resolve()
-
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
 variables.Add(
@@ -40,22 +35,29 @@ variables.Add(
         validator=PathVariable.PathAccept))
 
 # Set project internal variables
-project_name = 'WAVES'
-eabm_source_dir = pathlib.Path('eabm')
-abaqus_source_dir = eabm_source_dir / 'abaqus'
-documentation_source_dir = 'docs'
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
-                  variables=variables,
-                  PROJECT_NAME=project_name.lower(),
-                  VERSION=version,
-                  PROJECT_DIR=Dir('.').abspath,
-                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
-                  abaqus_wrapper=str(abaqus_wrapper))
+                  variables=variables)
 
 # Add project command line variable options to help message
 Help(variables.GenerateHelpText(env))
+
+# Set project internal variables and variable substitution dictionaries
+project_name = 'WAVES'
+documentation_source_dir = 'docs'
+waves_source_dir = 'waves'
+project_variables = {
+    'project_name': project_name,
+    'project_dir': Dir('.').abspath,
+    'version': version,
+    'abaqus_source_dir': 'eabm/abaqus',
+    'abaqus_wrapper': str(pathlib.Path(f'{waves_source_dir}/bin/abaqus_wrapper').resolve())
+} 
+project_substitution_dictionary = dict()
+for key, value in project_variables.items():
+    env[key] = value
+    project_substitution_dictionary[f"@{key}@"] = value
 
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
@@ -63,16 +65,16 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 # Add documentation target
 build_dir = variant_dir_base / documentation_source_dir
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
+SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
 
 # Add pytests
-SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)
+SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
 
 # Add conda build target
 # TODO: fix the SCons conda build target and use it instead of hardcoding the conda build commands in .gitlab-ci.yml
 # TODO: add a ``--croot`` switch, prefering /scratch/$USER/conda-build when available
 # TODO: add a ``--croot`` command line option
-package_prefix = f"dist/{project_name.upper()}-{env['VERSION']}"
+package_prefix = f"dist/{project_name.upper()}-{env['version']}"
 conda_build_targets = [f"{package_prefix}-py3-none-any.whl", f"{package_prefix}.tar.gz"]
 conda_build = env.Command(
     target=conda_build_targets,
