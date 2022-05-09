@@ -9,6 +9,11 @@ Changelog
 0.1.5 (unreleased)
 ******************
 
+Enhancements
+============
+- Avoid build file creation in the source directory during copy/substitution operations, e.g. SolverPrep (:issue:`16`,
+  :merge:`25`). By `Kyle Brindley`_.
+
 ******************
 0.1.4 (2022-05-06)
 ******************

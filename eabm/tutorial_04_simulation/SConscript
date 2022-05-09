@@ -7,7 +7,8 @@ Import('env')
 
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(env['PROJECT_DIR'])
-abaqus_source_abspath = project_dir / env['ABAQUS_SOURCE_DIR']
+abaqus_source_dir = env['ABAQUS_SOURCE_DIR']
+abaqus_source_abspath = project_dir / abaqus_source_dir
 
 # Simulation variables
 model = "single_element"
@@ -37,44 +38,41 @@ mesh = env.AbaqusJournal(
     journal_options=journal_options)
 
 # SolverPrep
-abaqus_input_template_list = [
-    # The root input file MUST be first for the AbaqusSolver Builder
-    abaqus_source_abspath / "single_element_compression.inp.in",
-    abaqus_source_abspath / "amplitudes.inp.in",
-    abaqus_source_abspath / "assembly.inp.in",
-    abaqus_source_abspath / "boundary.inp.in",
-    abaqus_source_abspath / "field_output.inp.in",
-    abaqus_source_abspath / "materials.inp.in",
-    abaqus_source_abspath / "parts.inp.in",
-    abaqus_source_abspath / "history_output.inp.in"
+abaqus_source_list = [
+    f"#/{abaqus_source_dir}/{model}_compression.inp",
+    f"#/{abaqus_source_dir}/amplitudes.inp",
+    f"#/{abaqus_source_dir}/assembly.inp",
+    f"#/{abaqus_source_dir}/boundary.inp",
+    f"#/{abaqus_source_dir}/field_output.inp",
+    f"#/{abaqus_source_dir}/materials.inp",
+    f"#/{abaqus_source_dir}/parts.inp",
+    f"#/{abaqus_source_dir}/history_output.inp"
 ]
-abaqus_input_list = [abaqus_input.with_suffix('') for abaqus_input in abaqus_input_template_list]
+abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
+# TODO: Write copy/substitute function that accepts a list of strings or pathlib.Path objects
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/28
 solverprep = list()
-for template_file, input_file in zip(abaqus_input_template_list, abaqus_input_list):
-    solverprep.append(Substfile(str(template_file)))
+for source_file in abaqus_source_list:
+    # Copy all files in list to build directory without changing extension
     solverprep.append(
         Command(
-            target=input_file.name,
-            source=str(input_file),
-# This AlwaysBuild means that the build/**/*.inp files are always re-created and moved.
-# It's required because the Substfile command will find it's targets missing and re-run, but Move will not re-run,
-# leaving build output in the source directory. Fortunately, the md5sum checking of SCons prevents this from always
-# triggering downstream targets.
-# TODO: Find another way to avoid creating files in the source directory with Substfile
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/16
+            target=source_file.name,
+            source=str(source_file),
             action=Copy('${TARGET}', '${SOURCE}')))
-env.AlwaysBuild(solverprep)
+    # Run substitution dictionary on anything with *.in template extension
+    if source_file.suffix == '.in':
+        solverprep.append(Substfile(source_file.name))
 
 # Abaqus Solve
 # TODO: Add a datacheck simulation
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/30
-job_name = 'single_element_compression'
+solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+solve_source_list.append([f"{journal_file}.inp"])
+job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
 abaqus_options = ''
-abaqus_input_names = [abaqus_input.name for abaqus_input in abaqus_input_list]
-abaqus_input_names.append(f"{journal_file}.inp")
 solve = env.AbaqusSolver(
     target=[],
-    source=abaqus_input_names,
+    source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options)
 

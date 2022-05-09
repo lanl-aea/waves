@@ -7,7 +7,8 @@ Import('env')
 
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(env['PROJECT_DIR'])
-abaqus_source_abspath = project_dir / env['ABAQUS_SOURCE_DIR']
+abaqus_source_dir = env['ABAQUS_SOURCE_DIR']
+abaqus_source_abspath = project_dir / abaqus_source_dir
 
 # Simulation variables
 model = "single_element"
@@ -37,31 +38,30 @@ mesh = env.AbaqusJournal(
     journal_options=journal_options)
 
 # SolverPrep
-abaqus_input_list = [
-    abaqus_source_abspath / "single_element_compression.inp.in",
-    abaqus_source_abspath / "amplitudes.inp.in",
-    abaqus_source_abspath / "assembly.inp.in",
-    abaqus_source_abspath / "boundary.inp.in",
-    abaqus_source_abspath / "field_output.inp.in",
-    abaqus_source_abspath / "materials.inp.in",
-    abaqus_source_abspath / "parts.inp.in",
-    abaqus_source_abspath / "history_output.inp.in"
+abaqus_source_list = [
+    f"#/{abaqus_source_dir}/{model}_compression.inp",
+    f"#/{abaqus_source_dir}/amplitudes.inp",
+    f"#/{abaqus_source_dir}/assembly.inp",
+    f"#/{abaqus_source_dir}/boundary.inp",
+    f"#/{abaqus_source_dir}/field_output.inp",
+    f"#/{abaqus_source_dir}/materials.inp",
+    f"#/{abaqus_source_dir}/parts.inp",
+    f"#/{abaqus_source_dir}/history_output.inp"
 ]
+abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
+# TODO: Write copy/substitute function that accepts a list of strings or pathlib.Path objects
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/28
 solverprep = list()
-for abaqus_input in abaqus_input_list:
-    solverprep.append(Substfile(str(abaqus_input)))
+for source_file in abaqus_source_list:
+    # Copy all files in list to build directory without changing extension
     solverprep.append(
         Command(
-            target=abaqus_input.with_suffix('').name,
-            source=str(abaqus_input.with_suffix('')),
-# This AlwaysBuild means that the build/**/*.inp files are always re-created and moved.
-# It's required because the Substfile command will find it's targets missing and re-run, but Move will not re-run,
-# leaving build output in the source directory. Fortunately, the md5sum checking of SCons prevents this from always
-# triggering downstream targets.
-# TODO: Find another way to avoid creating files in the source directory with Substfile
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/16
+            target=source_file.name,
+            source=str(source_file),
             action=Copy('${TARGET}', '${SOURCE}')))
-env.AlwaysBuild(solverprep)
+    # Run substitution dictionary on anything with *.in template extension
+    if source_file.suffix == '.in':
+        solverprep.append(Substfile(source_file.name))
 
 # Collector alias
 env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep)
