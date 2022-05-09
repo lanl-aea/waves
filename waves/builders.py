@@ -4,9 +4,8 @@ import pathlib
 
 import SCons.Builder
 
-# TODO: (1) Separate EABM and WAVES definitions
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
 # TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/40
 waves_source_dir = pathlib.Path(__file__).parent.resolve()
 abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
 
@@ -62,7 +61,7 @@ def _abaqus_solver_emitter(target, source, env):
     if not 'job_name' in env:
         raise RuntimeError('Builder is missing required keyword argument "job_name".')
     builder_suffixes = ['log']
-    abaqus_simulation_suffixes = ['odb', 'dat', 'sta', 'msg', 'com', 'prt']
+    abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
     for suffix in suffixes:
         target.append(f"{env['job_name']}.{suffix}")
@@ -75,7 +74,11 @@ def abaqus_solver():
     This builder requires that the root input file is the first source in the list. The builder returned by this
     functions accepts all SCons Builder arguments and adds the required string argument ``job_name`` and optional string
     argument ``abaqus_options``.  The Builder emitter will append common Abaqus output files as targets automatically
-    from the ``job_name``, e.g. ``job_name.odb``, ``job_name.dat``, ``job_name.sta``, etc.
+    from the ``job_name``, e.g. ``job_name.odb``, ``job_name.dat``, ``job_name.msg``, etc.
+
+    The target list only appends those extensions which are common to all Abaqus operations. Some extensions may need to
+    be added explicitly according to the Abaqus simulation solver, type, or options. If you find that SCons isn't
+    automatically cleaning some Abaqus output files, they are not in the automatically appended target list.
 
     .. code-block::
        :caption: Abaqus journal builder action

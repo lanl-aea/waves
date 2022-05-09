@@ -16,6 +16,12 @@ New Features
   line arguments to avoid building all simulations from a bare ``scons`` execution (:issue:`32`, :merge:`27`). By `Kyle
   Brindley`_.
 
+Bug fixes
+=========
+- Limit automatically appended target extensions for the AbaqusSolver builder to avoid inadvertent ``AlwaysBuild``
+  behavior introduced by expected, but missing, file extensions that are never created (:issue:`41`, :merge:`28`). By
+  `Kyle Brindley`_.
+
 Enhancements
 ============
 - Avoid build file creation in the source directory during copy/substitution operations, e.g. SolverPrep (:issue:`16`,
