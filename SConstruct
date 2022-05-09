@@ -35,7 +35,7 @@ abaqus_wrapper = abaqus_wrapper.resolve()
 variables = Variables(None, ARGUMENTS)
 variables.Add(
     PathVariable('variant_dir_base',
-        help='Variant (build) root directory',
+        help='SCons variant (build) root directory. Relative or absolute path.',
         default='build',
         validator=PathVariable.PathAccept))
 
@@ -53,6 +53,9 @@ env = Environment(ENV=os.environ.copy(),
                   PROJECT_DIR=Dir('.').abspath,
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
                   abaqus_wrapper=str(abaqus_wrapper))
+
+# Add project command line variable options to help message
+Help(variables.GenerateHelpText(env))
 
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
