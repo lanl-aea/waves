@@ -28,21 +28,26 @@ variables.Add(
         default='build',
         validator=PathVariable.PathAccept))
 
-# Set project internal variables
-project_name = 'SCons-EABM'
-abaqus_source_dir = pathlib.Path('abaqus')
-documentation_source_dir = 'docs'
-
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
-                  variables=variables,
-                  PROJECT_NAME=project_name.lower(),
-                  VERSION=version,
-                  PROJECT_DIR=Dir('.').abspath,
-                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir))
+                  variables=variables)
 
 # Add project command line variable options to help message
 Help(variables.GenerateHelpText(env))
+
+# Set project internal variables and variable substitution dictionaries
+project_name = 'SCons-EABM'
+documentation_source_dir = 'docs'
+project_variables = {
+    'project_name': project_name,
+    'project_dir': Dir('.').abspath,
+    'version': version,
+    'abaqus_source_dir': 'abaqus',
+}
+project_substitution_dictionary = dict()
+for key, value in project_variables.items():
+    env[key] = value
+    project_substitution_dictionary[f"@{key}@"] = value
 
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
@@ -54,7 +59,7 @@ env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(),
 # Add documentation target(s)
 build_dir = variant_dir_base / documentation_source_dir
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
+SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
 
 # Add simulation targets
 eabm_simulation_directories = [

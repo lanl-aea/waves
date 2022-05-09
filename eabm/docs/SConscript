@@ -3,15 +3,12 @@
 import pathlib
 
 # Inherit the parent construction environment
-Import('env')
+Import(['env', 'project_substitution_dictionary'])
 
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
-    SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'],
-                '@VERSION@': env['VERSION'],
-                '@PROJECT_DIR@': env['PROJECT_DIR'],
-                '@ABAQUS_SOURCE_DIR@': env['ABAQUS_SOURCE_DIR']})
+    SUBST_DICT=project_substitution_dictionary)
 
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
