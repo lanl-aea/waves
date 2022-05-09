@@ -1,6 +1,6 @@
-########################
-Build System User Manual
-########################
+###########
+User Manual
+###########
 
 *************
 Build wrapper
@@ -17,6 +17,8 @@ The build wrapper command line options and behavior are described in the help me
 
 .. .. literalinclude:: build_wrapper_message.txt
 ..    :language: bash
+
+.. _abaqus_wrapper:
 
 **************
 Abaqus wrapper
