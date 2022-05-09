@@ -64,12 +64,12 @@ for source_file in abaqus_source_list:
         solverprep.append(Substfile(source_file.name))
 
 # Abaqus Solve
-abaqus_build_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 # TODO: Add a datacheck simulation
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/30
-job_name = f'{model}_compression'
+solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+solve_source_list.append([f"{journal_file}.inp"])
+job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
 abaqus_options = ''
-solve_source_list = abaqus_build_list + [f"{journal_file}.inp"]
 solve = env.AbaqusSolver(
     target=[],
     source=solve_source_list,
