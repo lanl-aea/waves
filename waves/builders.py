@@ -80,6 +80,9 @@ def abaqus_solver():
     be added explicitly according to the Abaqus simulation solver, type, or options. If you find that SCons isn't
     automatically cleaning some Abaqus output files, they are not in the automatically appended target list.
 
+    Abaqus is not called directly. Instead the |PROJECT| :ref:`abaqus_wrapper` is executed to help control the Abaqus
+    return code and return timing.
+
     .. code-block::
        :caption: Abaqus journal builder action
        :name: abaqus_solver_action

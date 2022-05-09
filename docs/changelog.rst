@@ -25,6 +25,11 @@ Bug fixes
   behavior introduced by expected, but missing, file extensions that are never created (:issue:`41`, :merge:`28`). By
   `Kyle Brindley`_.
 
+Documentation
+=============
+- Link from the AbaqusSolver builder to the abaqus wrapper shell script to help explain the action definition
+  (:issue:`42`, :merge:`31`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Avoid build file creation in the source directory during copy/substitution operations, e.g. SolverPrep (:issue:`16`,
