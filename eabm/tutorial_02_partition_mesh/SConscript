@@ -37,5 +37,7 @@ mesh = env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options)
 
-# Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh])
+# Collector alias and remove target(s) from default execution
+workflow = [geometry, partition, mesh]
+env.Alias('${SOURCE_DIR.srcdir}', workflow)
+env.Ignore('${SOURCE_DIR.srcdir}', workflow)

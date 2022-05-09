@@ -22,5 +22,7 @@ geometry = env.AbaqusJournal(
     journal_options=journal_options)
 env.Alias('${SOURCE_DIR.srcdir}', [geometry])
 
-# Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry])
+# Collector alias and remove target(s) from default execution
+workflow = [geometry]
+env.Alias('${SOURCE_DIR.srcdir}', workflow)
+env.Ignore('${SOURCE_DIR.srcdir}', workflow)

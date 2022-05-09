@@ -81,5 +81,7 @@ solve = env.AbaqusSolver(
     job_name=job_name,
     abaqus_options='')
 
-# Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep + [datacheck, solve])
+# Collector alias and remove target(s) from default execution
+workflow = [geometry, partition, mesh] + solverprep + [datacheck, solve]
+env.Alias('${SOURCE_DIR.srcdir}', workflow)
+env.Ignore('${SOURCE_DIR.srcdir}', workflow)

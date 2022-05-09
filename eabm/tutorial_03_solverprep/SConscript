@@ -63,5 +63,7 @@ for source_file in abaqus_source_list:
     if source_file.suffix == '.in':
         solverprep.append(Substfile(source_file.name))
 
-# Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh] + solverprep)
+# Collector alias and remove target(s) from default execution
+workflow = [geometry, partition, mesh] + solverprep
+env.Alias('${SOURCE_DIR.srcdir}', workflow)
+env.Ignore('${SOURCE_DIR.srcdir}', workflow)
