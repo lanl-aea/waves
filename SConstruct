@@ -48,11 +48,9 @@ env = Environment(ENV=os.environ.copy(),
                   ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
                   abaqus_wrapper=str(abaqus_wrapper))
 
-# Add top-level SCons script
-SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-
 # Add documentation target
 build_dir = variant_dir_base / documentation_source_dir
+SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
 SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
 
 # Add pytests
