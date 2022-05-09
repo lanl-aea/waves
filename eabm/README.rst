@@ -95,29 +95,40 @@ Build Simulations
 
 .. build-start-do-not-remove
 
+This project limits the default target list to the documentation with the `SCons`_ ``Default`` command. Simulation
+targets must be specified directly on the command line. The `SCons`_ all targets default, ``.``, may also be specified
+to build literally every target in the repository. Simulation targets may be specified by output file name or by target
+alias, which is set to the parent directory for the target configuration.
+
 4. View the available targets (e.g. the simulations themselves and their intermediate build steps)
 
    .. code-block::
 
       $ WIP
 
-5. Build all targets
+5. Build default targets
 
    .. code-block::
 
       $ scons
 
-6. Build a specific target
+6. Build ALL targets
+
+   .. code-block::
+
+      $ scons .
+
+7. Build a specific target
 
    .. code-block::
 
       $ scons <target name>
 
-7. Remove the build target artifacts
+8. Remove ALL build target artifacts
 
    .. code-block::
 
-      $ scons --clean
+      $ scons . --clean
 
 .. build-end-do-not-remove
 
@@ -142,11 +153,11 @@ scripts.
       path/to/local/git/clone/scons-simulation
       $ scons <target_1_name> <target-2_name>
 
-6. Run all tests
+6. Run all tests even if some targets fail
 
    .. code-block::
 
-      scons --keep-going
+      scons . --keep-going
 
 A full list of test names can be generated with the following command.
 

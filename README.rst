@@ -118,7 +118,7 @@ Build Simulations
       path/to/local/git/clone/scons-simulation/eabm
       $ WIP
 
-5. Build all targets
+5. Build all default targets
 
    .. code-block::
 
@@ -134,7 +134,7 @@ Build Simulations
       path/to/local/git/clone/scons-simulation/eabm
       $ scons <target name>
 
-7. Remove the build target artifacts
+7. Remove the default targets' artifacts
 
    .. code-block::
 
