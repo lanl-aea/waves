@@ -64,7 +64,7 @@ def get_parser():
     default_width = 1.0
     default_height = 1.0
     
-    prog = "abaqus cae noGui={} --".format(basename)
+    prog = "abaqus cae -noGui {} --".format(basename)
     parser = argparse.ArgumentParser(description="Create a simple square geometry",
                                      prog=prog)
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
