@@ -107,11 +107,14 @@ targets must be specified directly on the command line. The `SCons`_ all targets
 to build literally every target in the repository. Simulation targets may be specified by output file name or by target
 alias, which is set to the parent directory for the target configuration.
 
-4. View the available targets (e.g. the simulations themselves and their intermediate build steps)
+4. View the default targets and target aliases
 
    .. code-block::
 
-      $ WIP
+      $ pwd
+      path/to/local/git/clone/scons-simulation/eabm
+      $ scons -h
+      ...
 
 5. Build default targets
 
