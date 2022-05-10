@@ -19,6 +19,8 @@ New Features
 - Build the project internal variables into a substitution dictionary that can be passed to SConscript files
   (:issue:`13`, :merge:`30`). By `Kyle Brindley`_.
 - Add a copy and substitute target builder to WAVES (:issue:`28`, :merge:`32`). By `Kyle Brindley`_.
+- Add an alias collector solution to provide a list of available aliases in the project help message (:issue:`33`,
+  :merge:`38`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
