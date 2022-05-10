@@ -47,7 +47,7 @@ def abaqus_journal():
        :name: abaqus_journal_example
 
        import waves
-       env.Environment()
+       env = Environment()
        env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
        AbaqusJournal(target=my_journal.cae, source=my_journal.py, journal_options='')
     """
@@ -97,7 +97,7 @@ def abaqus_solver():
        :name: abaqus_solver_example
 
        import waves
-       env.Environment()
+       env = Environment()
        env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
        AbaqusSolver(target=[], source=input.inp, job_name='my_job', abaqus_options='-cpus 4')
     """
@@ -121,6 +121,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
        :name: copy_substitute_example
 
        import waves
+       env = Environment()
        source_list = [
            'file_one.ext',  # File found in current SConscript directory
            'subdir2/file_two',  # File found below current SConscript directory
@@ -130,7 +131,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
        substitution_dictionary = {
            '@variable_one@': 'value_one'
        }
-       waves.builders.copy_substitution(source_list, substitution_dictionary)
+       waves.builders.copy_substitution(source_list, substitution_dictionary, env)
 
     :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
     :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the template
