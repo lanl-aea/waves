@@ -2,6 +2,7 @@
 
 import pathlib
 
+import SCons.Defaults
 import SCons.Builder
 import SCons.Environment
 import SCons.Node
@@ -141,10 +142,10 @@ def copy_substitute(source_list, substitution_dictionary={}):
     target_list = SCons.Node.NodeList()
     for source_file in source_list:
         target_list.append(
-            SCons.Environment.Base.Command(
+            SCons.Environment.Command(
                 target=source_file.name,
                 source=str(source_file),
-                action=Copy('${TARGET}', '${SOURCE}')))
+                action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}')))
         if source_file.suffix == '.in':
             target_list.append(Substfile(source_file.name))
     return target_list
