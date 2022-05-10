@@ -56,7 +56,4 @@ solverprep = waves.builders.copy_substitute(abaqus_source_list)
 # Collector alias based on parent directory name
 parent_directory = pathlib.Path('.').parent.name
 workflow = geometry + partition + mesh + solverprep
-alias_list = env.Alias(parent_directory, workflow)
-
-# Return the alias list to SConstruct for help message output
-Return('alias_list')
+env.Alias(parent_directory, workflow)
