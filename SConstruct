@@ -66,7 +66,7 @@ SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_s
 docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
 
 # Add pytests
-SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
+pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
 
 # Add conda build target
 # TODO: fix the SCons conda build target and use it instead of hardcoding the conda build commands in .gitlab-ci.yml
@@ -84,7 +84,7 @@ env.Ignore('dist', conda_build_targets)
 conda_build_alias = env.Alias('conda-build', conda_build)
 
 # Add aliases to help message so users know what build target options are available
-alias_list = docs_aliases + conda_build_alias
+alias_list = docs_aliases + pytest_aliases + conda_build_alias
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
