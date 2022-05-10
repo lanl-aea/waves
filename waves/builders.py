@@ -49,7 +49,7 @@ def abaqus_journal():
        import waves
        env = Environment()
        env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
-       AbaqusJournal(target=my_journal.cae, source=my_journal.py, journal_options='')
+       AbaqusJournal(target=['my_journal.cae'], source=['my_journal.py'], journal_options='')
     """
     abaqus_journal_builder = SCons.Builder.Builder(
         chdir=1,
@@ -99,7 +99,7 @@ def abaqus_solver():
        import waves
        env = Environment()
        env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
-       AbaqusSolver(target=[], source=input.inp, job_name='my_job', abaqus_options='-cpus 4')
+       AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
     """
     abaqus_solver_builder = SCons.Builder.Builder(
         chdir=1,
