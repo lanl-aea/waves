@@ -2,6 +2,8 @@
 
 import pathlib
 
+import waves
+
 # Inherit the parent construction environment
 Import('env')
 
@@ -49,7 +51,7 @@ abaqus_source_list = [
     f"#/{abaqus_source_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-solverprep = CopySubstitute(abaqus_source_list)
+solverprep = waves.builders.copy_substitute(abaqus_source_list)
 
 # Collector alias based on parent directory name
 parent_directory = pathlib.Path('.').parent.name
