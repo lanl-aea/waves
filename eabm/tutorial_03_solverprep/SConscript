@@ -2,6 +2,8 @@
 
 import pathlib
 
+import waves
+
 # Inherit the parent construction environment
 Import('env')
 
@@ -49,19 +51,7 @@ abaqus_source_list = [
     f"#/{abaqus_source_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-# TODO: Write copy/substitute function that accepts a list of strings or pathlib.Path objects
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/28
-solverprep = list()
-for source_file in abaqus_source_list:
-    # Copy all files in list to build directory without changing extension
-    solverprep.append(
-        Command(
-            target=source_file.name,
-            source=str(source_file),
-            action=Copy('${TARGET}', '${SOURCE}')))
-    # Run substitution dictionary on anything with *.in template extension
-    if source_file.suffix == '.in':
-        solverprep.append(Substfile(source_file.name))
+solverprep = waves.builders.copy_substitute(abaqus_source_list)
 
 # Collector alias based on parent directory name
 parent_directory = pathlib.Path('.').parent.name

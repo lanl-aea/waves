@@ -2,7 +2,10 @@
 
 import pathlib
 
+import SCons.Defaults
 import SCons.Builder
+import SCons.Environment
+import SCons.Node
 
 # TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/40
@@ -44,7 +47,7 @@ def abaqus_journal():
        :name: abaqus_journal_example
 
        import waves
-       env.Environment()
+       env = Environment()
        env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
        AbaqusJournal(target=my_journal.cae, source=my_journal.py, journal_options='')
     """
@@ -94,7 +97,7 @@ def abaqus_solver():
        :name: abaqus_solver_example
 
        import waves
-       env.Environment()
+       env = Environment()
        env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
        AbaqusSolver(target=[], source=input.inp, job_name='my_job', abaqus_options='-cpus 4')
     """
@@ -103,3 +106,47 @@ def abaqus_solver():
         action=f'{abaqus_wrapper} ${{job_name}} abaqus -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}',
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
+
+
+def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment()):
+    """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
+
+    Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
+    matching the calling SConscript parent directory. Files with the name convention ``*.in`` are also given an SCons
+    Substfile Builder, which will perform template substitution with the provided dictionary in-place in the current
+    variant directory and remove the ``.in`` suffix.
+
+    .. code-block::
+       :caption: SConstruct
+       :name: copy_substitute_example
+
+       import waves
+       env = Environment()
+       source_list = [
+           'file_one.ext',  # File found in current SConscript directory
+           'subdir2/file_two',  # File found below current SConscript directory
+           '#/subdir3/file_three.ext',  # File found with respect to project root directory
+           'file_four.ext.in'  # File with substitutions matching substitution dictionary keys
+       ]
+       substitution_dictionary = {
+           '@variable_one@': 'value_one'
+       }
+       waves.builders.copy_substitution(source_list, substitution_dictionary, env)
+
+    :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
+    :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the template
+        characters, e.g. @variable@. The template character can be anything that works in the SCons Substfile builder.
+    :param SCons.Environment.Environment env: An SCons construction environment to use when defining the targets.
+
+    :return: SCons NodeList of Copy and Substfile objects
+    :rtype: SCons.Node.NodeList
+    """
+    target_list = SCons.Node.NodeList()
+    for source_file in source_list:
+        target_list += env.Command(
+                target=source_file.name,
+                source=str(source_file),
+                action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}'))
+        if source_file.suffix == '.in':
+            target_list += Substfile(source_file.name)
+    return target_list
