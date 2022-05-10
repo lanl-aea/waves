@@ -3,7 +3,8 @@
 import pathlib
 
 import SCons.Builder
-import Scons.Node
+import SCons.Environment
+import SCons.Node
 
 # TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/40
@@ -119,12 +120,12 @@ def copy_substitute(source_list, substitution_dictionary={}):
         characters, e.g. @variable@. The template character can be anything that works in the SCons Substfile builder.
 
     :return: SCons NodeList of Copy and Substfile objects
-    :rtype: SCons.Node.Nodelist
+    :rtype: SCons.Node.NodeList
     """
-    target_list = SCons.Node.Nodelist()
+    target_list = SCons.Node.NodeList()
     for source_file in source_list:
         target_list.append(
-            Command(
+            SCons.Environment.Base.Command(
                 Copy(
                     target=source_file.name,
                     source=str(source_file),
