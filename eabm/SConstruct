@@ -59,7 +59,7 @@ env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(),
 # Add documentation target(s)
 build_dir = variant_dir_base / documentation_source_dir
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
 
 # Add simulation targets
 eabm_simulation_directories = [
@@ -68,6 +68,20 @@ eabm_simulation_directories = [
     'tutorial_03_solverprep',
     'tutorial_04_simulation'
 ]
+simulation_aliases = []
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
-    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+    simulation_aliases += SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+
+# Add default target list to help message
+default_targets_help = "\nDefault Targets:\n"
+for target in DEFAULT_TARGETS:
+    default_targets_help += f"    {str(target)}\n"
+Help(default_targets_help)
+
+# Add aliases to help message so users know what build target options are available
+alias_list = docs_aliases + simulation_aliases 
+alias_help = "\nTarget Aliases:\n"
+for alias in alias_list:
+    alias_help += f"    {alias}\n"
+Help(alias_help)

@@ -24,4 +24,7 @@ geometry = env.AbaqusJournal(
 # Collector alias based on parent directory name
 parent_directory = pathlib.Path('.').parent.name
 workflow = geometry
-env.Alias(parent_directory, workflow)
+alias_list = env.Alias(parent_directory, workflow)
+
+# Return the alias list to SConstruct for help message output
+Return('alias_list')
