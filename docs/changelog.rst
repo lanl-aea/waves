@@ -18,6 +18,7 @@ New Features
 - Make the variant (build) directory a command line variable option (:issue:`25`, :merge:`29`). By `Kyle Brindley`_.
 - Build the project internal variables into a substitution dictionary that can be passed to SConscript files
   (:issue:`13`, :merge:`30`). By `Kyle Brindley`_.
+- Add a copy and substitute target builder to WAVES (:issue:`28`, :merge:`32`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
