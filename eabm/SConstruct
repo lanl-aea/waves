@@ -68,10 +68,9 @@ eabm_simulation_directories = [
     'tutorial_03_solverprep',
     'tutorial_04_simulation'
 ]
-simulation_aliases = []
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
-    simulation_aliases += SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
 
 # Add default target list to help message
 default_targets_help = "\nDefault Targets:\n"
@@ -80,7 +79,7 @@ for target in DEFAULT_TARGETS:
 Help(default_targets_help)
 
 # Add aliases to help message so users know what build target options are available
-alias_list = docs_aliases + simulation_aliases 
+alias_list = docs_aliases + eabm_simulation_directories
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
