@@ -115,6 +115,22 @@ def copy_substitute(source_list, substitution_dictionary={}):
     Substfile Builder, which will perform template substitution with the provided dictionary in-place in the current
     variant directory and remove the ``.in`` suffix.
 
+    .. code-block::
+       :caption: SConstruct
+       :name: copy_substitute_example
+
+       import waves
+       source_list = [
+           'file_one.ext',  # File found in current SConscript directory
+           'subdir2/file_two',  # File found below current SConscript directory
+           '#/subdir3/file_three.ext',  # File found with respect to project root directory
+           'file_four.ext.in'  # File with substitutions matching substitution dictionary keys
+       ]
+       substitution_dictionary = {
+           '@variable_one@': 'value_one'
+       }
+       waves.builders.copy_substitution(source_list, substitution_dictionary)
+
     :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
     :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the template
         characters, e.g. @variable@. The template character can be anything that works in the SCons Substfile builder.
