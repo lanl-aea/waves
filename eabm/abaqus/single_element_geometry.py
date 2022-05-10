@@ -48,7 +48,8 @@ def main(output_file, model_name, part_name, width, height):
 
     return 0
 
-if __name__ == '__main__':
+
+def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     default_output_file = '{}'.format(basename_without_extension)
     default_width = 1.0
     default_height = 1.0
-
+    
     parser = argparse.ArgumentParser(description="Create a simple square geometry",
                                      prog=basename)
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
@@ -76,12 +77,16 @@ if __name__ == '__main__':
     # Short option '-h' is reserved for the help message
     parser.add_argument('--height', type=float, default=default_height,
                         help="square height")
+    return parser
 
+
+if __name__ == '__main__':
+    parser = get_parser()
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
     args, unknown = parser.parse_known_args()
-
     sys.exit(main(output_file=args.output_file,
                   model_name=args.model_name,
                   part_name=args.part_name,
                   width=args.width,
                   height=args.height))
+
