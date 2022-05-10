@@ -30,6 +30,7 @@ Documentation
 =============
 - Link from the AbaqusSolver builder to the abaqus wrapper shell script to help explain the action definition
   (:issue:`42`, :merge:`31`). By `Kyle Brindley`_.
+- Add a command line interface (CLI) documentation page (:issue:`44`, :merge:`34`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
