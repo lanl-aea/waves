@@ -54,7 +54,8 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(),
-                     'AbaqusSolver': waves.builders.abaqus_solver()})
+                     'AbaqusSolver': waves.builders.abaqus_solver(),
+                     'CopySubstitute': waves.builders.copy_substitute()})
 
 # Add documentation target(s)
 build_dir = variant_dir_base / documentation_source_dir
