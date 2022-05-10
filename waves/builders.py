@@ -108,7 +108,7 @@ def abaqus_solver():
     return abaqus_solver_builder
 
 
-def copy_substitute(source_list, substitution_dictionary={}):
+def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment()):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
     Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
@@ -135,6 +135,7 @@ def copy_substitute(source_list, substitution_dictionary={}):
     :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
     :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the template
         characters, e.g. @variable@. The template character can be anything that works in the SCons Substfile builder.
+    :param SCons.Environment.Environment env: An SCons construction environment to use when defining the targets.
 
     :return: SCons NodeList of Copy and Substfile objects
     :rtype: SCons.Node.NodeList
@@ -142,7 +143,7 @@ def copy_substitute(source_list, substitution_dictionary={}):
     target_list = SCons.Node.NodeList()
     for source_file in source_list:
         target_list.append(
-            SCons.Environment.Command(
+            env.Command(
                 target=source_file.name,
                 source=str(source_file),
                 action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}')))
