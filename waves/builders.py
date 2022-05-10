@@ -142,10 +142,9 @@ def copy_substitute(source_list, substitution_dictionary={}):
     for source_file in source_list:
         target_list.append(
             SCons.Environment.Base.Command(
-                Copy(
-                    target=source_file.name,
-                    source=str(source_file),
-                    action=Copy('${TARGET}', '${SOURCE}'))))
+                target=source_file.name,
+                source=str(source_file),
+                action=Copy('${TARGET}', '${SOURCE}')))
         if source_file.suffix == '.in':
             target_list.append(Substfile(source_file.name))
     return target_list
