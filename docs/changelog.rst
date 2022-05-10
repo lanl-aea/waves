@@ -31,6 +31,11 @@ Documentation
 - Link from the AbaqusSolver builder to the abaqus wrapper shell script to help explain the action definition
   (:issue:`42`, :merge:`31`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Move the geometry argument parser to a stand-alone function within the geometry script (:issue:`43`, :merge:`33`). By
+  `Thomas Roberts`_.
+
 Enhancements
 ============
 - Avoid build file creation in the source directory during copy/substitution operations, e.g. SolverPrep (:issue:`16`,
