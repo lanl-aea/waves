@@ -32,6 +32,8 @@ Documentation
   (:issue:`42`, :merge:`31`). By `Kyle Brindley`_.
 - Add a command line interface (CLI) documentation page (:issue:`44`, :merge:`34`). By `Thomas Roberts`_.
 - Fix WAVES builder docstring example syntax (:issue:`54`, :merge:`36`). By `Kyle Brindley`_.
+- Create a custom usage message for the geometry argument parser that displays the proper command for running an Abaqus
+  journal file (:issue:`55`, :merge:`37`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
