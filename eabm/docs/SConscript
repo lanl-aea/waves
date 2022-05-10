@@ -15,6 +15,7 @@ documentation_file_list = [
     'conf.py',
     'README.txt',  # Copied from README.rst to docs build directory by root SConscript
     'api.rst',
+    'cli.rst',
     'build.txt',
     'changelog.rst',
     'contribution.txt',
