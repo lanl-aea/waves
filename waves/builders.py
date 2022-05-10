@@ -3,6 +3,7 @@
 import pathlib
 
 import SCons.Builder
+import Scons.Node
 
 # TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/40
@@ -103,3 +104,31 @@ def abaqus_solver():
         action=f'{abaqus_wrapper} ${{job_name}} abaqus -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}',
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
+
+
+def copy_substitute(source_list, substitution_dictionary={}):
+    """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
+
+    Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
+    matching the calling SConscript parent directory. Files with the name convention ``*.in`` are also given an SCons
+    Substfile Builder, which will perform template substitution with the provided dictionary in-place in the current
+    variant directory and remove the ``.in`` suffix.
+
+    :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
+    :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the template
+        characters, e.g. @variable@. The template character can be anything that works in the SCons Substfile builder.
+
+    :return: SCons NodeList of Copy and Substfile objects
+    :rtype: SCons.Node.Nodelist
+    """
+    target_list = SCons.Node.Nodelist()
+    for source_file in source_list:
+        target_list.append(
+            Command(
+                Copy(
+                    target=source_file.name,
+                    source=str(source_file),
+                    action=Copy('${TARGET}', '${SOURCE}'))))
+        if source_file.suffix == '.in':
+            target_list.append(Substfile(source_file.name))
+    return target_list
