@@ -63,7 +63,7 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 # Add documentation target
 build_dir = variant_dir_base / documentation_source_dir
 SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
 
 # Add pytests
 SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
@@ -81,4 +81,11 @@ conda_build = env.Command(
                                                                   '--croot /tmp/${USER}-conda-build ' \
                                                                   '--output-folder ./conda-build-artifacts')
 env.Ignore('dist', conda_build_targets)
-env.Alias('conda-build', conda_build)
+conda_build_alias = env.Alias('conda-build', conda_build)
+
+# Add aliases to help message so users know what build target options are available
+alias_list = docs_aliases + conda_build_alias
+alias_help = "\nTarget Aliases:\n"
+for alias in alias_list:
+    alias_help += f"    {alias}\n"
+Help(alias_help)
