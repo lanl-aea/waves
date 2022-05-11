@@ -142,6 +142,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     :rtype: SCons.Node.NodeList
     """
     target_list = SCons.Node.NodeList()
+    source_list = [pathlib.Path(source_file) for source_file in source_list]
     for source_file in source_list:
         target_list += env.Command(
                 target=source_file.name,
