@@ -43,6 +43,7 @@ project_variables = {
     'project_dir': Dir('.').abspath,
     'version': version,
     'abaqus_source_dir': 'abaqus',
+    'python_source_dir': 'python',
 }
 project_substitution_dictionary = dict()
 for key, value in project_variables.items():
@@ -67,7 +68,8 @@ eabm_simulation_directories = [
     'tutorial_02_partition_mesh',
     'tutorial_03_solverprep',
     'tutorial_04_simulation',
-    'tutorial_05_parameter_substitution'
+    'tutorial_05_parameter_substitution',
+    'tutorial_06_include_files'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
