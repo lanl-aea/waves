@@ -8,8 +8,10 @@ import SCons
 from waves import builders
 
 copy_substitute_input = {
-    'strings': (['dummy', 'dummy2.in'], ['dummy', 'dummy2.in', 'dummy2']),
-    'pathlib.Path()s': ([pathlib.Path('dummy')], ['dummy']),
+    'strings': (['dummy', 'dummy2.in'],
+                ['dummy', 'dummy2.in', 'dummy2']),
+    'pathlib.Path()s': ([pathlib.Path('dummy'), pathlib.Path('dummy2.in')],
+                        ['dummy', 'dummy2.in', 'dummy2']),
 }
 
 
