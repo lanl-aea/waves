@@ -5,9 +5,23 @@ import pytest
 
 from waves import builders
 
+
+# TODO: Find a better way to instantiate or mock SCons objects for testing
+class fakeSConsFile(str): 
+    """Add a ''.path method to the string built-in
+
+    Used here because instantiating an SCons.Node.FS.File object is hard and requires mucking about in the SCons
+    internals. All we really need for the emitter unit tests is the target and source lists and the ''.path attribute of
+    an SCons.Node.FS.File object.
+    """
+    def __init__(self, string): 
+        super().__init__() 
+        self.path = string
+
+
 journal_emitter_input = {
     'empty targets': ([],
-                      ['dummy.py'],
+                      [fakeSConsFile('dummy.py')],
                       ['dummy.jnl', 'dummy.log'])
 }
 
@@ -17,7 +31,7 @@ journal_emitter_input = {
                          journal_emitter_input.values(),
                          ids=journal_emitter_input.keys())
 def test__abaqus_journal_emitter(target, source, expected):
-    target, source = builders._abaqus_journal_emitter(target, source, SCons.Environment.Environment)
+    target, source = builders._abaqus_journal_emitter(target, source, None)
     assert target == expected
 
 
