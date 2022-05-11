@@ -149,5 +149,5 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
                 source=str(source_file),
                 action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}'))
         if source_file.suffix == '.in':
-            target_list += env.Substfile(source_file.with_suffix('').name, source_file.name, SUBST_DICT=substitution_dictionary)
+            target_list += env.Substfile(source_file.name, SUBST_DICT=substitution_dictionary)
     return target_list
