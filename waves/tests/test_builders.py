@@ -48,6 +48,11 @@ solver_emitter_input = {
                     ['job.sta'],
                     [source_file],
                     ['job.sta', 'job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt']),
+    'missing job_name': pytest.param('',
+                        [],
+                        [source_file],
+                        [],
+                        marks=pytest.mark.xfail)
 }
 
 
