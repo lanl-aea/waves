@@ -22,7 +22,10 @@ class fakeSConsFile(str):
 journal_emitter_input = {
     'empty targets': ([],
                       [fakeSConsFile('dummy.py')],
-                      ['dummy.jnl', 'dummy.log'])
+                      ['dummy.jnl', 'dummy.log']),
+    'one target': (['dummy.cae'],
+                   [fakeSConsFile('dummy.py')],
+                   ['dummy.cae', 'dummy.jnl', 'dummy.log'])
 }
 
 
