@@ -61,7 +61,7 @@ def abaqus_journal():
 def _abaqus_solver_emitter(target, source, env):
     """Appends the abaqus_solver builder target list with the builder managed targets
     """
-    if not 'job_name' in env:
+    if not 'job_name' in env or not env['job_name']:
         raise RuntimeError('Builder is missing required keyword argument "job_name".')
     builder_suffixes = ['log']
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']

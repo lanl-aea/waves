@@ -2,6 +2,7 @@
 
 import pathlib
 import pytest
+from contextlib import nullcontext as does_not_raise
 
 import SCons.Node.FS
 
@@ -35,6 +36,49 @@ def test__abaqus_journal():
     env.Append(BUILDERS={'AbaqusJournal': builders.abaqus_journal()})
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
     node = env.AbaqusJournal(target=['journal.cae'], source=['journal.py'], journal_options="")
+
+
+fs = SCons.Node.FS.FS()
+source_file = fs.File('root.inp')
+solver_emitter_input = {
+    'empty targets': ('job',
+                      [],
+                      [source_file],
+                      ['job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
+                      does_not_raise()),
+    'one targets': ('job',
+                    ['job.sta'],
+                    [source_file],
+                    ['job.sta', 'job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
+                    does_not_raise()),
+    'missing job_name': pytest.param('',
+                        [],
+                        [source_file],
+                        [],
+                        pytest.raises(RuntimeError))
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('job_name, target, source, expected, outcome',
+                         solver_emitter_input.values(),
+                         ids=solver_emitter_input.keys())
+def test__abaqus_solver_emitter(job_name, target, source, expected, outcome):
+    env = SCons.Environment.Environment()
+    env['job_name'] = job_name
+    with outcome:
+        try:
+            builders._abaqus_solver_emitter(target, source, env)
+        finally:
+            assert target == expected
+
+
+@pytest.mark.unittest
+def test__abaqus_solver():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'AbaqusSolver': builders.abaqus_solver()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.AbaqusSolver(target=[], source=['root.inp'], job_name="job", abaqus_options="")
 
 
 copy_substitute_input = {
