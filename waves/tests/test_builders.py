@@ -2,6 +2,7 @@
 
 import pathlib
 import pytest
+from contextlib import nullcontext as does_not_raise
 
 import SCons.Node.FS
 
@@ -43,28 +44,32 @@ solver_emitter_input = {
     'empty targets': ('job',
                       [],
                       [source_file],
-                      ['job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt']),
+                      ['job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
+                      does_not_raise()),
     'one targets': ('job',
                     ['job.sta'],
                     [source_file],
-                    ['job.sta', 'job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt']),
+                    ['job.sta', 'job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
+                    does_not_raise()),
     'missing job_name': pytest.param('',
                         [],
                         [source_file],
                         [],
-                        marks=pytest.mark.xfail)
+                        pytest.raises(RuntimeError))
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize('job_name, target, source, expected',
+@pytest.mark.parametrize('job_name, target, source, expected, outcome',
                          solver_emitter_input.values(),
                          ids=solver_emitter_input.keys())
-def test__abaqus_solver_emitter(job_name, target, source, expected):
+def test__abaqus_solver_emitter(job_name, target, source, expected, outcome):
     env = SCons.Environment.Environment()
     env['job_name'] = job_name
-    builders._abaqus_solver_emitter(target, source, env)
-    assert target == expected
+    with outcome:
+        builders._abaqus_solver_emitter(target, source, env)
+    if outcome == does_not_raise:
+        assert target == expected
 
 
 @pytest.mark.unittest
