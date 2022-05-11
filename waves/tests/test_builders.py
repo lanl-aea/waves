@@ -3,8 +3,6 @@
 import pathlib
 import pytest
 
-import SCons
-
 from waves import builders
 
 copy_substitute_input = {
