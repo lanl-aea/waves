@@ -21,6 +21,8 @@ New Features
 - Add a copy and substitute target builder to WAVES (:issue:`28`, :merge:`32`). By `Kyle Brindley`_.
 - Add an alias collector solution to provide a list of available aliases in the project help message (:issue:`33`,
   :merge:`38`). By `Kyle Brindley`_.
+- Add the SCons target definition equivalent to the ECMF and CMake-simulation parameter substitution tutorial files (:issue:`57`,
+  :merge:`43`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
