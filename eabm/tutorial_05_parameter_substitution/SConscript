@@ -14,17 +14,17 @@ abaqus_source_abspath = project_dir / abaqus_source_dir
 
 # Simulation variables
 model = "single_element"
-sim_variables = {
-    'width' = 1.0
-    'height' = 1.0
-    'global_seed' = 1.0
-    'displacement' = -1.0
+simulation_variables = {
+    'width': 1.0,
+    'height': 1.0,
+    'global_seed': 1.0,
+    'displacement': -1.0
 }
-simulation_substitution_dictionary = {f"@{key}@": value for key, value in sim_variables.items()}
+simulation_substitution_dictionary = {f"@{key}@": value for key, value in simulation_variables.items()}
 
 # Geometry
 journal_file = f"{model}_geometry"
-journal_options = f"--width {sim_variables['width']} --height {sim_variables['height']}"
+journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 geometry = env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
@@ -32,7 +32,7 @@ geometry = env.AbaqusJournal(
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = "--width {sim_variables['width']} --height {sim_variables['height']}"
+journal_options = "--width {simulation_variables['width']} --height {simulation_variables['height']}"
 partition = env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
@@ -40,7 +40,7 @@ partition = env.AbaqusJournal(
 
 # Mesh
 journal_file = f"{model}_mesh"
-journal_options = "--global-seed {sim_variables['global_seed']}"
+journal_options = "--global-seed {simulation_variables['global_seed']}"
 mesh = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.inp"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
@@ -59,7 +59,7 @@ abaqus_source_list = [
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 solverprep = waves.builders.copy_substitute(abaqus_source_list, 
-                                            substitution_dictionary=sim_subst_dict)
+                                            substitution_dictionary=simulation_substitution_dictionary)
 
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
