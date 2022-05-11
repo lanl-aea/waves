@@ -62,6 +62,14 @@ def test__abaqus_solver_emitter(job_name, target, source, expected):
     assert target == expected
 
 
+@pytest.mark.unittest
+def test__abaqus_solver():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'AbaqusSolver': builders.abaqus_solver()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.AbaqusSolver(target=[], source=['root.inp'], job_name="job", abaqus_options="")
+
+
 copy_substitute_input = {
     'strings': (['dummy', 'dummy2.in'],
                 ['dummy', 'dummy2.in', 'dummy2']),
