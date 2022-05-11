@@ -23,6 +23,8 @@ New Features
   :merge:`38`). By `Kyle Brindley`_.
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation parameter substitution tutorial files (:issue:`57`,
   :merge:`43`). By `Kyle Brindley`_.
+- Add the SCons target definition equivalent to the ECMF include file tutorial (:issue:`59`, :merge:`44`). By `Kyle
+  Brindley`_.
 
 Bug fixes
 =========
