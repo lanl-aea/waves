@@ -32,7 +32,7 @@ geometry = env.AbaqusJournal(
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = "--width {simulation_variables['width']} --height {simulation_variables['height']}"
+journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 partition = env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
@@ -40,7 +40,7 @@ partition = env.AbaqusJournal(
 
 # Mesh
 journal_file = f"{model}_mesh"
-journal_options = "--global-seed {simulation_variables['global_seed']}"
+journal_options = f"--global-seed {simulation_variables['global_seed']}"
 mesh = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.inp"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
