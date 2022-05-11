@@ -82,8 +82,8 @@ def test__abaqus_solver():
 
 
 copy_substitute_input = {
-    'strings': (['dummy', 'dummy2.in'],
-                ['dummy', 'dummy2.in', 'dummy2']),
+    'strings': (['dummy', 'dummy2.in', 'root.inp.in', 'conf.py.in'],
+                ['dummy', 'dummy2.in', 'dummy2', 'root.inp.in', 'root.in', 'conf.py.in', 'conf.py']),
     'pathlib.Path()s': ([pathlib.Path('dummy'), pathlib.Path('dummy2.in')],
                         ['dummy', 'dummy2.in', 'dummy2']),
 }
