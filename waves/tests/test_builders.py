@@ -37,6 +37,31 @@ def test__abaqus_journal():
     node = env.AbaqusJournal(target=['journal.cae'], source=['journal.py'], journal_options="")
 
 
+fs = SCons.Node.FS.FS()
+source_file = fs.File('root.inp')
+solver_emitter_input = {
+    'empty targets': ('job',
+                      [],
+                      [source_file],
+                      ['job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt']),
+    'one targets': ('job',
+                    ['job.sta'],
+                    [source_file],
+                    ['job.sta', 'job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt']),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('job_name, target, source, expected',
+                         solver_emitter_input.values(),
+                         ids=solver_emitter_input.keys())
+def test__abaqus_solver_emitter(job_name, target, source, expected):
+    env = SCons.Environment.Environment()
+    env['job_name'] = job_name
+    builders._abaqus_solver_emitter(target, source, env)
+    assert target == expected
+
+
 copy_substitute_input = {
     'strings': (['dummy', 'dummy2.in'],
                 ['dummy', 'dummy2.in', 'dummy2']),
