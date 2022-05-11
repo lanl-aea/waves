@@ -1,0 +1,87 @@
+#! /usr/bin/env python
+
+import pathlib
+
+import waves
+
+# Inherit the parent construction environment
+Import('env')
+
+# Set project-wide paths with os-agnostic path separators
+project_dir = pathlib.Path(env['project_dir'])
+abaqus_source_dir = env['abaqus_source_dir']
+abaqus_source_abspath = project_dir / abaqus_source_dir
+
+# Simulation variables
+model = "single_element"
+sim_variables = {
+    'width' = 1.0
+    'height' = 1.0
+    'global_seed' = 1.0
+    'displacement' = -1.0
+}
+simulation_substitution_dictionary = {f"@{key}@": value for key, value in sim_variables.items()}
+
+# Geometry
+journal_file = f"{model}_geometry"
+journal_options = f"--width {sim_variables['width']} --height {sim_variables['height']}"
+geometry = env.AbaqusJournal(
+    target=[f"{journal_file}.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py"],
+    journal_options=journal_options)
+
+# Partition
+journal_file = f"{model}_partition"
+journal_options = "--width {sim_variables['width']} --height {sim_variables['height']}"
+partition = env.AbaqusJournal(
+    target=[f"{journal_file}.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+    journal_options=journal_options)
+
+# Mesh
+journal_file = f"{model}_mesh"
+journal_options = "--global-seed {sim_variables['global_seed']}"
+mesh = env.AbaqusJournal(
+    target=[f"{journal_file}.cae", f"{journal_file}.inp"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
+    journal_options=journal_options)
+
+# SolverPrep
+abaqus_source_list = [
+    f"#/{abaqus_source_dir}/{model}_compression.inp",
+    f"#/{abaqus_source_dir}/amplitudes.inp",
+    f"#/{abaqus_source_dir}/assembly.inp",
+    f"#/{abaqus_source_dir}/boundary.inp",
+    f"#/{abaqus_source_dir}/field_output.inp",
+    f"#/{abaqus_source_dir}/materials.inp",
+    f"#/{abaqus_source_dir}/parts.inp",
+    f"#/{abaqus_source_dir}/history_output.inp"
+]
+abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
+solverprep = waves.builders.copy_substitute(abaqus_source_list, 
+                                            substitution_dictionary=sim_subst_dict)
+
+# Abaqus Solve
+solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+solve_source_list.append([f"{journal_file}.inp"])
+job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
+datacheck_name = f"{job_name}_DATACHECK"
+datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
+abaqus_options='-double both'
+datacheck = env.AbaqusSolver(
+    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+    source=solve_source_list,
+    job_name=datacheck_name,
+    abaqus_options=f'{abaqus_options} -datacheck')
+
+solve_source_list.append([f"{datacheck_name}.odb"])
+solve = env.AbaqusSolver(
+    target=[f"{job_name}.sta"],
+    source=solve_source_list,
+    job_name=job_name,
+    abaqus_options=abaqus_options)
+
+# Collector alias based on parent directory name
+parent_directory = pathlib.Path('.').parent.name
+workflow = geometry + partition + mesh + solverprep + datacheck + solve
+env.Alias(parent_directory, workflow)
