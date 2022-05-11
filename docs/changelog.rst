@@ -42,7 +42,8 @@ Internal Changes
 - Move the geometry argument parser to a stand-alone function within the geometry script (:issue:`43`, :merge:`33`). By
   `Thomas Roberts`_.
 - Unit test the WAVES copy and substitute builder function (:issue:`52`, :merge:`40`). By `Kyle Brindley`_.
-- Unit test the WAVES Abaqus Journal file target and emitter (:issue:`50`, :merge:`41`). By `Kyle Brindley`_.
+- Unit test the WAVES Abaqus Journal builder and emitter (:issue:`50`, :merge:`41`). By `Kyle Brindley`_.
+- Unit test the WAVES Abaqus Solver builder and emitter (:issue:`51`, :merge:`51`). By `Kyle Brindley`_.
 
 Enhancements
 ============
