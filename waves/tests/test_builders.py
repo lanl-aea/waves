@@ -7,4 +7,4 @@ from waves import builders
 
 
 def test__copy_substitute():
-    pass
+    builders.copy_substitute(['dummy'], {})
