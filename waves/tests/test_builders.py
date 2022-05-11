@@ -3,10 +3,12 @@
 import pathlib
 import pytest
 
+import SCons
+
 from waves import builders
 
 copy_substitute_input = {
-    'strings': (['dummy'], ['dummy']),
+    'strings': (['dummy', 'dummy2.in'], ['dummy', 'dummy2.in', 'dummy2']),
     'pathlib.Path()s': ([pathlib.Path('dummy')], ['dummy']),
 }
 
