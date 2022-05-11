@@ -1,4 +1,4 @@
-.. _tutorial01geometry:
+.. _tutorial01geometrywaves:
 
 ####################
 Tutorial 1: Geometry

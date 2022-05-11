@@ -15,10 +15,10 @@
    devops
 
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 2
    :caption: WAVES Tutorials
    
-   tutorial_01_geometry
+   tutorial_01_geometry_waves
 
 .. toctree::
    :caption: Help & Reference
