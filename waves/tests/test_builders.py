@@ -3,28 +3,19 @@
 import pathlib
 import pytest
 
+import SCons.Node.FS
+
 from waves import builders
 
 
-# TODO: Find a better way to instantiate or mock SCons objects for testing
-class fakeSConsFile(str): 
-    """Add a ''.path method to the string built-in
-
-    Used here because instantiating an SCons.Node.FS.File object is hard and requires mucking about in the SCons
-    internals. All we really need for the emitter unit tests is the target and source lists and the ''.path attribute of
-    an SCons.Node.FS.File object.
-    """
-    def __init__(self, string): 
-        super().__init__() 
-        self.path = string
-
-
+fs = SCons.Node.FS.FS()
+source_file = fs.File('dummy.py')
 journal_emitter_input = {
     'empty targets': ([],
-                      [fakeSConsFile('dummy.py')],
+                      [source_file],
                       ['dummy.jnl', 'dummy.log']),
     'one target': (['dummy.cae'],
-                   [fakeSConsFile('dummy.py')],
+                   [source_file],
                    ['dummy.cae', 'dummy.jnl', 'dummy.log'])
 }
 
