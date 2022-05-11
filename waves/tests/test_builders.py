@@ -29,6 +29,14 @@ def test__abaqus_journal_emitter(target, source, expected):
     assert target == expected
 
 
+@pytest.mark.unittest
+def test__abaqus_journal():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'AbaqusJournal': builders.abaqus_journal()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.AbaqusJournal(target=['journal.cae'], source=['journal.py'], journal_options="")
+
+
 copy_substitute_input = {
     'strings': (['dummy', 'dummy2.in'],
                 ['dummy', 'dummy2.in', 'dummy2']),
