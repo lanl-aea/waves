@@ -41,6 +41,7 @@ Internal Changes
 ================
 - Move the geometry argument parser to a stand-alone function within the geometry script (:issue:`43`, :merge:`33`). By
   `Thomas Roberts`_.
+- Unit test the WAVES copy and substitute builder function (:issue:`52`, :merge:`40`). By `Kyle Brindley`_.
 
 Enhancements
 ============
