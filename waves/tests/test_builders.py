@@ -67,9 +67,10 @@ def test__abaqus_solver_emitter(job_name, target, source, expected, outcome):
     env = SCons.Environment.Environment()
     env['job_name'] = job_name
     with outcome:
-        builders._abaqus_solver_emitter(target, source, env)
-    if outcome == does_not_raise:
-        assert target == expected
+        try:
+            builders._abaqus_solver_emitter(target, source, env)
+        finally:
+            assert target == expected
 
 
 @pytest.mark.unittest
