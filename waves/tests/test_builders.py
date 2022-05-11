@@ -1,12 +1,14 @@
 """Test WAVES SCons builders and support functions 
 """
 
+import pathlib
 import pytest
 
 from waves import builders
 
 copy_substitute_input = {
-    'strings': (['dummy'])
+    'strings': (['dummy']),
+    'pathlib.Path()s': ([pathlib.Path('dummy')]),
 }
 
 
