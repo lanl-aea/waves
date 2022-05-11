@@ -5,6 +5,22 @@ import pytest
 
 from waves import builders
 
+journal_emitter_input = {
+    'empty targets': ([],
+                      ['dummy.py'],
+                      ['dummy.jnl', 'dummy.log'])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('target, source, expected',
+                         journal_emitter_input.values(),
+                         ids=journal_emitter_input.keys())
+def test__abaqus_journal_emitter(target, source, expected):
+    target, source = builders._abaqus_journal_emitter(target, source, SCons.Environment.Environment)
+    assert target == expected
+
+
 copy_substitute_input = {
     'strings': (['dummy', 'dummy2.in'],
                 ['dummy', 'dummy2.in', 'dummy2']),
