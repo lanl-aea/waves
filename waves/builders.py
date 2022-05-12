@@ -29,7 +29,7 @@ def _abaqus_journal_emitter(target, source, env):
     return target, source
 
 
-def abaqus_journal():
+def abaqus_journal(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -53,7 +53,7 @@ def abaqus_journal():
     """
     abaqus_journal_builder = SCons.Builder.Builder(
         chdir=1,
-        action='abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
+        action='{abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -71,7 +71,7 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver():
+def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -103,7 +103,7 @@ def abaqus_solver():
     """
     abaqus_solver_builder = SCons.Builder.Builder(
         chdir=1,
-        action=f'{abaqus_wrapper} ${{job_name}} abaqus -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}',
+        action=f'{abaqus_wrapper} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}',
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
