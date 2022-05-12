@@ -31,7 +31,7 @@ def _abaqus_journal_emitter(target, source, env):
     return target, source
 
 
-def abaqus_journal(abaqus_program='abaqus', env=SCons.Environment.Environment()):
+def abaqus_journal(abaqus_program='abaqus'):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
