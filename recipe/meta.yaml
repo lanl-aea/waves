@@ -22,12 +22,10 @@ requirements:
   build:
     - python {{ python }}
     - git
-    - build
     - setuptools
     - setuptools_scm
   host:
     - python
-    - build
     - setuptools
     - setuptools_scm
   run:
@@ -42,24 +40,18 @@ test:
     - pyyaml
     - scons
     - setuptools_scm
-    - sphinx
-    - sphinx-argparse
-    - sphinx_rtd_theme
-    - sphinxcontrib-bibtex
   source_files:
     - SConstruct
     - SConscript
     - README.rst
-    - waves/bin/  # Required by the documentation build
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
     - eabm/
-    - docs/
   imports:
     - waves
   commands:
     # TODO: Test from the as installed directory where possible, e.g. waves pytests
-    - scons . --keep-going conditional_ignore=False
+    - scons . --keep-going conditional_ignore=False ignore_documentation=True
     # Test the SCons-EABM targets and tests
-    - cd eabm && scons . --keep-going conditional_ignore=False
+    - cd eabm && scons . --keep-going conditional_ignore=False ignore_documentation=True

@@ -29,13 +29,17 @@ variables.AddVariables(
         validator=PathVariable.PathAccept),
     BoolVariable('conditional_ignore',
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
-        default=True))
+        default=True),
+    # Used by the WAVES project during packaging. Not required for an EABM.
+    BoolVariable('ignore_documentation',
+        help="Boolean to ignore the documentation build, e.g. during Conda package build and testing.",
+        default=False))
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
 
-# Find required programs for conditional target skipping
+# Find required programs for conditional target ignoring and absolute path for use in target actions
 required_programs = ['sphinx-build', 'abaqus']
 conf = env.Configure()
 for program in required_programs:
@@ -68,9 +72,14 @@ env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_progr
                      'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'], env=env)})
 
 # Add documentation target(s)
-build_dir = variant_dir_base / documentation_source_dir
-SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+# The 'ignore_documentation' variable is used by WAVES during packaging. Not required for an EABM.
+if not env['ignore_documentation']:
+    build_dir = variant_dir_base / documentation_source_dir
+    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
+    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+else:
+    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
+    docs_aliases = []
 
 # Add simulation targets
 eabm_simulation_directories = [

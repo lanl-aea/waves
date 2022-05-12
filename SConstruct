@@ -13,7 +13,7 @@ warnings.filterwarnings(action='ignore',
                         module='setuptools_scm')
 
 # Versioning is more complicated than ``setuptools_scm.get_version()`` to allow us to build and run tests in the Conda
-# package directory, where setuptools_scm can't version from Git. This logic is reveresed from the waves.__init__
+# package directory, where setuptools_scm can't version from Git. This logic is reversed from the waves.__init__
 # logic. We do this to re-use SCons build target commands during Conda packaging to avoid hard coding target commands in
 # the Conda recipe. This is not necessary in an EABM project definition.
 try:
@@ -35,13 +35,16 @@ variables.AddVariables(
         validator=PathVariable.PathAccept),
     BoolVariable('conditional_ignore',
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
-        default=True))
+        default=True),
+    BoolVariable('ignore_documentation',
+        help="Boolean to ignore the documentation build, e.g. during Conda package build and testing.",
+        default=False))
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
 
-# Find required programs for conditional target skipping
+# Find required programs for conditional target ignoring
 required_programs = ['sphinx-build']
 conf = env.Configure()
 for program in required_programs:
@@ -73,9 +76,13 @@ for key, value in project_variables.items():
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add documentation target
-build_dir = variant_dir_base / documentation_source_dir
-SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+if not env['ignore_documentation']:
+    build_dir = variant_dir_base / documentation_source_dir
+    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
+    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+else:
+    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
+    docs_aliases = []
 
 # Add pytests
 pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
