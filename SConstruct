@@ -97,11 +97,11 @@ croot_dir = '/scratch/$${USER}/conda-build'
 if 'sstelmo' not in hostname and 'sstbigbird' not in hostname:
     croot_dir = '/tmp/$${USER}-conda-build'
 conda_package_output = 'conda-build-artifacts'
-package_prefix = f"{conda_package_output}/{project_name.upper()}-{env['version']}"
+package_prefix = f"{conda_package_output}/noarch/{project_name.upper()}-{env['version']}"
 conda_build_targets = [f"{package_prefix}-py3-none-any.whl"]
 conda_build = env.Command(
     target=conda_build_targets,
-    source=['recipe/meta.yaml', 'recipe/conda_build_config.yaml'],
+    source=['recipe/meta.yaml'],
     action=f"VERSION=$$(python -m setuptools_scm | sed 's/Guessed Version //g') conda build recipe --channel conda-forge --no-anaconda-upload " \
                                                                   f"--croot {croot_dir} " \
                                                                   f"--output-folder {conda_package_output}")
