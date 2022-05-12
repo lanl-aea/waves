@@ -29,6 +29,8 @@ New Features
   :merge:`45`). By `Kyle Brindley`_.
 - Provide and use an override variable to the conditional ignore behavior. Useful for requiring all targets in a build,
   particularly for CI testing (:issue:`3`, :merge:`45`). By `Kyle Brindley`_.
+- Conditionally skip simulation target trees when a required program is missing (:issue:`38`, :merge:`46`). By `Kyle
+  Brindley`_.
 
 Bug fixes
 =========

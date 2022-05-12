@@ -54,6 +54,10 @@ abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source
 solverprep = waves.builders.copy_substitute(abaqus_source_list)
 
 # Collector alias based on parent directory name
-parent_directory = pathlib.Path('.').parent.name
+parent_directory = Dir('.').srcnode().name
 workflow = geometry + partition + mesh + solverprep
 env.Alias(parent_directory, workflow)
+
+if not env['abaqus'] and env['conditional_ignore']:
+    print(f"Program 'abaqus' was not found in construction environment. Skipping '{parent_directory}' target(s)")
+    Ignore(['.', parent_directory], workflow)
