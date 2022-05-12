@@ -37,14 +37,14 @@ variables.AddVariables(
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
         default=True),
     BoolVariable('ignore_documentation',
-        help="Boolean to skip the documentation build, e.g. during Conda package build and testing.",
+        help="Boolean to ignore the documentation build, e.g. during Conda package build and testing.",
         default=False))
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
 
-# Find required programs for conditional target skipping
+# Find required programs for conditional target ignoreping
 required_programs = ['sphinx-build']
 conf = env.Configure()
 for program in required_programs:

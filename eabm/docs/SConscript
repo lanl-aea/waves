@@ -48,10 +48,10 @@ alias_list = env.Alias('documentation', documentation)
 
 # Used by WAVES during packaging. Not required for an EABM.
 if env['ignore_documentation']:
-    print(f"The 'ignore_documentation' option was set to 'True'. Skipping Sphinx target(s)")
+    print(f"The 'ignore_documentation' option was set to 'True'. Ignoring Sphinx target(s)")
     Ignore(['.', 'html', 'documentation'], documentation)
 elif env['conditional_ignore'] and not env['sphinx_build']:
-    print(f"Program 'sphinx-build' was not found in construction environment. Skipping Sphinx target(s)")
+    print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore(['.', 'html', 'documentation'], documentation)
 else:
     env.Default(documentation)

@@ -87,5 +87,5 @@ workflow = geometry + partition + mesh + solverprep + datacheck + solve
 env.Alias(parent_directory, workflow)
 
 if env['conditional_ignore'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Skipping '{parent_directory}' target(s)")
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
     Ignore(['.', parent_directory], workflow)
