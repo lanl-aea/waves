@@ -83,30 +83,10 @@ else:
 # Add pytests
 pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
 
-# Add conda build target
-# TODO: fix the SCons conda build target and use it instead of hardcoding the conda build commands in .gitlab-ci.yml
-# TODO: add a ``--croot`` switch, prefering /scratch/$USER/conda-build when available
-# TODO: add a ``--croot`` command line option
-hostname = socket.gethostname()
-croot_dir = '/scratch/$${USER}/conda-build'
-if 'sstelmo' not in hostname and 'sstbigbird' not in hostname:
-    croot_dir = '/tmp/$${USER}-conda-build'
-conda_package_output = 'conda-build-artifacts'
-package_prefix = f"{conda_package_output}/noarch/{project_name.upper()}-{env['version']}"
-conda_build_targets = [f"{package_prefix}-py_0.tar.bz2"]
-conda_build = env.Command(
-    target=conda_build_targets,
-    source=['recipe/meta.yaml'],
-    action=f"VERSION=$$(python -m setuptools_scm | sed 's/Guessed Version //g') conda build recipe --channel conda-forge --no-anaconda-upload " \
-                                                                  f"--croot {croot_dir} " \
-                                                                  f"--output-folder {conda_package_output}")
-conda_build_alias = env.Alias('conda-build', conda_build)
-env.Ignore('conda-build-artifacts', conda_build_targets)
-
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/33
-alias_list = docs_aliases + pytest_aliases + conda_build_alias
+alias_list = docs_aliases + pytest_aliases
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
