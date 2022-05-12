@@ -39,7 +39,7 @@ variables.AddVariables(
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
 
-# Find required programs for conditional target ignoreping
+# Find required programs for conditional target ignoring
 required_programs = ['sphinx-build', 'abaqus']
 conf = env.Configure()
 for program in required_programs:
