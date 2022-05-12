@@ -98,7 +98,7 @@ if 'sstelmo' not in hostname and 'sstbigbird' not in hostname:
     croot_dir = '/tmp/$${USER}-conda-build'
 conda_package_output = 'conda-build-artifacts'
 package_prefix = f"{conda_package_output}/noarch/{project_name.upper()}-{env['version']}"
-conda_build_targets = [f"{package_prefix}-py3-none-any.whl"]
+conda_build_targets = [f"{package_prefix}-py_0.tar.bz2"]
 conda_build = env.Command(
     target=conda_build_targets,
     source=['recipe/meta.yaml'],
