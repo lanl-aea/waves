@@ -41,7 +41,7 @@ sphinx_build = env.Command(
     # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/5
     target=['dummy_file', 'html/index.html'],
     source=documentation_file_list,
-    action="sphinx-build ${sphinx_options} -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
 env.Clean(sphinx_build, 'html/')
 alias_list = env.Alias('documentation', sphinx_build)
