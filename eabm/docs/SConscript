@@ -46,11 +46,16 @@ documentation = env.Command(
 env.Clean(documentation, 'html/')
 alias_list = env.Alias('documentation', documentation)
 
-if not env['sphinx_build'] and env['conditional_ignore']:
+# Used by WAVES during packaging. Not required for an EABM.
+if env['skip_documentation']:
+    print(f"The 'skip_documentation' option was set to 'True'. Skipping Sphinx target(s)")
+    Ignore(['.', 'html', 'documentation'], documentation)
+elif not env['sphinx_build'] and env['conditional_ignore']:
     print(f"Program 'sphinx-build' was not found in construction environment. Skipping Sphinx target(s)")
     Ignore(['.', 'html', 'documentation'], documentation)
 else:
     env.Default(documentation)
+
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')
