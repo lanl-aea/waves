@@ -43,7 +43,7 @@ env = Environment(ENV=os.environ.copy(),
 
 # Find required programs for conditional target skipping
 required_programs = ['sphinx-build']
-conf = Configure(env)
+conf = env.Configure()
 for program in required_programs:
     env[program.replace('-', '_')] = conf.CheckProg(program)
 conf.Finish()
