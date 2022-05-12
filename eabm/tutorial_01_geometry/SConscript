@@ -25,3 +25,7 @@ geometry = env.AbaqusJournal(
 parent_directory = pathlib.Path('.').parent.name
 workflow = geometry
 env.Alias(parent_directory, workflow)
+
+if not env['abaqus'] and env['conditional_ignore']:
+    print(f"Program 'abaqus' was not found in construction environment. Skipping Abaqus target(s)")
+    Ignore(['.', parent_directory], workflow)
