@@ -21,6 +21,10 @@ def _abaqus_journal_emitter(target, source, env):
     Appends ``source[0]``.jnl and ``source[0]``.log to the ``target`` list. The abaqus_journal Builder requires that the
     journal file to execute is the first source in the list.
 
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
     :return: target, source
     :rtype: tuple with two lists
     """
@@ -52,6 +56,8 @@ def abaqus_journal(abaqus_program='abaqus'):
        env = Environment()
        env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
        AbaqusJournal(target=['my_journal.cae'], source=['my_journal.py'], journal_options='')
+
+    :param str abaqus_program: An absolute path or basename string for the abaqus program.
     """
     abaqus_journal_builder = SCons.Builder.Builder(
         chdir=1,
@@ -102,6 +108,10 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
        env = Environment()
        env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
        AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
+
+    :param str abaqus_program: An absolute path or basename string for the abaqus program
+    :param SCons.Script.SConscript.SConsEnvironment env: An SCons construction environment to use when searching for the
+        abaqus_wrapper program.
     """
     conf = env.Configure()
     abaqus_wrapper_program = conf.CheckProg('abaqus_wrapper') 
