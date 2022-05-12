@@ -22,12 +22,10 @@ requirements:
   build:
     - python {{ python }}
     - git
-    - build
     - setuptools
     - setuptools_scm
   host:
     - python
-    - build
     - setuptools
     - setuptools_scm
   run:
