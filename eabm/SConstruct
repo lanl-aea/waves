@@ -72,9 +72,12 @@ env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_progr
                      'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'], env=env)})
 
 # Add documentation target(s)
-build_dir = variant_dir_base / documentation_source_dir
-SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+# The 'ignore_documentation' variable is used by WAVES during packaging. Not required for an EABM.
+if not env['ignore_documentation']:
+    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
+    build_dir = variant_dir_base / documentation_source_dir
+    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
+    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
 
 # Add simulation targets
 eabm_simulation_directories = [
