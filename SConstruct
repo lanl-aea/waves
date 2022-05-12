@@ -77,10 +77,12 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add documentation target
 if not env['ignore_documentation']:
-    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
     build_dir = variant_dir_base / documentation_source_dir
     SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
     docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+else:
+    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
+    docs_aliases = []
 
 # Add pytests
 pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
