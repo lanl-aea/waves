@@ -10,7 +10,7 @@ import SCons.Node
 # TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/40
 waves_source_dir = pathlib.Path(__file__).parent.resolve()
-abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
+abaqus_wrapper_internal_abspath = waves_source_dir / 'bin/abaqus_wrapper'
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -101,9 +101,16 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
        env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
        AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
     """
+    conf = env.Configure()
+    abaqus_wrapper_program = conf.CheckProg('abaqus_wrapper') 
+    if not abaqus_wrapper_program:
+        abaqus_wrapper_program = abaqus_wrapper_internal_abspath
+        print("Could not find 'abaqus_wrapper' in construction environment. " \
+              f"Falling back to WAVES internal path...{abaqus_wrapper_program}")
+    conf.Finish()
     abaqus_solver_builder = SCons.Builder.Builder(
         chdir=1,
-        action=f"{abaqus_wrapper} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}",
+        action=f"{abaqus_wrapper_program} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}",
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
