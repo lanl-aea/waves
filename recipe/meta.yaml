@@ -50,6 +50,7 @@ test:
     - SConstruct
     - SConscript
     - README.rst
+    - waves/bin/  # Required by the documentation build
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
