@@ -56,7 +56,7 @@ alias_list = env.Alias('documentation', documentation)
 if env['skip_documentation']:
     print(f"The 'skip_documentation' option was set to 'True'. Skipping Sphinx target(s)")
     Ignore(['.', 'html', 'documentation'], documentation)
-elif not env['sphinx_build'] and env['conditional_ignore']:
+elif env['conditional_ignore'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Skipping Sphinx target(s)")
     Ignore(['.', 'html', 'documentation'], documentation)
 
