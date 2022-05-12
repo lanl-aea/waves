@@ -28,11 +28,14 @@ except LookupError:
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
-variables.Add(
+variables.AddVariables(
     PathVariable('variant_dir_base',
         help='SCons variant (build) root directory. Relative or absolute path.',
         default='build',
-        validator=PathVariable.PathAccept))
+        validator=PathVariable.PathAccept),
+    BoolVariable('conditional_ignore',
+        help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
+        default=True))
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
