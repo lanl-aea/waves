@@ -53,7 +53,7 @@ def abaqus_journal(abaqus_program='abaqus', env=SCons.Environment.Environment())
     """
     abaqus_journal_builder = SCons.Builder.Builder(
         chdir=1,
-        action='{abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
+        action=f"{abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1",
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -103,7 +103,7 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     """
     abaqus_solver_builder = SCons.Builder.Builder(
         chdir=1,
-        action=f'{abaqus_wrapper} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}',
+        action=f"{abaqus_wrapper} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}",
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
