@@ -13,7 +13,7 @@ warnings.filterwarnings(action='ignore',
                         module='setuptools_scm')
 
 # Versioning is more complicated than ``setuptools_scm.get_version()`` to allow us to build and run tests in the Conda
-# package directory, where setuptools_scm can't version from Git. This logic is reveresed from the waves.__init__
+# package directory, where setuptools_scm can't version from Git. This logic is reversed from the waves.__init__
 # logic. We do this to re-use SCons build target commands during Conda packaging to avoid hard coding target commands in
 # the Conda recipe. This is not necessary in an EABM project definition.
 try:
@@ -35,7 +35,10 @@ variables.AddVariables(
         validator=PathVariable.PathAccept),
     BoolVariable('conditional_ignore',
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
-        default=True))
+        default=True),
+    BoolVariable('skip_documentation',
+        help="Boolean to skip the documentation build, e.g. during Conda package build and testing.",
+        default=False))
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
