@@ -40,20 +40,14 @@ test:
     - pyyaml
     - scons
     - setuptools_scm
-    - sphinx
-    - sphinx-argparse
-    - sphinx_rtd_theme
-    - sphinxcontrib-bibtex
   source_files:
     - SConstruct
     - SConscript
     - README.rst
-    - waves/bin/  # Required by the documentation build
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
     - eabm/
-    - docs/
   imports:
     - waves
   commands:
