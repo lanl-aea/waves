@@ -7,8 +7,10 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 
-# TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/40
+# Construct an absolute path to the WAVES project wrappers.
+# Can't use pass through from SConstruct when installed as a package.
+# TODO: Move project settings to a waves setting file and out of SConstruct
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/64
 waves_source_dir = pathlib.Path(__file__).parent.resolve()
 abaqus_wrapper_internal_abspath = waves_source_dir / 'bin/abaqus_wrapper'
 
