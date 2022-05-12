@@ -43,7 +43,7 @@ env = Environment(ENV=os.environ.copy(),
 
 # Find required programs for conditional target skipping
 required_programs = ['sphinx-build']
-conf = Configure(env)
+conf = env.Configure()
 for program in required_programs:
     env[program.replace('-', '_')] = conf.CheckProg(program)
 conf.Finish()
@@ -52,6 +52,8 @@ conf.Finish()
 Help(variables.GenerateHelpText(env))
 
 # Set project internal variables and variable substitution dictionaries
+# TODO: Move project settings to a waves setting file and out of SConstruct
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/64
 project_name = 'WAVES'
 documentation_source_dir = 'docs'
 waves_source_dir = 'waves'

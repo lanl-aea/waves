@@ -7,10 +7,12 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 
-# TODO: (2) Find the abaqus wrapper in the installation directory (or re-write in Python here)
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/40
+# Construct an absolute path to the WAVES project wrappers.
+# Can't use pass through from SConstruct when installed as a package.
+# TODO: Move project settings to a waves setting file and out of SConstruct
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/64
 waves_source_dir = pathlib.Path(__file__).parent.resolve()
-abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
+abaqus_wrapper_internal_abspath = waves_source_dir / 'bin/abaqus_wrapper'
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -18,6 +20,10 @@ def _abaqus_journal_emitter(target, source, env):
 
     Appends ``source[0]``.jnl and ``source[0]``.log to the ``target`` list. The abaqus_journal Builder requires that the
     journal file to execute is the first source in the list.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
 
     :return: target, source
     :rtype: tuple with two lists
@@ -29,7 +35,7 @@ def _abaqus_journal_emitter(target, source, env):
     return target, source
 
 
-def abaqus_journal():
+def abaqus_journal(abaqus_program='abaqus'):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -50,10 +56,12 @@ def abaqus_journal():
        env = Environment()
        env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
        AbaqusJournal(target=['my_journal.cae'], source=['my_journal.py'], journal_options='')
+
+    :param str abaqus_program: An absolute path or basename string for the abaqus program.
     """
     abaqus_journal_builder = SCons.Builder.Builder(
         chdir=1,
-        action='abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1',
+        action=f"{abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1",
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -71,7 +79,7 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver():
+def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -100,10 +108,21 @@ def abaqus_solver():
        env = Environment()
        env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
        AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
+
+    :param str abaqus_program: An absolute path or basename string for the abaqus program
+    :param SCons.Script.SConscript.SConsEnvironment env: An SCons construction environment to use when searching for the
+        abaqus_wrapper program.
     """
+    conf = env.Configure()
+    abaqus_wrapper_program = conf.CheckProg('abaqus_wrapper') 
+    if not abaqus_wrapper_program:
+        abaqus_wrapper_program = abaqus_wrapper_internal_abspath
+        print("Could not find 'abaqus_wrapper' in construction environment. " \
+              f"Using WAVES internal path...{abaqus_wrapper_program}")
+    conf.Finish()
     abaqus_solver_builder = SCons.Builder.Builder(
         chdir=1,
-        action=f'{abaqus_wrapper} ${{job_name}} abaqus -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}',
+        action=f"{abaqus_wrapper_program} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}",
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 

@@ -40,7 +40,7 @@ Bug fixes
 
 Documentation
 =============
-- Link from the AbaqusSolver builder to the abaqus wrapper shell script to help explain the action definition
+- Link from the AbaqusSolver builder to the Abaqus wrapper shell script to help explain the action definition
   (:issue:`42`, :merge:`31`). By `Kyle Brindley`_.
 - Add a command line interface (CLI) documentation page (:issue:`44`, :merge:`34`). By `Thomas Roberts`_.
 - Fix WAVES builder docstring example syntax (:issue:`54`, :merge:`36`). By `Kyle Brindley`_.
@@ -54,11 +54,14 @@ Internal Changes
 - Unit test the WAVES copy and substitute builder function (:issue:`52`, :merge:`40`). By `Kyle Brindley`_.
 - Unit test the WAVES Abaqus Journal builder and emitter (:issue:`50`, :merge:`41`). By `Kyle Brindley`_.
 - Unit test the WAVES Abaqus Solver builder and emitter (:issue:`51`, :merge:`51`). By `Kyle Brindley`_.
+- Search a user provided construction environment for the 'abaqus_wrapper' program before using the WAVES internal
+  project bin. Allows users to override the WAVES Abaqus wrapper with their own (:issue:`40`, :merge:`47`). By `Kyle Brindley`_.
 
 Enhancements
 ============
 - Avoid build file creation in the source directory during copy/substitution operations, e.g. SolverPrep (:issue:`16`,
   :merge:`25`). By `Kyle Brindley`_.
+- Provide an optional Abaqus program argument to the Abaqus builders (:issue:`40`, :merge:`47`). By `Kyle Brindley`_.
 
 ******************
 0.1.4 (2022-05-06)

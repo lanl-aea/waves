@@ -50,8 +50,7 @@ test:
     - SConstruct
     - SConscript
     - README.rst
-    # TODO: find the installed shell scripts to use and stop copying these files
-    - waves/bin/
+    - waves/bin/  # Required by the documentation build
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py

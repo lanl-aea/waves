@@ -37,7 +37,7 @@ env = Environment(ENV=os.environ.copy(),
 
 # Find required programs for conditional target skipping
 required_programs = ['sphinx-build', 'abaqus']
-conf = Configure(env)
+conf = env.Configure()
 for program in required_programs:
     env[program.replace('-', '_')] = conf.CheckProg(program)
 conf.Finish()
@@ -64,8 +64,8 @@ for key, value in project_variables.items():
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
-env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(),
-                     'AbaqusSolver': waves.builders.abaqus_solver()})
+env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
+                     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'], env=env)})
 
 # Add documentation target(s)
 build_dir = variant_dir_base / documentation_source_dir
