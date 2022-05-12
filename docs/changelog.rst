@@ -56,6 +56,8 @@ Internal Changes
 - Unit test the WAVES Abaqus Solver builder and emitter (:issue:`51`, :merge:`51`). By `Kyle Brindley`_.
 - Search a user provided construction environment for the 'abaqus_wrapper' program before using the WAVES internal
   project bin. Allows users to override the WAVES Abaqus wrapper with their own (:issue:`40`, :merge:`47`). By `Kyle Brindley`_.
+- Separate the development environment fast tests from the Conda build/test job. Skip the WAVES documentation build in the
+  Conda packaging process (:issue:`67`, :merge:`48`). By `Kyle Brindley`_.
 
 Enhancements
 ============
