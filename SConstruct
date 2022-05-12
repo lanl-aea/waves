@@ -24,8 +24,7 @@ except LookupError:
         from importlib.metadata import version, PackageNotFoundError
         __version__ = version("waves")
     except PackageNotFoundError:
-        from waves import _version
-        __version__ = _version.version
+        from waves import __version__
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
