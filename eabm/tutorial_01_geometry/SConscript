@@ -26,6 +26,6 @@ parent_directory = Dir('.').srcnode().name
 workflow = geometry
 env.Alias(parent_directory, workflow)
 
-if not env['abaqus'] and env['conditional_ignore']:
+if env['conditional_ignore'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Skipping '{parent_directory}' target(s)")
     Ignore(['.', parent_directory], workflow)
