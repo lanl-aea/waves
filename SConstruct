@@ -39,9 +39,10 @@ env = Environment(ENV=os.environ.copy(),
                   variables=variables)
 
 # Find required programs for conditional target skipping
+required_programs = ['sphinx-build']
 conf = Configure(env)
-sphinx_build_string = 'sphinx-build'
-env['sphinx_build'] = conf.CheckProg(sphinx_build_string)
+for program in required_programs:
+    env[program.replace('-', '_')] = conf.CheckProg(program)
 conf.Finish()
 
 # Add project command line variable options to help message
