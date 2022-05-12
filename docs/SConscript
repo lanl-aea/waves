@@ -40,13 +40,6 @@ documentation_file_list = [
     '_static/custom.css'
 ]
 
-# Find the sphinx-build program with scons
-env2 = Environment()
-conf = Configure(env2)
-sphinx_build_string = 'sphinx-build'
-sphinx_build = conf.CheckProg(sphinx_build_string)
-conf.Finish()
-
 # TODO: os agnostic pathsep for the html directory
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/4
 sphinx_options = '-W'
@@ -55,13 +48,13 @@ documentation = env.Command(
     # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/5
     target=['dummy_file', 'html/index.html'],
     source=documentation_file_list,
-    action=f"{sphinx_build} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
 env.Clean(documentation, 'html/')
 alias_list = env.Alias('documentation', documentation)
 
-if not sphinx_build:
-    print(f"Program {sphinx_build_string} was not found in construction environment. Skipping Sphinx target(s)")
+if not env['sphinx_build']:
+    print(f"Program 'sphinx-build' was not found in construction environment. Skipping Sphinx target(s)")
     Ignore(['.', 'html', 'documentation'], documentation)
 
 # Return the alias list to SConstruct for help message output

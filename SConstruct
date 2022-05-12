@@ -38,6 +38,12 @@ variables.Add(
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
 
+# Find required programs for conditional target skipping
+conf = Configure(env)
+sphinx_build_string = 'sphinx-build'
+env['sphinx_build'] = conf.CheckProg(sphinx_build_string)
+conf.Finish()
+
 # Add project command line variable options to help message
 Help(variables.GenerateHelpText(env))
 
