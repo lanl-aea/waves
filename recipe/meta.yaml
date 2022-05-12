@@ -7,6 +7,7 @@ source:
   path: '..'
 
 build:
+  noarch: python
   script:
     # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
     # deprecated setup.py solutions
