@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import socket
 import os
 import pathlib
 import warnings
@@ -91,16 +92,21 @@ pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=Fals
 # TODO: fix the SCons conda build target and use it instead of hardcoding the conda build commands in .gitlab-ci.yml
 # TODO: add a ``--croot`` switch, prefering /scratch/$USER/conda-build when available
 # TODO: add a ``--croot`` command line option
-package_prefix = f"dist/{project_name.upper()}-{env['version']}"
-conda_build_targets = [f"{package_prefix}-py3-none-any.whl", f"{package_prefix}.tar.gz"]
+hostname = socket.gethostname()
+croot_dir = '/scratch/$${USER}/conda-build'
+if 'sstelmo' not in hostname and 'sstbigbird' not in hostname:
+    croot_dir = '/tmp/$${USER}-conda-build'
+conda_package_output = 'conda-build-artifacts'
+package_prefix = f"{conda_package_output}/{project_name.upper()}-{env['version']}"
+conda_build_targets = [f"{package_prefix}-py3-none-any.whl"]
 conda_build = env.Command(
     target=conda_build_targets,
-    source=['recipe/metal.yaml', 'recipe/conda_build_config.yaml'],
-    action='VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload ' \
-                                                                  '--croot /tmp/${USER}-conda-build ' \
-                                                                  '--output-folder ./conda-build-artifacts')
-env.Ignore('dist', conda_build_targets)
+    source=['recipe/meta.yaml', 'recipe/conda_build_config.yaml'],
+    action=f"VERSION=$$(python -m setuptools_scm | sed 's/Guessed Version //g') conda build recipe --channel conda-forge --no-anaconda-upload " \
+                                                                  f"--croot {croot_dir} " \
+                                                                  f"--output-folder {conda_package_output}")
 conda_build_alias = env.Alias('conda-build', conda_build)
+env.Ignore('conda-build-artifacts', conda_build_targets)
 
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
