@@ -36,7 +36,7 @@ variables.AddVariables(
     BoolVariable('conditional_ignore',
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
         default=True),
-    BoolVariable('skip_documentation',
+    BoolVariable('ignore_documentation',
         help="Boolean to skip the documentation build, e.g. during Conda package build and testing.",
         default=False))
 

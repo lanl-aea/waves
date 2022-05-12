@@ -31,7 +31,7 @@ variables.AddVariables(
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
         default=True),
     # Used by the WAVES project during packaging. Not required for an EABM.
-    BoolVariable('skip_documentation',
+    BoolVariable('ignore_documentation',
         help="Boolean to skip the documentation build, e.g. during Conda package build and testing.",
         default=False))
 
