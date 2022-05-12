@@ -18,13 +18,9 @@ warnings.filterwarnings(action='ignore',
 # logic. We do this to re-use SCons build target commands during Conda packaging to avoid hard coding target commands in
 # the Conda recipe. This is not necessary in an EABM project definition.
 try:
-    __version__ = setuptools_scm.get_version()
+    version = setuptools_scm.get_version()
 except LookupError:
-    try:
-        from importlib.metadata import version, PackageNotFoundError
-        __version__ = version("waves")
-    except PackageNotFoundError:
-        from waves import __version__
+    version = 'uknown'
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
@@ -63,7 +59,7 @@ waves_source_dir = 'waves'
 project_variables = {
     'project_name': project_name,
     'project_dir': Dir('.').abspath,
-    'version': __version__,
+    'version': version,
     'abaqus_source_dir': 'eabm/abaqus',
     'abaqus_wrapper': str(pathlib.Path(f'{waves_source_dir}/bin/abaqus_wrapper').resolve())
 }
