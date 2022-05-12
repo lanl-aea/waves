@@ -45,11 +45,12 @@ documentation = env.Command(
     sphinx_options=sphinx_options)
 env.Clean(documentation, 'html/')
 alias_list = env.Alias('documentation', documentation)
-env.Default(documentation)
 
 if not env['sphinx_build'] and env['conditional_ignore']:
     print(f"Program 'sphinx-build' was not found in construction environment. Skipping Sphinx target(s)")
     Ignore(['.', 'html', 'documentation'], documentation)
+else:
+    env.Default(documentation)
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')
