@@ -108,7 +108,7 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     if not abaqus_wrapper_program:
         abaqus_wrapper_program = abaqus_wrapper_internal_abspath
         print("Could not find 'abaqus_wrapper' in construction environment. " \
-              f"Falling back to WAVES internal path...{abaqus_wrapper_program}")
+              f"Using WAVES internal path...{abaqus_wrapper_program}")
     conf.Finish()
     abaqus_solver_builder = SCons.Builder.Builder(
         chdir=1,
