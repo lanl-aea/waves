@@ -104,8 +104,8 @@ fast-test:
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons . --keep-going
-    - cd eabm && scons . --keep-going
+    - scons . --keep-going conditional_ignore=False
+    - cd eabm && scons . --keep-going conditional_ignore=False
   tags:
     - sstelmo-shell-aea
   only:
@@ -190,12 +190,12 @@ pages:
             git reset --hard origin/$ref
             mkdir -p public/$ref/scons-eabm
             # Clean and build documentation
-            scons . --clean
-            scons documentation
+            scons . --clean conditional_ignore=False
+            scons documentation conditional_ignore=False
             # Build EABM documentation
             cd eabm
-            scons . --clean
-            scons documentation
+            scons . --clean conditional_ignore=False
+            scons documentation conditional_ignore=False
             cd ..
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref

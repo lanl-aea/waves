@@ -4,6 +4,7 @@ build/
 
 # SCons files
 .sconsign.dblite
+config.log
 
 # Python distribution/packaging files
 _version.py
