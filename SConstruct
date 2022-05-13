@@ -60,7 +60,6 @@ project_variables = {
     'project_name': project_name,
     'project_dir': Dir('.').abspath,
     'version': version,
-    'abaqus_source_dir': 'eabm/abaqus',
     'abaqus_wrapper': str(pathlib.Path(f'{waves_source_dir}/bin/abaqus_wrapper').resolve())
 }
 project_substitution_dictionary = dict()
