@@ -3,7 +3,7 @@
 
 import pytest
 
-from waves.parameter_study import CartesianProduct
+from waves.parameter_generators import CartesianProduct
 
 class TestCartesianProduct:
     """Class for testing CartesianProduct parameter study generator class"""

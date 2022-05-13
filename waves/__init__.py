@@ -3,7 +3,7 @@ import pathlib
 import warnings
 
 from waves import builders
-from waves import parameter_study
+from waves import parameter_generators
 
 warnings.filterwarnings(action='ignore',
                         message='tag',
