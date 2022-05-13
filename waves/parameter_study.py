@@ -23,7 +23,7 @@ _program_name = pathlib.Path(__file__).with_suffix('').name
 cartesian_product_subcommand = 'cartesian_product'
 
 #============================================================================================ COMMAND LINE INTERFACE ===
-def get_parser():
+def get_parser(return_subparser_dictionary=False):
     """Get parser object for command line options
 
     :return: argument parser
@@ -72,7 +72,10 @@ def get_parser():
 
     subparser_dictionary = {cartesian_product_subcommand: cartesian_product_parser}
 
-    return main_parser, subparser_dictionary
+    if return_subparser_dictionary:
+        return subparser_dictionary
+    else:
+        return main_parser
 
 # ============================================================================================= PARAMETER STUDY MAIN ===
 def main():
@@ -83,7 +86,8 @@ def main():
     """
 
     # Console scripts must parse arguments outside of __main__
-    parser, subparser_dictionary = get_parser()
+    parser = get_parser()
+    subparser_dictionary = get_parser(return_subparser_dictionary=True)
     args = parser.parse_args()
 
     # Set variables from CLI argparse output
