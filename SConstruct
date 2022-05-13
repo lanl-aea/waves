@@ -19,12 +19,8 @@ warnings.filterwarnings(action='ignore',
 try:
     version = setuptools_scm.get_version()
 except LookupError:
-    try:
-        from importlib.metadata import version, PackageNotFoundError
-        version = version("waves")
-    except PackageNotFoundError:
-        from waves import _version
-        version = _version.version
+    from importlib.metadata import version, PackageNotFoundError
+    version = version("waves")
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
@@ -87,25 +83,10 @@ else:
 # Add pytests
 pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
 
-# Add conda build target
-# TODO: fix the SCons conda build target and use it instead of hardcoding the conda build commands in .gitlab-ci.yml
-# TODO: add a ``--croot`` switch, prefering /scratch/$USER/conda-build when available
-# TODO: add a ``--croot`` command line option
-package_prefix = f"dist/{project_name.upper()}-{env['version']}"
-conda_build_targets = [f"{package_prefix}-py3-none-any.whl", f"{package_prefix}.tar.gz"]
-conda_build = env.Command(
-    target=conda_build_targets,
-    source=['recipe/metal.yaml', 'recipe/conda_build_config.yaml'],
-    action='VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload ' \
-                                                                  '--croot /tmp/${USER}-conda-build ' \
-                                                                  '--output-folder ./conda-build-artifacts')
-env.Ignore('dist', conda_build_targets)
-conda_build_alias = env.Alias('conda-build', conda_build)
-
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/33
-alias_list = docs_aliases + pytest_aliases + conda_build_alias
+alias_list = docs_aliases + pytest_aliases
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
