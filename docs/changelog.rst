@@ -58,6 +58,7 @@ Internal Changes
   project bin. Allows users to override the WAVES Abaqus wrapper with their own (:issue:`40`, :merge:`47`). By `Kyle Brindley`_.
 - Separate the development environment fast tests from the Conda build/test job. Skip the WAVES documentation build in the
   Conda packaging process (:issue:`67`, :merge:`48`). By `Kyle Brindley`_.
+- Deploy as a ``noarch`` Conda package (:issue:`69`, :merge:`51`). By `Kyle Brindley`_.
 
 Enhancements
 ============
