@@ -11,13 +11,8 @@
    user
    theory
    api
+   cli
    devops
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Parameter Study Utility
-
-   parameter_study_cli
 
 .. toctree::
    :caption: Help & Reference
