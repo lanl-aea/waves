@@ -59,6 +59,7 @@ class ParameterGenerator(ABC):
         """Generate the parameter study definition
 
         Must set:
+
         * ``self.parameter_study``
         """
         pass
