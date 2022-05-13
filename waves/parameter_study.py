@@ -85,6 +85,9 @@ def main():
 
     # Set variables from CLI argparse output
     subcommand = args.subcommand
+    if not subcommand:
+        parser.print_usage()
+        return 0
     input_file = args.INPUT_FILE
     # TODO: accept an output file template and manage file writeability outside argparse
     # May require and additional --output-dir option and otherwise assume PWD
