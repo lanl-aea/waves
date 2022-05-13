@@ -21,16 +21,16 @@ build:
 
 requirements:
   build:
-    - python {{ python }}
+    - python {{ python }} 
     - git
     - setuptools
     - setuptools_scm
   host:
-    - python
+    - python >=3.8
     - setuptools
     - setuptools_scm
   run:
-    - python
+    - python >=3.8
     - pyyaml
     - scons
 
