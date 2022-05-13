@@ -6,7 +6,7 @@ import warnings
 
 import setuptools_scm
 
-from waves._settings import _project_name, _project_name_short, _project_bin_dir
+from waves._settings import _project_name_short, _abaqus_wrapper
 
 # Ignore the version warning message associated with 'x.y.z+dev' Git tags
 warnings.filterwarnings(action='ignore',
@@ -59,10 +59,9 @@ Help(variables.GenerateHelpText(env))
 documentation_source_dir = 'docs'
 package_source_dir = _project_name_short.lower()
 project_variables = {
-    'project_name': _project_name_short,
     'project_dir': Dir('.').abspath,
     'version': version,
-    'abaqus_wrapper': str(pathlib.Path(f'{package_source_dir}/{_project_bin_dir}/abaqus_wrapper').resolve())
+    'abaqus_wrapper': str(_abaqus_wrapper)
 }
 project_substitution_dictionary = dict()
 for key, value in project_variables.items():
