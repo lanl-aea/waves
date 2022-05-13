@@ -9,6 +9,7 @@ template_delimiter = '@'
 
 
 class AtSignTemplate(string.Template):
+    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
     delimiter = template_delimiter
 
 
@@ -21,8 +22,8 @@ parameter_study_meta_file = "parameter_study_meta.txt"
 class ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
-    :param str parameter_schema: The loaded parameter study schema file contents
-    :param list output_file_template: Output file name template
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param str output_file_template: Output file name template
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -58,6 +59,7 @@ class ParameterGenerator(ABC):
         """Generate the parameter study definition
 
         Must set:
+
         * ``self.parameter_study``
         """
         pass
@@ -99,8 +101,10 @@ class ParameterGenerator(ABC):
 class CartesianProduct(ParameterGenerator):
     """Builds a cartesian product parameter study
 
-    :param str parameter_schema: The loaded parameter study schema file contents
-    :param list output_file_template: Output file name template
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+        CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
+        value" will be a Python list.
+    :param str output_file_template: Output file name template
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -108,7 +112,7 @@ class CartesianProduct(ParameterGenerator):
 
     def validate(self):
         # TODO: Settle on an input file schema and validation library
-        # https://re-git.lanl.gov/kbrindley/cmake-simulation/-/issues/69
+        # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/80
         return True
 
     def generate(self):
