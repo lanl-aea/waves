@@ -9,8 +9,8 @@ readme = "README.rst"
 classifiers = ["Programming Language:: Python :: 3"]
 dynamic = ["version"]
 
-[tool.setuptools.packages.find]
-exclude = ['eabm', 'modulefiles']
+[tool.setuptools]
+packages = ["my_package"]
 
 [project.scripts]
 parameter_study = "waves.parameter_study:main"
