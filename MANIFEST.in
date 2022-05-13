@@ -1,0 +1,2 @@
+recursive-exclude build *
+recursive-exclude docs *
