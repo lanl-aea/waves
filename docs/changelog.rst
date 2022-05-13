@@ -9,6 +9,11 @@ Changelog
 0.1.6 (unreleased)
 ******************
 
+Internal Changes
+================
+- Exclude documentation source files and build artifacts from the Conda package (:issue:`68`, :merge:`54`). By `Kyle
+  Brindley`_.
+
 ******************
 0.1.5 (2022-05-12)
 ******************
