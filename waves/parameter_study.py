@@ -14,7 +14,7 @@ import sys
 
 import yaml
 
-from waves._version import version
+from waves import __version__
 from waves import parameter_generators
 
 #========================================================================================================== SETTINGS ===
@@ -40,7 +40,7 @@ def get_parser():
                                  epilog=f"author(s): {__author__}")
     main_parser.add_argument('-V', '--version',
                              action='version',
-                             version=f"{_program_name} {version}")
+                             version=f"{_program_name} {__version__}")
 
     parent_parser = ArgumentParser(add_help=False)
     parent_parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
