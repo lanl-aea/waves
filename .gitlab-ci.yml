@@ -145,16 +145,11 @@ deploy:
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
-    # Build alternate OS packages (assumes original built on linux-64)
-    - conda convert conda-build-artifacts/linux-64/waves-*-*.tar.bz2 --platform osx-64 --output-dir conda-build-artifacts
-    - conda convert conda-build-artifacts/linux-64/waves-*-*.tar.bz2 --platform win-64 --output-dir conda-build-artifacts
     # Copy Conda package to AEA Conda Channel
-    - cp conda-build-artifacts/linux-64/waves-*-*.tar.bz2 ${aea_conda_channel}/linux-64
-    - cp conda-build-artifacts/osx-64/waves-*-*.tar.bz2 ${aea_conda_channel}/osx-64
-    - cp conda-build-artifacts/win-64/waves-*-*.tar.bz2 ${aea_conda_channel}/win-64
+    - cp conda-build-artifacts/linux-64/waves-*-*.tar.bz2 ${aea_conda_channel}/noarch
     # Change group for access by all W-13 staff and prevent accidental modification by institutional account in CI jobs
-    - chgrp w13users ${aea_conda_channel}/*-64/waves-*-*.tar.bz2 || true
-    - chmod 555 ${aea_conda_channel}/*-64/waves-*-*.tar.bz2 || true
+    - chgrp w13users ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
+    - chmod 555 ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
     # Update the AEA Conda Channel index
     - conda index ${aea_conda_channel}
     # Troubleshooting conda channel deploy and index update
