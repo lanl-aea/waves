@@ -8,22 +8,14 @@ import setuptools_scm
 
 from waves._settings import _project_name_short, _abaqus_wrapper
 
-# Ignore the version warning message associated with 'x.y.z+dev' Git tags
-warnings.filterwarnings(action='ignore',
-                        message='tag',
-                        category=UserWarning,
-                        module='setuptools_scm')
-
-# Versioning is more complicated than ``setuptools_scm.get_version()`` to allow us to build and run tests in the Conda
-# package directory, where setuptools_scm can't version from Git. We do this to re-use SCons targets during Conda
-# package testing to avoid hard coding target commands in the Conda recipe. This is not necessary in an EABM project
-# definition.
 try:
+    # Ignore the version warning message associated with 'x.y.z+dev' Git tags
+    warnings.filterwarnings(action='ignore', message='tag', category=UserWarning, module='setuptools_scm')
     version = setuptools_scm.get_version()
 except LookupError:
-    from importlib.metadata import version, PackageNotFoundError
+    # Conda package test doesn't occur in the Git repo. Import the version from the installed waves package.
+    from importlib.metadata import version
     version = version("waves")
-
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
