@@ -48,7 +48,11 @@ test:
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
-    - eabm/
+    - eabm/README.rst
+    - eabm/SC*
+    - eabm/abaqus/*
+    - eabm/python/*
+    - eabm/tutorial*/*
   imports:
     - waves
   commands:
