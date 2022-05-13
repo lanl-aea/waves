@@ -5,6 +5,8 @@ parameter_study - Python based generator of parameter studies
 .. moduleauthor:: Kyle Brindley <kbrindley@lanl.gov>
 """
 
+__author__ = 'Kyle Brindley <kbrindley@lanl.gov>'
+
 from abc import ABC, abstractmethod
 import argparse
 from argparse import ArgumentParser
@@ -15,8 +17,11 @@ import itertools
 
 import yaml
 
+from waves._version import version
+
 #========================================================================================================== SETTINGS ===
-# Files normally found in a project's root settings.py file(s)
+# Variables normally found in a project's root settings.py file(s)
+_program_name = pathlib.Path(__file__).with_suffix('').name
 template_delimiter = '@'
 
 
@@ -43,11 +48,11 @@ def get_parser():
         "parameter set files. The dry run option will print a list of files and contents " \
         "that would have been  written."
     main_parser = ArgumentParser(description=main_description,
-                                 prog=PROJECT_NAME_SHORT,
+                                 prog=_program_name,
                                  epilog=f"author(s): {__author__}")
     main_parser.add_argument('-V', '--version',
                              action='version',
-                             version=f"{PROJECT_NAME_SHORT} {__version__}")
+                             version=f"{_program_name} {version}")
 
     parent_parser = ArgumentParser(add_help=False)
     parent_parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
