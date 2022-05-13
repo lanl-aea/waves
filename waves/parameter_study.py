@@ -103,7 +103,7 @@ def main():
 
     # Clean the output file template if specified
     if output_file_template:
-        output_file_tempalte = pathlib.Path(args.OUTPUT_FILE_TEMPLATE).name
+        output_file_template = pathlib.Path(args.OUTPUT_FILE_TEMPLATE).name
 
     # Read the input stream
     # TODO: Handle input file outside of argparse
@@ -111,16 +111,15 @@ def main():
     parameter_schema = yaml.safe_load(input_file)
     input_file.close()
 
-    # Retrieve the subcommand class
-    # TODO: Move parameter study class(es) to a separate module file. Will change the class creation technique
+    # Retrieve and instantiate the subcommand class
     available_parameter_generators = \
-        {'cartesian_product': CartesianProduct}
+        {'cartesian_product': parameter_generators.CartesianProduct}
     parameter_generator = \
         available_parameter_generators[subcommand](parameter_schema, output_file_template, overwrite, dryrun, debug)
 
     # Build the parameter study
     if not parameter_generator.validate():
-        print("Parameter schema validation failed. Please review the input file for syntax errors")
+        print("Parameter schema validation failed. Please review the input file for syntax errors.")
         return 1
     parameter_generator.generate()
     parameter_generator.write()
