@@ -21,7 +21,7 @@ build:
 
 requirements:
   build:
-    - python {{ python }} 
+    - python {{ python }}
     - git
     - setuptools
     - setuptools_scm
