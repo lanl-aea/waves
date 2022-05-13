@@ -8,15 +8,6 @@ import setuptools_scm
 
 from waves._settings import _project_name_short, _abaqus_wrapper
 
-try:
-    # Ignore the version warning message associated with 'x.y.z+dev' Git tags
-    warnings.filterwarnings(action='ignore', message='tag', category=UserWarning, module='setuptools_scm')
-    version = setuptools_scm.get_version()
-except LookupError:
-    # Conda package test doesn't occur in the Git repo. Import the version from the installed waves package.
-    from importlib.metadata import version
-    version = version("waves")
-
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
 variables.AddVariables(
@@ -52,7 +43,6 @@ documentation_source_dir = 'docs'
 package_source_dir = _project_name_short.lower()
 project_variables = {
     'project_dir': Dir('.').abspath,
-    'version': version,
     'abaqus_wrapper': str(_abaqus_wrapper)
 }
 project_substitution_dictionary = dict()
