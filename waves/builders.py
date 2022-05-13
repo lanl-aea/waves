@@ -7,14 +7,7 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 
-from waves._settings import _project_bin_dir 
-
-# Construct an absolute path to the WAVES project wrappers.
-# Can't use pass through from SConstruct when installed as a package.
-# TODO: Move project settings to a waves setting file and out of SConstruct
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/64
-waves_source_dir = pathlib.Path(__file__).parent.resolve()
-abaqus_wrapper_internal_abspath = waves_source_dir / f'{_project_bin_dir}/abaqus_wrapper'
+from waves._settings import _abaqus_wrapper
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -116,9 +109,9 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
         abaqus_wrapper program.
     """
     conf = env.Configure()
-    abaqus_wrapper_program = conf.CheckProg('abaqus_wrapper') 
+    abaqus_wrapper_program = conf.CheckProg('abaqus_wrapper')
     if not abaqus_wrapper_program:
-        abaqus_wrapper_program = abaqus_wrapper_internal_abspath
+        abaqus_wrapper_program = _abaqus_wrapper
         print("Could not find 'abaqus_wrapper' in construction environment. " \
               f"Using WAVES internal path...{abaqus_wrapper_program}")
     conf.Finish()
