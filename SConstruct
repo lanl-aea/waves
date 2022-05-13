@@ -21,7 +21,7 @@ try:
     version = setuptools_scm.get_version()
 except LookupError:
     from importlib.metadata import version, PackageNotFoundError
-    version = version("waves") 
+    version = version("waves")
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
