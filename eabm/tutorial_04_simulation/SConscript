@@ -2,12 +2,15 @@
 
 import pathlib
 
+import waves
+
 # Inherit the parent construction environment
 Import('env')
 
 # Set project-wide paths with os-agnostic path separators
-project_dir = pathlib.Path(env['PROJECT_DIR'])
-abaqus_source_abspath = project_dir / env['ABAQUS_SOURCE_DIR']
+project_dir = pathlib.Path(env['project_dir'])
+abaqus_source_dir = env['abaqus_source_dir']
+abaqus_source_abspath = project_dir / abaqus_source_dir
 
 # Simulation variables
 model = "single_element"
@@ -37,46 +40,44 @@ mesh = env.AbaqusJournal(
     journal_options=journal_options)
 
 # SolverPrep
-abaqus_input_template_list = [
-    # The root input file MUST be first for the AbaqusSolver Builder
-    abaqus_source_abspath / "single_element_compression.inp.in",
-    abaqus_source_abspath / "amplitudes.inp.in",
-    abaqus_source_abspath / "assembly.inp.in",
-    abaqus_source_abspath / "boundary.inp.in",
-    abaqus_source_abspath / "field_output.inp.in",
-    abaqus_source_abspath / "materials.inp.in",
-    abaqus_source_abspath / "parts.inp.in",
-    abaqus_source_abspath / "history_output.inp.in"
+abaqus_source_list = [
+    f"#/{abaqus_source_dir}/{model}_compression.inp",
+    f"#/{abaqus_source_dir}/amplitudes.inp",
+    f"#/{abaqus_source_dir}/assembly.inp",
+    f"#/{abaqus_source_dir}/boundary.inp",
+    f"#/{abaqus_source_dir}/field_output.inp",
+    f"#/{abaqus_source_dir}/materials.inp",
+    f"#/{abaqus_source_dir}/parts.inp",
+    f"#/{abaqus_source_dir}/history_output.inp"
 ]
-abaqus_input_list = [abaqus_input.with_suffix('') for abaqus_input in abaqus_input_template_list]
-solverprep = list()
-for template_file, input_file in zip(abaqus_input_template_list, abaqus_input_list):
-    solverprep.append(Substfile(str(template_file)))
-    solverprep.append(
-        Command(
-            target=input_file.name,
-            source=str(input_file),
-# This AlwaysBuild means that the build/**/*.inp files are always re-created and moved.
-# It's required because the Substfile command will find it's targets missing and re-run, but Move will not re-run,
-# leaving build output in the source directory. Fortunately, the md5sum checking of SCons prevents this from always
-# triggering downstream targets.
-# TODO: Find another way to avoid creating files in the source directory with Substfile
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/16
-            action=Copy('${TARGET}', '${SOURCE}')))
-env.AlwaysBuild(solverprep)
+abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
+solverprep = waves.builders.copy_substitute(abaqus_source_list)
 
 # Abaqus Solve
-# TODO: Add a datacheck simulation
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/30
-job_name = 'single_element_compression'
-abaqus_options = ''
-abaqus_input_names = [abaqus_input.name for abaqus_input in abaqus_input_list]
-abaqus_input_names.append(f"{journal_file}.inp")
+solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
+solve_source_list.append([f"{journal_file}.inp"])
+job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
+datacheck_name = f"{job_name}_DATACHECK"
+datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
+abaqus_options='-double both'
+datacheck = env.AbaqusSolver(
+    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+    source=solve_source_list,
+    job_name=datacheck_name,
+    abaqus_options=f'{abaqus_options} -datacheck')
+
+solve_source_list.append([f"{datacheck_name}.odb"])
 solve = env.AbaqusSolver(
-    target=[],
-    source=abaqus_input_names,
+    target=[f"{job_name}.sta"],
+    source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options)
 
-# Collector alias
-env.Alias('${SOURCE_DIR.srcdir}', [geometry, partition, mesh, solve] + solverprep)
+# Collector alias based on parent directory name
+parent_directory = Dir('.').srcnode().name
+workflow = geometry + partition + mesh + solverprep + datacheck + solve
+env.Alias(parent_directory, workflow)
+
+if env['conditional_ignore'] and not env['abaqus']:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
+    Ignore(['.', parent_directory], workflow)

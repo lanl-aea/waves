@@ -6,8 +6,9 @@ import pathlib
 Import('env')
 
 # Set project-wide paths with os-agnostic path separators
-project_dir = pathlib.Path(env['PROJECT_DIR'])
-abaqus_source_abspath = project_dir / env['ABAQUS_SOURCE_DIR']
+project_dir = pathlib.Path(env['project_dir'])
+abaqus_source_dir = env['abaqus_source_dir']
+abaqus_source_abspath = project_dir / abaqus_source_dir
 
 # Simulation variables
 model = "single_element"
@@ -19,4 +20,12 @@ geometry = env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options)
-env.Alias('${SOURCE_DIR.srcdir}', [geometry])
+
+# Collector alias based on parent directory name
+parent_directory = Dir('.').srcnode().name
+workflow = geometry
+env.Alias(parent_directory, workflow)
+
+if env['conditional_ignore'] and not env['abaqus']:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
+    Ignore(['.', parent_directory], workflow)

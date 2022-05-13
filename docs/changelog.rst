@@ -6,8 +6,69 @@ Changelog
 #########
 
 ******************
-0.1.5 (unreleased)
+0.1.6 (unreleased)
 ******************
+
+******************
+0.1.5 (2022-05-12)
+******************
+
+New Features
+============
+- Add an Abaqus datacheck prior to solving the simulation target (:issue:`30`, :merge:`26`). By `Kyle Brindley`_.
+- Limit the EABM default targets to the documentation. Requires simulation targets to be specified in the SCons command
+  line arguments to avoid building all simulations from a bare ``scons`` execution (:issue:`32`, :merge:`27`). By `Kyle
+  Brindley`_.
+- Make the variant (build) directory a command line variable option (:issue:`25`, :merge:`29`). By `Kyle Brindley`_.
+- Build the project internal variables into a substitution dictionary that can be passed to SConscript files
+  (:issue:`13`, :merge:`30`). By `Kyle Brindley`_.
+- Add a copy and substitute target builder to WAVES (:issue:`28`, :merge:`32`). By `Kyle Brindley`_.
+- Add an alias collector solution to provide a list of available aliases in the project help message (:issue:`33`,
+  :merge:`38`). By `Kyle Brindley`_.
+- Add the SCons target definition equivalent to the ECMF and CMake-simulation parameter substitution tutorial files (:issue:`57`,
+  :merge:`43`). By `Kyle Brindley`_.
+- Add the SCons target definition equivalent to the ECMF include file tutorial (:issue:`59`, :merge:`44`). By `Kyle
+  Brindley`_.
+- Conditionally ignore Sphinx targets when the sphinx-build is not found in the construction environment (:issue:`3`,
+  :merge:`45`). By `Kyle Brindley`_.
+- Provide and use an override variable to the conditional ignore behavior. Useful for requiring all targets in a build,
+  particularly for CI testing (:issue:`3`, :merge:`45`). By `Kyle Brindley`_.
+- Conditionally skip simulation target trees when a required program is missing (:issue:`38`, :merge:`46`). By `Kyle
+  Brindley`_.
+
+Bug fixes
+=========
+- Limit automatically appended target extensions for the AbaqusSolver builder to avoid inadvertent ``AlwaysBuild``
+  behavior introduced by expected, but missing, file extensions that are never created (:issue:`41`, :merge:`28`). By
+  `Kyle Brindley`_.
+
+Documentation
+=============
+- Link from the AbaqusSolver builder to the Abaqus wrapper shell script to help explain the action definition
+  (:issue:`42`, :merge:`31`). By `Kyle Brindley`_.
+- Add a command line interface (CLI) documentation page (:issue:`44`, :merge:`34`). By `Thomas Roberts`_.
+- Fix WAVES builder docstring example syntax (:issue:`54`, :merge:`36`). By `Kyle Brindley`_.
+- Create a custom usage message for the geometry argument parser that displays the proper command for running an Abaqus
+  journal file (:issue:`55`, :merge:`37`). By `Thomas Roberts`_.
+
+Internal Changes
+================
+- Move the geometry argument parser to a stand-alone function within the geometry script (:issue:`43`, :merge:`33`). By
+  `Thomas Roberts`_.
+- Unit test the WAVES copy and substitute builder function (:issue:`52`, :merge:`40`). By `Kyle Brindley`_.
+- Unit test the WAVES Abaqus Journal builder and emitter (:issue:`50`, :merge:`41`). By `Kyle Brindley`_.
+- Unit test the WAVES Abaqus Solver builder and emitter (:issue:`51`, :merge:`51`). By `Kyle Brindley`_.
+- Search a user provided construction environment for the 'abaqus_wrapper' program before using the WAVES internal
+  project bin. Allows users to override the WAVES Abaqus wrapper with their own (:issue:`40`, :merge:`47`). By `Kyle Brindley`_.
+- Separate the development environment fast tests from the Conda build/test job. Skip the WAVES documentation build in the
+  Conda packaging process (:issue:`67`, :merge:`48`). By `Kyle Brindley`_.
+- Deploy as a ``noarch`` Conda package (:issue:`69`, :merge:`51`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Avoid build file creation in the source directory during copy/substitution operations, e.g. SolverPrep (:issue:`16`,
+  :merge:`25`). By `Kyle Brindley`_.
+- Provide an optional Abaqus program argument to the Abaqus builders (:issue:`40`, :merge:`47`). By `Kyle Brindley`_.
 
 ******************
 0.1.4 (2022-05-06)

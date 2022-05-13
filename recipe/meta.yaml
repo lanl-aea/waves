@@ -7,6 +7,7 @@ source:
   path: '..'
 
 build:
+  noarch: python
   script:
     # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
     # deprecated setup.py solutions
@@ -22,16 +23,14 @@ requirements:
   build:
     - python {{ python }}
     - git
-    - build
     - setuptools
     - setuptools_scm
   host:
     - python
-    - build
     - setuptools
     - setuptools_scm
   run:
-    - python
+    - python >=3.8
     - pyyaml
     - scons
 
@@ -42,25 +41,18 @@ test:
     - pyyaml
     - scons
     - setuptools_scm
-    - sphinx
-    - sphinx-argparse
-    - sphinx_rtd_theme
-    - sphinxcontrib-bibtex
   source_files:
     - SConstruct
     - SConscript
     - README.rst
-    # TODO: find the installed shell scripts to use and stop copying these files
-    - waves/bin/
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
     - eabm/
-    - docs/
   imports:
     - waves
   commands:
     # TODO: Test from the as installed directory where possible, e.g. waves pytests
-    - scons --keep-going
+    - scons . --keep-going conditional_ignore=False ignore_documentation=True
     # Test the SCons-EABM targets and tests
-    - cd eabm && scons --keep-going
+    - cd eabm && scons . --keep-going conditional_ignore=False ignore_documentation=True

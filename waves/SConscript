@@ -14,6 +14,9 @@ pytest_node = env.Command(
     target='test_results.xml',
     source=waves_source_list,
     action='pytest')
-env.Alias('pytest', pytest_node)
+alias_list = env.Alias('pytest', pytest_node)
 # Always run pytests in place of a complete source list
 env.AlwaysBuild(pytest_node)
+
+# Return the alias list to SConstruct for help message output
+Return('alias_list')

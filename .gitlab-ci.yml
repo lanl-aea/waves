@@ -8,6 +8,7 @@ stages:
   - environment
   - version
   - test
+  - build
   - deploy
 
 before_script:
@@ -104,15 +105,15 @@ fast-test:
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons --keep-going
-    - cd eabm && scons --keep-going
+    - scons . --keep-going conditional_ignore=False
+    - cd eabm && scons . --keep-going conditional_ignore=False
   tags:
     - sstelmo-shell-aea
   only:
     - merge_requests
 
 conda-build:
-  stage: test
+  stage: build
   variables:
     GIT_STRATEGY: clone
   script:
@@ -129,7 +130,7 @@ conda-build:
   artifacts:
     expire_in: '2 hrs'
     paths:
-      - conda-build-artifacts/linux-64/waves-*-*.tar.bz2
+      - conda-build-artifacts/noarch/waves-*-*.tar.bz2
   tags:
     - sstelmo-shell-aea
   only:
@@ -144,16 +145,11 @@ deploy:
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
-    # Build alternate OS packages (assumes original built on linux-64)
-    - conda convert conda-build-artifacts/linux-64/waves-*-*.tar.bz2 --platform osx-64 --output-dir conda-build-artifacts
-    - conda convert conda-build-artifacts/linux-64/waves-*-*.tar.bz2 --platform win-64 --output-dir conda-build-artifacts
     # Copy Conda package to AEA Conda Channel
-    - cp conda-build-artifacts/linux-64/waves-*-*.tar.bz2 ${aea_conda_channel}/linux-64
-    - cp conda-build-artifacts/osx-64/waves-*-*.tar.bz2 ${aea_conda_channel}/osx-64
-    - cp conda-build-artifacts/win-64/waves-*-*.tar.bz2 ${aea_conda_channel}/win-64
+    - cp conda-build-artifacts/noarch/waves-*-*.tar.bz2 ${aea_conda_channel}/noarch
     # Change group for access by all W-13 staff and prevent accidental modification by institutional account in CI jobs
-    - chgrp w13users ${aea_conda_channel}/*-64/waves-*-*.tar.bz2 || true
-    - chmod 555 ${aea_conda_channel}/*-64/waves-*-*.tar.bz2 || true
+    - chgrp w13users ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
+    - chmod 555 ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
     # Update the AEA Conda Channel index
     - conda index ${aea_conda_channel}
     # Troubleshooting conda channel deploy and index update
@@ -190,12 +186,12 @@ pages:
             git reset --hard origin/$ref
             mkdir -p public/$ref/scons-eabm
             # Clean and build documentation
-            scons --clean
-            scons documentation
+            scons . --clean conditional_ignore=False
+            scons documentation conditional_ignore=False
             # Build EABM documentation
             cd eabm
-            scons --clean
-            scons documentation
+            scons . --clean conditional_ignore=False
+            scons documentation conditional_ignore=False
             cd ..
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref

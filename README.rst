@@ -107,18 +107,29 @@ Build Simulations
 
 .. build-start-do-not-remove
 
-4. View the available targets (e.g. the simulations themselves and their intermediate build steps)
+3. View project specific command line options
+
+   .. code-block::
+
+      $ scons -h
+      ...
+
+4. View the default targets and target aliases
 
    .. code-block::
 
       $ pwd
       path/to/local/git/clone/scons-simulation/
+      $ scons -h
+      ...
+
       $ cd eabm
       $ pwd
       path/to/local/git/clone/scons-simulation/eabm
-      $ WIP
+      $ scons -h
+      ...
 
-5. Build all targets
+5. Build all default targets
 
    .. code-block::
 
@@ -134,7 +145,7 @@ Build Simulations
       path/to/local/git/clone/scons-simulation/eabm
       $ scons <target name>
 
-7. Remove the build target artifacts
+7. Remove the default targets' artifacts
 
    .. code-block::
 

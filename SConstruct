@@ -13,65 +13,81 @@ warnings.filterwarnings(action='ignore',
                         module='setuptools_scm')
 
 # Versioning is more complicated than ``setuptools_scm.get_version()`` to allow us to build and run tests in the Conda
-# package directory, where setuptools_scm can't version from Git. This logic is reveresed from the waves.__init__
+# package directory, where setuptools_scm can't version from Git. This logic is reversed from the waves.__init__
 # logic. We do this to re-use SCons build target commands during Conda packaging to avoid hard coding target commands in
 # the Conda recipe. This is not necessary in an EABM project definition.
 try:
     version = setuptools_scm.get_version()
 except LookupError:
-    try:
-        from importlib.metadata import version, PackageNotFoundError
-        version = version("waves")
-    except PackageNotFoundError:
-        from waves import _version
-        version = _version.version
+    from importlib.metadata import version, PackageNotFoundError
+    version = version("waves")
 
-# Variables required when WAVES is not installed as a package
-# TODO: (1) Separate EABM and WAVES definitions
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/23
-waves_source_dir = pathlib.Path('waves')
-abaqus_wrapper = waves_source_dir / 'bin/abaqus_wrapper'
-abaqus_wrapper = abaqus_wrapper.resolve()
-
-# TODO: make this available for overwrite from a command line option
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/25
-variant_dir_base = pathlib.Path('build')
-
-# Set project internal variables
-project_name = 'WAVES'
-eabm_source_dir = pathlib.Path('eabm')
-abaqus_source_dir = eabm_source_dir / 'abaqus'
-documentation_source_dir = 'docs'
+# Accept command line variables with fall back default values
+variables = Variables(None, ARGUMENTS)
+variables.AddVariables(
+    PathVariable('variant_dir_base',
+        help='SCons variant (build) root directory. Relative or absolute path.',
+        default='build',
+        validator=PathVariable.PathAccept),
+    BoolVariable('conditional_ignore',
+        help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
+        default=True),
+    BoolVariable('ignore_documentation',
+        help="Boolean to ignore the documentation build, e.g. during Conda package build and testing.",
+        default=False))
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
-                  PROJECT_NAME=project_name.lower(),
-                  VERSION=version,
-                  PROJECT_DIR=Dir('.').abspath,
-                  ABAQUS_SOURCE_DIR=str(abaqus_source_dir),
-                  abaqus_wrapper=str(abaqus_wrapper))
+                  variables=variables)
 
-# Add top-level SCons script
-SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
+# Find required programs for conditional target ignoring
+required_programs = ['sphinx-build']
+conf = env.Configure()
+for program in required_programs:
+    env[program.replace('-', '_')] = conf.CheckProg(program)
+conf.Finish()
+
+# Add project command line variable options to help message
+Help(variables.GenerateHelpText(env))
+
+# Set project internal variables and variable substitution dictionaries
+# TODO: Move project settings to a waves setting file and out of SConstruct
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/64
+project_name = 'WAVES'
+documentation_source_dir = 'docs'
+waves_source_dir = 'waves'
+project_variables = {
+    'project_name': project_name,
+    'project_dir': Dir('.').abspath,
+    'version': version,
+    'abaqus_source_dir': 'eabm/abaqus',
+    'abaqus_wrapper': str(pathlib.Path(f'{waves_source_dir}/bin/abaqus_wrapper').resolve())
+}
+project_substitution_dictionary = dict()
+for key, value in project_variables.items():
+    env[key] = value
+    project_substitution_dictionary[f"@{key}@"] = value
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add documentation target
-build_dir = variant_dir_base / documentation_source_dir
-SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports='env')
+if not env['ignore_documentation']:
+    build_dir = variant_dir_base / documentation_source_dir
+    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
+    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+else:
+    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
+    docs_aliases = []
 
 # Add pytests
-SConscript(dirs=str(waves_source_dir), exports='env', duplicate=False)
+pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
 
-# Add conda build target
-# TODO: fix the SCons conda build target and use it instead of hardcoding the conda build commands in .gitlab-ci.yml
-# TODO: add a ``--croot`` switch, prefering /scratch/$USER/conda-build when available
-# TODO: add a ``--croot`` command line option
-package_prefix = f"dist/{project_name.upper()}-{env['VERSION']}"
-conda_build_targets = [f"{package_prefix}-py3-none-any.whl", f"{package_prefix}.tar.gz"]
-conda_build = env.Command(
-    target=conda_build_targets,
-    source=['recipe/metal.yaml', 'recipe/conda_build_config.yaml'],
-    action='VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload ' \
-                                                                  '--croot /tmp/${USER}-conda-build ' \
-                                                                  '--output-folder ./conda-build-artifacts')
-env.Ignore('dist', conda_build_targets)
-env.Alias('conda-build', conda_build)
+# Add aliases to help message so users know what build target options are available
+# TODO: recover alias list from SCons variable instead of constructing manually
+# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/33
+alias_list = docs_aliases + pytest_aliases
+alias_help = "\nTarget Aliases:\n"
+for alias in alias_list:
+    alias_help += f"    {alias}\n"
+Help(alias_help)

@@ -3,14 +3,12 @@
 import pathlib
 
 # Inherit the parent construction environment
-Import('env')
+Import(['env', 'project_substitution_dictionary'])
 
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
-    SUBST_DICT={'@PROJECT_NAME@': env['PROJECT_NAME'],
-                '@VERSION@': env['VERSION'],
-                '@PROJECT_DIR@': env['PROJECT_DIR']})
+    SUBST_DICT=project_substitution_dictionary)
 
 # Write shell script help messages to documentation build files
 abaqus_wrapper_node = env.Command(
@@ -42,19 +40,23 @@ documentation_file_list = [
     '_static/custom.css'
 ]
 
-# TODO: Find the sphinx-build program with scons
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/3
 # TODO: os agnostic pathsep for the html directory
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/4
 sphinx_options = '-W'
-sphinx_build = env.Command(
+documentation = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/5
-    target=['dummy_file_name', 'html/index.html'],
+    target=['dummy_file', 'html/index.html'],
     source=documentation_file_list,
-    action="sphinx-build ${sphinx_options} -b html ${TARGET.dir.abspath} ${TARGET.dir.abspath}/html",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
-env.Clean(sphinx_build, 'html/')
-# TODO: Figure out why alias is recognized, but not built
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/6
-env.Alias('documentation', sphinx_build)
+env.Clean(documentation, 'html/')
+alias_list = env.Alias('documentation', documentation)
+
+if env['conditional_ignore'] and not env['sphinx_build']:
+    print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
+    Ignore(['.', 'html', 'documentation'], documentation)
+
+
+# Return the alias list to SConstruct for help message output
+Return('alias_list')

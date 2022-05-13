@@ -11,6 +11,7 @@
    user
    theory
    api
+   cli
    devops
 
 .. toctree::
