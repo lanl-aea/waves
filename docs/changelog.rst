@@ -13,6 +13,8 @@ Internal Changes
 ================
 - Exclude documentation source files and build artifacts from the Conda package (:issue:`68`, :merge:`54`). By `Kyle
   Brindley`_.
+- Move Conda package constants into a package internal settings file. Remove as many project settings from SCons
+  configuration files as possible (:issue:`64`, :merge:`55`). By `Kyle Brindley`_.
 
 ******************
 0.1.5 (2022-05-12)
