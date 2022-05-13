@@ -17,7 +17,8 @@ try:
 # Only required for SCons-EABM in the SCons-simulation repository.
 # Most EABMs only need ``setuptools_scm.get_version('.')`` to find their version number.
 except LookupError:
-    version = 'uknown'
+    from importlib.metadata import version, PackageNotFoundError
+    version = version("waves") 
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)

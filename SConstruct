@@ -20,7 +20,8 @@ warnings.filterwarnings(action='ignore',
 try:
     version = setuptools_scm.get_version()
 except LookupError:
-    version = 'uknown'
+    from importlib.metadata import version, PackageNotFoundError
+    version = version("waves") 
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
