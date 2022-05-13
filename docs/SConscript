@@ -30,6 +30,7 @@ documentation_file_list = [
     'devops.rst',
     'documentation.txt',
     'index.rst',
+    'parameter_study_cli.rst',
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
