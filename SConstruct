@@ -6,6 +6,8 @@ import warnings
 
 import setuptools_scm
 
+from waves._settings import _project_name, _project_name_short, _project_bin_dir
+
 # Ignore the version warning message associated with 'x.y.z+dev' Git tags
 warnings.filterwarnings(action='ignore',
                         message='tag',
@@ -13,14 +15,15 @@ warnings.filterwarnings(action='ignore',
                         module='setuptools_scm')
 
 # Versioning is more complicated than ``setuptools_scm.get_version()`` to allow us to build and run tests in the Conda
-# package directory, where setuptools_scm can't version from Git. This logic is reversed from the waves.__init__
-# logic. We do this to re-use SCons build target commands during Conda packaging to avoid hard coding target commands in
-# the Conda recipe. This is not necessary in an EABM project definition.
+# package directory, where setuptools_scm can't version from Git. We do this to re-use SCons targets during Conda
+# package testing to avoid hard coding target commands in the Conda recipe. This is not necessary in an EABM project
+# definition.
 try:
     version = setuptools_scm.get_version()
 except LookupError:
     from importlib.metadata import version, PackageNotFoundError
     version = version("waves")
+
 
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
@@ -53,14 +56,13 @@ Help(variables.GenerateHelpText(env))
 # Set project internal variables and variable substitution dictionaries
 # TODO: Move project settings to a waves setting file and out of SConstruct
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/64
-project_name = 'WAVES'
 documentation_source_dir = 'docs'
-waves_source_dir = 'waves'
+package_source_dir = _project_name_short.lower()
 project_variables = {
-    'project_name': project_name,
+    'project_name': _project_name_short,
     'project_dir': Dir('.').abspath,
     'version': version,
-    'abaqus_wrapper': str(pathlib.Path(f'{waves_source_dir}/bin/abaqus_wrapper').resolve())
+    'abaqus_wrapper': str(pathlib.Path(f'{package_source_dir}/{_project_bin_dir}/abaqus_wrapper').resolve())
 }
 project_substitution_dictionary = dict()
 for key, value in project_variables.items():
@@ -80,7 +82,7 @@ else:
     docs_aliases = []
 
 # Add pytests
-pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
+pytest_aliases = SConscript(dirs=package_source_dir, exports='env', duplicate=False)
 
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
