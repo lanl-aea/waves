@@ -5,7 +5,7 @@ import pytest
 from unittest.mock import patch, mock_open
 import pathlib
 
-from waves.parameter_study import ParameterGenerator
+from waves.parameter_generators import ParameterGenerator
 
 
 class TestParameterGenerator:
@@ -39,7 +39,7 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
         WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
-        with patch('waves.parameter_study.ParameterGenerator.write_meta'), \
+        with patch('waves.parameter_generators.ParameterGenerator.write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -74,7 +74,7 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
         WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
-        with patch('waves.parameter_study.ParameterGenerator.write_meta'), \
+        with patch('waves.parameter_generators.ParameterGenerator.write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):

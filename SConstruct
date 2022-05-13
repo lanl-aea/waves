@@ -2,26 +2,19 @@
 
 import os
 import pathlib
-import warnings
 
-import setuptools_scm
+from waves._settings import _project_name_short, _abaqus_wrapper
 
-# Ignore the version warning message associated with 'x.y.z+dev' Git tags
-warnings.filterwarnings(action='ignore',
-                        message='tag',
-                        category=UserWarning,
-                        module='setuptools_scm')
+# ========================================================================================================= SETTINGS ===
+# Set project meta variables
+documentation_source_dir = 'docs'
+package_source_dir = _project_name_short.lower()
+project_variables = {
+    'project_dir': Dir('.').abspath,
+    'abaqus_wrapper': str(_abaqus_wrapper)
+}
 
-# Versioning is more complicated than ``setuptools_scm.get_version()`` to allow us to build and run tests in the Conda
-# package directory, where setuptools_scm can't version from Git. This logic is reversed from the waves.__init__
-# logic. We do this to re-use SCons build target commands during Conda packaging to avoid hard coding target commands in
-# the Conda recipe. This is not necessary in an EABM project definition.
-try:
-    version = setuptools_scm.get_version()
-except LookupError:
-    from importlib.metadata import version, PackageNotFoundError
-    version = version("waves")
-
+# =========================================================================================== COMMAND LINE VARIABLES ===
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
 variables.AddVariables(
@@ -36,6 +29,7 @@ variables.AddVariables(
         help="Boolean to ignore the documentation build, e.g. during Conda package build and testing.",
         default=False))
 
+# ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
@@ -50,39 +44,32 @@ conf.Finish()
 # Add project command line variable options to help message
 Help(variables.GenerateHelpText(env))
 
-# Set project internal variables and variable substitution dictionaries
-# TODO: Move project settings to a waves setting file and out of SConstruct
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/64
-project_name = 'WAVES'
-documentation_source_dir = 'docs'
-waves_source_dir = 'waves'
-project_variables = {
-    'project_name': project_name,
-    'project_dir': Dir('.').abspath,
-    'version': version,
-    'abaqus_source_dir': 'eabm/abaqus',
-    'abaqus_wrapper': str(pathlib.Path(f'{waves_source_dir}/bin/abaqus_wrapper').resolve())
-}
+# Build variable substitution dictionary
 project_substitution_dictionary = dict()
 for key, value in project_variables.items():
     env[key] = value
     project_substitution_dictionary[f"@{key}@"] = value
 
+# ======================================================================================= SCONSTRUCT LOCAL VARIABLES ===
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
+# ========================================================================================================== TARGETS ===
 # Add documentation target
 if not env['ignore_documentation']:
     build_dir = variant_dir_base / documentation_source_dir
     SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+    docs_aliases = SConscript(dirs=documentation_source_dir,
+                              variant_dir=str(build_dir),
+                              exports=['env', 'project_substitution_dictionary'])
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
     docs_aliases = []
 
 # Add pytests
-pytest_aliases = SConscript(dirs=waves_source_dir, exports='env', duplicate=False)
+pytest_aliases = SConscript(dirs=package_source_dir, exports='env', duplicate=False)
 
+# ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/33
