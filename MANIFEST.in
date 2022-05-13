@@ -1,2 +1,2 @@
-recursive-exclude build *
 recursive-exclude docs *
+recursive-exclude eabm/docs *
