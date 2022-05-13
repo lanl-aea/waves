@@ -8,12 +8,10 @@ source:
 
 build:
   noarch: python
-  entry_points:
-    - parameter_study = waves.parameter_study:main
   script:
     # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
     # deprecated setup.py solutions
-    - python setup.py install
+    - {{ PYTHON }} setup.py install
     # TODO: install shell scripts from pyproject.toml if possible
     - cp waves/bin/* ${PREFIX}/bin
   script_env:
@@ -23,16 +21,16 @@ build:
 
 requirements:
   build:
-    - python >=3.8
+    - python {{ python }}
     - git
     - setuptools
     - setuptools_scm
   host:
-    - python >=3.8
+    - python
     - setuptools
     - setuptools_scm
   run:
-    - python >=3.8
+    - python
     - pyyaml
     - scons
 
