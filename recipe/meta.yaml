@@ -42,17 +42,20 @@ test:
     - scons
     - setuptools_scm
   source_files:
+    # Everything copied here will make it into the "info" directory of the Conda package
     - SConstruct
     - SConscript
     - README.rst
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
-    - eabm/
+    - eabm/README.rst
+    - eabm/SC*
+    - eabm/abaqus/*
+    - eabm/python/*
+    - eabm/tutorial*/*
   imports:
     - waves
   commands:
-    # TODO: Test from the as installed directory where possible, e.g. waves pytests
     - scons . --keep-going conditional_ignore=False ignore_documentation=True
-    # Test the SCons-EABM targets and tests
     - cd eabm && scons . --keep-going conditional_ignore=False ignore_documentation=True
