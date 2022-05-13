@@ -20,6 +20,7 @@ from waves import parameter_generators
 #========================================================================================================== SETTINGS ===
 # Variables normally found in a project's root settings.py file(s)
 _program_name = pathlib.Path(__file__).with_suffix('').name
+cartesian_product_subcommand = 'cartesian_product'
 
 #============================================================================================ COMMAND LINE INTERFACE ===
 def get_parser():
@@ -44,7 +45,7 @@ def get_parser():
 
     parent_parser = ArgumentParser(add_help=False)
     parent_parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
-                               default=sys.stdin,
+                               default=(None if sys.stdin.isatty() else sys.stdin),
                                help=f"Parameter study configuration file (default: STDIN)")
     parent_parser.add_argument('-o', '--output-file-template',
                                default=None, dest='OUTPUT_FILE_TEMPLATE',
@@ -65,11 +66,13 @@ def get_parser():
         description=f"Available parameter study generators",
         dest='subcommand')
 
-    cartesian_product_parser = subparsers.add_parser('cartesian_product', description=generator_description,
+    cartesian_product_parser = subparsers.add_parser(cartesian_product_subcommand, description=generator_description,
                                                      help='Cartesian product generator',
                                                      parents=[parent_parser])
 
-    return main_parser
+    subparser_dictionary = {cartesian_product_subcommand: cartesian_product_parser}
+
+    return main_parser, subparser_dictionary
 
 # ============================================================================================= PARAMETER STUDY MAIN ===
 def main():
@@ -80,7 +83,7 @@ def main():
     """
 
     # Console scripts must parse arguments outside of __main__
-    parser = get_parser()
+    parser, subparser_dictionary = get_parser()
     args = parser.parse_args()
 
     # Set variables from CLI argparse output
@@ -89,6 +92,9 @@ def main():
         parser.print_usage()
         return 0
     input_file = args.INPUT_FILE
+    if not input_file:
+        subparser_dictionary[subcommand].print_usage()
+        return 0
     # TODO: accept an output file template and manage file writeability outside argparse
     # May require and additional --output-dir option and otherwise assume PWD
     # https://re-git.lanl.gov/kbrindley/cmake-simulation/-/issues/33
@@ -116,7 +122,7 @@ def main():
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = \
-        {'cartesian_product': parameter_generators.CartesianProduct}
+        {cartesian_product_subcommand: parameter_generators.CartesianProduct}
     parameter_generator = \
         available_parameter_generators[subcommand](parameter_schema, output_file_template, overwrite, dryrun, debug)
 
