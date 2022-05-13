@@ -2,12 +2,19 @@
 
 import os
 import pathlib
-import warnings
-
-import setuptools_scm
 
 from waves._settings import _project_name_short, _abaqus_wrapper
 
+# ========================================================================================================= SETTINGS ===
+# Set project meta variables
+documentation_source_dir = 'docs'
+package_source_dir = _project_name_short.lower()
+project_variables = {
+    'project_dir': Dir('.').abspath,
+    'abaqus_wrapper': str(_abaqus_wrapper)
+}
+
+# =========================================================================================== COMMAND LINE VARIABLES ===
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
 variables.AddVariables(
@@ -22,6 +29,7 @@ variables.AddVariables(
         help="Boolean to ignore the documentation build, e.g. during Conda package build and testing.",
         default=False))
 
+# ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
@@ -36,28 +44,24 @@ conf.Finish()
 # Add project command line variable options to help message
 Help(variables.GenerateHelpText(env))
 
-# Set project internal variables and variable substitution dictionaries
-# TODO: Move project settings to a waves setting file and out of SConstruct
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/64
-documentation_source_dir = 'docs'
-package_source_dir = _project_name_short.lower()
-project_variables = {
-    'project_dir': Dir('.').abspath,
-    'abaqus_wrapper': str(_abaqus_wrapper)
-}
+# Build variable substitution dictionary
 project_substitution_dictionary = dict()
 for key, value in project_variables.items():
     env[key] = value
     project_substitution_dictionary[f"@{key}@"] = value
 
+# ======================================================================================= SCONSTRUCT LOCAL VARIABLES ===
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
+# ========================================================================================================== TARGETS ===
 # Add documentation target
 if not env['ignore_documentation']:
     build_dir = variant_dir_base / documentation_source_dir
     SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+    docs_aliases = SConscript(dirs=documentation_source_dir,
+                              variant_dir=str(build_dir),
+                              exports=['env', 'project_substitution_dictionary'])
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
     docs_aliases = []
@@ -65,6 +69,7 @@ else:
 # Add pytests
 pytest_aliases = SConscript(dirs=package_source_dir, exports='env', duplicate=False)
 
+# ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
 # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/33
