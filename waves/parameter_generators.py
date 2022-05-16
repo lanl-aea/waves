@@ -68,9 +68,20 @@ class ParameterGenerator(ABC):
     def generate(self):
         """Generate the parameter study definition
 
-        Must set ``self.parameter_study`` as a dictionary of {parameter_set_file_name: text} where
-        ``parameter_set_file_name`` is a pathlib.Path object of the files to write and ``text`` is the file contents of
-        parameter names and their values.
+        Must accept ``self.parameter_schema`` dictionary and set ``self.parameter_study`` as an XArray Dataset in the format
+
+        .. code-block:: bash
+
+           <xarray.Dataset>
+           Dimensions:         (parameter_name: 2, parameter_data: 1)
+           Coordinates:
+             * parameter_name  (parameter_name) object 'parameter_1' 'parameter_2'
+             * parameter_data  (parameter_data) object 'values'
+           Data variables:
+               parameter_set0  (parameter_name, parameter_data) int64 1 3
+               parameter_set1  (parameter_name, parameter_data) int64 1 4
+               parameter_set2  (parameter_name, parameter_data) int64 2 3
+               parameter_set3  (parameter_name, parameter_data) int64 2 4
 
         :returns: parameter study object: dict(parameter_set_name: parameter_set_text)
         :rtype: dict
@@ -157,6 +168,16 @@ class CartesianProduct(ParameterGenerator):
         return True
 
     def generate(self):
+        """
+        Accepts ``parameter_schema`` as a dictionary of {parmeter_name: list} pairs, e.g.
+
+        .. code-block::
+
+           parameter_schema = {
+               parameter_1: [1, 2],
+               parameter_2: [3, 4],
+           }
+        """
         parameter_names = list(self.parameter_schema.keys())
         parameter_sets = numpy.array(list(itertools.product(*self.parameter_schema.values()))).transpose()
         parameter_set_names = []
