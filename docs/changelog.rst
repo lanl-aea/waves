@@ -9,6 +9,10 @@ Changelog
 0.1.6 (unreleased)
 ******************
 
+Documentation
+=============
+- Add the root project name back to the documentation build (:issue:`86`, :merge:`57`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Exclude documentation source files and build artifacts from the Conda package (:issue:`68`, :merge:`54`). By `Kyle
