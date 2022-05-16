@@ -4,6 +4,10 @@ import string
 import sys
 import itertools
 
+import numpy
+import pandas
+import xarray
+
 #========================================================================================================== SETTINGS ===
 template_delimiter = '@'
 
@@ -144,19 +148,12 @@ class CartesianProduct(ParameterGenerator):
 
     def generate(self):
         parameter_names = list(self.parameter_schema.keys())
-        parameter_sets = list(itertools.product(*self.parameter_schema.values()))
+        parameter_sets = numpy.array(list(itertools.product(*parameter_schema.values()))).transpose()
         parameter_set_names = []
-        parameter_set_text = []
-        # TODO: Separate the parameter study object from the output file syntax
-        # https://re-git.lanl.gov/aea/python-projects/cmake-simulation/-/issues/36
-        for number, parameter_set in enumerate(parameter_sets):
-            template = self.output_file_template
+        for number in range(len(parameter_sets[0])):
+            template = output_file_template
             parameter_set_names.append(template.substitute({'number': number}))
-            text = ''
-            for name, value in zip(parameter_names, parameter_set):
-                text = f'{text}{name}: {value}\n'
-            parameter_set_text.append(text)
-        self.parameter_study = {pathlib.Path(set_name): set_text for set_name, set_text in
-                                zip(parameter_set_names, parameter_set_text)}
-
-        return self.parameter_study
+        coordinates = [parameter_names, ['values']]
+        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
+        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=parameter_set_names)
+        self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
