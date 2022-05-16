@@ -53,6 +53,7 @@ requirements:
     - h5netcdf
     - h5py
     - numpy
+    - pandas
     - pyyaml
     - scons
     - xarray
