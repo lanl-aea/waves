@@ -93,7 +93,15 @@ class ParameterGenerator(ABC):
         """
         if self.write_meta and self.provided_template:
             self._write_meta()
-        for parameter_set_file, text in self.parameter_study.items():
+        parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_study.keys()]
+        self._write_meta(parameter_set_files)
+        for parameter_set_file in parameter_set_files:
+            # Construct the output text
+            values = self.parameter_study[parameter_set_file.name].sel(parameter_data='values').values
+            parameter_names = self.parameter_study[parameter_set_file.name].coords['parameter_name'].values
+            text = ''
+            for value, parameter_name in zip(values, parameter_names):
+                text += f"{parameter_name} = {value}\n"
             # If no output file template is provided, print to stdout
             if not self.provided_template:
                 sys.stdout.write(f"{parameter_set_file.name}:\n{text}")
@@ -101,20 +109,22 @@ class ParameterGenerator(ABC):
             elif self.overwrite or not parameter_set_file.is_file():
                 # If dry run is specified, print the files that would have been written to stdout
                 if self.dryrun:
-                    sys.stdout.write(f"{parameter_set_file.absolute()}:\n{text}")
+                    sys.stdout.write(f"{parameter_set_file.resolve()}:\n{text}")
                 else:
                     with open(parameter_set_file, 'w') as outfile:
                         outfile.write(text)
 
-    def _write_meta(self):
+    def _write_meta(self, parameter_set_files):
         """Write the parameter study meta data file.
 
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
         target or dependee is out-of-date.
+
+        :param list parameter_set_files: List of pathlib.Path parameter set file paths
         """
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(f'{parameter_study_meta_file}', 'w') as meta_file:
-            for parameter_set_file in self.parameter_study.keys():
+            for parameter_set_file in parameter_set_files:
                 meta_file.write(f"{parameter_set_file.name}\n")
 
 
@@ -148,10 +158,10 @@ class CartesianProduct(ParameterGenerator):
 
     def generate(self):
         parameter_names = list(self.parameter_schema.keys())
-        parameter_sets = numpy.array(list(itertools.product(*parameter_schema.values()))).transpose()
+        parameter_sets = numpy.array(list(itertools.product(*self.parameter_schema.values()))).transpose()
         parameter_set_names = []
         for number in range(len(parameter_sets[0])):
-            template = output_file_template
+            template = self.output_file_template
             parameter_set_names.append(template.substitute({'number': number}))
         coordinates = [parameter_names, ['values']]
         index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
