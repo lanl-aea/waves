@@ -45,6 +45,8 @@ class ParameterGenerator(ABC):
         else:
             self.output_file_template = self.default_template
 
+        self.validate()
+
     @abstractmethod
     def validate(self):
         """Process parameter study input to verify schema
