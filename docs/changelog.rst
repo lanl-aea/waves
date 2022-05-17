@@ -109,7 +109,7 @@ New Features
 
 Documentation
 =============
-- Use SCons-simulation repository version in SCons-EABM documentation (:issue:`31`, :merge:`18`). By `Kyle Brindley`_.
+- Use WAVES repository version in SCons-EABM documentation (:issue:`31`, :merge:`18`). By `Kyle Brindley`_.
 
 ******************
 0.1.3 (2022-05-05)

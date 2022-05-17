@@ -8,14 +8,14 @@
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
-.. _SCons-simulation: https://kbrindley.re-pages.lanl.gov/waves/main/
-.. _SCons-simulation repository: https://re-git.lanl.gov/kbrindley/waves
+.. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
+.. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
 .. _Scons-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
 .. target-end-do-not-remove
 
 ################
-SCons-simulation
+WAVES
 ################
 
 .. inclusion-marker-do-not-remove
@@ -31,12 +31,12 @@ features and behavior. The related `cmake-simulation`_ project established the f
 `CMake`_ in place of the `ECMF`_.
 
 A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
-`SCons-simulation`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
+`WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
 repositories. The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_
 covers build system concepts, command line options, and project definition.
 
 This project includes a template `SCons-EABM`_ which is used for the tutorials and for integration and regression
-testing of the `SCons-simulation`_ extensions to SCons.
+testing of the `WAVES`_ extensions to SCons.
 
 .. project-description-end-do-not-remove
 
@@ -200,7 +200,7 @@ Documentation
 
 The documentation build is also automated with SCons as the ``documentation`` target.
 
-5. Build the `SCons-simulation`_ documentation
+5. Build the `WAVES`_ documentation
 
    .. code-block::
 

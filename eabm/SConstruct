@@ -5,7 +5,7 @@ import sys
 import pathlib
 
 import setuptools_scm
-# Only required when WAVES is not installed as a package, e.g. for local testing in SCons-simulation repository.
+# Only required when WAVES is not installed as a package, e.g. for local testing in WAVES repository.
 try:
     import waves
 except ModuleNotFoundError:
@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 try:
     version = setuptools_scm.get_version(root='..')
-# Only required for SCons-EABM in the SCons-simulation repository.
+# Only required for SCons-EABM in the WAVES repository.
 # Most EABMs only need ``setuptools_scm.get_version('.')`` to find their version number.
 except LookupError:
     from importlib.metadata import version, PackageNotFoundError

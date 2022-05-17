@@ -8,8 +8,8 @@
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
-.. _SCons-simulation: https://kbrindley.re-pages.lanl.gov/waves/main/
-.. _SCons-simulation repository: https://re-git.lanl.gov/kbrindley/waves
+.. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
+.. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
 .. _Scons-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
 .. target-end-do-not-remove
@@ -27,9 +27,9 @@ Description
 .. project-description-start-do-not-remove
 
 The `SCons-EABM`_ contains the demonstration engineering analysis baseline model (EABM) that matches the
-`SCons-simulation`_ collection of parametric study and simulation helper utilities. Besides the handful of command line
-utilities, `SCons-simulation`_ also includes custom SCons builders that are commonly re-used in model simulation
-(modsim) repositories. This EABM is used in the `SCons-simulation`_ tutorials as well as the `SCons-simulation
+`WAVES`_ collection of parametric study and simulation helper utilities. Besides the handful of command line
+utilities, `WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation
+(modsim) repositories. This EABM is used in the `WAVES`_ tutorials as well as the `WAVES
 repository`_ integration and system tests.
 
 .. project-description-end-do-not-remove
