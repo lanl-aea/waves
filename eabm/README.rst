@@ -8,9 +8,9 @@
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
-.. _SCons-simulation: https://kbrindley.re-pages.lanl.gov/scons-simulation/main/
-.. _SCons-simulation repository: https://re-git.lanl.gov/kbrindley/scons-simulation
-.. _Scons-EABM: https://re-git.lanl.gov/kbrindley/scons-simulation/-/tree/dev/eabm
+.. _SCons-simulation: https://kbrindley.re-pages.lanl.gov/waves/main/
+.. _SCons-simulation repository: https://re-git.lanl.gov/kbrindley/waves
+.. _Scons-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
 .. target-end-do-not-remove
 
@@ -37,8 +37,8 @@ repository`_ integration and system tests.
 Documentation
 =============
 
-* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/main/scons-eabm/
-* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/dev/scons-eabm/
+* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/scons-eabm/
+* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/scons-eabm/
 
 Developers
 ==========
@@ -61,19 +61,19 @@ Local environments
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation
-      $ conda create --name scons-simulation-env --file environment.yml
+      path/to/local/git/clone/waves
+      $ conda create --name waves-env --file environment.yml
 
 2. Activate the environment
 
    .. code-block::
 
-      $ conda activate scons-simulation-env
+      $ conda activate waves-env
 
 AEA server environments
 =======================
 
-A minimal environment for the scons-simulation project Gitlab-CI jobs is maintained on AEA servers.
+A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA servers.
 
 1. Add the AEA modulefiles directory
 
@@ -85,7 +85,7 @@ A minimal environment for the scons-simulation project Gitlab-CI jobs is maintai
 
    .. code-block::
 
-      $ module load scons-simulation-env
+      $ module load waves-env
 
 .. env-end-do-not-remove
 
@@ -113,7 +113,7 @@ configuration, e.g. ``tutorial_01_geometry``.
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       $ scons -h
       ...
 
@@ -160,7 +160,7 @@ processing scripts.
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation
+      path/to/local/git/clone/waves
       $ scons <target_1_name> <target-2_name>
 
 6. Run *all* simulation and test targets. Try to run all targets even if some fail.

@@ -39,8 +39,8 @@ bibtex_bibfiles = ['references.bib']
 
 # Links to PRs, Jira issues.
 extlinks = {
-     "merge": ("https://re-git.lanl.gov/kbrindley/scons-simulation/-/merge_requests/%s", "MERGE-"),
-     "issue": ("https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/%s", "ISSUE-"),
+     "merge": ("https://re-git.lanl.gov/kbrindley/waves/-/merge_requests/%s", "MERGE-"),
+     "issue": ("https://re-git.lanl.gov/kbrindley/waves/-/issues/%s", "ISSUE-"),
 }
 
 templates_path = ['_templates']

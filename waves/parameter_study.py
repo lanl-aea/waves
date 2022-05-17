@@ -100,7 +100,7 @@ def main():
         return 0
     # TODO: accept an output file template and manage file writeability outside argparse
     # May require and additional --output-dir option and otherwise assume PWD
-    # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/79
+    # https://re-git.lanl.gov/kbrindley/waves/-/issues/79
     output_file_template = args.OUTPUT_FILE_TEMPLATE
     overwrite = args.overwrite
     dryrun = args.dryrun
@@ -121,7 +121,7 @@ def main():
 
     # Read the input stream
     # TODO: Handle input file outside of argparse
-    # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/72
+    # https://re-git.lanl.gov/kbrindley/waves/-/issues/72
     parameter_schema = yaml.safe_load(input_file)
     input_file.close()
 

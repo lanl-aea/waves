@@ -34,11 +34,11 @@ documentation_file_list = [
 ]
 
 # TODO: os agnostic pathsep for the html directory
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/4
+# https://re-git.lanl.gov/kbrindley/waves/-/issues/4
 sphinx_options = '-W'
 documentation = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
-    # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/5
+    # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
     target=['dummy_file', 'html/index.html'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
