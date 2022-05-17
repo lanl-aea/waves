@@ -87,7 +87,7 @@ class ParameterGenerator(ABC):
            parameter_1: 1
            parameter_2: a
         """
-        if self.write_meta:
+        if self.write_meta and self.provided_template:
             self._write_meta()
         for parameter_set_file, text in self.parameter_study.items():
             # If no output file template is provided, print to stdout
