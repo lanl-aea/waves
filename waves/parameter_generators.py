@@ -64,7 +64,7 @@ class ParameterGenerator(ABC):
         ``parameter_set_file_name`` is a pathlib.Path object of the files to write and ``text`` is the file contents of
         parameter names and their values.
 
-        :returns: List of ``parameter_set_file_name``s pathlib.Path objects
+        :returns: List of ``parameter_set_file_name`` s pathlib.Path objects
         :rtype: list
         """
         pass
