@@ -127,7 +127,7 @@ class CartesianProduct(ParameterGenerator):
             parameter_set_names.append(template.substitute({'number': number}))
             text = ''
             for name, value in zip(parameter_names, parameter_set):
-                text = f'{text}set({name} "{value}")\n'
+                text = f'{text}{name}: {value}\n'
             parameter_set_text.append(text)
         self.parameter_study = {pathlib.Path(set_name): set_text for set_name, set_text in
                                 zip(parameter_set_names, parameter_set_text)}
