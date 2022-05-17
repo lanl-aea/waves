@@ -54,7 +54,10 @@ def get_parser(return_subparser_dictionary=False):
                                help=f"Print contents of new parameter study output files to STDOUT and exit " \
                                     f"(default: %(default)s)")
     parent_parser.add_argument('--debug', action='store_true',
-                               help=f"Print internal variables to STDOUT and exit (default: False)")
+                               help="Print internal variables to STDOUT and exit (default: %(default)s)")
+    parent_parser.add_argument('--write-meta', action='store_true',
+                               help="Write a meta file named 'parameter_study_meta.txt' containing the " \
+                                    "parameter set file names (default: %(default)s)")
 
     subparsers = main_parser.add_subparsers(
         help=f"Specify which parameter study generator to use",
@@ -102,12 +105,14 @@ def main():
     overwrite = args.overwrite
     dryrun = args.dryrun
     debug = args.debug
+    write_meta = args.write_meta
 
     if debug:
         print(f"subcommand           = {subcommand}")
         print(f"input_file           = {input_file}")
         print(f"output_file_template = {output_file_template}")
         print(f"overwrite            = {overwrite}")
+        print(f"write_meta           = {write_meta}")
         return 0
 
     # Clean the output file template if specified
@@ -124,7 +129,8 @@ def main():
     available_parameter_generators = \
         {cartesian_product_subcommand: parameter_generators.CartesianProduct}
     parameter_generator = \
-        available_parameter_generators[subcommand](parameter_schema, output_file_template, overwrite, dryrun, debug)
+        available_parameter_generators[subcommand](parameter_schema, output_file_template,
+                                                   overwrite, dryrun, debug, write_meta)
 
     # Build the parameter study
     parameter_generator.generate()
