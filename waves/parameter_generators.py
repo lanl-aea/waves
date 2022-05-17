@@ -70,6 +70,13 @@ class ParameterGenerator(ABC):
         If printing to STDOUT, print all parameter sets together. If printing to files, don't overwrite existing files.
         If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
         associations for files that would have been written.
+
+        Writes parameter set files in YAML syntax. Alternate syntax options are a WIP.
+
+        .. code-block::
+
+           parameter_1: 1
+           parameter_2: a
         """
         self.write_meta()
         for parameter_set_file, text in self.parameter_study.items():
