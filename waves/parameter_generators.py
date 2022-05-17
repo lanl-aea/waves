@@ -63,6 +63,9 @@ class ParameterGenerator(ABC):
         Must set ``self.parameter_study`` as a dictionary of {parameter_set_file_name: text} where
         ``parameter_set_file_name`` is a pathlib.Path object of the files to write and ``text`` is the file contents of
         parameter names and their values.
+
+        :returns: List of ``parameter_set_file_name``s pathlib.Path objects
+        :rtype: list
         """
         pass
 
@@ -140,3 +143,5 @@ class CartesianProduct(ParameterGenerator):
             parameter_set_text.append(text)
         self.parameter_study = {pathlib.Path(set_name): set_text for set_name, set_text in
                                 zip(parameter_set_names, parameter_set_text)}
+
+        return list(self.parameter_study.keys())
