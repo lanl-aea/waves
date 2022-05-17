@@ -1,9 +1,5 @@
 #!/usr/bin/env python
-"""
-parameter_study - Python based generator of parameter studies
-
-.. moduleauthor:: Kyle Brindley <kbrindley@lanl.gov>
-"""
+"""parameter_study - Python based generator of parameter studies"""
 
 __author__ = 'Kyle Brindley <kbrindley@lanl.gov>'
 
