@@ -26,7 +26,7 @@ that this script is only called from a build system that manages out-of-date tar
 
 # Parse arguments
 # TODO: Add a getopts interface with a '-h' option
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/22
+# https://re-git.lanl.gov/kbrindley/waves/-/issues/22
 if [ "$#" -eq 0 ]; then
     printf "%s\n" "${usage}"
     printf "%s\n" "${help_output}"

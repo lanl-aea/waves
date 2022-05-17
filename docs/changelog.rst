@@ -6,7 +6,11 @@ Changelog
 #########
 
 ******************
-0.1.6 (unreleased)
+0.1.7 (unreleased)
+******************
+
+******************
+0.1.6 (2022-05-17)
 ******************
 
 Breaking changes
@@ -14,6 +18,8 @@ Breaking changes
 - Output parameter set files in YAML syntax instead of CMake syntax (:issue:`71`, :merge:`59`). By `Kyle Brindley`_.
 - Avoid writing parameter study meta file by default. Never write parameter meta file for output to STDOUT (:issue:`87`,
   :merge:`61`). By `Kyle Brindley`_.
+- Change the project name to "WAVES" and update the Git repository URL and documentation (:issue:`88`, :merge:`62`). By
+  `Kyle Brindley`_.
 
 New Features
 ============
@@ -109,7 +115,7 @@ New Features
 
 Documentation
 =============
-- Use SCons-simulation repository version in SCons-EABM documentation (:issue:`31`, :merge:`18`). By `Kyle Brindley`_.
+- Use WAVES repository version in WAVES-EABM documentation (:issue:`31`, :merge:`18`). By `Kyle Brindley`_.
 
 ******************
 0.1.3 (2022-05-05)
@@ -133,7 +139,7 @@ Bug fixes
 Documentation
 =============
 - Add SCons custom builder documentation for the build system (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
-- Separate the Scons build system documentation from the associated SCons-EABM documentation (:issue:`26`, :merge:`16`).
+- Separate the Scons build system documentation from the associated WAVES-EABM documentation (:issue:`26`, :merge:`16`).
   By `Kyle Brindley`_.
 
 Internal Changes

@@ -5,7 +5,7 @@ import sys
 import pathlib
 
 import setuptools_scm
-# Only required when WAVES is not installed as a package, e.g. for local testing in SCons-simulation repository.
+# Only required when WAVES is not installed as a package, e.g. for local testing in WAVES repository.
 try:
     import waves
 except ModuleNotFoundError:
@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 try:
     version = setuptools_scm.get_version(root='..')
-# Only required for SCons-EABM in the SCons-simulation repository.
+# Only required for WAVES-EABM in the WAVES repository.
 # Most EABMs only need ``setuptools_scm.get_version('.')`` to find their version number.
 except LookupError:
     from importlib.metadata import version, PackageNotFoundError
@@ -50,7 +50,7 @@ conf.Finish()
 Help(variables.GenerateHelpText(env))
 
 # Set project internal variables and variable substitution dictionaries
-project_name = 'SCons-EABM'
+project_name = 'WAVES-EABM'
 documentation_source_dir = 'docs'
 project_variables = {
     'project_name': project_name,
@@ -102,7 +102,7 @@ Help(default_targets_help)
 
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
-# https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/33
+# https://re-git.lanl.gov/kbrindley/waves/-/issues/33
 alias_list = docs_aliases + eabm_simulation_directories
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:

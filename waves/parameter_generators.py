@@ -140,7 +140,7 @@ class CartesianProduct(ParameterGenerator):
 
     def validate(self):
         # TODO: Settle on an input file schema and validation library
-        # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/80
+        # https://re-git.lanl.gov/kbrindley/waves/-/issues/80
         return True
 
     def generate(self):
