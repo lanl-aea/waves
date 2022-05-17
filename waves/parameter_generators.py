@@ -70,6 +70,13 @@ class ParameterGenerator(ABC):
         If printing to STDOUT, print all parameter sets together. If printing to files, don't overwrite existing files.
         If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
         associations for files that would have been written.
+
+        Writes parameter set files in YAML syntax. Alternate syntax options are a WIP.
+
+        .. code-block::
+
+           parameter_1: 1
+           parameter_2: a
         """
         self.write_meta()
         for parameter_set_file, text in self.parameter_study.items():
@@ -127,7 +134,7 @@ class CartesianProduct(ParameterGenerator):
             parameter_set_names.append(template.substitute({'number': number}))
             text = ''
             for name, value in zip(parameter_names, parameter_set):
-                text = f'{text}set({name} "{value}")\n'
+                text = f'{text}{name}: {value}\n'
             parameter_set_text.append(text)
         self.parameter_study = {pathlib.Path(set_name): set_text for set_name, set_text in
                                 zip(parameter_set_names, parameter_set_text)}
