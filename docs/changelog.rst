@@ -9,6 +9,10 @@ Changelog
 0.1.6 (unreleased)
 ******************
 
+Breaking changes
+================
+- Output parameter set files in YAML syntax instead of CMake syntax (:issue:`71`, :merge:`59`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add the root project name back to the documentation build (:issue:`86`, :merge:`57`). By `Kyle Brindley`_.
