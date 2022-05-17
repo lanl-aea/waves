@@ -39,7 +39,7 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
         WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
-        with patch('waves.parameter_generators.ParameterGenerator.write_meta'), \
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -74,7 +74,7 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
         WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
-        with patch('waves.parameter_generators.ParameterGenerator.write_meta'), \
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):
