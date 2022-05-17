@@ -28,7 +28,7 @@ class ParameterGenerator(ABC):
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
     """
-    def __init__(self, parameter_schema, output_file_template, overwrite, dryrun, debug):
+    def __init__(self, parameter_schema, output_file_template=None, overwrite=False, dryrun=False, debug=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.overwrite = overwrite
