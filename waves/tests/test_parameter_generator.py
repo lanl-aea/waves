@@ -38,6 +38,7 @@ class TestParameterGenerator:
         :param int sets: test specific argument for the number of sets to build for the test
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
+        # TODO: build up an xarray dataset dummy parameter study object
         WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
@@ -73,6 +74,7 @@ class TestParameterGenerator:
         :param int sets: test specific argument for the number of sets to build for the test
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
+        # TODO: build up an xarray dataset dummy parameter study object
         WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
