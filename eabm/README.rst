@@ -8,14 +8,14 @@
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
-.. _SCons-simulation: https://kbrindley.re-pages.lanl.gov/scons-simulation/main/
-.. _SCons-simulation repository: https://re-git.lanl.gov/kbrindley/scons-simulation
-.. _Scons-EABM: https://re-git.lanl.gov/kbrindley/scons-simulation/-/tree/dev/eabm
+.. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
+.. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
+.. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
 .. target-end-do-not-remove
 
 ##########
-SCons-EABM
+WAVES-EABM
 ##########
 
 .. inclusion-marker-do-not-remove
@@ -26,10 +26,10 @@ Description
 
 .. project-description-start-do-not-remove
 
-The `SCons-EABM`_ contains the demonstration engineering analysis baseline model (EABM) that matches the
-`SCons-simulation`_ collection of parametric study and simulation helper utilities. Besides the handful of command line
-utilities, `SCons-simulation`_ also includes custom SCons builders that are commonly re-used in model simulation
-(modsim) repositories. This EABM is used in the `SCons-simulation`_ tutorials as well as the `SCons-simulation
+The `WAVES-EABM`_ contains the demonstration engineering analysis baseline model (EABM) that matches the
+`WAVES`_ collection of parametric study and simulation helper utilities. Besides the handful of command line
+utilities, `WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation
+(modsim) repositories. This EABM is used in the `WAVES`_ tutorials as well as the `WAVES
 repository`_ integration and system tests.
 
 .. project-description-end-do-not-remove
@@ -37,8 +37,8 @@ repository`_ integration and system tests.
 Documentation
 =============
 
-* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/main/scons-eabm/
-* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/dev/scons-eabm/
+* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/waves-eabm/
+* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/
 
 Developers
 ==========
@@ -61,19 +61,19 @@ Local environments
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation
-      $ conda create --name scons-simulation-env --file environment.yml
+      path/to/local/git/clone/waves
+      $ conda create --name waves-env --file environment.yml
 
 2. Activate the environment
 
    .. code-block::
 
-      $ conda activate scons-simulation-env
+      $ conda activate waves-env
 
 AEA server environments
 =======================
 
-A minimal environment for the scons-simulation project Gitlab-CI jobs is maintained on AEA servers.
+A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA servers.
 
 1. Add the AEA modulefiles directory
 
@@ -85,7 +85,7 @@ A minimal environment for the scons-simulation project Gitlab-CI jobs is maintai
 
    .. code-block::
 
-      $ module load scons-simulation-env
+      $ module load waves-env
 
 .. env-end-do-not-remove
 
@@ -103,16 +103,17 @@ Build Simulations
       ...
 
 This project limits the default target list to the documentation with the `SCons`_ ``Default`` command. Simulation
-targets must be specified directly on the command line. The `SCons`_ all targets default, ``.``, may also be specified
-to build literally every target in the repository. Simulation targets may be specified by output file name or by target
-alias, which is set to the parent directory for the target configuration.
+targets must be specified directly on the command line. The `SCons`_ "all targets" character, ``.``, may also be
+specified to build every target in the repository, including *all* simulation targets. Simulation targets may be
+specified by output file name or by target alias, which is set to match the parent directory for the target
+configuration, e.g. ``tutorial_01_geometry``.
 
 4. View the default targets and target aliases
 
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       $ scons -h
       ...
 
@@ -122,7 +123,7 @@ alias, which is set to the parent directory for the target configuration.
 
       $ scons
 
-6. Build ALL targets
+6. Build *all* targets
 
    .. code-block::
 
@@ -134,7 +135,7 @@ alias, which is set to the parent directory for the target configuration.
 
       $ scons <target name>
 
-8. Remove ALL build target artifacts
+8. Remove *all* build target artifacts
 
    .. code-block::
 
@@ -149,31 +150,24 @@ Testing
 .. test-start-do-not-remove
 
 Unlike software projects, the primary model/simulation project tests are the successful completion of some subset of the
-simulation targets. If the selected simulations run successfully, then the target passes. To facilitate Gitlab-CI
-regression testing, the primary model/simluation targets have also been added as `SCons`_ tests. Secondary project tests
-will use `SCons`_ for unit and integration testing project specific scripts, such as journal files and processing
-scripts.
+simulation targets. If the selected simulations run successfully, then the target passes. Secondary project tests will
+use `SCons`_ to execute unit and integration testing for project specific scripts, such as journal files and Python
+processing scripts.
 
-5. Build the required target(s). Test targets may not be part of the default target ``all``. If so, each target will
-   need to be listed explicitly
+5. Build the required target(s). Test targets may not be part of the default target list. If so, each target will
+   need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
 
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation
+      path/to/local/git/clone/waves
       $ scons <target_1_name> <target-2_name>
 
-6. Run all tests even if some targets fail
+6. Run *all* simulation and test targets. Try to run all targets even if some fail.
 
    .. code-block::
 
       scons . --keep-going
-
-A full list of test names can be generated with the following command.
-
-.. code-block::
-
-   WIP
 
 .. test-end-do-not-remove
 
@@ -183,7 +177,7 @@ Documentation
 
 .. docs-start-do-not-remove
 
-The documentation build is also automated with SCons as the ``documentation`` target.
+The documentation build is also automated with SCons as the ``documentation`` target alias.
 
 5. Build the documentation target
 

@@ -8,15 +8,15 @@
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
-.. _SCons-simulation: https://kbrindley.re-pages.lanl.gov/scons-simulation/main/
-.. _SCons-simulation repository: https://re-git.lanl.gov/kbrindley/scons-simulation
-.. _Scons-EABM: https://re-git.lanl.gov/kbrindley/scons-simulation/-/tree/dev/eabm
+.. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
+.. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
+.. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
 .. target-end-do-not-remove
 
-################
-SCons-simulation
-################
+#####
+WAVES
+#####
 
 .. inclusion-marker-do-not-remove
 
@@ -31,26 +31,26 @@ features and behavior. The related `cmake-simulation`_ project established the f
 `CMake`_ in place of the `ECMF`_.
 
 A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
-`SCons-simulation`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
+`WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
 repositories. The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_
 covers build system concepts, command line options, and project definition.
 
-This project includes a template `SCons-EABM`_ which is used for the tutorials and for integration and regression
-testing of the `SCons-simulation`_ extensions to SCons.
+This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
+testing of the `WAVES`_ extensions to SCons.
 
 .. project-description-end-do-not-remove
 
 Documentation
 =============
 
-* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/main/
-* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/dev/
+* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/
+* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/
 
-The `SCons-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
+The `WAVES-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
-* `SCons-EABM`_ Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/main/scons-eabm/
-* `SCons-EABM`_ Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/scons-simulation/dev/scons-eabm/
+* `WAVES-EABM`_ Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/waves-eabm/
+* `WAVES-EABM`_ Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/
 
 Developers
 ==========
@@ -73,19 +73,19 @@ Local environments
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation
-      $ conda create --name scons-simulation-env --file environment.yml
+      path/to/local/git/clone/waves
+      $ conda create --name waves-env --file environment.yml
 
 2. Activate the environment
 
    .. code-block::
 
-      $ conda activate scons-simulation-env
+      $ conda activate waves-env
 
 AEA server environments
 =======================
 
-A minimal environment for the scons-simulation project Gitlab-CI jobs is maintained on AEA servers.
+A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA servers.
 
 1. Add the AEA modulefiles directory
 
@@ -97,7 +97,7 @@ A minimal environment for the scons-simulation project Gitlab-CI jobs is maintai
 
    .. code-block::
 
-      $ module load scons-simulation-env
+      $ module load waves-env
 
 .. env-end-do-not-remove
 
@@ -119,13 +119,13 @@ Build Simulations
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/
+      path/to/local/git/clone/waves/
       $ scons -h
       ...
 
       $ cd eabm
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       $ scons -h
       ...
 
@@ -134,7 +134,7 @@ Build Simulations
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       $ scons
 
 6. Build a specific target
@@ -142,7 +142,7 @@ Build Simulations
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       $ scons <target name>
 
 7. Remove the default targets' artifacts
@@ -150,7 +150,7 @@ Build Simulations
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       $ scons --clean
 
 .. build-end-do-not-remove
@@ -173,7 +173,7 @@ scripts.
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       $ scons <target_1_name> <target-2_name>
 
 6. Run all tests
@@ -181,7 +181,7 @@ scripts.
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       WIP
 
 A full list of test names can be generated with the following command.
@@ -200,20 +200,20 @@ Documentation
 
 The documentation build is also automated with SCons as the ``documentation`` target.
 
-5. Build the `SCons-simulation`_ documentation
+5. Build the `WAVES`_ documentation
 
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/
+      path/to/local/git/clone/waves/
       $ scons documentation
 
-6. Build the `SCons-EABM`_ documentation
+6. Build the `WAVES-EABM`_ documentation
 
    .. code-block::
 
       $ pwd
-      path/to/local/git/clone/scons-simulation/eabm
+      path/to/local/git/clone/waves/eabm
       $ scons documentation
 
 .. docs-end-do-not-remove

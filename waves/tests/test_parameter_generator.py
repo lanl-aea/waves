@@ -5,21 +5,21 @@ import pytest
 from unittest.mock import patch, mock_open
 import pathlib
 
-from waves.parameter_study import ParameterGenerator
+from waves.parameter_generators import ParameterGenerator
 
 
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
 
     init_write_stdout = {# schema, template, overwrite, dryrun, debug,         is_file, sets
-        'no-template-1': (     '',     None,     False,  False, False,          [False],    1),
-        'no-template-2': (     '',     None,      True,  False, False,          [False],    1),
-        'no-template-3': (     '',     None,     False,   True, False,   [False, False],    2),
-        'no-template-4': (     '',     None,     False,  False, False,   [ True,  True],    2),
-        'dryrun-1':      (     '',    'out',     False,   True, False,          [False],    1),
-        'dryrun-2':      (     '',    'out',      True,   True, False,          [False],    1),
-        'dryrun-3':      (     '',    'out',      True,   True, False,   [ True, False],    2),
-        'dryrun-4':      (     '',    'out',     False,   True, False,   [False,  True],    1),
+        'no-template-1': (     {},     None,     False,  False, False,          [False],    1),
+        'no-template-2': (     {},     None,      True,  False, False,          [False],    1),
+        'no-template-3': (     {},     None,     False,   True, False,   [False, False],    2),
+        'no-template-4': (     {},     None,     False,  False, False,   [ True,  True],    2),
+        'dryrun-1':      (     {},    'out',     False,   True, False,          [False],    1),
+        'dryrun-2':      (     {},    'out',      True,   True, False,          [False],    1),
+        'dryrun-3':      (     {},    'out',      True,   True, False,   [ True, False],    2),
+        'dryrun-4':      (     {},    'out',     False,   True, False,   [False,  True],    1),
     }
 
     @pytest.mark.unittest
@@ -39,7 +39,7 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
         WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
-        with patch('waves.parameter_study.ParameterGenerator.write_meta'), \
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -48,13 +48,13 @@ class TestParameterGenerator:
             assert stdout_write.call_count == sets
 
     init_write_files = {# schema, template, overwrite, dryrun, debug,          is_file, sets, files
-        'template-1':  (      '',    'out',     False,  False, False,          [False],    1,     1),
-        'template-2':  (      '',    'out',     False,  False, False,   [False, False],    2,     2),
-        'template-3':  (      '',    'out',     False,  False, False,   [ True,  True],    2,     0),
-        'template-4':  (      '',    'out',     False,  False, False,   [ True, False],    2,     1),
-        'overwrite-2': (      '',    'out',      True,  False, False,   [False, False],    2,     2),
-        'overwrite-3': (      '',    'out',      True,  False, False,   [ True,  True],    2,     2),
-        'overwrite-4': (      '',    'out',      True,  False, False,   [ True, False],    2,     2),
+        'template-1':  (      {},    'out',     False,  False, False,          [False],    1,     1),
+        'template-2':  (      {},    'out',     False,  False, False,   [False, False],    2,     2),
+        'template-3':  (      {},    'out',     False,  False, False,   [ True,  True],    2,     0),
+        'template-4':  (      {},    'out',     False,  False, False,   [ True, False],    2,     1),
+        'overwrite-2': (      {},    'out',      True,  False, False,   [False, False],    2,     2),
+        'overwrite-3': (      {},    'out',      True,  False, False,   [ True,  True],    2,     2),
+        'overwrite-4': (      {},    'out',      True,  False, False,   [ True, False],    2,     2),
     }
 
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
@@ -74,7 +74,7 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
         WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
-        with patch('waves.parameter_study.ParameterGenerator.write_meta'), \
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -85,7 +85,7 @@ class TestParameterGenerator:
 
 class FakeParameterGenerator(ParameterGenerator):
 
-    def validate():
+    def validate(self):
         pass
 
     def generate():

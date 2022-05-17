@@ -5,25 +5,21 @@ import unittest.mock
 import subprocess
 
 # -- Project information -----------------------------------------------------
-# Meta data from SCons project
-project = '@project_name@'
-VERSION = '@version@'
 project_dir = pathlib.Path('@project_dir@').resolve()
 
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
 
-# Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules.
-mock_modules = ['abaqus', 'abaqusConstants', 'mesh']
-for mod_name in mock_modules:
-    sys.modules[mod_name] = unittest.mock.Mock()
+from waves import __version__
+from waves._settings import _project_name_short
 
-release = VERSION
+project = _project_name_short
+release = __version__
 version = release
 
 # ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # -- Project Variables -------------------------------------------------------
-rst_prolog = f'.. |project| replace:: {project}\n.. include:: targets.txt'
+rst_prolog = f'.. |project| replace:: {_project_name_short}\n.. include:: targets.txt'
 
 # -- General configuration ---------------------------------------------------
 # Add custom style sheet to make the html docs wider
@@ -37,8 +33,8 @@ bibtex_bibfiles = ['references.bib']
 
 # Links to PRs, Jira issues.
 extlinks = {
-     "merge": ("https://re-git.lanl.gov/kbrindley/scons-simulation/-/merge_requests/%s", "MERGE-"),
-     "issue": ("https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/%s", "ISSUE-"),
+     "merge": ("https://re-git.lanl.gov/kbrindley/waves/-/merge_requests/%s", "MERGE-"),
+     "issue": ("https://re-git.lanl.gov/kbrindley/waves/-/issues/%s", "ISSUE-"),
 }
 
 templates_path = ['_templates']

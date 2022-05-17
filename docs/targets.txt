@@ -9,13 +9,13 @@
 .. _`ASC RE Gitlab`: https://re-git.lanl.gov/
 .. _`ASC RE Gitlab HPC Accounts`: https://hpcaccounts.lanl.gov/projects/request/asc-re-gitlab
 .. _`ASC RE Gitlab User Documentation`: https://re-git.lanl.gov/help/user/index.md
-.. _`AEA Gitlab group`: https://re-git.lanl.gov/aea 
+.. _`AEA Gitlab group`: https://re-git.lanl.gov/aea
 .. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
 .. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
 .. _`Granta/MIMS`: http://grantami.lanl.gov/mi
-.. _`Material Models`: https://re-git.lanl.gov/aea/material-models 
+.. _`Material Models`: https://re-git.lanl.gov/aea/material-models
 .. _`Material Models members`: https://re-git.lanl.gov/groups/aea/material-models/-/group_members
 .. _`Material Database`: https://ddw-confluence.lanl.gov/display/MD/Material+Database
 .. _`Python`: https://www.python.org/
@@ -30,8 +30,8 @@
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
 
 .. Project specific links
-.. _`upstream repository`: https://re-git.lanl.gov/kbrindley/scons-simulation/cpp_stub 
-.. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues
+.. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
+.. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm

@@ -13,12 +13,12 @@ stages:
 
 before_script:
   # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
-  # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/7
+  # https://re-git.lanl.gov/kbrindley/waves/-/issues/7
   - aea_projects='/projects'
   - aea_deploy_directory="${aea_projects}/python"
   - aea_conda_channel="${aea_deploy_directory}/aea-conda"
   - aea_modulefiles=${aea_deploy_directory}/modulefiles
-  - environment='scons-simulation-env'
+  - environment='waves-env'
   - environment_path="${aea_deploy_directory}/${environment}"
   - conda_options='--yes --channel conda-forge'
   # Activate the project specific environment from the project specific modulefile
@@ -26,7 +26,7 @@ before_script:
   - module load ${environment}
   # Build the Conda environment if it's missing
   # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
-  # https://re-git.lanl.gov/kbrindley/scons-simulation/-/issues/8
+  # https://re-git.lanl.gov/kbrindley/waves/-/issues/8
   - |
       if [[ ! -d ${environment_path} ]]; then
           export ALL_PROXY="proxyout.lanl.gov:8080"
@@ -181,10 +181,10 @@ pages:
     - |
         for ref in ${documentation_branches}; do
             # TODO: match the branch to the correct module. unload/load for each branch.
-            # https://re-git.lanl.gov/kbrindley/scons-simulation/-/boards
+            # https://re-git.lanl.gov/kbrindley/waves/-/boards
             git checkout $ref
             git reset --hard origin/$ref
-            mkdir -p public/$ref/scons-eabm
+            mkdir -p public/$ref/waves-eabm
             # Clean and build documentation
             scons . --clean conditional_ignore=False
             scons documentation conditional_ignore=False
@@ -195,7 +195,7 @@ pages:
             cd ..
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref
-            cp -r eabm/build/docs/html/* public/$ref/scons-eabm
+            cp -r eabm/build/docs/html/* public/$ref/waves-eabm
         done
     # FIXME: (1) Reset the repository Git configuration to preserve ssl verifications. Remove when the server(s)
     # configurations no longer require us to drop ssl verifications.
