@@ -120,6 +120,15 @@ class CartesianProduct(ParameterGenerator):
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
+
+    Expected parameter schema example:
+
+    .. code-block::
+
+       parameter_schema = {
+           'parameter_1': [1, 2],
+           'parameter_2': ['a', 'b']
+       }
     """
 
     def validate(self):
