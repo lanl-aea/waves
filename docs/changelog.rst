@@ -13,6 +13,12 @@ Breaking changes
 ================
 - Output parameter set files in YAML syntax instead of CMake syntax (:issue:`71`, :merge:`59`). By `Kyle Brindley`_.
 
+New Features
+============
+- Re-work the parameter generators for direct use in an SCons builder: validate schema on instantiation, provide
+  argument defaults on instantiation, output list of pathlib.Path file objects that will be written (:issue:`60`,
+  :merge:`60`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add the root project name back to the documentation build (:issue:`86`, :merge:`57`). By `Kyle Brindley`_.

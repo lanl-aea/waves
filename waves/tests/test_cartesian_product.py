@@ -1,6 +1,7 @@
 """Test CartesianProduct Class
 """
 
+import pathlib
 import pytest
 
 from waves.parameter_generators import CartesianProduct
@@ -23,5 +24,6 @@ class TestCartesianProduct:
                              ids=generate_io.keys())
     def test_generate(self, parameter_schema, expected_text_list):
         TestGenerate = CartesianProduct(parameter_schema, None, False, False, False)
-        TestGenerate.generate()
+        parameter_set_file_paths = TestGenerate.generate()
         assert list(TestGenerate.parameter_study.values()) == expected_text_list
+        assert parameter_set_file_paths == [pathlib.Path(f"parameter_set{num}") for num in range(len(expected_text_list))]

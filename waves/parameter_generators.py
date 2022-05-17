@@ -28,7 +28,7 @@ class ParameterGenerator(ABC):
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
     """
-    def __init__(self, parameter_schema, output_file_template, overwrite, dryrun, debug):
+    def __init__(self, parameter_schema, output_file_template=None, overwrite=False, dryrun=False, debug=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.overwrite = overwrite
@@ -45,6 +45,8 @@ class ParameterGenerator(ABC):
         else:
             self.output_file_template = self.default_template
 
+        self.validate()
+
     @abstractmethod
     def validate(self):
         """Process parameter study input to verify schema
@@ -58,9 +60,12 @@ class ParameterGenerator(ABC):
     def generate(self):
         """Generate the parameter study definition
 
-        Must set:
+        Must set ``self.parameter_study`` as a dictionary of {parameter_set_file_name: text} where
+        ``parameter_set_file_name`` is a pathlib.Path object of the files to write and ``text`` is the file contents of
+        parameter names and their values.
 
-        * ``self.parameter_study``
+        :returns: List of ``parameter_set_file_name`` s pathlib.Path objects
+        :rtype: list
         """
         pass
 
@@ -115,6 +120,15 @@ class CartesianProduct(ParameterGenerator):
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
+
+    Expected parameter schema example:
+
+    .. code-block::
+
+       parameter_schema = {
+           'parameter_1': [1, 2],
+           'parameter_2': ['a', 'b']
+       }
     """
 
     def validate(self):
@@ -138,3 +152,5 @@ class CartesianProduct(ParameterGenerator):
             parameter_set_text.append(text)
         self.parameter_study = {pathlib.Path(set_name): set_text for set_name, set_text in
                                 zip(parameter_set_names, parameter_set_text)}
+
+        return list(self.parameter_study.keys())

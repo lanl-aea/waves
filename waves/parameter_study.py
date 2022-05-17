@@ -1,9 +1,5 @@
 #!/usr/bin/env python
-"""
-parameter_study - Python based generator of parameter studies
-
-.. moduleauthor:: Kyle Brindley <kbrindley@lanl.gov>
-"""
+"""parameter_study - Python based generator of parameter studies"""
 
 __author__ = 'Kyle Brindley <kbrindley@lanl.gov>'
 
@@ -131,9 +127,6 @@ def main():
         available_parameter_generators[subcommand](parameter_schema, output_file_template, overwrite, dryrun, debug)
 
     # Build the parameter study
-    if not parameter_generator.validate():
-        print("Parameter schema validation failed. Please review the input file for syntax errors.")
-        return 1
     parameter_generator.generate()
     parameter_generator.write()
 
