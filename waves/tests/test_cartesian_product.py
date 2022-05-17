@@ -9,12 +9,12 @@ class TestCartesianProduct:
     """Class for testing CartesianProduct parameter study generator class"""
 
     generate_io = {
-        'one_parameter': ({'parameter_1': [1, 2]}, ['set(parameter_1 "1")\n', 'set(parameter_1 "2")\n']),
+        'one_parameter': ({'parameter_1': [1, 2]}, ['parameter_1: 1\n', 'parameter_1: 2\n']),
         'two_parameter': ({'parameter_1': [1, 2], 'parameter_2': ['a', 'b']},
-                          ['set(parameter_1 "1")\nset(parameter_2 "a")\n',
-                           'set(parameter_1 "1")\nset(parameter_2 "b")\n',
-                           'set(parameter_1 "2")\nset(parameter_2 "a")\n',
-                           'set(parameter_1 "2")\nset(parameter_2 "b")\n'])
+                          ['parameter_1: 1\nparameter_2: a\n',
+                           'parameter_1: 1\nparameter_2: b\n',
+                           'parameter_1: 2\nparameter_2: a\n',
+                           'parameter_1: 2\nparameter_2: b\n'])
     }
 
     @pytest.mark.unittest
