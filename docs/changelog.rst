@@ -14,6 +14,8 @@ Breaking changes
 - Output parameter set files in YAML syntax instead of CMake syntax (:issue:`71`, :merge:`59`). By `Kyle Brindley`_.
 - Avoid writing parameter study meta file by default. Never write parameter meta file for output to STDOUT (:issue:`87`,
   :merge:`61`). By `Kyle Brindley`_.
+- Change the project name to "WAVES" and update the Git repository URL and documentation (:issue:`88`, :merge:`62`). By
+  `Kyle Brindley`_.
 
 New Features
 ============
