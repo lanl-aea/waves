@@ -60,9 +60,9 @@ class ParameterGenerator(ABC):
     def generate(self):
         """Generate the parameter study definition
 
-        Must set:
-
-        * ``self.parameter_study``
+        Must set ``self.parameter_study`` as a dictionary of {parameter_set_file_name: text} where
+        ``parameter_set_file_name`` is a pathlib.Path object of the files to write and ``text`` is the file contents of
+        parameter names and their values.
         """
         pass
 
