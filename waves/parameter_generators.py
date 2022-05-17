@@ -27,13 +27,17 @@ class ParameterGenerator(ABC):
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
+    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None, overwrite=False, dryrun=False, debug=False):
+    def __init__(self, parameter_schema, output_file_template=None,
+                 overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.overwrite = overwrite
         self.dryrun = dryrun
         self.debug = debug
+        self.write_meta = write_meta
 
         self.default_template = default_output_file_template
         self.provided_template = False
@@ -83,7 +87,8 @@ class ParameterGenerator(ABC):
            parameter_1: 1
            parameter_2: a
         """
-        self.write_meta()
+        if self.write_meta and self.provided_template:
+            self._write_meta()
         for parameter_set_file, text in self.parameter_study.items():
             # If no output file template is provided, print to stdout
             if not self.provided_template:
@@ -97,7 +102,7 @@ class ParameterGenerator(ABC):
                     with open(parameter_set_file, 'w') as outfile:
                         outfile.write(text)
 
-    def write_meta(self):
+    def _write_meta(self):
         """Write the parameter study meta data file.
 
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
@@ -120,6 +125,8 @@ class CartesianProduct(ParameterGenerator):
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
+    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
 
     Expected parameter schema example:
 

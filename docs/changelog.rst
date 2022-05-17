@@ -12,6 +12,8 @@ Changelog
 Breaking changes
 ================
 - Output parameter set files in YAML syntax instead of CMake syntax (:issue:`71`, :merge:`59`). By `Kyle Brindley`_.
+- Avoid writing parameter study meta file by default. Never write parameter meta file for output to STDOUT (:issue:`87`,
+  :merge:`61`). By `Kyle Brindley`_.
 
 New Features
 ============
