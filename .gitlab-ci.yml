@@ -184,7 +184,7 @@ pages:
             # https://re-git.lanl.gov/kbrindley/waves/-/boards
             git checkout $ref
             git reset --hard origin/$ref
-            mkdir -p public/$ref/scons-eabm
+            mkdir -p public/$ref/waves-eabm
             # Clean and build documentation
             scons . --clean conditional_ignore=False
             scons documentation conditional_ignore=False
@@ -195,7 +195,7 @@ pages:
             cd ..
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref
-            cp -r eabm/build/docs/html/* public/$ref/scons-eabm
+            cp -r eabm/build/docs/html/* public/$ref/waves-eabm
         done
     # FIXME: (1) Reset the repository Git configuration to preserve ssl verifications. Remove when the server(s)
     # configurations no longer require us to drop ssl verifications.

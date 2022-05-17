@@ -10,7 +10,7 @@
 .. _SCons documentation: https://scons.org/documentation.html
 .. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
 .. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
-.. _Scons-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
+.. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
 .. target-end-do-not-remove
 
@@ -35,7 +35,7 @@ A collection of parametric study and simulation helper utilities. Besides the ha
 repositories. The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_
 covers build system concepts, command line options, and project definition.
 
-This project includes a template `SCons-EABM`_ which is used for the tutorials and for integration and regression
+This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
 testing of the `WAVES`_ extensions to SCons.
 
 .. project-description-end-do-not-remove
@@ -46,11 +46,11 @@ Documentation
 * Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/
 * Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/
 
-The `SCons-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
+The `WAVES-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
-* `SCons-EABM`_ Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/scons-eabm/
-* `SCons-EABM`_ Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/scons-eabm/
+* `WAVES-EABM`_ Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/waves-eabm/
+* `WAVES-EABM`_ Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/
 
 Developers
 ==========
@@ -208,7 +208,7 @@ The documentation build is also automated with SCons as the ``documentation`` ta
       path/to/local/git/clone/waves/
       $ scons documentation
 
-6. Build the `SCons-EABM`_ documentation
+6. Build the `WAVES-EABM`_ documentation
 
    .. code-block::
 

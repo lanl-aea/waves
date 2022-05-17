@@ -10,12 +10,12 @@
 .. _SCons documentation: https://scons.org/documentation.html
 .. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
 .. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
-.. _Scons-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
+.. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
 .. target-end-do-not-remove
 
 ##########
-SCons-EABM
+WAVES-EABM
 ##########
 
 .. inclusion-marker-do-not-remove
@@ -26,7 +26,7 @@ Description
 
 .. project-description-start-do-not-remove
 
-The `SCons-EABM`_ contains the demonstration engineering analysis baseline model (EABM) that matches the
+The `WAVES-EABM`_ contains the demonstration engineering analysis baseline model (EABM) that matches the
 `WAVES`_ collection of parametric study and simulation helper utilities. Besides the handful of command line
 utilities, `WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation
 (modsim) repositories. This EABM is used in the `WAVES`_ tutorials as well as the `WAVES
@@ -37,8 +37,8 @@ repository`_ integration and system tests.
 Documentation
 =============
 
-* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/scons-eabm/
-* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/scons-eabm/
+* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/waves-eabm/
+* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/
 
 Developers
 ==========

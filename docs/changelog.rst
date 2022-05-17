@@ -109,7 +109,7 @@ New Features
 
 Documentation
 =============
-- Use WAVES repository version in SCons-EABM documentation (:issue:`31`, :merge:`18`). By `Kyle Brindley`_.
+- Use WAVES repository version in WAVES-EABM documentation (:issue:`31`, :merge:`18`). By `Kyle Brindley`_.
 
 ******************
 0.1.3 (2022-05-05)
@@ -133,7 +133,7 @@ Bug fixes
 Documentation
 =============
 - Add SCons custom builder documentation for the build system (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
-- Separate the Scons build system documentation from the associated SCons-EABM documentation (:issue:`26`, :merge:`16`).
+- Separate the Scons build system documentation from the associated WAVES-EABM documentation (:issue:`26`, :merge:`16`).
   By `Kyle Brindley`_.
 
 Internal Changes

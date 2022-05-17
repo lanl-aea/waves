@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 
 try:
     version = setuptools_scm.get_version(root='..')
-# Only required for SCons-EABM in the WAVES repository.
+# Only required for WAVES-EABM in the WAVES repository.
 # Most EABMs only need ``setuptools_scm.get_version('.')`` to find their version number.
 except LookupError:
     from importlib.metadata import version, PackageNotFoundError
@@ -50,7 +50,7 @@ conf.Finish()
 Help(variables.GenerateHelpText(env))
 
 # Set project internal variables and variable substitution dictionaries
-project_name = 'SCons-EABM'
+project_name = 'WAVES-EABM'
 documentation_source_dir = 'docs'
 project_variables = {
     'project_name': project_name,
