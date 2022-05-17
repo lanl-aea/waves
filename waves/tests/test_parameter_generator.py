@@ -85,7 +85,7 @@ class TestParameterGenerator:
 
 class FakeParameterGenerator(ParameterGenerator):
 
-    def validate():
+    def validate(self):
         pass
 
     def generate():
