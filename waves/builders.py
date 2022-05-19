@@ -25,9 +25,10 @@ def _abaqus_journal_emitter(target, source, env):
     """
     journal_file = pathlib.Path(source[0].path).name
     journal_file = pathlib.Path(journal_file)
+    # TODO: clean up the search for a build subdirectory prepended to the targets. Need to handle the case where there
+    # is a build subdirectory, but the target list is currently empty. How do we find out the build subdirectory
+    # relative path with an empty target list?
     build_subdirectory = pathlib.Path(str(target[0])).parents[0]
-    if build_subdirectory == '.':
-        build_subdirectory = ''
     target.append(f"{build_subdirectory}/{str(journal_file.with_suffix('.jnl'))}")
     target.append(f"{build_subdirectory}/{str(journal_file.with_suffix('.log'))}")
     return target, source
@@ -72,8 +73,12 @@ def _abaqus_solver_emitter(target, source, env):
     builder_suffixes = ['log']
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
+    # TODO: clean up the search for a build subdirectory prepended to the targets. Need to handle the case where there
+    # is a build subdirectory, but the target list is currently empty. How do we find out the build subdirectory
+    # relative path with an empty target list?
+    build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     for suffix in suffixes:
-        target.append(f"{env['job_name']}.{suffix}")
+        target.append(f"{build_subdirectory}/{env['job_name']}.{suffix}")
     return target, source
 
 
