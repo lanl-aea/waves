@@ -78,7 +78,8 @@ for parameter_file in parameter_set_files:
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     solverprep = waves.builders.copy_substitute(abaqus_source_list,
-                                                substitution_dictionary=simulation_substitution_dictionary)
+                                                substitution_dictionary=simulation_substitution_dictionary,
+                                                build_subdirectory=current_set_name)
 
     # Abaqus Solve
     solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
