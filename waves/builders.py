@@ -130,7 +130,7 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     return abaqus_solver_builder
 
 
-def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment()):
+def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment(), build_subdirectory='.'):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
     Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
@@ -163,13 +163,17 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     :return: SCons NodeList of Copy and Substfile objects
     :rtype: SCons.Node.NodeList
     """
+    # TODO: clean up the search for a build subdirectory prepended to the targets. Need to handle the case where there
+    # is a build subdirectory, but the target list is currently empty. How do we find out the build subdirectory
+    # relative path with an empty target list?
+    build_subdirectory = pathlib.Path(build_subdirectory)
     target_list = SCons.Node.NodeList()
     source_list = [pathlib.Path(source_file) for source_file in source_list]
     for source_file in source_list:
         target_list += env.Command(
-                target=source_file.name,
+                target=f"{build_subdirectory}/{source_file.name}",
                 source=str(source_file),
                 action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}'))
         if source_file.suffix == '.in':
-            target_list += env.Substfile(source_file.name, SUBST_DICT=substitution_dictionary)
+            target_list += env.Substfile(f"{build_subdirectory}/{source_file.name}", SUBST_DICT=substitution_dictionary)
     return target_list
