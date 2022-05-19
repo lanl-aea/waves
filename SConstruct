@@ -15,6 +15,7 @@ project_variables = {
     'eabm_dir': 'eabm',
     'abaqus_dir': 'source/abaqus',
     'tutorial_01_dir': 'tutorial_01_geometry'
+    'abaqus_dir': 'abaqus'
 }
 
 # =========================================================================================== COMMAND LINE VARIABLES ===
