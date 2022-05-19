@@ -13,7 +13,8 @@ project_variables = {
     'project_dir': Dir('.').abspath,
     'abaqus_wrapper': str(_abaqus_wrapper),
     'eabm_dir': 'eabm',
-    'abaqus_dir': 'source/abaqus'
+    'abaqus_dir': 'source/abaqus',
+    'tutorial_01_dir': 'tutorial_01_geometry'
 }
 
 # =========================================================================================== COMMAND LINE VARIABLES ===
