@@ -32,7 +32,7 @@ with open(parameter_study) as input_file:
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file_template=parameter_set_file_template)
-parameter_set_files = parameter_generator.generate
+parameter_set_files = parameter_generator.generate()
 parameter_generator.write()
 
 # Parameterized targets must live inside current simulation_variables for loop
