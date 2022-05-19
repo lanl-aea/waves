@@ -4,6 +4,7 @@ import sys
 import pathlib
 
 import yaml
+import SCons.Node
 
 import waves
 
@@ -35,6 +36,13 @@ parameter_set_files = parameter_generator.generate()
 parameter_generator.write()
 
 # Parameterized targets must live inside current simulation_variables for loop
+# TODO: Don't dig around in SCons guts to instantiate the target list(s)
+geometry = SCons.Node.NodeList()
+partition = SCons.Node.NodeList()
+mesh = SCons.Node.NodeList()
+solverprep = SCons.Node.NodeList()
+datacheck = SCons.Node.NodeList()
+solve = SCons.Node.NodeList()
 for parameter_file in parameter_set_files:
     current_set_name = parameter_file.with_suffix('').name
     with open(parameter_file) as current_parameter_file:
@@ -44,7 +52,7 @@ for parameter_file in parameter_set_files:
     # Geometry
     journal_file = f"{model}_geometry"
     journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
-    geometry = env.AbaqusJournal(
+    geometry += env.AbaqusJournal(
         target=[f"{current_set_name}/{journal_file}.cae"],
         source=[f"{abaqus_source_abspath / journal_file}.py"],
         journal_options=journal_options)
@@ -52,7 +60,7 @@ for parameter_file in parameter_set_files:
     # Partition
     journal_file = f"{model}_partition"
     journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
-    partition = env.AbaqusJournal(
+    partition += env.AbaqusJournal(
         target=[f"{current_set_name}/{journal_file}.cae"],
         source=[f"{abaqus_source_abspath / journal_file}.py", f"{current_set_name}/{model}_geometry.cae"],
         journal_options=journal_options)
@@ -60,7 +68,7 @@ for parameter_file in parameter_set_files:
     # Mesh
     journal_file = f"{model}_mesh"
     journal_options = f"--global-seed {simulation_variables['global_seed']}"
-    mesh = env.AbaqusJournal(
+    mesh += env.AbaqusJournal(
         target=[f"{current_set_name}/{journal_file}.cae", f"{current_set_name}/{journal_file}.inp"],
         source=[f"{abaqus_source_abspath / journal_file}.py", f"{current_set_name}/{model}_partition.cae"],
         journal_options=journal_options)
@@ -77,7 +85,7 @@ for parameter_file in parameter_set_files:
         f"#/{abaqus_source_dir}/history_output.inp"
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-    solverprep = waves.builders.copy_substitute(abaqus_source_list,
+    solverprep += waves.builders.copy_substitute(abaqus_source_list,
                                                 substitution_dictionary=simulation_substitution_dictionary,
                                                 build_subdirectory=current_set_name)
 
@@ -88,14 +96,14 @@ for parameter_file in parameter_set_files:
     datacheck_name = f"{job_name}_DATACHECK"
     datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
     abaqus_options='-double both'
-    datacheck = env.AbaqusSolver(
+    datacheck += env.AbaqusSolver(
         target=[f"{current_set_name}/{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
         source=solve_source_list,
         job_name=datacheck_name,
         abaqus_options=f'{abaqus_options} -datacheck')
 
     solve_source_list.append([f"{current_set_name}/{datacheck_name}.odb"])
-    solve = env.AbaqusSolver(
+    solve += env.AbaqusSolver(
         target=[f"{current_set_name}/{job_name}.sta"],
         source=solve_source_list,
         job_name=job_name,
