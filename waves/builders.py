@@ -25,8 +25,11 @@ def _abaqus_journal_emitter(target, source, env):
     """
     journal_file = pathlib.Path(source[0].path).name
     journal_file = pathlib.Path(journal_file)
-    target.append(f"{str(journal_file.with_suffix('.jnl'))}")
-    target.append(f"{str(journal_file.with_suffix('.log'))}")
+    build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+    if build_subdirectory == '.':
+        build_subdirectory = ''
+    target.append(f"{build_subdirectory}/{str(journal_file.with_suffix('.jnl'))}")
+    target.append(f"{build_subdirectory}/{str(journal_file.with_suffix('.log'))}")
     return target, source
 
 
