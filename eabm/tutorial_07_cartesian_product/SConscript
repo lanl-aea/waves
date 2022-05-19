@@ -16,15 +16,11 @@ abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
 python_source_abspath = project_dir / env['python_source_dir']
 
-sys.path.insert(0, str(python_source_abspath))
-import single_element_compression_nominal
-
 # Simulation variables
-parameter_study = pathlib.Path(Dir('.').srcdir.abspath) / 'parameter_study_input.yaml'
+current_build_directory = pathlib.Path(Dir('.').srcdir.abspath)
+parameter_study = current_build_directory / 'parameter_study_input.yaml'
 parameter_set_file_template = "parameter_set@number.yaml"
 model = "single_element"
-simulation_variables = single_element_compression_nominal.simulation_variables
-simulation_substitution_dictionary = single_element_compression_nominal.simulation_substitution_dictionary
 
 # Parameter Study with Cartesian Product
 with open(parameter_study) as input_file:
@@ -37,10 +33,10 @@ parameter_generator.write()
 
 # Parameterized targets must live inside current simulation_variables for loop
 for parameter_file in parameter_set_files:
-    parameter_build_file = pathlib.Path(Dir('.').abspath) / parameter_file
     current_set_name = parameter_file.with_suffix('').name
-    with open(parameter_build_file) as current_parameter_file:
+    with open(parameter_file) as current_parameter_file:
         simulation_variables = yaml.safe_load(current_parameter_file)
+    simulation_substitution_dictionary = {f"@{key}@": value for key, value in simulation_variables.items()}
 
     # Geometry
     journal_file = f"{model}_geometry"
