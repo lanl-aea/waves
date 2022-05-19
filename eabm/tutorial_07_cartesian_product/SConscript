@@ -61,7 +61,7 @@ for parameter_file in parameter_set_files:
     journal_file = f"{model}_mesh"
     journal_options = f"--global-seed {simulation_variables['global_seed']}"
     mesh = env.AbaqusJournal(
-        target=[f"{current_set_name}/{journal_file}.cae", f"{journal_file}.inp"],
+        target=[f"{current_set_name}/{journal_file}.cae", f"{current_set_name}/{journal_file}.inp"],
         source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
         journal_options=journal_options)
 
