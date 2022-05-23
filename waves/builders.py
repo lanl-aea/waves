@@ -30,9 +30,6 @@ def _abaqus_journal_emitter(target, source, env):
     """
     journal_file = pathlib.Path(source[0].path).name
     journal_file = pathlib.Path(journal_file)
-    # TODO: clean up the search for a build subdirectory prepended to the targets. Need to handle the case where there
-    # is a build subdirectory, but the target list is currently empty. How do we find out the build subdirectory
-    # relative path with an empty target list?
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
@@ -88,9 +85,6 @@ def _abaqus_solver_emitter(target, source, env):
     builder_suffixes = ['log']
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
-    # TODO: clean up the search for a build subdirectory prepended to the targets. Need to handle the case where there
-    # is a build subdirectory, but the target list is currently empty. How do we find out the build subdirectory
-    # relative path with an empty target list?
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
@@ -182,9 +176,6 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     :return: SCons NodeList of Copy and Substfile objects
     :rtype: SCons.Node.NodeList
     """
-    # TODO: clean up the search for a build subdirectory prepended to the targets. Need to handle the case where there
-    # is a build subdirectory, but the target list is currently empty. How do we find out the build subdirectory
-    # relative path with an empty target list?
     build_subdirectory = pathlib.Path(build_subdirectory)
     target_list = SCons.Node.NodeList()
     source_list = [pathlib.Path(source_file) for source_file in source_list]
@@ -194,5 +185,6 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
                 source=str(source_file),
                 action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}'))
         if source_file.suffix == '.in':
-            target_list += env.Substfile(f"{build_subdirectory}/{source_file.name}", SUBST_DICT=substitution_dictionary)
+            substfile_target = build_subdirectory / source_file.name
+            target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
     return target_list
