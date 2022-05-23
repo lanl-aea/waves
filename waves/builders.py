@@ -31,9 +31,11 @@ def _abaqus_journal_emitter(target, source, env):
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
-        build_subdirectory = '.'
-    target.append(f"{build_subdirectory}/{str(journal_file.with_suffix('.jnl'))}")
-    target.append(f"{build_subdirectory}/{str(journal_file.with_suffix('.log'))}")
+        build_subdirectory = pathlib.Path('.')
+    suffixes = ['.jnl', '.log']
+    for suffix in suffixes:
+        emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
+        target.append(str(emitter_target))
     return target, source
 
 
@@ -82,9 +84,10 @@ def _abaqus_solver_emitter(target, source, env):
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
-        build_subdirectory = '.'
+        build_subdirectory = pathlib.Path('.')
     for suffix in suffixes:
-        target.append(f"{build_subdirectory}/{env['job_name']}.{suffix}")
+        emitter_target = build_subdirectory / f"{env['job_name']}.{suffix}"
+        target.append(str(emitter_target))
     return target, source
 
 

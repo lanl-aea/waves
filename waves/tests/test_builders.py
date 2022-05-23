@@ -14,10 +14,10 @@ source_file = fs.File('dummy.py')
 journal_emitter_input = {
     'empty targets': ([],
                       [source_file],
-                      ['./dummy.jnl', './dummy.log']),
+                      ['dummy.jnl', 'dummy.log']),
     'one target': (['dummy.cae'],
                    [source_file],
-                   ['dummy.cae', './dummy.jnl', './dummy.log'])
+                   ['dummy.cae', 'dummy.jnl', 'dummy.log'])
 }
 
 
@@ -44,12 +44,12 @@ solver_emitter_input = {
     'empty targets': ('job',
                       [],
                       [source_file],
-                      ['./job.log', './job.odb', './job.dat', './job.msg', './job.com', './job.prt'],
+                      ['job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
                       does_not_raise()),
     'one targets': ('job',
                     ['job.sta'],
                     [source_file],
-                    ['job.sta', './job.log', './job.odb', './job.dat', './job.msg', './job.com', './job.prt'],
+                    ['job.sta', 'job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
                     does_not_raise()),
     'missing job_name': pytest.param('',
                         [],
