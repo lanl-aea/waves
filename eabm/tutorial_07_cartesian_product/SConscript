@@ -66,7 +66,7 @@ for parameter_file in parameter_set_files:
     partition += env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
-                str(current_set_name / f"{model}_geometry.cae")],
+                f"{current_set_name / model}_geometry.cae"],
         journal_options=journal_options)
 
     # Mesh
@@ -76,7 +76,7 @@ for parameter_file in parameter_set_files:
         target=[f"{current_set_name / journal_file}.cae",
                 f"{current_set_name / journal_file}.inp"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
-                str(current_set_name / f"{model}_partition.cae")],
+                f"{current_set_name / model}_partition.cae"],
         journal_options=journal_options)
 
     # SolverPrep
