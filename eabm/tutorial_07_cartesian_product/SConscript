@@ -32,7 +32,7 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
 # TODO: write parameter set files to the build directory. Can be SCons target builds or the parameter study output
 # directory feature. Probably the latter.
 # https://re-git.lanl.gov/kbrindley/waves/-/issues/79
-# TODO: return a use-able parameter study object directly
+# TODO: return a use-able parameter study object directly to avoid file I/O when there is no target definition
 # https://re-git.lanl.gov/kbrindley/waves/-/issues/70
 parameter_set_files = parameter_generator.generate()
 parameter_generator.write()
@@ -92,11 +92,11 @@ for parameter_file in parameter_set_files:
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     solverprep += waves.builders.copy_substitute(abaqus_source_list,
-                                                substitution_dictionary=simulation_substitution_dictionary,
-                                                build_subdirectory=current_set_name)
+                                                 substitution_dictionary=simulation_substitution_dictionary,
+                                                 build_subdirectory=current_set_name)
 
     # Abaqus Solve
-    solve_source_list = [str(current_set_name / f"{source_file.name.rstrip('.in')}") for source_file in abaqus_source_list]
+    solve_source_list = [f"{current_set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
     solve_source_list.append([f"{current_set_name / journal_file}.inp"])
     job_name = pathlib.Path(solve_source_list[0]).with_suffix('').name
     datacheck_name = f"{job_name}_DATACHECK"
