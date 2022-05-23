@@ -14,7 +14,7 @@ env.Substfile(
 abaqus_wrapper_node = env.Command(
     target='abaqus_wrapper_message.txt',
     source=env['abaqus_wrapper'],
-    action='${SOURCE.abspath} > ${TARGET.dir.abspath}/abaqus_wrapper_message.txt')
+    action='${SOURCE.abspath} > ${TARGET.abspath}')
 
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
