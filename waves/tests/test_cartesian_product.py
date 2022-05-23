@@ -26,4 +26,4 @@ class TestCartesianProduct:
         TestGenerate = CartesianProduct(parameter_schema, None, False, False, False)
         parameter_set_file_paths = TestGenerate.generate()
         assert list(TestGenerate.parameter_study.values()) == expected_text_list
-        assert parameter_set_file_paths == [pathlib.Path(f"parameter_set{num}") for num in range(len(expected_text_list))]
+        assert parameter_set_file_paths == {pathlib.Path(f"parameter_set{num}"): expected_text_list[num] for num in range(len(expected_text_list))}
