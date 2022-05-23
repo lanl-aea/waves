@@ -180,8 +180,9 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     target_list = SCons.Node.NodeList()
     source_list = [pathlib.Path(source_file) for source_file in source_list]
     for source_file in source_list:
+        copy_target = build_subdirectory / source_file.name
         target_list += env.Command(
-                target=f"{build_subdirectory}/{source_file.name}",
+                target=str(copy_target),
                 source=str(source_file),
                 action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}'))
         if source_file.suffix == '.in':
