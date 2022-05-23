@@ -66,8 +66,7 @@ def abaqus_journal(abaqus_program='abaqus'):
     :param str abaqus_program: An absolute path or basename string for the abaqus program.
     """
     abaqus_journal_builder = SCons.Builder.Builder(
-        chdir=1,
-        action=f"{abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1",
+        action=f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1",
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -137,8 +136,7 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
               f"Using WAVES internal path...{abaqus_wrapper_program}")
     conf.Finish()
     abaqus_solver_builder = SCons.Builder.Builder(
-        chdir=1,
-        action=f"{abaqus_wrapper_program} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}",
+        action=f"cd ${{TARGET.dir.abspath}} && {abaqus_wrapper_program} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}",
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
