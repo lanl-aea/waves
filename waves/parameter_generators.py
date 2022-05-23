@@ -108,7 +108,6 @@ class ParameterGenerator(ABC):
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
         target or dependee is out-of-date.
         """
-        # TODO: Don't write meta for STDOUT output stream
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(f'{parameter_study_meta_file}', 'w') as meta_file:
             for parameter_set_file in self.parameter_study.keys():
