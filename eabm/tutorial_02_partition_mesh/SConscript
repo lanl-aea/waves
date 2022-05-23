@@ -13,33 +13,35 @@ abaqus_source_abspath = project_dir / abaqus_source_dir
 # Simulation variables
 model = "single_element"
 
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
-geometry = env.AbaqusJournal(
+workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
-    journal_options=journal_options)
+    journal_options=journal_options))
 
 # Partition
 journal_file = f"{model}_partition"
 journal_options = ""
-partition = env.AbaqusJournal(
+workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
-    journal_options=journal_options)
+    journal_options=journal_options))
 
 # Mesh
 journal_file = f"{model}_mesh"
 journal_options = ""
-mesh = env.AbaqusJournal(
+workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.inp"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
-    journal_options=journal_options)
+    journal_options=journal_options))
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
-workflow = geometry + partition + mesh
 env.Alias(parent_directory, workflow)
 
 if env['conditional_ignore'] and not env['abaqus']:

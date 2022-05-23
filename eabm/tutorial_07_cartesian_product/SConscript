@@ -37,8 +37,6 @@ parameter_set_files = parameter_generator.generate()
 parameter_generator.write()
 
 # Parameterized targets must live inside current simulation_variables for loop
-# TODO: Don't dig around in SCons guts to instantiate the target list(s)
-# https://re-git.lanl.gov/kbrindley/waves/-/issues/89
 workflow = []
 for parameter_file in parameter_set_files:
     current_set_name = pathlib.Path(parameter_file.with_suffix('').name)
