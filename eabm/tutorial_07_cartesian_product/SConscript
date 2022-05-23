@@ -19,7 +19,7 @@ python_source_abspath = project_dir / env['python_source_dir']
 # Simulation variables
 current_build_directory = pathlib.Path(Dir('.').srcdir.abspath)
 parameter_study = current_build_directory / 'parameter_study_input.yaml'
-parameter_set_file_template = "parameter_set@number.yaml"
+parameter_set_file_template = "parameter_set@number"
 model = "single_element"
 
 # Parameter Study with Cartesian Product
@@ -28,20 +28,12 @@ with open(parameter_study) as input_file:
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file_template=parameter_set_file_template)
-# TODO: write parameter set files to the build directory. Can be SCons target builds or the parameter study output
-# directory feature. Probably the latter.
-# https://re-git.lanl.gov/kbrindley/waves/-/issues/79
-# TODO: return a use-able parameter study object directly to avoid file I/O when there is no target definition
-# https://re-git.lanl.gov/kbrindley/waves/-/issues/70
-parameter_set_files = parameter_generator.generate()
-parameter_generator.write()
+parameter_study = parameter_generator.generate()
 
 # Parameterized targets must live inside current simulation_variables for loop
 workflow = []
-for parameter_file in parameter_set_files:
-    current_set_name = pathlib.Path(parameter_file.with_suffix('').name)
-    with open(parameter_file) as current_parameter_file:
-        simulation_variables = yaml.safe_load(current_parameter_file)
+for current_set_name, parameter_text in parameter_study.items():
+    simulation_variables = yaml.safe_load(parameter_text)
     simulation_substitution_dictionary = {f"@{key}@": value for key, value in simulation_variables.items()}
 
     # Geometry
