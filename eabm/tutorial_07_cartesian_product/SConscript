@@ -37,6 +37,7 @@ parameter_generator.write()
 
 # Parameterized targets must live inside current simulation_variables for loop
 # TODO: Don't dig around in SCons guts to instantiate the target list(s)
+# https://re-git.lanl.gov/kbrindley/waves/-/issues/89
 geometry = SCons.Node.NodeList()
 partition = SCons.Node.NodeList()
 mesh = SCons.Node.NodeList()
