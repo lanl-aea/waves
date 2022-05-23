@@ -88,7 +88,8 @@ eabm_simulation_directories = [
     'tutorial_03_solverprep',
     'tutorial_04_simulation',
     'tutorial_05_parameter_substitution',
-    'tutorial_06_include_files'
+    'tutorial_06_include_files',
+    'tutorial_07_cartesian_product'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir

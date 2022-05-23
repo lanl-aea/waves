@@ -16,6 +16,11 @@ def _abaqus_journal_emitter(target, source, env):
     Appends ``source[0]``.jnl and ``source[0]``.log to the ``target`` list. The abaqus_journal Builder requires that the
     journal file to execute is the first source in the list.
 
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the expected log file as a target, e.g. ``source[0].log``.
+
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
@@ -25,8 +30,14 @@ def _abaqus_journal_emitter(target, source, env):
     """
     journal_file = pathlib.Path(source[0].path).name
     journal_file = pathlib.Path(journal_file)
-    target.append(f"{str(journal_file.with_suffix('.jnl'))}")
-    target.append(f"{str(journal_file.with_suffix('.log'))}")
+    try:
+        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path('.')
+    suffixes = ['.jnl', '.log']
+    for suffix in suffixes:
+        emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
+        target.append(str(emitter_target))
     return target, source
 
 
@@ -63,14 +74,24 @@ def abaqus_journal(abaqus_program='abaqus'):
 
 def _abaqus_solver_emitter(target, source, env):
     """Appends the abaqus_solver builder target list with the builder managed targets
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the output database as a target, e.g. ``job_name.odb``
     """
     if not 'job_name' in env or not env['job_name']:
         raise RuntimeError('Builder is missing required keyword argument "job_name".')
     builder_suffixes = ['log']
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
+    try:
+        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path('.')
     for suffix in suffixes:
-        target.append(f"{env['job_name']}.{suffix}")
+        emitter_target = build_subdirectory / f"{env['job_name']}.{suffix}"
+        target.append(str(emitter_target))
     return target, source
 
 
@@ -122,7 +143,7 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     return abaqus_solver_builder
 
 
-def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment()):
+def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment(), build_subdirectory='.'):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
     Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
@@ -155,13 +176,16 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     :return: SCons NodeList of Copy and Substfile objects
     :rtype: SCons.Node.NodeList
     """
+    build_subdirectory = pathlib.Path(build_subdirectory)
     target_list = SCons.Node.NodeList()
     source_list = [pathlib.Path(source_file) for source_file in source_list]
     for source_file in source_list:
+        copy_target = build_subdirectory / source_file.name
         target_list += env.Command(
-                target=source_file.name,
+                target=str(copy_target),
                 source=str(source_file),
                 action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}'))
         if source_file.suffix == '.in':
-            target_list += env.Substfile(source_file.name, SUBST_DICT=substitution_dictionary)
+            substfile_target = build_subdirectory / source_file.name
+            target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
     return target_list
