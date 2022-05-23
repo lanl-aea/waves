@@ -21,6 +21,11 @@ Internal Changes
 - Make the Abaqus and documentation builders thread safe for SCons parallel threading feature, ``--jobs`` option
   (:issue:`62`, :merge:`66`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Use the parameter study object directly to avoid unnecessary EABM parameter study file I/O (:issue:`91`, :merge:`67`).
+  By `Kyle Brindley`_.
+
 ******************
 0.1.6 (2022-05-17)
 ******************
