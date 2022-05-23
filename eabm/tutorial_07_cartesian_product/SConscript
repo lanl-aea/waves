@@ -32,6 +32,8 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
 # TODO: write parameter set files to the build directory. Can be SCons target builds or the parameter study output
 # directory feature. Probably the latter.
 # https://re-git.lanl.gov/kbrindley/waves/-/issues/79
+# TODO: return a use-able parameter study object directly
+# https://re-git.lanl.gov/kbrindley/waves/-/issues/70
 parameter_set_files = parameter_generator.generate()
 parameter_generator.write()
 
