@@ -14,6 +14,11 @@ New Features
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation cartesian product parameterized simulation
   files (:issue:`61`, :merge:`64`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Collect target list with a Python built-in list for consistency across SConscript solutions with the paramerization
+  solution (:issue:`89`, :merge:`65`). By `Kyle Brindley`_.
+
 ******************
 0.1.6 (2022-05-17)
 ******************
