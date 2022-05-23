@@ -53,7 +53,7 @@ for parameter_file in parameter_set_files:
     journal_file = f"{model}_geometry"
     journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
     geometry += env.AbaqusJournal(
-        target=[str(current_set_name / f"{journal_file}.cae")],
+        target=[f"{current_set_name / journal_file}.cae"],
         source=[f"{abaqus_source_abspath / journal_file}.py"],
         journal_options=journal_options)
 
@@ -61,7 +61,7 @@ for parameter_file in parameter_set_files:
     journal_file = f"{model}_partition"
     journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
     partition += env.AbaqusJournal(
-        target=[str(current_set_name / f"{journal_file}.cae")],
+        target=[f"{current_set_name / journal_file}.cae"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 str(current_set_name / f"{model}_geometry.cae")],
         journal_options=journal_options)
@@ -70,8 +70,8 @@ for parameter_file in parameter_set_files:
     journal_file = f"{model}_mesh"
     journal_options = f"--global-seed {simulation_variables['global_seed']}"
     mesh += env.AbaqusJournal(
-        target=[str(current_set_name / f"{journal_file}.cae"),
-                str(current_set_name / f"{journal_file}.inp")],
+        target=[f"{current_set_name / journal_file}.cae",
+                f"{current_set_name / journal_file}.inp"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 str(current_set_name / f"{model}_partition.cae")],
         journal_options=journal_options)
@@ -94,20 +94,20 @@ for parameter_file in parameter_set_files:
 
     # Abaqus Solve
     solve_source_list = [str(current_set_name / f"{source_file.name.rstrip('.in')}") for source_file in abaqus_source_list]
-    solve_source_list.append([str(current_set_name / f"{journal_file}.inp")])
+    solve_source_list.append([f"{current_set_name / journal_file}.inp"])
     job_name = pathlib.Path(solve_source_list[0]).with_suffix('').name
     datacheck_name = f"{job_name}_DATACHECK"
     datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
     abaqus_options='-double both'
     datacheck += env.AbaqusSolver(
-        target=[str(current_set_name / f"{datacheck_name}.{suffix}") for suffix in datacheck_suffixes],
+        target=[f"{current_set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
         source=solve_source_list,
         job_name=datacheck_name,
         abaqus_options=f'{abaqus_options} -datacheck')
 
-    solve_source_list.append([str(current_set_name / f"{datacheck_name}.odb")])
+    solve_source_list.append([f"{current_set_name / datacheck_name}.odb"])
     solve += env.AbaqusSolver(
-        target=[str(current_set_name / f"{job_name}.sta")],
+        target=[f"{current_set_name / job_name}.sta"],
         source=solve_source_list,
         job_name=job_name,
         abaqus_options=abaqus_options)
