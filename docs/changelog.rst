@@ -9,6 +9,11 @@ Changelog
 0.1.7 (unreleased)
 ******************
 
+New Features
+============
+- Add the SCons target definition equivalent to the ECMF and CMake-simulation cartesian product parameterized simulation
+  files (:issue:`61`, :merge:`64`). By `Kyle Brindley`_.
+
 ******************
 0.1.6 (2022-05-17)
 ******************
