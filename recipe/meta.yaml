@@ -58,4 +58,4 @@ test:
     - waves
   commands:
     - scons . --keep-going conditional_ignore=False ignore_documentation=True
-    - cd eabm && scons . --keep-going conditional_ignore=False ignore_documentation=True
+    - cd eabm && scons . --keep-going conditional_ignore=False ignore_documentation=True --jobs=4
