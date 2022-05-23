@@ -16,6 +16,11 @@ def _abaqus_journal_emitter(target, source, env):
     Appends ``source[0]``.jnl and ``source[0]``.log to the ``target`` list. The abaqus_journal Builder requires that the
     journal file to execute is the first source in the list.
 
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the expected log file as a target, e.g. ``source[0].log``.
+
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
@@ -72,6 +77,11 @@ def abaqus_journal(abaqus_program='abaqus'):
 
 def _abaqus_solver_emitter(target, source, env):
     """Appends the abaqus_solver builder target list with the builder managed targets
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the output database as a target, e.g. ``job_name.odb``
     """
     if not 'job_name' in env or not env['job_name']:
         raise RuntimeError('Builder is missing required keyword argument "job_name".')
