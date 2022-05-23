@@ -18,6 +18,8 @@ Internal Changes
 ================
 - Collect target list with a Python built-in list for consistency across SConscript solutions with the paramerization
   solution (:issue:`89`, :merge:`65`). By `Kyle Brindley`_.
+- Make the Abaqus and documentation builders thread safe for SCons parallel threading feature, ``--jobs`` option
+  (:issue:`62`, :merge:`66`). By `Kyle Brindley`_.
 
 ******************
 0.1.6 (2022-05-17)

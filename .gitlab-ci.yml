@@ -106,7 +106,7 @@ fast-test:
     GIT_STRATEGY: clone
   script:
     - scons . --keep-going conditional_ignore=False
-    - cd eabm && scons . --keep-going conditional_ignore=False
+    - cd eabm && scons . --keep-going conditional_ignore=False --jobs=4
   tags:
     - sstelmo-shell-aea
   only:
