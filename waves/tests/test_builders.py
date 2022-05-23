@@ -17,7 +17,10 @@ journal_emitter_input = {
                       ['dummy.jnl', 'dummy.log']),
     'one target': (['dummy.cae'],
                    [source_file],
-                   ['dummy.cae', 'dummy.jnl', 'dummy.log'])
+                   ['dummy.cae', 'dummy.jnl', 'dummy.log']),
+    'subdirectory': (['set1/dummy.cae'],
+                    [source_file],
+                    ['set1/dummy.cae', 'set1/dummy.jnl', 'set1/dummy.log'])
 }
 
 
@@ -50,6 +53,12 @@ solver_emitter_input = {
                     ['job.sta'],
                     [source_file],
                     ['job.sta', 'job.log', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
+                    does_not_raise()),
+    'subdirectory': ('job',
+                    ['set1/job.sta'],
+                    [source_file],
+                    ['set1/job.sta', 'set1/job.log', 'set1/job.odb', 'set1/job.dat', 'set1/job.msg', 'set1/job.com',
+                     'set1/job.prt'],
                     does_not_raise()),
     'missing job_name': pytest.param('',
                         [],
