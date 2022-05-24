@@ -8,4 +8,6 @@ Developer Manual
 
 .. include:: contribution.txt
 
+.. include:: build.txt
+
 .. include:: documentation.txt
