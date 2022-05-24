@@ -44,7 +44,7 @@ if { [ string match "sn-rfe?.lanl.gov" $hostname ] ||
 }
 set anaconda_path "$software_prefix/anaconda/$anaconda_version-python-$python_version"
 set anaconda_bin "$anaconda_path/bin"
-set environment_path "$projects/python/$environment"
+set environment_path "$projects/aea_compute/$environment"
 set environment_bin "$environment_path/bin"
 set environment_man "$environment_path/share/man"
 set environment_lib "$environment_path/lib64"
@@ -70,7 +70,7 @@ prepend-path LD_LIBRARY_PATH "$environment_lib"
 set conda_variables "CONDA_SHLVL CONDA_EXE _CE_CONDA CONDA_PYTHON_EXE"
 set conda_functions "__add_sys_prefix_to_path __conda_hashr __conda_activate __conda_reactivate conda"
 if { [module-info mode load] || [module-info mode switch2] } {
-    puts stdout "source $anaconda_path/etc/profile.d/conda.sh; conda activate $projects/python/$environment;"
+    puts stdout "source $anaconda_path/etc/profile.d/conda.sh; conda activate $projects/aea_compute/$environment;"
 } elseif { [module-info mode remove] && ![module-info mode switch3] } {
     # TODO: use "getenv" when module v4.0 is available
     # https://modules.readthedocs.io/en/latest/modulefile.html#mfcmd-getenv

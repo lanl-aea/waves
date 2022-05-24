@@ -91,7 +91,7 @@ A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA 
 
    .. code-block::
 
-      $ module use /projects/python/modulefiles
+      $ module use /projects/aea_compute/modulefiles
 
 2. Load the project specific modulefile
 
