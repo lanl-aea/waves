@@ -3,11 +3,14 @@
 .. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
 .. _ECMF: https://aea.re-pages.lanl.gov/python-projects/ecmf/main/
 .. _Conda: https://docs.conda.io/en/latest/
+.. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
+.. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 .. _CMake: https://cmake.org/cmake/help/v3.14/
 .. _ctest: https://cmake.org/cmake/help/latest/manual/ctest.1.html
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
+.. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
 .. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
 .. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
@@ -54,7 +57,8 @@ Activate Environment
 Local environments
 ==================
 
-`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager.
+`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
+`Conda environment management`_ documentation for more details about using `Conda`_.
 
 1. Create the environment if it doesn't exist
 
@@ -62,18 +66,19 @@ Local environments
 
       $ pwd
       path/to/local/git/clone/waves
-      $ conda create --name waves-env --file environment.yml
+      $ conda create --name waves-eabm-env --file environment.yml
 
 2. Activate the environment
 
    .. code-block::
 
-      $ conda activate waves-env
+      $ conda activate waves-eabm-env
 
 AEA server environments
 =======================
 
-A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA servers.
+A shared `AEA Compute environment`_ is maintained on AEA servers. See the `AEA Compute environment`_ documentation for
+the official use and activation instructions. A minimal activation description is included below for convenience.
 
 1. Add the AEA modulefiles directory
 
@@ -81,11 +86,11 @@ A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA 
 
       $ module use /projects/aea_compute/modulefiles
 
-2. Load the project specific modulefile
+2. Load the shared environment modulefile
 
    .. code-block::
 
-      $ module load waves-env
+      $ module load aea-release
 
 .. env-end-do-not-remove
 
@@ -94,6 +99,31 @@ Build Simulations
 *****************
 
 .. build-start-do-not-remove
+
+This project uses the `SCons`_ build system. This section will discuss some
+common build operations. For a fulle list of `SCons`_ command line options and
+target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
+installed with `Scons`_ in the environment and can be opened as ``man scons``
+in the `AEA Compute environment`_. In local environments, the man pages may not
+be in the ``MANPATH``. You can find the man pages file and make them available
+with something similar to any of the following.
+
+.. code-block::
+
+   # Find the scons manpage file
+   $ find /path/to/local/environment -name scons.1
+   /path/to/local/environment/bin/scons.1
+
+   # Open manpage directly
+   $ man /path/to/local/environment/bin/scons.1
+
+   # Link SCons manpage to expected location
+   $ ln -s /path/to/local/environment/man/man1/scons.1 /path/to/local/environment/bin/scons.1
+   $ man scons
+
+   # Add path to MANPATH
+   $ export MANPATH=$MANPATH:/path/to/local/environment/bin
+   $ man scons
 
 3. View project specific command line options
 

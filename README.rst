@@ -3,6 +3,8 @@
 .. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
 .. _ECMF: https://aea.re-pages.lanl.gov/python-projects/ecmf/main/
 .. _Conda: https://docs.conda.io/en/latest/
+.. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
+.. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 .. _CMake: https://cmake.org/cmake/help/v3.14/
 .. _ctest: https://cmake.org/cmake/help/latest/manual/ctest.1.html
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
@@ -25,10 +27,6 @@ Description
 ***********
 
 .. project-description-start-do-not-remove
-
-Testing `SCons`_ as a build system for simulations. Evaluating `SCons`_ features and behavior against `CMake`_ and `ECMF`_
-features and behavior. The related `cmake-simulation`_ project established the feasibility of using a build system like
-`CMake`_ in place of the `ECMF`_.
 
 A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
 `WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
@@ -66,7 +64,8 @@ Activate Environment
 Local environments
 ==================
 
-`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager.
+`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
+`Conda environment management`_ documentation for more details about using `Conda`_.
 
 1. Create the environment if it doesn't exist
 
@@ -106,6 +105,31 @@ Build Simulations
 *****************
 
 .. build-start-do-not-remove
+
+This project uses the `SCons`_ build system. This section will discuss some
+common build operations. For a fulle list of `SCons`_ command line options and
+target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
+installed with `Scons`_ in the environment and can be opened as ``man scons``
+in the `AEA Compute environment`_. In local environments, the man pages may not
+be in the ``MANPATH``. You can find the man pages file and make them available
+with something similar to any of the following.
+
+.. code-block::
+
+   # Find the scons manpage file
+   $ find /path/to/local/environment -name scons.1
+   /path/to/local/environment/bin/scons.1
+
+   # Open manpage directly
+   $ man /path/to/local/environment/bin/scons.1
+
+   # Link SCons manpage to expected location
+   $ ln -s /path/to/local/environment/man/man1/scons.1 /path/to/local/environment/bin/scons.1
+   $ man scons
+
+   # Add path to MANPATH
+   $ export MANPATH=$MANPATH:/path/to/local/environment/bin
+   $ man scons
 
 3. View project specific command line options
 
