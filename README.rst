@@ -10,6 +10,7 @@
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
+.. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
 .. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
 .. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
