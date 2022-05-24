@@ -106,13 +106,12 @@ Build Simulations
 
 .. build-start-do-not-remove
 
-This project uses the `SCons`_ build system. This section will discuss some
-common build operations. For a fulle list of `SCons`_ command line options and
-target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
-installed with `Scons`_ in the environment and can be opened as ``man scons``
-in the `AEA Compute environment`_. In local environments, the man pages may not
-be in the ``MANPATH``. You can find the man pages file and make them available
-with something similar to any of the following.
+This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
+`SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
+installed with `Scons`_ in the environment and can be opened from the command line as ``man scons`` in the `AEA Compute
+environment`_. In local environments, the man pages may not be in the ``MANPATH``. You can find the man pages file and
+make them available with something similar to any of the following, in increasing order of required background
+knowledge.
 
 .. code-block::
 
@@ -123,12 +122,9 @@ with something similar to any of the following.
    # Open manpage directly
    $ man /path/to/local/environment/bin/scons.1
 
-   # Link SCons manpage to expected location
-   $ ln -s /path/to/local/environment/man/man1/scons.1 /path/to/local/environment/bin/scons.1
-   $ man scons
-
-   # Add path to MANPATH
-   $ export MANPATH=$MANPATH:/path/to/local/environment/bin
+   # Link SCons manpage to expected path and update MANPATH
+   $ ln -s /path/to/local/environment/bin/scons.1 /path/to/local/environment/man/man1/scons.1
+   $ export MANPATH=$MANPATH:/path/to/local/environment/man
    $ man scons
 
 3. View project specific command line options
