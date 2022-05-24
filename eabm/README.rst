@@ -100,12 +100,12 @@ Build Simulations
 
 .. build-start-do-not-remove
 
-This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
-`SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
-installed with `Scons`_ in the environment and can be opened from the command line as ``man scons`` in the `AEA Compute
-environment`_. In local environments, the man pages may not be in the ``MANPATH``. You can find the man pages file and
-make them available with something similar to any of the following, in increasing order of required background
-knowledge.
+This project uses the `SCons`_ build system. This section will discuss some common build operations. An abbreviated
+options description can be displayed with ``scons -H``. For a full list of `SCons`_ command line options and target
+build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also installed with `Scons`_ in the environment and
+can be opened from the command line as ``man scons`` in the `AEA Compute environment`_. In local environments, the
+manpage may not be in the ``man`` program's search path, ``MANPATH``. You can find the manpage file and make them
+available with something similar to any of the following, in increasing order of required background knowledge.
 
 .. code-block::
 
@@ -138,8 +138,6 @@ configuration, e.g. ``tutorial_01_geometry``.
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons -h
       ...
 

@@ -109,7 +109,7 @@ Build Simulations
 This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
 `SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
 installed with `Scons`_ in the environment and can be opened from the command line as ``man scons`` in the `AEA Compute
-environment`_. In local environments, the man pages may not be in the ``MANPATH``. You can find the man pages file and
+environment`_. In local environments, the manpage may not be in the ``MANPATH``. You can find the manpage file and
 make them available with something similar to any of the following, in increasing order of required background
 knowledge.
 
@@ -126,6 +126,12 @@ knowledge.
    $ ln -s /path/to/local/environment/bin/scons.1 /path/to/local/environment/man/man1/scons.1
    $ export MANPATH=$MANPATH:/path/to/local/environment/man
    $ man scons
+
+This project contains two, separate `SCons`_ project definitions, where the ``SConstruct`` file name indicates an
+`SCons`_ project by convention. The WAVES package and documentation are defined in the ``waves/SConstruct`` file. The
+WAVES-EABM stub and regression tests are defined in a separate ``waves/eabm/Sconstruct`` file. The following build
+commands apply to each, but must be run from their respective project definition parent directories, ``waves`` and
+``waves/eabm``. The available targets and aliases differ accordingly.
 
 3. View project specific command line options
 
@@ -181,11 +187,12 @@ Testing
 
 .. test-start-do-not-remove
 
-Unlike software projects, the primary model/simulation project tests are the successful completion of some subset of the
-simulation targets. If the selected simulations run successfully, then the target passes. To facilitate Gitlab-CI
-regression testing, the primary model/simluation targets have also been added as `SCons`_ tests. Secondary project tests
-will use `SCons`_ for unit and integration testing project specific scripts, such as journal files and processing
-scripts.
+This project uses the `SCons`_ build system. This section will discuss some common build operations. An abbreviated
+options description can be displayed with ``scons -H``. For a full list of `SCons`_ command line options and target
+build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also installed with `Scons`_ in the environment and
+can be opened from the command line as ``man scons`` in the `AEA Compute environment`_. In local environments, the
+manpage may not be in the ``man`` program's search path, ``MANPATH``. You can find the manpage file and make them
+available with something similar to any of the following, in increasing order of required background knowledge.
 
 5. Build the required target(s). Test targets may not be part of the default target ``all``. If so, each target will
    need to be listed explicitly
