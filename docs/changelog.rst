@@ -14,6 +14,11 @@ New Features
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation cartesian product parameterized simulation
   files (:issue:`61`, :merge:`64`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Update the build discussion to include references to the SCons complete CLI options. Add missing portions of the WAVES
+  development operations documentation (:issue:`49`, :merge:`69`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Collect target list with a Python built-in list for consistency across SConscript solutions with the paramerization
