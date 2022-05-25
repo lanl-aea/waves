@@ -183,8 +183,6 @@ processing scripts.
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves
       $ scons <target_1_name> <target-2_name>
 
 6. Run *all* simulation and test targets. Try to run all targets even if some fail.

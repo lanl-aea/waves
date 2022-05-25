@@ -145,14 +145,6 @@ commands apply to each, but must be run from their respective project definition
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/
-      $ scons -h
-      ...
-
-      $ cd eabm
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons -h
       ...
 
@@ -160,25 +152,25 @@ commands apply to each, but must be run from their respective project definition
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons
 
 6. Build a specific target
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons <target name>
 
 7. Remove the default targets' artifacts
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons --clean
+
+7. Remove *all* targets' artifacts
+
+   .. code-block::
+
+      $ scons . --clean
 
 .. build-end-do-not-remove
 
@@ -195,22 +187,18 @@ can be opened from the command line as ``man scons`` in the `AEA Compute environ
 manpage may not be in the ``man`` program's search path, ``MANPATH``. You can find the manpage file and make them
 available with something similar to any of the following, in increasing order of required background knowledge.
 
-5. Build the required target(s). Test targets may not be part of the default target ``all``. If so, each target will
-   need to be listed explicitly
+5. Build the required target(s). Test targets may not be part of the default target list. If so, each target will
+   need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons <target_1_name> <target-2_name>
 
-6. Run all tests
+6. Run *all* simulation and test targets. Try to run all targets even if some fail.
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
-      WIP
+      scons . --keep-going
 
 A full list of test names can be generated with the following command.
 
