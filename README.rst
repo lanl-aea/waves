@@ -3,11 +3,14 @@
 .. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
 .. _ECMF: https://aea.re-pages.lanl.gov/python-projects/ecmf/main/
 .. _Conda: https://docs.conda.io/en/latest/
+.. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
+.. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 .. _CMake: https://cmake.org/cmake/help/v3.14/
 .. _ctest: https://cmake.org/cmake/help/latest/manual/ctest.1.html
 .. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
+.. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
 .. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
 .. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
@@ -25,10 +28,6 @@ Description
 ***********
 
 .. project-description-start-do-not-remove
-
-Testing `SCons`_ as a build system for simulations. Evaluating `SCons`_ features and behavior against `CMake`_ and `ECMF`_
-features and behavior. The related `cmake-simulation`_ project established the feasibility of using a build system like
-`CMake`_ in place of the `ECMF`_.
 
 A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
 `WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
@@ -66,7 +65,8 @@ Activate Environment
 Local environments
 ==================
 
-`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager.
+`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
+`Conda environment management`_ documentation for more details about using `Conda`_.
 
 1. Create the environment if it doesn't exist
 
@@ -91,7 +91,7 @@ A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA 
 
    .. code-block::
 
-      $ module use /projects/python/modulefiles
+      $ module use /projects/aea_compute/modulefiles
 
 2. Load the project specific modulefile
 
@@ -107,6 +107,33 @@ Build Simulations
 
 .. build-start-do-not-remove
 
+This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
+`SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
+installed with `Scons`_ in the environment and can be opened from the command line as ``man scons`` in the `AEA Compute
+environment`_. In local environments, the manpage may not be in the ``MANPATH``. You can find the manpage file and
+make them available with something similar to any of the following, in increasing order of required background
+knowledge.
+
+.. code-block::
+
+   # Find the scons manpage file
+   $ find /path/to/local/environment -name scons.1
+   /path/to/local/environment/bin/scons.1
+
+   # Open manpage directly
+   $ man /path/to/local/environment/bin/scons.1
+
+   # Link SCons manpage to expected path and update MANPATH
+   $ ln -s /path/to/local/environment/bin/scons.1 /path/to/local/environment/man/man1/scons.1
+   $ export MANPATH=$MANPATH:/path/to/local/environment/man
+   $ man scons
+
+This project contains two, separate `SCons`_ project definitions, where the ``SConstruct`` file name indicates an
+`SCons`_ project by convention. The WAVES package and documentation are defined in the ``waves/SConstruct`` file. The
+WAVES-EABM stub and regression tests are defined in a separate ``waves/eabm/Sconstruct`` file. The following build
+commands apply to each, but must be run from their respective project definition parent directories, ``waves`` and
+``waves/eabm``. The available targets and aliases differ accordingly.
+
 3. View project specific command line options
 
    .. code-block::
@@ -118,14 +145,6 @@ Build Simulations
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/
-      $ scons -h
-      ...
-
-      $ cd eabm
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons -h
       ...
 
@@ -133,25 +152,25 @@ Build Simulations
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons
 
 6. Build a specific target
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons <target name>
 
 7. Remove the default targets' artifacts
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons --clean
+
+7. Remove *all* targets' artifacts
+
+   .. code-block::
+
+      $ scons . --clean
 
 .. build-end-do-not-remove
 
@@ -161,28 +180,25 @@ Testing
 
 .. test-start-do-not-remove
 
-Unlike software projects, the primary model/simulation project tests are the successful completion of some subset of the
-simulation targets. If the selected simulations run successfully, then the target passes. To facilitate Gitlab-CI
-regression testing, the primary model/simluation targets have also been added as `SCons`_ tests. Secondary project tests
-will use `SCons`_ for unit and integration testing project specific scripts, such as journal files and processing
-scripts.
+This project uses the `SCons`_ build system. This section will discuss some common build operations. An abbreviated
+options description can be displayed with ``scons -H``. For a full list of `SCons`_ command line options and target
+build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also installed with `Scons`_ in the environment and
+can be opened from the command line as ``man scons`` in the `AEA Compute environment`_. In local environments, the
+manpage may not be in the ``man`` program's search path, ``MANPATH``. You can find the manpage file and make them
+available with something similar to any of the following, in increasing order of required background knowledge.
 
-5. Build the required target(s). Test targets may not be part of the default target ``all``. If so, each target will
-   need to be listed explicitly
+5. Build the required target(s). Test targets may not be part of the default target list. If so, each target will
+   need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
       $ scons <target_1_name> <target-2_name>
 
-6. Run all tests
+6. Run *all* simulation and test targets. Try to run all targets even if some fail.
 
    .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
-      WIP
+      scons . --keep-going
 
 A full list of test names can be generated with the following command.
 
