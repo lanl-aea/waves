@@ -21,6 +21,7 @@ Documentation
 - Typesetting update for mesh node and element set names in the meshing journal file API (:issue:`84`, :merge:`71`). By
   `Kyle Brindley`_.
 - Add the Python package dependency list to the HTML documentation (:issue:`81`, :merge:`72`). By `Kyle Brindley`_.
+- Update the EABM stub environment activation and creation instructions (:issue:`82`, :merge:`73`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
