@@ -20,6 +20,7 @@ Documentation
   development operations documentation (:issue:`49`, :merge:`69`). By `Kyle Brindley`_.
 - Typesetting update for mesh node and element set names in the meshing journal file API (:issue:`84`, :merge:`71`). By
   `Kyle Brindley`_.
+- Add the Python package dependency list to the HTML documentation (:issue:`81`, :merge:`72`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

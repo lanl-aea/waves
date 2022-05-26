@@ -14,6 +14,7 @@ env.Substfile(
 documentation_file_list = [
     'conf.py',
     'README.txt',  # Copied from README.rst to docs build directory by root SConscript
+    'environment.txt',  # Copied from environment.txt to docs build directory by root SConscript
     'api.rst',
     'cli.rst',
     'build.txt',

@@ -8,5 +8,10 @@ readme_target = Command(
     source="README.rst",
     action=Copy("$TARGET", "$SOURCE"))
 
+Command(
+    target=f"{documentation_source_dir}/environment.txt",
+    source="environment.txt",
+    action=Copy("$TARGET", "$SOURCE"))
+
 # Add this target to the defaults list
 Default(readme_target)

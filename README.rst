@@ -74,7 +74,7 @@ Local environments
 
       $ pwd
       path/to/local/git/clone/waves
-      $ conda create --name waves-env --file environment.yml
+      $ conda create --name waves-env --file environment.txt
 
 2. Activate the environment
 
