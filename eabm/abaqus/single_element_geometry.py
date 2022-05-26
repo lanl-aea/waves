@@ -6,20 +6,9 @@ import inspect
 import abaqus
 import abaqusConstants
 
+output_file_help = "The output file for the Abaqus model without extension, e.g. ``output_file``.cae"
+
 def main(output_file, model_name, part_name, width, height):
-    """Create a simple square geometry.
-
-    This script creates a simple Abaqus model with a single square part.
-
-    :param str output_file: The output file for the Abaqus model without extension, e.g. ``output_file``.cae
-    :param str model_name: The name of the Abaqus model
-    :param str part_name: The name of the Abaqus part
-    :param float width: The square width
-    :param float height: The square height
-
-    :returns: writes ``output_file``.cae
-    """
-
     abaqus.mdb.Model(name=model_name, modelType=abaqusConstants.STANDARD_EXPLICIT)
 
     s = abaqus.mdb.models[model_name].ConstrainedSketch(name=part_name, sheetSize=1.0)
@@ -40,6 +29,20 @@ def main(output_file, model_name, part_name, width, height):
     return 0
 
 
+main.__doc__ = """Create a simple square geometry.
+
+    This script creates a simple Abaqus model with a single square part.
+
+    :param str output_file: {}
+    :param str model_name: The name of the Abaqus model
+    :param str part_name: The name of the Abaqus part
+    :param float width: The square width
+    :param float height: The square height
+
+    :returns: writes ``output_file``.cae
+    """.format(output_file_help)
+
+
 def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     filename = inspect.getfile(lambda: None)
@@ -54,12 +57,12 @@ def get_parser():
     default_output_file = '{}'.format(basename_without_extension)
     default_width = 1.0
     default_height = 1.0
-    
+
     prog = "abaqus cae -noGui {} --".format(basename)
     parser = argparse.ArgumentParser(description="Create a simple square geometry",
                                      prog=prog)
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
-                        help="output file name")
+                        help=output_file_help)
     parser.add_argument('-m', '--model-name', type=str, default=default_part_name,
                         help="model name")
     parser.add_argument('-p', '--part-name', type=str, default=default_part_name,
