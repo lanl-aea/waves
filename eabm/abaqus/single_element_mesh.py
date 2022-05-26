@@ -31,9 +31,9 @@ def export_mesh(model_object, part_name, orphan_mesh_file):
         output.write(part_definition[1].strip())
 
 def main(input_file, output_file, model_name, part_name, global_seed):
-    """Mesh the simple square geometry partitioned by ``single_element_partition.py``
+    """Mesh the simple rectangle geometry partitioned by ``single_element_partition.py``
 
-    This script meshes a simple Abaqus model with a single square part.
+    This script meshes a simple Abaqus model with a single rectangle part.
 
     **Node sets:**
 
@@ -102,7 +102,7 @@ if __name__ == '__main__':
     default_output_file = '{}'.format(basename_without_extension)
     default_global_seed = 1.0
 
-    cli_description = "Mesh the simple square geometry partitioned by ``single_element_partition.py`` " \
+    cli_description = "Mesh the simple rectangle geometry partitioned by ``single_element_partition.py`` " \
                       "and write an ``output_file``.cae Abaqus model file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=os.path.basename(filename))
