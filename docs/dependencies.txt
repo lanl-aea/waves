@@ -2,7 +2,7 @@
 Dependencies
 ************
 
-The Python package dependencies are found in the project's ``environment.yml`` file. For convenience, the file is reproduced here
+The Python package dependencies are found in the project's ``environment.txt`` file. For convenience, the file is reproduced here
 
 .. literalinclude:: environment.txt
    :linenos:

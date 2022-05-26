@@ -32,7 +32,7 @@ before_script:
           export ALL_PROXY="proxyout.lanl.gov:8080"
           export HTTP_PROXY="http://$ALL_PROXY"
           export HTTPS_PROXY=$HTTP_PROXY
-          conda create --prefix ${environment_path} --file environment.yml ${conda_options};
+          conda create --prefix ${environment_path} --file environment.txt ${conda_options};
           unset ALL_PROXY
           unset HTTP_PROXY
           unset HTTPS_PROXY
@@ -47,7 +47,7 @@ environment:
     - export HTTP_PROXY="http://$ALL_PROXY"
     - export HTTPS_PROXY=$HTTP_PROXY
     # Re-build the Conda environment on changes to environment files
-    - conda create --prefix ${environment_path} --file environment.yml ${conda_options}
+    - conda create --prefix ${environment_path} --file environment.txt ${conda_options}
     # Remove write permissions from group to avoid accidental environment changes
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
@@ -62,7 +62,7 @@ environment:
       - dev
     changes:
       - "modulefiles/*"
-      - "environment.yml"
+      - "environment.txt"
   tags:
     - sstelmo-shell-aea
 
