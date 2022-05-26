@@ -1,6 +1,7 @@
 .. target-start-do-not-remove
 
 .. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
+.. _AEA Conda channel: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea-release/aea_compute_environment.html#aea-conda-channel
 .. _ECMF: https://aea.re-pages.lanl.gov/python-projects/ecmf/main/
 .. _Conda: https://docs.conda.io/en/latest/
 .. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
@@ -54,26 +55,6 @@ Activate Environment
 
 .. env-start-do-not-remove
 
-Local environments
-==================
-
-`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
-`Conda environment management`_ documentation for more details about using `Conda`_.
-
-1. Create the environment if it doesn't exist
-
-   .. code-block::
-
-      $ pwd
-      path/to/local/git/clone/waves
-      $ conda create --name waves-eabm-env --file environment.txt
-
-2. Activate the environment
-
-   .. code-block::
-
-      $ conda activate waves-eabm-env
-
 AEA server environments
 =======================
 
@@ -91,6 +72,31 @@ the official use and activation instructions. A minimal activation description i
    .. code-block::
 
       $ module load aea-release
+
+Local environments
+==================
+
+`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
+`Conda environment management`_ documentation for more details about using `Conda`_. The `WAVES`_ package must be
+installed from the `AEA Conda channel`_.
+
+    **WARNING** The `AEA Conda channel`_ is not yet available from a webserver. Until the channel is webhosted, local,
+    minimal `WAVES-EABM`_ Conda environments can only be created on ``sstelmo`` or AEA RHEL desktops with the method
+    described below. Advanced users may copy the `WAVES`_ package from the `AEA Conda channel`_ to their local machines
+    and attempt the `WAVES`_ installation from a local file instead of from a Conda channel. Check the `AEA Conda
+    channel`_ official documentation for updates in the channel access an availability.
+
+1. Create the environment if it doesn't exist
+
+   .. code-block::
+
+      $ conda create --name waves-eabm-env --file environment.txt --channel file:///projects/python/aea-conda/ --channel conda-forge
+
+2. Activate the environment
+
+   .. code-block::
+
+      $ conda activate waves-eabm-env
 
 .. env-end-do-not-remove
 
