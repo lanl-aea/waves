@@ -46,11 +46,11 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     **Node sets:**
 
-    * ALLNODES - all part nodes
+    * ``ALLNODES`` - all part nodes
 
     **Element sets:**
 
-    * ELEMENTS - all part elements
+    * ``ELEMENTS`` - all part elements
 
     :param str input_file: The Abaqus model file created by single_element_partition.py without extension, e.g.
         ``input_file``.cae
