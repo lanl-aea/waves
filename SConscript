@@ -8,5 +8,5 @@ Command(target=f"{documentation_source_dir}/README.txt",
         action=Copy("$TARGET", "$SOURCE"))
 
 Command(target=f"{documentation_source_dir}/environment.txt",
-        source="environment.yml",
+        source="environment.txt",
         action=Copy("$TARGET", "$SOURCE"))
