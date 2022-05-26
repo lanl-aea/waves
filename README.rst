@@ -74,7 +74,7 @@ Local environments
 
       $ pwd
       path/to/local/git/clone/waves
-      $ conda create --name waves-env --file environment.txt
+      $ conda create --name waves-env --file environment.txt --channel conda-forge
 
 2. Activate the environment
 
