@@ -22,6 +22,8 @@ Documentation
   `Kyle Brindley`_.
 - Add the Python package dependency list to the HTML documentation (:issue:`81`, :merge:`72`). By `Kyle Brindley`_.
 - Update the EABM stub environment activation and creation instructions (:issue:`82`, :merge:`73`). By `Kyle Brindley`_.
+- Update the tutorial Abaqus journal files CLI documentation for consistency with the API (:issue:`83`, :merge:`74`). By
+  `Kyle Brindley`_.
 
 Internal Changes
 ================
