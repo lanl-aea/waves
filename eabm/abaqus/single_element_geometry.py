@@ -56,7 +56,8 @@ def get_parser():
     default_height = 1.0
     
     prog = "abaqus cae -noGui {} --".format(basename)
-    parser = argparse.ArgumentParser(description="Create a simple rectangle geometry",
+    cli_description = "Create a simple rectangle geometry and write an ``output_file``.cae Abaqus model file."
+    parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
                         help="The output file for the Abaqus model without extension, e.g. ``output_file``.cae")
