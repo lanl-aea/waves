@@ -11,15 +11,6 @@ def main(output_file, model_name, part_name, width, height):
 
     This script creates a simple Abaqus model with a single square part.
 
-    **Usage:**
-
-    .. code-block::
-
-       abaqus cae -noGUI single_element_geometry.py
-       abaqus cae -noGUI single_element_geometry.py -- [options]
-       abaqus cae -noGUI single_element_geometry.py -- --output-file single_element_geometry.cae
-       abaqus cae -noGUI single_element_geometry.py -- --part-name single_element.cae
-
     :param str output_file: The output file for the Abaqus model without extension, e.g. ``output_file``.cae
     :param str model_name: The name of the Abaqus model
     :param str part_name: The name of the Abaqus part
