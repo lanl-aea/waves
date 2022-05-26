@@ -25,6 +25,8 @@ Internal Changes
   solution (:issue:`89`, :merge:`65`). By `Kyle Brindley`_.
 - Make the Abaqus and documentation builders thread safe for SCons parallel threading feature, ``--jobs`` option
   (:issue:`62`, :merge:`66`). By `Kyle Brindley`_.
+- Update the parameter study for more useful post-processing demonstrations (:issue:`107`, :merge:`70`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
