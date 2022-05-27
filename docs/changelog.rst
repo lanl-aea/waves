@@ -9,6 +9,11 @@ Changelog
 0.1.7 (unreleased)
 ******************
 
+Breaking changes
+================
+- Re-arrange the EABM stub source files to allow identically named Abaqus and Cubit journal files when those files
+  perform a nominally identical task (:issue:`109`, :merge:`77`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation cartesian product parameterized simulation
