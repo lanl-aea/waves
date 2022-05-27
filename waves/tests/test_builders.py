@@ -130,3 +130,11 @@ python_emitter_input = {
 def test__python_script_emitter(target, source, expected):
     target, source = builders._python_script_emitter(target, source, None)
     assert target == expected
+
+
+@pytest.mark.unittest
+def test__python_script():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'PythonScript': builders.python_script()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.PythonScript(target=['journal.cub'], source=['journal.py'], journal_options="")
