@@ -27,6 +27,9 @@ conda-build-artifacts/
 *.cae
 *.jnl
 
+# Cubit output file
+*.cub
+
 # parameter study utility output templates
 parameter_study_meta.txt
 
