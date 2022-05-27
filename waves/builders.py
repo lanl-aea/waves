@@ -198,6 +198,23 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
 
 
 def _python_script_emitter(target, source, env):
+    """Appends the python_script builder target list with the builder managed targets
+
+    Appends ``source[0]``.log to the ``target`` list. The python_script Builder requires that the
+    python script to execute is the first source in the list.
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the expected log file as a target, e.g. ``python_script_basename.log``.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
     journal_file = pathlib.Path(source[0].path).name
     journal_file = pathlib.Path(journal_file)
     try:
@@ -211,6 +228,27 @@ def _python_script_emitter(target, source, env):
     return target, source
 
 def python_script():
+    """Python script SCons builder
+
+    This builder requires that the python script to execute is the first source in the list. The builder returned by
+    this function accepts all SCons Builder arguments and adds the ``script_options`` and ``python_options`` string
+    arguments. The Builder emitter will append the builder managed targets automatically.
+
+    .. code-block::
+       :caption: Python script builder action
+       :name: python_script_action 
+
+       python ${python_options} ${SOURCE.abspath} ${script_options} > ${SOURCE.filebase}.log 2>&1
+
+    .. code-block::
+       :caption: SConstruct
+       :name: python_script_example 
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
+       AbaqusJournal(target=['my_journal.cae'], source=['my_journal.py'], journal_options='')
+    """
     python_builder = SCons.Builder.Builder(
         action=
             [f"cd ${{TARGET.dir.abspath}} && python ${{python_options}} ${{SOURCE.abspath}} " \
