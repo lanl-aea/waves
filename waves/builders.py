@@ -8,6 +8,7 @@ import SCons.Environment
 import SCons.Node
 
 from waves._settings import _abaqus_wrapper
+from waves._settings import _abaqus_environment_file
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -34,7 +35,7 @@ def _abaqus_journal_emitter(target, source, env):
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
-    suffixes = ['.jnl', '.log']
+    suffixes = ['.jnl', '.log', f'.{_abaqus_environment_file}']
     for suffix in suffixes:
         emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
         target.append(str(emitter_target))
@@ -66,7 +67,11 @@ def abaqus_journal(abaqus_program='abaqus'):
     :param str abaqus_program: An absolute path or basename string for the abaqus program.
     """
     abaqus_journal_builder = SCons.Builder.Builder(
-        action=f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1",
+        action=
+            [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
+                 f"${{SOURCE.filebase}}.{_abaqus_environment_file}",
+             f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
+                 f"${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1"],
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -81,7 +86,7 @@ def _abaqus_solver_emitter(target, source, env):
     """
     if not 'job_name' in env or not env['job_name']:
         raise RuntimeError('Builder is missing required keyword argument "job_name".')
-    builder_suffixes = ['log']
+    builder_suffixes = ['log', _abaqus_environment_file]
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
     try:
@@ -136,7 +141,10 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
               f"Using WAVES internal path...{abaqus_wrapper_program}")
     conf.Finish()
     abaqus_solver_builder = SCons.Builder.Builder(
-        action=f"cd ${{TARGET.dir.abspath}} && {abaqus_wrapper_program} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}",
+        action=[f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
+                    f"${{job_name}}.{_abaqus_environment_file}",
+                f"cd ${{TARGET.dir.abspath}} && {abaqus_wrapper_program} ${{job_name}} {abaqus_program} " \
+                    f"-job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}"],
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
