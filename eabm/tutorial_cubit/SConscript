@@ -11,47 +11,42 @@ Import('env')
 project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
+cubit_source_dir = env['cubit_source_dir']
+cubit_source_abspath = project_dir / cubit_source_dir
 
 # Simulation variables
 model = "single_element"
-simulation_variables = {
-    'width': 1.0,
-    'height': 1.0,
-    'global_seed': 1.0,
-    'displacement': -1.0
-}
-simulation_substitution_dictionary = {f"@{key}@": value for key, value in simulation_variables.items()}
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
 # Geometry
 journal_file = f"{model}_geometry"
-journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
+journal_options = ""
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub"],
+    source=[f"{cubit_source_abspath / journal_file}.py"],
     journal_options=journal_options))
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+journal_options = ""
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub"],
+    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
     journal_options=journal_options))
 
 # Mesh
 journal_file = f"{model}_mesh"
-journal_options = f"--global-seed {simulation_variables['global_seed']}"
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.inp"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
+journal_options = ""
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub", f"{journal_file}.inp"],
+    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
     journal_options=journal_options))
 
 # SolverPrep
 abaqus_source_list = [
-    f"#/{abaqus_source_dir}/{model}_compression.inp.in",
+    f"#/{abaqus_source_dir}/{model}_compression.inp",
     f"#/{abaqus_source_dir}/amplitudes.inp",
     f"#/{abaqus_source_dir}/assembly.inp",
     f"#/{abaqus_source_dir}/boundary.inp",
@@ -61,8 +56,7 @@ abaqus_source_list = [
     f"#/{abaqus_source_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list, 
-                                               substitution_dictionary=simulation_substitution_dictionary))
+workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
 
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
@@ -88,6 +82,6 @@ workflow.extend(env.AbaqusSolver(
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)
 
-if env['conditional_ignore'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
+if env['conditional_ignore'] and (not env['cubit'] or not env['abaqus']):
+    print(f"Program 'cubit' or 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
     Ignore(['.', parent_directory], workflow)

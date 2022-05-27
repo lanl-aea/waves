@@ -1,8 +1,8 @@
 .. _user_manual:
 
-############################
-Model Repository User Manual
-############################
+###########
+User Manual
+###########
 
 .. include:: build.txt
 

@@ -68,8 +68,8 @@ class ParameterGenerator(ABC):
         ``parameter_set_file_name`` is a pathlib.Path object of the files to write and ``text`` is the file contents of
         parameter names and their values.
 
-        :returns: List of ``parameter_set_file_name`` s pathlib.Path objects
-        :rtype: list
+        :returns: parameter study object: dict(parameter_set_name: parameter_set_text)
+        :rtype: dict
         """
         pass
 
@@ -108,7 +108,6 @@ class ParameterGenerator(ABC):
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
         target or dependee is out-of-date.
         """
-        # TODO: Don't write meta for STDOUT output stream
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(f'{parameter_study_meta_file}', 'w') as meta_file:
             for parameter_set_file in self.parameter_study.keys():
@@ -160,4 +159,4 @@ class CartesianProduct(ParameterGenerator):
         self.parameter_study = {pathlib.Path(set_name): set_text for set_name, set_text in
                                 zip(parameter_set_names, parameter_set_text)}
 
-        return list(self.parameter_study.keys())
+        return self.parameter_study

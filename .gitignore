@@ -11,6 +11,7 @@ _version.py
 *.egg-info
 dist/
 conda-build-artifacts/
+*.pyc
 
 # Temp files
 *.swp
@@ -26,6 +27,9 @@ conda-build-artifacts/
 *.rpy*
 *.cae
 *.jnl
+
+# Cubit output file
+*.cub
 
 # parameter study utility output templates
 parameter_study_meta.txt

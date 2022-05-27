@@ -1,0 +1,9 @@
+pyyaml
+scons
+setuptools
+setuptools_scm
+sphinx
+sphinx-argparse
+sphinx_rtd_theme
+sphinxcontrib-bibtex
+waves

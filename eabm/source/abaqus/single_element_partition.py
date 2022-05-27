@@ -7,18 +7,9 @@ import shutil
 import abaqus
 
 def main(input_file, output_file, model_name, part_name, width, height):
-    """Partition the simple square geometry created by single_element_geometry.py
+    """Partition the simple rectangle geometry created by ``single_element_geometry.py``
 
-    This script partitions a simple Abaqus model with a single square part.
-
-    **Usage:**
-
-    .. code-block::
-
-       abaqus cae -noGUI single_element_partition.py
-       abaqus cae -noGUI single_element_partition.py -- [options]
-       abaqus cae -noGUI single_element_partition.py -- --output-file single_element_geometry.cae
-       abaqus cae -noGUI single_element_partition.py -- --part-name single_element.cae
+    This script partitions a simple Abaqus model with a single rectangle part.
 
     **Feature labels:**
 
@@ -36,8 +27,8 @@ def main(input_file, output_file, model_name, part_name, width, height):
     :param str output_file: The output file for the Abaqus model without extension, e.g. ``output_file``.cae
     :param str model_name: The name of the Abaqus model
     :param str part_name: The name of the Abaqus part
-    :param float width: The square width
-    :param float height: The square height
+    :param float width: The rectangle width
+    :param float height: The rectangle height
 
     :returns: writes ``output_file``.cae
     """
@@ -99,21 +90,24 @@ if __name__ == '__main__':
     default_width = 1.0
     default_height = 1.0
 
-    parser = argparse.ArgumentParser(description="Partition a simple square geometry",
+    cli_description = "Partition the simple rectangle geometry created by ``single_element_geometry.py`` " \
+                      "and write an ``output_file``.cae Abaqus model file."
+    parser = argparse.ArgumentParser(description=cli_description,
                                      prog=os.path.basename(filename))
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
-                        help="input file name")
+                        help="The Abaqus model file created by single_element_geometry.py without extension, " \
+                             "e.g. ``input_file``.cae")
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
-                        help="output file name")
+                        help="The output file for the Abaqus model without extension, e.g. ``output_file``.cae")
     parser.add_argument('-m', '--model-name', type=str, default=default_part_name,
-                        help="model name")
+                        help="The name of the Abaqus model")
     parser.add_argument('-p', '--part-name', type=str, default=default_part_name,
-                        help="part name")
+                        help="The name of the Abaqus part")
     parser.add_argument('-w', '--width', type=float, default=default_width,
-                        help="square width")
+                        help="The rectangle width")
     # Short option '-h' is reserved for the help message
     parser.add_argument('--height', type=float, default=default_height,
-                        help="square height")
+                        help="The rectangle height")
 
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
     args, unknown = parser.parse_known_args()

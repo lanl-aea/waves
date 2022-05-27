@@ -6,8 +6,53 @@ Changelog
 #########
 
 ******************
-0.1.7 (unreleased)
+0.1.8 (unreleased)
 ******************
+
+******************
+0.1.7 (2022-05-27)
+******************
+
+Breaking changes
+================
+- Re-arrange the EABM stub source files to allow identically named Abaqus and Cubit journal files when those files
+  perform a nominally identical task (:issue:`109`, :merge:`77`). By `Kyle Brindley`_.
+
+New Features
+============
+- Add the SCons target definition equivalent to the ECMF and CMake-simulation cartesian product parameterized simulation
+  files (:issue:`61`, :merge:`64`). By `Kyle Brindley`_.
+- Record the Abaqus environment for each Abaqus builder task (:issue:`85`, :merge:`75`). By `Kyle Brindley`_.
+- Add prototype Cubit geometry tutorial source files (:issue:`108`, :merge:`76`). By `Kyle Brindley`_.
+- Add Cubit partition and mesh tutorial source files (:issue:`110`, :merge:`78`). By `Kyle Brindley`_.
+- Add a Cubit journal files to Abaqus solver tutorial source files (:issue:`111`, :merge:`79`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Update the build discussion to include references to the SCons complete CLI options. Add missing portions of the WAVES
+  development operations documentation (:issue:`49`, :merge:`69`). By `Kyle Brindley`_.
+- Typesetting update for mesh node and element set names in the meshing journal file API (:issue:`84`, :merge:`71`). By
+  `Kyle Brindley`_.
+- Add the Python package dependency list to the HTML documentation (:issue:`81`, :merge:`72`). By `Kyle Brindley`_.
+- Update the EABM stub environment activation and creation instructions (:issue:`82`, :merge:`73`). By `Kyle Brindley`_.
+- Update the tutorial Abaqus journal files CLI documentation for consistency with the API (:issue:`83`, :merge:`74`). By
+  `Kyle Brindley`_.
+
+Internal Changes
+================
+- Collect target list with a Python built-in list for consistency across SConscript solutions with the paramerization
+  solution (:issue:`89`, :merge:`65`). By `Kyle Brindley`_.
+- Make the Abaqus and documentation builders thread safe for SCons parallel threading feature, ``--jobs`` option
+  (:issue:`62`, :merge:`66`). By `Kyle Brindley`_.
+- Update the parameter study for more useful post-processing demonstrations (:issue:`107`, :merge:`70`). By `Kyle
+  Brindley`_.
+- Separate the EABM specific abaqus utility function from the meshing journal file (:issue:`53`, :merge:`80`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Use the parameter study object directly to avoid unnecessary EABM parameter study file I/O (:issue:`91`, :merge:`67`).
+  By `Kyle Brindley`_.
 
 ******************
 0.1.6 (2022-05-17)
