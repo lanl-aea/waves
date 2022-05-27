@@ -11,6 +11,7 @@ _version.py
 *.egg-info
 dist/
 conda-build-artifacts/
+*.pyc
 
 # Temp files
 *.swp
