@@ -195,3 +195,25 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
             substfile_target = build_subdirectory / source_file.name
             target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
     return target_list
+
+
+def _python_script_emitter(target, source, env):
+    journal_file = pathlib.Path(source[0].path).name
+    journal_file = pathlib.Path(journal_file)
+    try:
+        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path('.')
+    suffixes = ['.log']
+    for suffix in suffixes:
+        emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
+        target.append(str(emitter_target))
+    return target, source
+
+def python_script():
+    python_builder = SCons.Builder.Builder(
+        action=
+            [f"cd ${{TARGET.dir.abspath}} && python ${{python_options}} ${{SOURCE.abspath}} " \
+                f"${{script_options}} > ${{SOURCE.filebase}}.log 2>&1"],
+        emitter=_python_emitter)
+    return python_builder
