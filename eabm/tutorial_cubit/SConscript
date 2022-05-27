@@ -24,6 +24,22 @@ workflow.extend(env.PythonScript(
     source=[f"{cubit_source_abspath / journal_file}.py"],
     journal_options=journal_options))
 
+# Partition
+journal_file = f"{model}_partition"
+journal_options = ""
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub"],
+    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
+    journal_options=journal_options))
+
+# Mesh
+journal_file = f"{model}_mesh"
+journal_options = ""
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub", f"{journal_file}.inp"],
+    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
+    journal_options=journal_options))
+
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)

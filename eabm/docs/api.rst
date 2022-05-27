@@ -47,3 +47,21 @@ single_element_geometry.py
     :members:
     :show-inheritance:
     :synopsis: The Cubit single element geometry creation script
+
+single_element_partition.py
+===========================
+
+.. automodule:: source.cubit.single_element_partition
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: The Cubit single element partition script
+
+single_element_mesh.py
+======================
+
+.. automodule:: source.cubit.single_element_mesh
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: The Cubit single element mesh script

@@ -19,7 +19,8 @@ New Features
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation cartesian product parameterized simulation
   files (:issue:`61`, :merge:`64`). By `Kyle Brindley`_.
 - Record the Abaqus environment for each Abaqus builder task (:issue:`85`, :merge:`75`). By `Kyle Brindley`_.
-- Add prototype Cubit geometry tutorial source files (:issue:`180`, :merge:`76`). By `Kyle Brindley`_.
+- Add prototype Cubit geometry tutorial source files (:issue:`108`, :merge:`76`). By `Kyle Brindley`_.
+- Add Cubit partition and mesh tutorial source files (:issue:`110`, :merge:`78`). By `Kyle Brindley`_.
 
 Documentation
 =============
