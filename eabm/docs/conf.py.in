@@ -10,13 +10,16 @@ project = '@project_name@'
 VERSION = '@version@'
 project_dir = pathlib.Path('@project_dir@').resolve()
 abaqus_source_dir = '@abaqus_source_dir@'
+cubit_source_dir = '@cubit_source_dir@'
 
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
 sys.path.insert(0, str(project_dir / abaqus_source_dir))
+sys.path.insert(0, str(project_dir / cubit_source_dir))
 
-# Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules.
-mock_modules = ['abaqus', 'abaqusConstants', 'mesh']
+# Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
+# the documentation build, e.g. cubit.
+mock_modules = ['abaqus', 'abaqusConstants', 'mesh', 'cubit']
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
