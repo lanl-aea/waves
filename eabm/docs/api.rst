@@ -11,7 +11,7 @@ abaqus
 single_element_geometry.py
 ==========================
 
-.. automodule:: single_element_geometry
+.. automodule:: source.abaqus.single_element_geometry
     :noindex:
     :members:
     :show-inheritance:
@@ -20,7 +20,7 @@ single_element_geometry.py
 single_element_partition.py
 ===========================
 
-.. automodule:: single_element_partition
+.. automodule:: source.abaqus.single_element_partition
     :noindex:
     :members:
     :show-inheritance:
@@ -29,7 +29,7 @@ single_element_partition.py
 single_element_mesh.py
 ======================
 
-.. automodule:: single_element_mesh
+.. automodule:: source.abaqus.single_element_mesh
     :noindex:
     :members:
     :show-inheritance:
@@ -39,10 +39,10 @@ single_element_mesh.py
 cubit
 *****
 
-cubit_single_element_geometry.py
-================================
+single_element_geometry.py
+==========================
 
-.. automodule:: cubit_single_element_geometry
+.. automodule:: source.cubit.single_element_geometry
     :noindex:
     :members:
     :show-inheritance:

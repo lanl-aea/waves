@@ -51,9 +51,9 @@ test:
     - waves/tests/*.py
     - eabm/README.rst
     - eabm/SC*
-    - eabm/abaqus/*
-    - eabm/cubit/*
-    - eabm/python/*
+    - eabm/source/abaqus/*
+    - eabm/source/cubit/*
+    - eabm/source/python/*
     - eabm/tutorial*/*
   imports:
     - waves
