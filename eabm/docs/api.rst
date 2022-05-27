@@ -39,10 +39,10 @@ single_element_mesh.py
 cubit
 *****
 
-cubit_single_element_geometry.py
-================================
+single_element_geometry.py
+==========================
 
-.. automodule:: source.cubit.cubit_single_element_geometry
+.. automodule:: source.cubit.single_element_geometry
     :noindex:
     :members:
     :show-inheritance:

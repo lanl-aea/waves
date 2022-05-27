@@ -18,8 +18,8 @@ single_element_geometry.py
 cubit
 *****
 
-cubit_single_element_geometry.py
-================================
+single_element_geometry.py
+==========================
 
 .. argparse:: 
-    :ref: source.cubit.cubit_single_element_geometry.get_parser
+    :ref: source.cubit.single_element_geometry.get_parser
