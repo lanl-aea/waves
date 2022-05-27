@@ -21,6 +21,7 @@ New Features
 - Record the Abaqus environment for each Abaqus builder task (:issue:`85`, :merge:`75`). By `Kyle Brindley`_.
 - Add prototype Cubit geometry tutorial source files (:issue:`108`, :merge:`76`). By `Kyle Brindley`_.
 - Add Cubit partition and mesh tutorial source files (:issue:`110`, :merge:`78`). By `Kyle Brindley`_.
+- Add a Cubit journal files to Abaqus solver tutorial source files (:issue:`111`, :merge:`79`). By `Kyle Brindley`_.
 
 Documentation
 =============
