@@ -17,7 +17,7 @@ model = "single_element"
 workflow = []
 
 # Geometry
-journal_file = f"{model}_geometry"
+journal_file = f"cubit_{model}_geometry"
 journal_options = ""
 workflow.extend(env.PythonScript(
     target=[f"{journal_file}.cub"],

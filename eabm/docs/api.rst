@@ -15,7 +15,7 @@ single_element_geometry.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The single element geometry creation script
+    :synopsis: The Abaqus single element geometry creation script
 
 single_element_partition.py
 ===========================
@@ -24,7 +24,7 @@ single_element_partition.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The single element partition script
+    :synopsis: The Abaqus single element partition script
 
 single_element_mesh.py
 ======================
@@ -33,4 +33,17 @@ single_element_mesh.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The single element mesh script
+    :synopsis: The Abaqus single element mesh script
+
+*****
+cubit
+*****
+
+cubit_single_element_geometry.py
+================================
+
+.. automodule:: cubit_single_element_geometry
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: The Cubit single element geometry creation script
