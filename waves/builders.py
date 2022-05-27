@@ -215,5 +215,5 @@ def python_script():
         action=
             [f"cd ${{TARGET.dir.abspath}} && python ${{python_options}} ${{SOURCE.abspath}} " \
                 f"${{script_options}} > ${{SOURCE.filebase}}.log 2>&1"],
-        emitter=_python_emitter)
+        emitter=_python_script_emitter)
     return python_builder
