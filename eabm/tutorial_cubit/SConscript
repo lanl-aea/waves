@@ -19,8 +19,8 @@ workflow = []
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
-workflow.extend(env.Python3(
-    target=[f"{journal_file}.cae"],
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py"],
     journal_options=journal_options))
 
