@@ -52,6 +52,7 @@ test:
     - eabm/README.rst
     - eabm/SC*
     - eabm/abaqus/*
+    - eabm/cubit/*
     - eabm/python/*
     - eabm/tutorial*/*
   imports:
