@@ -86,7 +86,7 @@ def _abaqus_solver_emitter(target, source, env):
     """
     if not 'job_name' in env or not env['job_name']:
         raise RuntimeError('Builder is missing required keyword argument "job_name".')
-    builder_suffixes = ['log']
+    builder_suffixes = ['log', _abaqus_environment_file]
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
     try:
@@ -141,7 +141,10 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
               f"Using WAVES internal path...{abaqus_wrapper_program}")
     conf.Finish()
     abaqus_solver_builder = SCons.Builder.Builder(
-        action=f"cd ${{TARGET.dir.abspath}} && {abaqus_wrapper_program} ${{job_name}} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}",
+        action=[f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
+                    f"${{job_name}}.{_abaqus_environment_file}",
+                f"cd ${{TARGET.dir.abspath}} && {abaqus_wrapper_program} ${{job_name}} {abaqus_program} " \
+                    f"-job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}"],
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
