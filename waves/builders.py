@@ -66,7 +66,11 @@ def abaqus_journal(abaqus_program='abaqus'):
     :param str abaqus_program: An absolute path or basename string for the abaqus program.
     """
     abaqus_journal_builder = SCons.Builder.Builder(
-        action=f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1",
+        action=
+            [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
+                 f"${{SOURCE.filebase}}.abaqus_v6.env",
+             f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
+                 f"${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1"],
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
