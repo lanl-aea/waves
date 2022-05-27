@@ -40,7 +40,7 @@ env = Environment(ENV=os.environ.copy(),
                   variables=variables)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-required_programs = ['sphinx-build', 'abaqus']
+required_programs = ['sphinx-build', 'abaqus', 'cubit']
 conf = env.Configure()
 for program in required_programs:
     env[program.replace('-', '_')] = conf.CheckProg(program)
@@ -57,6 +57,7 @@ project_variables = {
     'project_dir': Dir('.').abspath,
     'version': version,
     'abaqus_source_dir': 'abaqus',
+    'cubit_source_dir': 'cubit',
     'python_source_dir': 'python',
 }
 project_substitution_dictionary = dict()
@@ -69,7 +70,8 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-                     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'], env=env)})
+                     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'], env=env),
+                     'PythonScript': waves.builders.python_script()})
 
 # Add documentation target(s)
 # The 'ignore_documentation' variable is used by WAVES during packaging. Not required for an EABM.
@@ -83,6 +85,7 @@ else:
 
 # Add simulation targets
 eabm_simulation_directories = [
+    'tutorial_cubit',
     'tutorial_01_geometry',
     'tutorial_02_partition_mesh',
     'tutorial_03_solverprep',

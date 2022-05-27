@@ -106,3 +106,35 @@ def test__copy_substitute(source_list, expected_list):
     target_list = builders.copy_substitute(source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
+
+
+fs = SCons.Node.FS.FS()
+source_file = fs.File('dummy.py')
+python_emitter_input = {
+    'empty targets': ([],
+                      [source_file],
+                      ['dummy.log']),
+    'one target': (['dummy.cub'],
+                   [source_file],
+                   ['dummy.cub', 'dummy.log']),
+    'subdirectory': (['set1/dummy.cub'],
+                    [source_file],
+                    ['set1/dummy.cub', 'set1/dummy.log'])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('target, source, expected',
+                         python_emitter_input.values(),
+                         ids=python_emitter_input.keys())
+def test__python_script_emitter(target, source, expected):
+    target, source = builders._python_script_emitter(target, source, None)
+    assert target == expected
+
+
+@pytest.mark.unittest
+def test__python_script():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'PythonScript': builders.python_script()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.PythonScript(target=['journal.cub'], source=['journal.py'], journal_options="")
