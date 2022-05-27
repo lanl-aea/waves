@@ -8,6 +8,7 @@ import SCons.Environment
 import SCons.Node
 
 from waves._settings import _abaqus_wrapper
+from waves._settings import _abaqus_environment_file
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -34,7 +35,7 @@ def _abaqus_journal_emitter(target, source, env):
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
-    suffixes = ['.jnl', '.log']
+    suffixes = ['.jnl', '.log', f'.{_abaqus_environment_file}']
     for suffix in suffixes:
         emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
         target.append(str(emitter_target))
@@ -68,7 +69,7 @@ def abaqus_journal(abaqus_program='abaqus'):
     abaqus_journal_builder = SCons.Builder.Builder(
         action=
             [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
-                 f"${{SOURCE.filebase}}.abaqus_v6.env",
+                 f"${{SOURCE.filebase}}.{_abaqus_environment_file}",
              f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
                  f"${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1"],
         emitter=_abaqus_journal_emitter)
