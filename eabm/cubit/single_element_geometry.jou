@@ -1,0 +1,10 @@
+# cubit 15.4
+
+#Geometry
+create vertex 0 0 0
+create vertex {width} 0 0
+create vertex {width} {height} 0
+create vertex 0 {height} 0
+create surface vertex 1,2,3,4
+
+save as "single_element_geometry.cub" overwrite
