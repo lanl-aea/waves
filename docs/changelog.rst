@@ -42,6 +42,8 @@ Internal Changes
   (:issue:`62`, :merge:`66`). By `Kyle Brindley`_.
 - Update the parameter study for more useful post-processing demonstrations (:issue:`107`, :merge:`70`). By `Kyle
   Brindley`_.
+- Separate the EABM specific abaqus utility function from the meshing journal file (:issue:`53`, :merge:`80`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
