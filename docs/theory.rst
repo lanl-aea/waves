@@ -33,3 +33,37 @@ different software more amenable to their specific work. It is always the overal
 that is most important, where the ability to recognize which software fits in which practice that will make a practicing
 engineer agile to changing project needs, computing resources, numeric solvers, programming languages, and even
 available funding.
+
+**********************************
+Computational Engineering Concepts
+**********************************
+
+The core concepts of computational engineering as listed below in the rough order of project maturity. That is, those
+things listed near the beginning of the list should be implemented early in the life-cycle of all projects, regardless
+of expected project growth, re-use, or impact. Particularly, version control should be implemented at the very beginning of
+a computational project, even with the earliest project brainstorming session. As the foundational practice of
+computational engineering, version control fills the role of a laboratory notebook and the strict practice of detailed
+and regular entries are equally important.
+
+* version control
+* documentation
+
+  * user manual
+  * theory manual
+  * API
+  * CLI
+  * developer manual
+  * release philosophy
+  * strategic plan/feature schedule
+  * analysis reports
+
+* build system
+* compute environment
+* unit/integration/regression tests and test frameworks
+* continuous integration automation
+
+Those practices at the end of the list are more costly to implement and therefore more valuable for mature or long-lived
+projects. However, an engineer familiar with the computational tools implementing these practices will find that even
+small, short-term projects benefit from implementing all of these concepts. In production engineering environments, it
+is beneficial to implement the full range of computational engineering concepts in a "stub" repository that may be
+re-used at the beginning of every project.
