@@ -3,8 +3,9 @@
    :start-after: target-start-do-not-remove
    :end-before: target-end-do-not-remove
 
-.. General referenfes
+.. General references
 .. _`Anaconda Documentation`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+.. _`automated build system`: https://en.wikipedia.org/wiki/List_of_build_automation_software
 .. _`Confluence`: https://www.atlassian.com/software/confluence
 .. _`ASC RE Gitlab`: https://re-git.lanl.gov/
 .. _`ASC RE Gitlab HPC Accounts`: https://hpcaccounts.lanl.gov/projects/request/asc-re-gitlab
@@ -23,6 +24,7 @@
 .. _`Python 2`: https://docs.python.org/2.7/
 .. _`PEP-8`: https://www.python.org/dev/peps/pep-0008/
 .. _`PEP-440`: https://www.python.org/dev/peps/pep-0440/
+.. _`Software Carpentry`: https://software-carpentry.org/
 .. _`sphinx`: https://www.sphinx-doc.org/en/master/
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
