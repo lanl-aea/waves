@@ -236,18 +236,18 @@ def python_script():
 
     .. code-block::
        :caption: Python script builder action
-       :name: python_script_action 
+       :name: python_script_action
 
        python ${python_options} ${SOURCE.abspath} ${script_options} > ${SOURCE.filebase}.log 2>&1
 
     .. code-block::
        :caption: SConstruct
-       :name: python_script_example 
+       :name: python_script_example
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
-       AbaqusJournal(target=['my_journal.cae'], source=['my_journal.py'], journal_options='')
+       env.Append(BUILDERS={'PythonScript': waves.builders.python_script()})
+       PythonScript(target=['my_output.log'], source=['my_scipt.py'], python_options='', script_options='')
     """
     python_builder = SCons.Builder.Builder(
         action=
