@@ -9,6 +9,10 @@ Changelog
 0.1.8 (unreleased)
 ******************
 
+Documentation
+=============
+- Update the SConstruct example for the Python script builder (:issue:`113`, :merge:`83`). By `Kyle Brindley`_.
+
 ******************
 0.1.7 (2022-05-27)
 ******************
