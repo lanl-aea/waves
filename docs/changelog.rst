@@ -12,6 +12,8 @@ Changelog
 Documentation
 =============
 - Update the SConstruct example for the Python script builder (:issue:`113`, :merge:`83`). By `Kyle Brindley`_.
+- Fix the out-of-order build/test/documentation examples as bulleted lists instead of enumerated lists (:issue:`115`,
+  :merge:`84`). By `Kyle Brindley`_.
 
 ******************
 0.1.7 (2022-05-27)
