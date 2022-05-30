@@ -136,41 +136,41 @@ commands apply to each, but must be run from their respective project definition
 
 - View project specific command line options
 
-   .. code-block::
+  .. code-block::
 
-      $ scons -h
-      ...
+     $ scons -h
+     ...
 
 - View the default targets and target aliases
 
-   .. code-block::
+  .. code-block::
 
-      $ scons -h
-      ...
+     $ scons -h
+     ...
 
 - Build all default targets
 
-   .. code-block::
+  .. code-block::
 
-      $ scons
+     $ scons
 
 - Build a specific target
 
-   .. code-block::
+  .. code-block::
 
-      $ scons <target name>
+     $ scons <target name>
 
 - Remove the default targets' artifacts
 
-   .. code-block::
+  .. code-block::
 
-      $ scons --clean
+     $ scons --clean
 
 - Remove *all* targets' artifacts
 
-   .. code-block::
+  .. code-block::
 
-      $ scons . --clean
+     $ scons . --clean
 
 .. build-end-do-not-remove
 
@@ -188,17 +188,17 @@ manpage may not be in the ``man`` program's search path, ``MANPATH``. You can fi
 available with something similar to any of the following, in increasing order of required background knowledge.
 
 - Build the required target(s). Test targets may not be part of the default target list. If so, each target will
-   need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
+  need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
 
-   .. code-block::
+  .. code-block::
 
-      $ scons <target_1_name> <target-2_name>
+     $ scons <target_1_name> <target-2_name>
 
 - Run *all* simulation and test targets. Try to run all targets even if some fail.
 
-   .. code-block::
+  .. code-block::
 
-      scons . --keep-going
+     scons . --keep-going
 
 A full list of test names can be generated with the following command.
 
@@ -218,18 +218,18 @@ The documentation build is also automated with SCons as the ``documentation`` ta
 
 - Build the `WAVES`_ documentation
 
-   .. code-block::
+  .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/
-      $ scons documentation
+     $ pwd
+     path/to/local/git/clone/waves/
+     $ scons documentation
 
 - Build the `WAVES-EABM`_ documentation
 
-   .. code-block::
+  .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
-      $ scons documentation
+     $ pwd
+     path/to/local/git/clone/waves/eabm
+     $ scons documentation
 
 .. docs-end-do-not-remove
