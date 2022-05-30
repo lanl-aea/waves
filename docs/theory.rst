@@ -47,16 +47,6 @@ and regular entries are equally important.
 
 * version control
 * documentation
-
-  * user manual
-  * theory manual
-  * API
-  * CLI
-  * developer manual
-  * release philosophy
-  * strategic plan/feature schedule
-  * analysis reports
-
 * build system
 * compute environment
 * unit/integration/regression tests and test frameworks
@@ -67,3 +57,36 @@ projects. However, an engineer familiar with the computational tools implementin
 small, short-term projects benefit from implementing all of these concepts. In production engineering environments, it
 is beneficial to implement the full range of computational engineering concepts in a "stub" repository that may be
 re-used at the beginning of every project.
+
+***************
+Version Control
+***************
+
+*************
+Documentation
+*************
+
+* user manual
+* theory manual
+* API
+* CLI
+* developer manual
+* release philosophy
+* strategic plan/feature schedule
+* analysis reports
+
+************
+Build System
+************
+
+*******************
+Compute Environment
+*******************
+
+***************************
+Testing and Test Frameworks
+***************************
+
+**********************
+Continuous Integration
+**********************
