@@ -134,43 +134,43 @@ WAVES-EABM stub and regression tests are defined in a separate ``waves/eabm/Scon
 commands apply to each, but must be run from their respective project definition parent directories, ``waves`` and
 ``waves/eabm``. The available targets and aliases differ accordingly.
 
-3. View project specific command line options
+- View project specific command line options
 
-   .. code-block::
+  .. code-block::
 
-      $ scons -h
-      ...
+     $ scons -h
+     ...
 
-4. View the default targets and target aliases
+- View the default targets and target aliases
 
-   .. code-block::
+  .. code-block::
 
-      $ scons -h
-      ...
+     $ scons -h
+     ...
 
-5. Build all default targets
+- Build all default targets
 
-   .. code-block::
+  .. code-block::
 
-      $ scons
+     $ scons
 
-6. Build a specific target
+- Build a specific target
 
-   .. code-block::
+  .. code-block::
 
-      $ scons <target name>
+     $ scons <target name>
 
-7. Remove the default targets' artifacts
+- Remove the default targets' artifacts
 
-   .. code-block::
+  .. code-block::
 
-      $ scons --clean
+     $ scons --clean
 
-7. Remove *all* targets' artifacts
+- Remove *all* targets' artifacts
 
-   .. code-block::
+  .. code-block::
 
-      $ scons . --clean
+     $ scons . --clean
 
 .. build-end-do-not-remove
 
@@ -187,18 +187,18 @@ can be opened from the command line as ``man scons`` in the `AEA Compute environ
 manpage may not be in the ``man`` program's search path, ``MANPATH``. You can find the manpage file and make them
 available with something similar to any of the following, in increasing order of required background knowledge.
 
-5. Build the required target(s). Test targets may not be part of the default target list. If so, each target will
-   need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
+- Build the required target(s). Test targets may not be part of the default target list. If so, each target will
+  need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
 
-   .. code-block::
+  .. code-block::
 
-      $ scons <target_1_name> <target-2_name>
+     $ scons <target_1_name> <target-2_name>
 
-6. Run *all* simulation and test targets. Try to run all targets even if some fail.
+- Run *all* simulation and test targets. Try to run all targets even if some fail.
 
-   .. code-block::
+  .. code-block::
 
-      scons . --keep-going
+     scons . --keep-going
 
 A full list of test names can be generated with the following command.
 
@@ -216,20 +216,20 @@ Documentation
 
 The documentation build is also automated with SCons as the ``documentation`` target.
 
-5. Build the `WAVES`_ documentation
+- Build the `WAVES`_ documentation
 
-   .. code-block::
+  .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/
-      $ scons documentation
+     $ pwd
+     path/to/local/git/clone/waves/
+     $ scons documentation
 
-6. Build the `WAVES-EABM`_ documentation
+- Build the `WAVES-EABM`_ documentation
 
-   .. code-block::
+  .. code-block::
 
-      $ pwd
-      path/to/local/git/clone/waves/eabm
-      $ scons documentation
+     $ pwd
+     path/to/local/git/clone/waves/eabm
+     $ scons documentation
 
 .. docs-end-do-not-remove
