@@ -19,13 +19,13 @@ The command line utilities provided by `WAVES`_ are those utilities required to 
 traditional software build systems. For most engineering simulation workflows, software build systems will work
 out-of-the-box. However, it is difficult to implement engineering parameter studies in software build systems, which are
 designed to produce a single program, not many nearly identical configurations of the same program. The `WAVES`_
-:ref:`parameter_generator` utilities are designed to work with most build systems, but were originally developed with
-the requirements of `CMake`_ in mind.
+parameter generator utility, (:ref:`parameter_study_cli`) are designed to work with most build systems, but were
+originally developed with the requirements of `CMake`_ in mind.
 
 For production engineering analysis, `WAVES`_ focuses on extending the build system `SCons`_ because `SCons`_
 configuration files use `Python`_ as a fully featured scripting language. This choice is primarily driven by the
 familiarity of the engineering community with `Python`_ as a programming language, but also because the parameter
-generation utility can be integrated more closely with the build system.
+generation utility can be integrated more closely with the build system, :ref:`parameter_generator_api`.
 
 By convention, the `SCons`_ root project file is named ``SConstruct``. Because this is a `Python`_ file, we can import
 `Python`_ libraries to help define project settings. 
