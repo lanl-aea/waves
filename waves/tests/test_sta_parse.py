@@ -21,7 +21,7 @@ def test_get_parser():
 def test_main():
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
          patch('builtins.print') as mock_print, \
-         patch('builtins.raise'), \
+         patch('stdLib.StdObject', ** {'return_value.raiseError.side_effect': Exception()}), \
          patch('waves.abaqus.abaqus_file_parser.StaFileParser'):
         sta_parse.main()
         assert "sample.sta does not exist" in str(mock_print.call_args)
