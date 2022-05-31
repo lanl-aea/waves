@@ -6,12 +6,17 @@ Test msg_parse.py
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
+import pytest
 from unittest.mock import patch
 from pathlib import Path
 
 from waves.abaqus.command_line_tools import msg_parse
 
+main_input = {
+    'missing file_name': pytest.param('', pytest.raises(SystemExit))
+}
 
+@pytest.mark.unittest
 def test_get_parser():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-o', 'sample', '-a']):
         cmd_args = msg_parse.get_parser().parse_args()
@@ -21,10 +26,11 @@ def test_get_parser():
         assert cmd_args.write_summary_table == False
         assert cmd_args.write_yaml == True
 
+@pytest.mark.unittest
+@pytest.mark.parametrize(main_input.values())
 def test_main():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg']), \
          patch('builtins.print') as mock_print, \
-         patch('stdLib.StdObject', ** {'return_value.raiseError.side_effect': Exception()}), \
          patch('waves.abaqus.abaqus_file_parser.MsgFileParser'):
         msg_parse.main()
         assert "sample.msg does not exist" in str(mock_print.call_args)
@@ -42,6 +48,7 @@ def test_main():
         assert write_all.called
         assert write_summary.called
 
+@pytest.mark.unittest
 def test_file_exists():
     fake_path = Path('fake_file.txt')
     with patch('pathlib.Path.exists', return_value=False):
