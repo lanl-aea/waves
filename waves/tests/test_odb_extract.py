@@ -149,7 +149,6 @@ def test_main():
          patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('logging.Logger.hasHandlers', return_value=False), \
          patch('select.select', return_value=[None, None, None]), \
-         pytest.raises(SystemExit) as mock_exception, \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
          pytest.raises(SystemExit) as mock_exception, \
          patch('builtins.print') as mock_print, \
