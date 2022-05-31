@@ -126,7 +126,7 @@ Command Line Interfaces
         :lineno-match:
         :start-after: marker-1
         :end-before: marker-2
-        :emphasize-lines: 2-5
+        :emphasize-lines: 2-5, 12-14, 16-30
 
 This portion of ``single_element_geometry.py`` defines the argument parsing function, 
 :meth:`get_parser`, which is the next step in turning our simple Python script into a 
