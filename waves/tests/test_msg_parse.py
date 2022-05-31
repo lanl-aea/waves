@@ -50,6 +50,5 @@ def test_file_exists():
          patch('builtins.print') as mock_print:
         file_name = msg_parse.file_exists(fake_path)
         assert file_name.startswith('fake_file_')
-        mock_print.assert_called_with("already exists")
         assert "already exists" in mock_print.getvalue()
 
