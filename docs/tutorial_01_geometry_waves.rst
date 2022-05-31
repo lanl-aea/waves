@@ -108,11 +108,12 @@ Query the contents of the ``build`` directory using the ``tree`` command against
     ├── docs
     │   └── SConscript
     └── tutorial_01_geometry
-        ├── abaqus.rpy
+        ├── abaqus.rpy        
+        ├── single_element_geometry.abaqus_v6.env
         ├── single_element_geometry.cae
         ├── single_element_geometry.jnl
         └── single_element_geometry.log
-    
+
     2 directories, 5 files
 
 Inside the build directory are two sub-directories. First is a default ``docs`` directory 
@@ -123,6 +124,8 @@ In this case, that is ``tutorial_01_geometry``.
 The ``tutorial_01_geomtry/`` directory should contain the following files:
 
 * ``abaqus.rpy``, the replay file from the ``abaqus cae -nogui`` command
+* ``single_element_geometry.abaqus_v6.env``, the environment file that allows for 
+  reproduction of the Abaqus environment used to build the ``tutorial_01_geometry`` targets
 * ``single_element_geomtry.cae``, an Abaqus CAE file that contains a model named 
   ``<model_name>`` within which is a part named ``<part_name>``.
 * ``single_element_geometry.jnl`` and ``single_element_geometry.log``, the journal file 
