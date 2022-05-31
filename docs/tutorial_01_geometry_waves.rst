@@ -84,7 +84,14 @@ journal file. This will be discussed in REFTUTORIAL05PLACEHOLDER.
 
 Next, the ``workflow`` list is extended to include the action to use the ``AbaqusJournal`` 
 builder. For more information about the behavior of the ``AbaqusJournal`` builder, see the 
-:ref:`sconsbuildersapi`.
+:ref:`sconsbuildersapi`. ``target`` specifies the files created when running the 
+``source`` files with the Abaqus command.
+
+The lines of code that follow alias the workflow that was extended previously to the name 
+of the current working directory, in this case ``tutorial_01_geometry``.
+
+The final lines of code in the ``SConstruct`` file allow SCons to pass a target build 
+sequence if the Abaqus executable is not found.
 
 ***********************************
 Create geometry part build file
