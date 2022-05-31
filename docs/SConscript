@@ -48,10 +48,10 @@ abaqus_dir = pathlib.Path(env['abaqus_dir'])
 tutorial_files_list = [ # tutorial_01_dir / 'SConscript',
                         # abaqus_dir / 'single_element_geometry.py',
 ]
-for filename in tutorial_files_list:
-    target = f'{filename.parents[0]}_{filename.name}'
+for filepath in tutorial_files_list:
+    target = f'{filepath.parents[0]}_{filepath.name}'
     Command(target=target,
-            source=str(eabm_dir / filename),
+            source=str(eabm_dir / filepath),
             action=Copy("$TARGET", "$SOURCE"))
     documentation_file_list.append(target)
 
