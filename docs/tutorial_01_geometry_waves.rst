@@ -126,11 +126,38 @@ Command Line Interfaces
         :lineno-match:
         :start-after: marker-1
         :end-before: marker-2
+        :emphasize-lines: 2-5
 
 This portion of ``single_element_geometry.py`` defines the argument parsing function, 
 :meth:`get_parser`, which is the next step in turning our simple Python script into a 
 small software utility. Command line interfaces allow for scripts to be executed with 
 changing input arguments to the ``main`` function without any source code modification.
+
+The first highlighted portion o the :meth:`get_parser` function defines variables based on 
+the name of the script. While this method of determining the file name is non-standard for 
+Python 3, the Abaqus-Python environment neccessitates this syntax. Nonetheless, the code 
+is general for any script name.
+
+The code that follows uses the name of the script to define some variables. This code 
+assumes that the ``part_name`` variable will be equal to the name of the script, will 
+remove the ``_geometry`` suffix if it exists in the file name.
+
+The second highlighted portion defines default values for some of the command line 
+arguments. Default values are assigned if no command line argument is detected for any of 
+the expected command line arguments. ``output_file`` is the name of the file that is 
+created at the end of the :meth:`main` function, which assumes ``output_file`` does not 
+include a file extension. ``default_width`` and ``default_height`` define the size of the 
+``single_element`` part.
+
+The final highlighted portion of the code is where the ``argparse`` package is used to 
+define the argument parser rules. First, an argument parser is defined using the 
+:meth:`ArgumentParser` method. This recieves a brief description ``cli_description`` and 
+direction ``prog`` on how to execute the program. Each subsequent call of the 
+:meth:`add_argument` adds a command line argument to the parser's rules. Command line 
+arguments have identifiers, like ``-o`` or ``--output-file``, default values, and help 
+messages.
+
+See the `Python argparse`_ documentation for more information.
 
 .. todo::
 
