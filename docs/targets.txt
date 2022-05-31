@@ -30,6 +30,7 @@
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
+.. _`Python Top-Level Code Environment`: https://docs.python.org/3/library/__main__.html
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
@@ -44,3 +45,4 @@
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
 .. _`w13dev`: w13dev@lanl.gov
+

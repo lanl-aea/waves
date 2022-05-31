@@ -132,14 +132,15 @@ This portion of ``single_element_geometry.py`` defines the argument parsing func
 small software utility. Command line interfaces allow for scripts to be executed with 
 changing input arguments to the ``main`` function without any source code modification.
 
-``main`` Function Protection
-============================
+Top-Level Code Environment
+==========================
 
 .. todo::
 
     * In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``.
-    * Use the contents below to create the ``if`` statement to call the :meth:`main` 
-      function. Note that any missing line numberts should be interpreted as blank lines.
+    * Use the contents below to create the ``if`` statement within which we will call the 
+      :meth:`main` function. Note that any missing line numberts should be interpreted as 
+      blank lines.
 
 .. admonition:: single_element_geometry.py
 
@@ -148,6 +149,12 @@ changing input arguments to the ``main`` function without any source code modifi
         :lineno-match:
         :start-after: marker-2
 
+When the script is executed, an internal variable ``__name__`` is set to the value 
+``__main__``. When this condition is true (i.e. the script is being executed rather than 
+being imported), the ``if`` statement's conditions are met, and the code inside is 
+executed. ``__main__`` is referred to as the top-level code environment. Top-level code is 
+also referred to as the *entry point* of the program. See the 
+`Python Top-Level Code Environment`_ documentation for more information.
 
 
 ****************
