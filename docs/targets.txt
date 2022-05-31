@@ -24,6 +24,8 @@
 .. _`Python 2`: https://docs.python.org/2.7/
 .. _`PEP-8`: https://www.python.org/dev/peps/pep-0008/
 .. _`PEP-440`: https://www.python.org/dev/peps/pep-0440/
+.. _`PEP-257`: https://peps.python.org/pep-0257/
+.. _`PEP-287`: https://peps.python.org/pep-0287/
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`sphinx`: https://www.sphinx-doc.org/en/master/
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html

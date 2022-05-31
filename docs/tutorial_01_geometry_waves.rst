@@ -100,7 +100,8 @@ The highlighted lines of code at the beginning of the ``main`` function are call
 Docstrings are specially formatted comment blocks the help automate documentation builds. 
 In this case, the docstrings are formatted so the Sphinx ``automodule`` directive can 
 interpret the comments as ReStructured Text. Docstrings discuss the use case of the 
-function along with its inputs, outputs, and usage.
+function along with its inputs, outputs, and usage. See the `PEP-257`_ conventions for 
+docstring formatting along with `PEP-287`_ for syntax specific to reStructured Text.
 
 Abaqus Python Code
 ==================
