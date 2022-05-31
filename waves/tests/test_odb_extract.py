@@ -8,9 +8,8 @@ Test odb_extract.py
 """
 
 from unittest.mock import patch, mock_open
-from pathlib import Path
 
-from ecmf.command_line_tools import odb_extract
+from waves.abaqus.command_line_tools import odb_extract
 
 
 fake_odb = {
@@ -49,9 +48,9 @@ def test_get_parser():
 def test_main(caplog):
     with patch('sys.argv', ['odb_extract.py', 'sample.odb']), \
          patch('yaml.safe_dump'), \
-         patch('ecmf.command_line_tools.odb_extract.which', return_value='abaqus'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('ecmf.work.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
          patch('builtins.open', mock_open(read_data="data")):  # Test first critical error
         odb_extract.main()
     critical_records = [r.message for r in caplog.records if r.levelname == 'CRITICAL']
@@ -60,9 +59,9 @@ def test_main(caplog):
 
     with patch('sys.argv', ['odb_extract.py', 'sample']),  \
          patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
-         patch('ecmf.command_line_tools.odb_extract.which', return_value='abaqus'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('ecmf.work.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
          patch('pathlib.Path.exists', return_value=True):  # Test warning after second critical error
         odb_extract.main()
     warning_records = [r.message for r in caplog.records if r.levelname == 'WARNING']
@@ -71,11 +70,10 @@ def test_main(caplog):
 
     with patch('sys.argv', ['odb_extract.py', 'sample.odb', '-r', 'odbreport all', '-f', 'yaml']), \
          patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
-         patch('ecmf.work.ecmf_helper.ExitHandler.emit'), \
-         patch('ecmf.command_line_tools.odb_extract.which', return_value='abaqus'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('logging.Logger.hasHandlers', return_value=False), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('ecmf.work.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
          patch('pathlib.Path.exists', return_value=True):  # Test second critical error
         odb_extract.main()
     critical_records = [r.message for r in caplog.records if r.levelname == 'CRITICAL']
@@ -86,12 +84,11 @@ def test_main(caplog):
          patch('pathlib.Path.exists', return_value=True), \
          patch('builtins.open', mock_open(read_data="data")), \
          patch('yaml.safe_dump'), \
-         patch('ecmf.work.ecmf_helper.ExitHandler.emit'), \
-         patch('ecmf.command_line_tools.odb_extract.which', return_value='abaqus'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=['y', None, None]), \
          patch('sys.stdin', return_value='y'), \
-         patch('ecmf.work.abaqus_file_parser.OdbReportFileParser') as mock_abaqus_file_parser, \
-         patch('ecmf.work.ecmf_helper.run_external', return_value=[b'', -1, b'invalid command.']) \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser') as mock_abaqus_file_parser, \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser.run_external', return_value=[b'', -1, b'invalid command.']) \
                     as mock_run_external:
         # Test case where report args need to be adjusted, abaqus file parser is called, and third critical error
         odb_extract.main()
@@ -105,11 +102,11 @@ def test_main(caplog):
          patch('pathlib.Path.exists', return_value=[True, False]), \
          patch('builtins.open', mock_open(read_data="data")), \
          patch('yaml.safe_dump') as mock_safe_dump, \
-         patch('ecmf.command_line_tools.odb_extract.which', return_value='abaqus'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=['y', None, None]), \
          patch('sys.stdin', return_value='y'), \
-         patch('ecmf.work.abaqus_file_parser.OdbReportFileParser'), \
-         patch('ecmf.work.ecmf_helper.run_external', return_value=[b'', 0, b'valid command.']) as mock_run_external:
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser.run_external', return_value=[b'', 0, b'valid command.']) as mock_run_external:
         # Test case where yaml dump is called
         odb_extract.main()
         mock_run_external.assert_called_with('abaqus odbreport job=sample odb=sample.odb all blocked mode=CSV')
@@ -119,11 +116,11 @@ def test_main(caplog):
          patch('pathlib.Path.exists', return_value=[True, False]), \
          patch('builtins.open', mock_open(read_data="data")), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('ecmf.command_line_tools.odb_extract.which', return_value='abaqus'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('json.dump') as mock_safe_dump, \
-         patch('ecmf.work.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
          patch('pathlib.Path.unlink') as mock_unlink, \
-         patch('ecmf.work.ecmf_helper.run_external', return_value=[b'', 0, b'valid command.']):
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser.run_external', return_value=[b'', 0, b'valid command.']):
         # Test case where yaml dump is called
         odb_extract.main()
         mock_safe_dump.assert_called()
@@ -132,21 +129,20 @@ def test_main(caplog):
     with patch('sys.argv', ['odb_extract.py', 'sample.odb', '-f', 'h5']), \
          patch('pathlib.Path.exists', return_value=[True, False]), \
          patch('builtins.open', mock_open(read_data="data")), \
-         patch('ecmf.command_line_tools.odb_extract.which', return_value='abaqus'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('ecmf.work.abaqus_file_parser.OdbReportFileParser') as h5_parser, \
-         patch('ecmf.work.ecmf_helper.run_external', return_value=[b'', 0, b'valid command.']):
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser') as h5_parser, \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser.run_external', return_value=[b'', 0, b'valid command.']):
         # Test case where h5 file is created
         odb_extract.main()
         h5_parser.assert_called()
 
     with patch('sys.argv', ['odb_extract.py', 'sample.odb', '-f', 'h5']), \
          patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
-         patch('ecmf.work.ecmf_helper.ExitHandler.emit'), \
-         patch('ecmf.command_line_tools.odb_extract.which', return_value='abaqus'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('logging.Logger.hasHandlers', return_value=False), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('ecmf.work.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
          patch('pathlib.Path.exists', return_value=True):  # Test second critical error
         # Test case where h5 file is requested, but error is raised
         odb_extract.main()

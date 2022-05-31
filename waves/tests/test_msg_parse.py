@@ -10,7 +10,7 @@ Test msg_parse.py
 from unittest.mock import patch
 from pathlib import Path
 
-from ecmf.command_line_tools import msg_parse
+from waves.abaqus.command_line_tools import msg_parse
 
 
 def test_get_parser():
@@ -24,7 +24,7 @@ def test_get_parser():
 
 def test_main(caplog):
     with patch('sys.argv', ['msg_parse.py', 'sample.msg']), \
-         patch('ecmf.work.abaqus_file_parser.MsgFileParser'):
+         patch('waves.abaqus.abaqus_file_parser.MsgFileParser'):
         msg_parse.main()
     critical_records = [r.message for r in caplog.records if r.levelname == 'CRITICAL']
     assert "sample.msg does not exist" in critical_records[0]
@@ -33,10 +33,10 @@ def test_main(caplog):
     path_exists = [True, False, False, False]
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-s', '-a']), \
          patch('pathlib.Path.exists', side_effect=path_exists), \
-         patch('ecmf.work.abaqus_file_parser.MsgFileParser.write_yaml') as write_yaml, \
-         patch('ecmf.work.abaqus_file_parser.MsgFileParser.write_all') as write_all, \
-         patch('ecmf.work.abaqus_file_parser.MsgFileParser.write_summary_table') as write_summary, \
-         patch('ecmf.work.abaqus_file_parser.MsgFileParser.parse') as parse:
+         patch('waves.abaqus.abaqus_file_parser.MsgFileParser.write_yaml') as write_yaml, \
+         patch('waves.abaqus.abaqus_file_parser.MsgFileParser.write_all') as write_all, \
+         patch('waves.abaqus.abaqus_file_parser.MsgFileParser.write_summary_table') as write_summary, \
+         patch('waves.abaqus.abaqus_file_parser.MsgFileParser.parse') as parse:
         msg_parse.main()
         assert parse.called
         assert write_yaml.called
