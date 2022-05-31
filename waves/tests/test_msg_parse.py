@@ -9,14 +9,8 @@ Test msg_parse.py
 import pytest
 from unittest.mock import patch
 from pathlib import Path
-from contextlib import nullcontext as does_not_raise
 
 from waves.abaqus.command_line_tools import msg_parse
-
-main_input = {
-    '': ('', [], does_not_raise()),
-    '': pytest.param('', [], pytest.raises(SystemExit))
-}
 
 @pytest.mark.unittest
 def test_get_parser():
@@ -29,17 +23,14 @@ def test_get_parser():
         assert cmd_args.write_yaml == True
 
 @pytest.mark.unittest
-#@pytest.mark.parametrize( "", ["", pytest.raises(SystemExit)] )
-#@pytest.mark.parametrize("", main_input.values(), ids=main_input.keys())
 def test_main():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg']), \
          patch('builtins.print') as mock_print, \
-         pytest.raises(SystemExit) as exc_info, \
+         pytest.raises(SystemExit) as mock_exception, \
          patch('waves.abaqus.abaqus_file_parser.MsgFileParser'):
         msg_parse.main()
         assert "sample.msg does not exist" in str(mock_print.call_args)
-        exception_raised = exc_info.value
-        assert exception_raised == -1
+        assert mock_exception.value == -1
 
     path_exists = [True, False, False, False]
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-s', '-a']), \
