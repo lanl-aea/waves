@@ -6,6 +6,7 @@ Test odb_extract.py
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
+import pytest
 from unittest.mock import patch, mock_open
 
 from waves.abaqus.command_line_tools import odb_extract
@@ -38,12 +39,14 @@ fake_odb = {
 }
 
 
+@pytest.mark.unittest
 def test_get_parser():
     with patch('sys.argv', ['odb_extract.py', 'sample.odb']):
         cmd_args = odb_extract.get_parser().parse_args()
         assert cmd_args.abaqus_command == "abaqus"
 
 
+@pytest.mark.unittest
 def test_main(caplog):
     with patch('sys.argv', ['odb_extract.py', 'sample.odb']), \
          patch('yaml.safe_dump'), \
