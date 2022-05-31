@@ -26,7 +26,7 @@ def test_main():
          patch('builtins.print') as mock_print, \
          patch('waves.abaqus.abaqus_file_parser.MsgFileParser'):
         msg_parse.main()
-        mock_print.assert_called_with("sample.msg does not exist")
+        assert "sample.msg does not exist" in mock_print.getvalue()
 
     path_exists = [True, False, False, False]
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-s', '-a']), \
@@ -51,4 +51,5 @@ def test_file_exists():
         file_name = msg_parse.file_exists(fake_path)
         assert file_name.startswith('fake_file_')
         mock_print.assert_called_with("already exists")
+        assert "already exists" in mock_print.getvalue()
 
