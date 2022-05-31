@@ -27,7 +27,7 @@ def test_get_parser():
         assert cmd_args.write_yaml == True
 
 @pytest.mark.unittest
-@pytest.mark.parametrize(main_input.values())
+@pytest.mark.parametrize(main_input.values(), ids=main_input.keys())
 def test_main():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg']), \
          patch('builtins.print') as mock_print, \
