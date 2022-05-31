@@ -91,6 +91,18 @@ Now that you've create the geometry part build file in your ``tutorial_01_geomet
 folder, this section will walk through building the ``tutorial_01_geometry`` target using 
 Scons.
 
+.. todo::
+
+    To build the targets only for the ``tutorial_01_geometry``, execute the following 
+    command: ``scons tutorial_01_geometry``
+
+    To build *all* targets aliases in the ``eabm/SConstruct`` file, execute the following 
+    command: ``scons .``
+    
+    The output files will be located in the ``build`` directory within the ``eabm`` 
+    folder. The location of the ``build`` directory is controlled in the 
+    ``eabm/SConstruct`` file.
+
 
 ************
 Output Files
