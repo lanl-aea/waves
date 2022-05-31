@@ -814,7 +814,7 @@ class OdbReportFileParser(AbaqusFileParser):
                Dataset  # HDF5 Dataset that lists the location within the hdf5 file of all xarray datasets
     """
 
-    def parse(self, format='extract', h5_file=f'extract{_settings._default_h5_extraction}', time_stamp=None):
+    def parse(self, format='extract', h5_file=f'extract{_settings._default_h5_extension}', time_stamp=None):
         """Parse the file and store the results in the self.parsed dictionary.
          Can parse csv formatted output with the blocked option from the odbreport command
 
@@ -2249,10 +2249,10 @@ class OdbReportFileParser(AbaqusFileParser):
 
         non_empty_datasets = list()  # Store the names of the datasets that aren't empty
         datasets_file = Path(h5_file)
-        datasets_file = datasets_file.parent / f"{datasets_file.stem}_datasets{_settings._default_h5_extraction}"
+        datasets_file = datasets_file.parent / f"{datasets_file.stem}_datasets{_settings._default_h5_extension}"
         if datasets_file.exists():
             datasets_file = datasets_file.parent / f"{datasets_file.stem}_datasets_{time_stamp}" \
-                                                   f"{_settings._default_h5_extraction}"
+                                                   f"{_settings._default_h5_extension}"
         filename = str(datasets_file)
         for dataset in datasets:
             keys = dataset.split('/')  # Get instance, (Mesh|HistoryOutputs|FieldOutputs),(region name|None)
