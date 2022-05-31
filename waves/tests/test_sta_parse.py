@@ -9,7 +9,7 @@ Test sta_parse.py
 
 from unittest.mock import patch
 
-from ecmf.command_line_tools import sta_parse
+from waves.abaqus.command_line_tools import sta_parse
 
 
 def test_get_parser():
@@ -21,7 +21,7 @@ def test_get_parser():
 
 def test_main(caplog):
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
-         patch('ecmf.work.abaqus_file_parser.StaFileParser'):
+         patch('waves.abaqus.abaqus_file_parser.StaFileParser'):
         sta_parse.main()
     critical_records = [r.message for r in caplog.records if r.levelname == 'CRITICAL']
     assert "sample.sta does not exist" in critical_records[0]
@@ -30,8 +30,8 @@ def test_main(caplog):
     path_exists = [True, True]
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
          patch('pathlib.Path.exists', side_effect=path_exists), \
-         patch('ecmf.work.abaqus_file_parser.StaFileParser.write_yaml') as write_yaml, \
-         patch('ecmf.work.abaqus_file_parser.StaFileParser.parse') as parse:
+         patch('waves.abaqus.abaqus_file_parser.StaFileParser.write_yaml') as write_yaml, \
+         patch('waves.abaqus.abaqus_file_parser.StaFileParser.parse') as parse:
         sta_parse.main()
         assert parse.called
         assert write_yaml.called
