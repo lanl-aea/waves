@@ -12,7 +12,6 @@
 .. _`ASC RE Gitlab User Documentation`: https://re-git.lanl.gov/help/user/index.md
 .. _`AEA Gitlab group`: https://re-git.lanl.gov/aea
 .. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
-.. _`CMake`: https://cmake.org/
 .. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
