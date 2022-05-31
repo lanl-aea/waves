@@ -68,7 +68,7 @@ def test_main():
          patch('waves.abaqus.command_line_tools.odb_extract.log_warning') as mock_print, \
          patch('pathlib.Path.exists', return_value=True):  # Test warning after second critical error
         odb_extract.main()
-        assert "sample is not an odb file" in str(mock_print.call_args)
+        assert "sample is not an odb file" in str(mock_print.call_args_list[0])
 
     with patch('sys.argv', ['odb_extract.py', 'sample.odb', '-r', 'odbreport all', '-f', 'yaml']), \
          patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
