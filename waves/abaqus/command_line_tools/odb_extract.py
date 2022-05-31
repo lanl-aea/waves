@@ -75,6 +75,7 @@ def get_parser():
 def main():
     args = get_parser().parse_args()
 
+    verbose = args.verbose
     # Handle arguments
     input_file = args.input_file[0]
     path_input_file = Path(input_file)
