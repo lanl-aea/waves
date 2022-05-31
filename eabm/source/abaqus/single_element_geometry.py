@@ -72,7 +72,7 @@ def get_parser():
     parser.add_argument('--height', type=float, default=default_height,
                         help="The rectangle height")
     return parser
-
+# Comment used in tutorial code snippets: marker-2
 
 if __name__ == '__main__':
     parser = get_parser()

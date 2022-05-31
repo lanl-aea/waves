@@ -92,7 +92,7 @@ is saved with the name ``<output_file>.cae``.
 .. todo::
 
     * In the ``abaqus`` folder, modify the file called ``single_element_geometry.py``.
-    * Use the contents below to create the second half of the file. Note that any missing 
+    * Use the contents below to create the :meth:`get_parser` function. Note that any missing 
       line numbers should be interpreted as blank lines.
 
 .. admonition:: single_element_geometry.py
@@ -101,6 +101,21 @@ is saved with the name ``<output_file>.cae``.
         :language: Python
         :lineno-match:
         :start-after: marker-1
+        :end-before: marker-2
+
+.. todo::
+
+    * In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``.
+    * Use the contents below to create the ``if`` statement to call the :meth:`main` 
+      function. Note that any missing line numberts should be interpreted as blank lines.
+
+.. admonition:: single_element_geometry.py
+
+    .. literalinclude:: abaqus_single_element_geometry.py
+        :language: Python
+        :lineno-match:
+        :start-after: marker-2
+
 
 
 ****************
