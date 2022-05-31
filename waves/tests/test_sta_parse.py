@@ -21,9 +21,10 @@ def test_get_parser():
 def test_main():
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
          patch('builtins.print') as mock_print, \
+         patch('builtins.raise'), \
          patch('waves.abaqus.abaqus_file_parser.StaFileParser'):
         sta_parse.main()
-        mock_print.assert_called_with("sample.sta does not exist")
+        assert "sample.sta does not exist" in str(mock_print.call_args)
 
     path_exists = [True, True]
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
@@ -34,4 +35,4 @@ def test_main():
         sta_parse.main()
         assert parse.called
         assert write_yaml.called
-        mock_print.assert_called_with("already exists")
+        assert "already exists" in str(mock_print.call_args)
