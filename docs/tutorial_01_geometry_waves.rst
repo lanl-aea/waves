@@ -101,7 +101,9 @@ Docstrings are specially formatted comment blocks the help automate documentatio
 In this case, the docstrings are formatted so the Sphinx ``automodule`` directive can 
 interpret the comments as ReStructured Text. Docstrings discuss the use case of the 
 function along with its inputs, outputs, and usage. See the `PEP-257`_ conventions for 
-docstring formatting along with `PEP-287`_ for syntax specific to reStructured Text.
+docstring formatting along with `PEP-287`_ for syntax specific to reStructured Text. Using 
+the Sphinx ``automodule`` directive, the docstring can be used to autobuild documentation 
+for your functions. An example of this is in the :ref:`EABM API`.
 
 Abaqus Python Code
 ==================
@@ -132,7 +134,9 @@ Command Line Interfaces
 This portion of ``single_element_geometry.py`` defines the argument parsing function, 
 :meth:`get_parser`, which is the next step in turning our simple Python script into a 
 small software utility. Command line interfaces allow for scripts to be executed with 
-changing input arguments to the ``main`` function without any source code modification.
+changing input arguments to the ``main`` function without any source code modification. 
+``argparse`` also helps automate command line interface (CLI) documentation. An example of 
+this is the :ref:`EABM CLI`.
 
 The first highlighted portion o the :meth:`get_parser` function defines variables based on 
 the name of the script. While this method of determining the file name is non-standard for 

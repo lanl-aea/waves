@@ -38,6 +38,8 @@
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
 .. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
+.. _`EABM API`: https://kbrindley.re-pages.lanl.gov/waves/dev/api.html#
+.. _`EABM CLI`: https://kbrindley.re-pages.lanl.gov/waves/dev/cli.html#
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm
