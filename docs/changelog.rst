@@ -15,6 +15,11 @@ Documentation
 - Fix the out-of-order build/test/documentation examples as bulleted lists instead of enumerated lists (:issue:`115`,
   :merge:`84`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Create a list of files to be copied to the documentation build directory for include statements in ``.rst`` files 
+  (:issue:`120`, :merge:`90`). By `Thomas Roberts`_.
+
 ******************
 0.1.7 (2022-05-27)
 ******************
