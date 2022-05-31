@@ -32,6 +32,6 @@ By convention, the `SCons`_ root project file is named ``SConstruct``. Because t
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: ._SConstruct
       :language: Python
       :lineno-match:
