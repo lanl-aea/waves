@@ -82,7 +82,7 @@ def main():
     if not path_input_file.exists():
         log_critical(f'{input_file} does not exist.')
     if path_input_file.suffix != '.odb':
-        log_warning(f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
+        log_warning(verbose, f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
         odbreport_file = True
     file_base_name = str(path_input_file.with_suffix(''))
     output_file = args.output_file
@@ -92,7 +92,7 @@ def main():
     file_suffix = path_output_file.suffix.replace('.', '')
     if file_suffix != args.output_type:  # If file ends in different extension than requested output
         output_file = str(path_output_file.with_suffix(f'.{args.output_type}'))  # Change extension
-        log_warning(f'Output specified as {args.output_type}, but output file extension is {file_suffix}. '
+        log_warning(verbose, f'Output specified as {args.output_type}, but output file extension is {file_suffix}. '
                        f'Changing output file extension. Output file name {output_file}')
         file_suffix = args.output_type
     odb_report_args = args.odb_report_args
@@ -102,11 +102,11 @@ def main():
         odb_report_args = f'job={job_name} odb={input_file} all mode=CSV blocked'
     else:
         if 'odb=' in odb_report_args or 'job=' in odb_report_args:
-            log_warning(f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
+            log_warning(verbose, f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
             odb_report_args = f'job={job_name} odb={input_file} all mode=CSV blocked'
     if path_output_file.exists():
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
-        log_warning(f'{output_file} already exists. Will use {new_output_file} instead.')
+        log_warning(verbose, f'{output_file} already exists. Will use {new_output_file} instead.')
         output_file = new_output_file
 
     if 'odbreport' in odb_report_args:
