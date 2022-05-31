@@ -65,6 +65,7 @@ def test_main():
          patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves.abaqus.command_line_tools.odb_extract.log_warning'), \
          patch('builtins.print') as mock_print, \
          patch('pathlib.Path.exists', return_value=True):  # Test warning after second critical error
         odb_extract.main()
