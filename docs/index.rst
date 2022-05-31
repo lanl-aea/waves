@@ -6,9 +6,14 @@
 
 .. toctree::
    :maxdepth: 2
+   :caption: User Manual
+
+   tutorial_00_scons
+
+.. toctree::
+   :maxdepth: 2
    :caption: Build System
 
-   user
    theory
    api
    cli

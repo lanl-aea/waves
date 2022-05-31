@@ -36,8 +36,8 @@ documentation_file_list = [
     'release_philosophy.rst',
     'targets.txt',
     'theory.rst',
+    'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
-    'user.rst',
     'zreferences.rst',
     '_static/custom.css'
 ]
