@@ -62,9 +62,13 @@ re-used at the beginning of every project.
 Version Control
 ***************
 
+Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html
+
 *************
 Documentation
 *************
+
+Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html
 
 * user manual
 * theory manual
@@ -79,9 +83,13 @@ Documentation
 Build System
 ************
 
+Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/
+
 *******************
 Compute Environment
 *******************
+
+Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 
 ***************************
 Testing and Test Frameworks
