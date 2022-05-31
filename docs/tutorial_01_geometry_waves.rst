@@ -132,9 +132,6 @@ This portion of ``single_element_geometry.py`` defines the argument parsing func
 small software utility. Command line interfaces allow for scripts to be executed with 
 changing input arguments to the ``main`` function without any source code modification.
 
-Top-Level Code Environment
-==========================
-
 .. todo::
 
     * In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``.
@@ -149,12 +146,21 @@ Top-Level Code Environment
         :lineno-match:
         :start-after: marker-2
 
+Top-Level Code Environment
+==========================
+
 When the script is executed, an internal variable ``__name__`` is set to the value 
 ``__main__``. When this condition is true (i.e. the script is being executed rather than 
 being imported), the ``if`` statement's conditions are met, and the code inside is 
 executed. ``__main__`` is referred to as the top-level code environment. Top-level code is 
 also referred to as the *entry point* of the program. See the 
 `Python Top-Level Code Environment`_ documentation for more information.
+
+Retrieving Exit Codes
+=====================
+
+The :meth:`main` function is called from within the :meth:`sys.exit` method. This provides 
+the operating system with a non-zero exit code if the script throws and error.
 
 
 ****************
