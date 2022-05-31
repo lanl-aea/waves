@@ -19,6 +19,7 @@ Internal Changes
 ================
 - Create a list of files to be copied to the documentation build directory for include statements in ``.rst`` files 
   (:issue:`120`, :merge:`90`). By `Thomas Roberts`_.
+- Specify Sphinx v4.5.0 in the enviroment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
 
 ******************
 0.1.7 (2022-05-27)
