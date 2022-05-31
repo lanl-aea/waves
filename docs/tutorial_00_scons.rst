@@ -35,3 +35,4 @@ By convention, the `SCons`_ root project file is named ``SConstruct``. Because t
    .. literalinclude:: ._SConstruct
       :language: Python
       :lineno-match:
+      :end-before: marker-1

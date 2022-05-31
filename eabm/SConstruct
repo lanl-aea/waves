@@ -20,6 +20,8 @@ except LookupError:
     from importlib.metadata import version, PackageNotFoundError
     version = version("waves")
 
+# Comments used in tutorial code snippets: marker-1
+
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
 variables.AddVariables(
