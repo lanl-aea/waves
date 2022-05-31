@@ -4,6 +4,26 @@
 Tutorial 1: Geometry
 ####################
 
+**Do the following steps to get started with hands-on activities:**
+
+1. Create two directories ``tutorial_01_geometry`` and and ``source`` with the same parent 
+   directory. For example, in a bash shell:
+   
+   .. code-block:: bash
+       
+       $ pwd
+       /path/to/local/clone/eabm
+       $ mkdir tutorial_01_geometry source
+
+2. Create a directory within ``source`` called ``abaqus``. For example, in a bash shell:
+
+   .. code-block:: bash
+   
+       $ pwd
+       /path/to/local/clone/eabm
+       $ mkdir source/abaqus
+
+       
 ***************
 SConscript File
 ***************
