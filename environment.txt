@@ -4,7 +4,7 @@ pyyaml
 scons
 setuptools
 setuptools_scm
-sphinx
+sphinx=4.5.*
 sphinx-argparse
 sphinx_rtd_theme
 sphinxcontrib-bibtex
