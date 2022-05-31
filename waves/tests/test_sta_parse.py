@@ -18,25 +18,20 @@ def test_get_parser():
         assert cmd_args.output_file == "sample.yaml"
 
 
-def test_main(caplog):
+def test_main():
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
+         patch('builtins.print') as mock_print, \
          patch('waves.abaqus.abaqus_file_parser.StaFileParser'):
         sta_parse.main()
-    critical_records = [r.message for r in caplog.records if r.levelname == 'CRITICAL']
-    assert "sample.sta does not exist" in critical_records[0]
-    caplog.clear()
+        mock_print.assert_called_with("sample.sta does not exist")
 
     path_exists = [True, True]
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
          patch('pathlib.Path.exists', side_effect=path_exists), \
+         patch('builtins.print') as mock_print, \
          patch('waves.abaqus.abaqus_file_parser.StaFileParser.write_yaml') as write_yaml, \
          patch('waves.abaqus.abaqus_file_parser.StaFileParser.parse') as parse:
         sta_parse.main()
         assert parse.called
         assert write_yaml.called
-
-    warning_logs = [r.message for r in caplog.records if r.levelname == 'WARNING']
-    assert "already exists" in warning_logs[0]
-    caplog.clear()
-
-
+        mock_print.assert_called_with("already exists")
