@@ -12,10 +12,6 @@ from pathlib import Path
 
 from waves.abaqus.command_line_tools import msg_parse
 
-main_input = {
-    'missing file_name': pytest.param('', pytest.raises(SystemExit))
-}
-
 @pytest.mark.unittest
 def test_get_parser():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-o', 'sample', '-a']):
@@ -27,7 +23,7 @@ def test_get_parser():
         assert cmd_args.write_yaml == True
 
 @pytest.mark.unittest
-@pytest.mark.parametrize(main_input.values(), ids=main_input.keys())
+@pytest.mark.parametrize( "", ["", pytest.raises(SystemExit)] )
 def test_main():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg']), \
          patch('builtins.print') as mock_print, \
