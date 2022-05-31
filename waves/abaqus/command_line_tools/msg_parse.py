@@ -6,7 +6,6 @@ Parses passed in msg file and writes the output to a yaml file
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
-import logging
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pathlib import Path
@@ -14,8 +13,6 @@ from pathlib import Path
 # Local modules
 from waves.abaqus import abaqus_file_parser
 from waves.abaqus import _settings
-
-logger = logging.getLogger(__name__)
 
 
 def get_parser():
@@ -62,7 +59,8 @@ def main():
     msg_file = args.msg_file[0]
     path_msg_file = Path(msg_file)
     if not path_msg_file.exists():
-        logger.critical(f'{msg_file} does not exist.')
+        print(f'{msg_file} does not exist.')
+        raise SystemExit(-1)
     output_file = args.output_file
     if not output_file:
         output_file = path_msg_file.with_suffix('')
@@ -94,7 +92,7 @@ def file_exists(output_file):
         time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
         file_suffix = output_file.suffix
         new_output_file = f"{str(output_file.with_suffix(''))}_{time_stamp}{file_suffix}"
-        logger.warning(f'{output_file} already exists. Will use {new_output_file} instead.')
+        print(f'{output_file} already exists. Will use {new_output_file} instead.')
         return str(new_output_file)
     else:
         return str(output_file)

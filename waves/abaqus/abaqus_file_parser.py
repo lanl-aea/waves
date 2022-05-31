@@ -77,7 +77,7 @@ class AbaqusFileParser(ABC):
             print(message)
 
     def log_error(self, message):
-        """Log a warning message
+        """Log an error message
 
         :param str message: string with a message to print
         """
@@ -85,7 +85,7 @@ class AbaqusFileParser(ABC):
             print(message)
 
     def log_critical(self, message):
-        """Log a warning message
+        """Log a critical message and exit with an exception
 
         :param str message: string with a message to print
         """
