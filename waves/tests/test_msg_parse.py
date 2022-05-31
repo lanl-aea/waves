@@ -14,8 +14,8 @@ from contextlib import nullcontext as does_not_raise
 from waves.abaqus.command_line_tools import msg_parse
 
 main_input = {
-    '': ('', does_not_raise()),
-    '': pytest.param('', pytest.raises(SystemExit))
+    '': ('', [], does_not_raise()),
+    '': pytest.param('', [], pytest.raises(SystemExit))
 }
 
 @pytest.mark.unittest
