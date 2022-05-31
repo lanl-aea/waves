@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Extracts data from an Abaqus odb file.
 Calls odbreport feature of Abaqus, parses resultant file, and creates output file.
@@ -11,20 +10,17 @@ import sys
 import json
 import yaml
 import select
-import logging
 import re
+import shlex
+import subprocess
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pathlib import Path
 from shutil import which
 
 # Local modules
-import ecmf.work.ecmf_helper as helper
-from ecmf.work import abaqus_file_parser
-from ecmf import settings
-
-logger = logging.getLogger(__name__)
-
+from waves.abaqus import abaqus_file_parser
+from waves.abaqus import _settings
 
 def get_parser():
     """Get parser object for command line options
@@ -60,7 +56,7 @@ def get_parser():
     parser.add_argument('-a', '--abaqus-command',
                         dest='abaqus_command',
                         type=str,
-                        default=settings.DEFAULT_ABAQUS_COMMANDS[0],
+                        default=_settings._default_abaqus_command,
                         help='Abaqus command to use',
                         metavar='/path/to/abaqus')
     parser.add_argument('-d', '--delete-report-file',
@@ -68,24 +64,26 @@ def get_parser():
                         dest='delete_report_file',
                         default=False,
                         help='Delete after parsing the file created by the odbreport command')
+    parser.add_argument('-v', '--verbose',
+                        action="store_true",
+                        dest='verbose',
+                        default=False,
+                        help='Print all messages')
     return parser
 
 
 def main():
     args = get_parser().parse_args()
-    if not logger.hasHandlers():  # If this is run from the command line, likely the ECMF logger hasn't been set up
-        logger.addHandler(logging.StreamHandler())  # Using the command line handler for printing logging to the screen
-        logger.setLevel(logging.DEBUG)  # Print everything from Debug and above
-        logger.addHandler(helper.ExitHandler())  # Add exit handler for critical log messages
 
+    verbose = args.verbose
     # Handle arguments
     input_file = args.input_file[0]
     path_input_file = Path(input_file)
     odbreport_file = False
     if not path_input_file.exists():
-        logger.critical(f'{input_file} does not exist.')
+        log_message(verbose, f'{input_file} does not exist.')
     if path_input_file.suffix != '.odb':
-        logger.warning(f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
+        log_message(verbose, f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
         odbreport_file = True
     file_base_name = str(path_input_file.with_suffix(''))
     output_file = args.output_file
@@ -95,21 +93,21 @@ def main():
     file_suffix = path_output_file.suffix.replace('.', '')
     if file_suffix != args.output_type:  # If file ends in different extension than requested output
         output_file = str(path_output_file.with_suffix(f'.{args.output_type}'))  # Change extension
-        logger.warning(f'Output specified as {args.output_type}, but output file extension is {file_suffix}. '
+        log_message(verbose, f'Output specified as {args.output_type}, but output file extension is {file_suffix}. '
                        f'Changing output file extension. Output file name {output_file}')
         file_suffix = args.output_type
     odb_report_args = args.odb_report_args
     job_name = file_base_name
-    time_stamp = datetime.now().strftime(settings.DEFAULT_TIMESTAMP_FORMAT)
+    time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
     if not odb_report_args:
         odb_report_args = f'job={job_name} odb={input_file} all mode=CSV blocked'
     else:
         if 'odb=' in odb_report_args or 'job=' in odb_report_args:
-            logger.warning(f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
+            log_message(verbose, f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
             odb_report_args = f'job={job_name} odb={input_file} all mode=CSV blocked'
     if path_output_file.exists():
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
-        logger.warning(f'{output_file} already exists. Will use {new_output_file} instead.')
+        log_message(verbose, f'{output_file} already exists. Will use {new_output_file} instead.')
         output_file = new_output_file
 
     if 'odbreport' in odb_report_args:
@@ -129,12 +127,7 @@ def main():
 
     abaqus_base_command = which(args.abaqus_command)
     if not abaqus_base_command:
-        for abaqus_path in settings.DEFAULT_ABAQUS_COMMANDS[1:]:
-            abaqus_base_command = which(abaqus_path)
-            if abaqus_base_command:
-                break
-            else:
-                abaqus_base_command = settings.DEFAULT_ABAQUS_COMMANDS[0]  # Utlimately try 'abaqus' anyway
+        abaqus_base_command = _settings._default_abaqus_command  # try 'abaqus' anyway
 
     abaqus_command = f'{abaqus_base_command} odbreport {odb_report_args}'
 
@@ -142,7 +135,7 @@ def main():
         job_name = path_input_file
         call_odbreport = False
     else:
-        job_name = f'{file_base_name}{settings.DEFAULT_ODBREPORT_EXTENSION}'
+        job_name = f'{file_base_name}{_settings._default_odbreport_extension}'
         call_odbreport = True
     if Path(job_name).exists() and not odbreport_file:
         call_odbreport = False  # Don't call odbreport again if the report file already exists
@@ -154,24 +147,24 @@ def main():
                 call_odbreport = True  # If user input is not yes, run odbreport again
     if call_odbreport:
         # Call odbreport
-        output, return_code, error_code = helper.run_external(abaqus_command)
+        output, return_code, error_code = run_external(abaqus_command)
         if return_code != 0:
-            logger.critical(f'Abaqus odbreport command failed to execute. {error_code}')
+            log_message(verbose, f'Abaqus odbreport command failed to execute. {error_code}')
         if not Path(job_name).exists():
-            logger.critical(f'{job_name} does not exist.')
+            log_message(verbose, f'{job_name} does not exist.')
 
     if args.output_type == 'h5':  # If the dataset isn't empty
         try:
-            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp)
+            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp, verbose=verbose)
         except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if a string is found where an integer is expected
-            logger.critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
+            log_message(verbose, f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
     else:
         parsed_odb = None
         # Parse output of odbreport
         try:
-            parsed_odb = abaqus_file_parser.OdbReportFileParser(job_name, 'odb').parsed
+            parsed_odb = abaqus_file_parser.OdbReportFileParser(job_name, 'odb', verbose=verbose).parsed
         except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty)
-            logger.critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
+            log_message(verbose, f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
 
         # Write parsed output
         if args.output_type == 'json':
@@ -184,6 +177,31 @@ def main():
     if args.delete_report_file:
         Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
     return 0
+
+def run_external(cmd, env=None, stdout_file=None):
+    """
+    Execute an external command and get its exitcode, stdout and stderr.
+
+    :param str cmd: command line command to run
+    :param dict env: environment mapping for new process
+    :param str stdout_file: file to pipe STDOUT
+    :returns: output, return_code, error_code
+    """
+    args = shlex.split(cmd, posix=(os.name == 'posix'))
+    proc = subprocess.Popen(args, stdin=subprocess.DEVNULL, stdout=stdout_file, stderr=subprocess.PIPE, env=env)
+    out, error_code = proc.communicate()
+    exit_code = proc.returncode
+    return exit_code, out, error_code
+
+def log_message(verbose, message):
+    """
+    Log a message to the screen
+
+    :param bool verbose: Whether to print or not
+    :param bool message: message to print
+    """
+    if verbose:
+        print(message)
 
 
 if __name__ == '__main__':

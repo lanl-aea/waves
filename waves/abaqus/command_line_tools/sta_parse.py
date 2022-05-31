@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Extracts data from an Abaqus sta file.
 Parses passed in sta file and writes the output to a yaml file
@@ -13,8 +12,8 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pathlib import Path
 
 # Local modules
-from ecmf.work import abaqus_file_parser
-from ecmf import settings
+from waves.abaqus import abaqus_file_parser
+from waves.abaqus import _settings
 
 logger = logging.getLogger(__name__)
 
@@ -51,10 +50,10 @@ def main():
         logger.critical(f'{sta_file} does not exist.')
     output_file = args.output_file
     if not output_file:
-        output_file = path_sta_file.with_suffix(settings.DEFAULT_YAML_EXTENSION)
+        output_file = path_sta_file.with_suffix(_settings._default_yaml_extension)
     path_output_file = Path(output_file)
     if path_output_file.exists():
-        time_stamp = datetime.now().strftime(settings.DEFAULT_TIMESTAMP_FORMAT)
+        time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
         file_suffix = path_output_file.suffix
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}{file_suffix}"
         logger.warning(f'{output_file} already exists. Will use {new_output_file} instead.')

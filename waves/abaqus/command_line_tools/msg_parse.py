@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Extracts data from an Abaqus msg file.
 Parses passed in msg file and writes the output to a yaml file
@@ -13,8 +12,8 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pathlib import Path
 
 # Local modules
-from ecmf.work import abaqus_file_parser
-from ecmf import settings
+from waves.abaqus import abaqus_file_parser
+from waves.abaqus import _settings
 
 logger = logging.getLogger(__name__)
 
@@ -73,10 +72,10 @@ def main():
     parsed_msg = abaqus_file_parser.MsgFileParser(msg_file)
 
     if args.write_yaml:
-        output_file = file_exists(path_output_file.with_suffix(settings.DEFAULT_YAML_EXTENSION))
+        output_file = file_exists(path_output_file.with_suffix(_settings._default_yaml_extension))
         parsed_msg.write_yaml(output_file)
     if args.write_all:
-        output_file = file_exists(path_output_file.with_suffix(settings.DEFAULT_PARSED_EXTENSION))
+        output_file = file_exists(path_output_file.with_suffix(_settings._default_parsed_extension))
         parsed_msg.write_all(output_file)
     if args.write_summary_table:
         output_file = file_exists(path_output_file.with_suffix('.summary'))
@@ -92,7 +91,7 @@ def file_exists(output_file):
     :rtype: pathlib.Path
     """
     if output_file.exists():
-        time_stamp = datetime.now().strftime(settings.DEFAULT_TIMESTAMP_FORMAT)
+        time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
         file_suffix = output_file.suffix
         new_output_file = f"{str(output_file.with_suffix(''))}_{time_stamp}{file_suffix}"
         logger.warning(f'{output_file} already exists. Will use {new_output_file} instead.')
