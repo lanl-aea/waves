@@ -41,6 +41,21 @@ documentation_file_list = [
     '_static/custom.css'
 ]
 
+# Copy tutorial files to the build/docs directory
+project_dir = pathlib.Path(env['project_dir'])
+eabm_dir = project_dir / pathlib.Path(env['eabm_dir'])
+tutorial_01_dir = pathlib.Path(env['tutorial_01_dir'])
+abaqus_dir = pathlib.Path(env['abaqus_dir'])
+tutorial_files_list = [tutorial_01_dir / 'SConscript',
+                       abaqus_dir / 'single_element_geometry.py',
+]
+for file in tutorial_files_list:
+    target = f'{file.parents[0]}_{file.name}'
+    Command(target=target,
+            source=str(eabm_dir / file),
+            action=Copy("$TARGET", "$SOURCE"))
+    documentation_file_list.append(target)
+
 # TODO: os agnostic pathsep for the html directory
 # https://re-git.lanl.gov/kbrindley/waves/-/issues/4
 sphinx_options = '-W'
