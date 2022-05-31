@@ -2,6 +2,8 @@
 API
 ###
 
+.. _sconsbuildersapi:
+
 **************
 SCons Builders
 **************

@@ -28,12 +28,42 @@ Tutorial 1: Geometry
 SConscript File
 ***************
 
+The SConscript defines the sources, targets, and how to build the targets. Sources are 
+files that exist in the source code, such as Abaqus journal files. Targets are the outputs 
+form executing the source files, and the methods used to build the targets are the SCons 
+Builders. In this tutorial, we will build the geometry for a single element of a given 
+material using the WAVES ``AbaqusJournal`` builder.
+
+.. todo::
+
+    * In the ``tutorial_01_geomtry`` folder, create a file called ``SConscript``
+    * Use the contents below to create the first half of the file
+
 .. admonition:: SConscript
    
     .. literalinclude:: tutorial_01_geometry_SConscript
         :language: Python
         :lineno-match:
         :end-before: marker-1
+        :emphasize-lines: 6, 8-10
+
+The SConscript file begins with imports of standard Python libraries. The first highlighed 
+section is an SCons specific requirement. By default, SCons does not build in the user's 
+current environment. This ensures reproducability between users and environments. However, 
+in this case we want to inherit the user's compute environment, so we must import ``env``, 
+which is a variable set in EABM's SConstruct file.
+
+The next set of highlighted lines sets environment agnostic paths by utilizing 
+`Python pathlib`_ objects. The variable ``abaqus_source_abspath`` is used in source definitions
+to point at the absolute path to the directory where the Abaqus journal files exist.
+
+Lastly, the ``model`` variable is assinged so it can be used to specify an Abaqus journal file 
+by name.
+
+.. todo::
+
+    * In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``
+    * Use the contents below to create the second half of the file
 
 .. admonition:: Sconscript
 
@@ -41,7 +71,20 @@ SConscript File
          :language: Python
          :lineno-match:
          :start-after: marker-1
+         :emphasize-lines: 5-10
 
+First, the ``workflow`` variable is assigned to an empty list. Every time we instruct 
+SCons to build a target(s), we will ``extend`` this list and finally alias the current 
+directory name to the workflow list of targets.
+
+The next lines of code instruct SCons on how to build the ``<journal_file>.cae`` target.
+The ``journal_file`` variable sets the name of the Abaqus journal file that should be ran. 
+``journal_options`` allows for parameters to be passed as command line arguments to the 
+journal file. This will be discussed in REFTUTORIAL05PLACEHOLDER.
+
+Next, the ``workflow`` list is extended to include the action to use the ``AbaqusJournal`` 
+builder. For more information about the behavior of the ``AbaqusJournal`` builder, see the 
+:ref:`sconsbuildersapi`.
 
 ***********************************
 Create geometry part build file
@@ -103,7 +146,7 @@ interpret the comments as ReStructured Text. Docstrings discuss the use case of 
 function along with its inputs, outputs, and usage. See the `PEP-257`_ conventions for 
 docstring formatting along with `PEP-287`_ for syntax specific to reStructured Text. Using 
 the Sphinx ``automodule`` directive, the docstring can be used to autobuild documentation 
-for your functions. An example of this is in the :ref:`EABM API`.
+for your functions. An example of this is in the `EABM API`_.
 
 Abaqus Python Code
 ==================
@@ -136,7 +179,7 @@ This portion of ``single_element_geometry.py`` defines the argument parsing func
 small software utility. Command line interfaces allow for scripts to be executed with 
 changing input arguments to the ``main`` function without any source code modification. 
 ``argparse`` also helps automate command line interface (CLI) documentation. An example of 
-this is the :ref:`EABM CLI`.
+this is the `EABM CLI`_.
 
 The first highlighted portion o the :meth:`get_parser` function defines variables based on 
 the name of the script. While this method of determining the file name is non-standard for 
