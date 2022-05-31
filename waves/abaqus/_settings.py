@@ -1,5 +1,5 @@
 # Default supported file extensions
-_default_h5_extraction = '.h5'
+_default_h5_extension = '.h5'
 _default_yaml_extension = '.yaml'
 _default_parsed_extension = '.parsed'
 _default_odbreport_extension = '.csv'

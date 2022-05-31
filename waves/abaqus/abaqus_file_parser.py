@@ -16,7 +16,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from datetime import datetime
 
-from waves import _settings
+from waves.abaqus import _settings
 
 
 class AbaqusFileParser(ABC):
