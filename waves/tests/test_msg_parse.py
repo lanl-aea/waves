@@ -34,7 +34,7 @@ def test_get_parser():
 def test_main():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg']), \
          patch('builtins.print') as mock_print, \
-         pytest.raises('SystemExit') as exc_info, \
+         pytest.raises(SystemExit) as exc_info, \
          patch('waves.abaqus.abaqus_file_parser.MsgFileParser'):
         msg_parse.main()
         assert "sample.msg does not exist" in str(mock_print.call_args)
