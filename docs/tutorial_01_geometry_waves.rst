@@ -50,6 +50,16 @@ Create geometry part build file
 Now that you have an overview of the SConscript file and how SCons uses an Abaqus journal 
 file, let's create the geometry part build file for the single element model.
 
+The following sections of this tutorial will introduce four software-engineering practices 
+that are paramount to building an EABM. These concepts will be presented sequentially, 
+starting with familiar Python code, and adding in the following:
+
+1. Protecting your code within a :meth:`main` function
+2. Writing docstrings for your Python code
+3. Adding a command line interface to your Python code
+4. Protecting :meth:`main` function execution and returning exit codes
+
+
 .. todo::
 
     * In the ``abaqus`` folder, create a file called ``single_element_geometry.py``.
@@ -69,6 +79,9 @@ Python ``.py`` extension for the journal file, we allow the Sphinx Python interp
 read the file as if it is true Python, and this allows for automated API generation from 
 docstrings (which are disussed in the following paragraphs).
 
+``main`` Functions
+==================
+
 The top of the file imports standard library modules used by the script's functions along 
 with Abaqus modules. The ``main`` function takes in several arguments, like a 
 ``model_name``, ``part_name``, and some geometric parameters for the single element. Most 
@@ -78,16 +91,26 @@ inputs, known as sources, and outputs, known as targets. In this case, the ``out
 is the target which is created from the source, which is the 
 ``single_element_geometry.py`` file.
 
+
+Python Docstrings
+=================
+
 The beginning lines of code inside of the ``main`` function are called a docstring. 
 Docstrings are specially formatted comment blocks the help automate documentation builds. 
 In this case, the docstrings are formatted so the Sphinx ``automodule`` directive can 
 interpret the comments as ReStructured Text. Docstrings discuss the use case of the 
 function along with its inputs, outputs, and usage.
 
+Abaqus Python Code
+==================
+
 The latter portion of the ``main`` function is the code that generates the single element 
 geometry. Here, an Abaqus model is opened using the ``model_name`` variable as the model's 
 name, a rectangle is drawn with dimensions ``width`` and ``height``, and the Abaqus model 
 is saved with the name ``<output_file>.cae``.
+
+Command Line Interfaces
+=======================
 
 .. todo::
 
@@ -102,6 +125,14 @@ is saved with the name ``<output_file>.cae``.
         :lineno-match:
         :start-after: marker-1
         :end-before: marker-2
+
+This portion of ``single_element_geometry.py`` defines the argument parsing function, 
+:meth:`get_parser`, which is the next step in turning our simple Python script into a 
+small software utility. Command line interfaces allow for scripts to be executed with 
+changing input arguments to the ``main`` function without any source code modification.
+
+``main`` Function Protection
+============================
 
 .. todo::
 
