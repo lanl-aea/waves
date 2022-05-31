@@ -72,6 +72,7 @@ starting with familiar Python code, and adding in the following:
         :language: Python
         :lineno-match:
         :end-before: marker-1
+        :emphasize-lines: 10-21
 
 It is important to note that ``single_element_geometry.py`` is, indeed, an Abaqus journal 
 file - even though it does not have the classic ``.jnl.py`` extension. By using a standard 
@@ -95,7 +96,7 @@ is the target which is created from the source, which is the
 Python Docstrings
 =================
 
-The beginning lines of code inside of the ``main`` function are called a docstring. 
+The highlighted lines of code at the beginning of the ``main`` function are called a docstring. 
 Docstrings are specially formatted comment blocks the help automate documentation builds. 
 In this case, the docstrings are formatted so the Sphinx ``automodule`` directive can 
 interpret the comments as ReStructured Text. Docstrings discuss the use case of the 
