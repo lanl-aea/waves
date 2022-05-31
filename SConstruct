@@ -11,7 +11,9 @@ documentation_source_dir = 'docs'
 package_source_dir = _project_name_short.lower()
 project_variables = {
     'project_dir': Dir('.').abspath,
-    'abaqus_wrapper': str(_abaqus_wrapper)
+    'abaqus_wrapper': str(_abaqus_wrapper),
+    'eabm_dir': 'eabm',
+    'abaqus_dir': 'source/abaqus'
 }
 
 # =========================================================================================== COMMAND LINE VARIABLES ===
