@@ -51,7 +51,7 @@ tutorial_files_list = [tutorial_01_dir / 'SConscript',
                        abaqus_dir / 'single_element_geometry.py',
 ]
 for file in tutorial_files_list:
-    target = f'{file.parents[0]}_{file.name}'
+    target = f'{file.parts[-2]}_{file.name}'
     Command(target=target,
             source=str(eabm_dir / file),
             action=Copy("$TARGET", "$SOURCE"))
