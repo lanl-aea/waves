@@ -75,15 +75,14 @@ def get_parser():
 def main():
     args = get_parser().parse_args()
 
-    verbose = args.verbose
     # Handle arguments
     input_file = args.input_file[0]
     path_input_file = Path(input_file)
     odbreport_file = False
     if not path_input_file.exists():
-        log_message(verbose, f'{input_file} does not exist.')
+        log_critical(f'{input_file} does not exist.')
     if path_input_file.suffix != '.odb':
-        log_message(verbose, f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
+        log_warning(f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
         odbreport_file = True
     file_base_name = str(path_input_file.with_suffix(''))
     output_file = args.output_file
@@ -93,7 +92,7 @@ def main():
     file_suffix = path_output_file.suffix.replace('.', '')
     if file_suffix != args.output_type:  # If file ends in different extension than requested output
         output_file = str(path_output_file.with_suffix(f'.{args.output_type}'))  # Change extension
-        log_message(verbose, f'Output specified as {args.output_type}, but output file extension is {file_suffix}. '
+        log_warning(f'Output specified as {args.output_type}, but output file extension is {file_suffix}. '
                        f'Changing output file extension. Output file name {output_file}')
         file_suffix = args.output_type
     odb_report_args = args.odb_report_args
@@ -103,11 +102,11 @@ def main():
         odb_report_args = f'job={job_name} odb={input_file} all mode=CSV blocked'
     else:
         if 'odb=' in odb_report_args or 'job=' in odb_report_args:
-            log_message(verbose, f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
+            log_warning(f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
             odb_report_args = f'job={job_name} odb={input_file} all mode=CSV blocked'
     if path_output_file.exists():
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
-        log_message(verbose, f'{output_file} already exists. Will use {new_output_file} instead.')
+        log_warning(f'{output_file} already exists. Will use {new_output_file} instead.')
         output_file = new_output_file
 
     if 'odbreport' in odb_report_args:
@@ -149,22 +148,22 @@ def main():
         # Call odbreport
         output, return_code, error_code = run_external(abaqus_command)
         if return_code != 0:
-            log_message(verbose, f'Abaqus odbreport command failed to execute. {error_code}')
+            log_critical(f'Abaqus odbreport command failed to execute. {error_code}')
         if not Path(job_name).exists():
-            log_message(verbose, f'{job_name} does not exist.')
+            log_critical(f'{job_name} does not exist.')
 
     if args.output_type == 'h5':  # If the dataset isn't empty
         try:
-            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp, verbose=verbose)
+            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp)
         except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if a string is found where an integer is expected
-            log_message(verbose, f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
+            log_critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
     else:
         parsed_odb = None
         # Parse output of odbreport
         try:
-            parsed_odb = abaqus_file_parser.OdbReportFileParser(job_name, 'odb', verbose=verbose).parsed
+            parsed_odb = abaqus_file_parser.OdbReportFileParser(job_name, 'odb').parsed
         except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty)
-            log_message(verbose, f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
+            log_critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
 
         # Write parsed output
         if args.output_type == 'json':
@@ -193,7 +192,7 @@ def run_external(cmd, env=None, stdout_file=None):
     exit_code = proc.returncode
     return exit_code, out, error_code
 
-def log_message(verbose, message):
+def log_warning(verbose, message):
     """
     Log a message to the screen
 
@@ -202,6 +201,16 @@ def log_message(verbose, message):
     """
     if verbose:
         print(message)
+
+def log_critical(message):
+    """
+    Log a message to the screen and exit
+
+    :param bool verbose: Whether to print or not
+    :param bool message: message to print
+    """
+    print(message)
+    raise SystemExit(-1)
 
 
 if __name__ == '__main__':
