@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
 
 """Test msg parse
 Test msg_parse.py
@@ -22,13 +21,12 @@ def test_get_parser():
         assert cmd_args.write_summary_table == False
         assert cmd_args.write_yaml == True
 
-def test_main(caplog):
+def test_main():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg']), \
+         patch('builtins.print') as mock_print, \
          patch('waves.abaqus.abaqus_file_parser.MsgFileParser'):
         msg_parse.main()
-    critical_records = [r.message for r in caplog.records if r.levelname == 'CRITICAL']
-    assert "sample.msg does not exist" in critical_records[0]
-    caplog.clear()
+        mock_print.assert_called_with("sample.msg does not exist")
 
     path_exists = [True, False, False, False]
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-s', '-a']), \
@@ -43,15 +41,14 @@ def test_main(caplog):
         assert write_all.called
         assert write_summary.called
 
-def test_file_exists(caplog):
+def test_file_exists():
     fake_path = Path('fake_file.txt')
     with patch('pathlib.Path.exists', return_value=False):
         file_name = msg_parse.file_exists(fake_path)
         assert file_name == str(fake_path)
-    with patch('pathlib.Path.exists', return_value=True):
+    with patch('pathlib.Path.exists', return_value=True), \
+         patch('builtins.print') as mock_print:
         file_name = msg_parse.file_exists(fake_path)
         assert file_name.startswith('fake_file_')
+        mock_print.assert_called_with("already exists")
 
-    warning_logs = [r.message for r in caplog.records if r.levelname == 'WARNING']
-    assert "already exists" in warning_logs[0]
-    caplog.clear()
