@@ -33,11 +33,6 @@ def get_parser():
                         type=str,
                         help='file for printing output',
                         metavar='sample.yaml')
-    parser.add_argument('-v', '--verbose',
-                        action="store_true",
-                        dest='verbose',
-                        default=False,
-                        help='Print messages to screen')
     return parser
 
 
