@@ -183,6 +183,11 @@ executed. ``__main__`` is referred to as the top-level code environment. Top-lev
 also referred to as the *entry point* of the program. See the 
 `Python Top-Level Code Environment`_ documentation for more information.
 
+The first lines within the ``if __name__ == "__main__"`` context call the 
+:meth:`get_parser` method and use ``argparse`` to separate known and unknown command line 
+arguments. This is required for Abaqus journal files, because Abaqus will not strip the 
+CAE options from the ``abaqus cae -nogui`` command.
+
 Retrieving Exit Codes
 =====================
 
