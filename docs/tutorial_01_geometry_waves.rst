@@ -117,6 +117,22 @@ of the current working directory, in this case ``tutorial_01_geometry``.
 The final lines of code in the ``SConstruct`` file allow SCons to skip building a target 
 sequence if the Abaqus executable is not found.
 
+
+Entire SConscript File
+======================
+
+Shown below is the SConscript file in its entirety. The highlighted lines indicate code 
+that will commonly be change on a project-by-project basis.
+
+.. admonition:: Sconscript
+
+     .. literalinclude:: tutorial_01_geometry_SConscript
+         :language: Python
+         :lines: 1-14, 17-28, 30-36
+         :linenos:
+         :emphasize-lines: 14, 20-21
+
+
 *******************
 Abaqus Journal File
 *******************
