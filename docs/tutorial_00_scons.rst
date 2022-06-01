@@ -52,7 +52,7 @@ SCons Project Configuration
       $ mkdir waves-eabm-tutorial
       $ cd /home/roppenheimer/waves-eabm-tutorial
 
-2. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory with the contents listed below. Note
+2. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory and add the contents listed below. Note
    that the filename is case sensitive.
 
 .. admonition:: SConstruct
@@ -77,6 +77,14 @@ identify the file as a Python file for syntax highlighting. Using the `PEP-8`_ f
 imports are listed in the first block and third-party imports are listed in the second block, including the `WAVES`_
 package. Finally, the EABM version number is hardcoded into the project definition for these tutorials.
 
+3. Add the project's command-line build variables to the SCons project configuration from the code snippet below.
+
+.. note::
+
+   The line numbers may jump between code snippets. The skipped lines are not important to the tutorial content as you
+   create the tutorial files. They are a side effect of methods used to robustly create these code snippets from the
+   original source code.
+
 .. admonition:: SConstruct
 
    .. literalinclude:: ._SConstruct
@@ -84,6 +92,13 @@ package. Finally, the EABM version number is hardcoded into the project definiti
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
+
+The `SCons command-line build variables`_ are specific to the project definition that you are
+currently creating. EABM projects may add or remove command line options to aid in build behavior control. The most
+relevant variable to most EABMs will be the ``variant_dir_base``, which allows EABM developers to change the build
+directory location from the command line without modifying the ``SConstruct`` file source code. The
+``conditional_ignore`` and ``ignore_documentation`` variables are mostly useful for :ref:`continuous_integration` of
+EABM builds.
 
 .. admonition:: SConstruct
 
