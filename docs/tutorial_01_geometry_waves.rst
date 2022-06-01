@@ -13,8 +13,8 @@ References
 Directory Structure
 *******************
 
-1. Within the ``waves-eabm-tutorial`` directory, two directories called ``tutorial_01_geometry`` and and ``source``. 
-   For example, in a bash shell:
+1. Within the ``waves-eabm-tutorial`` directory, create two directories called 
+   ``tutorial_01_geometry`` and ``source``. For example, in a bash shell:
    
    .. code-block::
        
