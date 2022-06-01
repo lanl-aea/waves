@@ -301,7 +301,9 @@ Output Files
 ************
 
 Query the contents of the ``build`` directory using the ``tree`` command against the 
-``build`` directory, as shown below.
+``build`` directory, as shown below. Note that the directory structure of the build 
+directory *exactly* matches the directory structure of the location where the 
+project-level ``SConstruct`` and ``SConscript`` files exist.
 
 .. code-block:: bash
     
