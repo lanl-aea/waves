@@ -86,10 +86,10 @@ First, the ``workflow`` variable is assigned to an empty list. Every time we ins
 SCons to build a target(s), we will ``extend`` this list and finally create an alias to the current
 directory name to the workflow list of targets.
 
-The next lines of code instruct SCons on how to build the ``<journal_file>.cae`` target.
-The ``journal_file`` variable sets the name of the Abaqus journal file that should be ran. 
-``journal_options`` allows for parameters to be passed as command line arguments to the 
-journal file. This will be discussed in REFTUTORIAL05PLACEHOLDER.
+The next lines of code instruct SCons on how to build the ``journal_file`` target, which 
+is an Abaqus CAE file. The ``journal_file`` variable sets the name of the Abaqus journal 
+file that should be ran. ``journal_options`` allows for parameters to be passed as command line 
+arguments to the journal file. This will be discussed in REFTUTORIAL05PLACEHOLDER.
 
 Next, the ``workflow`` list is extended to include the action to use the ``AbaqusJournal`` 
 builder. For more information about the behavior of the ``AbaqusJournal`` builder, see the 
@@ -181,8 +181,8 @@ Abaqus Python Code
 
 The latter portion of the ``main`` function is the code that generates the single element 
 geometry. Here, an Abaqus model is opened using the ``model_name`` variable as the model's 
-name, a rectangle is drawn with dimensions ``width`` and ``height``, and the Abaqus model 
-is saved with the name ``<output_file>.cae``.
+name, a rectangle is drawn with dimensions ``width`` and ``height``, and the Abaqus 
+CAE model is saved with the name ``output_file``.
 
 .. TODO link to abaqus scripting documentation, specifically mention python 2.7
 
@@ -331,7 +331,7 @@ The ``tutorial_01_geomtry/`` directory should contain the following files:
 * ``single_element_geometry.abaqus_v6.env``, the environment file that allows for 
   reproduction of the Abaqus environment used to build the ``tutorial_01_geometry`` targets
 * ``single_element_geomtry.cae``, an Abaqus CAE file that contains a model named 
-  ``<model_name>`` within which is a part named ``<part_name>``.
+  ``model_name`` within which is a part named ``part_name``.
 * ``single_element_geometry.jnl`` and ``single_element_geometry.log``, the journal file 
   that records all of the commands executed by Abaqaus and the log file that will contain 
   any errors recorded by Abaqus.
