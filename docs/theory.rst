@@ -38,7 +38,7 @@ available funding.
 Computational Engineering Concepts
 **********************************
 
-The core concepts of computational engineering as listed below in the rough order of project maturity. That is, those
+The core concepts of computational engineering are listed below in the rough order of project maturity. That is, those
 things listed near the beginning of the list should be implemented early in the life-cycle of all projects, regardless
 of expected project growth, re-use, or impact. Particularly, version control should be implemented at the very beginning of
 a computational project, even with the earliest project brainstorming session. As the foundational practice of
