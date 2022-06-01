@@ -9,6 +9,14 @@ Prerequisites
 1. **TODO: link to the build system section of the theory manual when the theory manual is merged.**
 2. Software Carpentry: GNU Make -  https://swcarpentry.github.io/make-novice/
 
+***********
+Environment
+***********
+
+***********
+Description
+***********
+
 `WAVES`_ is a suite of build wrappers and command line utilities for the build system `SCons`_. Build systems help
 automate the execution of complex computing workflows by constructing component task execution order. In the
 `WAVES-EABM`_ tutorials, there are two components to the `SCons`_ configuration: project definition and simulation
@@ -26,6 +34,10 @@ For production engineering analysis, `WAVES`_ focuses on extending the build sys
 configuration files use `Python`_ as a fully featured scripting language. This choice is primarily driven by the
 familiarity of the engineering community with `Python`_ as a programming language, but also because the parameter
 generation utility can be integrated more closely with the build system, :ref:`parameter_generator_api`.
+
+***************************
+SCons Project Configuration
+***************************
 
 By convention, the `SCons`_ root project file is named ``SConstruct``. Because this is a `Python`_ file, we can import
 `Python`_ libraries to help define project settings. 
