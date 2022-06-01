@@ -6,6 +6,7 @@ Parses passed in msg file and writes the output to a yaml file
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
+import sys
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pathlib import Path
@@ -96,3 +97,6 @@ def file_exists(output_file):
         return str(new_output_file)
     else:
         return str(output_file)
+
+if __name__ == '__main__':
+    sys.exit(main())  # pragma: no cover
