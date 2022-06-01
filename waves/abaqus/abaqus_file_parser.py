@@ -9,12 +9,13 @@ Parse various file types created via Abaqus
 import re
 import yaml
 import os
-import xarray as xr
-import numpy as np
-import h5py
 from abc import ABC, abstractmethod
 from pathlib import Path
 from datetime import datetime
+
+import xarray as xr
+import numpy as np
+import h5py
 
 from waves.abaqus import _settings
 
