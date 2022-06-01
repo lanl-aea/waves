@@ -2,7 +2,7 @@
 API
 ###
 
-.. _sconsbuildersapi:
+.. _wavesbuildersapi:
 
 **************
 SCons Builders

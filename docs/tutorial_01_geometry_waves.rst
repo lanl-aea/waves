@@ -39,8 +39,9 @@ The SConscript defines the sources, actions, and targets. Sources are
 files that exist in the source repository, such as Abaqus journal files. Actions define 
 how to process source files, for example executing the Abaqus command. Targets are the 
 outputs artifacts created by the action, such as an Abaqus model file.
-In this tutorial, we will build the geometry for a single element part using the |PROJECT| 
-``AbaqusJournal`` builder.
+In this tutorial, we will build the geometry for a single element part using the 
+:meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the 
+:ref:`wavesbuildersapi`).
 
 .. todo::
 
@@ -91,9 +92,11 @@ is an Abaqus CAE file. The ``journal_file`` variable sets the name of the Abaqus
 file that should be ran. ``journal_options`` allows for parameters to be passed as command line 
 arguments to the journal file. This will be discussed in REFTUTORIAL05PLACEHOLDER.
 
-Next, the ``workflow`` list is extended to include the action to use the ``AbaqusJournal`` 
-builder. For more information about the behavior of the ``AbaqusJournal`` builder, see the 
-:ref:`sconsbuildersapi`. ``target`` specifies the files created when running the 
+Next, the ``workflow`` list is extended to include the action to use the 
+:meth:`waves.builders.abaqus_journal` builder, as discussed in REFTUTORIAL0PLACEHOLDER. 
+For more information about the behavior of the 
+:meth:`waves.builders.abaqus_journal` builder, click the builder's link or see the 
+:ref:`wavesbuildersapi`. ``target`` specifies the files created when running the 
 ``source`` files with the Abaqus command.
 
 .. todo::
@@ -107,7 +110,6 @@ builder. For more information about the behavior of the ``AbaqusJournal`` builde
          :language: Python
          :lineno-match:
          :start-after: marker-2
-         :emphasize-lines: 5-10
 
 First, we create an alias for the workflow that was extended previously to the name 
 of the current working directory, in this case ``tutorial_01_geometry``.
