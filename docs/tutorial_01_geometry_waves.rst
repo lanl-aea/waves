@@ -14,21 +14,13 @@ Directory Structure
 *******************
 
 1. Within the ``waves-eabm-tutorial`` directory, create two directories called 
-   ``tutorial_01_geometry`` and ``source``. For example, in a bash shell:
+   ``tutorial_01_geometry`` and ``source/abaqus``. For example, in a bash shell:
    
    .. code-block::
        
        $ pwd
        /path/to/waves-eabm-tutorial
-       $ mkdir tutorial_01_geometry source
-
-2. Create a directory within ``source`` called ``abaqus``. For example, in a bash shell:
-
-   .. code-block::
-   
-       $ pwd
-       /path/to/waves-eabm-tutorial
-       $ mkdir source/abaqus
+       $ mkdir tutorial_01_geometry source/abaqus
 
        
 ***************
@@ -43,7 +35,7 @@ In this tutorial, we will build the geometry for a single element part using the
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the 
 :ref:`waves_builders_api`).
 
-3. In the ``tutorial_01_geometry`` folder, create a file called ``SConscript``. Use the 
+2. In the ``tutorial_01_geometry`` folder, create a file called ``SConscript``. Use the 
    contents below to create the first third of the file.
 
 .. admonition:: SConscript
@@ -67,7 +59,7 @@ and then used as variables everywhere else in the code. For example, the variabl
 ``abaqus_source_abspath`` is used in source definitions to point at the absolute path to 
 the directory where the Abaqus journal files exist.
 
-4. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
+3. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
    contents below to create the middle portion of the file
 
 .. admonition:: Sconscript
@@ -97,7 +89,7 @@ For more information about the behavior of the
 :ref:`waves_builders_api`. ``target`` specifies the files created when running the 
 ``source`` files with the Abaqus command.
 
-5. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
+4. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
    contents below to create the final third of the file
 
 .. admonition:: Sconscript
@@ -139,12 +131,14 @@ The following sections of this tutorial will introduce four software-engineering
 that match the build system philosophy. These concepts will be presented sequentially, 
 starting with familiar Python code, and adding in the following:
 
-1. Protecting your code within a ``main()`` function
-2. Writing docstrings for your Python code
-3. Adding a command line interface to your Python code
-4. Protecting ``main()`` function execution and returning exit codes
+.. admonition:: Computational-Engineering Concepts Introduced
 
-6. In the ``source/abaqus`` folder, create a file called ``single_element_geometry.py``. 
+    1. Protecting your code within a ``main()`` function
+    2. Writing docstrings for your Python code
+    3. Adding a command line interface to your Python code
+    4. Protecting ``main()`` function execution and returning exit codes
+
+5. In the ``source/abaqus`` folder, create a file called ``single_element_geometry.py``. 
    Use the contents below to create the first half of the file, which contains the 
    ``main()`` function.
 
@@ -197,7 +191,7 @@ Abaqus CAE model is saved with the name ``output_file``.
 Command Line Interfaces
 =======================
 
-7. In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``. 
+6. In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``. 
    Use the contents below to create the ``get_parser()`` function. Note that any missing 
    line numbers should be interpreted as blank lines.
 
@@ -246,7 +240,7 @@ or ``--output-file``, default values, and help messages.
 
 See the `Python argparse`_ documentation for more information.
 
-8. In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``. 
+7. In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``. 
    Use the contents below to create the ``if`` statement within which we will call the 
    ``main()`` function. Note that any missing line numberts should be interpreted as blank 
    lines.
@@ -319,7 +313,8 @@ REFTUTORIAL0PLACEHOLDER, as shown in the included section of code below.
         :lineno-match:
         :emphasize-lines: 4
 
-9. To build the targets only for the ``tutorial_01_geometry``, execute the following command: 
+8. To build the targets only for the ``tutorial_01_geometry``, execute the following 
+   command: 
 
    .. code-block::
        
