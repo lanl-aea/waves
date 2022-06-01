@@ -6,6 +6,7 @@ Parses passed in sta file and writes the output to a yaml file
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
+import sys
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pathlib import Path
@@ -63,3 +64,5 @@ def main():
 
     return 0
 
+if __name__ == '__main__':
+    sys.exit(main())  # pragma: no cover
