@@ -9,6 +9,10 @@ Changelog
 0.1.8 (unreleased)
 ******************
 
+New Features
+============
+- Add the command line tools odb_extract, msg_parse, and sta_parse (:issue:`93`, :merge:`88`). By `Prabhu Khalsa`_.
+
 Documentation
 =============
 - Update the SConstruct example for the Python script builder (:issue:`113`, :merge:`83`). By `Kyle Brindley`_.

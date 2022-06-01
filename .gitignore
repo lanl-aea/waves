@@ -41,3 +41,10 @@ conda-bld/
 
 # MacOSX
 .DS_Store
+
+# PyCharm
+.idea
+
+# Pytest
+.coverage
+htmlcov
