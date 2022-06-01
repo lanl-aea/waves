@@ -31,16 +31,22 @@ requirements:
     - setuptools_scm
   run:
     - python >=3.8
+    - h5py
+    - numpy
     - pyyaml
     - scons
+    - xarray
 
 test:
   requires:
+    - h5py
+    - numpy
     - pytest
     - pytest-xdist
     - pyyaml
     - scons
     - setuptools_scm
+    - xarray
   source_files:
     # Everything copied here will make it into the "info" directory of the Conda package
     - SConstruct
