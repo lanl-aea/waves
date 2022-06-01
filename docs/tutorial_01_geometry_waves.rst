@@ -117,7 +117,6 @@ of the current working directory, in this case ``tutorial_01_geometry``.
 The final lines of code in the ``SConstruct`` file allow SCons to skip building a target 
 sequence if the Abaqus executable is not found.
 
-
 Entire SConscript File
 ======================
 
@@ -292,6 +291,20 @@ the operating system with a non-zero exit code if the script throws and error.
 
 allows the build system to exit when a build action has failed and a target has not been 
 produced corrrectly 
+
+Entire Abaqus Journal File
+==========================
+
+Shown below is ``single_element_geometry.py`` in its entirety. The highlighted lines 
+indicate code that will commonly be change on a project-by-project basis.
+
+.. admonition:: Sconscript
+
+     .. literalinclude:: abaqus_single_element_geometry.py
+         :language: Python
+         :lines: 1-40, 42-74, 76-85
+         :linenos:
+         :emphasize-lines: 9-21, 25-36, 50, 53-56, 59, 62-72, 79-83
 
 
 ****************
