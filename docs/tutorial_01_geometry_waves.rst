@@ -57,8 +57,8 @@ In this tutorial, we will build the geometry for a single element part using the
         :emphasize-lines: 6, 9-11
 
 The SConscript file begins with imports of standard Python libraries. The first 
-highlighted line imports the ``env`` variable, which is a variable set in 
-``eabm/SConstruct`` file. The ``env`` variable defines project settings, and is imported 
+highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set 
+in ``eabm/SConstruct`` file. The ``env`` variable defines project settings, and is imported 
 so setings variables are not hard-coded more than once.
 
 The next set of highlighted lines sets operating system agnostic paths by utilizing 
