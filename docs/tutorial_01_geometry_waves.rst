@@ -101,9 +101,9 @@ of the current working directory, in this case ``tutorial_01_geometry``.
 The final lines of code in the ``SConstruct`` file allow SCons to skip building a target 
 sequence if the Abaqus executable is not found.
 
-***********************************
-Create geometry part build file
-***********************************
+*******************
+Abaqus Journal File
+*******************
 
 Now that you have an overview of the SConscript file and how SCons uses an Abaqus journal 
 file, let's create the geometry part build file for the single element model.
