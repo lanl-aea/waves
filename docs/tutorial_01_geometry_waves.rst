@@ -1,8 +1,8 @@
 .. _tutorialgeometrywaves:
 
-####################
-Tutorial 1: Geometry
-####################
+#####################
+Tutorial 01: Geometry
+#####################
 
 **Do the following steps to get started with hands-on activities:**
 
