@@ -39,7 +39,7 @@ The SConscript defines the sources, actions, and targets. Sources are
 files that exist in the source repository, such as Abaqus journal files. Actions define 
 how to process source files, for example executing the Abaqus command. Targets are the 
 outputs artifacts created by the action, such as an Abaqus model file.
-In this tutorial, we will build the geometry for a single element part using the WAVES 
+In this tutorial, we will build the geometry for a single element part using the |PROJECT| 
 ``AbaqusJournal`` builder.
 
 .. todo::
