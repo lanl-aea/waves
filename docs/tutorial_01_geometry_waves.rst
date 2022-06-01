@@ -19,7 +19,7 @@ Directory Structure
    .. code-block:: bash
        
        $ pwd
-       /path/to/local/clone/eabm
+       /path/to/waves-eabm-tutorial
        $ mkdir tutorial_01_geometry source
 
 2. Create a directory within ``source`` called ``abaqus``. For example, in a bash shell:
@@ -27,7 +27,7 @@ Directory Structure
    .. code-block:: bash
    
        $ pwd
-       /path/to/local/clone/eabm
+       /path/to/waves-eabm-tutorial
        $ mkdir source/abaqus
 
        
@@ -292,7 +292,7 @@ Query the contents of the ``build`` directory using the ``tree`` command against
 .. code-block:: bash
     
     $ pwd
-    /path/to/local/clone/eabm
+    /path/to/waves-eabm-tutorial
     $ tree build
     build/
     ├── docs
