@@ -50,5 +50,6 @@
 .. email addresses
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
+.. _`Prabhu Khalsa`: pkhalsa@lanl.gov
 .. _`w13dev`: w13dev@lanl.gov
 

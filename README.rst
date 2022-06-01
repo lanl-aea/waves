@@ -55,6 +55,7 @@ Developers
 ==========
 
 * Kyle Brindley: kbrindley@lanl.gov
+* Prabhu Khalsa: pkhalsa@lanl.gov
 
 ********************
 Activate Environment
