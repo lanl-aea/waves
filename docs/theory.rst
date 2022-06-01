@@ -58,11 +58,15 @@ small, short-term projects benefit from implementing all of these concepts. In p
 is beneficial to implement the full range of computational engineering concepts in a "stub" repository that may be
 re-used at the beginning of every project.
 
+.. _version_control:
+
 ***************
 Version Control
 ***************
 
 Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html
+
+.. _documentation:
 
 *************
 Documentation
@@ -79,11 +83,15 @@ Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html
 * strategic plan/feature schedule
 * analysis reports
 
+.. _build_system:
+
 ************
 Build System
 ************
 
 Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/
+
+.. _compute_environment:
 
 *******************
 Compute Environment
@@ -91,9 +99,13 @@ Compute Environment
 
 Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 
+.. _testing:
+
 ***************************
 Testing and Test Frameworks
 ***************************
+
+.. _continuous_integration:
 
 **********************
 Continuous Integration
