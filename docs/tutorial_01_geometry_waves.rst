@@ -56,16 +56,17 @@ In this tutorial, we will build the geometry for a single element part using the
 
 The SConscript file begins with imports of standard Python libraries. The first 
 highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set 
-in ``eabm/SConstruct`` file. The ``env`` variable defines project settings, and is imported 
+in ``waves-eabm-tutorial/SConstruct`` file. The ``env`` variable defines project settings, 
+and is imported 
 so setings variables are not hard-coded more than once.
 
 The next set of highlighted lines sets operating system agnostic paths by utilizing 
 `Python pathlib`_ objects. Pathlib objects are used to reconstruct absolute paths to 
-source files using variables specified defined in the ``eabm/SConstruct`` file. This 
-method of path definition allows for path strings to be hard-coded only once, and then 
-used as variables everywhere else in the code. The variable ``abaqus_source_abspath`` is 
-used in source definitions to point at the absolute path to the directory where the Abaqus 
-journal files exist.
+source files using variables specified defined in the ``waves-eabm-tutorial/SConstruct`` 
+file. This method of path definition allows for path strings to be hard-coded only once, 
+and then used as variables everywhere else in the code. The variable 
+``abaqus_source_abspath`` is used in source definitions to point at the absolute path to 
+the directory where the Abaqus journal files exist.
 
 4. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
    contents below to create the middle portion of the file
