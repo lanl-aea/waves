@@ -622,7 +622,7 @@ class MsgFileParser(AbaqusFileParser):
             else:
                 sta = None
 
-        if sta.parsed:
+        if sta and sta.parsed:
             f.write("Filename: " + self.input_file + "\n")
             f.write("sta filename: " + sta_file + "\n")
             f.write("Date: " + self.parsed["date"] + "    ")
