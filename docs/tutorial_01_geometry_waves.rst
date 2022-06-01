@@ -308,11 +308,13 @@ was just done in the code block above), the name ``tutorial_01_geometry`` needed
 added to the ``waves-eabm-tutorial/SConstruct`` file. This was done in 
 REFTUTORIAL0PLACEHOLDER, as shown in the included section of code below.
 
-.. adomnition:: SConstruct
+.. admonition:: SConstruct
 
     .. literalinclude:: eabm_SConstruct
         :language: Python
+        :lines: 86-99
         :lineno-match:
+        :emphasize-lines: 89
 
 9. To build the targets only for the ``tutorial_01_geometry``, execute the following command: 
 
@@ -324,13 +326,10 @@ REFTUTORIAL0PLACEHOLDER, as shown in the included section of code below.
        scons: Reading SConscript files 
        <output truncated>
        ...scons: done building targets.
-
-
-    reference back to sconstruct where default target list is 
     
-    The output files will be located in the ``build`` directory within the ``eabm`` 
-    folder. The location of the ``build`` directory is controlled in the 
-    ``eabm/SConstruct`` file.
+The output files will be located in the ``build`` directory within the ``eabm`` folder. 
+The location of the ``build`` directory is controlled in the ``waves-eabm-tutorial/SConstruct`` 
+file.
 
 
 ************
