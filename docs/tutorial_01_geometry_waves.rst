@@ -4,7 +4,14 @@
 Tutorial 01: Geometry
 #####################
 
-**Do the following steps to get started with hands-on activities:**
+**********
+References
+**********
+
+
+*******************
+Directory Structure
+*******************
 
 1. Create two directories ``tutorial_01_geometry`` and and ``source`` with the same parent 
    directory. For example, in a bash shell:
@@ -28,15 +35,16 @@ Tutorial 01: Geometry
 SConscript File
 ***************
 
-The SConscript defines the sources, targets, and how to build the targets. Sources are 
-files that exist in the source code, such as Abaqus journal files. Targets are the outputs 
-form executing the source files, and the methods used to build the targets are the SCons 
-Builders. In this tutorial, we will build the geometry for a single element of a given 
-material using the WAVES ``AbaqusJournal`` builder.
+The SConscript defines the sources, actions, and targets. Sources are 
+files that exist in the source repository, such as Abaqus journal files. Actions define 
+how to process source files, for example executing the Abaqus command. Targets are the 
+outputs artifacts created by the action, such as an Abaqus model file.
+In this tutorial, we will build the geometry for a single element part using the WAVES 
+``AbaqusJournal`` builder.
 
 .. todo::
 
-    * In the ``tutorial_01_geomtry`` folder, create a file called ``SConscript``
+    * In the ``tutorial_01_geometry`` folder, create a file called ``SConscript``
     * Use the contents below to create the first half of the file
 
 .. admonition:: SConscript
@@ -74,7 +82,7 @@ by name.
          :emphasize-lines: 5-10
 
 First, the ``workflow`` variable is assigned to an empty list. Every time we instruct 
-SCons to build a target(s), we will ``extend`` this list and finally alias the current 
+SCons to build a target(s), we will ``extend`` this list and finally create an alias to the current
 directory name to the workflow list of targets.
 
 The next lines of code instruct SCons on how to build the ``<journal_file>.cae`` target.
@@ -90,7 +98,7 @@ builder. For more information about the behavior of the ``AbaqusJournal`` builde
 The lines of code that follow alias the workflow that was extended previously to the name 
 of the current working directory, in this case ``tutorial_01_geometry``.
 
-The final lines of code in the ``SConstruct`` file allow SCons to pass a target build 
+The final lines of code in the ``SConstruct`` file allow SCons to skip building a target 
 sequence if the Abaqus executable is not found.
 
 ***********************************
@@ -101,7 +109,7 @@ Now that you have an overview of the SConscript file and how SCons uses an Abaqu
 file, let's create the geometry part build file for the single element model.
 
 The following sections of this tutorial will introduce four software-engineering practices 
-that are paramount to building an EABM. These concepts will be presented sequentially, 
+that match the build system philosophy. These concepts will be presented sequentially, 
 starting with familiar Python code, and adding in the following:
 
 1. Protecting your code within a :meth:`main` function
@@ -125,10 +133,8 @@ starting with familiar Python code, and adding in the following:
         :emphasize-lines: 10-21
 
 It is important to note that ``single_element_geometry.py`` is, indeed, an Abaqus journal 
-file - even though it does not have the classic ``.jnl.py`` extension. By using a standard 
-Python ``.py`` extension for the journal file, we allow the Sphinx Python interpreter to 
-read the file as if it is true Python, and this allows for automated API generation from 
-docstrings (which are disussed in the following paragraphs).
+file - even though it does not look like a journal file produced by an ABaqus CAE gui 
+sessions.
 
 ``main`` Functions
 ==================
@@ -148,9 +154,10 @@ Python Docstrings
 
 The highlighted lines of code at the beginning of the ``main`` function are called a docstring. 
 Docstrings are specially formatted comment blocks the help automate documentation builds. 
-In this case, the docstrings are formatted so the Sphinx ``automodule`` directive can 
-interpret the comments as ReStructured Text. Docstrings discuss the use case of the 
-function along with its inputs, outputs, and usage. See the `PEP-257`_ conventions for 
+In this case, the docstrings are formatted so the `Sphinx`_ ``automodule`` directive 
+can 
+interpret the comments as ReStructured Text. Docstrings discuss the function behavior and 
+its interface. See the `PEP-257`_ conventions for 
 docstring formatting along with `PEP-287`_ for syntax specific to reStructured Text. Using 
 the Sphinx ``automodule`` directive, the docstring can be used to autobuild documentation 
 for your functions. An example of this is in the `EABM API`_.
@@ -162,6 +169,8 @@ The latter portion of the ``main`` function is the code that generates the singl
 geometry. Here, an Abaqus model is opened using the ``model_name`` variable as the model's 
 name, a rectangle is drawn with dimensions ``width`` and ``height``, and the Abaqus model 
 is saved with the name ``<output_file>.cae``.
+
+.. TODO link to abaqus scripting documentation, specifically mention python 2.7
 
 Command Line Interfaces
 =======================
@@ -249,6 +258,9 @@ Retrieving Exit Codes
 The :meth:`main` function is called from within the :meth:`sys.exit` method. This provides 
 the operating system with a non-zero exit code if the script throws and error.
 
+allows the build system to exit when a build action has failed and a target has not been 
+produced corrrectly 
+
 
 ****************
 Building targets
@@ -261,10 +273,9 @@ Scons.
 .. todo::
 
     To build the targets only for the ``tutorial_01_geometry``, execute the following 
-    command: ``scons tutorial_01_geometry``
+    command: ``scons tutorial_01_geometry``.
 
-    To build *all* targets aliases in the ``eabm/SConstruct`` file, execute the following 
-    command: ``scons .``
+    reference back to sconstruct where default target list is 
     
     The output files will be located in the ``build`` directory within the ``eabm`` 
     folder. The location of the ``build`` directory is controlled in the 
