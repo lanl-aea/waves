@@ -43,8 +43,39 @@ generation utility can be integrated more closely with the build system, :ref:`p
 SCons Project Configuration
 ***************************
 
+1. Create and change to a new project root directory to house the tutorial files. For example
+
+   .. code-block:: bash
+
+      $ pwd
+      /home/roppenheimer
+      $ mkdir waves-eabm-tutorial
+      $ cd /home/roppenheimer/waves-eabm-tutorial
+
+2. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory with the contents listed below. Note
+   that the filename is case sensitive.
+
+.. admonition:: SConstruct
+
+   .. code-block:: Python
+      :linenos:
+
+      #! /usr/bin/env python
+
+      import os
+      import sys
+      import pathlib
+
+      import setuptools_scm
+      import waves
+
+      version = '0.1.0'
+
 By convention, the `SCons`_ root project file is named ``SConstruct``. Because this is a `Python`_ file, we can import
-`Python`_ libraries to help define project settings.
+`Python`_ libraries to help define project settings. The `shebang`_ in the first line is included to help text editors
+identify the file as a Python file for syntax highlighting. Using the `PEP-8`_ formatting, the `Python`_ built-in
+imports are listed in the first block and third-party imports are listed in the second block, including the `WAVES`_
+package. Finally, the EABM version number is hardcoded into the project definition for these tutorials.
 
 .. admonition:: SConstruct
 
