@@ -1,10 +1,13 @@
+h5py
+numpy
 pytest
 pytest-xdist
 pyyaml
 scons
 setuptools
 setuptools_scm
-sphinx<5.*.*
 sphinx-argparse
+sphinx<5.*.*
 sphinx_rtd_theme
 sphinxcontrib-bibtex
+xarray

@@ -33,6 +33,9 @@ requirements:
     - python >=3.8
     - pyyaml
     - scons
+    - h5py
+    - numpy
+    - xarray
 
 test:
   requires:
