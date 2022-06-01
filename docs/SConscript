@@ -23,6 +23,7 @@ documentation_file_list = [
     'README.txt',  # Copied from README.rst to docs build directory by root SConscript
     'environment.txt',  # Copied from environment.txt to docs build directory by root SConscript
     '._SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
+    'eabm_README.txt',   # Copied from the eabm directory to waves docs build directory by root SConscript
     'api.rst',
     'build.txt',
     'changelog.rst',

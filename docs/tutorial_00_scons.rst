@@ -13,6 +13,10 @@ Prerequisites
 Environment
 ***********
 
+.. include:: eabm_README.txt
+   :start-after: env-start-do-not-remove
+   :end-before: env-end-do-not-remove
+
 ***********
 Description
 ***********
