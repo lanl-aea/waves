@@ -30,7 +30,8 @@ SConscript File
 The SConscript file defines the sources, actions, and targets. Sources are 
 files that exist in the source repository, such as Abaqus journal files. Actions define 
 how to process source files, for example executing the Abaqus command. Targets are the 
-output artifacts created by the action, such as an Abaqus model file.
+output artifacts created by the action, such as an Abaqus model file. It is also worth 
+noting that the ``SConscript`` file naming convention is case sensitive.
 In this tutorial, we will build the geometry for a single element part using the 
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the 
 :ref:`waves_builders_api`).
