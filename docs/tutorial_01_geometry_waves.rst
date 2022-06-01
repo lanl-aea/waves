@@ -13,10 +13,10 @@ References
 Directory Structure
 *******************
 
-1. Create two directories ``tutorial_01_geometry`` and and ``source`` with the same parent 
-   directory. For example, in a bash shell:
+1. Within the ``waves-eabm-tutorial`` directory, two directories called ``tutorial_01_geometry`` and and ``source``. 
+   For example, in a bash shell:
    
-   .. code-block:: bash
+   .. code-block::
        
        $ pwd
        /path/to/waves-eabm-tutorial
@@ -24,7 +24,7 @@ Directory Structure
 
 2. Create a directory within ``source`` called ``abaqus``. For example, in a bash shell:
 
-   .. code-block:: bash
+   .. code-block::
    
        $ pwd
        /path/to/waves-eabm-tutorial
