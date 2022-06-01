@@ -4,6 +4,8 @@
 
 .. include:: project_brief.txt
 
+.. _user_manual:
+
 .. toctree::
    :maxdepth: 2
    :caption: User Manual

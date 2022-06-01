@@ -6,7 +6,7 @@ Tutorial 00: SCons
 Prerequisites
 *************
 
-1. **TODO: link to the build system section of the theory manual when the theory manual is merged.**
+1. :ref:`computational_tools` :ref:`build_system`
 2. Software Carpentry: GNU Make -  https://swcarpentry.github.io/make-novice/
 
 ***********
@@ -40,7 +40,7 @@ SCons Project Configuration
 ***************************
 
 By convention, the `SCons`_ root project file is named ``SConstruct``. Because this is a `Python`_ file, we can import
-`Python`_ libraries to help define project settings. 
+`Python`_ libraries to help define project settings.
 
 .. admonition:: SConstruct
 
