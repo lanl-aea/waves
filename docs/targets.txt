@@ -24,16 +24,23 @@
 .. _`Python 2`: https://docs.python.org/2.7/
 .. _`PEP-8`: https://www.python.org/dev/peps/pep-0008/
 .. _`PEP-440`: https://www.python.org/dev/peps/pep-0440/
+.. _`PEP-257`: https://peps.python.org/pep-0257/
+.. _`PEP-287`: https://peps.python.org/pep-0287/
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`sphinx`: https://www.sphinx-doc.org/en/master/
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
+.. _`Python Top-Level Code Environment`: https://docs.python.org/3/library/__main__.html
+.. _`Python argparse`: https://docs.python.org/3/library/argparse.html
+.. _`Python pathlib`: https://docs.python.org/3/library/pathlib.html
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
 .. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
+.. _`EABM API`: https://kbrindley.re-pages.lanl.gov/waves/dev/api.html#
+.. _`EABM CLI`: https://kbrindley.re-pages.lanl.gov/waves/dev/cli.html#
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm
@@ -44,3 +51,4 @@
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
 .. _`w13dev`: w13dev@lanl.gov
+

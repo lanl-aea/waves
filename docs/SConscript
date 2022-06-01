@@ -36,10 +36,26 @@ documentation_file_list = [
     'release_philosophy.rst',
     'targets.txt',
     'theory.rst',
+    'tutorial_01_geometry_waves.rst',
     'user.rst',
     'zreferences.rst',
     '_static/custom.css'
 ]
+
+# Copy tutorial files to the build/docs directory
+project_dir = pathlib.Path(env['project_dir'])
+eabm_dir = project_dir / pathlib.Path(env['eabm_dir'])
+tutorial_01_dir = pathlib.Path(env['tutorial_01_dir'])
+abaqus_dir = pathlib.Path(env['abaqus_dir'])
+tutorial_files_list = [tutorial_01_dir / 'SConscript',
+                       abaqus_dir / 'single_element_geometry.py',
+]
+for file in tutorial_files_list:
+    target = f'{file.parts[-2]}_{file.name}'
+    Command(target=target,
+            source=str(eabm_dir / file),
+            action=Copy("$TARGET", "$SOURCE"))
+    documentation_file_list.append(target)
 
 # Copy tutorial files to the build/docs directory
 project_dir = pathlib.Path(env['project_dir'])

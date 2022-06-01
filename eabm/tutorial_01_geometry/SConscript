@@ -13,6 +13,8 @@ abaqus_source_abspath = project_dir / abaqus_source_dir
 # Simulation variables
 model = "single_element"
 
+# Comment used in tutorial code snippets: marker-1
+
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
