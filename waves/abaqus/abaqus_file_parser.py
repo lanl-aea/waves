@@ -61,32 +61,32 @@ class AbaqusFileParser(ABC):
             self.output_file = output_file
         if Path(self.output_file).suffix != _settings._default_yaml_extension:
             self.output_file = str(Path(self.output_file).with_suffix(_settings._default_yaml_extension))
-            self.log_warning(f'Changing suffix of output file to {_settings._default_yaml_extension}')
+            self.print_warning(f'Changing suffix of output file to {_settings._default_yaml_extension}')
         try:
             f = open(self.output_file, 'w')
         except EnvironmentError as e:
-            self.log_critical(f"Couldn't write file {self.output_file}: {e}")
+            self.print_critical(f"Couldn't write file {self.output_file}: {e}")
             return
         yaml.safe_dump(self.parsed, f)
 
-    def log_warning(self, message):
-        """Log a warning message
+    def print_warning(self, message):
+        """Print a warning message
 
         :param str message: string with a message to print
         """
         if self.verbose:
             print(message)
 
-    def log_error(self, message):
-        """Log an error message
+    def print_error(self, message):
+        """Print an error message
 
         :param str message: string with a message to print
         """
         if self.verbose:
             print(message)
 
-    def log_critical(self, message):
-        """Log a critical message and exit with an exception
+    def print_critical(self, message):
+        """Print a critical message and exit with an exception
 
         :param str message: string with a message to print
         """
@@ -104,7 +104,7 @@ class MsgFileParser(AbaqusFileParser):
         try:
             f = open(input_file, 'r')
         except EnvironmentError as e:
-            self.log_critical(f"Couldn't read file {input_file}: {e}")
+            self.print_critical(f"Couldn't read file {input_file}: {e}")
             return
 
         self.parsed["steps"] = dict()
@@ -138,7 +138,7 @@ class MsgFileParser(AbaqusFileParser):
                 try:
                     step_time = float(step_match.group(3))
                 except ValueError as e:
-                    self.log_error("Couldn't convert step time to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert step time to float. Storing as string:{}".format(e))
                     step_time = step_match.group(3)
                 if step_number not in self.parsed["steps"]:
                     self.parsed["steps"][step_number] = dict()
@@ -156,7 +156,7 @@ class MsgFileParser(AbaqusFileParser):
                 try:
                     time_increment = float(increment_match.group(3))
                 except ValueError as e:
-                    self.log_error("Couldn't convert time increment to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert time increment to float. Storing as string:{}".format(e))
                     time_increment = increment_match.group(3)
                 if increment_number not in self.parsed["steps"][step_number]["increments"]:
                     self.parsed["steps"][step_number]["increments"][increment_number] = dict()
@@ -193,7 +193,7 @@ class MsgFileParser(AbaqusFileParser):
                     try:
                         number_of_floating_pt_operations = float(numbers_match.group(3))
                     except ValueError as e:
-                        self.log_error("Couldn't convert number of floating point operations to float. "
+                        self.print_error("Couldn't convert number of floating point operations to float. "
                                      "Storing as string:{}".format(e))
                         number_of_floating_pt_operations = numbers_match.group(3)
             # Found situations where the following pattern was on its own line
@@ -202,32 +202,32 @@ class MsgFileParser(AbaqusFileParser):
                 try:
                     number_of_floating_pt_operations = float(floating_point_match.group(1))
                 except ValueError as e:
-                    self.log_error("Couldn't convert number of floating point operations to float. "
+                    self.print_error("Couldn't convert number of floating point operations to float. "
                                  "Storing as string:{}".format(e))
                     number_of_floating_pt_operations = floating_point_match.group(1)
             if "ELAPSED USER TIME (SEC)" in line:
                 try:
                     elapsed_user_time = float(line.split('=')[1].strip())
                 except ValueError as e:
-                    self.log_error("Couldn't convert elapsed user time to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert elapsed user time to float. Storing as string:{}".format(e))
                     elapsed_user_time = line.split('=')[1].strip()
             if "ELAPSED SYSTEM TIME (SEC)" in line:
                 try:
                     elapsed_system_time = float(line.split('=')[1].strip())
                 except ValueError as e:
-                    self.log_error("Couldn't convert elapsed system time to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert elapsed system time to float. Storing as string:{}".format(e))
                     elapsed_system_time = line.split('=')[1].strip()
             if "ELAPSED TOTAL CPU TIME (SEC)" in line:
                 try:
                     elapsed_total_cpu_time = float(line.split('=')[1].strip())
                 except ValueError as e:
-                    self.log_error("Couldn't convert elapsed total cpu time to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert elapsed total cpu time to float. Storing as string:{}".format(e))
                     elapsed_total_cpu_time = line.split('=')[1].strip()
             if "ELAPSED WALLCLOCK TIME (SEC)" in line:
                 try:
                     elapsed_wallclock_time = float(line.split('=')[1].strip())
                 except ValueError as e:
-                    self.log_error("Couldn't convert elapsed wallclock time to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert elapsed wallclock time to float. Storing as string:{}".format(e))
                     elapsed_wallclock_time = line.split('=')[1].strip()
             severe_match = re.match(r'^\s*(\d+)\s+SEVERE DISCONTINUITIES OCCURRED DURING THIS ITERATION.', line)
             if severe_match:
@@ -320,7 +320,7 @@ class MsgFileParser(AbaqusFileParser):
                         iteration_type][iteration_number]["data blocks"][data_type]["average"] = \
                         float(avg_match.group(2))
                 except ValueError as e:
-                    self.log_error("Couldn't convert average " + data_type +
+                    self.print_error("Couldn't convert average " + data_type +
                                  " to float. Storing as string:{}".format(e))
                     self.parsed["steps"][step_number]["increments"][increment_number]["attempts"][attempt_number][
                         iteration_type][iteration_number]["data blocks"][data_type]["average"] = avg_match.group(2)
@@ -329,7 +329,7 @@ class MsgFileParser(AbaqusFileParser):
                         iteration_type][iteration_number]["data blocks"][data_type]["time average"] = \
                         float(avg_match.group(4))
                 except ValueError as e:
-                    self.log_error("Couldn't convert time average " + data_type +
+                    self.print_error("Couldn't convert time average " + data_type +
                                  "to float. Storing as string:{}".format(e))
                     self.parsed["steps"][step_number]["increments"][increment_number]["attempts"][attempt_number][
                         iteration_type][iteration_number]["data blocks"][data_type]["time average"] = avg_match.group(4)
@@ -345,7 +345,7 @@ class MsgFileParser(AbaqusFileParser):
                         iteration_type][iteration_number]["data blocks"][data_type][residual_type]["value"] = \
                         float(largest_residual_match.group(2))
                 except ValueError as e:
-                    self.log_error("Couldn't convert largest residual " + residual_type +
+                    self.print_error("Couldn't convert largest residual " + residual_type +
                                  "to float. Storing as string:{}".format(e))
                     self.parsed["steps"][step_number]["increments"][increment_number]["attempts"][attempt_number][
                         iteration_type][iteration_number]["data blocks"][data_type][residual_type]["value"] = \
@@ -382,7 +382,7 @@ class MsgFileParser(AbaqusFileParser):
                         iteration_type][iteration_number]["data blocks"][data_type][largest_increment_type]["value"] = \
                         float(largest_increment_match.group(2))
                 except ValueError as e:
-                    self.log_error("Couldn't convert largest increment of " + largest_increment_type + " to float."
+                    self.print_error("Couldn't convert largest increment of " + largest_increment_type + " to float."
                                                                                                      " Storing as string:{}".format(
                         e))
                     self.parsed["steps"][step_number]["increments"][increment_number]["attempts"][attempt_number][
@@ -420,7 +420,7 @@ class MsgFileParser(AbaqusFileParser):
                         iteration_type][iteration_number]["data blocks"][data_type][correction_type]["value"] = \
                         float(largest_correction_match.group(2))
                 except ValueError as e:
-                    self.log_error("Couldn't convert largest correction to " + correction_type + " to float."
+                    self.print_error("Couldn't convert largest correction to " + correction_type + " to float."
                                                                                                " Storing as string:{}".format(
                         e))
                     self.parsed["steps"][step_number]["increments"][increment_number]["attempts"][attempt_number][
@@ -462,7 +462,7 @@ class MsgFileParser(AbaqusFileParser):
                     try:
                         self.parsed["job summary"][time_type] = float(time_value.strip())
                     except ValueError as e:
-                        self.log_error("Couldn't convert " + time_type + " to float. Storing as string:{}".format(e))
+                        self.print_error("Couldn't convert " + time_type + " to float. Storing as string:{}".format(e))
                         self.parsed["job summary"][time_type] = time_value.strip()
                     line = f.readline()
                     line = line.strip()
@@ -479,7 +479,7 @@ class MsgFileParser(AbaqusFileParser):
         try:
             f = open(output_file, 'w')
         except EnvironmentError as e:
-            self.log_error(f"Couldn't write file {self.output_file}: {e}")
+            self.print_error(f"Couldn't write file {self.output_file}: {e}")
             return
         f.write("Filename: " + self.input_file + "\n")
         if "date" in self.parsed and "time" in self.parsed:
@@ -610,7 +610,7 @@ class MsgFileParser(AbaqusFileParser):
         try:
             f = open(output_file, 'w')
         except EnvironmentError as e:
-            self.log_error(f"Couldn't write file {self.output_file}: {e}")
+            self.print_error(f"Couldn't write file {self.output_file}: {e}")
             return
 
         if sta_file:
@@ -741,7 +741,7 @@ class StaFileParser(AbaqusFileParser):
         try:
             f = open(input_file, 'r')
         except EnvironmentError as e:
-            self.log_critical(f"Couldn't read file {input_file}: {e}")
+            self.print_critical(f"Couldn't read file {input_file}: {e}")
             return
 
         self.parsed["columns"] = list()
@@ -764,17 +764,17 @@ class StaFileParser(AbaqusFileParser):
                 try:
                     column['total time'] = float(column_match.group(7))
                 except ValueError as e:
-                    self.log_error("Couldn't convert total time to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert total time to float. Storing as string:{}".format(e))
                     column['total time'] = column_match.group(7)
                 try:
                     column['step time'] = float(column_match.group(8))
                 except ValueError as e:
-                    self.log_error("Couldn't convert step time to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert step time to float. Storing as string:{}".format(e))
                     column['step time'] = column_match.group(8)
                 try:
                     column['increment of time'] = float(column_match.group(9))
                 except ValueError as e:
-                    self.log_error("Couldn't convert increment time to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert increment time to float. Storing as string:{}".format(e))
                     column['increment of time'] = column_match.group(9)
                 if column_match.group(10):
                     column['dof monitor'] = column_match.group(10)
@@ -836,7 +836,7 @@ class OdbReportFileParser(AbaqusFileParser):
         try:
             f = open(input_file, 'r')
         except EnvironmentError as e:
-            self.log_critical(f"Couldn't read file {input_file}: {e}")
+            self.print_critical(f"Couldn't read file {input_file}: {e}")
             return
 
         if not time_stamp:
@@ -848,7 +848,7 @@ class OdbReportFileParser(AbaqusFileParser):
         while not line.startswith("General ODB information") and line != "":
             if line.startswith('ODB Report'):
                 if not re.search('csv', line, re.IGNORECASE):
-                    self.log_critical(f"ODB report file must be in CSV format")
+                    self.print_critical(f"ODB report file must be in CSV format")
                     return
             line = f.readline()
 
@@ -893,7 +893,7 @@ class OdbReportFileParser(AbaqusFileParser):
             try:
                 self.parse_instances(f, self.parsed['odb']['rootAssembly']['instances'], number_of_instances)
             except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
-                self.log_critical(f"Unknown error occurred parsing odbreport file: {e}. Please report error "
+                self.print_critical(f"Unknown error occurred parsing odbreport file: {e}. Please report error "
                                 f"to {_settings._parsing_error_contact} and send odb or "
                                 f"odbreport ({_settings._default_odbreport_extension}) file.")
         # The following members of the root assembly object in the odb don't appear to be listed in the odbreport
@@ -914,7 +914,7 @@ class OdbReportFileParser(AbaqusFileParser):
             try:
                 self.parse_steps(f, self.parsed['odb']['steps'], number_of_steps)
             except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
-                self.log_critical(f"Unknown error occurred parsing odbreport file: {e}. Please report error "
+                self.print_critical(f"Unknown error occurred parsing odbreport file: {e}. Please report error "
                                 f"to {_settings._parsing_error_contact} and send odb or "
                                 f"odbreport ({_settings._default_odbreport_extension}) file.")
         # TODO: Find out if any of the following members of the odb appear in odbreport output: amplitudes, filters,
@@ -2033,14 +2033,14 @@ class OdbReportFileParser(AbaqusFileParser):
         :return: None
         """
         if self.format != 'extract':
-            self.log_error("Must specify extract format to utilize this routine.")
+            self.print_error("Must specify extract format to utilize this routine.")
             return None  # If extract format wasn't given when parsing the data, this method won't work
         extract = dict()
         datasets = list()
         try:
             extract_h5 = h5py.File(h5_file, 'a')
         except EnvironmentError as e:
-            self.log_critical(f"Couldn't open file {h5_file}: {e}")
+            self.print_critical(f"Couldn't open file {h5_file}: {e}")
 
         # Format Mesh information
         for instance_key in odb_dict['odb']['rootAssembly']['instances']:

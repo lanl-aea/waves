@@ -65,7 +65,7 @@ def test_main():
          patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
-         patch('waves.abaqus.command_line_tools.odb_extract.log_warning') as mock_print, \
+         patch('waves.abaqus.command_line_tools.odb_extract.print_warning') as mock_print, \
          patch('pathlib.Path.exists', return_value=True):  # Test warning after second critical error
         odb_extract.main()
         assert "sample is not an odb file" in str(mock_print.call_args_list[0])
@@ -73,7 +73,6 @@ def test_main():
     with patch('sys.argv', ['odb_extract.py', 'sample.odb', '-r', 'odbreport all', '-f', 'yaml']), \
          patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
          patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
-         patch('logging.Logger.hasHandlers', return_value=False), \
          patch('select.select', return_value=[None, None, None]), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
          pytest.raises(SystemExit) as mock_exception, \
@@ -147,7 +146,6 @@ def test_main():
     with patch('sys.argv', ['odb_extract.py', 'sample.odb', '-f', 'h5']), \
          patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
          patch('waves.abaqus.command_line_tools.odb_extract.which', return_value='abaqus'), \
-         patch('logging.Logger.hasHandlers', return_value=False), \
          patch('select.select', return_value=[None, None, None]), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
          pytest.raises(SystemExit) as mock_exception, \
