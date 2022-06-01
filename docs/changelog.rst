@@ -14,10 +14,12 @@ Documentation
 - Update the SConstruct example for the Python script builder (:issue:`113`, :merge:`83`). By `Kyle Brindley`_.
 - Fix the out-of-order build/test/documentation examples as bulleted lists instead of enumerated lists (:issue:`115`,
   :merge:`84`). By `Kyle Brindley`_.
+- Draft outline for the computational tools and practices "theory" manual (:issue:`96`, :merge:`85`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
-- Create a list of files to be copied to the documentation build directory for include statements in ``.rst`` files 
+- Create a list of files to be copied to the documentation build directory for include statements in ``.rst`` files
   (:issue:`120`, :merge:`90`). By `Thomas Roberts`_.
 
 ******************
