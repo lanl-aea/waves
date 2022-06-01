@@ -65,4 +65,6 @@ test:
     - waves
   commands:
     - scons . --keep-going conditional_ignore=False ignore_documentation=True
-    - cd eabm && scons . --keep-going conditional_ignore=False ignore_documentation=True --jobs=4
+    - cd eabm
+    - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False ignore_documentation=True
+    - scons . --keep-going conditional_ignore=False --jobs=4 ignore_documentation=True
