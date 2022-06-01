@@ -50,4 +50,3 @@ ODB Extract
 
 .. argparse::
    :ref: waves.abaqus.command_line_tools.odb_extract.get_parser
-   :prog: waves.abaqus.command_line_tools.odb_extract
