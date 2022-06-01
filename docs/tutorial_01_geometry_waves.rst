@@ -41,7 +41,7 @@ how to process source files, for example executing the Abaqus command. Targets a
 output artifacts created by the action, such as an Abaqus model file.
 In this tutorial, we will build the geometry for a single element part using the 
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the 
-:ref:`wavesbuildersapi`).
+:ref:`waves_builders_api`).
 
 3. In the ``tutorial_01_geometry`` folder, create a file called ``SConscript``. Use the 
    contents below to create the first third of the file.
@@ -94,7 +94,7 @@ Next, the ``workflow`` list is extended to include the action to use the
 :meth:`waves.builders.abaqus_journal` builder, as discussed in REFTUTORIAL0PLACEHOLDER. 
 For more information about the behavior of the 
 :meth:`waves.builders.abaqus_journal` builder, click the builder's link or see the 
-:ref:`wavesbuildersapi`. ``target`` specifies the files created when running the 
+:ref:`waves_builders_api`. ``target`` specifies the files created when running the 
 ``source`` files with the Abaqus command.
 
 5. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
