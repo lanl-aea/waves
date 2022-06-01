@@ -82,4 +82,77 @@ package. Finally, the EABM version number is hardcoded into the project definiti
    .. literalinclude:: ._SConstruct
       :language: Python
       :lineno-match:
-      :end-before: marker-1
+      :start-after: marker-1
+      :end-before: marker-2
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-2
+      :end-before: marker-3
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-3
+      :end-before: marker-4
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-4
+      :end-before: marker-5
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-5
+      :end-before: marker-6
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-6
+      :end-before: marker-7
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-7
+      :end-before: marker-8
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-8
+      :end-before: marker-9
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-9
+      :end-before: marker-10
+
+.. admonition:: SConstruct
+
+   .. literalinclude:: ._SConstruct
+      :language: Python
+      :lineno-match:
+      :start-after: marker-9
+      :end-before: marker-10
