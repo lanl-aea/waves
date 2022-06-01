@@ -18,7 +18,6 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pathlib import Path
 from shutil import which
 
-# Local modules
 from waves.abaqus import abaqus_file_parser
 from waves.abaqus import _settings
 
@@ -146,7 +145,6 @@ def main():
             if answer[:1].lower() != 'y':
                 call_odbreport = True  # If user input is not yes, run odbreport again
     if call_odbreport:
-        # Call odbreport
         output, return_code, error_code = run_external(abaqus_command)
         if return_code != 0:
             log_critical(f'Abaqus odbreport command failed to execute. {error_code}')
