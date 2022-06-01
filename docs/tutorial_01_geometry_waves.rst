@@ -53,20 +53,20 @@ In this tutorial, we will build the geometry for a single element part using the
         :language: Python
         :lineno-match:
         :end-before: marker-1
-        :emphasize-lines: 6, 8-10
+        :emphasize-lines: 6, 9-11
 
-The SConscript file begins with imports of standard Python libraries. The first highlighed 
-section is an SCons specific requirement. By default, SCons does not build in the user's 
-current environment. This ensures reproducability between users and environments. However, 
-in this case we want to inherit the user's compute environment, so we must import ``env``, 
-which is a variable set in EABM's SConstruct file.
+The SConscript file begins with imports of standard Python libraries. The first 
+highlighted line imports the ``env`` variable, which is a variable set in 
+``eabm/SConstruct`` file. The ``env`` variable defines project settings, and is imported 
+so setings variables are not hard-coded more than once.
 
-The next set of highlighted lines sets environment agnostic paths by utilizing 
-`Python pathlib`_ objects. The variable ``abaqus_source_abspath`` is used in source definitions
-to point at the absolute path to the directory where the Abaqus journal files exist.
-
-Lastly, the ``model`` variable is assinged so it can be used to specify an Abaqus journal file 
-by name.
+The next set of highlighted lines sets operating system agnostic paths by utilizing 
+`Python pathlib`_ objects. Pathlib objects are used to reconstruct absolute paths to 
+source files using variables specified defined in the ``eabm/SConstruct`` file. This 
+method of path definition allows for path strings to be hard-coded only once, and then 
+used as variables everywhere else in the code. The variable ``abaqus_source_abspath`` is 
+used in source definitions to point at the absolute path to the directory where the Abaqus 
+journal files exist.
 
 .. todo::
 
