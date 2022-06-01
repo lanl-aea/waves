@@ -315,7 +315,7 @@ REFTUTORIAL0PLACEHOLDER, as shown in the included section of code below.
         :language: Python
         :lines: 86-99
         :lineno-match:
-        :emphasize-lines: 89
+        :emphasize-lines: 4
 
 9. To build the targets only for the ``tutorial_01_geometry``, execute the following command: 
 
