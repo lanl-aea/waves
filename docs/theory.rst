@@ -2,11 +2,111 @@
 Theory Manual
 #############
 
-You can read more about Sphinx ReST formatting in this `Sphinx style guide`_
-:cite:`sphinx-style`.
+************
+Introduction
+************
 
-Placeholder for a theory manual with equations and figures and references.
+This manual will attempt to motivate the use of an `automated build system`_ for the purposes of computational science and
+engineering. As part of this motivation, the surrounding computational practices of version control, documentation,
+compute environment management, unit, integration, and regression testing, and continuous integration will also be
+addressed as applied to the practice of computational engineering. Specifically, this manual intends to motivate the
+adoption of these traditional software engineering practices for use in production engineering simulation projects.
 
-.. math::
+This manual is not the first such effort in the greater scientific computing community. In fact, the authors relied
+heavily on the lesson plans of the `Software Carpentry`_, established to teach computing skills to researchers in 1998
+:cite:`SoftwareCarpentry`. As the intention for this manual is to lay out fundamental practices of engineering
+computing, it will not attempt to fully teach the underlying concepts and will instead reference the well designed lesson
+plans of the `Software Carpentry`_.
 
-   Q_{life} = 42
+Where possible, this manual will refer to general computing practices and concepts with reference to specific software
+implementation as examples or vehicles for practice in concrete application. The specific software taught by the
+`Software Carpentry`_ curriculum is an excellent starting point to learn the core concepts of computational engineering.
+However, the authors have found that applications to production engineering simulation and analysis require translation
+of these concepts into the language and workflows of computational engineers. Adopting these computational tools may
+require engineers to re-imagine their workflows in some combination of traditional engineering and software concepts.
+
+It has also been necessary to extend existing software build systems to engineering practices beyond the simple wrapping
+of engineering software execution. Where necessary, examples of specific software and their method of extension to
+engineering simulations will be given, with reference to the :ref:`user_manual` for recommended practical use. Where
+this manual relies on specific implementation examples, it should be understood that the practicing engineer may find
+different software more amenable to their specific work. It is always the overall collection of computational practices
+that is most important, where the ability to recognize which software fits in which practice that will make a practicing
+engineer agile to changing project needs, computing resources, numeric solvers, programming languages, and even
+available funding.
+
+**********************************
+Computational Engineering Concepts
+**********************************
+
+The core concepts of computational engineering are listed below in the rough order of project maturity. That is, those
+things listed near the beginning of the list should be implemented early in the life-cycle of all projects, regardless
+of expected project growth, re-use, or impact. Particularly, version control should be implemented at the very beginning of
+a computational project, even with the earliest project brainstorming session. As the foundational practice of
+computational engineering, version control fills the role of a laboratory notebook and the strict practice of detailed
+and regular entries are equally important.
+
+* version control
+* documentation
+* build system
+* compute environment
+* unit/integration/regression tests and test frameworks
+* continuous integration automation
+
+Those practices at the end of the list are more costly to implement and therefore more valuable for mature or long-lived
+projects. However, an engineer familiar with the computational tools implementing these practices will find that even
+small, short-term projects benefit from implementing all of these concepts. In production engineering environments, it
+is beneficial to implement the full range of computational engineering concepts in a "stub" repository that may be
+re-used at the beginning of every project.
+
+.. _version_control:
+
+***************
+Version Control
+***************
+
+Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html
+
+.. _documentation:
+
+*************
+Documentation
+*************
+
+Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html
+
+* user manual
+* theory manual
+* API
+* CLI
+* developer manual
+* release philosophy
+* strategic plan/feature schedule
+* analysis reports
+
+.. _build_system:
+
+************
+Build System
+************
+
+Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/
+
+.. _compute_environment:
+
+*******************
+Compute Environment
+*******************
+
+Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+
+.. _testing:
+
+***************************
+Testing and Test Frameworks
+***************************
+
+.. _continuous_integration:
+
+**********************
+Continuous Integration
+**********************
