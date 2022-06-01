@@ -43,10 +43,8 @@ In this tutorial, we will build the geometry for a single element part using the
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the 
 :ref:`wavesbuildersapi`).
 
-.. todo::
-
-    * In the ``tutorial_01_geometry`` folder, create a file called ``SConscript``
-    * Use the contents below to create the first third of the file
+3. In the ``tutorial_01_geometry`` folder, create a file called ``SConscript``. Use the 
+   contents below to create the first third of the file.
 
 .. admonition:: SConscript
    
@@ -69,10 +67,8 @@ used as variables everywhere else in the code. The variable ``abaqus_source_absp
 used in source definitions to point at the absolute path to the directory where the Abaqus 
 journal files exist.
 
-.. todo::
-
-    * In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``
-    * Use the contents below to create the middle portion of the file
+4. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
+   contents below to create the middle portion of the file
 
 .. admonition:: Sconscript
 
@@ -99,10 +95,8 @@ For more information about the behavior of the
 :ref:`wavesbuildersapi`. ``target`` specifies the files created when running the 
 ``source`` files with the Abaqus command.
 
-.. todo::
-
-    * In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``
-    * Use the contents below to create the final third of the file
+5. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
+   contents below to create the final third of the file
 
 .. admonition:: Sconscript
 
@@ -148,12 +142,9 @@ starting with familiar Python code, and adding in the following:
 3. Adding a command line interface to your Python code
 4. Protecting :meth:`main` function execution and returning exit codes
 
-
-.. todo::
-
-    * In the ``abaqus`` folder, create a file called ``single_element_geometry.py``.
-    * Use the contents below to create the first half of the file, which contains the 
-      ``main`` function.
+6. In the ``abaqus`` folder, create a file called ``single_element_geometry.py``. Use the 
+   contents below to create the first half of the file, which contains the ``main`` 
+   function.
 
 .. admonition:: single_element_geometry.py
    
@@ -206,11 +197,9 @@ CAE model is saved with the name ``output_file``.
 Command Line Interfaces
 =======================
 
-.. todo::
-
-    * In the ``abaqus`` folder, modify the file called ``single_element_geometry.py``.
-    * Use the contents below to create the :meth:`get_parser` function. Note that any missing 
-      line numbers should be interpreted as blank lines.
+7. In the ``abaqus`` folder, modify the file called ``single_element_geometry.py``. Use 
+   the contents below to create the :meth:`get_parser` function. Note that any missing 
+   line numbers should be interpreted as blank lines.
 
 .. admonition:: single_element_geometry.py
 
@@ -254,12 +243,9 @@ messages.
 
 See the `Python argparse`_ documentation for more information.
 
-.. todo::
-
-    * In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``.
-    * Use the contents below to create the ``if`` statement within which we will call the 
-      :meth:`main` function. Note that any missing line numberts should be interpreted as 
-      blank lines.
+8. In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``. 
+   Use the contents below to create the ``if`` statement within which we will call the 
+   :meth:`main` function. Note that any missing line numberts should be interpreted as blank lines.
 
 .. admonition:: single_element_geometry.py
 
@@ -298,7 +284,7 @@ Entire Abaqus Journal File
 Shown below is ``single_element_geometry.py`` in its entirety. The highlighted lines 
 indicate code that will commonly be change on a project-by-project basis.
 
-.. admonition:: Sconscript
+.. admonition:: single_element_geometry.py
 
      .. literalinclude:: abaqus_single_element_geometry.py
          :language: Python
@@ -315,10 +301,30 @@ Now that you've create the geometry part build file in your ``tutorial_01_geomet
 folder, this section will walk through building the ``tutorial_01_geometry`` target using 
 Scons.
 
-.. todo::
+First, recall that we aliased the action for building the targets in the 
+``waves-ebam-tutorial/tutorial_01_geometry/`` to the name of the tutorial directory. In 
+order for that alias to be available for specifing a specific set of targets to build (as 
+was just done in the code block above), the name ``tutorial_01_geometry`` needed to be 
+added to the ``waves-eabm-tutorial/SConstruct`` file. This was done in 
+REFTUTORIAL0PLACEHOLDER, as shown in the included section of code below.
 
-    To build the targets only for the ``tutorial_01_geometry``, execute the following 
-    command: ``scons tutorial_01_geometry``.
+.. adomnition:: SConstruct
+
+    .. literalinclude:: eabm_SConstruct
+        :language: Python
+        :lineno-match:
+
+9. To build the targets only for the ``tutorial_01_geometry``, execute the following command: 
+
+   .. code-block::
+       
+       $pwd
+       /path/to/waves-eabm-tutorial
+       $scons tutorial_01_geometry
+       scons: Reading SConscript files 
+       <output truncated>
+       ...scons: done building targets.
+
 
     reference back to sconstruct where default target list is 
     
