@@ -138,10 +138,10 @@ The following sections of this tutorial will introduce four software-engineering
 that match the build system philosophy. These concepts will be presented sequentially, 
 starting with familiar Python code, and adding in the following:
 
-1. Protecting your code within a :meth:`main` function
+1. Protecting your code within a ``main()`` function
 2. Writing docstrings for your Python code
 3. Adding a command line interface to your Python code
-4. Protecting :meth:`main` function execution and returning exit codes
+4. Protecting ``main()`` function execution and returning exit codes
 
 6. In the ``abaqus`` folder, create a file called ``single_element_geometry.py``. Use the 
    contents below to create the first half of the file, which contains the ``main`` 
@@ -199,7 +199,7 @@ Command Line Interfaces
 =======================
 
 7. In the ``abaqus`` folder, modify the file called ``single_element_geometry.py``. Use 
-   the contents below to create the :meth:`get_parser` function. Note that any missing 
+   the contents below to create the ``get_parser()`` function. Note that any missing 
    line numbers should be interpreted as blank lines.
 
 .. admonition:: single_element_geometry.py
@@ -212,13 +212,13 @@ Command Line Interfaces
         :emphasize-lines: 2-5, 12-14, 16-30
 
 This portion of ``single_element_geometry.py`` defines the argument parsing function, 
-:meth:`get_parser`, which is the next step in turning our simple Python script into a 
+``get_parser()``, which is the next step in turning our simple Python script into a 
 small software utility. Command line interfaces allow for scripts to be executed with 
 changing input arguments to the ``main`` function without any source code modification. 
 ``argparse`` also helps automate command line interface (CLI) documentation. An example of 
 this is the `EABM CLI`_.
 
-The first highlighted portion o the :meth:`get_parser` function defines variables based on 
+The first highlighted portion o the ``get_parser()`` function defines variables based on 
 the name of the script. While this method of determining the file name is non-standard for 
 Python 3, the Abaqus-Python environment neccessitates this syntax. Nonetheless, the code 
 is general for any script name.
@@ -230,15 +230,15 @@ remove the ``_geometry`` suffix if it exists in the file name.
 The second highlighted portion defines default values for some of the command line 
 arguments. Default values are assigned if no command line argument is detected for any of 
 the expected command line arguments. ``output_file`` is the name of the file that is 
-created at the end of the :meth:`main` function, which assumes ``output_file`` does not 
+created at the end of the ``main()`` function, which assumes ``output_file`` does not 
 include a file extension. ``default_width`` and ``default_height`` define the size of the 
 ``single_element`` part.
 
 The final highlighted portion of the code is where the ``argparse`` package is used to 
 define the argument parser rules. First, an argument parser is defined using the 
-:meth:`ArgumentParser` method. This recieves a brief description ``cli_description`` and 
+``ArgumentParser`` method. This recieves a brief description ``cli_description`` and 
 direction ``prog`` on how to execute the program. Each subsequent call of the 
-:meth:`add_argument` adds a command line argument to the parser's rules. Command line 
+``add_argument`` method adds a command line argument to the parser's rules. Command line 
 arguments have identifiers, like ``-o`` or ``--output-file``, default values, and help 
 messages.
 
@@ -246,7 +246,8 @@ See the `Python argparse`_ documentation for more information.
 
 8. In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``. 
    Use the contents below to create the ``if`` statement within which we will call the 
-   :meth:`main` function. Note that any missing line numberts should be interpreted as blank lines.
+   ``main()`` function. Note that any missing line numberts should be interpreted as blank 
+   lines.
 
 .. admonition:: single_element_geometry.py
 
@@ -266,14 +267,14 @@ also referred to as the *entry point* of the program. See the
 `Python Top-Level Code Environment`_ documentation for more information.
 
 The first lines within the ``if __name__ == "__main__"`` context call the 
-:meth:`get_parser` method and use ``argparse`` to separate known and unknown command line 
+``get_parser()`` method and use ``argparse`` to separate known and unknown command line 
 arguments. This is required for Abaqus journal files, because Abaqus will not strip the 
 CAE options from the ``abaqus cae -nogui`` command.
 
 Retrieving Exit Codes
 =====================
 
-The :meth:`main` function is called from within the :meth:`sys.exit` method. This provides 
+The ``main()`` function is called from within the ``sys.exit()`` method. This provides 
 the operating system with a non-zero exit code if the script throws and error.
 
 allows the build system to exit when a build action has failed and a target has not been 
