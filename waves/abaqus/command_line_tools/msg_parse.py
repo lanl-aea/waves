@@ -11,7 +11,6 @@ from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from pathlib import Path
 
-# Local modules
 from waves.abaqus import abaqus_file_parser
 from waves.abaqus import _settings
 
