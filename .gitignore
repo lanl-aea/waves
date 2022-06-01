@@ -44,3 +44,7 @@ conda-bld/
 
 # PyCharm
 .idea
+
+# Pytest
+.coverage
+htmlcov
