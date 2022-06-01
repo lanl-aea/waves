@@ -45,7 +45,7 @@ In this tutorial, we will build the geometry for a single element part using the
 .. todo::
 
     * In the ``tutorial_01_geometry`` folder, create a file called ``SConscript``
-    * Use the contents below to create the first half of the file
+    * Use the contents below to create the first third of the file
 
 .. admonition:: SConscript
    
@@ -71,7 +71,7 @@ journal files exist.
 .. todo::
 
     * In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``
-    * Use the contents below to create the second half of the file
+    * Use the contents below to create the middle portion of the file
 
 .. admonition:: Sconscript
 
@@ -79,6 +79,7 @@ journal files exist.
          :language: Python
          :lineno-match:
          :start-after: marker-1
+         :end-before: marker-2
          :emphasize-lines: 5-10
 
 First, the ``workflow`` variable is assigned to an empty list. Every time we instruct 
@@ -95,7 +96,20 @@ builder. For more information about the behavior of the ``AbaqusJournal`` builde
 :ref:`sconsbuildersapi`. ``target`` specifies the files created when running the 
 ``source`` files with the Abaqus command.
 
-The lines of code that follow alias the workflow that was extended previously to the name 
+.. todo::
+
+    * In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``
+    * Use the contents below to create the final third of the file
+
+.. admonition:: Sconscript
+
+     .. literalinclude:: tutorial_01_geometry_SConscript
+         :language: Python
+         :lineno-match:
+         :start-after: marker-2
+         :emphasize-lines: 5-10
+
+First, we create an alias for the workflow that was extended previously to the name 
 of the current working directory, in this case ``tutorial_01_geometry``.
 
 The final lines of code in the ``SConstruct`` file allow SCons to skip building a target 
