@@ -36,8 +36,8 @@ In this tutorial, we will build the geometry for a single element part using the
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the 
 :ref:`waves_builders_api`).
 
-2. In the ``tutorial_01_geometry`` folder, create a file called ``SConscript``. Use the 
-   contents below to create the first third of the file.
+2. In the ``tutorial_01_geometry`` folder, create a file called ``SConscript`` using the 
+   contents below.
 
 .. admonition:: SConscript
    
@@ -60,8 +60,8 @@ and then used as variables everywhere else in the code. For example, the variabl
 ``abaqus_source_abspath`` is used in source definitions to point at the absolute path to 
 the directory where the Abaqus journal files exist.
 
-3. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
-   contents below to create the middle portion of the file
+3. In the ``tutorial_01_geometry`` folder, continue editing the file called ``SConscript`` 
+   using contents below.
 
 .. admonition:: Sconscript
 
@@ -90,8 +90,8 @@ For more information about the behavior of the
 :ref:`waves_builders_api`. ``target`` specifies the files created when running the 
 ``source`` files with the Abaqus command.
 
-4. In the ``tutorial_01_geometry`` folder, modify the file called ``SConscript``. Use the 
-   contents below to create the final third of the file
+4. In the ``tutorial_01_geometry`` folder, continue editing the file called ``SConscript``
+   using the contents below.
 
 .. admonition:: Sconscript
 
@@ -139,9 +139,8 @@ starting with familiar Python code, and adding in the following:
     3. Adding a command line interface to your Python code
     4. Protecting ``main()`` function execution and returning exit codes
 
-5. In the ``source/abaqus`` folder, create a file called ``single_element_geometry.py``. 
-   Use the contents below to create the first half of the file, which contains the 
-   ``main()`` function.
+5. In the ``source/abaqus`` folder, create a file called ``single_element_geometry.py``
+   using the contents below which contains the ``main()`` function.
 
 .. admonition:: single_element_geometry.py
    
@@ -192,9 +191,9 @@ Abaqus CAE model is saved with the name ``output_file``.
 Command Line Interfaces
 =======================
 
-6. In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``. 
-   Use the contents below to create the ``get_parser()`` function. Note that any missing 
-   line numbers should be interpreted as blank lines.
+6. In the ``source/abaqus`` folder, continue editing the file called ``single_element_geometry.py``
+   using the contents below which contains the ``get_parser()`` function. Note that any 
+   missing line numbers should be interpreted as blank lines.
 
 .. admonition:: single_element_geometry.py
 
@@ -241,8 +240,8 @@ or ``--output-file``, default values, and help messages.
 
 See the `Python argparse`_ documentation for more information.
 
-7. In the ``source/abaqus`` folder, modify the file called ``single_element_geometry.py``. 
-   Use the contents below to create the ``if`` statement within which we will call the 
+7. In the ``source/abaqus`` folder, continue editing the file called ``single_element_geometry.py``
+   using the contents below to create the ``if`` statement within which we will call the 
    ``main()`` function. Note that any missing line numberts should be interpreted as blank 
    lines.
 
