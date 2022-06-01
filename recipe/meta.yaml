@@ -68,4 +68,5 @@ test:
     - cd eabm
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False ignore_documentation=True
     - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going conditional_ignore=False ignore_documentation=True
+    - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going conditional_ignore=False ignore_documentation=True
     - scons . --keep-going conditional_ignore=False --jobs=4 ignore_documentation=True
