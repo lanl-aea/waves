@@ -99,6 +99,11 @@ class MsgFileParser(AbaqusFileParser):
     """
 
     def parse(self, input_file=None):
+        """Parse the file and store the results in the self.parsed dictionary.
+
+        :param str input_file: Name of msg file to parse
+        :return: None
+        """
         if not input_file:
             input_file = self.input_file
         try:
@@ -472,7 +477,9 @@ class MsgFileParser(AbaqusFileParser):
 
     def write_all(self, output_file=None):
         """Write all the data in the dictionary
+
         :param str output_file: Name of output file to write data (default: <input file>.parsed)
+        :return: None
         """
         if not output_file:
             output_file = self.output_file
@@ -602,8 +609,10 @@ class MsgFileParser(AbaqusFileParser):
 
     def write_summary_table(self, output_file=None, sta_file=None):
         """Write a summary of the data in a table
+
         :param str output_file: Name of output file to write data (default: <input file>.parsed)
         :param str sta_file: Name of sta file to parse for summary data
+        :return: None
         """
         if not output_file:
             output_file = self.output_file
