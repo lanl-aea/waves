@@ -736,6 +736,11 @@ class StaFileParser(AbaqusFileParser):
     """
 
     def parse(self, input_file=None):
+        """Parse the file and store the results in the self.parsed dictionary.
+
+        :param str input_file: Name of sta file to parse
+        :return: None
+        """
         if not input_file:
             input_file = self.input_file
         try:
