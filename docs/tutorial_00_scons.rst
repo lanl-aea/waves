@@ -95,9 +95,27 @@ package. Finally, the EABM version number is hardcoded into the project definiti
 The `SCons command-line build variables`_ are specific to the project definition that you are currently creating. EABM
 projects may add or remove command line options to aid in build behavior control. The most relevant variable to most
 EABMs will be the ``variant_dir_base``, which allows EABM developers to change the build directory location from the
-command line without modifying the ``SConstruct`` file source code. The ``conditional_ignore`` variable is mostly useful
-for :ref:`continuous_integration` testing. At the end of this tutorial, you will see how to explore the project specific
-command line options and build variables help and usage.
+command line without modifying the ``SConstruct`` file source code. For example, the first ``scons`` call will create
+the default build directory named ``build`` and the second ``scons`` call will create a build directory named
+``non-default_build``.
+
+.. code-block::
+
+   $ ls .
+   SConstruct
+   $ scons
+   $ ls .
+   SConstruct
+   build/
+
+   $ scons variant_dir_base=non-default_build
+   $ ls .
+   SConstruct
+   build/
+   non-default_build/
+
+The ``conditional_ignore`` variable is mostly useful for :ref:`continuous_integration` testing. At the end of this
+tutorial, you will see how to explore the project specific command line options and build variables help and usage.
 
 6. Add the content below to the ``SConstruct`` file to initialize the `SCons construction environment`_.
 
