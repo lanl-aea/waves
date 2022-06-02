@@ -36,8 +36,8 @@ In this tutorial, we will build the geometry for a single element part using the
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the 
 :ref:`waves_builders_api`).
 
-2. In the ``tutorial_01_geometry`` folder, create a file called ``SConscript`` using the 
-   contents below.
+2. In the ``tutorial_01_geometry`` directory, create a file called ``SConscript`` using 
+the contents below.
 
 .. admonition:: SConscript
    
@@ -61,8 +61,8 @@ the code. For example, the variable ``abaqus_source_abspath`` is used in source
 definitions to point at the absolute path to the directory where the Abaqus journal files 
 exist.
 
-3. In the ``tutorial_01_geometry`` folder, continue editing the file called ``SConscript`` 
-   using contents below.
+3. In the ``tutorial_01_geometry`` directory, continue editing the file called 
+``SConscript`` using contents below.
 
 .. admonition:: Sconscript
 
@@ -95,8 +95,8 @@ For more information about the behavior of the
 :meth:`waves.builders.abaqus_journal` task's action, which is defined in the 
 :ref:`waves_builders_api`.
 
-4. In the ``tutorial_01_geometry`` folder, continue editing the file called ``SConscript``
-   using the contents below.
+4. In the ``tutorial_01_geometry`` directory, continue editing the file called 
+``SConscript`` using the contents below.
 
 .. admonition:: Sconscript
 
@@ -128,7 +128,7 @@ starting with familiar Abaqus Python code, and adding in the following:
 * Adding a command line interface to your Python code
 * Protecting ``main()`` function execution and returning exit codes
 
-5. In the ``source/abaqus`` folder, create a file called ``single_element_geometry.py``
+5. In the ``source/abaqus`` directory, create a file called ``single_element_geometry.py``
    using the contents below which contains the ``main()`` function.
 
 .. admonition:: single_element_geometry.py
@@ -187,7 +187,7 @@ Abaqus Python 2.7 environment.
 Command Line Interfaces
 =======================
 
-6. In the ``source/abaqus`` folder, continue editing the file called ``single_element_geometry.py``
+6. In the ``source/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
    using the contents below which contains the ``get_parser()`` function. Note that 
    missing line numbers may be ignored.
 
@@ -246,7 +246,7 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 2.7. See the `Python 2.7 argparse`_ documentation for more information about how 
 ``argparse`` will behave in an Abaqus journal file.
 
-7. In the ``source/abaqus`` folder, continue editing the file called ``single_element_geometry.py``
+7. In the ``source/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
    using the contents below to create the ``if`` statement within which we will call the 
    ``main()`` function. Note that missing line numbers may be ignored.
 
@@ -306,9 +306,9 @@ but that may change in production EABMs.
 Building targets
 ****************
 
-Now that you've create the geometry part build file in your ``tutorial_01_geometry`` 
-folder, this section will walk through building the ``tutorial_01_geometry`` targets using 
-Scons.
+Now that you've created the geometry part build file in your ``tutorial_01_geometry`` 
+directory, this section will walk through building the ``tutorial_01_geometry`` targets 
+using Scons.
 
 First, recall that we aliased the action for building the targets in the 
 ``waves-ebam-tutorial/tutorial_01_geometry/SConscript`` file to the name of the tutorial 
@@ -337,8 +337,8 @@ REFTUTORIAL0PLACEHOLDER, as shown in the included section of code below.
        <output truncated>
        ...scons: done building targets.
     
-The output files will be located in the ``build`` directory within the ``eabm`` folder. 
-The location of the ``build`` directory is controlled in the ``waves-eabm-tutorial/SConstruct`` 
+The output files will be located in the ``build`` directory within the ``waves-eabm-tutorial`` 
+directory. The location of the ``build`` directory is controlled in the ``waves-eabm-tutorial/SConstruct`` 
 file.
 
 
