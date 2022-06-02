@@ -1,8 +1,8 @@
 .. _tutorial_cartesian_product_waves:
 
-##########################
-Tutorial 07: Include Files
-##########################
+##############################
+Tutorial 07: Cartesian Product
+##############################
 
 **********
 References
@@ -35,6 +35,17 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_06_include_files/SConscript tutorial_07_cartesian_product/
 
+********************
+Parameter Study File
+********************
+
+5. Create a new file ``tutorial_07_cartesian_product/parameter_study_input.yaml`` from the content below.
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/parameter_study_input.yaml
+
+   .. literalinclude:: tutorial_07_cartesian_product_parameter_study_input.yaml 
+      :language: YAML
+
 **********
 SConscript
 **********
@@ -65,7 +76,7 @@ changes made in this tutorial.
 Build Targets 
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 
