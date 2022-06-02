@@ -27,6 +27,7 @@ workflow.extend(env.AbaqusJournal(
     journal_options=journal_options))
 
 # Comment used in tutorial code snippets: marker-2
+
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)
