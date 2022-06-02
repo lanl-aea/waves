@@ -1,3 +1,5 @@
+.. _tutorialsconstruct:
+
 #######################
 Tutorial 00: SConstruct
 #######################
@@ -215,7 +217,7 @@ by `WAVES`_ reduce the requisite background knowledge to begin creating EABM rep
 ``BUILDERS`` variable must be updated to include these custom `SCons`_ builders and make them available to the
 simulation configuration starting in :ref:`tutorialgeometrywaves`.
 
-The :ref:`sconsbuildersapi` describes the available builders and their usage. As `WAVES`_ matures, more software will be
+The :ref:`waves_builders_api` describes the available builders and their usage. As `WAVES`_ matures, more software will be
 supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
 builders`_.
 
