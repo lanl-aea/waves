@@ -8,6 +8,7 @@ Prerequisites
 
 1. :ref:`computational_tools` :ref:`build_system`
 2. Software Carpentry: GNU Make -  https://swcarpentry.github.io/make-novice/
+3. Software Carpentry: Python - https://swcarpentry.github.io/python-novice-inflammation/
 
 .. _sconstruct_environment:
 
