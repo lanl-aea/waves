@@ -200,6 +200,8 @@ argument allows the project configuration file to pass the ``env`` construction 
 sharing environments`_ feature. The first simulation configuration will be added to the ``eabm_simulation_directories``
 list in :ref:`tutorialgeometrywaves`.
 
+10. Add an empty default target and a list of default targets to the project help message with the code-snippet below.
+
 .. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
@@ -207,6 +209,13 @@ list in :ref:`tutorialgeometrywaves`.
       :lineno-match:
       :start-after: marker-8
       :end-before: marker-9
+
+Because the `WAVES-EABM`_ contains a suite of simulations, it is useful to limit what `SCons`_ will build by default. To
+protect against running all simulations by default, create an empty default list. This will require that simulation
+targets are specified by name in the `SCons`_ build command. In addition to limiting the default target list, it is
+useful to print the list of default targets in the project help to remind developers what targets will build when no
+target is specified in the call to ``scons``. The second call to ``Help()`` will append the default target list to the
+output of ``scons -h``.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
