@@ -102,7 +102,7 @@ variable exists solely to minimize hard-coded duplication of the string
 ``'single_element_geometry'``. ``journal_options`` allows for parameters to be passed as 
 command line arguments to the journal file. Using the journal file's command line 
 interface with the ``journal_options`` string will be discussed in 
-REFTUTORIALK05PLACEHOLDER.
+:ref:`tutorial_parameter_substitution_waves`.
 
 Next, the ``workflow`` list is extended to include the action to use the 
 :meth:`waves.builders.abaqus_journal` builder, as discussed in :ref:`tutorialsconstruct`. 
