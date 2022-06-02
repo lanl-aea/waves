@@ -4,9 +4,17 @@
 Tutorial 01: Geometry
 #####################
 
+
 **********
 References
 **********
+
+Below is a list of refrences for more information about topics that are not explicitly 
+covered in this tutorial.
+
+* `Abaqus Scripting`_
+* `Abaqus Python Environment`
+* Python Docstrings: `PEP-257`_, `PEP-287`_
 
 
 *******************
@@ -195,12 +203,12 @@ The latter portion of the ``main()`` function is the code that generates the sin
 element geometry. Here, an Abaqus model is opened using the ``model_name`` variable as 
 the model's name, a rectangle is drawn with dimensions ``width`` and ``height``, and the 
 Abaqus CAE model is saved with the name ``output_file``. One notable difference between 
-the PLACEHOLDERAbaqusScripting documentation of Abaqus journal files is the use of the 
+the `Abaqus Scripting`_ documentation of Abaqus journal files is the use of the 
 `PEP-8`_ style guide for package imports. Here, we order the imports according to the 
 `PEP-8`_ style and avoid bulk imports to the file's namespace from Abaqus Python 
 packages. It is also worth noting noting that Abaqus journal files use the the Abaqus 
 Python 2.7 environment *not* the SCons/EABM Python 3 environment. See the 
-PLACEHOLDERAbaqusPythonEnvironment documentation for more information on the 
+`Abaqus Python Environment`_ documentation for more information on the 
 Abaqus Python 2.7 environment.
 
 .. TODO link to abaqus scripting documentation, specifically mention python 2.7
@@ -240,6 +248,10 @@ required for all journal files depending on their designed behavior.
 The code that follows uses the name of the script to define some variables. This code 
 assumes that the ``part_name`` variable will be equal to the name of the script and will 
 remove the ``_geometry`` suffix if it exists in the file name.
+
+The default values and naming conventions in this journal file are eabm design decisions 
+made for this EABM stub repository. In practice, it may be beneficial to choose different 
+default behavior depending on the design of the EABM.
 
 The second highlighted portion (starting with ``default_output_file = 
 '{}'.format(basename_without_extension)``) defines default values for some of the command 
