@@ -44,6 +44,7 @@ documentation_file_list = [
     'tutorial_04_simulation_waves.rst',
     'tutorial_05_parameter_substitution_waves.rst',
     'tutorial_environment_activation.txt',
+    'tutorial_00_prerequisites.txt',
     'zreferences.rst',
     '_static/custom.css'
 ]

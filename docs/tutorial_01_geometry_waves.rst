@@ -4,6 +4,12 @@
 Tutorial 01: Geometry
 #####################
 
+*************
+Prerequisites
+*************
+
+.. include:: tutorial_00_prerequisites.txt
+
 
 **********
 References
