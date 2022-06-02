@@ -114,7 +114,7 @@ fast-test:
     - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_07_cartesian_prodcut_SConstruct --jobs=4 --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going conditional_ignore=False
     - scons . --jobs=4 --keep-going conditional_ignore=False
   tags:
     - sstelmo-shell-aea
