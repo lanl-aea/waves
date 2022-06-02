@@ -33,6 +33,7 @@ documentation_file_list = [
     'devops.rst',
     'documentation.txt',
     'index.rst',
+    'line_number_jump_note.txt',
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
@@ -40,6 +41,7 @@ documentation_file_list = [
     'theory.rst',
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
+    'tutorial_environment_activation.txt',
     'zreferences.rst',
     '_static/custom.css'
 ]
