@@ -44,6 +44,7 @@ documentation_file_list = [
     'tutorial_02_partition_mesh_waves.rst',
     'tutorial_04_simulation_waves.rst',
     'tutorial_05_parameter_substitution_waves.rst',
+    'tutorial_06_include_files_waves.rst',
     'tutorial_environment_activation.txt',
     'tutorial_00_prerequisites.txt',
     'zreferences.rst',
@@ -56,7 +57,9 @@ eabm_dir = project_dir / pathlib.Path(env['eabm_dir'])
 tutorial_01_dir = pathlib.Path(env['tutorial_01_dir'])
 tutorial_04_dir = pathlib.Path(env['tutorial_04_dir'])
 tutorial_05_dir = pathlib.Path(env['tutorial_05_dir'])
+tutorial_06_dir = pathlib.Path(env['tutorial_06_dir'])
 abaqus_dir = pathlib.Path(env['abaqus_dir'])
+python_dir = pathlib.Path(env['python_dir'])
 tutorial_files_list = [
     eabm_dir / 'tutorial_00_SConstruct',
     eabm_dir / 'tutorial_01_geometry_SConstruct',
@@ -69,8 +72,10 @@ tutorial_files_list = [
     eabm_dir / tutorial_01_dir / 'SConscript',
     eabm_dir / tutorial_04_dir / 'SConscript',
     eabm_dir / tutorial_05_dir / 'SConscript',
+    eabm_dir / tutorial_06_dir / 'SConscript',
     eabm_dir / 'SConstruct',
     eabm_dir / abaqus_dir / 'single_element_geometry.py',
+    eabm_dir / python_dir / 'single_element_compression_nominal.py'
 ]
 for file_path in tutorial_files_list:
     target = f'{file_path.parts[-2]}_{file_path.name}'
