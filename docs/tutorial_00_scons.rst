@@ -150,6 +150,8 @@ The following line adds the help messages for the command-line build variables t
 wheen running ``scons -h``. The help messages are added to the construction environment, so this line must come after
 the construction environment instantiation.
 
+7. Add the project meta data to the construction environment from the code-snippet below.
+
 .. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
@@ -157,6 +159,12 @@ the construction environment instantiation.
       :lineno-match:
       :start-after: marker-5
       :end-before: marker-6
+
+The `WAVES-EABM`_ makes use of the `SCons hierarchical build`_ feature to separate simulation output in the build
+directory. This is valuable for modsim repositories that include a suite of simulations. To avoid hardcoded duplication
+of project meta data, the project meta data variables are added to the construction environment, which will be passed
+around to all `SCons`_ configuration files. The implementation that passes the construction environment around is
+introduced in :ref:`tutorialgeometrywaves`.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
