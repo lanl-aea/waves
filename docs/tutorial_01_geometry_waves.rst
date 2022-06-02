@@ -91,8 +91,9 @@ Next, the ``workflow`` list is extended to include the action to use the
 :meth:`waves.builders.abaqus_journal` builder, as discussed in REFTUTORIAL0PLACEHOLDER. 
 For more information about the behavior of the 
 :meth:`waves.builders.abaqus_journal` builder, click the builder's link or see the 
-:ref:`waves_builders_api`. ``target`` specifies the files created when running the 
-``source`` files with the Abaqus command.
+:ref:`waves_builders_api`. The ``target`` list specifies the files created by the 
+:meth:`waves.builders.abaqus_journal` task's action, which is defined in the 
+:ref:`waves_builders_api`.
 
 4. In the ``tutorial_01_geometry`` folder, continue editing the file called ``SConscript``
    using the contents below.
