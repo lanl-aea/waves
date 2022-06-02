@@ -46,6 +46,7 @@
 .. _`Python argparse`: https://docs.python.org/3/library/argparse.html
 .. _`Python 2.7 argparse`: https://docs.python.org/2.7/library/argparse.html
 .. _`Python pathlib`: https://docs.python.org/3/library/pathlib.html
+.. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub

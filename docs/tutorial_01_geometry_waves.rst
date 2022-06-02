@@ -270,15 +270,18 @@ information.
 The first lines within the ``if __name__ == "__main__"`` context call the 
 ``get_parser()`` method and use ``argparse`` to separate known and unknown command line 
 arguments. This is required for Abaqus journal files, because Abaqus will not strip the 
-CAE options from the ``abaqus cae -nogui`` command.
+CAE options from the ``abaqus cae -nogui`` command, which are irrelevant to and unused by 
+the journal file interface.
 
 Retrieving Exit Codes
 =====================
 
 The ``main()`` function is called from within the ``sys.exit()`` method. This provides 
-the operating system with a non-zero exit code if the script throws and error. Retrieving 
-non-zero exit codes allows the build system to exit when a build action has failed and a 
-target has not been produced corrrectly .
+the operating system with a non-zero exit code if the script throws an error. By 
+convention, non-zero exit codes indicate an error in the executing program. See the `Bash 
+Exit Status`_ documentation for more infomation about specific exit codes. This is used 
+by build systems to understand when a target has not been produced correctly and to exit the 
+downstream sequence of target actions which can no longer succeed.
 
 Entire Abaqus Journal File
 ==========================
