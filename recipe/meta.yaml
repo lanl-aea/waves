@@ -61,6 +61,7 @@ test:
     - eabm/source/cubit/*
     - eabm/source/python/*
     - eabm/tutorial*/*
+    - eabm/tutorial*SConstruct
   imports:
     - waves
   commands:
