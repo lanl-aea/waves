@@ -33,6 +33,7 @@ Internal Changes
 - Added odb_extract rst documentation and added odb_extract, msg_parse, and sta_parse to pyrpojects.toml
   (:issue:`132`, :merge:`96`). By `Prabhu Khalsa`_
 - Added StaFileParser API documentation (:issue:`135`, :merge:`99`). By `Prabhu Khalsa`_
+- Added MsgFileParser API documentation (:issue:`136`, :merge:`98`). By `Prabhu Khalsa`_
 
 ******************
 0.1.7 (2022-05-27)
