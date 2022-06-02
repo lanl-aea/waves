@@ -45,6 +45,7 @@ documentation_file_list = [
     'tutorial_04_simulation_waves.rst',
     'tutorial_05_parameter_substitution_waves.rst',
     'tutorial_06_include_files_waves.rst',
+    'tutorial_07_cartesian_product_waves.rst',
     'tutorial_environment_activation.txt',
     'tutorial_00_prerequisites.txt',
     'zreferences.rst',
@@ -58,6 +59,7 @@ tutorial_01_dir = pathlib.Path(env['tutorial_01_dir'])
 tutorial_04_dir = pathlib.Path(env['tutorial_04_dir'])
 tutorial_05_dir = pathlib.Path(env['tutorial_05_dir'])
 tutorial_06_dir = pathlib.Path(env['tutorial_06_dir'])
+tutorial_07_dir = pathlib.Path(env['tutorial_07_dir'])
 abaqus_dir = pathlib.Path(env['abaqus_dir'])
 python_dir = pathlib.Path(env['python_dir'])
 tutorial_files_list = [
@@ -73,6 +75,7 @@ tutorial_files_list = [
     eabm_dir / tutorial_04_dir / 'SConscript',
     eabm_dir / tutorial_05_dir / 'SConscript',
     eabm_dir / tutorial_06_dir / 'SConscript',
+    eabm_dir / tutorial_07_dir / 'SConscript',
     eabm_dir / 'SConstruct',
     eabm_dir / abaqus_dir / 'single_element_geometry.py',
     eabm_dir / python_dir / 'single_element_compression_nominal.py'
