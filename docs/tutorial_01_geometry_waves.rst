@@ -147,9 +147,9 @@ session.
 ==================
 
 The top of the file imports standard library modules used by the script's functions along 
-with Abaqus modules. The ``main`` function takes in several arguments, like  
+with Abaqus modules. The ``main()`` function takes in several arguments, like  
 ``model_name``, ``part_name``, and some geometric parameters for the single element 
-part. Most notable of the inputs to the ``main`` function is the first input argument - 
+part. Most notable of the inputs to the ``main()`` function is the first input argument - 
 ``output_file``. One can simplify the general concept of a build system into a series of 
 inputs (known as sources) and outputs (known as targets). In this case, the 
 ``output_file`` is the target which is created from the source - the 
@@ -158,7 +158,7 @@ inputs (known as sources) and outputs (known as targets). In this case, the
 Python Docstrings
 =================
 
-The highlighted lines of code at the beginning of the ``main`` function are called a docstring. 
+The highlighted lines of code at the beginning of the ``main()`` function are called a docstring. 
 Docstrings are specially formatted comment blocks the help automate documentation builds. 
 In this case, the docstrings are formatted so the `Sphinx automodule`_ directive can 
 interpret the comments as ReStructured Text. Docstrings discuss the function behavior and 
@@ -204,7 +204,7 @@ This portion of ``single_element_geometry.py`` defines the argument parsing func
 ``get_parser()``, which is the next step in turning our simple Python script into a 
 small software utility. Command line interfaces allow for scripts to be executed 
 with optional command line arguments. This allows us to change the values of input 
-arguments to the ``main`` function without any source code modification. 
+arguments to the ``main()`` function without any source code modification. 
 ``argparse`` also helps automate command line interface (CLI) documentation. An example of 
 this is the `EABM CLI`_.
 
