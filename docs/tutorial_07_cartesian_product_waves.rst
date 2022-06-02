@@ -43,12 +43,21 @@ Parameter Study File
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/parameter_study_input.yaml
 
-   .. literalinclude:: tutorial_07_cartesian_product_parameter_study_input.yaml 
+   .. literalinclude:: tutorial_07_cartesian_product_parameter_study_input.yaml
       :language: YAML
 
 **********
 SConscript
 **********
+
+The ``diff`` for changes in the ``SConscript`` file for this tutorial is extensive because of the for loop indent
+wrapping the task generation for each parameter set. For convenience, the full source file is included below to aid in a
+wholesale copy and paste when creating the new ``SConscript`` file.
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
@@ -73,7 +82,7 @@ changes made in this tutorial.
       :diff: eabm_tutorial_06_include_files_SConstruct
 
 *************
-Build Targets 
+Build Targets
 *************
 
 6. Build the new targets
