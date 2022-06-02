@@ -121,7 +121,7 @@ file, let's create the geometry part build file for the single element model.
 
 The following sections of this tutorial will introduce four software-engineering practices 
 that match the build system philosophy. These concepts will be presented sequentially, 
-starting with familiar Python code, and adding in the following:
+starting with familiar Abaqus Python code, and adding in the following:
 
 .. admonition:: Computational-Engineering Concepts Introduced
 
@@ -206,7 +206,7 @@ this is the `EABM CLI`_.
 The first highlighted portion of the ``get_parser()`` function (starting with 
 ``filename = inspect.getfile(lambda: None)``) defines variables based on the name of the 
 script. While this method of determining the file name is non-standard for Python 3, the 
-Abaqus-Python environment neccessitates this syntax. Nonetheless, the code is general for 
+Abaqus Python environment neccessitates this syntax. Nonetheless, the code is general for 
 any script name.
 
 The code that follows uses the name of the script to define some variables. This code 
