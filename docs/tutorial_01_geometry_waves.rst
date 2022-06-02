@@ -23,11 +23,32 @@ Directory Structure
        $ mkdir tutorial_01_geometry source/abaqus
 
        
+
+***************
+SConstruct File
+***************
+
+In REFTUTORIAL0PLACEHOLDER, we created the ``SConstruct`` file. For convenicne, we will add a 
+collector alias matching the tutorial direcotyr name in the SContruct file. This 
+collector alias will point to the list of targets to build specified in the 
+``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` file.
+
+2. Modify the ``waves-eabm-tutorial/SConstruct file`` by adding the 
+   ``tutorial_01_geometry`` collector alias to the ``eabm_simulation_directories`` list.
+   The ``diff`` output below shows the difference between the ``SConstruct`` file created 
+   in REFTUTORIAL0PLACEHOLDER and what the new ``SConstruct`` file will be.
+
+   .. admonition:: waves-eabm-tutorial/SConstruct diff
+       
+       .. literalinclude:: eabm_tutorial_01_geometry_SConstruct
+          :language: Python
+          :diff: eabm_tutorial_00_SConstruct
+
 ***************
 SConscript File
 ***************
 
-The SConscript file defines the sources, actions, and targets. Sources are 
+The ``SConscript`` file defines the sources, actions, and targets. Sources are 
 files that exist in the source repository, such as Abaqus journal files. Actions define 
 how to process source files, for example executing the Abaqus command. Targets are the 
 output artifacts created by the action, such as an Abaqus model file. It is also worth 
@@ -47,7 +68,7 @@ the contents below.
         :end-before: marker-1
         :emphasize-lines: 6, 9-11
 
-The SConscript file begins with imports of standard Python libraries. The first 
+The ``SConscript`` file begins with imports of standard Python libraries. The first 
 highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set 
 in ``waves-eabm-tutorial/SConstruct`` file. The ``env`` variable defines project settings, 
 and is imported so settings variables are not hard-coded more than once.
@@ -116,7 +137,7 @@ sequence if the Abaqus executable is not found.
 Abaqus Journal File
 *******************
 
-Now that you have an overview of the SConscript file and how SCons uses an Abaqus journal 
+Now that you have an overview of the ``SConscript`` file and how SCons uses an Abaqus journal 
 file, let's create the geometry part build file for the single element model.
 
 The following sections of this tutorial will introduce four software-engineering practices 
@@ -309,21 +330,6 @@ Building targets
 Now that you've created the geometry part build file in your ``tutorial_01_geometry`` 
 directory, this section will walk through building the ``tutorial_01_geometry`` targets 
 using Scons.
-
-First, recall that we aliased the action for building the targets in the 
-``waves-ebam-tutorial/tutorial_01_geometry/SConscript`` file to the name of the tutorial 
-directory. In order for that alias to be available for specifing which targets to build 
-(as was just done in the code block above), the name ``tutorial_01_geometry`` needed to 
-be added to the ``waves-eabm-tutorial/SConstruct`` file. This was done in 
-REFTUTORIAL0PLACEHOLDER, as shown in the included section of code below.
-
-.. admonition:: SConstruct
-
-    .. literalinclude:: eabm_SConstruct
-        :language: Python
-        :lines: 86-99
-        :lineno-match:
-        :emphasize-lines: 4
 
 8. To build the targets only for the ``tutorial_01_geometry``, execute the following 
    command: 
