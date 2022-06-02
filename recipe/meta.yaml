@@ -74,5 +74,5 @@ test:
     - scons . --sconstruct=tutorial_04_simulation --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_05_parameter_substitution --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_07_cartesian_prodcut_SConstruct --keep-going conditional_ignore=False
-    - scons . --keep-going conditional_ignore=False --jobs=4 ignore_documentation=True
+    - scons . --sconstruct=tutorial_07_cartesian_prodcut_SConstruct --jobs=4 --keep-going conditional_ignore=False
+    - scons . --jobs=4 --keep-going conditional_ignore=False ignore_documentation=True
