@@ -18,12 +18,12 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_05_parameter_substitution`` in the ``model-eabm-tutorial`` directory.
+3. Create a directory ``tutorial_05_parameter_substitution`` in the ``waves-eabm-tutorial`` directory.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/model-eabm-tutorial
+   /path/to/waves-eabm-tutorial
    $ mkdir tutorial_05_parameter_substitution
 
 4. Copy the ``tutorial_04_simulation/SConscript`` file into the newly created ``tutorial_05_parameter_substitution``
@@ -32,7 +32,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/model-eabm-tutorial
+   /path/to/waves-eabm-tutorial
    $ cp tutorial_04_simulation/SConscript tutorial_05_parameter_substitution/
 
 **********
@@ -70,7 +70,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/model-eabm-tutorial
+   /path/to/waves-eabm-tutorial
    $ scons tutorial_05_parameter_substitution
 
 ************
