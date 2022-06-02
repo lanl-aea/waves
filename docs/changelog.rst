@@ -23,6 +23,7 @@ Documentation
 - Add the project configuration (SConstruct) tutorial (:issue:`119`, :merge:`89`). By `Kyle Brindley`_.
 - Add minimum scaffolding for the parameter substitution tutorial documentation (:issue:`137`, :merge:`101`). By `Kyle
   Brindley`_.
+- Draft of Tutorial 1: Geometry (:issue:`45`, :merge:`35`). By `Thomas Roberts`_.
 - Completed |PROJECT| Tutorial 1: Geometry (:issue:`129`, :merge:`94`). By `Thomas Roberts`_.
 
 Internal Changes
