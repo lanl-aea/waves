@@ -46,7 +46,6 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorial_05_parameter_substitution_SConscript
       :language: Python
-      :lineno-match:
       :diff: tutorial_04_simulation_SConscript
 
 **********
@@ -60,7 +59,6 @@ changes made in this tutorial.
 
    .. literalinclude:: eabm_tutorial_05_parameter_substitution_SConstruct
       :language: Python
-      :lineno-match:
       :diff: eabm_tutorial_04_simulation_SConstruct
 
 *************
