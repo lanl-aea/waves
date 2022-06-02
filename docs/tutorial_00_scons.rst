@@ -46,7 +46,7 @@ generation utility can be integrated more closely with the build system, :ref:`p
 SCons Project Configuration
 ***************************
 
-1. Create and change to a new project root directory to house the tutorial files. For example
+3. Create and change to a new project root directory to house the tutorial files. For example
 
    .. code-block:: bash
 
@@ -55,7 +55,7 @@ SCons Project Configuration
       $ mkdir waves-eabm-tutorial
       $ cd /home/roppenheimer/waves-eabm-tutorial
 
-2. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory and add the contents listed below. Note
+4. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory and add the contents listed below. Note
    that the filename is case sensitive.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
@@ -71,7 +71,7 @@ identify the file as a Python file for syntax highlighting. Using the `PEP-8`_ f
 imports are listed in the first block and third-party imports are listed in the second block, including the `WAVES`_
 package. Finally, the EABM version number is hardcoded into the project definition for these tutorials.
 
-3. Add the project's command-line build variables to the SCons project configuration from the code snippet below.
+5. Add the project's command-line build variables to the SCons project configuration from the code snippet below.
 
 .. include:: line_number_jump_note.txt
 
@@ -90,7 +90,7 @@ command line without modifying the ``SConstruct`` file source code. The ``condit
 for :ref:`continuous_integration` testing. At the end of this tutorial, you will see how to explore the project specific
 command line options and build variables help and usage.
 
-4. Initialize the `SCons construction environment`_ from the code snippet below.
+6. Initialize the `SCons construction environment`_ from the code snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -112,7 +112,7 @@ construction environment inherited from the active shell environment at build co
 the active external environment, the above code adds the project command-line build variables to the construction
 environment for re-use throughout the project definition files, SConstruct and SConscript, for build control.
 
-5. Add the third-party software dependency checks from the code snippet below.
+7. Add the third-party software dependency checks from the code snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -133,7 +133,7 @@ In `WAVES`_ and `WAVES-EABM`_, this approach is primarily used to allow develope
 computers without cluttering their test builds with tasks that cannot succeed on their local computer.
 :ref:`tutorialgeometrywaves` will introduce the use of these variables for build control.
 
-6. Add the command-line build variables to the `SCons project build help`_ from the code-snippet below.
+8. Add the command-line build variables to the `SCons project build help`_ from the code-snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -155,7 +155,7 @@ the construction environment instantiation.
    tutorials and documentation will not discuss the full range of `SCons`_ command options, so modsim developers are
    encouraged to read the `SCons`_ usage summary and `SCons manpage`_ to learn more about available build control options.
 
-7. Add the project meta data to the construction environment from the code-snippet below.
+9. Add the project meta data to the construction environment from the code-snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -171,7 +171,7 @@ of project meta data, the project meta data variables are added to the construct
 around to all `SCons`_ configuration files. The implementation that passes the construction environment around is
 introduced in :ref:`tutorialgeometrywaves`.
 
-8. Add `WAVES`_ builders to the project configuration from the code-snippet below.
+10. Add `WAVES`_ builders to the project configuration from the code-snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -190,7 +190,7 @@ The :ref:`sconsbuildersapi` describes the available builders and their usage. As
 supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
 builders`_.
 
-9. Create a placeholder call to the hierarchical simulation configuration files from the code-snippet below.
+11. Create a placeholder call to the hierarchical simulation configuration files from the code-snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -205,7 +205,7 @@ argument allows the project configuration file to pass the ``env`` construction 
 sharing environments`_ feature. The first simulation configuration will be added to the ``eabm_simulation_directories``
 list in :ref:`tutorialgeometrywaves`.
 
-10. Add an empty default target and a list of default targets to the project help message with the code-snippet below.
+12. Add an empty default target and a list of default targets to the project help message with the code-snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -222,7 +222,7 @@ useful to print the list of default targets in the project help to remind develo
 target is specified in the call to ``scons``. The second call to ``Help()`` will append the default target list to the
 output of ``scons -h``.
 
-11. Add the project aliases to the project help message from the code-snippet below.
+13. Add the project aliases to the project help message from the code-snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
