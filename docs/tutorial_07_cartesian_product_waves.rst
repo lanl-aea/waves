@@ -82,7 +82,7 @@ Build Targets
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ scons tutorial_07_cartesian_product
+   $ scons tutorial_07_cartesian_product --jobs=4
 
 ************
 Output Files
