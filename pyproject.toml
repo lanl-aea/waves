@@ -14,6 +14,9 @@ packages = ["waves"]
 
 [project.scripts]
 parameter_study = "waves.parameter_study:main"
+odb_extract = "waves.abaqus.command_line_tools.odb_extract:main"
+msg_parse = "waves.abaqus.command_line_tools.msg_parse:main"
+sta_parse = "waves.abaqus.command_line_tools.sta_parse:main"
 
 [tool.setuptools_scm]
 write_to = "waves/_version.py"

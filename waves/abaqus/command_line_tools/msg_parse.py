@@ -21,9 +21,10 @@ def get_parser():
     :return: argument parser
     :rtype: parser
     """
-    example = f''' Example: >> python {Path(__file__).name} sample.msg\n '''
+    _program_name = Path(__file__).stem
+    example = f''' Example: >> {_program_name} sample.msg\n '''
     parser = ArgumentParser(description=__doc__.split('..')[0],  # Don't include module author part of doc string
-                            formatter_class=ArgumentDefaultsHelpFormatter, epilog=example)
+                            formatter_class=ArgumentDefaultsHelpFormatter, epilog=example, prog=_program_name)
     parser.add_argument(nargs=1,
                         dest='msg_file',
                         type=str,

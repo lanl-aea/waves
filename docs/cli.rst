@@ -43,3 +43,10 @@ Parameter Study
 
 .. argparse::
    :ref: waves.parameter_study.get_parser
+
+***********
+ODB Extract
+***********
+
+.. argparse::
+   :ref: waves.abaqus.command_line_tools.odb_extract.get_parser
