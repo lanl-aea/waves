@@ -188,8 +188,8 @@ Command Line Interfaces
 =======================
 
 6. In the ``source/abaqus`` folder, continue editing the file called ``single_element_geometry.py``
-   using the contents below which contains the ``get_parser()`` function. Note that any 
-   missing line numbers should be interpreted as blank lines.
+   using the contents below which contains the ``get_parser()`` function. Note that 
+   missing line numbers may be ignored.
 
 .. admonition:: single_element_geometry.py
 
@@ -248,8 +248,7 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 
 7. In the ``source/abaqus`` folder, continue editing the file called ``single_element_geometry.py``
    using the contents below to create the ``if`` statement within which we will call the 
-   ``main()`` function. Note that any missing line numberts should be interpreted as blank 
-   lines.
+   ``main()`` function. Note that missing line numbers may be ignored.
 
 .. admonition:: single_element_geometry.py
 
