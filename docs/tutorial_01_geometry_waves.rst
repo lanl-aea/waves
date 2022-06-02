@@ -173,7 +173,14 @@ Abaqus Python Code
 The latter portion of the ``main()`` function is the code that generates the single 
 element geometry. Here, an Abaqus model is opened using the ``model_name`` variable as 
 the model's name, a rectangle is drawn with dimensions ``width`` and ``height``, and the 
-Abaqus CAE model is saved with the name ``output_file``.
+Abaqus CAE model is saved with the name ``output_file``. One notable difference between 
+the PLACEHOLDERAbaqusScripting documentation of Abaqus journal files is the use of the 
+`PEP-8`_ style guide for package imports. Here, we order the imports according to the 
+`PEP-8`_ style and avoid bulk imports to the file's namespace from Abaqus Python 
+packages. It is also worth noting noting that Abaqus journal files use the the Abaqus 
+Python 2.7 environment *not* the SCons/EABM Python 3 environment. See the 
+PLACEHOLDERAbaqusPythonEnvironment documentation for more information on the 
+Abaqus Python 2.7 environment.
 
 .. TODO link to abaqus scripting documentation, specifically mention python 2.7
 
