@@ -169,5 +169,5 @@ EABM builds.
    .. literalinclude:: eabm_SConstruct
       :language: Python
       :lineno-match:
-      :start-after: marker-9
-      :end-before: marker-10
+      :start-after: marker-10
+      :end-before: marker-11
