@@ -286,8 +286,12 @@ downstream sequence of target actions which can no longer succeed.
 Entire Abaqus Journal File
 ==========================
 
-Shown below is ``single_element_geometry.py`` in its entirety. The highlighted lines 
-indicate code that will commonly be change on a project-by-project basis.
+Shown below is ``single_element_geometry.py`` in its entirety. The highlighted lines show 
+the non-boilerplate code that will change between journal files in this WAVES-EABM 
+tutorial project. As discussed in preceding sections, some portions of the boilerplate 
+code are required for EABM best practice when using a build system such as SCons_ and 
+other sections are boilerplate code that matches naming conventions used by the tutorials, 
+but that may change in production EABMs.
 
 .. admonition:: single_element_geometry.py
 
