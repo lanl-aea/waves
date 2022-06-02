@@ -72,11 +72,7 @@ package. Finally, the EABM version number is hardcoded into the project definiti
 
 3. Add the project's command-line build variables to the SCons project configuration from the code snippet below.
 
-.. note::
-
-   The line numbers may jump between code snippets. The skipped lines are not important to the tutorial content as you
-   create the tutorial files. They are a side effect of methods used to robustly create these code snippets from the
-   original source code.
+.. include:: line_number_jump_note.txt
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
