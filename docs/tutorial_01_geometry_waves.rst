@@ -13,7 +13,7 @@ Below is a list of refrences for more information about topics that are not expl
 covered in this tutorial.
 
 * `Abaqus Scripting`_
-* `Abaqus Python Environment`
+* `Abaqus Python Environment`_
 * Python Docstrings: `PEP-257`_, `PEP-287`_
 
 
@@ -31,27 +31,6 @@ Directory Structure
        $ mkdir tutorial_01_geometry source/abaqus
 
        
-
-***************
-SConstruct File
-***************
-
-In REFTUTORIAL0PLACEHOLDER, we created the ``SConstruct`` file. For convenicne, we will add a 
-collector alias matching the tutorial direcotyr name in the SContruct file. This 
-collector alias will point to the list of targets to build specified in the 
-``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` file.
-
-2. Modify the ``waves-eabm-tutorial/SConstruct file`` by adding the 
-   ``tutorial_01_geometry`` collector alias to the ``eabm_simulation_directories`` list.
-   The ``diff`` output below shows the difference between the ``SConstruct`` file created 
-   in REFTUTORIAL0PLACEHOLDER and what the new ``SConstruct`` file will be.
-
-   .. admonition:: waves-eabm-tutorial/SConstruct diff
-       
-       .. literalinclude:: eabm_tutorial_01_geometry_SConstruct
-          :language: Python
-          :diff: eabm_tutorial_00_SConstruct
-
 ***************
 SConscript File
 ***************
@@ -108,16 +87,16 @@ we will ``extend`` this list and finally create an alias that matches the parent
 directory name. The alias thus represents the list of targets specified in the 
 ``SConscript`` file.
 
-The highlighted lines of code (starting with ``journal_file = f"{model}_geometry"``) instruct 
-SCons on how to build the target, an Abaqus CAE file whose name is constructed using the 
-``journal_file`` variable. The ``journal_file`` variable exists solely to minimize 
-hard-coded duplication of the string ``'single_element_geometry'``. ``journal_options`` 
-allows for parameters to be passed as command line arguments to the journal file. Using 
-the journal file's command line interface with the ``journal_options`` string will be 
-discussed in REFTUTORIAL05PLACEHOLDER.
+The highlighted lines of code instruct SCons on how to build the target, an Abaqus CAE 
+file whose name is constructed using the ``journal_file`` variable. The ``journal_file`` 
+variable exists solely to minimize hard-coded duplication of the string 
+``'single_element_geometry'``. ``journal_options`` allows for parameters to be passed as 
+command line arguments to the journal file. Using the journal file's command line 
+interface with the ``journal_options`` string will be discussed in 
+REFTUTORIAL05PLACEHOLDER.
 
 Next, the ``workflow`` list is extended to include the action to use the 
-:meth:`waves.builders.abaqus_journal` builder, as discussed in REFTUTORIAL0PLACEHOLDER. 
+:meth:`waves.builders.abaqus_journal` builder, as discussed in :ref:`tutorialsconstruct`. 
 For more information about the behavior of the 
 :meth:`waves.builders.abaqus_journal` builder, click the builder's link or see the 
 :ref:`waves_builders_api`. The ``target`` list specifies the files created by the 
@@ -237,13 +216,12 @@ arguments to the ``main()`` function without any source code modification.
 ``argparse`` also helps automate command line interface (CLI) documentation. An example of 
 this is the `EABM CLI`_.
 
-The first highlighted portion of the ``get_parser()`` function (starting with 
-``filename = inspect.getfile(lambda: None)``) defines variables based on the name of the 
-script. While this method of determining the file name is non-standard for Python 3, the 
-Abaqus Python environment neccessitates this syntax. This code will become common 
-boilerplate code included in every Abaqus journal file created in the WAVES-EABM 
-tutorials. It is valuable to the behavior of these example journal files, but may not be 
-required for all journal files depending on their designed behavior.
+The first highlighted portion of the ``get_parser()`` function defines variables based on 
+the name of the script. While this method of determining the file name is non-standard 
+for Python 3, the Abaqus Python environment neccessitates this syntax. This code will 
+become common boilerplate code included in every Abaqus journal file created in the 
+WAVES-EABM tutorials. It is valuable to the behavior of these example journal files, but 
+may not be required for all journal files depending on their designed behavior.
 
 The code that follows uses the name of the script to define some variables. This code 
 assumes that the ``part_name`` variable will be equal to the name of the script and will 
@@ -253,8 +231,7 @@ The default values and naming conventions in this journal file are eabm design d
 made for this EABM stub repository. In practice, it may be beneficial to choose different 
 default behavior depending on the design of the EABM.
 
-The second highlighted portion (starting with ``default_output_file = 
-'{}'.format(basename_without_extension)``) defines default values for some of the command 
+The second highlighted portion defines default values for some of the command 
 line arguments. Default values are assigned if no command line argument is detected for any of 
 the expected command line arguments. This provides the utility of having a use-able file 
 even when command line arguments are not specified. It should be noted, however, that 
@@ -264,16 +241,15 @@ at the end of the ``main()`` function, which assumes ``output_file`` does not in
 file extension. ``default_width`` and ``default_height`` define the size of the 
 ``single_element`` part.
 
-The final highlighted portion of the code (starting with ``prog = "abaqus cae -noGui {} 
---".format(basename)``) is where the ``argparse`` package is used to define the argument 
-parser rules. First, an argument parser is defined using the ``ArgumentParser`` class. 
-This recieves a brief description ``cli_description`` and direction ``prog`` on how to 
-execute the program. Each subsequent call of the ``add_argument`` method adds a command 
-line argument to the parser's rules. Command line arguments defined using ``argparse`` 
-have options, like ``-o`` or ``--output-file``, and arguments. Arguments can also have 
-default values. ``argparse`` also allows for command line argument definitions to include 
-a help message that is used to auto-generate the command's help message. See the `Python 
-argparse`_ documentation for more information.
+The final highlighted portion of the code is where the ``argparse`` package is used to 
+define the argument parser rules. First, an argument parser is defined using the 
+``ArgumentParser`` class. This recieves a brief description ``cli_description`` and 
+direction ``prog`` on how to execute the program. Each subsequent call of the 
+``add_argument`` method adds a command line argument to the parser's rules. Command line 
+arguments defined using ``argparse`` have options, like ``-o`` or ``--output-file``, and 
+arguments. Arguments can also have default values. ``argparse`` also allows for command 
+line argument definitions to include a help message that is used to auto-generate the 
+command's help message. See the `Python argparse`_ documentation for more information.
 
 In this case, we are using ``argparse`` in an Abaqus Python script, which will use Python 
 2.7. See the `Python 2.7 argparse`_ documentation for more information about how 
@@ -334,6 +310,27 @@ but that may change in production EABMs.
          :emphasize-lines: 9-21, 25-36, 52, 55-58, 61, 64-74, 83-87
 
 
+***************
+SConstruct File
+***************
+
+In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenicne, we will add a 
+collector alias matching the tutorial direcotyr name in the SContruct file. This 
+collector alias will point to the list of targets to build specified in the 
+``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` file.
+
+2. Modify the ``waves-eabm-tutorial/SConstruct file`` by adding the 
+   ``tutorial_01_geometry`` collector alias to the ``eabm_simulation_directories`` list.
+   The ``diff`` output below shows the difference between the ``SConstruct`` file created 
+   in :ref:`tutorialsconstruct` and what the new ``SConstruct`` file will be.
+
+   .. admonition:: waves-eabm-tutorial/SConstruct diff
+       
+       .. literalinclude:: eabm_tutorial_01_geometry_SConstruct
+          :language: Python
+          :diff: eabm_tutorial_00_SConstruct
+
+
 ****************
 Building targets
 ****************
@@ -370,7 +367,7 @@ using Scons.
        scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as 
-the ``SConstruct`` file as described in REFTUTORIAL0PLACEHOLDER.    
+the ``SConstruct`` file as described in :ref:`tutorialsconstruct`.    
 
 
 ************
