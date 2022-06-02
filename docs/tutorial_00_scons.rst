@@ -16,9 +16,7 @@ Prerequisites
 Environment
 ***********
 
-.. include:: eabm_README.txt
-   :start-after: env-start-do-not-remove
-   :end-before: env-end-do-not-remove
+.. include:: tutorial_environment_activation.txt
 
 ***********
 Description
