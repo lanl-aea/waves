@@ -318,9 +318,8 @@ but that may change in production EABMs.
 
      .. literalinclude:: abaqus_single_element_geometry.py
          :language: Python
-         :lines: 1-40, 42-74, 76-85
          :linenos:
-         :emphasize-lines: 9-21, 25-36, 50, 53-56, 59, 62-72, 79-83
+         :emphasize-lines: 9-21, 25-36, 52, 55-58, 61, 64-74, 83-87
 
 
 ****************
@@ -357,20 +356,22 @@ using Scons.
        /projects/roppenheimer/waves/eabm/source/abaqus/single_element_geometry.py -- > 
        single_element_geometry.log 2>&1
        scons: done building targets.
-    
-The output files will be located in the ``build`` directory within the ``waves-eabm-tutorial`` 
-directory. The location of the ``build`` directory is controlled in the ``waves-eabm-tutorial/SConstruct`` 
-file.
+
+The default build directory name is ``build`` and located in the same parent directory as 
+the ``SConstruct`` file as described in REFTUTORIAL0PLACEHOLDER.    
 
 
 ************
 Output Files
 ************
 
-Query the contents of the ``build`` directory using the ``tree`` command against the 
+Explore the contents of the ``build`` directory using the ``tree`` command against the 
 ``build`` directory, as shown below. Note that the directory structure of the build 
 directory *exactly* matches the directory structure of the location where the 
-project-level ``SConstruct`` and ``SConscript`` files exist.
+project-level ``SConstruct`` and ``SConscript`` files exist. This behavior will allow us 
+to define multiple simulations in our modsim repository (EABM) with build result 
+separation if more than one simulation is built at the same time. 
+REFTUTORIAL02PLACEHOLDER will demonstrate the importance of this behavior more clearly.
 
 .. code-block:: bash
     
@@ -378,8 +379,6 @@ project-level ``SConstruct`` and ``SConscript`` files exist.
     /path/to/waves-eabm-tutorial
     $ tree build
     build/
-    ├── docs
-    │   └── SConscript
     └── tutorial_01_geometry
         ├── abaqus.rpy        
         ├── single_element_geometry.abaqus_v6.env
@@ -387,7 +386,7 @@ project-level ``SConstruct`` and ``SConscript`` files exist.
         ├── single_element_geometry.jnl
         └── single_element_geometry.log
 
-    2 directories, 6 files
+    1 directory, 5 files
 
 Inside the build directory are two sub-directories. First is a default ``docs`` directory 
 that is specified to be built in the ``waves-eabm-tutorial/SConstruct`` file. Second is 
