@@ -30,6 +30,7 @@
 .. _`SCons construction environment`: https://scons.org/doc/production/HTML/scons-user/ch07s02.html
 .. _`SCons custom builders`: https://scons.org/doc/production/HTML/scons-user/ch17.html
 .. _`SCons project build help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idm46358284707920
+.. _`SCons sharing environments`: https://scons.org/doc/production/HTML/scons-user/ch14s05.html
 .. _`SCons hierarchical build`: https://scons.org/doc/production/HTML/scons-user/ch14.html
 .. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
 .. _`Software Carpentry`: https://software-carpentry.org/

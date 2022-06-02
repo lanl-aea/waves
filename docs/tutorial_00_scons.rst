@@ -183,7 +183,9 @@ simulation configuration starting in :ref:`tutorialgeometrywaves`.
 
 The :ref:`sconsbuildersapi` describes the available builders and their usage. As `WAVES`_ matures, more software will be
 supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
-builders`_. 
+builders`_.
+
+9. Create a placeholder call to the hierarchical simulation configuration files from the code-snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -192,6 +194,11 @@ builders`_.
       :lineno-match:
       :start-after: marker-7
       :end-before: marker-8
+
+The for loop in this code-snippet is the method for implementing an `SCons hierarchical build`. The ``exports`` keyword
+argument allows the project configuration file to pass the ``env`` construction environment variable with the `SCons
+sharing environments`_ feature. The first simulation configuration will be added to the ``eabm_simulation_directories``
+list in :ref:`tutorialgeometrywaves`.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
