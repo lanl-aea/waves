@@ -55,7 +55,7 @@ SCons Project Configuration
 2. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory and add the contents listed below. Note
    that the filename is case sensitive.
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -76,7 +76,7 @@ package. Finally, the EABM version number is hardcoded into the project definiti
    create the tutorial files. They are a side effect of methods used to robustly create these code snippets from the
    original source code.
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -91,7 +91,7 @@ directory location from the command line without modifying the ``SConstruct`` fi
 ``conditional_ignore`` and ``ignore_documentation`` variables are mostly useful for :ref:`continuous_integration` of
 EABM builds.
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -99,7 +99,7 @@ EABM builds.
       :start-after: marker-2
       :end-before: marker-3
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -107,7 +107,7 @@ EABM builds.
       :start-after: marker-3
       :end-before: marker-4
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -115,7 +115,7 @@ EABM builds.
       :start-after: marker-4
       :end-before: marker-5
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -123,7 +123,7 @@ EABM builds.
       :start-after: marker-5
       :end-before: marker-6
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -131,7 +131,7 @@ EABM builds.
       :start-after: marker-6
       :end-before: marker-7
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -139,7 +139,7 @@ EABM builds.
       :start-after: marker-7
       :end-before: marker-8
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
@@ -147,7 +147,7 @@ EABM builds.
       :start-after: marker-8
       :end-before: marker-9
 
-.. admonition:: SConstruct
+.. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
