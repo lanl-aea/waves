@@ -81,8 +81,9 @@ The highlighted lines of code (starting with ``journal_file = f"{model}_geometry
 SCons on how to build the target, an Abaqus CAE file whose name is constructed using the 
 ``journal_file`` variable. The ``journal_file`` variable exists solely to minimize 
 hard-coded duplication of the string ``'single_element_geometry'``. ``journal_options`` 
-allows for parameters to be passed as command line arguments to the journal file. This 
-will be discussed in REFTUTORIAL05PLACEHOLDER.
+allows for parameters to be passed as command line arguments to the journal file. Using 
+the journal file's command line interface with the ``journal_options`` string will be 
+discussed in REFTUTORIAL05PLACEHOLDER.
 
 Next, the ``workflow`` list is extended to include the action to use the 
 :meth:`waves.builders.abaqus_journal` builder, as discussed in REFTUTORIAL0PLACEHOLDER. 
