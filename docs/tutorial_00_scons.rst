@@ -9,6 +9,8 @@ Prerequisites
 1. :ref:`computational_tools` :ref:`build_system`
 2. Software Carpentry: GNU Make -  https://swcarpentry.github.io/make-novice/
 
+.. _sconstruct_environment:
+
 ***********
 Environment
 ***********
@@ -113,6 +115,8 @@ construction environment inherited from the active shell environment at build co
 the active external environment, the above code adds the project command-line build variables to the construction
 environment for re-use throughout the project definition files, SConstruct and SConscript, for build control.
 
+5. Add the third-party software dependency checks from the code snippet below.
+
 .. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
@@ -121,6 +125,19 @@ environment for re-use throughout the project definition files, SConstruct and S
       :start-after: marker-3
       :end-before: marker-4
 
+These checks are not strictly required for an `SCons`_ `WAVES`_ EABM; however, they provide valuable build control
+options for EABM developers. Most of the `WAVES-EABM`_  compute environment dependencies are `Python`_ packages managed
+with `Conda`_ as described in the :ref:`sconstruct_environment` section of this tutorial. Many modsim repositories will
+also depend on proprietary or commercial software that is not included in a package manager such as `Conda`_. Instead,
+the project configuration can check the construction environment for software installation(s) and provide an environment
+variable to conditionally skip any tasks that depend on missing software.
+
+In `WAVES`_ and `WAVES-EABM`_, this approach is primarily used to allow developers to perform development work on local
+computers without cluttering their test builds with tasks that cannot succeed on their local computer.
+:ref:`tutorialgeometrywaves` will introduce the use of these variables for build control.
+
+6. Add the command-line build variables to the `SCons project build help`_ from the code-snippet below.
+
 .. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
@@ -128,6 +145,10 @@ environment for re-use throughout the project definition files, SConstruct and S
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
+
+The following line adds the help messages for the command-line build variables to the project help message displayed
+wheen running ``scons -h``. The help messages are added to the construction environment, so this line must come after
+the construction environment instantiation.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
