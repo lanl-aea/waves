@@ -166,6 +166,8 @@ of project meta data, the project meta data variables are added to the construct
 around to all `SCons`_ configuration files. The implementation that passes the construction environment around is
 introduced in :ref:`tutorialgeometrywaves`.
 
+8. Add `WAVES`_ builders to the project configuration from the code-snippet below.
+
 .. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
@@ -173,6 +175,15 @@ introduced in :ref:`tutorialgeometrywaves`.
       :lineno-match:
       :start-after: marker-6
       :end-before: marker-7
+
+Although it is possible to re-create the `WAVES-EABM`_ entirely in native `SCons`_ code, the builder extensions provided
+by `WAVES`_ reduce the requisite background knowledge to begin creating EABM repositories. The construction environment
+``BUILDERS`` variable must be updated to include these custom `SCons`_ builders and make them available to the
+simulation configuration starting in :ref:`tutorialgeometrywaves`.
+
+The :ref:`sconsbuildersapi` describes the available builders and their usage. As `WAVES`_ matures, more software will be
+supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
+builders`_. 
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
