@@ -57,3 +57,10 @@ Sta Parse
 
 .. argparse::
    :ref: waves.abaqus.command_line_tools.sta_parse.get_parser
+
+*********
+Msg Parse
+*********
+
+.. argparse::
+   :ref: waves.abaqus.command_line_tools.msg_parse.get_parser
