@@ -149,6 +149,7 @@ Documentation
 New Features
 ============
 - Add the command line tools odb_extract, msg_parse, and sta_parse (:issue:`93`, :merge:`88`). By `Prabhu Khalsa`_.
+- Add Data Extraction tutorial source files (:issue:`92`, :merge:`100`). By `Prabhu Khalsa`_.
 
 Bug fixes
 =========
