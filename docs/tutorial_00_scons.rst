@@ -87,7 +87,7 @@ package. Finally, the EABM version number is hardcoded into the project definiti
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-1
@@ -102,7 +102,7 @@ EABM builds.
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-2
@@ -110,7 +110,7 @@ EABM builds.
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -118,7 +118,7 @@ EABM builds.
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-4
@@ -126,7 +126,7 @@ EABM builds.
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-5
@@ -134,7 +134,7 @@ EABM builds.
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-6
@@ -142,7 +142,7 @@ EABM builds.
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-7
@@ -150,7 +150,7 @@ EABM builds.
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-8
@@ -158,16 +158,8 @@ EABM builds.
 
 .. admonition:: SConstruct
 
-   .. literalinclude:: eabm_SConstruct
+   .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-9
       :end-before: marker-10
-
-.. admonition:: SConstruct
-
-   .. literalinclude:: eabm_SConstruct
-      :language: Python
-      :lineno-match:
-      :start-after: marker-10
-      :end-before: marker-11

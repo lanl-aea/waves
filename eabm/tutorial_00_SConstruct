@@ -86,7 +86,7 @@ for target in DEFAULT_TARGETS:
     default_targets_help += f"    {str(target)}\n"
 Help(default_targets_help)
 
-# Comments used in tutorial code snippets: marker-10
+# Comments used in tutorial code snippets: marker-9
 
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
@@ -97,4 +97,4 @@ for alias in alias_list:
     alias_help += f"    {alias}\n"
 Help(alias_help)
 
-# Comments used in tutorial code snippets: marker-11
+# Comments used in tutorial code snippets: marker-10
