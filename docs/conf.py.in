@@ -27,7 +27,7 @@ def setup(app):
     app.add_css_file('custom.css')
 
 # Add any Sphinx extension module names here, as strings.
-extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.bibtex', 'sphinx.ext.extlinks', 'sphinxarg.ext', 'sphinx.ext.todo']
+extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.bibtex', 'sphinx.ext.extlinks', 'sphinxarg.ext']
 
 bibtex_bibfiles = ['references.bib']
 
@@ -40,8 +40,6 @@ extlinks = {
 templates_path = ['_templates']
 source_suffix = ['.rst']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
-
-todo_include_todos = True
 
 # -- Options for HTML output -------------------------------------------------
 html_theme = 'sphinx_rtd_theme'

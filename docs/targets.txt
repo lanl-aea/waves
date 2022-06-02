@@ -36,6 +36,7 @@
 .. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`sphinx`: https://www.sphinx-doc.org/en/master/
+.. _`Sphinx automodule`: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
@@ -43,13 +44,17 @@
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
 .. _`Python Top-Level Code Environment`: https://docs.python.org/3/library/__main__.html
 .. _`Python argparse`: https://docs.python.org/3/library/argparse.html
+.. _`Python 2.7 argparse`: https://docs.python.org/2.7/library/argparse.html
 .. _`Python pathlib`: https://docs.python.org/3/library/pathlib.html
+.. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
+.. _`Abaqus Scripting`: https://simulia.lanl.gov/v2017/English/SIMACAEKERRefMap/simaker-c-ov.htm
+.. _`Abaqus Python Environment`: https://simulia.lanl.gov/v2017/English/SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
 .. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
-.. _`EABM API`: https://kbrindley.re-pages.lanl.gov/waves/dev/api.html#
-.. _`EABM CLI`: https://kbrindley.re-pages.lanl.gov/waves/dev/cli.html#
+.. _`EABM API`: https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/api.html#
+.. _`EABM CLI`: https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/cli.html#
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm

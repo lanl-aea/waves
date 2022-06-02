@@ -41,9 +41,11 @@ documentation_file_list = [
     'theory.rst',
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
+    'tutorial_02_partition_mesh_waves.rst',
     'tutorial_04_simulation_waves.rst',
     'tutorial_05_parameter_substitution_waves.rst',
     'tutorial_environment_activation.txt',
+    'tutorial_00_prerequisites.txt',
     'zreferences.rst',
     '_static/custom.css'
 ]
@@ -64,15 +66,16 @@ tutorial_files_list = [
     eabm_dir / 'tutorial_05_parameter_substitution_SConstruct',
     eabm_dir / 'tutorial_06_include_files_SConstruct',
     eabm_dir / 'tutorial_07_cartesian_product_SConstruct',
-    tutorial_01_dir / 'SConscript',
-    tutorial_04_dir / 'SConscript',
-    tutorial_05_dir / 'SConscript',
-    abaqus_dir / 'single_element_geometry.py',
+    eabm_dir / tutorial_01_dir / 'SConscript',
+    eabm_dir / tutorial_04_dir / 'SConscript',
+    eabm_dir / tutorial_05_dir / 'SConscript',
+    eabm_dir / 'SConstruct',
+    eabm_dir / abaqus_dir / 'single_element_geometry.py',
 ]
 for file_path in tutorial_files_list:
     target = f'{file_path.parts[-2]}_{file_path.name}'
     Command(target=target,
-            source=str(eabm_dir / file_path),
+            source=str(file_path),
             action=Copy("$TARGET", "$SOURCE"))
     documentation_file_list.append(target)
 
