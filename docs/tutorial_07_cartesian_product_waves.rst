@@ -59,7 +59,7 @@ wholesale copy and paste when creating the new ``SConscript`` file.
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
       :language: Python
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -72,7 +72,7 @@ changes made in this tutorial.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
