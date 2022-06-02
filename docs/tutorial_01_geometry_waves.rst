@@ -223,20 +223,28 @@ remove the ``_geometry`` suffix if it exists in the file name.
 The second highlighted portion (starting with ``default_output_file = 
 '{}'.format(basename_without_extension)``) defines default values for some of the command 
 line arguments. Default values are assigned if no command line argument is detected for any of 
-the expected command line arguments. ``output_file`` is the name of the file that is 
-created at the end of the ``main()`` function, which assumes ``output_file`` does not 
-include a file extension. ``default_width`` and ``default_height`` define the size of the 
+the expected command line arguments. This provides the utility of having a use-able file 
+even when command line arguments are not specified. It should be noted, however, that 
+some model developers may prefer to require all command line arguments every time the 
+file is used to build a target. ``output_file`` is the name of the file that is created 
+at the end of the ``main()`` function, which assumes ``output_file`` does not include a 
+file extension. ``default_width`` and ``default_height`` define the size of the 
 ``single_element`` part.
 
 The final highlighted portion of the code (starting with ``prog = "abaqus cae -noGui {} 
 --".format(basename)``) is where the ``argparse`` package is used to define the argument 
-parser rules. First, an argument parser is defined using the ``ArgumentParser`` method. 
+parser rules. First, an argument parser is defined using the ``ArgumentParser`` class. 
 This recieves a brief description ``cli_description`` and direction ``prog`` on how to 
 execute the program. Each subsequent call of the ``add_argument`` method adds a command 
-line argument to the parser's rules. Command line arguments have identifiers, like ``-o`` 
-or ``--output-file``, default values, and help messages.
+line argument to the parser's rules. Command line arguments defined using ``argparse`` 
+have options, like ``-o`` or ``--output-file``, and arguments. Arguments can also have 
+default values. ``argparse`` also allows for command line argument definitions to include 
+a help message that is used to auto-generate the command's help message. See the `Python 
+argparse`_ documentation for more information.
 
-See the `Python argparse`_ documentation for more information.
+In this case, we are using ``argparse`` in an Abaqus Python script, which will use Python 
+2.7. See the `Python 2.7 argparse`_ documentation for more information about how 
+``argparse`` will behave in an Abaqus journal file.
 
 7. In the ``source/abaqus`` folder, continue editing the file called ``single_element_geometry.py``
    using the contents below to create the ``if`` statement within which we will call the 
