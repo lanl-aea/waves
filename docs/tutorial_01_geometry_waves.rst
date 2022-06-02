@@ -123,12 +123,10 @@ The following sections of this tutorial will introduce four software-engineering
 that match the build system philosophy. These concepts will be presented sequentially, 
 starting with familiar Abaqus Python code, and adding in the following:
 
-.. admonition:: Computational-Engineering Concepts Introduced
-
-    1. Protecting your code within a ``main()`` function
-    2. Writing docstrings for your Python code
-    3. Adding a command line interface to your Python code
-    4. Protecting ``main()`` function execution and returning exit codes
+* Protecting your code within a ``main()`` function
+* Writing docstrings for your Python code
+* Adding a command line interface to your Python code
+* Protecting ``main()`` function execution and returning exit codes
 
 5. In the ``source/abaqus`` folder, create a file called ``single_element_geometry.py``
    using the contents below which contains the ``main()`` function.
