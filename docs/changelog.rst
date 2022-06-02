@@ -28,6 +28,8 @@ Internal Changes
 - Specify Sphinx v4.5.0 in the enviroment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
 - Removed duplicate code in the docs/SConscript file (:issue:`128`, :merge:`93`). By `Sergio Cordova`_
 - Changed test_builders so journal.log is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
+- Create per-tutorial EABM stub project definition files (SConstruct) to aid in incremental changes in the tutorial
+  documentation and allow for per-tutorial regression tests (:issue:`131`, :merge:`97`). By `Kyle Brindley`_.
 
 ******************
 0.1.7 (2022-05-27)
