@@ -1,0 +1,5 @@
+.. note::
+
+   The line numbers may jump between code snippets. The skipped lines are not important to the tutorial content as you
+   create the tutorial files. They are a side effect of methods used to robustly create these code snippets from the
+   original source code.

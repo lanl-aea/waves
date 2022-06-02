@@ -13,6 +13,8 @@ SCons Builders
     :show-inheritance:
     :synopsis: WAVES Analysis for Validated Engineering Simulations SCons builder extensions
 
+.. _parameter_generator_api:
+
 ********************
 Parameter Generators
 ********************

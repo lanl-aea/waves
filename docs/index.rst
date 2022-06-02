@@ -4,21 +4,23 @@
 
 .. include:: project_brief.txt
 
+.. _user_manual:
+
+.. toctree::
+   :maxdepth: 2
+   :caption: User Manual
+
+   tutorial_00_scons
+   tutorial_01_geometry_waves
+
 .. toctree::
    :maxdepth: 2
    :caption: Build System
 
-   user
    theory
    api
    cli
    devops
-
-.. toctree::
-   :maxdepth: 2
-   :caption: WAVES Tutorials
-   
-   tutorial_01_geometry_waves
 
 .. toctree::
    :caption: Help & Reference

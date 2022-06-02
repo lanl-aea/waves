@@ -20,6 +20,7 @@ Documentation
   :merge:`84`). By `Kyle Brindley`_.
 - Draft outline for the computational tools and practices "theory" manual (:issue:`96`, :merge:`85`). By `Kyle
   Brindley`_.
+- Add the project configuration (SConstruct) tutorial (:issue:`119`, :merge:`89`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
