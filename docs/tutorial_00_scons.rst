@@ -61,7 +61,17 @@ SCons Project Configuration
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
+      :emphasize-lines: 8-13
       :end-before: marker-1
+
+.. note::
+
+   Highlighted lines 8-13 are artifacts of the `WAVES-EABM`_ internal project regression tests. EABM owners and tutorial
+   users may replace these lines with a simple `WAVES`_ import, such as
+
+   .. code-block::
+
+      import waves
 
 By convention, the `SCons`_ root project file is named ``SConstruct``. Because this is a `Python`_ file, we can import
 `Python`_ libraries to help define project settings. The `shebang`_ in the first line is included to help text editors
