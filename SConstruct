@@ -18,7 +18,8 @@ project_variables = {
     'tutorial_01_dir': 'tutorial_01_geometry',
     'tutorial_04_dir': 'tutorial_04_simulation',
     'tutorial_05_dir': 'tutorial_05_parameter_substitution',
-    'tutorial_06_dir': 'tutorial_06_include_files'
+    'tutorial_06_dir': 'tutorial_06_include_files',
+    'tutorial_07_dir': 'tutorial_07_cartesian_product'
 }
 
 # =========================================================================================== COMMAND LINE VARIABLES ===

@@ -58,7 +58,7 @@ Python Parameter File
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_06_include_files/SConscript
@@ -71,7 +71,7 @@ changes made in this tutorial.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct

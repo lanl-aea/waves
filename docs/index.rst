@@ -16,6 +16,7 @@
    tutorial_04_simulation_waves
    tutorial_05_parameter_substitution_waves
    tutorial_06_include_files_waves
+   tutorial_07_cartesian_product_waves
 
 .. toctree::
    :maxdepth: 2

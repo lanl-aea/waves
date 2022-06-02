@@ -27,6 +27,8 @@ Documentation
 - Completed |PROJECT| Tutorial 1: Geometry (:issue:`129`, :merge:`94`). By `Thomas Roberts`_.
 - Add minimum scaffolding for the include files tutorial documentation (:issue:`139`, :merge:`105`). By `Kyle
   Brindley`_.
+- Add minimum scaffolding for the cartesian product tutorial documentation (:issue:`140`, :merge:`106`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
