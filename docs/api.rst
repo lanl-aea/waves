@@ -30,3 +30,12 @@ Odb Report File Parser
     :members:
     :show-inheritance:
     :synopsis: Parses an odbreport file produced by Abaqus
+
+***************
+Sta File Parser
+***************
+
+.. automodule:: waves.abaqus.abaqus_file_parser.StaFileParser
+    :members:
+    :show-inheritance:
+    :synopsis: Parses an sta file produced by Abaqus
