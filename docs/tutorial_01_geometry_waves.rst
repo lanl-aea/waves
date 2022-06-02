@@ -78,10 +78,11 @@ SCons to build a target(s), we will ``extend`` this list and finally create an a
 matches the parent directory name for the workflow list of targets.
 
 The highlighted lines of code (starting with ``journal_file = f"{model}_geometry"``) instruct 
-SCons on how to build the ``journal_file`` target, which is an Abaqus CAE file. The 
-``journal_file`` variable exists to reduce hard-coded duplication of file names. 
-``journal_options`` allows for parameters to be passed as command line arguments to the 
-journal file. This will be discussed in REFTUTORIAL05PLACEHOLDER.
+SCons on how to build the target, an Abaqus CAE file whose name is constructed using the 
+``journal_file`` variable. The ``journal_file`` variable exists solely to minimize 
+hard-coded duplication of the string ``'single_element_geometry'``. ``journal_options`` 
+allows for parameters to be passed as command line arguments to the journal file. This 
+will be discussed in REFTUTORIAL05PLACEHOLDER.
 
 Next, the ``workflow`` list is extended to include the action to use the 
 :meth:`waves.builders.abaqus_journal` builder, as discussed in REFTUTORIAL0PLACEHOLDER. 
