@@ -37,6 +37,16 @@ before_script:
           unset HTTP_PROXY
           unset HTTPS_PROXY
       fi
+  # FIXME: (1) Without setting this to false, Git webserver API calls to re-git.lanl.gov will throw errors about
+  # self-signed certificates. Work on CI server and Gitlab webserver configurations so that this is no longer
+  # necessary. There is a matching "FIXME: (1)" tag where the process is reversed that must also be removed when this
+  # is fixed.
+  - git config --local http.sslVerify false
+
+after_script:
+  # FIXME: (1) Reset the repository Git configuration to preserve ssl verifications. Remove when the server(s)
+  # configurations no longer require us to drop ssl verifications.
+  - git config --local http.sslVerify true
 
 environment:
   stage: environment
@@ -176,11 +186,6 @@ pages:
   script:
     - rm -rf public && mkdir -p public
     - cp docs/_static/index.html public
-    # FIXME: (1) Without setting this to false, Git webserver API calls to re-git.lanl.gov will throw errors about
-    # self-signed certificates. Work on CI server and Gitlab webserver configurations so that this is no longer
-    # necessary. There is a matching "FIXME: (1)" tag where the process is reversed that must also be removed when this
-    # is fixed.
-    - git config --local http.sslVerify false
     # Every documentation version must be re-built for *every* gitlab-pages job execution
     # Reference: https://gitlab.com/gitlab-org/gitlab/-/issues/33822
     - git fetch origin
@@ -205,9 +210,6 @@ pages:
             cp -r build/docs/html/* public/$ref
             cp -r eabm/build/docs/html/* public/$ref/waves-eabm
         done
-    # FIXME: (1) Reset the repository Git configuration to preserve ssl verifications. Remove when the server(s)
-    # configurations no longer require us to drop ssl verifications.
-    - git config --local http.sslVerify true
   artifacts:
     paths:
       # It MUST be called public

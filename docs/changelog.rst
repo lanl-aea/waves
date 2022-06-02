@@ -9,6 +9,10 @@ Changelog
 0.1.9 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Workaround the self-signed re-git.lanl.gov ssl certificates (:issue:`142`, :merge:`109`). By `Kyle Brindley`_.
+
 ******************
 0.1.8 (2022-06-02)
 ******************
