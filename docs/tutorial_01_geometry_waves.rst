@@ -339,9 +339,24 @@ using Scons.
        $ pwd
        /path/to/waves-eabm-tutorial
        $ scons tutorial_01_geometry
-       scons: Reading SConscript files 
-       <output truncated>
-       ...scons: done building targets.
+       scons: Reading SConscript files ...
+       Checking whether sphinx-build program 
+       exists.../projects/aea_compute/aea-beta/bin/sphinx-build
+       Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
+       Checking whether cubit program exists.../apps/Cubit-15.8/cubit
+       Checking whether abaqus_wrapper program exists...no
+       Could not find 'abaqus_wrapper' in construction environment. Using WAVES internal 
+       path.../projects/roppenheimer/waves/waves/bin/abaqus_wrapper
+       scons: done reading SConscript files.
+       scons: Building targets ...
+       cd /projects/roppenheimer/waves/eabm/build/tutorial_01_geometry && 
+       /apps/abaqus/Commands/abaqus -information environment > 
+       single_element_geometry.abaqus_v6.env
+       cd /projects/roppenheimer/waves/eabm/build/tutorial_01_geometry && 
+       /apps/abaqus/Commands/abaqus cae -noGui 
+       /projects/roppenheimer/waves/eabm/source/abaqus/single_element_geometry.py -- > 
+       single_element_geometry.log 2>&1
+       scons: done building targets.
     
 The output files will be located in the ``build`` directory within the ``waves-eabm-tutorial`` 
 directory. The location of the ``build`` directory is controlled in the ``waves-eabm-tutorial/SConstruct`` 
