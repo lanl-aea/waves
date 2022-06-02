@@ -110,8 +110,9 @@ fast-test:
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_04_simulation --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_05_parameter_substitution --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going conditional_ignore=False
     - scons . --keep-going conditional_ignore=False --jobs=4
   tags:
     - sstelmo-shell-aea
