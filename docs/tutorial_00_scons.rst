@@ -150,6 +150,14 @@ The following line adds the help messages for the command-line build variables t
 wheen running ``scons -h``. The help messages are added to the construction environment, so this line must come after
 the construction environment instantiation.
 
+.. note::
+
+   The project help message uses the conventional lowercase help option, ``-h``. Most bash commands use this option to
+   display the command's help message corresponding the software options. Due to this behavior, the `SCons`_ command
+   options are displayed with the unconventional capitalized option, ``-H``, as ``scons -H``. The `WAVES-EABM`_
+   tutorials and documentation will not discuss the full range of `SCons`_ command options, so modsim developers are
+   encouraged to read the `SCons`_ usage summary and `SCons manpage`_ to learn more about available build control options.
+
 7. Add the project meta data to the construction environment from the code-snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
@@ -217,6 +225,8 @@ useful to print the list of default targets in the project help to remind develo
 target is specified in the call to ``scons``. The second call to ``Help()`` will append the default target list to the
 output of ``scons -h``.
 
+11. Add the project aliases to the project help message from the code-snippet below.
+
 .. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: eabm_tutorial_00_SConstruct
@@ -224,3 +234,17 @@ output of ``scons -h``.
       :lineno-match:
       :start-after: marker-9
       :end-before: marker-10
+
+Simulation build workflows will typically involve many targets and tasks in a non-trivial execution order. The target
+file names may also be cumbersome to type when explicitly listing build targets in the `SCons`_ build command. For
+convenience, the `WAVES-EABM`_ simulation configurations will add a collector alias for the list of simulation targets
+with the `SCons alias`_ feature. By convention, `WAVES-EABM` matches the alias name to the simulation subdirectory
+name. :ref:`tutorialgeometrywaves` will introduce the first target alias, which will then populate the project help
+message diplayed by the ``scons -h`` command option.
+
+.. note::
+
+   The alias list is constructed manually according to the `WAVES-EABM`_ naming convention. There may be a way to
+   recover the alias list from the construction environment. If so, recovering the alias list directly will be a more
+   robust solution for building the project's alias list than a project naming convention. This tutorial will be updated
+   to reflect best practice if/when an `SCons`_ alias list solution is better understood.
