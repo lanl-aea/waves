@@ -106,7 +106,16 @@ fast-test:
     GIT_STRATEGY: clone
   script:
     - scons . --keep-going conditional_ignore=False
-    - cd eabm && scons . --keep-going conditional_ignore=False --jobs=4
+    - cd eabm
+    - scons . --sconstruct=tutorial_00_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going conditional_ignore=False
+    - scons . --jobs=4 --keep-going conditional_ignore=False
   tags:
     - sstelmo-shell-aea
   only:

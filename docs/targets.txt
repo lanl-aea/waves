@@ -3,8 +3,9 @@
    :start-after: target-start-do-not-remove
    :end-before: target-end-do-not-remove
 
-.. General referenfes
+.. General references
 .. _`Anaconda Documentation`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+.. _`automated build system`: https://en.wikipedia.org/wiki/List_of_build_automation_software
 .. _`Confluence`: https://www.atlassian.com/software/confluence
 .. _`ASC RE Gitlab`: https://re-git.lanl.gov/
 .. _`ASC RE Gitlab HPC Accounts`: https://hpcaccounts.lanl.gov/projects/request/asc-re-gitlab
@@ -23,15 +24,37 @@
 .. _`Python 2`: https://docs.python.org/2.7/
 .. _`PEP-8`: https://www.python.org/dev/peps/pep-0008/
 .. _`PEP-440`: https://www.python.org/dev/peps/pep-0440/
+.. _`PEP-257`: https://peps.python.org/pep-0257/
+.. _`PEP-287`: https://peps.python.org/pep-0287/
+.. _`SCons alias`: https://scons.org/doc/production/HTML/scons-user/ch22s07.html
+.. _`SCons command-line build variables`: https://scons.org/doc/production/HTML/scons-user/ch10s02.html
+.. _`SCons construction environment`: https://scons.org/doc/production/HTML/scons-user/ch07s02.html
+.. _`SCons custom builders`: https://scons.org/doc/production/HTML/scons-user/ch17.html
+.. _`SCons project build help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idm46358284707920
+.. _`SCons sharing environments`: https://scons.org/doc/production/HTML/scons-user/ch14s05.html
+.. _`SCons hierarchical build`: https://scons.org/doc/production/HTML/scons-user/ch14.html
+.. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
+.. _`Software Carpentry`: https://software-carpentry.org/
 .. _`sphinx`: https://www.sphinx-doc.org/en/master/
+.. _`Sphinx automodule`: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
+.. _`shebang`: https://en.wikipedia.org/wiki/Shebang_(Unix)
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
+.. _`Python Top-Level Code Environment`: https://docs.python.org/3/library/__main__.html
+.. _`Python argparse`: https://docs.python.org/3/library/argparse.html
+.. _`Python 2.7 argparse`: https://docs.python.org/2.7/library/argparse.html
+.. _`Python pathlib`: https://docs.python.org/3/library/pathlib.html
+.. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
+.. _`Abaqus Scripting`: https://simulia.lanl.gov/v2017/English/SIMACAEKERRefMap/simaker-c-ov.htm
+.. _`Abaqus Python Environment`: https://simulia.lanl.gov/v2017/English/SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
 .. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
+.. _`EABM API`: https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/api.html#
+.. _`EABM CLI`: https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/cli.html#
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm
@@ -41,4 +64,6 @@
 .. email addresses
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
+.. _`Sergio Cordova`: sergioc@lanl.gov
+.. _`Prabhu Khalsa`: pkhalsa@lanl.gov
 .. _`w13dev`: w13dev@lanl.gov

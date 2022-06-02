@@ -11,7 +11,15 @@ documentation_source_dir = 'docs'
 package_source_dir = _project_name_short.lower()
 project_variables = {
     'project_dir': Dir('.').abspath,
-    'abaqus_wrapper': str(_abaqus_wrapper)
+    'abaqus_wrapper': str(_abaqus_wrapper),
+    'eabm_dir': 'eabm',
+    'abaqus_dir': 'source/abaqus',
+    'python_dir': 'source/python',
+    'tutorial_01_dir': 'tutorial_01_geometry',
+    'tutorial_04_dir': 'tutorial_04_simulation',
+    'tutorial_05_dir': 'tutorial_05_parameter_substitution',
+    'tutorial_06_dir': 'tutorial_06_include_files',
+    'tutorial_07_dir': 'tutorial_07_cartesian_product'
 }
 
 # =========================================================================================== COMMAND LINE VARIABLES ===

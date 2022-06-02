@@ -37,9 +37,32 @@ The abaqus wrapper command line options and behavior are described in the usage 
 .. literalinclude:: abaqus_wrapper_message.txt
    :language: bash
 
+.. _parameter_study_cli:
+
 ***************
 Parameter Study
 ***************
 
 .. argparse::
    :ref: waves.parameter_study.get_parser
+
+***********
+ODB Extract
+***********
+
+.. argparse::
+   :ref: waves.abaqus.command_line_tools.odb_extract.get_parser
+
+*********
+Sta Parse
+*********
+
+.. argparse::
+   :ref: waves.abaqus.command_line_tools.sta_parse.get_parser
+
+*********
+Msg Parse
+*********
+
+.. argparse::
+   :ref: waves.abaqus.command_line_tools.msg_parse.get_parser

@@ -127,12 +127,12 @@ available with something similar to any of the following, in increasing order of
    $ export MANPATH=$MANPATH:/path/to/local/environment/man
    $ man scons
 
-3. View project specific command line options
+- View project specific command line options
 
-   .. code-block::
+  .. code-block::
 
-      $ scons -h
-      ...
+     $ scons -h
+     ...
 
 This project limits the default target list to the documentation with the `SCons`_ ``Default`` command. Simulation
 targets must be specified directly on the command line. The `SCons`_ "all targets" character, ``.``, may also be
@@ -140,36 +140,36 @@ specified to build every target in the repository, including *all* simulation ta
 specified by output file name or by target alias, which is set to match the parent directory for the target
 configuration, e.g. ``tutorial_01_geometry``.
 
-4. View the default targets and target aliases
+- View the default targets and target aliases
 
-   .. code-block::
+  .. code-block::
 
-      $ scons -h
-      ...
+     $ scons -h
+     ...
 
-5. Build default targets
+- Build default targets
 
-   .. code-block::
+  .. code-block::
 
-      $ scons
+     $ scons
 
-6. Build *all* targets
+- Build *all* targets
 
-   .. code-block::
+  .. code-block::
 
-      $ scons .
+     $ scons .
 
-7. Build a specific target
+- Build a specific target
 
-   .. code-block::
+  .. code-block::
 
-      $ scons <target name>
+     $ scons <target name>
 
-8. Remove *all* build target artifacts
+- Remove *all* build target artifacts
 
-   .. code-block::
+  .. code-block::
 
-      $ scons . --clean
+     $ scons . --clean
 
 .. build-end-do-not-remove
 
@@ -184,18 +184,18 @@ simulation targets. If the selected simulations run successfully, then the targe
 use `SCons`_ to execute unit and integration testing for project specific scripts, such as journal files and Python
 processing scripts.
 
-5. Build the required target(s). Test targets may not be part of the default target list. If so, each target will
-   need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
+- Build the required target(s). Test targets may not be part of the default target list. If so, each target will
+  need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
 
-   .. code-block::
+  .. code-block::
 
-      $ scons <target_1_name> <target-2_name>
+     $ scons <target_1_name> <target-2_name>
 
-6. Run *all* simulation and test targets. Try to run all targets even if some fail.
+- Run *all* simulation and test targets. Try to run all targets even if some fail.
 
-   .. code-block::
+  .. code-block::
 
-      scons . --keep-going
+     scons . --keep-going
 
 .. test-end-do-not-remove
 
@@ -207,10 +207,10 @@ Documentation
 
 The documentation build is also automated with SCons as the ``documentation`` target alias.
 
-5. Build the documentation target
+- Build the documentation target
 
-   .. code-block::
+  .. code-block::
 
-      $ scons documentation
+     $ scons documentation
 
 .. docs-end-do-not-remove

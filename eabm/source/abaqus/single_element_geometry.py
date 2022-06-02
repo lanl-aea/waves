@@ -39,6 +39,8 @@ def main(output_file, model_name, part_name, width, height):
 
     return 0
 
+# Comment used in tutorial code snippets: marker-1
+
 
 def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
@@ -72,6 +74,7 @@ def get_parser():
                         help="The rectangle height")
     return parser
 
+# Comment used in tutorial code snippets: marker-2
 
 if __name__ == '__main__':
     parser = get_parser()

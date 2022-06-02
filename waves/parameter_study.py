@@ -15,7 +15,7 @@ from waves import parameter_generators
 
 #========================================================================================================== SETTINGS ===
 # Variables normally found in a project's root settings.py file(s)
-_program_name = pathlib.Path(__file__).with_suffix('').name
+_program_name = pathlib.Path(__file__).stem
 cartesian_product_subcommand = 'cartesian_product'
 
 #============================================================================================ COMMAND LINE INTERFACE ===

@@ -6,8 +6,47 @@ Changelog
 #########
 
 ******************
-0.1.8 (unreleased)
+0.1.9 (unreleased)
 ******************
+
+******************
+0.1.8 (2022-06-02)
+******************
+
+New Features
+============
+- Add the command line tools odb_extract, msg_parse, and sta_parse (:issue:`93`, :merge:`88`). By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Update the SConstruct example for the Python script builder (:issue:`113`, :merge:`83`). By `Kyle Brindley`_.
+- Fix the out-of-order build/test/documentation examples as bulleted lists instead of enumerated lists (:issue:`115`,
+  :merge:`84`). By `Kyle Brindley`_.
+- Draft outline for the computational tools and practices "theory" manual (:issue:`96`, :merge:`85`). By `Kyle
+  Brindley`_.
+- Add the project configuration (SConstruct) tutorial (:issue:`119`, :merge:`89`). By `Kyle Brindley`_.
+- Add minimum scaffolding for the parameter substitution tutorial documentation (:issue:`137`, :merge:`101`). By `Kyle
+  Brindley`_.
+- Draft of Tutorial 1: Geometry (:issue:`45`, :merge:`35`). By `Thomas Roberts`_.
+- Completed |PROJECT| Tutorial 1: Geometry (:issue:`129`, :merge:`94`). By `Thomas Roberts`_.
+- Add minimum scaffolding for the include files tutorial documentation (:issue:`139`, :merge:`105`). By `Kyle
+  Brindley`_.
+- Add minimum scaffolding for the cartesian product tutorial documentation (:issue:`140`, :merge:`106`). By `Kyle
+  Brindley`_.
+
+Internal Changes
+================
+- Create a list of files to be copied to the documentation build directory for include statements in ``.rst`` files
+  (:issue:`120`, :merge:`90`). By `Thomas Roberts`_.
+- Specify Sphinx v4.5.0 in the enviroment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
+- Removed duplicate code in the docs/SConscript file (:issue:`128`, :merge:`93`). By `Sergio Cordova`_
+- Changed test_builders so journal.log is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
+- Create per-tutorial EABM stub project definition files (SConstruct) to aid in incremental changes in the tutorial
+  documentation and allow for per-tutorial regression tests (:issue:`131`, :merge:`97`). By `Kyle Brindley`_.
+- Added odb_extract rst documentation and added odb_extract, msg_parse, and sta_parse to pyrpojects.toml
+  (:issue:`132`, :merge:`96`). By `Prabhu Khalsa`_
+- Added StaFileParser API documentation (:issue:`135`, :merge:`99`). By `Prabhu Khalsa`_
+- Added MsgFileParser API documentation (:issue:`136`, :merge:`98`). By `Prabhu Khalsa`_
 
 ******************
 0.1.7 (2022-05-27)

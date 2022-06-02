@@ -31,16 +31,22 @@ requirements:
     - setuptools_scm
   run:
     - python >=3.8
+    - h5py
+    - numpy
     - pyyaml
     - scons
+    - xarray
 
 test:
   requires:
+    - h5py
+    - numpy
     - pytest
     - pytest-xdist
     - pyyaml
     - scons
     - setuptools_scm
+    - xarray
   source_files:
     # Everything copied here will make it into the "info" directory of the Conda package
     - SConstruct
@@ -55,8 +61,18 @@ test:
     - eabm/source/cubit/*
     - eabm/source/python/*
     - eabm/tutorial*/*
+    - eabm/tutorial*SConstruct
   imports:
     - waves
   commands:
     - scons . --keep-going conditional_ignore=False ignore_documentation=True
-    - cd eabm && scons . --keep-going conditional_ignore=False ignore_documentation=True --jobs=4
+    - cd eabm
+    - scons . --sconstruct=tutorial_00_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going conditional_ignore=False
+    - scons . --jobs=4 --keep-going conditional_ignore=False ignore_documentation=True
