@@ -27,6 +27,8 @@
 .. _`PEP-257`: https://peps.python.org/pep-0257/
 .. _`PEP-287`: https://peps.python.org/pep-0287/
 .. _`SCons command-line build variables`: https://scons.org/doc/production/HTML/scons-user/ch10s02.html
+.. _`SCons construction environment`: https://scons.org/doc/production/HTML/scons-user/ch07s02.html
+.. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`sphinx`: https://www.sphinx-doc.org/en/master/
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html

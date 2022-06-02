@@ -84,12 +84,14 @@ package. Finally, the EABM version number is hardcoded into the project definiti
       :start-after: marker-1
       :end-before: marker-2
 
-The `SCons command-line build variables`_ are specific to the project definition that you are
-currently creating. EABM projects may add or remove command line options to aid in build behavior control. The most
-relevant variable to most EABMs will be the ``variant_dir_base``, which allows EABM developers to change the build
-directory location from the command line without modifying the ``SConstruct`` file source code. The
-``conditional_ignore`` and ``ignore_documentation`` variables are mostly useful for :ref:`continuous_integration` of
-EABM builds.
+The `SCons command-line build variables`_ are specific to the project definition that you are currently creating. EABM
+projects may add or remove command line options to aid in build behavior control. The most relevant variable to most
+EABMs will be the ``variant_dir_base``, which allows EABM developers to change the build directory location from the
+command line without modifying the ``SConstruct`` file source code. The ``conditional_ignore`` variable is mostly useful
+for :ref:`continuous_integration` testing. At the end of this tutorial, you will see how to explore the project specific
+command line options and build variables help and usage.
+
+4. Initialize the `SCons construction environment`_ from the code snippet below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -98,6 +100,18 @@ EABM builds.
       :lineno-match:
       :start-after: marker-2
       :end-before: marker-3
+
+Most build systems inherit the user's active `shell environment`_ at build configuration time, referred to as the
+"external" environment in the `SCons`_ documentation. This means that (most) of the environment must be identical for
+all build tasks in the project. `SCons`_ differs from most build systems by managing the construction environment for
+each task separately from the external environment. `SCons`_ projects do not inherit the user's shell environment at
+build configuration by default. Instead, projects define one or more construction environments that is used to define
+per-task environment configuration.
+
+While this is a powerful feature for large, complex projects, most EABM projects will benefit from maintaining a single
+construction environment inherited from the active shell environment at build configuration time. In addition to copying
+the active external environment, the above code adds the project command-line build variables to the construction
+environment for re-use throughout the project definition files, SConstruct and SConscript, for build control.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
