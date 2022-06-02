@@ -1,6 +1,6 @@
-##################
-Tutorial 00: SCons
-##################
+#######################
+Tutorial 00: SConstruct
+#######################
 
 *************
 Prerequisites
@@ -31,7 +31,7 @@ The command line utilities provided by `WAVES`_ are those utilities required to 
 traditional software build systems. For most engineering simulation workflows, software build systems will work
 out-of-the-box. However, it is difficult to implement engineering parameter studies in software build systems, which are
 designed to produce a single program, not many nearly identical configurations of the same program. The `WAVES`_
-parameter generator utility, (:ref:`parameter_study_cli`) are designed to work with most build systems, but were
+parameter generator utility, :ref:`parameter_study_cli`, is designed to work with most build systems, but were
 originally developed with the requirements of `CMake`_ in mind.
 
 For production engineering analysis, `WAVES`_ focuses on extending the build system `SCons`_ because `SCons`_
@@ -57,19 +57,10 @@ SCons Project Configuration
 
 .. admonition:: SConstruct
 
-   .. code-block:: Python
-      :linenos:
-
-      #! /usr/bin/env python
-
-      import os
-      import sys
-      import pathlib
-
-      import setuptools_scm
-      import waves
-
-      version = '0.1.0'
+   .. literalinclude:: eabm_tutorial_00_SConstruct
+      :language: Python
+      :lineno-match:
+      :end-before: marker-1
 
 By convention, the `SCons`_ root project file is named ``SConstruct``. Because this is a `Python`_ file, we can import
 `Python`_ libraries to help define project settings. The `shebang`_ in the first line is included to help text editors
