@@ -211,8 +211,10 @@ this is the `EABM CLI`_.
 The first highlighted portion of the ``get_parser()`` function (starting with 
 ``filename = inspect.getfile(lambda: None)``) defines variables based on the name of the 
 script. While this method of determining the file name is non-standard for Python 3, the 
-Abaqus Python environment neccessitates this syntax. Nonetheless, the code is general for 
-any script name.
+Abaqus Python environment neccessitates this syntax. This code will become common 
+boilerplate code included in every Abaqus journal file created in the WAVES-EABM 
+tutorials. It is valuable to the behavior of these example journal files, but may not be 
+required for all journal files depending on their designed behavior.
 
 The code that follows uses the name of the script to define some variables. This code 
 assumes that the ``part_name`` variable will be equal to the name of the script and will 
