@@ -53,12 +53,13 @@ in ``waves-eabm-tutorial/SConstruct`` file. The ``env`` variable defines project
 and is imported so settings variables are not hard-coded more than once.
 
 The next set of highlighted lines sets operating system agnostic paths by utilizing 
-`Python pathlib`_ objects. Pathlib objects are used to reconstruct absolute paths to 
-source files using variables defined in the ``waves-eabm-tutorial/SConstruct`` 
-file. This method of path definition allows for path-strings to be hard-coded only once, 
-and then used as variables everywhere else in the code. For example, the variable 
-``abaqus_source_abspath`` is used in source definitions to point at the absolute path to 
-the directory where the Abaqus journal files exist.
+`Python pathlib`_ objects. These Pathlib objects absolute or relative paths on any 
+operating system to source files using variables defined in the 
+``waves-eabm-tutorial/SConstruct`` file. This method of path definition allows for 
+path-strings to be hard-coded only once, and then used as variables everywhere else in 
+the code. For example, the variable ``abaqus_source_abspath`` is used in source 
+definitions to point at the absolute path to the directory where the Abaqus journal files 
+exist.
 
 3. In the ``tutorial_01_geometry`` folder, continue editing the file called ``SConscript`` 
    using contents below.
