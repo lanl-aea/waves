@@ -41,6 +41,7 @@ documentation_file_list = [
     'theory.rst',
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
+    'tutorial_02_partition_mesh_waves.rst',
     'tutorial_04_simulation_waves.rst',
     'tutorial_05_parameter_substitution_waves.rst',
     'tutorial_environment_activation.txt',

@@ -10,7 +10,6 @@ Prerequisites
 
 .. include:: tutorial_00_prerequisites.txt
 
-
 **********
 References
 **********
@@ -22,13 +21,11 @@ covered in this tutorial.
 * `Abaqus Python Environment`_
 * Python Docstrings: `PEP-257`_, `PEP-287`_
 
-
 ***********
 Environment
 ***********
 
 .. include:: tutorial_environment_activation.txt
-
 
 *******************
 Directory Structure
@@ -43,7 +40,6 @@ Directory Structure
        /path/to/waves-eabm-tutorial
        $ mkdir tutorial_01_geometry source/abaqus
 
-       
 ***************
 SConscript File
 ***************
@@ -132,7 +128,6 @@ of the current working directory, in this case ``tutorial_01_geometry``.
 The final lines of code in the ``SConstruct`` file allow SCons to skip building a target 
 sequence if the Abaqus executable is not found.
 
-
 *******************
 Abaqus Journal File
 *******************
@@ -166,7 +161,6 @@ session.
 
 ``main`` Functions
 ==================
-
 The top of the file imports standard library modules used by the script's functions along 
 with Abaqus modules. The ``main()`` function takes in several arguments, like  
 ``model_name``, ``part_name``, and some geometric parameters for the single element 
@@ -178,7 +172,6 @@ inputs (known as sources) and outputs (known as targets). In this case, the
 
 Python Docstrings
 =================
-
 The highlighted lines of code at the beginning of the ``main()`` function are called a docstring. 
 Docstrings are specially formatted comment blocks the help automate documentation builds. 
 In this case, the docstrings are formatted so the `Sphinx automodule`_ directive can 
@@ -190,7 +183,6 @@ example of this is in the `EABM API`_.
 
 Abaqus Python Code
 ==================
-
 The latter portion of the ``main()`` function is the code that generates the single 
 element geometry. Here, an Abaqus model is opened using the ``model_name`` variable as 
 the model's name, a rectangle is drawn with dimensions ``width`` and ``height``, and the 
@@ -207,7 +199,6 @@ Abaqus Python 2.7 environment.
 
 Command Line Interfaces
 =======================
-
 8. In the ``source/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
    using the contents below which contains the ``get_parser()`` function. Note that 
    missing line numbers may be ignored.
@@ -281,7 +272,6 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 
 Top-Level Code Environment
 ==========================
-
 When the script is executed, an internal variable ``__name__`` is set to the value 
 ``__main__``. When this condition is true (i.e. the script is being executed rather than 
 being imported), the code inside of ``main()`` is executed. ``__main__`` is referred to as 
@@ -297,7 +287,6 @@ the journal file interface.
 
 Retrieving Exit Codes
 =====================
-
 The ``main()`` function is called from within the ``sys.exit()`` method. This provides 
 the operating system with a non-zero exit code if the script throws an error. By 
 convention, non-zero exit codes indicate an error in the executing program. See the `Bash 
@@ -307,7 +296,6 @@ downstream sequence of target actions which can no longer succeed.
 
 Entire Abaqus Journal File
 ==========================
-
 Shown below is ``single_element_geometry.py`` in its entirety. The highlighted lines show 
 the non-boilerplate code that will change between journal files in this WAVES-EABM 
 tutorial project. As discussed in preceding sections, some portions of the boilerplate 
@@ -321,7 +309,6 @@ but that may change in production EABMs.
          :language: Python
          :linenos:
          :emphasize-lines: 9-21, 25-36, 52, 55-58, 61, 64-74, 83-87
-
 
 ***************
 SConstruct File
@@ -342,7 +329,6 @@ collector alias will point to the list of targets to build specified in the
         .. literalinclude:: eabm_tutorial_01_geometry_SConstruct
            :language: Python
            :diff: eabm_tutorial_00_SConstruct
-
 
 ****************
 Building targets
@@ -382,7 +368,6 @@ using Scons.
 The default build directory name is ``build`` and located in the same parent directory as 
 the ``SConstruct`` file as described in :ref:`tutorialsconstruct`.    
 
-
 ************
 Output Files
 ************
@@ -393,7 +378,7 @@ directory *exactly* matches the directory structure of the location where the
 project-level ``SConstruct`` and ``SConscript`` files exist. This behavior will allow us 
 to define multiple simulations in our modsim repository (EABM) with build result 
 separation if more than one simulation is built at the same time. 
-REFTUTORIAL02PLACEHOLDER will demonstrate the importance of this behavior more clearly.
+:ref:`tutorialpartitionmeshwaves` will demonstrate the importance of this behavior more clearly.
 
 .. code-block:: bash
     
