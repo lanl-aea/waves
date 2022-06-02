@@ -39,19 +39,38 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorialgeometrywaves` is included below to help identify the
+A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: tutorial_05_parameter_substitution/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
 
    .. literalinclude:: tutorial_05_parameter_substitution_SConscript
       :language: Python
-      :diff: tutorial_04)
+      :lineno-match:
+      :diff: tutorial_04_simulation_SConscript
 
 **********
 SConstruct
 **********
 
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+changes made in this tutorial.
+
+.. admonition:: waves-eabm-tutorial/SConstruct
+
+   .. literalinclude:: eabm_tutorial_05_parameter_substitution_SConstruct
+      :language: Python
+      :lineno-match:
+      :diff: eabm_tutorial_04_simulation_SConstruct
+
 *************
 Build Targets 
 *************
+
+5. Build the new targets
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/model-eabm-tutorial
+   $ scons tutorial_05_parameter_substitution
