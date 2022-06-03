@@ -15,6 +15,7 @@ Documentation
   Brindley`_.
 - Add minimum scaffolding for the simulation tutorial documentation (:issue:`146`, :merge:`112`). By `Kyle
   Brindley`_.
+- Add a quickstart tutorial using a single project definition file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
 
 ******************
 0.1.8 (2022-06-02)
