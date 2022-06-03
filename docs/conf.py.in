@@ -7,7 +7,7 @@ import subprocess
 # -- Project information -----------------------------------------------------
 project_dir = pathlib.Path('@project_dir@').resolve()
 eabm_dir = project_dir / pathlib.Path('@eabm_dir@')
-print(eabm_dir)
+
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
 sys.path.insert(0, str(eabm_dir))
