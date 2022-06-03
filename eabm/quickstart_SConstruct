@@ -45,7 +45,7 @@ workflow = []
 journal_file = f"{model}_geometry"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae"],
+    target=[f"{variant_dir_base / journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options))
 
@@ -53,7 +53,7 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_partition"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae"],
+    target=[f"{variant_dir_base / journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
     journal_options=journal_options))
 
@@ -61,7 +61,7 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_mesh"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.inp"],
+    target=[f"{variant_dir_base / journal_file}.cae", f"{variant_dir_base / journal_file}.inp"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options))
 
@@ -77,7 +77,7 @@ abaqus_source_list = [
     f"#/{abaqus_source_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
+workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdirectory=variant_dir_base))
 
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
@@ -87,14 +87,14 @@ datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
 abaqus_options='-double both'
 workflow.extend(env.AbaqusSolver(
-    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+    target=[f"{variant_dir_base / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
     source=solve_source_list,
     job_name=datacheck_name,
     abaqus_options=f'{abaqus_options} -datacheck'))
 
 solve_source_list.append([f"{datacheck_name}.odb"])
 workflow.extend(env.AbaqusSolver(
-    target=[f"{job_name}.sta"],
+    target=[f"{variant_dir_base / job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options))
