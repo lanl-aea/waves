@@ -4,7 +4,8 @@
 Quickstart
 ##########
 
-This quickstart will create a minimal, single file version of the full tutorial project definitions in
+This quickstart will create a minimal version of the full tutorial project definitions below using a single project
+definition file.
 
 * :ref:`tutorialgeometrywaves`
 * :ref:`tutorial_partition_mesh_waves`
