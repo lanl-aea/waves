@@ -117,6 +117,7 @@ fast-test:
   script:
     - scons . --keep-going conditional_ignore=False
     - cd eabm
+    - scons . --sconstruct=quickstart_SConstruct --keep-going
     - scons . --sconstruct=tutorial_00_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going conditional_ignore=False
