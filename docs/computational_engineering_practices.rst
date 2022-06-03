@@ -32,23 +32,23 @@ that is most important, where the ability to recognize which software fits in wh
 engineer agile to changing project needs, computing resources, numeric solvers, programming languages, and even
 available funding.
 
-**********************************
-Computational Engineering Concepts
-**********************************
+*************
+Core Concepts
+*************
 
-The core concepts of computational engineering are listed below in the rough order of project maturity. That is, those
-things listed near the beginning of the list should be implemented early in the life-cycle of all projects, regardless
-of expected project growth, re-use, or impact. Particularly, version control should be implemented at the very beginning of
-a computational project, even with the earliest project brainstorming session. As the foundational practice of
-computational engineering, version control fills the role of a laboratory notebook and the strict practice of detailed
-and regular entries are equally important.
+The core concepts of computational engineering practice are listed below in the rough order of project maturity. That
+is, those things listed near the beginning of the list should be implemented early in the life-cycle of all projects,
+regardless of expected project growth, re-use, or impact. Particularly, version control should be implemented at the
+very beginning of a computational project, even with the earliest project brainstorming session. As the foundational
+practice of computational engineering, version control fills the role of a laboratory notebook and the strict practice
+of detailed and regular entries are equally important.
 
-* version control
-* documentation
-* build system
-* compute environment
-* unit/integration/regression tests and test frameworks
-* continuous integration automation
+* :ref:`version_control` 
+* :ref:`documentation`
+* :ref:`build_system`
+* :ref:`compute_environment`
+* :ref:`testing`
+* :ref:`continuous_integration`
 
 Those practices at the end of the list are more costly to implement and therefore more valuable for mature or long-lived
 projects. However, an engineer familiar with the computational tools implementing these practices will find that even
@@ -99,9 +99,9 @@ Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/ta
 
 .. _testing:
 
-***************************
-Testing and Test Frameworks
-***************************
+******************
+Regression Testing
+******************
 
 .. _continuous_integration:
 
