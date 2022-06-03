@@ -43,7 +43,7 @@ very beginning of a computational project, even with the earliest project brains
 practice of computational engineering, version control fills the role of a laboratory notebook and the strict practice
 of detailed and regular entries are equally important.
 
-* :ref:`version_control` 
+* :ref:`version_control`
 * :ref:`documentation`
 * :ref:`build_system`
 * :ref:`compute_environment`
