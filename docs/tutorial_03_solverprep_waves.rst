@@ -87,9 +87,9 @@ list) to a `Python pathlib`_ object.
 Just as in the previous tutorials, we now need to extend the ``workflow`` list. Recall 
 that we have already extended the workflow three times - once each for the Geometry, 
 Partition, and Mesh processes. Note that the syntax in this case is different from before, 
-as we now need to call the ``copy_substitute`` builder as a function from the ``waves`` 
-module. This is required because we need to perform the ``copy_substitute`` task for each 
-item in the ``abaqus_source_list``.
+as we now need to call the :meth:`waves.builders.copy_substitute` builder as a function 
+from the ``waves`` module. This is required because we need to perform the 
+``copy_substitute`` task for each item in the ``abaqus_source_list``.
 
 In summary of the changes you just made to the ``tutorial_03_solverprep/SConscript`` file, 
 a ``diff`` against the ``SConscript`` file from :ref:`tutorial_partition_mesh_waves` is 
@@ -105,9 +105,9 @@ included below to help identify the changes made in this tutorial.
 Solver Input Files
 ******************
 
-4. Download and copy the `WAVES-EABM abaqus source files`_ into your existing ``source/abaqus`` 
-   sub-directory. If you're on a linux system with `git`_ installed and read access on the 
-   `WAVES`_ repository, you can use `git archive`_ as below.
+6. Download and copy the `WAVES-EABM abaqus source files`_ into your existing 
+   ``source/abaqus`` sub-directory. If you're on a linux system with `git`_ installed and 
+   read access on the `WAVES`_ repository, you can use `git archive`_ as below.
 
 .. note::
     
@@ -125,9 +125,28 @@ Solver Input Files
    $ git archive --format=zip --remote=$repo_ssh HEAD:eabm/source/abaqus ${file_list[*]} > source_abaqus.zip
    $ unzip source_abaqus.zip -d source/abaqus
 
+This action will unzip the source files we included in the 
+``tutorial_03_solverprep/SConscript`` file into the ``waves-eabm-tutorial/source/abaqus/`` 
+directory. Check the contents of this directory using the ``ls`` command.
+
+.. code-block::
+    
+    $ pwd
+    /home/roppenheimer/waves-eabm-tutorial
+    $ ls source/abaqus
+    abaqus_journal_utilities.py  materials.inp
+    amplitudes.inp               parts.inp
+    assembly.inp                 single_element_compression.inp
+    boundary.inp                 single_element_geometry.py
+    field_output.inp             single_element_mesh.py
+    history_output.inp           single_element_partition.py
+
 **********
 SConstruct
 **********
+
+7. Add ``tutorial_03_solverprep`` to the ``eabm_simulation_directories`` list in the 
+   ``waves-eabm-tutorial/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
 changes made in this tutorial.
@@ -217,4 +236,9 @@ Inside the build directory are three sub-directories. ``tutorial_01_geometry`` a
 ``tutorial_02_partition_mesh``  remain from the previous two tutorials. The third 
 directory, ``tutorial_03_solverprep``, pertains to the targets we just build. 
 
-
+It is worth noting that the ``tutorial_03_solverprep`` build directory contains all the 
+files from the previous two tutorials. The additional files are the files from the 
+``abaqus_source_list`` that were acted on with the :meth:`waves.builders.copy_substitute` 
+builder. In this case, there files were simply copied into the build directory with no 
+modification to the source code. :ref:`tutorial_parameter_substitution_waves` will discuss 
+how parameters can be inserted into these solver input files.
