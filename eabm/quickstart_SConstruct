@@ -19,7 +19,7 @@ env = Environment(ENV=os.environ.copy())
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'source/abaqus'
 abaqus_source_abspath = project_dir / abaqus_source_dir
-variant_dir_base = pathlib.Path('build')
+variant_dir_base = pathlib.Path('build_quickstart')
 
 # Separate target output from source files
 VariantDir(variant_dir_base.name, '.', duplicate=False)
