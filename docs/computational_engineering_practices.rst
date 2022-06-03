@@ -4,11 +4,11 @@
 Introduction
 ************
 
-This manual will attempt to motivate the use of an `automated build system`_ for the purposes of computational science and
-engineering. As part of this motivation, the surrounding computational practices of version control, documentation,
-compute environment management, unit, integration, and regression testing, and continuous integration will also be
-addressed as applied to the practice of computational engineering. Specifically, this manual intends to motivate the
-adoption of these traditional software engineering practices for use in production engineering simulation projects.
+This manual will attempt to motivate the use of an `automated build system`_ for the purposes of computational science
+and engineering. As part of this motivation, the surrounding computational practices of version control, documentation,
+compute environment management, regression testing, and continuous integration will also be addressed as applied to the
+practice of computational engineering. Specifically, this manual intends to motivate the adoption of these traditional
+software engineering practices for use in research and production engineering simulation projects.
 
 This manual is not the first such effort in the greater scientific computing community. In fact, the authors relied
 heavily on the lesson plans of the `Software Carpentry`_, established to teach computing skills to researchers in 1998
@@ -16,21 +16,22 @@ heavily on the lesson plans of the `Software Carpentry`_, established to teach c
 computing, it will not attempt to fully teach the underlying concepts and will instead reference the well designed lesson
 plans of the `Software Carpentry`_.
 
-Where possible, this manual will refer to general computing practices and concepts with reference to specific software
-implementation as examples or vehicles for practice in concrete application. The specific software taught by the
-`Software Carpentry`_ curriculum is an excellent starting point to learn the core concepts of computational engineering.
-However, the authors have found that applications to production engineering simulation and analysis require translation
-of these concepts into the language and workflows of computational engineers. Adopting these computational tools may
-require engineers to re-imagine their workflows in some combination of traditional engineering and software concepts.
+Where possible, this manual will explain to general computing practices and concepts and limit discussion of specific
+software implementations to examples or vehicles for practice in concrete application. The specific software taught by
+the `Software Carpentry`_ curriculum is an excellent starting point to learn the core concepts of computational
+engineering. However, the authors have found that applications to engineering simulation and analysis require
+translation of these software development concepts into the language and workflows of computational engineers. Adopting
+these computational tools may require engineers to re-imagine their workflows in some combination of traditional
+engineering and software concepts.
 
-It has also been necessary to extend existing software build systems to engineering practices beyond the simple wrapping
-of engineering software execution. Where necessary, examples of specific software and their method of extension to
-engineering simulations will be given, with reference to the :ref:`user_manual` for recommended practical use. Where
+It has also been necessary to extend existing software build systems for engineering practices beyond the simple
+wrapping of engineering software execution. Where necessary, examples of specific software and their method of extension
+to engineering simulations will be given, with reference to the :ref:`user_manual` for recommended practical use. Where
 this manual relies on specific implementation examples, it should be understood that the practicing engineer may find
-different software more amenable to their specific work. It is always the overall collection of computational practices
-that is most important, where the ability to recognize which software fits in which practice that will make a practicing
-engineer agile to changing project needs, computing resources, numeric solvers, programming languages, and even
-available funding.
+that different software is more amenable to their specific work. It is always the overall collection of computational
+practices is more important than any specific software implementation. The ability to recognize which concepts are
+implemented by a software package will make a practicing engineer agile to changing project needs, computing resources,
+numeric solvers, programming languages, and even available funding.
 
 *************
 Core Concepts
