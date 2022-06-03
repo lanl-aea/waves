@@ -108,7 +108,7 @@ included below to help identify the changes made in this tutorial.
 Solver Input Files
 ******************
 
-6. Download and copy the `WAVES-EABM abaqus source files`_ into your existing 
+7. Download and copy the `WAVES-EABM abaqus source files`_ into your existing 
    ``source/abaqus`` sub-directory. If you're on a linux system with `git`_ installed and 
    read access on the `WAVES`_ repository, you can use `git archive`_ as below.
 
@@ -148,7 +148,7 @@ directory. Check the contents of this directory using the ``ls`` command.
 SConstruct
 **********
 
-7. Add ``tutorial_03_solverprep`` to the ``eabm_simulation_directories`` list in the 
+8. Add ``tutorial_03_solverprep`` to the ``eabm_simulation_directories`` list in the 
    ``waves-eabm-tutorial/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
