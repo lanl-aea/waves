@@ -1,5 +1,6 @@
 # Project files
 build/
+build_quickstart/
 *.tar.bz2
 
 # SCons files
