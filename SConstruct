@@ -16,6 +16,7 @@ project_variables = {
     'abaqus_dir': 'source/abaqus',
     'python_dir': 'source/python',
     'tutorial_01_dir': 'tutorial_01_geometry',
+    'tutorial_02_dir': 'tutorial_02_partition_mesh',
     'tutorial_03_dir': 'tutorial_03_solverprep',
     'tutorial_04_dir': 'tutorial_04_simulation',
     'tutorial_05_dir': 'tutorial_05_parameter_substitution',

@@ -13,6 +13,7 @@
    tutorial_00_scons
    tutorial_01_geometry_waves
    tutorial_02_partition_mesh_waves
+   tutorial_03_solverprep_waves
    tutorial_04_simulation_waves
    tutorial_05_parameter_substitution_waves
    tutorial_06_include_files_waves
