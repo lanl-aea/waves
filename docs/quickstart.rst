@@ -66,3 +66,7 @@ Building targets
     $ pwd
     /path/to/waves-eabm-tutorial
     $ scons single_element
+
+************
+Output Files
+************
