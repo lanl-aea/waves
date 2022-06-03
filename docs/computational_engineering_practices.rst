@@ -54,8 +54,8 @@ of detailed and regular entries are equally important.
 Those practices at the end of the list are more costly to implement and therefore more valuable for mature or long-lived
 projects. However, an engineer familiar with the computational tools implementing these practices will find that even
 small, short-term projects benefit from implementing all of these concepts. In production engineering environments, it
-is beneficial to implement the full range of computational engineering concepts in a "stub" repository that may be
-re-used at the beginning of every project.
+is beneficial to implement the full range of computational engineering concepts in a "stub" repository as a starting
+template for every project.
 
 .. _version_control:
 
