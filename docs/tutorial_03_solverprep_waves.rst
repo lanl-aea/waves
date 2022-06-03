@@ -39,6 +39,9 @@ Directory Structure
 SConscript
 **********
 
+5. Add the highlighted import statement shown below to the 
+   ``tutorial_03_solverprep/SConscript`` file.
+
 .. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
     
     .. literalinclude:: tutorial_03_solverprep_SConscript
@@ -47,7 +50,21 @@ SConscript
        :emphasize-lines: 5
        :end-before: marker-1
 
-.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
+The first few lines of the ``SConscript`` file should look very familiar with exception to 
+the single highlighted line. In this tutorial, we need to import the ``waves`` module, as 
+we will require a custom builder that functions differently than the previously used 
+:meth:`waves.builders.abaqus_journal` builder.
+
+.. note::
+    
+    There is a large section of lines in the ``SConscript`` file that are not included 
+    before the next section of code shown here, as they are identical to those from 
+    :ref:`tutorial_partition_mesh_waves`. The ``diff`` of the ``SConscript`` file at the 
+    end of the **SConscript** section will demonstrate this more clearly.
+
+6. Modify your ``tutorial_03_solverprep/SConscript`` file by adding the contents shown 
+   below immediately after the code pertaining to ``#Mesh`` form the previous tutorial. .. 
+   admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
 
     .. literalinclude:: tutorial_03_solverprep_SConscript
        :language: Python
@@ -55,9 +72,28 @@ SConscript
        :start-after: marker-2
        :end-before: marker-3
 
+The ``abaqus_source_list`` contains the names of all the files that are used to build the 
+Abaqus model. The ``{model}_compression.inp`` file is the primary input file, and the 
+other files in the ``abaqus_source_list`` are included within it. See the `Abaqus 
+*INCLUDE`_ keyword documentaiton for more information about how this is implemented.
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
-changes made in this tutorial.
+Each file in the ``abaqus_source_list`` is specified with its absolute path. `SCons`_ 
+interprets the ``#`` character in any target or source string as the absolute path to the 
+project root directory. The ``abaqus_source_dir`` variable was previously constructed 
+using variables from the ``env`` object. After constructing the ``abaqus_source_list``, we 
+must first convert each string (which represent the aboslute paths of each file in the 
+list) to a `Python pathlib`_ object.
+
+Just as in the previous tutorials, we now need to extend the ``workflow`` list. Recall 
+that we have already extended the workflow three times - once each for the Geometry, 
+Partition, and Mesh processes. Note that the syntax in this case is different from before, 
+as we now need to call the ``copy_substitute`` builder as a function from the ``waves`` 
+module. This is required because we need to perform the ``copy_substitute`` task for each 
+item in the ``abaqus_source_list``.
+
+In summary of the changes you just made to the ``tutorial_03_solverprep/SConscript`` file, 
+a ``diff`` against the ``SConscript`` file from :ref:`tutorial_partition_mesh_waves` is 
+included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
 
