@@ -42,6 +42,7 @@ documentation_file_list = [
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
     'tutorial_02_partition_mesh_waves.rst',
+    'tutorial_03_solverprep_waves.rst',
     'tutorial_04_simulation_waves.rst',
     'tutorial_05_parameter_substitution_waves.rst',
     'tutorial_06_include_files_waves.rst',
@@ -56,6 +57,7 @@ documentation_file_list = [
 project_dir = pathlib.Path(env['project_dir'])
 eabm_dir = project_dir / pathlib.Path(env['eabm_dir'])
 tutorial_01_dir = pathlib.Path(env['tutorial_01_dir'])
+tutorial_03_dir = pathlib.Path(env['tutorial_03_dir'])
 tutorial_04_dir = pathlib.Path(env['tutorial_04_dir'])
 tutorial_05_dir = pathlib.Path(env['tutorial_05_dir'])
 tutorial_06_dir = pathlib.Path(env['tutorial_06_dir'])
@@ -72,6 +74,7 @@ tutorial_files_list = [
     eabm_dir / 'tutorial_06_include_files_SConstruct',
     eabm_dir / 'tutorial_07_cartesian_product_SConstruct',
     eabm_dir / tutorial_01_dir / 'SConscript',
+    eabm_dir / tutorial_03_dir / 'SConscript',
     eabm_dir / tutorial_04_dir / 'SConscript',
     eabm_dir / tutorial_05_dir / 'SConscript',
     eabm_dir / tutorial_06_dir / 'SConscript',
