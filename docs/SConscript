@@ -24,6 +24,8 @@ documentation_file_list = [
     'environment.txt',  # Copied from environment.txt to docs build directory by root SConscript
     'eabm_tutorial_00_SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
     'eabm_README.txt',   # Copied from the eabm directory to waves docs build directory by root SConscript
+    'eabm_api.rst',
+    'eabm_cli.rst',
     'api.rst',
     'build.txt',
     'changelog.rst',

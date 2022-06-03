@@ -37,6 +37,13 @@
    changelog
    zreferences
 
+.. toctree::
+   :caption: Appendices
+   :maxdepth: 1
+
+   eabm_api
+   eabm_cli
+
 .. only:: html
 
    ##################

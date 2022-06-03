@@ -16,6 +16,8 @@ Documentation
 - Add minimum scaffolding for the simulation tutorial documentation (:issue:`146`, :merge:`112`). By `Kyle
   Brindley`_.
 - Add a quickstart tutorial using a single project definition file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
+- Add the EABM API and CLI to an Appendices section in the WAVES documentation (:issue:`138`, :merge:`104`). 
+  By `Thomas Roberts`_.
 
 ******************
 0.1.8 (2022-06-02)

@@ -55,8 +55,6 @@
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
 .. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
-.. _`EABM API`: https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/api.html#
-.. _`EABM CLI`: https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/cli.html#
 .. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm/source/abaqus
 
 .. Abaqus reference links
