@@ -15,6 +15,9 @@ except ModuleNotFoundError:
 # Inherit user's full environment
 env = Environment(ENV=os.environ.copy())
 
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
+
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'source/abaqus'

@@ -56,3 +56,13 @@ SConstruct File
     .. literalinclude:: eabm_quickstart_SConstruct
        :language: Python
        :lineno-match:
+
+****************
+Building targets
+****************
+
+.. code-block::
+   
+    $ pwd
+    /path/to/waves-eabm-tutorial
+    $ scons single_element
