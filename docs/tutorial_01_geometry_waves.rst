@@ -37,7 +37,7 @@ Directory Structure
    .. code-block::
        
        $ pwd
-       /path/to/waves-eabm-tutorial
+       /home/roppenheimer/waves-eabm-tutorial
        $ mkdir tutorial_01_geometry source/abaqus
 
 ***************
@@ -56,7 +56,7 @@ In this tutorial, we will build the geometry for a single element part using the
 4. In the ``tutorial_01_geometry`` directory, create a file called ``SConscript`` using 
 the contents below.
 
-.. admonition:: SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
    
     .. literalinclude:: tutorial_01_geometry_SConscript
         :language: Python
@@ -81,7 +81,7 @@ exist.
 5. In the ``tutorial_01_geometry`` directory, continue editing the file called 
 ``SConscript`` using contents below.
 
-.. admonition:: Sconscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/Sconscript
 
      .. literalinclude:: tutorial_01_geometry_SConscript
          :language: Python
@@ -115,7 +115,7 @@ For more information about the behavior of the
 6. In the ``tutorial_01_geometry`` directory, continue editing the file called 
 ``SConscript`` using the contents below.
 
-.. admonition:: Sconscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/Sconscript
 
      .. literalinclude:: tutorial_01_geometry_SConscript
          :language: Python
@@ -147,7 +147,7 @@ starting with familiar Abaqus Python code, and adding in the following:
 7. In the ``source/abaqus`` directory, create a file called ``single_element_geometry.py``
    using the contents below which contains the ``main()`` function.
 
-.. admonition:: single_element_geometry.py
+.. admonition:: waves-eabm-tutorial/source/abaqus/single_element_geometry.py
    
     .. literalinclude:: abaqus_single_element_geometry.py
         :language: Python
@@ -203,7 +203,7 @@ Command Line Interfaces
    using the contents below which contains the ``get_parser()`` function. Note that 
    missing line numbers may be ignored.
 
-.. admonition:: single_element_geometry.py
+.. admonition:: wabes-eabm-tutorial/source/abaqus/single_element_geometry.py
 
     .. literalinclude:: abaqus_single_element_geometry.py
         :language: Python
@@ -263,7 +263,7 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
    using the contents below to create the ``if`` statement within which we will call the 
    ``main()`` function. Note that missing line numbers may be ignored.
 
-.. admonition:: single_element_geometry.py
+.. admonition:: waves-eabm-tutorial/source/abaqus/single_element_geometry.py
 
     .. literalinclude:: abaqus_single_element_geometry.py
         :language: Python
@@ -303,7 +303,7 @@ code are required for EABM best practice when using a build system such as SCons
 other sections are boilerplate code that matches naming conventions used by the tutorials, 
 but that may change in production EABMs.
 
-.. admonition:: single_element_geometry.py
+.. admonition:: waves-eabm-tutorial/source/abaqus/single_element_geometry.py
 
      .. literalinclude:: abaqus_single_element_geometry.py
          :language: Python
@@ -344,7 +344,7 @@ using Scons.
     .. code-block::
        
         $ pwd
-        /path/to/waves-eabm-tutorial
+         /home/roppenheimer/waves-eabm-tutorial
         $ scons tutorial_01_geometry
         scons: Reading SConscript files ...
         Checking whether sphinx-build program 
@@ -383,7 +383,7 @@ separation if more than one simulation is built at the same time.
 .. code-block:: bash
     
     $ pwd
-    /path/to/waves-eabm-tutorial
+     /home/roppenheimer/waves-eabm-tutorial
     $ tree build
     build/
     └── tutorial_01_geometry
@@ -395,10 +395,9 @@ separation if more than one simulation is built at the same time.
 
     1 directory, 5 files
 
-Inside the build directory are two sub-directories. First is a default ``docs`` directory 
-that is specified to be built in the ``waves-eabm-tutorial/SConstruct`` file. Second is 
-the directory pertaining to the specific target that was specified to be built. In this 
-case, that is ``tutorial_01_geometry``. 
+At this point, the only directory in the ``build`` directory is that pertaining to the 
+specific target that was specified to be built. In this case, that is 
+``tutorial_01_geometry``.
 
 The ``tutorial_01_geomtry/`` directory should contain the following files:
 
