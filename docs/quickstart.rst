@@ -7,6 +7,7 @@ Quickstart
 This quickstart will create a minimal version of the full tutorial project definitions below using a single project
 definition file.
 
+* :ref:`tutorialsconstruct`
 * :ref:`tutorialgeometrywaves`
 * :ref:`tutorial_partition_mesh_waves`
 * :ref:`tutorial_solverprep_waves`
@@ -42,7 +43,7 @@ SConstruct File
 5. Create a file named ``SConstruct`` from the contents below.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
-   
+
     .. literalinclude:: eabm_quickstart_SConstruct
        :language: Python
        :lineno-match:
