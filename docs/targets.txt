@@ -53,6 +53,9 @@
 .. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
 .. _`Abaqus Scripting`: https://simulia.lanl.gov/v2017/English/SIMACAEKERRefMap/simaker-c-ov.htm
 .. _`Abaqus Python Environment`: https://simulia.lanl.gov/v2017/English/SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
+.. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
+.. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
+.. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
