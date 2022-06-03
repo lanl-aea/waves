@@ -63,10 +63,62 @@ Building targets
 
 .. code-block::
    
-    $ pwd
-    /path/to/waves-eabm-tutorial
-    $ scons single_element
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ scons single_element
 
 ************
 Output Files
 ************
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ tree build_quickstart/
+   build_quickstart/
+   |-- abaqus.rpy
+   |-- abaqus.rpy.1
+   |-- abaqus.rpy.2
+   |-- amplitudes.inp
+   |-- assembly.inp
+   |-- boundary.inp
+   |-- field_output.inp
+   |-- history_output.inp
+   |-- materials.inp
+   |-- parts.inp
+   |-- single_element_compression.abaqus_v6.env
+   |-- single_element_compression.com
+   |-- single_element_compression.dat
+   |-- single_element_compression.inp
+   |-- single_element_compression.log
+   |-- single_element_compression.msg
+   |-- single_element_compression.odb
+   |-- single_element_compression.prt
+   |-- single_element_compression.sta
+   |-- single_element_compression_DATACHECK.023
+   |-- single_element_compression_DATACHECK.abaqus_v6.env
+   |-- single_element_compression_DATACHECK.com
+   |-- single_element_compression_DATACHECK.dat
+   |-- single_element_compression_DATACHECK.log
+   |-- single_element_compression_DATACHECK.mdl
+   |-- single_element_compression_DATACHECK.msg
+   |-- single_element_compression_DATACHECK.odb
+   |-- single_element_compression_DATACHECK.prt
+   |-- single_element_compression_DATACHECK.sim
+   |-- single_element_compression_DATACHECK.stt
+   |-- single_element_geometry.abaqus_v6.env
+   |-- single_element_geometry.cae
+   |-- single_element_geometry.jnl
+   |-- single_element_geometry.log
+   |-- single_element_mesh.abaqus_v6.env
+   |-- single_element_mesh.cae
+   |-- single_element_mesh.inp
+   |-- single_element_mesh.jnl
+   |-- single_element_mesh.log
+   |-- single_element_partition.abaqus_v6.env
+   |-- single_element_partition.cae
+   |-- single_element_partition.jnl
+   `-- single_element_partition.log
+   
+   0 directories, 43 files
