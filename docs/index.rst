@@ -4,6 +4,12 @@
 
 .. include:: project_brief.txt
 
+.. toctree::
+   :maxdepth: 1
+   :caption: Computational Engineering Practices 
+
+   computational_engineering_practices
+
 .. _user_manual:
 
 .. toctree::
@@ -24,7 +30,6 @@
    :maxdepth: 2
    :caption: Build System
 
-   theory
    api
    cli
    devops

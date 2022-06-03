@@ -1,9 +1,5 @@
 .. _computational_tools:
 
-#############
-Theory Manual
-#############
-
 ************
 Introduction
 ************
