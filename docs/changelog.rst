@@ -20,6 +20,7 @@ Documentation
   By `Thomas Roberts`_.
 - Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By 
   `Thomas Roberts`_.
+- Completed WAVES  Tutorial 03: SolverPrep (:issue:`99`, :merge:`115`). By `Thomas Roberts`_.
 
 ******************
 0.1.8 (2022-06-02)
