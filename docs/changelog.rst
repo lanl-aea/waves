@@ -9,9 +9,10 @@ Changelog
 0.1.9 (unreleased)
 ******************
 
-Bug fixes
-=========
-- Workaround the self-signed re-git.lanl.gov ssl certificates (:issue:`142`, :merge:`109`). By `Kyle Brindley`_.
+Documentation
+=============
+- Add minimum scaffolding for the solverprep tutorial documentation (:issue:`145`, :merge:`111`). By `Kyle
+  Brindley`_.
 
 ******************
 0.1.8 (2022-06-02)
@@ -20,6 +21,10 @@ Bug fixes
 New Features
 ============
 - Add the command line tools odb_extract, msg_parse, and sta_parse (:issue:`93`, :merge:`88`). By `Prabhu Khalsa`_.
+
+Bug fixes
+=========
+- Workaround the self-signed re-git.lanl.gov ssl certificates (:issue:`142`, :merge:`109`). By `Kyle Brindley`_.
 
 Documentation
 =============
