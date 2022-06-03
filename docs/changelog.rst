@@ -13,6 +13,8 @@ Documentation
 =============
 - Add minimum scaffolding for the solverprep tutorial documentation (:issue:`145`, :merge:`111`). By `Kyle
   Brindley`_.
+- Add minimum scaffolding for the simulation tutorial documentation (:issue:`146`, :merge:`112`). By `Kyle
+  Brindley`_.
 
 ******************
 0.1.8 (2022-06-02)
