@@ -17,7 +17,6 @@
    computational_practices_compute_environment
    computational_practices_regression_testing
    computational_practices_continuous_integration
-   computational_practices_curriculum
 
 .. _user_manual:
 
