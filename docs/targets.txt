@@ -14,6 +14,7 @@
 .. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
 .. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
 .. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
+.. _`GNU Make`: https://www.gnu.org/software/make/
 .. _`git`: https://git-scm.com/
 .. _`git archive`: https://git-scm.com/docs/git-archive
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
