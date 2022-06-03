@@ -1,8 +1,16 @@
 #! /usr/bin/env python
 
+import os
+import sys
 import pathlib
 
-import waves
+# Only required when WAVES is not installed as a package, e.g. for local testing in WAVES repository.
+# EABMs may simply use "import waves"
+try:
+    import waves
+except ModuleNotFoundError:
+    sys.path.insert(0, str(pathlib.Path('..').resolve()))
+    import waves
 
 env = Environment(ENV=os.environ.copy())
 
@@ -11,6 +19,9 @@ project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'source/abaqus' 
 abaqus_source_abspath = project_dir / abaqus_source_dir
 variant_dir_base = pathlib.Path('build')
+
+# Separate target output from source files
+VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 required_programs = ['abaqus']
