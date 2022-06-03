@@ -37,7 +37,7 @@ Directory Structure
    .. code-block::
        
        $ pwd
-       /path/to/waves-eabm-tutorial
+       /home/roppenheimer/waves-eabm-tutorial
        $ mkdir tutorial_01_geometry source/abaqus
 
 ***************
@@ -344,7 +344,7 @@ using Scons.
     .. code-block::
        
         $ pwd
-        /path/to/waves-eabm-tutorial
+         /home/roppenheimer/waves-eabm-tutorial
         $ scons tutorial_01_geometry
         scons: Reading SConscript files ...
         Checking whether sphinx-build program 
@@ -383,7 +383,7 @@ separation if more than one simulation is built at the same time.
 .. code-block:: bash
     
     $ pwd
-    /path/to/waves-eabm-tutorial
+     /home/roppenheimer/waves-eabm-tutorial
     $ tree build
     build/
     └── tutorial_01_geometry
