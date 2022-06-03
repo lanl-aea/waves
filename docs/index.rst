@@ -4,6 +4,20 @@
 
 .. include:: project_brief.txt
 
+.. _computational_tools:
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Computational Practices 
+
+   computational_practices_introduction
+   computational_practices_version_control
+   computational_practices_documentation
+   computational_practices_build_system
+   computational_practices_compute_environment
+   computational_practices_regression_testing
+   computational_practices_continuous_integration
+
 .. _user_manual:
 
 .. toctree::
@@ -24,7 +38,6 @@
    :maxdepth: 2
    :caption: Build System
 
-   theory
    api
    cli
    devops
