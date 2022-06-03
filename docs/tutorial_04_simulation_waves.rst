@@ -3,3 +3,76 @@
 #######################
 Tutorial 04: Simulation
 #######################
+
+**********
+References
+**********
+
+***********
+Environment
+***********
+
+.. include:: tutorial_environment_activation.txt
+
+*******************
+Directory Structure
+*******************
+
+3. Create a directory ``tutorial_04_simulation`` in the ``waves-eabm-tutorial`` directory.
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ mkdir tutorial_04_simulation
+
+4. Copy the ``tutorial_03_solverprep/SConscript`` file into the newly created ``tutorial_04_simulation``
+   directory.
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ cp tutorial_03_solverprep/SConscript tutorial_04_simulation/
+
+**********
+SConscript
+**********
+
+A ``diff`` against the ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the
+changes made in this tutorial.
+
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+
+   .. literalinclude:: tutorial_04_simulation_SConscript
+      :language: Python
+      :diff: tutorial_03_solverprep_SConscript
+
+**********
+SConstruct
+**********
+
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the
+changes made in this tutorial.
+
+.. admonition:: waves-eabm-tutorial/SConstruct
+
+   .. literalinclude:: eabm_tutorial_04_simulation_SConstruct
+      :language: Python
+      :diff: eabm_tutorial_03_solverprep_SConstruct
+
+*************
+Build Targets 
+*************
+
+5. Build the new targets
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ scons tutorial_04_simulation
+
+************
+Output Files
+************

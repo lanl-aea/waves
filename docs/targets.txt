@@ -12,7 +12,11 @@
 .. _`ASC RE Gitlab User Documentation`: https://re-git.lanl.gov/help/user/index.md
 .. _`AEA Gitlab group`: https://re-git.lanl.gov/aea
 .. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
+.. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
 .. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
+.. _`GNU Make`: https://www.gnu.org/software/make/
+.. _`git`: https://git-scm.com/
+.. _`git archive`: https://git-scm.com/docs/git-archive
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
 .. _`Granta/MIMS`: http://grantami.lanl.gov/mi
@@ -53,8 +57,7 @@
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
 .. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
-.. _`EABM API`: https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/api.html#
-.. _`EABM CLI`: https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/cli.html#
+.. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm/source/abaqus
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm

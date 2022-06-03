@@ -24,10 +24,19 @@ documentation_file_list = [
     'environment.txt',  # Copied from environment.txt to docs build directory by root SConscript
     'eabm_tutorial_00_SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
     'eabm_README.txt',   # Copied from the eabm directory to waves docs build directory by root SConscript
+    'eabm_api.rst',
+    'eabm_cli.rst',
     'api.rst',
     'build.txt',
     'changelog.rst',
     'cli.rst',
+    'computational_practices_introduction.rst',
+    'computational_practices_version_control.rst',
+    'computational_practices_documentation.rst',
+    'computational_practices_build_system.rst',
+    'computational_practices_compute_environment.rst',
+    'computational_practices_regression_testing.rst',
+    'computational_practices_continuous_integration.rst',
     'contribution.txt',
     'dependencies.txt',
     'devops.rst',
@@ -35,19 +44,20 @@ documentation_file_list = [
     'index.rst',
     'line_number_jump_note.txt',
     'project_brief.txt',
+    'quickstart.rst',
     'references.bib',
     'release_philosophy.rst',
     'targets.txt',
-    'theory.rst',
+    'tutorial_00_prerequisites.txt',
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
     'tutorial_02_partition_mesh_waves.rst',
+    'tutorial_03_solverprep_waves.rst',
     'tutorial_04_simulation_waves.rst',
     'tutorial_05_parameter_substitution_waves.rst',
     'tutorial_06_include_files_waves.rst',
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_environment_activation.txt',
-    'tutorial_00_prerequisites.txt',
     'zreferences.rst',
     '_static/custom.css'
 ]
@@ -56,6 +66,8 @@ documentation_file_list = [
 project_dir = pathlib.Path(env['project_dir'])
 eabm_dir = project_dir / pathlib.Path(env['eabm_dir'])
 tutorial_01_dir = pathlib.Path(env['tutorial_01_dir'])
+tutorial_02_dir = pathlib.Path(env['tutorial_02_dir'])
+tutorial_03_dir = pathlib.Path(env['tutorial_03_dir'])
 tutorial_04_dir = pathlib.Path(env['tutorial_04_dir'])
 tutorial_05_dir = pathlib.Path(env['tutorial_05_dir'])
 tutorial_06_dir = pathlib.Path(env['tutorial_06_dir'])
@@ -64,6 +76,7 @@ abaqus_dir = pathlib.Path(env['abaqus_dir'])
 python_dir = pathlib.Path(env['python_dir'])
 tutorial_files_list = [
     eabm_dir / 'tutorial_00_SConstruct',
+    eabm_dir / 'quickstart_SConstruct',
     eabm_dir / 'tutorial_01_geometry_SConstruct',
     eabm_dir / 'tutorial_02_partition_mesh_SConstruct',
     eabm_dir / 'tutorial_03_solverprep_SConstruct',
@@ -72,6 +85,8 @@ tutorial_files_list = [
     eabm_dir / 'tutorial_06_include_files_SConstruct',
     eabm_dir / 'tutorial_07_cartesian_product_SConstruct',
     eabm_dir / tutorial_01_dir / 'SConscript',
+    eabm_dir / tutorial_02_dir / 'SConscript',
+    eabm_dir / tutorial_03_dir / 'SConscript',
     eabm_dir / tutorial_04_dir / 'SConscript',
     eabm_dir / tutorial_05_dir / 'SConscript',
     eabm_dir / tutorial_06_dir / 'SConscript',

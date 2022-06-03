@@ -5,13 +5,25 @@
 Changelog
 #########
 
+*******************
+0.1.10 (unreleased)
+*******************
+
 ******************
-0.1.9 (unreleased)
+0.1.9 (2022-06-03)
 ******************
 
-Bug fixes
-=========
-- Workaround the self-signed re-git.lanl.gov ssl certificates (:issue:`142`, :merge:`109`). By `Kyle Brindley`_.
+Documentation
+=============
+- Add minimum scaffolding for the solverprep tutorial documentation (:issue:`145`, :merge:`111`). By `Kyle
+  Brindley`_.
+- Add minimum scaffolding for the simulation tutorial documentation (:issue:`146`, :merge:`112`). By `Kyle
+  Brindley`_.
+- Add a quickstart tutorial using a single project definition file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
+- Add the EABM API and CLI to an Appendices section in the WAVES documentation (:issue:`138`, :merge:`104`). 
+  By `Thomas Roberts`_.
+- Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By 
+  `Thomas Roberts`_.
 
 ******************
 0.1.8 (2022-06-02)
@@ -20,6 +32,10 @@ Bug fixes
 New Features
 ============
 - Add the command line tools odb_extract, msg_parse, and sta_parse (:issue:`93`, :merge:`88`). By `Prabhu Khalsa`_.
+
+Bug fixes
+=========
+- Workaround the self-signed re-git.lanl.gov ssl certificates (:issue:`142`, :merge:`109`). By `Kyle Brindley`_.
 
 Documentation
 =============

@@ -4,15 +4,31 @@
 
 .. include:: project_brief.txt
 
+.. _computational_tools:
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Computational Practices 
+
+   computational_practices_introduction
+   computational_practices_version_control
+   computational_practices_documentation
+   computational_practices_build_system
+   computational_practices_compute_environment
+   computational_practices_regression_testing
+   computational_practices_continuous_integration
+
 .. _user_manual:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: User Manual
 
+   quickstart
    tutorial_00_scons
    tutorial_01_geometry_waves
    tutorial_02_partition_mesh_waves
+   tutorial_03_solverprep_waves
    tutorial_04_simulation_waves
    tutorial_05_parameter_substitution_waves
    tutorial_06_include_files_waves
@@ -22,7 +38,6 @@
    :maxdepth: 2
    :caption: Build System
 
-   theory
    api
    cli
    devops
@@ -34,6 +49,13 @@
    release_philosophy
    changelog
    zreferences
+
+.. toctree::
+   :caption: Appendices
+   :maxdepth: 1
+
+   eabm_api
+   eabm_cli
 
 .. only:: html
 
