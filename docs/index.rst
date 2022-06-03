@@ -10,6 +10,7 @@
    :maxdepth: 1
    :caption: User Manual
 
+   quickstart
    tutorial_00_scons
    tutorial_01_geometry_waves
    tutorial_02_partition_mesh_waves
