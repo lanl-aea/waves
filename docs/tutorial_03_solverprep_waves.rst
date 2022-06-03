@@ -8,6 +8,9 @@ Tutorial 03: SolverPrep
 References
 **********
 
+* Bash concepts used in this tutorial: `Bash Variables`_, `Bash Arrays`_, `Bash Parameter Expansion`_
+* `Abaqus *INCLUDE`_ keyword documentation
+
 ***********
 Environment
 ***********
