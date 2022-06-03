@@ -395,10 +395,8 @@ separation if more than one simulation is built at the same time.
 
     1 directory, 5 files
 
-Inside the build directory are two sub-directories. First is a default ``docs`` directory 
-that is specified to be built in the ``waves-eabm-tutorial/SConstruct`` file. Second is 
-the directory pertaining to the specific target that was specified to be built. In this 
-case, that is ``tutorial_01_geometry``. 
+At this point, the only directory in build directory that pertaining to the specific 
+target that was specified to be built. In this case, that is ``tutorial_01_geometry``.
 
 The ``tutorial_01_geomtry/`` directory should contain the following files:
 
