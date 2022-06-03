@@ -5,7 +5,9 @@ Quickstart
 ##########
 
 This quickstart will create a minimal version of the full tutorial project definitions below using a single project
-definition file.
+definition file. These tutorials and this quickstart describe the computational engineering workflow through simulation
+execution. Using a single project definition requires `SCons`_ techniques that differ between the quickstart
+``SConstruct`` file and the project defintion files, ``SConstruct`` and ``SConscript``, found in the full tutorials.
 
 * :ref:`tutorialsconstruct`
 * :ref:`tutorialgeometrywaves`
@@ -62,7 +64,7 @@ Building targets
 ****************
 
 .. code-block::
-   
+
    $ pwd
    /path/to/waves-eabm-tutorial
    $ scons single_element
@@ -120,5 +122,5 @@ Output Files
    |-- single_element_partition.cae
    |-- single_element_partition.jnl
    `-- single_element_partition.log
-   
+
    0 directories, 43 files
