@@ -7,9 +7,9 @@ Quickstart
 This quickstart will create a minimal, single file version of the full tutorial project definitions in
 
 * :ref:`tutorialgeometrywaves`
-* :ref:`tutorial_partition_mesh`
-* :ref:`tutorial_solverprep`
-* :ref:`tutorial_simulation`
+* :ref:`tutorial_partition_mesh_waves`
+* :ref:`tutorial_solverprep_waves`
+* :ref:`tutorial_simulation_waves`
 
 ***********
 Environment
@@ -32,7 +32,7 @@ Directory Structure
       $ pwd
       /home/roppenheimer/waves-eabm-tutorial
 
-5. Download and copy the following modsim files into the ``source/abaqus`` sub-directory.
+4. Download and copy the following modsim files into the ``source/abaqus`` sub-directory.
 
 ***************
 SConstruct File
