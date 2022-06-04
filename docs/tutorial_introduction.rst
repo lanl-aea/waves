@@ -12,6 +12,8 @@ Start Options
 Prerequisites
 *************
 
+.. include:: tutorial_00_prerequisites.txt
+
 ********
 Schedule
 ********
