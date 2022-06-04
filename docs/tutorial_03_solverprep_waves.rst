@@ -89,7 +89,9 @@ interprets the ``#`` character in any target or source string as the absolute pa
 project root directory. The ``abaqus_source_dir`` variable was previously constructed 
 using variables from the ``env`` object. After constructing the ``abaqus_source_list``, we 
 must first convert each string (which represent the aboslute paths of each file in the 
-list) to a `Python pathlib`_ object.
+list) to a `Python pathlib`_ object. While not strictly neccessary for the 
+:meth:`waves.builders.copy_substitute` method, the `Python pathlib`_ objects are used 
+elsewhere in the `SConscript` file.
 
 Just as in the previous tutorials, we now need to extend the ``workflow`` list. Recall 
 that we have already extended the workflow three times - once each for the Geometry, 
