@@ -26,7 +26,7 @@ Schedule
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
-                   00:10 :ref:`tutorial_quickstart`                   Minimally functional simulation build system
+                   00:10 :ref:`quickstart`                            Minimally functional simulation build system
                                                                       workflow
                    01:00 :ref:`tutorialsconstruct`                    `SCons`_ project definition and meta data
                    01:00 :ref:`tutorialgeometrywaves`                 Hierarchical `SCons`_ builds, task creation,
