@@ -12,6 +12,7 @@ Changelog
 Documentation
 =============
 - Add tutorial description page for summary instructions (:issue:`144`, :merge:`121`). By `Kyle Brindley`_.
+- Add draft of the computational practices version control section (:issue:`123`, :merge:`122`). By `Kyle Brindley`_.
 
 ******************
 0.1.9 (2022-06-03)
