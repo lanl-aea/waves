@@ -69,8 +69,9 @@ we will require a custom builder that functions differently than the previously 
     more clearly.
 
 6. Modify your ``tutorial_03_solverprep/SConscript`` file by adding the contents shown 
-   below immediately after the code pertaining to ``#Mesh`` form the previous tutorial. .. 
-   admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
+   below immediately after the code pertaining to ``# Mesh`` from the previous tutorial. 
+
+.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
 
     .. literalinclude:: tutorial_03_solverprep_SConscript
        :language: Python
