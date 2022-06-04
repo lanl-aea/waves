@@ -128,6 +128,7 @@ Solver Input Files
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
+   
    $ file_list=("single_element_compression" "amplitudes" "boundary" "field_output" "materials" "parts" "history_output")
    $ file_list=("${file_list[@]/%/.inp}")
    $ repo_ssh="ssh://git@re-git.lanl.gov:10022/kbrindley/waves.git"
