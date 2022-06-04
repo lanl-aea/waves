@@ -20,7 +20,7 @@ Documentation
   By `Thomas Roberts`_.
 - Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By 
   `Thomas Roberts`_.
-- Completed WAVES  Tutorial 03: SolverPrep (:issue:`99`, :merge:`115`). By `Thomas Roberts`_.
+- Completed WAVES Tutorial 03: SolverPrep (:issue:`99`, :merge:`115`). By `Thomas Roberts`_.
 
 ******************
 0.1.8 (2022-06-02)
@@ -45,7 +45,7 @@ Documentation
 - Add minimum scaffolding for the parameter substitution tutorial documentation (:issue:`137`, :merge:`101`). By `Kyle
   Brindley`_.
 - Draft of Tutorial 1: Geometry (:issue:`45`, :merge:`35`). By `Thomas Roberts`_.
-- Completed |PROJECT| Tutorial 1: Geometry (:issue:`129`, :merge:`94`). By `Thomas Roberts`_.
+- Completed WAVES Tutorial 1: Geometry (:issue:`129`, :merge:`94`). By `Thomas Roberts`_.
 - Add minimum scaffolding for the include files tutorial documentation (:issue:`139`, :merge:`105`). By `Kyle
   Brindley`_.
 - Add minimum scaffolding for the cartesian product tutorial documentation (:issue:`140`, :merge:`106`). By `Kyle
