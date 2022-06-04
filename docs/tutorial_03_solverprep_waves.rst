@@ -244,11 +244,11 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
 
 Inside the build directory are three sub-directories. ``tutorial_01_geometry`` and 
 ``tutorial_02_partition_mesh``  remain from the previous two tutorials. The third 
-directory, ``tutorial_03_solverprep``, pertains to the targets we just build. 
+directory, ``tutorial_03_solverprep``, pertains to the targets we just built.
 
 It is worth noting that the ``tutorial_03_solverprep`` build directory contains all the 
 files from the previous two tutorials. The additional files are the files from the 
 ``abaqus_source_list`` that were acted on with the :meth:`waves.builders.copy_substitute` 
-builder. In this case, there files were simply copied into the build directory with no 
+builder. In this case, the files were simply copied into the build directory with no 
 modification to the source code. :ref:`tutorial_parameter_substitution_waves` will discuss 
 how parameters can be inserted into these solver input files.
