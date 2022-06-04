@@ -38,6 +38,8 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_02_partition_mesh/SConscript tutorial_03_solverprep/
 
+.. _tutorial_solverprep_waves_SConscript:
+
 **********
 SConscript
 **********
@@ -63,7 +65,8 @@ we will require a custom builder that functions differently than the previously 
     There is a large section of lines in the ``SConscript`` file that are not included 
     before the next section of code shown here, as they are identical to those from 
     :ref:`tutorial_partition_mesh_waves`. The ``diff`` of the ``SConscript`` file at the 
-    end of the **SConscript** section will demonstrate this more clearly.
+    end of the :ref:`tutorial_solverprep_waves_SConscript` section will demonstrate this 
+    more clearly.
 
 6. Modify your ``tutorial_03_solverprep/SConscript`` file by adding the contents shown 
    below immediately after the code pertaining to ``#Mesh`` form the previous tutorial. .. 
