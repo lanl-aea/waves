@@ -48,6 +48,7 @@ documentation_file_list = [
     'references.bib',
     'release_philosophy.rst',
     'targets.txt',
+    'tutorial_introduction.rst',
     'tutorial_00_prerequisites.txt',
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',

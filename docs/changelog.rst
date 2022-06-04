@@ -9,6 +9,10 @@ Changelog
 0.1.10 (unreleased)
 *******************
 
+Documentation
+=============
+- Add tutorial description page for summary instructions (:issue:`144`, :merge:`121`). By `Kyle Brindley`_.
+
 ******************
 0.1.9 (2022-06-03)
 ******************
@@ -20,9 +24,9 @@ Documentation
 - Add minimum scaffolding for the simulation tutorial documentation (:issue:`146`, :merge:`112`). By `Kyle
   Brindley`_.
 - Add a quickstart tutorial using a single project definition file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
-- Add the EABM API and CLI to an Appendices section in the WAVES documentation (:issue:`138`, :merge:`104`). 
+- Add the EABM API and CLI to an Appendices section in the WAVES documentation (:issue:`138`, :merge:`104`).
   By `Thomas Roberts`_.
-- Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By 
+- Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By
   `Thomas Roberts`_.
 
 ******************

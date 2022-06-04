@@ -24,6 +24,7 @@
    :maxdepth: 1
    :caption: User Manual
 
+   tutorial_introduction
    quickstart
    tutorial_00_scons
    tutorial_01_geometry_waves
