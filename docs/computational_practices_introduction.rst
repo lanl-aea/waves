@@ -1,3 +1,5 @@
+.. _practices_introduction:
+
 ************
 Introduction
 ************
