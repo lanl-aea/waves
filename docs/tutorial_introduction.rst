@@ -8,10 +8,10 @@ Tutorial Introduction
 Start Options
 *************
 
-Users who want to jump straight to a simulation can find instructions for a fully functional example in the
-:ref:`quickstart`. For a detailed discussion of `SCons`_ project setup, meta data, and features, start with
-:ref:`tutorialsconstruct`. It's also possible to skip the detailed project setup discussion and start with the
-simulation definitions directly in :ref:`tutorialgeometrywaves`.
+Users who want to jump straight to a minimally functional simulation workflow example can start with the
+:ref:`quickstart`. For a detailed discussion of a recommended best practices `SCons`_  and `WAVES-EABM`_ project setup,
+meta data, and features, start with :ref:`tutorialsconstruct`. It's also possible to skip the detailed project setup
+discussion and start with the simulation definitions directly in :ref:`tutorialgeometrywaves`.
 
 *************
 Prerequisites
