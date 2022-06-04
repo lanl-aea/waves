@@ -42,4 +42,57 @@ There is an abundance of documentation, tutorials, and recommended practices in 
 control software systems and practices. Instead of re-creating a tutorial here, this section will end with a few
 examples of a Git log from the current project.
 
+* Display contributor information: commits, name, email. Differences in name for a single person are artifacts of
+  providing different biographical information over project history. Typically this arises when working from more than
+  one computer with slight differences in user account settings.
+
+  .. code-block::
+
+     $ git shortlog --summary --numbered --email
+     794  Kyle Brindley <kbrindley@lanl.gov>
+     134  Thomas Phillip Roberts <tproberts@lanl.gov>
+      90  Prabhu Khalsa <pkhalsa@pn1934993.lanl.gov>
+      84  Kyle Andrew Brindley <kbrindley@lanl.gov>
+       6  Prabhu Singh Khalsa <prabhu@lanl.gov>
+       2  Sergio Cordova <sergioc@lanl.gov>
+       1  Sergio Rene Cordova <sergioc@lanl.gov>
+
+* Display all commits that have affected the source file of the current section.
+
+  .. code-block::
+
+     $ git log -- docs/computational_practices_version_control.rst
+     commit bdeac0a7940a1e366bd69a3fe5e81960f0322f00 (HEAD -> 123-theory-manual-version-control-section, origin/123-theory-manual-version-control-section)
+     Author: Kyle Brindley <kbrindley@lanl.gov>
+     Date:   Sat Jun 4 09:44:47 2022 -0600
+
+         DOC: add git discussion to version control practices
+
+     commit 8f6b997bba6a8d17222f0c788b5ff36ce8321e52
+     Author: Kyle Brindley <kbrindley@lanl.gov>
+     Date:   Sat Jun 4 08:47:51 2022 -0600
+
+         DOC: draft importance of version control
+
+     commit b569dc8537237c8521c280f183b81b532cfb1577
+     Author: Kyle Brindley <kbrindley@lanl.gov>
+     Date:   Fri Jun 3 14:49:41 2022 -0600
+
+         MAINT: separate pages for the computational practices toc tree
+
+* Show summary information for the most recent commits to the project's documentation.
+
+  .. code-block::
+  
+     $ git log --oneline -n 10 -- docs  
+     bdeac0a (HEAD -> 123-theory-manual-version-control-section, origin/123-theory-manual-version-control-section) DOC: add git discussion to version control practices
+     8f6b997 DOC: draft importance of version control
+     07a30ee (origin/144-add-a-setup-page-to-the-user-manual, 144-add-a-setup-page-to-the-user-manual) MAINT: fix quickstart anchor
+     eda85cd DOC: add quickstart time estimate
+     4bc1acf DOC: starting point clarifications
+     5621d50 DOC: startup options dicussion
+     bdcd044 DOC: clarify time estimate format
+     842920b DOC: draft guesses at tutorial time estimates
+     be5e2e2 DOC: commit to hours and minutes
+     3a093c3 DOC: adjust prereq typesetting
 
