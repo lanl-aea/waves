@@ -6,7 +6,7 @@ import pathlib
 import yaml
 import waves
 
-from source.python.tutorial_07_cartesian_product import parameter_schema
+from eabm_package.python.tutorial_07_cartesian_product import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')

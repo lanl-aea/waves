@@ -14,7 +14,7 @@ abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
 python_source_abspath = project_dir / env['python_source_dir']
 
-from source.python import single_element_compression_nominal
+from eabm_package.python import single_element_compression_nominal
 
 # Simulation variables
 model = "single_element"
