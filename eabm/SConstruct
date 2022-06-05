@@ -69,9 +69,9 @@ project_variables = {
     'project_name': project_name,
     'project_dir': Dir('.').abspath,
     'version': version,
-    'abaqus_source_dir': 'source/abaqus',
-    'cubit_source_dir': 'source/cubit',
-    'python_source_dir': 'source/python',
+    'abaqus_source_dir': 'eabm_package/abaqus',
+    'cubit_source_dir': 'eabm_package/cubit',
+    'python_source_dir': 'eabm_package/python',
 }
 project_substitution_dictionary = dict()
 for key, value in project_variables.items():
