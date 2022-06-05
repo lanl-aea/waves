@@ -39,12 +39,12 @@ Directory Structure
 Parameter Study File
 ********************
 
-5. Create a new file ``tutorial_07_cartesian_product/parameter_study_input.yaml`` from the content below.
+5. Create a new file ``source/python/tutorial_07_cartesian_product.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/parameter_study_input.yaml
+.. admonition:: waves-eabm-tutorial/source/python/tutorial_07_cartesian_product.py
 
-   .. literalinclude:: tutorial_07_cartesian_product_parameter_study_input.yaml
-      :language: YAML
+   .. literalinclude:: python_tutorial_07_cartesian_product.py 
+      :language: Python 
 
 **********
 SConscript
