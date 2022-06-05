@@ -35,21 +35,21 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_05_parameter_substitution/SConscript tutorial_06_include_files/
 
-5. Create a new directory in ``source/python`` in the ``waves-eabm-tutorial`` directory.
+5. Create a new directory in ``eabm_package/python`` in the ``waves-eabm-tutorial`` directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir -p source/python
+   $ mkdir -p eabm_package/python
 
 *********************
 Python Parameter File
 *********************
 
-6. Create a new file ``source/python/single_element_compression_nominal.py`` from the content below.
+6. Create a new file ``eabm_package/python/single_element_compression_nominal.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/source/python/single_element_compression_nominal.py
+.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_nominal.py
 
    .. literalinclude:: python_single_element_compression_nominal.py 
       :language: Python

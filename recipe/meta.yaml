@@ -57,9 +57,9 @@ test:
     - waves/tests/*.py
     - eabm/README.rst
     - eabm/SC*
-    - eabm/source/abaqus/*
-    - eabm/source/cubit/*
-    - eabm/source/python/*
+    - eabm/eabm_package/abaqus/*
+    - eabm/eabm_package/cubit/*
+    - eabm/eabm_package/python/*
     - eabm/tutorial*/*
     - eabm/tutorial*SConstruct
   imports:

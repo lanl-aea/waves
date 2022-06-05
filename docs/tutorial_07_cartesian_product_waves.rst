@@ -39,9 +39,9 @@ Directory Structure
 Parameter Study File
 ********************
 
-5. Create a new file ``source/python/tutorial_07_cartesian_product.py`` from the content below.
+5. Create a new file ``eabm_package/python/tutorial_07_cartesian_product.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/source/python/tutorial_07_cartesian_product.py
+.. admonition:: waves-eabm-tutorial/eabm_package/python/tutorial_07_cartesian_product.py
 
    .. literalinclude:: python_tutorial_07_cartesian_product.py 
       :language: Python 
