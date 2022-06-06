@@ -14,8 +14,7 @@ abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
 python_source_abspath = project_dir / env['python_source_dir']
 
-sys.path.insert(0, str(python_source_abspath))
-import single_element_compression_nominal
+from eabm_package.python import single_element_compression_nominal
 
 # Simulation variables
 model = "single_element"
@@ -61,7 +60,7 @@ abaqus_source_list = [
     f"#/{abaqus_source_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list, 
+workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
                                                substitution_dictionary=simulation_substitution_dictionary))
 
 # Abaqus Solve

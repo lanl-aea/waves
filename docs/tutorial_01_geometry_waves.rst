@@ -32,13 +32,13 @@ Directory Structure
 *******************
 
 3. Within the ``waves-eabm-tutorial`` directory, create two directories called 
-   ``tutorial_01_geometry`` and ``source/abaqus``. For example, in a bash shell:
+   ``tutorial_01_geometry`` and ``eabm_package/abaqus``. For example, in a bash shell:
    
    .. code-block::
        
        $ pwd
        /home/roppenheimer/waves-eabm-tutorial
-       $ mkdir tutorial_01_geometry source/abaqus
+       $ mkdir tutorial_01_geometry eabm_package/abaqus
 
 ***************
 SConscript File
@@ -144,10 +144,10 @@ starting with familiar Abaqus Python code, and adding in the following:
 * Adding a command line interface to your Python code
 * Protecting ``main()`` function execution and returning exit codes
 
-7. In the ``source/abaqus`` directory, create a file called ``single_element_geometry.py``
+7. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_geometry.py``
    using the contents below which contains the ``main()`` function.
 
-.. admonition:: waves-eabm-tutorial/source/abaqus/single_element_geometry.py
+.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
    
     .. literalinclude:: abaqus_single_element_geometry.py
         :language: Python
@@ -199,11 +199,11 @@ Abaqus Python 2.7 environment.
 
 Command Line Interfaces
 =======================
-8. In the ``source/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
+8. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
    using the contents below which contains the ``get_parser()`` function. Note that 
    missing line numbers may be ignored.
 
-.. admonition:: wabes-eabm-tutorial/source/abaqus/single_element_geometry.py
+.. admonition:: wabes-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
 
     .. literalinclude:: abaqus_single_element_geometry.py
         :language: Python
@@ -259,11 +259,11 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 2.7. See the `Python 2.7 argparse`_ documentation for more information about how 
 ``argparse`` will behave in an Abaqus journal file.
 
-9. In the ``source/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
+9. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
    using the contents below to create the ``if`` statement within which we will call the 
    ``main()`` function. Note that missing line numbers may be ignored.
 
-.. admonition:: waves-eabm-tutorial/source/abaqus/single_element_geometry.py
+.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
 
     .. literalinclude:: abaqus_single_element_geometry.py
         :language: Python
@@ -303,7 +303,7 @@ code are required for EABM best practice when using a build system such as SCons
 other sections are boilerplate code that matches naming conventions used by the tutorials, 
 but that may change in production EABMs.
 
-.. admonition:: waves-eabm-tutorial/source/abaqus/single_element_geometry.py
+.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
 
      .. literalinclude:: abaqus_single_element_geometry.py
          :language: Python
@@ -361,7 +361,7 @@ using Scons.
         single_element_geometry.abaqus_v6.env
         cd /projects/roppenheimer/waves/eabm/build/tutorial_01_geometry && 
         /apps/abaqus/Commands/abaqus cae -noGui 
-        /projects/roppenheimer/waves/eabm/source/abaqus/single_element_geometry.py -- > 
+        /projects/roppenheimer/waves/eabm/eabm_package/abaqus/single_element_geometry.py -- > 
         single_element_geometry.log 2>&1
         scons: done building targets.
 

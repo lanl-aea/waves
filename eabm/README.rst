@@ -90,7 +90,7 @@ installed from the `AEA Conda channel`_.
 
    .. code-block::
 
-      $ conda create --name waves-eabm-env --file environment.txt --channel file:///projects/python/aea-conda/ --channel conda-forge
+      $ conda create --name waves-eabm-env --file environment.txt --channel file:///projects/aea_compute/aea-conda/ --channel conda-forge
 
 2. Activate the environment
 
