@@ -14,6 +14,11 @@ Documentation
 - Add tutorial description page for summary instructions (:issue:`144`, :merge:`121`). By `Kyle Brindley`_.
 - Add draft of the computational practices version control section (:issue:`123`, :merge:`122`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Clean at the end of a branch's Gitlab-Pages job to avoid incomplete clean operations when main/dev differ in their
+  target file(s) (:issue:`152`, :merge:`125`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Treat the EABM source files like a local package for re-using project settings (:issue:`150`, :merge:`124`). By `Kyle

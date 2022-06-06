@@ -210,6 +210,10 @@ pages:
             # Copy documentation to the pages artifact directory
             cp -r build/docs/html/* public/$ref
             cp -r eabm/build/docs/html/* public/$ref/waves-eabm
+            # Final clean to avoid main/dev partial cleans after branch switch
+            scons . --clean conditional_ignore=False
+            cd eabm
+            scons . --clean conditional_ignore=False
         done
   artifacts:
     paths:
