@@ -98,27 +98,21 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver(abaqus_program='abaqus'):
+def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    functions accepts all SCons Builder arguments and adds the required string argument ``job_name`` and optional string
-    argument ``abaqus_options``.  The Builder emitter will append common Abaqus output files as targets automatically
-    from the ``job_name``, e.g. ``job_name.odb``, ``job_name.dat``, ``job_name.msg``, etc.
+    function accepts all SCons Builder arguments and adds optional Builder keyword arguments ``job_name`` and
+    ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. The Builder emitter will
+    append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
 
-    The target list only appends those extensions which are common to all Abaqus operations. Some extensions may need to
-    be added explicitly according to the Abaqus simulation solver, type, or options. If you find that SCons isn't
-    automatically cleaning some Abaqus output files, they are not in the automatically appended target list.
+    The target list only appends those extensions which are common to Abaqus analysis operations. Some extensions may
+    need to be added explicitly according to the Abaqus simulation solver, type, or options. If you find that SCons
+    isn't automatically cleaning some Abaqus output files, they are not in the automatically appended target list.
 
     The ``-interactive`` option is always appended to avoid exiting the Abaqus task before the simulation is complete.
     The ``-ask_delete no`` to option is always appended to overwrite existing files in programmatic execution, where
     it is assumed that the Abaqus solver target(s) should be re-built when their source files change.
-
-    .. code-block::
-       :caption: Abaqus journal builder action
-       :name: abaqus_solver_action
-
-       ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no'
 
     .. code-block::
        :caption: SConstruct
@@ -126,16 +120,32 @@ def abaqus_solver(abaqus_program='abaqus'):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
+       env.Append(BUILDERS=
+           {'AbaqusSolver': waves.builders.abaqus_solver(),
+            'AbaqusOld': waves.builders.abaqus_solver(abaqus_program='abq2019'),
+            'AbaqusPost': waves.builders.abaqus_solver(post_simulation='grep -E SUCCESSFULLY ${job_name}.log')})
        AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
 
+    .. code-block::
+       :caption: Abaqus journal builder action
+       :name: abaqus_solver_action
+
+       ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no'
+
     :param str abaqus_program: An absolute path or basename string for the abaqus program
+    :param str post_simulation: Shell command string to execute after the simulation command finishes. Intended to allow
+        modification of the Abaqus exit code, e.g. return a non-zero (error) exit code when Abaqus reports a simulation
+        error or incomplete simulation. Builder keyword variables are available for substitution in the
+        ``post_simulation`` action using the ``${}`` syntax.
     """
+    action = [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
+                  f"${{job_name}}.{_abaqus_environment_file}",
+              f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
+                  f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}.log 2>&1"]
+    if post_simulation:
+        action.append(str(post_simulation))
     abaqus_solver_builder = SCons.Builder.Builder(
-        action=[f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
-                    f"${{job_name}}.{_abaqus_environment_file}",
-                f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
-                    f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}.log 2>&1"],
+        action=action,
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
