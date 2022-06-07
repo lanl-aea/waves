@@ -85,7 +85,7 @@ def _abaqus_solver_emitter(target, source, env):
     provide the output database as a target, e.g. ``job_name.odb``
     """
     if not 'job_name' in env or not env['job_name']:
-        raise RuntimeError('Builder is missing required keyword argument "job_name".')
+        env['job_name'] = pathlib.Path(source[0].path).stem
     builder_suffixes = ['log', _abaqus_environment_file]
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
@@ -138,7 +138,7 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
         action=[f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
                     f"${{job_name}}.{_abaqus_environment_file}",
                 f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
-                    f"${{abaqus_options}} -interactive -ask_delete no >> ${job_name}.log 2>&1"],
+                    f"${{abaqus_options}} -interactive -ask_delete no >> ${{job_name}}.log 2>&1"],
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
