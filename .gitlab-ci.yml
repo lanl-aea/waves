@@ -117,6 +117,7 @@ fast-test:
   script:
     - scons . --keep-going conditional_ignore=False
     - cd eabm
+    # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=quickstart_SConstruct --keep-going
     - scons . --sconstruct=tutorial_00_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False
@@ -126,6 +127,10 @@ fast-test:
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going conditional_ignore=False
+    # Re-run the full WAVES-EABM suite once more with the full, advanced project definition in SContruct.
+    # Uses "rm" instead of "scons --clean" to ensure a complete re-build even if the tutorial files and the default
+    # SConstruct file target definitions differ or something is incompletely cleaned.
+    - rm -rf build/
     - scons . --jobs=4 --keep-going conditional_ignore=False
   tags:
     - sstelmo-shell-aea
@@ -201,7 +206,8 @@ pages:
             git checkout $ref
             git reset --hard origin/$ref
             mkdir -p public/$ref/waves-eabm
-            # Build WAVES documentation. Clean up after to avoid leftover targets from main/dev filename differences
+            # Build WAVES documentation. Clean up after to avoid leftover targets from main/dev filename differences.
+            # Clean instead of "rm" to help catch incomplete target clean operations.
             scons . --clean conditional_ignore=False
             scons documentation conditional_ignore=False
             cp -r build/docs/html/* ${repo_root}/public/$ref
