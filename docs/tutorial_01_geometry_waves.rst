@@ -351,9 +351,6 @@ using Scons.
         exists.../projects/aea_compute/aea-beta/bin/sphinx-build
         Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
         Checking whether cubit program exists.../apps/Cubit-15.8/cubit
-        Checking whether abaqus_wrapper program exists...no
-        Could not find 'abaqus_wrapper' in construction environment. Using WAVES internal 
-        path.../projects/roppenheimer/waves/waves/bin/abaqus_wrapper
         scons: done reading SConscript files.
         scons: Building targets ...
         cd /projects/roppenheimer/waves/eabm/build/tutorial_01_geometry && 

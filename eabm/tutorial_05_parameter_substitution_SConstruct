@@ -54,8 +54,9 @@ for key, value in project_variables.items():
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
-env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-                     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'], env=env)})
+env.Append(BUILDERS={
+    'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
+    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])})
 
 # Add simulation targets
 eabm_simulation_directories = [
