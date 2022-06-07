@@ -143,7 +143,7 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
               f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}.log 2>&1"]
     if post_simulation:
-        action.append(str(post_simulation))
+        action.append(f"cd ${{TARGET.dir.abspath}} && {post_simulation}")
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_solver_emitter)
