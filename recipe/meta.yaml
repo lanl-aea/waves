@@ -12,8 +12,6 @@ build:
     # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
     # deprecated setup.py solutions
     - {{ PYTHON }} setup.py install
-    # TODO: install shell scripts from pyproject.toml if possible
-    - cp waves/bin/* ${PREFIX}/bin
   script_env:
     - VERSION
   ignore_run_exports:
