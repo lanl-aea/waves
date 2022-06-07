@@ -3,7 +3,7 @@
 import os
 import pathlib
 
-from waves._settings import _project_name_short, _abaqus_wrapper
+from waves._settings import _project_name_short
 
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
@@ -11,7 +11,6 @@ documentation_source_dir = 'docs'
 package_source_dir = _project_name_short.lower()
 project_variables = {
     'project_dir': Dir('.').abspath,
-    'abaqus_wrapper': str(_abaqus_wrapper),
     'eabm_dir': 'eabm',
     'abaqus_dir': 'eabm_package/abaqus',
     'python_dir': 'eabm_package/python',

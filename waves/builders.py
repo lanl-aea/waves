@@ -7,7 +7,6 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 
-from waves._settings import _abaqus_wrapper
 from waves._settings import _abaqus_environment_file
 
 
@@ -99,7 +98,7 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
+def abaqus_solver(abaqus_program='abaqus'):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -131,8 +130,6 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
        AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
-    :param SCons.Script.SConscript.SConsEnvironment env: An SCons construction environment to use when searching for the
-        abaqus_wrapper program.
     """
     abaqus_solver_builder = SCons.Builder.Builder(
         action=[f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \

@@ -36,7 +36,7 @@ conf.Finish()
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-                     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'], env=env)})
+                     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])})
 
 # Simulation variables
 model = "single_element"
