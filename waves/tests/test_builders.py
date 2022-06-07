@@ -60,11 +60,11 @@ solver_emitter_input = {
                     ['set1/job.sta', 'set1/job.log', 'set1/job.abaqus_v6.env', 'set1/job.odb', 'set1/job.dat',
                      'set1/job.msg', 'set1/job.com', 'set1/job.prt'],
                     does_not_raise()),
-    'missing job_name': pytest.param('',
+    'missing job_name': (None,
                         [],
                         [source_file],
-                        [],
-                        pytest.raises(RuntimeError))
+                        ['root.log', 'root.abaqus_v6.env', 'root.odb', 'root.dat', 'root.msg', 'root.com', 'root.prt'],
+                        does_not_raise())
 }
 
 
