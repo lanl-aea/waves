@@ -9,6 +9,11 @@ Changelog
 0.1.10 (unreleased)
 *******************
 
+Breaking changes
+================
+- Remove the ``abaqus_wrapper`` bash utility in favor of an SCons builder solution (:issue:`22`, :merge:`127`). By
+  `Kyle Brindley`_.
+
 Documentation
 =============
 - Add tutorial description page for summary instructions (:issue:`144`, :merge:`121`). By `Kyle Brindley`_.
