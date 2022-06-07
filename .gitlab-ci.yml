@@ -185,6 +185,7 @@ pages:
   variables:
     GIT_STRATEGY: clone
   script:
+    - repo_root=$PWD
     - rm -rf public && mkdir -p public
     - cp docs/_static/index.html public
     # Every documentation version must be re-built for *every* gitlab-pages job execution
@@ -194,26 +195,24 @@ pages:
     - documentation_branches="main dev"
     - |
         for ref in ${documentation_branches}; do
+            cd ${repo_root}
             # TODO: match the branch to the correct module. unload/load for each branch.
             # https://re-git.lanl.gov/kbrindley/waves/-/boards
             git checkout $ref
             git reset --hard origin/$ref
             mkdir -p public/$ref/waves-eabm
-            # Clean and build documentation
+            # Build WAVES documentation. Clean up after to avoid leftover targets from main/dev filename differences
             scons . --clean conditional_ignore=False
             scons documentation conditional_ignore=False
-            # Build EABM documentation
+            cp -r build/docs/html/* ${repo_root}/public/$ref
+            scons . --clean conditional_ignore=False
+            # Build WAVES-EABM documentation
             cd eabm
             scons . --clean conditional_ignore=False
             scons documentation conditional_ignore=False
-            cd ..
-            # Copy documentation to the pages artifact directory
-            cp -r build/docs/html/* public/$ref
-            cp -r eabm/build/docs/html/* public/$ref/waves-eabm
-            # Final clean to avoid main/dev partial cleans after branch switch
+            cp -r build/docs/html/* ${repo_root}/public/$ref/waves-eabm
             scons . --clean conditional_ignore=False
-            cd eabm
-            scons . --clean conditional_ignore=False
+            cd ${repo_root} 
         done
   artifacts:
     paths:
