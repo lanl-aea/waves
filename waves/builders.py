@@ -123,7 +123,7 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
        env.Append(BUILDERS=
            {'AbaqusSolver': waves.builders.abaqus_solver(),
             'AbaqusOld': waves.builders.abaqus_solver(abaqus_program='abq2019'),
-            'AbaqusPost': waves.builders.abaqus_solver(post_simulation='grep -E SUCCESSFULLY ${job_name}.log')})
+            'AbaqusPost': waves.builders.abaqus_solver(post_simulation='grep -E "\<SUCCESSFULLY" ${job_name}.sta')})
        AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
 
     .. code-block::
