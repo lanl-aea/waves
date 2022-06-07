@@ -111,14 +111,15 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     be added explicitly according to the Abaqus simulation solver, type, or options. If you find that SCons isn't
     automatically cleaning some Abaqus output files, they are not in the automatically appended target list.
 
-    Abaqus is not called directly. Instead the |PROJECT| :ref:`abaqus_wrapper` is executed to help control the Abaqus
-    return code and return timing.
+    The ``-interactive`` option is always appended to avoid exiting the Abaqus task before the simulation is complete.
+    The ``-ask_delete no`` to option is always appended to overwrite existing files in programmatic execution, where
+    it is assumed that the Abaqus solver target(s) should be re-built when their source files change.
 
     .. code-block::
        :caption: Abaqus journal builder action
        :name: abaqus_solver_action
 
-       abaqus_wrapper ${job_name} abaqus -job ${job_name} -input ${SOURCE} ${abaqus_options}'
+       ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no'
 
     .. code-block::
        :caption: SConstruct
@@ -133,18 +134,11 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
     :param SCons.Script.SConscript.SConsEnvironment env: An SCons construction environment to use when searching for the
         abaqus_wrapper program.
     """
-    conf = env.Configure()
-    abaqus_wrapper_program = conf.CheckProg('abaqus_wrapper')
-    if not abaqus_wrapper_program:
-        abaqus_wrapper_program = _abaqus_wrapper
-        print("Could not find 'abaqus_wrapper' in construction environment. " \
-              f"Using WAVES internal path...{abaqus_wrapper_program}")
-    conf.Finish()
     abaqus_solver_builder = SCons.Builder.Builder(
         action=[f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
                     f"${{job_name}}.{_abaqus_environment_file}",
-                f"cd ${{TARGET.dir.abspath}} && {abaqus_wrapper_program} ${{job_name}} {abaqus_program} " \
-                    f"-job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}"],
+                f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
+                    f"${{abaqus_options}} -interactive -ask_delete no >> ${job_name}.log 2>&1"],
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
