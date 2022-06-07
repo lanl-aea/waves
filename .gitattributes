@@ -1,0 +1,27 @@
+# https://docs.github.com/en/github/using-git/configuring-git-to-handle-line-endings
+# Command to show all line endings:
+# git ls-tree -r HEAD --name-only | perl -ne 'print $1 if m/\.([^.\/]+)$/' | sort -u
+
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=unix eol=lf
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+*.rst text eol=lf
+*.txt text eol=lf
+*.py text eol=lf
+*.inp text eol=lf
+*.log text eol=lf
+*.yaml text eol=lf
+*.sh text eol=lf
+*.md text eol=lf
+*.jou text eol=lf
+*.msg text eol=lf
+*.sta text eol=lf
+
+# Denote all files that are truly binary and should not be modified.
+*.png binary
+*.jpg binary
+*.cae binary
+*.prt binary
+*.sim binary
