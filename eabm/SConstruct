@@ -84,9 +84,12 @@ for key, value in project_variables.items():
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
-env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-                     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
-                     'PythonScript': waves.builders.python_script()})
+env.Append(BUILDERS={
+     'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
+     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'],
+                                                  # Exit workflow if abaqus reports errors in simulation execution
+                                                  post_simulation='! grep -iE "error" ${job_name}.log'),
+     'PythonScript': waves.builders.python_script()})
 
 # Comments used in tutorial code snippets: marker-7
 
