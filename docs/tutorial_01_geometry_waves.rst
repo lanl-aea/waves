@@ -38,7 +38,7 @@ Directory Structure
        
        $ pwd
        /home/roppenheimer/waves-eabm-tutorial
-       $ mkdir tutorial_01_geometry eabm_package/abaqus
+       $ mkdir -p tutorial_01_geometry eabm_package/abaqus
 
 ***************
 SConscript File
