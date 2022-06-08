@@ -69,8 +69,4 @@
 .. _`Abaqus UMAT documentation`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAESUBRefMap/simasub-c-umat.htm
 
 .. email addresses
-.. _`Kyle Brindley`: kbrindley@lanl.gov
-.. _`Thomas Roberts`: tproberts@lanl.gov
-.. _`Sergio Cordova`: sergioc@lanl.gov
-.. _`Prabhu Khalsa`: pkhalsa@lanl.gov
 .. _`w13dev`: w13dev@lanl.gov
