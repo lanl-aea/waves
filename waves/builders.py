@@ -19,7 +19,7 @@ def _abaqus_journal_emitter(target, source, env):
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the expected log file as a target, e.g. ``source[0].stdout``.
+    provide the expected STDOUT redirected file as a target, e.g. ``source[0].stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -85,7 +85,7 @@ def _abaqus_solver_emitter(target, source, env):
     """
     if not 'job_name' in env or not env['job_name']:
         env['job_name'] = pathlib.Path(source[0].path).stem
-    builder_suffixes = ['log', _abaqus_environment_file]
+    builder_suffixes = ['stdout', _abaqus_environment_file]
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
     try:
@@ -207,7 +207,7 @@ def _python_script_emitter(target, source, env):
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the expected log file as a target, e.g. ``python_script_basename.stdout``.
+    provide the expected STDOUT redirected file as a target, e.g. ``python_script_basename.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
