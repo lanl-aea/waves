@@ -359,7 +359,7 @@ using Scons.
         cd /projects/roppenheimer/waves/eabm/build/tutorial_01_geometry && 
         /apps/abaqus/Commands/abaqus cae -noGui 
         /projects/roppenheimer/waves/eabm/eabm_package/abaqus/single_element_geometry.py -- > 
-        single_element_geometry.log 2>&1
+        single_element_geometry.stdout 2>&1
         scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as 
@@ -388,7 +388,7 @@ separation if more than one simulation is built at the same time.
         ├── single_element_geometry.abaqus_v6.env
         ├── single_element_geometry.cae
         ├── single_element_geometry.jnl
-        └── single_element_geometry.log
+        └── single_element_geometry.stdout
 
     1 directory, 5 files
 
@@ -403,6 +403,6 @@ The ``tutorial_01_geomtry/`` directory should contain the following files:
   reproduction of the Abaqus environment used to build the ``tutorial_01_geometry`` targets
 * ``single_element_geomtry.cae``, an Abaqus CAE file that contains a model named 
   ``model_name`` within which is a part named ``part_name``.
-* ``single_element_geometry.jnl`` and ``single_element_geometry.log``, the journal file 
+* ``single_element_geometry.jnl`` and ``single_element_geometry.stdout``, the journal file 
   that records all of the commands executed by Abaqaus and the log file that will contain 
   any errors recorded by Abaqus.
