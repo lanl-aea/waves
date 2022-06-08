@@ -29,12 +29,10 @@ Directory Structure
 
 .. code-block:: bash
 
-   $ pwd
-   /home/roppenheimer
-   $ mkdir -p waves-eabm-tutorial/eabm_package/abaqus
-   $ cd /home/roppenheimer/waves-eabm-tutorial
-   $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+      $ mkdir -p ~/waves-eabm-tutorial
+      $ cd ~/waves-eabm-tutorial
+      $ pwd
+      /home/roppenheimer/waves-eabm-tutorial
 
 4. Download and copy the `WAVES-EABM abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory. If you're on a
    linux system with `git`_ installed and read access on the `WAVES`_ repository, you can use `git archive`_ as below.

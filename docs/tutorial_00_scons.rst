@@ -46,12 +46,12 @@ SCons Project Configuration
 
 3. Create and change to a new project root directory to house the tutorial files. For example
 
-   .. code-block:: bash
+.. code-block:: bash
 
-      $ mkdir -p ~/waves-eabm-tutorial
-      $ cd ~/waves-eabm-tutorial
-      $ pwd
-      /home/roppenheimer/waves-eabm-tutorial
+   $ mkdir -p ~/waves-eabm-tutorial
+   $ cd ~/waves-eabm-tutorial
+   $ pwd
+   /home/roppenheimer/waves-eabm-tutorial
 
 4. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory and add the contents listed below. Note
    that the filename is case sensitive.
