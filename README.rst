@@ -16,6 +16,12 @@
 .. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
 .. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
+.. _`Kyle Brindley`: kbrindley@lanl.gov
+.. _`Thomas Roberts`: tproberts@lanl.gov
+.. _`Sergio Cordova`: sergioc@lanl.gov
+.. _`Prabhu Khalsa`: pkhalsa@lanl.gov
+.. _`Scott Ouellette`: souellette@lanl.gov
+
 .. target-end-do-not-remove
 
 #####
@@ -55,8 +61,11 @@ like.
 Developers
 ==========
 
-* Kyle Brindley: kbrindley@lanl.gov
-* Prabhu Khalsa: pkhalsa@lanl.gov
+* `Kyle Brindley`_
+* `Prabhu Khalsa`_
+* `Thomas Roberts`_
+* `Sergio Cordova`_
+* `Scott Ouellette`_
 
 ********************
 Activate Environment
