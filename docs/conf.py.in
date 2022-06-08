@@ -8,6 +8,12 @@ import subprocess
 project_dir = pathlib.Path('@project_dir@').resolve()
 eabm_dir = project_dir / pathlib.Path('@eabm_dir@')
 
+author_latex = r'Kyle Brindley, W-13 \and ' \
+               r'Prabhu S. Khalsa, W-13 \and ' \
+               r'Thomas Roberts, W-13 \and ' \
+               r'Sergio Cordova, W-13 \and ' \
+               r'Scott Ouellette, W-13'
+
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
 sys.path.insert(0, str(eabm_dir))
@@ -30,13 +36,14 @@ version = release
 rst_prolog = f'.. |project| replace:: {_project_name_short}\n.. include:: targets.txt'
 
 # -- General configuration ---------------------------------------------------
+master_doc = 'index'
+
 # Add custom style sheet to make the html docs wider
 def setup(app):
     app.add_css_file('custom.css')
 
 # Add any Sphinx extension module names here, as strings.
 extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.bibtex', 'sphinx.ext.extlinks', 'sphinxarg.ext']
-
 bibtex_bibfiles = ['references.bib']
 
 # Links to PRs, Jira issues.
@@ -52,3 +59,10 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+# -- Options for LaTeX output ---------------------------------------------
+latex_elements = {}
+latex_documents = [
+    (master_doc, project + '.tex', project.upper() + ' Documentation',
+     author_latex, 'manual'),
+]
