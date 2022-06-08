@@ -4,10 +4,12 @@
 Quickstart
 ##########
 
-This quickstart will create a minimal version of the full tutorial project definitions below using a single project
-definition file. These tutorials and this quickstart describe the computational engineering workflow through simulation
-execution. Using a single project definition requires `SCons`_ techniques that differ between the quickstart
-``SConstruct`` file and the project defintion files, ``SConstruct`` and ``SConscript``, found in the full tutorials.
+This quickstart will create a minimal, single file project definition matching the tutorial listed below. These
+tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using a
+single project definition file requires `SCons`_ techniques that differ between the quickstart ``SConstruct`` file and
+the project definition files, ``SConstruct`` and ``SConscript``, found in the full tutorials. Consequently, this
+quickstart will use a separate name for the project definition file, ``quickstart_SConstruct``, to allow the tutorials
+and this quickstart to share a common tutorial directory.
 
 * :ref:`tutorialsconstruct`
 * :ref:`tutorialgeometrywaves`
@@ -29,12 +31,10 @@ Directory Structure
 
 .. code-block:: bash
 
-   $ pwd
-   /home/roppenheimer
-   $ mkdir -p waves-eabm-tutorial/eabm_package/abaqus
-   $ cd /home/roppenheimer/waves-eabm-tutorial
-   $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+      $ mkdir -p ~/waves-eabm-tutorial/eabm_package/abaqus
+      $ cd ~/waves-eabm-tutorial
+      $ pwd
+      /home/roppenheimer/waves-eabm-tutorial
 
 4. Download and copy the `WAVES-EABM abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory. If you're on a
    linux system with `git`_ installed and read access on the `WAVES`_ repository, you can use `git archive`_ as below.
@@ -51,9 +51,9 @@ Directory Structure
 SConstruct File
 ***************
 
-5. Create a file named ``SConstruct`` from the contents below.
+5. Create a file named ``quickstart_SConstruct`` from the contents below.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-eabm-tutorial/quickstart_SConstruct
 
     .. literalinclude:: eabm_quickstart_SConstruct
        :language: Python
@@ -66,8 +66,13 @@ Building targets
 .. code-block::
 
    $ pwd
-   /path/to/waves-eabm-tutorial
-   $ scons single_element
+   /home/roppenheimer/waves-eabm-tutorial
+   $ scons --sconstruct=quickstart_SConstruct single_element
+
+.. note::
+
+   The ``--sconstruct`` option is required because the quickstart project definition file name doesn't follow the
+   `SCons`_ naming convention, ``SConstruct``.
 
 ************
 Output Files
@@ -76,7 +81,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /home/roppenheimer/waves-eabm-tutorial
    $ tree build_quickstart/
    build_quickstart/
    |-- abaqus.rpy

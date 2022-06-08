@@ -46,12 +46,12 @@ SCons Project Configuration
 
 3. Create and change to a new project root directory to house the tutorial files. For example
 
-   .. code-block:: bash
+.. code-block:: bash
 
-      $ pwd
-      /home/roppenheimer
-      $ mkdir waves-eabm-tutorial
-      $ cd /home/roppenheimer/waves-eabm-tutorial
+   $ mkdir -p ~/waves-eabm-tutorial
+   $ cd ~/waves-eabm-tutorial
+   $ pwd
+   /home/roppenheimer/waves-eabm-tutorial
 
 4. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory and add the contents listed below. Note
    that the filename is case sensitive.
@@ -215,7 +215,7 @@ by `WAVES`_ reduce the requisite background knowledge to begin creating EABM rep
 ``BUILDERS`` variable must be updated to include these custom `SCons`_ builders and make them available to the
 simulation configuration starting in :ref:`tutorialgeometrywaves`.
 
-The :ref:`waves_builders_api` describes the available builders and their usage. As `WAVES`_ matures, more software will be
+The `WAVES`_ :ref:`waves_builders_api` describes the available builders and their usage. As `WAVES`_ matures, more software will be
 supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
 builders`_.
 
@@ -229,7 +229,7 @@ builders`_.
       :start-after: marker-7
       :end-before: marker-8
 
-The for loop in this code-snippet is the method for implementing an `SCons hierarchical build`. The ``exports`` keyword
+The for loop in this code-snippet is the method for implementing an `SCons hierarchical build`_. The ``exports`` keyword
 argument allows the project configuration file to pass the ``env`` construction environment variable with the `SCons
 sharing environments`_ feature. The first simulation configuration will be added to the ``eabm_simulation_directories``
 list in :ref:`tutorialgeometrywaves`.
@@ -265,7 +265,7 @@ output of ``scons -h``.
 Simulation build workflows will typically involve many targets and tasks in a non-trivial execution order. The target
 file names may also be cumbersome to type when explicitly listing build targets in the `SCons`_ build command. For
 convenience, the `WAVES-EABM`_ simulation configurations will add a collector alias for the list of simulation targets
-with the `SCons alias`_ feature. By convention, `WAVES-EABM` matches the alias name to the simulation subdirectory
+with the `SCons alias`_ feature. By convention, `WAVES-EABM`_ matches the alias name to the simulation subdirectory
 name. :ref:`tutorialgeometrywaves` will introduce the first target alias, which will then populate the project help
 message diplayed by the ``scons -h`` command option.
 
