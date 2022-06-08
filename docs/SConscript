@@ -52,7 +52,7 @@ documentation_file_list = [
     'tutorial_06_include_files_waves.rst',
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_environment_activation.txt',
-    'waves_logo_brandmark_icon.png',
+    'waves_logo_brandmark_small.png',
     'zreferences.rst',
     '_static/custom.css'
 ]
