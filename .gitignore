@@ -2,6 +2,7 @@
 build/
 build_quickstart/
 *.tar.bz2
+*.zip
 
 # SCons files
 .sconsign.dblite
