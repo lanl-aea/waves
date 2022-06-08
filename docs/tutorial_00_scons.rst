@@ -48,10 +48,10 @@ SCons Project Configuration
 
    .. code-block:: bash
 
+      $ mkdir -p ~/waves-eabm-tutorial
+      $ cd ~/waves-eabm-tutorial
       $ pwd
-      /home/roppenheimer
-      $ mkdir waves-eabm-tutorial
-      $ cd /home/roppenheimer/waves-eabm-tutorial
+      /home/roppenheimer/waves-eabm-tutorial
 
 4. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory and add the contents listed below. Note
    that the filename is case sensitive.
