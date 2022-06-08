@@ -13,6 +13,8 @@ Breaking changes
 ================
 - Remove the ``abaqus_wrapper`` bash utility in favor of an SCons builder solution (:issue:`22`, :merge:`127`). By
   `Kyle Brindley`_.
+- Use ``*.stdout`` extension for re-directed STDOUT and STDERR streams to avoid clobbering third-party software log
+  files (:issue:`159`, :merge:`131`). By `Kyle Brindley`_.
 
 Documentation
 =============
