@@ -98,7 +98,7 @@ Output Files
    |-- single_element_compression.com
    |-- single_element_compression.dat
    |-- single_element_compression.inp
-   |-- single_element_compression.log
+   |-- single_element_compression.stdout
    |-- single_element_compression.msg
    |-- single_element_compression.odb
    |-- single_element_compression.prt
@@ -107,7 +107,7 @@ Output Files
    |-- single_element_compression_DATACHECK.abaqus_v6.env
    |-- single_element_compression_DATACHECK.com
    |-- single_element_compression_DATACHECK.dat
-   |-- single_element_compression_DATACHECK.log
+   |-- single_element_compression_DATACHECK.stdout
    |-- single_element_compression_DATACHECK.mdl
    |-- single_element_compression_DATACHECK.msg
    |-- single_element_compression_DATACHECK.odb
@@ -117,15 +117,15 @@ Output Files
    |-- single_element_geometry.abaqus_v6.env
    |-- single_element_geometry.cae
    |-- single_element_geometry.jnl
-   |-- single_element_geometry.log
+   |-- single_element_geometry.stdout
    |-- single_element_mesh.abaqus_v6.env
    |-- single_element_mesh.cae
    |-- single_element_mesh.inp
    |-- single_element_mesh.jnl
-   |-- single_element_mesh.log
+   |-- single_element_mesh.stdout
    |-- single_element_partition.abaqus_v6.env
    |-- single_element_partition.cae
    |-- single_element_partition.jnl
-   `-- single_element_partition.log
+   `-- single_element_partition.stdout
 
    0 directories, 43 files

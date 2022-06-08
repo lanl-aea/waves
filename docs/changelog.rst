@@ -13,6 +13,8 @@ Breaking changes
 ================
 - Remove the ``abaqus_wrapper`` bash utility in favor of an SCons builder solution (:issue:`22`, :merge:`127`). By
   `Kyle Brindley`_.
+- Use ``*.stdout`` extension for re-directed STDOUT and STDERR streams to avoid clobbering third-party software log
+  files (:issue:`159`, :merge:`131`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -84,7 +86,7 @@ Internal Changes
   (:issue:`120`, :merge:`90`). By `Thomas Roberts`_.
 - Specify Sphinx v4.5.0 in the enviroment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
 - Removed duplicate code in the docs/SConscript file (:issue:`128`, :merge:`93`). By `Sergio Cordova`_
-- Changed test_builders so journal.log is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
+- Changed test_builders so journal.stdout is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
 - Create per-tutorial EABM stub project definition files (SConstruct) to aid in incremental changes in the tutorial
   documentation and allow for per-tutorial regression tests (:issue:`131`, :merge:`97`). By `Kyle Brindley`_.
 - Added odb_extract rst documentation and added odb_extract, msg_parse, and sta_parse to pyrpojects.toml

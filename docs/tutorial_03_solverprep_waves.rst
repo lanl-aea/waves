@@ -196,7 +196,7 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     │   ├── single_element_geometry.abaqus_v6.env
     │   ├── single_element_geometry.cae
     │   ├── single_element_geometry.jnl
-    │   └── single_element_geometry.log
+    │   └── single_element_geometry.stdout
     ├── tutorial_02_partition_mesh
     │   ├── abaqus.rpy
     │   ├── abaqus.rpy.1
@@ -204,16 +204,16 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     │   ├── single_element_geometry.abaqus_v6.env
     │   ├── single_element_geometry.cae
     │   ├── single_element_geometry.jnl
-    │   ├── single_element_geometry.log
+    │   ├── single_element_geometry.stdout
     │   ├── single_element_mesh.abaqus_v6.env
     │   ├── single_element_mesh.cae
     │   ├── single_element_mesh.inp
     │   ├── single_element_mesh.jnl
-    │   ├── single_element_mesh.log
+    │   ├── single_element_mesh.stdout
     │   ├── single_element_partition.abaqus_v6.env
     │   ├── single_element_partition.cae
     │   ├── single_element_partition.jnl
-    │   └── single_element_partition.log
+    │   └── single_element_partition.stdout
     └── tutorial_03_solverprep
         ├── abaqus.rpy
         ├── abaqus.rpy.1
@@ -229,16 +229,16 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
         ├── single_element_geometry.abaqus_v6.env
         ├── single_element_geometry.cae
         ├── single_element_geometry.jnl
-        ├── single_element_geometry.log
+        ├── single_element_geometry.stdout
         ├── single_element_mesh.abaqus_v6.env
         ├── single_element_mesh.cae
         ├── single_element_mesh.inp
         ├── single_element_mesh.jnl
-        ├── single_element_mesh.log
+        ├── single_element_mesh.stdout
         ├── single_element_partition.abaqus_v6.env
         ├── single_element_partition.cae
         ├── single_element_partition.jnl
-        └── single_element_partition.log
+        └── single_element_partition.stdout
     
     3 directories, 45 files
 
