@@ -29,7 +29,7 @@ Directory Structure
 
 .. code-block:: bash
 
-      $ mkdir -p ~/waves-eabm-tutorial
+      $ mkdir -p ~/waves-eabm-tutorial/eabm_package/abaqus
       $ cd ~/waves-eabm-tutorial
       $ pwd
       /home/roppenheimer/waves-eabm-tutorial
