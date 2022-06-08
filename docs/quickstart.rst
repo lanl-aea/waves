@@ -69,6 +69,11 @@ Building targets
    /home/roppenheimer/waves-eabm-tutorial
    $ scons --sconstruct=quickstart_SConstruct single_element
 
+.. note::
+
+   The ``--sconstruct`` option is required because the quickstart project definition file name doesn't follow the
+   `SCons`_ naming convention, ``SConstruct``.
+
 ************
 Output Files
 ************
