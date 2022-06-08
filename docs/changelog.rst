@@ -24,6 +24,8 @@ Internal Changes
 - Clean at the end of a branch's Gitlab-Pages job to avoid incomplete clean operations when main/dev differ in their
   target file(s) (:issue:`152`, :merge:`125`). By `Kyle Brindley`_.
 - Improve directory location change logic in the Gitlab-Pages job (:issue:`154`, :merge:`126`). By `Kyle Brindley`_.
+- Keep the SConstruct markers to avoid unecessarily long and possibly confusing diffs in the tutorial documentation
+  (:issue:`158`, :merge:`129`). By `Kyle Brindley`_.
 
 Enhancements
 ============
