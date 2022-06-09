@@ -4,8 +4,9 @@ import sys
 import pathlib
 
 import yaml
-
 import waves
+
+from eabm_package.python.tutorial_07_cartesian_product import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
@@ -23,8 +24,6 @@ parameter_set_file_template = "parameter_set@number"
 model = "single_element"
 
 # Parameter Study with Cartesian Product
-with open(parameter_study) as input_file:
-    parameter_schema = yaml.safe_load(input_file)
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file_template=parameter_set_file_template)

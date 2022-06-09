@@ -18,25 +18,6 @@ The build wrapper command line options and behavior are described in the help me
 .. .. literalinclude:: build_wrapper_message.txt
 ..    :language: bash
 
-.. _abaqus_wrapper:
-
-**************
-Abaqus wrapper
-**************
-
-This project contains a thin wrapper around Abaqus that provides
-
-1. Non-zero exit codes for failed simulations
-2. Interactive output redirect to a log file
-
-Both features are required when executing Abaqus from a build system to allow the build system to exit a workflow after
-a failed simulation and provide robust wait criteria to determine target completion.
-
-The abaqus wrapper command line options and behavior are described in the usage message as
-
-.. literalinclude:: abaqus_wrapper_message.txt
-   :language: bash
-
 .. _parameter_study_cli:
 
 ***************

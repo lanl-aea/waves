@@ -12,6 +12,8 @@ project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
 
+# Comment used in tutorial code snippets: marker-1
+ 
 # Simulation variables
 model = "single_element"
 
@@ -42,6 +44,8 @@ workflow.extend(env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options))
 
+# Comment used in tutorial code snippets: marker-2
+
 # SolverPrep
 abaqus_source_list = [
     f"#/{abaqus_source_dir}/{model}_compression.inp",
@@ -55,6 +59,8 @@ abaqus_source_list = [
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
+
+# Comment used in tutorial code snippets: marker-3
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name

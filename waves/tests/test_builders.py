@@ -14,13 +14,13 @@ source_file = fs.File('dummy.py')
 journal_emitter_input = {
     'empty targets': ([],
                       [source_file],
-                      ['dummy.jnl', 'dummy.log', 'dummy.abaqus_v6.env']),
+                      ['dummy.jnl', 'dummy.stdout', 'dummy.abaqus_v6.env']),
     'one target': (['dummy.cae'],
                    [source_file],
-                   ['dummy.cae', 'dummy.jnl', 'dummy.log', 'dummy.abaqus_v6.env']),
+                   ['dummy.cae', 'dummy.jnl', 'dummy.stdout', 'dummy.abaqus_v6.env']),
     'subdirectory': (['set1/dummy.cae'],
                     [source_file],
-                    ['set1/dummy.cae', 'set1/dummy.jnl', 'set1/dummy.log', 'set1/dummy.abaqus_v6.env'])
+                    ['set1/dummy.cae', 'set1/dummy.jnl', 'set1/dummy.stdout', 'set1/dummy.abaqus_v6.env'])
 }
 
 
@@ -47,24 +47,24 @@ solver_emitter_input = {
     'empty targets': ('job',
                       [],
                       [source_file],
-                      ['job.log', 'job.abaqus_v6.env', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
+                      ['job.stdout', 'job.abaqus_v6.env', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
                       does_not_raise()),
     'one targets': ('job',
                     ['job.sta'],
                     [source_file],
-                    ['job.sta', 'job.log', 'job.abaqus_v6.env', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
+                    ['job.sta', 'job.stdout', 'job.abaqus_v6.env', 'job.odb', 'job.dat', 'job.msg', 'job.com', 'job.prt'],
                     does_not_raise()),
     'subdirectory': ('job',
                     ['set1/job.sta'],
                     [source_file],
-                    ['set1/job.sta', 'set1/job.log', 'set1/job.abaqus_v6.env', 'set1/job.odb', 'set1/job.dat',
+                    ['set1/job.sta', 'set1/job.stdout', 'set1/job.abaqus_v6.env', 'set1/job.odb', 'set1/job.dat',
                      'set1/job.msg', 'set1/job.com', 'set1/job.prt'],
                     does_not_raise()),
-    'missing job_name': pytest.param('',
+    'missing job_name': (None,
                         [],
                         [source_file],
-                        [],
-                        pytest.raises(RuntimeError))
+                        ['root.stdout', 'root.abaqus_v6.env', 'root.odb', 'root.dat', 'root.msg', 'root.com', 'root.prt'],
+                        does_not_raise())
 }
 
 
@@ -113,13 +113,13 @@ source_file = fs.File('dummy.py')
 python_emitter_input = {
     'empty targets': ([],
                       [source_file],
-                      ['dummy.log']),
+                      ['dummy.stdout']),
     'one target': (['dummy.cub'],
                    [source_file],
-                   ['dummy.cub', 'dummy.log']),
+                   ['dummy.cub', 'dummy.stdout']),
     'subdirectory': (['set1/dummy.cub'],
                     [source_file],
-                    ['set1/dummy.cub', 'set1/dummy.log'])
+                    ['set1/dummy.cub', 'set1/dummy.stdout'])
 }
 
 

@@ -6,8 +6,37 @@ Changelog
 #########
 
 *******************
-0.1.10 (unreleased)
+0.1.11 (unreleased)
 *******************
+
+*******************
+0.1.10 (2022-06-09)
+*******************
+
+Breaking changes
+================
+- Remove the ``abaqus_wrapper`` bash utility in favor of an SCons builder solution (:issue:`22`, :merge:`127`). By
+  `Kyle Brindley`_.
+- Use ``*.stdout`` extension for re-directed STDOUT and STDERR streams to avoid clobbering third-party software log
+  files (:issue:`159`, :merge:`131`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add tutorial description page for summary instructions (:issue:`144`, :merge:`121`). By `Kyle Brindley`_.
+- Add draft of the computational practices version control section (:issue:`123`, :merge:`122`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Clean at the end of a branch's Gitlab-Pages job to avoid incomplete clean operations when main/dev differ in their
+  target file(s) (:issue:`152`, :merge:`125`). By `Kyle Brindley`_.
+- Improve directory location change logic in the Gitlab-Pages job (:issue:`154`, :merge:`126`). By `Kyle Brindley`_.
+- Keep the SConstruct markers to avoid unecessarily long and possibly confusing diffs in the tutorial documentation
+  (:issue:`158`, :merge:`129`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Treat the EABM source files like a local package for re-using project settings (:issue:`150`, :merge:`124`). By `Kyle
+  Brindley`_.
 
 ******************
 0.1.9 (2022-06-03)
@@ -20,10 +49,11 @@ Documentation
 - Add minimum scaffolding for the simulation tutorial documentation (:issue:`146`, :merge:`112`). By `Kyle
   Brindley`_.
 - Add a quickstart tutorial using a single project definition file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
-- Add the EABM API and CLI to an Appendices section in the WAVES documentation (:issue:`138`, :merge:`104`). 
+- Add the EABM API and CLI to an Appendices section in the WAVES documentation (:issue:`138`, :merge:`104`).
   By `Thomas Roberts`_.
-- Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By 
+- Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By
   `Thomas Roberts`_.
+- Completed WAVES Tutorial 03: SolverPrep (:issue:`99`, :merge:`115`). By `Thomas Roberts`_.
 
 ******************
 0.1.8 (2022-06-02)
@@ -48,7 +78,7 @@ Documentation
 - Add minimum scaffolding for the parameter substitution tutorial documentation (:issue:`137`, :merge:`101`). By `Kyle
   Brindley`_.
 - Draft of Tutorial 1: Geometry (:issue:`45`, :merge:`35`). By `Thomas Roberts`_.
-- Completed |PROJECT| Tutorial 1: Geometry (:issue:`129`, :merge:`94`). By `Thomas Roberts`_.
+- Completed WAVES Tutorial 1: Geometry (:issue:`129`, :merge:`94`). By `Thomas Roberts`_.
 - Add minimum scaffolding for the include files tutorial documentation (:issue:`139`, :merge:`105`). By `Kyle
   Brindley`_.
 - Add minimum scaffolding for the cartesian product tutorial documentation (:issue:`140`, :merge:`106`). By `Kyle
@@ -60,7 +90,7 @@ Internal Changes
   (:issue:`120`, :merge:`90`). By `Thomas Roberts`_.
 - Specify Sphinx v4.5.0 in the enviroment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
 - Removed duplicate code in the docs/SConscript file (:issue:`128`, :merge:`93`). By `Sergio Cordova`_
-- Changed test_builders so journal.log is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
+- Changed test_builders so journal.stdout is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
 - Create per-tutorial EABM stub project definition files (SConstruct) to aid in incremental changes in the tutorial
   documentation and allow for per-tutorial regression tests (:issue:`131`, :merge:`97`). By `Kyle Brindley`_.
 - Added odb_extract rst documentation and added odb_extract, msg_parse, and sta_parse to pyrpojects.toml

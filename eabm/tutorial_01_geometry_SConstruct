@@ -14,6 +14,8 @@ except ModuleNotFoundError:
 
 version = '0.1.0'
 
+# Comments used in tutorial code snippets: marker-1
+
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
 variables.AddVariables(
@@ -25,9 +27,13 @@ variables.AddVariables(
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
         default=True))
 
+# Comments used in tutorial code snippets: marker-2
+
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variables=variables)
+
+# Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 required_programs = ['abaqus']
@@ -36,8 +42,12 @@ for program in required_programs:
     env[program.replace('-', '_')] = conf.CheckProg(program)
 conf.Finish()
 
+# Comments used in tutorial code snippets: marker-4
+
 # Add project command line variable options to help message
 Help(variables.GenerateHelpText(env))
+
+# Comments used in tutorial code snippets: marker-5
 
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM-TUTORIAL'
@@ -45,16 +55,20 @@ project_variables = {
     'project_name': project_name,
     'project_dir': Dir('.').abspath,
     'version': version,
-    'abaqus_source_dir': 'source/abaqus'
+    'abaqus_source_dir': 'eabm_package/abaqus'
 }
 for key, value in project_variables.items():
     env[key] = value
+
+# Comments used in tutorial code snippets: marker-6
 
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus'])})
+
+# Comments used in tutorial code snippets: marker-7
 
 # Add simulation targets
 eabm_simulation_directories = [
@@ -64,12 +78,16 @@ for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
     SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
 
+# Comments used in tutorial code snippets: marker-8
+
 # Add default target list to help message
 env.Default()  # Empty defaults list to avoid building all simulation targets by default
 default_targets_help = "\nDefault Targets:\n"
 for target in DEFAULT_TARGETS:
     default_targets_help += f"    {str(target)}\n"
 Help(default_targets_help)
+
+# Comments used in tutorial code snippets: marker-9
 
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
@@ -79,3 +97,5 @@ alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
 Help(alias_help)
+
+# Comments used in tutorial code snippets: marker-10

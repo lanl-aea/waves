@@ -20,7 +20,7 @@ env.Default()
 
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(Dir('.').abspath)
-abaqus_source_dir = 'source/abaqus'
+abaqus_source_dir = 'eabm_package/abaqus'
 abaqus_source_abspath = project_dir / abaqus_source_dir
 variant_dir_base = pathlib.Path('build_quickstart')
 
@@ -35,8 +35,9 @@ for program in required_programs:
 conf.Finish()
 
 # Add custom builders
-env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-                     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'], env=env)})
+env.Append(BUILDERS=
+    {'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
+     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])})
 
 # Simulation variables
 model = "single_element"

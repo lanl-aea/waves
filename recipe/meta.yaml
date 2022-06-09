@@ -12,8 +12,6 @@ build:
     # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
     # deprecated setup.py solutions
     - {{ PYTHON }} setup.py install
-    # TODO: install shell scripts from pyproject.toml if possible
-    - cp waves/bin/* ${PREFIX}/bin
   script_env:
     - VERSION
   ignore_run_exports:
@@ -57,9 +55,9 @@ test:
     - waves/tests/*.py
     - eabm/README.rst
     - eabm/SC*
-    - eabm/source/abaqus/*
-    - eabm/source/cubit/*
-    - eabm/source/python/*
+    - eabm/eabm_package/abaqus/*
+    - eabm/eabm_package/cubit/*
+    - eabm/eabm_package/python/*
     - eabm/tutorial*/*
     - eabm/tutorial*SConstruct
   imports:
@@ -67,6 +65,7 @@ test:
   commands:
     - scons . --keep-going conditional_ignore=False ignore_documentation=True
     - cd eabm
+    # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=quickstart_SConstruct --keep-going
     - scons . --sconstruct=tutorial_00_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False
@@ -76,4 +75,8 @@ test:
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going conditional_ignore=False
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going conditional_ignore=False
+    # Re-run the full WAVES-EABM suite once more with the full, advanced project definition in SContruct.
+    # Uses "rm" instead of "scons --clean" to ensure a complete re-build even if the tutorial files and the default
+    # SConstruct file target definitions differ or something is incompletely cleaned.
+    - rm -rf build/
     - scons . --jobs=4 --keep-going conditional_ignore=False ignore_documentation=True

@@ -4,10 +4,12 @@
 Quickstart
 ##########
 
-This quickstart will create a minimal version of the full tutorial project definitions below using a single project
-definition file. These tutorials and this quickstart describe the computational engineering workflow through simulation
-execution. Using a single project definition requires `SCons`_ techniques that differ between the quickstart
-``SConstruct`` file and the project defintion files, ``SConstruct`` and ``SConscript``, found in the full tutorials.
+This quickstart will create a minimal, single file project definition matching the tutorial listed below. These
+tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using a
+single project definition file requires `SCons`_ techniques that differ between the quickstart ``SConstruct`` file and
+the project definition files, ``SConstruct`` and ``SConscript``, found in the full tutorials. Consequently, this
+quickstart will use a separate name for the project definition file, ``quickstart_SConstruct``, to allow the tutorials
+and this quickstart to share a common tutorial directory.
 
 * :ref:`tutorialsconstruct`
 * :ref:`tutorialgeometrywaves`
@@ -29,31 +31,29 @@ Directory Structure
 
 .. code-block:: bash
 
-   $ pwd
-   /home/roppenheimer
-   $ mkdir -p waves-eabm-tutorial/source/abaqus
-   $ cd /home/roppenheimer/waves-eabm-tutorial
-   $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+      $ mkdir -p ~/waves-eabm-tutorial/eabm_package/abaqus
+      $ cd ~/waves-eabm-tutorial
+      $ pwd
+      /home/roppenheimer/waves-eabm-tutorial
 
-4. Download and copy the `WAVES-EABM abaqus source files`_ into the ``source/abaqus`` sub-directory. If you're on a
+4. Download and copy the `WAVES-EABM abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory. If you're on a
    linux system with `git`_ installed and read access on the `WAVES`_ repository, you can use `git archive`_ as below.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
-   $ git archive --format=zip --remote=ssh://git@re-git.lanl.gov:10022/kbrindley/waves.git HEAD:eabm/source/abaqus > source_abaqus.zip
-   $ unzip source_abaqus.zip -d source/abaqus
+   $ git archive --format=zip --remote=ssh://git@re-git.lanl.gov:10022/kbrindley/waves.git HEAD:eabm/eabm_package/abaqus > source_abaqus.zip
+   $ unzip source_abaqus.zip -d eabm_package/abaqus
 
 
 ***************
 SConstruct File
 ***************
 
-5. Create a file named ``SConstruct`` from the contents below.
+5. Create a file named ``quickstart_SConstruct`` from the contents below.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-eabm-tutorial/quickstart_SConstruct
 
     .. literalinclude:: eabm_quickstart_SConstruct
        :language: Python
@@ -66,8 +66,13 @@ Building targets
 .. code-block::
 
    $ pwd
-   /path/to/waves-eabm-tutorial
-   $ scons single_element
+   /home/roppenheimer/waves-eabm-tutorial
+   $ scons --sconstruct=quickstart_SConstruct single_element
+
+.. note::
+
+   The ``--sconstruct`` option is required because the quickstart project definition file name doesn't follow the
+   `SCons`_ naming convention, ``SConstruct``.
 
 ************
 Output Files
@@ -76,7 +81,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /home/roppenheimer/waves-eabm-tutorial
    $ tree build_quickstart/
    build_quickstart/
    |-- abaqus.rpy
@@ -93,7 +98,7 @@ Output Files
    |-- single_element_compression.com
    |-- single_element_compression.dat
    |-- single_element_compression.inp
-   |-- single_element_compression.log
+   |-- single_element_compression.stdout
    |-- single_element_compression.msg
    |-- single_element_compression.odb
    |-- single_element_compression.prt
@@ -102,7 +107,7 @@ Output Files
    |-- single_element_compression_DATACHECK.abaqus_v6.env
    |-- single_element_compression_DATACHECK.com
    |-- single_element_compression_DATACHECK.dat
-   |-- single_element_compression_DATACHECK.log
+   |-- single_element_compression_DATACHECK.stdout
    |-- single_element_compression_DATACHECK.mdl
    |-- single_element_compression_DATACHECK.msg
    |-- single_element_compression_DATACHECK.odb
@@ -112,15 +117,15 @@ Output Files
    |-- single_element_geometry.abaqus_v6.env
    |-- single_element_geometry.cae
    |-- single_element_geometry.jnl
-   |-- single_element_geometry.log
+   |-- single_element_geometry.stdout
    |-- single_element_mesh.abaqus_v6.env
    |-- single_element_mesh.cae
    |-- single_element_mesh.inp
    |-- single_element_mesh.jnl
-   |-- single_element_mesh.log
+   |-- single_element_mesh.stdout
    |-- single_element_partition.abaqus_v6.env
    |-- single_element_partition.cae
    |-- single_element_partition.jnl
-   `-- single_element_partition.log
+   `-- single_element_partition.stdout
 
    0 directories, 43 files

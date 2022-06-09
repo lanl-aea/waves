@@ -7,20 +7,19 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 
-from waves._settings import _abaqus_wrapper
 from waves._settings import _abaqus_environment_file
 
 
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
-    Appends ``source[0]``.jnl and ``source[0]``.log to the ``target`` list. The abaqus_journal Builder requires that the
+    Appends ``source[0]``.jnl and ``source[0]``.stdout to the ``target`` list. The abaqus_journal Builder requires that the
     journal file to execute is the first source in the list.
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the expected log file as a target, e.g. ``source[0].log``.
+    provide the expected STDOUT redirected file as a target, e.g. ``source[0].stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -35,7 +34,7 @@ def _abaqus_journal_emitter(target, source, env):
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
-    suffixes = ['.jnl', '.log', f'.{_abaqus_environment_file}']
+    suffixes = ['.jnl', '.stdout', f'.{_abaqus_environment_file}']
     for suffix in suffixes:
         emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
         target.append(str(emitter_target))
@@ -53,7 +52,7 @@ def abaqus_journal(abaqus_program='abaqus'):
        :caption: Abaqus journal builder action
        :name: abaqus_journal_action
 
-       abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.log 2>&1
+       abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -71,7 +70,7 @@ def abaqus_journal(abaqus_program='abaqus'):
             [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
                  f"${{SOURCE.filebase}}.{_abaqus_environment_file}",
              f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
-                 f"${{journal_options}} > ${{SOURCE.filebase}}.log 2>&1"],
+                 f"${{journal_options}} > ${{SOURCE.filebase}}.stdout 2>&1"],
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -85,8 +84,8 @@ def _abaqus_solver_emitter(target, source, env):
     provide the output database as a target, e.g. ``job_name.odb``
     """
     if not 'job_name' in env or not env['job_name']:
-        raise RuntimeError('Builder is missing required keyword argument "job_name".')
-    builder_suffixes = ['log', _abaqus_environment_file]
+        env['job_name'] = pathlib.Path(source[0].path).stem
+    builder_suffixes = ['stdout', _abaqus_environment_file]
     abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
     try:
@@ -99,26 +98,21 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
+def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    functions accepts all SCons Builder arguments and adds the required string argument ``job_name`` and optional string
-    argument ``abaqus_options``.  The Builder emitter will append common Abaqus output files as targets automatically
-    from the ``job_name``, e.g. ``job_name.odb``, ``job_name.dat``, ``job_name.msg``, etc.
+    function accepts all SCons Builder arguments and adds optional Builder keyword arguments ``job_name`` and
+    ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. The Builder emitter will
+    append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
 
-    The target list only appends those extensions which are common to all Abaqus operations. Some extensions may need to
-    be added explicitly according to the Abaqus simulation solver, type, or options. If you find that SCons isn't
-    automatically cleaning some Abaqus output files, they are not in the automatically appended target list.
+    The target list only appends those extensions which are common to Abaqus analysis operations. Some extensions may
+    need to be added explicitly according to the Abaqus simulation solver, type, or options. If you find that SCons
+    isn't automatically cleaning some Abaqus output files, they are not in the automatically appended target list.
 
-    Abaqus is not called directly. Instead the |PROJECT| :ref:`abaqus_wrapper` is executed to help control the Abaqus
-    return code and return timing.
-
-    .. code-block::
-       :caption: Abaqus journal builder action
-       :name: abaqus_solver_action
-
-       abaqus_wrapper ${job_name} abaqus -job ${job_name} -input ${SOURCE} ${abaqus_options}'
+    The ``-interactive`` option is always appended to avoid exiting the Abaqus task before the simulation is complete.
+    The ``-ask_delete no`` to option is always appended to overwrite existing files in programmatic execution, where
+    it is assumed that the Abaqus solver target(s) should be re-built when their source files change.
 
     .. code-block::
        :caption: SConstruct
@@ -126,25 +120,32 @@ def abaqus_solver(abaqus_program='abaqus', env=SCons.Environment.Environment()):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={'AbaqusSolver': waves.builders.abaqus_solver()})
+       env.Append(BUILDERS=
+           {'AbaqusSolver': waves.builders.abaqus_solver(),
+            'AbaqusOld': waves.builders.abaqus_solver(abaqus_program='abq2019'),
+            'AbaqusPost': waves.builders.abaqus_solver(post_simulation='grep -E "\<SUCCESSFULLY" ${job_name}.sta')})
        AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
 
+    .. code-block::
+       :caption: Abaqus journal builder action
+       :name: abaqus_solver_action
+
+       ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no'
+
     :param str abaqus_program: An absolute path or basename string for the abaqus program
-    :param SCons.Script.SConscript.SConsEnvironment env: An SCons construction environment to use when searching for the
-        abaqus_wrapper program.
+    :param str post_simulation: Shell command string to execute after the simulation command finishes. Intended to allow
+        modification of the Abaqus exit code, e.g. return a non-zero (error) exit code when Abaqus reports a simulation
+        error or incomplete simulation. Builder keyword variables are available for substitution in the
+        ``post_simulation`` action using the ``${}`` syntax.
     """
-    conf = env.Configure()
-    abaqus_wrapper_program = conf.CheckProg('abaqus_wrapper')
-    if not abaqus_wrapper_program:
-        abaqus_wrapper_program = _abaqus_wrapper
-        print("Could not find 'abaqus_wrapper' in construction environment. " \
-              f"Using WAVES internal path...{abaqus_wrapper_program}")
-    conf.Finish()
+    action = [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
+                  f"${{job_name}}.{_abaqus_environment_file}",
+              f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
+                  f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}.stdout 2>&1"]
+    if post_simulation:
+        action.append(f"cd ${{TARGET.dir.abspath}} && {post_simulation}")
     abaqus_solver_builder = SCons.Builder.Builder(
-        action=[f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
-                    f"${{job_name}}.{_abaqus_environment_file}",
-                f"cd ${{TARGET.dir.abspath}} && {abaqus_wrapper_program} ${{job_name}} {abaqus_program} " \
-                    f"-job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}}"],
+        action=action,
         emitter=_abaqus_solver_emitter)
     return abaqus_solver_builder
 
@@ -200,13 +201,13 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
 def _python_script_emitter(target, source, env):
     """Appends the python_script builder target list with the builder managed targets
 
-    Appends ``source[0]``.log to the ``target`` list. The python_script Builder requires that the
+    Appends ``source[0]``.stdout to the ``target`` list. The python_script Builder requires that the
     python script to execute is the first source in the list.
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the expected log file as a target, e.g. ``python_script_basename.log``.
+    provide the expected STDOUT redirected file as a target, e.g. ``python_script_basename.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -221,7 +222,7 @@ def _python_script_emitter(target, source, env):
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
-    suffixes = ['.log']
+    suffixes = ['.stdout']
     for suffix in suffixes:
         emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
         target.append(str(emitter_target))
@@ -238,7 +239,7 @@ def python_script():
        :caption: Python script builder action
        :name: python_script_action
 
-       python ${python_options} ${SOURCE.abspath} ${script_options} > ${SOURCE.filebase}.log 2>&1
+       python ${python_options} ${SOURCE.abspath} ${script_options} > ${SOURCE.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -247,11 +248,11 @@ def python_script():
        import waves
        env = Environment()
        env.Append(BUILDERS={'PythonScript': waves.builders.python_script()})
-       PythonScript(target=['my_output.log'], source=['my_scipt.py'], python_options='', script_options='')
+       PythonScript(target=['my_output.stdout'], source=['my_scipt.py'], python_options='', script_options='')
     """
     python_builder = SCons.Builder.Builder(
         action=
             [f"cd ${{TARGET.dir.abspath}} && python ${{python_options}} ${{SOURCE.abspath}} " \
-                f"${{script_options}} > ${{SOURCE.filebase}}.log 2>&1"],
+                f"${{script_options}} > ${{SOURCE.filebase}}.stdout 2>&1"],
         emitter=_python_script_emitter)
     return python_builder

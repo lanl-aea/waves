@@ -16,6 +16,12 @@
 .. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
 .. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
 
+.. _`Kyle Brindley`: kbrindley@lanl.gov
+.. _`Thomas Roberts`: tproberts@lanl.gov
+.. _`Sergio Cordova`: sergioc@lanl.gov
+.. _`Prabhu Khalsa`: pkhalsa@lanl.gov
+.. _`Scott Ouellette`: souellette@lanl.gov
+
 .. target-end-do-not-remove
 
 ##########
@@ -47,7 +53,8 @@ Documentation
 Developers
 ==========
 
-* Kyle Brindley: kbrindley@lanl.gov
+* `Kyle Brindley`_
+* `Thomas Roberts`_
 
 ********************
 Activate Environment
@@ -90,7 +97,7 @@ installed from the `AEA Conda channel`_.
 
    .. code-block::
 
-      $ conda create --name waves-eabm-env --file environment.txt --channel file:///projects/python/aea-conda/ --channel conda-forge
+      $ conda create --name waves-eabm-env --file environment.txt --channel file:///projects/aea_compute/aea-conda/ --channel conda-forge
 
 2. Activate the environment
 

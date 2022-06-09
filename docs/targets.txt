@@ -53,11 +53,15 @@
 .. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
 .. _`Abaqus Scripting`: https://simulia.lanl.gov/v2017/English/SIMACAEKERRefMap/simaker-c-ov.htm
 .. _`Abaqus Python Environment`: https://simulia.lanl.gov/v2017/English/SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
+.. _`Abaqus *INCLUDE`: https://simulia.lanl.gov/v2017/English/SIMACAEKEYRefMap/simakey-r-include.htm
+.. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
+.. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
+.. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
 .. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
-.. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm/source/abaqus
+.. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm/eabm_package/abaqus
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm
@@ -65,8 +69,4 @@
 .. _`Abaqus UMAT documentation`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAESUBRefMap/simasub-c-umat.htm
 
 .. email addresses
-.. _`Kyle Brindley`: kbrindley@lanl.gov
-.. _`Thomas Roberts`: tproberts@lanl.gov
-.. _`Sergio Cordova`: sergioc@lanl.gov
-.. _`Prabhu Khalsa`: pkhalsa@lanl.gov
 .. _`w13dev`: w13dev@lanl.gov
