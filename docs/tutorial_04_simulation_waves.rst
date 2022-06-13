@@ -59,8 +59,9 @@ SConscript
        :start-after: marker-1
        :end-before: marker-2
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the
-changes made in this tutorial.
+In summary of the changes you just made to the ``tutorial_04_simulation/SConscript`` file, a ``diff`` against the 
+``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the changes made in this 
+tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
 
