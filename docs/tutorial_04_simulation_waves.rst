@@ -59,6 +59,11 @@ SConscript
        :start-after: marker-1
        :end-before: marker-2
 
+In the changes you just made, the first line of code removes any trailing ``.in`` extensions from the file names in the 
+``abaqus_source_list`` (which you defined in the previous tutorial). While this step is not strictly neccessary for this 
+tutorial, it is required when it comes to inserting parameters into files. This is discussed in detail in the next 
+tutorial, :ref:`tutorial_parameter_substitution_waves`.
+
 In summary of the changes you just made to the ``tutorial_04_simulation/SConscript`` file, a ``diff`` against the 
 ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the changes made in this 
 tutorial.
