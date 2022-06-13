@@ -209,11 +209,13 @@ processing scripts.
 
      scons . --keep-going
 
-A full list of test names can be generated with the following command.
+The full list of continuous integration test targets can be found in the Gitlab-CI file, ``.gitlab-ci.yml``.
 
 .. code-block::
 
-   WIP
+   $ pwd
+   path/to/local/git/clone/waves/
+   $ sed -n '/fast-test/,/tags/p' .gitlab-ci.yml 
 
 .. test-end-do-not-remove
 
