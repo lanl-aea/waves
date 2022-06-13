@@ -35,9 +35,29 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_03_solverprep/SConscript tutorial_04_simulation/
 
+
+.. _tutorial_simulation_waves_SConscript:
+
 **********
 SConscript
 **********
+
+.. note::
+
+    There is a large section of lines in the ``SConscript`` file that are not included before the next section of code 
+    shown here, as they are identical to those from :ref:`tutorial_solverprep_waves`. The ``diff`` of the ``SConscript`` 
+    file at the end of the :ref:`tutorial_solverprep_waves_SConscript` section will demonstrate this more clearly.
+
+5. Modify your ``tutorial_04_simulation/SConscript`` file by adding the contents shown below immediately after the code 
+   pertaining to ``# SolverPrep`` from the previous tutorial.
+
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+
+    .. literalinclude:: tutorial_04_simulation_SConscript
+       :language: Python
+       :lineno-match:
+       :start-after: marker-1
+       :end-before: marker-2
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the
 changes made in this tutorial.
