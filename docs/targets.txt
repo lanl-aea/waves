@@ -54,6 +54,9 @@
 .. _`Abaqus Scripting`: https://simulia.lanl.gov/v2017/English/SIMACAEKERRefMap/simaker-c-ov.htm
 .. _`Abaqus Python Environment`: https://simulia.lanl.gov/v2017/English/SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
 .. _`Abaqus *INCLUDE`: https://simulia.lanl.gov/v2017/English/SIMACAEKEYRefMap/simakey-r-include.htm
+.. _`Abaqus File Extension Definitions`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEEXCRefMap/simaexc-c-fileextensions.htm
+.. _`Abaqus Standard/Explicit Execution`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEEXCRefMap/simaexc-c-analysisproc.htm
+.. _`Abaqus Precision Level for Executables`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/SIMACAEANLRefMap/simaanl-c-over.htm#simaanl-c-over-precision
 .. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
 .. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
 .. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
