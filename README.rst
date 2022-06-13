@@ -191,12 +191,10 @@ Testing
 
 .. test-start-do-not-remove
 
-This project uses the `SCons`_ build system. This section will discuss some common build operations. An abbreviated
-options description can be displayed with ``scons -H``. For a full list of `SCons`_ command line options and target
-build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also installed with `Scons`_ in the environment and
-can be opened from the command line as ``man scons`` in the `AEA Compute environment`_. In local environments, the
-manpage may not be in the ``man`` program's search path, ``MANPATH``. You can find the manpage file and make them
-available with something similar to any of the following, in increasing order of required background knowledge.
+Unlike software projects, the primary model/simulation project tests are the successful completion of some subset of the
+simulation targets. If the selected simulations run successfully, then the target passes. Secondary project tests will
+use `SCons`_ to execute unit and integration testing for project specific scripts, such as journal files and Python
+processing scripts.
 
 - Build the required target(s). Test targets may not be part of the default target list. If so, each target will
   need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
@@ -211,11 +209,13 @@ available with something similar to any of the following, in increasing order of
 
      scons . --keep-going
 
-A full list of test names can be generated with the following command.
+The full list of continuous integration test targets can be found in the Gitlab-CI file, ``.gitlab-ci.yml``.
 
 .. code-block::
 
-   WIP
+   $ pwd
+   path/to/local/git/clone/waves/
+   $ sed -n '/fast-test/,/tags/p' .gitlab-ci.yml 
 
 .. test-end-do-not-remove
 
