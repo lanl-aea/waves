@@ -46,7 +46,7 @@ SConscript
 
     There is a large section of lines in the ``SConscript`` file that are not included before the next section of code 
     shown here, as they are identical to those from :ref:`tutorial_solverprep_waves`. The ``diff`` of the ``SConscript`` 
-    file at the end of the :ref:`tutorial_solverprep_waves_SConscript` section will demonstrate this more clearly.
+    file at the end of the :ref:`tutorial_simulation_waves_SConscript` section will demonstrate this more clearly.
 
 5. Modify your ``tutorial_04_simulation/SConscript`` file by adding the contents shown below immediately after the code 
    pertaining to ``# SolverPrep`` from the previous tutorial.
