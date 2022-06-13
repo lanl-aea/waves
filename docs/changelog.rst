@@ -9,6 +9,10 @@ Changelog
 0.1.11 (unreleased)
 *******************
 
+Documentation
+=============
+- Add brandmark logo to documentation (:issue:`133`, :merge:`128`). By `Kyle Brindley`_.
+
 *******************
 0.1.10 (2022-06-09)
 *******************
