@@ -12,6 +12,8 @@ Changelog
 Documentation
 =============
 - Add brandmark logo to documentation (:issue:`133`, :merge:`128`). By `Kyle Brindley`_.
+- Update the Abaqus solver builder's docstring action to match the implementation (:issue:`163`, :merge:`134`). By `Kyle
+  Brindley`_.
 
 *******************
 0.1.10 (2022-06-09)
