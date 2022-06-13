@@ -109,7 +109,7 @@ Running the Analysis
 
 The changes you just made will be used to define the task for running the ``single_element_compression`` analysis. 
 Before running the analysis, we must first ensure that the output from the datacheck is included in the 
-``solver_source_list``. Appending the ``{datacheck_name}.odb`` file to the list of source files, we ensure that Abaqus 
+``solve_source_list``. Appending the ``{datacheck_name}.odb`` file to the list of source files, we ensure that Abaqus 
 solver effort is not duplicated between the datacheck and the analysis we are about to run.
 
 The next step should now be quite familiar - we extend the ``workflow`` list to include that task for running the 
