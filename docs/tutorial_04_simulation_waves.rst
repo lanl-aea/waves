@@ -8,6 +8,8 @@ Tutorial 04: Simulation
 References
 **********
 
+* `Abaqus File Extension Definitions`_
+
 ***********
 Environment
 ***********
@@ -48,6 +50,9 @@ SConscript
     shown here, as they are identical to those from :ref:`tutorial_solverprep_waves`. The ``diff`` of the ``SConscript`` 
     file at the end of the :ref:`tutorial_simulation_waves_SConscript` section will demonstrate this more clearly.
 
+Running a Datacheck
+===================
+
 5. Modify your ``tutorial_04_simulation/SConscript`` file by adding the contents shown below immediately after the code 
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
@@ -58,11 +63,49 @@ SConscript
        :lineno-match:
        :start-after: marker-1
        :end-before: marker-2
+       :emphasize-lines: 4-12
 
 In the changes you just made, the first line of code removes any trailing ``.in`` extensions from the file names in the 
 ``abaqus_source_list`` (which you defined in the previous tutorial). While this step is not strictly neccessary for this 
 tutorial, it is required when it comes to inserting parameters into files. This is discussed in detail in the next 
 tutorial, :ref:`tutorial_parameter_substitution_waves`.
+
+Next, ``{journal_file}.inp`` needs to be appended to the list of simulation source files. Recall from 
+:ref:`tutorial_partition_mesh_waves` that this file is one of the targets that is generated from  
+:meth:`waves.builders.abaqus_journal` builder.
+
+The first set of highlighted lines will define a prelimnary step to the actual analysis called a *datacheck*. You can 
+read the `Abaqus Standard/Explicit Execution`_ documentation for more details on running a datacheck. First, the 
+``job_name`` is resolved from the name of the first source file listed in code pertaining to ``# SolverPrep``, in this 
+case ``single_element_compression``. That name is appened with the ``_DATACHECK`` key to uniquely identify output 
+files that might have common name and extension with those from the actual analysis to come. The ``datacheck_suffixes`` 
+are standard output file extensions that will form the targets of our datacheck task. See the `Abaqus File Extension 
+Definitions`_ for more information about each of the file extensions listed.
+
+One new section of code that we have not utilized yet in the previous tutotorials is the passing of command line options 
+to the builder. This is done using the ``abaqus_options`` variable. Here, we instruct the Abaqus solver to use double 
+precision for both the Packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation for 
+more information about the use of single or double precision in an Abaqus analysis.
+
+Finally, the ``workflow`` list is extended to define the task for running the datacheck. The ``target`` list is formed 
+by adding the ``datacheck_suffixes`` to the ``datacheck_name``. The ``source`` list was created in the first portions of 
+the new code for this tutorial. ``job_name`` is used in the Abaqus solver call, see :meth:`waves.builders.abaqus_solver` 
+API for information about default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be appended to 
+the Abaqus solver call.
+
+Running the Analysis
+====================
+
+6. Modify your ``tutorial_04_simulation/SConscript`` file by adding the contents below immediately after the Abaqus 
+   datacheck code that was just discussed.
+
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+
+    .. literalinclude:: tutorial_04_simulation_SConscript
+       :language: Python
+       :lineno-match:
+       :start-after: marker-2
+       :end-before: marker-3
 
 In summary of the changes you just made to the ``tutorial_04_simulation/SConscript`` file, a ``diff`` against the 
 ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the changes made in this 
