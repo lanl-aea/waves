@@ -381,7 +381,7 @@ separation if more than one simulation is built at the same time.
     
     $ pwd
      /home/roppenheimer/waves-eabm-tutorial
-    $ tree build
+    $ tree build/
     build/
     └── tutorial_01_geometry
         ├── abaqus.rpy        
