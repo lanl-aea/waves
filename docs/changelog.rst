@@ -18,6 +18,7 @@ Documentation
   targets (:issue:`160`, :merge:`135`). By `Kyle Brindley`_.
 - Use copy and paste-able commands for SCons man page location and linking instructions (:issue:`164`, :merge:`136`). By
   `Kyle Brindley`_.
+- Complete WAVES Tutorial 4: Simulation (:issue:`100`, :merge:`117`) By `Thomas Roberts`_.
 
 *******************
 0.1.10 (2022-06-09)
