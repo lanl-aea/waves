@@ -16,6 +16,8 @@ Documentation
   Brindley`_.
 - Update the developer documentation for WAVES repository testing and add a code snippet to help find the CI test
   targets (:issue:`160`, :merge:`135`). By `Kyle Brindley`_.
+- Use copy and paste-able commands for SCons man page location and linking instructions (:issue:`164`, :merge:`136`). By
+  `Kyle Brindley`_.
 
 *******************
 0.1.10 (2022-06-09)
