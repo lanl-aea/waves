@@ -10,6 +10,7 @@ References
 
 * `Abaqus File Extension Definitions`_
 * `Abaqus Standard/Explicit Execution`_
+* `Abaqus Precision Level for Executables`_
 
 ***********
 Environment
@@ -51,6 +52,8 @@ SConscript
     shown here, as they are identical to those from :ref:`tutorial_solverprep_waves`. The ``diff`` of the ``SConscript`` 
     file at the end of the :ref:`tutorial_simulation_waves_SConscript` section will demonstrate this more clearly.
 
+.. _tutorial_simulation_waves_running_datacheck:
+
 Running a Datacheck
 ===================
 
@@ -68,31 +71,33 @@ Running a Datacheck
 
 In the changes you just made, the first line of code removes any trailing ``.in`` extensions from the file names in the 
 ``abaqus_source_list`` (which you defined in the previous tutorial). While this step is not strictly neccessary for this 
-tutorial, it is required when it comes to inserting parameters into files. This is discussed in detail in the next 
+tutorial, it is required when it comes to substituting parameters into files. This is discussed in detail in the next 
 tutorial, :ref:`tutorial_parameter_substitution_waves`.
 
 Next, ``{journal_file}.inp`` needs to be appended to the list of simulation source files. Recall from 
 :ref:`tutorial_partition_mesh_waves` that this file is one of the targets that is generated from  
-:meth:`waves.builders.abaqus_journal` builder.
+:meth:`waves.builders.abaqus_journal` builder in the code pertaining to ``# Mesh``.
 
 The first set of highlighted lines will define a prelimnary step to the actual analysis called a *datacheck*. You can 
 read the `Abaqus Standard/Explicit Execution`_ documentation for more details on running a datacheck. First, the 
 ``job_name`` is resolved from the name of the first source file listed in code pertaining to ``# SolverPrep``, in this 
-case ``single_element_compression``. That name is appened with the ``_DATACHECK`` key to uniquely identify output 
+case ``single_element_compression``. That name is appened with the ``_DATACHECK`` string to uniquely identify output 
 files that might have common name and extension with those from the actual analysis to come. The ``datacheck_suffixes`` 
 are standard output file extensions that will form the targets of our datacheck task. See the `Abaqus File Extension 
-Definitions`_ for more information about each of the file extensions listed.
+Definitions`_ documentation for more information about each of the file extensions listed.
 
 One new section of code that we have not utilized yet in the previous tutotorials is the passing of command line options 
 to the builder. This is done using the ``abaqus_options`` variable. Here, we instruct the Abaqus solver to use double 
-precision for both the Packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation for 
+precision for both the packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation for 
 more information about the use of single or double precision in an Abaqus analysis.
 
 Finally, the ``workflow`` list is extended to define the task for running the datacheck. The ``target`` list is formed 
 by adding the ``datacheck_suffixes`` to the ``datacheck_name``. The ``source`` list was created in the first portions of 
-the new code for this tutorial. ``job_name`` is used in the Abaqus solver call, see :meth:`waves.builders.abaqus_solver` 
-API for information about default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be appended to 
-the Abaqus solver call.
+the new code for this tutorial. ``job_name`` is used in the Abaqus solver call. See the 
+:meth:`waves.builders.abaqus_solver` API for information about default behavior. Lastly, the ``abaqus_options`` are 
+passed to the builder to be appended to the Abaqus solver call.
+
+.. _tutorial_simulation_waves_running_analysis:
 
 Running the Analysis
 ====================
@@ -110,7 +115,7 @@ Running the Analysis
 
 The changes you just made will be used to define the task for running the ``single_element_compression`` analysis. 
 Before running the analysis, we must first ensure that the output from the datacheck is included in the 
-``solve_source_list``. Appending the ``{datacheck_name}.odb`` file to the list of source files, we ensure that Abaqus 
+``solve_source_list``. Appending the ``{datacheck_name}.odb`` file to the list of source files ensures that Abaqus 
 solver effort is not duplicated between the datacheck and the analysis we are about to run.
 
 The next step should now be quite familiar - we extend the ``workflow`` list to include that task for running the 
@@ -125,7 +130,7 @@ both`` option is included with the ``abaqus_options`` variable.
     
     The :meth:`waves.builders.solve_abaqus` builder has the option to retrieve non-zero exit codes from the Abaqus 
     solver by parsing the output ``.sta`` file using ``grep``. The :meth:`waves.builders.solve_abaqus` API provides and 
-    example of the ``post_simulation`` builder argument as well has how exit codes are returned to the build system.
+    example of the ``post_simulation`` builder argument as well as how exit codes are returned to the build system.
 
     This functionality is useful in cases where the model developer wants the build system to exit its processes if an 
     Abaqus analysis does not complete successfully. By default, Abaqus will return a zero exit code regradless of 
@@ -222,7 +227,7 @@ Build Targets
 Output Files
 ************
 
-Explore the contents of the ``build`` directory`` using the ``tree`` command against the ``build`` directory, as shown 
+Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown 
 below. Note that the output files from the previous tutorials also exist in the ``build`` directory, but the ``-I`` 
 option is used in the ``tree`` command below to reduce clutter in the ouptut shown.
 
@@ -281,11 +286,11 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
 
     2 directories, 44 files
 
-The ``tutorial_04_simulation`` directory several different subsets of related files:
+The ``tutorial_04_simulation`` directory contains several different subsets of related files:
 
 * ``single_element_geometry.*``, ``_partition.*``, and ``_mesh.*`` - output files generated from the workflow in 
   :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves`.
 * ``*.inp`` - files copied to the build directory as part of :ref:`tutorial_solverprep_waves`.
-* ``single_element_compression_DATACHECK.*`` - output files from the datacheck portion of this tutorial.
-* ``single_element_compression.*`` - output files from the analysis portion of this tutorial.
+* ``single_element_compression_DATACHECK.*`` - output files from :ref:`tutorial_simulation_waves_running_datacheck`.
+* ``single_element_compression.*`` - output files from :ref:`tutorial_simulation_waves_running_analysis`.
 
