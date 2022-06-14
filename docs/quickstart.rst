@@ -12,7 +12,7 @@ quickstart will use a separate name for the project definition file, ``quickstar
 and this quickstart to share a common tutorial directory.
 
 * :ref:`tutorialsconstruct`
-* :ref:`tutorialgeometrywaves`
+* :ref:`tutorial_geometry_waves`
 * :ref:`tutorial_partition_mesh_waves`
 * :ref:`tutorial_solverprep_waves`
 * :ref:`tutorial_simulation_waves`

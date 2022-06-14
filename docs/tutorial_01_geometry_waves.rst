@@ -1,4 +1,4 @@
-.. _tutorialgeometrywaves:
+.. _tutorial_geometry_waves:
 
 #####################
 Tutorial 01: Geometry
