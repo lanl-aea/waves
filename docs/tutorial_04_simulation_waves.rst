@@ -9,6 +9,7 @@ References
 **********
 
 * `Abaqus File Extension Definitions`_
+* `Abaqus Standard/Explicit Execution`_
 
 ***********
 Environment
@@ -123,8 +124,8 @@ both`` option is included with the ``abaqus_options`` variable.
 .. note::
     
     The :meth:`waves.builders.solve_abaqus` builder has the option to retrieve non-zero exit codes from the Abaqus 
-    solver by parsing the output ``.sta`` file using ``grep``. The :meth:`waves.builders.solve_abaqus` API provides more 
-    information about the usage of ``grep`` commands and how exit codes are returned to the build system.
+    solver by parsing the output ``.sta`` file using ``grep``. The :meth:`waves.builders.solve_abaqus` API provides and 
+    example of the ``post_simulation`` builder argument as well has how exit codes are returned to the build system.
 
     This functionality is useful in cases where the model developer wants the build system to exit its processes if an 
     Abaqus analysis does not complete successfully. By default, Abaqus will return a zero exit code regradless of 
