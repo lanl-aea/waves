@@ -146,6 +146,13 @@ tutorial.
 SConstruct
 **********
 
+7. Make the following additions to the ``waves-eabm-tutorial/SConstruct`` file using the ``diff`` against the 
+   ``SConstruct`` file from the last tutorial:
+   
+   * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add custom 
+     builders``
+   * Add ``tutorial_04_simulation`` to the ``eabm_simulation_directories`` list
+
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the
 changes made in this tutorial.
 
