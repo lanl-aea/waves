@@ -127,16 +127,19 @@ knowledge.
 
 .. code-block::
 
+   # Activate the environment
+   conda activate waves-env
+
    # Find the scons manpage file
-   $ find /path/to/local/environment -name scons.1
-   /path/to/local/environment/bin/scons.1
+   $ find $CONDA_PREFIX -name scons.1
+   /path/to/waves-env/scons.1
 
    # Open manpage directly
-   $ man /path/to/local/environment/bin/scons.1
+   $ man $CONDA_PREFIX/scons.1
 
    # Link SCons manpage to expected path and update MANPATH
-   $ ln -s /path/to/local/environment/bin/scons.1 /path/to/local/environment/man/man1/scons.1
-   $ export MANPATH=$MANPATH:/path/to/local/environment/man
+   $ ln -s $CONDA_PREFIX/scons.1 $CONDA_PREFIX/man/man1/scons.1
+   $ export MANPATH=$MANPATH:$CONDA_PREFIX/man
    $ man scons
 
 This project contains two, separate `SCons`_ project definitions, where the ``SConstruct`` file name indicates an
@@ -215,7 +218,7 @@ The full list of continuous integration test targets can be found in the Gitlab-
 
    $ pwd
    path/to/local/git/clone/waves/
-   $ sed -n '/fast-test/,/tags/p' .gitlab-ci.yml 
+   $ sed -n '/fast-test/,/tags/p' .gitlab-ci.yml
 
 .. test-end-do-not-remove
 
