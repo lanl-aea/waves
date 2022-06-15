@@ -190,7 +190,7 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
 
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    build/
+    $ tree build/
     ├── tutorial_01_geometry
     │   ├── abaqus.rpy
     │   ├── single_element_geometry.abaqus_v6.env

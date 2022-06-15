@@ -159,7 +159,7 @@ variable to conditionally skip any tasks that depend on missing software.
 
 In `WAVES`_ and `WAVES-EABM`_, this approach is primarily used to allow developers to perform development work on local
 computers without cluttering their test builds with tasks that cannot succeed on their local computer.
-:ref:`tutorialgeometrywaves` will introduce the use of these variables for build control.
+:ref:`tutorial_geometry_waves` will introduce the use of these variables for build control.
 
 8. Add the content below to the ``SConstruct`` file to add the command-line build variables to the `SCons project build
    help`_ message.
@@ -198,7 +198,7 @@ The `WAVES-EABM`_ makes use of the `SCons hierarchical build`_ feature to separa
 directory. This is valuable for modsim repositories that include a suite of simulations. To avoid hardcoded duplication
 of project meta data, the project meta data variables are added to the construction environment, which will be passed
 around to all `SCons`_ configuration files. The implementation that passes the construction environment around is
-introduced in :ref:`tutorialgeometrywaves`.
+introduced in :ref:`tutorial_geometry_waves`.
 
 10. Add the content below to the ``SConstruct`` file to add `WAVES`_ builders to the project definition.
 
@@ -213,7 +213,7 @@ introduced in :ref:`tutorialgeometrywaves`.
 Although it is possible to re-create the `WAVES-EABM`_ entirely in native `SCons`_ code, the builder extensions provided
 by `WAVES`_ reduce the requisite background knowledge to begin creating EABM repositories. The construction environment
 ``BUILDERS`` variable must be updated to include these custom `SCons`_ builders and make them available to the
-simulation configuration starting in :ref:`tutorialgeometrywaves`.
+simulation configuration starting in :ref:`tutorial_geometry_waves`.
 
 The `WAVES`_ :ref:`waves_builders_api` describes the available builders and their usage. As `WAVES`_ matures, more software will be
 supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
@@ -232,7 +232,7 @@ builders`_.
 The for loop in this code-snippet is the method for implementing an `SCons hierarchical build`_. The ``exports`` keyword
 argument allows the project configuration file to pass the ``env`` construction environment variable with the `SCons
 sharing environments`_ feature. The first simulation configuration will be added to the ``eabm_simulation_directories``
-list in :ref:`tutorialgeometrywaves`.
+list in :ref:`tutorial_geometry_waves`.
 
 12. Add the content below to the ``SConstruct`` file to add an empty default target list and to list the default targets
     in the project help message.
@@ -266,7 +266,7 @@ Simulation build workflows will typically involve many targets and tasks in a no
 file names may also be cumbersome to type when explicitly listing build targets in the `SCons`_ build command. For
 convenience, the `WAVES-EABM`_ simulation configurations will add a collector alias for the list of simulation targets
 with the `SCons alias`_ feature. By convention, `WAVES-EABM`_ matches the alias name to the simulation subdirectory
-name. :ref:`tutorialgeometrywaves` will introduce the first target alias, which will then populate the project help
+name. :ref:`tutorial_geometry_waves` will introduce the first target alias, which will then populate the project help
 message diplayed by the ``scons -h`` command option.
 
 .. note::
