@@ -353,12 +353,12 @@ using Scons.
         Checking whether cubit program exists.../apps/Cubit-15.8/cubit
         scons: done reading SConscript files.
         scons: Building targets ...
-        cd /home/roppenheimer/waves-eabm-tutoroal/build/tutorial_01_geometry && 
+        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && 
         /apps/abaqus/Commands/abaqus -information environment > 
         single_element_geometry.abaqus_v6.env
-        cd /home/roppenheimer/waves-eabm-tutoroal/build/tutorial_01_geometry && 
+        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && 
         /apps/abaqus/Commands/abaqus cae -noGui 
-        /home/roppenheimer/waves-eabm-tutoroal/eabm_package/abaqus/single_element_geometry.py -- > 
+        /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > 
         single_element_geometry.stdout 2>&1
         scons: done building targets.
 
