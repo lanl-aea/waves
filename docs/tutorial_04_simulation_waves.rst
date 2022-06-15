@@ -79,12 +79,17 @@ Next, ``{journal_file}.inp`` needs to be appended to the list of simulation sour
 :meth:`waves.builders.abaqus_journal` builder in the code pertaining to ``# Mesh``.
 
 The first set of highlighted lines will define a preliminary step to the actual analysis called a *datacheck*. You can 
-read the `Abaqus Standard/Explicit Execution`_ documentation for more details on running a datacheck. First, the 
-``job_name`` is resolved from the name of the first source file listed in code pertaining to ``# SolverPrep``, in this 
-case ``single_element_compression``. That name is appended with the ``_DATACHECK`` string to uniquely identify output 
-files that might have a common name and extension with those from the actual analysis to come. The 
-``datacheck_suffixes`` are standard output file extensions that will form the targets of our datacheck task. See the 
-`Abaqus File Extension Definitions`_ documentation for more information about each of the file extensions listed.
+read the `Abaqus Standard/Explicit Execution`_ documentation for more details on running a datacheck. The primary 
+purpose for running a datacheck prior to the analysis is to provide the build system an opportunity for early exit if 
+the datacheck fails. This is useful in a scenario where the full analysis might take much longer to fail than the 
+datacheck.
+
+First, the ``job_name`` is resolved from the name of the first source file listed in code 
+pertaining to ``# SolverPrep``, in this case ``single_element_compression``. That name is appended with the 
+``_DATACHECK`` string to uniquely identify output files that might have a common name and extension with those from the 
+actual analysis to come. The ``datacheck_suffixes`` are standard output file extensions that will form the targets of 
+our datacheck task. See the `Abaqus File Extension Definitions`_ documentation for more information about each of the 
+file extensions listed.
 
 One new section of code that we have not utilized yet in the previous tutotorials is the passing of command line options 
 to the builder. This is done using the ``abaqus_options`` variable. Here, we instruct the Abaqus solver to use double 
@@ -114,9 +119,10 @@ Running the Analysis
        :end-before: marker-3
 
 The changes you just made will be used to define the task for running the ``single_element_compression`` analysis. 
-Before running the analysis, we must first ensure that the output from the datacheck is included in the 
-``solve_source_list``. Appending the ``{datacheck_name}.odb`` file to the list of source files ensures that Abaqus 
-solver effort is not duplicated between the datacheck and the analysis we are about to run.
+Before running the analysis, we add the output from the datacheck to the ``solve_source_list``. Appending the 
+``{datacheck_name}.odb`` file to the list of source files ensures that the simulation targets are rebuilt if something 
+in the datacheck outputs changes. The build system will recognize this dependency automatically, so long as 
+``{datacheck_name}.odb`` is defined as a source.
 
 The next step should now be quite familiar - we extend the ``workflow`` list to include that task for running the 
 simulation with the :meth:`waves.builders.abaqus_solver` builder. The ``target`` list includes only the 
