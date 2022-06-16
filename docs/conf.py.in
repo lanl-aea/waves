@@ -8,11 +8,19 @@ import subprocess
 project_dir = pathlib.Path('@project_dir@').resolve()
 eabm_dir = project_dir / pathlib.Path('@eabm_dir@')
 
-author_latex = r'Kyle Brindley, W-13 \and ' \
-               r'Prabhu S. Khalsa, W-13 \and ' \
-               r'Thomas Roberts, W-13 \and ' \
-               r'Sergio Cordova, W-13 \and ' \
-               r'Scott Ouellette, W-13'
+# Name, Group, Email
+authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
+           ('Prabhu S. Khalsa', 'W-13', '<pkhalsa@lanl.gov>'),
+           ('Thomas Roberts', 'W-13', '<tproberts@lanl.gov>'),
+           ('Sergio Cordova', 'W-13', '<sergioc@lanl.gov>'),
+           ('Scott Ouellette', 'W-13', '<souellette@lanl.gov>')]
+author_latex = ''
+author_manpage = ''
+for author, group, email in authors:
+    author_latex += f"{author}, {group} " + r'\and '
+    author_manpage += f"{author} {email}, "
+author_latex = author_latex.rstrip(r'\and ')
+author_manpage = author_manpage.rstrip(', ')
 
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
@@ -66,4 +74,10 @@ latex_elements = {}
 latex_documents = [
     (master_doc, project + '.tex', project.upper() + ' Documentation',
      author_latex, 'manual'),
+]
+
+# -- Options for manual page output ---------------------------------------
+man_pages = [
+    (master_doc, project.upper(), project,
+     [author_manpage], 1)
 ]
