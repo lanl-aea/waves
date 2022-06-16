@@ -5,6 +5,9 @@ import pathlib
 # Inherit the parent construction environment
 Import(['env', 'project_substitution_dictionary'])
 
+# Set empty alias return list
+alias_list = []
+
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
@@ -109,7 +112,7 @@ documentation = env.Command(
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
 env.Clean(documentation, 'html/')
-alias_list = env.Alias('documentation', documentation)
+alias_list.extend(env.Alias('documentation', documentation))
 
 latexpdf = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
@@ -118,7 +121,7 @@ latexpdf = env.Command(
     source=documentation_file_list,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
 env.Clean(documentation, 'latex/')
-alias_list = env.Alias('latexpdf', latexpdf)
+alias_list.extend(env.Alias('latexpdf', latexpdf))
 
 manpage = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
@@ -127,7 +130,7 @@ manpage = env.Command(
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man",
     sphinx_options=sphinx_options)
-alias_list = env.Alias('manpage', manpage)
+alias_list.extend(env.Alias('manpage', manpage))
 
 if env['conditional_ignore'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
