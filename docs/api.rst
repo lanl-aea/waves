@@ -65,4 +65,3 @@ development efforts in the original repositoy that would otherwise produce ambig
 The build wrapper command line options and behavior are described in the help message as
 
 .. literalinclude:: waves_build_wrapper_message.txt
-   :language: bash
