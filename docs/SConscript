@@ -104,16 +104,26 @@ sphinx_options = '-W'
 documentation = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
-    target=['dummy_file', 'html/index.html'],
+    target=['dummy_html', 'html/index.html'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
 env.Clean(documentation, 'html/')
 alias_list = env.Alias('documentation', documentation)
 
+manpage = env.Command(
+    # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
+    # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
+    target=['dummy_manpage', 'man/waves.1'],
+    source=documentation_file_list,
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man",
+    sphinx_options=sphinx_options)
+alias_list = env.Alias('manpage', manpage)
+
 if env['conditional_ignore'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore(['.', 'html', 'documentation'], documentation)
+    Ignore(['.', 'man', 'manpage'], manpage)
 
 
 # Return the alias list to SConstruct for help message output
