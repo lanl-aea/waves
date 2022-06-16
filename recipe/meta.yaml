@@ -32,6 +32,10 @@ requirements:
     - git
     - setuptools
     - setuptools_scm
+    - sphinx >=3,<5
+    - sphinx-argparse
+    - sphinx_rtd_theme >=0.5
+    - sphinxcontrib-bibtex
   host:
     - python
     - setuptools
