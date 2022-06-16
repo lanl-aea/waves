@@ -104,15 +104,15 @@ for file_path in tutorial_files_list:
 # TODO: os agnostic pathsep for the html directory
 # https://re-git.lanl.gov/kbrindley/waves/-/issues/4
 sphinx_options = '-W'
-documentation = env.Command(
+html = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
     target=['dummy_html', 'html/index.html'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
-env.Clean(documentation, 'html/')
-alias_list.extend(env.Alias('documentation', documentation))
+env.Clean(html, 'html/')
+alias_list.extend(env.Alias('html', html))
 
 latexpdf = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
@@ -120,7 +120,7 @@ latexpdf = env.Command(
     target=['dummy_latexpdf', 'latex/waves.pdf'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
-env.Clean(documentation, 'latex/')
+env.Clean(latexpdf, 'latex/')
 alias_list.extend(env.Alias('latexpdf', latexpdf))
 
 manpage = env.Command(
@@ -132,11 +132,14 @@ manpage = env.Command(
     sphinx_options=sphinx_options)
 alias_list.extend(env.Alias('manpage', manpage))
 
+# Collector alias to build all documentation
+alias_list.extend(env.Alias('documentation', html + latexpdf + manpage))
+
 if env['conditional_ignore'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
-    Ignore(['.', 'html', 'documentation'], documentation)
+    Ignore(['.', 'html', 'html'], html)
+    Ignore(['.', 'latex', 'latexpdf'], latexpdf)
     Ignore(['.', 'man', 'manpage'], manpage)
-
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')
