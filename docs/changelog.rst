@@ -9,6 +9,11 @@ Changelog
 0.1.11 (unreleased)
 *******************
 
+New Features
+============
+- Add an SCons build wrapper to manage unique build directory names and Git clone operations (:issue:`114`,
+  :merge:`141`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add brandmark logo to documentation (:issue:`133`, :merge:`128`). By `Kyle Brindley`_.
