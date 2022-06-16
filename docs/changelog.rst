@@ -20,6 +20,7 @@ Documentation
   `Kyle Brindley`_.
 - Complete WAVES Tutorial 4: Simulation (:issue:`100`, :merge:`117`). By `Thomas Roberts`_.
 - Add brandmark to WAVES-EABM documentation (:issue:`166`, :merge:`139`). By `Kyle Brindley`_.
+- Add manpage and PDF builders for the WAVES documentation (:issue:`167`, :merge:`140`). By `Kyle Brindley`_.
 
 *******************
 0.1.10 (2022-06-09)
