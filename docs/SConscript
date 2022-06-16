@@ -111,6 +111,15 @@ documentation = env.Command(
 env.Clean(documentation, 'html/')
 alias_list = env.Alias('documentation', documentation)
 
+latexpdf = env.Command(
+    # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
+    # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
+    target=['dummy_latexpdf', 'latex/waves.pdf'],
+    source=documentation_file_list,
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
+env.Clean(documentation, 'latex/')
+alias_list = env.Alias('latexpdf', latexpdf)
+
 manpage = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5

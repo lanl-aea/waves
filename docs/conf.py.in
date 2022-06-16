@@ -72,12 +72,12 @@ html_static_path = ['_static']
 # -- Options for LaTeX output ---------------------------------------------
 latex_elements = {}
 latex_documents = [
-    (master_doc, project + '.tex', project.upper() + ' Documentation',
+    (master_doc, project.lower() + '.tex', project.upper() + ' Documentation',
      author_latex, 'manual'),
 ]
 
 # -- Options for manual page output ---------------------------------------
 man_pages = [
-    (master_doc, project.upper(), project,
+    (master_doc, project.lower(), project.upper(),
      [author_manpage], 1)
 ]
