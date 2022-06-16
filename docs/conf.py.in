@@ -7,7 +7,6 @@ import subprocess
 # -- Project information -----------------------------------------------------
 project_dir = pathlib.Path('@project_dir@').resolve()
 eabm_dir = project_dir / pathlib.Path('@eabm_dir@')
-build_wrapper = project_dir / '@build_wrapper@'
 
 # Name, Group, Email
 authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
@@ -39,22 +38,6 @@ from waves._settings import _project_name_short
 project = _project_name_short
 release = __version__
 version = release
-
-#============================================================================= GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
-bash_scripts = [(build_wrapper, ['-h'])]
-for script, options in bash_scripts:
-    message_command = subprocess.Popen([f'{script}'] + options,
-                                       stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    stdout, stderr = message_command.communicate()
-    exit_code = message_command.returncode
-    with open(f'{pathlib.Path(script).stem}_message.txt', 'w') as script_message_file:
-        command_line_example = f"$ {pathlib.Path(script).name}"
-        for option in options:
-            command_line_example = f"{command_line_example} {option}"
-        command_line_example = f"{command_line_example}\n"
-
-        script_message_file.write(command_line_example)
-        script_message_file.write(stdout.decode('utf-8'))
 
 #============================================================================================== SPHINX CONFIGURATION ===
 # -- Project Variables -------------------------------------------------------
