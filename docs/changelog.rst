@@ -23,6 +23,11 @@ Documentation
 - Add manpage and PDF builders for the WAVES documentation and bundle with the Conda package (:issue:`167`,
   :merge:`140`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Added three new documentation aliases to match the sphinx-build builders: html, latexpdf, man. "documentation" alias
+  now collects all three documentation build types (:issue:`167`, :merge:`140`). By `Kyle Brindley`_.
+
 *******************
 0.1.10 (2022-06-09)
 *******************

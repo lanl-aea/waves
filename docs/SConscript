@@ -123,23 +123,23 @@ latexpdf = env.Command(
 env.Clean(latexpdf, 'latex/')
 alias_list.extend(env.Alias('latexpdf', latexpdf))
 
-manpage = env.Command(
+man = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
-    target=['dummy_manpage', 'man/waves.1'],
+    target=['dummy_man', 'man/waves.1'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man",
     sphinx_options=sphinx_options)
-alias_list.extend(env.Alias('manpage', manpage))
+alias_list.extend(env.Alias('man', man))
 
 # Collector alias to build all documentation
-alias_list.extend(env.Alias('documentation', html + latexpdf + manpage))
+alias_list.extend(env.Alias('documentation', html + latexpdf + man))
 
 if env['conditional_ignore'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore(['.', 'html', 'html'], html)
     Ignore(['.', 'latex', 'latexpdf'], latexpdf)
-    Ignore(['.', 'man', 'manpage'], manpage)
+    Ignore(['.', 'man', 'man'], man)
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')
