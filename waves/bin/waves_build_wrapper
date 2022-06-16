@@ -2,7 +2,7 @@
 
 script_name=$(basename "$0")
 usage="${script_name}
-USAGE: ./${script_name} [TARGET [TARGET...]] [-hdvtg] [-p BUILD_TEMPLATE]"
+USAGE: ./${script_name} [TARGET [TARGET...]] [-hdvg] [-p BUILD_TEMPLATE]"
 options='OPTIONS:
     TARGET             Name of the SCons target(s) to build. If no targets are
                        provided, print the usage and exit (DEFAULT: None)
@@ -15,21 +15,21 @@ options='OPTIONS:
                        using the current repository state. Will build to the
                        SCons project default build sub-directory under the
                        template directory.
-                       ``git clone --no-hardlinks <calling directory> <BUILD_TEMPLATE>``
+                       ``git clone --no-hardlinks ${PWD} ${BUILD_TEMPLATE}``
     -p BUILD_TEMPLATE  Absolute or relative path to create as a build
                        directory without a trailing slash. Will be appended
-                       as BUILD_TEMPLATE.XXXXXX for use in mktemp command to
-                       create a unique build directory with every execution
-                       (DEFAULT: build).
+                       as ``${BUILD_TEMPLATE}.XXXXXX`` for use in ``mktemp``
+                       command to create a unique build directory with every
+                       execution (DEFAULT: build).
 
 NOTE: SCons project must define and use the ``variant_dir_base`` variable for
-non-git builds. Otherwise the ``mkdtemp`` directory will be unused.
+non-git builds. Otherwise the ``mktemp`` directory will be unused.
 
-Build command construction without ``-g``:
-    scons variant_dir_base=${build_directory} ${targets}
+SCons command construction without ``-g``:
+    ``scons variant_dir_base=${build_directory} ${targets}``
 
-Build command construction with ``-g``:
-    scons ${targets}'
+SCons command construction with ``-g``:
+    ``scons ${targets}``'
 
 #=========================================================== PARSE ARGUMENTS ===
 # Set default options
