@@ -50,3 +50,10 @@ Msg File Parser
     :members:
     :show-inheritance:
     :synopsis: Parses a msg file produced by Abaqus
+
+***********************
+|PROJECT| Build Wrapper
+***********************
+
+.. literalinclude:: waves_build_wrapper_message.txt
+   :language: bash
