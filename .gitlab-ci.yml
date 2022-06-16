@@ -24,6 +24,9 @@ before_script:
   # Activate the project specific environment from the project specific modulefile
   - module use ${PWD}/modulefiles
   - module load ${environment}
+  # Make LaTeX available
+  # TODO: Account for different systems, e.g. AEA servers and HPC, modulefiles
+  - module load texlive
   # Build the Conda environment if it's missing
   # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
   # https://re-git.lanl.gov/kbrindley/waves/-/issues/8
