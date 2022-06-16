@@ -9,9 +9,18 @@ source:
 build:
   noarch: python
   script:
+    - scons man html
+    - manpath1="$PREFIX/share/man/man1"
+    - manpath2="$PREFIX/man/man1"
+    - mkdir -p $manpath1 $manpath2
+    - cp build/docs/man/waves.1 $manpath1
+    - cp build/docs/man/waves.1 $manpath2 || true
     # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
     # deprecated setup.py solutions
     - {{ PYTHON }} setup.py install
+    - docspath="$SP_DIR/$PKG_NAME/docs"
+    - mkdir -p $docspath
+    - cp -r build/docs/html/* $docspath
   script_env:
     - VERSION
   ignore_run_exports:
@@ -21,8 +30,13 @@ requirements:
   build:
     - python {{ python }}
     - git
+    - scons >=4
     - setuptools
     - setuptools_scm
+    - sphinx >=3,<5
+    - sphinx-argparse
+    - sphinx_rtd_theme >=0.5
+    - sphinxcontrib-bibtex
   host:
     - python
     - setuptools
