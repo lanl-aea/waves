@@ -13,6 +13,7 @@ Documentation
 =============
 - Move the build wrapper discussion and usage into the command line utilities section (:issue:`168`, :merge:`143`). By
   `Kyle Brindley`_.
+- Add TOC tree captions as PDF parts in the PDF documentation build (:issue:`169`, :merge:`144`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
