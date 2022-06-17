@@ -78,15 +78,15 @@
    eabm_api
    eabm_cli
 
+.. raw:: latex
+
+   \part{Indices and Tables}
+
 .. only:: html
 
    ##################
    Indices and tables
    ##################
-
-.. raw:: latex
-
-   \part{Indices and Tables}
 
    * :ref:`genindex`
    * :ref:`modindex`
