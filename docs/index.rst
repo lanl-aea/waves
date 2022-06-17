@@ -12,7 +12,7 @@
 
 .. toctree::
    :maxdepth: 1
-   :caption: Computational Practices 
+   :caption: Computational Practices
 
    computational_practices_introduction
    computational_practices_version_control
