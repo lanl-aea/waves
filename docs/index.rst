@@ -4,6 +4,10 @@
 
 .. include:: project_brief.txt
 
+.. raw:: latex
+
+   \part{Computational Practices}
+
 .. _computational_tools:
 
 .. toctree::
@@ -20,6 +24,10 @@
 
 .. _user_manual:
 
+.. raw:: latex
+
+   \part{User Manual}
+
 .. toctree::
    :maxdepth: 1
    :caption: User Manual
@@ -35,6 +43,10 @@
    tutorial_06_include_files_waves
    tutorial_07_cartesian_product_waves
 
+.. raw:: latex
+
+   \part{Build System}
+
 .. toctree::
    :maxdepth: 2
    :caption: Build System
@@ -43,6 +55,10 @@
    cli
    devops
 
+.. raw:: latex
+
+   \part{Help & Reference}
+
 .. toctree::
    :caption: Help & Reference
    :maxdepth: 2
@@ -50,6 +66,10 @@
    release_philosophy
    changelog
    zreferences
+
+.. raw:: latex
+
+   \part{Appendices}
 
 .. toctree::
    :caption: Appendices
@@ -63,6 +83,10 @@
    ##################
    Indices and tables
    ##################
+
+.. raw:: latex
+
+   \part{Indices and Tables}
 
    * :ref:`genindex`
    * :ref:`modindex`
