@@ -9,6 +9,11 @@ Changelog
 0.1.12 (unreleased)
 *******************
 
+Documentation
+=============
+- Move the build wrapper discussion and usage into the command line utilities section (:issue:`168`, :merge:`143`). By
+  `Kyle Brindley`_.
+
 *******************
 0.1.11 (2022-06-17)
 *******************
