@@ -6,8 +6,23 @@ Changelog
 #########
 
 *******************
-0.1.12 (unreleased)
+0.1.13 (unreleased)
 *******************
+
+*******************
+0.1.12 (2022-06-17)
+*******************
+
+Documentation
+=============
+- Move the build wrapper discussion and usage into the command line utilities section (:issue:`168`, :merge:`143`). By
+  `Kyle Brindley`_.
+- Add TOC tree captions as PDF parts in the PDF documentation build (:issue:`169`, :merge:`144`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Limit Gitlab-Pages build to the HTML documentation (:issue:`168`, :merge:`143`). By `Kyle Brindley`_.
+- Fix the WAVES-EABM Gitlab-Pages documentation build (:issue:`170`, :merge:`145`). By `Kyle Brindley`_.
 
 *******************
 0.1.11 (2022-06-17)

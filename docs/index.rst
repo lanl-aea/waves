@@ -4,11 +4,15 @@
 
 .. include:: project_brief.txt
 
+.. raw:: latex
+
+   \part{Computational Practices}
+
 .. _computational_tools:
 
 .. toctree::
    :maxdepth: 1
-   :caption: Computational Practices 
+   :caption: Computational Practices
 
    computational_practices_introduction
    computational_practices_version_control
@@ -17,6 +21,10 @@
    computational_practices_compute_environment
    computational_practices_regression_testing
    computational_practices_continuous_integration
+
+.. raw:: latex
+
+   \part{User Manual}
 
 .. _user_manual:
 
@@ -35,6 +43,10 @@
    tutorial_06_include_files_waves
    tutorial_07_cartesian_product_waves
 
+.. raw:: latex
+
+   \part{Build System}
+
 .. toctree::
    :maxdepth: 2
    :caption: Build System
@@ -43,13 +55,21 @@
    cli
    devops
 
+.. raw:: latex
+
+   \part{Help and Reference}
+
 .. toctree::
-   :caption: Help & Reference
+   :caption: Help and Reference
    :maxdepth: 2
 
    release_philosophy
    changelog
    zreferences
+
+.. raw:: latex
+
+   \part{Appendices}
 
 .. toctree::
    :caption: Appendices
@@ -57,6 +77,10 @@
 
    eabm_api
    eabm_cli
+
+.. raw:: latex
+
+   \part{Indices and Tables}
 
 .. only:: html
 

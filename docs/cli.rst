@@ -2,11 +2,11 @@
 Command Line Utilities
 ######################
 
-*************
-Build wrapper
-*************
+***********************
+|PROJECT| Build Wrapper
+***********************
 
-The build system provides a build wrapper for the model repository CMake configuration build process. The build wrapper
+|PROJECT| provides a build wrapper for the model repository `SCons`_ configuration build process. The build wrapper
 creates a new, unique build directory for every build execution.
 
 Optionally, the build wrapper will create a model repository clone in the build directory to separate the original
@@ -15,8 +15,7 @@ development efforts in the original repositoy that would otherwise produce ambig
 
 The build wrapper command line options and behavior are described in the help message as
 
-.. .. literalinclude:: build_wrapper_message.txt
-..    :language: bash
+.. literalinclude:: waves_build_wrapper_message.txt
 
 .. _parameter_study_cli:
 
