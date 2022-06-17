@@ -4,11 +4,24 @@ import pathlib
 
 # Inherit the parent construction environment
 Import(['env', 'project_substitution_dictionary'])
+project_dir = pathlib.Path(env['project_dir'])
+build_wrapper = project_dir / env['build_wrapper']
+
+# Set empty alias return list
+alias_list = []
 
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
     SUBST_DICT=project_substitution_dictionary)
+
+# Generate the shell script usage message
+env.Command(
+    target=['waves_build_wrapper_message.txt'],
+    source=[str(build_wrapper)],
+    action=[
+        f"echo -e '$$ {build_wrapper.stem} -h' > ${{TARGET.abspath}}",
+        f"{build_wrapper} -h >> ${{TARGET.abspath}}"])
 
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
@@ -16,6 +29,7 @@ documentation_file_list = [
     'README.txt',  # Copied from README.rst to docs build directory by root SConscript
     'environment.txt',  # Copied from environment.txt to docs build directory by root SConscript
     'eabm_tutorial_00_SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
+    'waves_build_wrapper_message.txt',  # Created in docs build directory by this SConscript
     'eabm_README.txt',   # Copied from the eabm directory to waves docs build directory by root SConscript
     'eabm_api.rst',
     'eabm_cli.rst',
@@ -52,12 +66,12 @@ documentation_file_list = [
     'tutorial_06_include_files_waves.rst',
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_environment_activation.txt',
+    'waves_logo_brandmark_smaller.png',
     'zreferences.rst',
     '_static/custom.css'
 ]
 
 # Copy tutorial files to the build/docs directory
-project_dir = pathlib.Path(env['project_dir'])
 eabm_dir = project_dir / pathlib.Path(env['eabm_dir'])
 tutorial_01_dir = pathlib.Path(env['tutorial_01_dir'])
 tutorial_02_dir = pathlib.Path(env['tutorial_02_dir'])
@@ -100,20 +114,42 @@ for file_path in tutorial_files_list:
 # TODO: os agnostic pathsep for the html directory
 # https://re-git.lanl.gov/kbrindley/waves/-/issues/4
 sphinx_options = '-W'
-documentation = env.Command(
+html = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
-    target=['dummy_file', 'html/index.html'],
+    target=['dummy_html', 'html/index.html'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
-env.Clean(documentation, 'html/')
-alias_list = env.Alias('documentation', documentation)
+env.Clean(html, 'html/')
+alias_list.extend(env.Alias('html', html))
+
+latexpdf = env.Command(
+    # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
+    # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
+    target=['dummy_latexpdf', 'latex/waves.pdf'],
+    source=documentation_file_list,
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
+env.Clean(latexpdf, 'latex/')
+alias_list.extend(env.Alias('latexpdf', latexpdf))
+
+man = env.Command(
+    # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
+    # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
+    target=['dummy_man', 'man/waves.1'],
+    source=documentation_file_list,
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man",
+    sphinx_options=sphinx_options)
+alias_list.extend(env.Alias('man', man))
+
+# Collector alias to build all documentation
+alias_list.extend(env.Alias('documentation', html + latexpdf + man))
 
 if env['conditional_ignore'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
-    Ignore(['.', 'html', 'documentation'], documentation)
-
+    Ignore(['.', 'html', 'html'], html)
+    Ignore(['.', 'latex', 'latexpdf'], latexpdf)
+    Ignore(['.', 'man', 'man'], man)
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')

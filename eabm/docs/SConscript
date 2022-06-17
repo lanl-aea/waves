@@ -30,6 +30,7 @@ documentation_file_list = [
     'targets.txt',
     'theory.rst',
     'user.rst',
+    'waves_logo_brandmark_smaller.png',
     'zreferences.rst',
     '_static/custom.css'
 ]

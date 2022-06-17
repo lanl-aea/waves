@@ -122,16 +122,19 @@ available with something similar to any of the following, in increasing order of
 
 .. code-block::
 
+   # Activate the environment
+   conda activate waves-eabm-env
+
    # Find the scons manpage file
-   $ find /path/to/local/environment -name scons.1
-   /path/to/local/environment/bin/scons.1
+   $ find $CONDA_PREFIX -name scons.1
+   /path/to/waves-eabm-env/scons.1
 
    # Open manpage directly
-   $ man /path/to/local/environment/bin/scons.1
+   $ man $CONDA_PREFIX/scons.1
 
    # Link SCons manpage to expected path and update MANPATH
-   $ ln -s /path/to/local/environment/bin/scons.1 /path/to/local/environment/man/man1/scons.1
-   $ export MANPATH=$MANPATH:/path/to/local/environment/man
+   $ ln -s $CONDA_PREFIX/scons.1 $CONDA_PREFIX/man/man1/scons.1
+   $ export MANPATH=$MANPATH:$CONDA_PREFIX/man
    $ man scons
 
 - View project specific command line options

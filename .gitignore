@@ -18,6 +18,10 @@ conda-build-artifacts/
 # Temp files
 *.swp
 
+# Binary image files
+*.png
+*.jpg
+
 # Abaqus output files
 *.com
 *.dat

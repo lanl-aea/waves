@@ -6,8 +6,36 @@ Changelog
 #########
 
 *******************
-0.1.11 (unreleased)
+0.1.12 (unreleased)
 *******************
+
+*******************
+0.1.11 (2022-06-17)
+*******************
+
+New Features
+============
+- Add an SCons build wrapper to manage unique build directory names and Git clone operations (:issue:`114`,
+  :merge:`141`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add brandmark logo to documentation (:issue:`133`, :merge:`128`). By `Kyle Brindley`_.
+- Update the Abaqus solver builder's docstring action to match the implementation (:issue:`163`, :merge:`134`). By `Kyle
+  Brindley`_.
+- Update the developer documentation for WAVES repository testing and add a code snippet to help find the CI test
+  targets (:issue:`160`, :merge:`135`). By `Kyle Brindley`_.
+- Use copy and paste-able commands for SCons man page location and linking instructions (:issue:`164`, :merge:`136`). By
+  `Kyle Brindley`_.
+- Complete WAVES Tutorial 4: Simulation (:issue:`100`, :merge:`117`). By `Thomas Roberts`_.
+- Add brandmark to WAVES-EABM documentation (:issue:`166`, :merge:`139`). By `Kyle Brindley`_.
+- Add manpage and PDF builders for the WAVES documentation and bundle with the Conda package (:issue:`167`,
+  :merge:`140`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Added three new documentation aliases to match the sphinx-build builders: html, latexpdf, man. "documentation" alias
+  now collects all three documentation build types (:issue:`167`, :merge:`140`). By `Kyle Brindley`_.
 
 *******************
 0.1.10 (2022-06-09)
