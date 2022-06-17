@@ -18,6 +18,7 @@ Documentation
 Internal Changes
 ================
 - Limit Gitlab-Pages build to the HTML documentation (:issue:`168`, :merge:`143`). By `Kyle Brindley`_.
+- Fix the WAVES-EABM Gitlab-Pages documentation build (:issue:`170`, :merge:`145`). By `Kyle Brindley`_.
 
 *******************
 0.1.11 (2022-06-17)
