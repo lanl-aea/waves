@@ -6,8 +6,17 @@ Changelog
 #########
 
 *******************
-0.1.11 (unreleased)
+0.1.12 (unreleased)
 *******************
+
+*******************
+0.1.11 (2022-06-17)
+*******************
+
+New Features
+============
+- Add an SCons build wrapper to manage unique build directory names and Git clone operations (:issue:`114`,
+  :merge:`141`). By `Kyle Brindley`_.
 
 Documentation
 =============
