@@ -22,11 +22,11 @@
    computational_practices_regression_testing
    computational_practices_continuous_integration
 
-.. _user_manual:
-
 .. raw:: latex
 
    \part{User Manual}
+
+.. _user_manual:
 
 .. toctree::
    :maxdepth: 1
@@ -57,10 +57,10 @@
 
 .. raw:: latex
 
-   \part{Help & Reference}
+   \part{Help and Reference}
 
 .. toctree::
-   :caption: Help & Reference
+   :caption: Help and Reference
    :maxdepth: 2
 
    release_philosophy
