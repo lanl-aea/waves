@@ -101,6 +101,8 @@ tutorial_files_list = [
     eabm_dir / tutorial_07_dir / 'SConscript',
     eabm_dir / 'SConstruct',
     eabm_dir / abaqus_dir / 'single_element_geometry.py',
+    eabm_dir / abaqus_dir / 'single_element_partition.py',
+    eabm_dir / abaqus_dir / 'single_element_mesh.py',
     eabm_dir / python_dir / 'single_element_compression_nominal.py',
     eabm_dir / python_dir / 'tutorial_07_cartesian_product.py'
 ]
