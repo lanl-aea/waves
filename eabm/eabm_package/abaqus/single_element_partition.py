@@ -110,8 +110,7 @@ def get_parser():
                         help="The rectangle width")
     # Short option '-h' is reserved for the help message
     parser.add_argument('--height', type=float, default=default_height,
-                        help="The rectangle height")
-    
+                        help="The rectangle height")    
     return parser
 
 if __name__ == '__main__':
