@@ -73,7 +73,8 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     return 0
 
-if __name__ == '__main__':
+
+def get_parser(filename):
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     basename = os.path.basename(filename)
     basename_without_extension, extension = os.path.splitext(basename)
@@ -102,10 +103,12 @@ if __name__ == '__main__':
                         help="The name of the Abaqus part")
     parser.add_argument('-g', '--global-seed', type=float, default=default_global_seed,
                         help="The global mesh seed size")
+    return parser
 
+if __name__ == '__main__':
+    parser = get_parser()
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
     args, unknown = parser.parse_known_args()
-
     sys.exit(main(input_file=args.input_file,
                   output_file=args.output_file,
                   model_name=args.model_name,
