@@ -35,6 +35,28 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_04_simulation/SConscript tutorial_05_parameter_substitution/
 
+******************
+Solver Input Files
+******************
+
+5. Copy the ``eabm_package/abaqus/single_element_compression.inp`` file to a new file in the same directory named 
+   ``single_element_compression.inp.in``. **Note:** the only change in the file name is the addition of the ``.in`` 
+   suffix.directory.
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ cp eabm_package/abaqus/single_element_compression.inp eabm_package/abaqus/single_element_compression.inp.in
+
+6. Use the ``diff`` below to modify your ``single_element_compression.inp.in`` file.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_compression.inp.in
+   
+   .. literalinclude:: abaqus_single_element_compression.inp.in
+      :language: text
+      :diff: abaqus_single_element_compression.inp
+
 **********
 SConscript
 **********
