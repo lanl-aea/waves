@@ -71,6 +71,8 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     abaqus.mdb.save()
 
+    return 0
+
 if __name__ == '__main__':
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     basename = os.path.basename(filename)
