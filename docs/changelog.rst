@@ -22,6 +22,8 @@ Documentation
 - Add brandmark to WAVES-EABM documentation (:issue:`166`, :merge:`139`). By `Kyle Brindley`_.
 - Add manpage and PDF builders for the WAVES documentation and bundle with the Conda package (:issue:`167`,
   :merge:`140`). By `Kyle Brindley`_.
+- Update the Abaqus documentation links to use the Abaqus 2021 documentation (:issue:`165`, :merge:`138`). By `Thomas 
+  Roberts`_.
 
 Internal Changes
 ================
