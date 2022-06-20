@@ -74,8 +74,9 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     return 0
 
 
-def get_parser(filename):
+def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
+    filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
     basename_without_extension, extension = os.path.splitext(basename)
     # Construct a part name from the filename less the workflow step
@@ -106,7 +107,7 @@ def get_parser(filename):
     return parser
 
 if __name__ == '__main__':
-    parser = get_parser(filename)
+    parser = get_parser()
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
     args, unknown = parser.parse_known_args()
     sys.exit(main(input_file=args.input_file,
