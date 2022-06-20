@@ -137,6 +137,9 @@ changes made in this tutorial.
 SConstruct
 **********
 
+8. Add ``tutorial_05_parameter_substitution`` to the ``eabm_simulation_directories`` list in the 
+   ``waves-eabm-tutorial/SConstruct`` file.
+
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
