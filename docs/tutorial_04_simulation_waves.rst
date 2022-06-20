@@ -241,7 +241,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
     
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial[1,2,3]*'
+    $ tree build/ -I 'tutorial_[1,2,3]*'
     build
     ├── docs
     │   └── SConscript
