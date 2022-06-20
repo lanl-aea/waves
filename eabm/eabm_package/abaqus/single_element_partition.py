@@ -73,6 +73,8 @@ def main(input_file, output_file, model_name, part_name, width, height):
     p.Surface(side1Edges=side1Edges, name='bottom')
 
     abaqus.mdb.save()
+    
+    return 0
 
 if __name__ == '__main__':
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
