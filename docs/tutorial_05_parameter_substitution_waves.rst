@@ -39,15 +39,23 @@ Directory Structure
 Solver Input Files
 ******************
 
-5. Copy the ``eabm_package/abaqus/single_element_compression.inp`` file to a new file in the same directory named 
-   ``single_element_compression.inp.in``. **Note:** the only change in the file name is the addition of the ``.in`` 
-   suffix.directory.
+5. Copy the ``eabm_package/abaqus/single_element_compression.inp`` file and all of its contents to a new file in the 
+   same directory named ``single_element_compression.inp.in``. **Note:** the only change in the file name is the 
+   addition of the ``.in`` suffix.directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
    $ cp eabm_package/abaqus/single_element_compression.inp eabm_package/abaqus/single_element_compression.inp.in
+
+In this tutorial, we will be modifying several scripts from :ref:`tutorial_simulation_waves`, the first of which is 
+``single_element_compression.inp``. We copy this file and all of its contents to a new file with the same basename and 
+the ``.in`` extension for the purposes of *parameter substitution*. This change is made so it is easy for the 
+:meth:`waves.builders.copy_substitute` builder to identify which files should be searched for parameters. Any files with 
+the ``.in`` extension that are passed to the :meth:`waves.builders.copy_substitute` builder will be parsed for 
+characters matching the parameter definitions using template substitution. This is discussed in more detail later in 
+this tutorial.
 
 6. Use the ``diff`` below to modify your ``single_element_compression.inp.in`` file.
 
@@ -56,6 +64,18 @@ Solver Input Files
    .. literalinclude:: abaqus_single_element_compression.inp.in
       :language: text
       :diff: abaqus_single_element_compression.inp
+
+First, we add the ``displacement`` parameter to the ``single_element_compression.inp.in`` using the `Abaqus *PARAMETER`_ 
+keyword. After making this definition, any place in the file that utilizes ``<displacement>`` syntax will be replaced by 
+the value ``float('@displacement@')`` by the Abaqus file parser. Casting the value substituted by the parameter to a 
+``float`` ensures that the ``displacement`` parameter ends up the proper variable type. This also eludes to the fact 
+that a parameter can be any variable type, provided its usage is correct for the syntax of the file where it is used. 
+Thus, for example, one could use a ``str`` as a parameter to change the name of the material assigned to a part in the 
+model.
+
+The final modification to make to the ``single_element_compression.inp.in`` file is to replace the hardcoded 
+displacement value of ``-1.0`` with the parameter key ``<displacement>``. With this change, the Abaqus file parser will 
+know to use the value of the ``displacement`` parameter anywhere it sees ``<displacement>``.
 
 **********
 SConscript
