@@ -81,7 +81,7 @@ know to use the value of the ``displacement`` parameter anywhere it sees ``<disp
 SConscript
 **********
 
-5. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by adding the contents shown below to the code 
+7. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by adding the contents shown below to the code 
    pertaining to ``# Simulation variables``. The entire code snippet shows how your code should look after editing, and
    the highlghted portion is what needs to be added to your existing code.
    
@@ -121,7 +121,7 @@ of all the other text in a file. Note that this step is only required when utili
 continue to use the ``simulation_variables`` dictionary - we do not need uniquely identifiable parameter keys when 
 values are passed to our scripts via command line interface.
 
-6. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the 
+8. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the 
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
 
 .. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
@@ -144,7 +144,7 @@ shown in the first highlighted section, we will end up passing a string that loo
 
 This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mesh``.
 
-7. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the 
+9. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the 
    code pertaining to ``# SolverPrep``.
 
 .. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
@@ -179,8 +179,8 @@ changes made in this tutorial.
 SConstruct
 **********
 
-8. Add ``tutorial_05_parameter_substitution`` to the ``eabm_simulation_directories`` list in the 
-   ``waves-eabm-tutorial/SConstruct`` file.
+10. Add ``tutorial_05_parameter_substitution`` to the ``eabm_simulation_directories`` list in the 
+    ``waves-eabm-tutorial/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
@@ -195,7 +195,7 @@ changes made in this tutorial.
 Build Targets 
 *************
 
-5. Build the new targets
+11. Build the new targets
 
 .. code-block:: bash
 
@@ -206,3 +206,12 @@ Build Targets
 ************
 Output Files
 ************
+
+Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown 
+below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` command output.
+
+.. code-block:: bash
+    
+    $ pwd
+    /home/roppenheimer/waves-eabm-tutorial
+    $ tree build/ -I 'tutorial_0[1,2,3,4]*'
