@@ -41,7 +41,7 @@ Solver Input Files
 
 5. Copy the ``eabm_package/abaqus/single_element_compression.inp`` file and all of its contents to a new file in the 
    same directory named ``single_element_compression.inp.in``. **Note:** the only change in the file name is the 
-   addition of the ``.in`` suffix.directory.
+   addition of the ``.in`` suffix.
 
 .. code-block:: bash
 
@@ -54,8 +54,8 @@ In this tutorial, we will be modifying several scripts from :ref:`tutorial_simul
 the ``.in`` extension for the purposes of *parameter substitution*. This change is made so it is easy for the 
 :meth:`waves.builders.copy_substitute` builder to identify which files should be searched for parameters. Any files with 
 the ``.in`` extension that are passed to the :meth:`waves.builders.copy_substitute` builder will be parsed for 
-characters matching the parameter definitions using template substitution. This is discussed in more detail later in 
-this tutorial.
+characters matching the parameter definitions using substitution with `Python Template Strings`_. This is discussed in 
+more detail later in this tutorial.
 
 6. Use the ``diff`` below to modify your ``single_element_compression.inp.in`` file.
 
