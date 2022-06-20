@@ -73,8 +73,11 @@ def main(input_file, output_file, model_name, part_name, width, height):
     p.Surface(side1Edges=side1Edges, name='bottom')
 
     abaqus.mdb.save()
+    
+    return 0
 
-if __name__ == '__main__':
+
+def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
@@ -107,11 +110,13 @@ if __name__ == '__main__':
                         help="The rectangle width")
     # Short option '-h' is reserved for the help message
     parser.add_argument('--height', type=float, default=default_height,
-                        help="The rectangle height")
+                        help="The rectangle height")    
+    return parser
 
+if __name__ == '__main__':
+    parser = get_parser()
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
     args, unknown = parser.parse_known_args()
-
     sys.exit(main(input_file=args.input_file,
                   output_file=args.output_file,
                   model_name=args.model_name,

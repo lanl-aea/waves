@@ -13,6 +13,11 @@ Documentation
 =============
 - Add source code links to WAVES and WAVES-EABM documentation (:issue:`173`, :merge:`148`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Move the argument parsing for partitioning and meshing to dedicated argument parser functions (:issue:`174`, 
+  :merge:`150`). By `Thomas Roberts`_.
+
 *******************
 0.1.12 (2022-06-17)
 *******************
