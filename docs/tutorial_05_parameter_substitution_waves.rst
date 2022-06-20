@@ -68,13 +68,13 @@ more detail later in this tutorial.
       :language: text
       :diff: abaqus_single_element_compression.inp
 
-First, we add the ``displacement`` parameter to the ``single_element_compression.inp.in`` using the `Abaqus *PARAMETER`_ 
-keyword. After making this definition, any place in the file that utilizes ``<displacement>`` syntax will be replaced by 
-the value ``float('@displacement@')`` by the Abaqus file parser. Casting the value substituted by the parameter to a 
-``float`` ensures that the ``displacement`` parameter ends up the proper variable type. This also eludes to the fact 
-that a parameter can be any variable type, provided its usage is correct for the syntax of the file where it is used. 
-Thus, for example, one could use a ``str`` as a parameter to change the name of the material assigned to a part in the 
-model.
+First, we add the ``displacement`` parameter to the ``single_element_compression.inp.in`` file using the `Abaqus 
+*PARAMETER`_ keyword. After making this definition, any place in the file that utilizes the ``<displacement>`` syntax 
+will be replaced by the value ``float('@displacement@')`` by the Abaqus file parser. Casting the value substituted by 
+the parameter to a ``float`` ensures that the ``displacement`` parameter ends up the proper variable type. This also 
+eludes to the fact that a parameter can be any variable type, provided its usage is correct for the syntax of the file 
+where it is used. Thus, for example, one could use a ``str`` as a parameter to change the name of the material assigned 
+to a part in the model.
 
 The final modification to make to the ``single_element_compression.inp.in`` file is to replace the hardcoded 
 displacement value of ``-1.0`` with the parameter key ``<displacement>``. With this change, the Abaqus file parser will 
@@ -111,7 +111,7 @@ the ``simulation_variables`` dictionary will be used later in this tutorial to s
 files via the CLI.
 
 The final key-value pair defined in the ``simulation_variables`` dictionary is ``displacement``. This parameter will be 
-used in a slighly different way than the others, as the script that utilizes this parameter does not function with a 
+used in a slightly different way than the others, as the script that utilizes this parameter does not function with a 
 command line interface. Recall from earlier in this tutorial, we created a new file called 
 ``single_element_compression.inp.in`` and added an `Abaqus *PARAMETER`_ definition with the ``@displacement@`` key. 
 Here, our final key-value pair of the ``simulation_variables`` dictionary will be utlized. Disussion of exacly how this 
@@ -120,8 +120,8 @@ is implemented with the :meth:`waves.builders.copy_substitute` builder will come
 Finally, we must discuss the last line of your new code, which defines the ``simulation_substitution_dictionary``. 
 Simply put, the keys of the ``simulation_variables`` dictionary must be uniquely identifiable as parameters in the midst 
 of all the other text in a file. Note that this step is only required when utilizing the 
-:meth:`waves.builders.copy_substitute` builder for parameter substitution. This is why in the code you will add next we 
-continue to use the ``simulation_variables`` dictionary - we do not need uniquely identifiable parameter keys when 
+:meth:`waves.builders.copy_substitute` builder for parameter substitution. In the code you will add next, we will 
+continue to use the ``simulation_variables`` dictionary, as we do not need uniquely identifiable parameter keys when 
 values are passed to our scripts via command line interface.
 
 8. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the 
