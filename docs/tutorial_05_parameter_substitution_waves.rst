@@ -8,6 +8,9 @@ Tutorial 05: Parameter Substitution
 References
 **********
 
+* `Python Template Strings`_
+* `Abaqus *PARAMETER`_ keyword documentation
+
 ***********
 Environment
 ***********
