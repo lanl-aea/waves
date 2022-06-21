@@ -47,8 +47,8 @@ Directory Structure
 Python Parameter File
 *********************
 
-In this tutorial, we will update the code from :ref:`tutorial_parameter_substitution` to use an included parameter file 
-in favor of hardcoding the parameter definitions in the ``SConscript`` file.
+In this tutorial, we will update the code from :ref:`tutorial_parameter_substitution_waves` to use an included parameter 
+file in favor of hardcoding the parameter definitions in the ``SConscript`` file.
 
 6. Create a new file ``eabm_package/python/single_element_compression_nominal.py`` from the content below.
 
@@ -64,8 +64,10 @@ that defines the key-value pairs for parameters.
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help identify the
-changes made in this tutorial.
+7. Use the ``diff`` below to modify your ``tutorial_06_include_files/SConscript`` file.
+
+A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help 
+identify the changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_06_include_files/SConscript
 
