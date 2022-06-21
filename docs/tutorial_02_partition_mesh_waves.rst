@@ -39,6 +39,8 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_01_geometry/SConscript tutorial_02_partition_mesh/
 
+.. _tutorial_partition_mesh_waves_SConscript:
+
 **********
 SConscript
 **********
@@ -62,26 +64,30 @@ In the code pertaining to ``# Partition``, we will again pass an empty string fo
 re-open the discussion of using the journal file's command line interface via the ``journal_options`` variable in 
 :ref:`tutorial_parameter_substitution_waves`. Next, the ``workflow`` list is extended once again to include the action 
 to use the :meth:`waves.builders.abaqus_journal` builder. The ``target`` list specifies the files created by the 
-:meth:`waves.builders.abaqus_journal` task's action, and the ``source`` list specifies which files need to be acted on 
-in order to produce the targets.
+:meth:`waves.builders.abaqus_journal` task's action, and the ``source`` list specifies on which files to act in order to 
+produce the targets.
 
 Keen readers will note that this source-target definition is slightly different 
-from that in ref:`tutorial_geometry_waves`.  Here, we still specify only one target - 
-``single_element_partition.cae``. This target is geneating by performing an action on not one, but now two sources. The 
+from that in :ref:`tutorial_geometry_waves`.  Here, we still specify only one target - 
+``single_element_partition.cae``. This target is geneated by *performing an action on not one, but now two sources*. The 
 first source is similar to that in :ref:`tutorial_geometry_waves`, where we run the ``single_element_partition.py`` file 
 in the Abaqus kernel, but now the default behavior of the journal is different. 
+
+.. TODO: figure out how to link to a specific entry in the CLI. There's gotta be some way to do this similat to :meth: 
+   directive. https://re-git.lanl.gov/kbrindley/waves/-/issues/175
 
 6. Investigate the :ref:`sphinx_cli` documentation for the ``single_element_partition.py`` file. Notice that a new 
    parameter is defined here that was absent in ``single_element_geometry.py``. This parameter is defined in short with 
    ``-i`` or verbosely by ``--input-file``.
 
-This command line argument defaults to the string ``'single_element)geometry'`` and does not require a file extension. 
-So, we simply need to make sure that the ``single_element_geometry.cae`` file (which was an output from 
-:ref:`tutorial_geometry_waves`) be included in the ``source`` list. If ``single_element_geometry.cae`` were left out 
-of the source list, it is quite possible that the build system would still be able to build our target. However, 
-this would lead to possibly unreproducable behavior in the case where something has changed in the 
-``single_element_geometry.cae`` file. If not specified as a source, the ``single_element_geometry.cae`` file could 
-change and the build system would not know that the ``single_element_partition.cae`` target needs to be updated.
+The ``--input-file`` command line argument defaults to the string ``'single_element_geometry'`` and does not require a 
+file extension. So, we simply need to make sure that the ``single_element_geometry.cae`` file (which is an output from 
+the code we wrote in :ref:`tutorial_geometry_waves`) be included in the ``source`` list. If 
+``single_element_geometry.cae`` were left out of the source list, it is quite possible that the build system would still 
+be able to build our target. However, this would lead to possibly unreproducable behavior in the case where something 
+has changed in the ``single_element_geometry.cae`` file. If not specified as a source, the 
+``single_element_geometry.cae`` file could change and the build system would not know that the 
+``single_element_partition.cae`` target needs to be re-built.
 
 With the two sources defined, the :meth:`waves.builders.abaqus_journal` builder has all the information it needs to 
 build the ``single_element_partition.cae`` target.
@@ -89,20 +95,22 @@ build the ``single_element_partition.cae`` target.
 .. note::
    
    At this point, we have encountered our first dependency on a previous tutorial. It is important to understand that 
-   the code pertaining to ``# Partition`` *requires* that the ``single_element_partition.cae`` file be in the build 
+   the code pertaining to ``# Partition`` *requires* that the ``single_element_geometry.cae`` file be in the build 
    directory at the time the build system gets to the task of acting on our ``# Partition`` sources.
    
    It is the build system's job to define the dependencies for each target. However, the build system cannot utilize a 
-   source file that has never been created. The outputs from :ref:`tutorial_geometry_waves` are required sources for
-   this tutorial, and this tutorial's outputs will be required sources for the tutorials that follow.
+   source file that has never been created. The outputs from the code you wrote in :ref:`tutorial_geometry_waves` are 
+   required sources for this tutorial, and the outputs from this tutorial's code will be required sources for the 
+   tutorials that follow.
 
-   You cannot build :ref:`tutorial_partition_mesh_waves` without first building :ref:`tutorial_geometry_waves`.
+   You cannot build :ref:`tutorial_partition_mesh_waves` without first building the code from 
+   :ref:`tutorial_geometry_waves`.
 
 In the code pertaining to ``# Mesh``, the trend continues. We will create a ``journal_file`` variable to reduce 
 hard-coded duplication of strings. We define an empty string for ``journal_options``, as nothing other than the default 
 is required for this task. We finally extend the workflow to utilize the :meth:`waves.builders.abaqus_journal` builder 
-on the ``source list``. Just like the code for ``# Partition``, we have two sources. The ``single_element_mesh.py`` CLI 
-defines an ``--input-file`` argument that defaults to ``single_element_partiton.cae``. Readers are encouraged to return 
+on the ``source`` list. Just like the code for ``# Partition``, we have two sources. The ``single_element_mesh.py`` CLI 
+defines an ``--input-file`` argument that defaults to ``single_element_partition.cae``. Readers are encouraged to return 
 to the :ref:`sphinx_cli` to become familiar with the command line arguments available for the journal files in this 
 tutorial.
 
@@ -151,10 +159,10 @@ journal files:
         :lineno-match:
 
 The ``single_element_partition.py`` file is layed out in a very similar fashion to ``single_element_geometry.py``. It 
-contains a ``main()`` function with `PEP-287` formatted docstrings. Within that main function is Abaqus python code that 
-does a few specific tasks:
+contains a ``main()`` function with `PEP-287`_ formatted docstrings. Within that ``main()`` function is Abaqus python 
+code that does a few specific tasks:
 
-* Format the ``--input-file`` and ``--output-file`` command line arguments with file extensions
+* Format the ``--input-file`` and ``--output-file`` command line argument values with ``.cae`` file extensions
 * Copy the ``input_file`` to an identical ``output_file`` with a new name
 * Within the new ``output_file``, do the following:
 
@@ -173,7 +181,7 @@ argument is how the script knows which file to copy and then modify in the Abaqu
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":`` 
 statement, and the ``main()`` function is called within ``sys.exit()`` for exit code retrieval.
 
-8. in the ``eabm_package/abaqus`` directory, create a file called ``abaqus_journal_utilities.py`` using the contents 
+8. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_journal_utilities.py`` using the contents 
    below.
 
 .. admonition:: waves-eabm-tutoria/eabm_package/abaqus/abaqus_journal_utilities.py
@@ -186,14 +194,14 @@ statement, and the ``main()`` function is called within ``sys.exit()`` for exit 
 The ``abaqus_journal_utilities.py`` script's purpose is to contain commonly used functions that we do not want to 
 duplicate. At the moment, we have only created one function - ``export_mesh()``. The ``export_mesh`` function utlizes an 
 `Abaqus Model Object`_ along with a ``part_name`` and ``orphan_mesh_file`` name to create an orphan mesh file. Orphan 
-mesh files define the an entire part's mesh in a text-based file. The node and element locations and labels are listed 
+mesh files define the entire part's mesh in a text-based file. The node and element locations and labels are listed 
 in a tabular format that the Abaqus file parser understands.
 
 .. note::
    
    Any model developer may have other functions that are commonly used by multiple scripts. An example use case is if 
-   our model has multiple parts that notionally all looked the same. In this case, the model developer could choose to 
-   create a generic geometry generation function and place it in this ``abaqus_journal_utilities.py`` file. The model 
+   our model had multiple parts that notionally all looked the same. In this case, the model developer could choose to 
+   create a generic geometry generation function and place it in this ``abaqus_journal_utilities.py`` file. Then, model 
    developer can then call this function any number of times without duplicating source code.
 
 9. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents 
@@ -206,39 +214,42 @@ in a tabular format that the Abaqus file parser understands.
         :lineno-match:
 
 The ``single_element_mesh.py`` file will have many similarities in code structure to the ``single_element_geometry.py`` 
-and ``single_element_partition.py`` files. The first significant change is in the ``import`` statements at the top of 
-the file. The ``single_element_mesh.py`` file uses a function called ``export_mesh`` that is imported from the 
+and ``single_element_partition.py`` files. The first significant change is within the ``import`` statements at the top 
+of the file. The ``single_element_mesh.py`` file uses the ``export_mesh()`` function that is imported from the 
 ``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utlities.py`` exists in the 
-``eabm_package/abaqus`` directory, and is never copied to the builder directory where the journal files are ran with the 
-Abaqus kernel. Without any modifications to your `PYTHONPATH`_, the Abaqus kernel will attempt to import 
-``abaqus_journal_utilities``, but will not be able to find that file (because it is not in the build directory). In 
-order to solve this problem, we must add the location of the ``abaqus_journal_utlities.py`` file to `PYTHONPATH`_ at 
-run time.
+``eabm_package/abaqus`` directory, and is never copied to the builde directory where the journal files are ran with the 
+Abaqus kernel. Without any modifications to your `PYTHONPATH`_, the Abaqus kernel will attempt to ``import 
+abaqus_journal_utilities``, but will not be able to find the file (because it does not exist in the build directory). In 
+order to solve this problem, we must add the location of the ``abaqus_journal_utlities.py`` file to `PYTHONPATH`_ at run 
+time.
 
 .. note::
    
-   While the ``single_element_mesh.py`` script is also never copied to the run directory, it is executed via absolute 
-   path from within the run directory. For this reason, we can utilize the path of the ``single_element_mesh.py`` file 
+   While the ``single_element_mesh.py`` script is also never copied to the build directory, it is executed via absolute 
+   path from within the build directory. So, we can utilize the path of the ``single_element_mesh.py`` file 
    to point to the location of the ``abaqus_journal_utlities`` file as well.
 
-First, the ``filename`` is extracted in the same as in :ref:`tutorial_geometry_waves` in the 
-:ref:`tutorial_geometry_waves_command_line_interfaces` code. Then, we use ``sys.path.insert`` from the `Python sys`_ 
-package to add the location of the current file (``single_element_mesh.py``) to the `PYTHONPATH`_.
+Before importing ``abaqus_journal_utilities``, the ``filename`` is extracted in the same way as in
+:ref:`tutorial_geometry_waves`'s :ref:`tutorial_geometry_waves_command_line_interfaces` code. Then, we use 
+``sys.path.insert`` from the `Python sys`_ package to add the location of the current file (``single_element_mesh.py``) 
+to the `PYTHONPATH`_.
 
 From this point, the ``main()`` function proceeds to copy the input file just like in ``single_element_partition.py``. 
 The code that follows performs the following tasks within the new ``output_file``:
 
-* Create a part instance that can be meshed
-* Seed the part using the ``global_seed`` command line argument value to define the global meshing size
+* Create a part instance that can be meshed. See the `Abaqus Assembly Definition`_ documentation for more information 
+  about defining parts, part instances, and assemblies.
+* Seed the part using the ``--global-seed`` command line argument value to define the global meshing size
 * Mesh the part
-* Assign an element type to the part
+* Assign an element type to the part. See the `Abaqus Elements Guide`_ for more information about defining element 
+  types.
 * Define element and node sets for all elements and all nodes in the model. See the `Abaqus Element Sets`_ documentation 
-  for more information about element sets
+  for more information about element sets.
 * Create an orphan mesh file by calling the ``export_mesh()`` function that was imported from 
   ``abaqus_journal_utilities.py``
 * Save the ``output_file`` with the changes made
 
-The ``single_element_mesh.py`` script also contains an argument parser function. This command line interfaces has yet 
+The ``single_element_mesh.py`` script also contains an argument parser function. This command line interface has yet 
 another new argument ``--global-seed``. This argument defines global mesh sizing for the model and has a default value 
 that is assigned to the ``global_seed`` variable if not specified when calling the script.
 
@@ -334,13 +345,14 @@ below.
     3 directories, 22 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories. 
-Recall from the note earlier in this tutorial that we require the targets from the code pertaining to 
-:ref:`tutorial_geometry_waves` to build the targets for this tutorial. There is an important distinction to be made 
-here. This tutorial is *NOT* utilizing the outputs from :ref:`tutorial_geometry_waves` when we executed the ``scons 
-tutorial_01_geometry_waves`` command. This tutorial us utilizing the outputs generated from executing the same code, but 
-from our new ``tutorial_02_partition_mesh/SConscript`` file. For this reason, we see the same same outputs from the 
-``build/tutorial_01_geometry`` directory in the ``build/tutorial_02_partition_mesh`` directory (along with other 
-:ref:`tutorial_partition_mesh_waves` output files.
+Recall from the note this tutorial's :ref:`tutorial_partition_mesh_waves_SConscript` section that we require the targets 
+from the code pertaining to :ref:`tutorial_geometry_waves` to build the targets for this tutorial. There is an important 
+distinction to be made here. This tutorial is **NOT** utilizing the outputs from :ref:`tutorial_geometry_waves`'s 
+:ref:`tutorial_geometry_waves_build_targets` section when we executed the ``$ scons tutorial_01_geometry`` command. This
+tutorial is utilizing the outputs generated from executing the same code, but from our new 
+``tutorial_02_partition_mesh/SConscript`` file. For this reason, we see the same outputs from the 
+``build/tutorial_01_geometry`` directory in the ``build/tutorial_02_partition_mesh`` directory (along with other
+:ref:`tutorial_partition_mesh_waves` output files).
 
 The new output files pertain to the partitioning and meshing steps we added to the workflow. The file extensions are the 
 same as when we ran the geometry workflow, but now we have an added ``single_element_mesh.inp`` orphan mesh file.
