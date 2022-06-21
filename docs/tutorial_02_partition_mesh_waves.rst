@@ -328,3 +328,14 @@ below.
 
     3 directories, 22 files
 
+Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories. 
+Recall from the note earlier in this tutorial that we require the targets from the code pertaining to 
+:ref:`tutorial_geometry_waves` to build the targets for this tutorial. There is an important distinction to be made 
+here. This tutorial is *NOT* utilizing the outputs from :ref:`tutorial_geometry_waves` when we executed the ``scons 
+tutorial_01_geometry_waves`` command. This tutorial us utilizing the outputs generated from executing the same code, but 
+from our new ``tutorial_02_partition_mesh/SConscript`` file. For this reason, we see the same same outputs from the 
+``build/tutorial_01_geometry`` directory in the ``build/tutorial_02_partition_mesh`` directory (along with other 
+:ref:`tutorial_partition_mesh_waves` output files.
+
+The new output files pertain to the partitioning and meshing steps we added to the workflow. The file extensions are the 
+same as when we ran the geometry workflow, but now we have an added ``single_element_mesh.inp`` orphan mesh file.
