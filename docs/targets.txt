@@ -50,6 +50,7 @@
 .. _`Python argparse`: https://docs.python.org/3/library/argparse.html
 .. _`Python 2.7 argparse`: https://docs.python.org/2.7/library/argparse.html
 .. _`Python pathlib`: https://docs.python.org/3/library/pathlib.html
+.. _`Python Modules`: https://docs.python.org/3/tutorial/modules.html
 .. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
 .. _`Abaqus Scripting`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-ov.htm
 .. _`Abaqus Python Environment`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
