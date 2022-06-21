@@ -35,9 +35,24 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_06_include_files/SConscript tutorial_07_cartesian_product/
 
+.. _tutorial_cartesian_product_waves_parameter_study_file:
+
 ********************
 Parameter Study File
 ********************
+
+In this tutorial, we will use an included parameter study python file to define a parmetet study using a `Cartesian 
+Product`_ sampling methodology.
+
+.. admonition:: What is Cartesian Product
+   
+   A "cartesian product" is a set of all ordered pairs of the elements for a series of list objects. Another commonly 
+   used synonym for `Cartesian Product`_ is *Full Factorial*.
+
+   Take a parameter study defined by variables ``A`` which has three samples, ``B`` which has two samples, and ``C`` 
+   which has one sample. The result will be a parameter study that contains six (``3x2x1``) simulations.
+   
+   For more information, see this `Cartesian Product`_ Wiki page.
 
 5. Create a new file ``eabm_package/python/tutorial_07_cartesian_product.py`` from the content below.
 
@@ -45,6 +60,36 @@ Parameter Study File
 
    .. literalinclude:: python_tutorial_07_cartesian_product.py 
       :language: Python 
+
+The ``tutorial_07_cartesian_product.py`` file you just created is very similar to the 
+``single_element_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference 
+between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters.
+
+In the ``parameter_schema``, we have defined two parameters with two samples each and two parameters with one sample 
+each. This will result in four total simulations. The parameter sets will look like the following:
+
+.. code-block:: yaml
+    
+   parameter_set0:
+     width: 1
+     height: 1
+     global_seed: 1
+     displacement: -1
+   parameter_set1:
+     width: 1.1
+     height: 1
+     global_seed: 1
+     displacement: -1
+   parameter_set2:
+     width: 1
+     height: 1.1
+     global_seed: 1
+     displacement: -1
+   parameter_set3:
+     width: 1.1
+     height: 1.1
+     global_seed: 1
+     displacement: -1
 
 **********
 SConscript
