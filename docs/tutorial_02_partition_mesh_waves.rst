@@ -124,6 +124,18 @@ tutorial.
 Abaqus Journal File
 *******************
 
+Recall from :ref:`tutorial_geometry_waves` that you created an Abaqus journal file called 
+``single_element_geometry.py``. You will now create two more for the partitioning and meshing workflows. The reader is 
+referred to the following sections in :ref:`tutorial_geometry_waves` for a reminder of different aspects of these 
+journal files:
+
+* :ref:`tutorial_geometry_waves_main_functions`
+* :ref:`tutorial_geometry_waves_python_docstrings`
+* :ref:`tutorial_geometry_waves_abaqus_python_code`
+* :ref:`tutorial_geometry_waves_command_line_interfaces`
+* :ref:`tutorial_geometry_waves_top_level_code_environment`
+* :ref:`tutorial_geometry_waves_retrieving_exit_codes`
+
 .. admonition:: single_element_partition.py
    
     .. literalinclude:: abaqus_single_element_partition.py
