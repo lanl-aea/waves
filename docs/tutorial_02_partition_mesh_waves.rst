@@ -139,7 +139,7 @@ journal files:
 7. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_partition.py`` using all the contents 
    below.
 
-.. admonition:: single_element_partition.py
+.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py
    
     .. literalinclude:: abaqus_single_element_partition.py
         :language: Python
@@ -168,10 +168,33 @@ argument is how the script knows which file to copy and then modify in the Abaqu
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":`` 
 statement, and the ``main()`` function is called within ``sys.exit()`` for exit code retrieval.
 
-8. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents 
+8. in the ``eabm_package/abaqus`` directory, create a file called ``abaqus_journal_utilities.py`` using the contents 
    below.
 
-.. admonition:: single_element_mesh.py
+.. admonition:: waves-eabm-tutoria/eabm_package/abaqus/abaqus_journal_utilities.py
+   
+   .. literalinclude:: abaqus_abaqus_journal_utilities.py
+      :language: Python
+      :lineno-match:
+      :end-before: marker-1
+
+The ``abaqus_journal_utilities.py`` script's purpose is to contain commonly used functions that we do not want to 
+duplicate. At the moment, we have only created one function - ``export_mesh()``. The ``export_mesh`` function utlizes an 
+`Abaqus Model Object`_ along with a ``part_name`` and ``orphan_mesh_file`` name to create an orphan mesh file. Orphan 
+mesh files define the an entire part's mesh in a text-based file. The node and element locations and labels are listed 
+in a tabular format that the Abaqus file parser understands.
+
+.. note::
+   
+   Any model developer may have other functions that are commonly used by multiple scripts. An example use case is if 
+   our model has multiple parts that notionally all looked the same. In this case, the model developer could choose to 
+   create a generic geometry generation function and place it in this ``abaqus_journal_utilities.py`` file. The model 
+   developer can then call this function any number of times without duplicating source code.
+
+9. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents 
+   below.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py
    
     .. literalinclude:: abaqus_single_element_mesh.py
         :language: Python
