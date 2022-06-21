@@ -8,6 +8,7 @@ Tutorial 02: Partition and Mesh
 References
 **********
 
+* Adding to `PYTHONPATH`_ with `Python sys`_
 * `Abaqus Node Sets`_
 * `Abaqus Element Sets`_
 * `Abaqus Surfaces`_
@@ -209,9 +210,9 @@ and ``single_element_partition.py`` files. The first significant change is in th
 the file. The ``single_element_mesh.py`` file uses a function called ``export_mesh`` that is imported from the 
 ``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utlities.py`` exists in the 
 ``eabm_package/abaqus`` directory, and is never copied to the builder directory where the journal files are ran with the 
-Abaqus kernel. Without any modifications to your ``PYTHONOATH``, the Abaqus kernel will attempt to import 
+Abaqus kernel. Without any modifications to your `PYTHONPATH`_, the Abaqus kernel will attempt to import 
 ``abaqus_journal_utilities``, but will not be able to find that file (because it is not in the build directory). In 
-order to solve this problem, we must add the location of the ``abaqus_journal_utlities.py`` file to ``$PYTHONPATH`` at 
+order to solve this problem, we must add the location of the ``abaqus_journal_utlities.py`` file to `PYTHONPATH`_ at 
 run time.
 
 .. note::
@@ -222,7 +223,7 @@ run time.
 
 First, the ``filename`` is extracted in the same as in :ref:`tutorial_geometry_waves` in the 
 :ref:`tutorial_geometry_waves_command_line_interfaces` code. Then, we use ``sys.path.insert`` from the `Python sys`_ 
-package to add the location of the current file (``single_element_mesh.py``) to the ``PYTHONPATH``.
+package to add the location of the current file (``single_element_mesh.py``) to the `PYTHONPATH`_.
 
 From this point, the ``main()`` function proceeds to copy the input file just like in ``single_element_partition.py``. 
 The code that follows performs the following tasks within the new ``output_file``:
