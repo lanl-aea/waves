@@ -65,6 +65,8 @@
 .. _`Abaqus Element Sets`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/SIMACAEMODRefMap/simamod-c-element.htm?exalead=t&q=sets#simamod-c-element-t-GroupingElementsIntoElementSets-sma-topic9
 .. _`Abaqus Surfaces`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEMODRefMap/simamod-c-deformablesurf.htm
 .. _`Abaqus Model Object`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-modelpyc.htm
+.. _`Abaqus Assembly Definition`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEMODRefMap/simamod-c-partassy.htm
+.. _`Abaqus Elements Guide`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-ov.htm
 .. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
 .. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
 .. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
