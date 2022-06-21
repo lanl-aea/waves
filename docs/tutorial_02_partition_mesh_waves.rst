@@ -103,15 +103,16 @@ tutorial.
 
 The ``target`` list, however, shows another difference with the behavior we have seen previously. Now, we have two 
 targets instead of one. You should now be familiar with the behavior that generates the ``single_element_mesh.cae`` 
-target. The new target is the ``single_element_mesh.inp`` file. This file is called an `Abaqus Orphan Mesh`_ file. When 
-the :meth:`waves.builders.abaqus_journal` builder acts on the ``single_element_mesh.py`` file, our two target files are 
+target. The new target is the ``single_element_mesh.inp`` file. This file is called an *orphan mesh* file. When the 
+:meth:`waves.builders.abaqus_journal` builder acts on the ``single_element_mesh.py`` file, our two target files are 
 created. The orphan mesh file is created by calling the ``export_mesh()`` function within the ``single_element_mesh.py`` 
-file. See the :ref:`sphinx_api`, specifically the :ref:`sphinx_abaqus_journal_utilities_api`, for more information about 
-the ``export_mesh()`` function.
+file. See the :ref:`sphinx_api`, specifically the :ref:`sphinx_abaqus_journal_utilities_api` API, for more information 
+about the ``export_mesh()`` function.
 
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_geometry_waves` is included below to help identify the 
-changes made in this tutorial.
+In summary of the changes you just made to the ``tutorial_02_partition_mesh/SConscript`` file, a ``diff`` against the 
+``SConscript`` file from :ref:`tutorial_geometry_waves` is included below to help identify the changes made in this 
+tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh/SConscript
    
