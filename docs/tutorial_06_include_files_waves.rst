@@ -108,7 +108,6 @@ SConstruct
 8. Use the ``diff`` below to modify your ``waves-eabm-tutorial/SConstruct file`` in the following ways:
    
    * Add the ``waves-eabm-tutorial`` directory to your PYTHONPATH to make the ``eabm_package`` importable
-   * Add the ``python_source_dir`` key-value pair to the ``project_variables`` dictionary
    * Add ``tutorial_06_include_files`` to the ``eabm_simulation_directories`` list
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help identify the
@@ -123,7 +122,8 @@ changes made in this tutorial.
 The first change you made allows for us to import modules from the ``eabm_package`` package. This step is neccessary to 
 be able to import the ``eabm_package.python`` module in the ``tutorial_06_include_files/SConscript`` file.
 
-The next c
+The last change to be made is adding ``tutorial_06_include_files`` to the ``eabm_simulation_directories`` list. This 
+process should be quite familiar by now.
 
 *************
 Build Targets 
