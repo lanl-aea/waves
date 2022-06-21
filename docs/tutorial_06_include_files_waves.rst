@@ -8,6 +8,9 @@ Tutorial 06: Include Files
 References
 **********
 
+* Adding to `PYTHONPATH`_ with `Python sys`_
+* `Python Modules`_
+
 ***********
 Environment
 ***********
@@ -43,6 +46,8 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir -p eabm_package/python
 
+.. _tutorial_include_files_waves_python_parameter_file:
+
 *********************
 Python Parameter File
 *********************
@@ -71,7 +76,7 @@ SConscript
    * Import ``single_element_compression_nominal`` from the ``eabm_package.python`` module
    * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution_waves`'s 
      code
-   * Define ``simulation_variables`` and ``simulation_substituion_dictionary`` using the newly imported 
+   * Define ``simulation_variables`` and ``simulation_substitution_dictionary`` using the newly imported 
      ``single_element_compression_nominal`` module
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help 
@@ -84,10 +89,10 @@ identify the changes made in this tutorial.
       :diff: tutorial_05_parameter_substitution_SConscript
 
 The first change to be made is importing the ``single_element_compression_nominal`` module from the 
-``eabm_package.python`` module you created in the previous tutorial step. This import statement will import all 
-variables within the ``single_element_compression_nominal.py`` file and make them available in the ``SConscript`` file's 
-name space. See the `Python Modules`_ documentation for more information about importing modules. You can access those 
-variables with the following syntax:
+``eabm_package.python`` module you created in the :ref:`tutorial_include_files_waves_python_parameter_file` section of 
+this tutorial. This import statement will import all variables within the ``single_element_compression_nominal.py`` file 
+and make them available in the ``SConscript`` file's name space. See the `Python Modules`_ documentation for more 
+information about importing modules. You can access those variables with the following syntax:
 
 .. code-block:: python
 
@@ -99,17 +104,18 @@ remained from :ref:`tutorial_parameter_substitution_waves`'s code.
 
 The final change made in the ``tutorial_06_include_files/SConscript`` file is to re-define the ``simulation_variables`` 
 and ``simulation_substitution_dictionary`` variables by utlizing the ``single_element_compression_nominal`` module. The 
-The end result at this point in the code is the same between this tutorial and 
-:ref:`tutorial_parameter_substitution_waves`. However, now we import variables from a separate file, and allow ourselves
-the ability to change parameters without modification to the ``SConscript`` file.
+end result at this point in the code is the same between this tutorial and :ref:`tutorial_parameter_substitution_waves`. 
+However, now we import variables from a separate file, and allow ourselves the ability to change parameters without 
+modification to the ``SConscript`` file.
 
 **********
 SConstruct
 **********
 
-8. Use the ``diff`` below to modify your ``waves-eabm-tutorial/SConstruct file`` in the following ways:
+8. Use the ``diff`` below to modify your ``waves-eabm-tutorial/SConstruct`` file in the following ways:
    
-   * Add the ``waves-eabm-tutorial`` directory to your PYTHONPATH to make the ``eabm_package`` importable
+   * Add the ``waves-eabm-tutorial`` directory to your `PYTHONPATH`_ to make the ``eabm_package`` - and thus 
+     the modules within it - importable
    * Add ``tutorial_06_include_files`` to the ``eabm_simulation_directories`` list
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help identify the
@@ -190,7 +196,7 @@ Build Targets
 Output Files
 ************
 
-Explore the contents of the ``build`` directory`` using the ``tree`` command against the ``build`` directory, as shown 
+Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown 
 below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command output.
 
 .. code-block:: bash
@@ -256,8 +262,9 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
     2 directories, 51 files
 
 The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution_waves`. As 
-was mentioned when modifying the :ref:`tutorial_include_files_waves_SConscript`, the use of an included Python file to 
-define our parameters is that same as when we hard-code the parameters into the ``SConscript`` file. It is also worth 
-noting that the ``eabm_package/python/single_element_compression_nominal.py`` file did not get copied to the build 
-directory. Instead, we added the ``eabm_package/python`` directory to ``PYTHONPATH``. This way we can import the file 
-from its source location and remove any need to duplicate source code by copying files from place to place.
+was mentioned when modifying the :ref:`tutorial_include_files_waves_SConscript` file, the use of an included Python file 
+to define our parameters provides the same result as when we hard-code the parameters into the ``SConscript`` file. It 
+is also worth noting that the ``eabm_package/python/single_element_compression_nominal.py`` file did not get copied to 
+the build directory. Instead, we added the ``eabm_package`` directory to `PYTHONPATH`_. This way we can import the 
+``single_element_compression_nominal`` module from its source location and remove any need to duplicate source code by 
+copying files from place to place.
