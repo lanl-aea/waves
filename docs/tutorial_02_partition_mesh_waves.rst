@@ -38,6 +38,7 @@ Directory Structure
 SConscript
 **********
 
+5. Modify your ``tutorial_02_partition_mesh/SConscript`` file
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_geometry_waves` is included below to help identify the 
 changes made in this tutorial.
 
