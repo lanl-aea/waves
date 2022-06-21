@@ -159,6 +159,8 @@ It is important to note that ``single_element_geometry.py`` is, indeed, an Abaqu
 file - even though it does not look like a journal file produced by an Abaqus CAE GUI 
 session.
 
+.. _tutorial_geometry_waves_main_functions:
+
 ``main`` Functions
 ==================
 The top of the file imports standard library modules used by the script's functions along 
@@ -170,6 +172,8 @@ inputs (known as sources) and outputs (known as targets). In this case, the
 ``output_file`` is the target which is created from the source - the 
 ``single_element_geometry.py`` file.
 
+.. _tutorial_geometry_waves_python_docstrings:
+
 Python Docstrings
 =================
 The highlighted lines of code at the beginning of the ``main()`` function are called a docstring. 
@@ -180,6 +184,8 @@ its interface. See the `PEP-257`_ conventions for docstring formatting along wit
 `PEP-287`_ for syntax specific to reStructured Text. Using the `Sphinx automodule`_ 
 directive, the docstring can be used to autobuild documentation for your functions. An 
 example of this is in the :ref:`sphinx_api`.
+
+.. _tutorial_geometry_waves_abaqus_python_code:
 
 Abaqus Python Code
 ==================
@@ -197,6 +203,7 @@ Abaqus Python 2.7 environment.
 
 .. TODO link to abaqus scripting documentation, specifically mention python 2.7
 
+.. _tutorial_geometry_waves_command_line_interfaces:
 Command Line Interfaces
 =======================
 8. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
@@ -270,6 +277,8 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
         :lineno-match:
         :start-after: marker-2
 
+.. _tutorial_geometry_waves_top_level_code_environment:
+
 Top-Level Code Environment
 ==========================
 When the script is executed, an internal variable ``__name__`` is set to the value 
@@ -284,6 +293,8 @@ The first lines within the ``if __name__ == "__main__"`` context call the
 arguments. This is required for Abaqus journal files, because Abaqus will not strip the 
 CAE options from the ``abaqus cae -nogui`` command, which are irrelevant to and unused by 
 the journal file interface.
+
+.. _tutorial_geometry_waves_retrieving_exit_codes:
 
 Retrieving Exit Codes
 =====================
