@@ -60,6 +60,8 @@ file in favor of hardcoding the parameter definitions in the ``SConscript`` file
 The file you just created is an exact copy of the code in your ``tutorial_05_parameter_substitution/SConscript`` file 
 that defines the key-value pairs for parameters.
 
+.. _tutorial_include_files_waves_SConscript:
+
 **********
 SConscript
 **********
@@ -129,14 +131,133 @@ process should be quite familiar by now.
 Build Targets 
 *************
 
-7. Build the new targets
+9. Build the new targets
 
 .. code-block:: bash
 
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ scons tutorial_06_include_files
+    $ pwd
+    /path/to/waves-eabm-tutorial
+    $ scons tutorial_06_include_files
+    scons: Reading SConscript files ...
+      warnings.warn(
+    Checking whether sphinx-build program exists.../projects/aea_compute/aea-beta/bin/sphinx-build
+    Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
+    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
+    scons: done reading SConscript files.
+    scons: Building targets ...
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information 
+    environment > single_element_geometry.abaqus_v6.env
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 > 
+    single_element_geometry.stdout 2>&1
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information 
+    environment > single_element_partition.abaqus_v6.env
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 > 
+    single_element_partition.stdout 2>&1
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information 
+    environment > single_element_mesh.abaqus_v6.env
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 > 
+    single_element_mesh.stdout 2>&1
+    Copy("build/tutorial_06_include_files/single_element_compression.inp.in", 
+    "eabm_package/abaqus/single_element_compression.inp.in")
+    Creating 'build/tutorial_06_include_files/single_element_compression.inp'
+    Copy("build/tutorial_06_include_files/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
+    Copy("build/tutorial_06_include_files/assembly.inp", "eabm_package/abaqus/assembly.inp")
+    Copy("build/tutorial_06_include_files/boundary.inp", "eabm_package/abaqus/boundary.inp")
+    Copy("build/tutorial_06_include_files/field_output.inp", "eabm_package/abaqus/field_output.inp")
+    Copy("build/tutorial_06_include_files/materials.inp", "eabm_package/abaqus/materials.inp")
+    Copy("build/tutorial_06_include_files/parts.inp", "eabm_package/abaqus/parts.inp")
+    Copy("build/tutorial_06_include_files/history_output.inp", "eabm_package/abaqus/history_output.inp")
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information 
+    environment > single_element_compression_DATACHECK.abaqus_v6.env
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -job 
+    single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete 
+    no > single_element_compression_DATACHECK.stdout 2>&1
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && ! grep -iE "error" 
+    single_element_compression_DATACHECK.stdout
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information 
+    environment > single_element_compression.abaqus_v6.env
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -job 
+    single_element_compression -input single_element_compression -double both -interactive -ask_delete no > 
+    single_element_compression.stdout 2>&1
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && ! grep -iE "error" 
+    single_element_compression.stdout
+    scons: done building targets.
 
 ************
 Output Files
 ************
+
+Explore the contents of the ``build`` directory`` using the ``tree`` command against the ``build`` directory, as shown 
+below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command output.
+
+.. code-block:: bash
+    
+    $ pwd
+    /home/roppenheimer/waves-eabm-tutorial
+    $ tree build/ -I 'tutorial_0[1,2,3,4,5]*'
+    build/
+    ├── docs
+    │   └── SConscript
+    └── tutorial_06_include_files
+        ├── abaqus.rpy
+        ├── abaqus.rpy.1
+        ├── abaqus.rpy.2
+        ├── amplitudes.inp
+        ├── assembly.inp
+        ├── boundary.inp
+        ├── field_output.inp
+        ├── history_output.inp
+        ├── materials.inp
+        ├── parts.inp
+        ├── single_element_compression.abaqus_v6.env
+        ├── single_element_compression.com
+        ├── single_element_compression.dat
+        ├── single_element_compression_DATACHECK.023
+        ├── single_element_compression_DATACHECK.abaqus_v6.env
+        ├── single_element_compression_DATACHECK.com
+        ├── single_element_compression_DATACHECK.dat
+        ├── single_element_compression_DATACHECK.mdl
+        ├── single_element_compression_DATACHECK.msg
+        ├── single_element_compression_DATACHECK.odb
+        ├── single_element_compression_DATACHECK.par
+        ├── single_element_compression_DATACHECK.pes
+        ├── single_element_compression_DATACHECK.pmg
+        ├── single_element_compression_DATACHECK.prt
+        ├── single_element_compression_DATACHECK.sim
+        ├── single_element_compression_DATACHECK.stdout
+        ├── single_element_compression_DATACHECK.stt
+        ├── single_element_compression.inp
+        ├── single_element_compression.inp.in
+        ├── single_element_compression.msg
+        ├── single_element_compression.odb
+        ├── single_element_compression.par
+        ├── single_element_compression.pes
+        ├── single_element_compression.pmg
+        ├── single_element_compression.prt
+        ├── single_element_compression.sta
+        ├── single_element_compression.stdout
+        ├── single_element_geometry.abaqus_v6.env
+        ├── single_element_geometry.cae
+        ├── single_element_geometry.jnl
+        ├── single_element_geometry.stdout
+        ├── single_element_mesh.abaqus_v6.env
+        ├── single_element_mesh.cae
+        ├── single_element_mesh.inp
+        ├── single_element_mesh.jnl
+        ├── single_element_mesh.stdout
+        ├── single_element_partition.abaqus_v6.env
+        ├── single_element_partition.cae
+        ├── single_element_partition.jnl
+        └── single_element_partition.stdout
+
+    2 directories, 51 files
+
+The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution_waves`. As 
+was mentioned when modifying the :ref:`tutorial_include_files_waves_SConscript`, the use of an included Python file to 
+define our parameters is that same as when we hard-code the parameters into the ``SConscript`` file. It is also worth 
+noting that the ``eabm_package/python/single_element_compression_nominal.py`` file did not get copied to the build 
+directory. Instead, we added the ``eabm_package/python`` directory to ``PYTHONPATH``. This way we can import the file 
+from its source location and remove any need to duplicate source code by copying files from place to place.
