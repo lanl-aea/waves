@@ -342,8 +342,10 @@ collector alias will point to the list of targets to build specified in the
            :language: Python
            :diff: eabm_tutorial_00_SConstruct
 
+.. _tutorial_geometry_waves_build_targets:
+
 ****************
-Building targets
+Building Targets
 ****************
 
 Now that you've created the geometry part build file in your ``tutorial_01_geometry`` 
