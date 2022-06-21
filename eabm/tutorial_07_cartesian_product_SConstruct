@@ -52,8 +52,7 @@ project_variables = {
     'project_name': project_name,
     'project_dir': Dir('.').abspath,
     'version': version,
-    'abaqus_source_dir': 'eabm_package/abaqus',
-    'python_source_dir': 'eabm_package/python'
+    'abaqus_source_dir': 'eabm_package/abaqus'
 }
 for key, value in project_variables.items():
     env[key] = value
