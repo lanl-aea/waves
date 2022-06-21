@@ -24,6 +24,8 @@ workflow.extend(env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options))
 
+# Comment used in tutorial code snippets: marker-1
+
 # Partition
 journal_file = f"{model}_partition"
 journal_options = ""
@@ -39,6 +41,8 @@ workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.inp"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options))
+
+# Comment used in tutorial code snippets: marker-2
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
