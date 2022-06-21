@@ -67,7 +67,8 @@ SConscript
 7. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files/SConscript`` file:
 
    * Import ``single_element_compression_nominal`` from the ``eabm_package.python`` module
-   * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution`'s code
+   * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution_waves`'s 
+     code
    * Define ``simulation_variables`` and ``simulation_substituion_dictionary`` using the newly imported 
      ``single_element_compression_nominal`` module
 
@@ -92,13 +93,13 @@ variables with the following syntax:
    single_element_compression_nominal.simulation_substitution_dictionary
 
 The second change removes the code that defines ``simulation_variables`` and ``simulation_substitution_dictionary`` that 
-remained from :ref:`tutorial_parameter_substitution`'s code.
+remained from :ref:`tutorial_parameter_substitution_waves`'s code.
 
 The final change made in the ``tutorial_06_include_files/SConscript`` file is to re-define the ``simulation_variables`` 
 and ``simulation_substitution_dictionary`` variables by utlizing the ``single_element_compression_nominal`` module. The 
-The end result at this point in the code is the same between this tutorial and :ref:`tutorial_parameter_substitution`. 
-However, now we import variables from a separate file, and allow ourselves the ability to change parameters without 
-modification to the ``SConscript`` file.
+The end result at this point in the code is the same between this tutorial and 
+:ref:`tutorial_parameter_substitution_waves`. However, now we import variables from a separate file, and allow ourselves
+the ability to change parameters without modification to the ``SConscript`` file.
 
 **********
 SConstruct
