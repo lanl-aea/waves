@@ -24,6 +24,7 @@ Bug fixes
 Documentation
 =============
 - Add source code links to WAVES and WAVES-EABM documentation (:issue:`173`, :merge:`148`). By `Kyle Brindley`_.
+- Completed WAVES Tutorial 02: Partition and Mesh (:issue:`98`, :merge:`149`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
