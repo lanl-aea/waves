@@ -14,6 +14,8 @@ Environment
 
 .. include:: tutorial_environment_activation.txt
 
+.. _tutorial_cartesian_product_waves_directory_structure:
+
 *******************
 Directory Structure
 *******************
@@ -99,10 +101,82 @@ The ``diff`` for changes in the ``SConscript`` file for this tutorial is extensi
 wrapping the task generation for each parameter set. For convenience, the full source file is included below to aid in a
 wholesale copy and paste when creating the new ``SConscript`` file.
 
+.. note::
+   
+   In the :ref:`tutorial_cartesian_product_waves_directory_structure` section of this tutorial, you were instructed to 
+   copy the ``SConscript`` file from :ref:`tutorial_include_files_waves` to the ``tutorial_07_cartesian_product`` 
+   directory. If you prefer, you may start with a blank ``SConscript`` file in the ``tutorial_07_cartesian_product`` 
+   directory and simply copy and paste the contents below into your blank file.
+
+After viewing the full file contents below, continue to read the step by step procedure for building the 
+``tutorial_07_cartesian_product/SConscript`` file from scratch.
+
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
       :language: Python
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
+      :lineno-match:
+      :end-before: marker-1
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-1
+      :end-before: marker-2
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-2
+      :end-before: marker-3
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-3
+      :end-before: marker-4
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-4
+      :end-before: marker-5
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-5
+      :end-before: marker-6
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-6
+      :end-before: marker-7
+
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
+
+   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-7
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.
