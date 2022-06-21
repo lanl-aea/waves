@@ -8,6 +8,10 @@ Tutorial 02: Partition and Mesh
 References
 **********
 
+* `Abaqus Node Sets`_
+* `Abaqus Element Sets`_
+* `Abaqus Surfaces`_
+
 ***********
 Environment
 ***********
