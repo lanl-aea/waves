@@ -20,3 +20,5 @@ def export_mesh(model_object, part_name, orphan_mesh_file):
     part_definition = orphan_mesh[0]
     with open('{}.inp'.format(orphan_mesh_file), 'w') as output:
         output.write(part_definition[1].strip())
+
+# Comment used in tutorial code snippets: marker-1
