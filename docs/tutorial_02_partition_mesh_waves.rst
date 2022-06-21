@@ -153,9 +153,9 @@ does a few specific tasks:
 * Copy the ``input_file`` to an identical ``output_file`` with a new name
 * Within the new ``output_file``, do the following:
 
-  * Create node sets at four corners of the single element part. See the `Abaqus Node Sets` documentation for more 
+  * Create node sets at four corners of the single element part. See the `Abaqus Node Sets`_ documentation for more 
     information about node sets.
-  * Create surfaces for the four sides of the single element part. See the `Abaqus Surfaces` documentation for more 
+  * Create surfaces for the four sides of the single element part. See the `Abaqus Surfaces`_ documentation for more 
     information about surfaces.
 
 * Save the ``output_file`` with the changes made
@@ -176,6 +176,45 @@ statement, and the ``main()`` function is called within ``sys.exit()`` for exit 
     .. literalinclude:: abaqus_single_element_mesh.py
         :language: Python
         :lineno-match:
+
+The ``single_element_mesh.py`` file will have many similarities in code structure to the ``single_element_geometry.py`` 
+and ``single_element_partition.py`` files. The first significant change is in the ``import`` statements at the top of 
+the file. The ``single_element_mesh.py`` file uses a function called ``export_mesh`` that is imported from the 
+``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utlities.py`` exists in the 
+``eabm_package/abaqus`` directory, and is never copied to the builder directory where the journal files are ran with the 
+Abaqus kernel. Without any modifications to your ``PYTHONOATH``, the Abaqus kernel will attempt to import 
+``abaqus_journal_utilities``, but will not be able to find that file (because it is not in the build directory). In 
+order to solve this problem, we must add the location of the ``abaqus_journal_utlities.py`` file to ``$PYTHONPATH`` at 
+run time.
+
+.. note::
+   
+   While the ``single_element_mesh.py`` script is also never copied to the run directory, it is executed via absolute 
+   path from within the run directory. For this reason, we can utilize the path of the ``single_element_mesh.py`` file 
+   to point to the location of the ``abaqus_journal_utlities`` file as well.
+
+First, the ``filename`` is extracted in the same as in :ref:`tutorial_geometry_waves` in the 
+:ref:`tutorial_geometry_waves_command_line_interfaces` code. Then, we use ``sys.path.insert`` from the `Python sys`_ 
+package to add the location of the current file (``single_element_mesh.py``) to the ``PYTHONPATH``.
+
+From this point, the ``main()`` function proceeds to copy the input file just like in ``single_element_partition.py``. 
+The code that follows performs the following tasks within the new ``output_file``:
+
+* Create a part instance that can be meshed
+* Seed the part using the ``global_seed`` command line argument value to define the global meshing size
+* Mesh the part
+* Assign an element type to the part
+* Define element and node sets for all elements and all nodes in the model. See the `Abaqus Element Sets`_ documentation 
+  for more information about element sets
+* Create an orphan mesh file by calling the ``export_mesh()`` function that was imported from 
+  ``abaqus_journal_utilities.py``
+* Save the ``output_file`` with the changes made
+
+The ``single_element_mesh.py`` script also contains an argument parser function. This command line interfaces has yet 
+another new argument ``--global-seed``. This argument defines global mesh sizing for the model and has a default value 
+that is assigned to the ``global_seed`` variable if not specified when calling the script.
+
+All other aspects of the ``single_element_mesh.py`` file are the same as ``single_element_partition.py``.
 
 **********
 SConstruct
