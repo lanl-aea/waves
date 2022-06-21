@@ -10,8 +10,9 @@ References
 
 * Adding to `PYTHONPATH`_ with `Python sys`_
 * `Abaqus Node Sets`_
-* `Abaqus Element Sets`_
+* `Abaqus Element Sets`_ and `Abaqus Elements Guide`_
 * `Abaqus Surfaces`_
+* `Abaqus Assembly Definition`_
 
 ***********
 Environment
