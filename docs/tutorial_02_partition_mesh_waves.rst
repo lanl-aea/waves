@@ -168,6 +168,9 @@ argument is how the script knows which file to copy and then modify in the Abaqu
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":`` 
 statement, and the ``main()`` function is called within ``sys.exit()`` for exit code retrieval.
 
+8. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents 
+   below.
+
 .. admonition:: single_element_mesh.py
    
     .. literalinclude:: abaqus_single_element_mesh.py
