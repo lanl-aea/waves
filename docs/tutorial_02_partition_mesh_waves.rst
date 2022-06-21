@@ -136,11 +136,37 @@ journal files:
 * :ref:`tutorial_geometry_waves_top_level_code_environment`
 * :ref:`tutorial_geometry_waves_retrieving_exit_codes`
 
+7. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_partition.py`` using all the contents 
+   below.
+
 .. admonition:: single_element_partition.py
    
     .. literalinclude:: abaqus_single_element_partition.py
         :language: Python
         :lineno-match:
+
+The ``single_element_partition.py`` file is layed out in a very similar fashion to ``single_element_geometry.py``. It 
+contains a ``main()`` function with `PEP-287` formatted docstrings. Within that main function is Abaqus python code that 
+does a few specific tasks:
+
+* Format the ``--input-file`` and ``--output-file`` command line arguments with file extensions
+* Copy the ``input_file`` to an identical ``output_file`` with a new name
+* Within the new ``output_file``, do the following:
+
+  * Create node sets at four corners of the single element part. See the `Abaqus Node Sets` documentation for more 
+    information about node sets.
+  * Create surfaces for the four sides of the single element part. See the `Abaqus Surfaces` documentation for more 
+    information about surfaces.
+
+* Save the ``output_file`` with the changes made
+
+The ``single_element_partition.py`` script also contains an argument parser function, whose auto-generated CLI 
+documentation can be found in the :ref:`sphinx_cli`. The argument parser functions in a very similar way to that in the 
+``single_element_geometry.py`` file, but a new command line argument ``--input-file`` is added. This command line 
+argument is how the script knows which file to copy and then modify in the Abaqus python code.
+
+Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":`` 
+statement, and the ``main()`` function is called within ``sys.exit()`` for exit code retrieval.
 
 .. admonition:: single_element_mesh.py
    
