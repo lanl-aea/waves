@@ -26,6 +26,7 @@ Bug fixes
 Documentation
 =============
 - Add source code links to WAVES and WAVES-EABM documentation (:issue:`173`, :merge:`148`). By `Kyle Brindley`_.
+- Completed WAVES Tutorial 05: Parameter Substitution (:issue:`137`, :merge:`101`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
