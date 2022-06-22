@@ -1734,10 +1734,16 @@ class OdbReportFileParser(AbaqusFileParser):
                     value['sectionPoint'] = int(line_values[line_value_number])
                     line_value_number += 1
                 if integration_point_given:
-                    value['integrationPoint'] = int(line_values[line_value_number])
+                    try:
+                        value['integrationPoint'] = int(line_values[line_value_number])
+                    except ValueError:
+                        value['integrationPoint'] = None
                 # get the values after the first 5 values of: Instance, Element, Node, SP, IP
                 for i, datum in enumerate(line_values[-number_of_data_values:]):
-                    value[value_headers[i]] = float(datum)
+                    try:
+                        value[value_headers[i]] = float(datum)
+                    except ValueError:  # The float command will fail on None
+                        value[value_headers[i]] = None
                 values.append(value)
             else:
                 time_value = float(self.current_frame['frame value'])
@@ -1768,7 +1774,10 @@ class OdbReportFileParser(AbaqusFileParser):
                     line_value_number += 1
                 if integration_point_given:
                     if just_added:
-                        values[value_instance]['integrationPoint'].append(int(line_values[line_value_number]))
+                        try:
+                            values[value_instance]['integrationPoint'].append(int(line_values[line_value_number]))
+                        except ValueError:
+                            values[value_instance]['integrationPoint'].append(None)
 
                 if self.new_step and not values[value_instance]['values'][self.current_step_count]:
                     for time_index in range(len(values[value_instance]['time_index'])):
@@ -1800,7 +1809,10 @@ class OdbReportFileParser(AbaqusFileParser):
                 else:
                     data_value = list()
                     for datum in line_values[-number_of_data_values:]:
-                        data_value.append(float(datum))
+                        try:
+                            data_value.append(float(datum))
+                        except ValueError:  # Should be raised on None values
+                            data_value.append(None)
 
                 if just_added:
                     if self.first_field_data:
