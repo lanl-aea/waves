@@ -1734,10 +1734,16 @@ class OdbReportFileParser(AbaqusFileParser):
                     value['sectionPoint'] = int(line_values[line_value_number])
                     line_value_number += 1
                 if integration_point_given:
-                    value['integrationPoint'] = int(line_values[line_value_number])
+                    try:
+                        value['integrationPoint'] = int(line_values[line_value_number])
+                    except ValueError:
+                        value['integrationPoint'] = None
                 # get the values after the first 5 values of: Instance, Element, Node, SP, IP
                 for i, datum in enumerate(line_values[-number_of_data_values:]):
-                    value[value_headers[i]] = float(datum)
+                    try:
+                        value[value_headers[i]] = float(datum)
+                    except ValueError:  # The float command will fail on None
+                        value[value_headers[i]] = None
                 values.append(value)
             else:
                 time_value = float(self.current_frame['frame value'])
@@ -1768,7 +1774,10 @@ class OdbReportFileParser(AbaqusFileParser):
                     line_value_number += 1
                 if integration_point_given:
                     if just_added:
-                        values[value_instance]['integrationPoint'].append(int(line_values[line_value_number]))
+                        try:
+                            values[value_instance]['integrationPoint'].append(int(line_values[line_value_number]))
+                        except ValueError:
+                            values[value_instance]['integrationPoint'].append(None)
 
                 if self.new_step and not values[value_instance]['values'][self.current_step_count]:
                     for time_index in range(len(values[value_instance]['time_index'])):
@@ -1800,7 +1809,10 @@ class OdbReportFileParser(AbaqusFileParser):
                 else:
                     data_value = list()
                     for datum in line_values[-number_of_data_values:]:
-                        data_value.append(float(datum))
+                        try:
+                            data_value.append(float(datum))
+                        except ValueError:  # Should be raised on None values
+                            data_value.append(None)
 
                 if just_added:
                     if self.first_field_data:
@@ -2277,7 +2289,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 xr_dataset = extract[keys[0]][keys[1]][keys[2]]
             # Create or append to h5 file with xarray datasets
             if xr_dataset:  # If the dataset isn't empty
-                xr_dataset.to_netcdf(path=filename, mode='a', format="NETCDF4", group=dataset, engine=_settings.XARRAY_ENGINE)
+                xr_dataset.to_netcdf(path=filename, mode='a', format="NETCDF4", group=dataset, engine=_settings._default_xarray_engine)
                 extract_h5[dataset] = h5py.ExternalLink(filename, dataset)  # Link to datasets in file
                 non_empty_datasets.append(dataset)
 
@@ -2353,7 +2365,7 @@ class OdbReportFileParser(AbaqusFileParser):
             elif isinstance(item, dict):
                 self.save_dict_to_group(h5file, f'{path}{key}/', item, output_file)
             elif isinstance(item, xr.core.dataset.Dataset) or isinstance(item, xr.core.dataarray.DataArray):
-                item.to_netcdf(path=output_file, mode='a', format="NETCDF4", group=f'{path}{key}/', engine=XARRAY_ENGINE)
+                item.to_netcdf(path=output_file, mode='a', format="NETCDF4", group=f'{path}{key}/', engine=_settings._default_xarray_engine)
                 # TODO: In future additions of xarray, consider using option 'invalid_netcdf=True'
             else:
                 raise ValueError(f'Cannot save {type(item)} type to hdf5 file.')

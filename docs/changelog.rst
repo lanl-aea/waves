@@ -9,6 +9,10 @@ Changelog
 0.1.13 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Abaqus File Parser will now handle blank values for Integration Points even when the 'IP' heading is given (:issue:`176`, :merge:`153`). By `Prabhu Khalsa`_.
+
 Documentation
 =============
 - Add source code links to WAVES and WAVES-EABM documentation (:issue:`173`, :merge:`148`). By `Kyle Brindley`_.
