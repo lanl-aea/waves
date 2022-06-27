@@ -115,9 +115,7 @@ for file_path in tutorial_files_list:
 # https://re-git.lanl.gov/kbrindley/waves/-/issues/4
 sphinx_options = '-W'
 html = env.Command(
-    # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
-    # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
-    target=['dummy_html', 'html/index.html'],
+    target=['html/'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
