@@ -125,7 +125,7 @@ alias_list.extend(env.Alias('html', html))
 latexpdf = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
-    target=['dummy_latexpdf', 'latex/waves.pdf'],
+    target=['latex/'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
 env.Clean(latexpdf, 'latex/')
@@ -134,10 +134,11 @@ alias_list.extend(env.Alias('latexpdf', latexpdf))
 man = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
-    target=['dummy_man', 'man/waves.1'],
+    target=['man/'],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man",
     sphinx_options=sphinx_options)
+env.Clean(man, 'man')
 alias_list.extend(env.Alias('man', man))
 
 # Collector alias to build all documentation
