@@ -120,6 +120,7 @@ html = env.Command(
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
 env.Clean(html, Dir('html'))
+env.AlwaysBuild(html)
 alias_list.extend(env.Alias('html', html))
 
 latexpdf = env.Command(
@@ -127,6 +128,7 @@ latexpdf = env.Command(
     source=documentation_file_list,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
 env.Clean(latexpdf, Dir('latex'))
+env.AlwaysBuild(latexpdf)
 alias_list.extend(env.Alias('latexpdf', latexpdf))
 
 man = env.Command(
@@ -135,6 +137,7 @@ man = env.Command(
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man",
     sphinx_options=sphinx_options)
 env.Clean(man, Dir('man'))
+env.AlwaysBuild(man)
 alias_list.extend(env.Alias('man', man))
 
 # Collector alias to build all documentation

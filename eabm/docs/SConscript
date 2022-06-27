@@ -47,6 +47,7 @@ html = env.Command(
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
 env.Clean(html, Dir('html'))
+env.AlwaysBuild(html)
 alias_list.extend(env.Alias('html', html))
 
 # Collector alias to build all documentation
