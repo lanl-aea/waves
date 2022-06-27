@@ -115,7 +115,7 @@ for file_path in tutorial_files_list:
 # https://re-git.lanl.gov/kbrindley/waves/-/issues/4
 sphinx_options = '-W'
 html = env.Command(
-    target=['html/'],
+    target=[Dir('html')],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
     sphinx_options=sphinx_options)
@@ -125,7 +125,7 @@ alias_list.extend(env.Alias('html', html))
 latexpdf = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
-    target=['latex/'],
+    target=[Dir('latex')],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
 env.Clean(latexpdf, 'latex/')
@@ -134,7 +134,7 @@ alias_list.extend(env.Alias('latexpdf', latexpdf))
 man = env.Command(
     # TODO: figure out how to keep the Command in the "build/docs" directory without a leading dummy filename
     # https://re-git.lanl.gov/kbrindley/waves/-/issues/5
-    target=['man/'],
+    target=[Dir('man')],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man",
     sphinx_options=sphinx_options)
