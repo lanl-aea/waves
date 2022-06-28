@@ -23,6 +23,8 @@ Internal Changes
   :merge:`150`). By `Thomas Roberts`_.
 - Remove the dummy file targets for documentation builds to allow conditional re-building only on source/target content
   changes (:issue:`5`, :merge:`154`). By `Kyle Brindley`_.
+- Unpinned Sphinx version. Added fix to avoid warnings treated as errors (:issue:`178`, :merge:`155`). 
+  By `Sergio Cordova`_.
 
 *******************
 0.1.12 (2022-06-17)
