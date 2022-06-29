@@ -7,7 +7,7 @@ scons
 setuptools
 setuptools_scm
 sphinx-argparse
-sphinx<5.*.*
+sphinx
 sphinx_rtd_theme
 sphinxcontrib-bibtex
 xarray

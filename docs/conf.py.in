@@ -51,13 +51,17 @@ def setup(app):
     app.add_css_file('custom.css')
 
 # Add any Sphinx extension module names here, as strings.
-extensions = ['sphinx.ext.autodoc', 'sphinxcontrib.bibtex', 'sphinx.ext.extlinks', 'sphinxarg.ext']
+extensions = ['sphinx.ext.autodoc',
+              'sphinx.ext.viewcode',
+              'sphinx.ext.extlinks',
+              'sphinxcontrib.bibtex',
+              'sphinxarg.ext']
 bibtex_bibfiles = ['references.bib']
 
 # Links to PRs, Jira issues.
 extlinks = {
-     "merge": ("https://re-git.lanl.gov/kbrindley/waves/-/merge_requests/%s", "MERGE-"),
-     "issue": ("https://re-git.lanl.gov/kbrindley/waves/-/issues/%s", "ISSUE-"),
+     "merge": ("https://re-git.lanl.gov/kbrindley/waves/-/merge_requests/%s", "MERGE-%s"),
+     "issue": ("https://re-git.lanl.gov/kbrindley/waves/-/issues/%s", "ISSUE-%s"),
 }
 
 templates_path = ['_templates']
