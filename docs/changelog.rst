@@ -9,6 +9,10 @@ Changelog
 0.1.14 (unreleased)
 *******************
 
+Documentation
+=============
+- Complete WAVES Tutorial 06: Include Files (:issue:`102`, :merge:`151`). By `Thomas Roberts`_ and `Kyle Brindley`_.
+
 *******************
 0.1.13 (2022-06-29)
 *******************
@@ -20,7 +24,6 @@ Bug fixes
 Documentation
 =============
 - Add source code links to WAVES and WAVES-EABM documentation (:issue:`173`, :merge:`148`). By `Kyle Brindley`_.
-- Complete WAVES Tutorial 06: Include Files (:issue:`102`, :merge:`151`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
@@ -28,7 +31,7 @@ Internal Changes
   :merge:`150`). By `Thomas Roberts`_.
 - Remove the dummy file targets for documentation builds to allow conditional re-building only on source/target content
   changes (:issue:`5`, :merge:`154`). By `Kyle Brindley`_.
-- Unpinned Sphinx version. Added fix to avoid warnings treated as errors (:issue:`178`, :merge:`155`). 
+- Unpinned Sphinx version. Added fix to avoid warnings treated as errors (:issue:`178`, :merge:`155`).
   By `Sergio Cordova`_.
 
 *******************
