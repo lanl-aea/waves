@@ -4,7 +4,6 @@ import os
 import sys
 import pathlib
 
-import setuptools_scm
 # Only required when WAVES is not installed as a package, e.g. for local testing in WAVES repository.
 try:
     import waves

@@ -1,7 +1,5 @@
 #! /usr/bin/env python
 
-import pathlib
-
 # Inherit the parent construction environment
 Import(['env', 'project_substitution_dictionary'])
 
