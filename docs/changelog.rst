@@ -6,8 +6,20 @@ Changelog
 #########
 
 *******************
-0.1.14 (unreleased)
+0.1.15 (unreleased)
 *******************
+
+*******************
+0.1.14 (2022-06-30)
+*******************
+
+Documentation
+=============
+- Complete WAVES Tutorial 06: Include Files (:issue:`102`, :merge:`151`). By `Thomas Roberts`_ and `Kyle Brindley`_.
+- Completed WAVES Tutorial 02: Partition and Mesh (:issue:`98`, :merge:`149`). By `Thomas Roberts`_ and `Kyle
+  Brindley`_.
+- Completed WAVES Tutorial 05: Parameter Substitution (:issue:`137`, :merge:`101`). By `Thomas Roberts`_ and `Kyle
+  Brindley`_.
 
 *******************
 0.1.13 (2022-06-29)
@@ -27,7 +39,7 @@ Internal Changes
   :merge:`150`). By `Thomas Roberts`_.
 - Remove the dummy file targets for documentation builds to allow conditional re-building only on source/target content
   changes (:issue:`5`, :merge:`154`). By `Kyle Brindley`_.
-- Unpinned Sphinx version. Added fix to avoid warnings treated as errors (:issue:`178`, :merge:`155`). 
+- Unpinned Sphinx version. Added fix to avoid warnings treated as errors (:issue:`178`, :merge:`155`).
   By `Sergio Cordova`_.
 
 *******************

@@ -43,7 +43,7 @@ Solver Input Files
 ******************
 
 5. Download and copy the `WAVES-EABM abaqus source files`_ into your existing 
-   ``source/abaqus`` sub-directory. If you're on a linux system with `git`_ installed and 
+   ``eabm_package/abaqus`` sub-directory. If you're on a linux system with `git`_ installed and 
    read access on the `WAVES`_ repository, you can use `git archive`_ as below.
 
 .. note::
@@ -60,18 +60,18 @@ Solver Input Files
    $ file_list=("single_element_compression" "amplitudes" "boundary" "field_output" "materials" "parts" "history_output")
    $ file_list=("${file_list[@]/%/.inp}")
    $ repo_ssh="ssh://git@re-git.lanl.gov:10022/kbrindley/waves.git"
-   $ git archive --format=zip --remote=$repo_ssh HEAD:eabm/source/abaqus ${file_list[*]} > source_abaqus.zip
-   $ unzip source_abaqus.zip -d source/abaqus
+   $ git archive --format=zip --remote=$repo_ssh HEAD:eabm/eabm_package/abaqus ${file_list[*]} > source_abaqus.zip
+   $ unzip source_abaqus.zip -d eabm_package/abaqus
 
 This action will unzip the source files we included in the 
-``tutorial_03_solverprep/SConscript`` file into the ``waves-eabm-tutorial/source/abaqus/`` 
+``tutorial_03_solverprep/SConscript`` file into the ``waves-eabm-tutorial/eabm_package/abaqus/`` 
 directory. Check the contents of this directory using the ``ls`` command.
 
 .. code-block::
     
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ ls source/abaqus
+    $ ls eabm_package/abaqus
     abaqus_journal_utilities.py  materials.inp
     amplitudes.inp               parts.inp
     assembly.inp                 single_element_compression.inp
