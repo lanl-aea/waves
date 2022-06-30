@@ -35,6 +35,17 @@ single_element_mesh.py
     :show-inheritance:
     :synopsis: The Abaqus single element mesh script
 
+.. _sphinx_abaqus_journal_utilities_api:
+
+abaqus_journal_utilities.py
+===========================
+
+.. automodule:: eabm_package.abaqus.abaqus_journal_utilities
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: Abaqus utilities to be re-used in multiple places
+
 *****
 cubit
 *****
