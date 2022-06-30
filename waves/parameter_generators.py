@@ -139,7 +139,7 @@ class CartesianProduct(ParameterGenerator):
 
     def validate(self):
         # TODO: Settle on an input file schema and validation library
-        # https://re-git.lanl.gov/kbrindley/waves/-/issues/80
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
         return True
 
     def generate(self):
@@ -148,7 +148,7 @@ class CartesianProduct(ParameterGenerator):
         parameter_set_names = []
         parameter_set_text = []
         # TODO: Separate the parameter study object from the output file syntax
-        # https://re-git.lanl.gov/kbrindley/cmake-simulation/-/issues/36
+        # https://re-git.lanl.gov/aea/python-projects/cmake-simulation/-/issues/36
         for number, parameter_set in enumerate(parameter_sets):
             template = self.output_file_template
             parameter_set_names.append(template.substitute({'number': number}))

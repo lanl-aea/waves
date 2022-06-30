@@ -82,7 +82,7 @@ pytest_aliases = SConscript(dirs=package_source_dir, exports='env', duplicate=Fa
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
-# https://re-git.lanl.gov/kbrindley/waves/-/issues/33
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/33
 alias_list = docs_aliases + pytest_aliases
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:

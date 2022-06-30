@@ -131,7 +131,7 @@ Help(default_targets_help)
 
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
-# https://re-git.lanl.gov/kbrindley/waves/-/issues/33
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/33
 alias_list = docs_aliases + eabm_simulation_directories
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:

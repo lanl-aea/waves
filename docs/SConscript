@@ -117,7 +117,7 @@ for file_path in tutorial_files_list:
     documentation_file_list.append(target)
 
 # TODO: os agnostic pathsep for the html directory
-# https://re-git.lanl.gov/kbrindley/waves/-/issues/4
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/4
 sphinx_options = '-W'
 html = env.Command(
     target=[Dir('html')],

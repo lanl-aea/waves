@@ -8,13 +8,13 @@
 .. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 .. _CMake: https://cmake.org/cmake/help/v3.14/
 .. _ctest: https://cmake.org/cmake/help/latest/manual/ctest.1.html
-.. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
+.. _cmake-simulation: https://re-git.lanl.gov/aea/python-projects/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
-.. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
-.. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
+.. _WAVES repository: https://re-git.lanl.gov/aea/python-projects/waves
+.. _WAVES-EABM: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/eabm
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
