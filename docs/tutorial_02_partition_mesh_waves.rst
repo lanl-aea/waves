@@ -30,7 +30,7 @@ Directory Structure
    
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_05_parameter_substitution
+   $ mkdir tutorial_02_partition_mesh
 
 4. Copy the ``tutorial_01_geometry/SConscript`` file into the newly created ``tutorial_02_partition_mesh`` directory.
 
