@@ -39,7 +39,7 @@ documentation_file_list = [
 ]
 
 # TODO: os agnostic pathsep for the html directory
-# https://re-git.lanl.gov/kbrindley/waves/-/issues/4
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/4
 sphinx_options = '-W'
 html = env.Command(
     target=[Dir('html')],

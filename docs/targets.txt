@@ -75,9 +75,9 @@
 .. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
 
 .. Project specific links
-.. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
-.. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
-.. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm/eabm_package/abaqus
+.. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves/cpp_stub
+.. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
+.. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/eabm/eabm_package/abaqus
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm
