@@ -9,6 +9,10 @@ Changelog
 0.1.15 (unreleased)
 *******************
 
+Documentation
+=============
+- Update project URLs to reflect the move to the AEA Gitlab group (:issue:`183`, :merge:`160`). By `Kyle Brindley`_.
+
 *******************
 0.1.14 (2022-06-30)
 *******************
