@@ -84,11 +84,11 @@ in the Abaqus kernel, but now the default behavior of the journal is different.
 The ``--input-file`` command line argument defaults to the string ``'single_element_geometry'`` and does not require a
 file extension. So, we simply need to make sure that the ``single_element_geometry.cae`` file (which is an output from
 the code we wrote in :ref:`tutorial_geometry_waves`) be included in the ``source`` list. If
-``single_element_geometry.cae`` were left out of the source list, it is quite possible that the build system would still
-be able to build our target. However, this would lead to possibly unreproducible behavior in the case where something
-has changed in the ``single_element_geometry.cae`` file. If not specified as a source, the
-``single_element_geometry.cae`` file could change and the build system would not know that the
-``single_element_partition.cae`` target needs to be re-built.
+``single_element_geometry.cae`` were left out of the source list, the SCons build system would not be able to determine
+that the partition target depends on the geometry target. This would result in an indeterminate race condition in target
+execution order. Incomplete source and target lists also make it impossible for the build system to automatically
+determine when a target needs to be re-built. If not specified as a source, the ``single_element_geometry.cae`` file
+could change and the build system would not know that the ``single_element_partition.cae`` target needs to be re-built.
 
 With the two sources defined, the :meth:`waves.builders.abaqus_journal` builder has all the information it needs to
 build the ``single_element_partition.cae`` target.
