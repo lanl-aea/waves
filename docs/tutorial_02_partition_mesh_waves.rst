@@ -93,20 +93,6 @@ could change and the build system would not know that the ``single_element_parti
 With the two sources defined, the :meth:`waves.builders.abaqus_journal` builder has all the information it needs to
 build the ``single_element_partition.cae`` target.
 
-.. note::
-
-   At this point, we have encountered our first dependency on a previous tutorial. It is important to understand that
-   the code pertaining to ``# Partition`` *requires* that the ``single_element_geometry.cae`` file be in the build
-   directory at the time the build system gets to the task of acting on our ``# Partition`` sources.
-
-   It is the build system's job to define the dependencies for each target. However, the build system cannot utilize a
-   source file that has never been created. The outputs from the code you wrote in :ref:`tutorial_geometry_waves` are
-   required sources for this tutorial, and the outputs from this tutorial's code will be required sources for the
-   tutorials that follow.
-
-   You cannot build :ref:`tutorial_partition_mesh_waves` without first building the code from
-   :ref:`tutorial_geometry_waves`.
-
 In the code pertaining to ``# Mesh``, the trend continues. We will create a ``journal_file`` variable to reduce
 hard-coded duplication of strings. We define an empty string for ``journal_options``, as nothing other than the default
 is required for this task. We finally extend the workflow to utilize the :meth:`waves.builders.abaqus_journal` builder
