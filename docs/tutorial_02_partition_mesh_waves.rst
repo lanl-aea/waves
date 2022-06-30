@@ -93,13 +93,13 @@ could change and the build system would not know that the ``single_element_parti
 With the two sources defined, the :meth:`waves.builders.abaqus_journal` builder has all the information it needs to
 build the ``single_element_partition.cae`` target.
 
-In the code pertaining to ``# Mesh``, the trend continues. We will create a ``journal_file`` variable to reduce
-hard-coded duplication of strings. We define an empty string for ``journal_options``, as nothing other than the default
-is required for this task. We finally extend the workflow to utilize the :meth:`waves.builders.abaqus_journal` builder
-on the ``source`` list. Just like the code for ``# Partition``, we have two sources. The ``single_element_mesh.py`` CLI
-defines an ``--input-file`` argument that defaults to ``single_element_partition.cae``. Readers are encouraged to return
-to the :ref:`sphinx_cli` to become familiar with the command line arguments available for the journal files in this
-tutorial.
+In the code pertaining to ``# Mesh``, the trend continues. We will re-assign the ``journal_file`` variable to the
+meshing journal file name  to reduce hard-coded duplication of strings. We define an empty string for
+``journal_options``, as nothing other than the default is required for this task. We finally extend the workflow to
+utilize the :meth:`waves.builders.abaqus_journal` builder on the ``source`` list. Just like the code for ``#
+Partition``, we have two sources. The ``single_element_mesh.py`` CLI defines an ``--input-file`` argument that defaults
+to ``single_element_partition.cae``. Readers are encouraged to return to the :ref:`sphinx_cli` to become familiar with
+the command line arguments available for the journal files in this tutorial.
 
 The ``target`` list, however, shows another difference with the behavior we have seen previously. Now, we have two
 targets instead of one. You should now be familiar with the behavior that generates the ``single_element_mesh.cae``
@@ -108,7 +108,6 @@ target. The new target is the ``single_element_mesh.inp`` file. This file is cal
 created. The orphan mesh file is created by calling the ``export_mesh()`` function within the ``single_element_mesh.py``
 file. See the :ref:`sphinx_api`, specifically the :ref:`sphinx_abaqus_journal_utilities_api` API, for more information
 about the ``export_mesh()`` function.
-
 
 In summary of the changes you just made to the ``tutorial_02_partition_mesh/SConscript`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_geometry_waves` is included below to help identify the changes made in this
