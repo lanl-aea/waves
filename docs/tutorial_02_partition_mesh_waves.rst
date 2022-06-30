@@ -186,13 +186,6 @@ duplicate. At the moment, we have only created one function - ``export_mesh()``.
 mesh files define the entire part's mesh in a text-based file. The node and element locations and labels are listed
 in a tabular format that the Abaqus file parser understands.
 
-.. note::
-
-   Any model developer may have other functions that are commonly used by multiple scripts. An example use case is if
-   our model had multiple parts that notionally all looked the same. In this case, the model developer could choose to
-   create a generic geometry generation function and place it in this ``abaqus_journal_utilities.py`` file. The model
-   developer can then call this function any number of times without duplicating source code.
-
 9. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents
    below.
 
