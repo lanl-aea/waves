@@ -8,7 +8,7 @@ Tutorial 05: Parameter Substitution
 References
 **********
 
-* `Python Template Strings`_
+* `SCons Substfile`_
 * `Abaqus *PARAMETER`_ keyword documentation
 
 ***********
@@ -52,12 +52,12 @@ Solver Input Files
    /path/to/waves-eabm-tutorial
    $ cp eabm_package/abaqus/single_element_compression.inp eabm_package/abaqus/single_element_compression.inp.in
 
-In this tutorial, we will be modifying several scripts from :ref:`tutorial_simulation_waves`, the first of which is
+In this tutorial, we will be modifying several files from :ref:`tutorial_simulation_waves`, the first of which is
 ``single_element_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
 the ``.in`` extension for the purposes of *parameter substitution*. This change is made so it is easy for the
 :meth:`waves.builders.copy_substitute` builder to identify which files should be searched for parameters. Any files with
 the ``.in`` extension that are passed to the :meth:`waves.builders.copy_substitute` builder will be parsed for
-characters matching the parameter definitions using substitution with `Python Template Strings`_. This is discussed in
+characters matching the parameter definitions using substitution with `SCons Substfile`_. This is discussed in
 more detail later in this tutorial.
 
 6. Use the ``diff`` below to modify your ``single_element_compression.inp.in`` file.
@@ -169,10 +169,9 @@ In this tutorial, we leverage two different builder behaviors when defining sour
 :meth:`waves.builders.copy_substitute` builder. We are already familiar with one behavior, where the builder simply
 copies the source file to the build directory.
 
-This builder
-uses template substitution with files named with the ``*.in`` extension, and looks to match and replace *any characters*
-that match the keys in the provided ``substitution_dictionary``. For this reason, we must make our parameter names
-uniquely identifiable (e.g. ``@variable@``).
+This builder uses template substitution with files named with the ``*.in`` extension, and looks to match and replace
+*any characters* that match the keys in the provided ``substitution_dictionary``. For this reason, we must make our
+parameter names uniquely identifiable (e.g. ``@variable@``).
 
 The second behavior is utilized when we specify a file with ``.in`` extension in the ``abaqus_source_list`` and we
 specify a ``substitution_dictionary`` in the builder's options. This behavior will act on any file in the source list
