@@ -220,7 +220,7 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
 
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial_0[1,2,3,4,5]*'
+    $ tree build/ -I 'tutorial_0[12345]*'
     build/
     ├── docs
     │   └── SConscript
