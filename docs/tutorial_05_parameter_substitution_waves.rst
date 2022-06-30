@@ -180,12 +180,12 @@ parameter names uniquely identifiable (e.g. ``@variable@``).
 The second behavior is utilized when we specify a file with ``.in`` extension in the ``abaqus_source_list`` and we
 specify a ``substitution_dictionary`` in the builder's options. This behavior will act on any file in the source list
 with ``.in`` extension and attempts to match the parameter keys in the ``substitution_dictionary`` with the text in the
-file. For this reason, we must make our parameter names identifiable with a tamplating character (e.g. ``@variable@``).
-In this process, the files with ``.in`` extension are not modified, but are first copied to a file of the same name
-*without* the ``.in`` extension. The contents of the newly copied file are modified to reflect the parameter
-substitution. The final task is to copy both the source and the target files to the build directory. We will see this
-behavior more clearly when we investigate the :ref:`tutorial_parameter_substitution_waves_output_files` for this
-tutorial.
+file. For this reason, we must make our parameter names identifiable with a templating character (e.g. ``@variable@``).
+In this process, the files with ``.in`` extension are not modified, but are first copied to a file of the same name in
+the build directory. The contents of the newly copied file are modified to reflect the parameter substitution and the
+``.in`` extension is removed as a default behavior of the `SCons Substfile`_ method. The two step copy/substitute
+behavior is required to allow SCons to unambiguously resolve the source-target file locations. We will see this behavior
+more clearly when we investigate the :ref:`tutorial_parameter_substitution_waves_output_files` for this tutorial.
 
 In summary of the changes you just made to the ``tutorial_05_parameter_substitution`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
