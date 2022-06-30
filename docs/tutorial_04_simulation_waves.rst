@@ -185,8 +185,6 @@ Build Targets
    /path/to/waves-eabm-tutorial
    $ scons tutorial_04_simulation
     scons: Reading SConscript files ...
-    /projects/aea_compute/aea-beta/lib/python3.8/site-packages/setuptools_scm/version.py:74: UserWarning: tag '0.1.10+dev' will 
-    be stripped of its suffix '+dev'
       warnings.warn(
     Checking whether sphinx-build program exists.../projects/aea_compute/aea-beta/bin/sphinx-build
     Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
@@ -241,7 +239,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
     
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial[1,2,3]*'
+    $ tree build/ -I 'tutorial_0[123]*'
     build
     ├── docs
     │   └── SConscript
@@ -304,4 +302,3 @@ The ``tutorial_04_simulation`` directory contains several different subsets of r
   this tutorial.
 * ``single_element_compression.*`` - output files from :ref:`tutorial_simulation_waves_running_analysis` in this 
   tutorial.
-

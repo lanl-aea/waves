@@ -14,6 +14,8 @@ Documentation
 - Complete WAVES Tutorial 06: Include Files (:issue:`102`, :merge:`151`). By `Thomas Roberts`_ and `Kyle Brindley`_.
 - Completed WAVES Tutorial 02: Partition and Mesh (:issue:`98`, :merge:`149`). By `Thomas Roberts`_ and `Kyle
   Brindley`_.
+- Completed WAVES Tutorial 05: Parameter Substitution (:issue:`137`, :merge:`101`). By `Thomas Roberts`_ and `Kyle
+  Brindley`_.
 
 *******************
 0.1.13 (2022-06-29)
