@@ -181,7 +181,7 @@ statement, and the ``main()`` function is called within ``sys.exit()`` for exit 
       :end-before: marker-1
 
 The ``abaqus_journal_utilities.py`` script's purpose is to contain commonly used functions that we do not want to
-duplicate. At the moment, we have only created one function - ``export_mesh()``. The ``export_mesh`` function utlizes an
+duplicate. At the moment, we have only created one function - ``export_mesh()``. The ``export_mesh`` function utilizes an
 `Abaqus Model Object`_ along with a ``part_name`` and ``orphan_mesh_file`` name to create an orphan mesh file. Orphan
 mesh files define the entire part's mesh in a text-based file. The node and element locations and labels are listed
 in a tabular format that the Abaqus file parser understands.
@@ -198,23 +198,23 @@ in a tabular format that the Abaqus file parser understands.
 The ``single_element_mesh.py`` file will have many similarities in code structure to the ``single_element_geometry.py``
 and ``single_element_partition.py`` files. The first significant change is within the ``import`` statements at the top
 of the file. The ``single_element_mesh.py`` file uses the ``export_mesh()`` function that is imported from the
-``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utlities.py`` exists in the
-``eabm_package/abaqus`` directory, and is never copied to the builde directory where the journal files are ran with the
-Abaqus kernel. Without any modifications to your `PYTHONPATH`_, the Abaqus kernel will attempt to ``import
-abaqus_journal_utilities``, but will not be able to find the file (because it does not exist in the build directory). In
-order to solve this problem, we must add the location of the ``abaqus_journal_utlities.py`` file to `PYTHONPATH`_ at run
-time.
+``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utilities.py`` exists in the
+``eabm_package/abaqus`` directory, and is never copied to the build directory. Without any modifications to your
+``sys.path``, the Abaqus kernel will attempt to ``import abaqus_journal_utilities`` but will not be able to find the
+file. In order to solve this problem, we must add the location of the ``abaqus_journal_utilities.py`` file to
+``sys.path`` at run time.
 
 .. note::
 
-   While the ``single_element_mesh.py`` script is also never copied to the build directory, it is executed via absolute
-   path from within the build directory. So, we can utilize the path of the ``single_element_mesh.py`` file
-   to point to the location of the ``abaqus_journal_utlities`` file as well.
+   The ``single_element_mesh.py`` script is also never copied to the build directory, so we can utilize the path of the
+   ``single_element_mesh.py`` file to point to the location of the ``abaqus_journal_utilities`` file as well. The journal
+   files are executed via absolute path from within the build directory, so the output from these scripts is placed in
+   the build directory.
 
 Before importing ``abaqus_journal_utilities``, the ``filename`` is extracted in the same way as in
 :ref:`tutorial_geometry_waves`'s :ref:`tutorial_geometry_waves_command_line_interfaces` code. Then, we use
-``sys.path.insert`` from the `Python sys`_ package to add the location of the current file (``single_element_mesh.py``)
-to the `PYTHONPATH`_.
+``sys.path.insert`` from the `Python sys`_ package to add the parent directory of the current file
+(``single_element_mesh.py``) to the `PYTHONPATH`_.
 
 From this point, the ``main()`` function proceeds to copy the input file just like in ``single_element_partition.py``.
 The code that follows performs the following tasks within the new ``output_file``:
@@ -225,8 +225,8 @@ The code that follows performs the following tasks within the new ``output_file`
 * Mesh the part
 * Assign an element type to the part. See the `Abaqus Elements Guide`_ for more information about defining element
   types.
-* Define element and node sets for all elements and all nodes in the model. See the `Abaqus Element Sets`_ documentation
-  for more information about element sets.
+* Define element and node sets for elements and nodes that may require output requests in the model. See the `Abaqus
+  Element Sets`_ documentation for more information about element sets.
 * Create an orphan mesh file by calling the ``export_mesh()`` function that was imported from
   ``abaqus_journal_utilities.py``
 * Save the ``output_file`` with the changes made
