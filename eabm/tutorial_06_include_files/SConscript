@@ -11,6 +11,9 @@ Import('env')
 project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
+python_source_dir = env['python_source_dir']
+python_source_abspath = project_dir / python_source_dir
+parameters_file = python_source_abspath / 'single_element_compression_nominal.py'
 
 from eabm_package.python import single_element_compression_nominal
 
@@ -27,7 +30,7 @@ journal_file = f"{model}_geometry"
 journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", str(parameters_file)],
     journal_options=journal_options))
 
 # Partition
@@ -35,7 +38,7 @@ journal_file = f"{model}_partition"
 journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae", str(parameters_file)],
     journal_options=journal_options))
 
 # Mesh
@@ -43,7 +46,7 @@ journal_file = f"{model}_mesh"
 journal_options = f"--global-seed {simulation_variables['global_seed']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.inp"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae", str(parameters_file)],
     journal_options=journal_options))
 
 # SolverPrep
@@ -64,6 +67,7 @@ workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
+solve_source_list.append([str(parameters_file)])
 job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
