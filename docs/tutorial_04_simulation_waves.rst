@@ -239,7 +239,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
     
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial_0[1,2,3]*'
+    $ tree build/ -I 'tutorial_0[123]*'
     build
     ├── docs
     │   └── SConscript
@@ -302,4 +302,3 @@ The ``tutorial_04_simulation`` directory contains several different subsets of r
   this tutorial.
 * ``single_element_compression.*`` - output files from :ref:`tutorial_simulation_waves_running_analysis` in this 
   tutorial.
-
