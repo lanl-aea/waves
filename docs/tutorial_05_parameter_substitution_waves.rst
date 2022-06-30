@@ -68,13 +68,12 @@ more detail later in this tutorial.
       :language: text
       :diff: abaqus_single_element_compression.inp
 
-First, we add the ``displacement`` parameter to the ``single_element_compression.inp.in`` file using the `Abaqus
-*PARAMETER`_ keyword. After making this definition, any place in the file that utilizes the ``<displacement>`` syntax
-will be replaced by the value ``float('@displacement@')`` by the Abaqus file parser. Casting the value substituted by
-the parameter to a ``float`` ensures that the ``displacement`` parameter ends up the proper variable type. This also
-eludes to the fact that a parameter can be any variable type, provided its usage is correct for the syntax of the file
-where it is used. Thus, for example, one could use a ``str`` as a parameter to change the name of the material assigned
-to a part in the model.
+First, we add the ``displacement`` Abaqus parameter in Python 2 syntax to the ``single_element_compression.inp.in`` file
+using the `Abaqus *PARAMETER`_ keyword. Second, we use the parameter value with the Abaqus parameter syntax,
+``<displacement>``. Casting the value substituted by the parameter to a ``float`` ensures that the ``displacement``
+parameter ends up the proper variable type. This also eludes to the fact that a parameter can be any variable type,
+provided its usage is correct for the syntax of the file where it is used. Thus, for example, one could use a ``str`` as
+a parameter to change the name of the material assigned to a part in the model.
 
 The final modification to make to the ``single_element_compression.inp.in`` file is to replace the hardcoded
 displacement value of ``-1.0`` with the parameter key ``<displacement>``. With this change, the Abaqus file parser will
