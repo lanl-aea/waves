@@ -13,6 +13,11 @@ Documentation
 =============
 - Update project URLs to reflect the move to the AEA Gitlab group (:issue:`183`, :merge:`160`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Remove remnants of the parameter study file I/O that is no longer necessary from the cartesian product configuration
+  (:issue:`184`, :merge:`161`).  By `Kyle Brindley`_.
+
 *******************
 0.1.14 (2022-06-30)
 *******************
