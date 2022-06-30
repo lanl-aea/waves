@@ -97,9 +97,10 @@ In the code pertaining to ``# Mesh``, the trend continues. We will re-assign the
 meshing journal file name  to reduce hard-coded duplication of strings. We define an empty string for
 ``journal_options``, as nothing other than the default is required for this task. We finally extend the workflow to
 utilize the :meth:`waves.builders.abaqus_journal` builder on the ``source`` list. Just like the code for ``#
-Partition``, we have two sources. The ``single_element_mesh.py`` CLI defines an ``--input-file`` argument that defaults
-to ``single_element_partition.cae``. Readers are encouraged to return to the :ref:`sphinx_cli` to become familiar with
-the command line arguments available for the journal files in this tutorial.
+Partition``, we have two sources. In this tutorial, we rely on the ``single_element_mesh.py`` CLI default arguments
+which will use the ``single_element_partition.cae`` file as the input model file. Readers are encouraged to return to
+the :ref:`sphinx_cli` to become familiar with the command line arguments available for the journal files in this
+tutorial.
 
 The ``target`` list, however, shows another difference with the behavior we have seen previously. Now, we have two
 targets instead of one. You should now be familiar with the behavior that generates the ``single_element_mesh.cae``
@@ -149,7 +150,9 @@ contains a ``main()`` function with `PEP-287`_ formatted docstrings. Within that
 code that does a few specific tasks:
 
 * Format the ``--input-file`` and ``--output-file`` command line argument values with ``.cae`` file extensions
-* Copy the ``input_file`` to an identical ``output_file`` with a new name
+* Copy the ``input_file`` to an identical ``output_file`` with a new name. This is necessary because Abaqus changes the
+  contents of ``*.cae`` files on open. The content change will cause the build system to always re-run the task that
+  generated the ``input_file``.
 * Within the new ``output_file``, do the following:
 
   * Create node sets at four corners of the single element part. See the `Abaqus Node Sets`_ documentation for more
