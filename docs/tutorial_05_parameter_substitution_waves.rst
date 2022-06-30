@@ -116,8 +116,10 @@ The final key-value pair defined in the ``simulation_variables`` dictionary is `
 used in a slightly different way than the others, as the script that utilizes this parameter does not function with a
 command line interface. Recall from earlier in this tutorial, we created a new file called
 ``single_element_compression.inp.in`` and added an `Abaqus *PARAMETER`_ definition with the ``@displacement@`` key.
-Here, our final key-value pair of the ``simulation_variables`` dictionary will be utlized. Disussion of exacly how this
-is implemented with the :meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
+Here, our final key-value pair of the ``simulation_variables`` dictionary will be utilized after the key transformation
+to the ``project_substitution_dictionary`` which adds the ``@`` characters to the ``simulation_variables`` keys.
+Disussion of exacly how this is implemented with the :meth:`waves.builders.copy_substitute` builder will come later in
+this tutorial.
 
 Finally, we must discuss the last line of your new code, which defines the ``simulation_substitution_dictionary``.
 Simply put, the keys of the ``simulation_variables`` dictionary must be uniquely identifiable as parameters in the midst
