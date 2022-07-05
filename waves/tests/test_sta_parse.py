@@ -9,7 +9,7 @@ Test sta_parse.py
 import pytest
 from unittest.mock import patch
 
-from waves.abaqus.command_line_tools import sta_parse
+from waves.abaqus import sta_parse
 
 
 @pytest.mark.unittest

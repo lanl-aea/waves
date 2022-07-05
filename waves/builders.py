@@ -8,7 +8,7 @@ import SCons.Environment
 import SCons.Node
 
 from waves._settings import _abaqus_environment_file
-from waves.abaqus.command_line_tools import odb_extract
+from waves.abaqus import odb_extract
 
 
 def _abaqus_journal_emitter(target, source, env):

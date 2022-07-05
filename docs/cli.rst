@@ -31,18 +31,18 @@ ODB Extract
 ***********
 
 .. argparse::
-   :ref: waves.abaqus.command_line_tools.odb_extract.get_parser
+   :ref: waves.abaqus.odb_extract.get_parser
 
 *********
 Sta Parse
 *********
 
 .. argparse::
-   :ref: waves.abaqus.command_line_tools.sta_parse.get_parser
+   :ref: waves.abaqus.sta_parse.get_parser
 
 *********
 Msg Parse
 *********
 
 .. argparse::
-   :ref: waves.abaqus.command_line_tools.msg_parse.get_parser
+   :ref: waves.abaqus.msg_parse.get_parser

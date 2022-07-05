@@ -114,11 +114,11 @@ examples of a Git log from the current project.
      @@ -50,3 +50,10 @@ ODB Extract
       
       .. argparse::
-         :ref: waves.abaqus.command_line_tools.odb_extract.get_parser
+         :ref: waves.abaqus.odb_extract.get_parser
      +
      +*********
      +Sta Parse
      +*********
      +
      +.. argparse::
-     +   :ref: waves.abaqus.command_line_tools.sta_parse.get_parser
+     +   :ref: waves.abaqus.sta_parse.get_parser
