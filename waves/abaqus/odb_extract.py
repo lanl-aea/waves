@@ -73,7 +73,13 @@ def get_parser():
     return parser
 
 
-def main(input_file, output_file, output_type, odb_report_args, abaqus_command, delete_report_file, verbose):
+def main(input_file,
+         output_file,
+         output_type='h5',
+         odb_report_args=None,
+         abaqus_command=_settings._default_abaqus_command,
+         delete_report_file=False,
+         verbose=False):
 
     # Handle arguments
     verbose = verbose

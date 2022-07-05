@@ -259,15 +259,17 @@ def python_script():
     return python_builder
 
 
-def _odb_extract_emitter(target, source, env):
+def _abaqus_extract_emitter(target, source, env):
     return target, source
 
 
-def odb_extract(abaqus_program='abaqus'):
-    odb_extract_builder = SCons.Builder.Builder(
-    action = [
-        f"cd ${{TARGET.dir.abspath}} && odb_extract.main --abaqus-command {abaqus_program} " \
-            f"--output-file ${{SOURCE.filebase}}.h5 ${{SOURCE}} > ${{SOURCE.filebase}}.odb_extract.stdout 2>&1"
-    ],
-    emitter=_odb_extract_emitter)
-    return odb_extract_builder
+def abaqus_extract(abaqus_program='abaqus'):
+    abaqus_extract_builder = SCons.Builder.Builder(
+    action = build_odb_extract,
+    emitter=_abaqus_extract_emitter)
+    return abaqus_extract_builder
+
+
+def build_odb_extract(target, source, env):
+    odb_extract.main(source[0].abspath, target[0].abspath)
+    return None
