@@ -265,7 +265,10 @@ def _abaqus_extract_emitter(target, source, env):
 
 def abaqus_extract(abaqus_program='abaqus'):
     abaqus_extract_builder = SCons.Builder.Builder(
-        action = build_odb_extract,
+        action = [ 
+            "cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.{csv,rep} || true",
+            build_odb_extract
+        ],
         emitter=_abaqus_extract_emitter)
     return abaqus_extract_builder
 
