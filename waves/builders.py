@@ -271,5 +271,5 @@ def abaqus_extract(abaqus_program='abaqus'):
 
 
 def build_odb_extract(target, source, env):
-    odb_extract.main(source[0].abspath, target[0].abspath)
+    odb_extract.main([source[0].abspath], target[0].abspath)
     return None
