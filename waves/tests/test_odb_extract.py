@@ -89,7 +89,7 @@ def test_main():
          patch('builtins.print') as mock_print, \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser') as mock_abaqus_file_parser, \
          patch(
-             'waves.abaqus.odb_extract.run_external', return_value=[b'', -1, b'invalid command.']) \
+             'waves.abaqus.odb_extract.run_external', return_value=[-1, b'', b'invalid command.']) \
                  as mock_run_external:
         # Test case where report args need to be adjusted, abaqus file parser is called, and third critical error
         odb_extract.main(['sample.odb'], None, odb_report_args="job=job_name odb=odb_filea ll")
@@ -106,7 +106,7 @@ def test_main():
          patch('sys.stdin', return_value='y'), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
          patch(
-             'waves.abaqus.odb_extract.run_external', return_value=[b'', 0, b'valid command.']) \
+             'waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']) \
                  as mock_run_external:
         # Test case where yaml dump is called
         odb_extract.main(['sample.odb'], None, odb_report_args="odbreport all", output_type='yaml')
@@ -120,7 +120,7 @@ def test_main():
          patch('json.dump') as mock_safe_dump, \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
          patch('pathlib.Path.unlink') as mock_unlink, \
-         patch('waves.abaqus.odb_extract.run_external', return_value=[b'', 0, b'valid command.']):
+         patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']):
         # Test case where yaml dump is called
         odb_extract.main(['sample.odb'], None, output_type='json', output_file='sample.j', delete_report_file=True)
         mock_safe_dump.assert_called()
@@ -131,7 +131,7 @@ def test_main():
          patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser') as h5_parser, \
-         patch('waves.abaqus.odb_extract.run_external', return_value=[b'', 0, b'valid command.']):
+         patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']):
         # Test case where h5 file is created
         odb_extract.main(['sample.odb'], None, output_type='h5')
         h5_parser.assert_called()
