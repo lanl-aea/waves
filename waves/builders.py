@@ -269,10 +269,11 @@ def abaqus_extract(abaqus_program='abaqus'):
             "cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.{csv,rep} || true",
             build_odb_extract
         ],
-        emitter=_abaqus_extract_emitter)
+        emitter=_abaqus_extract_emitter,
+        abaqus_program=abaqus_program)
     return abaqus_extract_builder
 
 
 def build_odb_extract(target, source, env):
-    odb_extract.main([source[0].abspath], target[0].abspath)
+    odb_extract.main([source[0].abspath], target[0].abspath, abaqus_command=env['abaqus_program'])
     return None
