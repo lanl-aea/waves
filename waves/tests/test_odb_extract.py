@@ -122,7 +122,7 @@ def test_main():
          patch('pathlib.Path.unlink') as mock_unlink, \
          patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']):
         # Test case where yaml dump is called
-        odb_extract.main(['sample.odb'], None, output_type='json', output_file='sample.j', delete_report_file=True)
+        odb_extract.main(['sample.odb'], output_file='sample.j', output_type='json', delete_report_file=True)
         mock_safe_dump.assert_called()
         mock_unlink.assert_called()
 
