@@ -101,7 +101,7 @@ for current_set_name, parameter_text in parameter_study.items():
 
     # Extract Abaqus
     extract_source_list = [f"{current_set_name / job_name}.odb"]
-    workflow.extend(env.ODBExtract(
+    workflow.extend(env.AbaqusExtract(
         target=[f"{current_set_name / job_name}.h5"],
         source=extract_source_list))
 
