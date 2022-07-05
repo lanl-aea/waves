@@ -152,9 +152,9 @@ def main(input_file,
             if answer[:1].lower() != 'y':
                 call_odbreport = True  # If user input is not yes, run odbreport again
     if call_odbreport:
-        output, return_code, error_code = run_external(abaqus_command)
+        return_code, output, error_code = run_external(abaqus_command)
         if return_code != 0:
-            print_critical(f'Abaqus odbreport command failed to execute. {error_code}')
+            print_critical(f"Abaqus odbreport command failed to execute. Abaqus output: '{output}'")
         if not Path(job_name).exists():
             print_critical(f'{job_name} does not exist.')
 
