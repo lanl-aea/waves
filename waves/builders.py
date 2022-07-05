@@ -8,6 +8,7 @@ import SCons.Environment
 import SCons.Node
 
 from waves._settings import _abaqus_environment_file
+from waves.abaqus.command_line_tools import odb_extract
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -256,3 +257,17 @@ def python_script():
                 f"${{script_options}} > ${{SOURCE.filebase}}.stdout 2>&1"],
         emitter=_python_script_emitter)
     return python_builder
+
+
+def _odb_extract_emitter(target, source, env):
+    return target, source
+
+
+def odb_extract(abaqus_program='abaqus'):
+    odb_extract_builder = SCons.Builder.Builder(
+    action = [
+        f"cd ${{TARGET.dir.abspath}} && odb_extract.main --abaqus-command {abaqus_program} " \
+            f"--output-file ${{SOURCE.filebase}}.h5 ${{SOURCE}} > ${{SOURCE.filebase}}.odb_extract.stdout 2>&1"
+    ],
+    emitter=_odb_extract_emitter)
+    return odb_extract_builder

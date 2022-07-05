@@ -101,10 +101,9 @@ for current_set_name, parameter_text in parameter_study.items():
 
     # Extract Abaqus
     extract_source_list = [f"{current_set_name / datacheck_name}.odb"]
-    workflow.extend(env.Command(
+    workflow.extend(env.ODBExtract(
         target=[f"{current_set_name / job_name}.h5"],
-        source=extract_source_list,
-        action="odb_extract ${SOURCE}"))
+        source=extract_source_list))
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
