@@ -183,6 +183,7 @@ def main(input_file,
         Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
     return 0
 
+
 def run_external(cmd):
     """
     Execute an external command and get its exitcode, stdout and stderr.
@@ -194,6 +195,7 @@ def run_external(cmd):
     p = run(args, capture_output=True)
     return p.returncode, p.stdout.decode(), p.stderr.decode()
 
+
 def print_warning(verbose, message):
     """
     Log a message to the screen
@@ -203,6 +205,7 @@ def print_warning(verbose, message):
     """
     if verbose:
         print(message)
+
 
 def print_critical(message):
     """
