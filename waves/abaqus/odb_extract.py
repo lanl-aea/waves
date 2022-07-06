@@ -82,7 +82,6 @@ def main(input_file,
          verbose=False):
 
     # Handle arguments
-    verbose = verbose
     input_file = input_file[0]
     path_input_file = Path(input_file)
     odbreport_file = False
@@ -92,7 +91,6 @@ def main(input_file,
         print_warning(verbose, f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
         odbreport_file = True
     file_base_name = str(path_input_file.with_suffix(''))
-    output_file = output_file
     if not output_file:  # If no output file given, use the name and path of odb file, but change the extension
         output_file = f'{file_base_name}.{output_type}'
     path_output_file = Path(output_file)
