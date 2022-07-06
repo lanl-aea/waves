@@ -50,6 +50,7 @@ requirements:
     - setuptools_scm
   run:
     - python >=3.8
+    - h5netcdf
     - h5py
     - numpy
     - pyyaml
@@ -58,6 +59,7 @@ requirements:
 
 test:
   requires:
+    - h5netcdf
     - h5py
     - numpy
     - pytest
