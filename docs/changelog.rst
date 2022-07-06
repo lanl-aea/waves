@@ -17,6 +17,8 @@ Internal Changes
 ================
 - Remove remnants of the parameter study file I/O that is no longer necessary from the cartesian product configuration
   (:issue:`184`, :merge:`161`).  By `Kyle Brindley`_.
+- Remove the ``.jnl`` file from the list of targets appended by the Abaqus journal builder (:issue:`180`, :merge:`162`).
+  By `Matthew Fister`_.
 
 *******************
 0.1.14 (2022-06-30)
