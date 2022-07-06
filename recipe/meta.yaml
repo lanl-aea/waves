@@ -37,8 +37,6 @@ requirements:
   build:
     - python {{ python }}
     - git
-    - h5py
-    - numpy
     - scons >=4
     - setuptools
     - setuptools_scm
@@ -46,7 +44,6 @@ requirements:
     - sphinx-argparse
     - sphinx_rtd_theme >=0.5
     - sphinxcontrib-bibtex
-    - xarray
   host:
     - python
     - setuptools
