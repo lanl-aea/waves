@@ -13,8 +13,8 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from datetime import datetime
 
-import xarray as xr
-import numpy as np
+import xarray
+import numpy
 import h5py
 
 from waves.abaqus import _settings
@@ -2075,11 +2075,11 @@ class OdbReportFileParser(AbaqusFileParser):
                 mesh = extract[instance['name']]['Mesh']
             except KeyError:
                 try:
-                    extract[instance['name']]['Mesh'] = xr.Dataset()
+                    extract[instance['name']]['Mesh'] = xarray.Dataset()
                     datasets.append(f'{instance["name"]}/Mesh')
                 except KeyError:
                     extract[instance['name']] = dict()
-                    extract[instance['name']]['Mesh'] = xr.Dataset()
+                    extract[instance['name']]['Mesh'] = xarray.Dataset()
                     datasets.append(f'{instance["name"]}/Mesh')
                 mesh = extract[instance['name']]['Mesh']
             try:
@@ -2089,14 +2089,14 @@ class OdbReportFileParser(AbaqusFileParser):
             coords = [node_labels, ['x', 'y', 'z']]
             if instance['embeddedSpace'].upper() == 'AXISYMMETRIC':
                 try:
-                    mesh['node_location'] = xr.DataArray(data=instance['nodes']['coordinates'],
+                    mesh['node_location'] = xarray.DataArray(data=instance['nodes']['coordinates'],
                                                          coords=[node_labels, ['r', 'z']],
                                                          dims=['node', 'vector'])
                 except ValueError:  # If somehow the data are not 2 dimensional, use the 3 dimensional coordinates
-                    mesh['node_location'] = xr.DataArray(data=instance['nodes']['coordinates'], coords=coords,
+                    mesh['node_location'] = xarray.DataArray(data=instance['nodes']['coordinates'], coords=coords,
                                                          dims=['node', 'vector'])
             else:
-                mesh['node_location'] = xr.DataArray(data=instance['nodes']['coordinates'], coords=coords,
+                mesh['node_location'] = xarray.DataArray(data=instance['nodes']['coordinates'], coords=coords,
                                                      dims=['node', 'vector'])
             del instance['nodes']  # Clear up memory now that it's stored elsewhere
             if 'elements' in instance:
@@ -2109,7 +2109,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     coords = {element_key: element_type['labels'],
                               node_key: list(range(length_cols)),
                               'section_category': (element_key, element_type['section_category'])}
-                    mesh[mesh_key] = xr.DataArray(
+                    mesh[mesh_key] = xarray.DataArray(
                         data=element_type['connectivity'], coords=coords, dims=[element_key, node_key])
                 del instance['elements']
 
@@ -2126,7 +2126,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     current_dataset = extract[instance_name]['HistoryOutputs'][region_name]
                 except KeyError:
                     try:
-                        extract[instance_name]['HistoryOutputs'][region_name] = xr.Dataset()
+                        extract[instance_name]['HistoryOutputs'][region_name] = xarray.Dataset()
                         datasets.append(f'{instance_name}/HistoryOutputs/{region_name}')
                     except KeyError:
                         try:
@@ -2134,7 +2134,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         except KeyError:
                             extract[instance_name] = dict()
                             extract[instance_name]['HistoryOutputs'] = dict()
-                        extract[instance_name]['HistoryOutputs'][region_name] = xr.Dataset()
+                        extract[instance_name]['HistoryOutputs'][region_name] = xarray.Dataset()
                         datasets.append(f'{instance_name}/HistoryOutputs/{region_name}')
                     current_dataset = extract[instance_name]['HistoryOutputs'][region_name]
                 # Loop through data meant for data arrays and create data arrays
@@ -2181,13 +2181,13 @@ class OdbReportFileParser(AbaqusFileParser):
                             try:
                                 current_dataset = extract[instance_name]['HistoryOutputs'][new_region_name]
                             except KeyError:
-                                extract[instance_name]['HistoryOutputs'][new_region_name] = xr.Dataset()
+                                extract[instance_name]['HistoryOutputs'][new_region_name] = xarray.Dataset()
                                 datasets.append(f'{instance_name}/HistoryOutputs/{new_region_name}')
                                 current_dataset = extract[instance_name]['HistoryOutputs'][new_region_name]
 
                     # Create data array and put it in the current dataset
-                    current_dataset[output_name] = xr.DataArray(
-                        data=np.asarray(current_output['data'], dtype='f'), coords=coords, dims=dims)
+                    current_dataset[output_name] = xarray.DataArray(
+                        data=numpy.asarray(current_output['data'], dtype='f'), coords=coords, dims=dims)
                     current_dataset[output_name].attrs['description'] = current_output['description']
         del self.history_extract_format
         del history_length
@@ -2226,7 +2226,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         current_dataset = extract[instance_name]['FieldOutputs'][region_name]
                     except KeyError:
                         try:
-                            extract[instance_name]['FieldOutputs'][region_name] = xr.Dataset()
+                            extract[instance_name]['FieldOutputs'][region_name] = xarray.Dataset()
                             datasets.append(f'{instance_name}/FieldOutputs/{region_name}')
                         except KeyError:
                             try:
@@ -2234,7 +2234,7 @@ class OdbReportFileParser(AbaqusFileParser):
                             except KeyError:
                                 extract[instance_name] = dict()
                                 extract[instance_name]['FieldOutputs'] = dict()
-                            extract[instance_name]['FieldOutputs'][region_name] = xr.Dataset()
+                            extract[instance_name]['FieldOutputs'][region_name] = xarray.Dataset()
                             datasets.append(f'{instance_name}/FieldOutputs/{region_name}')
                         current_dataset = extract[instance_name]['FieldOutputs'][region_name]
                     # Get the length of the previous dataset with the current instance and region names
@@ -2264,12 +2264,12 @@ class OdbReportFileParser(AbaqusFileParser):
                             try:
                                 current_dataset = extract[instance_name]['FieldOutputs'][new_region_name]
                             except KeyError:
-                                extract[instance_name]['FieldOutputs'][new_region_name] = xr.Dataset()
+                                extract[instance_name]['FieldOutputs'][new_region_name] = xarray.Dataset()
                                 datasets.append(f'{instance_name}/FieldOutputs/{new_region_name}')
                                 current_dataset = extract[instance_name]['FieldOutputs'][new_region_name]
 
                     # Create data array and put it in the current dataset
-                    current_dataset[field_name] = xr.DataArray(data=np.asarray(data, dtype='f'),
+                    current_dataset[field_name] = xarray.DataArray(data=numpy.asarray(data, dtype='f'),
                                                                coords=coords, dims=dims)
 
         del self.field_extract_format
@@ -2294,7 +2294,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 non_empty_datasets.append(dataset)
 
         extract_h5.create_group('xarray')
-        extract_h5['xarray'].create_dataset('Dataset', data=np.asarray(non_empty_datasets, dtype='S'))
+        extract_h5['xarray'].create_dataset('Dataset', data=numpy.asarray(non_empty_datasets, dtype='S'))
         extract_h5['xarray']['Dataset'].attrs['filename'] = filename
         # TODO: consider removing statement below, if this information is not required
         del extract  # Don't need the dictionary any more, so just remove it
@@ -2329,19 +2329,19 @@ class OdbReportFileParser(AbaqusFileParser):
                 h5file[path].attrs[key] = item
             elif isinstance(item, list):
                 if all(isinstance(x, (str, bytes)) for x in item):
-                    h5file.create_dataset(f'{path}/{key}', data=np.array(item, dtype='S'))
+                    h5file.create_dataset(f'{path}/{key}', data=numpy.array(item, dtype='S'))
                 elif all(isinstance(x, int) for x in item):
-                    h5file.create_dataset(f'{path}/{key}', data=np.array(item))
+                    h5file.create_dataset(f'{path}/{key}', data=numpy.array(item))
                 elif all(isinstance(x, float) for x in item):
-                    h5file.create_dataset(f'{path}/{key}', data=np.array(item, dtype=np.float64))
+                    h5file.create_dataset(f'{path}/{key}', data=numpy.array(item, dtype=numpy.float64))
                 else:
                     for index, list_item in enumerate(item):
                         if isinstance(list_item, (str, bytes)):
                             h5file[f'{path}{key}/{index}'] = list_item
                         elif isinstance(list_item, int):
-                            h5file[f'{path}{key}/{index}'] = np.int64(list_item)
+                            h5file[f'{path}{key}/{index}'] = numpy.int64(list_item)
                         elif isinstance(list_item, float):
-                            h5file[f'{path}{key}/{index}'] = np.float64(list_item)
+                            h5file[f'{path}{key}/{index}'] = numpy.float64(list_item)
                         elif isinstance(list_item, dict):
                             self.save_dict_to_group(h5file, f'{path}{key}/{index}/', list_item, output_file)
             elif isinstance(item, int):
@@ -2349,22 +2349,22 @@ class OdbReportFileParser(AbaqusFileParser):
                     h5file.create_group(path)
                 except ValueError:  # pragma: no cover
                     pass  # If group is already created, just ignore the error
-                h5file[path].attrs[key] = np.int64(item)
+                h5file[path].attrs[key] = numpy.int64(item)
             elif isinstance(item, float):
                 try:
                     h5file.create_group(path)
                 except ValueError:  # pragma: no cover
                     pass  # If group is already created, just ignore the error
-                h5file[path].attrs[key] = np.float(item)
+                h5file[path].attrs[key] = numpy.float(item)
             elif isinstance(item, tuple):
                 if item:
                     if isinstance(item[0], (str, bytes)):
-                        h5file[f'{path}{key}'] = np.array(item, dtype='S')
+                        h5file[f'{path}{key}'] = numpy.array(item, dtype='S')
                     else:
-                        h5file[f'{path}{key}'] = np.array(item)
+                        h5file[f'{path}{key}'] = numpy.array(item)
             elif isinstance(item, dict):
                 self.save_dict_to_group(h5file, f'{path}{key}/', item, output_file)
-            elif isinstance(item, xr.core.dataset.Dataset) or isinstance(item, xr.core.dataarray.DataArray):
+            elif isinstance(item, xarray.core.dataset.Dataset) or isinstance(item, xarray.core.dataarray.DataArray):
                 item.to_netcdf(path=output_file, mode='a', format="NETCDF4", group=f'{path}{key}/', engine=_settings._default_xarray_engine)
                 # TODO: In future additions of xarray, consider using option 'invalid_netcdf=True'
             else:
