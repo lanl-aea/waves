@@ -13,8 +13,8 @@ from waves._settings import _abaqus_environment_file
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
-    Appends ``source[0]``.jnl and ``source[0]``.stdout to the ``target`` list. The abaqus_journal Builder requires that the
-    journal file to execute is the first source in the list.
+    Appends ``source[0]``.stdout to the ``target`` list. The abaqus_journal Builder requires that the journal file to
+    execute is the first source in the list.
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
@@ -34,7 +34,7 @@ def _abaqus_journal_emitter(target, source, env):
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
-    suffixes = ['.jnl', '.stdout', f'.{_abaqus_environment_file}']
+    suffixes = ['.stdout', f'.{_abaqus_environment_file}']
     for suffix in suffixes:
         emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
         target.append(str(emitter_target))
