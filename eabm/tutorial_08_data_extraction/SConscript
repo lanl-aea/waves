@@ -3,8 +3,9 @@
 import pathlib
 
 import yaml
-
 import waves
+
+from eabm_package.python.tutorial_07_cartesian_product import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
@@ -13,17 +14,12 @@ Import('env')
 project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
-python_source_abspath = project_dir / env['python_source_dir']
 
 # Simulation variables
-current_build_directory = pathlib.Path(Dir('.').srcdir.abspath)
-parameter_study = current_build_directory / 'parameter_study_input.yaml'
 parameter_set_file_template = "parameter_set@number"
 model = "single_element"
 
 # Parameter Study with Cartesian Product
-with open(parameter_study) as input_file:
-    parameter_schema = yaml.safe_load(input_file)
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file_template=parameter_set_file_template)
