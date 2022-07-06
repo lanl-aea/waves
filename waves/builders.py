@@ -277,6 +277,8 @@ def abaqus_extract(abaqus_program='abaqus'):
        env = Environment()
        env.Append(BUILDERS={'AbaqusExtract': waves.builders.abaqus_extract()})
        AbaqusExtract(target=['my_job.h5', 'my_job.csv'], source=['my_job.odb'])
+
+    :param str abaqus_program: An absolute path or basename string for the abaqus program
     """
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
