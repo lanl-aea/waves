@@ -249,7 +249,7 @@ def python_script():
        import waves
        env = Environment()
        env.Append(BUILDERS={'PythonScript': waves.builders.python_script()})
-       PythonScript(target=['my_output.stdout'], source=['my_scipt.py'], python_options='', script_options='')
+       PythonScript(target=['my_output.stdout'], source=['my_script.py'], python_options='', script_options='')
     """
     python_builder = SCons.Builder.Builder(
         action=
@@ -264,16 +264,31 @@ def _abaqus_extract_emitter(target, source, env):
 
 
 def abaqus_extract(abaqus_program='abaqus'):
+    """Abaqus ODB file extraction Builder
+
+    This builder executes the ``odb_extract`` command line utility against the first ODB file in the source list. If
+    there is more than one ODB file in the source list, all but the first are ignored by ``odb_extract``.
+
+    .. code-block::
+       :caption: SConstruct
+       :name: odb_extract_script_example
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={'AbaqusExtract': waves.builders.abaqus_extract()})
+       AbaqusExtract(target=['my_job.h5', 'my_job.csv'], source=['my_job.odb'])
+    """
     abaqus_extract_builder = SCons.Builder.Builder(
-        action = [ 
+        action = [
             "cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.{csv,rep,h5} || true",
-            build_odb_extract
+            _build_odb_extract
         ],
         emitter=_abaqus_extract_emitter,
         abaqus_program=abaqus_program)
     return abaqus_extract_builder
 
 
-def build_odb_extract(target, source, env):
+def _build_odb_extract(target, source, env):
+    """Define the odb_extract action when used as an internal package and not a command line utility"""
     odb_extract.main([source[0].abspath], target[0].abspath, abaqus_command=env['abaqus_program'])
     return None
