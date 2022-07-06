@@ -163,3 +163,12 @@ abaqus_extract_emitter_input = {
 def test__python_script_emitter(target, source, expected):
     target, source = builders._abaqus_extract_emitter(target, source, None)
     assert target == expected
+
+
+@pytest.mark.unittest
+def test__abaqus_extract():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'AbaqusExtract': builders.abaqus_extract()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.AbaqusExtract(
+        target=['abaqus_extract.h5'], source=['abaqus_extract.odb'], journal_options="")
