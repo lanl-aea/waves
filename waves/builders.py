@@ -260,14 +260,47 @@ def python_script():
 
 
 def _abaqus_extract_emitter(target, source, env):
+    """Prepends the abaqus extract builder target H5 file if none is specified. Always appends the source[0].csv file.
+    Always appends the ``target[0]_datasets.h5`` file.
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.h5``. When in doubt,
+    provide the expected H5 file as a target, e.g. ``source[0].h5``.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
+    odb_file = pathlib.Path(source[0].path).name
+    odb_file = pathlib.Path(odb_file)
+    try:
+        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path('.')
+    if not target or pathlib.Path(str(target[0])).suffix != '.h5':
+        target.insert(0, str(build_subdirectory / odb_file.with_suffix('.h5')))
+    target.append(f"{build_subdirectory / pathlib.Path(str(target[0])).stem}_datasets.h5")
+    target.append(str(build_subdirectory / odb_file.with_suffix('.csv')))
     return target, source
 
 
 def abaqus_extract(abaqus_program='abaqus'):
     """Abaqus ODB file extraction Builder
 
-    This builder executes the ``odb_extract`` command line utility against the first ODB file in the source list. If
-    there is more than one ODB file in the source list, all but the first are ignored by ``odb_extract``.
+    This builder executes the ``odb_extract`` command line utility against an ODB file in the source list. The ODB file
+    must be the first file in the source list. If there is more than one ODB file in the source list, all but the first
+    file are ignored by ``odb_extract``.
+
+    The target list may specify an output H5 file name that differs from the ODB file base name as ``new_name.h5``. If
+    the first file in the target list does not contain the ``*.h5`` extension, the target list will be prepended with a
+    name matching the ODB file base name and the ``*.h5`` extension.
+
+    The builder emitter always appends the CSV file created by the ``abaqus odbreport`` command as executed by
+    ``odb_extract``.
 
     .. code-block::
        :caption: SConstruct
@@ -282,7 +315,7 @@ def abaqus_extract(abaqus_program='abaqus'):
     """
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
-            "cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.{csv,rep,h5} || true",
+            "cd ${TARGET.dir.abspath} && rm ${SOURCE.filebase}.csv ${TARGET.filebase}.h5 ${TARGET.filebase}_datasets.h5 || true",
             _build_odb_extract
         ],
         emitter=_abaqus_extract_emitter,
