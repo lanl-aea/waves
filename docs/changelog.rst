@@ -18,6 +18,7 @@ Bug fixes
 =========
 - Fix the output and return code unpacking when calling the ``run_external`` function from ``odb_extract.main``
   (:issue:`92`, :merge:`100`). By `Kyle Brindley`_.
+- Execute the ODB parser for H5 file output (:issue:`92`, :merge:`100`). By `Kyle Brindley`_.
 
 Documentation
 =============
