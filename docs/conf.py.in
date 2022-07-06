@@ -13,7 +13,8 @@ authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
            ('Prabhu S. Khalsa', 'W-13', '<pkhalsa@lanl.gov>'),
            ('Thomas Roberts', 'W-13', '<tproberts@lanl.gov>'),
            ('Sergio Cordova', 'W-13', '<sergioc@lanl.gov>'),
-           ('Scott Ouellette', 'W-13', '<souellette@lanl.gov>')]
+           ('Scott Ouellette', 'W-13', '<souellette@lanl.gov>'),
+           ('Matthew Fister', 'W-13', '<mwfister@lanl.gov>')]
 author_latex = ''
 author_manpage = ''
 for author, group, email in authors:
