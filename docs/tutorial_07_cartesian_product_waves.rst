@@ -116,12 +116,24 @@ After viewing the full file contents below, continue to read the step by step pr
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
       :language: Python
 
+Step-By-Step SConscript Discussion
+==================================
+
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
       :language: Python
       :lineno-match:
       :end-before: marker-1
+      :emphasize-lines: 8, 11
+
+The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import 
+statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the 
+``parameter_schema`` dictioanry into the ``SConscript`` file's name space from the ``tutorial_07_cartesian_product`` 
+module that you created in the :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial. 
+The second import line should look familiar, but is work pointing out again. Here, we import the ``env`` variable from 
+the parent construction environment. This will provide access to variables we added to the ``SConstruct`` file's 
+``project_variables`` dictionary in previous tutorials.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -130,6 +142,14 @@ After viewing the full file contents below, continue to read the step by step pr
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
+      :emphasize-lines: 6-10
+
+The unhighlighted portions of the code snippet above do not present any unique code that has not been previously 
+discussed.
+
+The highlighted portions of the code snippet above define some new ``simulation_variables`` for this tutorial. The 
+``current_build_directory`` is the absolute path of the directory where the ``SConscript`` lives and is constructed as a 
+`Python pathlib`_ object. ``parameter_study`` 
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
