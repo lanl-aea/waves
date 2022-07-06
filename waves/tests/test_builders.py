@@ -14,13 +14,13 @@ source_file = fs.File('dummy.py')
 journal_emitter_input = {
     'empty targets': ([],
                       [source_file],
-                      ['dummy.jnl', 'dummy.stdout', 'dummy.abaqus_v6.env']),
+                      ['dummy.stdout', 'dummy.abaqus_v6.env']),
     'one target': (['dummy.cae'],
                    [source_file],
-                   ['dummy.cae', 'dummy.jnl', 'dummy.stdout', 'dummy.abaqus_v6.env']),
+                   ['dummy.cae', 'dummy.stdout', 'dummy.abaqus_v6.env']),
     'subdirectory': (['set1/dummy.cae'],
                     [source_file],
-                    ['set1/dummy.cae', 'set1/dummy.jnl', 'set1/dummy.stdout', 'set1/dummy.abaqus_v6.env'])
+                    ['set1/dummy.cae', 'set1/dummy.stdout', 'set1/dummy.abaqus_v6.env'])
 }
 
 
