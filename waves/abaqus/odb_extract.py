@@ -160,7 +160,7 @@ def main(input_file,
 
     if output_type == 'h5':  # If the dataset isn't empty
         try:
-            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp)
+            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp).parse()
         except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if a string is found where an integer is expected
             print_critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
     else:

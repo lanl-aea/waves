@@ -1,3 +1,4 @@
+h5netcdf
 h5py
 numpy
 pytest
@@ -6,8 +7,8 @@ pyyaml
 scons
 setuptools
 setuptools_scm
-sphinx-argparse
 sphinx
+sphinx-argparse
 sphinx_rtd_theme
 sphinxcontrib-bibtex
 xarray
