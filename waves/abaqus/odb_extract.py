@@ -73,13 +73,13 @@ def get_parser():
     return parser
 
 
-def main(input_file,
-         output_file,
-         output_type='h5',
-         odb_report_args=None,
-         abaqus_command=_settings._default_abaqus_command,
-         delete_report_file=False,
-         verbose=False):
+def odb_extract(input_file,
+                output_file,
+                output_type='h5',
+                odb_report_args=None,
+                abaqus_command=_settings._default_abaqus_command,
+                delete_report_file=False,
+                verbose=False):
 
     # Handle arguments
     input_file = input_file[0]
@@ -216,13 +216,13 @@ def print_critical(message):
     raise SystemExit(-1)
 
 
-if __name__ == '__main__':
+def main():
     args = get_parser().parse_args()
-    sys.exit(main(args.input_file,
-                  args.output_file,
-                  args.output_type,
-                  args.odb_report_args,
-                  args.abaqus_command,
-                  args.delete_report_file,
-                  args.verbose,
+    sys.exit(odb_extract(args.input_file,
+                         args.output_file,
+                         args.output_type,
+                         args.odb_report_args,
+                         args.abaqus_command,
+                         args.delete_report_file,
+                         args.verbose,
             ))  # pragma: no cover
