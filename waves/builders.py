@@ -8,6 +8,7 @@ import SCons.Environment
 import SCons.Node
 
 from waves._settings import _abaqus_environment_file
+from waves.abaqus import odb_extract
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -248,7 +249,7 @@ def python_script():
        import waves
        env = Environment()
        env.Append(BUILDERS={'PythonScript': waves.builders.python_script()})
-       PythonScript(target=['my_output.stdout'], source=['my_scipt.py'], python_options='', script_options='')
+       PythonScript(target=['my_output.stdout'], source=['my_script.py'], python_options='', script_options='')
     """
     python_builder = SCons.Builder.Builder(
         action=
@@ -256,3 +257,73 @@ def python_script():
                 f"${{script_options}} > ${{SOURCE.filebase}}.stdout 2>&1"],
         emitter=_python_script_emitter)
     return python_builder
+
+
+def _abaqus_extract_emitter(target, source, env):
+    """Prepends the abaqus extract builder target H5 file if none is specified. Always appends the source[0].csv file.
+    Always appends the ``target[0]_datasets.h5`` file.
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.h5``. When in doubt,
+    provide the expected H5 file as a target, e.g. ``source[0].h5``.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
+    odb_file = pathlib.Path(source[0].path).name
+    odb_file = pathlib.Path(odb_file)
+    try:
+        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path('.')
+    if not target or pathlib.Path(str(target[0])).suffix != '.h5':
+        target.insert(0, str(build_subdirectory / odb_file.with_suffix('.h5')))
+    target.append(f"{build_subdirectory / pathlib.Path(str(target[0])).stem}_datasets.h5")
+    target.append(str(build_subdirectory / odb_file.with_suffix('.csv')))
+    return target, source
+
+
+def abaqus_extract(abaqus_program='abaqus'):
+    """Abaqus ODB file extraction Builder
+
+    This builder executes the ``odb_extract`` command line utility against an ODB file in the source list. The ODB file
+    must be the first file in the source list. If there is more than one ODB file in the source list, all but the first
+    file are ignored by ``odb_extract``.
+
+    The target list may specify an output H5 file name that differs from the ODB file base name as ``new_name.h5``. If
+    the first file in the target list does not contain the ``*.h5`` extension, the target list will be prepended with a
+    name matching the ODB file base name and the ``*.h5`` extension.
+
+    The builder emitter always appends the CSV file created by the ``abaqus odbreport`` command as executed by
+    ``odb_extract``.
+
+    .. code-block::
+       :caption: SConstruct
+       :name: odb_extract_script_example
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={'AbaqusExtract': waves.builders.abaqus_extract()})
+       AbaqusExtract(target=['my_job.h5', 'my_job.csv'], source=['my_job.odb'])
+
+    :param str abaqus_program: An absolute path or basename string for the abaqus program
+    """
+    abaqus_extract_builder = SCons.Builder.Builder(
+        action = [
+            "cd ${TARGET.dir.abspath} && rm ${SOURCE.filebase}.csv ${TARGET.filebase}.h5 ${TARGET.filebase}_datasets.h5 || true",
+            _build_odb_extract
+        ],
+        emitter=_abaqus_extract_emitter,
+        abaqus_program=abaqus_program)
+    return abaqus_extract_builder
+
+
+def _build_odb_extract(target, source, env):
+    """Define the odb_extract action when used as an internal package and not a command line utility"""
+    odb_extract.main([source[0].abspath], target[0].abspath, abaqus_command=env['abaqus_program'])
+    return None

@@ -9,6 +9,17 @@ Changelog
 0.1.15 (unreleased)
 *******************
 
+New Features
+============
+- Add ODB extract builder and EABM tutorial configuration (:issue:`92`, :merge:`100`). By `Prabhu Khalsa`_ and `Kyle
+  Brindley`_.
+
+Bug fixes
+=========
+- Fix the output and return code unpacking when calling the ``run_external`` function from ``odb_extract.main``
+  (:issue:`92`, :merge:`100`). By `Kyle Brindley`_.
+- Execute the ODB parser for H5 file output (:issue:`92`, :merge:`100`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Update project URLs to reflect the move to the AEA Gitlab group (:issue:`183`, :merge:`160`). By `Kyle Brindley`_.

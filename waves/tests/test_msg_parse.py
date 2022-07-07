@@ -10,7 +10,7 @@ import pytest
 from unittest.mock import patch
 from pathlib import Path
 
-from waves.abaqus.command_line_tools import msg_parse
+from waves.abaqus import msg_parse
 
 @pytest.mark.unittest
 def test_get_parser():

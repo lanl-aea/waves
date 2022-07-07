@@ -73,12 +73,16 @@ def get_parser():
     return parser
 
 
-def main():
-    args = get_parser().parse_args()
+def main(input_file,
+         output_file,
+         output_type='h5',
+         odb_report_args=None,
+         abaqus_command=_settings._default_abaqus_command,
+         delete_report_file=False,
+         verbose=False):
 
     # Handle arguments
-    verbose = args.verbose
-    input_file = args.input_file[0]
+    input_file = input_file[0]
     path_input_file = Path(input_file)
     odbreport_file = False
     if not path_input_file.exists():
@@ -87,17 +91,16 @@ def main():
         print_warning(verbose, f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
         odbreport_file = True
     file_base_name = str(path_input_file.with_suffix(''))
-    output_file = args.output_file
     if not output_file:  # If no output file given, use the name and path of odb file, but change the extension
-        output_file = f'{file_base_name}.{args.output_type}'
+        output_file = f'{file_base_name}.{output_type}'
     path_output_file = Path(output_file)
     file_suffix = path_output_file.suffix.replace('.', '')
-    if file_suffix != args.output_type:  # If file ends in different extension than requested output
-        output_file = str(path_output_file.with_suffix(f'.{args.output_type}'))  # Change extension
-        print_warning(verbose, f'Output specified as {args.output_type}, but output file extension is {file_suffix}. '
+    if file_suffix != output_type:  # If file ends in different extension than requested output
+        output_file = str(path_output_file.with_suffix(f'.{output_type}'))  # Change extension
+        print_warning(verbose, f'Output specified as {output_type}, but output file extension is {file_suffix}. '
                        f'Changing output file extension. Output file name {output_file}')
-        file_suffix = args.output_type
-    odb_report_args = args.odb_report_args
+        file_suffix = output_type
+    odb_report_args = odb_report_args
     job_name = file_base_name
     time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
     if not odb_report_args:
@@ -126,7 +129,7 @@ def main():
     # use regex that ignores case to replace 'html' or 'HTML' with 'CSV'
     odb_report_args = re.sub('(?i)' + re.escape('html'), lambda m: 'CSV', odb_report_args)
 
-    abaqus_base_command = which(args.abaqus_command)
+    abaqus_base_command = which(abaqus_command)
     if not abaqus_base_command:
         abaqus_base_command = _settings._default_abaqus_command  # try 'abaqus' anyway
 
@@ -147,15 +150,15 @@ def main():
             if answer[:1].lower() != 'y':
                 call_odbreport = True  # If user input is not yes, run odbreport again
     if call_odbreport:
-        output, return_code, error_code = run_external(abaqus_command)
+        return_code, output, error_code = run_external(abaqus_command)
         if return_code != 0:
-            print_critical(f'Abaqus odbreport command failed to execute. {error_code}')
+            print_critical(f"Abaqus odbreport command failed to execute. Abaqus output: '{output}'")
         if not Path(job_name).exists():
             print_critical(f'{job_name} does not exist.')
 
-    if args.output_type == 'h5':  # If the dataset isn't empty
+    if output_type == 'h5':  # If the dataset isn't empty
         try:
-            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp)
+            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp).parse(h5_file=output_file)
         except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if a string is found where an integer is expected
             print_critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
     else:
@@ -167,16 +170,17 @@ def main():
             print_critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
 
         # Write parsed output
-        if args.output_type == 'json':
+        if output_type == 'json':
             with open(output_file, 'w') as f:
                 json.dump(parsed_odb, f, indent=4)
-        elif args.output_type == 'yaml':
+        elif output_type == 'yaml':
             with open(output_file, 'w') as f:
                 yaml.safe_dump(parsed_odb, f)  # With safe_dump, tuples are converted to lists
 
-    if args.delete_report_file:
+    if delete_report_file:
         Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
     return 0
+
 
 def run_external(cmd):
     """
@@ -189,6 +193,7 @@ def run_external(cmd):
     p = run(args, capture_output=True)
     return p.returncode, p.stdout.decode(), p.stderr.decode()
 
+
 def print_warning(verbose, message):
     """
     Log a message to the screen
@@ -198,6 +203,7 @@ def print_warning(verbose, message):
     """
     if verbose:
         print(message)
+
 
 def print_critical(message):
     """
@@ -211,4 +217,12 @@ def print_critical(message):
 
 
 if __name__ == '__main__':
-    sys.exit(main())  # pragma: no cover
+    args = get_parser().parse_args()
+    sys.exit(main(args.input_file,
+                  args.output_file,
+                  args.output_type,
+                  args.odb_report_args,
+                  args.abaqus_command,
+                  args.delete_report_file,
+                  args.verbose,
+            ))  # pragma: no cover

@@ -3,12 +3,10 @@
 import os
 import pathlib
 
-from waves._settings import _project_name_short
-
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
 documentation_source_dir = 'docs'
-package_source_dir = _project_name_short.lower()
+package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
     'build_wrapper': 'waves/bin/waves_build_wrapper',
