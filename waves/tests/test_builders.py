@@ -150,6 +150,9 @@ abaqus_extract_emitter_input = {
     'one target': (['new_name.h5'],
                    [source_file],
                    ['new_name.h5', 'new_name_datasets.h5', 'dummy.csv']),
+    'bad extension': (['new_name.txt'],
+                   [source_file],
+                   ['dummy.h5', 'new_name.txt', 'dummy_datasets.h5', 'dummy.csv']),
     'subdirectory': (['set1/dummy.h5'],
                     [source_file],
                     ['set1/dummy.h5', 'set1/dummy_datasets.h5', 'set1/dummy.csv'])

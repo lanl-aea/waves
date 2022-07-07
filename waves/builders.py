@@ -283,6 +283,7 @@ def _abaqus_extract_emitter(target, source, env):
         build_subdirectory = pathlib.Path('.')
     if not target or pathlib.Path(str(target[0])).suffix != '.h5':
         target.insert(0, str(build_subdirectory / odb_file.with_suffix('.h5')))
+    import pdb; pdb.set_trace()
     target.append(f"{build_subdirectory / pathlib.Path(str(target[0])).stem}_datasets.h5")
     target.append(str(build_subdirectory / odb_file.with_suffix('.csv')))
     return target, source
