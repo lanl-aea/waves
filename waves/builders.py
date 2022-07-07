@@ -325,5 +325,5 @@ def abaqus_extract(abaqus_program='abaqus'):
 
 def _build_odb_extract(target, source, env):
     """Define the odb_extract action when used as an internal package and not a command line utility"""
-    odb_extract.main([source[0].abspath], target[0].abspath, abaqus_command=env['abaqus_program'])
+    odb_extract.odb_extract([source[0].abspath], target[0].abspath, abaqus_command=env['abaqus_program'])
     return None
