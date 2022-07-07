@@ -83,6 +83,7 @@ test:
     - eabm/eabm_package/python/*
     - eabm/tutorial*/*
     - eabm/tutorial*SConstruct
+    - eabm/quickstart_SConstruct
   imports:
     - waves
   commands:

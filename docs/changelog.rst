@@ -21,6 +21,8 @@ Bug fixes
 - Execute the ODB parser for H5 file output (:issue:`92`, :merge:`100`). By `Kyle Brindley`_.
 - Fix the ``odb_extract`` entry point specification. New specification required by new internal interface introduced in
   :merge:`100` (:issue:`186`, :merge:`163`). By `Kyle Brindley`_.
+- Fix a missing file copy required by the Conda recipe test definition (:issue:`187`, :merge:`164`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============
