@@ -7,8 +7,9 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 
-from waves._settings import _abaqus_environment_file
 from waves.abaqus import odb_extract
+from waves._settings import _abaqus_environment_extension
+from waves._settings import _stdout_extension
 
 
 def _abaqus_journal_emitter(target, source, env):
@@ -33,7 +34,7 @@ def _abaqus_journal_emitter(target, source, env):
         build_subdirectory = first_target.parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
-    suffixes = ['.stdout', f'.{_abaqus_environment_file}']
+    suffixes = [_stdout_extension, _abaqus_environment_extension]
     for suffix in suffixes:
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
@@ -75,9 +76,9 @@ def abaqus_journal(abaqus_program='abaqus'):
     abaqus_journal_builder = SCons.Builder.Builder(
         action=
             [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
-                 f"${{TARGET.filebase}}.{_abaqus_environment_file}",
+                 f"${{TARGET.filebase}}{_abaqus_environment_extension}",
              f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
-                 f"${{journal_options}} > ${{TARGET.filebase}}.stdout 2>&1"],
+                 f"${{journal_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"],
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -92,15 +93,15 @@ def _abaqus_solver_emitter(target, source, env):
     """
     if not 'job_name' in env or not env['job_name']:
         env['job_name'] = pathlib.Path(source[0].path).stem
-    builder_suffixes = ['stdout', _abaqus_environment_file]
-    abaqus_simulation_suffixes = ['odb', 'dat', 'msg', 'com', 'prt']
+    builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
+    abaqus_simulation_suffixes = ['.odb', '.dat', '.msg', '.com', '.prt']
     suffixes = builder_suffixes + abaqus_simulation_suffixes
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
     for suffix in suffixes:
-        emitter_target = build_subdirectory / f"{env['job_name']}.{suffix}"
+        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
         target.append(str(emitter_target))
     return target, source
 
@@ -154,9 +155,9 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
         ``post_simulation`` action using the ``${}`` syntax.
     """
     action = [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
-                  f"${{job_name}}.{_abaqus_environment_file}",
+                  f"${{job_name}}{_abaqus_environment_extension}",
               f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
-                  f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}.stdout 2>&1"]
+                  f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     if post_simulation:
         action.append(f"cd ${{TARGET.dir.abspath}} && {post_simulation}")
     abaqus_solver_builder = SCons.Builder.Builder(
@@ -235,7 +236,7 @@ def _python_script_emitter(target, source, env):
         build_subdirectory = first_target.parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
-    suffixes = ['.stdout']
+    suffixes = [_stdout_extension]
     for suffix in suffixes:
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
@@ -274,7 +275,7 @@ def python_script():
     python_builder = SCons.Builder.Builder(
         action=
             [f"cd ${{TARGET.dir.abspath}} && python ${{python_options}} ${{SOURCE.abspath}} " \
-                f"${{script_options}} > ${{TARGET.filebase}}.stdout 2>&1"],
+                f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"],
         emitter=_python_script_emitter)
     return python_builder
 
