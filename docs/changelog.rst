@@ -35,6 +35,8 @@ Internal Changes
   (:issue:`184`, :merge:`161`).  By `Kyle Brindley`_.
 - Remove the ``.jnl`` file from the list of targets appended by the Abaqus journal builder (:issue:`180`, :merge:`162`).
   By `Matthew Fister`_.
+- Explicitly manage the ``.jnl`` target additions for more complete SCons clean operations (:issue:`185`, :merge:`168`).
+  By `Kyle Brindley`_.
 
 *******************
 0.1.14 (2022-06-30)
