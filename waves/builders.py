@@ -113,13 +113,21 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
     ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. The Builder emitter will
     append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
 
-    The target list only appends those extensions which are common to Abaqus analysis operations. Some extensions may
-    need to be added explicitly according to the Abaqus simulation solver, type, or options. If you find that SCons
-    isn't automatically cleaning some Abaqus output files, they are not in the automatically appended target list.
+    This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets
+    automatically. The target list only appends those extensions which are common to Abaqus analysis operations. Some
+    extensions may need to be added explicitly according to the Abaqus simulation solver, type, or options. If you find
+    that SCons isn't automatically cleaning some Abaqus output files, they are not in the automatically appended target
+    list.
 
-    The ``-interactive`` option is always appended to avoid exiting the Abaqus task before the simulation is complete.
-    The ``-ask_delete no`` to option is always appended to overwrite existing files in programmatic execution, where
-    it is assumed that the Abaqus solver target(s) should be re-built when their source files change.
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/job_name.odb``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``my_target.stdout``.
+
+    The ``-interactive`` option is always appended to the builder action to avoid exiting the Abaqus task before the
+    simulation is complete.  The ``-ask_delete no`` option is always appended to the builder action to overwrite
+    existing files in programmatic execution, where it is assumed that the Abaqus solver target(s) should be re-built
+    when their source files change.
 
     .. code-block::
        :caption: SConstruct
