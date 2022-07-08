@@ -12,9 +12,6 @@ from waves import builders
 fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 journal_emitter_input = {
-    'empty targets': ([],
-                      [source_file],
-                      ['dummy.stdout', 'dummy.abaqus_v6.env']),
     'one target': (['dummy.cae'],
                    [source_file],
                    ['dummy.cae', 'dummy.stdout', 'dummy.abaqus_v6.env']),
@@ -111,9 +108,6 @@ def test__copy_substitute(source_list, expected_list):
 fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 python_emitter_input = {
-    'empty targets': ([],
-                      [source_file],
-                      ['dummy.stdout']),
     'one target': (['dummy.cub'],
                    [source_file],
                    ['dummy.cub', 'dummy.stdout']),
