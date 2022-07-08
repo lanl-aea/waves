@@ -315,9 +315,12 @@ def abaqus_extract(abaqus_program='abaqus'):
     must be the first file in the source list. If there is more than one ODB file in the source list, all but the first
     file are ignored by ``odb_extract``.
 
+    This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets
+    and ``odb_extract`` target name constructions automatically.
+
     The target list may specify an output H5 file name that differs from the ODB file base name as ``new_name.h5``. If
-    the first file in the target list does not contain the ``*.h5`` extension, the target list will be prepended with a
-    name matching the ODB file base name and the ``*.h5`` extension.
+    the first file in the target list does not contain the ``*.h5`` extension, or if there is no file in the target
+    list, the target list will be prepended with a name matching the ODB file base name and the ``*.h5`` extension.
 
     The builder emitter always appends the CSV file created by the ``abaqus odbreport`` command as executed by
     ``odb_extract``.
