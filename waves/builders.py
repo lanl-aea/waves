@@ -14,13 +14,12 @@ from waves.abaqus import odb_extract
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
-    Appends ``source[0]``.stdout to the ``target`` list. The abaqus_journal Builder requires that the journal file to
-    execute is the first source in the list.
+    Appends ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder requires at least one target.
 
-    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
-    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
-    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the expected STDOUT redirected file as a target, e.g. ``source[0].stdout``.
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``target[0].stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -46,7 +45,15 @@ def abaqus_journal(abaqus_program='abaqus'):
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
     function accepts all SCons Builder arguments and adds the ``journal_options`` and ``abaqus_options`` string
-    arguments. The Builder emitter will append the builder managed targets automatically.
+    arguments.
+
+    At least one target must be specified. The Builder emitter will append the builder managed targets automatically.
+    Appends ``target[0]``.stdout and ``target[0]``.abaqus_v6.env to the ``target`` list.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``my_target.stdout``.
 
     .. code-block::
        :caption: Abaqus journal builder action
@@ -201,13 +208,12 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
 def _python_script_emitter(target, source, env):
     """Appends the python_script builder target list with the builder managed targets
 
-    Appends ``source[0]``.stdout to the ``target`` list. The python_script Builder requires that the
-    python script to execute is the first source in the list.
+    Appends ``target[0]``.stdout to the ``target`` list. The python_script Builder requires at least one target.
 
-    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
-    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
-    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the expected STDOUT redirected file as a target, e.g. ``python_script_basename.stdout``.
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``target[0].stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -232,7 +238,15 @@ def python_script():
 
     This builder requires that the python script to execute is the first source in the list. The builder returned by
     this function accepts all SCons Builder arguments and adds the ``script_options`` and ``python_options`` string
-    arguments. The Builder emitter will append the builder managed targets automatically.
+    arguments.
+
+    At least one target must be specified. The Builder emitter will append the builder managed targets automatically.
+    Appends ``target[0]``.stdout to the ``target`` list.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``my_target.stdout``.
 
     .. code-block::
        :caption: Python script builder action
