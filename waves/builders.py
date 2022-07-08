@@ -223,7 +223,7 @@ def _python_script_emitter(target, source, env):
         build_subdirectory = pathlib.Path('.')
     suffixes = ['.stdout']
     for suffix in suffixes:
-        emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
+        emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
     return target, source
 
