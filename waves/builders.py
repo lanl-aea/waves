@@ -9,6 +9,7 @@ import SCons.Node
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
+from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _stdout_extension
 
 
@@ -94,8 +95,7 @@ def _abaqus_solver_emitter(target, source, env):
     if not 'job_name' in env or not env['job_name']:
         env['job_name'] = pathlib.Path(source[0].path).stem
     builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
-    abaqus_simulation_suffixes = ['.odb', '.dat', '.msg', '.com', '.prt']
-    suffixes = builder_suffixes + abaqus_simulation_suffixes
+    suffixes = builder_suffixes + _abaqus_solver_common_suffixes
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:

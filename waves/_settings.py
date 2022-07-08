@@ -7,4 +7,5 @@ _project_name = f"{_project_name_short} Analysis for Validated Engineering Simul
 _project_bin_dir = _project_root_abspath / 'bin' 
 _abaqus_environment_file = 'abaqus_v6.env'
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
+_abaqus_solver_common_suffixes = ['.odb', '.dat', '.msg', '.com', '.prt']
 _stdout_extension = ".stdout"
