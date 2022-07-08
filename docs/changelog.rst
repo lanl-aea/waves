@@ -27,6 +27,7 @@ Bug fixes
 Documentation
 =============
 - Update project URLs to reflect the move to the AEA Gitlab group (:issue:`183`, :merge:`160`). By `Kyle Brindley`_.
+- Add a missing input file to the SolverPrep tutorial instructions (:issue:`192`, :merge:`167`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
