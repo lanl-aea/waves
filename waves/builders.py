@@ -10,6 +10,7 @@ import SCons.Node
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_solver_common_suffixes
+from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 
 
@@ -208,7 +209,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
                 target=str(copy_target),
                 source=str(source_file),
                 action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}'))
-        if source_file.suffix == '.in':
+        if source_file.suffix == _scons_substfile_suffix:
             substfile_target = build_subdirectory / source_file.name
             target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
     return target_list
