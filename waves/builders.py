@@ -59,7 +59,7 @@ def abaqus_journal(abaqus_program='abaqus'):
        :caption: Abaqus journal builder action
        :name: abaqus_journal_action
 
-       abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${SOURCE.filebase}.stdout 2>&1
+       abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -75,9 +75,9 @@ def abaqus_journal(abaqus_program='abaqus'):
     abaqus_journal_builder = SCons.Builder.Builder(
         action=
             [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
-                 f"${{SOURCE.filebase}}.{_abaqus_environment_file}",
+                 f"${{TARGET.filebase}}.{_abaqus_environment_file}",
              f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
-                 f"${{journal_options}} > ${{SOURCE.filebase}}.stdout 2>&1"],
+                 f"${{journal_options}} > ${{TARGET.filebase}}.stdout 2>&1"],
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -260,7 +260,7 @@ def python_script():
        :caption: Python script builder action
        :name: python_script_action
 
-       python ${python_options} ${SOURCE.abspath} ${script_options} > ${SOURCE.filebase}.stdout 2>&1
+       python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -274,7 +274,7 @@ def python_script():
     python_builder = SCons.Builder.Builder(
         action=
             [f"cd ${{TARGET.dir.abspath}} && python ${{python_options}} ${{SOURCE.abspath}} " \
-                f"${{script_options}} > ${{SOURCE.filebase}}.stdout 2>&1"],
+                f"${{script_options}} > ${{TARGET.filebase}}.stdout 2>&1"],
         emitter=_python_script_emitter)
     return python_builder
 
