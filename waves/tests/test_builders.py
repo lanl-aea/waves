@@ -12,9 +12,9 @@ from waves import builders
 fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 journal_emitter_input = {
-    'one target': (['dummy.cae'],
+    'one target': (['target.cae'],
                    [source_file],
-                   ['dummy.cae', 'dummy.stdout', 'dummy.abaqus_v6.env']),
+                   ['target.cae', 'target.stdout', 'target.abaqus_v6.env']),
     'subdirectory': (['set1/dummy.cae'],
                     [source_file],
                     ['set1/dummy.cae', 'set1/dummy.stdout', 'set1/dummy.abaqus_v6.env'])
@@ -108,9 +108,9 @@ def test__copy_substitute(source_list, expected_list):
 fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 python_emitter_input = {
-    'one target': (['dummy.cub'],
+    'one target': (['target.cub'],
                    [source_file],
-                   ['dummy.cub', 'dummy.stdout']),
+                   ['target.cub', 'target.stdout']),
     'subdirectory': (['set1/dummy.cub'],
                     [source_file],
                     ['set1/dummy.cub', 'set1/dummy.stdout'])
@@ -157,7 +157,7 @@ abaqus_extract_emitter_input = {
 @pytest.mark.parametrize('target, source, expected',
                          abaqus_extract_emitter_input.values(),
                          ids=abaqus_extract_emitter_input.keys())
-def test__python_script_emitter(target, source, expected):
+def test__abaqus_extract_emitter(target, source, expected):
     target, source = builders._abaqus_extract_emitter(target, source, None)
     assert target == expected
 
