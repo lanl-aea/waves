@@ -9,6 +9,11 @@ Changelog
 0.1.15 (unreleased)
 *******************
 
+Breaking changes
+================
+- Require at least one target for the AbaqusJournal and PythonScript builders (:issue:`188`, :merge:`166`). By `Kyle
+  Brindley`_.
+
 New Features
 ============
 - Add ODB extract builder and EABM tutorial configuration (:issue:`92`, :merge:`100`). By `Prabhu Khalsa`_ and `Kyle
@@ -23,11 +28,16 @@ Bug fixes
   :merge:`100` (:issue:`186`, :merge:`163`). By `Kyle Brindley`_.
 - Fix a missing file copy required by the Conda recipe test definition (:issue:`187`, :merge:`164`). By `Kyle
   Brindley`_.
+- Match the script builder redirected STDOUT file name to the first target. Required to allow multiple tasks that
+  execute the same script. Adds new target list requirement the script builders (:issue:`188`, :merge:`166`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============
 - Update project URLs to reflect the move to the AEA Gitlab group (:issue:`183`, :merge:`160`). By `Kyle Brindley`_.
 - Add a missing input file to the SolverPrep tutorial instructions (:issue:`192`, :merge:`167`). By `Kyle Brindley`_.
+- Clarify target list requirements and emitter behavior in the builder APIs (:issue:`188`, :merge:`160`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
