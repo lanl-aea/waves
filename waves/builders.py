@@ -29,15 +29,14 @@ def _abaqus_journal_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    journal_file = pathlib.Path(source[0].path).name
-    journal_file = pathlib.Path(journal_file)
+    first_target = pathlib.Path(str(target[0]))
     try:
-        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+        build_subdirectory = first_target.parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
     suffixes = ['.stdout', f'.{_abaqus_environment_file}']
     for suffix in suffixes:
-        emitter_target = build_subdirectory / journal_file.with_suffix(suffix)
+        emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
     return target, source
 
@@ -217,10 +216,9 @@ def _python_script_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    journal_file = pathlib.Path(source[0].path).name
-    journal_file = pathlib.Path(journal_file)
+    first_target = pathlib.Path(str(target[0]))
     try:
-        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+        build_subdirectory = first_target.parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path('.')
     suffixes = ['.stdout']
