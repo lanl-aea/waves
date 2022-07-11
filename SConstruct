@@ -55,7 +55,7 @@ AddOption(
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
                   ignore_documentation=GetOption("ignore_documentation"),
-                  unconditional_build=GetOption("unconditional_build")
+                  unconditional_build=GetOption("unconditional_build"))
 
 # Find required programs for conditional target ignoring
 required_programs = ['sphinx-build']
@@ -63,9 +63,6 @@ conf = env.Configure()
 for program in required_programs:
     env[program.replace('-', '_')] = conf.CheckProg(program)
 conf.Finish()
-
-# Add project command line variable options to help message
-Help(variables.GenerateHelpText(env), append=True)
 
 # Build variable substitution dictionary
 project_substitution_dictionary = dict()
@@ -100,4 +97,4 @@ alias_list = docs_aliases + pytest_aliases
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
-Help(alias_help)
+Help(alias_help, append=True)
