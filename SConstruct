@@ -26,10 +26,6 @@ project_variables = {
 # Accept command line variables with fall back default values
 variables = Variables(None, ARGUMENTS)
 variables.AddVariables(
-    PathVariable('variant_dir_base',
-        help='SCons variant (build) root directory. Relative or absolute path.',
-        default='build',
-        validator=PathVariable.PathAccept),
     BoolVariable('conditional_ignore',
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
         default=True),
@@ -37,10 +33,23 @@ variables.AddVariables(
         help="Boolean to ignore the documentation build, e.g. during Conda package build and testing.",
         default=False))
 
+# Add commane line options
+AddOption(
+    '--build-dir',
+    dest='variant_dir_base',
+    default='build',
+    nargs=1,
+    type='string',
+    action='store',
+    metavar='DIR',
+    help='SCons variant (build) root directory. Relative or absolute path.'
+)
+
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
-                  variables=variables)
+                  variables=variables,
+                  variant_dir_base=GetOption('variant_dir_base'))
 
 # Find required programs for conditional target ignoring
 required_programs = ['sphinx-build']
@@ -50,7 +59,7 @@ for program in required_programs:
 conf.Finish()
 
 # Add project command line variable options to help message
-Help(variables.GenerateHelpText(env))
+Help(variables.GenerateHelpText(env), append=True)
 
 # Build variable substitution dictionary
 project_substitution_dictionary = dict()
