@@ -88,7 +88,7 @@ test:
   imports:
     - waves
   commands:
-    - scons . --keep-going conditional_ignore=False ignore_documentation=True
+    - scons . --keep-going --unconditional-build --ignore-documentation
     - cd eabm
     # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=quickstart_SConstruct --keep-going
