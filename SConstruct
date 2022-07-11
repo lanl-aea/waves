@@ -22,8 +22,7 @@ project_variables = {
     'tutorial_07_dir': 'tutorial_07_cartesian_product'
 }
 
-# =========================================================================================== COMMAND LINE VARIABLES ===
-# Add commane line options
+# ============================================================================================= COMMAND LINE OPTIONS ===
 AddOption(
     "--build-dir",
     dest="variant_dir_base",
@@ -52,9 +51,8 @@ AddOption(
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
-# Inherit user's full environment and set project variables
+# Inherit user's full environment and set project options 
 env = Environment(ENV=os.environ.copy(),
-                  variables=variables,
                   variant_dir_base=GetOption("variant_dir_base"),
                   ignore_documentation=GetOption("ignore_documentation"),
                   unconditional_build=GetOption("unconditional_build")
