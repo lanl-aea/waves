@@ -15,22 +15,32 @@ version = '0.1.0'
 
 # Comments used in tutorial code snippets: marker-1
 
-# Accept command line variables with fall back default values
-variables = Variables(None, ARGUMENTS)
-variables.AddVariables(
-    PathVariable('variant_dir_base',
-        help='SCons variant (build) root directory. Relative or absolute path.',
-        default='build',
-        validator=PathVariable.PathAccept),
-    BoolVariable('conditional_ignore',
-        help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
-        default=True))
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+AddOption(
+    "--unconditional-build",
+    dest="unconditional_build",
+    default=False,
+    action="store_true",
+    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+            " and it would normally be ignored. (default: '%default')"
+)
 
 # Comments used in tutorial code snippets: marker-2
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
-                  variables=variables)
+                  variant_dir_base=GetOption("variant_dir_base"),
+                  unconditional_build=GetOption("unconditional_build")
 
 # Comments used in tutorial code snippets: marker-3
 

@@ -55,7 +55,7 @@ AddOption(
 
 # Comments used in tutorial code snippets: marker-2
 
-# Inherit user's full environment and set project options 
+# Inherit user's full environment and set project options
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
                   ignore_documentation=GetOption("ignore_documentation"),

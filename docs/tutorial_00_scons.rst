@@ -114,9 +114,8 @@ the default build directory named ``build`` and the second ``scons`` call will c
    build/
    non_default_build/
 
-The ``--unconditional-build`` and ``--ignore-documentation`` options are mostly useful for :ref:`continuous_integration`
-testing. At the end of this tutorial, you will see how to explore the project specific command line options help and
-usage.
+The ``--unconditional-build`` option is mostly useful for :ref:`continuous_integration` testing. At the end of this
+tutorial, you will see how to explore the project specific command line options help and usage.
 
 6. Add the content below to the ``SConstruct`` file to initialize the `SCons construction environment`_.
 
