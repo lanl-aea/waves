@@ -35,7 +35,8 @@ for current_set_name, parameter_text in parameter_study.items():
     journal_file = f"{model}_geometry"
     journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
     workflow.extend(env.AbaqusJournal(
-        target=[f"{current_set_name / journal_file}.cae"],
+        target=[f"{current_set_name / journal_file}.cae",
+                f"{current_set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py"],
         journal_options=journal_options))
 
@@ -43,7 +44,8 @@ for current_set_name, parameter_text in parameter_study.items():
     journal_file = f"{model}_partition"
     journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
     workflow.extend(env.AbaqusJournal(
-        target=[f"{current_set_name / journal_file}.cae"],
+        target=[f"{current_set_name / journal_file}.cae",
+                f"{current_set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{current_set_name / model}_geometry.cae"],
         journal_options=journal_options))
@@ -53,6 +55,7 @@ for current_set_name, parameter_text in parameter_study.items():
     journal_options = f"--global-seed {simulation_variables['global_seed']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae",
+                f"{current_set_name / journal_file}.jnl",
                 f"{current_set_name / journal_file}.inp"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{current_set_name / model}_partition.cae"],
