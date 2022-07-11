@@ -161,30 +161,7 @@ In `WAVES`_ and `WAVES-EABM`_, this approach is primarily used to allow develope
 computers without cluttering their test builds with tasks that cannot succeed on their local computer.
 :ref:`tutorial_geometry_waves` will introduce the use of these variables for build control.
 
-8. Add the content below to the ``SConstruct`` file to add the command-line build variables to the `SCons project build
-   help`_ message.
-
-.. admonition:: waves-eabm-tutorial/SConstruct
-
-   .. literalinclude:: eabm_tutorial_00_SConstruct
-      :language: Python
-      :lineno-match:
-      :start-after: marker-4
-      :end-before: marker-5
-
-The following line adds the help messages for the command-line build options to the project help message displayed
-wheen running ``scons -h``. The help messages are added to the construction environment, so this line must come after
-the construction environment instantiation.
-
-.. note::
-
-   The project help message uses the conventional lowercase help option, ``-h``. Most bash commands use this option to
-   display the command's help message corresponding the software options. Due to this behavior, the `SCons`_ command
-   options are displayed with the unconventional capitalized option, ``-H``, as ``scons -H``. The `WAVES-EABM`_
-   tutorials and documentation will not discuss the full range of `SCons`_ command options, so modsim developers are
-   encouraged to read the `SCons`_ usage summary and `SCons manpage`_ to learn more about available build control options.
-
-9. Add the content below to the ``SConstruct`` file to add the project meta data to the construction environment.
+8. Add the content below to the ``SConstruct`` file to add the project meta data to the construction environment.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -200,7 +177,7 @@ of project meta data, the project meta data variables are added to the construct
 around to all `SCons`_ configuration files. The implementation that passes the construction environment around is
 introduced in :ref:`tutorial_geometry_waves`.
 
-10. Add the content below to the ``SConstruct`` file to add `WAVES`_ builders to the project definition.
+9. Add the content below to the ``SConstruct`` file to add `WAVES`_ builders to the project definition.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -219,7 +196,7 @@ The `WAVES`_ :ref:`waves_builders_api` describes the available builders and thei
 supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
 builders`_.
 
-11. Add the content below to the ``SConstruct`` file to create a placeholder call to the hierarchical simulation configuration files.
+10. Add the content below to the ``SConstruct`` file to create a placeholder call to the hierarchical simulation configuration files.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -234,7 +211,7 @@ argument allows the project configuration file to pass the ``env`` construction 
 sharing environments`_ feature. The first simulation configuration will be added to the ``eabm_simulation_directories``
 list in :ref:`tutorial_geometry_waves`.
 
-12. Add the content below to the ``SConstruct`` file to add an empty default target list and to list the default targets
+11. Add the content below to the ``SConstruct`` file to add an empty default target list and to list the default targets
     in the project help message.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
@@ -252,7 +229,21 @@ useful to print the list of default targets in the project help to remind develo
 target is specified in the call to ``scons``. The second call to ``Help()`` will append the default target list to the
 output of ``scons -h``.
 
-13. Add the content below to the ``SConstruct`` file to add the project aliases to the project help message.
+Additionally, the ``Help(...)`` line adds the help messages for the command-line build options to the project help
+message displayed wheen running ``scons -h``. The help messages are added to the construction environment, so this line
+must come after the construction environment instantiation. To display the project specific command line options, the first
+use of the ``Help()`` `SCons`_ method must include the ``append=True`` keyword argument.
+
+.. note::
+
+   The project help message uses the conventional lowercase help option, ``-h``. Most bash commands use this option to
+   display the command's help message corresponding the software options. Due to this behavior, the `SCons`_ command
+   options are displayed with the unconventional capitalized option, ``-H``, as ``scons -H``. The `WAVES-EABM`_
+   tutorials and documentation will not discuss the full range of `SCons`_ command options, so modsim developers are
+   encouraged to read the `SCons`_ usage summary and `SCons manpage`_ to learn more about available build control options.
+
+
+12. Add the content below to the ``SConstruct`` file to add the project aliases to the project help message.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
