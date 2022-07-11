@@ -23,13 +23,6 @@ project_variables = {
 }
 
 # =========================================================================================== COMMAND LINE VARIABLES ===
-# Accept command line variables with fall back default values
-variables = Variables(None, ARGUMENTS)
-variables.AddVariables(
-    BoolVariable('conditional_ignore',
-        help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
-        default=True))
-
 # Add commane line options
 AddOption(
     "--build-dir",
@@ -46,7 +39,16 @@ AddOption(
     dest="ignore_documentation",
     default=False,
     action="store_true",
-    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. (default: '%default')"
+    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the " \
+         "'--unconditional-build' option. (default: '%default')"
+)
+AddOption(
+    "--unconditional-build",
+    dest="unconditional_build",
+    default=False,
+    action="store_true",
+    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+            " and it would normally be ignored. (default: '%default')"
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
@@ -54,7 +56,8 @@ AddOption(
 env = Environment(ENV=os.environ.copy(),
                   variables=variables,
                   variant_dir_base=GetOption("variant_dir_base"),
-                  ignore_documentation=GetOption("ignore_documentation"))
+                  ignore_documentation=GetOption("ignore_documentation"),
+                  unconditional_build=GetOption("unconditional_build")
 
 # Find required programs for conditional target ignoring
 required_programs = ['sphinx-build']
