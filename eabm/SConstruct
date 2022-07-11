@@ -59,7 +59,7 @@ AddOption(
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
                   ignore_documentation=GetOption("ignore_documentation"),
-                  unconditional_build=GetOption("unconditional_build")
+                  unconditional_build=GetOption("unconditional_build"))
 
 # Comments used in tutorial code snippets: marker-3
 
@@ -71,9 +71,6 @@ for program in required_programs:
 conf.Finish()
 
 # Comments used in tutorial code snippets: marker-4
-
-# Add project command line variable options to help message
-Help(variables.GenerateHelpText(env))
 
 # Comments used in tutorial code snippets: marker-5
 
@@ -142,7 +139,7 @@ for source_dir in eabm_simulation_directories:
 default_targets_help = "\nDefault Targets:\n"
 for target in DEFAULT_TARGETS:
     default_targets_help += f"    {str(target)}\n"
-Help(default_targets_help)
+Help(default_targets_help, append=True)
 
 # Comments used in tutorial code snippets: marker-10
 

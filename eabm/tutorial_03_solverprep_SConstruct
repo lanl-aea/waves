@@ -38,7 +38,7 @@ AddOption(
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
-                  unconditional_build=GetOption("unconditional_build")
+                  unconditional_build=GetOption("unconditional_build"))
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 required_programs = ['abaqus']
@@ -46,9 +46,6 @@ conf = env.Configure()
 for program in required_programs:
     env[program.replace('-', '_')] = conf.CheckProg(program)
 conf.Finish()
-
-# Add project command line variable options to help message
-Help(variables.GenerateHelpText(env))
 
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM-TUTORIAL'
@@ -82,7 +79,7 @@ env.Default()  # Empty defaults list to avoid building all simulation targets by
 default_targets_help = "\nDefault Targets:\n"
 for target in DEFAULT_TARGETS:
     default_targets_help += f"    {str(target)}\n"
-Help(default_targets_help)
+Help(default_targets_help, append=True)
 
 # Add aliases to help message so users know what build target options are available
 # TODO: recover alias list from SCons variable instead of constructing manually
