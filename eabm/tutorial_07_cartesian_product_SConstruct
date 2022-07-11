@@ -32,7 +32,7 @@ AddOption(
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+    help="Boolean flag to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
             " and it would normally be ignored. (default: '%default')"
 )
 

@@ -41,7 +41,7 @@ AddOption(
     dest="ignore_documentation",
     default=False,
     action="store_true",
-    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the " \
+    help="Boolean flag to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the " \
          "'--unconditional-build' option. (default: '%default')"
 )
 AddOption(
@@ -49,7 +49,7 @@ AddOption(
     dest="unconditional_build",
     default=False,
     action="store_true",
-    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+    help="Boolean flag to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
             " and it would normally be ignored. (default: '%default')"
 )
 
