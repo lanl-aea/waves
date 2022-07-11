@@ -79,7 +79,7 @@ identify the file as a Python file for syntax highlighting. Using the `PEP-8`_ f
 imports are listed in the first block and third-party imports are listed in the second block, including the `WAVES`_
 package. Finally, the EABM version number is hardcoded into the project definition for these tutorials.
 
-5. Add the content below to the ``SConstruct`` file to add the project's command-line build variables to the project
+5. Add the content below to the ``SConstruct`` file to add the project's command-line build options to the project
    configuration.
 
 .. include:: line_number_jump_note.txt
@@ -92,12 +92,12 @@ package. Finally, the EABM version number is hardcoded into the project definiti
       :start-after: marker-1
       :end-before: marker-2
 
-The `SCons command-line build variables`_ are specific to the project definition that you are currently creating. EABM
-projects may add or remove command line options to aid in build behavior control. The most relevant variable to most
-EABMs will be the ``variant_dir_base``, which allows EABM developers to change the build directory location from the
+The `SCons command-line build options`_ are specific to the project definition that you are currently creating. EABM
+projects may add or remove command line options to aid in build behavior control. The most relevant options to most
+EABMs will be the ``--build-dir``, which allows EABM developers to change the build directory location from the
 command line without modifying the ``SConstruct`` file source code. For example, the first ``scons`` call will create
 the default build directory named ``build`` and the second ``scons`` call will create a build directory named
-``non-default_build``.
+``non_default_build``.
 
 .. code-block::
 
@@ -108,14 +108,15 @@ the default build directory named ``build`` and the second ``scons`` call will c
    SConstruct
    build/
 
-   $ scons variant_dir_base=non-default_build
+   $ scons --build-dir=non_default_build
    $ ls .
    SConstruct
    build/
-   non-default_build/
+   non_default_build/
 
-The ``conditional_ignore`` variable is mostly useful for :ref:`continuous_integration` testing. At the end of this
-tutorial, you will see how to explore the project specific command line options and build variables help and usage.
+The ``--unconditional-build`` and ``--ignore-documentation`` options are mostly useful for :ref:`continuous_integration`
+testing. At the end of this tutorial, you will see how to explore the project specific command line options help and
+usage.
 
 6. Add the content below to the ``SConstruct`` file to initialize the `SCons construction environment`_.
 
@@ -136,7 +137,7 @@ per-task environment configuration.
 
 While this is a powerful feature for large, complex projects, most EABM projects will benefit from maintaining a single
 construction environment inherited from the active shell environment at build configuration time. In addition to copying
-the active external environment, the above code adds the project command-line build variables to the construction
+the active external environment, the above code adds the project command-line build options to the construction
 environment for re-use throughout the project definition files, SConstruct and SConscript, for build control.
 
 7. Add the content below to the ``SConstruct`` file to add the third-party software dependency checks to the project
@@ -172,7 +173,7 @@ computers without cluttering their test builds with tasks that cannot succeed on
       :start-after: marker-4
       :end-before: marker-5
 
-The following line adds the help messages for the command-line build variables to the project help message displayed
+The following line adds the help messages for the command-line build options to the project help message displayed
 wheen running ``scons -h``. The help messages are added to the construction environment, so this line must come after
 the construction environment instantiation.
 
