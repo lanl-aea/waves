@@ -118,7 +118,7 @@ fast-test:
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons . --keep-going conditional_ignore=False
+    - scons . --keep-going --unconditional-build
     - cd eabm
     # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=quickstart_SConstruct --keep-going
@@ -212,7 +212,7 @@ pages:
             mkdir -p public/$ref/waves-eabm
             # Build WAVES HTML documentation. Clean up after to avoid leftover targets from main/dev filename differences.
             # Clean instead of "rm" to help catch incomplete target clean operations.
-            scons . --clean conditional_ignore=False
+            scons . --clean --unconditional-build
             scons html conditional_ignore=False
             cp -r build/docs/html/* ${repo_root}/public/$ref
             scons . --clean conditional_ignore=False
