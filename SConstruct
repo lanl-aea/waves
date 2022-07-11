@@ -35,14 +35,14 @@ variables.AddVariables(
 
 # Add commane line options
 AddOption(
-    '--build-dir',
-    dest='variant_dir_base',
-    default='build',
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
     nargs=1,
-    type='string',
-    action='store',
-    metavar='DIR',
-    help='SCons variant (build) root directory. Relative or absolute path.'
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
