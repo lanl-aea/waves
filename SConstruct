@@ -28,10 +28,7 @@ variables = Variables(None, ARGUMENTS)
 variables.AddVariables(
     BoolVariable('conditional_ignore',
         help="Boolean to conditionally ignore targets, e.g. if the action's program is missing.",
-        default=True),
-    BoolVariable('ignore_documentation',
-        help="Boolean to ignore the documentation build, e.g. during Conda package build and testing.",
-        default=False))
+        default=True))
 
 # Add commane line options
 AddOption(
@@ -44,12 +41,20 @@ AddOption(
     metavar="DIR",
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
+AddOption(
+    "--ignore-documentation",
+    dest="ignore_documentation",
+    default=False,
+    action="store_true",
+    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. (default: '%default')"
+)
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variables=variables,
-                  variant_dir_base=GetOption('variant_dir_base'))
+                  variant_dir_base=GetOption("variant_dir_base"),
+                  ignore_documentation=GetOption("ignore_documentation"))
 
 # Find required programs for conditional target ignoring
 required_programs = ['sphinx-build']
