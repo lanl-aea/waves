@@ -23,17 +23,18 @@ model = "single_element"
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file_template=parameter_set_file_template)
-parameter_study = parameter_generator.generate()
+parameter_generator.generate()
+parameter_study = parameter_generator.parameter_study.sel(parameter_data='values')
 
 # Parameterized targets must live inside current simulation_variables for loop
 workflow = []
-for current_set_name, parameter_text in parameter_study.items():
-    simulation_variables = yaml.safe_load(parameter_text)
-    simulation_substitution_dictionary = {f"@{key}@": value for key, value in simulation_variables.items()}
+for set_name, simulation_variables in parameter_study.items():
+    current_set_name = pathlib.Path(set_name)
+    simulation_substitution_dictionary = {f"@{value.parameter_name.item()}@": value.item() for value in simulation_variables}
 
     # Geometry
     journal_file = f"{model}_geometry"
-    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+    journal_options = f"--width {simulation_substitution_dictionary['@width@']} --height {simulation_substitution_dictionary['@height@']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae",
                 f"{current_set_name / journal_file}.jnl"],
@@ -42,7 +43,7 @@ for current_set_name, parameter_text in parameter_study.items():
 
     # Partition
     journal_file = f"{model}_partition"
-    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+    journal_options = f"--width {simulation_substitution_dictionary['@width@']} --height {simulation_substitution_dictionary['@height@']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae",
                 f"{current_set_name / journal_file}.jnl"],
@@ -52,7 +53,7 @@ for current_set_name, parameter_text in parameter_study.items():
 
     # Mesh
     journal_file = f"{model}_mesh"
-    journal_options = f"--global-seed {simulation_variables['global_seed']}"
+    journal_options = f"--global-seed {simulation_substitution_dictionary['@global_seed@']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae",
                 f"{current_set_name / journal_file}.jnl",

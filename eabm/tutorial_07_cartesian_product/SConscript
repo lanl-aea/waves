@@ -28,7 +28,8 @@ parameter_study = parameter_generator.parameter_study.sel(parameter_data='values
 
 # Parameterized targets must live inside current simulation_variables for loop
 workflow = []
-for current_set_name, simulation_variables in parameter_study.items():
+for set_name, simulation_variables in parameter_study.items():
+    current_set_name = pathlib.Path(set_name)
     simulation_substitution_dictionary = {f"@{value.parameter_name.item()}@": value.item() for value in simulation_variables}
 
     # Geometry
