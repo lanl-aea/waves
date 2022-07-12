@@ -95,12 +95,12 @@ class ParameterGenerator(ABC):
         If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
         associations for files that would have been written.
 
-        Writes parameter set files in YAML syntax. Alternate syntax options are a WIP.
+        Writes parameter set files in Python syntax. Alternate syntax options are a WIP.
 
         .. code-block::
 
-           parameter_1: 1
-           parameter_2: a
+           parameter_1 = 1
+           parameter_2 = a
         """
         if self.write_meta and self.provided_template:
             self._write_meta()
