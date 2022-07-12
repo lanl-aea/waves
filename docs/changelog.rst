@@ -13,6 +13,9 @@ Breaking changes
 ================
 - Require at least one target for the AbaqusJournal and PythonScript builders (:issue:`188`, :merge:`166`). By `Kyle
   Brindley`_.
+- Return parameter study as an xarray dataset instead of a text YAML dictionary. Necessary for future output type
+  options and multi-index tables, e.g. Latin Hypercube value and quantile information (:issue:`70`, :merge:`170`). By
+  `Kyle Brindley`_.
 
 New Features
 ============
