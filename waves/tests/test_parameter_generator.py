@@ -44,7 +44,8 @@ class TestParameterGenerator:
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
         coordinates = [['parameter_1'], ['values']]
         index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        study_dataframe = pandas.DataFrame(numpy.random.randn(1, sets), index=index, columns=['parameter_1'])
+        parameter_set_names = [f"set{num}" for num in range(sets)]
+        study_dataframe = pandas.DataFrame(numpy.random.randn(1, sets), index=index, columns=parameter_set_names)
         WriteParameterGenerator.parameter_study = xarray.Dataset().from_dataframe(study_dataframe)
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
@@ -82,7 +83,8 @@ class TestParameterGenerator:
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
         coordinates = [['parameter_1'], ['values']]
         index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        study_dataframe = pandas.DataFrame(numpy.random.randn(1, sets), index=index, columns=['parameter_1'])
+        parameter_set_names = [f"set{num}" for num in range(sets)]
+        study_dataframe = pandas.DataFrame(numpy.random.randn(1, sets), index=index, columns=parameter_set_names)
         WriteParameterGenerator.parameter_study = xarray.Dataset().from_dataframe(study_dataframe)
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
