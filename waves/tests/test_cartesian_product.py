@@ -29,5 +29,6 @@ class TestCartesianProduct:
         TestGenerate = CartesianProduct(parameter_schema, None, False, False, False)
         TestGenerate.generate()
         generate_array = TestGenerate.parameter_study.sel(parameter_data='values').to_array().values
+        parameter_set_names = [key for key in TestGenerate.parameter_study.keys()]
         assert numpy.all(generate_array == expected_array)
-        assert parameter_set_file_paths == [pathlib.Path(f"parameter_set{num}") for num in range(len(expected_text_list))]
+        assert parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
