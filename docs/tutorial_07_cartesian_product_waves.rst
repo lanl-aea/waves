@@ -68,32 +68,7 @@ The ``tutorial_07_cartesian_product.py`` file you just created is very similar t
 between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters.
 
 In the ``parameter_schema``, we have defined two parameters with two samples each and two parameters with one sample 
-each. This will result in four total simulations. The parameter sets will be as shown in the code block below. Note that 
-the parameter sets are not exported or stored in YAML/dictionary format; they are simply shown this way below for 
-readability.
-
-.. code-block:: yaml
-    
-   parameter_set0:
-     width: 1
-     height: 1
-     global_seed: 1
-     displacement: -1
-   parameter_set1:
-     width: 1.1
-     height: 1
-     global_seed: 1
-     displacement: -1
-   parameter_set2:
-     width: 1
-     height: 1.1
-     global_seed: 1
-     displacement: -1
-   parameter_set3:
-     width: 1.1
-     height: 1.1
-     global_seed: 1
-     displacement: -1
+each. This will result in four total simulations.
 
 **********
 SConscript
@@ -133,7 +108,7 @@ The beginning portion of the ``SConscript`` file consists of a series of straigh
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the 
 ``parameter_schema`` dictioanry into the ``SConscript`` file's name space from the ``tutorial_07_cartesian_product`` 
 module that you created in the :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial. 
-The second import line should look familiar, but is work pointing out again. Here, we import the ``env`` variable from 
+The second import line should look familiar, but is worth pointing out again. Here, we import the ``env`` variable from 
 the parent construction environment. This will provide access to variables we added to the ``SConstruct`` file's 
 ``project_variables`` dictionary in previous tutorials.
 
@@ -151,7 +126,7 @@ discussed.
 
 The highlighted portions of the code snippet above define some new ``simulation_variables`` for this tutorial. The 
 ``current_build_directory`` is the absolute path of the directory where the ``SConscript`` lives and is constructed as a 
-`Python pathlib`_ object. ``parameter_study`` 
+`Python pathlib`_ object.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -160,6 +135,9 @@ The highlighted portions of the code snippet above define some new ``simulation_
       :lineno-match:
       :start-after: marker-2
       :end-before: marker-3
+
+.. literalinclude:: tutorial_07_cartesian_product_parameter_study_message.txt
+
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
