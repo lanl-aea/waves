@@ -79,12 +79,11 @@ test:
     - waves/tests/*.py
     - eabm/README.rst
     - eabm/SC*
+    - eabm/*SConstruct
     - eabm/eabm_package/abaqus/*
     - eabm/eabm_package/cubit/*
     - eabm/eabm_package/python/*
     - eabm/tutorial*/*
-    - eabm/tutorial*SConstruct
-    - eabm/quickstart_SConstruct
   imports:
     - waves
   commands:
