@@ -9,10 +9,10 @@ Start Options
 *************
 
 Users who want to jump straight to a minimally functional simulation workflow with native `SCons`_ can start with the
-:ref:`scons_quickstart`. The :ref:`quickstart` has the same features but uses the `WAVES`_ extension to `SCons`_. For a
-detailed discussion of a recommended best practices `SCons`_  and `WAVES-EABM`_ project setup, meta data, and features,
-start with :ref:`tutorialsconstruct`. It's also possible to skip the detailed project setup discussion and start with
-the simulation task definitions and discussion directly in :ref:`tutorial_geometry_waves`.
+:ref:`scons_quickstart`. The :ref:`waves_quickstart` has the same features but uses the `WAVES`_ extension to `SCons`_.
+For a detailed discussion of a recommended best practices `SCons`_  and `WAVES-EABM`_ project setup, meta data, and
+features, start with :ref:`tutorialsconstruct`. It's also possible to skip the detailed project setup discussion and
+start with the simulation task definitions and discussion directly in :ref:`tutorial_geometry_waves`.
 
 *************
 Prerequisites
@@ -29,7 +29,7 @@ Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
                    00:10 :ref:`scons_quickstart`                      Minimally functional simulation build system
                                                                       workflow using pure `SCons`_
-                   00:10 :ref:`quickstart`                            Minimally functional simulation build system
+                   00:10 :ref:`waves_quickstart`                      Minimally functional simulation build system
                                                                       workflow using `SCons`_ and `WAVES`_
                    01:00 :ref:`tutorialsconstruct`                    `SCons`_ project definition and meta data
                    01:00 :ref:`tutorial_geometry_waves`               Hierarchical `SCons`_ builds, task creation,
