@@ -185,24 +185,21 @@ Build Targets
    /path/to/waves-eabm-tutorial
    $ scons tutorial_04_simulation
     scons: Reading SConscript files ...
-      warnings.warn(
-    Checking whether sphinx-build program exists.../projects/aea_compute/aea-beta/bin/sphinx-build
     Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
-    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
     > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
-    > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
+    /projects/tproberts/waves/eabm/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information 
+    environment > single_element_partition.abaqus_v6.env
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
+    /projects/tproberts/waves/eabm/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
     > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
+    /projects/tproberts/waves/eabm/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
     Copy("build/tutorial_04_simulation/single_element_compression.inp", 
     "eabm_package/abaqus/single_element_compression.inp")
     Copy("build/tutorial_04_simulation/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
@@ -212,19 +209,16 @@ Build Targets
     Copy("build/tutorial_04_simulation/materials.inp", "eabm_package/abaqus/materials.inp")
     Copy("build/tutorial_04_simulation/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_04_simulation/history_output.inp", "eabm_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
     > single_element_compression_DATACHECK.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job 
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job 
     single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete 
     no > single_element_compression_DATACHECK.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && ! grep -iE "error" 
-    single_element_compression_DATACHECK.stdout
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
     > single_element_compression.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job 
+    cd /projects/tproberts/waves/eabm/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job 
     single_element_compression -input single_element_compression -double both -interactive -ask_delete no > 
     single_element_compression.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/tutorial_04_simulation && ! grep -iE "error" single_element_compression.stdout
     scons: done building targets.
 
 ************
@@ -239,10 +233,8 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
     
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial_0[123]*'
+    $ tree build/ -I 'tutorial_0[1,2,3]*'
     build
-    ├── docs
-    │   └── SConscript
     └── tutorial_04_simulation
         ├── abaqus.rpy
         ├── abaqus.rpy.1
@@ -288,7 +280,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
         ├── single_element_partition.jnl
         └── single_element_partition.stdout
 
-    2 directories, 44 files
+    1 directory, 43 files
 
 The ``tutorial_04_simulation`` directory contains several different subsets of related files:
 
