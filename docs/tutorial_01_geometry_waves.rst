@@ -187,21 +187,16 @@ example of this is in the :ref:`sphinx_api`.
 
 .. _tutorial_geometry_waves_abaqus_python_code:
 
-Abaqus Python Code
-==================
-The latter portion of the ``main()`` function is the code that generates the single 
-element geometry. Here, an Abaqus model is opened using the ``model_name`` variable as 
-the model's name, a rectangle is drawn with dimensions ``width`` and ``height``, and the 
-Abaqus CAE model is saved with the name ``output_file``. One notable difference between 
-the `Abaqus Scripting`_ documentation of Abaqus journal files is the use of the 
-`PEP-8`_ style guide for package imports. Here, we order the imports according to the 
-`PEP-8`_ style and avoid bulk imports to the file's namespace from Abaqus Python 
-packages. It is also worth noting noting that Abaqus journal files use the the Abaqus 
-Python 2.7 environment *not* the SCons/EABM Python 3 environment. See the 
-`Abaqus Python Environment`_ documentation for more information on the 
-Abaqus Python 2.7 environment.
-
-.. TODO link to abaqus scripting documentation, specifically mention python 2.7
+Abaqus Python Code 
+================== 
+The latter portion of the ``main()`` function is the code that generates the single element geometry. Here, an Abaqus 
+model is opened using the ``model_name`` variable as the model's name, a rectangle is drawn with dimensions ``width`` 
+and ``height``, and the Abaqus CAE model is saved with the name ``output_file``. One notable difference between the 
+`Abaqus Scripting`_ documentation of Abaqus journal files is the use of the `PEP-8`_ style guide for package imports. 
+Here, we order the imports according to the `PEP-8`_ style and avoid bulk imports to the file's namespace from Abaqus 
+Python packages. It is also worth noting that Abaqus journal files use the the Abaqus Python 2.7 environment *not* the 
+SCons/EABM Python 3 environment. See the `Abaqus Python Environment`_ documentation for more information on the Abaqus 
+Python 2.7 environment.
 
 .. _tutorial_geometry_waves_command_line_interfaces:
 
@@ -326,12 +321,11 @@ but that may change in production EABMs.
 SConstruct File
 ***************
 
-In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenicne, we will add a 
-collector alias matching the tutorial direcotyr name in the SContruct file. This 
-collector alias will point to the list of targets to build specified in the 
-``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` file.
+In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias 
+matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to 
+build specified in the ``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` file.
 
-10. Modify the ``waves-eabm-tutorial/SConstruct file`` by adding the 
+10. Modify the ``waves-eabm-tutorial/SConstruct`` file by adding the 
     ``tutorial_01_geometry`` collector alias to the ``eabm_simulation_directories`` list.
     The ``diff`` output below shows the difference between the ``SConstruct`` file created 
     in :ref:`tutorialsconstruct` and what the new ``SConstruct`` file will be.
@@ -356,24 +350,18 @@ using Scons.
     command: 
 
     .. code-block::
-       
+
         $ pwd
-         /home/roppenheimer/waves-eabm-tutorial
+        /home/roppenheimer/waves-eabm-tutorial
         $ scons tutorial_01_geometry
         scons: Reading SConscript files ...
-        Checking whether sphinx-build program 
-        exists.../projects/aea_compute/aea-beta/bin/sphinx-build
         Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
-        Checking whether cubit program exists.../apps/Cubit-15.8/cubit
         scons: done reading SConscript files.
         scons: Building targets ...
-        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && 
-        /apps/abaqus/Commands/abaqus -information environment > 
+        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus -information environment > 
         single_element_geometry.abaqus_v6.env
-        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && 
-        /apps/abaqus/Commands/abaqus cae -noGui 
-        /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > 
-        single_element_geometry.stdout 2>&1
+        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus cae -noGui 
+        /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
         scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as 
