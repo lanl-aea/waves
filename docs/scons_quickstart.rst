@@ -4,6 +4,12 @@
 SCons Quickstart
 ################
 
+.. note::
+
+   Unlike the :ref:`quickstart`, this tutorial will use native `SCons`_ code without the `WAVES`_ extensions and
+   builders. This tutorial is included as an example for using native `SCons`_ techniques when `WAVES`_ third-party
+   software support is not provided or for when a modsim project requires unique builder behavior.
+
 This quickstart will create a pure `SCons`_, minimal, single file project definition matching the tutorials listed below.
 
 * :ref:`tutorialsconstruct`
@@ -17,10 +23,6 @@ a single project definition file requires `SCons`_ techniques that differ betwee
 the project definition files, ``SConstruct`` and ``SConscript``, found in the full tutorials. Consequently, this
 quickstart will use a separate name for the project definition file, ``scons_quickstart_SConstruct``, to allow the
 tutorials and this quickstart to share a common tutorial directory.
-
-Unlike the :ref:`quickstart`, this tutorial will use native `SCons`_ code without the `WAVES`_ extensions and builders.
-This tutorial is included as an example for using native `SCons`_ techniques when `WAVES`_ third-party software support
-is not provided or for when a modsim project requires unique builder behavior.
 
 ***********
 Environment
