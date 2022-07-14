@@ -43,7 +43,6 @@ documentation_file_list = [
     'computational_practices_build_system.rst',
     'computational_practices_compute_environment.rst',
     'computational_practices_regression_testing.rst',
-    'computational_practices_continuous_integration.rst',
     'contribution.txt',
     'dependencies.txt',
     'devops.rst',

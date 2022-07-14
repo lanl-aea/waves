@@ -6,9 +6,9 @@ Introduction
 
 This manual will attempt to motivate the use of an `automated build system`_ for the purposes of computational science
 and engineering. As part of this motivation, the surrounding computational practices of version control, documentation,
-compute environment management, regression testing, and continuous integration will also be addressed as applied to the
-practice of computational engineering. Specifically, this manual intends to motivate the adoption of these traditional
-software engineering practices for use in research and production engineering simulation projects.
+compute environment management, and regression testing will also be addressed as applied to the practice of
+computational engineering. Specifically, this manual intends to motivate the adoption of these traditional software
+engineering practices for use in research and production engineering simulation projects.
 
 This manual is not the first such effort in the greater scientific computing community. In fact, the authors relied
 heavily on the lesson plans of the `Software Carpentry`_, established to teach computing skills to researchers in 1998
@@ -48,7 +48,6 @@ of detailed and regular entries are equally important.
 * :ref:`build_system`
 * :ref:`compute_environment`
 * :ref:`testing`
-* :ref:`continuous_integration`
 
 Those practices at the end of the list are more costly to implement and therefore more valuable for mature or long-lived
 projects. However, an engineer familiar with the computational tools implementing these practices will find that even
