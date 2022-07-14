@@ -26,8 +26,10 @@ Schedule
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
+                   00:10 :ref:`scons_quickstart`                      Minimally functional simulation build system
+                                                                      workflow using pure `SCons`_
                    00:10 :ref:`quickstart`                            Minimally functional simulation build system
-                                                                      workflow
+                                                                      workflow using `SCons`_ and `WAVES`_
                    01:00 :ref:`tutorialsconstruct`                    `SCons`_ project definition and meta data
                    01:00 :ref:`tutorial_geometry_waves`               Hierarchical `SCons`_ builds, task creation,
                                                                       Abaqus journal files as small utility software
