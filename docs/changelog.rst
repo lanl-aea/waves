@@ -44,6 +44,7 @@ Documentation
   Brindley`_.
 - Add a discussion about the types, purposes, and values of modsim repository testing (:issue:`127`, :merge:`171`). By
   `Kyle Brindley`_.
+- Fix typos and typesetting issues in Tutorial 01: Geometry (:issue:`191`, :merge:`172`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
