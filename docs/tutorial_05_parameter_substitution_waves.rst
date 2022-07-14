@@ -97,36 +97,31 @@ SConscript
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 3-9
+      :emphasize-lines: 3-8
 
-In the code you just added, a ``simulation_variables`` dictionary is defined. Each key-value pair in the
-``simulation_variables`` dictionary defines a parameter that already exists in several of the scripts we have utilized
-in the previous tutorials. ``width`` and ``height`` are used in the ``single_element_geometry.py`` and
-``single_element_partition.py`` scripts, and ``global_seed`` is used in the ``single_element_mesh.py`` script. Recall
-that each of these scripts is called using a command line interface that has default parameters. See the
-:ref:`sphinx_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
-parser for each of these scripts will supply a default value for each command line argument that is not specified
-(assuming a defualt value was specified in the argument parser definition). This allowed us to simplify the command
-passed to the :meth:`waves.builders.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that
-we get parameter substitution into our journal files for free. The ``width``, ``height``, and ``global_seed`` keys of
-the ``simulation_variables`` dictionary will be used later in this tutorial to specify the values passed to the journal
-files via the CLI.
+In the code you just added, a ``simulation_variables`` dictionary is defined. The surrounding ``@`` character is during
+template subsitution of text files and helps uniquely identify text for parameter substitution without accidentally
+changing text that is not a parameter.
+
+Each key-value pair in the ``simulation_variables`` dictionary defines a parameter that already exists in several of the
+scripts we have utilized in the previous tutorials. The ``width`` and ``height`` parameters are used in the
+``single_element_geometry.py`` and ``single_element_partition.py`` scripts, and ``global_seed`` is used in the
+``single_element_mesh.py`` script. Recall that each of these scripts is called using a command line interface that has
+default parameters. See the :ref:`sphinx_cli` to see what the default values are. As mentioned in
+:ref:`tutorial_geometry_waves`, the argument parser for each of these scripts will supply a default value for each
+command line argument that is not specified (assuming a defualt value was specified in the argument parser definition).
+This allowed us to simplify the command passed to the :meth:`waves.builders.abaqus_journal` builder. The advantage to
+coding this behavior ahead of time is that we get parameter substitution into our journal files when we need it. The
+``width``, ``height``, and ``global_seed`` keys of the ``simulation_variables`` dictionary will be used later in this
+tutorial to specify the values passed to the journal files via the CLI.
 
 The final key-value pair defined in the ``simulation_variables`` dictionary is ``displacement``. This parameter will be
 used in a slightly different way than the others, as the script that utilizes this parameter does not function with a
 command line interface. Recall from earlier in this tutorial, we created a new file called
 ``single_element_compression.inp.in`` and added an `Abaqus *PARAMETER`_ definition with the ``@displacement@`` key.
-Here, our final key-value pair of the ``simulation_variables`` dictionary will be utilized after the key transformation
-to the ``project_substitution_dictionary`` which adds the ``@`` characters to the ``simulation_variables`` keys.
-Disussion of exacly how this is implemented with the :meth:`waves.builders.copy_substitute` builder will come later in
-this tutorial.
-
-Finally, we must discuss the last line of your new code, which defines the ``simulation_substitution_dictionary``.
-Simply put, the keys of the ``simulation_variables`` dictionary must be uniquely identifiable as parameters in the midst
-of all the other text in a file. Note that this step is only required when utilizing the
-:meth:`waves.builders.copy_substitute` builder for parameter substitution. In the code you will add next, we will
-continue to use the ``simulation_variables`` dictionary, as we do not need uniquely identifiable parameter keys when
-values are passed to our scripts via command line interface.
+This text file parameter substitution is the primary reason the ``@`` characters are required in the
+``simulation_variables`` keys.  Disussion of exacly how this is implemented with the
+:meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
 
 8. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
@@ -234,22 +229,22 @@ Build Targets
     Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 > 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 >
     single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 > 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 >
     single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 > 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 >
     single_element_mesh.stdout 2>&1
-    Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in", 
+    Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in",
     "eabm_package/abaqus/single_element_compression.inp.in")
     Creating 'build/tutorial_05_parameter_substitution/single_element_compression.inp'
     Copy("build/tutorial_05_parameter_substitution/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
@@ -259,15 +254,15 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/materials.inp", "eabm_package/abaqus/materials.inp")
     Copy("build/tutorial_05_parameter_substitution/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_05_parameter_substitution/history_output.inp", "eabm_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_compression_DATACHECK.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job 
-    single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
+    single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete
     no > single_element_compression_DATACHECK.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_compression.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job 
-    single_element_compression -input single_element_compression -double both -interactive -ask_delete no > 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
+    single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
     single_element_compression.stdout 2>&1
     scons: done building targets.
 

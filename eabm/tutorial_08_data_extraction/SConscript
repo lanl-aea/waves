@@ -30,11 +30,11 @@ parameter_study = parameter_generator.parameter_study.sel(parameter_data='values
 workflow = []
 for set_name, simulation_variables in parameter_study.items():
     current_set_name = pathlib.Path(set_name)
-    simulation_substitution_dictionary = {f"@{value.parameter_name.item()}@": value.item() for value in simulation_variables}
+    simulation_variables = {f"@{value.parameter_name.item()}@": value.item() for value in simulation_variables}
 
     # Geometry
     journal_file = f"{model}_geometry"
-    journal_options = f"--width {simulation_substitution_dictionary['@width@']} --height {simulation_substitution_dictionary['@height@']}"
+    journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae",
                 f"{current_set_name / journal_file}.jnl"],
@@ -43,7 +43,7 @@ for set_name, simulation_variables in parameter_study.items():
 
     # Partition
     journal_file = f"{model}_partition"
-    journal_options = f"--width {simulation_substitution_dictionary['@width@']} --height {simulation_substitution_dictionary['@height@']}"
+    journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae",
                 f"{current_set_name / journal_file}.jnl"],
@@ -53,7 +53,7 @@ for set_name, simulation_variables in parameter_study.items():
 
     # Mesh
     journal_file = f"{model}_mesh"
-    journal_options = f"--global-seed {simulation_substitution_dictionary['@global_seed@']}"
+    journal_options = f"--global-seed {simulation_variables['@global_seed@']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae",
                 f"{current_set_name / journal_file}.jnl",
@@ -75,7 +75,7 @@ for set_name, simulation_variables in parameter_study.items():
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
-                                                 substitution_dictionary=simulation_substitution_dictionary,
+                                                 substitution_dictionary=simulation_variables,
                                                  build_subdirectory=current_set_name))
 
     # Abaqus Solve
