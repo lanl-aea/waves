@@ -68,7 +68,9 @@ The ``tutorial_07_cartesian_product.py`` file you just created is very similar t
 between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters.
 
 In the ``parameter_schema``, we have defined two parameters with two samples each and two parameters with one sample 
-each. This will result in four total simulations. The parameter sets will look like the following:
+each. This will result in four total simulations. The parameter sets will be as shown in the code block below. Note that 
+the parameter sets are not exported or stored in YAML/dictionary format; they are simply shown this way below for 
+readability.
 
 .. code-block:: yaml
     
