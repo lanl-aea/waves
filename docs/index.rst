@@ -33,7 +33,7 @@
    :caption: User Manual
 
    tutorial_introduction
-   quickstart
+   waves_quickstart
    tutorial_00_scons
    tutorial_01_geometry_waves
    tutorial_02_partition_mesh_waves

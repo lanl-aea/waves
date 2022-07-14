@@ -51,7 +51,6 @@ documentation_file_list = [
     'index.rst',
     'line_number_jump_note.txt',
     'project_brief.txt',
-    'quickstart.rst',
     'references.bib',
     'release_philosophy.rst',
     'targets.txt',
@@ -67,6 +66,7 @@ documentation_file_list = [
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_environment_activation.txt',
     'waves_logo_brandmark_smaller.png',
+    'waves_quickstart.rst',
     'zreferences.rst',
     '_static/custom.css'
 ]
