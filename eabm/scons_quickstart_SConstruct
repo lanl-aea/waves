@@ -53,6 +53,7 @@ journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{variant_dir_base / journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
+    abaqus_program=env['abaqus'],
     journal_options=journal_options))
 
 # Partition
@@ -61,6 +62,7 @@ journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{variant_dir_base / journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_geometry.cae")],
+    abaqus_program=env['abaqus'],
     journal_options=journal_options))
 
 # Mesh
@@ -69,6 +71,7 @@ journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{variant_dir_base / journal_file}.cae", f"{variant_dir_base / journal_file}.inp"],
     source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
+    abaqus_program=env['abaqus'],
     journal_options=journal_options))
 
 # SolverPrep
@@ -100,6 +103,7 @@ abaqus_options='-double both'
 workflow.extend(env.AbaqusSolver(
     target=[f"{variant_dir_base / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
     source=solve_source_list,
+    abaqus_program=env['abaqus'],
     job_name=datacheck_name,
     abaqus_options=f'{abaqus_options} -datacheck'))
 
@@ -107,6 +111,7 @@ solve_source_list.append([str(variant_dir_base / f"{datacheck_name}.odb")])
 workflow.extend(env.AbaqusSolver(
     target=[f"{variant_dir_base / job_name}.sta"],
     source=solve_source_list,
+    abaqus_program=env['abaqus'],
     job_name=job_name,
     abaqus_options=abaqus_options))
 
