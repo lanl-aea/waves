@@ -1,8 +1,8 @@
 .. _quickstart:
 
-##########
-Quickstart
-##########
+######################
+SCons-WAVES Quickstart
+######################
 
 This quickstart will create a minimal, single file project definition matching the tutorial listed below. These
 tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using a
