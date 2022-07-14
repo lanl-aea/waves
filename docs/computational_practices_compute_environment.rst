@@ -29,23 +29,27 @@ realm of version control, where developers now only need to re-build their virtu
 controlled environment file changes. When combined with continuous integration, any commonly used servers can have the
 shared environment updated automatically on changes to the environment file.
 
-In the `WAVES`_ project, a minimal `Conda`_ environment is maintained under version control and used for :ref:`testing`,
-shared compute environment management, and packaging all with a continuous integration server for automatic testing and
-deployment with every change to the project source code. The `Anaconda documentation`_ includes good tutorials and
-references for `Conda environment management`_. `Conda`_ was chosen as the package manager and virtual environment tool
-do to the popularity of Python as a scripting language and the Python-centric nature of many engineering analysis
-software tools.
+In the `WAVES`_ project, a minimal `Conda`_ environment file is maintained under version control and used for
+:ref:`testing`, shared compute environment management, and packaging with a continuous integration server for automatic
+testing and deployment on every change to the project source code. A similar `WAVE-EABM environment file`_ is included
+in the tutorials as a starting point for modsim repository environment management. The `Anaconda documentation`_
+includes good tutorials and references for `Conda environment management`_. `Conda`_ was chosen as the package manager
+and virtual environment tool do to the popularity of Python as a scripting language and the Python-centric nature of
+the scripting APIs for many engineering analysis software tools.
 
 While `Conda`_ is known primarily for Python package management, it is a general package manager and can package,
-deploy, and manage packages of many different programming languages and even mixed language packages. This makes it an
+deploy, and manage packages of many different programming languages and mixed language packages. This makes it an
 excellent tool for developing supporting Fortran, C, or C++ subroutines that most engineering analysis software allows
-to extend behavior. As an engineering project grows and collaborates with material modeling and other research projects,
-it may be beneficial to package supporting libraries and packages for `conda-forge`_ or even a self-hosted `custom conda
-channel`_.
+to extend their built-in behavior. As an engineering project grows and collaborates with material modeling and other
+research projects, it may be beneficial to package supporting libraries and packages for `conda-forge`_ or even a
+self-hosted `custom conda channel`_.
 
-There are several engineering numeric solvers developed by the open-source community and some are even packaged for
-`Conda`_ or other package managers and virtual environments. However, most commercial engineering analysis software is
-not packaged for a package manager and instead provides licenced installation media. In this case, it may be difficult
-to include the commercial software in a virtual environment.
-
-.. TODO: mention modulefiles and conda recipe wrappers.
+There are several engineering numeric solvers developed by the open-source community and some are even distributed by
+package managers, including `Conda`_. However, most commercial engineering analysis software is not packaged for a
+package manager and instead provides licenced installation media. In this case, it may be difficult to include the
+commercial software in a virtual environment. For collaborative efforts and version controlled consistency, system
+``PATH`` management with `Environment modules`_ and the ``module`` software can augment the virtual environnment. The
+`WAVES`_ project implements a version controlled modulefile for the ``module`` command to manage the Abaqus and Cubit
+software versions in a consistent manner between systems. When deployed with a shared compute environment deployed with
+continuous integration, the ``module`` and `Conda`_ solutions provide an easy-to-use entry point for new developers
+unfamiliar with compute environment management.

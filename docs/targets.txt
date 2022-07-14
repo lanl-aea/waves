@@ -15,6 +15,7 @@
 .. _`AEA Gitlab group`: https://re-git.lanl.gov/aea
 .. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
 .. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
+.. _`Environment modules`: https://modules.readthedocs.io/en/stable/modulefile.html
 .. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
 .. _`GNU Make`: https://www.gnu.org/software/make/
 .. _`git`: https://git-scm.com/
@@ -81,6 +82,7 @@
 .. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves/cpp_stub
 .. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
 .. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/eabm/eabm_package/abaqus
+.. _`WAVES-EABM environment file`: https://re-git.lanl.gov/aea/python-projects/waves/-/blob/dev/eabm/environment.txt
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm
