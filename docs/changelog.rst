@@ -9,6 +9,11 @@ Changelog
 0.1.16 (unreleased)
 *******************
 
+Documentation
+=============
+- Update Scons terminal output and sample tree output in the tutorials to reflect the state of a user's tutorial files 
+  (:issue:`189`, :merge:`174`). By `Thomas Roberts`_.
+
 *******************
 0.1.15 (2022-07-14)
 *******************

@@ -231,28 +231,25 @@ Build Targets
     /path/to/waves-eabm-tutorial
     $ scons tutorial_05_parameter_substitution
     scons: Reading SConscript files ...
-      warnings.warn(
-    Checking whether sphinx-build program exists.../projects/aea_compute/aea-beta/bin/sphinx-build
     Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
-    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 >
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 > 
     single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 >
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 > 
     single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 >
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 > 
     single_element_mesh.stdout 2>&1
-    Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in",
+    Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in", 
     "eabm_package/abaqus/single_element_compression.inp.in")
     Creating 'build/tutorial_05_parameter_substitution/single_element_compression.inp'
     Copy("build/tutorial_05_parameter_substitution/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
@@ -262,20 +259,16 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/materials.inp", "eabm_package/abaqus/materials.inp")
     Copy("build/tutorial_05_parameter_substitution/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_05_parameter_substitution/history_output.inp", "eabm_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
     environment > single_element_compression_DATACHECK.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
-    single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job 
+    single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete 
     no > single_element_compression_DATACHECK.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && ! grep -iE "error"
-    single_element_compression_DATACHECK.stdout
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information 
     environment > single_element_compression.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
-    single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job 
+    single_element_compression -input single_element_compression -double both -interactive -ask_delete no > 
     single_element_compression.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && ! grep -iE "error"
-    single_element_compression.stdout
     scons: done building targets.
 
 .. _tutorial_parameter_substitution_waves_output_files:
@@ -293,8 +286,6 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
     /home/roppenheimer/waves-eabm-tutorial
     $ tree build/ -I 'tutorial_0[1,2,3,4]*'
     build/
-    ├── docs
-    │   └── SConscript
     └── tutorial_05_parameter_substitution
         ├── abaqus.rpy
         ├── abaqus.rpy.1
@@ -347,7 +338,7 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
         ├── single_element_partition.jnl
         └── single_element_partition.stdout
 
-    2 directories, 51 files
+    1 directory, 50 files
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation_waves` with a few key
 differences.
@@ -375,8 +366,8 @@ file as the source and the ``single_element_compression.inp`` file was the targe
 parameter key ``@displacement@`` with the parameter value ``-1.0``, and then generated the target with this information
 in the text, as shown above.
 
-It is also worth noting that that there are 51 files in the ``build/tutorial_05_parameter_substitution`` directory
-compared to the 44 files from :ref:`tutorial_simulation_waves`. Other than the addition of the
+It is also worth noting that that there are 50 files in the ``build/tutorial_05_parameter_substitution`` directory
+compared to the 43 files from :ref:`tutorial_simulation_waves`. Other than the addition of the
 ``single_element_compression.inp.in`` file, the difference is the addition of the files with ``.par``, ``.pes``, and
 ``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation for more information about the
 information that these files provide.
