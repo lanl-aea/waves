@@ -17,12 +17,11 @@ abaqus_source_abspath = project_dir / abaqus_source_dir
 # Simulation variables
 model = "single_element"
 simulation_variables = {
-    'width': 1.0,
-    'height': 1.0,
-    'global_seed': 1.0,
-    'displacement': -1.0
+    '@width@': 1.0,
+    '@height@': 1.0,
+    '@global_seed@': 1.0,
+    '@displacement@': -1.0
 }
-simulation_substitution_dictionary = {f"@{key}@": value for key, value in simulation_variables.items()}
 
 # Comment used in tutorial code snippets: marker-2
 
@@ -33,7 +32,7 @@ workflow = []
 
 # Geometry
 journal_file = f"{model}_geometry"
-journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
@@ -41,7 +40,7 @@ workflow.extend(env.AbaqusJournal(
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
@@ -49,7 +48,7 @@ workflow.extend(env.AbaqusJournal(
 
 # Mesh
 journal_file = f"{model}_mesh"
-journal_options = f"--global-seed {simulation_variables['global_seed']}"
+journal_options = f"--global-seed {simulation_variables['@global_seed@']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.inp"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
@@ -70,7 +69,7 @@ abaqus_source_list = [
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
-                                               substitution_dictionary=simulation_substitution_dictionary))
+                                               substitution_dictionary=simulation_variables))
 
 # Comment used in tutorial code snippets: marker-5
 

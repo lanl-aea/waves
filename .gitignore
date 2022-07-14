@@ -1,6 +1,8 @@
 # Project files
 build/
 build_quickstart/
+waves_quickstart/
+scons_quickstart/
 *.tar.bz2
 *.zip
 

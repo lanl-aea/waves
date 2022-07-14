@@ -265,24 +265,21 @@ Build Targets
     /path/to/waves-eabm-tutorial
     $ scons tutorial_02_partition_mesh
     scons: Reading SConscript files ...
-      warnings.warn(
-    Checking whether sphinx-build program exists.../projects/aea_compute/aea-beta/bin/sphinx-build
     Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
-    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-turorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information 
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-turorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-turorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-turorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information 
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-turorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-turorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-turorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information 
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-turorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-turorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui 
+    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
     scons: done building targets.
 
 ************
@@ -298,8 +295,6 @@ below.
     $ /home/roppenheimer/waves-eabm-tutorial
     $ tree build/
     build/
-    ├── docs
-    │   └── SConscript
     ├── tutorial_01_geometry
     │   ├── abaqus.rpy
     │   ├── single_element_geometry.abaqus_v6.env
@@ -324,7 +319,7 @@ below.
         ├── single_element_partition.jnl
         └── single_element_partition.stdout
 
-    3 directories, 22 files
+    2 directories, 21 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
 Recall from the note this tutorial's :ref:`tutorial_partition_mesh_waves_SConscript` section that we require the targets
