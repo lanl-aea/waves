@@ -148,7 +148,7 @@ alias_list.extend(env.Alias('man', man))
 # Collector alias to build all documentation
 alias_list.extend(env.Alias('documentation', html + latexpdf + man))
 
-if env['conditional_ignore'] and not env['sphinx_build']:
+if not env['unconditional_build'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore(['.', 'html', 'html'], html)
     Ignore(['.', 'latex', 'latexpdf'], latexpdf)

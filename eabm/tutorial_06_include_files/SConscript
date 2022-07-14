@@ -89,6 +89,6 @@ workflow.extend(env.AbaqusSolver(
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)
 
-if env['conditional_ignore'] and not env['abaqus']:
+if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
     Ignore(['.', parent_directory], workflow)

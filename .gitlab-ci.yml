@@ -118,24 +118,24 @@ fast-test:
   variables:
     GIT_STRATEGY: clone
   script:
-    - scons . --keep-going conditional_ignore=False
+    - scons . --keep-going --unconditional-build
     - cd eabm
     # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=quickstart_SConstruct --keep-going
-    - scons . --sconstruct=tutorial_00_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going conditional_ignore=False
-    - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going conditional_ignore=False
+    - scons . --sconstruct=tutorial_00_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going --unconditional-build
     # Re-run the full WAVES-EABM suite once more with the full, advanced project definition in SContruct.
     # Uses "rm" instead of "scons --clean" to ensure a complete re-build even if the tutorial files and the default
     # SConstruct file target definitions differ or something is incompletely cleaned.
     - rm -rf build/
-    - scons . --jobs=4 --keep-going conditional_ignore=False
+    - scons . --jobs=4 --keep-going --unconditional-build
   tags:
     - sstelmo-shell-aea
   only:
@@ -212,16 +212,16 @@ pages:
             mkdir -p public/$ref/waves-eabm
             # Build WAVES HTML documentation. Clean up after to avoid leftover targets from main/dev filename differences.
             # Clean instead of "rm" to help catch incomplete target clean operations.
-            scons . --clean conditional_ignore=False
-            scons html conditional_ignore=False
+            scons . --clean --unconditional-build
+            scons html --unconditional-build
             cp -r build/docs/html/* ${repo_root}/public/$ref
-            scons . --clean conditional_ignore=False
+            scons . --clean --unconditional-build
             # Build WAVES-EABM HTML documentation
             cd eabm
-            scons . --clean conditional_ignore=False
-            scons html conditional_ignore=False
+            scons . --clean --unconditional-build
+            scons html --unconditional-build
             cp -r build/docs/html/* ${repo_root}/public/$ref/waves-eabm
-            scons . --clean conditional_ignore=False
+            scons . --clean --unconditional-build
             cd ${repo_root} 
         done
   artifacts:
