@@ -38,6 +38,8 @@ Documentation
 - Add a missing input file to the SolverPrep tutorial instructions (:issue:`192`, :merge:`167`). By `Kyle Brindley`_.
 - Clarify target list requirements and emitter behavior in the builder APIs (:issue:`188`, :merge:`160`). By `Kyle
   Brindley`_.
+- Add a discussion about the types, purposes, and values of modsim repository testing (:issue:`127`, :merge:`171`). By
+  `Kyle Brindley`_.
 
 Internal Changes
 ================
