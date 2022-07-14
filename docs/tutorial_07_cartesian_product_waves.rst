@@ -231,7 +231,89 @@ Build Targets
    $ pwd
    /path/to/waves-eabm-tutorial
    $ scons tutorial_07_cartesian_product --jobs=4
+   <output truncated>
 
 ************
 Output Files
 ************
+
+Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
+below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command output. The ``-d`` flag specified only 
+directories to be shown.
+
+.. code-block:: bash
+
+    $ pwd
+    /home/roppenheimer/waves-eabm-tutorial
+    $ tree build/ -d -I 'tutorial_0[1,2,3,4,5,6]*'
+    build/
+    └── tutorial_07_cartesian_product
+        ├── parameter_set0
+        ├── parameter_set1
+        ├── parameter_set2
+        └── parameter_set3
+
+    5 directories
+
+Explore the contents of the ``parameter_set0`` directory using the ``tree`` command. The contents of the remaining 
+``parameter_set*`` directories will be very similar to that shown for ``parameter_set0``.
+
+.. code-block:: bash
+   
+    $ pwd
+    /home/roppenheimer/waves-eabm-tutorial
+    $ tree build/tutorial_07_cartesian_product/parameter_set0
+    build/tutorial_07_cartesian_product/parameter_set0
+    ├── abaqus.rpy
+    ├── abaqus.rpy.1
+    ├── abaqus.rpy.2
+    ├── amplitudes.inp
+    ├── assembly.inp
+    ├── boundary.inp
+    ├── field_output.inp
+    ├── history_output.inp
+    ├── materials.inp
+    ├── parts.inp
+    ├── single_element_compression.abaqus_v6.env
+    ├── single_element_compression.com
+    ├── single_element_compression.dat
+    ├── single_element_compression_DATACHECK.023
+    ├── single_element_compression_DATACHECK.abaqus_v6.env
+    ├── single_element_compression_DATACHECK.com
+    ├── single_element_compression_DATACHECK.dat
+    ├── single_element_compression_DATACHECK.mdl
+    ├── single_element_compression_DATACHECK.msg
+    ├── single_element_compression_DATACHECK.odb
+    ├── single_element_compression_DATACHECK.par
+    ├── single_element_compression_DATACHECK.pes
+    ├── single_element_compression_DATACHECK.pmg
+    ├── single_element_compression_DATACHECK.prt
+    ├── single_element_compression_DATACHECK.sim
+    ├── single_element_compression_DATACHECK.stdout
+    ├── single_element_compression_DATACHECK.stt
+    ├── single_element_compression.inp
+    ├── single_element_compression.inp.in
+    ├── single_element_compression.msg
+    ├── single_element_compression.odb
+    ├── single_element_compression.par
+    ├── single_element_compression.pes
+    ├── single_element_compression.pmg
+    ├── single_element_compression.prt
+    ├── single_element_compression.sta
+    ├── single_element_compression.stdout
+    ├── single_element_geometry.abaqus_v6.env
+    ├── single_element_geometry.cae
+    ├── single_element_geometry.jnl
+    ├── single_element_geometry.stdout
+    ├── single_element_mesh.abaqus_v6.env
+    ├── single_element_mesh.cae
+    ├── single_element_mesh.inp
+    ├── single_element_mesh.jnl
+    ├── single_element_mesh.stdout
+    ├── single_element_partition.abaqus_v6.env
+    ├── single_element_partition.cae
+    ├── single_element_partition.jnl
+    └── single_element_partition.stdout
+
+    0 directories, 50 files
+
