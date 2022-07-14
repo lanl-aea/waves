@@ -7,8 +7,8 @@ SCons Quickstart
 .. note::
 
    Unlike the :ref:`quickstart`, this tutorial will use native `SCons`_ code without the `WAVES`_ extensions and
-   builders. This tutorial is included as an example for using native `SCons`_ techniques when `WAVES`_ third-party
-   software support is not provided or for when a modsim project requires unique builder behavior.
+   builders. This tutorial is included as an example for using native `SCons`_ techniques when `WAVES`_ does not support
+   required third-party software, such as numeric solvers, or for when a modsim project requires unique builder behavior.
 
 This quickstart will create a pure `SCons`_, minimal, single file project definition matching the tutorials listed below.
 
