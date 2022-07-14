@@ -53,6 +53,7 @@ documentation_file_list = [
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
+    'scons_quickstart.rst',
     'targets.txt',
     'tutorial_introduction.rst',
     'tutorial_00_prerequisites.txt',
@@ -83,8 +84,9 @@ tutorial_07_dir = pathlib.Path(env['tutorial_07_dir'])
 abaqus_dir = pathlib.Path(env['abaqus_dir'])
 python_dir = pathlib.Path(env['python_dir'])
 tutorial_files_list = [
-    eabm_dir / 'tutorial_00_SConstruct',
+    eabm_dir / 'scons_quickstart_SConstruct',
     eabm_dir / 'waves_quickstart_SConstruct',
+    eabm_dir / 'tutorial_00_SConstruct',
     eabm_dir / 'tutorial_01_geometry_SConstruct',
     eabm_dir / 'tutorial_02_partition_mesh_SConstruct',
     eabm_dir / 'tutorial_03_solverprep_SConstruct',

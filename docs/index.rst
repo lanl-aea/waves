@@ -33,6 +33,7 @@
    :caption: User Manual
 
    tutorial_introduction
+   scons_quickstart
    waves_quickstart
    tutorial_00_scons
    tutorial_01_geometry_waves
