@@ -1,4 +1,4 @@
-.. _quickstart:
+.. _waves_quickstart:
 
 ######################
 SCons-WAVES Quickstart
