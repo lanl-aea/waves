@@ -83,7 +83,12 @@ abaqus_source_list = [
     f"#/{abaqus_source_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdirectory=variant_dir_base))
+for source_file in abaqus_source_list:
+    copy_target = variant_dir_base / source_file.name
+    workflow.extend(env.Command(
+        target=str(copy_target),
+        source=str(source_file),
+        action=Copy('${TARGET}', '${SOURCE}')))
 
 # Abaqus Solve
 solve_source_list = [str(variant_dir_base /source_file.name.rstrip('.in')) for source_file in abaqus_source_list]
