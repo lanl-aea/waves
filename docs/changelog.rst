@@ -9,6 +9,11 @@ Changelog
 0.1.16 (unreleased)
 *******************
 
+Documentation
+=============
+- Update Scons terminal output and sample tree output in the tutorials to reflect the state of a user's tutorial files 
+  (:issue:`189`, :merge:`174`). By `Thomas Roberts`_.
+
 *******************
 0.1.15 (2022-07-14)
 *******************
@@ -49,8 +54,6 @@ Documentation
 - Add a discussion about the types, purposes, and values of modsim repository testing (:issue:`127`, :merge:`171`). By
   `Kyle Brindley`_.
 - Fix typos and typesetting issues in Tutorial 01: Geometry (:issue:`191`, :merge:`172`). By `Thomas Roberts`_.
-- Update Scons terminal output and sample tree output in the tutorials to reflect the state of a user's tutorial files 
-  (:issue:`189`, :merge:`174`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
