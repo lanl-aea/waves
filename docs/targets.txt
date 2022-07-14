@@ -32,6 +32,7 @@
 .. _`PEP-287`: https://peps.python.org/pep-0287/
 .. _`SCons alias`: https://scons.org/doc/production/HTML/scons-user/ch22s07.html
 .. _`SCons command-line build variables`: https://scons.org/doc/production/HTML/scons-user/ch10s02.html
+.. _`SCons command-line build options`: https://scons.org/doc/production/HTML/scons-user/ch10.html#idm46358236334624
 .. _`SCons construction environment`: https://scons.org/doc/production/HTML/scons-user/ch07s02.html
 .. _`SCons custom builders`: https://scons.org/doc/production/HTML/scons-user/ch17.html
 .. _`SCons project build help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idm46358284707920
@@ -75,9 +76,9 @@
 .. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
 
 .. Project specific links
-.. _`upstream repository`: https://re-git.lanl.gov/kbrindley/waves/cpp_stub
-.. _`Gitlab project issues`: https://re-git.lanl.gov/kbrindley/waves/-/issues
-.. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm/eabm_package/abaqus
+.. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves/cpp_stub
+.. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
+.. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/eabm/eabm_package/abaqus
 
 .. Abaqus reference links
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm

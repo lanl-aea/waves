@@ -98,6 +98,12 @@ for set_name, simulation_variables in parameter_study.items():
         job_name=job_name,
         abaqus_options=abaqus_options))
 
+    # Extract Abaqus
+    extract_source_list = [f"{current_set_name / job_name}.odb"]
+    workflow.extend(env.AbaqusExtract(
+        target=[f"{current_set_name / job_name}.h5"],
+        source=extract_source_list))
+
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)

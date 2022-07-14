@@ -12,15 +12,12 @@ from waves import builders
 fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 journal_emitter_input = {
-    'empty targets': ([],
-                      [source_file],
-                      ['dummy.jnl', 'dummy.stdout', 'dummy.abaqus_v6.env']),
-    'one target': (['dummy.cae'],
+    'one target': (['target.cae'],
                    [source_file],
-                   ['dummy.cae', 'dummy.jnl', 'dummy.stdout', 'dummy.abaqus_v6.env']),
+                   ['target.cae', 'target.stdout', 'target.abaqus_v6.env']),
     'subdirectory': (['set1/dummy.cae'],
                     [source_file],
-                    ['set1/dummy.cae', 'set1/dummy.jnl', 'set1/dummy.stdout', 'set1/dummy.abaqus_v6.env'])
+                    ['set1/dummy.cae', 'set1/dummy.stdout', 'set1/dummy.abaqus_v6.env'])
 }
 
 
@@ -111,12 +108,9 @@ def test__copy_substitute(source_list, expected_list):
 fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 python_emitter_input = {
-    'empty targets': ([],
-                      [source_file],
-                      ['dummy.stdout']),
-    'one target': (['dummy.cub'],
+    'one target': (['target.cub'],
                    [source_file],
-                   ['dummy.cub', 'dummy.stdout']),
+                   ['target.cub', 'target.stdout']),
     'subdirectory': (['set1/dummy.cub'],
                     [source_file],
                     ['set1/dummy.cub', 'set1/dummy.stdout'])
@@ -139,3 +133,39 @@ def test__python_script():
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
     node = env.PythonScript(
         target=['python_script_journal.cub'], source=['python_script_journal.py'], journal_options="")
+
+
+fs = SCons.Node.FS.FS()
+source_file = fs.File('dummy.odb')
+abaqus_extract_emitter_input = {
+    'empty targets': ([],
+                      [source_file],
+                      ['dummy.h5', 'dummy_datasets.h5', 'dummy.csv']),
+    'one target': (['new_name.h5'],
+                   [source_file],
+                   ['new_name.h5', 'new_name_datasets.h5', 'dummy.csv']),
+    'bad extension': (['new_name.txt'],
+                      [source_file],
+                      ['dummy.h5', 'new_name.txt', 'dummy_datasets.h5', 'dummy.csv']),
+    'subdirectory': (['set1/dummy.h5'],
+                    [source_file],
+                    ['set1/dummy.h5', 'set1/dummy_datasets.h5', 'set1/dummy.csv'])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('target, source, expected',
+                         abaqus_extract_emitter_input.values(),
+                         ids=abaqus_extract_emitter_input.keys())
+def test__abaqus_extract_emitter(target, source, expected):
+    target, source = builders._abaqus_extract_emitter(target, source, None)
+    assert target == expected
+
+
+@pytest.mark.unittest
+def test__abaqus_extract():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'AbaqusExtract': builders.abaqus_extract()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.AbaqusExtract(
+        target=['abaqus_extract.h5'], source=['abaqus_extract.odb'], journal_options="")

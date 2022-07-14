@@ -6,8 +6,58 @@ Changelog
 #########
 
 *******************
-0.1.15 (unreleased)
+0.1.16 (unreleased)
 *******************
+
+*******************
+0.1.15 (2022-07-14)
+*******************
+
+Breaking changes
+================
+- Require at least one target for the AbaqusJournal and PythonScript builders (:issue:`188`, :merge:`166`). By `Kyle
+  Brindley`_.
+- Return parameter study as an xarray dataset instead of a text YAML dictionary. Necessary for future output type
+  options and multi-index tables, e.g. Latin Hypercube value and quantile information (:issue:`70`, :merge:`170`). By
+  `Kyle Brindley`_.
+- Convert project command line variables to command line options (:issue:`179`, :merge:`169`). By `Kyle Brindley`_.
+
+New Features
+============
+- Add ODB extract builder and EABM tutorial configuration (:issue:`92`, :merge:`100`). By `Prabhu Khalsa`_ and `Kyle
+  Brindley`_.
+
+Bug fixes
+=========
+- Fix the output and return code unpacking when calling the ``run_external`` function from ``odb_extract.main``
+  (:issue:`92`, :merge:`100`). By `Kyle Brindley`_.
+- Execute the ODB parser for H5 file output (:issue:`92`, :merge:`100`). By `Kyle Brindley`_.
+- Fix the ``odb_extract`` entry point specification. New specification required by new internal interface introduced in
+  :merge:`100` (:issue:`186`, :merge:`163`). By `Kyle Brindley`_.
+- Fix a missing file copy required by the Conda recipe test definition (:issue:`187`, :merge:`164`). By `Kyle
+  Brindley`_.
+- Match the script builder redirected STDOUT file name to the first target. Required to allow multiple tasks that
+  execute the same script. Adds new target list requirement the script builders (:issue:`188`, :merge:`166`). By `Kyle
+  Brindley`_.
+
+Documentation
+=============
+- Update project URLs to reflect the move to the AEA Gitlab group (:issue:`183`, :merge:`160`). By `Kyle Brindley`_.
+- Add a missing input file to the SolverPrep tutorial instructions (:issue:`192`, :merge:`167`). By `Kyle Brindley`_.
+- Clarify target list requirements and emitter behavior in the builder APIs (:issue:`188`, :merge:`160`). By `Kyle
+  Brindley`_.
+- Add a discussion about the types, purposes, and values of modsim repository testing (:issue:`127`, :merge:`171`). By
+  `Kyle Brindley`_.
+- Fix typos and typesetting issues in Tutorial 01: Geometry (:issue:`191`, :merge:`172`). By `Thomas Roberts`_.
+
+Internal Changes
+================
+- Remove remnants of the parameter study file I/O that is no longer necessary from the cartesian product configuration
+  (:issue:`184`, :merge:`161`).  By `Kyle Brindley`_.
+- Remove the ``.jnl`` file from the list of targets appended by the Abaqus journal builder (:issue:`180`, :merge:`162`).
+  By `Matthew Fister`_.
+- Explicitly manage the ``.jnl`` target additions for more complete SCons clean operations (:issue:`185`, :merge:`168`).
+  By `Kyle Brindley`_.
 
 *******************
 0.1.14 (2022-06-30)

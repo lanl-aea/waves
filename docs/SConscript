@@ -117,7 +117,7 @@ for file_path in tutorial_files_list:
     documentation_file_list.append(target)
 
 # TODO: os agnostic pathsep for the html directory
-# https://re-git.lanl.gov/kbrindley/waves/-/issues/4
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/4
 sphinx_options = '-W'
 html = env.Command(
     target=[Dir('html')],
@@ -148,7 +148,7 @@ alias_list.extend(env.Alias('man', man))
 # Collector alias to build all documentation
 alias_list.extend(env.Alias('documentation', html + latexpdf + man))
 
-if env['conditional_ignore'] and not env['sphinx_build']:
+if not env['unconditional_build'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore(['.', 'html', 'html'], html)
     Ignore(['.', 'latex', 'latexpdf'], latexpdf)

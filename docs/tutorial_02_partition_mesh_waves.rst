@@ -75,7 +75,7 @@ first source is similar to that in :ref:`tutorial_geometry_waves`, where we run 
 in the Abaqus kernel, but now the default behavior of the journal is different.
 
 .. TODO: figure out how to link to a specific entry in the CLI. There's gotta be some way to do this similat to :meth:
-   directive. https://re-git.lanl.gov/kbrindley/waves/-/issues/175
+   directive. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/175
 
 6. Investigate the :ref:`sphinx_cli` documentation for the ``single_element_partition.py`` file. Notice that a new
    parameter is defined here that was absent in ``single_element_geometry.py``. This parameter is defined in short with

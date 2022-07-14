@@ -35,7 +35,7 @@ workflow = []
 journal_file = f"{model}_geometry"
 journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae"],
+    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options))
 
@@ -43,7 +43,7 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_partition"
 journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae"],
+    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
     journal_options=journal_options))
 
@@ -51,7 +51,7 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_mesh"
 journal_options = f"--global-seed {simulation_variables['global_seed']}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.inp"],
+    target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.inp"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options))
 
@@ -98,6 +98,6 @@ workflow.extend(env.AbaqusSolver(
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)
 
-if env['conditional_ignore'] and not env['abaqus']:
+if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
     Ignore(['.', parent_directory], workflow)

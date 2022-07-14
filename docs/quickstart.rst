@@ -43,7 +43,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
-   $ git archive --format=zip --remote=ssh://git@re-git.lanl.gov:10022/kbrindley/waves.git HEAD:eabm/eabm_package/abaqus > source_abaqus.zip
+   $ git archive --format=zip --remote=ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git HEAD:eabm/eabm_package/abaqus > source_abaqus.zip
    $ unzip source_abaqus.zip -d eabm_package/abaqus
 
 

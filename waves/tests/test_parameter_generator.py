@@ -5,6 +5,10 @@ import pytest
 from unittest.mock import patch, mock_open
 import pathlib
 
+import numpy
+import pandas
+import xarray
+
 from waves.parameter_generators import ParameterGenerator
 
 
@@ -38,7 +42,11 @@ class TestParameterGenerator:
         :param int sets: test specific argument for the number of sets to build for the test
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
-        WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
+        coordinates = [['parameter_1'], ['values']]
+        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
+        parameter_set_names = [f"set{num}" for num in range(sets)]
+        study_dataframe = pandas.DataFrame(numpy.random.randn(1, sets), index=index, columns=parameter_set_names)
+        WriteParameterGenerator.parameter_study = xarray.Dataset().from_dataframe(study_dataframe)
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
@@ -73,7 +81,11 @@ class TestParameterGenerator:
         :param int sets: test specific argument for the number of sets to build for the test
         """
         WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
-        WriteParameterGenerator.parameter_study = {pathlib.Path(f"{num}"): '\n' for num in range(sets)}
+        coordinates = [['parameter_1'], ['values']]
+        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
+        parameter_set_names = [f"set{num}" for num in range(sets)]
+        study_dataframe = pandas.DataFrame(numpy.random.randn(1, sets), index=index, columns=parameter_set_names)
+        WriteParameterGenerator.parameter_study = xarray.Dataset().from_dataframe(study_dataframe)
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \

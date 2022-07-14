@@ -8,19 +8,20 @@
 .. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 .. _CMake: https://cmake.org/cmake/help/v3.14/
 .. _ctest: https://cmake.org/cmake/help/latest/manual/ctest.1.html
-.. _cmake-simulation: https://re-git.lanl.gov/kbrindley/cmake-simulation
+.. _cmake-simulation: https://re-git.lanl.gov/aea/python-projects/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
-.. _WAVES: https://kbrindley.re-pages.lanl.gov/waves/main/
-.. _WAVES repository: https://re-git.lanl.gov/kbrindley/waves
-.. _WAVES-EABM: https://re-git.lanl.gov/kbrindley/waves/-/tree/dev/eabm
+.. _WAVES: https://aea.re-pages.lanl.gov/python-projects/waves/main/
+.. _WAVES repository: https://re-git.lanl.gov/aea/python-projects/waves
+.. _WAVES-EABM: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/eabm
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
 .. _`Sergio Cordova`: sergioc@lanl.gov
 .. _`Prabhu Khalsa`: pkhalsa@lanl.gov
 .. _`Scott Ouellette`: souellette@lanl.gov
+.. _`Matthew Fister`: mwfister@lanl.gov
 
 .. target-end-do-not-remove
 
@@ -49,14 +50,14 @@ testing of the `WAVES`_ extensions to SCons.
 Documentation
 =============
 
-* Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/
-* Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/
+* Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/
+* Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/
 
 The `WAVES-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
-* `WAVES-EABM`_ Production version (``main`` branch): https://kbrindley.re-pages.lanl.gov/waves/main/waves-eabm/
-* `WAVES-EABM`_ Development version (``dev`` branch): https://kbrindley.re-pages.lanl.gov/waves/dev/waves-eabm/
+* `WAVES-EABM`_ Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
+* `WAVES-EABM`_ Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
 
 Developers
 ==========
