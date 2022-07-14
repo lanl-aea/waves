@@ -13,6 +13,7 @@ Documentation
 =============
 - Update Scons terminal output and sample tree output in the tutorials to reflect the state of a user's tutorial files 
   (:issue:`189`, :merge:`174`). By `Thomas Roberts`_.
+- Add a pure SCons quickstart tutorial (:issue:`48`, :merge:`173`). By `Kyle Brindley`_.
 
 *******************
 0.1.15 (2022-07-14)
