@@ -350,24 +350,18 @@ using Scons.
     command: 
 
     .. code-block::
-       
+
         $ pwd
-         /home/roppenheimer/waves-eabm-tutorial
+        /home/roppenheimer/waves-eabm-tutorial
         $ scons tutorial_01_geometry
         scons: Reading SConscript files ...
-        Checking whether sphinx-build program 
-        exists.../projects/aea_compute/aea-beta/bin/sphinx-build
         Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
-        Checking whether cubit program exists.../apps/Cubit-15.8/cubit
         scons: done reading SConscript files.
         scons: Building targets ...
-        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && 
-        /apps/abaqus/Commands/abaqus -information environment > 
+        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus -information environment > 
         single_element_geometry.abaqus_v6.env
-        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && 
-        /apps/abaqus/Commands/abaqus cae -noGui 
-        /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > 
-        single_element_geometry.stdout 2>&1
+        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus cae -noGui 
+        /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
         scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as 
