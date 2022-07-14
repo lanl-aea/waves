@@ -94,22 +94,27 @@ for source_file in abaqus_source_list:
         action=Copy('${TARGET}', '${SOURCE}')))
 
 # Abaqus Solve
-solve_source_list = [str(variant_dir_base /source_file.name.rstrip('.in')) for source_file in abaqus_source_list]
-solve_source_list.append([str(variant_dir_base / f"{journal_file}.inp")])
-job_name = pathlib.Path(solve_source_list[0]).stem
-datacheck_name = f"{job_name}_DATACHECK"
-datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
 abaqus_options='-double both'
+common_suffixes = ('odb', 'dat', 'msg', 'com', 'prt')
+solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
+solve_source_list.append(str(variant_dir_base / f"{journal_file}.inp"))
+job_name = pathlib.Path(solve_source_list[0]).stem
+
+datacheck_suffixes = common_suffixes + ('023', 'mdl', 'sim', 'stt')
+datacheck_name = f"{job_name}_DATACHECK"
+datacheck_targets = [f"{variant_dir_base / datacheck_name}.{suffix}" for suffix in datacheck_suffixes]
 workflow.extend(env.AbaqusSolver(
-    target=[f"{variant_dir_base / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+    target=datacheck_targets,
     source=solve_source_list,
     abaqus_program=env['abaqus'],
     job_name=datacheck_name,
     abaqus_options=f'{abaqus_options} -datacheck'))
 
-solve_source_list.append([str(variant_dir_base / f"{datacheck_name}.odb")])
+solve_suffixes = common_suffixes + ('sta',)
+solve_targets = [f"{variant_dir_base / job_name}.{suffix}" for suffix in solve_suffixes]
+solve_source_list.append(str(variant_dir_base / f"{datacheck_name}.odb"))
 workflow.extend(env.AbaqusSolver(
-    target=[f"{variant_dir_base / job_name}.sta"],
+    target=solve_targets,
     source=solve_source_list,
     abaqus_program=env['abaqus'],
     job_name=job_name,
