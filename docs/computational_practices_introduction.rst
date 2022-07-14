@@ -69,4 +69,5 @@ tutorials are considered prerequisites.
 #. Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/
 #. Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
 #. Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html
+#. :ref:`SCons-WAVES-EABM tutorials<tutorial_introduction>`
 #. Software Carpentry: Regular Expressions - https://librarycarpentry.org/lc-data-intro/index.html
