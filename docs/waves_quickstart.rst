@@ -5,17 +5,18 @@ SCons-WAVES Quickstart
 ######################
 
 This quickstart will create a minimal, single file project definition matching the tutorial listed below. These
-tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using a
-single project definition file requires `SCons`_ techniques that differ between the quickstart ``SConstruct`` file and
-the project definition files, ``SConstruct`` and ``SConscript``, found in the full tutorials. Consequently, this
-quickstart will use a separate name for the project definition file, ``waves_quickstart_SConstruct``, to allow the tutorials
-and this quickstart to share a common tutorial directory.
 
 * :ref:`tutorialsconstruct`
 * :ref:`tutorial_geometry_waves`
 * :ref:`tutorial_partition_mesh_waves`
 * :ref:`tutorial_solverprep_waves`
 * :ref:`tutorial_simulation_waves`
+
+tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using a
+single project definition file requires `SCons`_ techniques that differ between the quickstart ``SConstruct`` file and
+the project definition files, ``SConstruct`` and ``SConscript``, found in the full tutorials. Consequently, this
+quickstart will use a separate name for the project definition file, ``waves_quickstart_SConstruct``, to allow the tutorials
+and this quickstart to share a common tutorial directory.
 
 ***********
 Environment
