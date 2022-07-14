@@ -9,9 +9,14 @@ Changelog
 0.1.16 (unreleased)
 *******************
 
+Internal Changes
+================
+- Reduce the simulation variables and substitution dictionary to a single dictionary (:issue:`181`, :merge:`177`). By
+  `Kyle Brindley`_.
+
 Documentation
 =============
-- Update Scons terminal output and sample tree output in the tutorials to reflect the state of a user's tutorial files 
+- Update Scons terminal output and sample tree output in the tutorials to reflect the state of a user's tutorial files
   (:issue:`189`, :merge:`174`). By `Thomas Roberts`_.
 - Add a pure SCons quickstart tutorial (:issue:`48`, :merge:`173`). By `Kyle Brindley`_.
 
