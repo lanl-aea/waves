@@ -8,7 +8,7 @@ This quickstart will create a minimal, single file project definition matching t
 tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using a
 single project definition file requires `SCons`_ techniques that differ between the quickstart ``SConstruct`` file and
 the project definition files, ``SConstruct`` and ``SConscript``, found in the full tutorials. Consequently, this
-quickstart will use a separate name for the project definition file, ``quickstart_SConstruct``, to allow the tutorials
+quickstart will use a separate name for the project definition file, ``waves_quickstart_SConstruct``, to allow the tutorials
 and this quickstart to share a common tutorial directory.
 
 * :ref:`tutorialsconstruct`
@@ -51,11 +51,11 @@ Directory Structure
 SConstruct File
 ***************
 
-5. Create a file named ``quickstart_SConstruct`` from the contents below.
+5. Create a file named ``waves_quickstart_SConstruct`` from the contents below.
 
-.. admonition:: waves-eabm-tutorial/quickstart_SConstruct
+.. admonition:: waves-eabm-tutorial/waves_quickstart_SConstruct
 
-    .. literalinclude:: eabm_quickstart_SConstruct
+    .. literalinclude:: eabm_waves_quickstart_SConstruct
        :language: Python
        :lineno-match:
 
@@ -67,7 +67,7 @@ Building targets
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
-   $ scons --sconstruct=quickstart_SConstruct single_element
+   $ scons --sconstruct=waves_quickstart_SConstruct single_element
 
 .. note::
 

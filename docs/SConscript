@@ -84,7 +84,7 @@ abaqus_dir = pathlib.Path(env['abaqus_dir'])
 python_dir = pathlib.Path(env['python_dir'])
 tutorial_files_list = [
     eabm_dir / 'tutorial_00_SConstruct',
-    eabm_dir / 'quickstart_SConstruct',
+    eabm_dir / 'waves_quickstart_SConstruct',
     eabm_dir / 'tutorial_01_geometry_SConstruct',
     eabm_dir / 'tutorial_02_partition_mesh_SConstruct',
     eabm_dir / 'tutorial_03_solverprep_SConstruct',
