@@ -28,7 +28,20 @@ tutorials and this quickstart to share a common tutorial directory.
 Environment
 ***********
 
-.. include:: tutorial_environment_activation.txt
+`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
+`Conda environment management`_ documentation for more details about using `Conda`_.
+
+1. Create the environment if it doesn't exist
+
+   .. code-block::
+
+      $ conda create --name waves-eabm-env --channel conda-forge scons
+
+2. Activate the environment
+
+   .. code-block::
+
+      $ conda activate waves-eabm-env
 
 *******************
 Directory Structure
