@@ -1,4 +1,4 @@
-.. _tutorial_cartesian_product_waves:
+.. _tutorial_data_extraction_waves:
 
 ############################
 Tutorial 08: Data Extraction
@@ -38,15 +38,6 @@ Directory Structure
 **********
 SConscript
 **********
-
-The ``diff`` for changes in the ``SConscript`` file for this tutorial is extensive because of the for loop indent
-wrapping the task generation for each parameter set. For convenience, the full source file is included below to aid in a
-wholesale copy and paste when creating the new ``SConscript`` file.
-
-.. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction/SConscript
-
-   .. literalinclude:: tutorial_08_data_extraction_SConscript
-      :language: Python
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.
