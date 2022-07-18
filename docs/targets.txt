@@ -23,6 +23,8 @@
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
 .. _`Granta/MIMS`: http://grantami.lanl.gov/mi
+.. _`LaTeX`: https://www.latex-project.org/
+.. _`Markdown`: https://www.markdownguide.org/
 .. _`Material Models`: https://re-git.lanl.gov/aea/material-models
 .. _`Material Models members`: https://re-git.lanl.gov/groups/aea/material-models/-/group_members
 .. _`Material Database`: https://ddw-confluence.lanl.gov/display/MD/Material+Database
@@ -33,6 +35,7 @@
 .. _`PEP-440`: https://www.python.org/dev/peps/pep-0440/
 .. _`PEP-257`: https://peps.python.org/pep-0257/
 .. _`PEP-287`: https://peps.python.org/pep-0287/
+.. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
 .. _`SCons alias`: https://scons.org/doc/production/HTML/scons-user/ch22s07.html
 .. _`SCons command-line build variables`: https://scons.org/doc/production/HTML/scons-user/ch10s02.html
 .. _`SCons command-line build options`: https://scons.org/doc/production/HTML/scons-user/ch10.html#idm46358236334624
