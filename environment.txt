@@ -4,6 +4,7 @@ numpy
 pandas
 pytest
 pytest-xdist
+pyyaml
 scons
 setuptools
 setuptools_scm
