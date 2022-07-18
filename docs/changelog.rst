@@ -13,6 +13,10 @@ Internal Changes
 ================
 - Remove unused ``pyyaml`` package from WAVES-EABM environment lists (:issue:`197`, :merge:`182`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Add minimal structure to data extraction tutorial (:issue:`198`, :merge:`183`). By `Kyle Brindley`_.
+
 *******************
 0.1.17 (2022-07-18)
 *******************

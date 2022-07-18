@@ -42,6 +42,7 @@
    tutorial_05_parameter_substitution_waves
    tutorial_06_include_files_waves
    tutorial_07_cartesian_product_waves
+   tutorial_08_data_extraction_waves
 
 .. raw:: latex
 
