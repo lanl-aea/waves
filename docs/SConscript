@@ -64,6 +64,7 @@ documentation_file_list = [
     'tutorial_05_parameter_substitution_waves.rst',
     'tutorial_06_include_files_waves.rst',
     'tutorial_07_cartesian_product_waves.rst',
+    'tutorial_08_data_extraction_waves.rst',
     'tutorial_environment_activation.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
@@ -80,6 +81,7 @@ tutorial_04_dir = pathlib.Path(env['tutorial_04_dir'])
 tutorial_05_dir = pathlib.Path(env['tutorial_05_dir'])
 tutorial_06_dir = pathlib.Path(env['tutorial_06_dir'])
 tutorial_07_dir = pathlib.Path(env['tutorial_07_dir'])
+tutorial_08_dir = pathlib.Path(env['tutorial_08_dir'])
 abaqus_dir = pathlib.Path(env['abaqus_dir'])
 python_dir = pathlib.Path(env['python_dir'])
 tutorial_files_list = [
@@ -93,6 +95,7 @@ tutorial_files_list = [
     eabm_dir / 'tutorial_05_parameter_substitution_SConstruct',
     eabm_dir / 'tutorial_06_include_files_SConstruct',
     eabm_dir / 'tutorial_07_cartesian_product_SConstruct',
+    eabm_dir / 'tutorial_08_data_extraction_SConstruct',
     eabm_dir / tutorial_01_dir / 'SConscript',
     eabm_dir / tutorial_02_dir / 'SConscript',
     eabm_dir / tutorial_03_dir / 'SConscript',
@@ -100,6 +103,7 @@ tutorial_files_list = [
     eabm_dir / tutorial_05_dir / 'SConscript',
     eabm_dir / tutorial_06_dir / 'SConscript',
     eabm_dir / tutorial_07_dir / 'SConscript',
+    eabm_dir / tutorial_08_dir / 'SConscript',
     eabm_dir / 'SConstruct',
     eabm_dir / abaqus_dir / 'single_element_geometry.py',
     eabm_dir / abaqus_dir / 'single_element_partition.py',
