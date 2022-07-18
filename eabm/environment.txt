@@ -1,4 +1,3 @@
-pyyaml
 scons
 setuptools
 setuptools_scm
