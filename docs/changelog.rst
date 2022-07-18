@@ -9,6 +9,10 @@ Changelog
 0.1.18 (unreleased)
 *******************
 
+Internal Changes
+================
+- Remove unused ``pyyaml`` package from WAVES-EABM environment lists (:issue:`197`, :merge:`182`). By `Kyle Brindley`_.
+
 *******************
 0.1.17 (2022-07-18)
 *******************
