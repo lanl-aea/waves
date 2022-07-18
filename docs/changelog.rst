@@ -6,8 +6,17 @@ Changelog
 #########
 
 *******************
-0.1.17 (unreleased)
+0.1.18 (unreleased)
 *******************
+
+*******************
+0.1.17 (2022-07-18)
+*******************
+
+Documentation
+=============
+- Add the compute environment section to the computational practices discussion (:issue:`126`, :merge:`179`). By `Kyle
+  Brindley`_.
 
 *******************
 0.1.16 (2022-07-14)
