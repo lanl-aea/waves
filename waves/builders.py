@@ -27,7 +27,8 @@ def find_program(names, env):
     conf = env.Configure()
     program_paths = [] 
     for name in names:
-        program_paths.append(conf.CheckProg(program))
+        program_paths.append(conf.CheckProg(name))
+    conf.Finish()
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
     return first_found_path
