@@ -136,6 +136,12 @@ The highlighted portions of the code snippet above define some new ``simulation_
       :start-after: marker-2
       :end-before: marker-3
 
+.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/examine_parameter_study_object.py
+   
+   .. literalinclude:: tutorial_07_cartesian_product_examine_parameter_study_object.py
+      :language: Python
+      :lineno-match:
+
 .. literalinclude:: tutorial_07_cartesian_product_parameter_study_message.txt
 
 
