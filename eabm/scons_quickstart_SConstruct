@@ -20,10 +20,8 @@ variant_dir_base = pathlib.Path('scons_quickstart')
 VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-required_programs = ['abaqus']
 conf = env.Configure()
-for program in required_programs:
-    env[program.replace('-', '_')] = conf.CheckProg(program)
+env['abaqus'] = conf.CheckProg('abq2021')
 conf.Finish()
 
 # Write project builders for re-use in task definitions
