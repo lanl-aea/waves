@@ -14,6 +14,28 @@ from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 
 
+def find_program(names, env):
+    """Search for a program from a list of possible program names.
+
+    Returns the absolute path of the first program name found.
+
+    :param names list: list of string program names. May include an absolute path.
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
+    """
+    if isinstance(names, str):
+        names = [names]
+    conf = env.Configure()
+    program_paths = [] 
+    for name in names:
+        program_paths.append(conf.CheckProg(name))
+    conf.Finish()
+    # Return first non-None path. Default to None if no program path was found.
+    first_found_path = next((path for path in program_paths if path is not None), None)
+    return first_found_path
+
+
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 

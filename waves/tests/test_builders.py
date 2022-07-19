@@ -3,10 +3,50 @@
 import pathlib
 import pytest
 from contextlib import nullcontext as does_not_raise
+import unittest
+from unittest.mock import patch
 
 import SCons.Node.FS
 
 from waves import builders
+
+
+
+find_program_input = {
+    'string': (
+        'dummy',
+        ['/installed/executable/dummy'],
+        '/installed/executable/dummy'),
+    'one path': (
+        ['dummy'],
+        ['/installed/executable/dummy'],
+        '/installed/executable/dummy'),
+    'first missing': (
+        ['notfound', 'dummy'],
+        [None, '/installed/executable/dummy'],
+        '/installed/executable/dummy'),
+    'two found': (
+        ['dummy', 'dummy1'],
+        ['/installed/executable/dummy', '/installed/executable/dummy1'],
+        '/installed/executable/dummy'),
+    'none found': (
+        ['notfound', 'dummy'],
+        [None, None],
+        None)
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('names, checkprog_side_effect, first_found_path',
+                         find_program_input.values(),
+                         ids=find_program_input.keys())
+def test__find_program(names, checkprog_side_effect, first_found_path):
+    env = SCons.Environment.Environment()
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    with patch('SCons.SConf.SConfBase', return_value=mock_conf):
+        program = builders.find_program(names, env)
+    assert program == first_found_path
 
 
 fs = SCons.Node.FS.FS()
