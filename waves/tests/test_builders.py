@@ -13,7 +13,9 @@ from waves import builders
 
 def test__find_program():
     env = SCons.Environment.Environment()
-    with patch('SCons.SConf.SConfBase', side_effect=[unittest.mock.Mock()]) as mock_conf:
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(return_value='/installed/executable/dummy')
+    with patch('SCons.SConf.SConfBase', side_effect=[mock_conf]):
         program = builders.find_program('dummy', env)
     assert program == '/installed/executable/dummy'
 
