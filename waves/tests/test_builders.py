@@ -13,15 +13,23 @@ from waves import builders
 
 
 find_program_input = {
-    'one path': (['dummy'])  
+    'string': ('dummy',
+               ['/installed/executable/dummy'],
+               '/installed/executable/dummy')
 }
-def test__find_program():
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('names, checkprog_side_effect, first_found_path',
+                         find_program_input.values(),
+                         ids=find_program_input.keys())
+def test__find_program(names, checkprog_side_effect, first_found_path):
     env = SCons.Environment.Environment()
     mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=['/installed/executable/dummy'])
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch('SCons.SConf.SConfBase', return_value=mock_conf):
-        program = builders.find_program(['dummy'], env)
-    assert program == '/installed/executable/dummy'
+        program = builders.find_program(names, env)
+    assert program == first_found_path 
 
 
 fs = SCons.Node.FS.FS()
