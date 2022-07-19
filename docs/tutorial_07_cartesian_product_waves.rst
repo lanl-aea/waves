@@ -136,13 +136,49 @@ The highlighted portions of the code snippet above define some new ``simulation_
       :start-after: marker-2
       :end-before: marker-3
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/examine_parameter_study_object.py
-   
-   .. literalinclude:: tutorial_07_cartesian_product_examine_parameter_study_object.py
-      :language: Python
-      :lineno-match:
+.. tip::
 
-.. literalinclude:: tutorial_07_cartesian_product_parameter_study_message.txt
+   Explore the variable types and contents of the ``parameter_generator`` and ``parameter_study`` variables. In the next 
+   additions to the ``SConscript`` file, you will add code to parse the ``parameter_study`` object to create the 
+   ``simulation_variables`` parmeter substitution dictionary. Understanding the structure of the 
+   ``parameter_study`` `xarray dataset`_ will help clarify this process.
+
+   
+   1. Create a file called ``tutorial_07_cartesian_product/examine_parameter_study_object.py`` using the contents shown 
+      below.
+
+   .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/examine_parameter_study_object.py
+   
+      .. literalinclude:: tutorial_07_cartesian_product_examine_parameter_study_object.py
+         :language: Python
+         :lineno-match:
+
+   The ``examine_parameter_study_object.py`` file does the following:
+   
+   * Import the ``waves`` package (note the comment above the ``import`` statments when importing from outside the 
+     WAVES repository)
+   * Create a sample ``parameter_schema`` dictionary. Note that in this tutorial, we import this from a module file 
+     instead.
+   * Generate the parameter sets with a ``parameter_generator``
+   * Extract the ``parameter_study`` `xarray dataset`_ from the ``parameter_generator`` object
+   * Print some information about the ``parameter_generator`` and ``parameter_study`` variables
+
+   2. From within the ``tutorial_07_cartesian_product`` directory, execute the ``examine_parameter_study_object.py`` 
+      file using Python.
+
+      .. literalinclude:: tutorial_07_cartesian_product_parameter_study_message.txt
+   
+   The first two printed lines display the variable types of the ``parameter_generator`` and ``parameter_study`` 
+   variables. The remainig text is the output from printing the ``parameter_study`` `xarray dataset`_. The coordinates 
+   of the ``parameter_study`` object provide the names of the parameters and metadata associated with the parameters. In 
+   this case, the parameter study ``parameter_data`` only contains ``values`` information, but other sampling strategies 
+   may require extra information to be stored here. An example of this is the usage of ``quantiles`` with Latin 
+   Hypercube sampling.
+   
+   The data variables availble in the ``parameter_study`` object are named according to the 
+   ``parameter_set_file_template`` and contain the parameter values unique to each specific parameter set. Examine the 
+   contents of the data variables to familiarize yourself with the specific parameter values generated for this 
+   particular `Cartesian Product`_ parameter study.
 
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
