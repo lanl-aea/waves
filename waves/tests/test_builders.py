@@ -3,10 +3,17 @@
 import pathlib
 import pytest
 from contextlib import nullcontext as does_not_raise
+from unittest.mock import patch
 
 import SCons.Node.FS
 
 from waves import builders
+
+
+def test__find_program():
+    with patch('SCons.Environment.Environment') as mock_env:
+        program = builders.find_program('dummy', mock_env)
+    assert program == '/installed/executable/dummy'
 
 
 fs = SCons.Node.FS.FS()
