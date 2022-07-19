@@ -17,6 +17,8 @@ New Features
 Internal Changes
 ================
 - Remove unused ``pyyaml`` package from WAVES-EABM environment lists (:issue:`197`, :merge:`182`). By `Kyle Brindley`_.
+- Use the ``find_program`` method to search for an ordered list of Abaqus executable names in the WAVES-EABM and
+  tutorials. Prefer the install naming convention ``abqYYYY`` (:issue:`65`, :merge:`185`). By `Kyle Brindley`_.
 
 Documentation
 =============
