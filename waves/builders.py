@@ -24,6 +24,8 @@ def find_program(names, env):
     :return: Absolute path of the found program. None if none of the names are found.
     :rtype: str
     """
+    if isinstance(names, str):
+        names = [names]
     conf = env.Configure()
     program_paths = [] 
     for name in names:
