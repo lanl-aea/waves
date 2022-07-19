@@ -161,10 +161,11 @@ In `WAVES`_ and `WAVES-EABM`_, this approach is primarily used to allow develope
 computers without cluttering their test builds with tasks that cannot succeed on their local computer.
 :ref:`tutorial_geometry_waves` will introduce the use of these variables for build control.
 
-The `SCons`_ native solution for finding a program is the `CheckProg`_ configuration method. The `WAVES`_
-:meth:`waves.builders.find_program` wraps this method to search for a list of possible program names. This is most
-useful when multiple versions of a program can be used to build the project and the servers where the project is built
-may have different versions available.
+The `SCons`_ native solution for finding a program is the `CheckProg`_ configuration method. The
+:meth:`waves.builders.find_program` method wraps `CheckProg`_ to search for a list of possible program names. This is
+most useful when multiple versions of a program can be used to build the project and the various servers where the
+project is built may have different versions available. The project will build with the first available program name
+without changes to the project configuration.
 
 .. note::
 
