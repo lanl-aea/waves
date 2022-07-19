@@ -11,12 +11,16 @@ import SCons.Node.FS
 from waves import builders
 
 
+
+find_program_input = {
+    'one path': (['dummy'])  
+}
 def test__find_program():
     env = SCons.Environment.Environment()
     mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(return_value='/installed/executable/dummy')
-    with patch('SCons.SConf.SConfBase', side_effect=[mock_conf]):
-        program = builders.find_program('dummy', env)
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=['/installed/executable/dummy'])
+    with patch('SCons.SConf.SConfBase', return_value=mock_conf):
+        program = builders.find_program(['dummy'], env)
     assert program == '/installed/executable/dummy'
 
 
