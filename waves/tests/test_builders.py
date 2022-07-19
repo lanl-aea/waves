@@ -3,6 +3,7 @@
 import pathlib
 import pytest
 from contextlib import nullcontext as does_not_raise
+import unittest
 from unittest.mock import patch
 
 import SCons.Node.FS
@@ -11,8 +12,9 @@ from waves import builders
 
 
 def test__find_program():
-    with patch('SCons.Environment.Environment') as mock_env:
-        program = builders.find_program('dummy', mock_env)
+    env = SCons.Environment.Environment()
+    with patch('SCons.SConf.SConfBase', side_effect=[unittest.mock.Mock()]) as mock_conf:
+        program = builders.find_program('dummy', env)
     assert program == '/installed/executable/dummy'
 
 
