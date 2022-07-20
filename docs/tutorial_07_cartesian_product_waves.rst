@@ -102,7 +102,7 @@ Step-By-Step SConscript Discussion
       :language: Python
       :lineno-match:
       :end-before: marker-1
-      :emphasize-lines: 8, 11
+      :emphasize-lines: 7, 10
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import 
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the 
@@ -135,6 +135,13 @@ The highlighted portions of the code snippet above define some new ``simulation_
       :lineno-match:
       :start-after: marker-2
       :end-before: marker-3
+
+The code above generates the parameter study for this tutorial, using the 
+:meth:`waves.parameter_generators.CartesianProduct` method. The ``parameter_schema`` that was imported in previous code 
+is used to define the parameter bounds, and the ``output_file_template`` option defines how the parameter set output 
+files will be named, and subsequently how the parameter sets will be accessed in the ``parameter_study`` object. The 
+``parameter_study`` object is an `xarray dataset`_. Follow the tip below for exploring the structure of the parameter 
+study.
 
 .. tip::
 
@@ -180,7 +187,6 @@ The highlighted portions of the code snippet above define some new ``simulation_
    contents of the data variables to familiarize yourself with the specific parameter values generated for this 
    particular `Cartesian Product`_ parameter study.
 
-
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
@@ -189,6 +195,19 @@ The highlighted portions of the code snippet above define some new ``simulation_
       :start-after: marker-3
       :end-before: marker-4
 
+The above code uses ``parameter_study.items()`` as an iterable to form the ``simulation_variables`` parameter 
+substitution dictionary. Recall from :ref:`tutorial_parameter_substitution_waves_SConscript` that you created a single 
+``simulation_variables`` dictionary in the ``SConscript`` file with leading and trailing ``@`` characters for parameter 
+substitution. Now, we will iterate on ``parameter_study.items()`` to generate a ``simulation_variables`` dictionary for 
+each of the simulations in our parameter study.
+
+The ``current_set_name`` will be used to construct a simulation directory for each parameter set within the tutorial 
+build directory. In order for this path construction to be operating system agnostic, we use `Python pathlib` objects to 
+construct the ``current_set_name``. The ``simulation_variables`` dictionary is formed in *nearly* the same way as in we 
+have seen previously, but with some slightly different syntax. The ``simulation_variables`` dictionary will have keys 
+that match the parameter names, which are extracted from the ``parameter_name`` *Coordinate* of the xarray dataset. The 
+value associated with the keys is the value of each individual parameter for a specific parameter set name.
+
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
@@ -196,6 +215,7 @@ The highlighted portions of the code snippet above define some new ``simulation_
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
+
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
