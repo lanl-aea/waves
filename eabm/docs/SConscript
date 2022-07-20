@@ -24,6 +24,7 @@ documentation_file_list = [
     'dependencies.txt',
     'devops.rst',
     'documentation.txt',
+    'glossary.rst',
     'index.rst',
     'project_brief.txt',
     'references.bib',
