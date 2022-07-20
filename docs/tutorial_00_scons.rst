@@ -152,7 +152,7 @@ environment for re-use throughout the project definition files, SConstruct and S
 
 These checks are not strictly required for an `SCons`_ `WAVES`_ :term:`EABM`; however, they provide valuable build control
 options for :term:`EABM` developers. Most of the `WAVES-EABM`_  compute environment dependencies are `Python`_ packages managed
-with `Conda`_ as described in the :ref:`sconstruct_environment` section of this tutorial. Many modsim repositories will
+with `Conda`_ as described in the :ref:`sconstruct_environment` section of this tutorial. Many :term:`modsim repositories<modsim repository>` will
 also depend on proprietary or commercial software that is not included in a package manager such as `Conda`_. Instead,
 the project configuration can check the construction environment for software installation(s) and provide an environment
 variable to conditionally skip any tasks that depend on missing software.
@@ -183,7 +183,7 @@ without changes to the project configuration.
       :end-before: marker-6
 
 The `WAVES-EABM`_ makes use of the `SCons hierarchical build`_ feature to separate simulation output in the build
-directory. This is valuable for modsim repositories that include a suite of simulations. To avoid hardcoded duplication
+directory. This is valuable for :term:`modsim repositories<modsim repository>` that include a suite of simulations. To avoid hardcoded duplication
 of project meta data, the project meta data variables are added to the construction environment, which will be passed
 around to all `SCons`_ configuration files. The implementation that passes the construction environment around is
 introduced in :ref:`tutorial_geometry_waves`.
