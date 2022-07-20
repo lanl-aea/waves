@@ -226,7 +226,8 @@ Build Targets
     /path/to/waves-eabm-tutorial
     $ scons tutorial_05_parameter_substitution
     scons: Reading SConscript files ...
-    Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
+    Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
+    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
     cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information

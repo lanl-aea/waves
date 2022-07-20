@@ -65,7 +65,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 

@@ -128,6 +128,7 @@ fast-test:
     - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_cubit_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build

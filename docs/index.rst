@@ -43,6 +43,7 @@
    tutorial_06_include_files_waves
    tutorial_07_cartesian_product_waves
    tutorial_08_data_extraction_waves
+   tutorial_cubit
 
 .. raw:: latex
 
