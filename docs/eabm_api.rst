@@ -46,6 +46,8 @@ abaqus_journal_utilities.py
     :show-inheritance:
     :synopsis: Abaqus utilities to be re-used in multiple places
 
+.. _cubit_journal_api:
+
 *****
 cubit
 *****
