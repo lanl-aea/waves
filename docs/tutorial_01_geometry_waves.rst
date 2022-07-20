@@ -376,7 +376,7 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
 ``build`` directory, as shown below. Note that the directory structure of the build
 directory *exactly* matches the directory structure of the location where the
 project-level ``SConstruct`` and ``SConscript`` files exist. This behavior will allow us
-to define multiple simulations in our modsim repository (EABM) with build result
+to define multiple simulations in our :term:`modsim repository` (EABM) with build result
 separation if more than one simulation is built at the same time.
 :ref:`tutorial_partition_mesh_waves` will demonstrate the importance of this behavior more clearly.
 

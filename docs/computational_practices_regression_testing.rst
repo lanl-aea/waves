@@ -39,7 +39,7 @@ When testing includes file I/O or external executables and programs, it is often
 repository, integration testing may require execution of several stand-alone scripts, such as those introduced in
 :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves`, which communicate through file I/O operations
 and must be executed by external software. For this reason, this project will often use integration and system testing
-interchangeably. Unless a modsim repository contains project specific, re-usable libraries, most integration testing of
+interchangeably. Unless a :term:`modsim repository` contains project specific, re-usable libraries, most integration testing of
 a simulation workflow will actually be system testing. One important aspect of such system testing is to provide a
 regression test suite that will verify expected behavior when external libraries, programs, and software change versions
 or when executing the simulation on a new server. Regular execution of the modsim integration and system tests helps
