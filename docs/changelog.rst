@@ -26,6 +26,7 @@ Documentation
 - Add a brief draft of the documentation computational practice discussion (:issue:`124`, :merge:`184`). By `Kyle
   Brindley`_.
 - Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
+- Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
 
 Enhancements
 ============
