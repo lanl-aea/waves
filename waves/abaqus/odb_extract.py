@@ -80,6 +80,18 @@ def odb_extract(input_file,
                 abaqus_command=_settings._default_abaqus_command,
                 delete_report_file=False,
                 verbose=False):
+    """The odb_extract Abaqus data extraction tool. Most users should use the associated command line interface.
+
+    :param list input_file: A list of ``*.odb`` files to extract. Current implementation only supports extraction on the
+        first file in the list.
+    :param str output_file: The output file name to extract to. Extension should match on of the supported output types.
+    :param str output_type: Output file type. Defaults to ``h5``. Options are: ``h5``, ``yaml``, ``json``.
+    :param str odb_report_args: String of command line options to pass to ``abaqus odbreport``.
+    :param str abaqus_command: The abaqus command name or absolute path to the Abaqus exectuble.
+    :param bool delete_report_file: Boolean to delete the intermediate Abaqus generated report file after producing the
+        ``output_file``.
+    :param bool verbose: Boolean to print more verbose messages
+    """
 
     # Handle arguments
     input_file = input_file[0]
