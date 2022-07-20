@@ -27,6 +27,11 @@ Documentation
   Brindley`_.
 - Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Add support for ``odb_extract`` arguments in the ``abaqus_extract`` builder (:issue:`200`, :merge:`188`) By `Kyle
+  Brindley`_.
+
 *******************
 0.1.17 (2022-07-18)
 *******************
