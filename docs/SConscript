@@ -34,6 +34,7 @@ documentation_file_list = [
     'eabm_api.rst',
     'eabm_cli.rst',
     'api.rst',
+    'internal_api.rst',
     'build.txt',
     'changelog.rst',
     'cli.rst',
