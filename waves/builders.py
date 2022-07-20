@@ -349,7 +349,8 @@ def abaqus_extract(abaqus_program='abaqus'):
     The builder emitter always appends the CSV file created by the ``abaqus odbreport`` command as executed by
     ``odb_extract``.
 
-    This builder supports all keyword arguments provided by the ``odb_extract`` API *except* the ``verbose`` flag.
+    This builder supports the keyword arguments: ``output_type``, ``odb_report_args``, ``delete_report_file`` with
+    behavior as described in the ``odb_extract`` command line interface.
 
     .. code-block::
        :caption: SConstruct
