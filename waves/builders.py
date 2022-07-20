@@ -27,7 +27,7 @@ def find_program(names, env):
     if isinstance(names, str):
         names = [names]
     conf = env.Configure()
-    program_paths = [] 
+    program_paths = []
     for name in names:
         program_paths.append(conf.CheckProg(name))
     conf.Finish()
