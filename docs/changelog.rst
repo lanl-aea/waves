@@ -25,6 +25,7 @@ Documentation
 - Add minimal structure to data extraction tutorial (:issue:`198`, :merge:`183`). By `Kyle Brindley`_.
 - Add a brief draft of the documentation computational practice discussion (:issue:`124`, :merge:`184`). By `Kyle
   Brindley`_.
+- Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
 
 *******************
 0.1.17 (2022-07-18)
