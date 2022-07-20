@@ -5,8 +5,8 @@ Tutorial Cubit: Simulation
 ##########################
 
 This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but uses `Cubit`_ for the
-geometry, partition, and meshing tasks. It is included as an example for how to add docstrings, an API, a CLI, and
-perform paramterized builds suitable for use with a build system when using `Cubit`_.
+geometry, partition, and meshing tasks. It is included as an example for how to use `Cubit`_ with a build system and
+include best practices, such as an API and CLI.
 
 **********
 References
