@@ -68,6 +68,7 @@
    release_philosophy
    changelog
    zreferences
+   glossary
 
 .. raw:: latex
 
