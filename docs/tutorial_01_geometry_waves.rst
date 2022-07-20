@@ -235,8 +235,8 @@ assumes that the ``part_name`` variable will be equal to the name of the script 
 remove the ``_geometry`` suffix if it exists in the file name.
 
 The default values and naming conventions in this journal file are eabm design decisions
-made for this EABM stub repository. In practice, it may be beneficial to choose different
-default behavior depending on the design of the EABM.
+made for this :term:`EABM` stub repository. In practice, it may be beneficial to choose different
+default behavior depending on the design of the :term:`EABM`.
 
 The second highlighted portion defines default values for some of the command
 line arguments. Default values are assigned if no command line argument is detected for any of
@@ -306,7 +306,7 @@ Entire Abaqus Journal File
 Shown below is ``single_element_geometry.py`` in its entirety. The highlighted lines show
 the non-boilerplate code that will change between journal files in this WAVES-EABM
 tutorial project. As discussed in preceding sections, some portions of the boilerplate
-code are required for EABM best practice when using a build system such as SCons_ and
+code are required for :term:`EABM` best practice when using a build system such as SCons_ and
 other sections are boilerplate code that matches naming conventions used by the tutorials,
 but that may change in production EABMs.
 
