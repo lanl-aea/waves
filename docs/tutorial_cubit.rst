@@ -12,6 +12,8 @@ include best practices, such as an API and CLI.
 References
 **********
 
+* `Cubit`_: Importing Cubit into Python
+
 ***********
 Environment
 ***********
@@ -22,13 +24,13 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_cubit`` in the ``waves-eabm-tutorial`` directory.
+3. Create directories ``tutorial_cubit`` and ``eabm_package/cubit`` in the ``waves-eabm-tutorial`` directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_cubit
+   $ mkdir -p tutorial_cubit eabm_package_cubit
 
 4. Copy the ``tutorial_04_simulation/SConscript`` file into the newly created ``tutorial_cubit``
    directory.
@@ -53,6 +55,30 @@ changes made in this tutorial.
    .. literalinclude:: tutorial_cubit_SConscript
       :language: Python
       :diff: tutorial_04_simulation_SConscript
+
+*******************
+Cubit Journal Files
+*******************
+
+5. Create the following journal files in the ``waves-eabm/eabm_package/cubit`` directory.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/cubit/single_element_geometry.py
+
+   .. literalinclude:: cubit_single_element_geometry.py
+       :language: Python
+       :lineno-match:
+
+.. admonition:: waves-eabm-tutorial/eabm_package/cubit/single_element_partition.py
+
+   .. literalinclude:: cubit_single_element_partition.py
+       :language: Python
+       :lineno-match:
+
+.. admonition:: waves-eabm-tutorial/eabm_package/cubit/single_element_mesh.py
+
+   .. literalinclude:: cubit_single_element_mesh.py
+       :language: Python
+       :lineno-match:
 
 **********
 SConstruct

@@ -12,6 +12,7 @@ project_variables = {
     'build_wrapper': 'waves/bin/waves_build_wrapper',
     'eabm_dir': 'eabm',
     'abaqus_dir': 'eabm_package/abaqus',
+    'cubit_dir': 'eabm_package/cubit',
     'python_dir': 'eabm_package/python',
     'tutorial_01_dir': 'tutorial_01_geometry',
     'tutorial_02_dir': 'tutorial_02_partition_mesh',
