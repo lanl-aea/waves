@@ -12,6 +12,7 @@ include best practices, such as an API and CLI.
 References
 **********
 
+* `Cubit`_: Python Interface
 * `Cubit`_: Importing Cubit into Python
 
 ***********
