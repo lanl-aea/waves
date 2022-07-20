@@ -103,7 +103,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 
