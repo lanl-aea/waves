@@ -92,7 +92,7 @@ installed from the `AEA Conda channel`_.
     minimal `WAVES-EABM`_ Conda environments can only be created on ``sstelmo`` or AEA RHEL desktops with the method
     described below. Advanced users may copy the `WAVES`_ package from the `AEA Conda channel`_ to their local machines
     and attempt the `WAVES`_ installation from a local file instead of from a Conda channel. Check the `AEA Conda
-    channel`_ official documentation for updates in the channel access an availability.
+    channel`_ official documentation for updates in the channel access and availability.
 
 1. Create the environment if it doesn't exist
 
