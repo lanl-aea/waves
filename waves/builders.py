@@ -372,5 +372,16 @@ def abaqus_extract(abaqus_program='abaqus'):
 
 def _build_odb_extract(target, source, env):
     """Define the odb_extract action when used as an internal package and not a command line utility"""
-    odb_extract.odb_extract([source[0].abspath], target[0].abspath, abaqus_command=env['abaqus_program'])
+    if not 'output_type' in env:
+        env['output_type'] = 'h5'
+    if not 'odb_report_args' in env:
+        env['odb_report_args'] = None
+    if not 'delete_report_file' in env:
+        env['delete_report_file'] = False
+    import pdb; pdb.set_trace()
+    odb_extract.odb_extract([source[0].abspath], target[0].abspath,
+                            output_type=env['output_type'],
+                            odb_report_args=env['odb_report_args'],
+                            abaqus_command=env['abaqus_program'],
+                            delete_report_file=env['delete_report_file'])
     return None
