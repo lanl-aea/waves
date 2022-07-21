@@ -13,6 +13,7 @@ New Features
 ============
 - Add the ``find_program`` method to search for an ordered list of program names (:issue:`65`, :merge:`185`). By `Kyle
   Brindley`_.
+- Add a LatinHypercube parameter generator (:issue:`77`, :merge:`192`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
