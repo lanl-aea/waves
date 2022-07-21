@@ -28,7 +28,8 @@ parameter_study_meta_file = "parameter_study_meta.txt"
 class ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}.
+        Validated on class instantiation.
     :param str output_file_template: Output file name template
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -199,6 +200,7 @@ class LatinHypercube(ParameterGenerator):
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
+        Validated on class instantiation.
     :param str output_file_template: Output file name template
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -263,7 +265,7 @@ class LatinHypercube(ParameterGenerator):
         self._create_parameter_set_names(set_count)
         quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
         samples = numpy.zeros((set_count, parameter_count))
-        parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'} 
+        parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'}
         for i, attributes in enumerate(parameter_dict.values()):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
