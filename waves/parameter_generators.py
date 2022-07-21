@@ -181,16 +181,7 @@ class CartesianProduct(ParameterGenerator):
         return True
 
     def generate(self):
-        """
-        Accepts ``parameter_schema`` as a dictionary of {parmeter_name: list} pairs, e.g.
-
-        .. code-block::
-
-           parameter_schema = {
-               parameter_1: [1, 2],
-               parameter_2: [3, 4],
-           }
-        """
+        """Generate the Cartesian Product parameter sets"""
         parameter_names = list(self.parameter_schema.keys())
         parameter_sets = numpy.array(list(itertools.product(*self.parameter_schema.values()))).transpose()
         set_count = len(parameter_sets[0])
@@ -262,6 +253,7 @@ class LatinHypercube(ParameterGenerator):
                                         "Python identifier")
 
     def generate(self):
+        """Generate the Latin Hypercube parameter sets"""
         # TODO: create the latin hypercube parameter study
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/77
         pass
