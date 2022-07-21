@@ -9,6 +9,7 @@ import numpy
 import pandas
 import xarray
 import scipy.stats
+from smt.sampling_methods import LHS
 
 #========================================================================================================== SETTINGS ===
 template_delimiter = '@'
@@ -259,14 +260,13 @@ class LatinHypercube(ParameterGenerator):
         set_count = self.parameter_schema['num_simulations']
         parameter_names = self._set_names()
         self._create_parameter_set_names(set_count)
-        quantiles = LHS(xlimits=np.repeat([[0, 1]], number_parameters, axis=0))(set_count)
-        samples = np.zeros((set_count, number_parameters))
+        quantiles = LHS(xlimits=numpy.repeat([[0, 1]], number_parameters, axis=0))(set_count)
+        samples = numpy.zeros((set_count, number_parameters))
         parameter_dict = copy.deepcopy(self.parameters)
         for i, attributes in enumerate(parameter_dict.values()):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
             samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
-        import pdb; pdb.set_trace()
 
     def _set_names(self):
         """Construct the Latin Hypercube parameter names"""
