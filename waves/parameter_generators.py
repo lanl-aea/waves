@@ -241,9 +241,9 @@ class LatinHypercube(ParameterGenerator):
     def validate(self):
         # TODO: Settle on an input file schema and validation library
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
-        if not 'num_simulations' in parameter_schema.keys():
+        if not 'num_simulations' in self.parameter_schema.keys():
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
-        elif not isinstance(parameter_schema['num_simulations'], int):
+        elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
         for name, keys in self.parameter_schema.items():
             parameter = self.parameter_schema[name]
