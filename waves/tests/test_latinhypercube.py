@@ -6,6 +6,8 @@ from contextlib import nullcontext as does_not_raise
 
 from waves.parameter_generators import LatinHypercube
 
+import numpy
+
 class TestLatinHypercube:
     """Class for testing LatinHypercube parameter study generator class"""
 
@@ -56,7 +58,7 @@ class TestLatinHypercube:
         "good schema":
             {'num_simulations': 4,
              'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
-             'parameter_2': {'distribution': 'skewnorm', 'a': 4, 'loc': 30, 'scale': 2}}
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}}
     }
 
     @pytest.mark.unittest
@@ -70,6 +72,8 @@ class TestLatinHypercube:
         values_array = TestGenerate.parameter_study.sel(parameter_data='values').to_array().values
         quantiles_array = TestGenerate.parameter_study.sel(parameter_data='quantiles').to_array().values
         assert values_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
+        assert numpy.all(value > 0 for value in values_array[:, 0])
+        assert numpy.all(value < 0 for value in values_array[:, 1])
         assert quantiles_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
         # Verify that the parameter set name creation method was called
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
