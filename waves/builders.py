@@ -82,13 +82,11 @@ def abaqus_journal(abaqus_program='abaqus'):
 
     .. code-block::
        :caption: Abaqus journal builder action
-       :name: abaqus_journal_action
 
        abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
-       :name: abaqus_journal_example
 
        import waves
        env = Environment()
@@ -155,7 +153,6 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
 
     .. code-block::
        :caption: SConstruct
-       :name: abaqus_solver_example
 
        import waves
        env = Environment()
@@ -167,7 +164,6 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
 
     .. code-block::
        :caption: Abaqus journal builder action
-       :name: abaqus_solver_action
 
        ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
@@ -199,7 +195,6 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
 
     .. code-block::
        :caption: SConstruct
-       :name: copy_substitute_example
 
        import waves
        env = Environment()
@@ -282,13 +277,11 @@ def python_script():
 
     .. code-block::
        :caption: Python script builder action
-       :name: python_script_action
 
        python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
-       :name: python_script_example
 
        import waves
        env = Environment()
@@ -354,7 +347,6 @@ def abaqus_extract(abaqus_program='abaqus'):
 
     .. code-block::
        :caption: SConstruct
-       :name: odb_extract_script_example
 
        import waves
        env = Environment()

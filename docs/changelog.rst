@@ -29,6 +29,7 @@ Documentation
   Brindley`_.
 - Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
 - Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
+- Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
 
 Enhancements
 ============
