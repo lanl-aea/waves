@@ -238,7 +238,7 @@ class LatinHypercube(ParameterGenerator):
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        parameter_name = self._set_names()
+        parameter_names = self._set_names()
         for name in parameter_names:
             parameter_keys = self.parameter_schema[name].keys()
             parameter_definition = self.parameter_schema[name]
@@ -257,7 +257,7 @@ class LatinHypercube(ParameterGenerator):
     def generate(self):
         """Generate the Latin Hypercube parameter sets"""
         set_count = self.parameter_schema['num_simulations']
-        parameter_name = self._set_names()
+        parameter_names = self._set_names()
         self._create_parameter_set_names(set_count)
         quantiles = LHS(xlimits=np.repeat([[0, 1]], number_parameters, axis=0))(set_count)
         samples = np.zeros((set_count, number_parameters))
