@@ -65,6 +65,7 @@
    :caption: Help and Reference
    :maxdepth: 2
 
+   internal_api
    release_philosophy
    changelog
    zreferences
