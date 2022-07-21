@@ -94,6 +94,12 @@ class TestParameterGenerator:
             stdout_write.assert_not_called()
             assert mock_file.call_count == files
 
+    def test_create_parameter_set_names(self):
+        """Test the parmater set name generation"""
+        SetNamesParameterGenerator = FakeParameterGenerator({}, 'out')
+        SetNamesParameterGenerator._create_parameter_set_names(2)
+        assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
+
 
 class FakeParameterGenerator(ParameterGenerator):
 
