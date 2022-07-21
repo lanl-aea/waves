@@ -12,7 +12,12 @@ class TestLatinHypercube:
     validate_input = {
         "good schema": (
             {'num_simulations': 2, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
-            does_not_raise())
+            does_not_raise()
+        ),
+        "missing num_simulation": (
+            {},
+            pytest.raises(AttributeError)
+        )
     }
 
     @pytest.mark.unittest
@@ -20,5 +25,9 @@ class TestLatinHypercube:
                              validate_input.values(),
                              ids=validate_input.keys())
     def test__validate(self, parameter_schema, outcome):
-        # Validate is called in __init__. Do not need to call explicitly.
-        TestValidate = LatinHypercube(parameter_schema, None, False, False, False)
+        with outcome:
+            try:
+                # Validate is called in __init__. Do not need to call explicitly.
+                TestValidate = LatinHypercube(parameter_schema, None, False, False, False)
+            finally:
+                pass
