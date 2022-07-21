@@ -54,7 +54,9 @@ class TestLatinHypercube:
 
     generate_input = {
         "good schema":
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'loc': 1}}
+            {'num_simulations': 4,
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'skewnorm', 'a': 4, 'loc': 30, 'scale': 2}}
     }
 
     @pytest.mark.unittest
