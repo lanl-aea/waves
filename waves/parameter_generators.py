@@ -193,6 +193,7 @@ class CartesianProduct(ParameterGenerator):
         dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
         self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
 
+
 class LatinHypercube(ParameterGenerator):
     """Builds a Latin Hypercube parameter study
 
@@ -267,6 +268,14 @@ class LatinHypercube(ParameterGenerator):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
             samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
+        # Transpose to put parameter names on the columns and parameter sets as rows
+        samples = samples.transpose()
+        quantiles = quantiles.transpose()
+        parameter_sets = numpy.hstack((samples, quantiles)).reshape(4, 4)
+        coordinates = [parameter_names, ['values', 'quantiles']]
+        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
+        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
+        self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
 
     def _set_names(self):
         """Construct the Latin Hypercube parameter names"""
