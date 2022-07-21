@@ -245,16 +245,18 @@ class LatinHypercube(ParameterGenerator):
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        for name, keys in self.parameter_schema.items():
-            parameter = self.parameter_schema[name]
-            delete_parameter = False
-            if 'distribution' not in keys:
+        parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+        for name in parameter_names:
+            parameter_keys = self.parameter_schema[name].keys()
+            parameter_definition = self.parameter_schema[name]
+            if 'distribution' not in parameter_keys:
                 raise AttributeError(f"Parameter '{name}' does not contain the required 'distribution' key")
-            elif not isinstance(parameter['distribution'], str) or not parameter['distribution'].isidentifier():
-                raise TypeError(f"Parameter '{name}' distribution '{parameter['distribution']}' is not a valid " \
-                                "Python identifier")
+            elif not isinstance(parameter_definition['distribution'], str) or \
+                 not parameter_definition['distribution'].isidentifier():
+                raise TypeError(f"Parameter '{name}' distribution '{parameter_definition['distribution']}' is not a " \
+                                "valid Python identifier")
             else:
-                for key in keys:
+                for key in parameter_keys:
                     if not isinstance(key, str) or not key.isidentifier():
                         raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
                                         "Python identifier")
