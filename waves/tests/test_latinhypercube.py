@@ -56,7 +56,7 @@ class TestLatinHypercube:
 
     generate_input = {
         "good schema":
-            {'num_simulations': 4,
+            {'num_simulations': 5,
              'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
              'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}}
     }

@@ -273,8 +273,10 @@ class LatinHypercube(ParameterGenerator):
         # Transpose to put parameter names on the columns and parameter sets as rows
         samples = samples.transpose()
         quantiles = quantiles.transpose()
-        parameter_sets = numpy.hstack((samples, quantiles)).reshape(4, 4)
-        coordinates = [parameter_names, ['values', 'quantiles']]
+        parameter_data_coordinates = ['values', 'quantiles']
+        coordinates = [parameter_names, parameter_data_coordinates]
+        rows = parameter_count * len(parameter_data_coordinates)
+        parameter_sets = numpy.hstack((samples, quantiles)).reshape(rows, set_count)
         index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
         dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
         self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
