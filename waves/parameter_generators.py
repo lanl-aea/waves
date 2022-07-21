@@ -3,7 +3,6 @@ import pathlib
 import string
 import sys
 import itertools
-import copy
 
 import numpy
 import pandas
@@ -263,7 +262,7 @@ class LatinHypercube(ParameterGenerator):
         self._create_parameter_set_names(set_count)
         quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
         samples = numpy.zeros((set_count, parameter_count))
-        parameter_dict = copy.deepcopy(self.parameters)
+        parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'} 
         for i, attributes in enumerate(parameter_dict.values()):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
