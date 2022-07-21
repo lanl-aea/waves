@@ -27,6 +27,8 @@ Internal Changes
   :merge:`193`). By `Kyle Brindley`_.
 - Mock ``scipy`` in the Sphinx documentation build to reduce package build time requirements (:merge:`194`). By `Kyle
   Brindley`_.
+- Add ``smt`` to waves development environment to support latin hypercube parameter generator (:merge:`195`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============

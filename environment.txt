@@ -9,6 +9,7 @@ scons
 scipy
 setuptools
 setuptools_scm
+smt
 sphinx
 sphinx-argparse
 sphinx_rtd_theme
