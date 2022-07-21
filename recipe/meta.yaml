@@ -55,7 +55,9 @@ requirements:
     - numpy
     - pandas
     - pyyaml
+    - scipy
     - scons
+    - smt
     - xarray
 
 test:
@@ -66,8 +68,10 @@ test:
     - pytest
     - pytest-xdist
     - pyyaml
+    - scipy
     - scons
     - setuptools_scm
+    - smt
     - xarray
   source_files:
     # Everything copied here will make it into the "info" directory of the Conda package

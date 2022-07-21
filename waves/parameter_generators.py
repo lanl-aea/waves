@@ -7,6 +7,8 @@ import itertools
 import numpy
 import pandas
 import xarray
+import scipy.stats
+from smt.sampling_methods import LHS
 
 #========================================================================================================== SETTINGS ===
 template_delimiter = '@'
@@ -26,7 +28,8 @@ parameter_study_meta_file = "parameter_study_meta.txt"
 class ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}.
+        Validated on class instantiation.
     :param str output_file_template: Output file name template
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -181,16 +184,7 @@ class CartesianProduct(ParameterGenerator):
         return True
 
     def generate(self):
-        """
-        Accepts ``parameter_schema`` as a dictionary of {parmeter_name: list} pairs, e.g.
-
-        .. code-block::
-
-           parameter_schema = {
-               parameter_1: [1, 2],
-               parameter_2: [3, 4],
-           }
-        """
+        """Generate the Cartesian Product parameter sets"""
         parameter_names = list(self.parameter_schema.keys())
         parameter_sets = numpy.array(list(itertools.product(*self.parameter_schema.values()))).transpose()
         set_count = len(parameter_sets[0])
@@ -200,11 +194,13 @@ class CartesianProduct(ParameterGenerator):
         dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
         self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
 
+
 class LatinHypercube(ParameterGenerator):
     """Builds a Latin Hypercube parameter study
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
+        Validated on class instantiation.
     :param str output_file_template: Output file name template
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -245,7 +241,7 @@ class LatinHypercube(ParameterGenerator):
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+        parameter_names = self._set_names()
         for name in parameter_names:
             parameter_keys = self.parameter_schema[name].keys()
             parameter_definition = self.parameter_schema[name]
@@ -262,6 +258,30 @@ class LatinHypercube(ParameterGenerator):
                                         "Python identifier")
 
     def generate(self):
-        # TODO: create the latin hypercube parameter study
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/77
-        pass
+        """Generate the Latin Hypercube parameter sets"""
+        set_count = self.parameter_schema['num_simulations']
+        parameter_names = self._set_names()
+        parameter_count = len(parameter_names)
+        self._create_parameter_set_names(set_count)
+        quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
+        samples = numpy.zeros((set_count, parameter_count))
+        parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'}
+        for i, attributes in enumerate(parameter_dict.values()):
+            distribution_name = attributes.pop('distribution')
+            distribution = getattr(scipy.stats, distribution_name)
+            samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
+        # Transpose to put parameter names on the columns and parameter sets as rows
+        samples = samples.transpose()
+        quantiles = quantiles.transpose()
+        parameter_data_coordinates = ['values', 'quantiles']
+        coordinates = [parameter_names, parameter_data_coordinates]
+        rows = parameter_count * len(parameter_data_coordinates)
+        parameter_sets = numpy.hstack((samples, quantiles)).reshape(rows, set_count)
+        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
+        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
+        self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
+
+    def _set_names(self):
+        """Construct the Latin Hypercube parameter names"""
+        parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+        return parameter_names
