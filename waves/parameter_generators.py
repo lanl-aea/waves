@@ -259,9 +259,10 @@ class LatinHypercube(ParameterGenerator):
         """Generate the Latin Hypercube parameter sets"""
         set_count = self.parameter_schema['num_simulations']
         parameter_names = self._set_names()
+        parameter_count = len(parameter_names)
         self._create_parameter_set_names(set_count)
-        quantiles = LHS(xlimits=numpy.repeat([[0, 1]], number_parameters, axis=0))(set_count)
-        samples = numpy.zeros((set_count, number_parameters))
+        quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
+        samples = numpy.zeros((set_count, parameter_count))
         parameter_dict = copy.deepcopy(self.parameters)
         for i, attributes in enumerate(parameter_dict.values()):
             distribution_name = attributes.pop('distribution')
