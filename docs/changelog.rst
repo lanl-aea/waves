@@ -25,6 +25,8 @@ Internal Changes
   `Kyle Brindley`_.
 - Add ``scipy`` to the waves development environment for the latin hypercube parameter generator (:issue:`208`,
   :merge:`193`). By `Kyle Brindley`_.
+- Mock ``scipy`` in the Sphinx documentation build to reduce package build time requirements (:merge:`194`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============
