@@ -64,4 +64,5 @@ class TestLatinHypercube:
     def test_generate(self, parameter_schema):
         TestGenerate = LatinHypercube(parameter_schema)
         TestGenerate.generate()
+        # Verify that the parameter set name creation method was called
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
