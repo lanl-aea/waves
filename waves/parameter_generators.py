@@ -138,6 +138,19 @@ class ParameterGenerator(ABC):
             for parameter_set_file in parameter_set_files:
                 meta_file.write(f"{parameter_set_file.name}\n")
 
+    def _create_parameter_set_names(self, set_count):
+        """Construct parameter set names from the output file template and number of parameter sets
+
+        Creates the generator attribute ``self.parameter_set_names`` required to populate the ``generate()`` method's
+        parameter study Xarray dataset object.
+
+        :param int set_count: Integer number of parameter sets
+        """
+        self.parameter_set_names = []
+        for number in range(set_count):
+            template = self.output_file_template
+            self.parameter_set_names.append(template.substitute({'number': number}))
+
 
 class CartesianProduct(ParameterGenerator):
     """Builds a cartesian product parameter study
@@ -180,11 +193,9 @@ class CartesianProduct(ParameterGenerator):
         """
         parameter_names = list(self.parameter_schema.keys())
         parameter_sets = numpy.array(list(itertools.product(*self.parameter_schema.values()))).transpose()
-        parameter_set_names = []
-        for number in range(len(parameter_sets[0])):
-            template = self.output_file_template
-            parameter_set_names.append(template.substitute({'number': number}))
+        set_count = len(parameter_sets[0])
+        self._create_parameter_set_names(set_count)
         coordinates = [parameter_names, ['values']]
         index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=parameter_set_names)
+        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
         self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
