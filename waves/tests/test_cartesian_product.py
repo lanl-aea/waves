@@ -1,7 +1,6 @@
 """Test CartesianProduct Class
 """
 
-import pathlib
 import numpy
 import pytest
 
