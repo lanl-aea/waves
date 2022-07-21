@@ -3,10 +3,12 @@ import pathlib
 import string
 import sys
 import itertools
+import copy
 
 import numpy
 import pandas
 import xarray
+import scipy.stats
 
 #========================================================================================================== SETTINGS ===
 template_delimiter = '@'
@@ -236,7 +238,7 @@ class LatinHypercube(ParameterGenerator):
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+        parameter_name = self._set_names()
         for name in parameter_names:
             parameter_keys = self.parameter_schema[name].keys()
             parameter_definition = self.parameter_schema[name]
@@ -255,4 +257,18 @@ class LatinHypercube(ParameterGenerator):
     def generate(self):
         """Generate the Latin Hypercube parameter sets"""
         set_count = self.parameter_schema['num_simulations']
+        parameter_name = self._set_names()
         self._create_parameter_set_names(set_count)
+        quantiles = LHS(xlimits=np.repeat([[0, 1]], number_parameters, axis=0))(set_count)
+        samples = np.zeros((set_count, number_parameters))
+        parameter_dict = copy.deepcopy(self.parameters)
+        for i, attributes in enumerate(parameter_dict.values()):
+            distribution_name = attributes.pop('distribution')
+            distribution = getattr(scipy.stats, distribution_name)
+            samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
+        import pdb; pdb.set_trace()
+
+    def _set_names(self):
+        """Construct the Latin Hypercube parameter names"""
+        parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+        return parameter_names
