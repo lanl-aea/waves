@@ -11,7 +11,7 @@ class TestLatinHypercube:
 
     validate_input = {
         "good schema": (
-            {'num_simulations': 2, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
             does_not_raise()
         ),
         "missing num_simulation": (
@@ -20,6 +20,22 @@ class TestLatinHypercube:
         ),
         "num_simulation non-integer": (
             {'num_simulations': 'not_a_number'},
+            pytest.raises(TypeError)
+        ),
+        "missing distribution": (
+            {'num_simulations': 1, 'parameter_1': {}},
+            pytest.raises(AttributeError)
+        ),
+        "distribution non-string": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 1}},
+            pytest.raises(TypeError)
+        ),
+        "distribution bad identifier": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'my norm'}},
+            pytest.raises(TypeError)
+        ),
+        "kwarg bad identifier": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg 1': 1}},
             pytest.raises(TypeError)
         )
     }
