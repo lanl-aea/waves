@@ -32,5 +32,5 @@ class TestCartesianProduct:
         # Verify that the parameter set name creation method was called
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-        parameter_set_names = [key for key in TestGenerate.parameter_study.keys()]
+        parameter_set_names = list(TestGenerate.parameter_study.keys())
         assert parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
