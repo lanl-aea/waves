@@ -21,6 +21,8 @@ Internal Changes
   tutorials. Prefer the install naming convention ``abqYYYY`` (:issue:`65`, :merge:`185`). By `Kyle Brindley`_.
 - Move the parameter set name creation to a dedicated function shared by all parameter generator classes (:issue:`205`,
   :merge:`189`). By `Kyle Brindley`_.
+- Placeholder Latin Hypercube parameter generator with functioning schema validation (:issue:`207`, :merge:`191`). By
+  `Kyle Brindley`_.
 
 Documentation
 =============
