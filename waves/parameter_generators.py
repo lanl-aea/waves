@@ -199,3 +199,46 @@ class CartesianProduct(ParameterGenerator):
         index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
         dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
         self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
+
+class LatinHypercube(ParameterGenerator):
+    """Builds a Latin Hypercube parameter study
+
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+        LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
+    :param str output_file_template: Output file name template
+    :param bool overwrite: Overwrite existing output files
+    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param bool debug: Print internal variables to STDOUT and exit
+    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    Expected parameter schema example:
+
+    .. code-block::
+
+       parameter_schema = {
+           'num_simulations': 100  # Required key. Value must be an integer.
+           'parameter_name': {  # Parameter names must be valid Python identifiers
+               'distribution': 'scipy_distribution_name',  # Required key. Value must be a valid scipy.stats
+                                                           # distribution name.
+               'kwarg_1': value,
+               'kwarg_2': value2
+           },
+           'parameter_1': {
+               'distribution': 'norm',
+               'loc': 50,
+               'scale': 1
+           },
+           'parameter_2': {
+               'distribution': 'skewnorm',
+               'a': 4,
+               'loc': 30,
+               'scale': 2
+           }
+       }
+    """
+
+    def validate(self):
+        # TODO: Settle on an input file schema and validation library
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
+        return True
