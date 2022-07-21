@@ -26,6 +26,8 @@ Parameter Study
 .. argparse::
    :ref: waves.parameter_study.get_parser
 
+.. _odb_extract_cli:
+
 ***********
 ODB Extract
 ***********

@@ -350,7 +350,7 @@ def abaqus_extract(abaqus_program='abaqus'):
     ``odb_extract``.
 
     This builder supports the keyword arguments: ``output_type``, ``odb_report_args``, ``delete_report_file`` with
-    behavior as described in the ``odb_extract`` command line interface.
+    behavior as described in the :ref:`odb_extract_cli` command line interface.
 
     .. code-block::
        :caption: SConstruct
