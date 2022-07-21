@@ -258,3 +258,8 @@ class LatinHypercube(ParameterGenerator):
                     if not isinstance(key, str) or not key.isidentifier():
                         raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
                                         "Python identifier")
+
+    def generate(self):
+        # TODO: create the latin hypercube parameter study
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/77
+        pass
