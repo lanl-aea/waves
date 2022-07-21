@@ -64,8 +64,13 @@ class TestLatinHypercube:
                              generate_input.values(),
                              ids=generate_input.keys())
     def test_generate(self, parameter_schema):
+        parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = LatinHypercube(parameter_schema)
         TestGenerate.generate()
+        values_array = TestGenerate.parameter_study.sel(parameter_data='values').to_array().values
+        quantiles_array = TestGenerate.parameter_study.sel(parameter_data='quantiles').to_array().values
+        assert values_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
+        assert quantiles_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
         # Verify that the parameter set name creation method was called
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
