@@ -23,6 +23,8 @@ Internal Changes
   :merge:`189`). By `Kyle Brindley`_.
 - Placeholder Latin Hypercube parameter generator with functioning schema validation (:issue:`207`, :merge:`191`). By
   `Kyle Brindley`_.
+- Add ``scipy`` to the waves development environment for the latin hypercube parameter generator (:issue:`208`,
+  :merge:`193`). By `Kyle Brindley`_.
 
 Documentation
 =============
