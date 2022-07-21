@@ -17,6 +17,10 @@ class TestLatinHypercube:
         "missing num_simulation": (
             {},
             pytest.raises(AttributeError)
+        ),
+        "num_simulation non-integer": (
+            {'num_simulations': 'not_a_number'},
+            pytest.raises(TypeError)
         )
     }
 
