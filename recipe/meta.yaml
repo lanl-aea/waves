@@ -55,6 +55,7 @@ requirements:
     - numpy
     - pandas
     - pyyaml
+    - scipy
     - scons
     - xarray
 
@@ -66,6 +67,7 @@ test:
     - pytest
     - pytest-xdist
     - pyyaml
+    - scipy
     - scons
     - setuptools_scm
     - xarray
