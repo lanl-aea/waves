@@ -254,6 +254,5 @@ class LatinHypercube(ParameterGenerator):
 
     def generate(self):
         """Generate the Latin Hypercube parameter sets"""
-        # TODO: create the latin hypercube parameter study
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/77
-        pass
+        set_count = self.parameter_schema['num_simulations']
+        self._create_parameter_set_names(set_count)

@@ -51,3 +51,17 @@ class TestLatinHypercube:
                 TestValidate = LatinHypercube(parameter_schema, None, False, False, False)
             finally:
                 pass
+
+    generate_input = {
+        "good schema":
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'loc': 1}}
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('parameter_schema',
+                             generate_input.values(),
+                             ids=generate_input.keys())
+    def test_generate(self, parameter_schema):
+        TestGenerate = LatinHypercube(parameter_schema)
+        TestGenerate.generate()
+        assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
