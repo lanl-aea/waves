@@ -41,12 +41,8 @@ class TestParameterGenerator:
         :param bool is_file: test specific argument mocks output for pathlib.Path().is_file()
         :param int sets: test specific argument for the number of sets to build for the test
         """
-        WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
-        coordinates = [['parameter_1'], ['values']]
-        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        parameter_set_names = [f"set{num}" for num in range(sets)]
-        study_dataframe = pandas.DataFrame(numpy.random.randn(1, sets), index=index, columns=parameter_set_names)
-        WriteParameterGenerator.parameter_study = xarray.Dataset().from_dataframe(study_dataframe)
+        WriteParameterGenerator = NoQuantilesGenerator(schema, template, overwrite, dryrun, debug)
+        WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
@@ -80,12 +76,8 @@ class TestParameterGenerator:
         :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
         :param int sets: test specific argument for the number of sets to build for the test
         """
-        WriteParameterGenerator = FakeParameterGenerator(schema, template, overwrite, dryrun, debug)
-        coordinates = [['parameter_1'], ['values']]
-        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        parameter_set_names = [f"set{num}" for num in range(sets)]
-        study_dataframe = pandas.DataFrame(numpy.random.randn(1, sets), index=index, columns=parameter_set_names)
-        WriteParameterGenerator.parameter_study = xarray.Dataset().from_dataframe(study_dataframe)
+        WriteParameterGenerator = NoQuantilesGenerator(schema, template, overwrite, dryrun, debug)
+        WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
@@ -96,15 +88,18 @@ class TestParameterGenerator:
 
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
-        SetNamesParameterGenerator = FakeParameterGenerator({}, 'out')
+        SetNamesParameterGenerator = NoQuantilesGenerator({}, 'out')
         SetNamesParameterGenerator._create_parameter_set_names(2)
         assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
 
 
-class FakeParameterGenerator(ParameterGenerator):
+class NoQuantilesGenerator(ParameterGenerator):
 
     def validate(self):
-        pass
+        self.parameter_names = ['parameter_1']
 
-    def generate():
-        pass
+    def generate(self, sets):
+        parameter_count = len(self.parameter_names)
+        self._create_parameter_set_names(sets)
+        self.values = numpy.zeros((sets, parameter_count))
+        self._create_parameter_study()
