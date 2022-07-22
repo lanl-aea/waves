@@ -46,16 +46,16 @@ workflow = []
 
 # Geometry, Partition, Mesh
 workflow.extend(env.Command(
-    target=[f"{variant_dir_base / model}.cae"],
+    target=[f"{variant_dir_base / model}_mesh.cae", f"{variant_dir_base / model}_mesh.inp"],
     source=[f"{abaqus_source_abspath / model}_geometry.py",
             f"{abaqus_source_abspath / model}_partition.py",
             f"{abaqus_source_abspath / model}_mesh.py"],
     action=[f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_geometry.py " \
-                "${abaqus_options} -- --output-file ${TARGET.file}",
+                "${abaqus_options} -- --output-file ${TARGET.filebase}",
             f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_partition.py " \
-                "${abaqus_options} -- --input-file ${TARGET.file} --output-file ${TARGET.file}",
+                "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}",
             f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_mesh.py " \
-                "${abaqus_options} -- --input-file ${TARGET.file} --output-file ${TARGET.file}"],
+                "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}"],
     abaqus_program=env['abaqus']
 ))
 
@@ -82,7 +82,7 @@ for source_file in abaqus_source_list:
 abaqus_options='-double both'
 common_suffixes = ('odb', 'dat', 'msg', 'com', 'prt')
 solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
-solve_source_list.append(str(variant_dir_base / f"{model}.inp"))
+solve_source_list.append(str(variant_dir_base / f"{model}_mesh.inp"))
 job_name = pathlib.Path(solve_source_list[0]).stem
 
 datacheck_suffixes = common_suffixes + ('023', 'mdl', 'sim', 'stt')
