@@ -60,7 +60,7 @@ for set_name in set_names:
 
     # Mesh
     journal_file = f"{model}_mesh"
-    journal_options = f"--global-seed {simulation_constants['@global_seed@']}"
+    journal_options = f"--global-seed {simulation_variables['@global_seed@']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{current_set_name / journal_file}.cae",
                 f"{current_set_name / journal_file}.jnl",

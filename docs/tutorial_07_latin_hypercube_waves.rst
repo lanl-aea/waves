@@ -59,15 +59,6 @@ wholesale copy and paste when creating the new ``SConscript`` file.
    .. literalinclude:: tutorial_07_latin_hypercube_SConscript
       :language: Python
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
-changes made in this tutorial.
-
-.. admonition:: waves-eabm-tutorial/tutorial_07_latin_hypercube/SConscript
-
-   .. literalinclude:: tutorial_07_latin_hypercube_SConscript
-      :language: Python
-      :diff: tutorial_06_include_files_SConscript
-
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 differences between the two parameter generators.
 
