@@ -50,7 +50,7 @@ Directory Structure
 .. note::
 
    If you do not have access to the `WAVES-EABM`_ directory of the `WAVES`_,
-   the Abaqus solver files can be found in the :ref:`eabm_input_files` appendix.
+   the Abaqus source files can be found in the :ref:`eabm_input_files` appendix.
 
 ***************
 SConstruct File
