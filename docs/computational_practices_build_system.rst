@@ -63,7 +63,7 @@ maximize the effectiveness of using a build system, but may require a deeper loo
 workflow up in a suitable way.
 
 There are trade-offs to workflow granularity which will depend on the needs of the current simulation or simulation
-suite in a modsim repository, so a prescriptive process for performing this work may be difficult. A generic template
+suite in a :term:`modsim repository`, so a prescriptive process for performing this work may be difficult. A generic template
 for a finite element simulation workflow is included in the `WAVES`_ :ref:`user_manual` and has proved to be a good
 starting point for production engineering analysis in practice.
 

@@ -7,6 +7,6 @@ The Python package dependencies are found in the project's ``environment.txt`` f
 .. literalinclude:: environment.txt
    :linenos:
 
-The EABM in this project also requires:
+The :term:`EABM` in this project also requires:
 
 #. Abaqus

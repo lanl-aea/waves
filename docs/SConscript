@@ -48,6 +48,7 @@ documentation_file_list = [
     'dependencies.txt',
     'devops.rst',
     'documentation.txt',
+    'glossary.rst',
     'index.rst',
     'line_number_jump_note.txt',
     'project_brief.txt',

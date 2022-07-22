@@ -21,6 +21,7 @@
    release_philosophy
    changelog
    zreferences
+   glossary
 
 .. only:: html
 

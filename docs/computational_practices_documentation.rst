@@ -10,7 +10,7 @@ Traditionally, most engineering simulation and analysis projects publish a techn
 Some projects may go further and deliver archives or databases of simulation input and output files. These documentation
 and archival deliverables may be sufficient for short projects, simple simulation workflows, or when there are a small
 number of contributors. When a project grow in complexity, contributors, or lifespan a more complete project
-documentation strategy is required. Engineering analysis projects and their associated modsim repository can have
+documentation strategy is required. Engineering analysis projects and their associated :term:`modsim repository` can have
 similar complexity to a large software project, and many of the same documentation sections are required.
 
 * User manual

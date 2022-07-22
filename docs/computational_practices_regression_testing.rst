@@ -4,12 +4,12 @@
 Regression Testing
 ******************
 
-There are several types of testing performed in software development. The three most relevant to modsim repositories are
+There are several types of testing performed in software development. The three most relevant to :term:`modsim repositories` are
 unit, integration, and system testing. Executing the test suite at regular intervals after changes to a project is
 called regression testing. If the regression test suite is performed prior to merging any change to a project, it is
 called continuous integration.
 
-Since modsim repositories will inevitably involve some amount of scripting and may contain small, project specific
+Since :term:`modsim repositories` will inevitably involve some amount of scripting and may contain small, project specific
 re-usable libraries, it is important to learn the practices of software testing. However, these testing concepts can
 also be applied to a simulation workflow to verify that changes to the simulation files and simulation construction
 tools have not broken a simulation workflow.
@@ -20,7 +20,7 @@ supporting scripts and project libraries. The intent is to test the code specifi
 avoid testing the behavior of libraries external to the current modsim project. Because well-defined behavior is
 difficult to implement and difficult to verify when a section of code performs many distinct operations, best practice
 is to write small, single-purpose functions and  methods. This makes them easier to document, implement, test, and
-maintain. In modsim repositories it is rare to write project specific file input and output (I/O) operations, so the
+maintain. In :term:`modsim repositories` it is rare to write project specific file input and output (I/O) operations, so the
 project unit tests should usually avoid real I/O operations that read or create files on disk. Instead, most programming
 languages have unit testing frameworks that include mock objects. Mock objects can be used in place of external library
 calls to avoid file I/O, while still allowing aspects of the library call to be examined in unit testing, e.g. what
@@ -39,7 +39,7 @@ When testing includes file I/O or external executables and programs, it is often
 repository, integration testing may require execution of several stand-alone scripts, such as those introduced in
 :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves`, which communicate through file I/O operations
 and must be executed by external software. For this reason, this project will often use integration and system testing
-interchangeably. Unless a modsim repository contains project specific, re-usable libraries, most integration testing of
+interchangeably. Unless a :term:`modsim repository` contains project specific, re-usable libraries, most integration testing of
 a simulation workflow will actually be system testing. One important aspect of such system testing is to provide a
 regression test suite that will verify expected behavior when external libraries, programs, and software change versions
 or when executing the simulation on a new server. Regular execution of the modsim integration and system tests helps
