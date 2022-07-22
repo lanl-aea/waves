@@ -1,8 +1,8 @@
 .. _sphinx_cli:
 
-####################
-Model Repository CLI
-####################
+##############
+WAVES-EABM CLI
+##############
 
 ******
 abaqus
