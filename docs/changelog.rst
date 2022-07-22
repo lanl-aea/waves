@@ -43,6 +43,8 @@ Documentation
 - Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
 - Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
 - Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
+- Add a mulit-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
