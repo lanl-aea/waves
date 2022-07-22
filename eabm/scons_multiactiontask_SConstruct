@@ -14,7 +14,7 @@ env.Default()
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'eabm_package/abaqus'
 abaqus_source_abspath = project_dir / abaqus_source_dir
-variant_dir_base = pathlib.Path('build_scons_quickstart')
+variant_dir_base = pathlib.Path('build_scons_multiactiontask')
 
 # Separate target output from source files
 VariantDir(variant_dir_base.name, '.', duplicate=False)
@@ -28,7 +28,6 @@ conf.Finish()
 abaqus_journal = Builder(
     action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} -- " \
                "${journal_options}")
-
 
 abaqus_solver = Builder(
     action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} " \
@@ -45,32 +44,20 @@ model = "single_element"
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
-# Geometry
-journal_file = f"{model}_geometry"
-journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
-    abaqus_program=env['abaqus'],
-    journal_options=journal_options))
-
-# Partition
-journal_file = f"{model}_partition"
-journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_geometry.cae")],
-    abaqus_program=env['abaqus'],
-    journal_options=journal_options))
-
-# Mesh
-journal_file = f"{model}_mesh"
-journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae", f"{variant_dir_base / journal_file}.inp"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
-    abaqus_program=env['abaqus'],
-    journal_options=journal_options))
+# Geometry, Partition, Mesh
+workflow.extend(env.Command(
+    target=[f"{variant_dir_base / model}_mesh.cae", f"{variant_dir_base / model}_mesh.inp"],
+    source=[f"{abaqus_source_abspath / model}_geometry.py",
+            f"{abaqus_source_abspath / model}_partition.py",
+            f"{abaqus_source_abspath / model}_mesh.py"],
+    action=[f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_geometry.py " \
+                "${abaqus_options} -- --output-file ${TARGET.filebase}",
+            f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_partition.py " \
+                "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}",
+            f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_mesh.py " \
+                "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}"],
+    abaqus_program=env['abaqus']
+))
 
 # SolverPrep
 abaqus_source_list = [
@@ -95,7 +82,7 @@ for source_file in abaqus_source_list:
 abaqus_options='-double both'
 common_suffixes = ('odb', 'dat', 'msg', 'com', 'prt')
 solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
-solve_source_list.append(str(variant_dir_base / f"{journal_file}.inp"))
+solve_source_list.append(str(variant_dir_base / f"{model}_mesh.inp"))
 job_name = pathlib.Path(solve_source_list[0]).stem
 
 datacheck_suffixes = common_suffixes + ('023', 'mdl', 'sim', 'stt')

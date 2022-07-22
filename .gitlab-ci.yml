@@ -122,6 +122,7 @@ fast-test:
     - cd eabm
     # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
+    - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
     - scons . --sconstruct=tutorial_00_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going --unconditional-build

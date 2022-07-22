@@ -38,7 +38,8 @@ def main(input_file, output_file, model_name, part_name, width, height):
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
-    shutil.copyfile(input_with_extension, output_with_extension)
+    if input_file != output_file:
+        shutil.copyfile(input_with_extension, output_with_extension)
 
     abaqus.openMdb(pathName=output_with_extension)
 
