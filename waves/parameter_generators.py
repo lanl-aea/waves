@@ -186,13 +186,15 @@ class CartesianProduct(ParameterGenerator):
     def generate(self):
         """Generate the Cartesian Product parameter sets"""
         parameter_names = list(self.parameter_schema.keys())
-        parameter_sets = numpy.array(list(itertools.product(*self.parameter_schema.values()))).transpose()
-        set_count = len(parameter_sets[0])
+        samples = numpy.array(list(itertools.product(*self.parameter_schema.values())))
+        set_count = samples.shape[0]
         self._create_parameter_set_names(set_count)
-        coordinates = [parameter_names, ['values']]
-        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
-        self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
+        values_array = xarray.DataArray(
+            samples,
+            coords=[self.parameter_set_names, parameter_names],
+            dims=['parameter_sets', 'parameters'],
+            name='values')
+        self.parameter_study = values_array.to_dataset()
 
 
 class LatinHypercube(ParameterGenerator):
