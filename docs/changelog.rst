@@ -11,7 +11,7 @@ Changelog
 
 Documentation
 =============
-- Provide Abaqus solver files in the appendix for users without access to the WAVES or WAVES-EABM repository files
+- Provide Abaqus files in the appendix for users without access to the WAVES or WAVES-EABM repository files
   (:issue:`206`, :merge:`203`). By `Kyle Brindley`_.
 
 ******************
