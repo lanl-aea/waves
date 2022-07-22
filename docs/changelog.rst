@@ -9,6 +9,11 @@ Changelog
 0.2.2 (unreleased)
 *******************
 
+Documentation
+=============
+- Provide Abaqus files in the appendix for users without access to the WAVES or WAVES-EABM repository files
+  (:issue:`206`, :merge:`203`). By `Kyle Brindley`_.
+
 ******************
 0.2.1 (2022-07-22)
 ******************

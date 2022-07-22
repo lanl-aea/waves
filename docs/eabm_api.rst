@@ -1,8 +1,8 @@
 .. _sphinx_api:
 
-####################
-Model Repository API
-####################
+##############
+WAVES-EABM API
+##############
 
 ******
 abaqus
