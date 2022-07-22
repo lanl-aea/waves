@@ -111,9 +111,8 @@ class ParameterGenerator(ABC):
         for parameter_set_file in parameter_set_files:
             # Construct the output text
             values = self.parameter_study[parameter_set_file.name].sel(parameter_data='values').values
-            parameter_names = self.parameter_study[parameter_set_file.name].coords['parameter_name'].values
             text = ''
-            for value, parameter_name in zip(values, parameter_names):
+            for value, parameter_name in zip(values, self.parameter_names):
                 text += f"{parameter_name} = {value}\n"
             # If no output file template is provided, print to stdout
             if not self.provided_template:
@@ -184,13 +183,13 @@ class CartesianProduct(ParameterGenerator):
 
     def generate(self):
         """Generate the Cartesian Product parameter sets"""
-        parameter_names = list(self.parameter_schema.keys())
+        self.parameter_names = list(self.parameter_schema.keys())
         samples = numpy.array(list(itertools.product(*self.parameter_schema.values())))
         set_count = samples.shape[0]
         self._create_parameter_set_names(set_count)
         values_array = xarray.DataArray(
             samples,
-            coords=[self.parameter_set_names, parameter_names],
+            coords=[self.parameter_set_names, self.parameter_names],
             dims=['parameter_sets', 'parameters'],
             name='values')
         self.parameter_study = values_array.to_dataset()
@@ -242,8 +241,8 @@ class LatinHypercube(ParameterGenerator):
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        parameter_names = self._set_names()
-        for name in parameter_names:
+        self._create_parameter_names()
+        for name in self.parameter_names:
             parameter_keys = self.parameter_schema[name].keys()
             parameter_definition = self.parameter_schema[name]
             if 'distribution' not in parameter_keys:
@@ -261,8 +260,7 @@ class LatinHypercube(ParameterGenerator):
     def generate(self):
         """Generate the Latin Hypercube parameter sets"""
         set_count = self.parameter_schema['num_simulations']
-        parameter_names = self._set_names()
-        parameter_count = len(parameter_names)
+        parameter_count = len(self.parameter_names)
         self._create_parameter_set_names(set_count)
         quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
         samples = numpy.zeros((set_count, parameter_count))
@@ -272,17 +270,16 @@ class LatinHypercube(ParameterGenerator):
             distribution = getattr(scipy.stats, distribution_name)
             samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
         values_array = xarray.DataArray(samples,
-                       coords=[self.parameter_set_names, parameter_names],
+                       coords=[self.parameter_set_names, self.parameter_names],
                        dims=['parameter_sets', 'parameters'],
                        name='values')
         quantiles_array = xarray.DataArray(quantiles,
-                          coords=[self.parameter_set_names, parameter_names],
+                          coords=[self.parameter_set_names, self.parameter_names],
                           dims=['parameter_sets', 'parameters'],
                           name='quantiles')
         self.parameter_study = xarray.merge([values_array, quantiles_array])
 
 
-    def _set_names(self):
+    def _create_parameter_names(self):
         """Construct the Latin Hypercube parameter names"""
-        parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
-        return parameter_names
+        self.parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
