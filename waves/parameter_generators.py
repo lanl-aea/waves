@@ -61,8 +61,9 @@ class ParameterGenerator(ABC):
     def validate(self):
         """Process parameter study input to verify schema
 
-        :returns: validated_schema
-        :rtype: bool
+        Must set the class attributes:
+
+        * ``self.parameter_names``: list of strings containing the parameter study's parameter names
         """
         pass
 
@@ -70,23 +71,25 @@ class ParameterGenerator(ABC):
     def generate(self):
         """Generate the parameter study definition
 
-        Must accept ``self.parameter_schema`` dictionary and set ``self.parameter_study`` as an XArray Dataset in the format
+        Must set the class attributes:
 
-        .. code-block:: bash
+        * ``self.samples``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number of parameters)
+        * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
+          ``_create_parameter_study()`` after defining ``samples`` and the optional ``quantiles`` class attribute.
 
-           <xarray.Dataset>
-           Dimensions:         (parameter_name: 2, parameter_data: 1)
-           Coordinates:
-             * parameter_name  (parameter_name) object 'parameter_1' 'parameter_2'
-             * parameter_data  (parameter_data) object 'values'
-           Data variables:
-               parameter_set0  (parameter_name, parameter_data) int64 1 3
-               parameter_set1  (parameter_name, parameter_data) int64 1 4
-               parameter_set2  (parameter_name, parameter_data) int64 2 3
-               parameter_set3  (parameter_name, parameter_data) int64 2 4
+        May set the class attributes:
 
-        :returns: parameter study object: dict(parameter_set_name: parameter_set_text)
-        :rtype: dict
+        * ``self.quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape (number of parameter sets, number of parameters)
+
+        .. code-block::
+
+           import xarray
+           import numpy
+
+           set_count = 5
+           parameter_names = ['parameter_1', 'parameter_2']
+           self.samples = numpy.zeros((set_count, len(parameter_names)))
+           self.parameter_study = _create_parameter_study()
         """
         pass
 
@@ -152,7 +155,7 @@ class ParameterGenerator(ABC):
             template = self.output_file_template
             self.parameter_set_names.append(template.substitute({'number': number}))
 
-    def _create_parameter_study_array(self, samples, name):
+    def _create_parameter_array(self, samples, name):
         """Create the standard structure for a parameter_study array
 
         requires:
@@ -171,6 +174,30 @@ class ParameterGenerator(ABC):
             name=name
         )
         return array
+
+    def _create_parameter_study(self):
+        """Create the standard structure for the parameter study dataset
+
+        requires:
+
+        * ``self.parameter_set_names``: rows of ``samples`` parameter study values
+        * ``self.parameter_names``: columns of ``samples`` parameter study values
+        * ``self.samples``: The parameter study values
+
+        optional:
+
+        * ``self.quantiles``: The quantiles associated with the paramter study sampling distributions
+
+        creates attribute:
+
+        * ``self.parameter_study``
+        """
+        values = self._create_parameter_array(self.samples, name='values')
+        if hasattr(self, "quantiles"):
+            quantiles = self._create_parameter_array(self.quantiles, name='quantiles')
+            self.parameter_study = xarray.merge([values, quantiles])
+        else:
+            self.parameter_study = values.to_dataset()
 
 
 class CartesianProduct(ParameterGenerator):
@@ -203,11 +230,10 @@ class CartesianProduct(ParameterGenerator):
 
     def generate(self):
         """Generate the Cartesian Product parameter sets"""
-        samples = numpy.array(list(itertools.product(*self.parameter_schema.values())))
-        set_count = samples.shape[0]
+        self.samples = numpy.array(list(itertools.product(*self.parameter_schema.values())))
+        set_count = self.samples.shape[0]
         self._create_parameter_set_names(set_count)
-        values_array = self._create_parameter_study_array(samples, name='values')
-        self.parameter_study = values_array.to_dataset()
+        self._create_parameter_study()
 
 
 class LatinHypercube(ParameterGenerator):
@@ -277,16 +303,14 @@ class LatinHypercube(ParameterGenerator):
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self.parameter_names)
         self._create_parameter_set_names(set_count)
-        quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
-        samples = numpy.zeros((set_count, parameter_count))
+        self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
+        self.samples = numpy.zeros((set_count, parameter_count))
         parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'}
         for i, attributes in enumerate(parameter_dict.values()):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
-            samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
-        values_array = self._create_parameter_study_array(samples, name='values')
-        quantiles_array = self._create_parameter_study_array(quantiles, name='quantiles')
-        self.parameter_study = xarray.merge([values_array, quantiles_array])
+            self.samples[:, i] = distribution(**attributes).ppf(self.quantiles[:, i])
+        self._create_parameter_study()
 
 
     def _create_parameter_names(self):
