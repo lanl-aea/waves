@@ -109,11 +109,11 @@ class ParameterGenerator(ABC):
         """
         if self.write_meta and self.provided_template:
             self._write_meta()
-        parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_study.keys()]
+        parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
         self._write_meta(parameter_set_files)
         for parameter_set_file in parameter_set_files:
             # Construct the output text
-            values = self.parameter_study[parameter_set_file.name].sel(parameter_data='values').values
+            values = self.parameter_study[parameter_set_file.name]['values'].values
             text = ''
             for value, parameter_name in zip(values, self.parameter_names):
                 text += f"{parameter_name} = {value}\n"
