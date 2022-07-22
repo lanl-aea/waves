@@ -33,7 +33,7 @@ documentation_file_list = [
     'eabm_README.txt',   # Copied from the eabm directory to waves docs build directory by root SConscript
     'eabm_api.rst',
     'eabm_cli.rst',
-    'eabm_input_files.rst',
+    'eabm_abaqus_files.rst',
     'api.rst',
     'internal_api.rst',
     'build.txt',
