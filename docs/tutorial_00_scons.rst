@@ -25,7 +25,7 @@ Description
 `WAVES`_ is a suite of build wrappers and command line utilities for the build system `SCons`_. Build systems help
 automate the execution of complex computing workflows by constructing component task execution order. In the
 `WAVES-EABM`_ tutorials, there are two components to the `SCons`_ configuration: project definition and simulation
-definitions. This tutorial introduces the `SCons`_ project definition file for the `WAVES-EABM`_ template EABM
+definitions. This tutorial introduces the `SCons`_ project definition file for the `WAVES-EABM`_ template :term:`EABM`
 repository.
 
 The command line utilities provided by `WAVES`_ are those utilities required to implement engineering workflows in
@@ -66,7 +66,7 @@ SCons Project Configuration
 
 .. note::
 
-   Highlighted lines 8-13 are artifacts of the `WAVES-EABM`_ internal project regression tests. EABM owners and tutorial
+   Highlighted lines 8-13 are artifacts of the `WAVES-EABM`_ internal project regression tests. :term:`EABM` owners and tutorial
    users may replace these lines with a simple `WAVES`_ import, such as
 
    .. code-block::
@@ -77,7 +77,7 @@ By convention, the `SCons`_ root project file is named ``SConstruct``. Because t
 `Python`_ libraries to help define project settings. The `shebang`_ in the first line is included to help text editors
 identify the file as a Python file for syntax highlighting. Using the `PEP-8`_ formatting, the `Python`_ built-in
 imports are listed in the first block and third-party imports are listed in the second block, including the `WAVES`_
-package. Finally, the EABM version number is hardcoded into the project definition for these tutorials.
+package. Finally, the :term:`EABM` version number is hardcoded into the project definition for these tutorials.
 
 5. Add the content below to the ``SConstruct`` file to add the project's command-line build options to the project
    configuration.
@@ -92,9 +92,9 @@ package. Finally, the EABM version number is hardcoded into the project definiti
       :start-after: marker-1
       :end-before: marker-2
 
-The `SCons command-line build options`_ are specific to the project definition that you are currently creating. EABM
+The `SCons command-line build options`_ are specific to the project definition that you are currently creating. :term:`EABM`
 projects may add or remove command line options to aid in build behavior control. The most relevant options to most
-EABMs will be the ``--build-dir``, which allows EABM developers to change the build directory location from the
+EABMs will be the ``--build-dir``, which allows :term:`EABM` developers to change the build directory location from the
 command line without modifying the ``SConstruct`` file source code. For example, the first ``scons`` call will create
 the default build directory named ``build`` and the second ``scons`` call will create a build directory named
 ``non_default_build``.
@@ -134,7 +134,7 @@ each task separately from the external environment. `SCons`_ projects do not inh
 build configuration by default. Instead, projects define one or more construction environments that is used to define
 per-task environment configuration.
 
-While this is a powerful feature for large, complex projects, most EABM projects will benefit from maintaining a single
+While this is a powerful feature for large, complex projects, most :term:`EABM` projects will benefit from maintaining a single
 construction environment inherited from the active shell environment at build configuration time. In addition to copying
 the active external environment, the above code adds the project command-line build options to the construction
 environment for re-use throughout the project definition files, SConstruct and SConscript, for build control.
@@ -150,9 +150,9 @@ environment for re-use throughout the project definition files, SConstruct and S
       :start-after: marker-3
       :end-before: marker-4
 
-These checks are not strictly required for an `SCons`_ `WAVES`_ EABM; however, they provide valuable build control
-options for EABM developers. Most of the `WAVES-EABM`_  compute environment dependencies are `Python`_ packages managed
-with `Conda`_ as described in the :ref:`sconstruct_environment` section of this tutorial. Many modsim repositories will
+These checks are not strictly required for an `SCons`_ `WAVES`_ :term:`EABM`; however, they provide valuable build control
+options for :term:`EABM` developers. Most of the `WAVES-EABM`_  compute environment dependencies are `Python`_ packages managed
+with `Conda`_ as described in the :ref:`sconstruct_environment` section of this tutorial. Many :term:`modsim repositories` will
 also depend on proprietary or commercial software that is not included in a package manager such as `Conda`_. Instead,
 the project configuration can check the construction environment for software installation(s) and provide an environment
 variable to conditionally skip any tasks that depend on missing software.
@@ -160,6 +160,17 @@ variable to conditionally skip any tasks that depend on missing software.
 In `WAVES`_ and `WAVES-EABM`_, this approach is primarily used to allow developers to perform development work on local
 computers without cluttering their test builds with tasks that cannot succeed on their local computer.
 :ref:`tutorial_geometry_waves` will introduce the use of these variables for build control.
+
+The `SCons`_ native solution for finding a program is the `CheckProg`_ configuration method. The
+:meth:`waves.builders.find_program` method wraps `CheckProg`_ to search for a list of possible program names. This is
+most useful when multiple versions of a program can be used to build the project and the various servers where the
+project is built may have different versions available. The project will build with the first available program name
+without changes to the project configuration.
+
+.. note::
+
+   The Abaqus program naming convention used here is specific to the naming convention used on the `WAVES`_ continuous
+   integration server. Users may need to update the abaqus program name to match their system installation.
 
 8. Add the content below to the ``SConstruct`` file to add the project meta data to the construction environment.
 
@@ -172,7 +183,7 @@ computers without cluttering their test builds with tasks that cannot succeed on
       :end-before: marker-6
 
 The `WAVES-EABM`_ makes use of the `SCons hierarchical build`_ feature to separate simulation output in the build
-directory. This is valuable for modsim repositories that include a suite of simulations. To avoid hardcoded duplication
+directory. This is valuable for :term:`modsim repositories` that include a suite of simulations. To avoid hardcoded duplication
 of project meta data, the project meta data variables are added to the construction environment, which will be passed
 around to all `SCons`_ configuration files. The implementation that passes the construction environment around is
 introduced in :ref:`tutorial_geometry_waves`.
@@ -188,7 +199,7 @@ introduced in :ref:`tutorial_geometry_waves`.
       :end-before: marker-7
 
 Although it is possible to re-create the `WAVES-EABM`_ entirely in native `SCons`_ code, the builder extensions provided
-by `WAVES`_ reduce the requisite background knowledge to begin creating EABM repositories. The construction environment
+by `WAVES`_ reduce the requisite background knowledge to begin creating :term:`EABM` repositories. The construction environment
 ``BUILDERS`` variable must be updated to include these custom `SCons`_ builders and make them available to the
 simulation configuration starting in :ref:`tutorial_geometry_waves`.
 

@@ -14,6 +14,28 @@ from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 
 
+def find_program(names, env):
+    """Search for a program from a list of possible program names.
+
+    Returns the absolute path of the first program name found.
+
+    :param names list: list of string program names. May include an absolute path.
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
+    """
+    if isinstance(names, str):
+        names = [names]
+    conf = env.Configure()
+    program_paths = []
+    for name in names:
+        program_paths.append(conf.CheckProg(name))
+    conf.Finish()
+    # Return first non-None path. Default to None if no program path was found.
+    first_found_path = next((path for path in program_paths if path is not None), None)
+    return first_found_path
+
+
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
@@ -60,13 +82,11 @@ def abaqus_journal(abaqus_program='abaqus'):
 
     .. code-block::
        :caption: Abaqus journal builder action
-       :name: abaqus_journal_action
 
        abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
-       :name: abaqus_journal_example
 
        import waves
        env = Environment()
@@ -133,7 +153,6 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
 
     .. code-block::
        :caption: SConstruct
-       :name: abaqus_solver_example
 
        import waves
        env = Environment()
@@ -145,7 +164,6 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
 
     .. code-block::
        :caption: Abaqus journal builder action
-       :name: abaqus_solver_action
 
        ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
@@ -177,7 +195,6 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
 
     .. code-block::
        :caption: SConstruct
-       :name: copy_substitute_example
 
        import waves
        env = Environment()
@@ -260,13 +277,11 @@ def python_script():
 
     .. code-block::
        :caption: Python script builder action
-       :name: python_script_action
 
        python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
-       :name: python_script_example
 
        import waves
        env = Environment()
@@ -327,9 +342,11 @@ def abaqus_extract(abaqus_program='abaqus'):
     The builder emitter always appends the CSV file created by the ``abaqus odbreport`` command as executed by
     ``odb_extract``.
 
+    This builder supports the keyword arguments: ``output_type``, ``odb_report_args``, ``delete_report_file`` with
+    behavior as described in the :ref:`odb_extract_cli` command line interface.
+
     .. code-block::
        :caption: SConstruct
-       :name: odb_extract_script_example
 
        import waves
        env = Environment()
@@ -350,5 +367,15 @@ def abaqus_extract(abaqus_program='abaqus'):
 
 def _build_odb_extract(target, source, env):
     """Define the odb_extract action when used as an internal package and not a command line utility"""
-    odb_extract.odb_extract([source[0].abspath], target[0].abspath, abaqus_command=env['abaqus_program'])
+    if not 'output_type' in env:
+        env['output_type'] = 'h5'
+    if not 'odb_report_args' in env:
+        env['odb_report_args'] = None
+    if not 'delete_report_file' in env:
+        env['delete_report_file'] = False
+    odb_extract.odb_extract([source[0].abspath], target[0].abspath,
+                            output_type=env['output_type'],
+                            odb_report_args=env['odb_report_args'],
+                            abaqus_command=env['abaqus_program'],
+                            delete_report_file=env['delete_report_file'])
     return None

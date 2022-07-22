@@ -1,13 +1,14 @@
 h5netcdf
 h5py
 numpy
-pandas
 pytest
 pytest-xdist
 pyyaml
 scons
+scipy
 setuptools
 setuptools_scm
+smt
 sphinx
 sphinx-argparse
 sphinx_rtd_theme

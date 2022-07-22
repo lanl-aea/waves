@@ -26,6 +26,8 @@ single_element_mesh.py
 .. argparse::
     :ref: eabm_package.abaqus.single_element_mesh.get_parser
 
+.. _cubit_journal_cli:
+
 *****
 cubit
 *****

@@ -12,6 +12,7 @@ project_variables = {
     'build_wrapper': 'waves/bin/waves_build_wrapper',
     'eabm_dir': 'eabm',
     'abaqus_dir': 'eabm_package/abaqus',
+    'cubit_dir': 'eabm_package/cubit',
     'python_dir': 'eabm_package/python',
     'tutorial_01_dir': 'tutorial_01_geometry',
     'tutorial_02_dir': 'tutorial_02_partition_mesh',
@@ -19,7 +20,10 @@ project_variables = {
     'tutorial_04_dir': 'tutorial_04_simulation',
     'tutorial_05_dir': 'tutorial_05_parameter_substitution',
     'tutorial_06_dir': 'tutorial_06_include_files',
-    'tutorial_07_dir': 'tutorial_07_cartesian_product'
+    'tutorial_07_cp_dir': 'tutorial_07_cartesian_product',
+    'tutorial_07_lh_dir': 'tutorial_07_latin_hypercube',
+    'tutorial_08_dir': 'tutorial_08_data_extraction',
+    'tutorial_cubit_dir': 'tutorial_cubit'
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===
@@ -51,7 +55,7 @@ AddOption(
 )
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
-# Inherit user's full environment and set project options 
+# Inherit user's full environment and set project options
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
                   ignore_documentation=GetOption("ignore_documentation"),

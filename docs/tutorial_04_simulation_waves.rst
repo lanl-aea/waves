@@ -184,42 +184,43 @@ Build Targets
    $ pwd
    /path/to/waves-eabm-tutorial
    $ scons tutorial_04_simulation
-    scons: Reading SConscript files ...
-    Checking whether abaqus program exists.../apps/abaqus/Commands/abaqus
-    scons: done reading SConscript files.
-    scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
-    > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information 
-    environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
-    > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
-    Copy("build/tutorial_04_simulation/single_element_compression.inp", 
-    "eabm_package/abaqus/single_element_compression.inp")
-    Copy("build/tutorial_04_simulation/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
-    Copy("build/tutorial_04_simulation/assembly.inp", "eabm_package/abaqus/assembly.inp")
-    Copy("build/tutorial_04_simulation/boundary.inp", "eabm_package/abaqus/boundary.inp")
-    Copy("build/tutorial_04_simulation/field_output.inp", "eabm_package/abaqus/field_output.inp")
-    Copy("build/tutorial_04_simulation/materials.inp", "eabm_package/abaqus/materials.inp")
-    Copy("build/tutorial_04_simulation/parts.inp", "eabm_package/abaqus/parts.inp")
-    Copy("build/tutorial_04_simulation/history_output.inp", "eabm_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
-    > single_element_compression_DATACHECK.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job 
-    single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete 
-    no > single_element_compression_DATACHECK.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
-    > single_element_compression.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job 
-    single_element_compression -input single_element_compression -double both -interactive -ask_delete no > 
-    single_element_compression.stdout 2>&1
-    scons: done building targets.
+   scons: Reading SConscript files ...
+   Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
+   Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
+   scons: done reading SConscript files.
+   scons: Building targets ...
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
+   > single_element_geometry.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
+   /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information 
+   environment > single_element_partition.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
+   /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
+   > single_element_mesh.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui 
+   /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+   Copy("build/tutorial_04_simulation/single_element_compression.inp", 
+   "eabm_package/abaqus/single_element_compression.inp")
+   Copy("build/tutorial_04_simulation/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
+   Copy("build/tutorial_04_simulation/assembly.inp", "eabm_package/abaqus/assembly.inp")
+   Copy("build/tutorial_04_simulation/boundary.inp", "eabm_package/abaqus/boundary.inp")
+   Copy("build/tutorial_04_simulation/field_output.inp", "eabm_package/abaqus/field_output.inp")
+   Copy("build/tutorial_04_simulation/materials.inp", "eabm_package/abaqus/materials.inp")
+   Copy("build/tutorial_04_simulation/parts.inp", "eabm_package/abaqus/parts.inp")
+   Copy("build/tutorial_04_simulation/history_output.inp", "eabm_package/abaqus/history_output.inp")
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
+   > single_element_compression_DATACHECK.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job 
+   single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete 
+   no > single_element_compression_DATACHECK.stdout 2>&1
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment 
+   > single_element_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job 
+   single_element_compression -input single_element_compression -double both -interactive -ask_delete no > 
+   single_element_compression.stdout 2>&1
+   scons: done building targets.
 
 ************
 Output Files

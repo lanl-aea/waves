@@ -64,11 +64,9 @@ env = Environment(ENV=os.environ.copy(),
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-required_programs = ['sphinx-build', 'abaqus', 'cubit']
-conf = env.Configure()
-for program in required_programs:
-    env[program.replace('-', '_')] = conf.CheckProg(program)
-conf.Finish()
+env['sphinx_build'] = waves.builders.find_program(['sphinx-build'], env)
+env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
+env['cubit'] = waves.builders.find_program(['cubit'], env)
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -127,6 +125,7 @@ eabm_simulation_directories = [
     'tutorial_05_parameter_substitution',
     'tutorial_06_include_files',
     'tutorial_07_cartesian_product',
+    'tutorial_07_latin_hypercube',
     'tutorial_08_data_extraction'
 ]
 for source_dir in eabm_simulation_directories:

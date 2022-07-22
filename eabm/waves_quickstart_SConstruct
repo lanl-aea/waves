@@ -22,17 +22,13 @@ env.Default()
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'eabm_package/abaqus'
 abaqus_source_abspath = project_dir / abaqus_source_dir
-variant_dir_base = pathlib.Path('waves_quickstart')
+variant_dir_base = pathlib.Path('build_waves_quickstart')
 
 # Separate target output from source files
 VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-required_programs = ['abaqus']
-conf = env.Configure()
-for program in required_programs:
-    env[program.replace('-', '_')] = conf.CheckProg(program)
-conf.Finish()
+env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
 
 # Add custom builders
 env.Append(BUILDERS=

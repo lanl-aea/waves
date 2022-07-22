@@ -58,6 +58,8 @@ abaqus_source_list = [
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
 
+# Comment used in tutorial code snippets: marker-1
+
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
@@ -71,12 +73,16 @@ workflow.extend(env.AbaqusSolver(
     job_name=datacheck_name,
     abaqus_options=f'{abaqus_options} -datacheck'))
 
+# Comment used in tutorial code snippets: marker-2
+
 solve_source_list.append([f"{datacheck_name}.odb"])
 workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options))
+
+# Comment used in tutorial code snippets: marker-3
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name

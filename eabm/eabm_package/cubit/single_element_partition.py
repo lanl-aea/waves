@@ -32,7 +32,8 @@ def main(input_file, output_file, width, height):
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
-    shutil.copyfile(input_with_extension, output_with_extension)
+    if input_file != output_file:
+        shutil.copyfile(input_with_extension, output_with_extension)
 
     cubit.init(['cubit', '-noecho', '-nojournal', '-nographics', '-batch'])
     cubit.cmd('new')

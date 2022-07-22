@@ -122,15 +122,18 @@ fast-test:
     - cd eabm
     # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
+    - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
     - scons . --sconstruct=tutorial_00_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_cubit_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going --unconditional-build
     # Re-run the full WAVES-EABM suite once more with the full, advanced project definition in SContruct.
     # Uses "rm" instead of "scons --clean" to ensure a complete re-build even if the tutorial files and the default

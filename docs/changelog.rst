@@ -6,8 +6,55 @@ Changelog
 #########
 
 *******************
-0.1.18 (unreleased)
+0.2.2 (unreleased)
 *******************
+
+******************
+0.2.1 (2022-07-22)
+******************
+
+Breaking changes
+================
+- Reform the parameter study xarray object to make it more intuitive (:issue:`210`, :merge:`197`). By `Kyle Brindley`_.
+
+New Features
+============
+- Add the ``find_program`` method to search for an ordered list of program names (:issue:`65`, :merge:`185`). By `Kyle
+  Brindley`_.
+- Add a LatinHypercube parameter generator (:issue:`77`, :merge:`192`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Remove unused ``pyyaml`` package from WAVES-EABM environment lists (:issue:`197`, :merge:`182`). By `Kyle Brindley`_.
+- Use the ``find_program`` method to search for an ordered list of Abaqus executable names in the WAVES-EABM and
+  tutorials. Prefer the install naming convention ``abqYYYY`` (:issue:`65`, :merge:`185`). By `Kyle Brindley`_.
+- Move the parameter set name creation to a dedicated function shared by all parameter generator classes (:issue:`205`,
+  :merge:`189`). By `Kyle Brindley`_.
+- Placeholder Latin Hypercube parameter generator with functioning schema validation (:issue:`207`, :merge:`191`). By
+  `Kyle Brindley`_.
+- Add ``scipy`` to the waves development environment for the latin hypercube parameter generator (:issue:`208`,
+  :merge:`193`). By `Kyle Brindley`_.
+- Mock ``scipy`` in the Sphinx documentation build to reduce package build time requirements (:merge:`194`). By `Kyle
+  Brindley`_.
+- Add ``smt`` to waves development environment to support latin hypercube parameter generator (:merge:`195`). By `Kyle
+  Brindley`_.
+
+Documentation
+=============
+- Add minimal structure to data extraction tutorial (:issue:`198`, :merge:`183`). By `Kyle Brindley`_.
+- Add a brief draft of the documentation computational practice discussion (:issue:`124`, :merge:`184`). By `Kyle
+  Brindley`_.
+- Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
+- Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
+- Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
+- Add a mulit-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
+  Brindley`_.
+- Add a Latin Hypercube tutorial (:issue:`211`, :merge:`200`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Add support for ``odb_extract`` arguments in the ``abaqus_extract`` builder (:issue:`200`, :merge:`188`) By `Kyle
+  Brindley`_.
 
 *******************
 0.1.17 (2022-07-18)
