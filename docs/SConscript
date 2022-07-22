@@ -118,7 +118,7 @@ tutorial_files_list = [
     eabm_dir / env['cubit_dir'] / 'single_element_partition.py',
     eabm_dir / env['cubit_dir'] / 'single_element_mesh.py',
     eabm_dir / env['python_dir'] / 'single_element_compression_nominal.py',
-    eabm_dir / env['python_dir'] / 'tutorial_07_cartesian_product.py'
+    eabm_dir / env['python_dir'] / 'tutorial_07_cartesian_product.py',
     eabm_dir / env['python_dir'] / 'tutorial_07_latin_hypercube.py'
 ]
 for file_path in tutorial_files_list:
