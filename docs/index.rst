@@ -83,6 +83,7 @@
 
    eabm_api
    eabm_cli
+   eabm_input_files
 
 .. raw:: latex
 
