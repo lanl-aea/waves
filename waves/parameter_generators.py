@@ -179,11 +179,10 @@ class CartesianProduct(ParameterGenerator):
     def validate(self):
         # TODO: Settle on an input file schema and validation library
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
-        return True
+        self.parameter_names = list(self.parameter_schema.keys())
 
     def generate(self):
         """Generate the Cartesian Product parameter sets"""
-        self.parameter_names = list(self.parameter_schema.keys())
         samples = numpy.array(list(itertools.product(*self.parameter_schema.values())))
         set_count = samples.shape[0]
         self._create_parameter_set_names(set_count)
