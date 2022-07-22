@@ -230,12 +230,13 @@ class CartesianProduct(ParameterGenerator):
     """
 
     def validate(self):
+        """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         # TODO: Settle on an input file schema and validation library
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
         self.parameter_names = list(self.parameter_schema.keys())
 
     def generate(self):
-        """Generate the Cartesian Product parameter sets"""
+        """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
         self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())))
         set_count = self.values.shape[0]
         self._create_parameter_set_names(set_count)
@@ -282,6 +283,7 @@ class LatinHypercube(ParameterGenerator):
     """
 
     def validate(self):
+        """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         # TODO: Settle on an input file schema and validation library
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
         if not 'num_simulations' in self.parameter_schema.keys():
@@ -305,7 +307,7 @@ class LatinHypercube(ParameterGenerator):
                                         "Python identifier")
 
     def generate(self):
-        """Generate the Latin Hypercube parameter sets"""
+        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study."""
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self.parameter_names)
         self._create_parameter_set_names(set_count)
