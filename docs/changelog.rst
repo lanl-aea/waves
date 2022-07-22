@@ -13,6 +13,8 @@ Documentation
 =============
 - Provide Abaqus files in the appendix for users without access to the WAVES or WAVES-EABM repository files
   (:issue:`206`, :merge:`203`). By `Kyle Brindley`_.
+- Remove the ABC ParameterGenerator abstract method docstrings from the parameter generators' APIs (:issue:`213`,
+  :merge:`204`). By `Kyle Brindley`_.
 
 ******************
 0.2.1 (2022-07-22)
