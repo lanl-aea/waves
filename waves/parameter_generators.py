@@ -270,16 +270,16 @@ class LatinHypercube(ParameterGenerator):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
             samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
-        # Transpose to put parameter names on the columns and parameter sets as rows
-        samples = samples.transpose()
-        quantiles = quantiles.transpose()
-        parameter_data_coordinates = ['values', 'quantiles']
-        coordinates = [parameter_names, parameter_data_coordinates]
-        rows = parameter_count * len(parameter_data_coordinates)
-        parameter_sets = numpy.hstack((samples, quantiles)).reshape(rows, set_count)
-        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
-        self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
+        values_array = xarray.DataArray(samples,
+                       coords=[self.parameter_set_names, parameter_names],
+                       dims=['parameter_sets', 'parameters'],
+                       name='values')
+        quantiles_array = xarray.DataArray(quantiles,
+                          coords=[self.parameter_set_names, parameter_names],
+                          dims=['parameter_sets', 'parameters'],
+                          name='quantiles')
+        self.parameter_study = xarray.merge([values_array, quantiles_array])
+
 
     def _set_names(self):
         """Construct the Latin Hypercube parameter names"""
