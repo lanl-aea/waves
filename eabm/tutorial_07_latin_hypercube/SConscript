@@ -1,0 +1,114 @@
+#! /usr/bin/env python
+
+import pathlib
+
+import waves
+
+from eabm_package.python.tutorial_07_latin_hypercube import parameter_schema
+
+# Inherit the parent construction environment
+Import('env')
+
+# Set project-wide paths with os-agnostic path separators
+project_dir = pathlib.Path(env['project_dir'])
+abaqus_source_dir = env['abaqus_source_dir']
+abaqus_source_abspath = project_dir / abaqus_source_dir
+
+# Simulation variables
+parameter_set_file_template = "parameter_set@number"
+model = "single_element"
+simulation_constants = {
+    '@global_seed@': 1,
+    '@displacement@': -1,
+}
+
+# Parameter Study with Latin Hypercube 
+parameter_generator = waves.parameter_generators.LatinHypercube(
+    parameter_schema,
+    output_file_template=parameter_set_file_template)
+parameter_generator.generate()
+parameter_study = parameter_generator.parameter_study
+set_names = parameter_study.parameter_sets.values
+parameter_names = parameter_study.parameters.values
+
+# Parameterized targets must live inside current simulation_variables for loop
+workflow = []
+for set_name in set_names:
+    current_set_name = pathlib.Path(set_name)
+    simulation_variables = parameter_study['values'].sel(parameter_sets=set_name).values
+    simulation_variables = {f"@{parameter_name}@": value for parameter_name, value in zip(parameter_names, simulation_variables)}
+    simulation_variables.update(simulation_constants)
+
+    # Geometry
+    journal_file = f"{model}_geometry"
+    journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
+    workflow.extend(env.AbaqusJournal(
+        target=[f"{current_set_name / journal_file}.cae",
+                f"{current_set_name / journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py"],
+        journal_options=journal_options))
+
+    # Partition
+    journal_file = f"{model}_partition"
+    journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
+    workflow.extend(env.AbaqusJournal(
+        target=[f"{current_set_name / journal_file}.cae",
+                f"{current_set_name / journal_file}.jnl"],
+        source=[f"{abaqus_source_abspath / journal_file}.py",
+                f"{current_set_name / model}_geometry.cae"],
+        journal_options=journal_options))
+
+    # Mesh
+    journal_file = f"{model}_mesh"
+    journal_options = f"--global-seed {simulation_constants['@global_seed@']}"
+    workflow.extend(env.AbaqusJournal(
+        target=[f"{current_set_name / journal_file}.cae",
+                f"{current_set_name / journal_file}.jnl",
+                f"{current_set_name / journal_file}.inp"],
+        source=[f"{abaqus_source_abspath / journal_file}.py",
+                f"{current_set_name / model}_partition.cae"],
+        journal_options=journal_options))
+
+    # SolverPrep
+    abaqus_source_list = [
+        f"#/{abaqus_source_dir}/{model}_compression.inp.in",
+        f"#/{abaqus_source_dir}/amplitudes.inp",
+        f"#/{abaqus_source_dir}/assembly.inp",
+        f"#/{abaqus_source_dir}/boundary.inp",
+        f"#/{abaqus_source_dir}/field_output.inp",
+        f"#/{abaqus_source_dir}/materials.inp",
+        f"#/{abaqus_source_dir}/parts.inp",
+        f"#/{abaqus_source_dir}/history_output.inp"
+    ]
+    abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
+    workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
+                                                   substitution_dictionary=simulation_variables,
+                                                   build_subdirectory=current_set_name))
+
+    # Abaqus Solve
+    solve_source_list = [f"{current_set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
+    solve_source_list.append([f"{current_set_name / journal_file}.inp"])
+    job_name = pathlib.Path(solve_source_list[0]).with_suffix('').name
+    datacheck_name = f"{job_name}_DATACHECK"
+    datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
+    abaqus_options='-double both'
+    workflow.extend(env.AbaqusSolver(
+        target=[f"{current_set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+        source=solve_source_list,
+        job_name=datacheck_name,
+        abaqus_options=f'{abaqus_options} -datacheck'))
+
+    solve_source_list.append([f"{current_set_name / datacheck_name}.odb"])
+    workflow.extend(env.AbaqusSolver(
+        target=[f"{current_set_name / job_name}.sta"],
+        source=solve_source_list,
+        job_name=job_name,
+        abaqus_options=abaqus_options))
+
+# Collector alias based on parent directory name
+parent_directory = Dir('.').srcnode().name
+env.Alias(parent_directory, workflow)
+
+if not env['unconditional_build'] and not env['abaqus']:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
+    Ignore(['.', parent_directory], workflow)
