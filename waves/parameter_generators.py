@@ -5,7 +5,6 @@ import sys
 import itertools
 
 import numpy
-import pandas
 import xarray
 import scipy.stats
 from smt.sampling_methods import LHS
