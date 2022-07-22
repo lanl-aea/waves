@@ -45,6 +45,7 @@ Documentation
 - Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
 - Add a mulit-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
   Brindley`_.
+- Add a Latin Hypercube tutorial (:issue:`211`, :merge:`200`). By `Kyle Brindley`_.
 
 Enhancements
 ============
