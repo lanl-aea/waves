@@ -61,7 +61,11 @@ class TestLatinHypercube:
              'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
         "good schema 2x1":
             {'num_simulations': 2,
-             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}}
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
+        "good schema 1x2":
+            {'num_simulations': 1,
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
     }
 
     @pytest.mark.unittest
