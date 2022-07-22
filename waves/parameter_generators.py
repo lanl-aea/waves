@@ -152,6 +152,26 @@ class ParameterGenerator(ABC):
             template = self.output_file_template
             self.parameter_set_names.append(template.substitute({'number': number}))
 
+    def _create_parameter_study_array(self, samples, name):
+        """Create the standard structure for a parameter_study array
+
+        requires:
+
+        * ``self.parameter_set_names``: rows of ``samples`` parameter study values
+        * ``self.parameter_names``: columns of ``samples`` parameter study values
+
+        :param numpy.array samples: 2D array of parameter study values with shape (number of parameter sets, number of
+            parameters).
+        :param str name: Name of the array. Used as a data variable name when converting to parameter study dataset.
+        """
+        array = xarray.DataArray(
+            samples,
+            coords=[self.parameter_set_names, self.parameter_names],
+            dims=['parameter_sets', 'parameters'],
+            name=name
+        )
+        return array
+
 
 class CartesianProduct(ParameterGenerator):
     """Builds a cartesian product parameter study
@@ -186,11 +206,7 @@ class CartesianProduct(ParameterGenerator):
         samples = numpy.array(list(itertools.product(*self.parameter_schema.values())))
         set_count = samples.shape[0]
         self._create_parameter_set_names(set_count)
-        values_array = xarray.DataArray(
-            samples,
-            coords=[self.parameter_set_names, self.parameter_names],
-            dims=['parameter_sets', 'parameters'],
-            name='values')
+        values_array = self._create_parameter_study_array(samples, name='values')
         self.parameter_study = values_array.to_dataset()
 
 
@@ -268,14 +284,8 @@ class LatinHypercube(ParameterGenerator):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
             samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
-        values_array = xarray.DataArray(samples,
-                       coords=[self.parameter_set_names, self.parameter_names],
-                       dims=['parameter_sets', 'parameters'],
-                       name='values')
-        quantiles_array = xarray.DataArray(quantiles,
-                          coords=[self.parameter_set_names, self.parameter_names],
-                          dims=['parameter_sets', 'parameters'],
-                          name='quantiles')
+        values_array = self._create_parameter_study_array(samples, name='values')
+        quantiles_array = self._create_parameter_study_array(quantiles, name='quantiles')
         self.parameter_study = xarray.merge([values_array, quantiles_array])
 
 
