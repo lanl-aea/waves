@@ -6,7 +6,6 @@ from unittest.mock import patch, mock_open
 import pathlib
 
 import numpy
-import pandas
 import xarray
 
 from waves.parameter_generators import ParameterGenerator
