@@ -20,7 +20,8 @@ project_variables = {
     'tutorial_04_dir': 'tutorial_04_simulation',
     'tutorial_05_dir': 'tutorial_05_parameter_substitution',
     'tutorial_06_dir': 'tutorial_06_include_files',
-    'tutorial_07_dir': 'tutorial_07_cartesian_product',
+    'tutorial_07_cp_dir': 'tutorial_07_cartesian_product',
+    'tutorial_07_lh_dir': 'tutorial_07_latin_hypercube',
     'tutorial_08_dir': 'tutorial_08_data_extraction',
     'tutorial_cubit_dir': 'tutorial_cubit'
 }
