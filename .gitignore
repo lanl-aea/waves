@@ -3,6 +3,7 @@ build/
 build_quickstart/
 waves_quickstart/
 scons_quickstart/
+scons_multiactiontask/
 *.tar.bz2
 *.zip
 
