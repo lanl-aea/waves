@@ -25,7 +25,12 @@ Schedule
 ********
 
 Quickstart
-========== ======================== ============================================ ================================================== Time to complete (HH:MM) Tutorial                                     Summary ------------------------ -------------------------------------------- -------------------------------------------------- 00:10 :ref:`scons_quickstart`                      Minimally functional simulation build system
+==========
+
+======================== ============================================ ==================================================
+Time to complete (HH:MM) Tutorial                                     Summary
+------------------------ -------------------------------------------- --------------------------------------------------
+                   00:10 :ref:`scons_quickstart`                      Minimally functional simulation build system
                                                                       workflow using pure `SCons`_
                    00:10 :ref:`waves_quickstart`                      Minimally functional simulation build system
                                                                       workflow using `SCons`_ and `WAVES`_
