@@ -64,6 +64,12 @@ class ParameterGenerator(ABC):
         Must set the class attributes:
 
         * ``self.parameter_names``: list of strings containing the parameter study's parameter names
+
+        Minimum necessary work example:
+
+        .. code-block::
+
+           self.parameter_names = self.parameter_schema.keys()
         """
         pass
 
@@ -81,15 +87,15 @@ class ParameterGenerator(ABC):
 
         * ``self.quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape (number of parameter sets, number of parameters)
 
+        Minimum necessary work example:
+
         .. code-block::
 
-           import xarray
-           import numpy
-
            set_count = 5
-           parameter_names = ['parameter_1', 'parameter_2']
-           self.values = numpy.zeros((set_count, len(parameter_names)))
-           self.parameter_study = _create_parameter_study()
+           self._create_parameter_set_names(set_count)
+           parameter_count = len(self.parameter_names)
+           self.values = numpy.zeros((set_count, parameter_count))
+           self.parameter_study = self._create_parameter_study()
         """
         pass
 
@@ -145,7 +151,7 @@ class ParameterGenerator(ABC):
     def _create_parameter_set_names(self, set_count):
         """Construct parameter set names from the output file template and number of parameter sets
 
-        Creates the generator attribute ``self.parameter_set_names`` required to populate the ``generate()`` method's
+        Creates the class attribute ``self.parameter_set_names`` required to populate the ``generate()`` method's
         parameter study Xarray dataset object.
 
         :param int set_count: Integer number of parameter sets
