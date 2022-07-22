@@ -73,9 +73,9 @@ class ParameterGenerator(ABC):
 
         Must set the class attributes:
 
-        * ``self.samples``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number of parameters)
+        * ``self.values``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number of parameters)
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
-          ``_create_parameter_study()`` after defining ``samples`` and the optional ``quantiles`` class attribute.
+          ``_create_parameter_study()`` after defining ``values`` and the optional ``quantiles`` class attribute.
 
         May set the class attributes:
 
@@ -88,7 +88,7 @@ class ParameterGenerator(ABC):
 
            set_count = 5
            parameter_names = ['parameter_1', 'parameter_2']
-           self.samples = numpy.zeros((set_count, len(parameter_names)))
+           self.values = numpy.zeros((set_count, len(parameter_names)))
            self.parameter_study = _create_parameter_study()
         """
         pass
@@ -155,20 +155,20 @@ class ParameterGenerator(ABC):
             template = self.output_file_template
             self.parameter_set_names.append(template.substitute({'number': number}))
 
-    def _create_parameter_array(self, samples, name):
+    def _create_parameter_array(self, data, name):
         """Create the standard structure for a parameter_study array
 
         requires:
 
-        * ``self.parameter_set_names``: rows of ``samples`` parameter study values
-        * ``self.parameter_names``: columns of ``samples`` parameter study values
+        * ``self.parameter_set_names``: parameter set names used as rows of parameter study
+        * ``self.parameter_names``: parameter names used as columns of parameter study
 
-        :param numpy.array samples: 2D array of parameter study values with shape (number of parameter sets, number of
+        :param numpy.array data: 2D array of parameter study values with shape (number of parameter sets, number of
             parameters).
         :param str name: Name of the array. Used as a data variable name when converting to parameter study dataset.
         """
         array = xarray.DataArray(
-            samples,
+            data,
             coords=[self.parameter_set_names, self.parameter_names],
             dims=['parameter_sets', 'parameters'],
             name=name
@@ -180,9 +180,9 @@ class ParameterGenerator(ABC):
 
         requires:
 
-        * ``self.parameter_set_names``: rows of ``samples`` parameter study values
-        * ``self.parameter_names``: columns of ``samples`` parameter study values
-        * ``self.samples``: The parameter study values
+        * ``self.parameter_set_names``: parameter set names used as rows of parameter study
+        * ``self.parameter_names``: parameter names used as columns of parameter study
+        * ``self.values``: The parameter study values
 
         optional:
 
@@ -192,7 +192,7 @@ class ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         """
-        values = self._create_parameter_array(self.samples, name='values')
+        values = self._create_parameter_array(self.values, name='values')
         if hasattr(self, "quantiles"):
             quantiles = self._create_parameter_array(self.quantiles, name='quantiles')
             self.parameter_study = xarray.merge([values, quantiles])
@@ -230,8 +230,8 @@ class CartesianProduct(ParameterGenerator):
 
     def generate(self):
         """Generate the Cartesian Product parameter sets"""
-        self.samples = numpy.array(list(itertools.product(*self.parameter_schema.values())))
-        set_count = self.samples.shape[0]
+        self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())))
+        set_count = self.values.shape[0]
         self._create_parameter_set_names(set_count)
         self._create_parameter_study()
 
@@ -304,12 +304,12 @@ class LatinHypercube(ParameterGenerator):
         parameter_count = len(self.parameter_names)
         self._create_parameter_set_names(set_count)
         self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
-        self.samples = numpy.zeros((set_count, parameter_count))
+        self.values = numpy.zeros((set_count, parameter_count))
         parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'}
         for i, attributes in enumerate(parameter_dict.values()):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
-            self.samples[:, i] = distribution(**attributes).ppf(self.quantiles[:, i])
+            self.values[:, i] = distribution(**attributes).ppf(self.quantiles[:, i])
         self._create_parameter_study()
 
 
