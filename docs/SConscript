@@ -55,6 +55,7 @@ documentation_file_list = [
     'references.bib',
     'release_philosophy.rst',
     'scons_quickstart.rst',
+    'scons_multiactiontask.rst',
     'targets.txt',
     'tutorial_introduction.rst',
     'tutorial_00_prerequisites.txt',
@@ -79,6 +80,7 @@ documentation_file_list = [
 eabm_dir = project_dir / pathlib.Path(env['eabm_dir'])
 tutorial_files_list = [
     eabm_dir / 'scons_quickstart_SConstruct',
+    eabm_dir / 'scons_multiactiontask_SConstruct',
     eabm_dir / 'waves_quickstart_SConstruct',
     eabm_dir / 'tutorial_00_SConstruct',
     eabm_dir / 'tutorial_01_geometry_SConstruct',
