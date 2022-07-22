@@ -1,9 +1,5 @@
 # Project files
-build/
-build_quickstart/
-waves_quickstart/
-scons_quickstart/
-scons_multiactiontask/
+build*/
 *.tar.bz2
 *.zip
 

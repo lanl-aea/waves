@@ -22,7 +22,7 @@ env.Default()
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'eabm_package/abaqus'
 abaqus_source_abspath = project_dir / abaqus_source_dir
-variant_dir_base = pathlib.Path('waves_quickstart')
+variant_dir_base = pathlib.Path('build_waves_quickstart')
 
 # Separate target output from source files
 VariantDir(variant_dir_base.name, '.', duplicate=False)

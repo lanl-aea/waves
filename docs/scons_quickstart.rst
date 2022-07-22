@@ -102,8 +102,8 @@ Output Files
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
-   $ tree build_quickstart/
-   build_quickstart/
+   $ tree build_scons_quickstart/
+   build_scons_quickstart/
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
