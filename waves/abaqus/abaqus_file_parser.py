@@ -1664,7 +1664,8 @@ class OdbReportFileParser(AbaqusFileParser):
                 region_name = 'ALL'
                 field_name = field['name']
 
-        field_name = field_name.replace('/', '|')
+        field_name = field_name.replace('/', '|').strip()
+        region_name = region_name.replace('/', '|').strip()
         try:
             current_output = self.field_extract_format[region_name][field_name]
         except KeyError:
