@@ -23,13 +23,16 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file_template=parameter_set_file_template)
 parameter_generator.generate()
-parameter_study = parameter_generator.parameter_study.sel(parameter_data='values')
+parameter_study = parameter_generator.parameter_study
+set_names = parameter_study.parameter_sets.values
+parameter_names = parameter_study.parameters.values
 
 # Parameterized targets must live inside current simulation_variables for loop
 workflow = []
-for set_name, simulation_variables in parameter_study.items():
+for set_name in set_names:
     current_set_name = pathlib.Path(set_name)
-    simulation_variables = {f"@{value.parameter_name.item()}@": value.item() for value in simulation_variables}
+    simulation_variables = parameter_study['values'].sel(parameter_sets=set_name).values
+    simulation_variables = {f"@{parameter_name}@": value for parameter_name, value in zip(parameter_names, simulation_variables)}
 
     # Geometry
     journal_file = f"{model}_geometry"

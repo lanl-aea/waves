@@ -5,7 +5,6 @@ import sys
 import itertools
 
 import numpy
-import pandas
 import xarray
 import scipy.stats
 from smt.sampling_methods import LHS
@@ -62,8 +61,15 @@ class ParameterGenerator(ABC):
     def validate(self):
         """Process parameter study input to verify schema
 
-        :returns: validated_schema
-        :rtype: bool
+        Must set the class attributes:
+
+        * ``self.parameter_names``: list of strings containing the parameter study's parameter names
+
+        Minimum necessary work example:
+
+        .. code-block::
+
+           self.parameter_names = self.parameter_schema.keys()
         """
         pass
 
@@ -71,23 +77,25 @@ class ParameterGenerator(ABC):
     def generate(self):
         """Generate the parameter study definition
 
-        Must accept ``self.parameter_schema`` dictionary and set ``self.parameter_study`` as an XArray Dataset in the format
+        Must set the class attributes:
 
-        .. code-block:: bash
+        * ``self.values``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number of parameters)
+        * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
+          ``_create_parameter_study()`` after defining ``values`` and the optional ``quantiles`` class attribute.
 
-           <xarray.Dataset>
-           Dimensions:         (parameter_name: 2, parameter_data: 1)
-           Coordinates:
-             * parameter_name  (parameter_name) object 'parameter_1' 'parameter_2'
-             * parameter_data  (parameter_data) object 'values'
-           Data variables:
-               parameter_set0  (parameter_name, parameter_data) int64 1 3
-               parameter_set1  (parameter_name, parameter_data) int64 1 4
-               parameter_set2  (parameter_name, parameter_data) int64 2 3
-               parameter_set3  (parameter_name, parameter_data) int64 2 4
+        May set the class attributes:
 
-        :returns: parameter study object: dict(parameter_set_name: parameter_set_text)
-        :rtype: dict
+        * ``self.quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape (number of parameter sets, number of parameters)
+
+        Minimum necessary work example:
+
+        .. code-block::
+
+           set_count = 5
+           self._create_parameter_set_names(set_count)
+           parameter_count = len(self.parameter_names)
+           self.values = numpy.zeros((set_count, parameter_count))
+           self.parameter_study = self._create_parameter_study()
         """
         pass
 
@@ -107,14 +115,13 @@ class ParameterGenerator(ABC):
         """
         if self.write_meta and self.provided_template:
             self._write_meta()
-        parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_study.keys()]
+        parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
         self._write_meta(parameter_set_files)
         for parameter_set_file in parameter_set_files:
             # Construct the output text
-            values = self.parameter_study[parameter_set_file.name].sel(parameter_data='values').values
-            parameter_names = self.parameter_study[parameter_set_file.name].coords['parameter_name'].values
+            values = self.parameter_study['values'].sel(parameter_sets=parameter_set_file.name).values
             text = ''
-            for value, parameter_name in zip(values, parameter_names):
+            for value, parameter_name in zip(values, self.parameter_names):
                 text += f"{parameter_name} = {value}\n"
             # If no output file template is provided, print to stdout
             if not self.provided_template:
@@ -144,7 +151,7 @@ class ParameterGenerator(ABC):
     def _create_parameter_set_names(self, set_count):
         """Construct parameter set names from the output file template and number of parameter sets
 
-        Creates the generator attribute ``self.parameter_set_names`` required to populate the ``generate()`` method's
+        Creates the class attribute ``self.parameter_set_names`` required to populate the ``generate()`` method's
         parameter study Xarray dataset object.
 
         :param int set_count: Integer number of parameter sets
@@ -153,6 +160,50 @@ class ParameterGenerator(ABC):
         for number in range(set_count):
             template = self.output_file_template
             self.parameter_set_names.append(template.substitute({'number': number}))
+
+    def _create_parameter_array(self, data, name):
+        """Create the standard structure for a parameter_study array
+
+        requires:
+
+        * ``self.parameter_set_names``: parameter set names used as rows of parameter study
+        * ``self.parameter_names``: parameter names used as columns of parameter study
+
+        :param numpy.array data: 2D array of parameter study values with shape (number of parameter sets, number of
+            parameters).
+        :param str name: Name of the array. Used as a data variable name when converting to parameter study dataset.
+        """
+        array = xarray.DataArray(
+            data,
+            coords=[self.parameter_set_names, self.parameter_names],
+            dims=['parameter_sets', 'parameters'],
+            name=name
+        )
+        return array
+
+    def _create_parameter_study(self):
+        """Create the standard structure for the parameter study dataset
+
+        requires:
+
+        * ``self.parameter_set_names``: parameter set names used as rows of parameter study
+        * ``self.parameter_names``: parameter names used as columns of parameter study
+        * ``self.values``: The parameter study values
+
+        optional:
+
+        * ``self.quantiles``: The quantiles associated with the paramter study sampling distributions
+
+        creates attribute:
+
+        * ``self.parameter_study``
+        """
+        values = self._create_parameter_array(self.values, name='values')
+        if hasattr(self, "quantiles"):
+            quantiles = self._create_parameter_array(self.quantiles, name='quantiles')
+            self.parameter_study = xarray.merge([values, quantiles])
+        else:
+            self.parameter_study = values.to_dataset()
 
 
 class CartesianProduct(ParameterGenerator):
@@ -181,18 +232,14 @@ class CartesianProduct(ParameterGenerator):
     def validate(self):
         # TODO: Settle on an input file schema and validation library
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
-        return True
+        self.parameter_names = list(self.parameter_schema.keys())
 
     def generate(self):
         """Generate the Cartesian Product parameter sets"""
-        parameter_names = list(self.parameter_schema.keys())
-        parameter_sets = numpy.array(list(itertools.product(*self.parameter_schema.values()))).transpose()
-        set_count = len(parameter_sets[0])
+        self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())))
+        set_count = self.values.shape[0]
         self._create_parameter_set_names(set_count)
-        coordinates = [parameter_names, ['values']]
-        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
-        self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
+        self._create_parameter_study()
 
 
 class LatinHypercube(ParameterGenerator):
@@ -241,8 +288,8 @@ class LatinHypercube(ParameterGenerator):
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        parameter_names = self._set_names()
-        for name in parameter_names:
+        self._create_parameter_names()
+        for name in self.parameter_names:
             parameter_keys = self.parameter_schema[name].keys()
             parameter_definition = self.parameter_schema[name]
             if 'distribution' not in parameter_keys:
@@ -260,28 +307,18 @@ class LatinHypercube(ParameterGenerator):
     def generate(self):
         """Generate the Latin Hypercube parameter sets"""
         set_count = self.parameter_schema['num_simulations']
-        parameter_names = self._set_names()
-        parameter_count = len(parameter_names)
+        parameter_count = len(self.parameter_names)
         self._create_parameter_set_names(set_count)
-        quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
-        samples = numpy.zeros((set_count, parameter_count))
+        self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
+        self.values = numpy.zeros((set_count, parameter_count))
         parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'}
         for i, attributes in enumerate(parameter_dict.values()):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
-            samples[:, i] = distribution(**attributes).ppf(quantiles[:, i])
-        # Transpose to put parameter names on the columns and parameter sets as rows
-        samples = samples.transpose()
-        quantiles = quantiles.transpose()
-        parameter_data_coordinates = ['values', 'quantiles']
-        coordinates = [parameter_names, parameter_data_coordinates]
-        rows = parameter_count * len(parameter_data_coordinates)
-        parameter_sets = numpy.hstack((samples, quantiles)).reshape(rows, set_count)
-        index = pandas.MultiIndex.from_product(coordinates, names=["parameter_name", "parameter_data"])
-        dataframe = pandas.DataFrame(parameter_sets, index=index, columns=self.parameter_set_names)
-        self.parameter_study = xarray.Dataset().from_dataframe(dataframe)
+            self.values[:, i] = distribution(**attributes).ppf(self.quantiles[:, i])
+        self._create_parameter_study()
 
-    def _set_names(self):
+
+    def _create_parameter_names(self):
         """Construct the Latin Hypercube parameter names"""
-        parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
-        return parameter_names
+        self.parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']

@@ -27,10 +27,11 @@ class TestCartesianProduct:
     def test_generate(self, parameter_schema, expected_array):
         TestGenerate = CartesianProduct(parameter_schema, None, False, False, False)
         TestGenerate.generate()
-        generate_array = TestGenerate.parameter_study.sel(parameter_data='values').to_array().values
+        generate_array = TestGenerate.parameter_study['values'].values
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-        parameter_set_names = list(TestGenerate.parameter_study.keys())
-        assert parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
+        expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
+        parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
+        assert numpy.all(parameter_set_names == expected_set_names)

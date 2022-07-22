@@ -1,7 +1,6 @@
 h5netcdf
 h5py
 numpy
-pandas
 pytest
 pytest-xdist
 pyyaml

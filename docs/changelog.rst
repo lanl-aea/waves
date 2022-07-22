@@ -9,6 +9,10 @@ Changelog
 0.1.18 (unreleased)
 *******************
 
+Breaking changes
+================
+- Reform the parameter study xarray object to make it more intuitive (:issue:`210`, :merge:`197`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Add the ``find_program`` method to search for an ordered list of program names (:issue:`65`, :merge:`185`). By `Kyle
