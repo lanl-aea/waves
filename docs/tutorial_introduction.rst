@@ -52,7 +52,8 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       values into copied files
                    00:20 :ref:`tutorial_include_files_waves`          Including files that can be re-used in more than
                                                                       one workflow
-                   00:30 :ref:`tutorial_cartesian_product_waves`      Parameter study introduction
+                   00:30 :ref:`tutorial_cartesian_product_waves`      Parameter study introduction using a cartesian
+                                                                      product
                    00:20 :ref:`tutorial_data_extraction_waves`        Abaqus data extraction
 ======================== ============================================ ==================================================
 
@@ -65,4 +66,6 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:20 :ref:`tutorial_cubit_waves`                  Geometry, partition, and mesh examples with Cubit
                                                                       replicating :ref:`tutorial_simulation_waves`
                    00:10 :ref:`scons_multiactiontask`                 Execute multiple actions on the same target file
+                   00:30 :ref:`tutorial_latin_hypercube_waves`        Parameter study introduction using a latin
+                                                                      hypercube
 ======================== ============================================ ==================================================
