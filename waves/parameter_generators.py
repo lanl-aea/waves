@@ -124,13 +124,23 @@ class _ParameterGenerator(ABC):
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
         if self.write_meta and self.provided_template:
-            self._write_meta(parameter_set_files)
-        for parameter_set_file in parameter_set_files:
+            self._write_meta(self.parameter_set_files)
+        if self.output_file_type == 'python' or self.output_file_type == 'yaml':
+            self._write_text(parameter_set_files)
+        else:
+            raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
+
+    def _write_text(self, parameter_set_files):
+        if self.output_file_type == 'python':
+            delimiter = ' ='
+        if self.output_file_type == 'yaml':
+            delimiter = ': '
+        for parameter_set_file in self.parameter_set_files:
             # Construct the output text
             values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
             text = ''
             for value, parameter_name in zip(values, self.parameter_names):
-                text += f"{parameter_name} = {repr(value)}\n"
+                text += f"{parameter_name}{delimiter}{repr(value)}\n"
             # If no output file template is provided, print to stdout
             if not self.provided_template:
                 sys.stdout.write(f"{parameter_set_file.name}:\n{text}")
