@@ -55,6 +55,10 @@ class _ParameterGenerator(ABC):
         else:
             self.output_file_template = self.default_template
 
+        # Infer output directory from output file template
+        self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        self.parameter_study_meta_file = self.output_directory / parameter_study_meta_file
+
         self.validate()
 
     @abstractmethod
@@ -143,7 +147,7 @@ class _ParameterGenerator(ABC):
         :param list parameter_set_files: List of pathlib.Path parameter set file paths
         """
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
-        with open(f'{parameter_study_meta_file}', 'w') as meta_file:
+        with open(self.parameter_study_meta_file, 'w') as meta_file:
             for parameter_set_file in parameter_set_files:
                 meta_file.write(f"{parameter_set_file.name}\n")
 

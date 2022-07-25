@@ -120,10 +120,6 @@ def main():
         print(f"write_meta           = {write_meta}")
         return 0
 
-    # Clean the output file template if specified
-    if output_file_template:
-        output_file_template = pathlib.Path(args.OUTPUT_FILE_TEMPLATE).name
-
     # Read the input stream
     # TODO: Handle input file outside of argparse
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/72
