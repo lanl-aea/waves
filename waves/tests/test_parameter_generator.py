@@ -40,11 +40,11 @@ class TestParameterGenerator:
         :param bool is_file: test specific argument mocks output for pathlib.Path().is_file()
         :param int sets: test specific argument for the number of sets to build for the test
         """
-        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='python',
+        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug)
         WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
+             patch('builtins.open') as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
@@ -67,7 +67,7 @@ class TestParameterGenerator:
                                  init_write_files.values(),
                              ids=init_write_files.keys())
     def test_write_to_files(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
-        """Check for conditions that should result in calls to stdout
+        """Check for conditions that should result in calls to builtins.open
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str template: user supplied string to be used as a template for output file names
@@ -77,11 +77,37 @@ class TestParameterGenerator:
         :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
         :param int sets: test specific argument for the number of sets to build for the test
         """
-        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='python',
+        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug)
         WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
+             patch('builtins.open') as mock_file, \
+             patch('sys.stdout.write') as stdout_write, \
+             patch('pathlib.Path.is_file', side_effect=is_file):
+            WriteParameterGenerator.write()
+            stdout_write.assert_not_called()
+            assert mock_file.call_count == files
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
+                                 init_write_files.values(),
+                             ids=init_write_files.keys())
+    def test_write_to_netcdf(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
+        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
+
+        :param str schema: placeholder string standing in for the schema read from an input file
+        :param str template: user supplied string to be used as a template for output file names
+        :param bool overwrite: overwrite existing files
+        :param bool dryrun: skip file write, but show file name and associated contents that would ahve been written
+        :param bool debug: print cli debugging information and exit
+        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
+        :param int sets: test specific argument for the number of sets to build for the test
+        """
+        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='h5',
+                                                       overwrite=overwrite, dryrun=dryrun, debug=debug)
+        WriteParameterGenerator.generate(sets)
+        with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
+             patch('xarray.Dataset.to_netcdf') as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
