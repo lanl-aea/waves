@@ -40,7 +40,8 @@ class TestParameterGenerator:
         :param bool is_file: test specific argument mocks output for pathlib.Path().is_file()
         :param int sets: test specific argument for the number of sets to build for the test
         """
-        WriteParameterGenerator = NoQuantilesGenerator(schema, template, overwrite, dryrun, debug)
+        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, overwrite=overwrite,
+                                                       dryrun=dryrun, debug=debug)
         WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
@@ -76,7 +77,8 @@ class TestParameterGenerator:
         :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
         :param int sets: test specific argument for the number of sets to build for the test
         """
-        WriteParameterGenerator = NoQuantilesGenerator(schema, template, overwrite, dryrun, debug)
+        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, overwrite=overwrite,
+                                                       dryrun=dryrun, debug=debug)
         WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
