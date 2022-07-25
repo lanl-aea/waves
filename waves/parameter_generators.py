@@ -283,7 +283,7 @@ class LatinHypercube(_ParameterGenerator):
     """
 
     def validate(self):
-        """Validate the Cartesian Product parameter schema. Executed by class initiation."""
+        """Validate the Latin Hypercube parameter schema. Executed by class initiation."""
         # TODO: Settle on an input file schema and validation library
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
         if not 'num_simulations' in self.parameter_schema.keys():
