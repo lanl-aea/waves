@@ -149,7 +149,7 @@ class _ParameterGenerator(ABC):
                     sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
                     sys.stdout.write("\n")
                 else:
-                    dataset.to_netcdf(parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
+                    dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_text(self, parameter_set_files):
         if self.output_file_type == 'python':
