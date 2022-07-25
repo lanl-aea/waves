@@ -38,7 +38,7 @@ class TestCartesianProduct:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = CartesianProduct(parameter_schema, None, False, False, False)
+                TestValidate = CartesianProduct(parameter_schema)
             finally:
                 pass
 
@@ -58,7 +58,7 @@ class TestCartesianProduct:
                                  generate_io.values(),
                              ids=generate_io.keys())
     def test_generate(self, parameter_schema, expected_array):
-        TestGenerate = CartesianProduct(parameter_schema, None, False, False, False)
+        TestGenerate = CartesianProduct(parameter_schema)
         TestGenerate.generate()
         generate_array = TestGenerate.parameter_study['values'].values
         assert numpy.all(generate_array == expected_array)
