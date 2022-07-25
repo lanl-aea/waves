@@ -138,11 +138,13 @@ class _ParameterGenerator(ABC):
             # If no output file template is provided, print to stdout
             if not self.provided_template:
                 sys.stdout.write(f"{parameter_set_file.name}:\n{dataset}")
+                sys.stdout.write("\n")
             # If overwrite is specified or if file doesn't exist
             elif self.overwrite or not parameter_set_file.is_file():
                 # If dry run is specified, print the files that would have been written to stdout
                 if self.dryrun:
                     sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
+                    sys.stdout.write("\n")
                 else:
                     dataset.to_netcdf(parameter_set_file, mode='w', format='NETCDF4')
 
