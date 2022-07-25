@@ -75,9 +75,12 @@ def get_parser(return_subparser_dictionary=False):
     cartesian_product_parser = subparsers.add_parser(cartesian_product_subcommand, description=generator_description,
                                                      help='Cartesian product generator',
                                                      parents=[parent_parser])
-    latin_hypercube_parser = subparsers.add_parser(latin_hypercube_subcommand, description=generator_description,
-                                                   help='Latin hypercube generator',
-                                                   parents=[parent_parser])
+    latin_hypercube_parser = subparsers.add_parser(
+        latin_hypercube_subcommand,
+        description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
+                    "parameter values and quantiles.",
+        help='Latin hypercube generator',
+        parents=[parent_parser])
 
     subparser_dictionary = {cartesian_product_subcommand: cartesian_product_parser,
                             latin_hypercube_subcommand: latin_hypercube_parser}
