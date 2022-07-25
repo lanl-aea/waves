@@ -77,7 +77,7 @@ class TestCartesianProduct:
                            call("parameter_1 = 2\n")]),
         'two_parameter': ({"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
                           4,
-                          [call("parameter_1 = '1'\nparameter_2 = 'a'\n"), 
+                          [call("parameter_1 = '1'\nparameter_2 = 'a'\n"),
                            call("parameter_1 = '1'\nparameter_2 = 'b'\n"),
                            call("parameter_1 = '2'\nparameter_2 = 'a'\n"),
                            call("parameter_1 = '2'\nparameter_2 = 'b'\n")]),
@@ -99,4 +99,4 @@ class TestCartesianProduct:
             stdout_write.assert_not_called()
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == file_count
-            assert mock_file().write.assert_called_with(expected_calls[0])
+            mock_file().write.assert_has_calls(expected_calls, any_order=False)
