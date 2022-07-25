@@ -137,7 +137,7 @@ class _ParameterGenerator(ABC):
 
     def _write_dataset(self, parameter_set_files):
         for parameter_set_file in parameter_set_files:
-            dataset = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file))
+            dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
             # If no output file template is provided, print to stdout
             if not self.provided_template:
                 sys.stdout.write(f"{parameter_set_file.name}:\n{dataset}")
