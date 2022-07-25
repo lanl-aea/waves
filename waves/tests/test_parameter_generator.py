@@ -45,7 +45,8 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('pathlib.Path.is_file', side_effect=is_file):
+             patch('pathlib.Path.is_file', side_effect=is_file), \
+             patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
             mock_file.assert_not_called()
             assert stdout_write.call_count == sets
@@ -60,10 +61,10 @@ class TestParameterGenerator:
         'overwrite-4': (      {},    'out',      True,  False, False,   [ True, False],    2,     2),
     }
 
+    @pytest.mark.unittest
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
                                  init_write_files.values(),
                              ids=init_write_files.keys())
-    @pytest.mark.unittest
     def test_write_to_files(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
         """Check for conditions that should result in calls to stdout
 
@@ -80,7 +81,8 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('pathlib.Path.is_file', side_effect=is_file):
+             patch('pathlib.Path.is_file', side_effect=is_file), \
+             patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
             stdout_write.assert_not_called()
             assert mock_file.call_count == files
