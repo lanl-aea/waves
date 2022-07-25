@@ -1,6 +1,7 @@
 """Test CartesianProduct Class
 """
 
+from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
 
 from waves.parameter_generators import CartesianProduct
@@ -68,3 +69,34 @@ class TestCartesianProduct:
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
         parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
         assert numpy.all(parameter_set_names == expected_set_names)
+
+    generate_io = {
+        'one_parameter': ({"parameter_1": [1, 2]},
+                          2,
+                          [call("parameter_1 = 1\n"),
+                           call("parameter_1 = 2\n")]),
+        'two_parameter': ({"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
+                          4,
+                          [call("parameter_1 = '1'\nparameter_2 = 'a'\n"), 
+                           call("parameter_1 = '1'\nparameter_2 = 'b'\n"),
+                           call("parameter_1 = '2'\nparameter_2 = 'a'\n"),
+                           call("parameter_1 = '2'\nparameter_2 = 'b'\n")]),
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('parameter_schema, file_count, expected_calls',
+                                 generate_io.values(),
+                             ids=generate_io.keys())
+    def test_write_python(self, parameter_schema, file_count, expected_calls):
+        with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
+             patch('builtins.open', mock_open()) as mock_file, \
+             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('sys.stdout.write') as stdout_write, \
+             patch('pathlib.Path.is_file', return_value=False):
+            TestWritePython = CartesianProduct(parameter_schema, output_file_template='out', output_file_type='python')
+            TestWritePython.generate()
+            TestWritePython.write()
+            stdout_write.assert_not_called()
+            xarray_to_netcdf.assert_not_called()
+            assert mock_file.call_count == file_count
+            assert mock_file().write.assert_called_with(expected_calls[0])

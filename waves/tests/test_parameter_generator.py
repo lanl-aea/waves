@@ -1,14 +1,14 @@
 """Test ParameterGenerator Abstract Base Class
 """
 
-import pytest
 from unittest.mock import patch, mock_open
 import pathlib
 
+from waves.parameter_generators import _ParameterGenerator
+
+import pytest
 import numpy
 import xarray
-
-from waves.parameter_generators import _ParameterGenerator
 
 
 class TestParameterGenerator:
@@ -44,7 +44,7 @@ class TestParameterGenerator:
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug)
         WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('builtins.open') as mock_file, \
+             patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
@@ -81,7 +81,7 @@ class TestParameterGenerator:
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug)
         WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('builtins.open') as mock_file, \
+             patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):
             WriteParameterGenerator.write()
