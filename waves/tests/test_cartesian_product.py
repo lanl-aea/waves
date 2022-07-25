@@ -1,13 +1,46 @@
 """Test CartesianProduct Class
 """
 
-import numpy
-import pytest
+from contextlib import nullcontext as does_not_raise
 
 from waves.parameter_generators import CartesianProduct
 
+import pytest
+import numpy
+
 class TestCartesianProduct:
     """Class for testing CartesianProduct parameter study generator class"""
+
+    validate_input = {
+        "good schema": (
+            {'parameter_1': [1], 'parameter_2': (2,) , 'parameter_3': set([3, 4])},
+            does_not_raise()
+        ),
+        "bad schema int": (
+            {'parameter_1': 1},
+            pytest.raises(TypeError)
+        ),
+        "bad schema dict": (
+            {'parameter_1': {'thing1': 1}},
+            pytest.raises(TypeError)
+        ),
+        "bad schema str": (
+            {'parameter_1': '1'},
+            pytest.raises(TypeError)
+        ),
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('parameter_schema, outcome',
+                             validate_input.values(),
+                             ids=validate_input.keys())
+    def test_validate(self, parameter_schema, outcome):
+        with outcome:
+            try:
+                # Validate is called in __init__. Do not need to call explicitly.
+                TestValidate = CartesianProduct(parameter_schema, None, False, False, False)
+            finally:
+                pass
 
     generate_io = {
         'one_parameter': ({'parameter_1': [1, 2]},

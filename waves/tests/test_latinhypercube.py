@@ -1,11 +1,11 @@
 """Test LatinHypercube Class
 """
 
-import pytest
 from contextlib import nullcontext as does_not_raise
 
 from waves.parameter_generators import LatinHypercube
 
+import pytest
 import numpy
 
 class TestLatinHypercube:

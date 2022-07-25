@@ -232,8 +232,11 @@ class CartesianProduct(_ParameterGenerator):
     def validate(self):
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         # TODO: Settle on an input file schema and validation library
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
         self.parameter_names = list(self.parameter_schema.keys())
+        # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
+        for name in self.parameter_names:
+            if not isinstance(self.parameter_schema[name], (list, set, tuple)):
+                raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
 
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
@@ -283,9 +286,8 @@ class LatinHypercube(_ParameterGenerator):
     """
 
     def validate(self):
-        """Validate the Cartesian Product parameter schema. Executed by class initiation."""
+        """Validate the Latin Hypercube parameter schema. Executed by class initiation."""
         # TODO: Settle on an input file schema and validation library
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
         if not 'num_simulations' in self.parameter_schema.keys():
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):

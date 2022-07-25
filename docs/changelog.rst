@@ -21,6 +21,10 @@ Documentation
 - Remove the ABC ParameterGenerator abstract method docstrings from the parameter generators' APIs (:issue:`213`,
   :merge:`204`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Add cartesian product schema validation (:issue:`80`, :merge:`208`). By `Kyle Brindley`_.
+
 ******************
 0.2.1 (2022-07-22)
 ******************
@@ -34,6 +38,18 @@ New Features
 - Add the ``find_program`` method to search for an ordered list of program names (:issue:`65`, :merge:`185`). By `Kyle
   Brindley`_.
 - Add a LatinHypercube parameter generator (:issue:`77`, :merge:`192`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add minimal structure to data extraction tutorial (:issue:`198`, :merge:`183`). By `Kyle Brindley`_.
+- Add a brief draft of the documentation computational practice discussion (:issue:`124`, :merge:`184`). By `Kyle
+  Brindley`_.
+- Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
+- Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
+- Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
+- Add a mulit-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
+  Brindley`_.
+- Add a Latin Hypercube tutorial (:issue:`211`, :merge:`200`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -50,18 +66,6 @@ Internal Changes
   Brindley`_.
 - Add ``smt`` to waves development environment to support latin hypercube parameter generator (:merge:`195`). By `Kyle
   Brindley`_.
-
-Documentation
-=============
-- Add minimal structure to data extraction tutorial (:issue:`198`, :merge:`183`). By `Kyle Brindley`_.
-- Add a brief draft of the documentation computational practice discussion (:issue:`124`, :merge:`184`). By `Kyle
-  Brindley`_.
-- Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
-- Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
-- Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
-- Add a mulit-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
-  Brindley`_.
-- Add a Latin Hypercube tutorial (:issue:`211`, :merge:`200`). By `Kyle Brindley`_.
 
 Enhancements
 ============
@@ -81,16 +85,16 @@ Documentation
 0.1.16 (2022-07-14)
 *******************
 
-Internal Changes
-================
-- Reduce the simulation variables and substitution dictionary to a single dictionary (:issue:`181`, :merge:`177`). By
-  `Kyle Brindley`_.
-
 Documentation
 =============
 - Update Scons terminal output and sample tree output in the tutorials to reflect the state of a user's tutorial files
   (:issue:`189`, :merge:`174`). By `Thomas Roberts`_.
 - Add a pure SCons quickstart tutorial (:issue:`48`, :merge:`173`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Reduce the simulation variables and substitution dictionary to a single dictionary (:issue:`181`, :merge:`177`). By
+  `Kyle Brindley`_.
 
 *******************
 0.1.15 (2022-07-14)
