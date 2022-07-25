@@ -236,7 +236,7 @@ class CartesianProduct(_ParameterGenerator):
         self.parameter_names = list(self.parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
         for name in self.parameter_names:
-            if not isinstance(self.parameter_schema[name], (list, set, tuple):
+            if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
 
     def generate(self):
