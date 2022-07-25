@@ -13,18 +13,18 @@ from smt.sampling_methods import LHS
 template_delimiter = '@'
 
 
-class AtSignTemplate(string.Template):
+class _AtSignTemplate(string.Template):
     """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
     delimiter = template_delimiter
 
 
 template_placeholder = f"{template_delimiter}number"
-default_output_file_template = AtSignTemplate(f'parameter_set{template_placeholder}')
+default_output_file_template = _AtSignTemplate(f'parameter_set{template_placeholder}')
 parameter_study_meta_file = "parameter_study_meta.txt"
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
-class ParameterGenerator(ABC):
+class _ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}.
@@ -50,7 +50,7 @@ class ParameterGenerator(ABC):
         if self.output_file_template:
             if not f'{template_placeholder}' in self.output_file_template:
                 self.output_file_template = f"{self.output_file_template}{template_placeholder}"
-            self.output_file_template = AtSignTemplate(self.output_file_template)
+            self.output_file_template = _AtSignTemplate(self.output_file_template)
             self.provided_template = True
         else:
             self.output_file_template = self.default_template
@@ -206,7 +206,7 @@ class ParameterGenerator(ABC):
             self.parameter_study = values.to_dataset()
 
 
-class CartesianProduct(ParameterGenerator):
+class CartesianProduct(_ParameterGenerator):
     """Builds a cartesian product parameter study
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
@@ -230,19 +230,20 @@ class CartesianProduct(ParameterGenerator):
     """
 
     def validate(self):
+        """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         # TODO: Settle on an input file schema and validation library
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
         self.parameter_names = list(self.parameter_schema.keys())
 
     def generate(self):
-        """Generate the Cartesian Product parameter sets"""
+        """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
         self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())))
         set_count = self.values.shape[0]
         self._create_parameter_set_names(set_count)
         self._create_parameter_study()
 
 
-class LatinHypercube(ParameterGenerator):
+class LatinHypercube(_ParameterGenerator):
     """Builds a Latin Hypercube parameter study
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
@@ -282,6 +283,7 @@ class LatinHypercube(ParameterGenerator):
     """
 
     def validate(self):
+        """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         # TODO: Settle on an input file schema and validation library
         # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/80
         if not 'num_simulations' in self.parameter_schema.keys():
@@ -305,7 +307,7 @@ class LatinHypercube(ParameterGenerator):
                                         "Python identifier")
 
     def generate(self):
-        """Generate the Latin Hypercube parameter sets"""
+        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study."""
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self.parameter_names)
         self._create_parameter_set_names(set_count)
