@@ -52,8 +52,8 @@ def get_parser(return_subparser_dictionary=False):
                                     f"If the placeholder is not found, it will be " \
                                     f"appended to the template string. (default: %(default)s)")
     parent_parser.add_argument('-t', '--output-file-type',
-                               default='python',
-                               choices=['python', 'yaml', 'h5'],
+                               default='yaml',
+                               choices=['yaml', 'python', 'h5'],
                                help="Output file type (default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
