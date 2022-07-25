@@ -123,7 +123,7 @@ class _ParameterGenerator(ABC):
             self._write_meta(parameter_set_files)
         for parameter_set_file in parameter_set_files:
             # Construct the output text
-            values = self.parameter_study['values'].sel(parameter_sets=parameter_set_file.name).values
+            values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
             text = ''
             for value, parameter_name in zip(values, self.parameter_names):
                 text += f"{parameter_name} = {repr(value)}\n"
