@@ -307,6 +307,8 @@ class LatinHypercube(_ParameterGenerator):
     An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
     converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
+    The 'h5' output file type is the only output type that contains both the parameter values *and* quantiles.
+
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
