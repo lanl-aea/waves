@@ -32,16 +32,18 @@ class _ParameterGenerator(ABC):
     :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
         template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
         placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_type: Output file syntax or type. Options are: 'h5' (default), 'python', 'yaml'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None,
+    def __init__(self, parameter_schema, output_file_template=None, output_file_type='h5',
                  overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
+        self.output_file_type = output_file_type
         self.overwrite = overwrite
         self.dryrun = dryrun
         self.debug = debug
@@ -221,6 +223,7 @@ class CartesianProduct(_ParameterGenerator):
     :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
         template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
         placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_type: Output file syntax or type. Options are: 'h5' (default), 'python', 'yaml'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -263,6 +266,7 @@ class LatinHypercube(_ParameterGenerator):
     :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
         template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
         placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_type: Output file syntax or type. Options are: 'h5' (default), 'python', 'yaml'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
