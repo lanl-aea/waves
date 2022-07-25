@@ -78,6 +78,7 @@ class TestParameterGenerator:
         :param bool debug: print cli debugging information and exit
         :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
         :param int sets: test specific argument for the number of sets to build for the test
+        :param int files: integer number of files that should be written
         """
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug)
@@ -106,6 +107,7 @@ class TestParameterGenerator:
         :param bool debug: print cli debugging information and exit
         :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
         :param int sets: test specific argument for the number of sets to build for the test
+        :param int files: integer number of files that should be written
         """
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='h5',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug)
