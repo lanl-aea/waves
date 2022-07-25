@@ -9,6 +9,11 @@ Changelog
 0.2.2 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Fix the representation of strings in the parameter generator parameter set output files (:issue:`215`, :merge:`206`).
+  By `Kyle Brindley`_.
+
 Documentation
 =============
 - Provide Abaqus files in the appendix for users without access to the WAVES or WAVES-EABM repository files
