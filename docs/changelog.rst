@@ -21,6 +21,10 @@ Documentation
 - Remove the ABC ParameterGenerator abstract method docstrings from the parameter generators' APIs (:issue:`213`,
   :merge:`204`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Add cartesian product schema validation (:issue:`80`, :merge:`208`). By `Kyle Brindley`_.
+
 ******************
 0.2.1 (2022-07-22)
 ******************
