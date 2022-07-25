@@ -9,6 +9,11 @@ Changelog
 0.2.2 (unreleased)
 *******************
 
+New Features
+============
+- Add the latin hypercube generator to the parameter study command line utility (:issue:`216`, :merge:`207`). By `Kyle
+  Brindley`_.
+
 Bug fixes
 =========
 - Fix the representation of strings in the parameter generator parameter set output files (:issue:`215`, :merge:`206`).

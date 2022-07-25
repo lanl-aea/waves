@@ -17,6 +17,7 @@ from waves import parameter_generators
 # Variables normally found in a project's root settings.py file(s)
 _program_name = pathlib.Path(__file__).stem
 cartesian_product_subcommand = 'cartesian_product'
+latin_hypercube_subcommand = 'latin_hypercube'
 
 #============================================================================================ COMMAND LINE INTERFACE ===
 def get_parser(return_subparser_dictionary=False):
@@ -68,8 +69,12 @@ def get_parser(return_subparser_dictionary=False):
     cartesian_product_parser = subparsers.add_parser(cartesian_product_subcommand, description=generator_description,
                                                      help='Cartesian product generator',
                                                      parents=[parent_parser])
+    latin_hypercube_parser = subparsers.add_parser(latin_hypercube_subcommand, description=generator_description,
+                                                   help='Latin hypercube generator',
+                                                   parents=[parent_parser])
 
-    subparser_dictionary = {cartesian_product_subcommand: cartesian_product_parser}
+    subparser_dictionary = {cartesian_product_subcommand: cartesian_product_parser,
+                            latin_hypercube_subcommand: latin_hypercube_parser}
 
     if return_subparser_dictionary:
         return subparser_dictionary
@@ -127,7 +132,8 @@ def main():
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = \
-        {cartesian_product_subcommand: parameter_generators.CartesianProduct}
+        {cartesian_product_subcommand: parameter_generators.CartesianProduct,
+         latin_hypercube_subcommand: parameter_generators.LatinHypercube}
     parameter_generator = \
         available_parameter_generators[subcommand](parameter_schema, output_file_template,
                                                    overwrite, dryrun, debug, write_meta)
