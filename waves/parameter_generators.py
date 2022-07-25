@@ -122,7 +122,7 @@ class _ParameterGenerator(ABC):
             values = self.parameter_study['values'].sel(parameter_sets=parameter_set_file.name).values
             text = ''
             for value, parameter_name in zip(values, self.parameter_names):
-                text += f"{parameter_name} = {value}\n"
+                text += f"{parameter_name} = {repr(value)}\n"
             # If no output file template is provided, print to stdout
             if not self.provided_template:
                 sys.stdout.write(f"{parameter_set_file.name}:\n{text}")
