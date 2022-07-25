@@ -32,14 +32,14 @@ class _ParameterGenerator(ABC):
     :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
         template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
         placeholder is not found it will be appended to the tempalte string.
-    :param str output_file_type: Output file syntax or type. Options are: 'h5' (default), 'python', 'yaml'.
+    :param str output_file_type: Output file syntax or type. Options are: 'python', 'yaml', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None, output_file_type='h5',
+    def __init__(self, parameter_schema, output_file_template=None, output_file_type='python',
                  overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
@@ -125,14 +125,31 @@ class _ParameterGenerator(ABC):
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
         if self.write_meta and self.provided_template:
             self._write_meta(parameter_set_files)
-        if self.output_file_type == 'python' or self.output_file_type == 'yaml':
+        if self.output_file_type == 'h5':
+            self._write_dataset(parameter_set_files)
+        elif self.output_file_type == 'python' or self.output_file_type == 'yaml':
             self._write_text(parameter_set_files)
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
+    def _write_dataset(self, parameter_set_files):
+        for parameter_set_file in parameter_set_files:
+            dataset = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file))
+            # If no output file template is provided, print to stdout
+            if not self.provided_template:
+                sys.stdout.write(f"{parameter_set_file.name}:\n{dataset}")
+            # If overwrite is specified or if file doesn't exist
+            elif self.overwrite or not parameter_set_file.is_file():
+                # If dry run is specified, print the files that would have been written to stdout
+                if self.dryrun:
+                    sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
+                else:
+                    dataset.to_netcdf(parameter_set_file, mode='w', format='NETCDF4')
+
     def _write_text(self, parameter_set_files):
         if self.output_file_type == 'python':
-            delimiter = ' ='
+            delimiter = ' = '
+            write_func = repr
         if self.output_file_type == 'yaml':
             delimiter = ': '
         for parameter_set_file in parameter_set_files:
