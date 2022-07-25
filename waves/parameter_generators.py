@@ -152,6 +152,7 @@ class _ParameterGenerator(ABC):
                     dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_text(self, parameter_set_files):
+        prefix = ""
         if self.output_file_type == 'python':
             delimiter = " = "
             # If no output file template is provided, print to stdout.
