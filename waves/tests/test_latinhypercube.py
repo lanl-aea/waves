@@ -50,7 +50,7 @@ class TestLatinHypercube:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = LatinHypercube(parameter_schema, None, False, False, False)
+                TestValidate = LatinHypercube(parameter_schema)
             finally:
                 pass
 

@@ -27,21 +27,26 @@ parameter_study_meta_file = "parameter_study_meta.txt"
 class _ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
+    An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+    converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
+
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}.
         Validated on class instantiation.
     :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
+        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
         placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None,
+    def __init__(self, parameter_schema, output_file_template=None, output_file_type='yaml',
                  overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
+        self.output_file_type = output_file_type
         self.overwrite = overwrite
         self.dryrun = dryrun
         self.debug = debug
@@ -123,13 +128,51 @@ class _ParameterGenerator(ABC):
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
         if self.write_meta and self.provided_template:
             self._write_meta(parameter_set_files)
+        if self.output_file_type == 'h5':
+            self._write_dataset(parameter_set_files)
+        elif self.output_file_type == 'python' or self.output_file_type == 'yaml':
+            self._write_text(parameter_set_files)
+        else:
+            raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
+
+    def _write_dataset(self, parameter_set_files):
+        for parameter_set_file in parameter_set_files:
+            dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
+            # If no output file template is provided, print to stdout
+            if not self.provided_template:
+                sys.stdout.write(f"{parameter_set_file.name}:\n{dataset}")
+                sys.stdout.write("\n")
+            # If overwrite is specified or if file doesn't exist
+            elif self.overwrite or not parameter_set_file.is_file():
+                # If dry run is specified, print the files that would have been written to stdout
+                if self.dryrun:
+                    sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
+                    sys.stdout.write("\n")
+                else:
+                    dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
+
+    def _write_text(self, parameter_set_files):
+        prefix = ""
+        if self.output_file_type == 'python':
+            delimiter = " = "
+            # If no output file template is provided, print to stdout.
+            # Adjust indentation for syntactically correct Python.
+            if not self.provided_template:
+                prefix = "    "
+        if self.output_file_type == 'yaml':
+            delimiter = ": "
+            # If no output file template is provided, print to stdout.
+            # Adjust indentation for syntactically correct YAML.
+            if not self.provided_template:
+                prefix = "  "
         for parameter_set_file in parameter_set_files:
             # Construct the output text
             values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
-            text = ''
+            text = ""
             for value, parameter_name in zip(values, self.parameter_names):
-                text += f"{parameter_name} = {repr(value)}\n"
+                text += f"{prefix}{parameter_name}{delimiter}{repr(value)}\n"
             # If no output file template is provided, print to stdout
+            # TODO: provide syntactically correct python STDOUT
             if not self.provided_template:
                 sys.stdout.write(f"{parameter_set_file.name}:\n{text}")
             # If overwrite is specified or if file doesn't exist
@@ -215,12 +258,16 @@ class _ParameterGenerator(ABC):
 class CartesianProduct(_ParameterGenerator):
     """Builds a cartesian product parameter study
 
+    An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+    converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
+
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
     :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
+        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
         placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -257,12 +304,18 @@ class CartesianProduct(_ParameterGenerator):
 class LatinHypercube(_ParameterGenerator):
     """Builds a Latin Hypercube parameter study
 
+    An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+    converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
+
+    The 'h5' output file type is the only output type that contains both the parameter values *and* quantiles.
+
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
+        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
         placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit

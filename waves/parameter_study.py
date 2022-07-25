@@ -47,10 +47,14 @@ def get_parser(return_subparser_dictionary=False):
     parent_parser.add_argument('-o', '--output-file-template',
                                default=None, dest='OUTPUT_FILE_TEMPLATE',
                                help=f"Output file template. May contain pathseps for an absolute or relative path " \
-                                    f"template. May contain '{parameter_generators.template_placeholder} " \
-                                    f"placeholder for the set number in the file basename but not in the path. " \
+                                    f"template. May contain ``{parameter_generators.template_placeholder}`` " \
+                                    f"set number placeholder in the file basename but not in the path. " \
                                     f"If the placeholder is not found, it will be " \
                                     f"appended to the template string. (default: %(default)s)")
+    parent_parser.add_argument('-t', '--output-file-type',
+                               default='yaml',
+                               choices=['yaml', 'python', 'h5'],
+                               help="Output file type (default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
     parent_parser.add_argument('--dryrun', action='store_true',
@@ -71,9 +75,12 @@ def get_parser(return_subparser_dictionary=False):
     cartesian_product_parser = subparsers.add_parser(cartesian_product_subcommand, description=generator_description,
                                                      help='Cartesian product generator',
                                                      parents=[parent_parser])
-    latin_hypercube_parser = subparsers.add_parser(latin_hypercube_subcommand, description=generator_description,
-                                                   help='Latin hypercube generator',
-                                                   parents=[parent_parser])
+    latin_hypercube_parser = subparsers.add_parser(
+        latin_hypercube_subcommand,
+        description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
+                    "parameter values and quantiles.",
+        help='Latin hypercube generator',
+        parents=[parent_parser])
 
     subparser_dictionary = {cartesian_product_subcommand: cartesian_product_parser,
                             latin_hypercube_subcommand: latin_hypercube_parser}
@@ -109,6 +116,7 @@ def main():
     # May require and additional --output-dir option and otherwise assume PWD
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/79
     output_file_template = args.OUTPUT_FILE_TEMPLATE
+    output_file_type = args.output_file_type
     overwrite = args.overwrite
     dryrun = args.dryrun
     debug = args.debug
@@ -118,6 +126,7 @@ def main():
         print(f"subcommand           = {subcommand}")
         print(f"input_file           = {input_file}")
         print(f"output_file_template = {output_file_template}")
+        print(f"output_file_type     = {output_file_type}")
         print(f"overwrite            = {overwrite}")
         print(f"write_meta           = {write_meta}")
         return 0
@@ -133,8 +142,15 @@ def main():
         {cartesian_product_subcommand: parameter_generators.CartesianProduct,
          latin_hypercube_subcommand: parameter_generators.LatinHypercube}
     parameter_generator = \
-        available_parameter_generators[subcommand](parameter_schema, output_file_template,
-                                                   overwrite, dryrun, debug, write_meta)
+        available_parameter_generators[subcommand](
+            parameter_schema,
+            output_file_template=output_file_template,
+            output_file_type=output_file_type,
+            overwrite=overwrite,
+            dryrun=dryrun,
+            debug=debug,
+            write_meta=write_meta
+        )
 
     # Build the parameter study
     parameter_generator.generate()

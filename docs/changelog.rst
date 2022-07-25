@@ -9,12 +9,20 @@ Changelog
 0.2.2 (unreleased)
 *******************
 
+Breaking changes
+================
+- Parmeter study writes to YAML syntax by default to provide syntactically correct STDOUT default behavior. Note that
+  the ``write()`` feature isn't used in the WAVES-EABM tutorials, so the user manual documentation is unchanged.
+  (:issue:`218`, :merge:`212`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Add the latin hypercube generator to the parameter study command line utility (:issue:`216`, :merge:`207`). By `Kyle
   Brindley`_.
 - Accept output template pathlike strings and write parameter study meta file in the same parent directory as the
   parameter set files (:issue:`79`, :merge:`210`). By `Kyle Brindley`_.
+- Add the option to output the parameter study sets as Xarray Dataset H5 files (:issue:`218`, :merge:`212`). By `Kyle
+  Brindley`_.
 
 Bug fixes
 =========
