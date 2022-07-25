@@ -29,7 +29,9 @@ class _ParameterGenerator(ABC):
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template
+    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
+        template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
+        placeholder is not found it will be appended to the tempalte string.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -54,6 +56,10 @@ class _ParameterGenerator(ABC):
             self.provided_template = True
         else:
             self.output_file_template = self.default_template
+
+        # Infer output directory from output file template
+        self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        self.parameter_study_meta_file = self.output_directory / parameter_study_meta_file
 
         self.validate()
 
@@ -113,12 +119,14 @@ class _ParameterGenerator(ABC):
            parameter_1 = 1
            parameter_2 = a
         """
+        if not self.output_directory.exists():
+            self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
         if self.write_meta and self.provided_template:
             self._write_meta(parameter_set_files)
         for parameter_set_file in parameter_set_files:
             # Construct the output text
-            values = self.parameter_study['values'].sel(parameter_sets=parameter_set_file.name).values
+            values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
             text = ''
             for value, parameter_name in zip(values, self.parameter_names):
                 text += f"{parameter_name} = {repr(value)}\n"
@@ -143,7 +151,7 @@ class _ParameterGenerator(ABC):
         :param list parameter_set_files: List of pathlib.Path parameter set file paths
         """
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
-        with open(f'{parameter_study_meta_file}', 'w') as meta_file:
+        with open(self.parameter_study_meta_file, 'w') as meta_file:
             for parameter_set_file in parameter_set_files:
                 meta_file.write(f"{parameter_set_file.name}\n")
 
@@ -211,7 +219,9 @@ class CartesianProduct(_ParameterGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
-    :param str output_file_template: Output file name template
+    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
+        template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
+        placeholder is not found it will be appended to the tempalte string.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -251,7 +261,9 @@ class LatinHypercube(_ParameterGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template
+    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
+        template. May contain the '@number' set number placeholder in the file basename but not in the path. If the
+        placeholder is not found it will be appended to the tempalte string.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit

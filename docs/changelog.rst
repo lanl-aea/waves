@@ -13,6 +13,8 @@ New Features
 ============
 - Add the latin hypercube generator to the parameter study command line utility (:issue:`216`, :merge:`207`). By `Kyle
   Brindley`_.
+- Accept output template pathlike strings and write parameter study meta file in the same parent directory as the
+  parameter set files (:issue:`79`, :merge:`210`). By `Kyle Brindley`_.
 
 Bug fixes
 =========

@@ -46,8 +46,10 @@ def get_parser(return_subparser_dictionary=False):
                                help=f"Parameter study configuration file (default: STDIN)")
     parent_parser.add_argument('-o', '--output-file-template',
                                default=None, dest='OUTPUT_FILE_TEMPLATE',
-                               help=f"Output file template. May contain '{parameter_generators.template_placeholder} " \
-                                    f"placeholder for the set number. If the placeholder is not found, it will be " \
+                               help=f"Output file template. May contain pathseps for an absolute or relative path " \
+                                    f"template. May contain '{parameter_generators.template_placeholder} " \
+                                    f"placeholder for the set number in the file basename but not in the path. " \
+                                    f"If the placeholder is not found, it will be " \
                                     f"appended to the template string. (default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
@@ -119,10 +121,6 @@ def main():
         print(f"overwrite            = {overwrite}")
         print(f"write_meta           = {write_meta}")
         return 0
-
-    # Clean the output file template if specified
-    if output_file_template:
-        output_file_template = pathlib.Path(args.OUTPUT_FILE_TEMPLATE).name
 
     # Read the input stream
     # TODO: Handle input file outside of argparse
