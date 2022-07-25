@@ -46,10 +46,12 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
+             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
             mock_file.assert_not_called()
+            xarray_to_netcdf.assert_not_called()
             assert stdout_write.call_count == sets
 
     init_write_files = {# schema, template, overwrite, dryrun, debug,          is_file, sets, files
@@ -83,9 +85,11 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
+             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file):
             WriteParameterGenerator.write()
             stdout_write.assert_not_called()
+            xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == files
 
     @pytest.mark.unittest
@@ -107,13 +111,15 @@ class TestParameterGenerator:
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug)
         WriteParameterGenerator.generate(sets)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('xarray.Dataset.to_netcdf') as mock_file, \
+             patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
+             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
+            mock_file.assert_not_called()
             stdout_write.assert_not_called()
-            assert mock_file.call_count == files
+            assert xarray_to_netcdf.call_count == files
 
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
