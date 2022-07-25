@@ -18,6 +18,7 @@ Bug fixes
 =========
 - Fix the representation of strings in the parameter generator parameter set output files (:issue:`215`, :merge:`206`).
   By `Kyle Brindley`_.
+- Fix the parameter study meta file write behavior to match documentation (:merge:`209`). By `Kyle Brindley`_.
 
 Documentation
 =============

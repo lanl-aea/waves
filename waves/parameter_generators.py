@@ -113,10 +113,9 @@ class _ParameterGenerator(ABC):
            parameter_1 = 1
            parameter_2 = a
         """
-        if self.write_meta and self.provided_template:
-            self._write_meta()
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
-        self._write_meta(parameter_set_files)
+        if self.write_meta and self.provided_template:
+            self._write_meta(parameter_set_files)
         for parameter_set_file in parameter_set_files:
             # Construct the output text
             values = self.parameter_study['values'].sel(parameter_sets=parameter_set_file.name).values
