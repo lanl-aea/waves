@@ -46,7 +46,8 @@ def get_parser(return_subparser_dictionary=False):
                                help=f"Parameter study configuration file (default: STDIN)")
     parent_parser.add_argument('-o', '--output-file-template',
                                default=None, dest='OUTPUT_FILE_TEMPLATE',
-                               help=f"Output file template. May contain '{parameter_generators.template_placeholder} " \
+                               help=f"Output file template. May contain pathseps for an absolute or relative path " \
+                                    f"template. May contain '{parameter_generators.template_placeholder} " \
                                     f"placeholder for the set number. If the placeholder is not found, it will be " \
                                     f"appended to the template string. (default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
