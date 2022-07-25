@@ -32,6 +32,7 @@ Documentation
 Internal Changes
 ================
 - Add cartesian product schema validation (:issue:`80`, :merge:`208`). By `Kyle Brindley`_.
+- Avoid file I/O during parameter study write pytests (:issue:`217`, :merge:`211`). By `Kyle Brindley`_.
 
 ******************
 0.2.1 (2022-07-22)
