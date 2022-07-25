@@ -9,6 +9,12 @@ Changelog
 0.2.2 (unreleased)
 *******************
 
+Breaking changes
+================
+- Parmeter study writes to YAML syntax by default to provide syntactically correct STDOUT default behavior. Note that
+  the ``write()`` feature isn't used in the WAVES-EABM tutorials, so the user manual documentation is unchanged.
+  (:issue:`218`, :merge:`212`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Add the latin hypercube generator to the parameter study command line utility (:issue:`216`, :merge:`207`). By `Kyle
