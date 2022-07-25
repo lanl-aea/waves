@@ -47,7 +47,7 @@ def get_parser(return_subparser_dictionary=False):
     parent_parser.add_argument('-o', '--output-file-template',
                                default=None, dest='OUTPUT_FILE_TEMPLATE',
                                help=f"Output file template. May contain pathseps for an absolute or relative path " \
-                                    f"template. May contain '{parameter_generators.template_placeholder}' " \
+                                    f"template. May contain ``{parameter_generators.template_placeholder}`` " \
                                     f"set number placeholder in the file basename but not in the path. " \
                                     f"If the placeholder is not found, it will be " \
                                     f"appended to the template string. (default: %(default)s)")
