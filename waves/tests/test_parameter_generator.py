@@ -46,7 +46,7 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('xarray.DataArray.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
@@ -85,7 +85,7 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('xarray.DataArray.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file):
             WriteParameterGenerator.write()
             stdout_write.assert_not_called()
@@ -113,7 +113,7 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('xarray.DataArray.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
