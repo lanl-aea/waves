@@ -133,8 +133,14 @@ def main():
         {cartesian_product_subcommand: parameter_generators.CartesianProduct,
          latin_hypercube_subcommand: parameter_generators.LatinHypercube}
     parameter_generator = \
-        available_parameter_generators[subcommand](parameter_schema, output_file_template,
-                                                   overwrite, dryrun, debug, write_meta)
+        available_parameter_generators[subcommand](
+            parameter_schema,
+            output_file_template=output_file_template,
+            overwrite=overwrite,
+            dryrun=dryrun,
+            debug=debug,
+            write_meta=write_meta
+        )
 
     # Build the parameter study
     parameter_generator.generate()
