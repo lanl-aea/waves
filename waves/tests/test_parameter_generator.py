@@ -8,7 +8,7 @@ import pathlib
 import numpy
 import xarray
 
-from waves.parameter_generators import ParameterGenerator
+from waves.parameter_generators import _ParameterGenerator
 
 
 class TestParameterGenerator:
@@ -42,7 +42,7 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = NoQuantilesGenerator(schema, template, overwrite, dryrun, debug)
         WriteParameterGenerator.generate(sets)
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+        with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -77,7 +77,7 @@ class TestParameterGenerator:
         """
         WriteParameterGenerator = NoQuantilesGenerator(schema, template, overwrite, dryrun, debug)
         WriteParameterGenerator.generate(sets)
-        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+        with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open(read_data='schema')) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -92,7 +92,7 @@ class TestParameterGenerator:
         assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
 
 
-class NoQuantilesGenerator(ParameterGenerator):
+class NoQuantilesGenerator(_ParameterGenerator):
 
     def validate(self):
         self.parameter_names = ['parameter_1']
