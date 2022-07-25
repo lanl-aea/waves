@@ -153,17 +153,25 @@ class _ParameterGenerator(ABC):
 
     def _write_text(self, parameter_set_files):
         if self.output_file_type == 'python':
-            delimiter = ' = '
-            write_func = repr
+            delimiter = " = "
+            # If no output file template is provided, print to stdout.
+            # Adjust indentation for syntactically correct Python.
+            if not self.provided_template:
+                prefix = "    "
         if self.output_file_type == 'yaml':
-            delimiter = ': '
+            delimiter = ": "
+            # If no output file template is provided, print to stdout.
+            # Adjust indentation for syntactically correct YAML.
+            if not self.provided_template:
+                prefix = "  "
         for parameter_set_file in parameter_set_files:
             # Construct the output text
             values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
-            text = ''
+            text = ""
             for value, parameter_name in zip(values, self.parameter_names):
-                text += f"{parameter_name}{delimiter}{repr(value)}\n"
+                text += f"{prefix}{parameter_name}{delimiter}{repr(value)}\n"
             # If no output file template is provided, print to stdout
+            # TODO: provide syntactically correct python STDOUT
             if not self.provided_template:
                 sys.stdout.write(f"{parameter_set_file.name}:\n{text}")
             # If overwrite is specified or if file doesn't exist
