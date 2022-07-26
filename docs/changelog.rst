@@ -42,6 +42,8 @@ Internal Changes
 ================
 - Add cartesian product schema validation (:issue:`80`, :merge:`208`). By `Kyle Brindley`_.
 - Avoid file I/O during parameter study write pytests (:issue:`217`, :merge:`211`). By `Kyle Brindley`_.
+- Add matplotlib to the CI environment for the pending post-processing tutorial (:issue:`221`, :merge:`216`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
