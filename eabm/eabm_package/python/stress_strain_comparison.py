@@ -10,11 +10,13 @@ import xarray
 
 def main(input_files, output_file):
     # TODO: Move dataset meta script assumptions to CLI
-    group = 'SINGLE_ELEMENT/FieldOutputs/ALL'
-    select_dict = {'LE values': 'LE22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}
+    group = "SINGLE_ELEMENT/FieldOutputs/ALL"
+    select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
 
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    dataarrays = [xarray.open_dataset(path, group=group).sel(select_dict) for path in paths]
+    data_generator = (xarray.open_dataset(path, group=group).sel(select_dict).assign_coords({"parameter_sets":
+                          path.parent.name}) for path in paths)
+    combined_data = xarray.concat(data_generator, "parameter_sets")
 
     # Clean up open files
     for datarray in dataarrays:
@@ -31,9 +33,9 @@ def get_parser():
     cli_description = "Read Xarray Datasets and plot stress-strain comparisons. Save to ``output_file``.pdf."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
-    parser.add_argument('-i', '--input-files', nargs='+',
+    parser.add_argument("-i", "--input-files", nargs="+",
                         help="The Xarray Dataset file(s)")
-    parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
+    parser.add_argument("-o", "--output-file", type=str, default=default_output_file,
                         help="The output file for for the stress-strain comparison plot, e.g. ``output_file``.pdf")
     return parser
 
