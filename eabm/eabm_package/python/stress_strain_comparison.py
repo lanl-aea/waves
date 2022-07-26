@@ -26,11 +26,10 @@ def main(input_files, output_file):
 
     # Plot
     combined_data.plot.scatter("LE", "S", hue="parameter_sets")
-    matplotlib.pyplot.savefig(f"{outfile}.pdf")
+    matplotlib.pyplot.savefig(f"{output_file}.pdf")
 
     # Clean up open files
-    for datarray in dataarrays:
-        dataarray.close()
+    combined_data.close()
 
     return 0
 
