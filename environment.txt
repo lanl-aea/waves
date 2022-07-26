@@ -1,5 +1,6 @@
 h5netcdf
 h5py
+matplotlib
 numpy
 pytest
 pytest-xdist
