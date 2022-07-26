@@ -1,6 +1,5 @@
 .. _changelog:
 
-
 #########
 Changelog
 #########
@@ -41,6 +40,10 @@ Internal Changes
 ================
 - Add cartesian product schema validation (:issue:`80`, :merge:`208`). By `Kyle Brindley`_.
 - Avoid file I/O during parameter study write pytests (:issue:`217`, :merge:`211`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Construct WAVES and WAVES-EABM alias list from SCons configuration (:issue:`56`, :merge:`213`). By `Kyle Brindley`_.
 
 ******************
 0.2.1 (2022-07-22)
