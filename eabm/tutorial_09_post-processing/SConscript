@@ -113,9 +113,11 @@ for set_name in set_names:
 
 # Post-processing
 post_processing_source = [f"{set_name / job_name}.h5" for set_name in set_names]
+script_options = "--input-files " + " ".join(str(path) for path in post_processing_source)
 workflow.extend(env.PythonScript(
     target=["stress_strain_comparison.pdf"],
-    source=[f"{python_source_abspath}/stress_strain_comparison.py"]))
+    source=[f"{python_source_abspath}/stress_strain_comparison.py"],
+    script_options=script_options))
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
