@@ -65,7 +65,7 @@
 
 .. toctree::
    :caption: Help and Reference
-   :maxdepth: 2
+   :maxdepth: 1
 
    internal_api
    release_philosophy
