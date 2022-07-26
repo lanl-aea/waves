@@ -22,11 +22,12 @@ options='OPTIONS:
                        command to create a unique build directory with every
                        execution (DEFAULT: build).
 
-NOTE: SCons project must define and use the ``variant_dir_base`` variable for
-non-git builds. Otherwise the ``mktemp`` directory will be unused.
+NOTE: SCons project must define and use the ``--build-dir`` project command
+line option for non-git builds. Otherwise the ``mktemp`` directory will be
+unused.
 
 SCons command construction without ``-g``:
-    ``scons variant_dir_base=${build_directory} ${targets}``
+    ``scons --build-dir=${build_directory} ${targets}``
 
 SCons command construction with ``-g``:
     ``scons ${targets}``'
@@ -145,5 +146,5 @@ if [ "${git_clone}" == 'true' ]; then
     cd ${build_directory}
     ${scons_program} ${targets}
 fi
-${scons_program} variant_dir_base=${build_directory} ${targets}
+${scons_program} --build-dir=${build_directory} ${targets}
 cd ${original_directory}
