@@ -5,9 +5,21 @@ import sys
 import argparse
 import pathlib
 
+import xarray
+
 
 def main(input_files, output_file):
+    # TODO: Move dataset meta script assumptions to CLI
+    group = 'SINGLE_ELEMENT/FieldOutputs/ALL'
+    select_dict = {'LE values': 'LE22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}
+
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
+    dataarrays = [xarray.open_dataset(str(path), group=group).sel(select_dict) for path in paths]
+
+    # Clean up open files
+    for datarray in dataarrays:
+        dataarray.close()
+
     return 0
 
 
