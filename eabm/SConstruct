@@ -126,7 +126,8 @@ eabm_simulation_directories = [
     'tutorial_06_include_files',
     'tutorial_07_cartesian_product',
     'tutorial_07_latin_hypercube',
-    'tutorial_08_data_extraction'
+    'tutorial_08_data_extraction',
+    'tutorial_09_post-processing'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
