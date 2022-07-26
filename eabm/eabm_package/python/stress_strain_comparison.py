@@ -6,6 +6,7 @@ import argparse
 import pathlib
 
 import xarray
+import matplotlib.pyplot
 
 
 def main(input_files, output_file):
@@ -19,8 +20,13 @@ def main(input_files, output_file):
                           path.parent.name}) for path in paths)
     combined_data = xarray.concat(data_generator, "parameter_sets")
 
+    # Add units
+    combined_data.S.attrs["units"] = "MPa"
+    combined_data.LE.attrs["units"] = "mm/mm"
+
     # Plot
     combined_data.plot.scatter("LE", "S", hue="parameter_sets")
+    matplotlib.pyplot.savefig(f"{outfile}.pdf")
 
     # Clean up open files
     for datarray in dataarrays:
