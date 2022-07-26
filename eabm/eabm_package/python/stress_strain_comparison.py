@@ -7,6 +7,7 @@ import pathlib
 
 
 def main(input_files, output_file):
+    paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
     return 0
 
 
