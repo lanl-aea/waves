@@ -12,19 +12,24 @@ import matplotlib.pyplot
 def main(input_files, output_file, group_path):
     # TODO: Move dataset meta script assumptions to CLI
     select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
+    x_var = "LE"
+    x_units = "mm/mm"
+    y_var = "S"
+    y_units = "MPa"
+    concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    data_generator = (xarray.open_dataset(path, group=group_path).sel(select_dict).assign_coords({"parameter_sets":
+    data_generator = (xarray.open_dataset(path, group=group_path).sel(select_dict).assign_coords({concat_coord:
                           path.parent.name}) for path in paths)
-    combined_data = xarray.concat(data_generator, "parameter_sets")
+    combined_data = xarray.concat(data_generator, concat_coord)
 
     # Add units
-    combined_data.S.attrs["units"] = "MPa"
-    combined_data.LE.attrs["units"] = "mm/mm"
+    combined_data[x_var].attrs["units"] = x_units
+    combined_data[y_var].attrs["units"] = y_units
 
     # Plot
-    combined_data.plot.scatter("LE", "S", hue="parameter_sets")
+    combined_data.plot.scatter(x_var, y_var, hue=concat_coord)
     matplotlib.pyplot.savefig(output_file)
 
     # Clean up open files
@@ -39,7 +44,8 @@ def get_parser():
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
 
     prog = f"python {script_name.name} "
-    cli_description = "Read Xarray Datasets and plot stress-strain comparisons. Save to ``output_file``."
+    cli_description = "Read Xarray Datasets and plot stress-strain comparisons as a function of parameter set name. " \
+                      " Save to ``output_file``."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument("-i", "--input-files", nargs="+",
