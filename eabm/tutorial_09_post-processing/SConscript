@@ -114,7 +114,7 @@ for set_name in set_names:
 
 # Post-processing
 plot_name = "stress_strain_comparison.pdf"
-post_processing_source = [f"{set_name / job_name}.h5" for set_name in set_names]
+post_processing_source = [f"{set_name / job_name}_datasets.h5" for set_name in set_names]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
 workflow.extend(env.PythonScript(
