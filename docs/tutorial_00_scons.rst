@@ -270,10 +270,3 @@ convenience, the `WAVES-EABM`_ simulation configurations will add a collector al
 with the `SCons alias`_ feature. By convention, `WAVES-EABM`_ matches the alias name to the simulation subdirectory
 name. :ref:`tutorial_geometry_waves` will introduce the first target alias, which will then populate the project help
 message diplayed by the ``scons -h`` command option.
-
-.. note::
-
-   The alias list is constructed manually according to the `WAVES-EABM`_ naming convention. There may be a way to
-   recover the alias list from the construction environment. If so, recovering the alias list directly will be a more
-   robust solution for building the project's alias list than a project naming convention. This tutorial will be updated
-   to reflect best practice if/when an `SCons`_ alias list solution is better understood.
