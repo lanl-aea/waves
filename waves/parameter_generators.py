@@ -32,9 +32,10 @@ class _ParameterGenerator(ABC):
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
-        placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the tempalte string.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -264,9 +265,10 @@ class CartesianProduct(_ParameterGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
-    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
-        placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the tempalte string.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -312,9 +314,10 @@ class LatinHypercube(_ParameterGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
-        placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the tempalte string.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
