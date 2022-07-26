@@ -25,7 +25,7 @@ def main(input_files, output_file, group_path):
 
     # Plot
     combined_data.plot.scatter("LE", "S", hue="parameter_sets")
-    matplotlib.pyplot.savefig(f"{output_file}.pdf")
+    matplotlib.pyplot.savefig(output_file)
 
     # Clean up open files
     combined_data.close()
@@ -39,13 +39,14 @@ def get_parser():
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
 
     prog = f"python {script_name.name} "
-    cli_description = "Read Xarray Datasets and plot stress-strain comparisons. Save to ``output_file``.pdf."
+    cli_description = "Read Xarray Datasets and plot stress-strain comparisons. Save to ``output_file``."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument("-i", "--input-files", nargs="+",
                         help="The Xarray Dataset file(s)")
     parser.add_argument("-o", "--output-file", type=str, default=default_output_file,
-                        help="The output file for for the stress-strain comparison plot, e.g. ``output_file``.pdf")
+                        help="The output file for the stress-strain comparison plot with extension, " \
+                             "e.g. ``output_file.pdf``. Extension must be supported by matplotlib.")
     parser.add_argument("-g", "--group-path", type=str, default=default_group_path,
                         help="The h5py group path to the dataset object (default: %(default)s)")
     return parser
