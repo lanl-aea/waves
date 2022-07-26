@@ -14,7 +14,7 @@ def main(input_files, output_file):
     select_dict = {'LE values': 'LE22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}
 
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    dataarrays = [xarray.open_dataset(str(path), group=group).sel(select_dict) for path in paths]
+    dataarrays = [xarray.open_dataset(path, group=group).sel(select_dict) for path in paths]
 
     # Clean up open files
     for datarray in dataarrays:
