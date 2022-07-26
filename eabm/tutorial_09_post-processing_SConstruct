@@ -1,0 +1,104 @@
+#! /usr/bin/env python
+
+import os
+import sys
+import pathlib
+
+# Only required when WAVES is not installed as a package, e.g. for local testing in WAVES repository.
+try:
+    import waves
+except ModuleNotFoundError:
+    sys.path.insert(0, str(pathlib.Path('..').resolve()))
+    import waves
+
+# Make the EABM package importable
+sys.path.insert(0, str(pathlib.Path('.').resolve()))
+
+version = '0.1.0'
+
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+AddOption(
+    "--unconditional-build",
+    dest="unconditional_build",
+    default=False,
+    action="store_true",
+    help="Boolean flag to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+            " and it would normally be ignored. (default: '%default')"
+)
+
+# Comments used in tutorial code snippets: marker-2
+
+# Inherit user's full environment and set project variables
+env = Environment(ENV=os.environ.copy(),
+                  variant_dir_base=GetOption("variant_dir_base"),
+                  unconditional_build=GetOption("unconditional_build"))
+
+# Find required programs for conditional target ignoring and absolute path for use in target actions
+env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
+
+# Set project internal variables and variable substitution dictionaries
+project_name = 'WAVES-EABM-TUTORIAL'
+project_variables = {
+    'project_name': project_name,
+    'project_dir': Dir('.').abspath,
+    'version': version,
+    'abaqus_source_dir': 'eabm_package/abaqus',
+    'python_source_dir': 'eabm_package/python'
+}
+for key, value in project_variables.items():
+    env[key] = value
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
+
+# Add custom builders
+env.Append(BUILDERS={
+    'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
+    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
+    'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus'])})
+
+# Add simulation targets
+eabm_simulation_directories = [
+    'tutorial_01_geometry',
+    'tutorial_02_partition_mesh',
+    'tutorial_03_solverprep',
+    'tutorial_04_simulation',
+    'tutorial_05_parameter_substitution',
+    'tutorial_06_include_files',
+    'tutorial_07_cartesian_product',
+    'tutorial_08_data_extraction'
+]
+for source_dir in eabm_simulation_directories:
+    build_dir = variant_dir_base / source_dir
+    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+
+# Add default target list to help message
+env.Default()  # Empty defaults list to avoid building all simulation targets by default
+default_targets_help = "\nDefault Targets:\n"
+for target in DEFAULT_TARGETS:
+    default_targets_help += f"    {str(target)}\n"
+Help(default_targets_help, append=True)
+
+# Add aliases to help message so users know what build target options are available
+# This must come *after* all expected Alias definitions and SConscript files.
+try:
+    # Recover from SCons configuration
+    from SCons.Node.Alias import default_ans
+    alias_list = default_ans
+except ImportError:
+    # Fall back to manually constructed alias list(s)
+    alias_list = eabm_simulation_directories
+alias_help = "\nTarget Aliases:\n"
+for alias in alias_list:
+    alias_help += f"    {alias}\n"
+Help(alias_help)
