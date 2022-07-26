@@ -32,9 +32,10 @@ class _ParameterGenerator(ABC):
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
-        placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the template string.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -113,16 +114,22 @@ class _ParameterGenerator(ABC):
     def write(self):
         """Write the parameter study to STDOUT or an output file.
 
+        Writes to STDOUT by default. Requires non-default ``output_file_template`` specification to write to files.
+
         If printing to STDOUT, print all parameter sets together. If printing to files, don't overwrite existing files.
         If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
         associations for files that would have been written.
 
-        Writes parameter set files in Python syntax. Alternate syntax options are a WIP.
+        Writes parameter set files in YAML syntax by default. Output formatting is controlled by
+        ``output_file_type``.
+
+        An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+        converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
         .. code-block::
 
-           parameter_1 = 1
-           parameter_2 = a
+           parameter_1: '1'
+           parameter_2: 'a'
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
@@ -264,9 +271,10 @@ class CartesianProduct(_ParameterGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
-    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
-        placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the template string.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -300,6 +308,9 @@ class CartesianProduct(_ParameterGenerator):
         self._create_parameter_set_names(set_count)
         self._create_parameter_study()
 
+    def write(self):
+        super().write()
+
 
 class LatinHypercube(_ParameterGenerator):
     """Builds a Latin Hypercube parameter study
@@ -312,9 +323,10 @@ class LatinHypercube(_ParameterGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template. May contain pathseps for an absolute or relative path
-        template. May contain the ``@number`` set number placeholder in the file basename but not in the path. If the
-        placeholder is not found it will be appended to the tempalte string.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the template string.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -328,7 +340,7 @@ class LatinHypercube(_ParameterGenerator):
 
        parameter_schema = {
            'num_simulations': 100  # Required key. Value must be an integer.
-           'parameter_name': {  # Parameter names must be valid Python identifiers
+           'parameter_name': {
                'distribution': 'scipy_distribution_name',  # Required key. Value must be a valid scipy.stats
                                                            # distribution name.
                'kwarg_1': value,
@@ -385,6 +397,8 @@ class LatinHypercube(_ParameterGenerator):
             self.values[:, i] = distribution(**attributes).ppf(self.quantiles[:, i])
         self._create_parameter_study()
 
+    def write(self):
+        super().write()
 
     def _create_parameter_names(self):
         """Construct the Latin Hypercube parameter names"""

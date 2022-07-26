@@ -43,7 +43,7 @@ def get_parser(return_subparser_dictionary=False):
     parent_parser = ArgumentParser(add_help=False)
     parent_parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
                                default=(None if sys.stdin.isatty() else sys.stdin),
-                               help=f"Parameter study configuration file (default: STDIN)")
+                               help=f"YAML formatted parameter study schema file (default: STDIN)")
     parent_parser.add_argument('-o', '--output-file-template',
                                default=None, dest='OUTPUT_FILE_TEMPLATE',
                                help=f"Output file template. May contain pathseps for an absolute or relative path " \

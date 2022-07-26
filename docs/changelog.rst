@@ -35,6 +35,8 @@ Documentation
   (:issue:`206`, :merge:`203`). By `Kyle Brindley`_.
 - Remove the ABC ParameterGenerator abstract method docstrings from the parameter generators' APIs (:issue:`213`,
   :merge:`204`). By `Kyle Brindley`_.
+- Clarify parameter generator behavior in external APIs. Add ABC write method docstring to parameter generators' APIs.
+  (:issue:`195`, :merge:`214`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
