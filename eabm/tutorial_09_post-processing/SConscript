@@ -13,6 +13,8 @@ Import('env')
 project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
+python_source_dir = env['python_source_dir']
+python_source_abspath = project_dir / python_source_dir
 
 # Simulation variables
 parameter_set_file_template = "parameter_set@number"
@@ -109,11 +111,11 @@ for set_name in set_names:
         target=[f"{set_name / job_name}.h5"],
         source=extract_source_list))
 
-## Post-processing
-#post_processing_source = [f"{set_name / job_name}.h5" for set_name in set_names]
-#workflow.extend(env.PythonScript(
-#    target=["stress_strain_comparison.pdf"],
-#    source=[
+# Post-processing
+post_processing_source = [f"{set_name / job_name}.h5" for set_name in set_names]
+workflow.extend(env.PythonScript(
+    target=["stress_strain_comparison.pdf"],
+    source=[f"{python_source_abspath}/stress_strain_comparison.py"]))
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
