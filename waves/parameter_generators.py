@@ -114,16 +114,22 @@ class _ParameterGenerator(ABC):
     def write(self):
         """Write the parameter study to STDOUT or an output file.
 
+        Writes to STDOUT by default. Requires non-default ``self.output_file_template`` specification to write to files.
+
         If printing to STDOUT, print all parameter sets together. If printing to files, don't overwrite existing files.
         If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
         associations for files that would have been written.
 
-        Writes parameter set files in Python syntax. Alternate syntax options are a WIP.
+        Writes parameter set files in YAML syntax by default. Output formatting is controlled by
+        ``self.output_file_type``.
+
+        An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+        converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
         .. code-block::
 
-           parameter_1 = 1
-           parameter_2 = a
+           parameter_1: '1'
+           parameter_2: 'a'
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
@@ -302,6 +308,9 @@ class CartesianProduct(_ParameterGenerator):
         self._create_parameter_set_names(set_count)
         self._create_parameter_study()
 
+    def write(self):
+        super().write()
+
 
 class LatinHypercube(_ParameterGenerator):
     """Builds a Latin Hypercube parameter study
@@ -388,6 +397,8 @@ class LatinHypercube(_ParameterGenerator):
             self.values[:, i] = distribution(**attributes).ppf(self.quantiles[:, i])
         self._create_parameter_study()
 
+    def write(self):
+        super().write()
 
     def _create_parameter_names(self):
         """Construct the Latin Hypercube parameter names"""
