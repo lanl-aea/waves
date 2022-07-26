@@ -115,8 +115,8 @@ for set_name in set_names:
 # Post-processing
 plot_name = "stress_strain_comparison.pdf"
 post_processing_source = [f"{set_name / job_name}.h5" for set_name in set_names]
-script_options = "--input-files " + " ".join(str(path) for path in post_processing_source)
-script_options += f" --output-file {plot_name}"
+script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
 workflow.extend(env.PythonScript(
     target=[plot_name],
     source=[f"{python_source_abspath}/plot_scatter.py"],
