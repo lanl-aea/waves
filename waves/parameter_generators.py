@@ -340,7 +340,7 @@ class LatinHypercube(_ParameterGenerator):
 
        parameter_schema = {
            'num_simulations': 100  # Required key. Value must be an integer.
-           'parameter_name': {  # Parameter names must be valid Python identifiers
+           'parameter_name': {
                'distribution': 'scipy_distribution_name',  # Required key. Value must be a valid scipy.stats
                                                            # distribution name.
                'kwarg_1': value,
