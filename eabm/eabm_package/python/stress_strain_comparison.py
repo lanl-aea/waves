@@ -13,10 +13,14 @@ def main(input_files, output_file):
     group = "SINGLE_ELEMENT/FieldOutputs/ALL"
     select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
 
+    # Build single dataset along the "parameter_sets" dimension
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
     data_generator = (xarray.open_dataset(path, group=group).sel(select_dict).assign_coords({"parameter_sets":
                           path.parent.name}) for path in paths)
     combined_data = xarray.concat(data_generator, "parameter_sets")
+
+    # Plot
+    combined_data.plot.scatter("LE", "S", hue="parameter_sets")
 
     # Clean up open files
     for datarray in dataarrays:
