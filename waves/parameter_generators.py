@@ -62,6 +62,9 @@ class _ParameterGenerator(ABC):
             raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
                                "Please specify one or the other.")
 
+        if self.output_file:
+            self.output_file = pathlib.Path(output_file)
+
         # Set output file name template, which doubles as the set name template.
         self.default_template = default_output_file_template
         self.provided_template = False
@@ -153,9 +156,9 @@ class _ParameterGenerator(ABC):
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
     def _write_dataset(self, parameter_set_files):
-        if output_file is not None:
+        if self.output_file:
             if self.dryrun:
-                sys.stdout.write(f"{self.output_file.resolve()}:\n{self.parameter_study}")
+                sys.stdout.write(f"{self.output_file.resolve()}:\n{self.parameter_study}\n")
             else:
                 self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
         else:
