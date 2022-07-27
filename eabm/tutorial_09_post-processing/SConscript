@@ -119,7 +119,7 @@ script_options = "--input-file " + " ".join(str(path) for path in post_processin
 script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
 workflow.extend(env.PythonScript(
     target=[plot_name],
-    source=[f"{python_source_abspath}/plot_scatter.py"],
+    source=[f"{python_source_abspath}/plot_scatter.py"] + post_processing_source,
     script_options=script_options))
 
 # Collector alias based on parent directory name
