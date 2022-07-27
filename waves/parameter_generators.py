@@ -36,7 +36,7 @@ class _ParameterGenerator(ABC):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -137,8 +137,8 @@ class _ParameterGenerator(ABC):
             self._write_meta(parameter_set_files)
         if self.output_file_type == 'h5':
             self._write_dataset(parameter_set_files)
-        elif self.output_file_type == 'python' or self.output_file_type == 'yaml':
-            self._write_text(parameter_set_files)
+        elif self.output_file_type == 'yaml':
+            self._write_yaml(parameter_set_files)
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
@@ -158,20 +158,13 @@ class _ParameterGenerator(ABC):
                 else:
                     dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
-    def _write_text(self, parameter_set_files):
+    def _write_yaml(self, parameter_set_files):
         prefix = ""
-        if self.output_file_type == 'python':
-            delimiter = " = "
-            # If no output file template is provided, print to stdout.
-            # Adjust indentation for syntactically correct Python.
-            if not self.provided_template:
-                prefix = "    "
-        if self.output_file_type == 'yaml':
-            delimiter = ": "
-            # If no output file template is provided, print to stdout.
-            # Adjust indentation for syntactically correct YAML.
-            if not self.provided_template:
-                prefix = "  "
+        delimiter = ": "
+        # If no output file template is provided, print to stdout.
+        # Adjust indentation for syntactically correct YAML.
+        if not self.provided_template:
+            prefix = "  "
         for parameter_set_file in parameter_set_files:
             # Construct the output text
             values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
@@ -275,7 +268,7 @@ class CartesianProduct(_ParameterGenerator):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -327,7 +320,7 @@ class LatinHypercube(_ParameterGenerator):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'python', 'h5'.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml' (default), 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
