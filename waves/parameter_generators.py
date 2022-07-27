@@ -36,6 +36,8 @@ class _ParameterGenerator(ABC):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. ``output_file`` and
+        ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -276,6 +278,8 @@ class CartesianProduct(_ParameterGenerator):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. ``output_file`` and
+        ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -328,6 +332,8 @@ class LatinHypercube(_ParameterGenerator):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. ``output_file`` and
+        ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
