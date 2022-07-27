@@ -175,6 +175,8 @@ deploy:
   variables:
     GIT_STRATEGY: clone
   script:
+    # DEBUGGING: "cp: relocation error: /lib64/libacl.so.1: symbol getxattr, version ATTR_1.0 not defined in file libattr.so.1 with link time reference"
+    - unset LD_LIBRARY_PATH
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     # Copy Conda package to AEA Conda Channel
@@ -198,6 +200,9 @@ pages:
   variables:
     GIT_STRATEGY: clone
   script:
+    # DEBUGGING: "cp: relocation error: /lib64/libacl.so.1: symbol getxattr, version ATTR_1.0 not defined in file libattr.so.1 with link time reference"
+    - unset LD_LIBRARY_PATH
+    # Set job-wide variables and directories
     - repo_root=$PWD
     - rm -rf public && mkdir -p public
     - cp docs/_static/index.html public
@@ -226,7 +231,7 @@ pages:
             scons html --unconditional-build
             cp -r build/docs/html/* ${repo_root}/public/$ref/waves-eabm
             scons . --clean --unconditional-build
-            cd ${repo_root} 
+            cd ${repo_root}
         done
   artifacts:
     paths:
