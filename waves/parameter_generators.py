@@ -36,6 +36,9 @@ class _ParameterGenerator(ABC):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
+        is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -43,16 +46,27 @@ class _ParameterGenerator(ABC):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None, output_file_type='yaml',
+    def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
                  overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
+        self.output_file = output_file
         self.output_file_type = output_file_type
         self.overwrite = overwrite
         self.dryrun = dryrun
         self.debug = debug
         self.write_meta = write_meta
 
+        # TODO: redesign the interface to make it possible to specify a parameter set name template and either the
+        # output file template or a single output file name.
+        if self.output_file_template is not None and self.output_file is not None:
+            raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
+                               "Please specify one or the other.")
+
+        if self.output_file:
+            self.output_file = pathlib.Path(output_file)
+
+        # Set output file name template, which doubles as the set name template.
         self.default_template = default_output_file_template
         self.provided_template = False
         if self.output_file_template:
@@ -143,59 +157,79 @@ class _ParameterGenerator(ABC):
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
     def _write_dataset(self, parameter_set_files):
-        for parameter_set_file in parameter_set_files:
-            dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
-            # If no output file template is provided, print to stdout
-            if not self.provided_template:
-                sys.stdout.write(f"{parameter_set_file.name}:\n{dataset}")
-                sys.stdout.write("\n")
-            # If overwrite is specified or if file doesn't exist
-            elif self.overwrite or not parameter_set_file.is_file():
-                # If dry run is specified, print the files that would have been written to stdout
-                if self.dryrun:
-                    sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
+        if self.output_file:
+            if self.dryrun:
+                sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
+            else:
+                self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
+        else:
+            for parameter_set_file in parameter_set_files:
+                dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
+                # If no output file template is provided, print to stdout
+                if not self.provided_template:
+                    sys.stdout.write(f"{parameter_set_file.name}\n{dataset}")
                     sys.stdout.write("\n")
-                else:
-                    dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
+                # If overwrite is specified or if file doesn't exist
+                elif self.overwrite or not parameter_set_file.is_file():
+                    # If dry run is specified, print the files that would have been written to stdout
+                    if self.dryrun:
+                        sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
+                        sys.stdout.write("\n")
+                    else:
+                        dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
         prefix = ""
         delimiter = ": "
-        # If no output file template is provided, print to stdout.
+        # If no output file template is provided, printing to stdout or a single file
         # Adjust indentation for syntactically correct YAML.
         if not self.provided_template:
             prefix = "  "
+        text_list = []
+        # Construct the output text
         for parameter_set_file in parameter_set_files:
-            # Construct the output text
             values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
             text = ""
             for value, parameter_name in zip(values, self.parameter_names):
                 text += f"{prefix}{parameter_name}{delimiter}{repr(value)}\n"
-            # If no output file template is provided, print to stdout
-            # TODO: provide syntactically correct python STDOUT
-            if not self.provided_template:
-                sys.stdout.write(f"{parameter_set_file.name}:\n{text}")
-            # If overwrite is specified or if file doesn't exist
-            elif self.overwrite or not parameter_set_file.is_file():
-                # If dry run is specified, print the files that would have been written to stdout
-                if self.dryrun:
-                    sys.stdout.write(f"{parameter_set_file.resolve()}:\n{text}")
-                else:
-                    with open(parameter_set_file, 'w') as outfile:
-                        outfile.write(text)
+            text_list.append(text)
+        # If no output file template is provided, printing to stdout or single file. Prepend set names.
+        if not self.provided_template:
+            text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in zip(parameter_set_files, text_list)]
+            output_text = "".join(text_list)
+            if self.output_file and not self.dryrun:
+                with open(self.output_file, 'w') as outfile:
+                    outfile.write(output_text)
+            elif self.output_file and self.dryrun:
+                sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
+            else:
+                sys.stdout.write(output_text)
+        # If output file template is provided, writing to parameter set files
+        else:
+            for parameter_set_file, text in zip(parameter_set_files, text_list):
+                if self.overwrite or not parameter_set_file.is_file():
+                    # If dry run is specified, print the files that would have been written to stdout
+                    if self.dryrun:
+                        sys.stdout.write(f"{parameter_set_file.resolve()}\n{text}")
+                    else:
+                        with open(parameter_set_file, 'w') as outfile:
+                            outfile.write(text)
 
     def _write_meta(self, parameter_set_files):
         """Write the parameter study meta data file.
 
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
-        target or dependee is out-of-date.
+        target or dependee is out-of-date. Parameter study file paths are written as absolute paths.
 
         :param list parameter_set_files: List of pathlib.Path parameter set file paths
         """
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(self.parameter_study_meta_file, 'w') as meta_file:
-            for parameter_set_file in parameter_set_files:
-                meta_file.write(f"{parameter_set_file.name}\n")
+            if self.output_file:
+                meta_file.write(f"{self.output_file.resolve()}\n")
+            else:
+                for parameter_set_file in parameter_set_files:
+                    meta_file.write(f"{parameter_set_file.resolve()}\n")
 
     def _create_parameter_set_names(self, set_count):
         """Construct parameter set names from the output file template and number of parameter sets
@@ -268,6 +302,9 @@ class CartesianProduct(_ParameterGenerator):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
+        is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -320,6 +357,9 @@ class LatinHypercube(_ParameterGenerator):
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
+        is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
