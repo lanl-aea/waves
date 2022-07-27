@@ -24,6 +24,7 @@ New Features
   parameter set files (:issue:`79`, :merge:`210`). By `Kyle Brindley`_.
 - Add the option to output the parameter study sets as Xarray Dataset H5 files (:issue:`218`, :merge:`212`). By `Kyle
   Brindley`_.
+- Add the option to output the parameter study as a single file (:issue:`222`, :merge:`218`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
