@@ -40,21 +40,27 @@ def get_parser(return_subparser_dictionary=False):
                              action='version',
                              version=f"{_program_name} {__version__}")
 
+    # Required positional option
     parent_parser = ArgumentParser(add_help=False)
     parent_parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
                                default=(None if sys.stdin.isatty() else sys.stdin),
                                help=f"YAML formatted parameter study schema file (default: STDIN)")
-    parent_parser.add_argument('-o', '--output-file-template',
-                               default=None, dest='OUTPUT_FILE_TEMPLATE',
-                               help=f"Output file template. May contain pathseps for an absolute or relative path " \
-                                    f"template. May contain ``{parameter_generators.template_placeholder}`` " \
-                                    f"set number placeholder in the file basename but not in the path. " \
-                                    f"If the placeholder is not found, it will be " \
-                                    f"appended to the template string. (default: %(default)s)")
-    parent_parser.add_argument('-s', '--output-file',
-                               default=None, dest='OUTPUT_FILE',
-                               help=f"Output file name. May contain pathseps for an absolute or relative path. " \
-                                    f"(default: %(default)s)")
+
+    # Mutually exclusive output file options
+    output_file_group = parent_parser.add_mutually_exclusive_group()
+    output_file_group.add_argument('-o', '--output-file-template',
+                                   default=None, dest='OUTPUT_FILE_TEMPLATE',
+                                   help=f"Output file template. May contain pathseps for an absolute or relative path " \
+                                        f"template. May contain ``{parameter_generators.template_placeholder}`` " \
+                                        f"set number placeholder in the file basename but not in the path. " \
+                                        f"If the placeholder is not found, it will be " \
+                                        f"appended to the template string. (default: %(default)s)")
+    output_file_group.add_argument('-s', '--output-file',
+                                   default=None, dest='OUTPUT_FILE',
+                                   help=f"Output file name. May contain pathseps for an absolute or relative path. " \
+                                        f"(default: %(default)s)")
+
+    # Optional keyword options
     parent_parser.add_argument('-t', '--output-file-type',
                                default='yaml',
                                choices=['yaml', 'h5'],
