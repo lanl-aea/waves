@@ -143,7 +143,7 @@ for file_path in tutorial_files_list:
     documentation_file_list.append(target)
 
 # Generate parameter study xarray dataset output text file
-examine_parameter_study_file = eabm_dir / env['tutorial_07_dir'] / "examine_parameter_study_object.py"
+examine_parameter_study_file = eabm_dir / env['tutorial_07_cp_dir'] / "examine_parameter_study_object.py"
 env.Command(
     target=['tutorial_07_cartesian_product_parameter_study_message.txt'],
     source=[str(examine_parameter_study_file)],
