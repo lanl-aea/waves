@@ -180,28 +180,39 @@ class _ParameterGenerator(ABC):
     def _write_yaml(self, parameter_set_files):
         prefix = ""
         delimiter = ": "
-        # If no output file template is provided, print to stdout.
+        # If no output file template is provided, printing to stdout or a single file
         # Adjust indentation for syntactically correct YAML.
         if not self.provided_template:
             prefix = "  "
+        text_list = []
+        # Construct the output text
         for parameter_set_file in parameter_set_files:
-            # Construct the output text
             values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
             text = ""
             for value, parameter_name in zip(values, self.parameter_names):
                 text += f"{prefix}{parameter_name}{delimiter}{repr(value)}\n"
-            # If no output file template is provided, print to stdout
-            # TODO: provide syntactically correct python STDOUT
-            if not self.provided_template:
-                sys.stdout.write(f"{parameter_set_file.name}:\n{text}")
-            # If overwrite is specified or if file doesn't exist
-            elif self.overwrite or not parameter_set_file.is_file():
-                # If dry run is specified, print the files that would have been written to stdout
-                if self.dryrun:
-                    sys.stdout.write(f"{parameter_set_file.resolve()}:\n{text}")
-                else:
-                    with open(parameter_set_file, 'w') as outfile:
-                        outfile.write(text)
+            text_list.append(text)
+        # If no output file template is provided, printing to stdout or single file. Prepend set names.
+        if not self.provided_template:
+            text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in zip(parameter_set_files, text_list)]
+            output_text = "".join(text_list)
+            if self.output_file and not self.dryrun:
+                with open(self.output_file) as outfile:
+                    outfile.write(output_text)
+            elif self.output_file and self.dryrun:
+                sys.stdout.write(f"{self.output_file.resolve()}:\n{output_text}")
+            else:
+                sys.stdout.write(output_text)
+        # If output file template is provided, writing to parameter set files
+        else:
+            for parameter_set_file, text in zip(parameter_set_files, text_list):
+                if self.overwrite or not parameter_set_file.is_file():
+                    # If dry run is specified, print the files that would have been written to stdout
+                    if self.dryrun:
+                        sys.stdout.write(f"{parameter_set_file.resolve()}:\n{text}")
+                    else:
+                        with open(parameter_set_file, 'w') as outfile:
+                            outfile.write(text)
 
     def _write_meta(self, parameter_set_files):
         """Write the parameter study meta data file.
