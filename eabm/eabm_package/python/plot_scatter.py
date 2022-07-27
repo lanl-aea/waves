@@ -26,7 +26,10 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
 
     # Open and merge WAVES parameter study if provided
     if parameter_study_file:
-        xarray.open_dataset(parameter_study_file)
+        parameter_study = xarray.open_dataset(parameter_study_file)
+        combined_data.merge(parameter_study, True)
+
+    print(combined_data)
 
     # Plot
     combined_data.plot.scatter(x_var, y_var, hue=concat_coord)
