@@ -17,17 +17,20 @@ python_source_dir = env['python_source_dir']
 python_source_abspath = project_dir / python_source_dir
 
 # Simulation variables
-parameter_set_file_template = "parameter_set@number"
 model = "single_element"
 
 # Collect the target nodes to build a concise alias for all targets
+parameter_study_syntax = "h5"
+parameter_study_file = f"parameter_study.{parameter_study_syntax}"
 workflow = []
 
 # Parameter Study with Cartesian Product
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
-    output_file_template=parameter_set_file_template)
+    output_file=parameter_study_file,
+    output_file_type=parameter_study_syntax)
 parameter_generator.generate()
+parameter_generator.write()
 parameter_study = parameter_generator.parameter_study
 
 # Prepare object types for parameterization loop
