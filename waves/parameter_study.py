@@ -51,6 +51,13 @@ def get_parser(return_subparser_dictionary=False):
                                     f"set number placeholder in the file basename but not in the path. " \
                                     f"If the placeholder is not found, it will be " \
                                     f"appended to the template string. (default: %(default)s)")
+    parent_parser.add_argument('-s', '--output-file',
+                               default=None, dest='OUTPUT_FILE',
+                               help=f"Output file name. May contain pathseps for an absolute or relative path " \
+                                    f"template. May contain ``{parameter_generators.template_placeholder}`` " \
+                                    f"set number placeholder in the file basename but not in the path. " \
+                                    f"If the placeholder is not found, it will be " \
+                                    f"appended to the template string. (default: %(default)s)")
     parent_parser.add_argument('-t', '--output-file-type',
                                default='yaml',
                                choices=['yaml', 'h5'],
@@ -116,6 +123,7 @@ def main():
     # May require and additional --output-dir option and otherwise assume PWD
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/79
     output_file_template = args.OUTPUT_FILE_TEMPLATE
+    output_file = args.OUTPUT_FILE
     output_file_type = args.output_file_type
     overwrite = args.overwrite
     dryrun = args.dryrun
@@ -126,6 +134,7 @@ def main():
         print(f"subcommand           = {subcommand}")
         print(f"input_file           = {input_file}")
         print(f"output_file_template = {output_file_template}")
+        print(f"output_file          = {output_file}")
         print(f"output_file_type     = {output_file_type}")
         print(f"overwrite            = {overwrite}")
         print(f"write_meta           = {write_meta}")
@@ -145,6 +154,7 @@ def main():
         available_parameter_generators[subcommand](
             parameter_schema,
             output_file_template=output_file_template,
+            output_file=output_file,
             output_file_type=output_file_type,
             overwrite=overwrite,
             dryrun=dryrun,
