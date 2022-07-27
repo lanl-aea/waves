@@ -55,7 +55,7 @@ def get_parser(return_subparser_dictionary=False):
                                         f"set number placeholder in the file basename but not in the path. " \
                                         f"If the placeholder is not found, it will be " \
                                         f"appended to the template string. (default: %(default)s)")
-    output_file_group.add_argument('-s', '--output-file',
+    output_file_group.add_argument('-f', '--output-file',
                                    default=None, dest='OUTPUT_FILE',
                                    help=f"Output file name. May contain pathseps for an absolute or relative path. " \
                                         f"(default: %(default)s)")
