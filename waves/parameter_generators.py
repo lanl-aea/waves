@@ -43,11 +43,11 @@ class _ParameterGenerator(ABC):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None, output_single_file=None, output_file_type='yaml',
+    def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
                  overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
-        self.output_single_files = output_single_file
+        self.output_files = output_file
         self.output_file_type = output_file_type
         self.overwrite = overwrite
         self.dryrun = dryrun
@@ -56,8 +56,8 @@ class _ParameterGenerator(ABC):
 
         # TODO: redesign the interface to make it possible to specify a parameter set name template and either the
         # output file template or a single output file name.
-        if self.output_file_template is not None and self.output_single_file is not None:
-            raise RuntimeError("The options 'output_file_template' and 'output_single_file' are mutually exclusive. " \
+        if self.output_file_template is not None and self.output_file is not None:
+            raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
                                "Please specify one or the other.")
 
         # Set output file name template, which doubles as the set name template.
