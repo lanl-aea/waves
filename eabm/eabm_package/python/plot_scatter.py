@@ -38,6 +38,8 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
 
     # Clean up open files
     combined_data.close()
+    if parameter_study_file:
+        parameter_study.close()
 
     return 0
 

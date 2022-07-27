@@ -30,6 +30,7 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     output_file=parameter_study_file,
     output_file_type=parameter_study_syntax)
 parameter_generator.generate()
+# TODO: Move the write method call to a builder or Command() task
 parameter_generator.write()
 parameter_study = parameter_generator.parameter_study
 
