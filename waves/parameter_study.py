@@ -53,7 +53,7 @@ def get_parser(return_subparser_dictionary=False):
                                     f"appended to the template string. (default: %(default)s)")
     parent_parser.add_argument('-t', '--output-file-type',
                                default='yaml',
-                               choices=['yaml', 'python', 'h5'],
+                               choices=['yaml', 'h5'],
                                help="Output file type (default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
