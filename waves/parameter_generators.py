@@ -158,7 +158,7 @@ class _ParameterGenerator(ABC):
     def _write_dataset(self, parameter_set_files):
         if self.output_file:
             if self.dryrun:
-                sys.stdout.write(f"{self.output_file.resolve()}:\n{self.parameter_study}\n")
+                sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
             else:
                 self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
         else:
@@ -166,7 +166,7 @@ class _ParameterGenerator(ABC):
                 dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
                 # If no output file template is provided, print to stdout
                 if not self.provided_template:
-                    sys.stdout.write(f"{parameter_set_file.name}:\n{dataset}")
+                    sys.stdout.write(f"{parameter_set_file.name}\n{dataset}")
                     sys.stdout.write("\n")
                 # If overwrite is specified or if file doesn't exist
                 elif self.overwrite or not parameter_set_file.is_file():
@@ -200,7 +200,7 @@ class _ParameterGenerator(ABC):
                 with open(self.output_file) as outfile:
                     outfile.write(output_text)
             elif self.output_file and self.dryrun:
-                sys.stdout.write(f"{self.output_file.resolve()}:\n{output_text}")
+                sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
                 sys.stdout.write(output_text)
         # If output file template is provided, writing to parameter set files
@@ -209,7 +209,7 @@ class _ParameterGenerator(ABC):
                 if self.overwrite or not parameter_set_file.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
                     if self.dryrun:
-                        sys.stdout.write(f"{parameter_set_file.resolve()}:\n{text}")
+                        sys.stdout.write(f"{parameter_set_file.resolve()}\n{text}")
                     else:
                         with open(parameter_set_file, 'w') as outfile:
                             outfile.write(text)
