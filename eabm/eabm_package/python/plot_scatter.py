@@ -16,7 +16,7 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
 
     # Build single dataset along the "parameter_sets" dimension
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    data_generator = (xarray.open_dataset(path, group=group_path).sel(select_dict).assign_coords({concat_coord:
+    data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord:
                           path.parent.name}) for path in paths)
     combined_data = xarray.concat(data_generator, concat_coord)
 
@@ -27,12 +27,13 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
     # Open and merge WAVES parameter study if provided
     if parameter_study_file:
         parameter_study = xarray.open_dataset(parameter_study_file)
-        combined_data.merge(parameter_study, True)
+        combined_data = combined_data.merge(parameter_study)
 
+    # Write results dataset to stdout for tutorial demonstration
     print(combined_data)
 
     # Plot
-    combined_data.plot.scatter(x_var, y_var, hue=concat_coord)
+    combined_data.sel(select_dict).plot.scatter(x_var, y_var, hue=concat_coord)
     matplotlib.pyplot.savefig(output_file)
 
     # Clean up open files
