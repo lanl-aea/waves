@@ -197,7 +197,7 @@ class _ParameterGenerator(ABC):
             text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
-                with open(self.output_file) as outfile:
+                with open(self.output_file, 'w') as outfile:
                     outfile.write(output_text)
             elif self.output_file and self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
