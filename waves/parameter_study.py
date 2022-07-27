@@ -58,7 +58,7 @@ def get_parser(return_subparser_dictionary=False):
     output_file_group.add_argument('-f', '--output-file',
                                    default=None, dest='OUTPUT_FILE',
                                    help=f"Output file name. May contain pathseps for an absolute or relative path. " \
-                                        f"(default: %(default)s)")
+                                         "Output file is always overwritten. (default: %(default)s)")
 
     # Optional keyword options
     parent_parser.add_argument('-t', '--output-file-type',
