@@ -13,6 +13,8 @@ Breaking changes
 - Parmeter study writes to YAML syntax by default to provide syntactically correct STDOUT default behavior. Note that
   the ``write()`` feature isn't used in the WAVES-EABM tutorials, so the user manual documentation is unchanged.
   (:issue:`218`, :merge:`212`). By `Kyle Brindley`_.
+- Remove the parameter study python syntax output. Recommend using YAML syntax and the PyYAML package if parameter study
+  output files must use a text based serialization format. (:issue:`223`, :merge:`217`). By `Kyle Brindley`_.
 
 New Features
 ============
