@@ -47,7 +47,7 @@ class _ParameterGenerator(ABC):
                  overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
-        self.output_files = output_file
+        self.output_file = output_file
         self.output_file_type = output_file_type
         self.overwrite = overwrite
         self.dryrun = dryrun
