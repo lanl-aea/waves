@@ -14,6 +14,14 @@ import xarray
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
 
+    def test_output_file_conflict(self):
+        with pytest.raises(RuntimeError):
+            try:
+                OutputFileConflict = NoQuantilesGenerator({}, output_file_template='out@number',
+                                                          output_file='single_output_file')
+            finally:
+                pass
+
     init_write_stdout = {# schema, template, overwrite, dryrun, debug,         is_file, sets
         'no-template-1': (     {},     None,     False,  False, False,          [False],    1),
         'no-template-2': (     {},     None,      True,  False, False,          [False],    1),
