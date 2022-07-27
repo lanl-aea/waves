@@ -25,7 +25,7 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
     combined_data[y_var].attrs["units"] = y_units
 
     # Open and merge WAVES parameter study if provided
-    if parmaeter_study_file:
+    if parameter_study_file:
         xarray.open_dataset(parameter_study_file)
 
     # Plot
@@ -85,4 +85,4 @@ if __name__ == "__main__":
                   x_units=args.x_units,
                   y_var=args.y_var,
                   y_units=args.y_units,
-                  paramater_study_file=args.parameter_study_file))
+                  parameter_study_file=args.parameter_study_file))

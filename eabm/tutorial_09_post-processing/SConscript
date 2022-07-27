@@ -120,9 +120,10 @@ plot_name = "stress_strain_comparison.pdf"
 post_processing_source = [f"{set_name / job_name}_datasets.h5" for set_name in set_names]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += f" --parameter-study-file {parameter_study_file}"
 workflow.extend(env.PythonScript(
     target=[plot_name],
-    source=[f"{python_source_abspath}/plot_scatter.py"] + post_processing_source,
+    source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file] + post_processing_source,
     script_options=script_options))
 
 # Collector alias based on parent directory name
