@@ -98,7 +98,43 @@ class TestCartesianProduct:
              patch('sys.stdout.write') as stdout_write, \
              patch('pathlib.Path.is_file', return_value=False):
             TestWriteYAML = CartesianProduct(parameter_schema, output_file_template='out',
-                                               output_file_type=output_type)
+                                             output_file_type=output_type)
+            TestWriteYAML.generate()
+            TestWriteYAML.write()
+            stdout_write.assert_not_called()
+            xarray_to_netcdf.assert_not_called()
+            assert mock_file.call_count == file_count
+            mock_file().write.assert_has_calls(expected_calls, any_order=False)
+
+    output_file_io = {
+        'one parameter yaml':
+            ({"parameter_1": [1, 2]},
+             'yaml',
+             1,
+             [call("parameter_set0:\n  parameter_1: 1\n" \
+                   "parameter_set1:\n  parameter_1: 2\n")]),
+        'two parameter yaml':
+            ({"parameter_1": [1, 2], "parameter_2": ["a", "b"]},
+             'yaml',
+             1,
+             [call("parameter_set0:\n  parameter_1: '1'\n  parameter_2: 'a'\n" \
+                   "parameter_set1:\n  parameter_1: '1'\n  parameter_2: 'b'\n" \
+                   "parameter_set2:\n  parameter_1: '2'\n  parameter_2: 'a'\n" \
+                   "parameter_set3:\n  parameter_1: '2'\n  parameter_2: 'b'\n")])
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('parameter_schema, output_type, file_count, expected_calls',
+                                 output_file_io.values(),
+                             ids=output_file_io.keys())
+    def test_write_yaml_single_file(self, parameter_schema, output_type, file_count, expected_calls):
+        with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
+             patch('builtins.open', mock_open()) as mock_file, \
+             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('sys.stdout.write') as stdout_write, \
+             patch('pathlib.Path.is_file', return_value=False):
+            TestWriteYAML = CartesianProduct(parameter_schema, output_file='parameter_study.yaml',
+                                             output_file_type=output_type)
             TestWriteYAML.generate()
             TestWriteYAML.write()
             stdout_write.assert_not_called()
