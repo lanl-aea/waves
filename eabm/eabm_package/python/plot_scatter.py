@@ -9,7 +9,7 @@ import xarray
 import matplotlib.pyplot
 
 
-def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units):
+def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, parameter_study_file=None):
     # TODO: Move dataset meta script assumptions to CLI
     select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
     concat_coord = "parameter_sets"
@@ -23,6 +23,10 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units):
     # Add units
     combined_data[x_var].attrs["units"] = x_units
     combined_data[y_var].attrs["units"] = y_units
+
+    # Open and merge WAVES parameter study if provided
+    if parmaeter_study_file:
+        xarray.open_dataset(parameter_study_file)
 
     # Plot
     combined_data.plot.scatter(x_var, y_var, hue=concat_coord)
@@ -40,6 +44,7 @@ def get_parser():
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
     default_x_var = "LE"
     default_y_var = "S"
+    default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
     cli_description = "Read Xarray Datasets and plot stress-strain comparisons as a function of parameter set name. " \
@@ -64,6 +69,8 @@ def get_parser():
                         help="The dependent (x-axis) variable name (default: %(default)s)")
     parser.add_argument("-y", "--y-var", type=str, default=default_y_var,
                         help="The independent (y-axis) variable name (default: %(default)s)")
+    parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
+                        help="An optional h5 file with a WAVES parameter study XArray Dataset (default: %(default)s")
 
     return parser
 
@@ -77,4 +84,5 @@ if __name__ == "__main__":
                   x_var=args.x_var,
                   x_units=args.x_units,
                   y_var=args.y_var,
-                  y_units=args.y_units))
+                  y_units=args.y_units,
+                  paramater_study_file=args.parameter_study_file))
