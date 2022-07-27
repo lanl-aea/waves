@@ -218,14 +218,17 @@ class _ParameterGenerator(ABC):
         """Write the parameter study meta data file.
 
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
-        target or dependee is out-of-date.
+        target or dependee is out-of-date. Parameter study file paths are written as absolute paths.
 
         :param list parameter_set_files: List of pathlib.Path parameter set file paths
         """
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(self.parameter_study_meta_file, 'w') as meta_file:
-            for parameter_set_file in parameter_set_files:
-                meta_file.write(f"{parameter_set_file.name}\n")
+            if self.output_file:
+                meta_file.write(f"{self.output_file.resolve()}\n")
+            else:
+                for parameter_set_file in parameter_set_files:
+                    meta_file.write(f"{parameter_set_file.resolve()}\n")
 
     def _create_parameter_set_names(self, set_count):
         """Construct parameter set names from the output file template and number of parameter sets
