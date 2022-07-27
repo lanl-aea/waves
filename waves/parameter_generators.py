@@ -153,20 +153,26 @@ class _ParameterGenerator(ABC):
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
     def _write_dataset(self, parameter_set_files):
-        for parameter_set_file in parameter_set_files:
-            dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
-            # If no output file template is provided, print to stdout
-            if not self.provided_template:
-                sys.stdout.write(f"{parameter_set_file.name}:\n{dataset}")
-                sys.stdout.write("\n")
-            # If overwrite is specified or if file doesn't exist
-            elif self.overwrite or not parameter_set_file.is_file():
-                # If dry run is specified, print the files that would have been written to stdout
-                if self.dryrun:
-                    sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
+        if output_file is not None:
+            if self.dryrun:
+                sys.stdout.write(f"{self.output_file.resolve()}:\n{self.parameter_study}")
+            else:
+                self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
+        else:
+            for parameter_set_file in parameter_set_files:
+                dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
+                # If no output file template is provided, print to stdout
+                if not self.provided_template:
+                    sys.stdout.write(f"{parameter_set_file.name}:\n{dataset}")
                     sys.stdout.write("\n")
-                else:
-                    dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
+                # If overwrite is specified or if file doesn't exist
+                elif self.overwrite or not parameter_set_file.is_file():
+                    # If dry run is specified, print the files that would have been written to stdout
+                    if self.dryrun:
+                        sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
+                        sys.stdout.write("\n")
+                    else:
+                        dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
         prefix = ""
