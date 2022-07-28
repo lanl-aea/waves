@@ -28,9 +28,6 @@ parameter_study_meta_file = "parameter_study_meta.txt"
 class _ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
-    An Xarray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
-    converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
-
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
         ``{parameter_name: schema_value}``.  Validated on class instantiation.
     :param str output_file_template: Output file name template. Required if parameter sets will be written to files
@@ -108,7 +105,9 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_set_names``: list of parameter set name strings created by calling
           ``self._create_parameter_set_names`` with the number of integer parameter sets.
-        * ``self.values``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number of parameters)
+        * ``self.values``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number
+          of parameters). If it's possible that the values may be of mixed type, ``numpy.array(..., dtype=object)``
+          should be used to preserve the original Python types.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
           ``self.parameter_study = self._create_parameter_study()`` after defining ``self.values`` and the optional
           ``self.quantiles`` class attribute.
@@ -141,9 +140,6 @@ class _ParameterGenerator(ABC):
 
         Writes parameter set files in YAML syntax by default. Output formatting is controlled by
         ``output_file_type``.
-
-        An Xarray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
-        converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
         .. code-block::
 
@@ -297,9 +293,6 @@ class _ParameterGenerator(ABC):
 class CartesianProduct(_ParameterGenerator):
     """Builds a cartesian product parameter study
 
-    An Xarray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
-    converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
-
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
@@ -358,7 +351,7 @@ class CartesianProduct(_ParameterGenerator):
 
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
-        self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())))
+        self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         set_count = self.values.shape[0]
         self._create_parameter_set_names(set_count)
         self._create_parameter_study()
@@ -369,9 +362,6 @@ class CartesianProduct(_ParameterGenerator):
 
 class LatinHypercube(_ParameterGenerator):
     """Builds a Latin Hypercube parameter study
-
-    An Xarray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
-    converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
     The 'h5' output file type is the only output type that contains both the parameter values *and* quantiles.
 

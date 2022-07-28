@@ -61,6 +61,8 @@ Enhancements
 - Add the ``scipy.stats`` parameter name to distribution object mapping dictionary as the ``parameter_distributions``
   attribute of the ``LatinHypercube`` class for use by downstream tools and workflows (:issue:`228`, :merge:`220`). By
   `Kyle Brindley`_.
+- Avoid type conversions with mixed type cartesian product parameter studies (:issue:`225`, :merge:`223`). By `Kyle
+  Brindley`_.
 
 ******************
 0.2.1 (2022-07-22)
