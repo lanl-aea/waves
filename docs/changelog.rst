@@ -52,6 +52,8 @@ Internal Changes
   with the results data. (:issue:`95`, :merge:`215`). By `Kyle Brindley`_.
 - Simplify the WAVES-EABM parameter study variables and their usage in the simulation configuration files (:issue:`219`,
   :merge:`221`). By `Kyle Brindley`_.
+- Changed validated to verified in WAVES acronym as it better reflects the intent of the tool (:issue:`220`,
+  :merge:`222`). By `Kyle Brindley`_.
 
 Enhancements
 ============

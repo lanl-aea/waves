@@ -11,7 +11,7 @@ SCons Builders
 .. automodule:: waves.builders
     :members:
     :show-inheritance:
-    :synopsis: WAVES Analysis for Validated Engineering Simulations SCons builder extensions
+    :synopsis: WAVES Analysis for Verified Engineering Simulations SCons builder extensions
 
 .. _parameter_generator_api:
 
