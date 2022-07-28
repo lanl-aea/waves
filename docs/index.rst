@@ -44,6 +44,7 @@
    tutorial_07_cartesian_product_waves
    tutorial_07_latin_hypercube_waves
    tutorial_08_data_extraction_waves
+   tutorial_09_post_processing_waves
    tutorial_cubit
    scons_multiactiontask
 
