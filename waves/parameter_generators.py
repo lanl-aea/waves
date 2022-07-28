@@ -105,7 +105,9 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_set_names``: list of parameter set name strings created by calling
           ``self._create_parameter_set_names`` with the number of integer parameter sets.
-        * ``self.values``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number of parameters)
+        * ``self.values``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number
+          of parameters). If it's possible that the values may be of mixed type, ``numpy.array(..., dtype=object)``
+          should be used to preserve the original Python types.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
           ``self.parameter_study = self._create_parameter_study()`` after defining ``self.values`` and the optional
           ``self.quantiles`` class attribute.
