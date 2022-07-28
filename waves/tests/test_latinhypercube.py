@@ -97,3 +97,4 @@ class TestLatinHypercube:
     def test_generate_parameter_distributions(self, parameter_schema):
         TestDistributions = LatinHypercube(parameter_schema)
         assert TestDistributions.parameter_names == list(TestDistributions.parameter_distributions.keys())
+        # TODO: More rigorous scipy.stats object inspection to test object construction
