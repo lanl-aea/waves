@@ -66,6 +66,9 @@ Post-processing script
    .. literalinclude:: python_plot_scatter.py
       :language: Python
 
+The script API and CLI are included in the :ref:`sphinx_api`: :ref:`eabm_plot_scatter_api` and :ref:`sphinx_cli`:
+:ref:`eabm_plot_scatter_cli`, respectively.
+
 **********
 SConstruct
 **********

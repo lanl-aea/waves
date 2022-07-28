@@ -83,6 +83,8 @@ single_element_mesh.py
 python
 ******
 
+.. _eabm_plot_scatter_api:
+
 plot_scatter.py
 ===============
 
