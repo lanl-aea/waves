@@ -102,3 +102,25 @@ Build Targets
 ************
 Output Files
 ************
+
+7. Observe the catenated parameter results and paramter study dataset in the post-processing task's STDOUT file
+
+.. code-block::
+
+   $ cat build/tutorial_09_post-processing/stress_strain_comparison.stdout
+   <xarray.Dataset>
+   Dimensions:           (parameter_sets: 4, step: 1, time: 5, elements: 1,
+                          LE values: 4, S values: 4, parameters: 4)
+   Coordinates:
+     * LE values         (LE values) object 'LE11' 'LE22' 'LE33' 'LE12'
+     * S values          (S values) object 'S11' 'S22' 'S33' 'S12'
+     * elements          (elements) int64 1
+       integrationPoint  (elements) int64 2
+     * step              (step) object 'Step-1'
+     * time              (time) float64 0.0175 0.07094 0.2513 0.86 1.0
+     * parameter_sets    (parameter_sets) <U14 'parameter_set0' ... 'parameter_s...
+     * parameters        (parameters) object 'width' 'height' ... 'displacement'
+   Data variables:
+       LE                (parameter_sets, step, time, elements, LE values) float32 ...
+       S                 (parameter_sets, step, time, elements, S values) float32 ...
+       values            (parameter_sets, parameters) float64 ...
