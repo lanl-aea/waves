@@ -423,12 +423,15 @@ class LatinHypercube(_ParameterGenerator):
         self._create_parameter_set_names(set_count)
         self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
         self.values = numpy.zeros((set_count, parameter_count))
-        parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'}
+        parameter_dict = self.parameter_dictionary()
         for i, attributes in enumerate(parameter_dict.values()):
             distribution_name = attributes.pop('distribution')
             distribution = getattr(scipy.stats, distribution_name)
             self.values[:, i] = distribution(**attributes).ppf(self.quantiles[:, i])
         self._create_parameter_study()
+
+    def parameter_dictionary(self):
+        return {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'}
 
     def write(self):
         super().write()
