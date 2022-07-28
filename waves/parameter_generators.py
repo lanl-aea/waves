@@ -418,6 +418,7 @@ class LatinHypercube(_ParameterGenerator):
                     if not isinstance(key, str) or not key.isidentifier():
                         raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
                                         "Python identifier")
+        self.parameter_distributions = self._generate_parameter_distributions()
 
     def generate(self):
         """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study."""
@@ -426,13 +427,12 @@ class LatinHypercube(_ParameterGenerator):
         self._create_parameter_set_names(set_count)
         self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
         self.values = numpy.zeros((set_count, parameter_count))
-        self.parameter_distributions = self._generate_parameter_distributions()
         for i, distribution in enumerate(self.parameter_distributions.values()):
             self.values[:, i] = distribution.ppf(self.quantiles[:, i])
         self._create_parameter_study()
 
     def _generate_parameter_distributions(self):
-        """Return a dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
+        """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
 
         :return: parameter_distributions
         :rtype: dict
