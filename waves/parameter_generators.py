@@ -323,6 +323,10 @@ class CartesianProduct(_ParameterGenerator):
            'parameter_1': [1, 2],
            'parameter_2': ['a', 'b']
        }
+
+    Attributes
+
+    * parameter_names: A list of parameter name strings
     """
 
     def validate(self):
@@ -394,6 +398,11 @@ class LatinHypercube(_ParameterGenerator):
                'scale': 2
            }
        }
+
+    Attributes
+
+    * parameter_names: A list of parameter name strings
+    * parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
     """
 
     def validate(self):
