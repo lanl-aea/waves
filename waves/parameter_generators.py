@@ -156,6 +156,16 @@ class _ParameterGenerator(ABC):
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
+    def write_builder_function(target, source, env):
+        """`SCons Python build function`_ wrapper for the write() function.
+
+        :param list target: The target file list of strings
+        :param list source: The source file list of SCons.Node.FS.File objects
+        :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+        """
+        self.write()
+        return None
+
     def _write_dataset(self, parameter_set_files):
         if self.output_file:
             if self.dryrun:
