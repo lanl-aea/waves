@@ -56,6 +56,10 @@ environment:
   variables:
     GIT_STRATEGY: clone
   script:
+    # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
+    - unset LD_LIBRARY_PATH
+    # Set LANL proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
     - export HTTP_PROXY="http://$ALL_PROXY"
     - export HTTPS_PROXY=$HTTP_PROXY
@@ -84,6 +88,9 @@ microbump:
   variables:
     GIT_STRATEGY: clone
   script:
+    # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
+    - unset LD_LIBRARY_PATH
     # Conditionally "bump" micro version number. setuptools_scm already bumps number, just need to strip local version.
     - old_version=$(python -m setuptools_scm)
     # First capture group is the major.minor.micro numbers
@@ -176,7 +183,8 @@ deploy:
   variables:
     GIT_STRATEGY: clone
   script:
-    # DEBUGGING: "cp: relocation error: /lib64/libacl.so.1: symbol getxattr, version ATTR_1.0 not defined in file libattr.so.1 with link time reference"
+    # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
     - unset LD_LIBRARY_PATH
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
@@ -201,7 +209,8 @@ pages:
   variables:
     GIT_STRATEGY: clone
   script:
-    # DEBUGGING: "cp: relocation error: /lib64/libacl.so.1: symbol getxattr, version ATTR_1.0 not defined in file libattr.so.1 with link time reference"
+    # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
     - unset LD_LIBRARY_PATH
     # Set job-wide variables and directories
     - repo_root=$PWD
