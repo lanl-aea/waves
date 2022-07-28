@@ -103,9 +103,9 @@ for set_name in set_names:
         abaqus_options=abaqus_options))
 
     # Extract Abaqus
-    extract_source_list = [f"{current_set_name / job_name}.odb"]
+    extract_source_list = [f"{set_name / job_name}.odb"]
     workflow.extend(env.AbaqusExtract(
-        target=[f"{current_set_name / job_name}.h5"],
+        target=[f"{set_name / job_name}.h5"],
         source=extract_source_list))
 
 # Collector alias based on parent directory name
