@@ -1,6 +1,7 @@
 """Test LatinHypercube Class
 """
 
+from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
 from waves.parameter_generators import LatinHypercube
@@ -47,12 +48,13 @@ class TestLatinHypercube:
                              validate_input.values(),
                              ids=validate_input.keys())
     def test__validate(self, parameter_schema, outcome):
-        with outcome:
+        with patch("waves.parameter_generators.LatinHypercube._generate_parameter_distributions") as mock_distros, \
+             outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = LatinHypercube(parameter_schema)
-            finally:
-                pass
+            else:
+                mock_distros.assert_called_once()
 
     generate_input = {
         "good schema 5x2":
