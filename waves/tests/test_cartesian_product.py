@@ -26,7 +26,7 @@ class TestCartesianProduct:
             pytest.raises(TypeError)
         ),
         "bad schema str": (
-            {'parameter_1': '1'},
+            {'parameter_1': 'one'},
             pytest.raises(TypeError)
         ),
     }
@@ -48,10 +48,10 @@ class TestCartesianProduct:
                           numpy.array([[1], [2]])),
         'two_parameter': ({'parameter_1': [1, 2], 'parameter_2': ['a', 'b']},
                           numpy.array(
-                              [["1", "a"],
-                               ["1", "b"],
-                               ["2", "a"],
-                               ["2", "b"]]))
+                              [[1, "a"],
+                               [1, "b"],
+                               [2, "a"],
+                               [2, "b"]], dtype=object))
     }
 
     @pytest.mark.unittest
@@ -85,10 +85,10 @@ class TestCartesianProduct:
              None,
              'yaml',
              4,
-             [call("parameter_1: '1'\nparameter_2: 'a'\n"),
-              call("parameter_1: '1'\nparameter_2: 'b'\n"),
-              call("parameter_1: '2'\nparameter_2: 'a'\n"),
-              call("parameter_1: '2'\nparameter_2: 'b'\n")]),
+             [call("parameter_1: 1\nparameter_2: 'a'\n"),
+              call("parameter_1: 1\nparameter_2: 'b'\n"),
+              call("parameter_1: 2\nparameter_2: 'a'\n"),
+              call("parameter_1: 2\nparameter_2: 'b'\n")]),
         'one parameter one file yaml':
             ({"parameter_1": [1, 2]},
              None,
@@ -103,10 +103,10 @@ class TestCartesianProduct:
              'parameter_study.yaml',
              'yaml',
              1,
-             [call("parameter_set0:\n  parameter_1: '1'\n  parameter_2: 'a'\n" \
-                   "parameter_set1:\n  parameter_1: '1'\n  parameter_2: 'b'\n" \
-                   "parameter_set2:\n  parameter_1: '2'\n  parameter_2: 'a'\n" \
-                   "parameter_set3:\n  parameter_1: '2'\n  parameter_2: 'b'\n")])
+             [call("parameter_set0:\n  parameter_1: 1\n  parameter_2: 'a'\n" \
+                   "parameter_set1:\n  parameter_1: 1\n  parameter_2: 'b'\n" \
+                   "parameter_set2:\n  parameter_1: 2\n  parameter_2: 'a'\n" \
+                   "parameter_set3:\n  parameter_1: 2\n  parameter_2: 'b'\n")])
     }
 
     @pytest.mark.unittest
