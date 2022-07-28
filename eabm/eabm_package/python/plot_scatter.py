@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""field output scatter plots"""
+"""Example of catenating WAVES parameter study results and definition"""
 
 import sys
 import argparse
@@ -10,6 +10,26 @@ import matplotlib.pyplot
 
 
 def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, parameter_study_file=None):
+    """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
+
+    Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
+    parameter study dataset file is assumed to be written by a WAVES parameter generator. Currently assumes the selected
+    data as harcoded dictionary
+
+    .. code-block::
+
+       select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
+
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing XArray Datasets
+    :param str output_file: The plot file name. Relative or absolute path.
+    :param str group_path: The h5netcdf group path locating the XArray Dataset in the input files.
+    :param str x_var: The independent (x-axis) variable key name for the XArray Dataset "data variable"
+    :param str x_units: The independent (x-axis) units
+    :param str y_var: The dependent (y-axis) variable key name for the XArray Dataset "data variable"
+    :param str y_units: The dependent (y-axis) units
+    :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
+        h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
+    """
     # TODO: Move dataset meta script assumptions to CLI
     select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
     concat_coord = "parameter_sets"
@@ -72,9 +92,9 @@ def get_parser():
     parser.add_argument("-g", "--group-path", type=str, default=default_group_path,
                         help="The h5py group path to the dataset object (default: %(default)s)")
     parser.add_argument("-x", "--x-var", type=str, default=default_x_var,
-                        help="The dependent (x-axis) variable name (default: %(default)s)")
+                        help="The independent (x-axis) variable name (default: %(default)s)")
     parser.add_argument("-y", "--y-var", type=str, default=default_y_var,
-                        help="The independent (y-axis) variable name (default: %(default)s)")
+                        help="The dependent (y-axis) variable name (default: %(default)s)")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
                         help="An optional h5 file with a WAVES parameter study XArray Dataset (default: %(default)s)")
 
