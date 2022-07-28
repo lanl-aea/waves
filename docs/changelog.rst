@@ -51,6 +51,9 @@ Internal Changes
 Enhancements
 ============
 - Construct WAVES and WAVES-EABM alias list from SCons configuration (:issue:`56`, :merge:`213`). By `Kyle Brindley`_.
+- Add the ``scipy.stats`` parameter name to distribution object mapping dictionary as the ``parameter_distributions``
+  attribute of the ``LatinHypercube`` class for use by downstream tools and workflows (:issue:`228`, :merge:`220`). By
+  `Kyle Brindley`_.
 
 ******************
 0.2.1 (2022-07-22)

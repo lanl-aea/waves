@@ -1,6 +1,7 @@
 """Test LatinHypercube Class
 """
 
+from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
 from waves.parameter_generators import LatinHypercube
@@ -47,10 +48,12 @@ class TestLatinHypercube:
                              validate_input.values(),
                              ids=validate_input.keys())
     def test__validate(self, parameter_schema, outcome):
-        with outcome:
+        with patch("waves.parameter_generators.LatinHypercube._generate_parameter_distributions") as mock_distros, \
+             outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = LatinHypercube(parameter_schema)
+                mock_distros.assert_called_once()
             finally:
                 pass
 
@@ -86,3 +89,12 @@ class TestLatinHypercube:
         expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
         assert numpy.all(parameter_set_names == expected_set_names)
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('parameter_schema',
+                             generate_input.values(),
+                             ids=generate_input.keys())
+    def test_generate_parameter_distributions(self, parameter_schema):
+        TestDistributions = LatinHypercube(parameter_schema)
+        assert TestDistributions.parameter_names == list(TestDistributions.parameter_distributions.keys())
+        # TODO: More rigorous scipy.stats object inspection to test object construction

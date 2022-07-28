@@ -3,6 +3,7 @@ import pathlib
 import string
 import sys
 import itertools
+import copy
 
 import numpy
 import xarray
@@ -30,8 +31,8 @@ class _ParameterGenerator(ABC):
     An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
     converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}.
-        Validated on class instantiation.
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
+        ``{parameter_name: schema_value}``.  Validated on class instantiation.
     :param str output_file_template: Output file name template. Required if parameter sets will be written to files
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
@@ -95,7 +96,7 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
-           self.parameter_names = self.parameter_schema.keys()
+           self.parameter_names = list(self.parameter_schema.keys())
         """
         pass
 
@@ -105,9 +106,12 @@ class _ParameterGenerator(ABC):
 
         Must set the class attributes:
 
+        * ``self.parameter_set_names``: list of parameter set name strings created by calling
+          ``self._create_parameter_set_names`` with the number of integer parameter sets.
         * ``self.values``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number of parameters)
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
-          ``_create_parameter_study()`` after defining ``values`` and the optional ``quantiles`` class attribute.
+          ``self.parameter_study = self._create_parameter_study()`` after defining ``self.values`` and the optional
+          ``self.quantiles`` class attribute.
 
         May set the class attributes:
 
@@ -128,7 +132,8 @@ class _ParameterGenerator(ABC):
     def write(self):
         """Write the parameter study to STDOUT or an output file.
 
-        Writes to STDOUT by default. Requires non-default ``output_file_template`` specification to write to files.
+        Writes to STDOUT by default. Requires non-default ``output_file_template`` or ``output_file`` specification to
+        write to files.
 
         If printing to STDOUT, print all parameter sets together. If printing to files, don't overwrite existing files.
         If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
@@ -312,7 +317,7 @@ class CartesianProduct(_ParameterGenerator):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
-    Expected parameter schema example:
+    Example
 
     .. code-block::
 
@@ -320,6 +325,26 @@ class CartesianProduct(_ParameterGenerator):
            'parameter_1': [1, 2],
            'parameter_2': ['a', 'b']
        }
+       parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
+       parameter_generator.generate()
+       print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:         (parameter_sets: 4, parameters: 2)
+       Coordinates:
+         * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
+         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+       Data variables:
+           values          (parameter_sets, parameters) <U21 '1' 'a' '1' ... '2' 'b'
+
+    Attributes after class instantiation
+
+    * parameter_names: A list of parameter name strings
+
+    Attributes after set generation
+
+    * parameter_set_names: list of parameter set name strings
+    * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
+    * parameter_study: The final parameter study XArray Dataset object
     """
 
     def validate(self):
@@ -367,21 +392,15 @@ class LatinHypercube(_ParameterGenerator):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
-    Expected parameter schema example:
+    Example
 
     .. code-block::
 
        parameter_schema = {
-           'num_simulations': 100  # Required key. Value must be an integer.
-           'parameter_name': {
-               'distribution': 'scipy_distribution_name',  # Required key. Value must be a valid scipy.stats
-                                                           # distribution name.
-               'kwarg_1': value,
-               'kwarg_2': value2
-           },
+           'num_simulations': 4  # Required key. Value must be an integer.
            'parameter_1': {
-               'distribution': 'norm',
-               'loc': 50,
+               'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
+               'loc': 50,               # distribution name.
                'scale': 1
            },
            'parameter_2': {
@@ -391,6 +410,29 @@ class LatinHypercube(_ParameterGenerator):
                'scale': 2
            }
        }
+       parameter_generator = waves.parameter_generators.LatinHypercube(parameter_schema)
+       parameter_generator.generate()
+       print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:         (parameter_sets: 100, parameters: 2)
+       Coordinates:
+         * parameter_sets  (parameter_sets) <U15 'parameter_set0' ... 'parameter_set99'
+         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+       Data variables:
+           values          (parameter_sets, parameters) float64 49.31 30.6 ... 31.36
+           quantiles       (parameter_sets, parameters) float64 0.245 0.245 ... 0.505
+
+    Attributes after class instantiation
+
+    * parameter_names: A list of parameter name strings
+    * parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
+
+    Attributes after set generation
+
+    * parameter_set_names: list of parameter set name strings
+    * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
+    * quantiles: The 2D parameter quantiles. Rows correspond to parameter set. Columns correspond to parameter names.
+    * parameter_study: The final parameter study XArray Dataset object
     """
 
     def validate(self):
@@ -415,6 +457,7 @@ class LatinHypercube(_ParameterGenerator):
                     if not isinstance(key, str) or not key.isidentifier():
                         raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
                                         "Python identifier")
+        self.parameter_distributions = self._generate_parameter_distributions()
 
     def generate(self):
         """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study."""
@@ -423,12 +466,22 @@ class LatinHypercube(_ParameterGenerator):
         self._create_parameter_set_names(set_count)
         self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
         self.values = numpy.zeros((set_count, parameter_count))
-        parameter_dict = {key: value for key, value in self.parameter_schema.items() if key != 'num_simulations'}
-        for i, attributes in enumerate(parameter_dict.values()):
-            distribution_name = attributes.pop('distribution')
-            distribution = getattr(scipy.stats, distribution_name)
-            self.values[:, i] = distribution(**attributes).ppf(self.quantiles[:, i])
+        for i, distribution in enumerate(self.parameter_distributions.values()):
+            self.values[:, i] = distribution.ppf(self.quantiles[:, i])
         self._create_parameter_study()
+
+    def _generate_parameter_distributions(self):
+        """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
+
+        :return: parameter_distributions
+        :rtype: dict
+        """
+        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self.parameter_names})
+        parameter_distributions = {}
+        for parameter, attributes in parameter_dictionary.items():
+            distribution_name = attributes.pop('distribution')
+            parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
+        return parameter_distributions
 
     def write(self):
         super().write()
