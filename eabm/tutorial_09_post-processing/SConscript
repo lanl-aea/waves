@@ -20,8 +20,10 @@ python_source_abspath = project_dir / python_source_dir
 model = "single_element"
 
 # Collect the target nodes to build a concise alias for all targets
+# TODO: Find a way to write the parameter study file to the build directory without constructing the build directory
+parent_directory = Dir('.').srcnode().name
 parameter_study_syntax = "h5"
-parameter_study_file = f"parameter_study.{parameter_study_syntax}"
+parameter_study_file = pathlib.Path(f"{env['variant_dir_base']}/{parent_directory}/parameter_study.{parameter_study_syntax}")
 workflow = []
 
 # Parameter Study with Cartesian Product
@@ -30,9 +32,17 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     output_file=parameter_study_file,
     output_file_type=parameter_study_syntax)
 parameter_generator.generate()
-# TODO: Move the write method call to a builder or Command() task
-parameter_generator.write()
 parameter_study = parameter_generator.parameter_study
+
+# TODO: Find a way to write the parameter study without a user-custom Python build function
+def write_parameter_study(target, source, env):
+    parameter_generator.write()
+    return None
+
+workflow.extend(env.Command(
+    target=[parameter_study_file.name],
+    source=[str(python_source_abspath / "tutorial_07_cartesian_product.py")],
+    action=[write_parameter_study]))
 
 # Prepare object types for parameterization loop
 set_names = [pathlib.Path(set_name) for set_name in parameter_study.parameter_sets.values]
@@ -121,10 +131,10 @@ plot_name = "stress_strain_comparison.pdf"
 post_processing_source = [f"{set_name / job_name}_datasets.h5" for set_name in set_names]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
-script_options += f" --parameter-study-file {parameter_study_file}"
+script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
     target=[plot_name],
-    source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file] + post_processing_source,
+    source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 # Collector alias based on parent directory name
