@@ -40,6 +40,7 @@ Documentation
   :merge:`204`). By `Kyle Brindley`_.
 - Clarify parameter generator behavior in external APIs. Add ABC write method docstring to parameter generators' APIs.
   (:issue:`195`, :merge:`214`). By `Kyle Brindley`_.
+- Placeholder structure for work-in-progress post-processing tutorial (:issue:`95`, :merge:`215`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
