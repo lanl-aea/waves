@@ -315,7 +315,7 @@ class CartesianProduct(_ParameterGenerator):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
-    Expected parameter schema example:
+    Example
 
     .. code-block::
 
@@ -323,10 +323,26 @@ class CartesianProduct(_ParameterGenerator):
            'parameter_1': [1, 2],
            'parameter_2': ['a', 'b']
        }
+       parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
+       parameter_generator.generate()
+       print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:         (parameter_sets: 4, parameters: 2)
+       Coordinates:
+         * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
+         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+       Data variables:
+           values          (parameter_sets, parameters) <U21 '1' 'a' '1' ... '2' 'b'
 
-    Attributes
+    Attributes after class instantiation
 
     * parameter_names: A list of parameter name strings
+
+    Attributes after set generation
+
+    * parameter_set_names: list of parameter set name strings
+    * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
+    * parameter_study: The final parameter study XArray Dataset object
     """
 
     def validate(self):
@@ -374,21 +390,15 @@ class LatinHypercube(_ParameterGenerator):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
-    Expected parameter schema example:
+    Example
 
     .. code-block::
 
        parameter_schema = {
-           'num_simulations': 100  # Required key. Value must be an integer.
-           'parameter_name': {
-               'distribution': 'scipy_distribution_name',  # Required key. Value must be a valid scipy.stats
-                                                           # distribution name.
-               'kwarg_1': value,
-               'kwarg_2': value2
-           },
+           'num_simulations': 4  # Required key. Value must be an integer.
            'parameter_1': {
-               'distribution': 'norm',
-               'loc': 50,
+               'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
+               'loc': 50,               # distribution name.
                'scale': 1
            },
            'parameter_2': {
@@ -398,11 +408,29 @@ class LatinHypercube(_ParameterGenerator):
                'scale': 2
            }
        }
+       parameter_generator = waves.parameter_generators.LatinHypercube(parameter_schema)
+       parameter_generator.generate()
+       print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:         (parameter_sets: 100, parameters: 2)
+       Coordinates:
+         * parameter_sets  (parameter_sets) <U15 'parameter_set0' ... 'parameter_set99'
+         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+       Data variables:
+           values          (parameter_sets, parameters) float64 49.31 30.6 ... 31.36
+           quantiles       (parameter_sets, parameters) float64 0.245 0.245 ... 0.505
 
-    Attributes
+    Attributes after class instantiation
 
     * parameter_names: A list of parameter name strings
     * parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
+
+    Attributes after set generation
+
+    * parameter_set_names: list of parameter set name strings
+    * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
+    * quantiles: The 2D parameter quantiles. Rows correspond to parameter set. Columns correspond to parameter names.
+    * parameter_study: The final parameter study XArray Dataset object
     """
 
     def validate(self):
