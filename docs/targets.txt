@@ -83,6 +83,7 @@
 .. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
 .. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
 .. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
+.. _`Xarray`: https://docs.xarray.dev/en/stable/
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves/cpp_stub

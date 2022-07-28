@@ -61,6 +61,11 @@ Post-processing script
 5. In the ``waves-eabm-tutorial/eabm_package/python`` directory, create a file called ``plot_scatter.py`` using the
    contents below.
 
+.. note::
+
+   Depending on the memory and disk resources available and the size of the simulation workflow results, modsim projects
+   may need to review the `Xarray`_ documentation for resource management specific to the projects' use case.
+
 .. admonition:: waves-eabm-tutorial/eabm_package/python/plot_scatter.py
 
    .. literalinclude:: python_plot_scatter.py
