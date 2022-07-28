@@ -49,3 +49,13 @@ single_element_mesh.py
 
 .. argparse::
     :ref: eabm_package.cubit.single_element_mesh.get_parser
+
+******
+python
+******
+
+plot_scatter.py
+===============
+
+.. argparse::
+    :ref: eabm_package.python.plot_scatter.get_parser

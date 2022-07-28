@@ -46,7 +46,7 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
 
 def get_parser():
     script_name = pathlib.Path(__file__)
-    default_output_file = script_name.stem
+    default_output_file = f"{script_name.stem}.pdf"
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
     default_x_var = "LE"
     default_y_var = "S"
@@ -63,7 +63,7 @@ def get_parser():
     required_named.add_argument("--x-units", type=str, required=True,
                                 help="The dependent (x-axis) units string.")
     required_named.add_argument("--y-units", type=str, required=True,
-                                help="The dependent (y-axis) units string.")
+                                help="The independent (y-axis) units string.")
 
     parser.add_argument("-o", "--output-file", type=str, default=default_output_file,
                         help="The output file for the stress-strain comparison plot with extension, " \
@@ -76,7 +76,7 @@ def get_parser():
     parser.add_argument("-y", "--y-var", type=str, default=default_y_var,
                         help="The independent (y-axis) variable name (default: %(default)s)")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
-                        help="An optional h5 file with a WAVES parameter study XArray Dataset (default: %(default)s")
+                        help="An optional h5 file with a WAVES parameter study XArray Dataset (default: %(default)s)")
 
     return parser
 

@@ -78,3 +78,16 @@ single_element_mesh.py
     :members:
     :show-inheritance:
     :synopsis: The Cubit single element mesh script
+
+******
+python
+******
+
+plot_scatter.py
+===============
+
+.. automodule:: eabm_package.python.plot_scatter
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: Post-process with data catenation and plotting
