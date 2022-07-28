@@ -17,13 +17,13 @@ python_source_dir = env['python_source_dir']
 python_source_abspath = project_dir / python_source_dir
 
 # Simulation variables
-model = "single_element"
-
-# Collect the target nodes to build a concise alias for all targets
 # TODO: Find a way to write the parameter study file to the build directory without constructing the build directory
 parent_directory = Dir('.').srcnode().name
 parameter_study_syntax = "h5"
 parameter_study_file = pathlib.Path(f"{env['variant_dir_base']}/{parent_directory}/parameter_study.{parameter_study_syntax}")
+model = "single_element"
+
+# Collect the target nodes to build a concise alias for all targets
 workflow = []
 
 # Parameter Study with Cartesian Product
