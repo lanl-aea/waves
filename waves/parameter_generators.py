@@ -132,7 +132,8 @@ class _ParameterGenerator(ABC):
     def write(self):
         """Write the parameter study to STDOUT or an output file.
 
-        Writes to STDOUT by default. Requires non-default ``output_file_template`` specification to write to files.
+        Writes to STDOUT by default. Requires non-default ``output_file_template`` or ``output_file`` specification to
+        write to files.
 
         If printing to STDOUT, print all parameter sets together. If printing to files, don't overwrite existing files.
         If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
