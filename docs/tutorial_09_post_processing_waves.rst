@@ -54,6 +54,18 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorial_08_data_extraction_SConscript
 
+**********************
+Post-processing script
+**********************
+
+5. In the ``waves-eabm-tutorial/eabm_package/python`` directory, create a file called ``plot_scatter.py`` using the
+   contents below.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/python/plot_scatter.py
+
+   .. literalinclude:: python_plot_scatter.py
+      :language: Python
+
 **********
 SConstruct
 **********
@@ -71,7 +83,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 
