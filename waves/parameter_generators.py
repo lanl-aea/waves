@@ -358,7 +358,7 @@ class CartesianProduct(_ParameterGenerator):
 
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
-        self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())))
+        self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         set_count = self.values.shape[0]
         self._create_parameter_set_names(set_count)
         self._create_parameter_study()
