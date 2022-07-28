@@ -32,7 +32,7 @@ class _ParameterGenerator(ABC):
     converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
-        ``{parameter_name: schema_value}``.  Validated on class instantiation.
+        ``{parameter_name: schema_value}``.  Verified on class instantiation.
     :param str output_file_template: Output file name template. Required if parameter sets will be written to files
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
@@ -377,7 +377,7 @@ class LatinHypercube(_ParameterGenerator):
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
-        Validated on class instantiation.
+        Verified on class instantiation.
     :param str output_file_template: Output file name template. Required if parameter sets will be written to files
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
