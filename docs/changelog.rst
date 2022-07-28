@@ -40,6 +40,7 @@ Documentation
   :merge:`204`). By `Kyle Brindley`_.
 - Clarify parameter generator behavior in external APIs. Add ABC write method docstring to parameter generators' APIs.
   (:issue:`195`, :merge:`214`). By `Kyle Brindley`_.
+- Placeholder structure for work-in-progress post-processing tutorial (:issue:`95`, :merge:`215`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -47,6 +48,8 @@ Internal Changes
 - Avoid file I/O during parameter study write pytests (:issue:`217`, :merge:`211`). By `Kyle Brindley`_.
 - Add matplotlib to the CI environment for the pending post-processing tutorial (:issue:`221`, :merge:`216`). By `Kyle
   Brindley`_.
+- Add configuration and integration test files for a post-processing demonstration, including merging a parameter study
+  with the results data. (:issue:`95`, :merge:`215`). By `Kyle Brindley`_.
 
 Enhancements
 ============

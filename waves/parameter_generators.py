@@ -28,7 +28,7 @@ parameter_study_meta_file = "parameter_study_meta.txt"
 class _ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
-    An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+    An Xarray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
     converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
@@ -142,7 +142,7 @@ class _ParameterGenerator(ABC):
         Writes parameter set files in YAML syntax by default. Output formatting is controlled by
         ``output_file_type``.
 
-        An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+        An Xarray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
         converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
         .. code-block::
@@ -297,7 +297,7 @@ class _ParameterGenerator(ABC):
 class CartesianProduct(_ParameterGenerator):
     """Builds a cartesian product parameter study
 
-    An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+    An Xarray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
     converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
@@ -370,7 +370,7 @@ class CartesianProduct(_ParameterGenerator):
 class LatinHypercube(_ParameterGenerator):
     """Builds a Latin Hypercube parameter study
 
-    An XArray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
+    An Xarray Dataset is used to store the parameter study. If one parameter is a string, all parameters will be
     converted to strings. Explicit type conversions are recommended wherever the parameter values are used.
 
     The 'h5' output file type is the only output type that contains both the parameter values *and* quantiles.

@@ -73,6 +73,7 @@ documentation_file_list = [
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_07_latin_hypercube_waves.rst',
     'tutorial_08_data_extraction_waves.rst',
+    'tutorial_09_post_processing_waves.rst',
     'tutorial_cubit.rst',
     'tutorial_environment_activation.txt',
     'waves_logo_brandmark_smaller.png',
@@ -97,6 +98,7 @@ tutorial_files_list = [
     eabm_dir / 'tutorial_07_cartesian_product_SConstruct',
     eabm_dir / 'tutorial_07_latin_hypercube_SConstruct',
     eabm_dir / 'tutorial_08_data_extraction_SConstruct',
+    eabm_dir / 'tutorial_09_post_processing_SConstruct',
     eabm_dir / 'tutorial_cubit_SConstruct',
     eabm_dir / env['tutorial_01_dir'] / 'SConscript',
     eabm_dir / env['tutorial_02_dir'] / 'SConscript',
@@ -107,6 +109,7 @@ tutorial_files_list = [
     eabm_dir / env['tutorial_07_cp_dir'] / 'SConscript',
     eabm_dir / env['tutorial_07_lh_dir'] / 'SConscript',
     eabm_dir / env['tutorial_08_dir'] / 'SConscript',
+    eabm_dir / env['tutorial_09_dir'] / 'SConscript',
     eabm_dir / env['tutorial_cubit_dir'] / 'SConscript',
     eabm_dir / 'SConstruct',
     eabm_dir / env['abaqus_dir'] / 'single_element_geometry.py',
@@ -127,7 +130,8 @@ tutorial_files_list = [
     eabm_dir / env['cubit_dir'] / 'single_element_mesh.py',
     eabm_dir / env['python_dir'] / 'single_element_compression_nominal.py',
     eabm_dir / env['python_dir'] / 'tutorial_07_cartesian_product.py',
-    eabm_dir / env['python_dir'] / 'tutorial_07_latin_hypercube.py'
+    eabm_dir / env['python_dir'] / 'tutorial_07_latin_hypercube.py',
+    eabm_dir / env['python_dir'] / 'plot_scatter.py'
 ]
 for file_path in tutorial_files_list:
     target = f'{file_path.parts[-2]}_{file_path.name}'
