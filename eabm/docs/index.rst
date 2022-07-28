@@ -16,7 +16,7 @@
 
 .. toctree::
    :caption: Help & Reference
-   :maxdepth: 2
+   :maxdepth: 1
 
    release_philosophy
    changelog
