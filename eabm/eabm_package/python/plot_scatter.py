@@ -20,12 +20,12 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
 
        select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
 
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing XArray Datasets
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray Datasets
     :param str output_file: The plot file name. Relative or absolute path.
-    :param str group_path: The h5netcdf group path locating the XArray Dataset in the input files.
-    :param str x_var: The independent (x-axis) variable key name for the XArray Dataset "data variable"
+    :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
+    :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
     :param str x_units: The independent (x-axis) units
-    :param str y_var: The dependent (y-axis) variable key name for the XArray Dataset "data variable"
+    :param str y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
     :param str y_units: The dependent (y-axis) units
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
@@ -96,7 +96,7 @@ def get_parser():
     parser.add_argument("-y", "--y-var", type=str, default=default_y_var,
                         help="The dependent (y-axis) variable name (default: %(default)s)")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
-                        help="An optional h5 file with a WAVES parameter study XArray Dataset (default: %(default)s)")
+                        help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)")
 
     return parser
 
