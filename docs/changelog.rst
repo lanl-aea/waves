@@ -50,6 +50,8 @@ Internal Changes
   Brindley`_.
 - Add configuration and integration test files for a post-processing demonstration, including merging a parameter study
   with the results data. (:issue:`95`, :merge:`215`). By `Kyle Brindley`_.
+- Simplify the WAVES-EABM parameter study variables and their usage in the simulation configuration files (:issue:`219`,
+  :merge:`221`). By `Kyle Brindley`_.
 
 Enhancements
 ============
