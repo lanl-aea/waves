@@ -53,8 +53,9 @@ class TestLatinHypercube:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = LatinHypercube(parameter_schema)
-            else:
                 mock_distros.assert_called_once()
+            finally:
+                pass
 
     generate_input = {
         "good schema 5x2":
@@ -93,6 +94,6 @@ class TestLatinHypercube:
     @pytest.mark.parametrize('parameter_schema',
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate_parameter_distributions(parameter_schema)
+    def test_generate_parameter_distributions(self, parameter_schema):
         TestDistributions = LatinHypercube(parameter_schema)
         assert TestDistributions.parameter_names == list(TestDistributions.parameter_distributions.keys())
