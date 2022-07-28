@@ -513,7 +513,7 @@ class CustomStudy(_ParameterGenerator):
     .. code-block::
 
        parameter_schema = dict(
-               parameter_samples = numpy.array([[1.0, 'a', 5], [2.0, 'b', 6]]),
+               parameter_samples = numpy.array([[1.0, 'a', 5], [2.0, 'b', 6]], dtype='object'),
                parameter_names = numpy.array(['height', 'prefix', 'index']))
        parameter_generator = waves.parameter_generators.CustomStudy(parameter_schema)
        parameter_generator.generate()
@@ -524,7 +524,7 @@ class CustomStudy(_ParameterGenerator):
          * parameter_sets  (parameter_sets) <U14 'parameter_set0' 'parameter_set1'
          * parameters      (parameters) <U6 'height' 'prefix' 'index'
        Data variables:
-           values          (parameter_sets, parameters) <U32 '1.0' 'a' '5' ... 'b' '6'
+           values          (parameter_sets, parameters) object 1.0 'a' 5 2.0 'b' 6
 
     Attributes after class instantiation
 
@@ -543,7 +543,7 @@ class CustomStudy(_ParameterGenerator):
             self.parameter_names = self.parameter_schema['parameter_names']
         except KeyError:
             raise KeyError('parameter_schema must contain the keys: parameter_names, parameter_samples')
-        if len(self.parameter_names) != numpy.array(self.parameter_schema['parameter_samples']).shape[1]:
+        if len(self.parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
             raise ValueError('The parameter samples must be an array of shape M x N, where N is the number of parameters.')
         return
 
