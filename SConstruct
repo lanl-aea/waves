@@ -23,6 +23,7 @@ project_variables = {
     'tutorial_07_cp_dir': 'tutorial_07_cartesian_product',
     'tutorial_07_lh_dir': 'tutorial_07_latin_hypercube',
     'tutorial_08_dir': 'tutorial_08_data_extraction',
+    'tutorial_09_dir': 'tutorial_09_post_processing',
     'tutorial_cubit_dir': 'tutorial_cubit'
 }
 
@@ -95,9 +96,14 @@ pytest_aliases = SConscript(dirs=package_source_dir, exports='env', duplicate=Fa
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
-# TODO: recover alias list from SCons variable instead of constructing manually
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/33
-alias_list = docs_aliases + pytest_aliases
+# This must come *after* all expected Alias definitions and SConscript files.
+try:
+    # Recover from SCons configuration
+    from SCons.Node.Alias import default_ans
+    alias_list = default_ans
+except ImportError:
+    # Fall back to manually constructed alias list(s)
+    alias_list = docs_aliases + pytest_aliases
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"

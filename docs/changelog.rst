@@ -1,13 +1,72 @@
 .. _changelog:
 
-
 #########
 Changelog
 #########
 
 *******************
-0.2.2 (unreleased)
+0.2.3 (unreleased)
 *******************
+
+*******************
+0.2.2 (2022-07-28)
+*******************
+
+Breaking changes
+================
+- Parmeter study writes to YAML syntax by default to provide syntactically correct STDOUT default behavior. Note that
+  the ``write()`` feature isn't used in the WAVES-EABM tutorials, so the user manual documentation is unchanged.
+  (:issue:`218`, :merge:`212`). By `Kyle Brindley`_.
+- Remove the parameter study python syntax output. Recommend using YAML syntax and the PyYAML package if parameter study
+  output files must use a text based serialization format. (:issue:`223`, :merge:`217`). By `Kyle Brindley`_.
+
+New Features
+============
+- Add the latin hypercube generator to the parameter study command line utility (:issue:`216`, :merge:`207`). By `Kyle
+  Brindley`_.
+- Accept output template pathlike strings and write parameter study meta file in the same parent directory as the
+  parameter set files (:issue:`79`, :merge:`210`). By `Kyle Brindley`_.
+- Add the option to output the parameter study sets as Xarray Dataset H5 files (:issue:`218`, :merge:`212`). By `Kyle
+  Brindley`_.
+- Add the option to output the parameter study as a single file (:issue:`222`, :merge:`218`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Fix the representation of strings in the parameter generator parameter set output files (:issue:`215`, :merge:`206`).
+  By `Kyle Brindley`_.
+- Fix the parameter study meta file write behavior to match documentation (:merge:`209`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Provide Abaqus files in the appendix for users without access to the WAVES or WAVES-EABM repository files
+  (:issue:`206`, :merge:`203`). By `Kyle Brindley`_.
+- Remove the ABC ParameterGenerator abstract method docstrings from the parameter generators' APIs (:issue:`213`,
+  :merge:`204`). By `Kyle Brindley`_.
+- Clarify parameter generator behavior in external APIs. Add ABC write method docstring to parameter generators' APIs.
+  (:issue:`195`, :merge:`214`). By `Kyle Brindley`_.
+- Placeholder structure for work-in-progress post-processing tutorial (:issue:`95`, :merge:`215`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Add cartesian product schema validation (:issue:`80`, :merge:`208`). By `Kyle Brindley`_.
+- Avoid file I/O during parameter study write pytests (:issue:`217`, :merge:`211`). By `Kyle Brindley`_.
+- Add matplotlib to the CI environment for the pending post-processing tutorial (:issue:`221`, :merge:`216`). By `Kyle
+  Brindley`_.
+- Add configuration and integration test files for a post-processing demonstration, including merging a parameter study
+  with the results data. (:issue:`95`, :merge:`215`). By `Kyle Brindley`_.
+- Simplify the WAVES-EABM parameter study variables and their usage in the simulation configuration files (:issue:`219`,
+  :merge:`221`). By `Kyle Brindley`_.
+- Changed validated to verified in WAVES acronym as it better reflects the intent of the tool (:issue:`220`,
+  :merge:`222`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Construct WAVES and WAVES-EABM alias list from SCons configuration (:issue:`56`, :merge:`213`). By `Kyle Brindley`_.
+- Add the ``scipy.stats`` parameter name to distribution object mapping dictionary as the ``parameter_distributions``
+  attribute of the ``LatinHypercube`` class for use by downstream tools and workflows (:issue:`228`, :merge:`220`). By
+  `Kyle Brindley`_.
+- Avoid type conversions with mixed type cartesian product parameter studies (:issue:`225`, :merge:`223`). By `Kyle
+  Brindley`_.
 
 ******************
 0.2.1 (2022-07-22)
@@ -22,6 +81,18 @@ New Features
 - Add the ``find_program`` method to search for an ordered list of program names (:issue:`65`, :merge:`185`). By `Kyle
   Brindley`_.
 - Add a LatinHypercube parameter generator (:issue:`77`, :merge:`192`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add minimal structure to data extraction tutorial (:issue:`198`, :merge:`183`). By `Kyle Brindley`_.
+- Add a brief draft of the documentation computational practice discussion (:issue:`124`, :merge:`184`). By `Kyle
+  Brindley`_.
+- Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
+- Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
+- Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
+- Add a mulit-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
+  Brindley`_.
+- Add a Latin Hypercube tutorial (:issue:`211`, :merge:`200`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -38,18 +109,6 @@ Internal Changes
   Brindley`_.
 - Add ``smt`` to waves development environment to support latin hypercube parameter generator (:merge:`195`). By `Kyle
   Brindley`_.
-
-Documentation
-=============
-- Add minimal structure to data extraction tutorial (:issue:`198`, :merge:`183`). By `Kyle Brindley`_.
-- Add a brief draft of the documentation computational practice discussion (:issue:`124`, :merge:`184`). By `Kyle
-  Brindley`_.
-- Add a Cubit example draft to the tutorials (:issue:`203`, :merge:`186`). By `Kyle Brindley`_.
-- Separate the internal and external API (:issue:`200`, :merge:`188`). By `Kyle Brindley`_.
-- Add private methods to the internal API (:merge:`190`). By `Kyle Brindley`_.
-- Add a mulit-action task example using the general purpose SCons Command builder (:issue:`196`, :merge:`198`). By `Kyle
-  Brindley`_.
-- Add a Latin Hypercube tutorial (:issue:`211`, :merge:`200`). By `Kyle Brindley`_.
 
 Enhancements
 ============
@@ -69,16 +128,16 @@ Documentation
 0.1.16 (2022-07-14)
 *******************
 
-Internal Changes
-================
-- Reduce the simulation variables and substitution dictionary to a single dictionary (:issue:`181`, :merge:`177`). By
-  `Kyle Brindley`_.
-
 Documentation
 =============
 - Update Scons terminal output and sample tree output in the tutorials to reflect the state of a user's tutorial files
   (:issue:`189`, :merge:`174`). By `Thomas Roberts`_.
 - Add a pure SCons quickstart tutorial (:issue:`48`, :merge:`173`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Reduce the simulation variables and substitution dictionary to a single dictionary (:issue:`181`, :merge:`177`). By
+  `Kyle Brindley`_.
 
 *******************
 0.1.15 (2022-07-14)

@@ -47,6 +47,10 @@ Directory Structure
    $ git archive --format=zip --remote=ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git HEAD:eabm/eabm_package/abaqus > source_abaqus.zip
    $ unzip source_abaqus.zip -d eabm_package/abaqus
 
+.. note::
+
+   If you do not have access to the `WAVES-EABM`_ directory of the `WAVES`_,
+   the Abaqus source files can be found in the :ref:`eabm_input_files` appendix.
 
 ***************
 SConstruct File

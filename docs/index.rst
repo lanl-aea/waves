@@ -44,6 +44,7 @@
    tutorial_07_cartesian_product_waves
    tutorial_07_latin_hypercube_waves
    tutorial_08_data_extraction_waves
+   tutorial_09_post_processing_waves
    tutorial_cubit
    scons_multiactiontask
 
@@ -65,7 +66,7 @@
 
 .. toctree::
    :caption: Help and Reference
-   :maxdepth: 2
+   :maxdepth: 1
 
    internal_api
    release_philosophy
@@ -83,6 +84,7 @@
 
    eabm_api
    eabm_cli
+   eabm_abaqus_files
 
 .. raw:: latex
 

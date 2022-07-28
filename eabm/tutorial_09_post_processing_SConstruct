@@ -65,7 +65,8 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 env.Append(BUILDERS={
     'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
-    'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus'])})
+    'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus']),
+    'PythonScript': waves.builders.python_script()})
 
 # Add simulation targets
 eabm_simulation_directories = [
@@ -76,7 +77,8 @@ eabm_simulation_directories = [
     'tutorial_05_parameter_substitution',
     'tutorial_06_include_files',
     'tutorial_07_cartesian_product',
-    'tutorial_08_data_extraction'
+    'tutorial_08_data_extraction',
+    'tutorial_09_post_processing'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir

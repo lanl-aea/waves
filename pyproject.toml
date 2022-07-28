@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "WAVES"
-description = "WAVES Analysis for Validated Engineering Simulations"
+description = "WAVES Analysis for Verified Engineering Simulations"
 readme = "README.rst"
 classifiers = ["Programming Language:: Python :: 3"]
 dynamic = ["version"]
