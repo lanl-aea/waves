@@ -3,6 +3,7 @@ import pathlib
 import string
 import sys
 import itertools
+import copy
 
 import numpy
 import xarray
@@ -474,7 +475,7 @@ class LatinHypercube(_ParameterGenerator):
         :return: parameter_distributions
         :rtype: dict
         """
-        parameter_dictionary = {key: self.parameter_schema[key] for key in self.parameter_names}
+        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self.parameter_names})
         parameter_distributions = {}
         for parameter, attributes in parameter_dictionary.items():
             distribution_name = attributes.pop('distribution')
