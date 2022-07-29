@@ -236,20 +236,18 @@ following two important aspects of the code above:
       :start-after: marker-5
       :end-before: marker-6
 
+The code above closes out our familiar workflow with the use of the :meth:`waves.builders.AbaqusSolver` method. Just as 
+in previous tutorials, we first run a datacheck to confirm that the Abaqus Solver's requirements are satisfied, and then 
+the simulation is executed in ernest. Note that the ``# Abaqus Solver`` code is still within the ``for`` loop, so the 
+Abaqus Solver will be called as many times as we have parameter sets. In this case, we will solve four Abaqus 
+simulations.
+
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
       :language: Python
       :lineno-match:
       :start-after: marker-6
-      :end-before: marker-7
-
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
-
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
-      :language: Python
-      :lineno-match:
-      :start-after: marker-7
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.
