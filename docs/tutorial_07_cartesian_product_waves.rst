@@ -249,6 +249,10 @@ simulations.
       :lineno-match:
       :start-after: marker-6
 
+The final additions to the ``SConscript`` file is a few lines of code that are directly copy-and-pasted from your 
+previous tutorial ``SConscript`` file. Note, however, that these final lines of code are outside of the ``for`` loop 
+that containted the previous snippets code.
+
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.
 
