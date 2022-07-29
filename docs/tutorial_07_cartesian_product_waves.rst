@@ -202,9 +202,15 @@ in a ``list`` container. We will iterate through this list in upcomming code to 
       :end-before: marker-4
 
 The above code uses the ``set_name`` list of ``Python pathlib`_ objects as an iterable to form the 
-``simulation_variables`` parameter substitution dictionary. Recall from :ref:`tutorial_parameter_substitution_waves`
-:ref:`tutorial_parameter_substitution_waves_SConscript` that you created a single ``simulation_variables`` dictionary in 
-the ``SConscript`` file with leading and trailing ``@`` characters for parameter substitution.
+``simulation_variables`` parameter substitution dictionary. At first declaration, ``simulation_variables`` is a 
+list of parameter values specific to the parameter set ``set_name``. However, recall from 
+:ref:`tutorial_parameter_substitution_waves` ref:`tutorial_parameter_substitution_waves_SConscript` that you created a 
+:``simulation_variables`` dictionary in the ``SConscript`` file with leading and trailing ``@`` characters for parameter 
+substitution. The next line modified the ``simulation_variables`` list and overwrites the variable with a dictionary 
+formatted in a way in which you are familiar. The ``parameter_name`` (from iterating on the ``parameter_names`` list) is 
+used as the dictionary key padded with leading and trailing ``@`` characters. The value to complete the key-value pair 
+is the parameter value from iterating on the previously defined ``simulation_variables`` list. The result is a 
+dictionary with keys that can be used for identifying the parameters where the values can be substituted.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -213,6 +219,7 @@ the ``SConscript`` file with leading and trailing ``@`` characters for parameter
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
+
 
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
