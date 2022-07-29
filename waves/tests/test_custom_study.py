@@ -100,7 +100,7 @@ class TestCustomStudy:
              'yaml',
              1,
              [call("parameter_set0:\n  a: 1\n  b: 2.0\n" \
-                   "parameter_set3:\n  a: 3\n  b: 4.5\n")])
+                   "parameter_set1:\n  a: 3\n  b: 4.5\n")])
     }
 
     @pytest.mark.unittest
