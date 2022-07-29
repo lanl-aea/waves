@@ -23,7 +23,11 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     output_file_template=parameter_set_file_template)
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
+set_names = [pathlib.Path(set_name) for set_name in parameter_study.parameter_sets.values]
+parameter_names = parameter_study.parameters.values
 
 print(type(parameter_generator))
 print(type(parameter_study))
 print(parameter_study)
+print(set_names)
+print(parameter_names)
