@@ -147,7 +147,7 @@ examine_parameter_study_file = eabm_dir / env['tutorial_07_cp_dir'] / "examine_p
 env.Command(
     target=['tutorial_07_cartesian_product_parameter_study_message.txt'],
     source=[str(examine_parameter_study_file)],
-    action=[f"echo -e '$$ python {examine_parameter_study_file.name}' > ${{TARGET.abspath}}",
+    action=[f"echo -e '$$ python {examine_parameter_study_file}' > ${{TARGET.abspath}}",
             f'python {examine_parameter_study_file} >> ${{TARGET.abspath}}'])
 
 # TODO: os agnostic pathsep for the html directory
