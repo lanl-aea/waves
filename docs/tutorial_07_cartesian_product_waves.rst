@@ -119,14 +119,15 @@ the parent construction environment. This will provide access to variables we ad
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 6-10
+      :emphasize-lines: 6-8
 
 The unhighlighted portions of the code snippet above do not present any unique code that has not been previously 
 discussed.
 
-The highlighted portions of the code snippet above define some new ``simulation_variables`` for this tutorial. The 
-``current_build_directory`` is the absolute path of the directory where the ``SConscript`` lives and is constructed as a 
-`Python pathlib`_ object.
+The highlighted portions of the code snippet above define some new variables that will get used in various places in 
+this tutorial's code. The ``current_build_directory`` is the absolute path of the directory where the ``SConscript`` 
+lives and is constructed as a `Python pathlib`_ object. The ``parameter_set_file_template`` defines how the parameter 
+sets, and subsequently the directories for each parametized simulation, will be named.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -142,6 +143,11 @@ is used to define the parameter bounds, and the ``output_file_template`` option 
 files will be named, and subsequently how the parameter sets will be accessed in the ``parameter_study`` object. The 
 ``parameter_study`` object is an `xarray dataset`_. Follow the tip below for exploring the structure of the parameter 
 study.
+
+The parameter ``set_names`` are extracted from the `xarray dataset`_, converted to `Python pathlib`_ objects, and stored 
+in a ``list`` container. We will iterate through this list in upcomming code to execute our parameter study. Lastly, the 
+``parameter_names`` are extracted from the `xarray dataset`_ as a ``list``. This ``list`` will be used to formulate the 
+``simulation_variables`` dictionary like in :ref:`tutorial_parameter_substitution_waves`.
 
 .. tip::
 
@@ -195,18 +201,10 @@ study.
       :start-after: marker-3
       :end-before: marker-4
 
-The above code uses ``parameter_study.items()`` as an iterable to form the ``simulation_variables`` parameter 
-substitution dictionary. Recall from :ref:`tutorial_parameter_substitution_waves_SConscript` that you created a single 
-``simulation_variables`` dictionary in the ``SConscript`` file with leading and trailing ``@`` characters for parameter 
-substitution. Now, we will iterate on ``parameter_study.items()`` to generate a ``simulation_variables`` dictionary for 
-each of the simulations in our parameter study.
-
-The ``current_set_name`` will be used to construct a simulation directory for each parameter set within the tutorial 
-build directory. In order for this path construction to be operating system agnostic, we use `Python pathlib` objects to 
-construct the ``current_set_name``. The ``simulation_variables`` dictionary is formed in *nearly* the same way as in we 
-have seen previously, but with some slightly different syntax. The ``simulation_variables`` dictionary will have keys 
-that match the parameter names, which are extracted from the ``parameter_name`` *Coordinate* of the xarray dataset. The 
-value associated with the keys is the value of each individual parameter for a specific parameter set name.
+The above code uses the ``set_name`` list of ``Python pathlib`_ objects as an iterable to form the 
+``simulation_variables`` parameter substitution dictionary. Recall from :ref:`tutorial_parameter_substitution_waves`
+:ref:`tutorial_parameter_substitution_waves_SConscript` that you created a single ``simulation_variables`` dictionary in 
+the ``SConscript`` file with leading and trailing ``@`` characters for parameter substitution.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
