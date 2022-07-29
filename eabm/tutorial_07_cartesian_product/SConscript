@@ -86,14 +86,12 @@ for set_name, parameter_samples in parameter_generator.parameter_study['samples'
         f"#/{abaqus_source_dir}/history_output.inp"
     ]
 
-# Comment used in tutorial code snippets: marker-5
-
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
                                                    substitution_dictionary=simulation_variables,
                                                    build_subdirectory=set_name))
 
-# Comment used in tutorial code snippets: marker-6
+# Comment used in tutorial code snippets: marker-5
 
     # Abaqus Solve
     solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
@@ -115,7 +113,7 @@ for set_name, parameter_samples in parameter_generator.parameter_study['samples'
         job_name=job_name,
         abaqus_options=abaqus_options))
 
-# Comment used in tutorial code snippets: marker-7
+# Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
