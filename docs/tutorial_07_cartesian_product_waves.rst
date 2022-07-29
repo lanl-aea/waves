@@ -8,6 +8,9 @@ Tutorial 07: Cartesian Product
 References
 **********
 
+* `Cartesian Product`_
+* `Xarray`_ and the `xarray dataset`_
+
 ***********
 Environment
 ***********
@@ -310,7 +313,7 @@ Output Files
 ************
 
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
-below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command output. The ``-d`` flag specified only 
+below. Note the usage of ``-I`` to reduce clutter in the ``tree`` command output. The ``-d`` flag specifies only 
 directories to be shown.
 
 .. code-block:: bash
@@ -389,3 +392,5 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
 
     0 directories, 50 files
 
+The contents of the ``parameter_set0`` directory will appear identical to the contents of the previous tutorials. In 
+this case, the contents of the files is different, as we have inserted parameters as part of the parameter study.
