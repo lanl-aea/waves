@@ -96,6 +96,10 @@ Internal Changes
 0.2.2 (2022-07-28)
 ******************
 
+New Features
+============
+- Add CustomStudy parameter study generator (:issue:`231`, :merge:`224`). By `Matthew Fister`_.
+
 Breaking changes
 ================
 - Parmeter study writes to YAML syntax by default to provide syntactically correct STDOUT default behavior. Note that
