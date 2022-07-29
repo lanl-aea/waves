@@ -220,7 +220,13 @@ dictionary with keys that can be used for identifying the parameters where the v
       :start-after: marker-4
       :end-before: marker-5
 
+The lines of code above are simply a copy of the previous Geometry, Partition, Mesh, and SolverPrep workflows. Note the 
+following two important aspects of the code above:
 
+* The indent of four spaces, as this code is inside of the ``for`` loop you created earlier
+* The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and 
+  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Don't forget to use the leading and trailing ``@`` 
+  characters when attempting to access parameter values from the ``simulation_variables`` dictionary.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
