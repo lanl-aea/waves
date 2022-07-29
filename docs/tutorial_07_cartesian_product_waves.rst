@@ -291,6 +291,20 @@ Build Targets
    $ scons tutorial_07_cartesian_product --jobs=4
    <output truncated>
 
+In the commands above, `SCons`_ is instructed to use four threads to build our targets. For this tutorial, four 
+``jobs`` is a sensible number, as we have four simulations to run that are independent of each other downstream from 
+parameter set generation. By using the ``--jobs=4`` option, `SCons`_ will run all four simulations in parallel.
+
+.. warning::
+   
+   Be aware of the difference between `SCons`_ thread management and task thread requests. `SCons`_ only manages thread 
+   cound (CPU) usage for task execution and does not control multi-threaded tasks. For example, if you specify ``scons 
+   --jobs=4``, `SCons`_ will use four worker threaders to execute task action in parallel. If each of the four tasks 
+   also specifies multi-threading, `SCons`_ will **not** balance the requested cpu count for each task with the four 
+   worker threads already in use. An example of this is using running an Abaqus simulation on multiple CPUs, e.g. 
+   ``abaqus_options='-cpus 12'``. In this case, four worker threads that execute tasks each requesting 12 CPUs will 
+   result in the consumption of ``4+4*12`` CPUs.
+
 ************
 Output Files
 ************
