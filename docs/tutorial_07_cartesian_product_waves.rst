@@ -75,7 +75,7 @@ only have a single value. The :meth:`waves.parameter_generators.CartesianProduct
 "schema values" to be an iterable.
 
 In the ``parameter_schema``, we have defined two parameters with two samples each and two parameters with one sample 
-each. This will result in four total simulations.
+each. This will result in four (``2x2x1x1``) total simulations.
 
 **********
 SConscript
