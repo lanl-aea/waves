@@ -195,7 +195,7 @@ following two important aspects of the code above:
 
 * The indent of four spaces, as this code is inside of the ``for`` loop you created earlier
 * The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and 
-  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Don't forget to use the leading and trailing ``@`` 
+  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Remember to use the leading and trailing ``@`` 
   characters when attempting to access parameter values from the ``simulation_variables`` dictionary.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -206,7 +206,7 @@ following two important aspects of the code above:
       :start-after: marker-5
       :end-before: marker-6
 
-The code above closes out our familiar workflow with the use of the :meth:`waves.builders.AbaqusSolver` method. Just as 
+The code above closes out our familiar workflow with the use of the :meth:`waves.builders.abaqus_solver` method. Just as 
 in previous tutorials, we first run a datacheck to confirm that the Abaqus Solver's requirements are satisfied, and then 
 the simulation is executed in ernest. Note that the ``# Abaqus Solver`` code is still within the ``for`` loop, so the 
 Abaqus Solver will be called as many times as we have parameter sets. In this case, we will solve four Abaqus 
@@ -219,7 +219,7 @@ simulations.
       :lineno-match:
       :start-after: marker-6
 
-The final additions to the ``SConscript`` file is a few lines of code that are directly copy-and-pasted from your 
+The final additions to the ``SConscript`` file are a few lines of code that are directly copy-and-pasted from your 
 previous tutorial ``SConscript`` file. Note, however, that these final lines of code are outside of the ``for`` loop 
 that contained the previous snippets of code. These final lines of code exists outside the ``for`` loop because we want 
 to include the *tasks for all parameter sets* in the convenience alias, ``tutorial_07_cartesian_product``.
@@ -262,17 +262,17 @@ Build Targets
    $ scons tutorial_07_cartesian_product --jobs=4
    <output truncated>
 
-In the commands above, `SCons`_ is instructed to use four threads to build our targets. For this tutorial, four 
-``jobs`` is a sensible number, as we have four simulations to run that are independent of each other downstream from 
-parameter set generation. By using the ``--jobs=4`` option, `SCons`_ will run all four simulations in parallel.
+In the command above, `SCons`_ is instructed to use four threads to build this tutorial's targets. For this tutorial, 
+four ``jobs`` is a sensible number, as we have four simulations to run that are independent of each other downstream 
+from parameter set generation. By using the ``--jobs=4`` option, `SCons`_ can run all four simulations in parallel.
 
 .. warning::
    
-   Be aware of the difference between `SCons`_ thread management and task thread requests. `SCons`_ only manages thread 
-   cound (CPU) usage for task execution and does not control multi-threaded tasks. For example, if you specify ``scons 
-   --jobs=4``, `SCons`_ will use four worker threaders to execute task action in parallel. If each of the four tasks 
-   also specifies multi-threading, `SCons`_ will **not** balance the requested cpu count for each task with the four 
-   worker threads already in use. An example of this is using running an Abaqus simulation on multiple CPUs, e.g. 
+   Be aware of the difference between `SCons`_ thread management and task threading requests. `SCons`_ only manages 
+   thread count (CPU) usage for task execution and does not control multi-threaded tasks. For example, if you specify 
+   ``scons --jobs=4``, `SCons`_ will use four worker threaders to execute task actions in parallel. If each of the four 
+   tasks also specifies multi-threading, `SCons`_ will **not** balance the requested CPU count for each task with the 
+   four worker threads already in use. An example of this is running Abaqus simulations on multiple CPUs, e.g. 
    ``abaqus_options='-cpus 12'``. In this case, four worker threads that execute tasks each requesting 12 CPUs will 
    result in the consumption of ``4+4*12`` CPUs.
 
@@ -281,7 +281,7 @@ Output Files
 ************
 
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
-below. Note the usage of ``-I`` to reduce clutter in the ``tree`` command output. The ``-d`` flag specifies only 
+below. Note the usage of ``-I`` to reduce clutter in the ``tree`` command output and the ``-d`` flag to specify only 
 directories to be shown.
 
 .. code-block:: bash
@@ -299,7 +299,7 @@ directories to be shown.
     5 directories
 
 Explore the contents of the ``parameter_set0`` directory using the ``tree`` command. The contents of the remaining 
-``parameter_set*`` directories will be very similar to that shown for ``parameter_set0``.
+``parameter_set{1,2,3}`` directories will be very similar to that shown for ``parameter_set0``.
 
 .. code-block:: bash
    
