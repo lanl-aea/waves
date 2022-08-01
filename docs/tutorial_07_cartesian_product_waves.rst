@@ -8,6 +8,7 @@ Tutorial 07: Cartesian Product
 References
 **********
 
+* WAVES :ref:`parameter_generator_api` API
 * `Cartesian Product`_
 * `Xarray`_ and the `xarray dataset`_
 
@@ -68,7 +69,10 @@ Product`_ sampling methodology.
 
 The ``tutorial_07_cartesian_product.py`` file you just created is very similar to the 
 ``single_element_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference 
-between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters.
+between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note 
+that the ``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters 
+only have a single value. The :meth:`waves.parameter_generators.CartesianProduct` API explains this requirement for the 
+"schema values" to be an iterable.
 
 In the ``parameter_schema``, we have defined two parameters with two samples each and two parameters with one sample 
 each. This will result in four total simulations.
