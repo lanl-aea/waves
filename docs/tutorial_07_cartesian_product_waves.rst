@@ -93,7 +93,7 @@ wholesale copy and paste when creating the new ``SConscript`` file.
    directory and simply copy and paste the contents below into your blank file.
 
 After viewing the full file contents below, continue to read the 
-:ref:`tutorial_cartesian_product_step_by_step_sconscript_discussion` for building the
+:ref:`tutorial_cartesian_product_waves_step_by_step_sconscript_discussion` for building the
 ``tutorial_07_cartesian_product/SConscript`` file from scratch.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -101,7 +101,7 @@ After viewing the full file contents below, continue to read the
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
       :language: Python
 
-.. _tutorial_cartesian_product_step_by_step_sconscript_discussion:
+.. _tutorial_cartesian_product_waves_step_by_step_sconscript_discussion:
 
 Step-By-Step SConscript Discussion
 ==================================
@@ -135,7 +135,7 @@ The unhighlighted portions of the code snippet above do not present any unique c
 discussed.
 
 The highlighted portions of the code snippet above define some new variables that will get used in various places in 
-this tutorial's code. The ``parameter_set_file_template`` defines how the parameter sets, and subsequently the 
+this tutorial's code. Namely, ``parameter_set_file_template`` defines how the parameter sets, and subsequently the 
 directories for each parameterized simulation, will be named.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -146,7 +146,7 @@ directories for each parameterized simulation, will be named.
       :start-after: marker-2
       :end-before: marker-3
 
-The code above generates the parameter study for this tutorial, using the 
+The code above generates the parameter study for this tutorial using the 
 :meth:`waves.parameter_generators.CartesianProduct` method. The ``parameter_schema`` that was imported in previous code 
 is used to define the parameter bounds, and the ``output_file_template`` option defines how the parameter set output 
 files will be named, and subsequently how the parameter sets will be accessed in the ``parameter_study`` object. The 
@@ -164,23 +164,23 @@ parameters using different variable types.
       :start-after: marker-3
       :end-before: marker-4
 
-In the ``for`` loop above, the ``set_name`` and ``parameter_samples`` variables are defined by iterating on the 
-``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``). The ``samples`` data variable of 
-the ``parameter_study`` is grouped by the coordinate ``parameter_sets``. This will return an iterable to the ``for`` 
+In the ``for`` loop definition above, the ``set_name`` and ``parameter_samples`` variables are defined by iterating on 
+the ``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``). The ``samples`` data variable 
+of the ``parameter_study`` is grouped by the coordinate ``parameter_sets``. This will return an iterable to the ``for`` 
 loop definition that contains the ``set_name`` and the ``parameter_samples`` information. ``parameter_samples`` contains 
-both the names of the parameters and the parameter values for a given parameter ``set_name``.
+both the names of the parameters and the parameter values for a given ``set_name``.
 
 Inside the ``for`` loop, the ``set_name`` variable is cast to a `Python pathlib`_ object, as it will aid in constructing 
 file locations later in the ``SConscript`` file. Next, the ``parameter_samples`` `xarray dataset`_ is converted to a 
 dictionary. At first declaration, ``simulation_variables`` is a dictionary whose keys are the names of the parameters 
-and values are the parameter values for a particular ``set_name``. This format of the ``simulation_variables`` 
-dictionary will not be sufficient for our usecase, however. Recall from :ref:`tutorial_parameter_substitution_waves`
-:ref:`tutorial_parameter_substitution_waves_SConscript` that you created a ``simulation_variables`` dictionary in the 
-``SConscript`` file whose keys contained leading and trailing ``@`` characters for parameter substitution. To replicate 
-this format, the next line modifies the existing ``simulation_variables`` dictionary and overwrites the variable with a 
-dictionary formatted in a way in which you are familiar. The ``parameter_name`` is used as the dictionary key padded 
-with leading and trailing ``@`` characters. The result is a dictionary with keys that can be used for identifying the 
-parameters where the values should be substituted.
+and whose values are the parameter values for a particular ``set_name``. This format of the ``simulation_variables`` 
+dictionary will not be sufficient for our usecase, however. Recall from the :ref:`tutorial_parameter_substitution_waves`
+:ref:`tutorial_parameter_substitution_waves_SConscript` file where you created a ``simulation_variables`` dictionary 
+whose keys contained leading and trailing ``@`` characters for parameter substitution. To replicate this format, the 
+next line of code modifies the existing ``simulation_variables`` dictionary and overwrites the variable with a 
+dictionary formatted like as in :ref:`tutorial_parameter_substitution_waves`. The ``parameter_name`` is used as the 
+dictionary key padded with leading and trailing ``@`` characters. The result is a dictionary with keys that can be used 
+for identifying the parameters where the values should be substituted.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
