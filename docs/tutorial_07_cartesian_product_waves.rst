@@ -92,13 +92,16 @@ wholesale copy and paste when creating the new ``SConscript`` file.
    directory. If you prefer, you may start with a blank ``SConscript`` file in the ``tutorial_07_cartesian_product`` 
    directory and simply copy and paste the contents below into your blank file.
 
-After viewing the full file contents below, continue to read the step by step procedure for building the 
+After viewing the full file contents below, continue to read the 
+:ref:`tutorial_cartesian_product_step_by_step_sconscript_discussion` for building the
 ``tutorial_07_cartesian_product/SConscript`` file from scratch.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
    .. literalinclude:: tutorial_07_cartesian_product_SConscript
       :language: Python
+
+.. _tutorial_cartesian_product_step_by_step_sconscript_discussion:
 
 Step-By-Step SConscript Discussion
 ==================================
