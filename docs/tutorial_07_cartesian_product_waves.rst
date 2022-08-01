@@ -146,11 +146,6 @@ files will be named, and subsequently how the parameter sets will be accessed in
 ``parameter_study`` object is an `xarray dataset`_. Follow the tip below for exploring the structure of the parameter 
 study.
 
-The parameter ``set_names`` are extracted from the `xarray dataset`_, converted to `Python pathlib`_ objects, and stored 
-in a ``list`` container. We will iterate through this list in upcomming code to execute our parameter study. Lastly, the 
-``parameter_names`` are extracted from the `xarray dataset`_ as a ``list``. This ``list`` will be used to formulate the 
-``simulation_variables`` dictionary like in :ref:`tutorial_parameter_substitution_waves`.
-
 .. tip::
 
    Explore the variable types and contents of the ``parameter_generator`` and ``parameter_study`` variables. In the next 
@@ -203,16 +198,23 @@ in a ``list`` container. We will iterate through this list in upcomming code to 
       :start-after: marker-3
       :end-before: marker-4
 
-The above code uses the ``set_name`` list of ``Python pathlib`_ objects as an iterable to form the 
-``simulation_variables`` parameter substitution dictionary. At first declaration, ``simulation_variables`` is a 
-list of parameter values specific to the parameter set ``set_name``. However, recall from 
-:ref:`tutorial_parameter_substitution_waves` ref:`tutorial_parameter_substitution_waves_SConscript` that you created a 
-:``simulation_variables`` dictionary in the ``SConscript`` file with leading and trailing ``@`` characters for parameter 
-substitution. The next line modified the ``simulation_variables`` list and overwrites the variable with a dictionary 
-formatted in a way in which you are familiar. The ``parameter_name`` (from iterating on the ``parameter_names`` list) is 
-used as the dictionary key padded with leading and trailing ``@`` characters. The value to complete the key-value pair 
-is the parameter value from iterating on the previously defined ``simulation_variables`` list. The result is a 
-dictionary with keys that can be used for identifying the parameters where the values can be substituted.
+In the ``for`` loop above, the ``set_name`` and ``parameter_samples`` variables are defined by iterating on the 
+``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``). The ``samples`` data variable of 
+the ``parameter_study`` is grouped by the coordinate ``parameter_sets``. This will return an iterable to the ``for`` 
+loop definition that contains the ``set_name`` and the ``parameter_samples`` information. ``parameter_samples`` contains 
+both the names of the parameters and the parameter values for a given parameter ``set_name``.
+
+Inside the ``for`` loop, the ``set_name`` variable is cast to a `Python pathlib`_ object, as it will aid in constructing 
+file locations later in the ``SConscript`` file. Next, the ``parameter_samples`` `xarray dataset`_ is converted to a 
+dictionary. At first declaration, ``simulation_variables`` is a dictionary whose keys are the names of the parameters 
+and values are the parameter values for a particular ``set_name``. This format of the ``simulation_variables`` 
+dictionary will not be sufficient for our usecase, however. Recall from :ref:`tutorial_parameter_substitution_waves`
+:ref:`tutorial_parameter_substitution_waves_SConscript` that you created a ``simulation_variables`` dictionary in the 
+``SConscript`` file whose keys contained leading and trailing ``@`` characters for parameter substitution. To replicate 
+this format, the next line modifies the existing ``simulation_variables`` dictionary and overwrites the variable with a 
+dictionary formatted in a way in which you are familiar. The ``parameter_name`` is used as the dictionary key padded 
+with leading and trailing ``@`` characters. The result is a dictionary with keys that can be used for identifying the 
+parameters where the values should be substituted.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
