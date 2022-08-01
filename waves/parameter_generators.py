@@ -177,6 +177,9 @@ class _ParameterGenerator(ABC):
                         sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
                         sys.stdout.write("\n")
                     else:
+                        # FIXME: mixed type samples are converted to match the first sample on write to file.
+                        # Related to an open Xarray bug report: https://github.com/pydata/xarray/issues/2620
+                        # WAVES issue: https://re-git.lanl.gov/aea/python-projects/waves/-/issues/239
                         dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
