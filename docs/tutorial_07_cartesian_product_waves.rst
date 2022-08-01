@@ -122,15 +122,14 @@ the parent construction environment. This will provide access to variables we ad
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 6-8
+      :emphasize-lines: 6-7
 
 The unhighlighted portions of the code snippet above do not present any unique code that has not been previously 
 discussed.
 
 The highlighted portions of the code snippet above define some new variables that will get used in various places in 
-this tutorial's code. The ``current_build_directory`` is the absolute path of the directory where the ``SConscript`` 
-lives and is constructed as a `Python pathlib`_ object. The ``parameter_set_file_template`` defines how the parameter 
-sets, and subsequently the directories for each parametized simulation, will be named.
+this tutorial's code. The ``parameter_set_file_template`` defines how the parameter sets, and subsequently the 
+directories for each parametized simulation, will be named.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
