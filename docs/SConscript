@@ -31,7 +31,6 @@ documentation_file_list = [
     'eabm_tutorial_00_SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
     'waves_build_wrapper_message.txt',  # Created in docs build directory by this SConscript
     'eabm_README.txt',   # Copied from the eabm directory to waves docs build directory by root SConscript
-    'tutorial_07_cartesian_product_parameter_study_message.txt',  # Created in the docs build directory by this Sconscript
     'eabm_api.rst',
     'eabm_cli.rst',
     'eabm_abaqus_files.rst',
@@ -108,7 +107,6 @@ tutorial_files_list = [
     eabm_dir / env['tutorial_05_dir'] / 'SConscript',
     eabm_dir / env['tutorial_06_dir'] / 'SConscript',
     eabm_dir / env['tutorial_07_cp_dir'] / 'SConscript',
-    eabm_dir / env['tutorial_07_cp_dir'] / 'examine_parameter_study_object.py',
     eabm_dir / env['tutorial_07_lh_dir'] / 'SConscript',
     eabm_dir / env['tutorial_08_dir'] / 'SConscript',
     eabm_dir / env['tutorial_09_dir'] / 'SConscript',
@@ -141,14 +139,6 @@ for file_path in tutorial_files_list:
             source=str(file_path),
             action=Copy("$TARGET", "$SOURCE"))
     documentation_file_list.append(target)
-
-# Generate parameter study xarray dataset output text file
-examine_parameter_study_file = eabm_dir / env['tutorial_07_cp_dir'] / "examine_parameter_study_object.py"
-env.Command(
-    target=['tutorial_07_cartesian_product_parameter_study_message.txt'],
-    source=[str(examine_parameter_study_file)],
-    action=[f"echo -e '$$ python {examine_parameter_study_file}' > ${{TARGET.abspath}}",
-            f'python {examine_parameter_study_file} >> ${{TARGET.abspath}}'])
 
 # TODO: os agnostic pathsep for the html directory
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/4
