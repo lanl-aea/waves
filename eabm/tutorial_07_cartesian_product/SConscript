@@ -17,7 +17,6 @@ abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
 
 # Simulation variables
-current_build_directory = pathlib.Path(Dir('.').srcdir.abspath)
 parameter_set_file_template = "parameter_set@number"
 model = "single_element"
 
