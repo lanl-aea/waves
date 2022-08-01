@@ -84,7 +84,6 @@ for set_name, parameter_samples in parameter_generator.parameter_study['samples'
         f"#/{abaqus_source_dir}/parts.inp",
         f"#/{abaqus_source_dir}/history_output.inp"
     ]
-
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
                                                    substitution_dictionary=simulation_variables,
