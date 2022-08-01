@@ -149,5 +149,5 @@ class NoQuantilesGenerator(_ParameterGenerator):
         set_count = sets
         parameter_count = len(self.parameter_names)
         self._create_parameter_set_names(set_count)
-        self.values = numpy.zeros((set_count, parameter_count))
+        self.samples = numpy.zeros((set_count, parameter_count))
         self._create_parameter_study()
