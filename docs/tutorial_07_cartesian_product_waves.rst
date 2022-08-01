@@ -255,7 +255,8 @@ simulations.
 
 The final additions to the ``SConscript`` file is a few lines of code that are directly copy-and-pasted from your 
 previous tutorial ``SConscript`` file. Note, however, that these final lines of code are outside of the ``for`` loop 
-that containted the previous snippets code.
+that contained the previous snippets of code. These final lines of code exists outside the ``for`` loop because we want 
+to include the *tasks for all parameter sets* in the convenience alias, ``tutorial_07_cartesian_product``.
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.
