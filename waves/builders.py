@@ -358,7 +358,7 @@ def abaqus_extract(abaqus_program='abaqus'):
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
             "cd ${TARGET.dir.abspath} && rm ${SOURCE.filebase}.csv ${TARGET.filebase}.h5 ${TARGET.filebase}_datasets.h5 || true",
-            _build_odb_extract
+            SCons.Action.Action(_build_odb_extract, varlist=['output_type', 'odb_report_args', 'delete_report_file'])
         ],
         emitter=_abaqus_extract_emitter,
         abaqus_program=abaqus_program)
