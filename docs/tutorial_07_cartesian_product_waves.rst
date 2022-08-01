@@ -46,7 +46,7 @@ Directory Structure
 Parameter Study File
 ********************
 
-In this tutorial, we will use an included parameter study python file to define a parmetet study using a `Cartesian 
+In this tutorial, we will use an included parameter study python file to define a parameter study using a `Cartesian 
 Product`_ sampling methodology.
 
 .. admonition:: What is Cartesian Product
@@ -109,7 +109,7 @@ Step-By-Step SConscript Discussion
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import 
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the 
-``parameter_schema`` dictioanry into the ``SConscript`` file's name space from the ``tutorial_07_cartesian_product`` 
+``parameter_schema`` dictionary into the ``SConscript`` file's name space from the ``tutorial_07_cartesian_product`` 
 module that you created in the :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial. 
 The second import line should look familiar, but is worth pointing out again. Here, we import the ``env`` variable from 
 the parent construction environment. This will provide access to variables we added to the ``SConstruct`` file's 
@@ -129,7 +129,7 @@ discussed.
 
 The highlighted portions of the code snippet above define some new variables that will get used in various places in 
 this tutorial's code. The ``parameter_set_file_template`` defines how the parameter sets, and subsequently the 
-directories for each parametized simulation, will be named.
+directories for each parameterized simulation, will be named.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
