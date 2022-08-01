@@ -36,7 +36,7 @@ parameter_names = parameter_study.parameters.values
 
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name in set_names:
-    simulation_variables = parameter_study['values'].sel(parameter_sets=str(set_name)).values
+    simulation_variables = parameter_study['samples'].sel(parameter_sets=str(set_name)).values
     simulation_variables = {f"@{parameter_name}@": value for parameter_name, value in
                             zip(parameter_names, simulation_variables)}
     simulation_variables.update(simulation_constants)

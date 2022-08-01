@@ -88,7 +88,7 @@ def get_parser(return_subparser_dictionary=False):
     latin_hypercube_parser = subparsers.add_parser(
         latin_hypercube_subcommand,
         description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
-                    "parameter values and quantiles.",
+                    "parameter samples and quantiles.",
         help='Latin hypercube generator',
         parents=[parent_parser])
 
