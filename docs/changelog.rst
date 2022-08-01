@@ -13,6 +13,11 @@ Breaking changes
 - Change the parameter study data key from 'values' to 'samples' to avoid name clash with the 'values' method and
   attribute of dictionaries and datasets. (:issue:`234`, :merge:`229`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Simpler parameter study unpacking into the parameter set task generation loop (:issue:`238`, :merge:`230`). By `Kyle
+  Brindley`_.
+
 *******************
 0.2.2 (2022-07-28)
 *******************
