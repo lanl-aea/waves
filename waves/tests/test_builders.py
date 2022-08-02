@@ -4,13 +4,14 @@ import pathlib
 import pytest
 from contextlib import nullcontext as does_not_raise
 import unittest
-from unittest.mock import patch
+from unittest.mock import patch, call
 
 import SCons.Node.FS
 
 from waves import builders
 
 
+fs = SCons.Node.FS.FS()
 
 find_program_input = {
     'string': (
@@ -49,7 +50,6 @@ def test__find_program(names, checkprog_side_effect, first_found_path):
     assert program == first_found_path
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 journal_emitter_input = {
     'one target': (['target.cae'],
@@ -78,7 +78,6 @@ def test__abaqus_journal():
     node = env.AbaqusJournal(target=['journal.cae'], source=['journal.py'], journal_options="")
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('root.inp')
 solver_emitter_input = {
     'empty targets': ('job',
@@ -145,7 +144,6 @@ def test__copy_substitute(source_list, expected_list):
     assert target_files == expected_list
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 python_emitter_input = {
     'one target': (['target.cub'],
@@ -175,7 +173,6 @@ def test__python_script():
         target=['python_script_journal.cub'], source=['python_script_journal.py'], journal_options="")
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.odb')
 abaqus_extract_emitter_input = {
     'empty targets': ([],
@@ -209,3 +206,27 @@ def test__abaqus_extract():
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
     node = env.AbaqusExtract(
         target=['abaqus_extract.h5'], source=['abaqus_extract.odb'], journal_options="")
+
+
+source_file = fs.File('/dummy.source')
+target_file = fs.File('/dummy.target')
+build_odb_extract_input = {
+    'no kwargs': ([target_file], [source_file], {'abaqus_program': 'NA'},
+                  [call(['/dummy.source'], '/dummy.target', output_type='h5', odb_report_args=None,
+                       abaqus_command='NA', delete_report_file=False)]),
+    'all kwargs': ([target_file], [source_file],
+                   {'abaqus_program': 'NA', 'output_type': 'different', 'odb_report_args': 'notnone',
+                    'delete_report_file': True},
+                   [call(['/dummy.source'], '/dummy.target', output_type='different', odb_report_args='notnone',
+                        abaqus_command='NA', delete_report_file=True)])
+}
+
+
+@pytest.mark.parametrize('target, source, env, calls',
+                         build_odb_extract_input.values(),
+                         ids=build_odb_extract_input.keys())
+@pytest.mark.unittest
+def test_build_odb_extract(target, source, env, calls):
+    with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract:
+        builders._build_odb_extract(target, source, env)
+    mock_odb_extract.assert_has_calls(calls)
