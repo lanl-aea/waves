@@ -16,7 +16,7 @@ Breaking changes
 Bug fixes
 =========
 - Add construction environment variables to the Abaqus extract builder signature. Builder now re-executes when the
-keyword arguments change (:issue:`230`, :merge:`232`). By `Kyle Brindley`_.
+  keyword arguments change (:issue:`230`, :merge:`232`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
