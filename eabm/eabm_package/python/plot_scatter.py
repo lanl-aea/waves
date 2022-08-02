@@ -46,7 +46,7 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
 
     # Open and merge WAVES parameter study if provided
     if parameter_study_file:
-        parameter_study = xarray.open_dataset(parameter_study_file)['samples'].to_dataset('parameters')
+        parameter_study = xarray.open_dataset(parameter_study_file)
         combined_data = combined_data.merge(parameter_study)
 
     # Write results dataset to stdout for tutorial demonstration
