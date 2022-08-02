@@ -63,3 +63,15 @@ Msg File Parser
     :private-members:
     :show-inheritance:
     :synopsis: Parses a msg file produced by Abaqus
+
+
+*****
+WAVES
+*****
+
+.. automodule:: waves.waves
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
+   :synopsis: waves command line utlitiy functionality

@@ -2,6 +2,15 @@
 Command Line Utilities
 ######################
 
+******************************
+|PROJECT| Command Line Utility
+******************************
+
+The |PROJECT| command line utility proves some basic functionality by calling ``|project|`` from the command line.
+
+.. argparse::
+   :ref: waves.waves.get_parser
+
 ***********************
 |PROJECT| Build Wrapper
 ***********************
