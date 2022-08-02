@@ -61,7 +61,7 @@ class TestCartesianProduct:
     def test_generate(self, parameter_schema, expected_array):
         TestGenerate = CartesianProduct(parameter_schema)
         TestGenerate.generate()
-        generate_array = TestGenerate.parameter_study['samples'].values
+        generate_array = TestGenerate.samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]

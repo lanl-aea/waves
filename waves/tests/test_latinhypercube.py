@@ -79,8 +79,8 @@ class TestLatinHypercube:
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = LatinHypercube(parameter_schema)
         TestGenerate.generate()
-        samples_array = TestGenerate.parameter_study['samples'].values
-        quantiles_array = TestGenerate.parameter_study['quantiles'].values
+        samples_array = TestGenerate.samples
+        quantiles_array = TestGenerate.quantiles
         assert samples_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
         assert quantiles_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
         # Verify that the parameter set name creation method was called
