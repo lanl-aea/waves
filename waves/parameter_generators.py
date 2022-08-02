@@ -5,6 +5,7 @@ import sys
 import itertools
 import copy
 
+import yaml
 import numpy
 import xarray
 import scipy.stats
@@ -105,11 +106,11 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_set_names``: list of parameter set name strings created by calling
           ``self._create_parameter_set_names`` with the number of integer parameter sets.
-        * ``self.values``: The parameter study values. A 2D numpy array in the shape (number of parameter sets, number
-          of parameters). If it's possible that the values may be of mixed type, ``numpy.array(..., dtype=object)``
+        * ``self.samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets, number
+          of parameters). If it's possible that the samples may be of mixed type, ``numpy.array(..., dtype=object)``
           should be used to preserve the original Python types.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
-          ``self.parameter_study = self._create_parameter_study()`` after defining ``self.values`` and the optional
+          ``self.parameter_study = self._create_parameter_study()`` after defining ``self.samples`` and the optional
           ``self.quantiles`` class attribute.
 
         May set the class attributes:
@@ -123,7 +124,7 @@ class _ParameterGenerator(ABC):
            set_count = 5
            self._create_parameter_set_names(set_count)
            parameter_count = len(self.parameter_names)
-           self.values = numpy.zeros((set_count, parameter_count))
+           self.samples = numpy.zeros((set_count, parameter_count))
            self.parameter_study = self._create_parameter_study()
         """
         pass
@@ -143,8 +144,8 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
-           parameter_1: '1'
-           parameter_2: 'a'
+           parameter_1: 1
+           parameter_2: a
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
@@ -177,25 +178,27 @@ class _ParameterGenerator(ABC):
                         sys.stdout.write(f"{parameter_set_file.resolve()}:\n{dataset}")
                         sys.stdout.write("\n")
                     else:
+                        # FIXME: mixed type samples are converted to match the first sample on write to file.
+                        # Related to an open Xarray bug report: https://github.com/pydata/xarray/issues/2620
+                        # WAVES issue: https://re-git.lanl.gov/aea/python-projects/waves/-/issues/239
                         dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
-        prefix = ""
-        delimiter = ": "
-        # If no output file template is provided, printing to stdout or a single file
-        # Adjust indentation for syntactically correct YAML.
-        if not self.provided_template:
-            prefix = "  "
         text_list = []
         # Construct the output text
         for parameter_set_file in parameter_set_files:
-            values = self.parameter_study['values'].sel(parameter_sets=str(parameter_set_file)).values
-            text = ""
-            for value, parameter_name in zip(values, self.parameter_names):
-                text += f"{prefix}{parameter_name}{delimiter}{repr(value)}\n"
+            text = yaml.safe_dump(
+                self.parameter_study.sel(data_type='samples',
+                                         parameter_sets=str(parameter_set_file)).to_pandas().to_dict()
+            )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
         if not self.provided_template:
+            # If no output file template is provided, printing to stdout or a single file
+            # Adjust indentation for syntactically correct YAML.
+            prefix = "  "
+            # TODO: split up text prefix change for readability
+            text_list = ["\n".join([f"{prefix}{item}" for item in text.split('\n')[:-1]])+"\n" for text in text_list]
             text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
@@ -253,14 +256,14 @@ class _ParameterGenerator(ABC):
         * ``self.parameter_set_names``: parameter set names used as rows of parameter study
         * ``self.parameter_names``: parameter names used as columns of parameter study
 
-        :param numpy.array data: 2D array of parameter study values with shape (number of parameter sets, number of
+        :param numpy.array data: 2D array of parameter study samples with shape (number of parameter sets, number of
             parameters).
         :param str name: Name of the array. Used as a data variable name when converting to parameter study dataset.
         """
         array = xarray.DataArray(
             data,
             coords=[self.parameter_set_names, self.parameter_names],
-            dims=['parameter_sets', 'parameters'],
+            dims=["parameter_sets", "parameters"],
             name=name
         )
         return array
@@ -272,7 +275,7 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_set_names``: parameter set names used as rows of parameter study
         * ``self.parameter_names``: parameter names used as columns of parameter study
-        * ``self.values``: The parameter study values
+        * ``self.samples``: The parameter study samples
 
         optional:
 
@@ -282,12 +285,13 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         """
-        values = self._create_parameter_array(self.values, name='values')
+        samples = self._create_parameter_array(self.samples, name="samples")
         if hasattr(self, "quantiles"):
-            quantiles = self._create_parameter_array(self.quantiles, name='quantiles')
-            self.parameter_study = xarray.merge([values, quantiles])
+            quantiles = self._create_parameter_array(self.quantiles, name="quantiles")
+            self.parameter_study = xarray.concat([quantiles, samples],
+                    xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
-            self.parameter_study = values.to_dataset()
+            self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
 
 
 class CartesianProduct(_ParameterGenerator):
@@ -322,12 +326,13 @@ class CartesianProduct(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (parameter_sets: 4, parameters: 2)
+       Dimensions:         (parameter_sets: 4, data_type: 1)
        Coordinates:
          * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
-         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+         * data_type       (data_type) <U7 'samples'
        Data variables:
-           values          (parameter_sets, parameters) <U21 '1' 'a' '1' ... '2' 'b'
+           parameter_1     (parameter_sets, data_type) object 1 1 2 2
+           parameter_2     (parameter_sets, data_type) object 'a' 'b' 'a' 'b'
 
     Attributes after class instantiation
 
@@ -336,7 +341,7 @@ class CartesianProduct(_ParameterGenerator):
     Attributes after set generation
 
     * parameter_set_names: list of parameter set name strings
-    * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
+    * samples: The 2D parameter samples. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
     """
 
@@ -351,8 +356,8 @@ class CartesianProduct(_ParameterGenerator):
 
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
-        self.values = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
-        set_count = self.values.shape[0]
+        self.samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
+        set_count = self.samples.shape[0]
         self._create_parameter_set_names(set_count)
         self._create_parameter_study()
 
@@ -363,7 +368,7 @@ class CartesianProduct(_ParameterGenerator):
 class LatinHypercube(_ParameterGenerator):
     """Builds a Latin Hypercube parameter study
 
-    The 'h5' output file type is the only output type that contains both the parameter values *and* quantiles.
+    The 'h5' output file type is the only output type that contains both the parameter samples *and* quantiles.
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
@@ -387,7 +392,7 @@ class LatinHypercube(_ParameterGenerator):
     .. code-block::
 
        parameter_schema = {
-           'num_simulations': 4  # Required key. Value must be an integer.
+           'num_simulations': 4,  # Required key. Value must be an integer.
            'parameter_1': {
                'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
                'loc': 50,               # distribution name.
@@ -404,13 +409,13 @@ class LatinHypercube(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (parameter_sets: 100, parameters: 2)
+       Dimensions:         (parameter_sets: 4, data_type: 2)
        Coordinates:
-         * parameter_sets  (parameter_sets) <U15 'parameter_set0' ... 'parameter_set99'
-         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+         * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
+         * data_type       (data_type) <U9 'samples' 'quantiles'
        Data variables:
-           values          (parameter_sets, parameters) float64 49.31 30.6 ... 31.36
-           quantiles       (parameter_sets, parameters) float64 0.245 0.245 ... 0.505
+           parameter_1     (parameter_sets, data_type) float64 48.85 0.125 ... 0.375
+           parameter_2     (parameter_sets, data_type) float64 30.97 0.375 ... 0.625
 
     Attributes after class instantiation
 
@@ -420,7 +425,7 @@ class LatinHypercube(_ParameterGenerator):
     Attributes after set generation
 
     * parameter_set_names: list of parameter set name strings
-    * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
+    * samples: The 2D parameter samples. Rows correspond to parameter set. Columns correspond to parameter names.
     * quantiles: The 2D parameter quantiles. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
     """
@@ -455,9 +460,9 @@ class LatinHypercube(_ParameterGenerator):
         parameter_count = len(self.parameter_names)
         self._create_parameter_set_names(set_count)
         self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
-        self.values = numpy.zeros((set_count, parameter_count))
+        self.samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
-            self.values[:, i] = distribution.ppf(self.quantiles[:, i])
+            self.samples[:, i] = distribution.ppf(self.quantiles[:, i])
         self._create_parameter_study()
 
     def _generate_parameter_distributions(self):

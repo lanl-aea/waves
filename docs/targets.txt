@@ -66,6 +66,7 @@
 .. _`Python documentation`: https://docs.python.org/3/index.html
 .. _`Python Modules`: https://docs.python.org/3/tutorial/modules.html
 .. _`Python Template Strings`: https://docs.python.org/3/library/string.html#template-strings
+.. _`xarray dataset`: https://xarray.pydata.org/en/v2022.03.0/generated/xarray.Dataset.html
 .. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
 .. _`Abaqus Scripting`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-ov.htm
 .. _`Abaqus Python Environment`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
@@ -84,6 +85,7 @@
 .. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
 .. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
 .. _`Xarray`: https://docs.xarray.dev/en/stable/
+.. _`Cartesian Product`: https://en.wikipedia.org/wiki/Cartesian_product
 
 .. Project specific links
 .. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves/cpp_stub
