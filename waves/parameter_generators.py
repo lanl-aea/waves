@@ -184,12 +184,6 @@ class _ParameterGenerator(ABC):
                         dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
-        prefix = ""
-        delimiter = ": "
-        # If no output file template is provided, printing to stdout or a single file
-        # Adjust indentation for syntactically correct YAML.
-        if not self.provided_template:
-            prefix = "  "
         text_list = []
         # Construct the output text
         for parameter_set_file in parameter_set_files:
@@ -200,6 +194,10 @@ class _ParameterGenerator(ABC):
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
         if not self.provided_template:
+            # If no output file template is provided, printing to stdout or a single file
+            # Adjust indentation for syntactically correct YAML.
+            prefix = "  "
+            text_list = ["\n".join([f"{prefix}{item}" for item in text.split('\n')[:-1]])+"\n" for text in text_list]
             text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
