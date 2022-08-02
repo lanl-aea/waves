@@ -285,12 +285,19 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         """
-        samples = self._create_parameter_array(self.samples, name='samples')
         if hasattr(self, "quantiles"):
-            quantiles = self._create_parameter_array(self.quantiles, name='quantiles')
-            self.parameter_study = xarray.merge([samples, quantiles])
+            data = numpy.dstack((self.samples.transpose(), self.quantiles.transpose()))
+            data_type = ['samples', 'quantiles']
         else:
-            self.parameter_study = samples.to_dataset()
+            data = self.samples.transpose()
+            data_type = ['samples']
+        data_arrays = list()
+        for parameter_data, name in zip(data, self.parameter_names):
+            data_arrays.append(
+                xarray.DataArray(parameter_data, coords=[self.parameter_set_names, data_type],
+                                 dims=['parameter_sets', 'data_type'], name=name)
+            )
+        self.parameter_study = xarray.merge(data_arrays)
 
 
 class CartesianProduct(_ParameterGenerator):
