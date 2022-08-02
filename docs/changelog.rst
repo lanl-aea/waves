@@ -32,6 +32,10 @@ Bug fixes
   that uses floats. Fixes the parameter study read/write to h5 files to avoid unexpected type conversions (:issue:`239`,
   :merge:`234`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Complete WAVES Tutorial 07: Cartesian Product (:issue:`103`, :merge:`152`). By `Thomas Roberts`_.
+
 Internal Changes
 ================
 - Simpler parameter study unpacking into the parameter set task generation loop (:issue:`238`, :merge:`230`). By `Kyle
