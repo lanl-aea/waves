@@ -197,6 +197,7 @@ class _ParameterGenerator(ABC):
             # If no output file template is provided, printing to stdout or a single file
             # Adjust indentation for syntactically correct YAML.
             prefix = "  "
+            # TODO: split up text prefix change for readability
             text_list = ["\n".join([f"{prefix}{item}" for item in text.split('\n')[:-1]])+"\n" for text in text_list]
             text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
