@@ -332,12 +332,13 @@ class CartesianProduct(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (parameter_sets: 4, parameters: 2)
+       Dimensions:         (parameter_sets: 4, data_type: 1)
        Coordinates:
          * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
-         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+         * data_type       (data_type) <U7 'samples'
        Data variables:
-           samples         (parameter_sets, parameters) <U21 '1' 'a' '1' ... '2' 'b'
+           parameter_1     (parameter_sets, data_type) object 1 1 2 2
+           parameter_2     (parameter_sets, data_type) object 'a' 'b' 'a' 'b'
 
     Attributes after class instantiation
 
@@ -397,7 +398,7 @@ class LatinHypercube(_ParameterGenerator):
     .. code-block::
 
        parameter_schema = {
-           'num_simulations': 4  # Required key. Value must be an integer.
+           'num_simulations': 4,  # Required key. Value must be an integer.
            'parameter_1': {
                'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
                'loc': 50,               # distribution name.
@@ -414,13 +415,13 @@ class LatinHypercube(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (parameter_sets: 100, parameters: 2)
+       Dimensions:         (parameter_sets: 4, data_type: 2)
        Coordinates:
-         * parameter_sets  (parameter_sets) <U15 'parameter_set0' ... 'parameter_set99'
-         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+         * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
+         * data_type       (data_type) <U9 'samples' 'quantiles'
        Data variables:
-           samples         (parameter_sets, parameters) float64 49.31 30.6 ... 31.36
-           quantiles       (parameter_sets, parameters) float64 0.245 0.245 ... 0.505
+           parameter_1     (parameter_sets, data_type) float64 48.85 0.125 ... 0.375
+           parameter_2     (parameter_sets, data_type) float64 30.97 0.375 ... 0.625
 
     Attributes after class instantiation
 
