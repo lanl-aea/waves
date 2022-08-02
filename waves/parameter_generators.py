@@ -144,8 +144,8 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
-           parameter_1: '1'
-           parameter_2: 'a'
+           parameter_1: 1
+           parameter_2: a
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
