@@ -11,6 +11,7 @@ import SCons.Node.FS
 from waves import builders
 
 
+fs = SCons.Node.FS.FS()
 
 find_program_input = {
     'string': (
@@ -49,7 +50,6 @@ def test__find_program(names, checkprog_side_effect, first_found_path):
     assert program == first_found_path
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 journal_emitter_input = {
     'one target': (['target.cae'],
@@ -78,7 +78,6 @@ def test__abaqus_journal():
     node = env.AbaqusJournal(target=['journal.cae'], source=['journal.py'], journal_options="")
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('root.inp')
 solver_emitter_input = {
     'empty targets': ('job',
@@ -145,7 +144,6 @@ def test__copy_substitute(source_list, expected_list):
     assert target_files == expected_list
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.py')
 python_emitter_input = {
     'one target': (['target.cub'],
@@ -175,7 +173,6 @@ def test__python_script():
         target=['python_script_journal.cub'], source=['python_script_journal.py'], journal_options="")
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('dummy.odb')
 abaqus_extract_emitter_input = {
     'empty targets': ([],
@@ -211,7 +208,6 @@ def test__abaqus_extract():
         target=['abaqus_extract.h5'], source=['abaqus_extract.odb'], journal_options="")
 
 
-fs = SCons.Node.FS.FS()
 source_file = fs.File('/dummy.source')
 target_file = fs.File('/dummy.target')
 build_odb_extract_input = {
