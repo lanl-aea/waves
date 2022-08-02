@@ -82,6 +82,8 @@ The final modification to make to the ``single_element_compression.inp.in`` file
 displacement value of ``-1.0`` with the parameter key ``<displacement>``. With this change, the Abaqus file parser will
 know to use the value of the ``displacement`` parameter anywhere it sees ``<displacement>``.
 
+.. _tutorial_parameter_substitution_waves_SConscript:
+
 **********
 SConscript
 **********
