@@ -33,9 +33,9 @@ parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
 
 # Parameterized targets must live inside current simulation_variables for loop
-for set_name, parameter_samples in parameter_generator.parameter_study['samples'].groupby('parameter_sets'):
+for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
     set_name = pathlib.Path(set_name)
-    simulation_variables = {**parameter_samples.to_series().to_dict(), **simulation_constants}
+    simulation_variables = {**parameter_samples.to_pandas().to_dict(), **simulation_constants}
     simulation_variables = {f"@{parameter_name}@": value for parameter_name, value in
                             simulation_variables.items()}
 
