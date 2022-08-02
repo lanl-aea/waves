@@ -61,7 +61,7 @@ class TestCartesianProduct:
     def test_generate(self, parameter_schema, expected_array):
         TestGenerate = CartesianProduct(parameter_schema)
         TestGenerate.generate()
-        generate_array = TestGenerate.parameter_study['samples'].values
+        generate_array = TestGenerate.samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
@@ -85,10 +85,10 @@ class TestCartesianProduct:
              None,
              'yaml',
              4,
-             [call("parameter_1: 1\nparameter_2: 'a'\n"),
-              call("parameter_1: 1\nparameter_2: 'b'\n"),
-              call("parameter_1: 2\nparameter_2: 'a'\n"),
-              call("parameter_1: 2\nparameter_2: 'b'\n")]),
+             [call("parameter_1: 1\nparameter_2: a\n"),
+              call("parameter_1: 1\nparameter_2: b\n"),
+              call("parameter_1: 2\nparameter_2: a\n"),
+              call("parameter_1: 2\nparameter_2: b\n")]),
         'one parameter one file yaml':
             ({"parameter_1": [1, 2]},
              None,
@@ -103,10 +103,10 @@ class TestCartesianProduct:
              'parameter_study.yaml',
              'yaml',
              1,
-             [call("parameter_set0:\n  parameter_1: 1\n  parameter_2: 'a'\n" \
-                   "parameter_set1:\n  parameter_1: 1\n  parameter_2: 'b'\n" \
-                   "parameter_set2:\n  parameter_1: 2\n  parameter_2: 'a'\n" \
-                   "parameter_set3:\n  parameter_1: 2\n  parameter_2: 'b'\n")])
+             [call("parameter_set0:\n  parameter_1: 1\n  parameter_2: a\n" \
+                   "parameter_set1:\n  parameter_1: 1\n  parameter_2: b\n" \
+                   "parameter_set2:\n  parameter_1: 2\n  parameter_2: a\n" \
+                   "parameter_set3:\n  parameter_1: 2\n  parameter_2: b\n")])
     }
 
     @pytest.mark.unittest

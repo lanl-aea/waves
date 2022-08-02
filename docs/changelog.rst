@@ -4,28 +4,37 @@
 Changelog
 #########
 
-*******************
-0.2.3 (unreleased)
-*******************
+******************
+0.3.2 (unreleased)
+******************
+
+******************
+0.3.1 (2022-08-02)
+******************
 
 Breaking changes
 ================
 - Change the parameter study data key from 'values' to 'samples' to avoid name clash with the 'values' method and
   attribute of dictionaries and datasets. (:issue:`234`, :merge:`229`). By `Kyle Brindley`_.
+- Re-organize the parameter study coordinates to allow mixed types, e.g. one parameter that uses strings and another
+  that uses floats (:issue:`239`, :merge:`234`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
 - Add construction environment variables to the Abaqus extract builder signature. Builder now re-executes when the
   keyword arguments change (:issue:`230`, :merge:`232`). By `Kyle Brindley`_.
+- Re-organize the parameter study coordinates to allow mixed types, e.g. one parameter that uses strings and another
+  that uses floats. Fixes the parameter study read/write to h5 files to avoid unexpected type conversions (:issue:`239`,
+  :merge:`234`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
 - Simpler parameter study unpacking into the parameter set task generation loop (:issue:`238`, :merge:`230`). By `Kyle
   Brindley`_.
 
-*******************
+******************
 0.2.2 (2022-07-28)
-*******************
+******************
 
 Breaking changes
 ================

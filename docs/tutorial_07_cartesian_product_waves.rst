@@ -47,34 +47,34 @@ Directory Structure
 Parameter Study File
 ********************
 
-In this tutorial, we will use an included parameter study python file to define a parameter study using a `Cartesian 
+In this tutorial, we will use an included parameter study python file to define a parameter study using a `Cartesian
 Product`_ sampling methodology.
 
 .. admonition:: What is Cartesian Product
-   
-   A "cartesian product" is a set of all ordered pairs of the elements for a series of list objects. Another commonly 
+
+   A "cartesian product" is a set of all ordered pairs of the elements for a series of list objects. Another commonly
    used synonym for `Cartesian Product`_ is *Full Factorial*.
 
-   Take a parameter study defined by variables ``A`` which has three samples, ``B`` which has two samples, and ``C`` 
+   Take a parameter study defined by variables ``A`` which has three samples, ``B`` which has two samples, and ``C``
    which has one sample. The result will be a parameter study that contains six (``3x2x1``) simulations.
-   
+
    For more information, see this `Cartesian Product`_ Wiki page.
 
 5. Create a new file ``eabm_package/python/tutorial_07_cartesian_product.py`` from the content below.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/python/tutorial_07_cartesian_product.py
 
-   .. literalinclude:: python_tutorial_07_cartesian_product.py 
-      :language: Python 
+   .. literalinclude:: python_tutorial_07_cartesian_product.py
+      :language: Python
 
-The ``tutorial_07_cartesian_product.py`` file you just created is very similar to the 
-``single_element_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference 
-between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note 
-that the ``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters 
-only have a single value. The :meth:`waves.parameter_generators.CartesianProduct` API explains this requirement for the 
+The ``tutorial_07_cartesian_product.py`` file you just created is very similar to the
+``single_element_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference
+between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note
+that the ``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters
+only have a single value. The :meth:`waves.parameter_generators.CartesianProduct` API explains this requirement for the
 "schema values" to be an iterable.
 
-In the ``parameter_schema``, we have defined two parameters with two samples each and two parameters with one sample 
+In the ``parameter_schema``, we have defined two parameters with two samples each and two parameters with one sample
 each. This will result in four (``2x2x1x1``) total simulations.
 
 **********
@@ -86,13 +86,13 @@ wrapping the task generation for each parameter set. For convenience, the full s
 wholesale copy and paste when creating the new ``SConscript`` file.
 
 .. note::
-   
-   In the :ref:`tutorial_cartesian_product_waves_directory_structure` section of this tutorial, you were instructed to 
-   copy the ``SConscript`` file from :ref:`tutorial_include_files_waves` to the ``tutorial_07_cartesian_product`` 
-   directory. If you prefer, you may start with a blank ``SConscript`` file in the ``tutorial_07_cartesian_product`` 
+
+   In the :ref:`tutorial_cartesian_product_waves_directory_structure` section of this tutorial, you were instructed to
+   copy the ``SConscript`` file from :ref:`tutorial_include_files_waves` to the ``tutorial_07_cartesian_product``
+   directory. If you prefer, you may start with a blank ``SConscript`` file in the ``tutorial_07_cartesian_product``
    directory and simply copy and paste the contents below into your blank file.
 
-After viewing the full file contents below, continue to read the 
+After viewing the full file contents below, continue to read the
 :ref:`tutorial_cartesian_product_waves_step_by_step_sconscript_discussion` for building the
 ``tutorial_07_cartesian_product/SConscript`` file from scratch.
 
@@ -114,12 +114,12 @@ Step-By-Step SConscript Discussion
       :end-before: marker-1
       :emphasize-lines: 7, 10
 
-The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import 
-statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the 
-``parameter_schema`` dictionary into the ``SConscript`` file's name space from the ``tutorial_07_cartesian_product`` 
-module that you created in the :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial. 
-The second import line should look familiar, but is worth pointing out again. Here, we import the ``env`` variable from 
-the parent construction environment. This will provide access to variables we added to the ``SConstruct`` file's 
+The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
+statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
+``parameter_schema`` dictionary into the ``SConscript`` file's name space from the ``tutorial_07_cartesian_product``
+module that you created in the :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial.
+The second import line should look familiar, but is worth pointing out again. Here, we import the ``env`` variable from
+the parent construction environment. This will provide access to variables we added to the ``SConstruct`` file's
 ``project_variables`` dictionary in previous tutorials.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -131,11 +131,11 @@ the parent construction environment. This will provide access to variables we ad
       :end-before: marker-2
       :emphasize-lines: 6-7
 
-The unhighlighted portions of the code snippet above do not present any unique code that has not been previously 
+The unhighlighted portions of the code snippet above do not present any unique code that has not been previously
 discussed.
 
-The highlighted portions of the code snippet above define some new variables that will get used in various places in 
-this tutorial's code. Namely, ``parameter_set_file_template`` defines how the parameter sets, and subsequently the 
+The highlighted portions of the code snippet above define some new variables that will get used in various places in
+this tutorial's code. Namely, ``parameter_set_file_template`` defines how the parameter sets, and subsequently the
 directories for each parameterized simulation, will be named.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -146,14 +146,14 @@ directories for each parameterized simulation, will be named.
       :start-after: marker-2
       :end-before: marker-3
 
-The code above generates the parameter study for this tutorial using the 
-:meth:`waves.parameter_generators.CartesianProduct` method. The ``parameter_schema`` that was imported in previous code 
-is used to define the parameter bounds, and the ``output_file_template`` option defines how the parameter set output 
-files will be named, and subsequently how the parameter sets will be accessed in the ``parameter_study`` object. The 
-``parameter_study`` object is an `xarray dataset`_. For more information about the structure of the 
-``parameter_generator`` and ``parameter_study`` objects, see the :meth:`waves.parameter_generators.CartesianProduct` 
-API. The API contains an example that prints ``parameter_study`` and shows the organization of the `xarray dataset`_. 
-Note that the API's example does not use the same ``parameter_schema`` as this tutorial, but rather a general set of 
+The code above generates the parameter study for this tutorial using the
+:meth:`waves.parameter_generators.CartesianProduct` method. The ``parameter_schema`` that was imported in previous code
+is used to define the parameter bounds, and the ``output_file_template`` option defines how the parameter set output
+files will be named, and subsequently how the parameter sets will be accessed in the ``parameter_study`` object. The
+``parameter_study`` object is an `xarray dataset`_. For more information about the structure of the
+``parameter_generator`` and ``parameter_study`` objects, see the :meth:`waves.parameter_generators.CartesianProduct`
+API. The API contains an example that prints ``parameter_study`` and shows the organization of the `xarray dataset`_.
+Note that the API's example does not use the same ``parameter_schema`` as this tutorial, but rather a general set of
 parameters using different variable types.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -164,22 +164,22 @@ parameters using different variable types.
       :start-after: marker-3
       :end-before: marker-4
 
-In the ``for`` loop definition above, the ``set_name`` and ``parameter_samples`` variables are defined by iterating on 
-the ``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``). The ``samples`` data variable 
-of the ``parameter_study`` is grouped by the coordinate ``parameter_sets``. This will return an iterable to the ``for`` 
-loop definition that contains the ``set_name`` and the ``parameter_samples`` information. ``parameter_samples`` contains 
+In the ``for`` loop definition above, the ``set_name`` and ``parameter_samples`` variables are defined by iterating on
+the ``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``). The ``samples`` ``data_type`` coordinate
+of the ``parameter_study`` is grouped by the coordinate ``parameter_sets``. This will return an iterable to the ``for``
+loop definition that contains the ``set_name`` and the ``parameter_samples`` information. ``parameter_samples`` contains
 both the names of the parameters and the parameter values for a given ``set_name``.
 
-Inside the ``for`` loop, the ``set_name`` variable is cast to a `Python pathlib`_ object, as it will aid in constructing 
-file locations later in the ``SConscript`` file. Next, the ``parameter_samples`` `xarray dataset`_ is converted to a 
-dictionary. At first declaration, ``simulation_variables`` is a dictionary whose keys are the names of the parameters 
-and whose values are the parameter values for a particular ``set_name``. This format of the ``simulation_variables`` 
+Inside the ``for`` loop, the ``set_name`` variable is cast to a `Python pathlib`_ object, as it will aid in constructing
+file locations later in the ``SConscript`` file. Next, the ``parameter_samples`` `xarray dataset`_ is converted to a
+dictionary. At first declaration, ``simulation_variables`` is a dictionary whose keys are the names of the parameters
+and whose values are the parameter values for a particular ``set_name``. This format of the ``simulation_variables``
 dictionary will not be sufficient for our usecase, however. Recall from the :ref:`tutorial_parameter_substitution_waves`
-:ref:`tutorial_parameter_substitution_waves_SConscript` file where you created a ``simulation_variables`` dictionary 
-whose keys contained leading and trailing ``@`` characters for parameter substitution. To replicate this format, the 
-next line of code modifies the existing ``simulation_variables`` dictionary and overwrites the variable with a 
-dictionary formatted like as in :ref:`tutorial_parameter_substitution_waves`. The ``parameter_name`` is used as the 
-dictionary key padded with leading and trailing ``@`` characters. The result is a dictionary with keys that can be used 
+:ref:`tutorial_parameter_substitution_waves_SConscript` file where you created a ``simulation_variables`` dictionary
+whose keys contained leading and trailing ``@`` characters for parameter substitution. To replicate this format, the
+next line of code modifies the existing ``simulation_variables`` dictionary and overwrites the variable with a
+dictionary formatted like as in :ref:`tutorial_parameter_substitution_waves`. The ``parameter_name`` is used as the
+dictionary key padded with leading and trailing ``@`` characters. The result is a dictionary with keys that can be used
 for identifying the parameters where the values should be substituted.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -190,12 +190,12 @@ for identifying the parameters where the values should be substituted.
       :start-after: marker-4
       :end-before: marker-5
 
-The lines of code above are simply a copy of the previous Geometry, Partition, Mesh, and SolverPrep workflows. Note the 
+The lines of code above are simply a copy of the previous Geometry, Partition, Mesh, and SolverPrep workflows. Note the
 following two important aspects of the code above:
 
 * The indent of four spaces, as this code is inside of the ``for`` loop you created earlier
-* The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and 
-  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Remember to use the leading and trailing ``@`` 
+* The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and
+  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Remember to use the leading and trailing ``@``
   characters when attempting to access parameter values from the ``simulation_variables`` dictionary.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -206,10 +206,10 @@ following two important aspects of the code above:
       :start-after: marker-5
       :end-before: marker-6
 
-The code above closes out our familiar workflow with the use of the :meth:`waves.builders.abaqus_solver` method. Just as 
-in previous tutorials, we first run a datacheck to confirm that the Abaqus Solver's requirements are satisfied, and then 
-the simulation is executed in ernest. Note that the ``# Abaqus Solver`` code is still within the ``for`` loop, so the 
-Abaqus Solver will be called as many times as we have parameter sets. In this case, we will solve four Abaqus 
+The code above closes out our familiar workflow with the use of the :meth:`waves.builders.abaqus_solver` method. Just as
+in previous tutorials, we first run a datacheck to confirm that the Abaqus Solver's requirements are satisfied, and then
+the simulation is executed in ernest. Note that the ``# Abaqus Solver`` code is still within the ``for`` loop, so the
+Abaqus Solver will be called as many times as we have parameter sets. In this case, we will solve four Abaqus
 simulations.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -219,9 +219,9 @@ simulations.
       :lineno-match:
       :start-after: marker-6
 
-The final additions to the ``SConscript`` file are a few lines of code that are directly copy-and-pasted from your 
-previous tutorial ``SConscript`` file. Note, however, that these final lines of code are outside of the ``for`` loop 
-that contained the previous snippets of code. These final lines of code exists outside the ``for`` loop because we want 
+The final additions to the ``SConscript`` file are a few lines of code that are directly copy-and-pasted from your
+previous tutorial ``SConscript`` file. Note, however, that these final lines of code are outside of the ``for`` loop
+that contained the previous snippets of code. These final lines of code exists outside the ``for`` loop because we want
 to include the *tasks for all parameter sets* in the convenience alias, ``tutorial_07_cartesian_product``.
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
@@ -262,18 +262,18 @@ Build Targets
    $ scons tutorial_07_cartesian_product --jobs=4
    <output truncated>
 
-In the command above, `SCons`_ is instructed to use four threads to build this tutorial's targets. For this tutorial, 
-four ``jobs`` is a sensible number, as we have four simulations to run that are independent of each other downstream 
+In the command above, `SCons`_ is instructed to use four threads to build this tutorial's targets. For this tutorial,
+four ``jobs`` is a sensible number, as we have four simulations to run that are independent of each other downstream
 from parameter set generation. By using the ``--jobs=4`` option, `SCons`_ can run all four simulations in parallel.
 
 .. warning::
-   
-   Be aware of the difference between `SCons`_ thread management and task threading requests. `SCons`_ only manages 
-   thread count (CPU) usage for task execution and does not control multi-threaded tasks. For example, if you specify 
-   ``scons --jobs=4``, `SCons`_ will use four worker threaders to execute task actions in parallel. If each of the four 
-   tasks also specifies multi-threading, `SCons`_ will **not** balance the requested CPU count for each task with the 
-   four worker threads already in use. An example of this is running Abaqus simulations on multiple CPUs, e.g. 
-   ``abaqus_options='-cpus 12'``. In this case, four worker threads that execute tasks each requesting 12 CPUs will 
+
+   Be aware of the difference between `SCons`_ thread management and task threading requests. `SCons`_ only manages
+   thread count (CPU) usage for task execution and does not control multi-threaded tasks. For example, if you specify
+   ``scons --jobs=4``, `SCons`_ will use four worker threaders to execute task actions in parallel. If each of the four
+   tasks also specifies multi-threading, `SCons`_ will **not** balance the requested CPU count for each task with the
+   four worker threads already in use. An example of this is running Abaqus simulations on multiple CPUs, e.g.
+   ``abaqus_options='-cpus 12'``. In this case, four worker threads that execute tasks each requesting 12 CPUs will
    result in the consumption of ``4+4*12`` CPUs.
 
 ************
@@ -281,7 +281,7 @@ Output Files
 ************
 
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
-below. Note the usage of ``-I`` to reduce clutter in the ``tree`` command output and the ``-d`` flag to specify only 
+below. Note the usage of ``-I`` to reduce clutter in the ``tree`` command output and the ``-d`` flag to specify only
 directories to be shown.
 
 .. code-block:: bash
@@ -298,11 +298,11 @@ directories to be shown.
 
     5 directories
 
-Explore the contents of the ``parameter_set0`` directory using the ``tree`` command. The contents of the remaining 
+Explore the contents of the ``parameter_set0`` directory using the ``tree`` command. The contents of the remaining
 ``parameter_set{1,2,3}`` directories will be very similar to that shown for ``parameter_set0``.
 
 .. code-block:: bash
-   
+
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
     $ tree build/tutorial_07_cartesian_product/parameter_set0
@@ -360,5 +360,5 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
 
     0 directories, 50 files
 
-The contents of the ``parameter_set0`` directory will appear identical to the contents of the previous tutorials. In 
+The contents of the ``parameter_set0`` directory will appear identical to the contents of the previous tutorials. In
 this case, the contents of the files is different, as we have inserted parameters as part of the parameter study.

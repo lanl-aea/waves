@@ -5,6 +5,7 @@ import sys
 import itertools
 import copy
 
+import yaml
 import numpy
 import xarray
 import scipy.stats
@@ -143,8 +144,8 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
-           parameter_1: '1'
-           parameter_2: 'a'
+           parameter_1: 1
+           parameter_2: a
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
@@ -183,22 +184,21 @@ class _ParameterGenerator(ABC):
                         dataset.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
-        prefix = ""
-        delimiter = ": "
-        # If no output file template is provided, printing to stdout or a single file
-        # Adjust indentation for syntactically correct YAML.
-        if not self.provided_template:
-            prefix = "  "
         text_list = []
         # Construct the output text
         for parameter_set_file in parameter_set_files:
-            samples = self.parameter_study['samples'].sel(parameter_sets=str(parameter_set_file)).values
-            text = ""
-            for sample, parameter_name in zip(samples, self.parameter_names):
-                text += f"{prefix}{parameter_name}{delimiter}{repr(sample)}\n"
+            text = yaml.safe_dump(
+                self.parameter_study.sel(data_type='samples',
+                                         parameter_sets=str(parameter_set_file)).to_pandas().to_dict()
+            )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
         if not self.provided_template:
+            # If no output file template is provided, printing to stdout or a single file
+            # Adjust indentation for syntactically correct YAML.
+            prefix = "  "
+            # TODO: split up text prefix change for readability
+            text_list = ["\n".join([f"{prefix}{item}" for item in text.split('\n')[:-1]])+"\n" for text in text_list]
             text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
@@ -263,7 +263,7 @@ class _ParameterGenerator(ABC):
         array = xarray.DataArray(
             data,
             coords=[self.parameter_set_names, self.parameter_names],
-            dims=['parameter_sets', 'parameters'],
+            dims=["parameter_sets", "parameters"],
             name=name
         )
         return array
@@ -285,12 +285,13 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         """
-        samples = self._create_parameter_array(self.samples, name='samples')
+        samples = self._create_parameter_array(self.samples, name="samples")
         if hasattr(self, "quantiles"):
-            quantiles = self._create_parameter_array(self.quantiles, name='quantiles')
-            self.parameter_study = xarray.merge([samples, quantiles])
+            quantiles = self._create_parameter_array(self.quantiles, name="quantiles")
+            self.parameter_study = xarray.concat([quantiles, samples],
+                    xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
-            self.parameter_study = samples.to_dataset()
+            self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
 
 
 class CartesianProduct(_ParameterGenerator):
@@ -325,12 +326,13 @@ class CartesianProduct(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (parameter_sets: 4, parameters: 2)
+       Dimensions:         (parameter_sets: 4, data_type: 1)
        Coordinates:
          * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
-         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+         * data_type       (data_type) <U7 'samples'
        Data variables:
-           samples         (parameter_sets, parameters) <U21 '1' 'a' '1' ... '2' 'b'
+           parameter_1     (parameter_sets, data_type) object 1 1 2 2
+           parameter_2     (parameter_sets, data_type) object 'a' 'b' 'a' 'b'
 
     Attributes after class instantiation
 
@@ -390,7 +392,7 @@ class LatinHypercube(_ParameterGenerator):
     .. code-block::
 
        parameter_schema = {
-           'num_simulations': 4  # Required key. Value must be an integer.
+           'num_simulations': 4,  # Required key. Value must be an integer.
            'parameter_1': {
                'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
                'loc': 50,               # distribution name.
@@ -407,13 +409,13 @@ class LatinHypercube(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (parameter_sets: 100, parameters: 2)
+       Dimensions:         (parameter_sets: 4, data_type: 2)
        Coordinates:
-         * parameter_sets  (parameter_sets) <U15 'parameter_set0' ... 'parameter_set99'
-         * parameters      (parameters) <U11 'parameter_1' 'parameter_2'
+         * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
+         * data_type       (data_type) <U9 'samples' 'quantiles'
        Data variables:
-           samples         (parameter_sets, parameters) float64 49.31 30.6 ... 31.36
-           quantiles       (parameter_sets, parameters) float64 0.245 0.245 ... 0.505
+           parameter_1     (parameter_sets, data_type) float64 48.85 0.125 ... 0.375
+           parameter_2     (parameter_sets, data_type) float64 30.97 0.375 ... 0.625
 
     Attributes after class instantiation
 
