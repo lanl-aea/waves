@@ -289,7 +289,8 @@ class _ParameterGenerator(ABC):
             data = numpy.dstack((self.samples.transpose(), self.quantiles.transpose()))
             data_type = ['samples', 'quantiles']
         else:
-            data = self.samples.transpose()
+            # Match dimension of the stacked samples/quantiles without adding quantiles
+            data = numpy.expand_dims(self.samples.transpose(), axis=2)
             data_type = ['samples']
         data_arrays = list()
         for parameter_data, name in zip(data, self.parameter_names):
