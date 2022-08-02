@@ -20,4 +20,3 @@ def test_main():
          patch("waves.waves.open_docs") as mock_open_docs:
         waves.main()
         mock_open_docs.assert_called()
-
