@@ -213,7 +213,12 @@ target_file = fs.File('/dummy.target')
 build_odb_extract_input = {
     'no kwargs': ([target_file], [source_file], {'abaqus_program': 'NA'},
                   [call(['/dummy.source'], '/dummy.target', output_type='h5', odb_report_args=None,
-                       abaqus_command='NA', delete_report_file=False)])
+                       abaqus_command='NA', delete_report_file=False)]),
+    'all kwargs': ([target_file], [source_file],
+                   {'abaqus_program': 'NA', 'output_type': 'different', 'odb_report_args': 'notnone',
+                    'delete_report_file': True},
+                   [call(['/dummy.source'], '/dummy.target', output_type='different', odb_report_args='notnone',
+                        abaqus_command='NA', delete_report_file=True)])
 }
 
 
