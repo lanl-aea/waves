@@ -262,7 +262,7 @@ class _ParameterGenerator(ABC):
         array = xarray.DataArray(
             data,
             coords=[self.parameter_set_names, self.parameter_names],
-            dims=['parameter_sets', 'parameters'],
+            dims=["parameter_sets", "parameters"],
             name=name
         )
         return array
@@ -284,20 +284,13 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         """
+        samples = self._create_parameter_array(self.samples, name="samples")
         if hasattr(self, "quantiles"):
-            data = numpy.dstack((self.samples.transpose(), self.quantiles.transpose()))
-            data_type = ['samples', 'quantiles']
+            quantiles = self._create_parameter_array(self.quantiles, name="quantiles")
+            self.parameter_study = xarray.concat([quantiles, samples],
+                    xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
-            # Match dimension of the stacked samples/quantiles without adding quantiles
-            data = numpy.expand_dims(self.samples.transpose(), axis=2)
-            data_type = ['samples']
-        data_arrays = list()
-        for parameter_data, name in zip(data, self.parameter_names):
-            data_arrays.append(
-                xarray.DataArray(parameter_data, coords=[self.parameter_set_names, data_type],
-                                 dims=['parameter_sets', 'data_type'], name=name)
-            )
-        self.parameter_study = xarray.merge(data_arrays)
+            self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
 
 
 class CartesianProduct(_ParameterGenerator):
