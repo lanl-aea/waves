@@ -19,6 +19,11 @@ Breaking changes
 - Re-organize the parameter study coordinates to allow mixed types, e.g. one parameter that uses strings and another
   that uses floats (:issue:`239`, :merge:`234`). By `Kyle Brindley`_.
 
+New Features
+============
+- Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML 
+  documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Robert`_.
+
 Bug fixes
 =========
 - Add construction environment variables to the Abaqus extract builder signature. Builder now re-executes when the
