@@ -5,6 +5,7 @@ import sys
 import itertools
 import copy
 
+import yaml
 import numpy
 import xarray
 import scipy.stats
@@ -192,10 +193,10 @@ class _ParameterGenerator(ABC):
         text_list = []
         # Construct the output text
         for parameter_set_file in parameter_set_files:
-            samples = self.parameter_study['samples'].sel(parameter_sets=str(parameter_set_file)).values
-            text = ""
-            for sample, parameter_name in zip(samples, self.parameter_names):
-                text += f"{prefix}{parameter_name}{delimiter}{repr(sample)}\n"
+            text = yaml.safe_dump(
+                self.parameter_study.sel(data_type='samples',
+                                         parameter_sets=str(parameter_set_file)).to_pandas().to_dict()
+            )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
         if not self.provided_template:
