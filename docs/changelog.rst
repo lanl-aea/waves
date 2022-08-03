@@ -8,6 +8,11 @@ Changelog
 0.3.2 (unreleased)
 ******************
 
+New Features
+============
+- Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML 
+  documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
+
 ******************
 0.3.1 (2022-08-02)
 ******************
@@ -18,11 +23,6 @@ Breaking changes
   attribute of dictionaries and datasets. (:issue:`234`, :merge:`229`). By `Kyle Brindley`_.
 - Re-organize the parameter study coordinates to allow mixed types, e.g. one parameter that uses strings and another
   that uses floats (:issue:`239`, :merge:`234`). By `Kyle Brindley`_.
-
-New Features
-============
-- Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML 
-  documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
 
 Bug fixes
 =========
