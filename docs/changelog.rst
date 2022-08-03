@@ -12,6 +12,8 @@ New Features
 ============
 - Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML
   documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
+- Add a Conda environment builder to aid in Python software stack documentation for reproducibility (:issue:`212`,
+  :merge:`239`). By `Kyle Brindley`_.
 
 Documentation
 =============

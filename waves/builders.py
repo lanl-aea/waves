@@ -210,8 +210,9 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
        waves.builders.copy_substitution(source_list, substitution_dictionary, env)
 
     :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
-    :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the template
-        characters, e.g. @variable@. The template character can be anything that works in the SCons Substfile builder.
+    :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional
+        template characters if present, e.g. ``@variable@``. The template character, e.g. ``@``, can be anything that
+        works in the `SCons Substfile`_ builder.
     :param SCons.Environment.Environment env: An SCons construction environment to use when defining the targets.
 
     :return: SCons NodeList of Copy and Substfile objects
@@ -294,6 +295,39 @@ def python_script():
                 f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"],
         emitter=_python_script_emitter)
     return python_builder
+
+
+def conda_environment():
+    """Create a Conda environment file with ``conda env export``
+
+    This builder is intended to help WAVES workflows document the Conda environment used in the current build. At least
+    one target file must be specified for the ``conda env export --file ${TARGET}`` output. Additional options to the
+    Conda ``env export`` subcommand may be passed as the builder keyword argument ``conda_env_export_options``.
+
+    The modsim owner may choose to re-use this builder throughout their project configuration to provide various levels
+    of granularity in the recorded Conda environment state. It's recommended to include this builder at least once for
+    any workflows that also use the :meth:`waves.builders.python_builder`. The builder may be re-used once per build
+    sub-directory to provide more granular build environment reproducibility in the event that sub-builds are run at
+    different times with variations in the active Conda environment. For per-Python script task environment
+    reproducibility, the builder source list can be linked to the output of a :meth:`waves.builders.python_builder` task
+    with a target environment file name to match.
+
+    The first recommendation, always building the project wide Conda environment file, is demonstrated in the example
+    usage below.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={'CondaEnvironment': waves.builders.conda_environment()})
+       environment_target = env.CondaEnvironment(target=['environment.yaml'])
+       env.AlwaysBuild(environment_target)
+    """
+    conda_environment_builder = SCons.Builder.Builder(
+        action=
+            [f"cd ${{TARGET.dir.abspath}} && conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"])
+    return conda_environment_builder
 
 
 def _abaqus_extract_emitter(target, source, env):

@@ -173,6 +173,15 @@ def test__python_script():
         target=['python_script_journal.cub'], source=['python_script_journal.py'], journal_options="")
 
 
+@pytest.mark.unittest
+def test__conda_environment():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'CondaEnvironment': builders.conda_environment()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.CondaEnvironment(
+        target=['environment.yaml'], source=[], conda_env_export_options="")
+
+
 source_file = fs.File('dummy.odb')
 abaqus_extract_emitter_input = {
     'empty targets': ([],
