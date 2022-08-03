@@ -16,6 +16,7 @@ Command(
 environment_target = env.CondaEnvironment(
     target=['environment.yaml'],
     source=[])
+env.AlwaysBuild(environment_target)
 
 # Add this target to the defaults list
 Default(readme_target, environment_target)
