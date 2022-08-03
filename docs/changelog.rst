@@ -10,8 +10,13 @@ Changelog
 
 New Features
 ============
-- Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML 
+- Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML
   documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
+
+Internal Changes
+================
+- Update the WAVES-EABM journal and python files for the PEP-8 style guide (:issue:`190`, :merge:`236`). By `Kyle
+  Brindley`_.
 
 ******************
 0.3.1 (2022-08-02)
