@@ -41,7 +41,7 @@ Description
 A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
 `WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
 repositories. The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_
-covers build system concepts, command line options, and project definition.
+covers build system concepts, command line options, and project configuration.
 
 This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
 testing of the `WAVES`_ extensions to SCons.
@@ -144,10 +144,10 @@ knowledge.
    $ export MANPATH=$MANPATH:$CONDA_PREFIX/man
    $ man scons
 
-This project contains two, separate `SCons`_ project definitions, where the ``SConstruct`` file name indicates an
+This project contains two, separate `SCons`_ project configurations, where the ``SConstruct`` file name indicates an
 `SCons`_ project by convention. The WAVES package and documentation are defined in the ``waves/SConstruct`` file. The
 WAVES-EABM stub and regression tests are defined in a separate ``waves/eabm/Sconstruct`` file. The following build
-commands apply to each, but must be run from their respective project definition parent directories, ``waves`` and
+commands apply to each, but must be run from their respective project configuration parent directories, ``waves`` and
 ``waves/eabm``. The available targets and aliases differ accordingly.
 
 - View project specific command line options
