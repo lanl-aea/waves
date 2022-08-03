@@ -311,13 +311,17 @@ def conda_environment():
     reproducibility, the builder source list can be linked to the output of a :meth:`waves.builders.python_builder` task
     with a target environment file name to match.
 
+    The first recommendation, always building the project wide Conda environment file, is demonstrated in the example
+    usage below.
+
     .. code-block::
        :caption: SConstruct
 
        import waves
        env = Environment()
        env.Append(BUILDERS={'CondaEnvironment': waves.builders.conda_environment()})
-       CondaEnvironment(target=['environment.yaml'])
+       environment_target = env.CondaEnvironment(target=['environment.yaml'])
+       env.AlwaysBuild(environment_target)
     """
     conda_environment_builder = SCons.Builder.Builder(
         action=
