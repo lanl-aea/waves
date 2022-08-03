@@ -17,6 +17,8 @@ Internal Changes
 ================
 - Update the WAVES-EABM journal and python files for the PEP-8 style guide (:issue:`190`, :merge:`236`). By `Kyle
   Brindley`_.
+- Remove the Abaqus keyword ``*PARAMETER`` from the parameter substitution tutorial because it's not supported for input
+  file import to CAE. (:issue:`240`, :merge:`238`). By `Kyle Brindley`_.
 
 ******************
 0.3.1 (2022-08-02)
