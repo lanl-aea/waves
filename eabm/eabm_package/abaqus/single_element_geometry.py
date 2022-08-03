@@ -6,6 +6,7 @@ import inspect
 import abaqus
 import abaqusConstants
 
+
 def main(output_file, model_name, part_name, width, height):
     """Create a simple rectangle geometry.
 
@@ -56,7 +57,7 @@ def get_parser():
     default_output_file = '{}'.format(basename_without_extension)
     default_width = 1.0
     default_height = 1.0
-    
+
     prog = "abaqus cae -noGui {} --".format(basename)
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.cae Abaqus model file."
     parser = argparse.ArgumentParser(description=cli_description,
@@ -85,4 +86,3 @@ if __name__ == '__main__':
                   part_name=args.part_name,
                   width=args.width,
                   height=args.height))
-
