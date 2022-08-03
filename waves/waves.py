@@ -42,7 +42,7 @@ def get_parser():
     
     subparsers = main_parser.add_subparsers(
         help=f"Specify {_settings._project_name_short.lower()} sub-commands",
-        title=f"{_settings._project_name_short} commands",
+        title=f"{_settings._project_name_short} sub-commands",
         description=f"Common {_settings._project_name_short.lower()} sub-commands to specify {_settings._project_name_short} usage",
         dest='subcommand')  # so args.subcommand will contain the name of the subcommand called
     
