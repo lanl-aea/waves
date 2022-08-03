@@ -5,6 +5,7 @@ import shutil
 
 import cubit
 
+
 def main(input_file, output_file, global_seed):
     """Create a simple rectangle geometry.
 
