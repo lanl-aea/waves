@@ -11,7 +11,7 @@ import mesh
 
 filename = inspect.getfile(lambda: None)
 sys.path.insert(0, os.path.dirname(filename))
-import abaqus_journal_utilities 
+import abaqus_journal_utilities
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
@@ -106,6 +106,7 @@ def get_parser():
     parser.add_argument('-g', '--global-seed', type=float, default=default_global_seed,
                         help="The global mesh seed size")
     return parser
+
 
 if __name__ == '__main__':
     parser = get_parser()
