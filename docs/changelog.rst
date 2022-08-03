@@ -13,6 +13,11 @@ New Features
 - Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML
   documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
 
+Documentation
+=============
+- Standardize on 'project configuration' language to describe SCons scripts: SConstruct and SConscript (:issue:`134`,
+  :merge:`237`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Update the WAVES-EABM journal and python files for the PEP-8 style guide (:issue:`190`, :merge:`236`). By `Kyle
