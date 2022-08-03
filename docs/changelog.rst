@@ -8,6 +8,11 @@ Changelog
 0.3.2 (unreleased)
 ******************
 
+New Features
+============
+- Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML 
+  documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
+
 ******************
 0.3.1 (2022-08-02)
 ******************
@@ -26,6 +31,10 @@ Bug fixes
 - Re-organize the parameter study coordinates to allow mixed types, e.g. one parameter that uses strings and another
   that uses floats. Fixes the parameter study read/write to h5 files to avoid unexpected type conversions (:issue:`239`,
   :merge:`234`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Complete WAVES Tutorial 07: Cartesian Product (:issue:`103`, :merge:`152`). By `Thomas Roberts`_.
 
 Internal Changes
 ================

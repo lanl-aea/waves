@@ -2,6 +2,15 @@
 Command Line Utilities
 ######################
 
+******************************
+|PROJECT| Command Line Utility
+******************************
+
+The |PROJECT| command line utility provides HTML documentation and meta information about the |PROJECT| Conda package.
+
+.. argparse::
+   :ref: waves.waves.get_parser
+
 ***********************
 |PROJECT| Build Wrapper
 ***********************

@@ -10,3 +10,4 @@ _abaqus_environment_extension = f".{_abaqus_environment_file}"
 _abaqus_solver_common_suffixes = [".odb", ".dat", ".msg", ".com", ".prt"]
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
+_docs_directory = _project_root_abspath / 'docs'
