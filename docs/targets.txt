@@ -88,7 +88,7 @@
 .. _`Cartesian Product`: https://en.wikipedia.org/wiki/Cartesian_product
 
 .. Project specific links
-.. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves/cpp_stub
+.. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves 
 .. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
 .. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/eabm/eabm_package/abaqus
 .. _`WAVES-EABM environment file`: https://re-git.lanl.gov/aea/python-projects/waves/-/blob/dev/eabm/environment.txt
