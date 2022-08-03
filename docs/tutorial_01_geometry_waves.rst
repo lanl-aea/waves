@@ -315,7 +315,7 @@ but that may change in production EABMs.
      .. literalinclude:: abaqus_single_element_geometry.py
          :language: Python
          :linenos:
-         :emphasize-lines: 9-21, 25-36, 52, 55-58, 61, 64-74, 83-87
+         :emphasize-lines: 10-22, 26-37, 53, 56-59, 62, 65-75, 84-88
 
 ***************
 SConstruct File
