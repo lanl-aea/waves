@@ -76,6 +76,7 @@ documentation_file_list = [
     'tutorial_09_post_processing_waves.rst',
     'tutorial_cubit.rst',
     'tutorial_environment_activation.txt',
+    'waves_access_and_appendix.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
     'zreferences.rst',
