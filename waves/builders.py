@@ -296,6 +296,35 @@ def python_script():
     return python_builder
 
 
+def conda_environment():
+    """Create a Conda environment file with ``conda env export``
+
+    This builder is intended to help WAVES workflows document the Conda environment used in the current build. At least
+    one target file must be specified for the ``conda env export --file ${TARGET}`` output. Additional options to the
+    Conda ``env export`` subcommand may be passed as the builder keyword argument ``conda_env_export_options``.
+
+    The modsim owner may choose to re-use this builder throughout their project configuration to provide various levels
+    of granularity in the recorded Conda environment state. It's recommended to include this builder at least once for
+    any workflows that also use the :meth:`waves.builders.python_builder`. The builder may be re-used once per build
+    sub-directory to provide more granular build environment reproducibility in the event that sub-builds are run at
+    different times with variations in the active Conda environment. For per-Python script task environment
+    reproducibility, the builder source list can be linked to the output of a :meth:`waves.builders.python_builder` task
+    with a target environment file name to match.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={'CondaEnvironment': waves.builders.conda_environment()})
+       CondaEnvironment(target=['environment.yaml'])
+    """
+    conda_environment_builder = SCons.Builder.Builder(
+        action=
+            [f"cd ${{TARGET.dir.abspath}} && conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"])
+    return conda_environment_builder
+
+
 def _abaqus_extract_emitter(target, source, env):
     """Prepends the abaqus extract builder target H5 file if none is specified. Always appends the source[0].csv file.
     Always appends the ``target[0]_datasets.h5`` file.
