@@ -42,7 +42,7 @@ Building targets
 
 .. note::
 
-   The ``--sconstruct`` option is required because the quickstart project definition file name doesn't follow the
+   The ``--sconstruct`` option is required because the quickstart project configuration file name doesn't follow the
    `SCons`_ naming convention, ``SConstruct``.
 
 ************

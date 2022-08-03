@@ -42,7 +42,7 @@ Core Lessons
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
-                   01:00 :ref:`tutorialsconstruct`                    `SCons`_ project definition and meta data
+                   01:00 :ref:`tutorialsconstruct`                    `SCons`_ project configuration and meta data
                    01:00 :ref:`tutorial_geometry_waves`               Hierarchical `SCons`_ builds, task creation,
                                                                       Abaqus journal files as small utility software
                    00:45 :ref:`tutorial_partition_mesh_waves`         Dependent tasks and execution order

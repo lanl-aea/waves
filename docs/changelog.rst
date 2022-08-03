@@ -344,7 +344,7 @@ Documentation
   Brindley`_.
 - Add minimum scaffolding for the simulation tutorial documentation (:issue:`146`, :merge:`112`). By `Kyle
   Brindley`_.
-- Add a quickstart tutorial using a single project definition file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
+- Add a quickstart tutorial using a single project configuration file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
 - Add the EABM API and CLI to an Appendices section in the WAVES documentation (:issue:`138`, :merge:`104`).
   By `Thomas Roberts`_.
 - Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By
@@ -387,7 +387,7 @@ Internal Changes
 - Specify Sphinx v4.5.0 in the enviroment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
 - Removed duplicate code in the docs/SConscript file (:issue:`128`, :merge:`93`). By `Sergio Cordova`_
 - Changed test_builders so journal.stdout is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
-- Create per-tutorial EABM stub project definition files (SConstruct) to aid in incremental changes in the tutorial
+- Create per-tutorial EABM stub project configuration files (SConstruct) to aid in incremental changes in the tutorial
   documentation and allow for per-tutorial regression tests (:issue:`131`, :merge:`97`). By `Kyle Brindley`_.
 - Added odb_extract rst documentation and added odb_extract, msg_parse, and sta_parse to pyrpojects.toml
   (:issue:`132`, :merge:`96`). By `Prabhu Khalsa`_
@@ -554,7 +554,7 @@ Documentation
 New Features
 ============
 - Append the Abaqus journal Builder managed targets automatically (:issue:`18`, :merge:`10`). By `Kyle Brindley`_.
-- Separate the common custom builders from the EABM SCons project definition (:issue:`19`, :merge:`11`). By `Kyle
+- Separate the common custom builders from the EABM SCons project configuration (:issue:`19`, :merge:`11`). By `Kyle
   Brindley`_.
 - Add a variable to pass through additional Abaqus command line arguments to the Abaqus journal file builder
   (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.

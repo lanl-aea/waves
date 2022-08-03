@@ -211,7 +211,7 @@ changes made in this tutorial.
       :diff: eabm_tutorial_04_simulation_SConstruct
 
 A previous tutorial constructed the ``simulation_variables`` and the ``substitution_dictionary`` variables. The
-``simulation_variables`` dictionary is used to define simulation parameters for SCons project definition and script
+``simulation_variables`` dictionary is used to define simulation parameters for SCons project configuration and script
 command line interfaces. The ``substitution_dictionary`` is constructed from the ``simulation_variables`` dictionary to
 apply the parameter substitution syntax (leading and trailing ``@`` character) to each variable name for use with the
 ``copy_substitute`` method as introduced in the current tutorial.
