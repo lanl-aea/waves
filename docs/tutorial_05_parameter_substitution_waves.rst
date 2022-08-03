@@ -68,19 +68,10 @@ more detail later in this tutorial.
       :language: text
       :diff: abaqus_single_element_compression.inp
 
-First, we add the ``displacement`` Abaqus parameter in Python 2 syntax to the ``single_element_compression.inp.in`` file
-using the `Abaqus *PARAMETER`_ keyword. Second, we use the parameter value with the Abaqus parameter syntax,
-``<displacement>``. Casting the value substituted by the parameter to a ``float`` ensures that the ``displacement``
-parameter ends up the proper variable type. Note that the `SCons Substfile`_ builder performs a literal string
-substitution in the target file, so it is necessary to prepare the correct syntax for the file type where the
-substitution occurs. When type ambiguity may arise, explicit type casting may help in debugging bugs caused by variable
-type conversions. For instance, when a float, ``2.0``, is required but a direct string replacement may result in an
-integer as ``2``. It's also possible to use the native string replacement, for instance one could use ``str`` as a
-parameter to change the name of the material assigned to a part in the model.
-
-The final modification to make to the ``single_element_compression.inp.in`` file is to replace the hardcoded
-displacement value of ``-1.0`` with the parameter key ``<displacement>``. With this change, the Abaqus file parser will
-know to use the value of the ``displacement`` parameter anywhere it sees ``<displacement>``.
+The modification made to the ``single_element_compression.inp.in`` file is to replace the hardcoded displacement value
+of ``-1.0`` with the parameter substitution key ``@displacement@``. Note that the `SCons Substfile`_ builder performs a
+literal string substitution in the target file, so it is necessary to prepare the correct syntax for the file type where
+the substitution occurs.
 
 .. _tutorial_parameter_substitution_waves_SConscript:
 

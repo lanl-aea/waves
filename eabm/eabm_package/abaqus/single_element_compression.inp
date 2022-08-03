@@ -2,7 +2,6 @@
 *HEADING
 Compressing a single element
 **
-**
 *INCLUDE, INPUT=parts.inp
 **
 *ASSEMBLY,NAME=A
