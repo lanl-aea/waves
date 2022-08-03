@@ -74,4 +74,4 @@ WAVES
    :members:
    :private-members:
    :show-inheritance:
-   :synopsis: waves command line utlitiy functionality
+   :synopsis: waves command line utility
