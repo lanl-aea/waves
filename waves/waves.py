@@ -41,9 +41,9 @@ def get_parser():
         version=f'{_settings._project_name_short.upper()} {__version__}')
     
     subparsers = main_parser.add_subparsers(
-        help=f"Specify {_settings._project_name_short.lower()} sub-command",
+        help=f"Specify {_settings._project_name_short.lower()} sub-commands",
         title=f"{_settings._project_name_short} commands",
-        description=f"Common {_settings._project_name_short.lower()} commands to specify {_settings._project_name_short} usage",
+        description=f"Common {_settings._project_name_short.lower()} sub-commands to specify {_settings._project_name_short} usage",
         dest='subcommand')  # so args.subcommand will contain the name of the subcommand called
     
     docs_parser = argparse.ArgumentParser(add_help=False)
