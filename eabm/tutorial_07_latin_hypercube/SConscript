@@ -4,7 +4,7 @@ import pathlib
 
 import waves
 
-from eabm_package.python.tutorial_07_latin_hypercube import parameter_schema
+from eabm_package.python.single_element_compression_latin_hypercube import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
