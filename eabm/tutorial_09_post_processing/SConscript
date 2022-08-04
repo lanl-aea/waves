@@ -9,6 +9,8 @@ from eabm_package.python.single_element_compression_cartesian_product import par
 # Inherit the parent construction environment
 Import('env')
 
+# Comment used in tutorial code snippets: marker-1
+
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
@@ -26,6 +28,8 @@ model = "single_element"
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
+# Comment used in tutorial code snippets: marker-2
+
 # Parameter Study with Cartesian Product
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
@@ -33,6 +37,8 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     output_file_type=parameter_study_syntax)
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
+
+# Comment used in tutorial code snippets: marker-3
 
 # TODO: Find a way to write the parameter study without a user-custom Python build function
 def write_parameter_study(target, source, env):
@@ -52,6 +58,8 @@ workflow.extend(env.Command(
 for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
     set_name = pathlib.Path(set_name)
     simulation_variables = parameter_samples.to_pandas().to_dict()
+
+    # Comment used in tutorial code snippets: marker-4
 
     # Geometry
     journal_file = f"{model}_geometry"
@@ -100,6 +108,8 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
         substitution_dictionary=waves.builders.substitution_syntax(simulation_variables),
         build_subdirectory=set_name))
 
+# Comment used in tutorial code snippets: marker-5
+
     # Abaqus Solve
     solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
     solve_source_list.append([f"{set_name / journal_file}.inp"])
@@ -125,6 +135,8 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
     workflow.extend(env.AbaqusExtract(
         target=[f"{set_name / job_name}.h5"],
         source=extract_source_list))
+
+# Comment used in tutorial code snippets: marker-6
 
 # Post-processing
 plot_name = "stress_strain_comparison.pdf"
