@@ -132,7 +132,10 @@ shown in the first highlighted section, we will end up passing a string that loo
 
    journal_options = "--width 1.0 --height 1.0"
 
-This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mesh``.
+This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mesh``. `SCons`_ will save a signature of
+the completed action string as part of the task definition. If the substituted parameter values change, `SCons`_ will
+recognize that the tasks need to be re-executed in the same way that tasks need to be re-executed when the contents of a
+source file change.
 
 9. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the
    code pertaining to ``# SolverPrep``.
