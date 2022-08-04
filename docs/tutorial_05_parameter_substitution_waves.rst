@@ -9,7 +9,6 @@ References
 **********
 
 * `SCons Substfile`_
-* `Abaqus *PARAMETER`_ keyword documentation
 
 ***********
 Environment
@@ -108,10 +107,9 @@ journal files via the CLI.
 The final key-value pair defined in the ``simulation_variables`` dictionary is ``displacement``. This parameter will be
 used in a slightly different way than the others, as the script that utilizes this parameter does not function with a
 command line interface. Recall from earlier in this tutorial, we created a new file called
-``single_element_compression.inp.in`` and added an `Abaqus *PARAMETER`_ definition with the ``@displacement@`` key.
-This text file parameter substitution is the primary reason the ``@`` characters are required in the
-``simulation_variables`` keys.  Disussion of exactly how this is implemented with the
-:meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
+``single_element_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
+the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
+this is implemented with the :meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
 
 8. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
