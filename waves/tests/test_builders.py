@@ -16,7 +16,12 @@ fs = SCons.Node.FS.FS()
 substitution_dictionary = {'thing1': 1, 'thing_two': 'two'}
 substitution_syntax_input = {
     'default characters': (substitution_dictionary, {}, {'@thing1@': 1, '@thing_two@': 'two'}),
-    'provided pre/postfix': (substitution_dictionary, {'prefix': '$', 'postfix': '%'}, {'$thing1%': 1, '$thing_two%': 'two'})
+    'provided pre/postfix': (substitution_dictionary, {'prefix': '$', 'postfix': '%'},
+                             {'$thing1%': 1, '$thing_two%': 'two'}),
+    'int key': ({1: 'one'}, {}, {'@1@': 'one'}),
+    'float key': ({1.0: 'one'}, {}, {'@1.0@': 'one'}),
+    'nested': ({'nest_parent': {'nest_child': 1}, 'thing_two': 'two'}, {},
+               {'@nest_parent@': {'nest_child': 1}, '@thing_two@': 'two'})
 }
 
 
