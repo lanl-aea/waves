@@ -14,6 +14,8 @@ New Features
   documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
 - Add a Conda environment builder to aid in Python software stack documentation for reproducibility (:issue:`212`,
   :merge:`239`). By `Kyle Brindley`_.
+- Add a substitution syntax helper to prepend and append special characters on dictionary key strings (:issue:`235`,
+  :merge:`240`). By `Kyle Brindley`_.
 
 Documentation
 =============
