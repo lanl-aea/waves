@@ -48,7 +48,6 @@ env = Environment(ENV=os.environ.copy(),
 env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
 
 # Comments used in tutorial code snippets: marker-4
-
 # Comments used in tutorial code snippets: marker-5
 
 # Set project internal variables and variable substitution dictionaries
