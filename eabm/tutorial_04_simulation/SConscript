@@ -11,7 +11,6 @@ Import('env')
 project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
-
 # Simulation variables
 model = "single_element"
 

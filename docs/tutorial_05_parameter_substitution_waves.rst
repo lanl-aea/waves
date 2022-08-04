@@ -87,8 +87,8 @@ SConscript
    .. literalinclude:: tutorial_05_parameter_substitution_SConscript
       :language: Python
       :lineno-match:
-      :start-after: marker-1
-      :end-before: marker-2
+      :start-after: marker-0
+      :end-before: marker-1
       :emphasize-lines: 3-8
 
 In the code you just added, a ``simulation_variables`` dictionary is defined.  Each key-value pair in the
@@ -119,9 +119,9 @@ this is implemented with the :meth:`waves.builders.copy_substitute` builder will
    .. literalinclude:: tutorial_05_parameter_substitution_SConscript
       :language: Python
       :lineno-match:
-      :start-after: marker-3
-      :end-before: marker-4
-      :emphasize-lines: 3, 11, 19
+      :start-after: marker-1
+      :end-before: marker-3
+      :emphasize-lines: 6, 16, 24 
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
 pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using a formatted string as
@@ -145,8 +145,8 @@ source file change.
    .. literalinclude:: tutorial_05_parameter_substitution_SConscript
       :language: Python
       :lineno-match:
-      :start-after: marker-4
-      :end-before: marker-5
+      :start-after: marker-3
+      :end-before: marker-4
       :emphasize-lines: 3, 13-15
 
 Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` must be updated to reflect the replacement
