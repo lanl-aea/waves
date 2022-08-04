@@ -179,8 +179,8 @@ without changes to the project configuration.
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
-      :start-after: marker-5
-      :end-before: marker-6
+      :start-after: marker-4
+      :end-before: marker-5
 
 The `WAVES-EABM`_ makes use of the `SCons hierarchical build`_ feature to separate simulation output in the build
 directory. This is valuable for :term:`modsim repositories` that include a suite of simulations. To avoid hardcoded duplication
@@ -195,8 +195,8 @@ introduced in :ref:`tutorial_geometry_waves`.
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
-      :start-after: marker-6
-      :end-before: marker-7
+      :start-after: marker-5
+      :end-before: marker-6
 
 Although it is possible to re-create the `WAVES-EABM`_ entirely in native `SCons`_ code, the builder extensions provided
 by `WAVES`_ reduce the requisite background knowledge to begin creating :term:`EABM` repositories. The construction environment
@@ -214,8 +214,8 @@ builders`_.
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
-      :start-after: marker-7
-      :end-before: marker-8
+      :start-after: marker-6
+      :end-before: marker-7
 
 The for loop in this code-snippet is the method for implementing an `SCons hierarchical build`_. The ``exports`` keyword
 argument allows the project configuration file to pass the ``env`` construction environment variable with the `SCons
@@ -230,8 +230,8 @@ list in :ref:`tutorial_geometry_waves`.
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
-      :start-after: marker-8
-      :end-before: marker-9
+      :start-after: marker-7
+      :end-before: marker-8
 
 Because the `WAVES-EABM`_ contains a suite of simulations, it is useful to limit what `SCons`_ will build by default. To
 protect against running all simulations by default, create an empty default list. This will require that simulation
@@ -261,8 +261,8 @@ use of the ``Help()`` `SCons`_ method must include the ``append=True`` keyword a
    .. literalinclude:: eabm_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
-      :start-after: marker-9
-      :end-before: marker-10
+      :start-after: marker-8
+      :end-before: marker-9
 
 Simulation build workflows will typically involve many targets and tasks in a non-trivial execution order. The target
 file names may also be cumbersome to type when explicitly listing build targets in the `SCons`_ build command. For

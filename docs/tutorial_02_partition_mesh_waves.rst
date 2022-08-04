@@ -54,8 +54,8 @@ SConscript
    .. literalinclude:: tutorial_02_partition_mesh_SConscript
       :language: Python
       :lineno-match:
-      :start-after: marker-1
-      :end-before: marker-2
+      :start-after: marker-2
+      :end-before: marker-3
 
 Just like building the geometry in :ref:`tutorial_geometry_waves`, the code you just added instructs SCons on how to
 build the targets for partitioning and meshing our single element part. Again, the ``journal_file`` variable exists
