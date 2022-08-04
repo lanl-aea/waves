@@ -8,6 +8,11 @@ Changelog
 0.3.2 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Remove redundant parameter file dependency from WAVES-EABM parameter substitution tutorial source files (:issue:`246`,
+  :merge:`243`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML
@@ -24,6 +29,8 @@ Documentation
 - Update the tutorial discussions about the simulation variables dictionary usage (:issue:`243`, :merge:`241`). By `Kyle
   Brindley`_.
 - Standardize the WAVES-EABM parameter set module names (:issue:`245`, :merge:`242`). By `Kyle Brindley`_.
+- Discuss task signatures related to parameter set values in the WAVES-EABM parameter substitution tutorial
+  (:issue:`246`, :merge:`243`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
