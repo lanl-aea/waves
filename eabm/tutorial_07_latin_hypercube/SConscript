@@ -9,6 +9,8 @@ from eabm_package.python.single_element_compression_latin_hypercube import param
 # Inherit the parent construction environment
 Import('env')
 
+# Comment used in tutorial code snippets: marker-1
+
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
@@ -25,6 +27,8 @@ simulation_constants = {
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
+# Comment used in tutorial code snippets: marker-2
+
 # Parameter Study with Latin Hypercube
 parameter_generator = waves.parameter_generators.LatinHypercube(
     parameter_schema,
@@ -32,10 +36,14 @@ parameter_generator = waves.parameter_generators.LatinHypercube(
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
 
+# Comment used in tutorial code snippets: marker-3
+
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
     set_name = pathlib.Path(set_name)
     simulation_variables = {**parameter_samples.to_pandas().to_dict(), **simulation_constants}
+
+    # Comment used in tutorial code snippets: marker-4
 
     # Geometry
     journal_file = f"{model}_geometry"
@@ -84,6 +92,8 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
         substitution_dictionary=waves.builders.substitution_syntax(simulation_variables),
         build_subdirectory=set_name))
 
+# Comment used in tutorial code snippets: marker-5
+
     # Abaqus Solve
     solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
     solve_source_list.append([f"{set_name / journal_file}.inp"])
@@ -103,6 +113,8 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
         source=solve_source_list,
         job_name=job_name,
         abaqus_options=abaqus_options))
+
+# Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
