@@ -13,6 +13,27 @@ from waves import builders
 
 fs = SCons.Node.FS.FS()
 
+substitution_dictionary = {'thing1': 1, 'thing_two': 'two'}
+substitution_syntax_input = {
+    'default characters': (substitution_dictionary, {}, {'@thing1@': 1, '@thing_two@': 'two'}),
+    'provided pre/postfix': (substitution_dictionary, {'prefix': '$', 'postfix': '%'},
+                             {'$thing1%': 1, '$thing_two%': 'two'}),
+    'int key': ({1: 'one'}, {}, {'@1@': 'one'}),
+    'float key': ({1.0: 'one'}, {}, {'@1.0@': 'one'}),
+    'nested': ({'nest_parent': {'nest_child': 1}, 'thing_two': 'two'}, {},
+               {'@nest_parent@': {'nest_child': 1}, '@thing_two@': 'two'})
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('substitution_dictionary, keyword_arguments, expected_dictionary',
+                         substitution_syntax_input.values(),
+                         ids=substitution_syntax_input.keys())
+def test__substitution_syntax(substitution_dictionary, keyword_arguments, expected_dictionary):
+    output_dictionary = builders.substitution_syntax(substitution_dictionary, **keyword_arguments)
+    assert output_dictionary == expected_dictionary
+
+
 find_program_input = {
     'string': (
         'dummy',

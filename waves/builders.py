@@ -14,6 +14,22 @@ from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 
 
+def substitution_syntax(substitution_dictionary, prefix='@', postfix='@'):
+    """Return a dictionary copy with the pre/postfix added to the key strings
+
+    Assumes a flat dictionary with keys of type str. Keys that aren't strings will be converted to their string
+    representation. Nested dictionaries can be supplied, but only the first layer keys will be modified. Dictionary
+    values are unchanged.
+
+    :param dict substitution_dictionary: Original dictionary to copy
+    :param string prefix: String to prepend to all dictionary keys
+    :param string postfix: String to append to all dictionary keys
+
+    :return: Copy of the dictionary with key strings modified by the pre/posfix
+    :rtype: dict
+    """
+    return {f"{prefix}{key}{postfix}": value for key, value in substitution_dictionary.items()}
+
 def find_program(names, env):
     """Search for a program from a list of possible program names.
 
