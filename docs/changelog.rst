@@ -41,6 +41,8 @@ Internal Changes
 - In WAVES-EABM, use parameter name keys without substitution syntax and perform substitution syntax key string changes
   only when necessary for parameter substitution (:issue:`243`, :merge:`241`). By `Kyle Brindley`_.
 - Standardize the WAVES-EABM parameter set module names (:issue:`245`, :merge:`242`). By `Kyle Brindley`_.
+- Standardize code snippet markers in tutorial configuration files to reduce diff clutter in the documentation
+  (:issue:`247`, :merge:`244`, :merge:`245`). By `Kyle Brindley`_.
 
 ******************
 0.3.1 (2022-08-02)
