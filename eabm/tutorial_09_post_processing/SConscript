@@ -4,7 +4,7 @@ import pathlib
 
 import waves
 
-from eabm_package.python.tutorial_07_cartesian_product import parameter_schema
+from eabm_package.python.single_element_compression_cartesian_product import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
@@ -45,7 +45,7 @@ def write_parameter_study(target, source, env):
 
 workflow.extend(env.Command(
     target=[parameter_study_file.name],
-    source=[str(python_source_abspath / "tutorial_07_cartesian_product.py")],
+    source=[str(python_source_abspath / "single_element_compression_cartesian_product.py")],
     action=[write_parameter_study]))
 
 # Parameterized targets must live inside current simulation_variables for loop
