@@ -60,14 +60,14 @@ Product`_ sampling methodology.
 
    For more information, see this `Cartesian Product`_ Wiki page.
 
-5. Create a new file ``eabm_package/python/tutorial_07_cartesian_product.py`` from the content below.
+5. Create a new file ``eabm_package/python/single_element_compression_cartesian_product.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/tutorial_07_cartesian_product.py
+.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_cartesian_product.py
 
-   .. literalinclude:: python_tutorial_07_cartesian_product.py
+   .. literalinclude:: python_single_element_compression_cartesian_product.py
       :language: Python
 
-The ``tutorial_07_cartesian_product.py`` file you just created is very similar to the
+The ``single_element_compression_cartesian_product.py`` file you just created is very similar to the
 ``single_element_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference
 between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note
 that the ``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters
@@ -116,11 +116,12 @@ Step-By-Step SConscript Discussion
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
-``parameter_schema`` dictionary into the ``SConscript`` file's name space from the ``tutorial_07_cartesian_product``
-module that you created in the :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial.
-The second import line should look familiar, but is worth pointing out again. Here, we import the ``env`` variable from
-the parent construction environment. This will provide access to variables we added to the ``SConstruct`` file's
-``project_variables`` dictionary in previous tutorials.
+``parameter_schema`` dictionary into the ``SConscript`` file's name space from the
+``single_element_compression_cartesian_product`` module that you created in the
+:ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial.  The second import line should
+look familiar, but is worth pointing out again. Here, we import the ``env`` variable from the parent construction
+environment. This will provide access to variables we added to the ``SConstruct`` file's ``project_variables``
+dictionary in previous tutorials.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
