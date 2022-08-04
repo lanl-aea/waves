@@ -21,6 +21,8 @@ Documentation
 =============
 - Standardize on 'project configuration' language to describe SCons scripts: SConstruct and SConscript (:issue:`134`,
   :merge:`237`). By `Kyle Brindley`_.
+- Update the tutorial discussions about the simulation variables dictionary usage (:issue:`243`, :merge:`241`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
@@ -28,6 +30,8 @@ Internal Changes
   Brindley`_.
 - Remove the Abaqus keyword ``*PARAMETER`` from the parameter substitution tutorial because it's not supported for input
   file import to CAE. (:issue:`240`, :merge:`238`). By `Kyle Brindley`_.
+- In WAVES-EABM, use parameter name keys without substitution syntax and perform substitution syntax key string changes
+  only when necessary for parameter substitution (:issue:`243`, :merge:`241`). By `Kyle Brindley`_.
 
 ******************
 0.3.1 (2022-08-02)

@@ -173,14 +173,9 @@ both the names of the parameters and the parameter values for a given ``set_name
 Inside the ``for`` loop, the ``set_name`` variable is cast to a `Python pathlib`_ object, as it will aid in constructing
 file locations later in the ``SConscript`` file. Next, the ``parameter_samples`` `xarray dataset`_ is converted to a
 dictionary. At first declaration, ``simulation_variables`` is a dictionary whose keys are the names of the parameters
-and whose values are the parameter values for a particular ``set_name``. This format of the ``simulation_variables``
-dictionary will not be sufficient for our usecase, however. Recall from the :ref:`tutorial_parameter_substitution_waves`
-:ref:`tutorial_parameter_substitution_waves_SConscript` file where you created a ``simulation_variables`` dictionary
-whose keys contained leading and trailing ``@`` characters for parameter substitution. To replicate this format, the
-next line of code modifies the existing ``simulation_variables`` dictionary and overwrites the variable with a
-dictionary formatted like as in :ref:`tutorial_parameter_substitution_waves`. The ``parameter_name`` is used as the
-dictionary key padded with leading and trailing ``@`` characters. The result is a dictionary with keys that can be used
-for identifying the parameters where the values should be substituted.
+and whose values are the parameter values for a particular ``set_name``. The same substitution syntax key modification
+introduced by :ref:`tutorial_parameter_substitution_waves` is used again when passing the simulation variables
+dictionary to the :meth:`waves.builders.copy_substitute` method for text file parameter substitution.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -195,8 +190,9 @@ following two important aspects of the code above:
 
 * The indent of four spaces, as this code is inside of the ``for`` loop you created earlier
 * The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and
-  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Remember to use the leading and trailing ``@``
-  characters when attempting to access parameter values from the ``simulation_variables`` dictionary.
+  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Remember to use the
+  :meth:`waves.builders.substitution_syntax` method to modify the parameter name keys for parameter substitution in text
+  files.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 

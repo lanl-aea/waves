@@ -92,28 +92,25 @@ SConscript
       :end-before: marker-2
       :emphasize-lines: 3-8
 
-In the code you just added, a ``simulation_variables`` dictionary is defined. The surrounding ``@`` character is during
-template subsitution of text files and helps uniquely identify text for parameter substitution without accidentally
-changing text that is not a parameter.
-
-Each key-value pair in the ``simulation_variables`` dictionary defines a parameter that already exists in several of the
-scripts we have utilized in the previous tutorials. The ``width`` and ``height`` parameters are used in the
-``single_element_geometry.py`` and ``single_element_partition.py`` scripts, and ``global_seed`` is used in the
-``single_element_mesh.py`` script. Recall that each of these scripts is called using a command line interface that has
-default parameters. See the :ref:`sphinx_cli` to see what the default values are. As mentioned in
-:ref:`tutorial_geometry_waves`, the argument parser for each of these scripts will supply a default value for each
-command line argument that is not specified (assuming a defualt value was specified in the argument parser definition).
-This allowed us to simplify the command passed to the :meth:`waves.builders.abaqus_journal` builder. The advantage to
-coding this behavior ahead of time is that we get parameter substitution into our journal files when we need it. The
-``width``, ``height``, and ``global_seed`` keys of the ``simulation_variables`` dictionary will be used later in this
-tutorial to specify the values passed to the journal files via the CLI.
+In the code you just added, a ``simulation_variables`` dictionary is defined.  Each key-value pair in the
+``simulation_variables`` dictionary defines a parameter that already exists in several of the scripts we have utilized
+in the previous tutorials. The ``width`` and ``height`` parameters are used in the ``single_element_geometry.py`` and
+``single_element_partition.py`` scripts, and ``global_seed`` is used in the ``single_element_mesh.py`` script. Recall
+that each of these scripts is called using a command line interface that has default parameters. See the
+:ref:`sphinx_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
+parser for each of these scripts will supply a default value for each command line argument that is not specified
+(assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
+passed to the :meth:`waves.builders.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that
+we get parameter substitution into our journal files when we need it. The ``width``, ``height``, and ``global_seed``
+keys of the ``simulation_variables`` dictionary will be used later in this tutorial to specify the values passed to the
+journal files via the CLI.
 
 The final key-value pair defined in the ``simulation_variables`` dictionary is ``displacement``. This parameter will be
 used in a slightly different way than the others, as the script that utilizes this parameter does not function with a
 command line interface. Recall from earlier in this tutorial, we created a new file called
 ``single_element_compression.inp.in`` and added an `Abaqus *PARAMETER`_ definition with the ``@displacement@`` key.
 This text file parameter substitution is the primary reason the ``@`` characters are required in the
-``simulation_variables`` keys.  Disussion of exacly how this is implemented with the
+``simulation_variables`` keys.  Disussion of exactly how this is implemented with the
 :meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
 
 8. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the
@@ -149,7 +146,7 @@ This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mes
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
-      :emphasize-lines: 3, 13-14
+      :emphasize-lines: 3, 13-15
 
 Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` must be updated to reflect the replacement
 of ``single_element_compression.inp`` with the parameterized ``single_element_compression.inp.in`` file.
@@ -163,7 +160,11 @@ copies the source file to the build directory.
 
 This builder uses template substitution with files named with the ``*.in`` extension, and looks to match and replace
 *any characters* that match the keys in the provided ``substitution_dictionary``. For this reason, we must make our
-parameter names uniquely identifiable (e.g. ``@variable@``).
+parameter names uniquely identifiable (e.g. ``@variable@``). The surrounding ``@`` character is used during template
+subsitution of text files and helps uniquely identify text for parameter substitution without accidentally changing text
+that is not a parameter. The matching simulation parameter dictionary key modification is made by the
+:meth:`waves.builders.substitution_syntax` method only when necesssary for the ``substitution_dictionary`` behavior to
+avoid carrying around the special character for other uses of the simulation variables dictionary.
 
 The second behavior is utilized when we specify a file with ``.in`` extension in the ``abaqus_source_list`` and we
 specify a ``substitution_dictionary`` in the builder's options. This behavior will act on any file in the source list
@@ -336,18 +337,19 @@ Most importantly, note that the build directory contains a file named ``single_e
 the file we created earlier in this tutorial. There is also a file named ``single_element_compression.inp``.
 
 12. Investigate the contents of ``single_element_compression.inp`` using your preferred text editor. Specifically, look
-    near the beginning of the file where we defined the ``displacement`` parameter. You should see the following:
+    in the step definition where we defined the ``displacement`` parameter. You should see the following:
 
 .. code-block:: text
    :linenos:
-   :emphasize-lines: 6
+   :emphasize-lines: 7
 
+   *STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
+   Compress cushions and pads.
+   *STATIC
+   .005, 1.00, 0.000001, 0.5
    **
-   *HEADING
-   Compressing a single element
-   **
-   *PARAMETER
-   displacement = float('-1.0')
+   *BOUNDARY,OP=MOD, AMPLITUDE=SINGLE_ELEMENT
+   TOP_BC,2,2,-1.0
    **
 
 With the use of the :meth:`waves.builders.copy_substitute` builder, we used the ``single_element_compression.inp.in``
