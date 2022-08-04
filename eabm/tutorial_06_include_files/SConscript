@@ -4,6 +4,8 @@ import pathlib
 
 import waves
 
+from eabm_package.python import single_element_compression_nominal
+
 # Inherit the parent construction environment
 Import('env')
 
@@ -13,40 +15,45 @@ abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
 python_source_dir = env['python_source_dir']
 python_source_abspath = project_dir / python_source_dir
-parameters_file = python_source_abspath / 'single_element_compression_nominal.py'
 
-from eabm_package.python import single_element_compression_nominal
+# Comment used in tutorial code snippets: marker-0
 
 # Simulation variables
 model = "single_element"
 simulation_variables = single_element_compression_nominal.simulation_variables
+
+# Comment used in tutorial code snippets: marker-1
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
 # Geometry
 journal_file = f"{model}_geometry"
-journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
+journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", str(parameters_file)],
+    source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options))
+
+# Comment used in tutorial code snippets: marker-2
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
+journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae", str(parameters_file)],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
     journal_options=journal_options))
 
 # Mesh
 journal_file = f"{model}_mesh"
-journal_options = f"--global-seed {simulation_variables['@global_seed@']}"
+journal_options = f"--global-seed {simulation_variables['global_seed']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.inp"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae", str(parameters_file)],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options))
+
+# Comment used in tutorial code snippets: marker-3
 
 # SolverPrep
 abaqus_source_list = [
@@ -60,13 +67,15 @@ abaqus_source_list = [
     f"#/{abaqus_source_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
-                                               substitution_dictionary=simulation_variables))
+workflow.extend(waves.builders.copy_substitute(
+    abaqus_source_list,
+    substitution_dictionary=waves.builders.substitution_syntax(simulation_variables)))
+
+# Comment used in tutorial code snippets: marker-4
 
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
-solve_source_list.append([str(parameters_file)])
 job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
@@ -77,12 +86,16 @@ workflow.extend(env.AbaqusSolver(
     job_name=datacheck_name,
     abaqus_options=f'{abaqus_options} -datacheck'))
 
+# Comment used in tutorial code snippets: marker-5
+
 solve_source_list.append([f"{datacheck_name}.odb"])
 workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options))
+
+# Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name

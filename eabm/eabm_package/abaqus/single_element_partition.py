@@ -6,6 +6,7 @@ import shutil
 
 import abaqus
 
+
 def main(input_file, output_file, model_name, part_name, width, height):
     """Partition the simple rectangle geometry created by ``single_element_geometry.py``
 
@@ -74,7 +75,7 @@ def main(input_file, output_file, model_name, part_name, width, height):
     p.Surface(side1Edges=side1Edges, name='bottom')
 
     abaqus.mdb.save()
-    
+
     return 0
 
 
@@ -111,8 +112,9 @@ def get_parser():
                         help="The rectangle width")
     # Short option '-h' is reserved for the help message
     parser.add_argument('--height', type=float, default=default_height,
-                        help="The rectangle height")    
+                        help="The rectangle height")
     return parser
+
 
 if __name__ == '__main__':
     parser = get_parser()

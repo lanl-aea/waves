@@ -39,11 +39,11 @@ Directory Structure
 Parameter Study File
 ********************
 
-5. Create a new file ``eabm_package/python/tutorial_07_latin_hypercube.py`` from the content below.
+5. Create a new file ``eabm_package/python/single_element_compression_latin_hypercube.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/tutorial_07_latin_hypercube.py
+.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_latin_hypercube.py
 
-   .. literalinclude:: python_tutorial_07_latin_hypercube.py
+   .. literalinclude:: python_single_element_compression_latin_hypercube.py
       :language: Python
 
 **********

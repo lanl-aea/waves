@@ -65,8 +65,8 @@ Running a Datacheck
     .. literalinclude:: tutorial_04_simulation_SConscript
        :language: Python
        :lineno-match:
-       :start-after: marker-1
-       :end-before: marker-2
+       :start-after: marker-4
+       :end-before: marker-5
        :emphasize-lines: 4-12
 
 In the changes you just made, the first line of code removes any trailing ``.in`` extensions from the file names in the 
@@ -115,8 +115,8 @@ Running the Analysis
     .. literalinclude:: tutorial_04_simulation_SConscript
        :language: Python
        :lineno-match:
-       :start-after: marker-2
-       :end-before: marker-3
+       :start-after: marker-5
+       :end-before: marker-6
 
 The changes you just made will be used to define the task for running the ``single_element_compression`` analysis. 
 Before running the analysis, we add the output from the datacheck to the ``solve_source_list``. Appending the 

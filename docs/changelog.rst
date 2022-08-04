@@ -5,8 +5,48 @@ Changelog
 #########
 
 ******************
-0.3.2 (unreleased)
+0.3.3 (unreleased)
 ******************
+
+******************
+0.3.2 (2022-08-04)
+******************
+
+Bug fixes
+=========
+- Remove redundant parameter file dependency from WAVES-EABM parameter substitution tutorial source files (:issue:`246`,
+  :merge:`243`). By `Kyle Brindley`_.
+
+New Features
+============
+- Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML
+  documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
+- Add a Conda environment builder to aid in Python software stack documentation for reproducibility (:issue:`212`,
+  :merge:`239`). By `Kyle Brindley`_.
+- Add a substitution syntax helper to prepend and append special characters on dictionary key strings (:issue:`235`,
+  :merge:`240`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Standardize on 'project configuration' language to describe SCons scripts: SConstruct and SConscript (:issue:`134`,
+  :merge:`237`). By `Kyle Brindley`_.
+- Update the tutorial discussions about the simulation variables dictionary usage (:issue:`243`, :merge:`241`). By `Kyle
+  Brindley`_.
+- Standardize the WAVES-EABM parameter set module names (:issue:`245`, :merge:`242`). By `Kyle Brindley`_.
+- Discuss task signatures related to parameter set values in the WAVES-EABM parameter substitution tutorial
+  (:issue:`246`, :merge:`243`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Update the WAVES-EABM journal and python files for the PEP-8 style guide (:issue:`190`, :merge:`236`). By `Kyle
+  Brindley`_.
+- Remove the Abaqus keyword ``*PARAMETER`` from the parameter substitution tutorial because it's not supported for input
+  file import to CAE. (:issue:`240`, :merge:`238`). By `Kyle Brindley`_.
+- In WAVES-EABM, use parameter name keys without substitution syntax and perform substitution syntax key string changes
+  only when necessary for parameter substitution (:issue:`243`, :merge:`241`). By `Kyle Brindley`_.
+- Standardize the WAVES-EABM parameter set module names (:issue:`245`, :merge:`242`). By `Kyle Brindley`_.
+- Standardize code snippet markers in tutorial configuration files to reduce diff clutter in the documentation
+  (:issue:`247`, :merge:`245`). By `Kyle Brindley`_.
 
 ******************
 0.3.1 (2022-08-02)
@@ -26,6 +66,10 @@ Bug fixes
 - Re-organize the parameter study coordinates to allow mixed types, e.g. one parameter that uses strings and another
   that uses floats. Fixes the parameter study read/write to h5 files to avoid unexpected type conversions (:issue:`239`,
   :merge:`234`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Complete WAVES Tutorial 07: Cartesian Product (:issue:`103`, :merge:`152`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
@@ -330,7 +374,7 @@ Documentation
   Brindley`_.
 - Add minimum scaffolding for the simulation tutorial documentation (:issue:`146`, :merge:`112`). By `Kyle
   Brindley`_.
-- Add a quickstart tutorial using a single project definition file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
+- Add a quickstart tutorial using a single project configuration file (:issue:`147`, :merge:`113`). By `Kyle Brindley`_.
 - Add the EABM API and CLI to an Appendices section in the WAVES documentation (:issue:`138`, :merge:`104`).
   By `Thomas Roberts`_.
 - Revise Tutorial 01: Geometry to match formatting of other tutorials (:issue:`148`, :merge:`116`). By
@@ -373,7 +417,7 @@ Internal Changes
 - Specify Sphinx v4.5.0 in the enviroment file (:issue:`121`, :merge:`91`). By `Thomas Roberts`_.
 - Removed duplicate code in the docs/SConscript file (:issue:`128`, :merge:`93`). By `Sergio Cordova`_
 - Changed test_builders so journal.stdout is not created by two targets (:issue:`130`, :merge:`95`). By `Prabhu Khalsa`_
-- Create per-tutorial EABM stub project definition files (SConstruct) to aid in incremental changes in the tutorial
+- Create per-tutorial EABM stub project configuration files (SConstruct) to aid in incremental changes in the tutorial
   documentation and allow for per-tutorial regression tests (:issue:`131`, :merge:`97`). By `Kyle Brindley`_.
 - Added odb_extract rst documentation and added odb_extract, msg_parse, and sta_parse to pyrpojects.toml
   (:issue:`132`, :merge:`96`). By `Prabhu Khalsa`_
@@ -540,7 +584,7 @@ Documentation
 New Features
 ============
 - Append the Abaqus journal Builder managed targets automatically (:issue:`18`, :merge:`10`). By `Kyle Brindley`_.
-- Separate the common custom builders from the EABM SCons project definition (:issue:`19`, :merge:`11`). By `Kyle
+- Separate the common custom builders from the EABM SCons project configuration (:issue:`19`, :merge:`11`). By `Kyle
   Brindley`_.
 - Add a variable to pass through additional Abaqus command line arguments to the Abaqus journal file builder
   (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.

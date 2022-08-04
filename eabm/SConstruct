@@ -83,10 +83,8 @@ project_variables = {
     'cubit_source_dir': 'eabm_package/cubit',
     'python_source_dir': 'eabm_package/python',
 }
-project_substitution_dictionary = dict()
 for key, value in project_variables.items():
     env[key] = value
-    project_substitution_dictionary[f"@{key}@"] = value
 
 # Comments used in tutorial code snippets: marker-6
 
@@ -99,7 +97,8 @@ env.Append(BUILDERS={
     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'],
                                                  post_simulation='! grep -iE "error" ${job_name}.stdout'),
     'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus']),
-    'PythonScript': waves.builders.python_script()})
+    'PythonScript': waves.builders.python_script(),
+    'CondaEnvironment': waves.builders.conda_environment()})
 
 # Comments used in tutorial code snippets: marker-7
 
@@ -107,8 +106,8 @@ env.Append(BUILDERS={
 # The 'ignore_documentation' variable is used by WAVES during packaging. Not required for an EABM.
 if not env['ignore_documentation']:
     build_dir = variant_dir_base / documentation_source_dir
-    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='documentation_source_dir', duplicate=False)
-    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_substitution_dictionary'])
+    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports=['env', 'documentation_source_dir'], duplicate=False)
+    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_variables'])
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
     docs_aliases = []

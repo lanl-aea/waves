@@ -117,8 +117,8 @@ we will require a custom builder that functions differently than the previously 
     .. literalinclude:: tutorial_03_solverprep_SConscript
        :language: Python
        :lineno-match:
-       :start-after: marker-2
-       :end-before: marker-3
+       :start-after: marker-3
+       :end-before: marker-4
 
 The ``abaqus_source_list`` contains the names of all the files that are used to build the 
 Abaqus model. The ``{model}_compression.inp`` file is the primary input file, and the 

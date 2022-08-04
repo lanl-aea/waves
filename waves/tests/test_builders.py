@@ -13,6 +13,27 @@ from waves import builders
 
 fs = SCons.Node.FS.FS()
 
+substitution_dictionary = {'thing1': 1, 'thing_two': 'two'}
+substitution_syntax_input = {
+    'default characters': (substitution_dictionary, {}, {'@thing1@': 1, '@thing_two@': 'two'}),
+    'provided pre/postfix': (substitution_dictionary, {'prefix': '$', 'postfix': '%'},
+                             {'$thing1%': 1, '$thing_two%': 'two'}),
+    'int key': ({1: 'one'}, {}, {'@1@': 'one'}),
+    'float key': ({1.0: 'one'}, {}, {'@1.0@': 'one'}),
+    'nested': ({'nest_parent': {'nest_child': 1}, 'thing_two': 'two'}, {},
+               {'@nest_parent@': {'nest_child': 1}, '@thing_two@': 'two'})
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('substitution_dictionary, keyword_arguments, expected_dictionary',
+                         substitution_syntax_input.values(),
+                         ids=substitution_syntax_input.keys())
+def test__substitution_syntax(substitution_dictionary, keyword_arguments, expected_dictionary):
+    output_dictionary = builders.substitution_syntax(substitution_dictionary, **keyword_arguments)
+    assert output_dictionary == expected_dictionary
+
+
 find_program_input = {
     'string': (
         'dummy',
@@ -171,6 +192,15 @@ def test__python_script():
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
     node = env.PythonScript(
         target=['python_script_journal.cub'], source=['python_script_journal.py'], journal_options="")
+
+
+@pytest.mark.unittest
+def test__conda_environment():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={'CondaEnvironment': builders.conda_environment()})
+    # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
+    node = env.CondaEnvironment(
+        target=['environment.yaml'], source=[], conda_env_export_options="")
 
 
 source_file = fs.File('dummy.odb')

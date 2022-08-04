@@ -60,14 +60,14 @@ Product`_ sampling methodology.
 
    For more information, see this `Cartesian Product`_ Wiki page.
 
-5. Create a new file ``eabm_package/python/tutorial_07_cartesian_product.py`` from the content below.
+5. Create a new file ``eabm_package/python/single_element_compression_cartesian_product.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/tutorial_07_cartesian_product.py
+.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_cartesian_product.py
 
-   .. literalinclude:: python_tutorial_07_cartesian_product.py
+   .. literalinclude:: python_single_element_compression_cartesian_product.py
       :language: Python
 
-The ``tutorial_07_cartesian_product.py`` file you just created is very similar to the
+The ``single_element_compression_cartesian_product.py`` file you just created is very similar to the
 ``single_element_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference
 between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note
 that the ``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters
@@ -116,11 +116,12 @@ Step-By-Step SConscript Discussion
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
-``parameter_schema`` dictionary into the ``SConscript`` file's name space from the ``tutorial_07_cartesian_product``
-module that you created in the :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial.
-The second import line should look familiar, but is worth pointing out again. Here, we import the ``env`` variable from
-the parent construction environment. This will provide access to variables we added to the ``SConstruct`` file's
-``project_variables`` dictionary in previous tutorials.
+``parameter_schema`` dictionary into the ``SConscript`` file's name space from the
+``single_element_compression_cartesian_product`` module that you created in the
+:ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial.  The second import line should
+look familiar, but is worth pointing out again. Here, we import the ``env`` variable from the parent construction
+environment. This will provide access to variables we added to the ``SConstruct`` file's ``project_variables``
+dictionary in previous tutorials.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -173,14 +174,9 @@ both the names of the parameters and the parameter values for a given ``set_name
 Inside the ``for`` loop, the ``set_name`` variable is cast to a `Python pathlib`_ object, as it will aid in constructing
 file locations later in the ``SConscript`` file. Next, the ``parameter_samples`` `xarray dataset`_ is converted to a
 dictionary. At first declaration, ``simulation_variables`` is a dictionary whose keys are the names of the parameters
-and whose values are the parameter values for a particular ``set_name``. This format of the ``simulation_variables``
-dictionary will not be sufficient for our usecase, however. Recall from the :ref:`tutorial_parameter_substitution_waves`
-:ref:`tutorial_parameter_substitution_waves_SConscript` file where you created a ``simulation_variables`` dictionary
-whose keys contained leading and trailing ``@`` characters for parameter substitution. To replicate this format, the
-next line of code modifies the existing ``simulation_variables`` dictionary and overwrites the variable with a
-dictionary formatted like as in :ref:`tutorial_parameter_substitution_waves`. The ``parameter_name`` is used as the
-dictionary key padded with leading and trailing ``@`` characters. The result is a dictionary with keys that can be used
-for identifying the parameters where the values should be substituted.
+and whose values are the parameter values for a particular ``set_name``. The same substitution syntax key modification
+introduced by :ref:`tutorial_parameter_substitution_waves` is used again when passing the simulation variables
+dictionary to the :meth:`waves.builders.copy_substitute` method for text file parameter substitution.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -195,8 +191,9 @@ following two important aspects of the code above:
 
 * The indent of four spaces, as this code is inside of the ``for`` loop you created earlier
 * The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and
-  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Remember to use the leading and trailing ``@``
-  characters when attempting to access parameter values from the ``simulation_variables`` dictionary.
+  the :meth:`waves.builders.copy_substitute` method for SolverPrep. Remember to use the
+  :meth:`waves.builders.substitution_syntax` method to modify the parameter name keys for parameter substitution in text
+  files.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -223,15 +220,6 @@ The final additions to the ``SConscript`` file are a few lines of code that are 
 previous tutorial ``SConscript`` file. Note, however, that these final lines of code are outside of the ``for`` loop
 that contained the previous snippets of code. These final lines of code exists outside the ``for`` loop because we want
 to include the *tasks for all parameter sets* in the convenience alias, ``tutorial_07_cartesian_product``.
-
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
-changes made in this tutorial.
-
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
-
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
-      :language: Python
-      :diff: tutorial_06_include_files_SConscript
 
 **********
 SConstruct

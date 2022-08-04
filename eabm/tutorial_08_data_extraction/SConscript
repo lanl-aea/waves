@@ -4,10 +4,12 @@ import pathlib
 
 import waves
 
-from eabm_package.python.tutorial_07_cartesian_product import parameter_schema
+from eabm_package.python.single_element_compression_cartesian_product import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
+
+# Comment used in tutorial code snippets: marker-1
 
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(env['project_dir'])
@@ -21,6 +23,8 @@ model = "single_element"
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
+# Comment used in tutorial code snippets: marker-2
+
 # Parameter Study with Cartesian Product
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
@@ -28,16 +32,18 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
 
+# Comment used in tutorial code snippets: marker-3
+
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
     set_name = pathlib.Path(set_name)
     simulation_variables = parameter_samples.to_pandas().to_dict()
-    simulation_variables = {f"@{parameter_name}@": value for parameter_name, value in
-                            simulation_variables.items()}
+
+    # Comment used in tutorial code snippets: marker-4
 
     # Geometry
     journal_file = f"{model}_geometry"
-    journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
+    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
@@ -46,7 +52,7 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
 
     # Partition
     journal_file = f"{model}_partition"
-    journal_options = f"--width {simulation_variables['@width@']} --height {simulation_variables['@height@']}"
+    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
@@ -56,7 +62,7 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
 
     # Mesh
     journal_file = f"{model}_mesh"
-    journal_options = f"--global-seed {simulation_variables['@global_seed@']}"
+    journal_options = f"--global-seed {simulation_variables['global_seed']}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl",
@@ -77,9 +83,12 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
         f"#/{abaqus_source_dir}/history_output.inp"
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-    workflow.extend(waves.builders.copy_substitute(abaqus_source_list,
-                                                   substitution_dictionary=simulation_variables,
-                                                   build_subdirectory=set_name))
+    workflow.extend(waves.builders.copy_substitute(
+        abaqus_source_list,
+        substitution_dictionary=waves.builders.substitution_syntax(simulation_variables),
+        build_subdirectory=set_name))
+
+# Comment used in tutorial code snippets: marker-5
 
     # Abaqus Solve
     solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
@@ -106,6 +115,8 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
     workflow.extend(env.AbaqusExtract(
         target=[f"{set_name / job_name}.h5"],
         source=extract_source_list))
+
+# Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
