@@ -133,10 +133,7 @@ dictionary in previous tutorials.
       :emphasize-lines: 6-7
 
 The unhighlighted portions of the code snippet above do not present any unique code that has not been previously
-discussed. Note that the ``parameters_file`` variable from :ref:`tutorial_include_files_waves` is no longer present.
-This variable was used to make the task definitions dependent on the parameter source file. This is not necessary in the
-cartesian product, because the parameter values will be included in the task action signature. If the parameters change,
-so will the task definition and `SCons`_ will know to re-execute the affected tasks.
+discussed.
 
 The highlighted portions of the code snippet above define some new variables that will get used in various places in
 this tutorial's code. Namely, ``parameter_set_file_template`` defines how the parameter sets, and subsequently the

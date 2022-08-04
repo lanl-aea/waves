@@ -9,7 +9,6 @@ References
 **********
 
 * `SCons Substfile`_
-* `Abaqus *PARAMETER`_ keyword documentation
 
 ***********
 Environment
@@ -108,10 +107,9 @@ journal files via the CLI.
 The final key-value pair defined in the ``simulation_variables`` dictionary is ``displacement``. This parameter will be
 used in a slightly different way than the others, as the script that utilizes this parameter does not function with a
 command line interface. Recall from earlier in this tutorial, we created a new file called
-``single_element_compression.inp.in`` and added an `Abaqus *PARAMETER`_ definition with the ``@displacement@`` key.
-This text file parameter substitution is the primary reason the ``@`` characters are required in the
-``simulation_variables`` keys.  Disussion of exactly how this is implemented with the
-:meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
+``single_element_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
+the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
+this is implemented with the :meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
 
 8. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
@@ -134,7 +132,10 @@ shown in the first highlighted section, we will end up passing a string that loo
 
    journal_options = "--width 1.0 --height 1.0"
 
-This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mesh``.
+This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mesh``. `SCons`_ will save a signature of
+the completed action string as part of the task definition. If the substituted parameter values change, `SCons`_ will
+recognize that the tasks need to be re-executed in the same way that tasks need to be re-executed when the contents of a
+source file change.
 
 9. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the
    code pertaining to ``# SolverPrep``.
@@ -166,7 +167,7 @@ that is not a parameter. The matching simulation parameter dictionary key modifi
 :meth:`waves.builders.substitution_syntax` method only when necesssary for the ``substitution_dictionary`` behavior to
 avoid carrying around the special character for other uses of the simulation variables dictionary.
 
-The second behavior is utilized when we specify a file with ``.in`` extension in the ``abaqus_source_list`` and we
+The second behavior is utilized when we specify a file with ``*.in`` extension in the ``abaqus_source_list`` and we
 specify a ``substitution_dictionary`` in the builder's options. This behavior will act on any file in the source list
 with ``.in`` extension and attempts to match the parameter keys in the ``substitution_dictionary`` with the text in the
 file. For this reason, we must make our parameter names identifiable with a templating character (e.g. ``@variable@``).
@@ -174,7 +175,9 @@ In this process, the files with ``.in`` extension are not modified, but are firs
 the build directory. The contents of the newly copied file are modified to reflect the parameter substitution and the
 ``.in`` extension is removed as a default behavior of the `SCons Substfile`_ method. The two step copy/substitute
 behavior is required to allow SCons to unambiguously resolve the source-target file locations. We will see this behavior
-more clearly when we investigate the :ref:`tutorial_parameter_substitution_waves_output_files` for this tutorial.
+more clearly when we investigate the :ref:`tutorial_parameter_substitution_waves_output_files` for this tutorial. The
+``substitution`` dictionary becomes part of the task signature for all ``*.in`` files. When the dictionary changes,
+the copy and substitute operations will be re-executed.
 
 In summary of the changes you just made to the ``tutorial_05_parameter_substitution`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
