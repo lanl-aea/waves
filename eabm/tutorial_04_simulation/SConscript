@@ -15,6 +15,8 @@ abaqus_source_abspath = project_dir / abaqus_source_dir
 # Simulation variables
 model = "single_element"
 
+# Comment used in tutorial code snippets: marker-1
+
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
@@ -25,6 +27,8 @@ workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options))
+
+# Comment used in tutorial code snippets: marker-2
 
 # Partition
 journal_file = f"{model}_partition"
@@ -42,6 +46,8 @@ workflow.extend(env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options))
 
+# Comment used in tutorial code snippets: marker-3
+
 # SolverPrep
 abaqus_source_list = [
     f"#/{abaqus_source_dir}/{model}_compression.inp",
@@ -56,7 +62,7 @@ abaqus_source_list = [
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
 
-# Comment used in tutorial code snippets: marker-1
+# Comment used in tutorial code snippets: marker-4
 
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
@@ -71,7 +77,7 @@ workflow.extend(env.AbaqusSolver(
     job_name=datacheck_name,
     abaqus_options=f'{abaqus_options} -datacheck'))
 
-# Comment used in tutorial code snippets: marker-2
+# Comment used in tutorial code snippets: marker-5
 
 solve_source_list.append([f"{datacheck_name}.odb"])
 workflow.extend(env.AbaqusSolver(
@@ -80,7 +86,7 @@ workflow.extend(env.AbaqusSolver(
     job_name=job_name,
     abaqus_options=abaqus_options))
 
-# Comment used in tutorial code snippets: marker-3
+# Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
