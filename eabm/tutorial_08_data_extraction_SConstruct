@@ -16,6 +16,8 @@ sys.path.insert(0, str(pathlib.Path('.').resolve()))
 
 version = '0.1.0'
 
+# Comments used in tutorial code snippets: marker-1
+
 # Accept command line options with fall back default values
 AddOption(
     "--build-dir",
@@ -43,8 +45,12 @@ env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
                   unconditional_build=GetOption("unconditional_build"))
 
+# Comments used in tutorial code snippets: marker-3
+
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
+
+# Comments used in tutorial code snippets: marker-4
 
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM-TUTORIAL'
@@ -58,6 +64,8 @@ project_variables = {
 for key, value in project_variables.items():
     env[key] = value
 
+# Comments used in tutorial code snippets: marker-5
+
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
@@ -66,6 +74,8 @@ env.Append(BUILDERS={
     'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
     'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus'])})
+
+# Comments used in tutorial code snippets: marker-6
 
 # Add simulation targets
 eabm_simulation_directories = [
@@ -82,12 +92,16 @@ for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
     SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
 
+# Comments used in tutorial code snippets: marker-7
+
 # Add default target list to help message
 env.Default()  # Empty defaults list to avoid building all simulation targets by default
 default_targets_help = "\nDefault Targets:\n"
 for target in DEFAULT_TARGETS:
     default_targets_help += f"    {str(target)}\n"
 Help(default_targets_help, append=True)
+
+# Comments used in tutorial code snippets: marker-8
 
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
@@ -102,3 +116,5 @@ alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
 Help(alias_help)
+
+# Comments used in tutorial code snippets: marker-9
