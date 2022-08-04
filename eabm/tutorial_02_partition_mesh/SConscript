@@ -13,6 +13,8 @@ abaqus_source_abspath = project_dir / abaqus_source_dir
 # Simulation variables
 model = "single_element"
 
+# Comment used in tutorial code snippets: marker-1
+
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
@@ -24,7 +26,7 @@ workflow.extend(env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options))
 
-# Comment used in tutorial code snippets: marker-1
+# Comment used in tutorial code snippets: marker-2
 
 # Partition
 journal_file = f"{model}_partition"
@@ -42,7 +44,7 @@ workflow.extend(env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options))
 
-# Comment used in tutorial code snippets: marker-2
+# Comment used in tutorial code snippets: marker-3
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name

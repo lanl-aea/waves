@@ -87,7 +87,7 @@ exist.
          :language: Python
          :lineno-match:
          :start-after: marker-1
-         :end-before: marker-2
+         :end-before: marker-3
          :emphasize-lines: 5-10
 
 First, the ``workflow`` variable is assigned to an empty list. Eventually, ``workflow``
@@ -120,7 +120,7 @@ For more information about the behavior of the
      .. literalinclude:: tutorial_01_geometry_SConscript
          :language: Python
          :lineno-match:
-         :start-after: marker-2
+         :start-after: marker-3
 
 First, we create an alias for the workflow that was extended previously to the name
 of the current working directory, in this case ``tutorial_01_geometry``.
