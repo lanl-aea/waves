@@ -221,15 +221,6 @@ previous tutorial ``SConscript`` file. Note, however, that these final lines of 
 that contained the previous snippets of code. These final lines of code exists outside the ``for`` loop because we want
 to include the *tasks for all parameter sets* in the convenience alias, ``tutorial_07_cartesian_product``.
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
-changes made in this tutorial.
-
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
-
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
-      :language: Python
-      :diff: tutorial_06_include_files_SConscript
-
 **********
 SConstruct
 **********
