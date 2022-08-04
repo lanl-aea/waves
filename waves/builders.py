@@ -28,7 +28,7 @@ def substitution_syntax(substitution_dictionary, prefix='@', postfix='@'):
     :return: Copy of the dictionary with key strings modified by the pre/posfix
     :rtype: dict
     """
-    return {f"{prefix}{key}{postfix}": value for key, value in substitution_dictionary}
+    return {f"{prefix}{key}{postfix}": value for key, value in substitution_dictionary.items()}
 
 def find_program(names, env):
     """Search for a program from a list of possible program names.
