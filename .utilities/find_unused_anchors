@@ -7,6 +7,8 @@ options='OPTIONS:
     ANCHOR_FILE        Name of the file(s) with anchor definitions       
     -h                 Show this help message and exit
     -p                 Path to the directory to search for anchor usage (DEFAULT: docs/)
+
+EXAMPLE: find_unused_anchors docs/targets.txt
 '
 
 # Set default options
