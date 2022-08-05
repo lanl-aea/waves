@@ -68,7 +68,8 @@ tutorials are considered prerequisites.
 #. Software Carpentry: Python Novice - https://swcarpentry.github.io/python-novice-inflammation/ :cite:`swc-python`
 #. Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`swc-git`
 #. Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
-#. Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html
+   :cite:`conda,conda-gettingstarted`
+#. Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html :cite:`sphinx,sphinx-tutorial`
 #. :ref:`SCons-WAVES-EABM tutorials<tutorial_introduction>`
 #. Library Carpentry: Regular Expressions - https://librarycarpentry.org/lc-data-intro/index.html
    :cite:`lbc-re,LibraryCarpentry`
