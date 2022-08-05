@@ -1,3 +1,4 @@
 1. :ref:`computational_tools` - :ref:`build_system`
-2. Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`SoftwareCarpentry,gnu-make`
-3. Software Carpentry: Python - https://swcarpentry.github.io/python-novice-inflammation/ :cite:`SoftwareCarpentry`
+2. Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`swc-make,gnu-make,SoftwareCarpentry`
+3. Software Carpentry: Python - https://swcarpentry.github.io/python-novice-inflammation/
+   :cite:`swc-python,SoftwareCarpentry`
