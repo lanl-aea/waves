@@ -4,100 +4,100 @@
    :end-before: target-end-do-not-remove
 
 .. General references
-.. _`Anaconda Documentation`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-.. _`automated build system`: https://en.wikipedia.org/wiki/List_of_build_automation_software
-.. _`CheckProg`: https://scons.org/doc/production/HTML/scons-user/ch21s07.html
-.. _`CMake`: https://cmake.org/cmake/help/latest/
-.. _`Confluence`: https://www.atlassian.com/software/confluence
-.. _`conda-forge`: https://conda-forge.org/
-.. _`custom conda channel`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-channels.html
-.. _`ASC RE Gitlab`: https://re-git.lanl.gov/
+.. _`AEA Conda channel`: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea-release/aea_compute_environment.html#aea-conda-channel
+.. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
+.. _`AEA Gitlab group`: https://re-git.lanl.gov/aea
 .. _`ASC RE Gitlab HPC Accounts`: https://hpcaccounts.lanl.gov/projects/request/asc-re-gitlab
 .. _`ASC RE Gitlab User Documentation`: https://re-git.lanl.gov/help/user/index.md
-.. _`AEA Conda channel`: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea-release/aea_compute_environment.html#aea-conda-channel
-.. _`AEA Gitlab group`: https://re-git.lanl.gov/aea
-.. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
-.. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
+.. _`ASC RE Gitlab`: https://re-git.lanl.gov/
+.. _`Anaconda Documentation`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+.. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
+.. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
+.. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
+.. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
+.. _`CMake`: https://cmake.org/cmake/help/latest/
+.. _`Cartesian Product`: https://en.wikipedia.org/wiki/Cartesian_product
+.. _`CheckProg`: https://scons.org/doc/production/HTML/scons-user/ch21s07.html
+.. _`Confluence`: https://www.atlassian.com/software/confluence
+.. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
 .. _`Environment modules`: https://modules.readthedocs.io/en/stable/modulefile.html
-.. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
 .. _`GNU Make`: https://www.gnu.org/software/make/
-.. _`git`: https://git-scm.com/
-.. _`git archive`: https://git-scm.com/docs/git-archive
+.. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
 .. _`Granta/MIMS`: http://grantami.lanl.gov/mi
 .. _`LaTeX`: https://www.latex-project.org/
 .. _`Markdown`: https://www.markdownguide.org/
-.. _`Material Models`: https://re-git.lanl.gov/aea/material-models
-.. _`Material Models members`: https://re-git.lanl.gov/groups/aea/material-models/-/group_members
 .. _`Material Database`: https://ddw-confluence.lanl.gov/display/MD/Material+Database
-.. _`Python`: https://www.python.org/
-.. _`Python 3`: https://docs.python.org/3.6/
-.. _`Python 2`: https://docs.python.org/2.7/
-.. _`PEP-8`: https://www.python.org/dev/peps/pep-0008/
-.. _`PEP-440`: https://www.python.org/dev/peps/pep-0440/
+.. _`Material Models members`: https://re-git.lanl.gov/groups/aea/material-models/-/group_members
+.. _`Material Models`: https://re-git.lanl.gov/aea/material-models
 .. _`PEP-257`: https://peps.python.org/pep-0257/
 .. _`PEP-287`: https://peps.python.org/pep-0287/
-.. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
-.. _`SCons alias`: https://scons.org/doc/production/HTML/scons-user/ch22s07.html
-.. _`SCons command-line build variables`: https://scons.org/doc/production/HTML/scons-user/ch10s02.html
-.. _`SCons command-line build options`: https://scons.org/doc/production/HTML/scons-user/ch10.html#idm46358236334624
-.. _`SCons construction environment`: https://scons.org/doc/production/HTML/scons-user/ch07s02.html
-.. _`SCons custom builders`: https://scons.org/doc/production/HTML/scons-user/ch17.html
-.. _`SCons project build help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idm46358284707920
-.. _`SCons sharing environments`: https://scons.org/doc/production/HTML/scons-user/ch14s05.html
-.. _`SCons hierarchical build`: https://scons.org/doc/production/HTML/scons-user/ch14.html
-.. _`SCons Python build function`: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
-.. _`SCons Substfile`: https://scons.org/doc/production/HTML/scons-user.html#b-Substfile
-.. _`SCons Command`: https://scons.org/doc/production/HTML/scons-user/ch18.html
-.. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
-.. _`Software Carpentry`: https://software-carpentry.org/
-.. _`sphinx`: https://www.sphinx-doc.org/en/master/
-.. _`Sphinx automodule`: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule
-.. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
-.. _`re docs`: https://docs.python.org/3.6/library/re.html
-.. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
-.. _`shebang`: https://en.wikipedia.org/wiki/Shebang_(Unix)
-.. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
-.. _`Python Top-Level Code Environment`: https://docs.python.org/3/library/__main__.html
-.. _`Python argparse`: https://docs.python.org/3/library/argparse.html
-.. _`Python 2.7 argparse`: https://docs.python.org/2.7/library/argparse.html
-.. _`Python pathlib`: https://docs.python.org/3/library/pathlib.html
-.. _`Python sys`: https://docs.python.org/3/library/sys.html
+.. _`PEP-440`: https://www.python.org/dev/peps/pep-0440/
+.. _`PEP-8`: https://www.python.org/dev/peps/pep-0008/
 .. _`PYTHONPATH`: https://docs.python.org/3/library/sys.html#sys.path
-.. _`Python documentation`: https://docs.python.org/3/index.html
+.. _`Python 2.7 argparse`: https://docs.python.org/2.7/library/argparse.html
+.. _`Python 2`: https://docs.python.org/2.7/
+.. _`Python 3`: https://docs.python.org/3.6/
 .. _`Python Modules`: https://docs.python.org/3/tutorial/modules.html
 .. _`Python Template Strings`: https://docs.python.org/3/library/string.html#template-strings
-.. _`xarray dataset`: https://xarray.pydata.org/en/v2022.03.0/generated/xarray.Dataset.html
-.. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
-.. _`Abaqus Scripting`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-ov.htm
-.. _`Abaqus Python Environment`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
-.. _`Abaqus *INCLUDE`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKEYRefMap/simakey-r-include.htm
-.. _`Abaqus File Extension Definitions`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEEXCRefMap/simaexc-c-fileextensions.htm
-.. _`Abaqus Standard/Explicit Execution`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEEXCRefMap/simaexc-c-analysisproc.htm
-.. _`Abaqus Precision Level for Executables`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/SIMACAEANLRefMap/simaanl-c-over.htm#simaanl-c-over-precision
-.. _`Abaqus Node Sets`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/SIMACAEMODRefMap/simamod-c-node.htm#simamod-c-node-t-GroupingNodesIntoNodeSets-sma-topic8
-.. _`Abaqus Element Sets`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/SIMACAEMODRefMap/simamod-c-element.htm?exalead=t&q=sets#simamod-c-element-t-GroupingElementsIntoElementSets-sma-topic9
-.. _`Abaqus Surfaces`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEMODRefMap/simamod-c-deformablesurf.htm
-.. _`Abaqus Model Object`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-modelpyc.htm
-.. _`Abaqus Assembly Definition`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEMODRefMap/simamod-c-partassy.htm
-.. _`Abaqus Elements Guide`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-ov.htm
-.. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
-.. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
-.. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
+.. _`Python Top-Level Code Environment`: https://docs.python.org/3/library/__main__.html
+.. _`Python argparse`: https://docs.python.org/3/library/argparse.html
+.. _`Python documentation`: https://docs.python.org/3/index.html
+.. _`Python pathlib`: https://docs.python.org/3/library/pathlib.html
+.. _`Python sys`: https://docs.python.org/3/library/sys.html
+.. _`Python`: https://www.python.org/
+.. _`SCons Command`: https://scons.org/doc/production/HTML/scons-user/ch18.html
+.. _`SCons Python build function`: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
+.. _`SCons Substfile`: https://scons.org/doc/production/HTML/scons-user.html#b-Substfile
+.. _`SCons alias`: https://scons.org/doc/production/HTML/scons-user/ch22s07.html
+.. _`SCons command-line build options`: https://scons.org/doc/production/HTML/scons-user/ch10.html#idm46358236334624
+.. _`SCons command-line build variables`: https://scons.org/doc/production/HTML/scons-user/ch10s02.html
+.. _`SCons construction environment`: https://scons.org/doc/production/HTML/scons-user/ch07s02.html
+.. _`SCons custom builders`: https://scons.org/doc/production/HTML/scons-user/ch17.html
+.. _`SCons hierarchical build`: https://scons.org/doc/production/HTML/scons-user/ch14.html
+.. _`SCons project build help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idm46358284707920
+.. _`SCons sharing environments`: https://scons.org/doc/production/HTML/scons-user/ch14s05.html
+.. _`Software Carpentry`: https://software-carpentry.org/
+.. _`Sphinx automodule`: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule
+.. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
+.. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
 .. _`Xarray`: https://docs.xarray.dev/en/stable/
-.. _`Cartesian Product`: https://en.wikipedia.org/wiki/Cartesian_product
+.. _`automated build system`: https://en.wikipedia.org/wiki/List_of_build_automation_software
+.. _`conda-forge`: https://conda-forge.org/
+.. _`custom conda channel`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-channels.html
+.. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
+.. _`git archive`: https://git-scm.com/docs/git-archive
+.. _`git`: https://git-scm.com/
+.. _`re docs`: https://docs.python.org/3.6/library/re.html
+.. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
+.. _`shebang`: https://en.wikipedia.org/wiki/Shebang_(Unix)
+.. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
+.. _`sphinx`: https://www.sphinx-doc.org/en/master/
+.. _`xarray dataset`: https://xarray.pydata.org/en/v2022.03.0/generated/xarray.Dataset.html
 
 .. Project specific links
-.. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves
 .. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
 .. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/eabm/eabm_package/abaqus
 .. _`WAVES-EABM environment file`: https://re-git.lanl.gov/aea/python-projects/waves/-/blob/dev/eabm/environment.txt
+.. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves
 
 .. Abaqus reference links
+.. _`Abaqus *INCLUDE`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKEYRefMap/simakey-r-include.htm
+.. _`Abaqus Assembly Definition`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEMODRefMap/simamod-c-partassy.htm
+.. _`Abaqus Element Sets`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/SIMACAEMODRefMap/simamod-c-element.htm?exalead=t&q=sets#simamod-c-element-t-GroupingElementsIntoElementSets-sma-topic9
+.. _`Abaqus Elements Guide`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-ov.htm
+.. _`Abaqus File Extension Definitions`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEEXCRefMap/simaexc-c-fileextensions.htm
+.. _`Abaqus Model Object`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-modelpyc.htm
+.. _`Abaqus Node Sets`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/SIMACAEMODRefMap/simamod-c-node.htm#simamod-c-node-t-GroupingNodesIntoNodeSets-sma-topic8
+.. _`Abaqus Precision Level for Executables`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/SIMACAEANLRefMap/simaanl-c-over.htm#simaanl-c-over-precision
+.. _`Abaqus Python Environment`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAECMDRefMap/simacmd-m-PdeUsing-sb.htm
+.. _`Abaqus Scripting`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-ov.htm
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm
-.. _`Abaqus scripting manual "Specifying a region"`: http://simulia.lanl.gov:8080/EstProdDocs2020/English/DSSIMULIA_Established.htm?show=SIMACAECMDRefMap/simacmd-c-intaclregions.htm
+.. _`Abaqus Standard/Explicit Execution`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEEXCRefMap/simaexc-c-analysisproc.htm
+.. _`Abaqus Surfaces`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEMODRefMap/simamod-c-deformablesurf.htm
 .. _`Abaqus UMAT documentation`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAESUBRefMap/simasub-c-umat.htm
+.. _`Abaqus scripting manual "Specifying a region"`: http://simulia.lanl.gov:8080/EstProdDocs2020/English/DSSIMULIA_Established.htm?show=SIMACAECMDRefMap/simacmd-c-intaclregions.htm
 
 .. email addresses
 .. _`w13dev`: w13dev@lanl.gov
