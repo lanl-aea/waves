@@ -45,7 +45,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
+A ``diff`` against the ``SConscript`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_09_post_processing/SConscript
@@ -78,7 +78,7 @@ The script API and CLI are included in the :ref:`sphinx_api`: :ref:`eabm_plot_sc
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
