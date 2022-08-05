@@ -17,10 +17,6 @@
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
-.. _`Sergio Cordova`: sergioc@lanl.gov
-.. _`Prabhu Khalsa`: pkhalsa@lanl.gov
-.. _`Scott Ouellette`: souellette@lanl.gov
-.. _`Matthew Fister`: mwfister@lanl.gov
 
 .. target-end-do-not-remove
 

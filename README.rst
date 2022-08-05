@@ -62,6 +62,7 @@ Developers
 * `Prabhu Khalsa`_
 * `Thomas Roberts`_
 * `Sergio Cordova`_
+* `Matthew Fister`_
 * `Scott Ouellette`_
 
 ********************
