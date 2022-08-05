@@ -83,7 +83,7 @@ Standard/Explicit Execution`_ documentation :cite:`ABAQUS` for more details on r
 for running a datacheck is to verify the input file construction without running a full simulation. While Abaqus can
 continue with an analysis from the datacheck output, doing so modifies the datacheck output files, which has the affect
 of prompting `SCons`_ to always re-build the datacheck target. This task is excluded from the main workflow to avoid
-duplicate preprocessing of the input file. It will be used in a later tutorial about regression testing.
+duplicate preprocessing of the input file. It will be used later in :ref:`tutorial_regression_testing_waves`.
 
 First, the ``job_name`` is resolved from the name of the first source file listed in code pertaining to ``#
 SolverPrep``, in this case ``single_element_compression``. That name is appended with the ``_DATACHECK`` string to
@@ -146,7 +146,8 @@ list by the builder. The ``source`` list once again utlizes the existing ``solve
 
 In summary of the changes you just made to the ``tutorial_04_simulation/SConscript`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the changes made in this
-tutorial. Note the addition of a separate datacheck alias, which will be used in the regression testing tutorial.
+tutorial. Note the addition of a separate datacheck alias, which will be used in
+:ref:`tutorial_regression_testing_waves`.
 
 .. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
 

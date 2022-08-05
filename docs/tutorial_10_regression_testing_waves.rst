@@ -20,8 +20,8 @@ can be tested should be tested as regularly as possible given compute resource c
 This tutorial introduces a project wide alias to allow convenient execution of the simulation workflow through the
 simulation datacheck task introduced in :ref:`tutorial_simulation_waves`. From that tutorial onward, each tutorial has
 propagated a tutorial specific datacheck alias. This tutorial will add a project wide ``datacheck`` alias and apply it
-to a copy of the :ref:`tutorial_post_processing` configuration files. The user may also go back to previous tutorials to
-include the full suite of datacheck tasks in the project wide datacheck regression alias.
+to a copy of the :ref:`tutorial_post_processing_waves` configuration files. The user may also go back to previous
+tutorials to include the full suite of datacheck tasks in the project wide datacheck regression alias.
 
 **********
 References
