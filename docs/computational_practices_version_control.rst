@@ -4,7 +4,8 @@
 Version Control
 ***************
 
-Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html :cite:`swc-git,SoftwareCarpentry`
+Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html
+:cite:`swc-git,SoftwareCarpentry,git`
 
 As mentioned in the :ref:`practices_introduction`, version control software fills the role of a laboratory notebook for
 computational engineering. Keeping a laboratory notebook is a fundamental practice of experimental engineering and
@@ -20,7 +21,7 @@ the ability to manage and resolve content conflicts from contributors working in
 Version control software is also referred to as revision control, source control, or source code management. There have
 been a variety of popular version control software dating back to the early 1970s. Today, there are many version control
 software to choose from, with a range of implmente concepts. This section will focus on the distributed version control
-system `git`_, which was released in 2005 :cite:`pro-git`.
+system `git`_ :cite:`git`, which was released in 2005 :cite:`pro-git`.
 
 Git tracks changes to collections of files in a project. The user creates incremental "commits" which form a directed
 graph of project history, called "branches". As the commits are created and added to history, the use can supply a
