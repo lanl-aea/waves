@@ -21,7 +21,7 @@ This tutorial introduces a project wide alias to allow convenient execution of t
 simulation datacheck task introduced in :ref:`tutorial_simulation_waves`. From that tutorial onward, each tutorial has
 propagated a tutorial specific datacheck alias. This tutorial will add a project wide ``datacheck`` alias and apply it
 to a copy of the :ref:`tutorial_post_processing_waves` configuration files. The user may also go back to previous
-tutorials to include the full suite of datacheck tasks in the project wide datacheck regression alias.
+tutorials to include the full suite of datacheck tasks in the project wide datacheck regression test alias.
 
 **********
 References
@@ -98,6 +98,36 @@ Build Targets
    /path/to/waves-eabm-tutorial
    $ scons datacheck --jobs=4
 
+The full simulation suite may also be executed with a single command, but will take much longer to run as the full
+simulation solve, data extraction, and post-processing will be performed. To compare the time of execution of the full
+simulation suite against the limited datacheck workflow, perform the following sequence of commands.
+
+.. code-block:: bash
+
+   $ scons . --clean --jobs=4 > clean.stdout 2>&1
+   $ { time scons datacheck --jobs=4 > scons.stdout 2>&1 ; } 2> time_datacheck_workflow.txt
+
+   # If you only added the datacheck alias to the tutorial 10 SConscript file
+   $ scons tutorial_10_regression_testing --clean --jobs=4 > clean.stdout 2>&1
+   $ { time scons . --jobs=4 > scons.stdout 2>&1 ; } 2> time_full_workflow.txt
+
+   # If you added the datacheck alias to all tutorial SConscript files
+   $ scons tutorial_10_regression_testing --clean --jobs=4 > clean.stdout 2>&1
+   $ { time scons . --jobs=4 > scons.stdout 2>&1 ; } 2> time_full_workflow.txt
+
+   # Compare times
+   grep real time_*_workflow.txt
+
 ************
 Output Files
 ************
+
+**********
+Automation
+**********
+
+There are many tools that can help automate the execution of the modsim project regression tests. With the collector
+alias, those tools need only execute a single `SCons`_ command to perform the selected, lower cost tasks for simulation
+workflow verification, ``scons datacheck``. If `git`_ is used as the version control system, developer operations
+software such as `Gitlab`_ provide continuous integration software that can automate verification tests on triggers, such
+as merge requests, or on a regular schedule.
