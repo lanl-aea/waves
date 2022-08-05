@@ -8,9 +8,9 @@ Tutorial 04: Simulation
 References
 **********
 
-* `Abaqus File Extension Definitions`_ :cite:`ABAQUS2022`
-* `Abaqus Standard/Explicit Execution`_ :cite:`ABAQUS2022`
-* `Abaqus Precision Level for Executables`_ :cite:`ABAQUS2022`
+* `Abaqus File Extension Definitions`_ :cite:`ABAQUS`
+* `Abaqus Standard/Explicit Execution`_ :cite:`ABAQUS`
+* `Abaqus Precision Level for Executables`_ :cite:`ABAQUS`
 
 ***********
 Environment
@@ -79,7 +79,7 @@ Next, ``{journal_file}.inp`` needs to be appended to the list of simulation sour
 :meth:`waves.builders.abaqus_journal` builder in the code pertaining to ``# Mesh``.
 
 The first set of highlighted lines will define a preliminary step to the actual analysis called a *datacheck*. You can
-read the `Abaqus Standard/Explicit Execution`_ documentation :cite:`ABAQUS2022` for more details on running a datacheck.
+read the `Abaqus Standard/Explicit Execution`_ documentation :cite:`ABAQUS` for more details on running a datacheck.
 The primary purpose for running a datacheck prior to the analysis is to provide the build system an opportunity for
 early exit if the datacheck fails. This is useful in a scenario where the full analysis might take much longer to fail
 than the datacheck.
@@ -88,13 +88,13 @@ First, the ``job_name`` is resolved from the name of the first source file liste
 SolverPrep``, in this case ``single_element_compression``. That name is appended with the ``_DATACHECK`` string to
 uniquely identify output files that might have a common name and extension with those from the actual analysis to come.
 The ``datacheck_suffixes`` are standard output file extensions that will form the targets of our datacheck task. See the
-`Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS2022` for more information about each of the file
+`Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information about each of the file
 extensions listed.
 
 One new section of code that we have not utilized yet in the previous tutotorials is the passing of command line options
 to the builder. This is done using the ``abaqus_options`` variable. Here, we instruct the Abaqus solver to use double
 precision for both the packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation
-:cite:`ABAQUS2022` for more information about the use of single or double precision in an Abaqus analysis.
+:cite:`ABAQUS` for more information about the use of single or double precision in an Abaqus analysis.
 
 Finally, the ``workflow`` list is extended to define the task for running the datacheck. The ``target`` list is formed
 by adding the ``datacheck_suffixes`` to the ``datacheck_name``. The ``source`` list was created in the first portions of

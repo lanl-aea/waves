@@ -9,7 +9,7 @@ References
 **********
 
 * Bash concepts used in this tutorial: `Bash Variables`_, `Bash Arrays`_, `Bash Parameter Expansion`_
-* `Abaqus *INCLUDE`_ keyword documentation :cite:`ABAQUS2022`
+* `Abaqus *INCLUDE`_ keyword documentation :cite:`ABAQUS`
 
 ***********
 Environment
@@ -122,7 +122,7 @@ we will require a custom builder that functions differently than the previously 
 
 The ``abaqus_source_list`` contains the names of all the files that are used to build the Abaqus model. The
 ``{model}_compression.inp`` file is the primary input file, and the other files in the ``abaqus_source_list`` are
-included within it. See the `Abaqus *INCLUDE`_ keyword documentaiton :cite:`ABAQUS2022` for more information about how
+included within it. See the `Abaqus *INCLUDE`_ keyword documentaiton :cite:`ABAQUS` for more information about how
 this is implemented.
 
 Each file in the ``abaqus_source_list`` is specified with its absolute path. `SCons`_

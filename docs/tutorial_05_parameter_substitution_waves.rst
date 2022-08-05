@@ -363,5 +363,5 @@ in the text, as shown above.
 It is also worth noting that that there are 50 files in the ``build/tutorial_05_parameter_substitution`` directory
 compared to the 43 files from :ref:`tutorial_simulation_waves`. Other than the addition of the
 ``single_element_compression.inp.in`` file, the difference is the addition of the files with ``.par``, ``.pes``, and
-``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS2022` for more information
+``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information
 about the information that these files provide.
