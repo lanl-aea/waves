@@ -79,6 +79,7 @@ html_static_path = ['_static']
 # -- Options for LaTeX output ---------------------------------------------
 latex_elements = {
     'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
+    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{\\textcopyright\\ {copyright}}}\sphinxmaketitle'
 }
 latex_documents = [
     (master_doc, project.lower() + '.tex', project.upper() + ' Documentation',
