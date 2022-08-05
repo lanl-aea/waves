@@ -4,6 +4,8 @@
 Tutorial 10: Regression Testing
 ###############################
 
+.. include:: wip_warning.txt
+
 **********
 References
 **********

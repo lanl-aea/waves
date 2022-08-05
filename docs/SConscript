@@ -80,6 +80,7 @@ documentation_file_list = [
     'waves_access_and_appendix.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
+    'wip_warning.txt',
     'zreferences.rst',
     '_static/custom.css'
 ]

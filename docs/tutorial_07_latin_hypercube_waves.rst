@@ -4,6 +4,8 @@
 Tutorial 07: Latin Hypercube
 ############################
 
+.. include:: wip_warning.txt
+
 **********
 References
 **********
