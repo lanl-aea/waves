@@ -8,6 +8,9 @@ options='OPTIONS:
     -h                 Show this help message and exit
     -p                 Path to the directory to search for anchor usage (DEFAULT: docs/)
 
+Assumes that anchors are defined with the Sphinx syntax (text between ""):
+    "_`anchor text`:"
+
 EXAMPLE: find_unused_anchors docs/targets.txt
 '
 
