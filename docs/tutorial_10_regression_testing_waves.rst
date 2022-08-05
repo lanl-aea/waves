@@ -116,7 +116,7 @@ simulation suite against the limited datacheck workflow, perform the following s
    $ { time scons . --jobs=4 > scons.stdout 2>&1 ; } 2> time_full_workflow.txt
 
    # Compare times
-   grep real time_*_workflow.txt
+   $ grep real time_*_workflow.txt
 
 ************
 Output Files
