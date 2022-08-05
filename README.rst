@@ -1,8 +1,6 @@
 .. target-start-do-not-remove
 
 .. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
-.. _AEA Conda channel: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea-release/aea_compute_environment.html#aea-conda-channel
-.. _ECMF: https://aea.re-pages.lanl.gov/python-projects/ecmf/main/
 .. _Conda: https://docs.conda.io/en/latest/
 .. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
 .. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
