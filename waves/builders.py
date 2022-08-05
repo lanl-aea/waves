@@ -372,6 +372,7 @@ def _abaqus_extract_emitter(target, source, env):
         target.insert(0, str(build_subdirectory / odb_file.with_suffix('.h5')))
     target.append(f"{build_subdirectory / pathlib.Path(str(target[0])).stem}_datasets.h5")
     target.append(str(build_subdirectory / odb_file.with_suffix('.csv')))
+    target.append(str(build_subdirectory / target[0].with_suffix('.stdout')))
     return target, source
 
 
