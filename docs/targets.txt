@@ -7,6 +7,7 @@
 .. _`Anaconda Documentation`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 .. _`automated build system`: https://en.wikipedia.org/wiki/List_of_build_automation_software
 .. _`CheckProg`: https://scons.org/doc/production/HTML/scons-user/ch21s07.html
+.. _`CMake`: https://cmake.org/cmake/help/latest/ 
 .. _`Confluence`: https://www.atlassian.com/software/confluence
 .. _`conda-forge`: https://conda-forge.org/
 .. _`custom conda channel`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-channels.html
