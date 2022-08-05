@@ -22,6 +22,7 @@ for mod_name in mock_modules:
 
 release = VERSION
 version = release
+copyright = '2022, Triad National Security, LLC.'
 
 # ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # -- Project Variables -------------------------------------------------------

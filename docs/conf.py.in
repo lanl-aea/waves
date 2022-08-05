@@ -40,6 +40,7 @@ from waves._settings import _project_name_short
 project = _project_name_short
 release = __version__
 version = release
+copyright = '2022, Triad National Security, LLC.'
 
 #============================================================================================== SPHINX CONFIGURATION ===
 # -- Project Variables -------------------------------------------------------
