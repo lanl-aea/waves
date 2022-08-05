@@ -101,16 +101,15 @@ job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_suffixes = common_suffixes + ('023', 'mdl', 'sim', 'stt')
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_targets = [f"{variant_dir_base / datacheck_name}.{suffix}" for suffix in datacheck_suffixes]
-workflow.extend(env.AbaqusSolver(
+datacheck = env.AbaqusSolver(
     target=datacheck_targets,
     source=solve_source_list,
     abaqus_program=env['abaqus'],
     job_name=datacheck_name,
-    abaqus_options=f'{abaqus_options} -datacheck'))
+    abaqus_options=f'{abaqus_options} -datacheck')
 
 solve_suffixes = common_suffixes + ('sta',)
 solve_targets = [f"{variant_dir_base / job_name}.{suffix}" for suffix in solve_suffixes]
-solve_source_list.append(str(variant_dir_base / f"{datacheck_name}.odb"))
 workflow.extend(env.AbaqusSolver(
     target=solve_targets,
     source=solve_source_list,
@@ -120,6 +119,7 @@ workflow.extend(env.AbaqusSolver(
 
 # Collector alias named after the model simulation
 env.Alias(model, workflow)
+env.Alias(f"{model}_datacheck", datacheck)
 
 if not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{model}' target(s)")
