@@ -370,9 +370,10 @@ def _abaqus_extract_emitter(target, source, env):
         build_subdirectory = pathlib.Path('.')
     if not target or pathlib.Path(str(target[0])).suffix != '.h5':
         target.insert(0, str(build_subdirectory / odb_file.with_suffix('.h5')))
-    target.append(f"{build_subdirectory / pathlib.Path(str(target[0])).stem}_datasets.h5")
+    first_target = pathlib.Path(str(target[0]))
+    target.append(f"{build_subdirectory / first_target.stem}_datasets.h5")
     target.append(str(build_subdirectory / odb_file.with_suffix('.csv')))
-    target.append(str(build_subdirectory / target[0].with_suffix('.stdout')))
+    target.append(f"{first_target}{_stdout_extension}")
     return target, source
 
 
@@ -409,7 +410,7 @@ def abaqus_extract(abaqus_program='abaqus'):
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
             "cd ${TARGET.dir.abspath} && rm ${SOURCE.filebase}.csv ${TARGET.filebase}.h5 " \
-                "${TARGET.filebase}_datasets.h5 > ${TARGET.filebase}.stdout 2>&1 || true",
+                f"${{TARGET.filebase}}_datasets.h5 > ${{TARGET.file}}{_stdout_extension} 2>&1 || true",
             SCons.Action.Action(_build_odb_extract, varlist=['output_type', 'odb_report_args', 'delete_report_file'])
         ],
         emitter=_abaqus_extract_emitter,
