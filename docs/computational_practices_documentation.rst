@@ -42,10 +42,11 @@ project history.
 
 While most of these documentation sections will not make it into technical reports, many elements of the documentation
 may overlap with the technical report. If the technical reports are compiled from a mark up or mark down language, such
-as `Markdown`_, `LaTeX`_, or `reStructuredText`_, then the source content may be shared by both the documentation and the
-report. This is valuable to avoid duplicate content that may become out of sync and reduces long term maintenance
-overhead.
+as `Markdown`_ :cite:`markdown`, `LaTeX`_ :cite:`latex`, or `reStructuredText`_ :cite:`rst`, then the source content may
+be shared by both the documentation and the report. This is valuable to avoid duplicate content that may become out of
+sync and reduces long term maintenance overhead.
 
-The practical examples in the :ref:`user_manual` use `reStructuredText`_ compiled with `sphinx`_, which integrates
-markup documentation with automated generation of API and CLI documentation from Python docstrings. An example of modsim
-documentation is included as part of the `WAVES-EABM`_ and is webhosted in the `WAVES-EABM documentation`_.
+The practical examples in the :ref:`user_manual` use `reStructuredText`_ compiled with `sphinx`_ :cite:`sphinx`, which
+integrates markup documentation with automated generation of API and CLI documentation from Python docstrings. An
+example of modsim documentation is included as part of the `WAVES-EABM`_ and is webhosted in the `WAVES-EABM
+documentation`_.
