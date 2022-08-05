@@ -44,6 +44,7 @@ model = "single_element"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
+datacheck = []
 
 # Geometry
 journal_file = f"{model}_geometry"
@@ -101,12 +102,12 @@ job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_suffixes = common_suffixes + ('023', 'mdl', 'sim', 'stt')
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_targets = [f"{variant_dir_base / datacheck_name}.{suffix}" for suffix in datacheck_suffixes]
-datacheck = env.AbaqusSolver(
+datacheck.extend(env.AbaqusSolver(
     target=datacheck_targets,
     source=solve_source_list,
     abaqus_program=env['abaqus'],
     job_name=datacheck_name,
-    abaqus_options=f'{abaqus_options} -datacheck')
+    abaqus_options=f'{abaqus_options} -datacheck'))
 
 solve_suffixes = common_suffixes + ('sta',)
 solve_targets = [f"{variant_dir_base / job_name}.{suffix}" for suffix in solve_suffixes]
