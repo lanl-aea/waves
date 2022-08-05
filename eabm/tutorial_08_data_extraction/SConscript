@@ -22,6 +22,7 @@ model = "single_element"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
+datacheck = []
 
 # Comment used in tutorial code snippets: marker-2
 
@@ -97,13 +98,12 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
     datacheck_name = f"{job_name}_DATACHECK"
     datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
     abaqus_options='-double both'
-    workflow.extend(env.AbaqusSolver(
+    datacheck.extend(env.AbaqusSolver(
         target=[f"{set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
         source=solve_source_list,
         job_name=datacheck_name,
         abaqus_options=f'{abaqus_options} -datacheck'))
 
-    solve_source_list.append([f"{set_name / datacheck_name}.odb"])
     workflow.extend(env.AbaqusSolver(
         target=[f"{set_name / job_name}.sta"],
         source=solve_source_list,
@@ -121,6 +121,7 @@ for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)
+env.Alias(f"{parent_directory}_datacheck", datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")

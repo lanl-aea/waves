@@ -190,11 +190,6 @@ Build Targets
     Copy("build/tutorial_06_include_files/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_06_include_files/history_output.inp", "eabm_package/abaqus/history_output.inp")
     cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
-    environment > single_element_compression_DATACHECK.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -job
-    single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete
-    no > single_element_compression_DATACHECK.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
     environment > single_element_compression.abaqus_v6.env
     cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -job
     single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
@@ -228,20 +223,6 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
         ├── single_element_compression.abaqus_v6.env
         ├── single_element_compression.com
         ├── single_element_compression.dat
-        ├── single_element_compression_DATACHECK.023
-        ├── single_element_compression_DATACHECK.abaqus_v6.env
-        ├── single_element_compression_DATACHECK.com
-        ├── single_element_compression_DATACHECK.dat
-        ├── single_element_compression_DATACHECK.mdl
-        ├── single_element_compression_DATACHECK.msg
-        ├── single_element_compression_DATACHECK.odb
-        ├── single_element_compression_DATACHECK.par
-        ├── single_element_compression_DATACHECK.pes
-        ├── single_element_compression_DATACHECK.pmg
-        ├── single_element_compression_DATACHECK.prt
-        ├── single_element_compression_DATACHECK.sim
-        ├── single_element_compression_DATACHECK.stdout
-        ├── single_element_compression_DATACHECK.stt
         ├── single_element_compression.inp
         ├── single_element_compression.inp.in
         ├── single_element_compression.msg
@@ -266,7 +247,7 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
         ├── single_element_partition.jnl
         └── single_element_partition.stdout
 
-    1 directory, 50 files
+    1 directory, 36 files
 
 The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution_waves`. As
 was mentioned when modifying the :ref:`tutorial_include_files_waves_SConscript` file, the use of an included Python file

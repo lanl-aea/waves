@@ -17,6 +17,11 @@ Documentation
 =============
 - Add bibliography citations to match external URLs hyperreferences (:issue:`242`, :merge:`249`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Separate the WAVES-EABM datacheck tasks from the main simulation workflow (:issue:`244`, :merge:`250`). By `Kyle
+  Brindley`_.
+
 ******************
 0.3.2 (2022-08-04)
 ******************
