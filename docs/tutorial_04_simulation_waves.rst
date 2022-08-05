@@ -78,11 +78,12 @@ Next, ``{journal_file}.inp`` needs to be appended to the list of simulation sour
 :ref:`tutorial_partition_mesh_waves` that this file is one of the targets that is generated from
 :meth:`waves.builders.abaqus_journal` builder in the code pertaining to ``# Mesh``.
 
-The first set of highlighted lines will define a preliminary step to the actual analysis called a *datacheck*. You can
-read the `Abaqus Standard/Explicit Execution`_ documentation :cite:`ABAQUS` for more details on running a datacheck.
-The primary purpose for running a datacheck prior to the analysis is to provide the build system an opportunity for
-early exit if the datacheck fails. This is useful in a scenario where the full analysis might take much longer to fail
-than the datacheck.
+The first set of highlighted lines will define an optional task called a *datacheck*. You can read the `Abaqus
+Standard/Explicit Execution`_ documentation :cite:`ABAQUS` for more details on running a datacheck. The primary purpose
+for running a datacheck is to verify the input file construction without running a full simulation. While Abaqus can
+continue with an analysis from the datacheck output, doing so modifies the datacheck output files, which has the affect
+of prompting `SCons`_ to always re-build the datacheck target. This task is excluded from the main workflow to avoid
+duplicate preprocessing of the input file. It will be used in a later tutorial about regression testing.
 
 First, the ``job_name`` is resolved from the name of the first source file listed in code pertaining to ``#
 SolverPrep``, in this case ``single_element_compression``. That name is appended with the ``_DATACHECK`` string to
@@ -96,11 +97,11 @@ to the builder. This is done using the ``abaqus_options`` variable. Here, we ins
 precision for both the packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation
 :cite:`ABAQUS` for more information about the use of single or double precision in an Abaqus analysis.
 
-Finally, the ``workflow`` list is extended to define the task for running the datacheck. The ``target`` list is formed
-by adding the ``datacheck_suffixes`` to the ``datacheck_name``. The ``source`` list was created in the first portions of
-the new code for this tutorial. ``job_name`` is used in the Abaqus solver call. See the
-:meth:`waves.builders.abaqus_solver` API for information about default behavior. Lastly, the ``abaqus_options`` are
-passed to the builder to be appended to the Abaqus solver call.
+Finally, the ``datacheck`` list is extended separately from the ``workflow`` list to separate the task for running the
+datacheck from the full simulation workflow. The ``target`` list is formed by adding the ``datacheck_suffixes`` to the
+``datacheck_name``. The ``source`` list was created in the first portions of the new code for this tutorial.
+``job_name`` is used in the Abaqus solver call. See the :meth:`waves.builders.abaqus_solver` API for information about
+default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be appended to the Abaqus solver call.
 
 .. _tutorial_simulation_waves_running_analysis:
 
@@ -145,7 +146,7 @@ list by the builder. The ``source`` list once again utlizes the existing ``solve
 
 In summary of the changes you just made to the ``tutorial_04_simulation/SConscript`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the changes made in this
-tutorial.
+tutorial. Note the addition of a separate datacheck alias, which will be used in the regression testing tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
 
@@ -211,11 +212,6 @@ Build Targets
    Copy("build/tutorial_04_simulation/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_04_simulation/history_output.inp", "eabm_package/abaqus/history_output.inp")
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment
-   > single_element_compression_DATACHECK.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job
-   single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete
-   no > single_element_compression_DATACHECK.stdout 2>&1
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment
    > single_element_compression.abaqus_v6.env
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job
    single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
@@ -250,17 +246,6 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
         ├── single_element_compression.abaqus_v6.env
         ├── single_element_compression.com
         ├── single_element_compression.dat
-        ├── single_element_compression_DATACHECK.023
-        ├── single_element_compression_DATACHECK.abaqus_v6.env
-        ├── single_element_compression_DATACHECK.com
-        ├── single_element_compression_DATACHECK.dat
-        ├── single_element_compression_DATACHECK.mdl
-        ├── single_element_compression_DATACHECK.msg
-        ├── single_element_compression_DATACHECK.odb
-        ├── single_element_compression_DATACHECK.prt
-        ├── single_element_compression_DATACHECK.sim
-        ├── single_element_compression_DATACHECK.stdout
-        ├── single_element_compression_DATACHECK.stt
         ├── single_element_compression.inp
         ├── single_element_compression.msg
         ├── single_element_compression.odb
@@ -281,7 +266,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
         ├── single_element_partition.jnl
         └── single_element_partition.stdout
 
-    1 directory, 43 files
+    1 directory, 32 files
 
 The ``tutorial_04_simulation`` directory contains several different subsets of related files:
 
@@ -291,7 +276,5 @@ The ``tutorial_04_simulation`` directory contains several different subsets of r
   tutorial adds and executes a full workflow.
 * ``*.inp`` - files copied to the build directory as part of the code pertaining to ``# SolverPrep`` in the
   ``SConscript`` file, which was introduced in :ref:`tutorial_solverprep_waves`.
-* ``single_element_compression_DATACHECK.*`` - output files from :ref:`tutorial_simulation_waves_running_datacheck` in
-  this tutorial.
 * ``single_element_compression.*`` - output files from :ref:`tutorial_simulation_waves_running_analysis` in this
   tutorial.
