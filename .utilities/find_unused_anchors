@@ -1,0 +1,79 @@
+#! /usr/bin/env bash
+
+script_name=$(basename "$0")
+usage="${script_name}
+USAGE: ./${script_name} ANCHOR_FILE [ANCHOR_FILE ...] [-p SEARCH_DIRECTORY]"
+options='OPTIONS:
+    ANCHOR_FILE        Name of the file(s) with anchor definitions       
+    -h                 Show this help message and exit
+    -p                 Path to the directory to search for anchor usage (DEFAULT: docs/)
+
+Assumes that anchors are defined with the Sphinx syntax (text between ""):
+    "_`anchor text`:"
+
+EXAMPLE: find_unused_anchors docs/targets.txt
+'
+
+# Set default options
+anchor_files_array=('')
+search_directory='docs'
+
+# Parse mix of positional and flag arguments with getopts
+declare -a positional
+while [ $# -gt 0 ]; do
+    unset OPTIND
+    unset OPTARG
+    while getopts ":hp:" opt; do
+        case $opt in
+            h)
+                printf "%s\n" "${usage}"
+                printf "%s\n" "${options}"
+                exit 0
+                ;;
+            p)
+                search_directory=${OPTARG}
+                ;;
+            \?)
+                printf "%s\n" "Invalid option: -${OPTARG}"
+                invalid_option='true'
+                ;;
+            :)
+                printf "%s\n" "Option -${OPTARG} requires an argument."
+                invalid_option='true'
+                ;;
+        esac
+    done
+    # Shift past last processed getopts valid arg
+    shift $((OPTIND-1))
+    # Shift past double dash
+    [ "${1:-}" = "--" ] && shift
+    # Assign non getopts arg to positional array
+    positional+=($1)
+    shift
+done
+
+# Exit on invalid argument flags
+if [ "${invalid_option}" == 'true' ]; then
+    printf "%s\n" "${usage}"
+    printf "%s\n" "${options}"
+    exit 1
+fi
+
+# Check for required positional arguments
+if [ ! ${#positional[@]} -eq 0 ]; then
+    anchor_files_array=("${positional[@]}")
+else
+    printf "%s\n" "${usage}"
+    exit 0
+fi
+
+# Convert targets array to space separated string of targets
+anchor_files=$(echo ${anchor_files_array[@]} | tr -d ',')
+
+# Do the thing
+while read -r anchor; do
+    grep -rIE "${anchor}" "${search_directory}" > /dev/null 2>&1
+    if [ "$?" != 0 ]; then
+        echo "${anchor}"
+    fi
+done < <(sed -n 's/.*\(`.*`\):.*/\1/p' ${anchor_files}) 

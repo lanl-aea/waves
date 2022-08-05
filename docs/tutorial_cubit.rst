@@ -4,16 +4,16 @@
 Tutorial Cubit: Simulation
 ##########################
 
-This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but uses `Cubit`_ for the
-geometry, partition, and meshing tasks. It is included as an example for how to use `Cubit`_ with a build system and
-include best practices, such as an API and CLI.
+This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but uses `Cubit`_
+:cite:`cubit` for the geometry, partition, and meshing tasks. It is included as an example for how to use `Cubit`_ with
+a build system and include best practices, such as an API and CLI.
 
 **********
 References
 **********
 
-* `Cubit`_: Python Interface
-* `Cubit`_: Importing Cubit into Python
+* `Cubit`_: Python Interface :cite:`cubit`
+* `Cubit`_: Importing Cubit into Python :cite:`cubit`
 
 ***********
 Environment

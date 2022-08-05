@@ -13,6 +13,10 @@ Bug fixes
 - Look outside the ``noarch`` installation egg to find the installed documentation files (:issue:`249`, :merge:`248`).
   By `Kyle Brindley`_.
 
+Documentation
+=============
+- Add bibliography citations to match external URLs hyperreferences (:issue:`242`, :merge:`249`). By `Kyle Brindley`_.
+
 ******************
 0.3.2 (2022-08-04)
 ******************
