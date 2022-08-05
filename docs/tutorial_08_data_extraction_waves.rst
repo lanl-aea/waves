@@ -4,6 +4,8 @@
 Tutorial 08: Data Extraction
 ############################
 
+.. include:: wip_warning.txt
+
 **********
 References
 **********
@@ -39,7 +41,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
+A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction/SConscript
@@ -52,7 +54,7 @@ changes made in this tutorial.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct

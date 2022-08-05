@@ -24,6 +24,7 @@ project_variables = {
     'tutorial_07_lh_dir': 'tutorial_07_latin_hypercube',
     'tutorial_08_dir': 'tutorial_08_data_extraction',
     'tutorial_09_dir': 'tutorial_09_post_processing',
+    'tutorial_10_dir': 'tutorial_10_regression_testing',
     'tutorial_cubit_dir': 'tutorial_cubit'
 }
 

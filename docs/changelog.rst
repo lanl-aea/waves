@@ -16,6 +16,7 @@ Bug fixes
 Documentation
 =============
 - Add bibliography citations to match external URLs hyperreferences (:issue:`242`, :merge:`249`). By `Kyle Brindley`_.
+- Add a draft outline of a regression test tutorial (:issue:`162`, :merge:`251`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

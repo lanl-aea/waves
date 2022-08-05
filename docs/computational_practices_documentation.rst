@@ -4,7 +4,7 @@
 Documentation
 *************
 
-Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html
+Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html :cite:`sphinx,sphinx-tutorial`
 
 Traditionally, most engineering simulation and analysis projects publish a technical report as the final deliverable.
 Some projects may go further and deliver archives or databases of simulation input and output files. These documentation
