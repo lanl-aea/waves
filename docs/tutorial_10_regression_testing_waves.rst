@@ -8,6 +8,8 @@ Tutorial 10: Regression Testing
 References
 **********
 
+* Gitlab CI: https://docs.gitlab.com/ee/ci/ :cite:`gitlab-ci`
+
 ***********
 Environment
 ***********
