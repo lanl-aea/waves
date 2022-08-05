@@ -57,6 +57,8 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:20 :ref:`tutorial_data_extraction_waves`        Abaqus data extraction
                    00:20 :ref:`tutorial_post_processing_waves`        Example solution to parameter study results
                                                                       concatenation with the parameter study definition
+                   00:10 :ref:`tutorial_regression_testing_waves`     Alias for partial simulation verification and
+                                                                      regression testing
 ======================== ============================================ ==================================================
 
 Supplemental Lessons
