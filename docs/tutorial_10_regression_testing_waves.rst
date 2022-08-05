@@ -131,3 +131,6 @@ alias, those tools need only execute a single `SCons`_ command to perform the se
 workflow verification, ``scons datacheck``. If `git`_ :cite:`git` is used as the version control system, developer
 operations software such as `Gitlab`_ :cite:`gitlab` provide continuous integration software that can automate
 verification tests on triggers, such as merge requests, or on a regular schedule.
+
+.. TODO: template .gitlab-ci.yml file
+.. TODO: add references to alternative to gitlab
