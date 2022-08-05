@@ -34,7 +34,7 @@ Description
 .. project-description-start-do-not-remove
 
 A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
-`WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
+`WAVES`_ also includes custom `SCons`_ builders that are commonly re-used in model simulation (modsim)
 repositories. The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_
 covers build system concepts, command line options, and project configuration.
 
