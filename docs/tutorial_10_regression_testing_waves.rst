@@ -90,7 +90,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the datacheck targets without executing the full simulation workflow
+5. Build the datacheck targets without executing the full simulation workflow
 
 .. code-block:: bash
 
