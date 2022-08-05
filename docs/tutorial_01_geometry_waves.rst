@@ -17,8 +17,8 @@ References
 Below is a list of refrences for more information about topics that are not explicitly
 covered in this tutorial.
 
-* `Abaqus Scripting`_
-* `Abaqus Python Environment`_
+* `Abaqus Scripting`_ :cite:`ABAQUS2022`
+* `Abaqus Python Environment`_ :cite:`ABAQUS2022`
 * Python Docstrings: `PEP-257`_, `PEP-287`_
 
 ***********
@@ -189,14 +189,15 @@ example of this is in the :ref:`sphinx_api`.
 
 Abaqus Python Code
 ==================
+
 The latter portion of the ``main()`` function is the code that generates the single element geometry. Here, an Abaqus
 model is opened using the ``model_name`` variable as the model's name, a rectangle is drawn with dimensions ``width``
 and ``height``, and the Abaqus CAE model is saved with the name ``output_file``. One notable difference between the
-`Abaqus Scripting`_ documentation of Abaqus journal files is the use of the `PEP-8`_ style guide for package imports.
-Here, we order the imports according to the `PEP-8`_ style and avoid bulk imports to the file's namespace from Abaqus
-Python packages. It is also worth noting that Abaqus journal files use the the Abaqus Python 2.7 environment *not* the
-SCons/EABM Python 3 environment. See the `Abaqus Python Environment`_ documentation for more information on the Abaqus
-Python 2.7 environment.
+`Abaqus Scripting`_ documentation :cite:`ABAQUS2022` of Abaqus journal files is the use of the `PEP-8`_ style guide for
+package imports.  Here, we order the imports according to the `PEP-8`_ style and avoid bulk imports to the file's
+namespace from Abaqus Python packages. It is also worth noting that Abaqus journal files use the the Abaqus Python 2.7
+environment *not* the SCons/EABM Python 3 environment. See the `Abaqus Python Environment`_ documentation
+:cite:`ABAQUS2022` for more information on the Abaqus Python 2.7 environment.
 
 .. _tutorial_geometry_waves_command_line_interfaces:
 
