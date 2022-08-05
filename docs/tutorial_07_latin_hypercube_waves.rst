@@ -8,6 +8,9 @@ Tutorial 07: Latin Hypercube
 References
 **********
 
+* WAVES :ref:`parameter_generator_api` API
+* `Xarray`_ and the `xarray dataset`_
+
 ***********
 Environment
 ***********
