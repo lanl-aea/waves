@@ -22,6 +22,11 @@ Internal Changes
 - Separate the WAVES-EABM datacheck tasks from the main simulation workflow (:issue:`244`, :merge:`250`). By `Kyle
   Brindley`_.
 
+Enhancements
+============
+- Redirect the ``rm`` command STDOUT and STDERR from the abaqus extract builder to a unique filename (:issue:`250`,
+  :merge:`252`). By `Kyle Brindley`_.
+
 ******************
 0.3.2 (2022-08-04)
 ******************
