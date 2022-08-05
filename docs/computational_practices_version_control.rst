@@ -4,7 +4,7 @@
 Version Control
 ***************
 
-Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html
+Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html :cite:`swc-git,SoftwareCarpentry`
 
 As mentioned in the :ref:`practices_introduction`, version control software fills the role of a laboratory notebook for
 computational engineering. Keeping a laboratory notebook is a fundamental practice of experimental engineering and
@@ -83,8 +83,8 @@ examples of a Git log from the current project.
 * Show summary information for the most recent commits to the project's documentation.
 
   .. code-block::
-  
-     $ git log --oneline -n 10 -- docs  
+
+     $ git log --oneline -n 10 -- docs
      bdeac0a (HEAD -> 123-theory-manual-version-control-section, origin/123-theory-manual-version-control-section) DOC: add git discussion to version control practices
      8f6b997 DOC: draft importance of version control
      07a30ee (origin/144-add-a-setup-page-to-the-user-manual, 144-add-a-setup-page-to-the-user-manual) MAINT: fix quickstart anchor
@@ -104,15 +104,15 @@ examples of a Git log from the current project.
      commit 0a00f5704d9299ffd77c83100f90676f2f509456
      Author: Prabhu Khalsa <pkhalsa@pn1934993.lanl.gov>
      Date:   Thu Jun 2 11:31:48 2022 -0600
-     
+
          DOC: Adding cli documentation to rst docs
-     
+
      diff --git a/docs/cli.rst b/docs/cli.rst
      index 114025a..cda1894 100644
      --- a/docs/cli.rst
      +++ b/docs/cli.rst
      @@ -50,3 +50,10 @@ ODB Extract
-      
+
       .. argparse::
          :ref: waves.abaqus.odb_extract.get_parser
      +

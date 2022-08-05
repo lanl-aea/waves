@@ -11,10 +11,10 @@ computational engineering. Specifically, this manual intends to motivate the ado
 engineering practices for use in research and production engineering simulation projects.
 
 This manual is not the first such effort in the greater scientific computing community. In fact, the authors relied
-heavily on the lesson plans of the `Software Carpentry`_, established to teach computing skills to researchers in 1998
-:cite:`SoftwareCarpentry`. As the intention for this manual is to lay out fundamental practices of engineering
-computing, it will not attempt to fully teach the underlying concepts and will instead reference the well designed lesson
-plans of the `Software Carpentry`_.
+heavily on the lesson plans of the `Software Carpentry`_ :cite:`SoftwareCarpentry`, established to teach computing
+skills to researchers in 1998 :cite:`SoftwareCarpentry`. As the intention for this manual is to lay out fundamental
+practices of engineering computing, it will not attempt to fully teach the underlying concepts and will instead
+reference the well designed lesson plans of the `Software Carpentry`_.
 
 Where possible, this manual will explain to general computing practices and concepts and limit discussion of specific
 software implementations to examples or vehicles for practice in concrete application. The specific software taught by
@@ -63,11 +63,12 @@ these practices. It should be supplemented with lessons in the numeric solvers u
 For the practical implementation found in the `WAVES`_ :ref:`user_manual`, the shell, Git, Python, and GNU Make
 tutorials are considered prerequisites.
 
-#. Software Carpentry: Shell Novice: http://swcarpentry.github.io/shell-novice/
-#. Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html
-#. Software Carpentry: Python Novice - https://swcarpentry.github.io/python-novice-inflammation/
-#. Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/
+#. Software Carpentry: Shell Novice: http://swcarpentry.github.io/shell-novice/ :cite:`swc-shell`
+#. Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html :cite:`swc-git`
+#. Software Carpentry: Python Novice - https://swcarpentry.github.io/python-novice-inflammation/ :cite:`swc-python`
+#. Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`swc-git`
 #. Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
 #. Sphinx tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html
 #. :ref:`SCons-WAVES-EABM tutorials<tutorial_introduction>`
-#. Software Carpentry: Regular Expressions - https://librarycarpentry.org/lc-data-intro/index.html
+#. Library Carpentry: Regular Expressions - https://librarycarpentry.org/lc-data-intro/index.html
+   :cite:`lbc-re,LibraryCarpentry`
