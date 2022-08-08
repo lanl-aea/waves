@@ -10,7 +10,7 @@ References
 
 * WAVES :ref:`parameter_generator_api` API
 * `Cartesian Product`_
-* `Xarray`_ and the `xarray dataset`_
+* `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
 
 ***********
 Environment
