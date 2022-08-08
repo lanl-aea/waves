@@ -1621,27 +1621,38 @@ class OdbReportFileParser(AbaqusFileParser):
                                 nodal = True
                         field['locations'].append(location)
                 if line.strip().startswith('Components of field ') or line.strip().startswith('Invariants of field'):
-                    if line.strip()[-1] == '/':  # Line has continuation
-                        continuation_line = f.readline()
-                        line += continuation_line
-                    if self.format == 'extract':
-                        if self.current_frame_number == 1 and self.current_step_count == 0:
-                            self.first_field_data = True
-                        else:
-                            self.first_field_data = False
-                        if self.current_frame_number == 1 and self.current_step_count > 0:
-                            self.new_step = True
-                        else:
-                            self.new_step = False
-                        field_values = self.setup_extract_field_format(field, nodal)
-                        self.parse_field_values(f, line, field_values)
-                    else:
-                        field['values'] = list()
-                        self.parse_field_values(f, line, field['values'])
+                    self.parse_components_of_field(f, line, field, nodal)
                 fields[field['name']] = field
             # if line != '\n':
             line = f.readline()
         return line
+
+    def parse_components_of_field(self, f, line, field, nodal):
+        """Parse the section that contains the data for field outputs found after the 'Components of field' heading
+
+        :param file object f: open file
+        :param str line: current line of file
+        :param dict field: dictionary for storing field output
+        :param bool nodal: Says whether or not data is nodal
+        """
+
+        if line.strip()[-1] == '/':  # Line has continuation
+            continuation_line = f.readline()
+            line += continuation_line
+        if self.format == 'extract':
+            if self.current_frame_number == 1 and self.current_step_count == 0:
+                self.first_field_data = True
+            else:
+                self.first_field_data = False
+            if self.current_frame_number == 1 and self.current_step_count > 0:
+                self.new_step = True
+            else:
+                self.new_step = False
+            field_values = self.setup_extract_field_format(field, nodal)
+            self.parse_field_values(f, line, field_values)
+        else:
+            field['values'] = list()
+            self.parse_field_values(f, line, field['values'])
 
     def setup_extract_field_format(self, field, nodal):
         """Do setup of field output formatting for extract format
