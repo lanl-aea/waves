@@ -1590,6 +1590,7 @@ class OdbReportFileParser(AbaqusFileParser):
         :rtype: str
         """
         self.current_field_number = 0
+        field = dict()
         while 'history' not in line.lower() \
                 and not line.startswith('-----------------------------------------------------------') \
                 and not line.startswith('  -------------------------------------') and line != "":
