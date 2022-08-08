@@ -10,6 +10,9 @@ Tutorial 08: Data Extraction
 References
 **********
 
+* :ref:`odb_extract_cli` CLI
+* :meth:`waves.builders.abaqus_extract`
+
 ***********
 Environment
 ***********
