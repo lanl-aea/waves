@@ -10,7 +10,7 @@ Tutorial 07: Latin Hypercube
 References
 **********
 
-* WAVES :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.LatinHypercube`
+* |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.LatinHypercube`
 * `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
 
 ***********

@@ -8,7 +8,7 @@ Tutorial 07: Cartesian Product
 References
 **********
 
-* WAVES :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.CartesianProduct`
+* |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.CartesianProduct`
 * `Cartesian Product`_
 * `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
 
