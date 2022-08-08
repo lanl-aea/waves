@@ -60,7 +60,7 @@ class TestCustomStudy:
     def test_generate(self, parameter_schema, expected_array):
         TestGenerate = CustomStudy(parameter_schema)
         TestGenerate.generate()
-        generate_array = TestGenerate.parameter_study['values'].values
+        generate_array = TestGenerate.samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
