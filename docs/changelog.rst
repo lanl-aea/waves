@@ -12,6 +12,8 @@ Bug fixes
 =========
 - Look outside the ``noarch`` installation egg to find the installed documentation files (:issue:`249`, :merge:`248`).
   By `Kyle Brindley`_.
+- odb_extract can now handle multiple 'Component of field' headers if they are present within field data sections
+  (:issue:`254`, :merge:`255`). By `Prabhu Khalsa`_.
 
 Documentation
 =============
