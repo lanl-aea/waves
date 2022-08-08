@@ -8,7 +8,7 @@ Tutorial 02: Partition and Mesh
 References
 **********
 
-* Adding to `PYTHONPATH`_ with `Python sys`_
+* Adding to `PYTHONPATH`_ with `Python sys`_ :cite:`python`
 * `Abaqus Node Sets`_ :cite:`ABAQUS`
 * `Abaqus Element Sets`_ and `Abaqus Elements Guide`_ :cite:`ABAQUS`
 * `Abaqus Surfaces`_ :cite:`ABAQUS`
