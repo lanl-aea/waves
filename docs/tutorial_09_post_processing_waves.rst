@@ -14,6 +14,10 @@ Tutorial 09: Post-Processing
 References
 **********
 
+* |PROJECT| :ref:`waves_builders_api` API: :meth:`waves.builders.python_script`
+* |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.CartesianProduct`
+* `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
+
 ***********
 Environment
 ***********
