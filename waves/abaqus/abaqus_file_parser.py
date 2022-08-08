@@ -1622,6 +1622,9 @@ class OdbReportFileParser(AbaqusFileParser):
                         field['locations'].append(location)
                 if line.strip().startswith('Components of field ') or line.strip().startswith('Invariants of field'):
                     self.parse_components_of_field(f, line, field, nodal)
+            if line.strip().startswith('Components of field ') or line.strip().startswith('Invariants of field'):
+                self.parse_components_of_field(f, line, field, nodal)
+            else:
                 fields[field['name']] = field
             # if line != '\n':
             line = f.readline()
