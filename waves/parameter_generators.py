@@ -552,7 +552,7 @@ class CustomStudy(_ParameterGenerator):
     def generate(self):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study."""
-        self.values = numpy.array(self.parameter_schema['parameter_samples'])
+        self.values = numpy.array(self.parameter_schema['parameter_samples'], dtype=object)
         set_count = self.values.shape[0]
         self._create_parameter_set_names(set_count)
         self._create_parameter_study()
