@@ -9,6 +9,7 @@ from waves.parameter_generators import CustomStudy
 import pytest
 import numpy
 
+
 class TestCustomStudy:
     """Class for testing CustomStudy parameter study generator class"""
 
