@@ -13,12 +13,16 @@ Bug fixes
 - Look outside the ``noarch`` installation egg to find the installed documentation files (:issue:`249`, :merge:`248`).
   By `Kyle Brindley`_.
 
+New Features
+============
+- Add CustomStudy parameter study generator (:issue:`231`, :merge:`224`). By `Matthew Fister`_.
+
 Documentation
 =============
 - Add bibliography citations to match external URLs hyperreferences (:issue:`242`, :merge:`249`). By `Kyle Brindley`_.
 - Add a draft outline of a regression test tutorial (:issue:`162`, :merge:`251`). By `Kyle Brindley`_.
 - Add references and citations to tutorials (:issue:`252`, :merge:`253`). By `Kyle Brindley`_.
-- Add discussion to the data extraction tutorial (:issue:`104`, :merge:`254`). By `Kyle Brindley`.
+- Add discussion to the data extraction tutorial (:issue:`104`, :merge:`254`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -47,7 +51,6 @@ New Features
   :merge:`239`). By `Kyle Brindley`_.
 - Add a substitution syntax helper to prepend and append special characters on dictionary key strings (:issue:`235`,
   :merge:`240`). By `Kyle Brindley`_.
-- Add CustomStudy parameter study generator (:issue:`231`, :merge:`224`). By `Matthew Fister`_.
 
 Documentation
 =============
