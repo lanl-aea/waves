@@ -544,7 +544,9 @@ class CustomStudy(_ParameterGenerator):
         try:
             self.parameter_names = self.parameter_schema['parameter_names']
         except KeyError:
-            raise KeyError('parameter_schema must contain the keys: parameter_names, parameter_samples')
+            raise KeyError('parameter_schema must contain the key: parameter_names')
+        if 'parameter_samples' not in self.parameter_schema:
+            raise KeyError('parameter_schema must contain the key: parameter_samples')
         if len(self.parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
             raise ValueError('The parameter samples must be an array of shape M x N, where N is the number of parameters.')
         return
