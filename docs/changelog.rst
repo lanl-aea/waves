@@ -41,6 +41,7 @@ New Features
   :merge:`239`). By `Kyle Brindley`_.
 - Add a substitution syntax helper to prepend and append special characters on dictionary key strings (:issue:`235`,
   :merge:`240`). By `Kyle Brindley`_.
+- Add CustomStudy parameter study generator (:issue:`231`, :merge:`224`). By `Matthew Fister`_.
 
 Documentation
 =============
