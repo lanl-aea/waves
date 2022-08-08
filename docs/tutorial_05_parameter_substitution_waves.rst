@@ -8,7 +8,7 @@ Tutorial 05: Parameter Substitution
 References
 **********
 
-* `SCons Substfile`_
+* `SCons Substfile`_ :cite:`scons-user`
 
 ***********
 Environment

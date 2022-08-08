@@ -28,6 +28,7 @@ References
 **********
 
 * :ref:`testing`
+* `SCons Alias`_ :cite:`scons-user`
 * Gitlab CI: https://docs.gitlab.com/ee/ci/ :cite:`gitlab-ci`
 
 ***********

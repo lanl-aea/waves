@@ -8,8 +8,8 @@ Tutorial 06: Include Files
 References
 **********
 
-* Adding to `PYTHONPATH`_ with `Python sys`_
-* `Python Modules`_
+* Adding to `PYTHONPATH`_ with `Python sys`_ :cite:`python`
+* `Python Modules`_ :cite:`python`
 
 ***********
 Environment
