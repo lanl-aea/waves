@@ -1622,9 +1622,9 @@ class OdbReportFileParser(AbaqusFileParser):
                                 nodal = True
                         field['locations'].append(location)
                 if line.strip().startswith('Components of field ') or line.strip().startswith('Invariants of field'):
-                    self.parse_components_of_field(f, line, field, nodal)
+                    line = self.parse_components_of_field(f, line, field, nodal)
             if line.strip().startswith('Components of field ') or line.strip().startswith('Invariants of field'):
-                self.parse_components_of_field(f, line, field, nodal)
+                line = self.parse_components_of_field(f, line, field, nodal)
             if 'name' in field:
                 fields[field['name']] = field
             # if line != '\n':
@@ -1638,6 +1638,8 @@ class OdbReportFileParser(AbaqusFileParser):
         :param str line: current line of file
         :param dict field: dictionary for storing field output
         :param bool nodal: Says whether or not data is nodal
+        :return: current line of file
+        :rtype: str
         """
 
         if line.strip()[-1] == '/':  # Line has continuation
@@ -1653,10 +1655,11 @@ class OdbReportFileParser(AbaqusFileParser):
             else:
                 self.new_step = False
             field_values = self.setup_extract_field_format(field, nodal)
-            self.parse_field_values(f, line, field_values)
+            line = self.parse_field_values(f, line, field_values)
         else:
             field['values'] = list()
-            self.parse_field_values(f, line, field['values'])
+            line = self.parse_field_values(f, line, field['values'])
+        return line
 
     def setup_extract_field_format(self, field, nodal):
         """Do setup of field output formatting for extract format
@@ -1698,7 +1701,8 @@ class OdbReportFileParser(AbaqusFileParser):
         :param file object f: open file
         :param str line: current line
         :param list values: list for storing the field values
-        :return: None
+        :return: current line of file
+        :rtype: str
         """
         instance_match = re.match(r".*for part instance '(.*?)'", line, re.IGNORECASE)
         if instance_match:
@@ -1843,6 +1847,7 @@ class OdbReportFileParser(AbaqusFileParser):
                                         [None for _ in range(number_of_data_values)])
                 else:
                     values[value_instance]['values'][self.current_step_count][time_index][index_key] = data_value
+        return line
 
 
     def get_position_index(self, position, position_type, values):
