@@ -189,7 +189,7 @@ class _ParameterGenerator(ABC):
         for parameter_set_file in parameter_set_files:
             text = yaml.safe_dump(
                 self.parameter_study.sel(data_type='samples',
-                                         parameter_sets=str(parameter_set_file)).to_pandas().to_dict()
+                                         parameter_sets=str(parameter_set_file)).to_array().to_series().to_dict()
             )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
