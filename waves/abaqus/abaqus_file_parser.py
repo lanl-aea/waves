@@ -1626,7 +1626,7 @@ class OdbReportFileParser(AbaqusFileParser):
             if line.strip().startswith('Components of field ') or line.strip().startswith('Invariants of field'):
                 line = self.parse_components_of_field(f, line, field, nodal)
             if 'name' in field:
-                fields[field['name']] = field
+                fields[field['name']] = field  # This may get called more than once, but there is no problem in doing so
             # if line != '\n':
             line = f.readline()
         return line
