@@ -4,7 +4,16 @@
 Tutorial 08: Data Extraction
 ############################
 
-.. include:: wip_warning.txt
+Many post-processing activities require a non-proprietary serialization format to provide common access to a mix of
+analysis libraries and tools. The :ref:`parameter_generator_api` of this project uses the `xarray dataset`_ and H5
+files, so it will be convenient to extract data results to a similar H5 file using matching coordinates for the
+N-dimensional data.
+
+As |PROJECT| grows to support more 
+
+Abaqus provides a scripting interface and a proprietary, binary output database file containing the simulation results.
+While this object and interface is good for scripting with the Abaqus kernel and CAE features, the Python interface is
+limited to the Python 2.7 environment that is shipped with Abaqus. When
 
 **********
 References
