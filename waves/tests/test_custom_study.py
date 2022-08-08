@@ -71,13 +71,13 @@ class TestCustomStudy:
 
     generate_io = {
         'one parameter yaml':
-            ({'parameter_names': ['a'], 'parameter_samples': numpy.array([[1], [2.0]], dtype=object)},
+            ({'parameter_names': ['a'], 'parameter_samples': numpy.array([[1], [2]], dtype=object)},
              'out',
              None,
              'yaml',
              2,
              [call("a: 1\n"),
-              call("a: 2.0\n")]),
+              call("a: 2\n")]),
         'two parameter yaml':
             ({'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
              'out',
@@ -87,13 +87,13 @@ class TestCustomStudy:
              [call("a: 1\nb: 2.0\n"),
               call("a: 3\nb: 4.5\n")]),
         'one parameter one file yaml':
-            ({'parameter_names': ['a'], 'parameter_samples': numpy.array([[1], [2.0]], dtype=object)},
+            ({'parameter_names': ['a'], 'parameter_samples': numpy.array([[1], [2]], dtype=object)},
              None,
              'parameter_study.yaml',
              'yaml',
              1,
              [call("parameter_set0:\n  a: 1\n" \
-                   "parameter_set1:\n  a: 2.0\n")]),
+                   "parameter_set1:\n  a: 2\n")]),
         'two parameter one file yaml':
             ({'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
              None,
