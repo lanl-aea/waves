@@ -51,7 +51,13 @@ class TestCartesianProduct:
                               [[1, "a"],
                                [1, "b"],
                                [2, "a"],
-                               [2, "b"]], dtype=object))
+                               [2, "b"]], dtype=object)),
+        'ints and floats': ({'parameter_1': [1, 2], 'parameter_2': [3.0, 4.0]},
+                            numpy.array(
+                                [[1, 3.0],
+                                 [1, 4.0],
+                                 [2, 3.0],
+                                 [2, 4.0]], dtype=object))
     }
 
     @pytest.mark.unittest
@@ -89,6 +95,16 @@ class TestCartesianProduct:
               call("parameter_1: 1\nparameter_2: b\n"),
               call("parameter_1: 2\nparameter_2: a\n"),
               call("parameter_1: 2\nparameter_2: b\n")]),
+        'two parameter yaml: floats and ints':
+            ({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
+             'out',
+             None,
+             'yaml',
+             4,
+             [call("parameter_1: 1\nparameter_2: 3.0\n"),
+              call("parameter_1: 1\nparameter_2: 4.0\n"),
+              call("parameter_1: 2\nparameter_2: 3.0\n"),
+              call("parameter_1: 2\nparameter_2: 4.0\n")]),
         'one parameter one file yaml':
             ({"parameter_1": [1, 2]},
              None,

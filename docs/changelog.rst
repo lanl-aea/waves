@@ -14,6 +14,8 @@ Bug fixes
   By `Kyle Brindley`_.
 - odb_extract can now handle multiple 'Component of field' headers if they are present within field data sections
   (:issue:`254`, :merge:`255`). By `Prabhu Khalsa`_.
+- Fix unintentional type casting in the parameter study conversion to dict (:issue:`255`, :merge:`257`). By `Kyle
+  Brindley`_.
 
 New Features
 ============
