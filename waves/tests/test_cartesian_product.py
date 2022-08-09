@@ -89,6 +89,16 @@ class TestCartesianProduct:
               call("parameter_1: 1\nparameter_2: b\n"),
               call("parameter_1: 2\nparameter_2: a\n"),
               call("parameter_1: 2\nparameter_2: b\n")]),
+        'two parameter yaml: floats and ints':
+            ({"parameter_1": [1, 2], "parameter_2": [3.0, 4.0]},
+             'out',
+             None,
+             'yaml',
+             4,
+             [call("parameter_1: 1\nparameter_2: 3.0\n"),
+              call("parameter_1: 1\nparameter_2: 4.0\n"),
+              call("parameter_1: 2\nparameter_2: 3.0\n"),
+              call("parameter_1: 2\nparameter_2: 4.0\n")]),
         'one parameter one file yaml':
             ({"parameter_1": [1, 2]},
              None,
