@@ -8,6 +8,11 @@ Changelog
 0.3.4 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Fix parameter set dimensions in tutorial set iteration usage for parameter studies with more than 10 sets
+  (:issue:`258`, :merge:`260`). By `Kyle Brindley`_.
+
 ******************
 0.3.3 (2022-08-09)
 ******************
