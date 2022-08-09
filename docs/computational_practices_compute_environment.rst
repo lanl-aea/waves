@@ -5,6 +5,7 @@ Compute Environment
 *******************
 
 Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
+:cite:`conda,conda-gettingstarted`
 
 Compute environment management is critical to any project that executes on more than one server or computer. This is
 true of most projects, where local development is performed on a local desktop or laptop, but the simulations must be

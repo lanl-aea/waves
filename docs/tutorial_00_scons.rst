@@ -267,6 +267,6 @@ use of the ``Help()`` `SCons`_ method must include the ``append=True`` keyword a
 Simulation build workflows will typically involve many targets and tasks in a non-trivial execution order. The target
 file names may also be cumbersome to type when explicitly listing build targets in the `SCons`_ build command. For
 convenience, the `WAVES-EABM`_ simulation configurations will add a collector alias for the list of simulation targets
-with the `SCons alias`_ feature. By convention, `WAVES-EABM`_ matches the alias name to the simulation subdirectory
+with the `SCons Alias`_ feature. By convention, `WAVES-EABM`_ matches the alias name to the simulation subdirectory
 name. :ref:`tutorial_geometry_waves` will introduce the first target alias, which will then populate the project help
 message diplayed by the ``scons -h`` command option.

@@ -4,15 +4,15 @@
 Regression Testing
 ******************
 
-There are several types of testing performed in software development. The three most relevant to :term:`modsim repositories` are
-unit, integration, and system testing. Executing the test suite at regular intervals after changes to a project is
-called regression testing. If the regression test suite is performed prior to merging any change to a project, it is
-called continuous integration.
+There are several types of testing performed in software development. The three most relevant to :term:`modsim
+repositories` are unit, integration, and system testing. Executing the test suite at regular intervals after changes to
+a project is called regression testing. If the regression test suite is performed prior to merging any change to a
+project, it is called continuous integration.
 
-Since :term:`modsim repositories` will inevitably involve some amount of scripting and may contain small, project specific
-re-usable libraries, it is important to learn the practices of software testing. However, these testing concepts can
-also be applied to a simulation workflow to verify that changes to the simulation files and simulation construction
-tools have not broken a simulation workflow.
+Since :term:`modsim repositories` will inevitably involve some amount of scripting and may contain small, project
+specific re-usable libraries, it is important to learn the practices of software testing. However, these testing
+concepts can also be applied to a simulation workflow to verify that changes to the simulation files and simulation
+construction tools have not broken a simulation workflow.
 
 Unit testing is directed at interface and behavior of an individual function, method, or class. Unit testing in a modsim
 repository serves the same purposes as in software development, and should be implemented to verify the behavior of
@@ -20,12 +20,12 @@ supporting scripts and project libraries. The intent is to test the code specifi
 avoid testing the behavior of libraries external to the current modsim project. Because well-defined behavior is
 difficult to implement and difficult to verify when a section of code performs many distinct operations, best practice
 is to write small, single-purpose functions and  methods. This makes them easier to document, implement, test, and
-maintain. In :term:`modsim repositories` it is rare to write project specific file input and output (I/O) operations, so the
-project unit tests should usually avoid real I/O operations that read or create files on disk. Instead, most programming
-languages have unit testing frameworks that include mock objects. Mock objects can be used in place of external library
-calls to avoid file I/O, while still allowing aspects of the library call to be examined in unit testing, e.g. what
-arguments and values were passed to the mock object. Finally, unit testing verifies the interfaces of code, leaving
-developers free to change the implementation without creating breaking changes in code behavior.
+maintain. In :term:`modsim repositories` it is rare to write project specific file input and output (I/O) operations, so
+the project unit tests should usually avoid real I/O operations that read or create files on disk. Instead, most
+programming languages have unit testing frameworks that include mock objects. Mock objects can be used in place of
+external library calls to avoid file I/O, while still allowing aspects of the library call to be examined in unit
+testing, e.g. what arguments and values were passed to the mock object. Finally, unit testing verifies the interfaces of
+code, leaving developers free to change the implementation without creating breaking changes in code behavior.
 
 Integration testing is the practice of testing interfaces between functions, methods, or classes. Where unit testing
 verifies the documented interface and behavior of a single element of code, integration testing verifies that the

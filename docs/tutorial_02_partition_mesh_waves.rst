@@ -8,11 +8,11 @@ Tutorial 02: Partition and Mesh
 References
 **********
 
-* Adding to `PYTHONPATH`_ with `Python sys`_
-* `Abaqus Node Sets`_
-* `Abaqus Element Sets`_ and `Abaqus Elements Guide`_
-* `Abaqus Surfaces`_
-* `Abaqus Assembly Definition`_
+* Adding to `PYTHONPATH`_ with `Python sys`_ :cite:`python`
+* `Abaqus Node Sets`_ :cite:`ABAQUS`
+* `Abaqus Element Sets`_ and `Abaqus Elements Guide`_ :cite:`ABAQUS`
+* `Abaqus Surfaces`_ :cite:`ABAQUS`
+* `Abaqus Assembly Definition`_ :cite:`ABAQUS`
 
 ***********
 Environment
@@ -155,9 +155,9 @@ code that does a few specific tasks:
   generated the ``input_file``.
 * Within the new ``output_file``, do the following:
 
-  * Create node sets at four corners of the single element part. See the `Abaqus Node Sets`_ documentation for more
+  * Create node sets at four corners of the single element part. See the `Abaqus Node Sets`_ documentation :cite:`ABAQUS` for more
     information about node sets.
-  * Create surfaces for the four sides of the single element part. See the `Abaqus Surfaces`_ documentation for more
+  * Create surfaces for the four sides of the single element part. See the `Abaqus Surfaces`_ documentation :cite:`ABAQUS` for more
     information about surfaces.
 
 * Save the ``output_file`` with the changes made
@@ -181,10 +181,10 @@ statement, and the ``main()`` function is called within ``sys.exit()`` for exit 
       :end-before: marker-1
 
 The ``abaqus_journal_utilities.py`` script's purpose is to contain commonly used functions that we do not want to
-duplicate. At the moment, we have only created one function - ``export_mesh()``. The ``export_mesh`` function utilizes an
-`Abaqus Model Object`_ along with a ``part_name`` and ``orphan_mesh_file`` name to create an orphan mesh file. Orphan
-mesh files define the entire part's mesh in a text-based file. The node and element locations and labels are listed
-in a tabular format that the Abaqus file parser understands.
+duplicate. At the moment, we have only created one function - ``export_mesh()``. The ``export_mesh`` function utilizes
+an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and ``orphan_mesh_file`` name to create an
+orphan mesh file. Orphan mesh files define the entire part's mesh in a text-based file. The node and element locations
+and labels are listed in a tabular format that the Abaqus file parser understands.
 
 9. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents
    below.
@@ -219,14 +219,14 @@ Before importing ``abaqus_journal_utilities``, the ``filename`` is extracted in 
 From this point, the ``main()`` function proceeds to copy the input file just like in ``single_element_partition.py``.
 The code that follows performs the following tasks within the new ``output_file``:
 
-* Create a part instance that can be meshed. See the `Abaqus Assembly Definition`_ documentation for more information
-  about defining parts, part instances, and assemblies.
+* Create a part instance that can be meshed. See the `Abaqus Assembly Definition`_ documentation :cite:`ABAQUS` for
+  more information about defining parts, part instances, and assemblies.
 * Seed the part using the ``--global-seed`` command line argument value to define the global meshing size
 * Mesh the part
-* Assign an element type to the part. See the `Abaqus Elements Guide`_ for more information about defining element
-  types.
+* Assign an element type to the part. See the `Abaqus Elements Guide`_ :cite:`ABAQUS` for more information about
+  defining element types.
 * Define element and node sets for elements and nodes that may require output requests in the model. See the `Abaqus
-  Element Sets`_ documentation for more information about element sets.
+  Element Sets`_ documentation :cite:`ABAQUS` for more information about element sets.
 * Create an orphan mesh file by calling the ``export_mesh()`` function that was imported from
   ``abaqus_journal_utilities.py``
 * Save the ``output_file`` with the changes made
@@ -269,17 +269,17 @@ Build Targets
     Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
     /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
     /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui 
+    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
     /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
     scons: done building targets.
 

@@ -189,7 +189,7 @@ class _ParameterGenerator(ABC):
         for parameter_set_file in parameter_set_files:
             text = yaml.safe_dump(
                 self.parameter_study.sel(data_type='samples',
-                                         parameter_sets=str(parameter_set_file)).to_pandas().to_dict()
+                                         parameter_sets=str(parameter_set_file)).to_array().to_series().to_dict()
             )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
@@ -484,3 +484,79 @@ class LatinHypercube(_ParameterGenerator):
     def _create_parameter_names(self):
         """Construct the Latin Hypercube parameter names"""
         self.parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+
+
+class CustomStudy(_ParameterGenerator):
+    """Builds a custom parameter study from user-specified values
+
+    An Xarray Dataset is used to store the parameter study. 
+
+    :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
+        Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
+        the number of parameters. Parameter names in the form of a 1D array with length N. When creating a
+        `parameter_samples` array with mixed type (e.g. string and floats) use `dtype=object` to preserve the mixed
+        types and avoid casting all values to a common type (e.g. all your floats will become strings).
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
+        is always overwritten.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param bool overwrite: Overwrite existing output files
+    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param bool debug: Print internal variables to STDOUT and exit
+    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    Example
+
+    .. code-block::
+
+       parameter_schema = dict(
+               parameter_samples = numpy.array([[1.0, 'a', 5], [2.0, 'b', 6]], dtype=object),
+               parameter_names = numpy.array(['height', 'prefix', 'index']))
+       parameter_generator = waves.parameter_generators.CustomStudy(parameter_schema)
+       parameter_generator.generate()
+       print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:         (data_type: 1, parameter_sets: 2)
+       Coordinates:
+         * data_type       (data_type) object 'samples'
+         * parameter_sets  (parameter_sets) <U14 'parameter_set0' 'parameter_set1'
+       Data variables:
+           height          (data_type, parameter_sets) object 1.0 2.0
+           prefix          (data_type, parameter_sets) object 'a' 'b'
+           index           (data_type, parameter_sets) object 5 6
+
+    Attributes after class instantiation
+
+    * parameter_names: A list of parameter name strings
+
+    Attributes after set generation
+
+    * parameter_set_names: list of parameter set name strings
+    * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
+    * parameter_study: The final parameter study XArray Dataset object
+    """
+
+    def validate(self):
+        """Validate the Custom Study parameter samples and names. Executed by class initiation."""
+        try:
+            self.parameter_names = self.parameter_schema['parameter_names']
+        except KeyError:
+            raise KeyError('parameter_schema must contain the key: parameter_names')
+        if 'parameter_samples' not in self.parameter_schema:
+            raise KeyError('parameter_schema must contain the key: parameter_samples')
+        if len(self.parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
+            raise ValueError('The parameter samples must be an array of shape M x N, where N is the number of parameters.')
+        return
+
+    def generate(self):
+        """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
+        generate the parameter study."""
+        self.samples = numpy.array(self.parameter_schema['parameter_samples'], dtype=object)
+        set_count = self.samples.shape[0]
+        self._create_parameter_set_names(set_count)
+        self._create_parameter_study()

@@ -13,8 +13,8 @@ authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
            ('Prabhu S. Khalsa', 'W-13', '<pkhalsa@lanl.gov>'),
            ('Thomas Roberts', 'W-13', '<tproberts@lanl.gov>'),
            ('Sergio Cordova', 'W-13', '<sergioc@lanl.gov>'),
-           ('Scott Ouellette', 'W-13', '<souellette@lanl.gov>'),
-           ('Matthew Fister', 'W-13', '<mwfister@lanl.gov>')]
+           ('Matthew Fister', 'W-13', '<mwfister@lanl.gov>'),
+           ('Scott Ouellette', 'W-13', '<souellette@lanl.gov>')]
 author_latex = ''
 author_manpage = ''
 for author, group, email in authors:
@@ -40,6 +40,7 @@ from waves._settings import _project_name_short
 project = _project_name_short
 release = __version__
 version = release
+copyright = '2022, Triad National Security, LLC.'
 
 #============================================================================================== SPHINX CONFIGURATION ===
 # -- Project Variables -------------------------------------------------------
@@ -78,6 +79,7 @@ html_static_path = ['_static']
 # -- Options for LaTeX output ---------------------------------------------
 latex_elements = {
     'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
+    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{\\textcopyright\\ {copyright}}}\sphinxmaketitle'
 }
 latex_documents = [
     (master_doc, project.lower() + '.tex', project.upper() + ' Documentation',

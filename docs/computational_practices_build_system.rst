@@ -4,7 +4,7 @@
 Build System
 ************
 
-Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/
+Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`SoftwareCarpentry`
 
 Directed graphs
 ---------------
@@ -46,10 +46,11 @@ files. In pseudocode, this might look like a dictionary
 As the number of discrete tasks increases, and as cross-dependencies grow, the importance of an automated tool to
 construct the build order becomes more important.
 
-Task definitions go by different names in different build systems, such as "recipe" in `GNU Make`_ or "builder" in
-`SCons`. For software projects, the task definition may be simplified by "rules" for common actions, such as associating
-a particular file extension with a predefined action or auto-generating an target file name that matches the source file
-name. Build systems usually provide a set of common rules for compiling different programming languages.
+Task definitions go by different names in different build systems, such as "recipe" in `GNU Make`_ :cite:`gnu-make` or
+"builder" in `SCons` :cite:`SCons`. For software projects, the task definition may be simplified by "rules" for common
+actions, such as associating a particular file extension with a predefined action or auto-generating an target file name
+that matches the source file name. Build systems usually provide a set of common rules for compiling different
+programming languages.
 
 For the purpose of executing simulations, it is important to use a build system that allows developers to write custom
 task generators for the numeric solvers and post processing programs used in the project. `WAVES`_ is a collection of

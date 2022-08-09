@@ -8,9 +8,9 @@ Tutorial 07: Cartesian Product
 References
 **********
 
-* WAVES :ref:`parameter_generator_api` API
+* |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.CartesianProduct`
 * `Cartesian Product`_
-* `Xarray`_ and the `xarray dataset`_
+* `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
 
 ***********
 Environment
@@ -203,11 +203,9 @@ following two important aspects of the code above:
       :start-after: marker-5
       :end-before: marker-6
 
-The code above closes out our familiar workflow with the use of the :meth:`waves.builders.abaqus_solver` method. Just as
-in previous tutorials, we first run a datacheck to confirm that the Abaqus Solver's requirements are satisfied, and then
-the simulation is executed in ernest. Note that the ``# Abaqus Solver`` code is still within the ``for`` loop, so the
-Abaqus Solver will be called as many times as we have parameter sets. In this case, we will solve four Abaqus
-simulations.
+The code above closes out our familiar workflow with the use of the :meth:`waves.builders.abaqus_solver` method. Note
+that the ``# Abaqus Solver`` code is still within the ``for`` loop, so the Abaqus Solver will be called as many times as
+we have parameter sets. In this case, we will solve four Abaqus simulations.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -308,20 +306,6 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
     ├── single_element_compression.abaqus_v6.env
     ├── single_element_compression.com
     ├── single_element_compression.dat
-    ├── single_element_compression_DATACHECK.023
-    ├── single_element_compression_DATACHECK.abaqus_v6.env
-    ├── single_element_compression_DATACHECK.com
-    ├── single_element_compression_DATACHECK.dat
-    ├── single_element_compression_DATACHECK.mdl
-    ├── single_element_compression_DATACHECK.msg
-    ├── single_element_compression_DATACHECK.odb
-    ├── single_element_compression_DATACHECK.par
-    ├── single_element_compression_DATACHECK.pes
-    ├── single_element_compression_DATACHECK.pmg
-    ├── single_element_compression_DATACHECK.prt
-    ├── single_element_compression_DATACHECK.sim
-    ├── single_element_compression_DATACHECK.stdout
-    ├── single_element_compression_DATACHECK.stt
     ├── single_element_compression.inp
     ├── single_element_compression.inp.in
     ├── single_element_compression.msg
@@ -346,7 +330,7 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
     ├── single_element_partition.jnl
     └── single_element_partition.stdout
 
-    0 directories, 50 files
+    0 directories, 36 files
 
 The contents of the ``parameter_set0`` directory will appear identical to the contents of the previous tutorials. In
 this case, the contents of the files is different, as we have inserted parameters as part of the parameter study.

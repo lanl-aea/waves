@@ -1,14 +1,9 @@
 .. target-start-do-not-remove
 
 .. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
-.. _AEA Conda channel: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea-release/aea_compute_environment.html#aea-conda-channel
-.. _ECMF: https://aea.re-pages.lanl.gov/python-projects/ecmf/main/
 .. _Conda: https://docs.conda.io/en/latest/
 .. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
 .. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-.. _CMake: https://cmake.org/cmake/help/v3.14/
-.. _ctest: https://cmake.org/cmake/help/latest/manual/ctest.1.html
-.. _cmake-simulation: https://re-git.lanl.gov/aea/python-projects/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
@@ -39,7 +34,7 @@ Description
 .. project-description-start-do-not-remove
 
 A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
-`WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim)
+`WAVES`_ also includes custom `SCons`_ builders that are commonly re-used in model simulation (modsim)
 repositories. The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_
 covers build system concepts, command line options, and project configuration.
 
@@ -67,6 +62,7 @@ Developers
 * `Prabhu Khalsa`_
 * `Thomas Roberts`_
 * `Sergio Cordova`_
+* `Matthew Fister`_
 * `Scott Ouellette`_
 
 ********************

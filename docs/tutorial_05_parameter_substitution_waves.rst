@@ -8,7 +8,7 @@ Tutorial 05: Parameter Substitution
 References
 **********
 
-* `SCons Substfile`_
+* `SCons Substfile`_ :cite:`scons-user`
 
 ***********
 Environment
@@ -253,11 +253,6 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_05_parameter_substitution/history_output.inp", "eabm_package/abaqus/history_output.inp")
     cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
-    environment > single_element_compression_DATACHECK.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
-    single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete
-    no > single_element_compression_DATACHECK.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_compression.abaqus_v6.env
     cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
     single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
@@ -293,20 +288,6 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
         ├── single_element_compression.abaqus_v6.env
         ├── single_element_compression.com
         ├── single_element_compression.dat
-        ├── single_element_compression_DATACHECK.023
-        ├── single_element_compression_DATACHECK.abaqus_v6.env
-        ├── single_element_compression_DATACHECK.com
-        ├── single_element_compression_DATACHECK.dat
-        ├── single_element_compression_DATACHECK.mdl
-        ├── single_element_compression_DATACHECK.msg
-        ├── single_element_compression_DATACHECK.odb
-        ├── single_element_compression_DATACHECK.par
-        ├── single_element_compression_DATACHECK.pes
-        ├── single_element_compression_DATACHECK.pmg
-        ├── single_element_compression_DATACHECK.prt
-        ├── single_element_compression_DATACHECK.sim
-        ├── single_element_compression_DATACHECK.stdout
-        ├── single_element_compression_DATACHECK.stt
         ├── single_element_compression.inp
         ├── single_element_compression.inp.in
         ├── single_element_compression.msg
@@ -331,7 +312,7 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
         ├── single_element_partition.jnl
         └── single_element_partition.stdout
 
-    1 directory, 50 files
+    1 directory, 36 files
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation_waves` with a few key
 differences.
@@ -363,5 +344,5 @@ in the text, as shown above.
 It is also worth noting that that there are 50 files in the ``build/tutorial_05_parameter_substitution`` directory
 compared to the 43 files from :ref:`tutorial_simulation_waves`. Other than the addition of the
 ``single_element_compression.inp.in`` file, the difference is the addition of the files with ``.par``, ``.pes``, and
-``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation for more information about the
-information that these files provide.
+``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information
+about the information that these files provide.

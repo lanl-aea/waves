@@ -5,8 +5,42 @@ Changelog
 #########
 
 ******************
-0.3.3 (unreleased)
+0.3.4 (unreleased)
 ******************
+
+******************
+0.3.3 (2022-08-09)
+******************
+
+Bug fixes
+=========
+- Look outside the ``noarch`` installation egg to find the installed documentation files (:issue:`249`, :merge:`248`).
+  By `Kyle Brindley`_.
+- odb_extract can now handle multiple 'Component of field' headers if they are present within field data sections
+  (:issue:`254`, :merge:`255`). By `Prabhu Khalsa`_.
+- Fix unintentional type casting in the parameter study conversion to dict (:issue:`255`, :merge:`257`). By `Kyle
+  Brindley`_.
+
+New Features
+============
+- Add CustomStudy parameter study generator (:issue:`231`, :merge:`224`). By `Matthew Fister`_.
+
+Documentation
+=============
+- Add bibliography citations to match external URLs hyperreferences (:issue:`242`, :merge:`249`). By `Kyle Brindley`_.
+- Add a draft outline of a regression test tutorial (:issue:`162`, :merge:`251`). By `Kyle Brindley`_.
+- Add references and citations to tutorials (:issue:`252`, :merge:`253`). By `Kyle Brindley`_.
+- Add discussion to the data extraction tutorial (:issue:`104`, :merge:`254`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Separate the WAVES-EABM datacheck tasks from the main simulation workflow (:issue:`244`, :merge:`250`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Redirect the ``rm`` command STDOUT and STDERR from the abaqus extract builder to a unique filename (:issue:`250`,
+  :merge:`252`). By `Kyle Brindley`_.
 
 ******************
 0.3.2 (2022-08-04)
