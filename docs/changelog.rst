@@ -12,6 +12,8 @@ Bug fixes
 =========
 - Fix parameter set dimensions in tutorial set iteration usage for parameter studies with more than 10 sets
   (:issue:`258`, :merge:`260`). By `Kyle Brindley`_.
+- Fix odb_extract to properly parse and store the first data value in the field outputs
+  (:issue:`259`, :merge:`261`). By `Prabhu Khalsa`_.
 
 ******************
 0.3.3 (2022-08-09)
