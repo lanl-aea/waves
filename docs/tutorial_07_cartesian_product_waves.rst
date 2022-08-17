@@ -130,13 +130,13 @@ dictionary in previous tutorials.
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 6-7
+      :emphasize-lines: 6-8
 
 The unhighlighted portions of the code snippet above do not present any unique code that has not been previously
 discussed.
 
 The highlighted portions of the code snippet above define some new variables that will get used in various places in
-this tutorial's code. Namely, ``parameter_set_file_template`` defines how the parameter sets, and subsequently the
+this tutorial's code. Namely, ``output_file_template`` defines how the parameter sets, and subsequently the
 directories for each parameterized simulation, will be named.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
@@ -165,18 +165,22 @@ parameters using different variable types.
       :start-after: marker-3
       :end-before: marker-4
 
-In the ``for`` loop definition above, the ``set_name`` and ``parameter_samples`` variables are defined by iterating on
-the ``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``). The ``samples`` ``data_type`` coordinate
-of the ``parameter_study`` is grouped by the coordinate ``parameter_sets``. This will return an iterable to the ``for``
-loop definition that contains the ``set_name`` and the ``parameter_samples`` information. ``parameter_samples`` contains
+In the ``for`` loop definition above, the ``set_name`` and ``parameters`` variables are defined by iterating on the
+``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``).  The ``samples`` ``data_type``
+coordinate of the ``parameter_study`` is grouped by the coordinate ``parameter_sets``. This will return an iterable to
+the ``for`` loop definition that contains the ``set_name`` and the ``parameters`` information. ``parameters`` contains
 both the names of the parameters and the parameter values for a given ``set_name``.
 
 Inside the ``for`` loop, the ``set_name`` variable is cast to a `Python pathlib`_ object, as it will aid in constructing
-file locations later in the ``SConscript`` file. Next, the ``parameter_samples`` `xarray dataset`_ is converted to a
-dictionary. At first declaration, ``simulation_variables`` is a dictionary whose keys are the names of the parameters
-and whose values are the parameter values for a particular ``set_name``. The same substitution syntax key modification
-introduced by :ref:`tutorial_parameter_substitution_waves` is used again when passing the simulation variables
-dictionary to the :meth:`waves.builders.copy_substitute` method for text file parameter substitution.
+file locations later in the ``SConscript`` file. The suffix is stripped from the set name to separate the parameter set
+build directory name from the filenames that would be written by
+:meth:`waves.parameter_generators.CartesianProduct.write`, although the method is unused in this tutorial.
+
+Next, the ``parameters`` `xarray dataset`_ is converted to a dictionary. At first declaration, ``simulation_variables``
+is a dictionary whose keys are the names of the parameters and whose values are the parameter values for a particular
+``set_name``. The same substitution syntax key modification introduced by :ref:`tutorial_parameter_substitution_waves`
+is used again when passing the simulation variables dictionary to the :meth:`waves.builders.copy_substitute` method for
+text file parameter substitution.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
