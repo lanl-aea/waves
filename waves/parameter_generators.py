@@ -23,6 +23,7 @@ class _AtSignTemplate(string.Template):
 template_placeholder = f"{template_delimiter}number"
 default_set_name_template = f'parameter_set{template_placeholder}'
 parameter_study_meta_file = "parameter_study_meta.txt"
+allowable_output_file_types = ('h5', 'yaml')
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
@@ -46,7 +47,7 @@ class _ParameterGenerator(ABC):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
+    def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='h5',
                  set_name_template=default_set_name_template, overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
@@ -61,6 +62,10 @@ class _ParameterGenerator(ABC):
         if self.output_file_template is not None and self.output_file is not None:
             raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
                                "Please specify one or the other.")
+
+        if not self.output_file_type in allowable_output_file_types:
+            raise RuntimeError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
+                               f"The 'output_file_type' must be one of {allowable_output_file_types}")
 
         if self.output_file:
             self.output_file = pathlib.Path(output_file)
