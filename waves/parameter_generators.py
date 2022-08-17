@@ -46,11 +46,12 @@ class _ParameterGenerator(ABC):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
     def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
-                 overwrite=False, dryrun=False, debug=False, write_meta=False):
+                 set_name_template=None, overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
         self.output_file_type = output_file_type
+        self.set_name_template = set_name_template
         self.overwrite = overwrite
         self.dryrun = dryrun
         self.debug = debug
