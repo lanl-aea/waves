@@ -22,6 +22,13 @@ class TestParameterGenerator:
             finally:
                 pass
 
+    def test_output_file_type(self):
+        with pytest.raises(RuntimeError):
+            try:
+                OutputTypeError = NoQuantilesGenerator({}, output_file_type='notsupported')
+            finally:
+                pass
+
     templates = {      #schema, file_template, set_template,          expected
         'no template':   (    {},        None,         None, ['parameter_set0']),
         'file template': (    {},       'out',         None,           ['out0']),
