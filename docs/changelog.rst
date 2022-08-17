@@ -20,6 +20,11 @@ New Features
 - Add set name template option to the parameter generators and parameter study interfaces. Allow the set name template
   to be changed when writing parameter sets to STDOUT or a single file. (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Separate the parameter study output file template from the set name directories in the WAVES-EABM tutorials
+  (:issue:`264`, :merge:`265`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Raise an exception for unsupported output file type strings (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
