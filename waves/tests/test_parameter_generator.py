@@ -23,7 +23,7 @@ class TestParameterGenerator:
                 pass
 
     templates = {      #schema, file_template, set_template,          expected
-        'no template': (    {},          None,         None, ['parameter_set0']),
+        'no template':   (    {},        None,         None, ['parameter_set0']),
         'file template': (    {},       'out',         None,           ['out0']),
         'file template': (    {},        None,        'out',           ['out0']),
         'file template': (    {},       'out', 'overridden',           ['out0'])
