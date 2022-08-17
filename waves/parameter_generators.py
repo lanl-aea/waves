@@ -47,7 +47,7 @@ class _ParameterGenerator(ABC):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='h5',
+    def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
                  set_name_template=default_set_name_template, overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
