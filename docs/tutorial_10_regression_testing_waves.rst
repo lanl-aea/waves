@@ -105,19 +105,26 @@ simulation suite against the limited datacheck workflow, perform the following s
 
 .. code-block:: bash
 
+   $ pwd
+   /path/to/waves-eabm-tutorial
+
+   # Find all workflows that use the datacheck alias for one-to-one real time comparison
+   datacheck_aliases=$(for file in $(grep -riIE "env\['datacheck_alias'\]" --include=SConscript -l); do echo $(dirname $file); done)
+
+   # Verify that the list matches those files you changed for this tutorial
+   echo ${datacheck_aliases}
+   ...
+
+   # Clean all and build datacheck alias
    $ scons . --clean --jobs=4 > clean.stdout 2>&1
    $ { time scons datacheck --jobs=4 > scons.stdout 2>&1 ; } 2> time_datacheck_workflow.txt
 
-   # If you only added the datacheck alias to the tutorial 10 SConscript file
-   $ scons tutorial_10_regression_testing --clean --jobs=4 > clean.stdout 2>&1
-   $ { time scons . --jobs=4 > scons.stdout 2>&1 ; } 2> time_full_workflow.txt
-
-   # If you added the datacheck alias to all tutorial SConscript files
-   $ scons tutorial_10_regression_testing --clean --jobs=4 > clean.stdout 2>&1
-   $ { time scons . --jobs=4 > scons.stdout 2>&1 ; } 2> time_full_workflow.txt
+   # Clean all and build matching full workflows
+   $ scons . --clean --jobs=4 > clean.stdout 2>&1
+   $ { time scons ${datacheck_aliases} --jobs=4 > scons.stdout 2>&1 ; } 2> time_full_workflow.txt
 
    # Compare times
-   $ grep real time_*_workflow.txt
+   $ grep "real" time_{datacheck,full}_workflow.txt
 
 ************
 Output Files
