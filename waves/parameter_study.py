@@ -65,6 +65,10 @@ def get_parser(return_subparser_dictionary=False):
                                default='yaml',
                                choices=['yaml', 'h5'],
                                help="Output file type (default: %(default)s)")
+    parent_parser.add_argument('-s', '--set-name-template',
+                               default='parameter_set@number', dest='SET_NAME_TEMPLATE',
+                               help="Parameter set name template. Overridden by ``output_file_template``, if provided " \
+                                    "(default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
     parent_parser.add_argument('--dryrun', action='store_true',
