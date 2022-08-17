@@ -67,7 +67,6 @@ class _ParameterGenerator(ABC):
             self.output_file = pathlib.Path(output_file)
 
         # Set output file name template, which doubles as the set name template.
-        self.default_template = default_output_file_template
         self.provided_template = False
         if self.output_file_template:
             if not f'{template_placeholder}' in self.output_file_template:
@@ -75,7 +74,7 @@ class _ParameterGenerator(ABC):
             self.output_file_template = _AtSignTemplate(self.output_file_template)
             self.provided_template = True
         else:
-            self.output_file_template = self.default_template
+            self.output_file_template = default_output_file_template
 
         # Infer output directory from output file template
         self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
