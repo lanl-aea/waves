@@ -126,9 +126,6 @@ def main():
     if not input_file:
         subparser_dictionary[subcommand].print_usage()
         return 0
-    # TODO: accept an output file template and manage file writeability outside argparse
-    # May require and additional --output-dir option and otherwise assume PWD
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/79
     output_file_template = args.OUTPUT_FILE_TEMPLATE
     output_file = args.OUTPUT_FILE
     output_file_type = args.output_file_type
