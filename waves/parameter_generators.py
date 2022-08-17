@@ -66,13 +66,13 @@ class _ParameterGenerator(ABC):
         if self.output_file:
             self.output_file = pathlib.Path(output_file)
 
-        # Set output file name template, which doubles as the set name template.
-        self.provided_template = False
+        # Configurat set name template, which doubles as the output name template.
+        self.provided_output_file_template = False
         if self.output_file_template:
             if not f'{template_placeholder}' in self.output_file_template:
                 self.output_file_template = f"{self.output_file_template}{template_placeholder}"
             self.output_file_template = _AtSignTemplate(self.output_file_template)
-            self.provided_template = True
+            self.provided_output_file_template = True
         else:
             self.output_file_template = default_output_file_template
 
@@ -149,7 +149,7 @@ class _ParameterGenerator(ABC):
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
-        if self.write_meta and self.provided_template:
+        if self.write_meta and self.provided_output_file_template:
             self._write_meta(parameter_set_files)
         if self.output_file_type == 'h5':
             self._write_dataset(parameter_set_files)
@@ -168,7 +168,7 @@ class _ParameterGenerator(ABC):
             for parameter_set_file in parameter_set_files:
                 dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
                 # If no output file template is provided, print to stdout
-                if not self.provided_template:
+                if not self.provided_output_file_template:
                     sys.stdout.write(f"{parameter_set_file.name}\n{dataset}")
                     sys.stdout.write("\n")
                 # If overwrite is specified or if file doesn't exist
@@ -193,7 +193,7 @@ class _ParameterGenerator(ABC):
             )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
-        if not self.provided_template:
+        if not self.provided_output_file_template:
             # If no output file template is provided, printing to stdout or a single file
             # Adjust indentation for syntactically correct YAML.
             prefix = "  "
