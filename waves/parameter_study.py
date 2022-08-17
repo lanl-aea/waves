@@ -132,6 +132,7 @@ def main():
     output_file_template = args.OUTPUT_FILE_TEMPLATE
     output_file = args.OUTPUT_FILE
     output_file_type = args.output_file_type
+    set_name_template = args.SET_NAME_TEMPLATE
     overwrite = args.overwrite
     dryrun = args.dryrun
     debug = args.debug
@@ -143,6 +144,7 @@ def main():
         print(f"output_file_template = {output_file_template}")
         print(f"output_file          = {output_file}")
         print(f"output_file_type     = {output_file_type}")
+        print(f"set_name_template    = {set_name_template}")
         print(f"overwrite            = {overwrite}")
         print(f"write_meta           = {write_meta}")
         return 0
@@ -163,6 +165,7 @@ def main():
             output_file_template=output_file_template,
             output_file=output_file,
             output_file_type=output_file_type,
+            set_name_template=set_name_template,
             overwrite=overwrite,
             dryrun=dryrun,
             debug=debug,
