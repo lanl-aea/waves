@@ -21,7 +21,7 @@ class _AtSignTemplate(string.Template):
 
 
 template_placeholder = f"{template_delimiter}number"
-default_set_name_template = _AtSignTemplate(f'parameter_set{template_placeholder}')
+default_set_name_template = f'parameter_set{template_placeholder}'
 parameter_study_meta_file = "parameter_study_meta.txt"
 
 
@@ -47,12 +47,12 @@ class _ParameterGenerator(ABC):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
     def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
-                 set_name_template=None, overwrite=False, dryrun=False, debug=False, write_meta=False):
+                 set_name_template=default_set_name_template, overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
         self.output_file_type = output_file_type
-        self.set_name_template = set_name_template
+        self.set_name_template = _AtSignTemplate(set_name_template)
         self.overwrite = overwrite
         self.dryrun = dryrun
         self.debug = debug
@@ -65,18 +65,15 @@ class _ParameterGenerator(ABC):
         if self.output_file:
             self.output_file = pathlib.Path(output_file)
 
-        # Configure set name template. Prefer output name template over set name template if both are provided.
+        # Override set name template if output name template is provided.
         self.provided_output_file_template = False
         if self.output_file_template:
             self.provided_output_file_template = True
+            # Append the set number placeholder if missing
             if not f'{template_placeholder}' in self.output_file_template:
                 self.output_file_template = f"{self.output_file_template}{template_placeholder}"
             self.output_file_template = _AtSignTemplate(self.output_file_template)
             self.set_name_template = self.output_file_template
-        elif self.set_name_template:
-            self.set_name_template = _AtSignTemplate(self.set_name_template)
-        else:
-            self.set_name_template = default_set_name_template
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
         if self.output_file_template:
