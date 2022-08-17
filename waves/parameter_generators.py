@@ -39,6 +39,7 @@ class _ParameterGenerator(ABC):
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by output_file_template, if provided.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -312,6 +313,7 @@ class CartesianProduct(_ParameterGenerator):
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by output_file_template, if provided.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -385,6 +387,7 @@ class LatinHypercube(_ParameterGenerator):
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by output_file_template, if provided.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -508,6 +511,7 @@ class CustomStudy(_ParameterGenerator):
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by output_file_template, if provided.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
