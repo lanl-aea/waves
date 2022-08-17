@@ -21,7 +21,7 @@ class _AtSignTemplate(string.Template):
 
 
 template_placeholder = f"{template_delimiter}number"
-default_output_file_template = _AtSignTemplate(f'parameter_set{template_placeholder}')
+default_set_name_template = _AtSignTemplate(f'parameter_set{template_placeholder}')
 parameter_study_meta_file = "parameter_study_meta.txt"
 
 
@@ -57,8 +57,6 @@ class _ParameterGenerator(ABC):
         self.debug = debug
         self.write_meta = write_meta
 
-        # TODO: redesign the interface to make it possible to specify a parameter set name template and either the
-        # output file template or a single output file name.
         if self.output_file_template is not None and self.output_file is not None:
             raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
                                "Please specify one or the other.")
@@ -66,18 +64,24 @@ class _ParameterGenerator(ABC):
         if self.output_file:
             self.output_file = pathlib.Path(output_file)
 
-        # Configurat set name template, which doubles as the output name template.
+        # Configure set name template. Prefer output name template over set name template if both are provided.
         self.provided_output_file_template = False
         if self.output_file_template:
+            self.provided_output_file_template = True
             if not f'{template_placeholder}' in self.output_file_template:
                 self.output_file_template = f"{self.output_file_template}{template_placeholder}"
             self.output_file_template = _AtSignTemplate(self.output_file_template)
-            self.provided_output_file_template = True
+            self.set_name_template = self.output_file_template
+        elif self.set_name_template:
+            self.set_name_template = _AtSignTemplate(self.set_name_template)
         else:
-            self.output_file_template = default_output_file_template
+            self.set_name_template = default_set_name_template
 
-        # Infer output directory from output file template
-        self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        # Infer output directory from output file template if provided. Set to PWD otherwise.
+        if self.output_file_template:
+            self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        else:
+            self.output_directory = pathlib.Path('.').resolve()
         self.parameter_study_meta_file = self.output_directory / parameter_study_meta_file
 
         self.validate()
@@ -245,7 +249,7 @@ class _ParameterGenerator(ABC):
         """
         self.parameter_set_names = []
         for number in range(set_count):
-            template = self.output_file_template
+            template = self.set_name_template
             self.parameter_set_names.append(template.substitute({'number': number}))
 
     def _create_parameter_array(self, data, name):
@@ -489,7 +493,7 @@ class LatinHypercube(_ParameterGenerator):
 class CustomStudy(_ParameterGenerator):
     """Builds a custom parameter study from user-specified values
 
-    An Xarray Dataset is used to store the parameter study. 
+    An Xarray Dataset is used to store the parameter study.
 
     :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
         Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
