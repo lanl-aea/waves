@@ -33,8 +33,8 @@ class ParameterStudy():
         """
         array = xarray.DataArray(
             data,
-            coords=[self.parameter_set_names, self.parameter_names],
-            dims=["parameter_sets", "parameters"],
+            coords=[self.parameter_set_hashes, self.parameter_names],
+            dims=["parameter_set_hash", "parameters"],
             name=name
         )
         return array
