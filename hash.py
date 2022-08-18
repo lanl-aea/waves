@@ -1,3 +1,5 @@
+import hashlib
+
 import xarray
 import numpy
 
@@ -7,8 +9,13 @@ class ParameterStudy():
         self.samples = data
 
         self.parameter_set_names = [f"set{number}" for number in range(self.samples.shape[0])]
-        self.parameter_set_hashes = [hash(row.tobytes()) for row in self.samples]
         self.parameter_names = [f"parameter_{number}" for number in range(self.samples.shape[1])]
+
+        self.parameter_set_hashes = []
+        for row in self.samples:
+            set_values_catenation = ''.join(repr(element) for element in row)
+            set_hash = hashlib.md5(set_values_catenation.encode('utf-8')).hexdigest()
+            self.parameter_set_hashes.append(set_hash)
 
         self._create_parameter_study()
 
