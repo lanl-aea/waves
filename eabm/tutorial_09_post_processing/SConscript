@@ -21,8 +21,8 @@ python_source_abspath = project_dir / python_source_dir
 # Simulation variables
 # TODO: Find a way to write the parameter study file to the build directory without constructing the build directory
 parent_directory = Dir('.').srcnode().name
-parameter_study_syntax = "h5"
-parameter_study_file = pathlib.Path(f"{env['variant_dir_base']}/{parent_directory}/parameter_study.{parameter_study_syntax}")
+output_file_type = "h5"
+parameter_study_file = pathlib.Path(f"{env['variant_dir_base']}/{parent_directory}/parameter_study.{output_file_type}")
 model = "single_element"
 
 # Collect the target nodes to build a concise alias for all targets
@@ -35,7 +35,7 @@ datacheck = []
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file=parameter_study_file,
-    output_file_type=parameter_study_syntax)
+    output_file_type=output_file_type)
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
 
