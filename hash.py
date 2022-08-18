@@ -75,7 +75,7 @@ if __name__ == "__main__":
 
     
     print('\nStudy2:')
-    data2 = numpy.array([[1, 10.1, 'a'], [3, 30.3, 'c'], [2, 20.2, 'b']], dtype=object)
+    data2 = numpy.array([[1, 10.1, 'a'], [3, 30.3, 'c'], [5, 50.5, 'e'], [2, 20.2, 'b']], dtype=object)
     study2 = ParameterStudy(data2)
     print(study2.parameter_study)
     print("")
