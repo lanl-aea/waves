@@ -24,7 +24,7 @@ class ParameterStudy():
 
         requires:
 
-        * ``self.parameter_set_names``: parameter set names used as rows of parameter study
+        * ``self.parameter_set_hashes``: parameter set names used as rows of parameter study
         * ``self.parameter_names``: parameter names used as columns of parameter study
 
         :param numpy.array data: 2D array of parameter study samples with shape (number of parameter sets, number of
@@ -44,7 +44,7 @@ class ParameterStudy():
 
         requires:
 
-        * ``self.parameter_set_names``: parameter set names used as rows of parameter study
+        * ``self.parameter_set_hashes``: parameter set names used as rows of parameter study
         * ``self.parameter_names``: parameter names used as columns of parameter study
         * ``self.samples``: The parameter study samples
 
