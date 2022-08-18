@@ -22,6 +22,40 @@ class TestParameterGenerator:
             finally:
                 pass
 
+    def test_output_file_type(self):
+        with pytest.raises(RuntimeError):
+            try:
+                OutputTypeError = NoQuantilesGenerator({}, output_file_type='notsupported')
+            finally:
+                pass
+
+    templates = {      #schema, file_template, set_template,          expected
+        'no template':   (    {},        None,         None, ['parameter_set0']),
+        'file template': (    {},       'out',         None,           ['out0']),
+        'file template': (    {},        None,        'out',           ['out0']),
+        'file template': (    {},       'out', 'overridden',           ['out0'])
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('schema, file_template, set_template, expected',
+                                 templates.values(),
+                             ids=templates.keys())
+    def test_set_names(self, schema, file_template, set_template, expected):
+        """Check the generated parameter set names against template arguments
+
+        :param str schema: placeholder string standing in for the schema read from an input file
+        :param str file_template: user supplied string to be used as a template for output file names
+        :param str set_template: user supplied string to be used as a template for parameter names
+        :param list expected: list of expected parameter name strings
+        """
+        if not set_template:
+            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template)
+        else:
+            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template,
+                                                     set_name_template=set_template)
+        TemplateGenerator.generate(1)
+        assert TemplateGenerator.parameter_set_names == expected
+
     init_write_stdout = {# schema, template, overwrite, dryrun, debug,         is_file,  sets, stdout_calls
         'no-template-1': (     {},     None,     False,  False, False,          [False],    1,            1),
         'no-template-2': (     {},     None,      True,  False, False,          [False],    1,            1),

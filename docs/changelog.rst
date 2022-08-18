@@ -15,6 +15,15 @@ Bug fixes
 - Fix odb_extract to properly parse and store the first data value in the field outputs
   (:issue:`259`, :merge:`261`). By `Prabhu Khalsa`_.
 
+New Features
+============
+- Add set name template option to the parameter generators and parameter study interfaces. Allow the set name template
+  to be changed when writing parameter sets to STDOUT or a single file. (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Raise an exception for unsupported output file type strings (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
+
 ******************
 0.3.3 (2022-08-09)
 ******************

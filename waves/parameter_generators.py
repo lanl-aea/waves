@@ -21,8 +21,9 @@ class _AtSignTemplate(string.Template):
 
 
 template_placeholder = f"{template_delimiter}number"
-default_output_file_template = _AtSignTemplate(f'parameter_set{template_placeholder}')
+default_set_name_template = f'parameter_set{template_placeholder}'
 parameter_study_meta_file = "parameter_study_meta.txt"
+allowable_output_file_types = ('h5', 'yaml')
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
@@ -39,6 +40,7 @@ class _ParameterGenerator(ABC):
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -46,38 +48,43 @@ class _ParameterGenerator(ABC):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
     def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
-                 overwrite=False, dryrun=False, debug=False, write_meta=False):
+                 set_name_template=default_set_name_template, overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
         self.output_file_type = output_file_type
+        self.set_name_template = _AtSignTemplate(set_name_template)
         self.overwrite = overwrite
         self.dryrun = dryrun
         self.debug = debug
         self.write_meta = write_meta
 
-        # TODO: redesign the interface to make it possible to specify a parameter set name template and either the
-        # output file template or a single output file name.
         if self.output_file_template is not None and self.output_file is not None:
             raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
                                "Please specify one or the other.")
 
+        if not self.output_file_type in allowable_output_file_types:
+            raise RuntimeError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
+                               f"The 'output_file_type' must be one of {allowable_output_file_types}")
+
         if self.output_file:
             self.output_file = pathlib.Path(output_file)
 
-        # Set output file name template, which doubles as the set name template.
-        self.default_template = default_output_file_template
-        self.provided_template = False
+        # Override set name template if output name template is provided.
+        self.provided_output_file_template = False
         if self.output_file_template:
+            self.provided_output_file_template = True
+            # Append the set number placeholder if missing
             if not f'{template_placeholder}' in self.output_file_template:
                 self.output_file_template = f"{self.output_file_template}{template_placeholder}"
             self.output_file_template = _AtSignTemplate(self.output_file_template)
-            self.provided_template = True
-        else:
-            self.output_file_template = self.default_template
+            self.set_name_template = self.output_file_template
 
-        # Infer output directory from output file template
-        self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        # Infer output directory from output file template if provided. Set to PWD otherwise.
+        if self.output_file_template:
+            self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
+        else:
+            self.output_directory = pathlib.Path('.').resolve()
         self.parameter_study_meta_file = self.output_directory / parameter_study_meta_file
 
         self.validate()
@@ -149,7 +156,7 @@ class _ParameterGenerator(ABC):
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
-        if self.write_meta and self.provided_template:
+        if self.write_meta and self.provided_output_file_template:
             self._write_meta(parameter_set_files)
         if self.output_file_type == 'h5':
             self._write_dataset(parameter_set_files)
@@ -168,7 +175,7 @@ class _ParameterGenerator(ABC):
             for parameter_set_file in parameter_set_files:
                 dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
                 # If no output file template is provided, print to stdout
-                if not self.provided_template:
+                if not self.provided_output_file_template:
                     sys.stdout.write(f"{parameter_set_file.name}\n{dataset}")
                     sys.stdout.write("\n")
                 # If overwrite is specified or if file doesn't exist
@@ -193,7 +200,7 @@ class _ParameterGenerator(ABC):
             )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
-        if not self.provided_template:
+        if not self.provided_output_file_template:
             # If no output file template is provided, printing to stdout or a single file
             # Adjust indentation for syntactically correct YAML.
             prefix = "  "
@@ -245,7 +252,7 @@ class _ParameterGenerator(ABC):
         """
         self.parameter_set_names = []
         for number in range(set_count):
-            template = self.output_file_template
+            template = self.set_name_template
             self.parameter_set_names.append(template.substitute({'number': number}))
 
     def _create_parameter_array(self, data, name):
@@ -308,6 +315,7 @@ class CartesianProduct(_ParameterGenerator):
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -381,6 +389,7 @@ class LatinHypercube(_ParameterGenerator):
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -489,7 +498,7 @@ class LatinHypercube(_ParameterGenerator):
 class CustomStudy(_ParameterGenerator):
     """Builds a custom parameter study from user-specified values
 
-    An Xarray Dataset is used to store the parameter study. 
+    An Xarray Dataset is used to store the parameter study.
 
     :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
         Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
@@ -504,6 +513,7 @@ class CustomStudy(_ParameterGenerator):
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit

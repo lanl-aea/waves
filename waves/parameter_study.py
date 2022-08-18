@@ -65,6 +65,10 @@ def get_parser(return_subparser_dictionary=False):
                                default='yaml',
                                choices=['yaml', 'h5'],
                                help="Output file type (default: %(default)s)")
+    parent_parser.add_argument('-s', '--set-name-template',
+                               default='parameter_set@number', dest='SET_NAME_TEMPLATE',
+                               help="Parameter set name template. Overridden by ``output_file_template``, if provided " \
+                                    "(default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
     parent_parser.add_argument('--dryrun', action='store_true',
@@ -122,12 +126,10 @@ def main():
     if not input_file:
         subparser_dictionary[subcommand].print_usage()
         return 0
-    # TODO: accept an output file template and manage file writeability outside argparse
-    # May require and additional --output-dir option and otherwise assume PWD
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/79
     output_file_template = args.OUTPUT_FILE_TEMPLATE
     output_file = args.OUTPUT_FILE
     output_file_type = args.output_file_type
+    set_name_template = args.SET_NAME_TEMPLATE
     overwrite = args.overwrite
     dryrun = args.dryrun
     debug = args.debug
@@ -139,6 +141,7 @@ def main():
         print(f"output_file_template = {output_file_template}")
         print(f"output_file          = {output_file}")
         print(f"output_file_type     = {output_file_type}")
+        print(f"set_name_template    = {set_name_template}")
         print(f"overwrite            = {overwrite}")
         print(f"write_meta           = {write_meta}")
         return 0
@@ -159,6 +162,7 @@ def main():
             output_file_template=output_file_template,
             output_file=output_file,
             output_file_type=output_file_type,
+            set_name_template=set_name_template,
             overwrite=overwrite,
             dryrun=dryrun,
             debug=debug,

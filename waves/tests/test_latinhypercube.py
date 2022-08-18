@@ -98,3 +98,4 @@ class TestLatinHypercube:
         TestDistributions = LatinHypercube(parameter_schema)
         assert TestDistributions.parameter_names == list(TestDistributions.parameter_distributions.keys())
         # TODO: More rigorous scipy.stats object inspection to test object construction
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/261
