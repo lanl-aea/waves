@@ -66,7 +66,7 @@ class ParameterStudy():
 
 if __name__ == "__main__":
     print('\nStudy1:')
-    data1 = numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)
+    data1 = numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b'], [4, 40.4, 'd']], dtype=object)
     study1 = ParameterStudy(data1)
     print(study1.parameter_study)
     print("")
