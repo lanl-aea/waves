@@ -1,9 +1,13 @@
+import xarray
+import numpy
+
 class ParameterStudy():
 
-    def __init__(data):  
+    def __init__(self, data):
         self.parameter_set_names = [f"set{number}" for number in range(data.shape[0])]
         self.parameter_names = [f"parameter_{number}" for number in range(data.shape[1])]
         self.samples = data
+        self._create_parameter_study()
 
     def _create_parameter_array(self, data, name):
         """Create the standard structure for a parameter_study array
@@ -49,3 +53,8 @@ class ParameterStudy():
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
+
+if __name__ == "__main__":
+    data = numpy.array([[1, 10.0, 'a'], [2, 20.0, 'b']], dtype=object)
+    study = ParameterStudy(data)
+    print(study.parameter_study)
