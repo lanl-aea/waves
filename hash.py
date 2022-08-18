@@ -4,9 +4,12 @@ import numpy
 class ParameterStudy():
 
     def __init__(self, data):
-        self.parameter_set_names = [f"set{number}" for number in range(data.shape[0])]
-        self.parameter_names = [f"parameter_{number}" for number in range(data.shape[1])]
         self.samples = data
+
+        self.parameter_set_names = [f"set{number}" for number in range(self.samples.shape[0])]
+        self.parameter_set_hashes = [hash(row.tobytes()) for row in self.samples]
+        self.parameter_names = [f"parameter_{number}" for number in range(self.samples.shape[1])]
+
         self._create_parameter_study()
 
     def _create_parameter_array(self, data, name):
@@ -58,3 +61,6 @@ if __name__ == "__main__":
     data = numpy.array([[1, 10.0, 'a'], [2, 20.0, 'b']], dtype=object)
     study = ParameterStudy(data)
     print(study.parameter_study)
+    print("")
+    for set_name, set_hash, row in zip(study.parameter_set_names, study.parameter_set_hashes, study.samples):
+        print(f"{set_name}: {set_hash}: {row}")
