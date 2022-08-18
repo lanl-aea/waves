@@ -65,9 +65,19 @@ class ParameterStudy():
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
 
 if __name__ == "__main__":
-    data = numpy.array([[1, 10.0, 'a'], [2, 20.0, 'b']], dtype=object)
-    study = ParameterStudy(data)
-    print(study.parameter_study)
+    print('\nStudy1:')
+    data1 = numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)
+    study1 = ParameterStudy(data1)
+    print(study1.parameter_study)
     print("")
-    for set_name, set_hash, row in zip(study.parameter_set_names, study.parameter_set_hashes, study.samples):
+    for set_name, set_hash, row in zip(study1.parameter_set_names, study1.parameter_set_hashes, study1.samples):
+        print(f"{set_name}: {set_hash}: {row}")
+
+    
+    print('\nStudy2:')
+    data2 = numpy.array([[1, 10.1, 'a'], [3, 30.3, 'c'], [2, 20.2, 'b']], dtype=object)
+    study2 = ParameterStudy(data2)
+    print(study2.parameter_study)
+    print("")
+    for set_name, set_hash, row in zip(study2.parameter_set_names, study2.parameter_set_hashes, study2.samples):
         print(f"{set_name}: {set_hash}: {row}")
