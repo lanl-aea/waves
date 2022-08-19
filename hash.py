@@ -90,7 +90,7 @@ class ParameterStudy():
         self.samples = numpy.array(merged_samples, dtype=object)
         # Recalculate lists with lengths matching the number of parameter sets
         self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
-        merged_set_count = len(self.parameter_set_hashes) 
+        merged_set_count = len(self.parameter_set_hashes)
         self._create_parameter_set_names(merged_set_count)
 
     def generate(self, other_study=None):
@@ -112,10 +112,12 @@ if __name__ == "__main__":
     print("")
     for set_name, set_hash, row in zip(study1.parameter_set_names, study1.parameter_set_hashes, study1.samples):
         print(f"{set_name}: {set_hash}: {row}")
+
+    print('\nStudy1: read from file')
     study1.parameter_study.to_netcdf(path='study1.h5', mode='w', format="NETCDF4", engine='h5netcdf')
     study1.parameter_study.close()
-
     study_read = xarray.open_dataset('study1.h5')
+    print(study_read)
 
     print('\nStudy2:')
     data2 = numpy.array([[1, 10.1, 'a'], [3, 30.3, 'c'], [5, 50.5, 'e'], [2, 20.2, 'b']], dtype=object)
