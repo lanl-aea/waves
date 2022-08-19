@@ -305,9 +305,9 @@ class _ParameterGenerator(ABC):
 
         requires:
 
-        * ``self.parameter_set_names``: parameter set names used as rows of parameter study
+        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         * ``self.parameter_names``: parameter names used as columns of parameter study
-        * ``self.samples``: The parameter study samples
+        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
         optional:
 
@@ -324,6 +324,12 @@ class _ParameterGenerator(ABC):
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
+        parameter_set_names_array = xarray.DataArray(self.parameter_set_names,
+                                                     coords=[self.parameter_set_hashes],
+                                                     dims=['parameter_set_hash'],
+                                                     name='parameter_sets')
+        self.parameter_study = xarray.merge([self.parameter_study,
+                                             parameter_set_names_array]).set_coords('parameter_sets')
 
 
 class CartesianProduct(_ParameterGenerator):
