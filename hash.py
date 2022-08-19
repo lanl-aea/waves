@@ -128,7 +128,7 @@ if __name__ == "__main__":
 
     print('\nStudy3:')
     study3 = ParameterStudy(data2)
-    study3.generate(study1.parameter_study)
+    study3.generate(study_read)
     print(study3.parameter_study)
     print("")
     for set_name, set_hash, row in zip(study3.parameter_set_names, study3.parameter_set_hashes, study3.samples):
