@@ -18,6 +18,10 @@ class TestCustomStudy:
             {'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
             does_not_raise()
         ),
+        "not a dict": (
+            'not a dict',
+            pytest.raises(TypeError)
+        ),
         "bad schema no names": (
             {'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
             pytest.raises(KeyError)

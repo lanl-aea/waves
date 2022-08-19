@@ -17,6 +17,10 @@ class TestLatinHypercube:
             {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
             does_not_raise()
         ),
+        "not a dict": (
+            'not a dict',
+            pytest.raises(TypeError)
+        ),
         "missing num_simulation": (
             {},
             pytest.raises(AttributeError)

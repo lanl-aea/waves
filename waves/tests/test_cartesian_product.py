@@ -17,6 +17,10 @@ class TestCartesianProduct:
             {'parameter_1': [1], 'parameter_2': (2,) , 'parameter_3': set([3, 4])},
             does_not_raise()
         ),
+        "not a dict": (
+            'not a dict',
+            pytest.raises(TypeError)
+        ),
         "bad schema int": (
             {'parameter_1': 1},
             pytest.raises(TypeError)
