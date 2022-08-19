@@ -46,10 +46,11 @@ class ParameterStudy():
 
         * ``self.parameter_set_names``: parameter set names identifying rows of parameter study
         """
-        self.parameter_set_names = []
+        parameter_set_names = []
         for number in range(self.samples.shape[0]):
             template = self.set_name_template
-            self.parameter_set_names.append(template.substitute({'number': number}))
+            parameter_set_names.append(template.substitute({'number': number}))
+        self.parameter_set_names = xarray.DataArray(parameter_set_names, coords=[self.parameter_set_hashes], dims=['parameter_set_hash'], name='parameter_set_names')
 
     def _create_parameter_array(self, data, name):
         """Create the standard structure for a parameter_study array
