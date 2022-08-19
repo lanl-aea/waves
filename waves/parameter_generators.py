@@ -242,6 +242,25 @@ class _ParameterGenerator(ABC):
                 for parameter_set_file in parameter_set_files:
                     meta_file.write(f"{parameter_set_file.resolve()}\n")
 
+    def _create_parameter_set_hashes(self):
+        """Construct unique, repeatable parameter set content hashes from ``self.samples``.
+
+        Creates an md5 hash from the concatenated string representation of parameter values.
+
+        requires:
+
+        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
+
+        creates attribute:
+
+        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        """
+        self.parameter_set_hashes = []
+        for row in self.samples:
+            set_values_catenation = ''.join(repr(element) for element in row)
+            set_hash = hashlib.md5(set_values_catenation.encode('utf-8')).hexdigest()
+            self.parameter_set_hashes.append(set_hash)
+
     def _create_parameter_set_names(self, set_count):
         """Construct parameter set names from the output file template and number of parameter sets
 
