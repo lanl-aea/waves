@@ -96,6 +96,8 @@ class ParameterStudy():
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
+        self.parameter_study = xarray.merge([self.parameter_study,
+                                             self.parameter_set_names]).set_coords('parameter_set_names')
 
     def _merge_parameter_studies(self, other_study):
         self.parameter_study = xarray.merge([other_study.astype(object), self.parameter_study])
