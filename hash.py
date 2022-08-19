@@ -110,9 +110,15 @@ class ParameterStudy():
             [other_study.astype(object), self.parameter_study.drop_vars('parameter_sets')])
         # Recover samples numpy array to match merged study
         merged_samples = []
-        for set_hash, parameter_set in self.parameter_study.sel(data_type='samples').groupby('parameter_set_hash'):
-            merged_samples.append(parameter_set.squeeze().to_array().to_numpy())
+        for set_hash, samples in self.parameter_study.sel(data_type='samples').groupby('parameter_set_hash'):
+            merged_samples.append(samples.squeeze().to_array().to_numpy())
         self.samples = numpy.array(merged_samples, dtype=object)
+        # Recover quantiles numpy array to match merged study
+        if hasattr(self, "quantiles"):
+            merged_quantiles = []
+            for set_hash, quantiles in self.parameter_study.sel(data_type='quantiles').groupby('parameter_set_hash'):
+                merged_quantiles.append(quantiles.squeeze().to_array().to_numpy())
+            self.quantiles = numpy.array(merged_quantiles, dtype=object)
         # Recalculate attributes with lengths matching the number of parameter sets
         self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
         self._create_parameter_set_names()
