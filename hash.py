@@ -82,7 +82,7 @@ class ParameterStudy():
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
 
     def _merge_parameter_studies(self, other_study):
-        self.parameter_study = xarray.merge([other_study, self.parameter_study])
+        self.parameter_study = xarray.merge([other_study.astype(object), self.parameter_study])
         # Recover sample numpy array to match merged study
         merged_samples = []
         for set_hash, parameter_set in study3.parameter_study.sel(data_type='samples').groupby('parameter_set_hash'):
@@ -137,4 +137,4 @@ if __name__ == "__main__":
         print(f"{set_name}: {set_hash}: {row}")
 
     print("")
-    print(xarray.merge([study_read, study2.parameter_study]))
+    print(xarray.merge([study_read.astype(object), study2.parameter_study]))
