@@ -177,7 +177,8 @@ class _ParameterGenerator(ABC):
                 self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
         else:
             for parameter_set_file in parameter_set_files:
-                dataset = self.parameter_study.sel(parameter_sets=str(parameter_set_file))
+                dataset = self.parameter_study.where(self.parameter_study.parameter_sets==str(parameter_set_file),
+                                                     drop=True)
                 # If no output file template is provided, print to stdout
                 if not self.provided_output_file_template:
                     sys.stdout.write(f"{parameter_set_file.name}\n{dataset}")
@@ -196,11 +197,14 @@ class _ParameterGenerator(ABC):
 
     def _write_yaml(self, parameter_set_files):
         text_list = []
+        # TODO: Find a better way to index on the non-index coordinate
+        # https://github.com/pydata/xarray/issues/2028
+        samples = self.parameter_study.sel(data_type='samples')
         # Construct the output text
         for parameter_set_file in parameter_set_files:
+            set_samples = samples.where(samples.parameter_sets==str(parameter_set_file), drop=True)
             text = yaml.safe_dump(
-                self.parameter_study.sel(data_type='samples',
-                                         parameter_sets=str(parameter_set_file)).to_array().to_series().to_dict()
+                set_samples.squeeze().to_array().to_series().to_dict()
             )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
