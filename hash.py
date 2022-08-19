@@ -17,22 +17,37 @@ class ParameterStudy():
         self.set_name_template = _AtSignTemplate("set@number")
 
     def _create_parameter_set_hashes(self):
+        """
+        requires:
+
+        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
+
+        creates attribute:
+
+        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        """
         self.parameter_set_hashes = []
         for row in self.samples:
             set_values_catenation = ''.join(repr(element) for element in row)
             set_hash = hashlib.md5(set_values_catenation.encode('utf-8')).hexdigest()
             self.parameter_set_hashes.append(set_hash)
 
-    def _create_parameter_set_names(self, set_count):
+    def _create_parameter_set_names(self):
         """Construct parameter set names from the output file template and number of parameter sets
 
         Creates the class attribute ``self.parameter_set_names`` required to populate the ``generate()`` method's
         parameter study Xarray dataset object.
 
-        :param int set_count: Integer number of parameter sets
+        requires:
+
+        * ``self.parameter_set_hashes``: parameter set content hash set by ``_create_parameter_set_hashes``
+
+        creates attribute:
+
+        * ``self.parameter_set_names``: parameter set names identifying rows of parameter study
         """
         self.parameter_set_names = []
-        for number in range(set_count):
+        for number in range(self.samples.shape[0]):
             template = self.set_name_template
             self.parameter_set_names.append(template.substitute({'number': number}))
 
@@ -41,7 +56,7 @@ class ParameterStudy():
 
         requires:
 
-        * ``self.parameter_set_hashes``: parameter set names used as rows of parameter study
+        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         * ``self.parameter_names``: parameter names used as columns of parameter study
 
         :param numpy.array data: 2D array of parameter study samples with shape (number of parameter sets, number of
@@ -61,9 +76,9 @@ class ParameterStudy():
 
         requires:
 
-        * ``self.parameter_set_hashes``: parameter set names used as rows of parameter study
+        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         * ``self.parameter_names``: parameter names used as columns of parameter study
-        * ``self.samples``: The parameter study samples
+        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
         optional:
 
@@ -90,13 +105,13 @@ class ParameterStudy():
         self.samples = numpy.array(merged_samples, dtype=object)
         # Recalculate lists with lengths matching the number of parameter sets
         self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
-        merged_set_count = len(self.parameter_set_hashes)
-        self._create_parameter_set_names(merged_set_count)
+        self._create_parameter_set_names()
 
     def generate(self, other_study=None):
-        self._create_parameter_set_names(self.samples.shape[0])
-        self.parameter_names = [f"parameter_{number}" for number in range(self.samples.shape[1])]
+        # In WAVES, self.samples would be set here.
         self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
+        self.parameter_names = [f"parameter_{number}" for number in range(self.samples.shape[1])]
         self._create_parameter_study()
 
         if other_study:
