@@ -100,13 +100,14 @@ class ParameterStudy():
                                              self.parameter_set_names]).set_coords('parameter_set_names')
 
     def _merge_parameter_studies(self, other_study):
-        self.parameter_study = xarray.merge([other_study.astype(object), self.parameter_study])
-        # Recover sample numpy array to match merged study
+        # Favor the set names of the prior study. Leaves new set names as NaN.
+        self.parameter_study = xarray.merge([other_study.astype(object), self.parameter_study.drop_vars('parameter_set_names')])
+        # Recover samples numpy array to match merged study
         merged_samples = []
         for set_hash, parameter_set in study3.parameter_study.sel(data_type='samples').groupby('parameter_set_hash'):
             merged_samples.append(parameter_set.squeeze().to_array().to_numpy())
         self.samples = numpy.array(merged_samples, dtype=object)
-        # Recalculate lists with lengths matching the number of parameter sets
+        # Recalculate attributes with lengths matching the number of parameter sets
         self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
         self._create_parameter_set_names()
 
@@ -151,5 +152,5 @@ if __name__ == "__main__":
     study3.generate(study_read)
     print(study3.parameter_study)
     print("")
-    for set_name, set_hash, row in zip(study3.parameter_set_names, study3.parameter_set_hashes, study3.samples):
+    for set_name, set_hash, row in zip(study3.parameter_study.coords['parameter_set_names'], study3.parameter_study.coords['parameter_set_hash'], study3.samples):
         print(f"{set_name}: {set_hash}: {row}")
