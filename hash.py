@@ -148,6 +148,7 @@ if __name__ == "__main__":
 
     assert study1.parameter_set_names == list(study1.parameter_study.coords['parameter_set_names'])
     assert study1.parameter_set_hashes == list(study1.parameter_study.coords['parameter_set_hash'])
+    assert numpy.all(data1 == study1.samples)
 
     print('\nStudy1: read from file')
     study1.parameter_study.to_netcdf(path='study1.h5', mode='w', format="NETCDF4", engine='h5netcdf')
@@ -166,6 +167,7 @@ if __name__ == "__main__":
 
     assert study2.parameter_set_names == list(study2.parameter_study.coords['parameter_set_names'])
     assert study2.parameter_set_hashes == list(study2.parameter_study.coords['parameter_set_hash'])
+    assert numpy.all(data2 == study2.samples)
 
     print('\nStudy3:')
     study3 = ParameterStudy(data2)
@@ -177,3 +179,10 @@ if __name__ == "__main__":
 
     assert study3.parameter_set_names == list(study3.parameter_study.coords['parameter_set_names'])
     assert study3.parameter_set_hashes == list(study3.parameter_study.coords['parameter_set_hash'])
+    merged_samples = numpy.array(  # Order is ascending alphabetical by set_hash performed by xarray.merge
+        [[1, 10.1, 'a'],
+         [5, 50.5, 'e'],
+         [4, 40.4, 'd'],
+         [2, 20.2, 'b'],
+         [3, 30.3, 'c']], dtype=object)
+    assert numpy.all(merged_samples == study3.samples)
