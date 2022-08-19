@@ -111,14 +111,16 @@ class _ParameterGenerator(ABC):
 
         Must set the class attributes:
 
-        * ``self.parameter_set_names``: list of parameter set name strings created by calling
-          ``self._create_parameter_set_names`` with the number of integer parameter sets.
         * ``self.samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets, number
           of parameters). If it's possible that the samples may be of mixed type, ``numpy.array(..., dtype=object)``
           should be used to preserve the original Python types.
+        * ``self.parameter_set_hashes``: list of parameter set content hashes created by calling
+          ``self._create_parameter_set_hashes`` after populating the ``self.samples`` parameter study values.
+        * ``self.parameter_set_names``: list of parameter set name strings created by calling
+          ``self._create_parameter_set_names`` after populating the ``self.samples`` parameter study values.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
-          ``self.parameter_study = self._create_parameter_study()`` after defining ``self.samples`` and the optional
-          ``self.quantiles`` class attribute.
+          ``self._create_parameter_study()`` after defining ``self.samples`` and the optional ``self.quantiles`` class
+          attribute.
 
         May set the class attributes:
 
@@ -128,11 +130,12 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
-           set_count = 5
-           self._create_parameter_set_names(set_count)
+           set_count = 5  # Normally set according to the parameter schema
            parameter_count = len(self.parameter_names)
            self.samples = numpy.zeros((set_count, parameter_count))
-           self.parameter_study = self._create_parameter_study()
+           self._create_parameter_set_hashes()
+           self._create_parameter_set_names()
+           self._create_parameter_study()
         """
         pass
 
@@ -379,6 +382,7 @@ class CartesianProduct(_ParameterGenerator):
 
     Attributes after set generation
 
+    * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
     * parameter_set_names: list of parameter set name strings
     * samples: The 2D parameter samples. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
@@ -464,6 +468,7 @@ class LatinHypercube(_ParameterGenerator):
 
     Attributes after set generation
 
+    * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
     * parameter_set_names: list of parameter set name strings
     * samples: The 2D parameter samples. Rows correspond to parameter set. Columns correspond to parameter names.
     * quantiles: The 2D parameter quantiles. Rows correspond to parameter set. Columns correspond to parameter names.
@@ -578,6 +583,7 @@ class CustomStudy(_ParameterGenerator):
 
     Attributes after set generation
 
+    * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
     * parameter_set_names: list of parameter set name strings
     * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
