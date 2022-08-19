@@ -49,7 +49,8 @@ class _ParameterGenerator(ABC):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
     def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
-                 set_name_template=default_set_name_template, overwrite=False, dryrun=False, debug=False, write_meta=False):
+                 set_name_template=default_set_name_template,
+                 overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
@@ -125,7 +126,8 @@ class _ParameterGenerator(ABC):
 
         May set the class attributes:
 
-        * ``self.quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape (number of parameter sets, number of parameters)
+        * ``self.quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape (number
+          of parameter sets, number of parameters)
 
         Minimum necessary work example:
 
@@ -214,7 +216,8 @@ class _ParameterGenerator(ABC):
             prefix = "  "
             # TODO: split up text prefix change for readability
             text_list = ["\n".join([f"{prefix}{item}" for item in text.split('\n')[:-1]])+"\n" for text in text_list]
-            text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in zip(parameter_set_files, text_list)]
+            text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in
+                         zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
                 with open(self.output_file, 'w') as outfile:
@@ -603,7 +606,7 @@ class CustomStudy(_ParameterGenerator):
         if 'parameter_samples' not in self.parameter_schema:
             raise KeyError('parameter_schema must contain the key: parameter_samples')
         if len(self.parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
-            raise ValueError('The parameter samples must be an array of shape M x N, where N is the number of parameters.')
+            raise ValueError('The parameter samples must be an array of shape MxN, where N is the number of parameters.')
         return
 
     def generate(self):
