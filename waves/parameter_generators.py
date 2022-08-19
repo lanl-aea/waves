@@ -453,6 +453,8 @@ class CartesianProduct(_ParameterGenerator):
 
     def validate(self):
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
         self.parameter_names = list(self.parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
@@ -544,6 +546,8 @@ class LatinHypercube(_ParameterGenerator):
 
     def validate(self):
         """Validate the Latin Hypercube parameter schema. Executed by class initiation."""
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
         if not 'num_simulations' in self.parameter_schema.keys():
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
@@ -662,6 +666,8 @@ class CustomStudy(_ParameterGenerator):
 
     def validate(self):
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
         try:
             self.parameter_names = self.parameter_schema['parameter_names']
         except KeyError:
