@@ -17,7 +17,6 @@ class ParameterStudy():
         self.set_name_template = _AtSignTemplate("set@number")
 
     def _create_parameter_set_hashes(self):
-
         self.parameter_set_hashes = []
         for row in self.samples:
             set_values_catenation = ''.join(repr(element) for element in row)
@@ -82,11 +81,19 @@ class ParameterStudy():
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
 
-    def generate(self):
+    def _merge_parameter_studies(self, other_study):
+        self.parameter_study = xarray.merge([other_study, self.parameter_study])
+        merged_set_count = len(self.parameter_study.coords['parameter_set_hash'])
+        self._create_parameter_set_names(merged_set_count)
+
+    def generate(self, other_study=None):
         self._create_parameter_set_names(self.samples.shape[0])
         self.parameter_names = [f"parameter_{number}" for number in range(self.samples.shape[1])]
         self._create_parameter_set_hashes()
         self._create_parameter_study()
+
+        if other_study:
+            self._merge_parameter_studies(other_study)
 
 
 if __name__ == "__main__":
