@@ -396,8 +396,8 @@ class CartesianProduct(_ParameterGenerator):
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
         self.samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
-        set_count = self.samples.shape[0]
-        self._create_parameter_set_names(set_count)
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
         self._create_parameter_study()
 
     def write(self):
@@ -498,11 +498,12 @@ class LatinHypercube(_ParameterGenerator):
         """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study."""
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self.parameter_names)
-        self._create_parameter_set_names(set_count)
         self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
         self.samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
             self.samples[:, i] = distribution.ppf(self.quantiles[:, i])
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
         self._create_parameter_study()
 
     def _generate_parameter_distributions(self):
@@ -598,6 +599,6 @@ class CustomStudy(_ParameterGenerator):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study."""
         self.samples = numpy.array(self.parameter_schema['parameter_samples'], dtype=object)
-        set_count = self.samples.shape[0]
-        self._create_parameter_set_names(set_count)
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
         self._create_parameter_study()
