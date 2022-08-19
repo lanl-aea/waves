@@ -342,6 +342,50 @@ class _ParameterGenerator(ABC):
         self.parameter_study = xarray.merge([self.parameter_study,
                                              parameter_set_names_array]).set_coords('parameter_sets')
 
+    def _merge_parameter_studies(self, previous_study):
+        # Favor the set names of the prior study. Leaves new set names as NaN.
+        self.parameter_study = xarray.merge(
+            [previous_study.astype(object), self.parameter_study.drop_vars('parameter_sets')])
+
+        # Recover samples numpy array to match merged study
+        # TODO: Move to dedicated function
+        merged_samples = []
+        for set_hash, samples in self.parameter_study.sel(data_type='samples').groupby('parameter_set_hash'):
+            merged_samples.append(samples.squeeze().to_array().to_numpy())
+        self.samples = numpy.array(merged_samples, dtype=object)
+
+        # Recover quantiles numpy array to match merged study
+        if hasattr(self, "quantiles"):
+            merged_quantiles = []
+            for set_hash, quantiles in self.parameter_study.sel(data_type='quantiles').groupby('parameter_set_hash'):
+                merged_quantiles.append(quantiles.squeeze().to_array().to_numpy())
+            self.quantiles = numpy.array(merged_quantiles, dtype=object)
+
+        # Recalculate attributes with lengths matching the number of parameter sets
+        self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
+        self._create_parameter_set_names()
+
+        # Hack in the complete set name coordinates
+        # TODO: figure out a cleaner solution
+        new_set_names = set(self.parameter_set_names) - set(self.parameter_study.coords['parameter_sets'].values)
+        set_name_dict = self.parameter_study.reset_coords(
+            names=['parameter_sets'])['parameter_sets'].to_series().to_dict()
+        nan_dict = {key: value for key, value in set_name_dict.items() if not isinstance(value, str)}
+        new_hash_sets = {key: set_name for key, set_name in zip(nan_dict.keys(), new_set_names)}
+        set_name_dict.update(new_hash_sets)
+        updated_parameter_set_names_array = xarray.DataArray(
+            list(set_name_dict.values()),
+            coords=[list(set_name_dict.keys())],
+            dims=['parameter_set_hash'],
+            name='parameter_sets')
+
+        self.parameter_study = xarray.merge(
+            [self.parameter_study.reset_coords(),
+             updated_parameter_set_names_array]).set_coords('parameter_sets')
+
+        # Re-order the set names for consistency with samples array and hashes
+        self.parameter_set_names = list(self.parameter_study.coords['parameter_sets'].values)
+
 
 class CartesianProduct(_ParameterGenerator):
     """Builds a cartesian product parameter study
