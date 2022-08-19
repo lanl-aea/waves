@@ -345,10 +345,10 @@ class _ParameterGenerator(ABC):
         self.parameter_study = xarray.merge([self.parameter_study,
                                              parameter_set_names_array]).set_coords('parameter_sets')
 
-    def _merge_parameter_studies(self, previous_study):
+    def _merge_parameter_studies(self):
         # Favor the set names of the prior study. Leaves new set names as NaN.
         self.parameter_study = xarray.merge(
-            [previous_study.astype(object), self.parameter_study.drop_vars('parameter_sets')])
+            [previous_parameter_study.astype(object), self.parameter_study.drop_vars('parameter_sets')])
 
         # Recover samples numpy array to match merged study
         # TODO: Move to dedicated function
@@ -460,6 +460,8 @@ class CartesianProduct(_ParameterGenerator):
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
+        if self.previous_parameter_study:
+            self._merge_parameter_study()
 
     def write(self):
         super().write()
@@ -569,6 +571,8 @@ class LatinHypercube(_ParameterGenerator):
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
+        if self.previous_parameter_study:
+            self._merge_parameter_study()
 
     def _generate_parameter_distributions(self):
         """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
@@ -669,3 +673,5 @@ class CustomStudy(_ParameterGenerator):
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
+        if self.previous_parameter_study:
+            self._merge_parameter_study()
