@@ -46,11 +46,10 @@ class ParameterStudy():
 
         * ``self.parameter_set_names``: parameter set names identifying rows of parameter study
         """
-        parameter_set_names = []
+        self.parameter_set_names = []
         for number in range(self.samples.shape[0]):
             template = self.set_name_template
-            parameter_set_names.append(template.substitute({'number': number}))
-        self.parameter_set_names = xarray.DataArray(parameter_set_names, coords=[self.parameter_set_hashes], dims=['parameter_set_hash'], name='parameter_set_names')
+            self.parameter_set_names.append(template.substitute({'number': number}))
 
     def _create_parameter_array(self, data, name):
         """Create the standard structure for a parameter_study array
@@ -96,8 +95,9 @@ class ParameterStudy():
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
+        parameter_set_names_array = xarray.DataArray(self.parameter_set_names, coords=[self.parameter_set_hashes], dims=['parameter_set_hash'], name='parameter_set_names')
         self.parameter_study = xarray.merge([self.parameter_study,
-                                             self.parameter_set_names]).set_coords('parameter_set_names')
+                                             parameter_set_names_array]).set_coords('parameter_set_names')
 
     def _merge_parameter_studies(self, other_study):
         # Favor the set names of the prior study. Leaves new set names as NaN.
@@ -110,6 +110,17 @@ class ParameterStudy():
         # Recalculate attributes with lengths matching the number of parameter sets
         self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
         self._create_parameter_set_names()
+
+        # Hack in the complete set name coordinates
+        # TODO: figure out a cleaner solution
+        new_set_names = set(study3.parameter_set_names) - set(study3.parameter_study.coords['parameter_set_names'].values)
+        set_name_dict = self.parameter_study.reset_coords(names=['parameter_set_names'])['parameter_set_names'].to_series().to_dict()
+        nan_dict = {key: value for key, value in set_name_dict.items() if not isinstance(value, str)}
+        new_hash_sets = {key: set_name for key, set_name in zip(nan_dict.keys(), new_set_names)}
+        set_name_dict.update(new_hash_sets)
+        updated_parameter_set_names_array = xarray.DataArray(list(set_name_dict.values()), coords=[list(set_name_dict.keys())],  dims=['parameter_set_hash'], name='parameter_set_names')
+
+        self.parameter_study = xarray.merge([study3.parameter_study.reset_coords(), updated_parameter_set_names_array]).set_coords('parameter_set_names')
 
     def generate(self, other_study=None):
         # In WAVES, self.samples would be set here.
