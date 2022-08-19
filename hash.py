@@ -135,3 +135,6 @@ if __name__ == "__main__":
     print("")
     for set_name, set_hash, row in zip(study3.parameter_set_names, study3.parameter_set_hashes, study3.samples):
         print(f"{set_name}: {set_hash}: {row}")
+
+    print("")
+    print(xarray.merge([study_read, study2.parameter_study]))
