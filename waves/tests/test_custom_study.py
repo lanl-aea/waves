@@ -51,7 +51,8 @@ class TestCustomStudy:
     generate_io = {
         'one_parameter': ({'parameter_names': ['a'], 'parameter_samples': numpy.array([[1], [2.0]], dtype=object)},
                           numpy.array([[1], [2.0]], dtype=object)),
-        'two_parameter': ({'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
+        'two_parameter': ({'parameter_names': ['a', 'b'],
+                           'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
                           numpy.array(
                               [[1, 2.0],
                                [3, 4.5]], dtype=object))
@@ -72,6 +73,30 @@ class TestCustomStudy:
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
         parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
         assert numpy.all(parameter_set_names == expected_set_names)
+
+    merge_test = {
+        'new set':
+            ({'parameter_names': ['ints', 'floats', 'strings'],
+              'parameter_samples': numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)},
+             {'parameter_names': ['ints', 'floats', 'strings'],
+              'parameter_samples': numpy.array([[1, 10.1, 'a'], [3, 30.3, 'c'], [2, 20.2, 'b']], dtype=object)},
+             numpy.array(
+                 [[1, 10.1, 'a'],
+                  [2, 20.2, 'b'],
+                  [3, 30.3, 'c']], dtype=object))
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('first_schema, second_schema, expected_array',
+                                 merge_test.values(),
+                             ids=merge_test.keys())
+    def test_merge(self, first_schema, second_schema, expected_array):
+        TestMerge1 = CustomStudy(first_schema)
+        TestMerge1.generate()
+        TestMerge2 = CustomStudy(second_schema, previous_parameter_study=TestMerge1.parameter_study)
+        TestMerge2.generate()
+        generate_array = TestMerge2.samples
+        assert numpy.all(generate_array == expected_array)
 
     generate_io = {
         'one parameter yaml':
