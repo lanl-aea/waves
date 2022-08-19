@@ -50,8 +50,8 @@ def get_parser(return_subparser_dictionary=False):
     output_file_group = parent_parser.add_mutually_exclusive_group()
     output_file_group.add_argument('-o', '--output-file-template',
                                    default=None, dest='OUTPUT_FILE_TEMPLATE',
-                                   help=f"Output file template. May contain pathseps for an absolute or relative path " \
-                                        f"template. May contain ``{parameter_generators.template_placeholder}`` " \
+                                   help=f"Output file template. May contain pathseps for an absolute or relative " \
+                                        f"path template. May contain ``{parameter_generators.template_placeholder}`` " \
                                         f"set number placeholder in the file basename but not in the path. " \
                                         f"If the placeholder is not found, it will be " \
                                         f"appended to the template string. (default: %(default)s)")
@@ -67,7 +67,12 @@ def get_parser(return_subparser_dictionary=False):
                                help="Output file type (default: %(default)s)")
     parent_parser.add_argument('-s', '--set-name-template',
                                default='parameter_set@number', dest='SET_NAME_TEMPLATE',
-                               help="Parameter set name template. Overridden by ``output_file_template``, if provided " \
+                               help="Parameter set name template. Overridden by ``output_file_template``, " \
+                                    "if provided (default: %(default)s)")
+    parent_parser.add_argument('-p', '--previous-parameter-study',
+                               default=None, dest='PREVIOUS_PARAMETER_STUDY',
+                               help="A parameter study Xarray Dataset file created previously from a schema with the " \
+                                    "same parameter names, but fewer or different parameter sets " \
                                     "(default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
@@ -130,20 +135,22 @@ def main():
     output_file = args.OUTPUT_FILE
     output_file_type = args.output_file_type
     set_name_template = args.SET_NAME_TEMPLATE
+    previous_parameter_study = args.PREVIOUS_PARAMETER_STUDY
     overwrite = args.overwrite
     dryrun = args.dryrun
     debug = args.debug
     write_meta = args.write_meta
 
     if debug:
-        print(f"subcommand           = {subcommand}")
-        print(f"input_file           = {input_file}")
-        print(f"output_file_template = {output_file_template}")
-        print(f"output_file          = {output_file}")
-        print(f"output_file_type     = {output_file_type}")
-        print(f"set_name_template    = {set_name_template}")
-        print(f"overwrite            = {overwrite}")
-        print(f"write_meta           = {write_meta}")
+        print(f"subcommand               = {subcommand}")
+        print(f"input_file               = {input_file}")
+        print(f"output_file_template     = {output_file_template}")
+        print(f"output_file              = {output_file}")
+        print(f"output_file_type         = {output_file_type}")
+        print(f"set_name_template        = {set_name_template}")
+        print(f"previous_parameter_study = {previous_parameter_study}")
+        print(f"overwrite                = {overwrite}")
+        print(f"write_meta               = {write_meta}")
         return 0
 
     # Read the input stream
@@ -163,13 +170,14 @@ def main():
             output_file=output_file,
             output_file_type=output_file_type,
             set_name_template=set_name_template,
+            previous_parameter_study=previous_parameter_study,
             overwrite=overwrite,
             dryrun=dryrun,
             debug=debug,
             write_meta=write_meta
         )
 
-    # Build the parameter study
+    # Build the parameter study.
     parameter_generator.generate()
     parameter_generator.write()
 
