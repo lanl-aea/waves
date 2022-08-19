@@ -122,6 +122,9 @@ class ParameterStudy():
 
         self.parameter_study = xarray.merge([study3.parameter_study.reset_coords(), updated_parameter_set_names_array]).set_coords('parameter_set_names')
 
+        # Re-order the set names for consistency with samples array and hashes
+        self.parameter_set_names = list(self.parameter_study.coords['parameter_set_names'].values)
+
     def generate(self, other_study=None):
         # In WAVES, self.samples would be set here.
         self._create_parameter_set_hashes()
@@ -143,6 +146,9 @@ if __name__ == "__main__":
     for set_name, set_hash, row in zip(study1.parameter_set_names, study1.parameter_set_hashes, study1.samples):
         print(f"{set_name}: {set_hash}: {row}")
 
+    assert study1.parameter_set_names == list(study1.parameter_study.coords['parameter_set_names'])
+    assert study1.parameter_set_hashes == list(study1.parameter_study.coords['parameter_set_hash'])
+
     print('\nStudy1: read from file')
     study1.parameter_study.to_netcdf(path='study1.h5', mode='w', format="NETCDF4", engine='h5netcdf')
     study1.parameter_study.close()
@@ -158,6 +164,9 @@ if __name__ == "__main__":
     for set_name, set_hash, row in zip(study2.parameter_set_names, study2.parameter_set_hashes, study2.samples):
         print(f"{set_name}: {set_hash}: {row}")
 
+    assert study2.parameter_set_names == list(study2.parameter_study.coords['parameter_set_names'])
+    assert study2.parameter_set_hashes == list(study2.parameter_study.coords['parameter_set_hash'])
+
     print('\nStudy3:')
     study3 = ParameterStudy(data2)
     study3.generate(study_read)
@@ -165,3 +174,6 @@ if __name__ == "__main__":
     print("")
     for set_name, set_hash, row in zip(study3.parameter_study.coords['parameter_set_names'], study3.parameter_study.coords['parameter_set_hash'], study3.samples):
         print(f"{set_name}: {set_hash}: {row}")
+
+    assert study3.parameter_set_names == list(study3.parameter_study.coords['parameter_set_names'])
+    assert study3.parameter_set_hashes == list(study3.parameter_study.coords['parameter_set_hash'])
