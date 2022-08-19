@@ -106,6 +106,7 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
+           # Work unique to the parameter generator schema. Example matches CartesianProduct schema.
            self.parameter_names = list(self.parameter_schema.keys())
         """
         pass
@@ -136,12 +137,17 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
+           # Work unique to the parameter generator schema and set generation
            set_count = 5  # Normally set according to the parameter schema
            parameter_count = len(self.parameter_names)
            self.samples = numpy.zeros((set_count, parameter_count))
+
+           # Work performed by common ABC methods
            self._create_parameter_set_hashes()
            self._create_parameter_set_names()
            self._create_parameter_study()
+           if self.previous_parameter_study:
+               self._merge_parameter_study()
         """
         pass
 
