@@ -95,13 +95,13 @@ class ParameterStudy():
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
-        parameter_set_names_array = xarray.DataArray(self.parameter_set_names, coords=[self.parameter_set_hashes], dims=['parameter_set_hash'], name='parameter_set_names')
+        parameter_set_names_array = xarray.DataArray(self.parameter_set_names, coords=[self.parameter_set_hashes], dims=['parameter_set_hash'], name='parameter_sets')
         self.parameter_study = xarray.merge([self.parameter_study,
-                                             parameter_set_names_array]).set_coords('parameter_set_names')
+                                             parameter_set_names_array]).set_coords('parameter_sets')
 
     def _merge_parameter_studies(self, other_study):
         # Favor the set names of the prior study. Leaves new set names as NaN.
-        self.parameter_study = xarray.merge([other_study.astype(object), self.parameter_study.drop_vars('parameter_set_names')])
+        self.parameter_study = xarray.merge([other_study.astype(object), self.parameter_study.drop_vars('parameter_sets')])
         # Recover samples numpy array to match merged study
         merged_samples = []
         for set_hash, parameter_set in study3.parameter_study.sel(data_type='samples').groupby('parameter_set_hash'):
@@ -113,17 +113,17 @@ class ParameterStudy():
 
         # Hack in the complete set name coordinates
         # TODO: figure out a cleaner solution
-        new_set_names = set(study3.parameter_set_names) - set(study3.parameter_study.coords['parameter_set_names'].values)
-        set_name_dict = self.parameter_study.reset_coords(names=['parameter_set_names'])['parameter_set_names'].to_series().to_dict()
+        new_set_names = set(study3.parameter_set_names) - set(study3.parameter_study.coords['parameter_sets'].values)
+        set_name_dict = self.parameter_study.reset_coords(names=['parameter_sets'])['parameter_sets'].to_series().to_dict()
         nan_dict = {key: value for key, value in set_name_dict.items() if not isinstance(value, str)}
         new_hash_sets = {key: set_name for key, set_name in zip(nan_dict.keys(), new_set_names)}
         set_name_dict.update(new_hash_sets)
-        updated_parameter_set_names_array = xarray.DataArray(list(set_name_dict.values()), coords=[list(set_name_dict.keys())],  dims=['parameter_set_hash'], name='parameter_set_names')
+        updated_parameter_set_names_array = xarray.DataArray(list(set_name_dict.values()), coords=[list(set_name_dict.keys())],  dims=['parameter_set_hash'], name='parameter_sets')
 
-        self.parameter_study = xarray.merge([study3.parameter_study.reset_coords(), updated_parameter_set_names_array]).set_coords('parameter_set_names')
+        self.parameter_study = xarray.merge([study3.parameter_study.reset_coords(), updated_parameter_set_names_array]).set_coords('parameter_sets')
 
         # Re-order the set names for consistency with samples array and hashes
-        self.parameter_set_names = list(self.parameter_study.coords['parameter_set_names'].values)
+        self.parameter_set_names = list(self.parameter_study.coords['parameter_sets'].values)
 
     def generate(self, other_study=None):
         # In WAVES, self.samples would be set here.
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     for set_name, set_hash, row in zip(study1.parameter_set_names, study1.parameter_set_hashes, study1.samples):
         print(f"{set_name}: {set_hash}: {row}")
 
-    assert study1.parameter_set_names == list(study1.parameter_study.coords['parameter_set_names'])
+    assert study1.parameter_set_names == list(study1.parameter_study.coords['parameter_sets'])
     assert study1.parameter_set_hashes == list(study1.parameter_study.coords['parameter_set_hash'])
     assert numpy.all(data1 == study1.samples)
 
@@ -165,7 +165,7 @@ if __name__ == "__main__":
     for set_name, set_hash, row in zip(study2.parameter_set_names, study2.parameter_set_hashes, study2.samples):
         print(f"{set_name}: {set_hash}: {row}")
 
-    assert study2.parameter_set_names == list(study2.parameter_study.coords['parameter_set_names'])
+    assert study2.parameter_set_names == list(study2.parameter_study.coords['parameter_sets'])
     assert study2.parameter_set_hashes == list(study2.parameter_study.coords['parameter_set_hash'])
     assert numpy.all(data2 == study2.samples)
 
@@ -174,10 +174,10 @@ if __name__ == "__main__":
     study3.generate(study_read)
     print(study3.parameter_study)
     print("")
-    for set_name, set_hash, row in zip(study3.parameter_study.coords['parameter_set_names'], study3.parameter_study.coords['parameter_set_hash'], study3.samples):
+    for set_name, set_hash, row in zip(study3.parameter_study.coords['parameter_sets'], study3.parameter_study.coords['parameter_set_hash'], study3.samples):
         print(f"{set_name}: {set_hash}: {row}")
 
-    assert study3.parameter_set_names == list(study3.parameter_study.coords['parameter_set_names'])
+    assert study3.parameter_set_names == list(study3.parameter_study.coords['parameter_sets'])
     assert study3.parameter_set_hashes == list(study3.parameter_study.coords['parameter_set_hash'])
     merged_samples = numpy.array(  # Order is ascending alphabetical by set_hash performed by xarray.merge
         [[1, 10.1, 'a'],
@@ -186,3 +186,8 @@ if __name__ == "__main__":
          [2, 20.2, 'b'],
          [3, 30.3, 'c']], dtype=object)
     assert numpy.all(merged_samples == study3.samples)
+
+    # Check for unpacking as in WAVES-EABM tutorials
+    print("\nStudy3: sets and dicts for WAVES-EABM tutorials")
+    for set_name, parameters in study3.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
+        print(set_name, parameters.squeeze().to_array().to_series().to_dict())
