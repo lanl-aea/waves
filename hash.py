@@ -83,6 +83,11 @@ class ParameterStudy():
 
     def _merge_parameter_studies(self, other_study):
         self.parameter_study = xarray.merge([other_study, self.parameter_study])
+        # Recover sample numpy array to match merged study
+        merged_samples = []
+        for set_hash, parameter_set in study3.parameter_study.sel(data_type='samples').groupby('parameter_set_hash'):
+            merged_samples.append(parameter_set.squeeze().to_array().to_numpy())
+        self.samples = numpy.array(merged_samples, dtype=object)
         # Recalculate lists with lengths matching the number of parameter sets
         self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
         merged_set_count = len(self.parameter_set_hashes) 
