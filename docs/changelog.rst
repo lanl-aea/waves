@@ -19,6 +19,8 @@ New Features
 ============
 - Add set name template option to the parameter generators and parameter study interfaces. Allow the set name template
   to be changed when writing parameter sets to STDOUT or a single file. (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
+- Add the ability to merge or expand parameter studies without re-building all previously executed SCons parameter sets.
+  Feature functions for all parameter generators and the CLI (:issue:`224`, :merge:`266`). By `Kyle Brindley`_.
 
 Documentation
 =============
