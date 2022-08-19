@@ -4,6 +4,7 @@ import string
 import sys
 import itertools
 import copy
+import hashlib
 
 import yaml
 import numpy

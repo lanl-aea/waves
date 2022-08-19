@@ -170,7 +170,8 @@ class TestParameterGenerator:
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
         SetNamesParameterGenerator = NoQuantilesGenerator({}, 'out')
-        SetNamesParameterGenerator._create_parameter_set_names(2)
+        SetNamesParameterGenerator.samples = numpy.zeros((2, 1))
+        SetNamesParameterGenerator._create_parameter_set_names()
         assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
 
 
@@ -180,8 +181,8 @@ class NoQuantilesGenerator(_ParameterGenerator):
         self.parameter_names = ['parameter_1']
 
     def generate(self, sets):
-        set_count = sets
         parameter_count = len(self.parameter_names)
-        self._create_parameter_set_names(set_count)
-        self.samples = numpy.zeros((set_count, parameter_count))
+        self.samples = numpy.zeros((sets, parameter_count))
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
         self._create_parameter_study()
