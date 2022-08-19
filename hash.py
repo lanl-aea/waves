@@ -83,7 +83,9 @@ class ParameterStudy():
 
     def _merge_parameter_studies(self, other_study):
         self.parameter_study = xarray.merge([other_study, self.parameter_study])
-        merged_set_count = len(self.parameter_study.coords['parameter_set_hash'])
+        # Recalculate lists with lengths matching the number of parameter sets
+        self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
+        merged_set_count = len(self.parameter_set_hashes) 
         self._create_parameter_set_names(merged_set_count)
 
     def generate(self, other_study=None):
@@ -105,7 +107,10 @@ if __name__ == "__main__":
     print("")
     for set_name, set_hash, row in zip(study1.parameter_set_names, study1.parameter_set_hashes, study1.samples):
         print(f"{set_name}: {set_hash}: {row}")
+    study1.parameter_study.to_netcdf(path='study1.h5', mode='w', format="NETCDF4", engine='h5netcdf')
+    study1.parameter_study.close()
 
+    study_read = xarray.open_dataset('study1.h5')
 
     print('\nStudy2:')
     data2 = numpy.array([[1, 10.1, 'a'], [3, 30.3, 'c'], [5, 50.5, 'e'], [2, 20.2, 'b']], dtype=object)
@@ -117,5 +122,9 @@ if __name__ == "__main__":
         print(f"{set_name}: {set_hash}: {row}")
 
     print('\nStudy3:')
-    study3 = xarray.merge([study1.parameter_study, study2.parameter_study])
-    print(study3)
+    study3 = ParameterStudy(data2)
+    study3.generate(study_read)
+    print(study3.parameter_study)
+    print("")
+    for set_name, set_hash, row in zip(study3.parameter_set_names, study3.parameter_set_hashes, study3.samples):
+        print(f"{set_name}: {set_hash}: {row}")
