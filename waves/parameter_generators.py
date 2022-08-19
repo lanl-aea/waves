@@ -261,16 +261,22 @@ class _ParameterGenerator(ABC):
             set_hash = hashlib.md5(set_values_catenation.encode('utf-8')).hexdigest()
             self.parameter_set_hashes.append(set_hash)
 
-    def _create_parameter_set_names(self, set_count):
-        """Construct parameter set names from the output file template and number of parameter sets
+    def _create_parameter_set_names(self):
+        """Construct parameter set names from the set name template and number of parameter sets in ``self.sample``
 
         Creates the class attribute ``self.parameter_set_names`` required to populate the ``generate()`` method's
         parameter study Xarray dataset object.
 
-        :param int set_count: Integer number of parameter sets
+        requires:
+
+        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
+
+        creates attribute:
+
+        * ``self.parameter_set_names``: parameter set names identifying rows of parameter study
         """
         self.parameter_set_names = []
-        for number in range(set_count):
+        for number in range(self.samples.shape[0]):
             template = self.set_name_template
             self.parameter_set_names.append(template.substitute({'number': number}))
 
@@ -279,7 +285,7 @@ class _ParameterGenerator(ABC):
 
         requires:
 
-        * ``self.parameter_set_names``: parameter set names used as rows of parameter study
+        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         * ``self.parameter_names``: parameter names used as columns of parameter study
 
         :param numpy.array data: 2D array of parameter study samples with shape (number of parameter sets, number of
@@ -288,8 +294,8 @@ class _ParameterGenerator(ABC):
         """
         array = xarray.DataArray(
             data,
-            coords=[self.parameter_set_names, self.parameter_names],
-            dims=["parameter_sets", "parameters"],
+            coords=[self.parameter_set_hashes, self.parameter_names],
+            dims=["parameter_set_hash", "parameters"],
             name=name
         )
         return array
