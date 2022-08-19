@@ -14,6 +14,7 @@ class ParameterStudy():
 
     def __init__(self, data):
         self.samples = data
+        self.quantiles = data
         self.set_name_template = _AtSignTemplate("set@number")
 
     def _create_parameter_set_hashes(self):
