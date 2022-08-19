@@ -42,6 +42,8 @@ class _ParameterGenerator(ABC):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param xarray.Dataset previous_parameter_study: A parameter study Xarray Dataset object created previously from a
+        schema with the same parameter names, but fewer or different parameter sets
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -49,13 +51,14 @@ class _ParameterGenerator(ABC):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
     def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
-                 set_name_template=default_set_name_template,
+                 set_name_template=default_set_name_template, previous_parameter_study=None,
                  overwrite=False, dryrun=False, debug=False, write_meta=False):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
         self.output_file_type = output_file_type
         self.set_name_template = _AtSignTemplate(set_name_template)
+        self.previous_parameter_study = previous_parameter_study
         self.overwrite = overwrite
         self.dryrun = dryrun
         self.debug = debug
@@ -402,6 +405,8 @@ class CartesianProduct(_ParameterGenerator):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param xarray.Dataset previous_parameter_study: A parameter study Xarray Dataset object created previously from a
+        schema with the same parameter names, but fewer or different parameter sets
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -477,6 +482,8 @@ class LatinHypercube(_ParameterGenerator):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param xarray.Dataset previous_parameter_study: A parameter study Xarray Dataset object created previously from a
+        schema with the same parameter names, but fewer or different parameter sets
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -603,6 +610,8 @@ class CustomStudy(_ParameterGenerator):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param xarray.Dataset previous_parameter_study: A parameter study Xarray Dataset object created previously from a
+        schema with the same parameter names, but fewer or different parameter sets
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
