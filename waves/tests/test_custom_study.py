@@ -93,8 +93,9 @@ class TestCustomStudy:
     def test_merge(self, first_schema, second_schema, expected_array):
         TestMerge1 = CustomStudy(first_schema)
         TestMerge1.generate()
-        TestMerge2 = CustomStudy(second_schema, previous_parameter_study=TestMerge1.parameter_study)
-        TestMerge2.generate()
+        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
+            TestMerge2 = CustomStudy(second_schema, previous_parameter_study='dummy_string')
+            TestMerge2.generate()
         generate_array = TestMerge2.samples
         assert numpy.all(generate_array == expected_array)
 

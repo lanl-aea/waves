@@ -42,8 +42,8 @@ class _ParameterGenerator(ABC):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param xarray.Dataset previous_parameter_study: A parameter study Xarray Dataset object created previously from a
-        schema with the same parameter names, but fewer or different parameter sets
+    :param str previous_parameter_study: A parameter study Xarray Dataset file created previously from a schema with the
+        same parameter names, but fewer or different parameter sets
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param bool debug: Print internal variables to STDOUT and exit
@@ -350,8 +350,10 @@ class _ParameterGenerator(ABC):
 
     def _merge_parameter_studies(self):
         # Favor the set names of the prior study. Leaves new set names as NaN.
+        previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
         self.parameter_study = xarray.merge(
-            [self.previous_parameter_study.astype(object), self.parameter_study.drop_vars('parameter_sets')])
+            [previous_parameter_study, self.parameter_study.drop_vars('parameter_sets')])
+        previous_parameter_study.close()
 
         # Recover samples numpy array to match merged study
         # TODO: Move to dedicated function
