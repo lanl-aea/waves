@@ -177,7 +177,7 @@ class TestParameterGenerator:
 
 class NoQuantilesGenerator(_ParameterGenerator):
 
-    def validate(self):
+    def _validate(self):
         self.parameter_names = ['parameter_1']
 
     def generate(self, sets):
