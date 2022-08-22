@@ -181,6 +181,10 @@ class _ParameterGenerator(ABC):
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
     def _write_dataset(self):
+        """Write Xarray Datset formatted output to STDOUT, separate set files, or a single file
+
+        Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
+        """
         if self.output_file:
             if self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
@@ -203,6 +207,12 @@ class _ParameterGenerator(ABC):
                         parameter_set.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
+        """Write YAML formatted output to STDOUT, separate set files, or a single file
+
+        Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
+
+        :param list parameter_set_files: List of pathlib.Path parameter set file paths
+        """
         text_list = []
         # Construct the output text
         for parameter_set_file, parameter_set in self.parameter_study.groupby('parameter_sets'):
