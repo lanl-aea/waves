@@ -446,13 +446,14 @@ class CartesianProduct(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (parameter_sets: 4, data_type: 1)
+       Dimensions:             (data_type: 1, parameter_set_hash: 4)
        Coordinates:
-         * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
-         * data_type       (data_type) <U7 'samples'
+         * data_type           (data_type) object 'samples'
+         * parameter_set_hash  (parameter_set_hash) <U32 'de3cb3eaecb767ff63973820b2...
+           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1     (parameter_sets, data_type) object 1 1 2 2
-           parameter_2     (parameter_sets, data_type) object 'a' 'b' 'a' 'b'
+           parameter_1         (data_type, parameter_set_hash) object 1 1 2 2
+           parameter_2         (data_type, parameter_set_hash) object 'a' 'b' 'a' 'b'
 
     Attributes after class instantiation
 
@@ -543,13 +544,14 @@ class LatinHypercube(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (parameter_sets: 4, data_type: 2)
+       Dimensions:             (data_type: 2, parameter_set_hash: 4)
        Coordinates:
-         * parameter_sets  (parameter_sets) <U14 'parameter_set0' ... 'parameter_set3'
-         * data_type       (data_type) <U9 'samples' 'quantiles'
+         * parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
+         * data_type           (data_type) <U9 'quantiles' 'samples'
+           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1     (parameter_sets, data_type) float64 48.85 0.125 ... 0.375
-           parameter_2     (parameter_sets, data_type) float64 30.97 0.375 ... 0.625
+           parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
+           parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
 
     Attributes after class instantiation
 
@@ -665,14 +667,15 @@ class CustomStudy(_ParameterGenerator):
        parameter_generator.generate()
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:         (data_type: 1, parameter_sets: 2)
+       Dimensions:             (data_type: 1, parameter_set_hash: 2)
        Coordinates:
-         * data_type       (data_type) object 'samples'
-         * parameter_sets  (parameter_sets) <U14 'parameter_set0' 'parameter_set1'
+         * data_type           (data_type) object 'samples'
+         * parameter_set_hash  (parameter_set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
+           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
        Data variables:
-           height          (data_type, parameter_sets) object 1.0 2.0
-           prefix          (data_type, parameter_sets) object 'a' 'b'
-           index           (data_type, parameter_sets) object 5 6
+           height              (data_type, parameter_set_hash) object 1.0 2.0
+           prefix              (data_type, parameter_set_hash) object 'a' 'b'
+           index               (data_type, parameter_set_hash) object 5 6
 
     Attributes after class instantiation
 
