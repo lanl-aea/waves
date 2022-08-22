@@ -130,10 +130,12 @@ class TestCartesianProduct:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls',
+    @pytest.mark.parametrize('parameter_schema, output_file_template, output_file, output_type, file_count, ' \
+                             'expected_calls',
                                  generate_io.values(),
                              ids=generate_io.keys())
-    def test_write_yaml(self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls):
+    def test_write_yaml(self, parameter_schema, output_file_template, output_file, output_type, file_count,
+                        expected_calls):
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
