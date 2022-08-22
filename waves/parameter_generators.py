@@ -92,10 +92,10 @@ class _ParameterGenerator(ABC):
             self.output_directory = pathlib.Path('.').resolve()
         self.parameter_study_meta_file = self.output_directory / parameter_study_meta_file
 
-        self.validate()
+        self._validate()
 
     @abstractmethod
-    def validate(self):
+    def _validate(self):
         """Process parameter study input to verify schema
 
         Must set the class attributes:
@@ -466,7 +466,7 @@ class CartesianProduct(_ParameterGenerator):
     * parameter_study: The final parameter study XArray Dataset object
     """
 
-    def validate(self):
+    def _validate(self):
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
@@ -559,7 +559,7 @@ class LatinHypercube(_ParameterGenerator):
     * parameter_study: The final parameter study XArray Dataset object
     """
 
-    def validate(self):
+    def _validate(self):
         """Validate the Latin Hypercube parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
@@ -679,7 +679,7 @@ class CustomStudy(_ParameterGenerator):
     * parameter_study: The final parameter study XArray Dataset object
     """
 
-    def validate(self):
+    def _validate(self):
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
