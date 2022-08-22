@@ -80,6 +80,31 @@ class TestCartesianProduct:
         parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
         assert numpy.all(parameter_set_names == expected_set_names)
 
+    merge_test = {
+        'new set':
+            ({'parameter_1': [1, 2], 'parameter_2': [3.0], 'parameter_3': ['a']},
+             {'parameter_1': [1, 2], 'parameter_2': [3.0, 4.0], 'parameter_3': ['a']},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[2, 3.0, "a"],
+                  [1, 4.0, "a"],
+                  [2, 4.0, "a"],
+                  [1, 3.0, "a"]], dtype=object)),
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('first_schema, second_schema, expected_array',
+                                 merge_test.values(),
+                             ids=merge_test.keys())
+    def test_merge(self, first_schema, second_schema, expected_array):
+        TestMerge1 = CartesianProduct(first_schema)
+        TestMerge1.generate()
+        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
+            TestMerge2 = CartesianProduct(second_schema, previous_parameter_study='dummy_string')
+            TestMerge2.generate()
+        generate_array = TestMerge2.samples
+        assert numpy.all(generate_array == expected_array)
+
     generate_io = {
         'one parameter yaml':
             ({"parameter_1": [1, 2]},
