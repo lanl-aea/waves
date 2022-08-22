@@ -167,6 +167,26 @@ class TestParameterGenerator:
             stdout_write.assert_not_called()
             assert xarray_to_netcdf.call_count == files
 
+    set_hashes = {
+        'set1':
+            (numpy.array([[1, 10.1, 'a']], dtype=object), ['524c99353118939a452503456d3100e8']),
+        'set2':
+            (numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b'], [3, 30.3, 'c']], dtype=object),
+             ['524c99353118939a452503456d3100e8',
+              'b8797cbda6f68f71de15d10f6f901d5d',
+              'cff4a038d9980830bc4ea32145b26cf7'])
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('samples, expected_hashes',
+                                 set_hashes.values(),
+                             ids=set_hashes.keys())
+    def test_create_parameter_set_hashes(self, samples, expected_hashes):
+        HashesParameterGenerator = NoQuantilesGenerator({})
+        HashesParameterGenerator.samples = samples
+        HashesParameterGenerator._create_parameter_set_hashes()
+        assert HashesParameterGenerator.parameter_set_hashes == expected_hashes
+
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
         SetNamesParameterGenerator = NoQuantilesGenerator({}, output_file_template='out')
