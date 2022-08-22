@@ -71,9 +71,8 @@ def get_parser(return_subparser_dictionary=False):
                                     "if provided (default: %(default)s)")
     parent_parser.add_argument('-p', '--previous-parameter-study',
                                default=None, dest='PREVIOUS_PARAMETER_STUDY',
-                               help="A parameter study Xarray Dataset file created previously from a schema with the " \
-                                    "same parameter names, but fewer or different parameter sets " \
-                                    "(default: %(default)s)")
+                               help="A relative or absolute file path to a previously created parameter study Xarray " \
+                                    "Dataset (default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
     parent_parser.add_argument('--dryrun', action='store_true',
