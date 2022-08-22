@@ -80,6 +80,7 @@ class TestCustomStudy:
               'parameter_samples': numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)},
              {'parameter_names': ['ints', 'floats', 'strings'],
               'parameter_samples': numpy.array([[1, 10.1, 'a'], [3, 30.3, 'c'], [2, 20.2, 'b']], dtype=object)},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
              numpy.array(
                  [[1, 10.1, 'a'],
                   [2, 20.2, 'b'],
