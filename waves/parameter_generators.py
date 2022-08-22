@@ -174,13 +174,13 @@ class _ParameterGenerator(ABC):
         if self.write_meta and self.provided_output_file_template:
             self._write_meta(parameter_set_files)
         if self.output_file_type == 'h5':
-            self._write_dataset(parameter_set_files)
+            self._write_dataset()
         elif self.output_file_type == 'yaml':
             self._write_yaml(parameter_set_files)
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
-    def _write_dataset(self, parameter_set_files):
+    def _write_dataset(self):
         if self.output_file:
             if self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
@@ -204,14 +204,10 @@ class _ParameterGenerator(ABC):
 
     def _write_yaml(self, parameter_set_files):
         text_list = []
-        # TODO: Find a better way to index on the non-index coordinate
-        # https://github.com/pydata/xarray/issues/2028
-        samples = self.parameter_study.sel(data_type='samples')
         # Construct the output text
-        for parameter_set_file in parameter_set_files:
-            set_samples = samples.where(samples.parameter_sets==str(parameter_set_file), drop=True)
+        for parameter_set_file, parameter_set in self.parameter_study.groupby('parameter_sets'):
             text = yaml.safe_dump(
-                set_samples.squeeze().to_array().to_series().to_dict()
+                parameter_set.squeeze().to_array().to_series().to_dict()
             )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
