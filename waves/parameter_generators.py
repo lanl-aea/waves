@@ -495,6 +495,11 @@ class LatinHypercube(_ParameterGenerator):
 
     The 'h5' output file type is the only output type that contains both the parameter samples *and* quantiles.
 
+    .. warning::
+
+       The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
+       parameter definitions will result in incorrectly parameter studies.
+
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
@@ -583,6 +588,7 @@ class LatinHypercube(_ParameterGenerator):
                     if not isinstance(key, str) or not key.isidentifier():
                         raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
                                         "Python identifier")
+        # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
     def generate(self):
