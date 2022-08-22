@@ -499,7 +499,7 @@ class LatinHypercube(_ParameterGenerator):
 
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions will result in incorrect relationships between parameters and the parameter study samples
-       and quantiles studies.
+       and quantiles.
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
