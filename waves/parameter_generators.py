@@ -354,6 +354,17 @@ class _ParameterGenerator(ABC):
                                              parameter_set_names_array]).set_coords('parameter_sets')
 
     def _merge_parameter_studies(self):
+        """Merge the current parameter study into a previous parameter study.
+
+        Preserve the previous parameter study set name to set contents associations by dropping the current study's set
+        names during merge. Resets attributes:
+
+        * ``parameter_study``
+        * ``samples``
+        * ``quantiles``: if it exists
+        * ``parameter_set_hashes``
+        * ``parameter_set_names``
+        """
         # Favor the set names of the prior study. Leaves new set names as NaN.
         previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
         self.parameter_study = xarray.merge(
