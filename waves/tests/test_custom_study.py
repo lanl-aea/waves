@@ -99,6 +99,9 @@ class TestCustomStudy:
             TestMerge2.generate()
         generate_array = TestMerge2.samples
         assert numpy.all(generate_array == expected_array)
+        # Self-consistency checks
+        assert TestMerge2.parameter_set_names == TestMerge2.parameter_study['parameter_sets'].values.tolist()
+        assert TestMerge2.parameter_set_hashes == TestMerge2.parameter_study['parameter_set_hash'].values.tolist()
 
     generate_io = {
         'one parameter yaml':
