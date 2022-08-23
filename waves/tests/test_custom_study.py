@@ -4,10 +4,11 @@
 from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
 
-from waves.parameter_generators import CustomStudy
-
 import pytest
 import numpy
+
+from waves.parameter_generators import CustomStudy
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 
 class TestCustomStudy:
@@ -71,7 +72,7 @@ class TestCustomStudy:
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
+        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
         assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
@@ -100,11 +101,11 @@ class TestCustomStudy:
         generate_array = TestMerge2.samples
         assert numpy.all(generate_array == expected_array)
         # Check for consistent hash-parameter set relationships
-        for set_hash, parameter_set in TestMerge1.parameter_study.groupby('parameter_set_hash'):
+        for set_hash, parameter_set in TestMerge1.parameter_study.groupby(_hash_coordinate_key):
             assert parameter_set == TestMerge2.parameter_study.sel(parameter_set_hash=set_hash)
         # Self-consistency checks
-        assert TestMerge2.parameter_set_names == TestMerge2.parameter_study['parameter_sets'].values.tolist()
-        assert TestMerge2.parameter_set_hashes == TestMerge2.parameter_study['parameter_set_hash'].values.tolist()
+        assert TestMerge2.parameter_set_names == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
+        assert TestMerge2.parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     generate_io = {
         'one parameter yaml':

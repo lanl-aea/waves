@@ -4,10 +4,12 @@
 from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
-from waves.parameter_generators import LatinHypercube
-
 import pytest
 import numpy
+
+from waves.parameter_generators import LatinHypercube
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
+
 
 class TestLatinHypercube:
     """Class for testing LatinHypercube parameter study generator class"""
@@ -91,7 +93,7 @@ class TestLatinHypercube:
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
-        parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
+        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
         assert numpy.all(parameter_set_names == expected_set_names)
 
     @pytest.mark.unittest
