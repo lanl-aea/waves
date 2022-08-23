@@ -312,7 +312,7 @@ class _ParameterGenerator(ABC):
         :rtype: xarray.DataArray
         """
         return xarray.DataArray(list(self.parameter_set_names.values()),
-               coords=[list(parameter_set_names.keys())],
+               coords=[list(self.parameter_set_names.keys())],
                dims=[_hash_coordinate_key],
                name=_set_coordinate_key)
 
