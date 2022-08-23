@@ -8,6 +8,11 @@ Changelog
 0.3.4 (unreleased)
 ******************
 
+Breaking changes
+================
+- Remove the intermediate attributes used to form the parameter study Xarray Dataset from the external API
+  (:issue:`268`, :merge:`268`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
 - Fix parameter set dimensions in tutorial set iteration usage for parameter studies with more than 10 sets
@@ -30,6 +35,8 @@ Documentation
 Internal Changes
 ================
 - Raise an exception for unsupported output file type strings (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
+- Store the parameter set names as a dictionary mapping the unique parameter set hash to the set name (:issue:`268`,
+  :merge:`268`). By `Kyle Brindley`_.
 
 ******************
 0.3.3 (2022-08-09)

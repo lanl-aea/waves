@@ -66,10 +66,10 @@ class TestCustomStudy:
     def test_generate(self, parameter_schema, expected_array):
         TestGenerate = CustomStudy(parameter_schema)
         TestGenerate.generate()
-        generate_array = TestGenerate.samples
+        generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
-        assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
+        assert list(TestGenerate._parameter_set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
         parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
@@ -98,14 +98,14 @@ class TestCustomStudy:
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = CustomStudy(second_schema, previous_parameter_study='dummy_string')
             TestMerge2.generate()
-        generate_array = TestMerge2.samples
+        generate_array = TestMerge2._samples
         assert numpy.all(generate_array == expected_array)
         # Check for consistent hash-parameter set relationships
         for set_hash, parameter_set in TestMerge1.parameter_study.groupby(_hash_coordinate_key):
             assert parameter_set == TestMerge2.parameter_study.sel(parameter_set_hash=set_hash)
         # Self-consistency checks
-        assert TestMerge2.parameter_set_names == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
-        assert TestMerge2.parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+        assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
+        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     generate_io = {
         'one parameter yaml':

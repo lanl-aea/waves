@@ -102,14 +102,14 @@ class _ParameterGenerator(ABC):
 
         Must set the class attributes:
 
-        * ``self.parameter_names``: list of strings containing the parameter study's parameter names
+        * ``self._parameter_names``: list of strings containing the parameter study's parameter names
 
         Minimum necessary work example:
 
         .. code-block::
 
            # Work unique to the parameter generator schema. Example matches CartesianProduct schema.
-           self.parameter_names = list(self.parameter_schema.keys())
+           self._parameter_names = list(self.parameter_schema.keys())
         """
         pass
 
@@ -119,20 +119,20 @@ class _ParameterGenerator(ABC):
 
         Must set the class attributes:
 
-        * ``self.samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets, number
+        * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets, number
           of parameters). If it's possible that the samples may be of mixed type, ``numpy.array(..., dtype=object)``
           should be used to preserve the original Python types.
-        * ``self.parameter_set_hashes``: list of parameter set content hashes created by calling
-          ``self._create_parameter_set_hashes`` after populating the ``self.samples`` parameter study values.
-        * ``self.parameter_set_names``: list of parameter set name strings created by calling
-          ``self._create_parameter_set_names`` after populating the ``self.samples`` parameter study values.
+        * ``self._parameter_set_hashes``: list of parameter set content hashes created by calling
+          ``self._create_parameter_set_hashes`` after populating the ``self._samples`` parameter study values.
+        * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name strings created by calling
+          ``self._create_parameter_set_names`` after populating ``self._parameter_set_hashes``.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
-          ``self._create_parameter_study()`` after defining ``self.samples`` and the optional ``self.quantiles`` class
+          ``self._create_parameter_study()`` after defining ``self._samples`` and the optional ``self._quantiles`` class
           attribute.
 
         May set the class attributes:
 
-        * ``self.quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape (number
+        * ``self._quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape (number
           of parameter sets, number of parameters)
 
         Minimum necessary work example:
@@ -141,8 +141,8 @@ class _ParameterGenerator(ABC):
 
            # Work unique to the parameter generator schema and set generation
            set_count = 5  # Normally set according to the parameter schema
-           parameter_count = len(self.parameter_names)
-           self.samples = numpy.zeros((set_count, parameter_count))
+           parameter_count = len(self._parameter_names)
+           self._samples = numpy.zeros((set_count, parameter_count))
 
            # Work performed by common ABC methods
            self._create_parameter_set_hashes()
@@ -172,7 +172,8 @@ class _ParameterGenerator(ABC):
            parameter_2: a
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
-        parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
+        parameter_set_files = [pathlib.Path(set_name) for set_name in
+                               self.parameter_study.coords[_set_coordinate_key].values]
         if self.write_meta and self.provided_output_file_template:
             self._write_meta(parameter_set_files)
         if self.output_file_type == 'h5':
@@ -267,64 +268,85 @@ class _ParameterGenerator(ABC):
                     meta_file.write(f"{parameter_set_file.resolve()}\n")
 
     def _create_parameter_set_hashes(self):
-        """Construct unique, repeatable parameter set content hashes from ``self.samples``.
+        """Construct unique, repeatable parameter set content hashes from ``self._samples``.
 
         Creates an md5 hash from the concatenated string representation of parameter values.
 
         requires:
 
-        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
+        * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
         creates attribute:
 
-        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         """
-        self.parameter_set_hashes = []
-        for row in self.samples:
+        self._parameter_set_hashes = []
+        for row in self._samples:
             set_values_catenation = ''.join(repr(element) for element in row)
             set_hash = hashlib.md5(set_values_catenation.encode('utf-8')).hexdigest()
-            self.parameter_set_hashes.append(set_hash)
+            self._parameter_set_hashes.append(set_hash)
 
     def _create_parameter_set_names(self):
-        """Construct parameter set names from the set name template and number of parameter sets in ``self.sample``
+        """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
 
-        Creates the class attribute ``self.parameter_set_names`` required to populate the ``generate()`` method's
+        Creates the class attribute ``self._parameter_set_names`` required to populate the ``generate()`` method's
         parameter study Xarray dataset object.
 
         requires:
 
-        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
+        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
 
         creates attribute:
 
-        * ``self.parameter_set_names``: parameter set names identifying rows of parameter study
+        * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name
         """
-        self.parameter_set_names = []
-        for number in range(self.samples.shape[0]):
+        self._parameter_set_names = {}
+        for number, set_hash in enumerate(self._parameter_set_hashes):
             template = self.set_name_template
-            self.parameter_set_names.append(template.substitute({'number': number}))
+            self._parameter_set_names[set_hash] = (template.substitute({'number': number}))
 
-    def _create_parameter_set_names_array(self, hashes, names):
+    def _update_parameter_set_names(self):
+        """Update the parameter set names after a parameter study dataset merge operation.
+
+        Resets attributes:
+
+        * ``self.parameter_study``
+        * ``self._parameter_set_names``
+        """
+        # TODO: figure out a cleaner solution that creates fewer intermediate objects
+        self._create_parameter_set_names()
+        new_set_names = set(self._parameter_set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
+        set_name_dict = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
+        nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
+        new_hash_sets = dict(zip(nan_hashes, new_set_names))
+        set_name_dict.update(new_hash_sets)
+        self._parameter_set_names = set_name_dict
+        self._merge_parameter_set_names_array()
+
+    def _create_parameter_set_names_array(self):
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
-
-        :param list hashes: list of parameter set hashes
-        :param list names: list of parameter set names ordered to match the parameter set hashes
 
         :return: parameter_set_names_array
         :rtype: xarray.DataArray
         """
-        return xarray.DataArray(names,
-               coords=[hashes],
+        return xarray.DataArray(list(self._parameter_set_names.values()),
+               coords=[list(self._parameter_set_names.keys())],
                dims=[_hash_coordinate_key],
                name=_set_coordinate_key)
+
+    def _merge_parameter_set_names_array(self):
+        """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
+        parameter_set_names_array = self._create_parameter_set_names_array()
+        self.parameter_study = xarray.merge(
+            [self.parameter_study.reset_coords(), parameter_set_names_array]).set_coords(_set_coordinate_key)
 
     def _create_parameter_array(self, data, name):
         """Create the standard structure for a parameter_study array
 
         requires:
 
-        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
-        * ``self.parameter_names``: parameter names used as columns of parameter study
+        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._parameter_names``: parameter names used as columns of parameter study
 
         :param numpy.array data: 2D array of parameter study samples with shape (number of parameter sets, number of
             parameters).
@@ -332,7 +354,7 @@ class _ParameterGenerator(ABC):
         """
         array = xarray.DataArray(
             data,
-            coords=[self.parameter_set_hashes, self.parameter_names],
+            coords=[self._parameter_set_hashes, self._parameter_names],
             dims=["parameter_set_hash", "parameters"],
             name=name
         )
@@ -343,30 +365,26 @@ class _ParameterGenerator(ABC):
 
         requires:
 
-        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
-        * ``self.parameter_names``: parameter names used as columns of parameter study
-        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
+        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
+        * ``self._parameter_names``: parameter names used as columns of parameter study
+        * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
         optional:
 
-        * ``self.quantiles``: The quantiles associated with the paramter study sampling distributions
+        * ``self._quantiles``: The quantiles associated with the paramter study sampling distributions
 
         creates attribute:
 
         * ``self.parameter_study``
         """
-        samples = self._create_parameter_array(self.samples, name="samples")
+        samples = self._create_parameter_array(self._samples, name="samples")
         if hasattr(self, "quantiles"):
-            quantiles = self._create_parameter_array(self.quantiles, name="quantiles")
+            quantiles = self._create_parameter_array(self._quantiles, name="quantiles")
             self.parameter_study = xarray.concat([quantiles, samples],
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
-        parameter_set_names_array = self._create_parameter_set_names_array(
-            self.parameter_set_hashes,
-            self.parameter_set_names)
-        self.parameter_study = xarray.merge([self.parameter_study,
-                                             parameter_set_names_array]).set_coords(_set_coordinate_key)
+        self._merge_parameter_set_names_array()
 
     def _parameter_study_to_numpy(self, data_type):
         """Return the parameter study data as a 2D numpy array
@@ -387,11 +405,11 @@ class _ParameterGenerator(ABC):
         Preserve the previous parameter study set name to set contents associations by dropping the current study's set
         names during merge. Resets attributes:
 
-        * ``parameter_study``
-        * ``samples``
-        * ``quantiles``: if it exists
-        * ``parameter_set_hashes``
-        * ``parameter_set_names``
+        * ``self.parameter_study``
+        * ``self._samples``
+        * ``self._quantiles``: if it exists
+        * ``self._parameter_set_hashes``
+        * ``self._parameter_set_names``
         """
         # Favor the set names of the prior study. Leaves new set names as NaN.
         previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
@@ -400,31 +418,13 @@ class _ParameterGenerator(ABC):
         previous_parameter_study.close()
 
         # Recover parameter study numpy array(s) to match merged study
-        self.samples = self._parameter_study_to_numpy('samples')
+        self._samples = self._parameter_study_to_numpy('samples')
         if hasattr(self, "quantiles"):
-            self.quantiles = self._parameter_study_to_numpy('quantiles')
+            self._quantiles = self._parameter_study_to_numpy('quantiles')
 
         # Recalculate attributes with lengths matching the number of parameter sets
-        self.parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
-
-        # Hack in the complete set name coordinates
-        # TODO: figure out a cleaner solution
-        self._create_parameter_set_names()
-        new_set_names = set(self.parameter_set_names) - set(self.parameter_study.coords[_set_coordinate_key].values)
-        set_name_dict = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
-        nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
-        new_hash_sets = dict(zip(nan_hashes, new_set_names))
-        set_name_dict.update(new_hash_sets)
-        parameter_set_names_array = self._create_parameter_set_names_array(
-            list(set_name_dict.keys()),
-            list(set_name_dict.values()))
-
-        self.parameter_study = xarray.merge(
-            [self.parameter_study.reset_coords(),
-             parameter_set_names_array]).set_coords(_set_coordinate_key)
-
-        # Re-order the set names for consistency with samples array and hashes
-        self.parameter_set_names = list(self.parameter_study.coords[_set_coordinate_key].values)
+        self._parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
+        self._update_parameter_set_names()
 
 
 class CartesianProduct(_ParameterGenerator):
@@ -471,15 +471,8 @@ class CartesianProduct(_ParameterGenerator):
            parameter_1         (data_type, parameter_set_hash) object 1 1 2 2
            parameter_2         (data_type, parameter_set_hash) object 'a' 'b' 'a' 'b'
 
-    Attributes after class instantiation
-
-    * parameter_names: A list of parameter name strings
-
     Attributes after set generation
 
-    * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
-    * parameter_set_names: list of parameter set name strings
-    * samples: The 2D parameter samples. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
     """
 
@@ -488,15 +481,15 @@ class CartesianProduct(_ParameterGenerator):
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        self.parameter_names = list(self.parameter_schema.keys())
+        self._parameter_names = list(self.parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
-        for name in self.parameter_names:
+        for name in self._parameter_names:
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
 
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
-        self.samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
+        self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
@@ -571,15 +564,10 @@ class LatinHypercube(_ParameterGenerator):
 
     Attributes after class instantiation
 
-    * parameter_names: A list of parameter name strings
     * parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
 
     Attributes after set generation
 
-    * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
-    * parameter_set_names: list of parameter set name strings
-    * samples: The 2D parameter samples. Rows correspond to parameter set. Columns correspond to parameter names.
-    * quantiles: The 2D parameter quantiles. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
     """
 
@@ -593,7 +581,7 @@ class LatinHypercube(_ParameterGenerator):
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
         self._create_parameter_names()
-        for name in self.parameter_names:
+        for name in self._parameter_names:
             parameter_keys = self.parameter_schema[name].keys()
             parameter_definition = self.parameter_schema[name]
             if 'distribution' not in parameter_keys:
@@ -613,11 +601,11 @@ class LatinHypercube(_ParameterGenerator):
     def generate(self):
         """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study."""
         set_count = self.parameter_schema['num_simulations']
-        parameter_count = len(self.parameter_names)
-        self.quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
-        self.samples = numpy.zeros((set_count, parameter_count))
+        parameter_count = len(self._parameter_names)
+        self._quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
+        self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
-            self.samples[:, i] = distribution.ppf(self.quantiles[:, i])
+            self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
@@ -630,7 +618,7 @@ class LatinHypercube(_ParameterGenerator):
         :return: parameter_distributions
         :rtype: dict
         """
-        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self.parameter_names})
+        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self._parameter_names})
         parameter_distributions = {}
         for parameter, attributes in parameter_dictionary.items():
             distribution_name = attributes.pop('distribution')
@@ -642,7 +630,7 @@ class LatinHypercube(_ParameterGenerator):
 
     def _create_parameter_names(self):
         """Construct the Latin Hypercube parameter names"""
-        self.parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
 
 
 class CustomStudy(_ParameterGenerator):
@@ -693,15 +681,8 @@ class CustomStudy(_ParameterGenerator):
            prefix              (data_type, parameter_set_hash) object 'a' 'b'
            index               (data_type, parameter_set_hash) object 5 6
 
-    Attributes after class instantiation
-
-    * parameter_names: A list of parameter name strings
-
     Attributes after set generation
 
-    * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
-    * parameter_set_names: list of parameter set name strings
-    * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
     """
 
@@ -710,12 +691,12 @@ class CustomStudy(_ParameterGenerator):
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
         try:
-            self.parameter_names = self.parameter_schema['parameter_names']
+            self._parameter_names = self.parameter_schema['parameter_names']
         except KeyError:
             raise KeyError('parameter_schema must contain the key: parameter_names')
         if 'parameter_samples' not in self.parameter_schema:
             raise KeyError('parameter_schema must contain the key: parameter_samples')
-        if len(self.parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
+        if len(self._parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
             raise ValueError("The parameter samples must be an array of shape MxN, "
                              "where N is the number of parameters.")
         return
@@ -723,7 +704,7 @@ class CustomStudy(_ParameterGenerator):
     def generate(self):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study."""
-        self.samples = numpy.array(self.parameter_schema['parameter_samples'], dtype=object)
+        self._samples = numpy.array(self.parameter_schema['parameter_samples'], dtype=object)
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
