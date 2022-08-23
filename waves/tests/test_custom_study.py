@@ -69,7 +69,7 @@ class TestCustomStudy:
         generate_array = TestGenerate.samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
-        assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
+        assert list(TestGenerate.parameter_set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
         parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
@@ -104,7 +104,7 @@ class TestCustomStudy:
         for set_hash, parameter_set in TestMerge1.parameter_study.groupby(_hash_coordinate_key):
             assert parameter_set == TestMerge2.parameter_study.sel(parameter_set_hash=set_hash)
         # Self-consistency checks
-        assert TestMerge2.parameter_set_names == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
+        assert list(TestMerge2.parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
         assert TestMerge2.parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     generate_io = {

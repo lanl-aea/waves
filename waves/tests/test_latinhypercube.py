@@ -90,7 +90,7 @@ class TestLatinHypercube:
         assert samples_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
         assert quantiles_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
         # Verify that the parameter set name creation method was called
-        assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+        assert list(TestGenerate.parameter_set_names.values()) == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
