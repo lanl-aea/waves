@@ -353,6 +353,19 @@ class _ParameterGenerator(ABC):
         self.parameter_study = xarray.merge([self.parameter_study,
                                              parameter_set_names_array]).set_coords('parameter_sets')
 
+    def _parameter_study_to_numpy(self, data_type):
+        """Return the parameter study data as a 2D numpy array
+
+        :param str data_type: The data_type selection to return - samples or quantiles
+
+        :return: data
+        :rtype: numpy.array
+        """
+        data = []
+        for set_hash, data_row in self.parameter_study.sel(data_type=data_type).groupby('parameter_set_hash'):
+            data.append(data_row.squeeze().to_array().to_numpy())
+        return numpy.array(data, dtype=object)
+
     def _merge_parameter_studies(self):
         """Merge the current parameter study into a previous parameter study.
 
@@ -371,19 +384,10 @@ class _ParameterGenerator(ABC):
             [previous_parameter_study, self.parameter_study.drop_vars('parameter_sets')])
         previous_parameter_study.close()
 
-        # Recover samples numpy array to match merged study
-        # TODO: Move to dedicated function
-        merged_samples = []
-        for set_hash, samples in self.parameter_study.sel(data_type='samples').groupby('parameter_set_hash'):
-            merged_samples.append(samples.squeeze().to_array().to_numpy())
-        self.samples = numpy.array(merged_samples, dtype=object)
-
-        # Recover quantiles numpy array to match merged study
+        # Recover parameter study numpy array(s) to match merged study
+        self.samples = self._parameter_study_to_numpy('samples')
         if hasattr(self, "quantiles"):
-            merged_quantiles = []
-            for set_hash, quantiles in self.parameter_study.sel(data_type='quantiles').groupby('parameter_set_hash'):
-                merged_quantiles.append(quantiles.squeeze().to_array().to_numpy())
-            self.quantiles = numpy.array(merged_quantiles, dtype=object)
+            self.quantiles = self._parameter_study_to_numpy('quantiles')
 
         # Recalculate attributes with lengths matching the number of parameter sets
         self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
