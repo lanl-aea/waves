@@ -13,13 +13,14 @@ import yaml
 from waves import __version__
 from waves import parameter_generators
 
-#========================================================================================================== SETTINGS ===
+# ========================================================================================================= SETTINGS ===
 # Variables normally found in a project's root settings.py file(s)
 _program_name = pathlib.Path(__file__).stem
 cartesian_product_subcommand = 'cartesian_product'
 latin_hypercube_subcommand = 'latin_hypercube'
 
-#============================================================================================ COMMAND LINE INTERFACE ===
+
+# =========================================================================================== COMMAND LINE INTERFACE ===
 def get_parser(return_subparser_dictionary=False):
     """Get parser object for command line options
 
@@ -50,8 +51,8 @@ def get_parser(return_subparser_dictionary=False):
     output_file_group = parent_parser.add_mutually_exclusive_group()
     output_file_group.add_argument('-o', '--output-file-template',
                                    default=None, dest='OUTPUT_FILE_TEMPLATE',
-                                   help=f"Output file template. May contain pathseps for an absolute or relative path " \
-                                        f"template. May contain ``{parameter_generators.template_placeholder}`` " \
+                                   help=f"Output file template. May contain pathseps for an absolute or relative " \
+                                        f"path template. May contain ``{parameter_generators.template_placeholder}`` " \
                                         f"set number placeholder in the file basename but not in the path. " \
                                         f"If the placeholder is not found, it will be " \
                                         f"appended to the template string. (default: %(default)s)")
@@ -67,8 +68,12 @@ def get_parser(return_subparser_dictionary=False):
                                help="Output file type (default: %(default)s)")
     parent_parser.add_argument('-s', '--set-name-template',
                                default='parameter_set@number', dest='SET_NAME_TEMPLATE',
-                               help="Parameter set name template. Overridden by ``output_file_template``, if provided " \
-                                    "(default: %(default)s)")
+                               help="Parameter set name template. Overridden by ``output_file_template``, " \
+                                    "if provided (default: %(default)s)")
+    parent_parser.add_argument('-p', '--previous-parameter-study',
+                               default=None, dest='PREVIOUS_PARAMETER_STUDY',
+                               help="A relative or absolute file path to a previously created parameter study Xarray " \
+                                    "Dataset (default: %(default)s)")
     parent_parser.add_argument('--overwrite', action='store_true',
                                help=f"Overwrite existing output files (default: %(default)s)")
     parent_parser.add_argument('--dryrun', action='store_true',
@@ -104,6 +109,7 @@ def get_parser(return_subparser_dictionary=False):
     else:
         return main_parser
 
+
 # ============================================================================================= PARAMETER STUDY MAIN ===
 def main():
     """
@@ -130,20 +136,22 @@ def main():
     output_file = args.OUTPUT_FILE
     output_file_type = args.output_file_type
     set_name_template = args.SET_NAME_TEMPLATE
+    previous_parameter_study = args.PREVIOUS_PARAMETER_STUDY
     overwrite = args.overwrite
     dryrun = args.dryrun
     debug = args.debug
     write_meta = args.write_meta
 
     if debug:
-        print(f"subcommand           = {subcommand}")
-        print(f"input_file           = {input_file}")
-        print(f"output_file_template = {output_file_template}")
-        print(f"output_file          = {output_file}")
-        print(f"output_file_type     = {output_file_type}")
-        print(f"set_name_template    = {set_name_template}")
-        print(f"overwrite            = {overwrite}")
-        print(f"write_meta           = {write_meta}")
+        print(f"subcommand               = {subcommand}")
+        print(f"input_file               = {input_file}")
+        print(f"output_file_template     = {output_file_template}")
+        print(f"output_file              = {output_file}")
+        print(f"output_file_type         = {output_file_type}")
+        print(f"set_name_template        = {set_name_template}")
+        print(f"previous_parameter_study = {previous_parameter_study}")
+        print(f"overwrite                = {overwrite}")
+        print(f"write_meta               = {write_meta}")
         return 0
 
     # Read the input stream
@@ -163,13 +171,14 @@ def main():
             output_file=output_file,
             output_file_type=output_file_type,
             set_name_template=set_name_template,
+            previous_parameter_study=previous_parameter_study,
             overwrite=overwrite,
             dryrun=dryrun,
             debug=debug,
             write_meta=write_meta
         )
 
-    # Build the parameter study
+    # Build the parameter study.
     parameter_generator.generate()
     parameter_generator.write()
 

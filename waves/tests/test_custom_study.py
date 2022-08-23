@@ -4,10 +4,11 @@
 from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
 
-from waves.parameter_generators import CustomStudy
-
 import pytest
 import numpy
+
+from waves.parameter_generators import CustomStudy
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 
 class TestCustomStudy:
@@ -17,6 +18,10 @@ class TestCustomStudy:
         "good schema": (
             {'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
             does_not_raise()
+        ),
+        "not a dict": (
+            'not a dict',
+            pytest.raises(TypeError)
         ),
         "bad schema no names": (
             {'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
@@ -47,7 +52,8 @@ class TestCustomStudy:
     generate_io = {
         'one_parameter': ({'parameter_names': ['a'], 'parameter_samples': numpy.array([[1], [2.0]], dtype=object)},
                           numpy.array([[1], [2.0]], dtype=object)),
-        'two_parameter': ({'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
+        'two_parameter': ({'parameter_names': ['a', 'b'],
+                           'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
                           numpy.array(
                               [[1, 2.0],
                                [3, 4.5]], dtype=object))
@@ -66,8 +72,40 @@ class TestCustomStudy:
         assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
+        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
         assert numpy.all(parameter_set_names == expected_set_names)
+
+    merge_test = {
+        'new set':
+            ({'parameter_names': ['ints', 'floats', 'strings'],
+              'parameter_samples': numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)},
+             {'parameter_names': ['ints', 'floats', 'strings'],
+              'parameter_samples': numpy.array([[1, 10.1, 'a'], [3, 30.3, 'c'], [2, 20.2, 'b']], dtype=object)},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[1, 10.1, 'a'],
+                  [2, 20.2, 'b'],
+                  [3, 30.3, 'c']], dtype=object))
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('first_schema, second_schema, expected_array',
+                                 merge_test.values(),
+                             ids=merge_test.keys())
+    def test_merge(self, first_schema, second_schema, expected_array):
+        TestMerge1 = CustomStudy(first_schema)
+        TestMerge1.generate()
+        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
+            TestMerge2 = CustomStudy(second_schema, previous_parameter_study='dummy_string')
+            TestMerge2.generate()
+        generate_array = TestMerge2.samples
+        assert numpy.all(generate_array == expected_array)
+        # Check for consistent hash-parameter set relationships
+        for set_hash, parameter_set in TestMerge1.parameter_study.groupby(_hash_coordinate_key):
+            assert parameter_set == TestMerge2.parameter_study.sel(parameter_set_hash=set_hash)
+        # Self-consistency checks
+        assert TestMerge2.parameter_set_names == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
+        assert TestMerge2.parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     generate_io = {
         'one parameter yaml':

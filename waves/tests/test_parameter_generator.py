@@ -167,21 +167,57 @@ class TestParameterGenerator:
             stdout_write.assert_not_called()
             assert xarray_to_netcdf.call_count == files
 
+    set_hashes = {
+        'set1':
+            (numpy.array([[1, 10.1, 'a']], dtype=object), ['524c99353118939a452503456d3100e8']),
+        'set2':
+            (numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b'], [3, 30.3, 'c']], dtype=object),
+             ['524c99353118939a452503456d3100e8',
+              'b8797cbda6f68f71de15d10f6f901d5d',
+              'cff4a038d9980830bc4ea32145b26cf7'])
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('samples, expected_hashes',
+                                 set_hashes.values(),
+                             ids=set_hashes.keys())
+    def test_create_parameter_set_hashes(self, samples, expected_hashes):
+        HashesParameterGenerator = NoQuantilesGenerator({})
+        HashesParameterGenerator.samples = samples
+        HashesParameterGenerator._create_parameter_set_hashes()
+        assert HashesParameterGenerator.parameter_set_hashes == expected_hashes
+
+    @pytest.mark.unittest
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
-        SetNamesParameterGenerator = NoQuantilesGenerator({}, 'out')
-        SetNamesParameterGenerator._create_parameter_set_names(2)
+        SetNamesParameterGenerator = NoQuantilesGenerator({}, output_file_template='out')
+        SetNamesParameterGenerator.samples = numpy.zeros((2, 1))
+        SetNamesParameterGenerator._create_parameter_set_names()
         assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
+
+    @pytest.mark.unittest
+    def test_parameter_study_to_numpy(self):
+        """Test the self-consistency of the parameter study dataset construction and deconstruction"""
+        # Setup
+        DataParameterGenerator = NoQuantilesGenerator({})
+        DataParameterGenerator.parameter_names = ['ints', 'floats', 'strings']
+        DataParameterGenerator.samples = numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)
+        DataParameterGenerator._create_parameter_set_hashes()
+        DataParameterGenerator._create_parameter_set_names()
+        DataParameterGenerator._create_parameter_study()
+        # Test
+        returned_samples = DataParameterGenerator._parameter_study_to_numpy('samples')
+        assert numpy.all(returned_samples == DataParameterGenerator.samples)
 
 
 class NoQuantilesGenerator(_ParameterGenerator):
 
-    def validate(self):
+    def _validate(self):
         self.parameter_names = ['parameter_1']
 
     def generate(self, sets):
-        set_count = sets
         parameter_count = len(self.parameter_names)
-        self._create_parameter_set_names(set_count)
-        self.samples = numpy.zeros((set_count, parameter_count))
+        self.samples = numpy.zeros((sets, parameter_count))
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
         self._create_parameter_study()
