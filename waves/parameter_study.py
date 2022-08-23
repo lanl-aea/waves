@@ -13,13 +13,14 @@ import yaml
 from waves import __version__
 from waves import parameter_generators
 
-#========================================================================================================== SETTINGS ===
+# ========================================================================================================= SETTINGS ===
 # Variables normally found in a project's root settings.py file(s)
 _program_name = pathlib.Path(__file__).stem
 cartesian_product_subcommand = 'cartesian_product'
 latin_hypercube_subcommand = 'latin_hypercube'
 
-#============================================================================================ COMMAND LINE INTERFACE ===
+
+# =========================================================================================== COMMAND LINE INTERFACE ===
 def get_parser(return_subparser_dictionary=False):
     """Get parser object for command line options
 
@@ -107,6 +108,7 @@ def get_parser(return_subparser_dictionary=False):
         return subparser_dictionary
     else:
         return main_parser
+
 
 # ============================================================================================= PARAMETER STUDY MAIN ===
 def main():
