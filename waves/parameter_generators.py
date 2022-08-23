@@ -124,8 +124,8 @@ class _ParameterGenerator(ABC):
           should be used to preserve the original Python types.
         * ``self.parameter_set_hashes``: list of parameter set content hashes created by calling
           ``self._create_parameter_set_hashes`` after populating the ``self.samples`` parameter study values.
-        * ``self.parameter_set_names``: list of parameter set name strings created by calling
-          ``self._create_parameter_set_names`` after populating the ``self.samples`` parameter study values.
+        * ``self.parameter_set_names``: Dictionary mapping parameter set hash to parameter set name strings created by calling
+          ``self._create_parameter_set_names`` after populating ``self.parameter_set_hashes``.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
           ``self._create_parameter_study()`` after defining ``self.samples`` and the optional ``self.quantiles`` class
           attribute.
@@ -172,7 +172,8 @@ class _ParameterGenerator(ABC):
            parameter_2: a
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
-        parameter_set_files = [pathlib.Path(parameter_set_name) for parameter_set_name in self.parameter_set_names]
+        parameter_set_files = [pathlib.Path(set_name) for set_name in
+                               self.parameter_study.coords[_set_coordinate_key].values]
         if self.write_meta and self.provided_output_file_template:
             self._write_meta(parameter_set_files)
         if self.output_file_type == 'h5':
@@ -293,28 +294,25 @@ class _ParameterGenerator(ABC):
 
         requires:
 
-        * ``self.samples``: The parameter study samples. Rows are sets. Columns are parameters.
+        * ``self.parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
 
         creates attribute:
 
-        * ``self.parameter_set_names``: parameter set names identifying rows of parameter study
+        * ``self.parameter_set_names``: Dictionary mapping parameter set hash to parameter set name
         """
-        self.parameter_set_names = []
-        for number in range(self.samples.shape[0]):
+        self.parameter_set_names = {}
+        for number, set_hash in enumerate(self.parameter_set_hashes):
             template = self.set_name_template
-            self.parameter_set_names.append(template.substitute({'number': number}))
+            self.parameter_set_names[set_hash] = (template.substitute({'number': number}))
 
-    def _create_parameter_set_names_array(self, hashes, names):
+    def _create_parameter_set_names_array(self):
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
-
-        :param list hashes: list of parameter set hashes
-        :param list names: list of parameter set names ordered to match the parameter set hashes
 
         :return: parameter_set_names_array
         :rtype: xarray.DataArray
         """
-        return xarray.DataArray(names,
-               coords=[hashes],
+        return xarray.DataArray(list(self.parameter_set_names.values()),
+               coords=[list(parameter_set_names.keys())],
                dims=[_hash_coordinate_key],
                name=_set_coordinate_key)
 
@@ -362,9 +360,7 @@ class _ParameterGenerator(ABC):
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
-        parameter_set_names_array = self._create_parameter_set_names_array(
-            self.parameter_set_hashes,
-            self.parameter_set_names)
+        parameter_set_names_array = self._create_parameter_set_names_array()
         self.parameter_study = xarray.merge([self.parameter_study,
                                              parameter_set_names_array]).set_coords(_set_coordinate_key)
 
@@ -410,21 +406,16 @@ class _ParameterGenerator(ABC):
         # Hack in the complete set name coordinates
         # TODO: figure out a cleaner solution
         self._create_parameter_set_names()
-        new_set_names = set(self.parameter_set_names) - set(self.parameter_study.coords[_set_coordinate_key].values)
+        new_set_names = set(self.parameter_set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
         set_name_dict = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
         nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
         new_hash_sets = dict(zip(nan_hashes, new_set_names))
-        set_name_dict.update(new_hash_sets)
-        parameter_set_names_array = self._create_parameter_set_names_array(
-            list(set_name_dict.keys()),
-            list(set_name_dict.values()))
+        self.parameter_set_names.update(new_hash_sets)
+        parameter_set_names_array = self._create_parameter_set_names_array()
 
         self.parameter_study = xarray.merge(
             [self.parameter_study.reset_coords(),
              parameter_set_names_array]).set_coords(_set_coordinate_key)
-
-        # Re-order the set names for consistency with samples array and hashes
-        self.parameter_set_names = list(self.parameter_study.coords[_set_coordinate_key].values)
 
 
 class CartesianProduct(_ParameterGenerator):
@@ -478,7 +469,7 @@ class CartesianProduct(_ParameterGenerator):
     Attributes after set generation
 
     * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
-    * parameter_set_names: list of parameter set name strings
+    * parameter_set_names: Dictionary mapping parameter set has to parameter set name
     * samples: The 2D parameter samples. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
     """
@@ -577,7 +568,7 @@ class LatinHypercube(_ParameterGenerator):
     Attributes after set generation
 
     * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
-    * parameter_set_names: list of parameter set name strings
+    * parameter_set_names: Dictionary mapping parameter set has to parameter set name
     * samples: The 2D parameter samples. Rows correspond to parameter set. Columns correspond to parameter names.
     * quantiles: The 2D parameter quantiles. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
@@ -700,7 +691,7 @@ class CustomStudy(_ParameterGenerator):
     Attributes after set generation
 
     * parameter_set_hashes: parameter set content hashes identifying rows of parameter study
-    * parameter_set_names: list of parameter set name strings
+    * parameter_set_names: Dictionary mapping parameter set has to parameter set name
     * samples: The 2D parameter values. Rows correspond to parameter set. Columns correspond to parameter names.
     * parameter_study: The final parameter study XArray Dataset object
     """
