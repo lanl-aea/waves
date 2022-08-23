@@ -218,7 +218,9 @@ class NoQuantilesGenerator(_ParameterGenerator):
 
     def generate(self, sets):
         parameter_count = len(self.parameter_names)
-        self.samples = numpy.zeros((sets, parameter_count))
+        self.samples = numpy.ones((sets, parameter_count))
+        for row in range(sets):
+            self.samples[row, :] = self.samples[row, :]*row
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
