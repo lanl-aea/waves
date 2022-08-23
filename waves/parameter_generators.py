@@ -304,6 +304,20 @@ class _ParameterGenerator(ABC):
             template = self.set_name_template
             self.parameter_set_names.append(template.substitute({'number': number}))
 
+    def _create_parameter_set_names_array(self, hashes, names):
+        """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
+
+        :param list hashes: list of parameter set hashes
+        :param list names: list of parameter set names ordered to match the parameter set hashes
+
+        :return: parameter_set_names_array
+        :rtype: xarray.DataArray
+        """
+        return xarray.DataArray(names,
+               coords=[hashes],
+               dims=[_hash_coordinate_key],
+               name=_set_coordinate_key)
+
     def _create_parameter_array(self, data, name):
         """Create the standard structure for a parameter_study array
 
@@ -348,10 +362,9 @@ class _ParameterGenerator(ABC):
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
-        parameter_set_names_array = xarray.DataArray(self.parameter_set_names,
-                                                     coords=[self.parameter_set_hashes],
-                                                     dims=[_hash_coordinate_key],
-                                                     name=_set_coordinate_key)
+        parameter_set_names_array = self._create_parameter_set_names_array(
+            self.parameter_set_hashes,
+            self.parameter_set_names)
         self.parameter_study = xarray.merge([self.parameter_study,
                                              parameter_set_names_array]).set_coords(_set_coordinate_key)
 
@@ -402,15 +415,13 @@ class _ParameterGenerator(ABC):
         nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
         new_hash_sets = dict(zip(nan_hashes, new_set_names))
         set_name_dict.update(new_hash_sets)
-        updated_parameter_set_names_array = xarray.DataArray(
-            list(set_name_dict.values()),
-            coords=[list(set_name_dict.keys())],
-            dims=[_hash_coordinate_key],
-            name=_set_coordinate_key)
+        parameter_set_names_array = self._create_parameter_set_names_array(
+            list(set_name_dict.keys()),
+            list(set_name_dict.values()))
 
         self.parameter_study = xarray.merge(
             [self.parameter_study.reset_coords(),
-             updated_parameter_set_names_array]).set_coords(_set_coordinate_key)
+             parameter_set_names_array]).set_coords(_set_coordinate_key)
 
         # Re-order the set names for consistency with samples array and hashes
         self.parameter_set_names = list(self.parameter_study.coords[_set_coordinate_key].values)
