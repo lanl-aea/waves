@@ -70,7 +70,7 @@ class _ParameterGenerator(ABC):
             raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
                                "Please specify one or the other.")
 
-        if not self.output_file_type in allowable_output_file_types:
+        if self.output_file_type not in allowable_output_file_types:
             raise RuntimeError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
                                f"The 'output_file_type' must be one of {allowable_output_file_types}")
 
@@ -82,7 +82,7 @@ class _ParameterGenerator(ABC):
         if self.output_file_template:
             self.provided_output_file_template = True
             # Append the set number placeholder if missing
-            if not f'{template_placeholder}' in self.output_file_template:
+            if f'{template_placeholder}' not in self.output_file_template:
                 self.output_file_template = f"{self.output_file_template}{template_placeholder}"
             self.output_file_template = _AtSignTemplate(self.output_file_template)
             self.set_name_template = self.output_file_template
@@ -577,7 +577,7 @@ class LatinHypercube(_ParameterGenerator):
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        if not 'num_simulations' in self.parameter_schema.keys():
+        if 'num_simulations' not in self.parameter_schema.keys():
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
