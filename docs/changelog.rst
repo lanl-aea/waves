@@ -30,6 +30,8 @@ Documentation
 Internal Changes
 ================
 - Raise an exception for unsupported output file type strings (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
+- Store the parameter set names as a dictionary mapping the unique parameter set hash to the set name (:issue:`268`,
+  :merge:`268`). By `Kyle Brindley`_.
 
 ******************
 0.3.3 (2022-08-09)
