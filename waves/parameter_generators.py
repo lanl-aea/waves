@@ -287,7 +287,7 @@ class _ParameterGenerator(ABC):
             self._parameter_set_hashes.append(set_hash)
 
     def _create_parameter_set_names(self):
-        """Construct parameter set names from the set name template and number of parameter sets in ``self.sample``
+        """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
 
         Creates the class attribute ``self._parameter_set_names`` required to populate the ``generate()`` method's
         parameter study Xarray dataset object.
@@ -304,6 +304,24 @@ class _ParameterGenerator(ABC):
         for number, set_hash in enumerate(self._parameter_set_hashes):
             template = self.set_name_template
             self._parameter_set_names[set_hash] = (template.substitute({'number': number}))
+
+    def _update_parameter_set_names(self):
+        """Update the parameter set names after a parameter study dataset merge operation.
+
+        Resets attributes:
+
+        * ``self.parameter_study``
+        * ``self._parameter_set_names``
+        """
+        # TODO: figure out a cleaner solution that creates fewer intermediate objects
+        self._create_parameter_set_names()
+        new_set_names = set(self._parameter_set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
+        set_name_dict = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
+        nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
+        new_hash_sets = dict(zip(nan_hashes, new_set_names))
+        set_name_dict.update(new_hash_sets)
+        self._parameter_set_names = set_name_dict
+        self._merge_parameter_set_names_array()
 
     def _create_parameter_set_names_array(self):
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
@@ -387,11 +405,11 @@ class _ParameterGenerator(ABC):
         Preserve the previous parameter study set name to set contents associations by dropping the current study's set
         names during merge. Resets attributes:
 
-        * ``parameter_study``
-        * ``samples``
-        * ``quantiles``: if it exists
-        * ``parameter_set_hashes``
-        * ``parameter_set_names``
+        * ``self.parameter_study``
+        * ``self._samples``
+        * ``self._quantiles``: if it exists
+        * ``self._parameter_set_hashes``
+        * ``self._parameter_set_names``
         """
         # Favor the set names of the prior study. Leaves new set names as NaN.
         previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
@@ -406,17 +424,7 @@ class _ParameterGenerator(ABC):
 
         # Recalculate attributes with lengths matching the number of parameter sets
         self._parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
-
-        # Hack in the complete set name coordinates
-        # TODO: figure out a cleaner solution
-        self._create_parameter_set_names()
-        new_set_names = set(self._parameter_set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
-        set_name_dict = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
-        nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
-        new_hash_sets = dict(zip(nan_hashes, new_set_names))
-        set_name_dict.update(new_hash_sets)
-        self._parameter_set_names = set_name_dict
-        self._merge_parameter_set_names_array()
+        self._update_parameter_set_names()
 
 
 class CartesianProduct(_ParameterGenerator):
