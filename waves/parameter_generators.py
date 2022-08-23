@@ -14,7 +14,7 @@ from smt.sampling_methods import LHS
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
-#========================================================================================================== SETTINGS ===
+# ========================================================================================================= SETTINGS ===
 template_delimiter = '@'
 
 
