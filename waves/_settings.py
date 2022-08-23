@@ -10,8 +10,10 @@ _abaqus_environment_extension = f".{_abaqus_environment_file}"
 _abaqus_solver_common_suffixes = [".odb", ".dat", ".msg", ".com", ".prt"]
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
+_hash_coordinate_key = "parameter_set_hash"
+_set_coordinate_key = "parameter_sets"
 # When built with ``noarch: python`` in recipe/meta.yaml, WAVES installs to:
 #   $CONDA_PREFIX/lib/python3.8/site-packages/WAVES-*-py3.?.egg
 # but documentation installs at
 #   $CONDA_PREFIX/lib/python3.8/site-packages/waves/docs
-_docs_directory = _project_root_abspath.parent.parent / 'waves/docs'
+_docs_directory = _project_root_abspath.parent.parent / "waves/docs"

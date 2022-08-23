@@ -12,6 +12,8 @@ import xarray
 import scipy.stats
 from smt.sampling_methods import LHS
 
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
+
 #========================================================================================================== SETTINGS ===
 template_delimiter = '@'
 
@@ -191,7 +193,7 @@ class _ParameterGenerator(ABC):
             else:
                 self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
         else:
-            for parameter_set_file, parameter_set in self.parameter_study.groupby('parameter_sets'):
+            for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
                 parameter_set_file = pathlib.Path(parameter_set_file)
                 # If no output file template is provided, print to stdout
                 if not self.provided_output_file_template:
@@ -215,7 +217,7 @@ class _ParameterGenerator(ABC):
         """
         text_list = []
         # Construct the output text
-        for parameter_set_file, parameter_set in self.parameter_study.groupby('parameter_sets'):
+        for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
             text = yaml.safe_dump(
                 parameter_set.squeeze().to_array().to_series().to_dict()
             )
@@ -349,9 +351,9 @@ class _ParameterGenerator(ABC):
         parameter_set_names_array = xarray.DataArray(self.parameter_set_names,
                                                      coords=[self.parameter_set_hashes],
                                                      dims=['parameter_set_hash'],
-                                                     name='parameter_sets')
+                                                     name=_set_coordinate_key)
         self.parameter_study = xarray.merge([self.parameter_study,
-                                             parameter_set_names_array]).set_coords('parameter_sets')
+                                             parameter_set_names_array]).set_coords(_set_coordinate_key)
 
     def _parameter_study_to_numpy(self, data_type):
         """Return the parameter study data as a 2D numpy array
@@ -381,7 +383,7 @@ class _ParameterGenerator(ABC):
         # Favor the set names of the prior study. Leaves new set names as NaN.
         previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
         self.parameter_study = xarray.merge(
-            [previous_parameter_study, self.parameter_study.drop_vars('parameter_sets')])
+            [previous_parameter_study, self.parameter_study.drop_vars(_set_coordinate_key)])
         previous_parameter_study.close()
 
         # Recover parameter study numpy array(s) to match merged study
@@ -395,8 +397,8 @@ class _ParameterGenerator(ABC):
         # Hack in the complete set name coordinates
         # TODO: figure out a cleaner solution
         self._create_parameter_set_names()
-        new_set_names = set(self.parameter_set_names) - set(self.parameter_study.coords['parameter_sets'].values)
-        set_name_dict = self.parameter_study['parameter_sets'].squeeze().to_series().to_dict()
+        new_set_names = set(self.parameter_set_names) - set(self.parameter_study.coords[_set_coordinate_key].values)
+        set_name_dict = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
         nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
         new_hash_sets = dict(zip(nan_hashes, new_set_names))
         set_name_dict.update(new_hash_sets)
@@ -404,14 +406,14 @@ class _ParameterGenerator(ABC):
             list(set_name_dict.values()),
             coords=[list(set_name_dict.keys())],
             dims=['parameter_set_hash'],
-            name='parameter_sets')
+            name=_set_coordinate_key)
 
         self.parameter_study = xarray.merge(
             [self.parameter_study.reset_coords(),
-             updated_parameter_set_names_array]).set_coords('parameter_sets')
+             updated_parameter_set_names_array]).set_coords(_set_coordinate_key)
 
         # Re-order the set names for consistency with samples array and hashes
-        self.parameter_set_names = list(self.parameter_study.coords['parameter_sets'].values)
+        self.parameter_set_names = list(self.parameter_study.coords[_set_coordinate_key].values)
 
 
 class CartesianProduct(_ParameterGenerator):
