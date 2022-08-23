@@ -396,8 +396,7 @@ class _ParameterGenerator(ABC):
         # Hack in the complete set name coordinates
         # TODO: figure out a cleaner solution
         new_set_names = set(self.parameter_set_names) - set(self.parameter_study.coords['parameter_sets'].values)
-        set_name_dict = self.parameter_study.reset_coords(
-            names=['parameter_sets'])['parameter_sets'].to_series().to_dict()
+        set_name_dict = self.parameter_study['parameter_sets'].squeeze().to_series().to_dict()
         nan_dict = {key: value for key, value in set_name_dict.items() if not isinstance(value, str)}
         new_hash_sets = {key: set_name for key, set_name in zip(nan_dict.keys(), new_set_names)}
         set_name_dict.update(new_hash_sets)
