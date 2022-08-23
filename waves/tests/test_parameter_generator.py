@@ -187,6 +187,7 @@ class TestParameterGenerator:
         HashesParameterGenerator._create_parameter_set_hashes()
         assert HashesParameterGenerator.parameter_set_hashes == expected_hashes
 
+    @pytest.mark.unittest
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
         SetNamesParameterGenerator = NoQuantilesGenerator({}, output_file_template='out')
@@ -194,6 +195,7 @@ class TestParameterGenerator:
         SetNamesParameterGenerator._create_parameter_set_names()
         assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
 
+    @pytest.mark.unittest
     def test_parameter_study_to_numpy(self):
         """Test the self-consistency of the parameter study dataset construction and deconstruction"""
         # Setup
