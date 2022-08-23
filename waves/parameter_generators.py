@@ -705,7 +705,8 @@ class CustomStudy(_ParameterGenerator):
         if 'parameter_samples' not in self.parameter_schema:
             raise KeyError('parameter_schema must contain the key: parameter_samples')
         if len(self.parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
-            raise ValueError('The parameter samples must be an array of shape MxN, where N is the number of parameters.')
+            raise ValueError("The parameter samples must be an array of shape MxN, "
+                             "where N is the number of parameters.")
         return
 
     def generate(self):
