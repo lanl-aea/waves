@@ -391,14 +391,14 @@ class _ParameterGenerator(ABC):
 
         # Recalculate attributes with lengths matching the number of parameter sets
         self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
-        self._create_parameter_set_names()
 
         # Hack in the complete set name coordinates
         # TODO: figure out a cleaner solution
+        self._create_parameter_set_names()
         new_set_names = set(self.parameter_set_names) - set(self.parameter_study.coords['parameter_sets'].values)
         set_name_dict = self.parameter_study['parameter_sets'].squeeze().to_series().to_dict()
-        nan_dict = {key: value for key, value in set_name_dict.items() if not isinstance(value, str)}
-        new_hash_sets = {key: set_name for key, set_name in zip(nan_dict.keys(), new_set_names)}
+        nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
+        new_hash_sets = dict(zip(nan_hashes, new_set_names))
         set_name_dict.update(new_hash_sets)
         updated_parameter_set_names_array = xarray.DataArray(
             list(set_name_dict.values()),
