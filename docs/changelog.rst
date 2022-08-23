@@ -5,8 +5,42 @@ Changelog
 #########
 
 ******************
-0.3.4 (unreleased)
+0.3.5 (unreleased)
 ******************
+
+******************
+0.3.4 (2022-08-23)
+******************
+
+Breaking changes
+================
+- Remove the intermediate attributes used to form the parameter study Xarray Dataset from the external API
+  (:issue:`268`, :merge:`268`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Fix parameter set dimensions in tutorial set iteration usage for parameter studies with more than 10 sets
+  (:issue:`258`, :merge:`260`). By `Kyle Brindley`_.
+- Fix odb_extract to properly parse and store the first data value in the field outputs
+  (:issue:`259`, :merge:`261`). By `Prabhu Khalsa`_.
+
+New Features
+============
+- Add set name template option to the parameter generators and parameter study interfaces. Allow the set name template
+  to be changed when writing parameter sets to STDOUT or a single file. (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
+- Add the ability to merge or expand parameter studies without re-building all previously executed SCons parameter sets.
+  Feature functions for all parameter generators and the CLI (:issue:`224`, :merge:`266`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Separate the parameter study output file template from the set name directories in the WAVES-EABM tutorials
+  (:issue:`264`, :merge:`265`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Raise an exception for unsupported output file type strings (:issue:`253`, :merge:`264`). By `Kyle Brindley`_.
+- Store the parameter set names as a dictionary mapping the unique parameter set hash to the set name (:issue:`268`,
+  :merge:`268`). By `Kyle Brindley`_.
 
 ******************
 0.3.3 (2022-08-09)

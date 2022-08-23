@@ -1733,7 +1733,7 @@ class OdbReportFileParser(AbaqusFileParser):
             headers[i] = header  # Need to store stripped header, without spaces or line breaks
         value_headers = headers[-number_of_data_values:]  # Storing the names of the headers that have data
         line = f.readline()  # Blank line
-        line = f.readline()  # First line of data
+        line = 'Ready for first line of data'
 
         while line != '\n' and line != "":
             value = dict()

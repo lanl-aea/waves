@@ -22,6 +22,40 @@ class TestParameterGenerator:
             finally:
                 pass
 
+    def test_output_file_type(self):
+        with pytest.raises(RuntimeError):
+            try:
+                OutputTypeError = NoQuantilesGenerator({}, output_file_type='notsupported')
+            finally:
+                pass
+
+    templates = {      #schema, file_template, set_template,          expected
+        'no template':   (    {},        None,         None, ['parameter_set0']),
+        'file template': (    {},       'out',         None,           ['out0']),
+        'file template': (    {},        None,        'out',           ['out0']),
+        'file template': (    {},       'out', 'overridden',           ['out0'])
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('schema, file_template, set_template, expected',
+                                 templates.values(),
+                             ids=templates.keys())
+    def test_set_names(self, schema, file_template, set_template, expected):
+        """Check the generated parameter set names against template arguments
+
+        :param str schema: placeholder string standing in for the schema read from an input file
+        :param str file_template: user supplied string to be used as a template for output file names
+        :param str set_template: user supplied string to be used as a template for parameter names
+        :param list expected: list of expected parameter name strings
+        """
+        if not set_template:
+            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template)
+        else:
+            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template,
+                                                     set_name_template=set_template)
+        TemplateGenerator.generate(1)
+        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+
     init_write_stdout = {# schema, template, overwrite, dryrun, debug,         is_file,  sets, stdout_calls
         'no-template-1': (     {},     None,     False,  False, False,          [False],    1,            1),
         'no-template-2': (     {},     None,      True,  False, False,          [False],    1,            1),
@@ -133,21 +167,60 @@ class TestParameterGenerator:
             stdout_write.assert_not_called()
             assert xarray_to_netcdf.call_count == files
 
+    set_hashes = {
+        'set1':
+            (numpy.array([[1, 10.1, 'a']], dtype=object), ['524c99353118939a452503456d3100e8']),
+        'set2':
+            (numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b'], [3, 30.3, 'c']], dtype=object),
+             ['524c99353118939a452503456d3100e8',
+              'b8797cbda6f68f71de15d10f6f901d5d',
+              'cff4a038d9980830bc4ea32145b26cf7'])
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('samples, expected_hashes',
+                                 set_hashes.values(),
+                             ids=set_hashes.keys())
+    def test_create_parameter_set_hashes(self, samples, expected_hashes):
+        HashesParameterGenerator = NoQuantilesGenerator({})
+        HashesParameterGenerator._samples = samples
+        HashesParameterGenerator._create_parameter_set_hashes()
+        assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
+
+    @pytest.mark.unittest
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
-        SetNamesParameterGenerator = NoQuantilesGenerator({}, 'out')
-        SetNamesParameterGenerator._create_parameter_set_names(2)
-        assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
+        SetNamesParameterGenerator = NoQuantilesGenerator({}, output_file_template='out')
+        SetNamesParameterGenerator._samples = numpy.array([[1], [2]])
+        SetNamesParameterGenerator._create_parameter_set_hashes()
+        SetNamesParameterGenerator._create_parameter_set_names()
+        assert list(SetNamesParameterGenerator._parameter_set_names.values()) == ['out0', 'out1']
+
+    @pytest.mark.unittest
+    def test_parameter_study_to_numpy(self):
+        """Test the self-consistency of the parameter study dataset construction and deconstruction"""
+        # Setup
+        DataParameterGenerator = NoQuantilesGenerator({})
+        DataParameterGenerator._parameter_names = ['ints', 'floats', 'strings']
+        DataParameterGenerator._samples = numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)
+        DataParameterGenerator._create_parameter_set_hashes()
+        DataParameterGenerator._create_parameter_set_names()
+        DataParameterGenerator._create_parameter_study()
+        # Test
+        returned_samples = DataParameterGenerator._parameter_study_to_numpy('samples')
+        assert numpy.all(returned_samples == DataParameterGenerator._samples)
 
 
 class NoQuantilesGenerator(_ParameterGenerator):
 
-    def validate(self):
-        self.parameter_names = ['parameter_1']
+    def _validate(self):
+        self._parameter_names = ['parameter_1']
 
     def generate(self, sets):
-        set_count = sets
-        parameter_count = len(self.parameter_names)
-        self._create_parameter_set_names(set_count)
-        self.samples = numpy.zeros((set_count, parameter_count))
+        parameter_count = len(self._parameter_names)
+        self._samples = numpy.ones((sets, parameter_count))
+        for row in range(sets):
+            self._samples[row, :] = self._samples[row, :]*row
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
         self._create_parameter_study()

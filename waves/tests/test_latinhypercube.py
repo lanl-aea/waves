@@ -4,10 +4,12 @@
 from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
-from waves.parameter_generators import LatinHypercube
-
 import pytest
 import numpy
+
+from waves.parameter_generators import LatinHypercube
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
+
 
 class TestLatinHypercube:
     """Class for testing LatinHypercube parameter study generator class"""
@@ -16,6 +18,10 @@ class TestLatinHypercube:
         "good schema": (
             {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
             does_not_raise()
+        ),
+        "not a dict": (
+            'not a dict',
+            pytest.raises(TypeError)
         ),
         "missing num_simulation": (
             {},
@@ -79,15 +85,15 @@ class TestLatinHypercube:
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = LatinHypercube(parameter_schema)
         TestGenerate.generate()
-        samples_array = TestGenerate.samples
-        quantiles_array = TestGenerate.quantiles
+        samples_array = TestGenerate._samples
+        quantiles_array = TestGenerate._quantiles
         assert samples_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
         assert quantiles_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
         # Verify that the parameter set name creation method was called
-        assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+        assert list(TestGenerate._parameter_set_names.values()) == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
-        parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
+        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
         assert numpy.all(parameter_set_names == expected_set_names)
 
     @pytest.mark.unittest
@@ -96,5 +102,6 @@ class TestLatinHypercube:
                              ids=generate_input.keys())
     def test_generate_parameter_distributions(self, parameter_schema):
         TestDistributions = LatinHypercube(parameter_schema)
-        assert TestDistributions.parameter_names == list(TestDistributions.parameter_distributions.keys())
+        assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
         # TODO: More rigorous scipy.stats object inspection to test object construction
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/261

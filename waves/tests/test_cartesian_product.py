@@ -4,10 +4,11 @@
 from unittest.mock import patch, call, mock_open
 from contextlib import nullcontext as does_not_raise
 
-from waves.parameter_generators import CartesianProduct
-
 import pytest
 import numpy
+
+from waves.parameter_generators import CartesianProduct
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 class TestCartesianProduct:
     """Class for testing CartesianProduct parameter study generator class"""
@@ -16,6 +17,10 @@ class TestCartesianProduct:
         "good schema": (
             {'parameter_1': [1], 'parameter_2': (2,) , 'parameter_3': set([3, 4])},
             does_not_raise()
+        ),
+        "not a dict": (
+            'not a dict',
+            pytest.raises(TypeError)
         ),
         "bad schema int": (
             {'parameter_1': 1},
@@ -67,14 +72,45 @@ class TestCartesianProduct:
     def test_generate(self, parameter_schema, expected_array):
         TestGenerate = CartesianProduct(parameter_schema)
         TestGenerate.generate()
-        generate_array = TestGenerate.samples
+        generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
-        assert TestGenerate.parameter_set_names == [f"parameter_set{num}" for num in range(len(expected_array))]
+        assert list(TestGenerate._parameter_set_names.values()) == [f"parameter_set{num}" for num in range(len(expected_array))]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(len(expected_array))]
-        parameter_set_names = list(TestGenerate.parameter_study['parameter_sets'])
+        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
         assert numpy.all(parameter_set_names == expected_set_names)
+
+    merge_test = {
+        'new set':
+            ({'parameter_1': [1, 2], 'parameter_2': [3.0], 'parameter_3': ['a']},
+             {'parameter_1': [1, 2], 'parameter_2': [3.0, 4.0], 'parameter_3': ['a']},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[2, 3.0, "a"],
+                  [1, 4.0, "a"],
+                  [2, 4.0, "a"],
+                  [1, 3.0, "a"]], dtype=object)),
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('first_schema, second_schema, expected_array',
+                                 merge_test.values(),
+                             ids=merge_test.keys())
+    def test_merge(self, first_schema, second_schema, expected_array):
+        TestMerge1 = CartesianProduct(first_schema)
+        TestMerge1.generate()
+        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
+            TestMerge2 = CartesianProduct(second_schema, previous_parameter_study='dummy_string')
+            TestMerge2.generate()
+        generate_array = TestMerge2._samples
+        assert numpy.all(generate_array == expected_array)
+        # Check for consistent hash-parameter set relationships
+        for set_hash, parameter_set in TestMerge1.parameter_study.groupby(_hash_coordinate_key):
+            assert parameter_set == TestMerge2.parameter_study.sel(parameter_set_hash=set_hash)
+        # Self-consistency checks
+        assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
+        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
     generate_io = {
         'one parameter yaml':
@@ -126,10 +162,12 @@ class TestCartesianProduct:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls',
+    @pytest.mark.parametrize('parameter_schema, output_file_template, output_file, output_type, file_count, ' \
+                             'expected_calls',
                                  generate_io.values(),
                              ids=generate_io.keys())
-    def test_write_yaml(self, parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls):
+    def test_write_yaml(self, parameter_schema, output_file_template, output_file, output_type, file_count,
+                        expected_calls):
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
