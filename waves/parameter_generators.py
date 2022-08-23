@@ -410,7 +410,8 @@ class _ParameterGenerator(ABC):
         set_name_dict = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
         nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
         new_hash_sets = dict(zip(nan_hashes, new_set_names))
-        self.parameter_set_names.update(new_hash_sets)
+        set_name_dict.update(new_hash_sets)
+        self.parameter_set_names = set_name_dict
         parameter_set_names_array = self._create_parameter_set_names_array()
 
         self.parameter_study = xarray.merge(
