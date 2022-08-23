@@ -54,7 +54,7 @@ class TestParameterGenerator:
             TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template,
                                                      set_name_template=set_template)
         TemplateGenerator.generate(1)
-        assert TemplateGenerator.parameter_set_names == expected
+        assert list(TemplateGenerator.parameter_set_names.values()) == expected
 
     init_write_stdout = {# schema, template, overwrite, dryrun, debug,         is_file,  sets, stdout_calls
         'no-template-1': (     {},     None,     False,  False, False,          [False],    1,            1),
@@ -191,9 +191,10 @@ class TestParameterGenerator:
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
         SetNamesParameterGenerator = NoQuantilesGenerator({}, output_file_template='out')
-        SetNamesParameterGenerator.samples = numpy.zeros((2, 1))
+        SetNamesParameterGenerator.samples = numpy.array([[1], [2]])
+        SetNamesParameterGenerator._create_parameter_set_hashes()
         SetNamesParameterGenerator._create_parameter_set_names()
-        assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
+        assert list(SetNamesParameterGenerator.parameter_set_names.values()) == ['out0', 'out1']
 
     @pytest.mark.unittest
     def test_parameter_study_to_numpy(self):
