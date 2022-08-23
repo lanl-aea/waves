@@ -8,6 +8,11 @@ Changelog
 0.3.5 (unreleased)
 ******************
 
+Documentation
+=============
+- Fix the type hint for the ``previous_parameter_study`` of the paramter generators' API (:merge:`271`). By `Kyle
+  Brindley`_.
+
 ******************
 0.3.4 (2022-08-23)
 ******************
