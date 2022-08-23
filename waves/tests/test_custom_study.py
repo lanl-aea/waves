@@ -99,6 +99,9 @@ class TestCustomStudy:
             TestMerge2.generate()
         generate_array = TestMerge2.samples
         assert numpy.all(generate_array == expected_array)
+        # Check for consistent hash-parameter set relationships
+        for set_hash, parameter_set in TestMerge1.parameter_study.groupby('parameter_set_hash'):
+            assert parameter_set == TestMerge2.parameter_study.sel(parameter_set_hash=set_hash)
         # Self-consistency checks
         assert TestMerge2.parameter_set_names == TestMerge2.parameter_study['parameter_sets'].values.tolist()
         assert TestMerge2.parameter_set_hashes == TestMerge2.parameter_study['parameter_set_hash'].values.tolist()
