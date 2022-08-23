@@ -316,6 +316,12 @@ class _ParameterGenerator(ABC):
                dims=[_hash_coordinate_key],
                name=_set_coordinate_key)
 
+    def _merge_parameter_set_names_array(self):
+        """Merge the parameter set names into the parameter study dataset"""
+        parameter_set_names_array = self._create_parameter_set_names_array()
+        self.parameter_study = xarray.merge(
+            [self.parameter_study, parameter_set_names_array]).set_coords(_set_coordinate_key)
+
     def _create_parameter_array(self, data, name):
         """Create the standard structure for a parameter_study array
 
@@ -360,9 +366,7 @@ class _ParameterGenerator(ABC):
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
-        parameter_set_names_array = self._create_parameter_set_names_array()
-        self.parameter_study = xarray.merge([self.parameter_study,
-                                             parameter_set_names_array]).set_coords(_set_coordinate_key)
+        self._merge_parameter_set_names_array()
 
     def _parameter_study_to_numpy(self, data_type):
         """Return the parameter study data as a 2D numpy array
@@ -412,11 +416,7 @@ class _ParameterGenerator(ABC):
         new_hash_sets = dict(zip(nan_hashes, new_set_names))
         set_name_dict.update(new_hash_sets)
         self._parameter_set_names = set_name_dict
-        parameter_set_names_array = self._create_parameter_set_names_array()
-
-        self.parameter_study = xarray.merge(
-            [self.parameter_study.reset_coords(),
-             parameter_set_names_array]).set_coords(_set_coordinate_key)
+        self._merge_parameter_set_names_array()
 
 
 class CartesianProduct(_ParameterGenerator):
