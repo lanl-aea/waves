@@ -317,7 +317,7 @@ class _ParameterGenerator(ABC):
                name=_set_coordinate_key)
 
     def _merge_parameter_set_names_array(self):
-        """Merge the parameter set names into the parameter study dataset"""
+        """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
         parameter_set_names_array = self._create_parameter_set_names_array()
         self.parameter_study = xarray.merge(
             [self.parameter_study.reset_coords(), parameter_set_names_array]).set_coords(_set_coordinate_key)
