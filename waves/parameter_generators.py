@@ -320,7 +320,7 @@ class _ParameterGenerator(ABC):
         """Merge the parameter set names into the parameter study dataset"""
         parameter_set_names_array = self._create_parameter_set_names_array()
         self.parameter_study = xarray.merge(
-            [self.parameter_study, parameter_set_names_array]).set_coords(_set_coordinate_key)
+            [self.parameter_study.reset_coords(), parameter_set_names_array]).set_coords(_set_coordinate_key)
 
     def _create_parameter_array(self, data, name):
         """Create the standard structure for a parameter_study array
