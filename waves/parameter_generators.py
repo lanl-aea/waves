@@ -350,7 +350,7 @@ class _ParameterGenerator(ABC):
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
         parameter_set_names_array = xarray.DataArray(self.parameter_set_names,
                                                      coords=[self.parameter_set_hashes],
-                                                     dims=['parameter_set_hash'],
+                                                     dims=[_hash_coordinate_key],
                                                      name=_set_coordinate_key)
         self.parameter_study = xarray.merge([self.parameter_study,
                                              parameter_set_names_array]).set_coords(_set_coordinate_key)
@@ -364,7 +364,7 @@ class _ParameterGenerator(ABC):
         :rtype: numpy.array
         """
         data = []
-        for set_hash, data_row in self.parameter_study.sel(data_type=data_type).groupby('parameter_set_hash'):
+        for set_hash, data_row in self.parameter_study.sel(data_type=data_type).groupby(_hash_coordinate_key):
             data.append(data_row.squeeze().to_array().to_numpy())
         return numpy.array(data, dtype=object)
 
@@ -392,7 +392,7 @@ class _ParameterGenerator(ABC):
             self.quantiles = self._parameter_study_to_numpy('quantiles')
 
         # Recalculate attributes with lengths matching the number of parameter sets
-        self.parameter_set_hashes = list(self.parameter_study.coords['parameter_set_hash'].values)
+        self.parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
 
         # Hack in the complete set name coordinates
         # TODO: figure out a cleaner solution
@@ -405,7 +405,7 @@ class _ParameterGenerator(ABC):
         updated_parameter_set_names_array = xarray.DataArray(
             list(set_name_dict.values()),
             coords=[list(set_name_dict.keys())],
-            dims=['parameter_set_hash'],
+            dims=[_hash_coordinate_key],
             name=_set_coordinate_key)
 
         self.parameter_study = xarray.merge(
