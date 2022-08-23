@@ -194,6 +194,19 @@ class TestParameterGenerator:
         SetNamesParameterGenerator._create_parameter_set_names()
         assert SetNamesParameterGenerator.parameter_set_names == ['out0', 'out1']
 
+    def test_parameter_study_to_numpy(self):
+        """Test the self-consistency of the parameter study dataset construction and deconstruction"""
+        # Setup
+        DataParameterGenerator = NoQuantilesGenerator({})
+        DataParameterGenerator.parameter_names = ['ints', 'floats', 'strings']
+        DataParameterGenerator.samples = numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)
+        DataParameterGenerator._create_parameter_set_hashes()
+        DataParameterGenerator._create_parameter_set_names()
+        DataParameterGenerator._create_parameter_study()
+        # Test
+        returned_samples = DataParameterGenerator._parameter_study_to_numpy('samples')
+        assert numpy.all(returned_samples == DataParameterGenerator.samples)
+
 
 class NoQuantilesGenerator(_ParameterGenerator):
 
