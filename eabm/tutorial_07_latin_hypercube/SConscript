@@ -19,11 +19,9 @@ python_source_dir = env['python_source_dir']
 python_source_abspath = project_dir / python_source_dir
 
 # Simulation variables
-# TODO: Find a way to write the parameter study file to the build directory without constructing the build directory
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/269
-parent_directory = Dir('.').srcnode().name
+build_directory = pathlib.Path(Dir('.').abspath)
 output_file_type = "h5"
-parameter_study_file = pathlib.Path(f"{env['variant_dir_base']}/{parent_directory}/parameter_study.{output_file_type}")
+parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
 model = "single_element"
 simulation_constants = {
