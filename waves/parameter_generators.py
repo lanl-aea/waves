@@ -10,7 +10,7 @@ import yaml
 import numpy
 import xarray
 import scipy.stats
-from smt.sampling_methods import LHS
+import pyDOE2
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
@@ -601,17 +601,18 @@ class LatinHypercube(_ParameterGenerator):
     def generate(self, lhs_kwargs=None):
         """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
 
-        :param dict lhs_kwargs: Keyword arguments for the ``smt.sampling_methods.LHS`` Latin Hypercube sampling method.
-            ``xlimits`` is internally managed and will be overwritten as ``[0, 1]`` for every parameter.
+        :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin Hypercube sampling method.
+            ``samples`` is internally managed and will be overwritten to match ``num_simulations`` from the parameter
+            schema.
         """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
-        default_kwargs = {'xlimits': numpy.repeat([[0, 1]], parameter_count, axis=0)}
+        default_kwargs = {'samples': set_count}
         if lhs_kwargs:
             lhs_kwargs.update(default_kwargs)
         else:
             lhs_kwargs = default_kwargs
-        self._quantiles = LHS(**lhs_kwargs)(set_count)
+        self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **lhs_kwargs)
         self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
             self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
