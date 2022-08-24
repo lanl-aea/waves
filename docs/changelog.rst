@@ -13,6 +13,14 @@ Documentation
 - Fix the type hint for the ``previous_parameter_study`` of the paramter generators' API (:merge:`271`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- More rigorous Latin Hypercube parameter study unit tests (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Add keyword argument pass through to Latin Hypercube generation (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
+
 ******************
 0.3.4 (2022-08-23)
 ******************
