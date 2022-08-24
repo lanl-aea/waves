@@ -12,6 +12,13 @@ Documentation
 =============
 - Fix the type hint for the ``previous_parameter_study`` of the paramter generators' API (:merge:`271`). By `Kyle
   Brindley`_.
+- Add the parameter study extension feature to the parameter study tutorials (:issue:`267`, :merge:`273`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Use the parameter study extension feature in the ``previous_parameter_study`` interface of the parameter generators
+  (:issue:`267`, :merge:`273`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
