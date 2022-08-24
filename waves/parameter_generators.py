@@ -602,8 +602,8 @@ class LatinHypercube(_ParameterGenerator):
         """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
 
         :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin Hypercube sampling method.
-            ``samples`` is internally managed and will be overwritten to match ``num_simulations`` from the parameter
-            schema.
+            The ``samples`` keyword argument is internally managed and will be overwritten to match ``num_simulations``
+            from the parameter schema.
         """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
