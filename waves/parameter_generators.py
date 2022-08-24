@@ -192,6 +192,7 @@ class _ParameterGenerator(ABC):
             if self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
             else:
+                self.output_file.parent.mkdir(parents=True, exist_ok=True)
                 self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
         else:
             for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
