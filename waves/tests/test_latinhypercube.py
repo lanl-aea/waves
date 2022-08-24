@@ -6,6 +6,7 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
+import scipy.stats
 
 from waves.parameter_generators import LatinHypercube
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
@@ -63,6 +64,8 @@ class TestLatinHypercube:
             finally:
                 pass
 
+    generate_input_interface = "parameter_schema, random_state, expected_samples, expected_quantiles, " \
+                               "expected_scipy_kwds"
     generate_input = {
         "good schema 5x2": (
             {'num_simulations': 5,
@@ -78,14 +81,17 @@ class TestLatinHypercube:
                          [0.5, 0.5],
                          [0.7, 0.1],
                          [0.3, 0.7],
-                         [0.9, 0.3]])
+                         [0.9, 0.3]]),
+            [{"loc":  50, "scale": 1},
+             {"loc": -50, "scale": 1}]
         ),
         "good schema 2x1": (
             {'num_simulations': 2,
             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
             42,
             numpy.array([[50.67448975], [49.32551025]]),
-            numpy.array([[0.75], [0.25]])
+            numpy.array([[0.75], [0.25]]),
+            [{"loc":  50, "scale": 1}]
         ),
         "good schema 1x2": (
             {'num_simulations': 1,
@@ -93,15 +99,18 @@ class TestLatinHypercube:
             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
             42,
             numpy.array([[ 50., -50.]]),
-            numpy.array([[0.5, 0.5]])
+            numpy.array([[0.5, 0.5]]),
+            [{"loc":  50, "scale": 1},
+             {"loc": -50, "scale": 1}]
         )
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, random_state, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize(generate_input_interface,
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate(self, parameter_schema, random_state, expected_samples, expected_quantiles):
+    def test_generate(self, parameter_schema, random_state,
+                      expected_samples, expected_quantiles, expected_scipy_kwds):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = LatinHypercube(parameter_schema)
         TestGenerate.generate(lhs_kwargs={'random_state': random_state})
@@ -117,11 +126,12 @@ class TestLatinHypercube:
         assert numpy.all(parameter_set_names == expected_set_names)
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, random_state, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize(generate_input_interface,
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate_parameter_distributions(self, parameter_schema, random_state, expected_samples, expected_quantiles):
+    def test_generate_parameter_distributions(self, parameter_schema, random_state,
+                      expected_samples, expected_quantiles, expected_scipy_kwds):
         TestDistributions = LatinHypercube(parameter_schema)
         assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
-        # TODO: More rigorous scipy.stats object inspection to test object construction
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/261
+        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds):
+            assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
