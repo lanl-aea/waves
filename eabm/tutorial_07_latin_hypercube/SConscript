@@ -15,10 +15,16 @@ Import('env')
 project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
+python_source_dir = env['python_source_dir']
+python_source_abspath = project_dir / python_source_dir
 
 # Simulation variables
-output_file_type = 'h5'
-output_file_template = f"parameter_set@number.{output_file_type}"
+# TODO: Find a way to write the parameter study file to the build directory without constructing the build directory
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/269
+parent_directory = Dir('.').srcnode().name
+output_file_type = "h5"
+parameter_study_file = pathlib.Path(f"{env['variant_dir_base']}/{parent_directory}/parameter_study.{output_file_type}")
+previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
 model = "single_element"
 simulation_constants = {
     'global_seed': 1,
@@ -34,16 +40,32 @@ datacheck = []
 # Parameter Study with Latin Hypercube
 parameter_generator = waves.parameter_generators.LatinHypercube(
     parameter_schema,
-    output_file_template=output_file_template,
-    output_file_type=output_file_type)
+    output_file=parameter_study_file,
+    output_file_type=output_file_type,
+    previous_parameter_study=previous_parameter_study)
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
 
 # Comment used in tutorial code snippets: marker-3
 
+# TODO: Find a way to write the parameter study without a user-custom Python build function
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/269
+def write_parameter_study(target, source, env):
+    """`SCons Python build function`_ wrapper for the parameter generator's write() function.
+
+    Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
+    """
+    parameter_generator.write()
+    return None
+
+workflow.extend(env.Command(
+    target=[parameter_study_file.name],
+    source=[str(python_source_abspath / "single_element_compression_cartesian_product.py")],
+    action=[write_parameter_study]))
+
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name, parameters in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
-    set_name = pathlib.Path(set_name).with_suffix('')
+    set_name = pathlib.Path(set_name)
     simulation_variables = {**parameters.squeeze().to_array().to_series().to_dict(), **simulation_constants}
 
     # Comment used in tutorial code snippets: marker-4
