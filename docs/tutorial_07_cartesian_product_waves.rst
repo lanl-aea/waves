@@ -284,24 +284,15 @@ from parameter set generation. By using the ``--jobs=4`` option, `SCons`_ can ru
 Output Files
 ************
 
-Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
-below. Note the usage of ``-I`` to reduce clutter in the ``tree`` command output and the ``-d`` flag to specify only
-directories to be shown.
+Explore the contents of the ``build`` directory using the ``ls`` and ``tree`` commands against the ``build`` directory,
+as shown below.
 
 .. code-block:: bash
 
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -d -I 'tutorial_0[1,2,3,4,5,6]*'
-    build/
-    └── tutorial_07_cartesian_product
-        ├── parameter_set0
-        ├── parameter_set1
-        ├── parameter_set2
-        ├── parameter_set3
-        └── parameter_study.h5
-
-    5 directories, 1 file
+    $ ls build/tutorial_07_cartesian_product/
+    parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/  parameter_study.h5
 
 Explore the contents of the ``parameter_set0`` directory using the ``tree`` command. The contents of the remaining
 ``parameter_set{1,2,3}`` directories will be very similar to that shown for ``parameter_set0``.
