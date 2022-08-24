@@ -44,8 +44,6 @@ parameter_generator = waves.parameter_generators.LatinHypercube(
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
 
-# Comment used in tutorial code snippets: marker-3
-
 # TODO: Find a way to write the parameter study without a user-custom Python build function
 def write_parameter_study(target, source, env):
     """`SCons Python build function`_ wrapper for the parameter generator's write() function.
@@ -59,6 +57,8 @@ workflow.extend(env.Command(
     target=[parameter_study_file.name],
     source=[str(python_source_abspath / "single_element_compression_latin_hypercube.py")],
     action=[write_parameter_study]))
+
+# Comment used in tutorial code snippets: marker-3
 
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name, parameters in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
