@@ -130,14 +130,14 @@ dictionary in previous tutorials.
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 6-8
+      :emphasize-lines: 5-6, 9-12
 
 The unhighlighted portions of the code snippet above do not present any unique code that has not been previously
 discussed.
 
 The highlighted portions of the code snippet above define some new variables that will get used in various places in
-this tutorial's code. Namely, ``output_file_template`` defines how the parameter sets, and subsequently the
-directories for each parameterized simulation, will be named.
+this tutorial's code. The ``parameter_study_file`` and ``previous_parameter_study`` will allow the parameter generator
+to extend previously executed parameter studies without re-computing existing parameter set output files.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -149,13 +149,21 @@ directories for each parameterized simulation, will be named.
 
 The code above generates the parameter study for this tutorial using the
 :meth:`waves.parameter_generators.CartesianProduct` method. The ``parameter_schema`` that was imported in previous code
-is used to define the parameter bounds, and the ``output_file_template`` option defines how the parameter set output
-files will be named, and subsequently how the parameter sets will be accessed in the ``parameter_study`` object. The
-``parameter_study`` object is an `xarray dataset`_. For more information about the structure of the
+is used to define the parameter bounds. The ``parameter_study_file`` and ``previous_parameter_study`` will allow the
+parameter generator to extend previously executed parameter studies without re-computing existing parameter set output
+files on repeat executions of this simulation workflow.
+
+The ``parameter_study`` object is an `xarray dataset`_. For more information about the structure of the
 ``parameter_generator`` and ``parameter_study`` objects, see the :meth:`waves.parameter_generators.CartesianProduct`
 API. The API contains an example that prints ``parameter_study`` and shows the organization of the `xarray dataset`_.
 Note that the API's example does not use the same ``parameter_schema`` as this tutorial, but rather a general set of
 parameters using different variable types.
+
+The function and task definitions will write the parameter study file to the build directory whenever the parameter
+schema file changes. Tasks that execute Python methods require an `SCons Python build function`_, which must be defined
+in the configuration file and can't be provided by a `WAVES`_ builder because the parameter generator is instantiated in
+the current ``SConscript`` file. The conditional re-write behavior will be important for post-processing tasks
+introduced in :ref:`tutorial_post_processing_waves`.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -189,11 +197,15 @@ text file parameter substitution.
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
+      :emphasize-lines: 5-6, 14-15, 17, 24-26, 28, 46
 
-The lines of code above are simply a copy of the previous Geometry, Partition, Mesh, and SolverPrep workflows. Note the
-following two important aspects of the code above:
+The lines of code above are nearly a direct copy of the previous Geometry, Partition, Mesh, and SolverPrep workflows.
+Note the following two important aspects of the code above:
 
 * The indent of four spaces, as this code is inside of the ``for`` loop you created earlier
+* Target files must be defined with respect to their parameter set directory, which will be created in the current
+  simulation build directory. Any targets that are later used as source must also include the parameter set directory as
+  part of their relative path.
 * The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and
   the :meth:`waves.builders.copy_substitute` method for SolverPrep. Remember to use the
   :meth:`waves.builders.substitution_syntax` method to modify the parameter name keys for parameter substitution in text
@@ -206,10 +218,12 @@ following two important aspects of the code above:
       :lineno-match:
       :start-after: marker-5
       :end-before: marker-6
+      :emphasize-lines: 2-3, 9, 15
 
-The code above closes out our familiar workflow with the use of the :meth:`waves.builders.abaqus_solver` method. Note
-that the ``# Abaqus Solver`` code is still within the ``for`` loop, so the Abaqus Solver will be called as many times as
-we have parameter sets. In this case, we will solve four Abaqus simulations.
+The code above closes out our familiar workflow with the use of the :meth:`waves.builders.abaqus_solver` method where
+the highlighted lines include the parameter set directory as part of target definitions. Note that the ``# Abaqus
+Solver`` code is still within the ``for`` loop, so the Abaqus Solver will be called as many times as we have parameter
+sets. In this case, we will solve four Abaqus simulations.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
@@ -270,23 +284,15 @@ from parameter set generation. By using the ``--jobs=4`` option, `SCons`_ can ru
 Output Files
 ************
 
-Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
-below. Note the usage of ``-I`` to reduce clutter in the ``tree`` command output and the ``-d`` flag to specify only
-directories to be shown.
+Explore the contents of the ``build`` directory using the ``ls`` and ``tree`` commands against the ``build`` directory,
+as shown below.
 
 .. code-block:: bash
 
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -d -I 'tutorial_0[1,2,3,4,5,6]*'
-    build/
-    └── tutorial_07_cartesian_product
-        ├── parameter_set0
-        ├── parameter_set1
-        ├── parameter_set2
-        └── parameter_set3
-
-    5 directories
+    $ ls build/tutorial_07_cartesian_product/
+    parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/  parameter_study.h5
 
 Explore the contents of the ``parameter_set0`` directory using the ``tree`` command. The contents of the remaining
 ``parameter_set{1,2,3}`` directories will be very similar to that shown for ``parameter_set0``.

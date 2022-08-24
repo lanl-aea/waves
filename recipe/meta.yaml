@@ -56,7 +56,7 @@ requirements:
     - pyyaml
     - scipy
     - scons
-    - smt
+    - pyDOE2 >=1
     - xarray
 
 test:
@@ -71,7 +71,7 @@ test:
     - scipy
     - scons
     - setuptools_scm
-    - smt
+    - pyDOE2 >=1
     - xarray
   source_files:
     # Everything copied here will make it into the "info" directory of the Conda package

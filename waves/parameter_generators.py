@@ -10,7 +10,7 @@ import yaml
 import numpy
 import xarray
 import scipy.stats
-from smt.sampling_methods import LHS
+import pyDOE2
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
@@ -44,7 +44,7 @@ class _ParameterGenerator(ABC):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param xarray.Dataset previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -192,6 +192,7 @@ class _ParameterGenerator(ABC):
             if self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
             else:
+                self.output_file.parent.mkdir(parents=True, exist_ok=True)
                 self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
         else:
             for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
@@ -442,7 +443,7 @@ class CartesianProduct(_ParameterGenerator):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param xarray.Dataset previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -523,7 +524,7 @@ class LatinHypercube(_ParameterGenerator):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param xarray.Dataset previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -598,11 +599,21 @@ class LatinHypercube(_ParameterGenerator):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
-    def generate(self):
-        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study."""
+    def generate(self, lhs_kwargs=None):
+        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
+
+        :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin Hypercube sampling method.
+            The ``samples`` keyword argument is internally managed and will be overwritten to match ``num_simulations``
+            from the parameter schema.
+        """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
-        self._quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
+        default_kwargs = {'samples': set_count}
+        if lhs_kwargs:
+            lhs_kwargs.update(default_kwargs)
+        else:
+            lhs_kwargs = default_kwargs
+        self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **lhs_kwargs)
         self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
             self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
@@ -652,7 +663,7 @@ class CustomStudy(_ParameterGenerator):
         is always overwritten.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param xarray.Dataset previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit

@@ -19,10 +19,10 @@ python_source_dir = env['python_source_dir']
 python_source_abspath = project_dir / python_source_dir
 
 # Simulation variables
-# TODO: Find a way to write the parameter study file to the build directory without constructing the build directory
-parent_directory = Dir('.').srcnode().name
+build_directory = pathlib.Path(Dir('.').abspath)
 output_file_type = "h5"
-parameter_study_file = pathlib.Path(f"{env['variant_dir_base']}/{parent_directory}/parameter_study.{output_file_type}")
+parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
+previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
 model = "single_element"
 
 # Collect the target nodes to build a concise alias for all targets
@@ -35,11 +35,10 @@ datacheck = []
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file=parameter_study_file,
-    output_file_type=output_file_type)
+    output_file_type=output_file_type,
+    previous_parameter_study=previous_parameter_study)
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
-
-# Comment used in tutorial code snippets: marker-3
 
 # TODO: Find a way to write the parameter study without a user-custom Python build function
 def write_parameter_study(target, source, env):
@@ -55,10 +54,12 @@ workflow.extend(env.Command(
     source=[str(python_source_abspath / "single_element_compression_cartesian_product.py")],
     action=[write_parameter_study]))
 
+# Comment used in tutorial code snippets: marker-3
+
 # Parameterized targets must live inside current simulation_variables for loop
-for set_name, parameter_samples in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
+for set_name, parameters in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
     set_name = pathlib.Path(set_name)
-    simulation_variables = parameter_samples.squeeze().to_array().to_series().to_dict()
+    simulation_variables = parameters.squeeze().to_array().to_series().to_dict()
 
     # Comment used in tutorial code snippets: marker-4
 
