@@ -17,6 +17,7 @@ Documentation
 
 Enhancements
 ============
+- Add keyword argument pass through to Latin Hypercube generation (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
 - Use the parameter study extension feature in the ``previous_parameter_study`` interface of the parameter generators
   (:issue:`267`, :merge:`273`). By `Kyle Brindley`_.
 
@@ -24,10 +25,6 @@ Internal Changes
 ================
 - Use ``pyDOE2`` instead of ``smt`` for Latin Hypercube sampling. Implement more rigorous Latin Hypercube parameter
   study unit tests (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
-
-Enhancements
-============
-- Add keyword argument pass through to Latin Hypercube generation (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
 
 ******************
 0.3.4 (2022-08-23)
