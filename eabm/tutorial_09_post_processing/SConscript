@@ -43,7 +43,6 @@ parameter_study = parameter_generator.parameter_study
 # Comment used in tutorial code snippets: marker-3
 
 # TODO: Find a way to write the parameter study without a user-custom Python build function
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/269
 def write_parameter_study(target, source, env):
     """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
