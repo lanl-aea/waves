@@ -73,13 +73,19 @@ class TestLatinHypercube:
                          [ 50.        , -50.        ],
                          [ 50.52440051, -51.28155157],
                          [ 49.47559949, -49.47559949],
-                         [ 51.28155157, -50.52440051]])
+                         [ 51.28155157, -50.52440051]]),
+            numpy.array([[0.1, 0.9],
+                         [0.5, 0.5],
+                         [0.7, 0.1],
+                         [0.3, 0.7],
+                         [0.9, 0.3]])
         ),
         "good schema 2x1": (
             {'num_simulations': 2,
             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
             42,
-            numpy.array([[50.67448975], [49.32551025]])
+            numpy.array([[50.67448975], [49.32551025]]),
+            numpy.array([[0.75], [0.25]])
         ),
         "good schema 1x2": (
             {'num_simulations': 1,
@@ -87,21 +93,22 @@ class TestLatinHypercube:
             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
             42,
             numpy.array([[ 50., -50.]]),
+            numpy.array([[0.5, 0.5]])
         )
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, random_state, expected_samples',
+    @pytest.mark.parametrize('parameter_schema, random_state, expected_samples, expected_quantiles',
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate(self, parameter_schema, random_state, expected_samples):
+    def test_generate(self, parameter_schema, random_state, expected_samples, expected_quantiles):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = LatinHypercube(parameter_schema)
         TestGenerate.generate(lhs_kwargs={'random_state': random_state})
         samples_array = TestGenerate._samples
         quantiles_array = TestGenerate._quantiles
         assert numpy.allclose(samples_array, expected_samples)
-        assert quantiles_array.shape == (parameter_schema['num_simulations'], len(parameter_names))
+        assert numpy.allclose(quantiles_array, expected_quantiles)
         # Verify that the parameter set name creation method was called
         assert list(TestGenerate._parameter_set_names.values()) == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
@@ -110,10 +117,10 @@ class TestLatinHypercube:
         assert numpy.all(parameter_set_names == expected_set_names)
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, random_state, expected_samples',
+    @pytest.mark.parametrize('parameter_schema, random_state, expected_samples, expected_quantiles',
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate_parameter_distributions(self, parameter_schema, random_state, expected_samples):
+    def test_generate_parameter_distributions(self, parameter_schema, random_state, expected_samples, expected_quantiles):
         TestDistributions = LatinHypercube(parameter_schema)
         assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
         # TODO: More rigorous scipy.stats object inspection to test object construction
