@@ -9,7 +9,7 @@ scons
 scipy
 setuptools
 setuptools_scm
-smt
+pyDOE2 >=1
 sphinx
 sphinx-argparse
 sphinx_rtd_theme

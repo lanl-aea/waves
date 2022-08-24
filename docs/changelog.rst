@@ -15,7 +15,8 @@ Documentation
 
 Internal Changes
 ================
-- More rigorous Latin Hypercube parameter study unit tests (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
+- Use ``pyDOE2`` instead of ``smt`` for Latin Hypercube sampling. Implement more rigorous Latin Hypercube parameter
+  study unit tests (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
 
 Enhancements
 ============
