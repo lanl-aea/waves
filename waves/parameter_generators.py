@@ -598,11 +598,20 @@ class LatinHypercube(_ParameterGenerator):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
-    def generate(self):
-        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study."""
+    def generate(self, lhs_kwargs=None):
+        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
+
+        :param dict lhs_kwargs: Keyword arguments for the ``smt.sampling_methods.LHS`` Latin Hypercube sampling method.
+            ``xlimits`` is internally managed and will be overwritten as ``[0, 1]`` for every parameter.
+        """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
-        self._quantiles = LHS(xlimits=numpy.repeat([[0, 1]], parameter_count, axis=0))(set_count)
+        default_kwargs = {'xlimits': numpy.repeat([[0, 1]], parameter_count, axis=0)}
+        if lhs_kwargs:
+            lhs_kwargs.update(default_kwargs)
+        else:
+            lhs_kwargs = default_kwargs
+        self._quantiles = LHS(**lhs_kwargs)(set_count)
         self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
             self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
