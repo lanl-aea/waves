@@ -5,13 +5,13 @@ numpy
 pytest
 pytest-xdist
 pyyaml
-scons
+scons >=4
 scipy
 setuptools
 setuptools_scm
-smt
+pyDOE2 >=1
 sphinx
 sphinx-argparse
-sphinx_rtd_theme
+sphinx_rtd_theme >=0.5
 sphinxcontrib-bibtex
 xarray
