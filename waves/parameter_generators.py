@@ -314,15 +314,10 @@ class _ParameterGenerator(ABC):
         * ``self.parameter_study``
         * ``self._parameter_set_names``
         """
-        # TODO: figure out a cleaner solution that creates fewer intermediate objects
         self._create_parameter_set_names()
         new_set_names = set(self._parameter_set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
-        set_name_dict = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
-        nan_hashes = [key for key, value in set_name_dict.items() if not isinstance(value, str)]
-        new_hash_sets = dict(zip(nan_hashes, new_set_names))
-        set_name_dict.update(new_hash_sets)
-        self._parameter_set_names = set_name_dict
-        self._merge_parameter_set_names_array()
+        self.parameter_study.parameter_sets[self.parameter_study.parameter_sets.isnull()] = list(new_set_names)
+        self._parameter_set_names = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
 
     def _create_parameter_set_names_array(self):
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
