@@ -33,20 +33,12 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
     """
     # TODO: Move dataset meta script assumptions to CLI
     select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
+    concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    if parameter_study_file:
-        parameter_study = xarray.open_dataset(parameter_study_file)
-        concat_coord = "parameter_set_hash"
-        # TODO: Match hash order to ``paths`` list. If paths aren't passed in the same order as saved by the parameter
-        # study, the resulting dataset will be incorrectly dimensioned.
-        coords = parameter_study.parameter_set_hash.values
-    else:
-        concat_coord = "parameter_sets"
-        coords = [path.parent.name for path in paths]
     data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord:
-                          coord}) for path, coord in zip(paths, coords))
+                          path.parent.name}) for path in paths)
     combined_data = xarray.concat(data_generator, concat_coord)
 
     # Add units
@@ -55,6 +47,7 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, p
 
     # Open and merge WAVES parameter study if provided
     if parameter_study_file:
+        parameter_study = xarray.open_dataset(parameter_study_file)
         combined_data = combined_data.merge(parameter_study)
 
     # Write results dataset to stdout for tutorial demonstration
