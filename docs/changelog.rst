@@ -25,6 +25,8 @@ Internal Changes
 ================
 - Use ``pyDOE2`` instead of ``smt`` for Latin Hypercube sampling. Implement more rigorous Latin Hypercube parameter
   study unit tests (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
+- Use vectorized indexing to replace ``nan`` values in ``_ParameterGenerator._update_parameter_set_names()``
+  (:issue:`271`, :merge:`275`). By `Matthew Fister`_.
 
 ******************
 0.3.4 (2022-08-23)
