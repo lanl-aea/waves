@@ -381,6 +381,7 @@ class _ParameterGenerator(ABC):
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
         self._merge_parameter_set_names_array()
+        self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
     def _parameter_study_to_numpy(self, data_type):
         """Return the parameter study data as a 2D numpy array
@@ -409,8 +410,9 @@ class _ParameterGenerator(ABC):
         """
         # Favor the set names of the prior study. Leaves new set names as NaN.
         previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
+        previous_parameter_study = previous_parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
         self.parameter_study = xarray.merge(
-            [previous_parameter_study, self.parameter_study.drop_vars(_set_coordinate_key)])
+            [previous_parameter_study, self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key}).drop_vars(_set_coordinate_key)])
         previous_parameter_study.close()
 
         # Recover parameter study numpy array(s) to match merged study
@@ -421,6 +423,7 @@ class _ParameterGenerator(ABC):
         # Recalculate attributes with lengths matching the number of parameter sets
         self._parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._update_parameter_set_names()
+        self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
 class CartesianProduct(_ParameterGenerator):
