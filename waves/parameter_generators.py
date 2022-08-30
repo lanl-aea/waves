@@ -749,10 +749,6 @@ class SobolSequence(_ParameterGenerator):
     An Xarray Dataset is used to store the parameter study. If a previous parameter study file is provided, it will be
     merged with the current study.
 
-    If a previous parameter_study *and* a ``seed`` key: value pair is provided to the
-    :meth:`waves.parameter_generators.SobolSequence.generate` method ``sobol_kwargs`` dictionary, the Sobol sequence
-    will resume drawing from the previous parameter study.
-
     .. warning::
 
        The merged parameter study feature does *not* check for consistent parameter ranges. Changing the
