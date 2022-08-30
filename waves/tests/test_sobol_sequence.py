@@ -32,6 +32,10 @@ class TestSobolSequence:
             {'num_simulations': 'not_a_number'},
             pytest.raises(TypeError)
         ),
+        "wrong order": (
+            {'num_simulations': 1, 'parameter_1': [1., 0.]},
+            pytest.raises(ValueError)
+        ),
         "not an iterable": (
             {'num_simulations': 1, 'parameter_1': 0.},
             pytest.raises(TypeError)

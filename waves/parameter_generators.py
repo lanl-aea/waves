@@ -806,8 +806,8 @@ class SobolSequence(_ParameterGenerator):
                 if not isinstance(value, numbers.Number):
                     raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
             if parameter_definition[1] < parameter_definition[0]:
-                ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound, "
-                            "upper_bound]")
+                raise ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound, "
+                                 "upper_bound]")
 
     def generate(self, sobol_kwargs=None):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
