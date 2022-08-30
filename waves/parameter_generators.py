@@ -380,7 +380,7 @@ class _ParameterGenerator(ABC):
         * ``self.parameter_study``
         """
         samples = self._create_parameter_array(self._samples, name="samples")
-        if hasattr(self, "quantiles"):
+        if hasattr(self, "_quantiles"):
             quantiles = self._create_parameter_array(self._quantiles, name="quantiles")
             self.parameter_study = xarray.concat([quantiles, samples],
                     xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
@@ -427,7 +427,7 @@ class _ParameterGenerator(ABC):
 
         # Recover parameter study numpy array(s) to match merged study
         self._samples = self._parameter_study_to_numpy('samples')
-        if hasattr(self, "quantiles"):
+        if hasattr(self, "_quantiles"):
             self._quantiles = self._parameter_study_to_numpy('quantiles')
 
         # Recalculate attributes with lengths matching the number of parameter sets
