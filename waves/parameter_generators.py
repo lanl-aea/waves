@@ -316,7 +316,9 @@ class _ParameterGenerator(ABC):
         """
         self._create_parameter_set_names()
         new_set_names = set(self._parameter_set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
-        self.parameter_study.parameter_sets[self.parameter_study.parameter_sets.isnull()] = list(new_set_names)
+        null_set_names = self.parameter_study.coords[_set_coordinate_key].isnull()
+        if any(null_set_names):
+            self.parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
         self._parameter_set_names = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
 
     def _create_parameter_set_names_array(self):
@@ -381,6 +383,7 @@ class _ParameterGenerator(ABC):
         else:
             self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
         self._merge_parameter_set_names_array()
+        self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
     def _parameter_study_to_numpy(self, data_type):
         """Return the parameter study data as a 2D numpy array
@@ -407,8 +410,13 @@ class _ParameterGenerator(ABC):
         * ``self._parameter_set_hashes``
         * ``self._parameter_set_names``
         """
-        # Favor the set names of the prior study. Leaves new set names as NaN.
+        # Swap dimensions from the set name to the set hash to merge identical sets
+        swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
         previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
+        previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
+        self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
+
+        # Favor the set names of the prior study. Leaves new set names as NaN.
         self.parameter_study = xarray.merge(
             [previous_parameter_study, self.parameter_study.drop_vars(_set_coordinate_key)])
         previous_parameter_study.close()
@@ -421,6 +429,7 @@ class _ParameterGenerator(ABC):
         # Recalculate attributes with lengths matching the number of parameter sets
         self._parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
         self._update_parameter_set_names()
+        self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
 class CartesianProduct(_ParameterGenerator):
