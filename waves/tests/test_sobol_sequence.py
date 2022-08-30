@@ -139,16 +139,16 @@ class TestSobolSequence:
             {'num_simulations': 5, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
             {'num_simulations': 5, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
-            numpy.array([[0.   , 2.   ],
-                         [5.   , 3.5  ],
+            numpy.array([[5.   , 3.5  ],
                          [7.5  , 2.75 ],
-                         [2.5  , 4.25 ],
-                         [3.75 , 3.125]]),
-            numpy.array([[0.   , 0.   ],
-                         [0.5  , 0.5  ],
+                         [3.75 , 3.125],
+                         [0.   , 2.   ],
+                         [2.5  , 4.25 ]]),
+            numpy.array([[0.5  , 0.5  ],
                          [0.75 , 0.25 ],
-                         [0.25 , 0.75 ],
-                         [0.375, 0.375]])
+                         [0.375, 0.375],
+                         [0.   , 0.   ],
+                         [0.25 , 0.75 ]])
         )
     }
 
@@ -162,8 +162,8 @@ class TestSobolSequence:
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = SobolSequence(second_schema, previous_parameter_study='dummy_string')
             TestMerge2.generate()
-        samples_array = TestMerge2._samples
-        quantiles_array = TestMerge2._quantiles
+        samples_array = TestMerge2._samples.astype(float)
+        quantiles_array = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)
         # Check for consistent hash-parameter set relationships
