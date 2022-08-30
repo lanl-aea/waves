@@ -76,7 +76,10 @@ class _ParameterGenerator(ABC):
                                f"The 'output_file_type' must be one of {allowable_output_file_types}")
 
         if self.output_file:
-            self.output_file = pathlib.Path(output_file)
+            self.output_file = pathlib.Path(self.output_file)
+
+        if self.previous_parameter_study:
+            self.previous_parameter_study = pathlib.Path(self.previous_parameter_study)
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False
@@ -413,7 +416,7 @@ class _ParameterGenerator(ABC):
         """
         # Swap dimensions from the set name to the set hash to merge identical sets
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
-        previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
+        previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
@@ -496,6 +499,8 @@ class CartesianProduct(_ParameterGenerator):
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
+
+        # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
@@ -623,6 +628,8 @@ class LatinHypercube(_ParameterGenerator):
         self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
             self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
+
+        # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
@@ -723,6 +730,8 @@ class CustomStudy(_ParameterGenerator):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study."""
         self._samples = numpy.array(self.parameter_schema['parameter_samples'], dtype=object)
+
+        # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
@@ -737,7 +746,18 @@ class CustomStudy(_ParameterGenerator):
 class SobolSequence(_ParameterGenerator):
     """Builds a Sobol sequence parameter study
 
-    An Xarray Dataset is used to store the parameter study.
+    An Xarray Dataset is used to store the parameter study. If a previous parameter study file is provided, it will be
+    merged with the current study.
+
+    If a previous parameter_study *and* a ``seed`` key: value pair is provided to the
+    :meth:`waves.parameter_generators.SobolSequence.generate` method ``sobol_kwargs`` dictionary, the Sobol sequence
+    will resume drawing from the previous parameter study.
+
+    .. warning::
+
+       The merged parameter study feature does *not* check for consistent parameter ranges. Changing the
+       parameter definitions will result in incorrect relationships between parameters and the parameter study samples
+       and quantiles.
 
     :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
         Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
@@ -760,6 +780,16 @@ class SobolSequence(_ParameterGenerator):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    Example
+
+    .. code-block::
+
+       parameter_schema = {
+           'num_simulations': 4,  # Required key. Value must be an integer.
+           'parameter_1': [0., 10.],  # Must be ordered as [lower_bound, upper_bound]
+           'parameter_2': [2.,  5.]
+       }
     """
 
     def _validate(self):
@@ -781,11 +811,50 @@ class SobolSequence(_ParameterGenerator):
             for value in parameter_definition:
                 if not isinstance(value, numbers.Number):
                     raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
+            if parameter_definition[1] < parameter_definition[0]:
+                ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound,
+                           upper_bound]")
 
-    def generate():
+    def generate(self, sobol_kwargs=None):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study."""
-        pass
+
+        # Instantiate the Sobol Sequence
+        parameter_count = len(self._parameter_names)
+        default_kwargs = {'d': parameter_count}
+        if sobol_kwargs:
+            sobol_kwargs.update(default_kwargs)
+        else:
+            sobol_kwargs = default_kwargs
+        sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
+
+        # Determine how many new draws to make. Extends from previous study if available
+        set_count = self.parameter_schema['num_simulations']
+        number_of_draws = set_count
+        previous_set_count = None
+        if self.previous_parameter_study and 'seed' in sobol_kwargs:
+            previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
+            previous_set_count = len(previous_parameter_study.coords[_set_coordinate_name])
+            previous_parameter_study.close()
+        if previous_set_count:
+            if set_count > previous_sample_count:
+                sampler.fast_forward(previous_sample_count)
+                number_of_draws = set_count - previous_sample_count
+
+        # Draw quantiles
+        self.quantiles = sampler.random([number_of_draws])
+
+        # Convert quantiles to scaled samples
+        lower_bounds = [self.parameter_schema[name][0] for name in self._parameter_names]
+        upper_bounds = [self.parameter_schema[name][1] for name in self._parameter_names]
+        self.samples = scipy.stats.qmc.scale(self.quantiles, lower_bounds, upper_bounds)
+
+        # Common work to create a parameter study Xarray Dataset
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
+        self._create_parameter_study()
+        if self.previous_parameter_study:
+            self._merge_parameter_studies()
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
