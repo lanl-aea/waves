@@ -755,11 +755,9 @@ class SobolSequence(_ParameterGenerator):
        parameter definitions will result in incorrect relationships between parameters and the parameter study samples
        and quantiles.
 
-    :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
-        Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
-        the number of parameters. Parameter names in the form of a 1D array with length N. When creating a
-        `parameter_samples` array with mixed type (e.g. string and floats) use `dtype=object` to preserve the mixed
-        types and avoid casting all values to a common type (e.g. all your floats will become strings).
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+        SobolSequence expects "schema value" to be a dictionary with a strict structure and one required key.
+        Validated on class instantiation.
     :param str output_file_template: Output file name template. Required if parameter sets will be written to files
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
