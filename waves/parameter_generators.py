@@ -5,6 +5,7 @@ import sys
 import itertools
 import copy
 import hashlib
+import numbers
 
 import yaml
 import numpy
@@ -725,3 +726,61 @@ class CustomStudy(_ParameterGenerator):
         self._create_parameter_study()
         if self.previous_parameter_study:
             self._merge_parameter_studies()
+
+class SobolSequence(_ParameterGenerator):
+    """Builds a Sobol sequence parameter study
+
+    An Xarray Dataset is used to store the parameter study.
+
+    :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
+        Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
+        the number of parameters. Parameter names in the form of a 1D array with length N. When creating a
+        `parameter_samples` array with mixed type (e.g. string and floats) use `dtype=object` to preserve the mixed
+        types and avoid casting all values to a common type (e.g. all your floats will become strings).
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
+        is always overwritten.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+        study Xarray Dataset
+    :param bool overwrite: Overwrite existing output files
+    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param bool debug: Print internal variables to STDOUT and exit
+    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
+    """
+
+    def _validate(self):
+        """Validate the Sobol sequence parameter schema. Executed by class initiation."""
+        # TODO: Settle on an input file schema and validation library
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
+        if 'num_simulations' not in self.parameter_schema.keys():
+            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
+        elif not isinstance(self.parameter_schema['num_simulations'], int):
+            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+        self._create_parameter_names()
+        for name in self._parameter_names:
+            parameter_definition = self.parameter_schema[name]
+            if not isinstance(parameter_definition, (list, set, tuple)):
+                raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
+            if not len(parameter_definition) == 2:
+                raise ValueError(f"Parameter '{name}' must have exactly length two: [lower_bound, upper_bound]")
+            for value in parameter_definition:
+                if not isinstance(value, numbers.Number):
+                    raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
+
+    def generate():
+        pass
+
+    def write(self):
+        super().write()
+
+    def _create_parameter_names(self):
+        """Construct the Sobol sequence parameter names"""
+        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
