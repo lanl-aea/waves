@@ -408,11 +408,15 @@ class _ParameterGenerator(ABC):
         * ``self._parameter_set_hashes``
         * ``self._parameter_set_names``
         """
-        # Favor the set names of the prior study. Leaves new set names as NaN.
+        # Swap dimensions from the set name to the set hash to merge identical sets
+        swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
         previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
-        previous_parameter_study = previous_parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key})
+        previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
+        self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
+
+        # Favor the set names of the prior study. Leaves new set names as NaN.
         self.parameter_study = xarray.merge(
-            [previous_parameter_study, self.parameter_study.swap_dims({_set_coordinate_key: _hash_coordinate_key}).drop_vars(_set_coordinate_key)])
+            [previous_parameter_study, self.parameter_study.drop_vars(_set_coordinate_key)])
         previous_parameter_study.close()
 
         # Recover parameter study numpy array(s) to match merged study
