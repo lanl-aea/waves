@@ -842,14 +842,14 @@ class SobolSequence(_ParameterGenerator):
             # TODO: allow the user to override ``scramble`` and only re-draw from previous parameter study for
             # ``seed`` or ``scramble=False``.
             previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
-            previous_set_count = len(previous_parameter_study.coords[_set_coordinate_name])
+            previous_set_count = len(previous_parameter_study.coords[_set_coordinate_key])
             previous_parameter_study.close()
         if previous_set_count:
             # TODO: recover previous parameter study meta attributes and exit early if set_count matches
             # previous_set_count
-            if set_count > previous_sample_count:
-                sampler.fast_forward(previous_sample_count)
-                number_of_draws = set_count - previous_sample_count
+            if set_count > previous_set_count:
+                sampler.fast_forward(previous_set_count)
+                number_of_draws = set_count - previous_set_count
 
         # Draw quantiles
         self._quantiles = sampler.random(number_of_draws)
