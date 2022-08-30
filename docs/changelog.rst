@@ -8,6 +8,12 @@ Changelog
 0.3.5 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Use the parameter set name as the parameter study's set index dimension. Fixes unintentional breaking change in the
+  parameter study coordinates from :merge:`266` that required users to swap dimensions when merging parameter studies with
+  the associated results (:issue:`270`, :merge:`277`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Fix the type hint for the ``previous_parameter_study`` of the paramter generators' API (:merge:`271`). By `Kyle
