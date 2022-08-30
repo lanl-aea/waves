@@ -503,6 +503,7 @@ class CartesianProduct(_ParameterGenerator):
             self._merge_parameter_studies()
 
     def write(self):
+        # Get the ABC docstring into each paramter generator API
         super().write()
 
 
@@ -642,6 +643,7 @@ class LatinHypercube(_ParameterGenerator):
         return parameter_distributions
 
     def write(self):
+        # Get the ABC docstring into each paramter generator API
         super().write()
 
     def _create_parameter_names(self):
@@ -727,6 +729,11 @@ class CustomStudy(_ParameterGenerator):
         if self.previous_parameter_study:
             self._merge_parameter_studies()
 
+    def write(self):
+        # Get the ABC docstring into each paramter generator API
+        super().write()
+
+
 class SobolSequence(_ParameterGenerator):
     """Builds a Sobol sequence parameter study
 
@@ -779,6 +786,7 @@ class SobolSequence(_ParameterGenerator):
         pass
 
     def write(self):
+        # Get the ABC docstring into each paramter generator API
         super().write()
 
     def _create_parameter_names(self):
