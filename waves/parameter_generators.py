@@ -783,6 +783,8 @@ class SobolSequence(_ParameterGenerator):
                     raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
 
     def generate():
+        """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
+        generate the parameter study."""
         pass
 
     def write(self):
