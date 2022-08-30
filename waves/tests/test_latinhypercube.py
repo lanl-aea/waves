@@ -119,7 +119,8 @@ class TestLatinHypercube:
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)
         # Verify that the parameter set name creation method was called
-        assert list(TestGenerate._parameter_set_names.values()) == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+        assert list(TestGenerate._parameter_set_names.values()) == expected_set_names 
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
