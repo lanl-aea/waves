@@ -812,16 +812,22 @@ class SobolSequence(_ParameterGenerator):
                 if not isinstance(value, numbers.Number):
                     raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
             if parameter_definition[1] < parameter_definition[0]:
-                ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound,
-                           upper_bound]")
+                ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound, "
+                            "upper_bound]")
 
     def generate(self, sobol_kwargs=None):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
-        generate the parameter study."""
+        generate the parameter study.
+
+        :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol sampling method.
+            The ``d`` keyword argument is internally managed and will be overwritten to match ``num_simulations`` from
+            the parameter schema. The ``scramble`` keyword is always set to ``False`` for consistent re-draws of
+            previous parameter studies.
+        """
 
         # Instantiate the Sobol Sequence
         parameter_count = len(self._parameter_names)
-        default_kwargs = {'d': parameter_count}
+        default_kwargs = {'d': parameter_count, 'scramble': False}
         if sobol_kwargs:
             sobol_kwargs.update(default_kwargs)
         else:
@@ -832,22 +838,26 @@ class SobolSequence(_ParameterGenerator):
         set_count = self.parameter_schema['num_simulations']
         number_of_draws = set_count
         previous_set_count = None
-        if self.previous_parameter_study and 'seed' in sobol_kwargs:
+        if self.previous_parameter_study:
+            # TODO: allow the user to override ``scramble`` and only re-draw from previous parameter study for
+            # ``seed`` or ``scramble=False``.
             previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
             previous_set_count = len(previous_parameter_study.coords[_set_coordinate_name])
             previous_parameter_study.close()
         if previous_set_count:
+            # TODO: recover previous parameter study meta attributes and exit early if set_count matches
+            # previous_set_count
             if set_count > previous_sample_count:
                 sampler.fast_forward(previous_sample_count)
                 number_of_draws = set_count - previous_sample_count
 
         # Draw quantiles
-        self.quantiles = sampler.random([number_of_draws])
+        self._quantiles = sampler.random(number_of_draws)
 
         # Convert quantiles to scaled samples
         lower_bounds = [self.parameter_schema[name][0] for name in self._parameter_names]
         upper_bounds = [self.parameter_schema[name][1] for name in self._parameter_names]
-        self.samples = scipy.stats.qmc.scale(self.quantiles, lower_bounds, upper_bounds)
+        self._samples = scipy.stats.qmc.scale(self._quantiles, lower_bounds, upper_bounds)
 
         # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
