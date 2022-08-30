@@ -316,7 +316,9 @@ class _ParameterGenerator(ABC):
         """
         self._create_parameter_set_names()
         new_set_names = set(self._parameter_set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
-        self.parameter_study.parameter_sets[self.parameter_study.parameter_sets.isnull()] = list(new_set_names)
+        null_set_names = self.parameter_study.parameter_sets.isnull()
+        if any(null_set_names):
+            self.parameter_study.parameter_sets[null_set_names] = list(new_set_names)
         self._parameter_set_names = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
 
     def _create_parameter_set_names_array(self):
