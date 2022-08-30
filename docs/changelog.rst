@@ -8,6 +8,10 @@ Changelog
 0.3.5 (unreleased)
 ******************
 
+New Features
+============
+- Add a Sobol sequence parameter generator. Requires ``scipy>=1.7.0`` (:issue:`274`, :merge:`278`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
 - Use the parameter set name as the parameter study's set index dimension. Fixes unintentional breaking change in the
