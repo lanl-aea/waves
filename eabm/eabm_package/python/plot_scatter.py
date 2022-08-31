@@ -14,11 +14,11 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
     parameter study dataset file is assumed to be written by a WAVES parameter generator. Currently assumes the selected
-    data as harcoded dictionary
+    data as the ``selection_dict`` dictionary parameter written as a string
 
     .. code-block::
 
-       select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
+       selection_dict = "{'LE values': 'LE22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}"
 
     :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray
         Datasets
@@ -32,8 +32,6 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
     """
-    # TODO: Move dataset meta script assumptions to CLI
-    select_dict = {"LE values": "LE22", "S values": "S22", "elements": 1, "step": "Step-1"}
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
@@ -55,7 +53,7 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     print(combined_data)
 
     # Plot
-    combined_data.sel(select_dict).plot.scatter(x_var, y_var, hue=concat_coord)
+    combined_data.sel(selection_dict).plot.scatter(x_var, y_var, hue=concat_coord)
     matplotlib.pyplot.savefig(output_file)
 
     # Clean up open files
@@ -72,7 +70,7 @@ def get_parser():
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
     default_x_var = "LE"
     default_y_var = "S"
-    default_selection_dict = "select_dict = {'LE values': 'LE22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}"
+    default_selection_dict = "{'LE values': 'LE22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}"
     default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
