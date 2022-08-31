@@ -51,6 +51,8 @@ Enhancements
 - Add keyword argument pass through to Latin Hypercube generation (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
 - Use the parameter study extension feature in the ``previous_parameter_study`` interface of the parameter generators
   (:issue:`267`, :merge:`273`). By `Kyle Brindley`_.
+- Provide the data downslection dictionary as a CLI argument rather than hardcoding it in ``plot_scatter.py``
+  (:issue:`273`, :merge:`281`). By `Thomas Roberts`_.
 
 Internal Changes
 ================
