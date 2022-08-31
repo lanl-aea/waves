@@ -116,7 +116,8 @@ eabm_simulation_directories = [
     'tutorial_07_sobol_sequence',
     'tutorial_08_data_extraction',
     'tutorial_09_post_processing',
-    'tutorial_10_regression_testing'
+    'tutorial_10_regression_testing',
+    'tutorial_mesh_convergence'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
