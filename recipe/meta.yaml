@@ -56,6 +56,9 @@ requirements:
     - pyyaml
     - scipy
     - scons
+    # TODO: Remove after updating minimum scipy requirement
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
+    - setuptools
     - pyDOE2 >=1
     - xarray
 
@@ -107,6 +110,7 @@ test:
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --keep-going --unconditional-build

@@ -5,7 +5,38 @@ Changelog
 #########
 
 ******************
-0.3.5 (unreleased)
+0.3.7 (unreleased)
+******************
+
+******************
+0.3.6 (2022-08-31)
+******************
+
+New Features
+============
+- Add a Sobol sequence parameter generator. Requires ``scipy>=1.7.0`` but this is not yet enforced in the Conda package
+  runtime requirements. See :issue:`278` for the timeline on the minimum ``scipy`` requirement update (:issue:`274`,
+  :merge:`278`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Use the parameter set name as the parameter study's set index dimension. Fixes unintentional breaking change in the
+  parameter study coordinates from :merge:`266` that required users to swap dimensions when merging parameter studies with
+  the associated results (:issue:`270`, :merge:`277`). By `Kyle Brindley`_.
+- Merge quantiles attribute correctly when provided with a previous parameter study (:issue:`275`, :merge:`280`). By
+  `Kyle Brindley`_.
+
+Documentation
+=============
+- Make typesetting corrections to the WAVES tutorials (:issue:`263`, :merge:`276`). By `Thomas Roberts`_.
+
+Internal Changes
+================
+- Use vectorized indexing to replace ``nan`` values in ``_ParameterGenerator._update_parameter_set_names()``
+  (:issue:`271`, :merge:`275`). By `Matthew Fister`_.
+
+******************
+0.3.5 (2022-08-24)
 ******************
 
 Documentation

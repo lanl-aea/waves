@@ -6,7 +6,6 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
-import scipy.stats
 
 from waves.parameter_generators import LatinHypercube
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
@@ -69,8 +68,8 @@ class TestLatinHypercube:
     generate_input = {
         "good schema 5x2": (
             {'num_simulations': 5,
-            'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
-            'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
             42,
             numpy.array([[ 48.55981847, -48.43152778],
                          [ 49.82668961, -50.17332267],
@@ -95,8 +94,8 @@ class TestLatinHypercube:
         ),
         "good schema 1x2": (
             {'num_simulations': 1,
-            'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
-            'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
             42,
             numpy.array([[49.68014762, -48.34818067]]),
             numpy.array([[0.37454012 ,  0.95071431 ]]),
@@ -119,7 +118,8 @@ class TestLatinHypercube:
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)
         # Verify that the parameter set name creation method was called
-        assert list(TestGenerate._parameter_set_names.values()) == [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+        assert list(TestGenerate._parameter_set_names.values()) == expected_set_names 
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
@@ -135,3 +135,42 @@ class TestLatinHypercube:
         assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
         for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds):
             assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
+
+    merge_test = {
+        'increase simulations': (
+            {'num_simulations': 1,
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
+            {'num_simulations': 2,
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
+            42,
+            numpy.array([[ 49.68014762, -48.34818067],
+                         [ 49.11199882, -49.16077225],
+                         [ 51.10766607, -50.06180979]]),
+            numpy.array([[0.37454012, 0.95071431],
+                         [0.18727006, 0.79932924],
+                         [0.86599697, 0.47535715]])
+        )
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('first_schema, second_schema, random_state, expected_samples, expected_quantiles',
+                                 merge_test.values(),
+                             ids=merge_test.keys())
+    def test_merge(self, first_schema, second_schema, random_state, expected_samples, expected_quantiles):
+        TestMerge1 = LatinHypercube(first_schema)
+        TestMerge1.generate(lhs_kwargs={'random_state': random_state})
+        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
+            TestMerge2 = LatinHypercube(second_schema, previous_parameter_study='dummy_string')
+            TestMerge2.generate(lhs_kwargs={'random_state': random_state})
+        samples = TestMerge2._samples.astype(float)
+        quantiles = TestMerge2._quantiles.astype(float)
+        assert numpy.allclose(samples, expected_samples)
+        assert numpy.allclose(quantiles, expected_quantiles)
+        # Check for consistent hash-parameter set relationships
+        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+        # Self-consistency checks
+        assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
+        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()

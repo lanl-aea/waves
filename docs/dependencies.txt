@@ -7,6 +7,7 @@ The Python package dependencies are found in the project's ``environment.txt`` f
 .. literalinclude:: environment.txt
    :linenos:
 
-The :term:`EABM` in this project also requires:
+The :term:`EABM` in this project, `WAVES-EABM`_, also requires:
 
 #. Abaqus
+#. Cubit

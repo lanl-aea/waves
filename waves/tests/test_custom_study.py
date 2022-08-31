@@ -85,7 +85,16 @@ class TestCustomStudy:
              numpy.array(
                  [[1, 10.1, 'a'],
                   [2, 20.2, 'b'],
-                  [3, 30.3, 'c']], dtype=object))
+                  [3, 30.3, 'c']], dtype=object)),
+        'unchanged sets':
+            ({'parameter_names': ['ints', 'floats', 'strings'],
+              'parameter_samples': numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)},
+             {'parameter_names': ['ints', 'floats', 'strings'],
+              'parameter_samples': numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[1, 10.1, 'a'],
+                  [2, 20.2, 'b']], dtype=object)),
     }
 
     @pytest.mark.unittest
@@ -101,8 +110,8 @@ class TestCustomStudy:
         generate_array = TestMerge2._samples
         assert numpy.all(generate_array == expected_array)
         # Check for consistent hash-parameter set relationships
-        for set_hash, parameter_set in TestMerge1.parameter_study.groupby(_hash_coordinate_key):
-            assert parameter_set == TestMerge2.parameter_study.sel(parameter_set_hash=set_hash)
+        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
         # Self-consistency checks
         assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
         assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
