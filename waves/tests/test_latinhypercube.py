@@ -6,7 +6,6 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
-import scipy.stats
 
 from waves.parameter_generators import LatinHypercube
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
