@@ -20,6 +20,7 @@ Documentation
   Brindley`_.
 - Add the parameter study extension feature to the parameter study tutorials (:issue:`267`, :merge:`273`). By `Kyle
   Brindley`_.
+- Make typesetting corrections to the WAVES tutorials (:issue:`263`, :merge:`276`). By `Thomas Roberts`_.
 
 Enhancements
 ============

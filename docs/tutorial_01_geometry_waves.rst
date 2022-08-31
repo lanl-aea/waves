@@ -81,7 +81,7 @@ exist.
 5. In the ``tutorial_01_geometry`` directory, continue editing the file called
 ``SConscript`` using contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/Sconscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
 
      .. literalinclude:: tutorial_01_geometry_SConscript
          :language: Python
@@ -115,7 +115,7 @@ For more information about the behavior of the
 6. In the ``tutorial_01_geometry`` directory, continue editing the file called
 ``SConscript`` using the contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/Sconscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
 
      .. literalinclude:: tutorial_01_geometry_SConscript
          :language: Python
