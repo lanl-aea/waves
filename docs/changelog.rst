@@ -13,6 +13,8 @@ Bug fixes
 - Use the parameter set name as the parameter study's set index dimension. Fixes unintentional breaking change in the
   parameter study coordinates from :merge:`266` that required users to swap dimensions when merging parameter studies with
   the associated results (:issue:`270`, :merge:`277`). By `Kyle Brindley`_.
+- Merge quantiles attribute correctly when provided with a previous parameter study (:issue:`275`, :merge:`280`). By
+  `Kyle Brindley`_.
 
 Documentation
 =============
