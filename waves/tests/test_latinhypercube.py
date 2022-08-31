@@ -151,19 +151,19 @@ class TestLatinHypercube:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('first_schema, second_schema, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize('first_schema, second_schema, random_state, expected_samples, expected_quantiles',
                                  merge_test.values(),
                              ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, expected_samples, expected_quantiles):
+    def test_merge(self, first_schema, second_schema, random_state, expected_samples, expected_quantiles):
         TestMerge1 = LatinHypercube(first_schema)
-        TestMerge1.generate()
+        TestMerge1.generate(lhs_kwargs={'random_state': random_state})
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = LatinHypercube(second_schema, previous_parameter_study='dummy_string')
-            TestMerge2.generate()
-        samples = TestMerge2._samples
-        quantiles = TestMerge2._quantiles
-        assert numpy.allclose(samples == expected_samples)
-        assert numpy.allclose(quantiles == expected_quantiles)
+            TestMerge2.generate(lhs_kwargs={'random_state': random_state})
+        samples = TestMerge2._samples.astype(float)
+        quantiles = TestMerge2._quantiles.astype(float)
+        assert numpy.allclose(samples, expected_samples)
+        assert numpy.allclose(quantiles, expected_quantiles)
         # Check for consistent hash-parameter set relationships
         for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
             assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
