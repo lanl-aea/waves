@@ -12,6 +12,7 @@ _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"
 _set_coordinate_key = "parameter_sets"
+_quantiles_attribute_key = "_quantiles"
 # When built with ``noarch: python`` in recipe/meta.yaml, WAVES installs to:
 #   $CONDA_PREFIX/lib/python3.8/site-packages/WAVES-*-py3.?.egg
 # but documentation installs at
