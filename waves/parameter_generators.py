@@ -619,11 +619,11 @@ class LatinHypercube(_ParameterGenerator):
         """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
-        default_kwargs = {'samples': set_count}
+        override_kwargs = {'samples': set_count}
         if lhs_kwargs:
-            lhs_kwargs.update(default_kwargs)
+            lhs_kwargs.update(override_kwargs)
         else:
-            lhs_kwargs = default_kwargs
+            lhs_kwargs = override_kwargs
         self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **lhs_kwargs)
         self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
@@ -834,17 +834,16 @@ class SobolSequence(_ParameterGenerator):
 
         :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol sampling method.
             The ``d`` keyword argument is internally managed and will be overwritten to match ``num_simulations`` from
-            the parameter schema. The ``scramble`` keyword is always set to ``False`` for consistent re-draws of
-            previous parameter studies.
+            the parameter schema.
         """
 
         # Instantiate the Sobol Sequence
         parameter_count = len(self._parameter_names)
-        default_kwargs = {'d': parameter_count, 'scramble': False}
+        override_kwargs = {'d': parameter_count}
         if sobol_kwargs:
-            sobol_kwargs.update(default_kwargs)
+            sobol_kwargs.update(override_kwargs)
         else:
-            sobol_kwargs = default_kwargs
+            sobol_kwargs = override_kwargs
         sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
 
         # Draw quantiles
