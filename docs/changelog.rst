@@ -10,7 +10,9 @@ Changelog
 
 New Features
 ============
-- Add a Sobol sequence parameter generator. Requires ``scipy>=1.7.0`` (:issue:`274`, :merge:`278`). By `Kyle Brindley`_.
+- Add a Sobol sequence parameter generator. Requires ``scipy>=1.7.0`` but this is not yet enforced in the Conda package
+  runtime requirements. See :issue:`278` for the timeline on the minimum ``scipy`` requirement update (:issue:`274`,
+  :merge:`278`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
