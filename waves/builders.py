@@ -89,7 +89,10 @@ def abaqus_journal(abaqus_program='abaqus'):
     arguments.
 
     At least one target must be specified. The Builder emitter will append the builder managed targets automatically.
-    Appends ``target[0]``.stdout and ``target[0]``.abaqus_v6.env to the ``target`` list.
+    Appends ``target[0]``.stdout and ``target[0]``.abaqus_v6.env to the ``target`` list. The first specified target 
+    deterimines the location for the ``cd`` command, as shown in the builder action code snippet below. The ``cd`` 
+    command updates the action's present working directory, and the ``abaqus`` command is executed from the first 
+    target's parent directory.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
@@ -99,7 +102,7 @@ def abaqus_journal(abaqus_program='abaqus'):
     .. code-block::
        :caption: Abaqus journal builder action
 
-       abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1
+       cd ${{TARGET.dir.abspath}} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
