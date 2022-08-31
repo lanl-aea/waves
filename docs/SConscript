@@ -72,6 +72,7 @@ documentation_file_list = [
     'tutorial_06_include_files_waves.rst',
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_07_latin_hypercube_waves.rst',
+    'tutorial_07_sobol_sequence_waves.rst',
     'tutorial_08_data_extraction_waves.rst',
     'tutorial_09_post_processing_waves.rst',
     'tutorial_10_regression_testing_waves.rst',
@@ -100,6 +101,7 @@ tutorial_files_list = [
     eabm_dir / 'tutorial_06_include_files_SConstruct',
     eabm_dir / 'tutorial_07_cartesian_product_SConstruct',
     eabm_dir / 'tutorial_07_latin_hypercube_SConstruct',
+    eabm_dir / 'tutorial_07_sobol_sequence_SConstruct',
     eabm_dir / 'tutorial_08_data_extraction_SConstruct',
     eabm_dir / 'tutorial_09_post_processing_SConstruct',
     eabm_dir / 'tutorial_10_regression_testing_SConstruct',
@@ -110,8 +112,9 @@ tutorial_files_list = [
     eabm_dir / env['tutorial_04_dir'] / 'SConscript',
     eabm_dir / env['tutorial_05_dir'] / 'SConscript',
     eabm_dir / env['tutorial_06_dir'] / 'SConscript',
-    eabm_dir / env['tutorial_07_cp_dir'] / 'SConscript',
-    eabm_dir / env['tutorial_07_lh_dir'] / 'SConscript',
+    eabm_dir / env['tutorial_07_cartesian_product_dir'] / 'SConscript',
+    eabm_dir / env['tutorial_07_latin_hypercube_dir'] / 'SConscript',
+    eabm_dir / env['tutorial_07_sobol_sequence_dir'] / 'SConscript',
     eabm_dir / env['tutorial_08_dir'] / 'SConscript',
     eabm_dir / env['tutorial_09_dir'] / 'SConscript',
     eabm_dir / env['tutorial_10_dir'] / 'SConscript',
@@ -136,6 +139,7 @@ tutorial_files_list = [
     eabm_dir / env['python_dir'] / 'single_element_compression_nominal.py',
     eabm_dir / env['python_dir'] / 'single_element_compression_cartesian_product.py',
     eabm_dir / env['python_dir'] / 'single_element_compression_latin_hypercube.py',
+    eabm_dir / env['python_dir'] / 'single_element_compression_sobol_sequence.py',
     eabm_dir / env['python_dir'] / 'plot_scatter.py'
 ]
 for file_path in tutorial_files_list:
