@@ -743,134 +743,146 @@ class CustomStudy(_ParameterGenerator):
         super().write()
 
 
-# TODO: Add ``scipy>=1.7.0`` runtime requirement to recipe/meta.yaml and remove the conditional when aea-beta supports
-# this minimum version of scipy
-import pkg_resources
-current_scipy = pkg_resources.parse_version(pkg_resources.get_distribution('scipy').version)
-minimum_scipy = pkg_resources.parse_version('1.7.0')
-if current_scipy >= minimum_scipy:
+class SobolSequence(_ParameterGenerator):
+    """Builds a Sobol sequence parameter study
 
-    class SobolSequence(_ParameterGenerator):
-        """Builds a Sobol sequence parameter study
+    .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
+    .. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
 
-        An Xarray Dataset is used to store the parameter study. If a previous parameter study file is provided, it will be
-        merged with the current study.
+    .. warning::
 
-        .. warning::
+       WAVES does not currently enforce a minimum version of scipy, but this class requires scipy >=1.7.0. Conda may
+       install WAVES even if the minimum version of scipy required by this class can't be met during environment
+       dependency resolution. If the minimum scipy version is not met, this class will raise a runtime error.
 
-           The merged parameter study feature does *not* check for consistent parameter ranges. Changing the
-           parameter definitions will result in incorrect relationships between parameters and the parameter study samples
-           and quantiles.
+    An Xarray Dataset is used to store the parameter study. If a previous parameter study file is provided, it will be
+    merged with the current study.
 
-        :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
-            SobolSequence expects "schema value" to be a dictionary with a strict structure and one required key.
-            Validated on class instantiation.
-        :param str output_file_template: Output file name template. Required if parameter sets will be written to files
-            instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
-            ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
-            will be appended to the template string.
-        :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
-            an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-            is always overwritten.
-        :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-        :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-        :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
-            study Xarray Dataset
-        :param bool overwrite: Overwrite existing output files
-        :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-        :param bool debug: Print internal variables to STDOUT and exit
-        :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
-            Useful for command line execution with build systems that require an explicit file list for target creation.
+    .. warning::
 
-        Example
+       The merged parameter study feature does *not* check for consistent parameter ranges. Changing the
+       parameter definitions will result in incorrect relationships between parameters and the parameter study samples
+       and quantiles.
 
-        .. code-block::
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+        SobolSequence expects "schema value" to be a dictionary with a strict structure and one required key.
+        Validated on class instantiation.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
+        is always overwritten.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+        study Xarray Dataset
+    :param bool overwrite: Overwrite existing output files
+    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param bool debug: Print internal variables to STDOUT and exit
+    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
 
-           parameter_schema = {
-               'num_simulations': 4,  # Required key. Value must be an integer.
-               'parameter_1': [0., 10.],  # Must be ordered as [lower_bound, upper_bound]
-               'parameter_2': [2.,  5.]
-           }
+    Example
+
+    .. code-block::
+
+       parameter_schema = {
+           'num_simulations': 4,  # Required key. Value must be an integer.
+           'parameter_1': [0., 10.],  # Must be ordered as [lower_bound, upper_bound]
+           'parameter_2': [2.,  5.]
+       }
+    """
+
+    def _validate(self):
+        """Validate the Sobol sequence parameter schema. Executed by class initiation."""
+        # TODO: Add ``scipy>=1.7.0`` runtime requirement to recipe/meta.yaml and remove this conditional when
+        # aea-beta supports this minimum version of scipy. May also be possible to remove the setuptools runtime
+        # requirement if there are no other uses of pkg_resources in WAVES.
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
+        import pkg_resources
+        current_scipy = pkg_resources.parse_version(pkg_resources.get_distribution('scipy').version)
+        minimum_scipy = pkg_resources.parse_version('1.7.0')
+        if current_scipy < minimum_scipy:
+            raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
+
+        # TODO: Settle on an input file schema and validation library
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
+        if 'num_simulations' not in self.parameter_schema.keys():
+            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
+        elif not isinstance(self.parameter_schema['num_simulations'], int):
+            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+        self._create_parameter_names()
+        for name in self._parameter_names:
+            parameter_definition = self.parameter_schema[name]
+            if not isinstance(parameter_definition, (list, set, tuple)):
+                raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
+            if not len(parameter_definition) == 2:
+                raise ValueError(f"Parameter '{name}' must have exactly length two: [lower_bound, upper_bound]")
+            for value in parameter_definition:
+                if not isinstance(value, numbers.Number):
+                    raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
+            if parameter_definition[1] < parameter_definition[0]:
+                raise ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound, "
+                                 "upper_bound]")
+
+    def generate(self, sobol_kwargs=None):
+        """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
+        generate the parameter study.
+
+        :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol sampling method.
+            The ``d`` keyword argument is internally managed and will be overwritten to match ``num_simulations`` from
+            the parameter schema. The ``scramble`` keyword is always set to ``False`` for consistent re-draws of
+            previous parameter studies.
         """
 
-        def _validate(self):
-            """Validate the Sobol sequence parameter schema. Executed by class initiation."""
-            # TODO: Settle on an input file schema and validation library
-            if not isinstance(self.parameter_schema, dict):
-                raise TypeError("parameter_schema must be a dictionary")
-            if 'num_simulations' not in self.parameter_schema.keys():
-                raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
-            elif not isinstance(self.parameter_schema['num_simulations'], int):
-                raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-            self._create_parameter_names()
-            for name in self._parameter_names:
-                parameter_definition = self.parameter_schema[name]
-                if not isinstance(parameter_definition, (list, set, tuple)):
-                    raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
-                if not len(parameter_definition) == 2:
-                    raise ValueError(f"Parameter '{name}' must have exactly length two: [lower_bound, upper_bound]")
-                for value in parameter_definition:
-                    if not isinstance(value, numbers.Number):
-                        raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
-                if parameter_definition[1] < parameter_definition[0]:
-                    raise ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound, "
-                                     "upper_bound]")
+        # Instantiate the Sobol Sequence
+        parameter_count = len(self._parameter_names)
+        default_kwargs = {'d': parameter_count, 'scramble': False}
+        if sobol_kwargs:
+            sobol_kwargs.update(default_kwargs)
+        else:
+            sobol_kwargs = default_kwargs
+        sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
 
-        def generate(self, sobol_kwargs=None):
-            """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
-            generate the parameter study.
+        # Determine how many new draws to make. Extends from previous study if available
+        set_count = self.parameter_schema['num_simulations']
+        number_of_draws = set_count
+        previous_set_count = None
+        if self.previous_parameter_study:
+            # TODO: allow the user to override ``scramble`` and only re-draw from previous parameter study for
+            # ``seed`` or ``scramble=False``.
+            previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
+            previous_set_count = len(previous_parameter_study.coords[_set_coordinate_key])
+            previous_parameter_study.close()
+        if previous_set_count:
+            # TODO: recover previous parameter study meta attributes and exit early if set_count matches
+            # previous_set_count
+            if set_count > previous_set_count:
+                sampler.fast_forward(previous_set_count)
+                number_of_draws = set_count - previous_set_count
 
-            :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol sampling method.
-                The ``d`` keyword argument is internally managed and will be overwritten to match ``num_simulations`` from
-                the parameter schema. The ``scramble`` keyword is always set to ``False`` for consistent re-draws of
-                previous parameter studies.
-            """
+        # Draw quantiles
+        self._quantiles = sampler.random(number_of_draws)
 
-            # Instantiate the Sobol Sequence
-            parameter_count = len(self._parameter_names)
-            default_kwargs = {'d': parameter_count, 'scramble': False}
-            if sobol_kwargs:
-                sobol_kwargs.update(default_kwargs)
-            else:
-                sobol_kwargs = default_kwargs
-            sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
+        # Convert quantiles to scaled samples
+        lower_bounds = [self.parameter_schema[name][0] for name in self._parameter_names]
+        upper_bounds = [self.parameter_schema[name][1] for name in self._parameter_names]
+        self._samples = scipy.stats.qmc.scale(self._quantiles, lower_bounds, upper_bounds)
 
-            # Determine how many new draws to make. Extends from previous study if available
-            set_count = self.parameter_schema['num_simulations']
-            number_of_draws = set_count
-            previous_set_count = None
-            if self.previous_parameter_study:
-                # TODO: allow the user to override ``scramble`` and only re-draw from previous parameter study for
-                # ``seed`` or ``scramble=False``.
-                previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
-                previous_set_count = len(previous_parameter_study.coords[_set_coordinate_key])
-                previous_parameter_study.close()
-            if previous_set_count:
-                # TODO: recover previous parameter study meta attributes and exit early if set_count matches
-                # previous_set_count
-                if set_count > previous_set_count:
-                    sampler.fast_forward(previous_set_count)
-                    number_of_draws = set_count - previous_set_count
+        # Common work to create a parameter study Xarray Dataset
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
+        self._create_parameter_study()
+        if self.previous_parameter_study:
+            self._merge_parameter_studies()
 
-            # Draw quantiles
-            self._quantiles = sampler.random(number_of_draws)
+    def write(self):
+        # Get the ABC docstring into each paramter generator API
+        super().write()
 
-            # Convert quantiles to scaled samples
-            lower_bounds = [self.parameter_schema[name][0] for name in self._parameter_names]
-            upper_bounds = [self.parameter_schema[name][1] for name in self._parameter_names]
-            self._samples = scipy.stats.qmc.scale(self._quantiles, lower_bounds, upper_bounds)
-
-            # Common work to create a parameter study Xarray Dataset
-            self._create_parameter_set_hashes()
-            self._create_parameter_set_names()
-            self._create_parameter_study()
-            if self.previous_parameter_study:
-                self._merge_parameter_studies()
-
-        def write(self):
-            # Get the ABC docstring into each paramter generator API
-            super().write()
-
-        def _create_parameter_names(self):
-            """Construct the Sobol sequence parameter names"""
-            self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+    def _create_parameter_names(self):
+        """Construct the Sobol sequence parameter names"""
+        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
