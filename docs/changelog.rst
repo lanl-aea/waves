@@ -5,7 +5,11 @@ Changelog
 #########
 
 ******************
-0.3.5 (unreleased)
+0.3.7 (unreleased)
+******************
+
+******************
+0.3.6 (2022-08-31)
 ******************
 
 New Features
@@ -24,11 +28,23 @@ Bug fixes
 
 Documentation
 =============
+- Make typesetting corrections to the WAVES tutorials (:issue:`263`, :merge:`276`). By `Thomas Roberts`_.
+
+Internal Changes
+================
+- Use vectorized indexing to replace ``nan`` values in ``_ParameterGenerator._update_parameter_set_names()``
+  (:issue:`271`, :merge:`275`). By `Matthew Fister`_.
+
+******************
+0.3.5 (2022-08-24)
+******************
+
+Documentation
+=============
 - Fix the type hint for the ``previous_parameter_study`` of the paramter generators' API (:merge:`271`). By `Kyle
   Brindley`_.
 - Add the parameter study extension feature to the parameter study tutorials (:issue:`267`, :merge:`273`). By `Kyle
   Brindley`_.
-- Make typesetting corrections to the WAVES tutorials (:issue:`263`, :merge:`276`). By `Thomas Roberts`_.
 
 Enhancements
 ============
@@ -40,8 +56,6 @@ Internal Changes
 ================
 - Use ``pyDOE2`` instead of ``smt`` for Latin Hypercube sampling. Implement more rigorous Latin Hypercube parameter
   study unit tests (:issue:`261`, :merge:`272`). By `Kyle Brindley`_.
-- Use vectorized indexing to replace ``nan`` values in ``_ParameterGenerator._update_parameter_set_names()``
-  (:issue:`271`, :merge:`275`). By `Matthew Fister`_.
 
 ******************
 0.3.4 (2022-08-23)
