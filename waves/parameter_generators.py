@@ -847,25 +847,9 @@ class SobolSequence(_ParameterGenerator):
             sobol_kwargs = default_kwargs
         sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
 
-        # Determine how many new draws to make. Extends from previous study if available
-        set_count = self.parameter_schema['num_simulations']
-        number_of_draws = set_count
-        previous_set_count = None
-        if self.previous_parameter_study:
-            # TODO: allow the user to override ``scramble`` and only re-draw from previous parameter study for
-            # ``seed`` or ``scramble=False``.
-            previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
-            previous_set_count = len(previous_parameter_study.coords[_set_coordinate_key])
-            previous_parameter_study.close()
-        if previous_set_count:
-            # TODO: recover previous parameter study meta attributes and exit early if set_count matches
-            # previous_set_count
-            if set_count > previous_set_count:
-                sampler.fast_forward(previous_set_count)
-                number_of_draws = set_count - previous_set_count
-
         # Draw quantiles
-        self._quantiles = sampler.random(number_of_draws)
+        set_count = self.parameter_schema['num_simulations']
+        self._quantiles = sampler.random(set_count)
 
         # Convert quantiles to scaled samples
         lower_bounds = [self.parameter_schema[name][0] for name in self._parameter_names]
