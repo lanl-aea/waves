@@ -513,9 +513,9 @@ class CartesianProduct(_ParameterGenerator):
 
 
 class LatinHypercube(_ParameterGenerator):
-    """Builds a Latin Hypercube parameter study
+    """Builds a Latin-Hypercube parameter study from the `pyDOE2`_ latin-hypercube class
 
-    The 'h5' output file type is the only output type that contains both the parameter samples *and* quantiles.
+    The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
 
     .. warning::
 
@@ -584,7 +584,7 @@ class LatinHypercube(_ParameterGenerator):
     """
 
     def _validate(self):
-        """Validate the Latin Hypercube parameter schema. Executed by class initiation."""
+        """Validate the Latin-Hypercube parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
@@ -611,9 +611,9 @@ class LatinHypercube(_ParameterGenerator):
         self.parameter_distributions = self._generate_parameter_distributions()
 
     def generate(self, lhs_kwargs=None):
-        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
+        """Generate the Latin-Hypercube parameter sets. Must be called directly to generate the parameter study.
 
-        :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin Hypercube sampling method.
+        :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin-Hypercube sampling method.
             The ``samples`` keyword argument is internally managed and will be overwritten to match ``num_simulations``
             from the parameter schema.
         """
@@ -654,14 +654,12 @@ class LatinHypercube(_ParameterGenerator):
         super().write()
 
     def _create_parameter_names(self):
-        """Construct the Latin Hypercube parameter names"""
+        """Construct the Latin-Hypercube parameter names"""
         self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
 
 
 class CustomStudy(_ParameterGenerator):
     """Builds a custom parameter study from user-specified values
-
-    An Xarray Dataset is used to store the parameter study.
 
     :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
         Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
@@ -744,7 +742,7 @@ class CustomStudy(_ParameterGenerator):
 
 
 class SobolSequence(_ParameterGenerator):
-    """Builds a Sobol sequence parameter study
+    """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
 
     .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
     .. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
@@ -755,8 +753,7 @@ class SobolSequence(_ParameterGenerator):
        install WAVES even if the minimum version of scipy required by this class can't be met during environment
        dependency resolution. If the minimum scipy version is not met, this class will raise a runtime error.
 
-    An Xarray Dataset is used to store the parameter study. If a previous parameter study file is provided, it will be
-    merged with the current study.
+    The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
 
     .. warning::
 
@@ -832,9 +829,12 @@ class SobolSequence(_ParameterGenerator):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study.
 
-        :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol sampling method.
-            The ``d`` keyword argument is internally managed and will be overwritten to match ``num_simulations`` from
-            the parameter schema.
+        To produce consistent Sobol sequences on repeat instantiations, the ``sobol_kwargs`` must include either
+        ``{'scramble': False}`` or ``{'seed': <int>}``. See the `scipy Sobol`_ documentation for details.
+
+        :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class.  The ``d`` keyword
+            argument is internally managed and will be overwritten to match the number of parameters defined in the
+            parameter schema.
         """
 
         # Instantiate the Sobol Sequence
