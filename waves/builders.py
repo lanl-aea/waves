@@ -185,7 +185,7 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
     .. code-block::
        :caption: Abaqus journal builder action
 
-       ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
     :param str post_simulation: Shell command string to execute after the simulation command finishes. Intended to allow
@@ -299,7 +299,7 @@ def python_script():
     .. code-block::
        :caption: Python script builder action
 
-       python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
