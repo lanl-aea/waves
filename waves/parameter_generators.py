@@ -474,8 +474,8 @@ class CartesianProduct(_ParameterGenerator):
        Dimensions:             (data_type: 1, parameter_set_hash: 4)
        Coordinates:
          * data_type           (data_type) object 'samples'
-         * parameter_set_hash  (parameter_set_hash) <U32 'de3cb3eaecb767ff63973820b2...
-           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+           parameter_set_hash  (parameter_set_hash) <U32 'de3cb3eaecb767ff63973820b2...
+         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (data_type, parameter_set_hash) object 1 1 2 2
            parameter_2         (data_type, parameter_set_hash) object 'a' 'b' 'a' 'b'
@@ -567,9 +567,9 @@ class LatinHypercube(_ParameterGenerator):
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_set_hash: 4)
        Coordinates:
-         * parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
+           parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
          * data_type           (data_type) <U9 'quantiles' 'samples'
-           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
@@ -697,8 +697,8 @@ class CustomStudy(_ParameterGenerator):
        Dimensions:             (data_type: 1, parameter_set_hash: 2)
        Coordinates:
          * data_type           (data_type) object 'samples'
-         * parameter_set_hash  (parameter_set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
-           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
+           parameter_set_hash  (parameter_set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
+        *  parameter_sets      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
        Data variables:
            height              (data_type, parameter_set_hash) object 1.0 2.0
            prefix              (data_type, parameter_set_hash) object 'a' 'b'
@@ -790,6 +790,18 @@ class SobolSequence(_ParameterGenerator):
            'parameter_1': [0., 10.],  # Must be ordered as [lower_bound, upper_bound]
            'parameter_2': [2.,  5.]
        }
+       parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
+       parameter_generator.generate(sobol_kwargs={'scramble': False})
+       print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:             (data_type: 2, parameter_sets: 4)
+       Coordinates:
+           parameter_set_hash  (parameter_sets) <U32 'c1fa74da12c0991379d1df6541c421...
+         * data_type           (data_type) <U9 'quantiles' 'samples'
+         * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
+       Data variables:
+           parameter_1         (data_type, parameter_sets) float64 0.0 0.5 ... 7.5 2.5
+           parameter_2         (data_type, parameter_sets) float64 0.0 0.5 ... 4.25
     """
 
     def _validate(self):
