@@ -8,3 +8,4 @@ sphinx_rtd_theme
 sphinxcontrib-bibtex
 xarray
 waves
+yaml
