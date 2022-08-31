@@ -8,6 +8,12 @@ Changelog
 0.3.5 (unreleased)
 ******************
 
+New Features
+============
+- Add a Sobol sequence parameter generator. Requires ``scipy>=1.7.0`` but this is not yet enforced in the Conda package
+  runtime requirements. See :issue:`278` for the timeline on the minimum ``scipy`` requirement update (:issue:`274`,
+  :merge:`278`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
 - Use the parameter set name as the parameter study's set index dimension. Fixes unintentional breaking change in the

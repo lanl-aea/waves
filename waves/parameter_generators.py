@@ -5,6 +5,7 @@ import sys
 import itertools
 import copy
 import hashlib
+import numbers
 
 import yaml
 import numpy
@@ -75,7 +76,10 @@ class _ParameterGenerator(ABC):
                                f"The 'output_file_type' must be one of {allowable_output_file_types}")
 
         if self.output_file:
-            self.output_file = pathlib.Path(output_file)
+            self.output_file = pathlib.Path(self.output_file)
+
+        if self.previous_parameter_study:
+            self.previous_parameter_study = pathlib.Path(self.previous_parameter_study)
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False
@@ -412,7 +416,7 @@ class _ParameterGenerator(ABC):
         """
         # Swap dimensions from the set name to the set hash to merge identical sets
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
-        previous_parameter_study = xarray.open_dataset(pathlib.Path(self.previous_parameter_study)).astype(object)
+        previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
@@ -470,8 +474,8 @@ class CartesianProduct(_ParameterGenerator):
        Dimensions:             (data_type: 1, parameter_set_hash: 4)
        Coordinates:
          * data_type           (data_type) object 'samples'
-         * parameter_set_hash  (parameter_set_hash) <U32 'de3cb3eaecb767ff63973820b2...
-           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+           parameter_set_hash  (parameter_set_hash) <U32 'de3cb3eaecb767ff63973820b2...
+         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (data_type, parameter_set_hash) object 1 1 2 2
            parameter_2         (data_type, parameter_set_hash) object 'a' 'b' 'a' 'b'
@@ -495,6 +499,8 @@ class CartesianProduct(_ParameterGenerator):
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
+
+        # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
@@ -502,13 +508,14 @@ class CartesianProduct(_ParameterGenerator):
             self._merge_parameter_studies()
 
     def write(self):
+        # Get the ABC docstring into each paramter generator API
         super().write()
 
 
 class LatinHypercube(_ParameterGenerator):
-    """Builds a Latin Hypercube parameter study
+    """Builds a Latin-Hypercube parameter study from the `pyDOE2`_ latin-hypercube class
 
-    The 'h5' output file type is the only output type that contains both the parameter samples *and* quantiles.
+    The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
 
     .. warning::
 
@@ -560,9 +567,9 @@ class LatinHypercube(_ParameterGenerator):
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_set_hash: 4)
        Coordinates:
-         * parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
+           parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
          * data_type           (data_type) <U9 'quantiles' 'samples'
-           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
@@ -577,7 +584,7 @@ class LatinHypercube(_ParameterGenerator):
     """
 
     def _validate(self):
-        """Validate the Latin Hypercube parameter schema. Executed by class initiation."""
+        """Validate the Latin-Hypercube parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
@@ -604,23 +611,25 @@ class LatinHypercube(_ParameterGenerator):
         self.parameter_distributions = self._generate_parameter_distributions()
 
     def generate(self, lhs_kwargs=None):
-        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
+        """Generate the Latin-Hypercube parameter sets. Must be called directly to generate the parameter study.
 
-        :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin Hypercube sampling method.
+        :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin-Hypercube sampling method.
             The ``samples`` keyword argument is internally managed and will be overwritten to match ``num_simulations``
             from the parameter schema.
         """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
-        default_kwargs = {'samples': set_count}
+        override_kwargs = {'samples': set_count}
         if lhs_kwargs:
-            lhs_kwargs.update(default_kwargs)
+            lhs_kwargs.update(override_kwargs)
         else:
-            lhs_kwargs = default_kwargs
+            lhs_kwargs = override_kwargs
         self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **lhs_kwargs)
         self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
             self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
+
+        # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
@@ -641,17 +650,16 @@ class LatinHypercube(_ParameterGenerator):
         return parameter_distributions
 
     def write(self):
+        # Get the ABC docstring into each paramter generator API
         super().write()
 
     def _create_parameter_names(self):
-        """Construct the Latin Hypercube parameter names"""
+        """Construct the Latin-Hypercube parameter names"""
         self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
 
 
 class CustomStudy(_ParameterGenerator):
     """Builds a custom parameter study from user-specified values
-
-    An Xarray Dataset is used to store the parameter study.
 
     :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
         Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
@@ -689,8 +697,8 @@ class CustomStudy(_ParameterGenerator):
        Dimensions:             (data_type: 1, parameter_set_hash: 2)
        Coordinates:
          * data_type           (data_type) object 'samples'
-         * parameter_set_hash  (parameter_set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
-           parameter_sets      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
+           parameter_set_hash  (parameter_set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
+        *  parameter_sets      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
        Data variables:
            height              (data_type, parameter_set_hash) object 1.0 2.0
            prefix              (data_type, parameter_set_hash) object 'a' 'b'
@@ -720,8 +728,156 @@ class CustomStudy(_ParameterGenerator):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study."""
         self._samples = numpy.array(self.parameter_schema['parameter_samples'], dtype=object)
+
+        # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
         if self.previous_parameter_study:
             self._merge_parameter_studies()
+
+    def write(self):
+        # Get the ABC docstring into each paramter generator API
+        super().write()
+
+
+class SobolSequence(_ParameterGenerator):
+    """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
+
+    .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
+    .. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
+
+    .. warning::
+
+       WAVES does not currently enforce a minimum version of scipy, but this class requires scipy >=1.7.0. Conda may
+       install WAVES even if the minimum version of scipy required by this class can't be met during environment
+       dependency resolution. If the minimum scipy version is not met, this class will raise a runtime error.
+
+    The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
+
+    .. warning::
+
+       The merged parameter study feature does *not* check for consistent parameter ranges. Changing the
+       parameter definitions will result in incorrect relationships between parameters and the parameter study samples
+       and quantiles.
+
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+        SobolSequence expects "schema value" to be a dictionary with a strict structure and one required key.
+        Validated on class instantiation.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
+        is always overwritten.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+        study Xarray Dataset
+    :param bool overwrite: Overwrite existing output files
+    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param bool debug: Print internal variables to STDOUT and exit
+    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    Example
+
+    .. code-block::
+
+       parameter_schema = {
+           'num_simulations': 4,  # Required key. Value must be an integer.
+           'parameter_1': [0., 10.],  # Must be ordered as [lower_bound, upper_bound]
+           'parameter_2': [2.,  5.]
+       }
+       parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
+       parameter_generator.generate(sobol_kwargs={'scramble': False})
+       print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:             (data_type: 2, parameter_sets: 4)
+       Coordinates:
+           parameter_set_hash  (parameter_sets) <U32 'c1fa74da12c0991379d1df6541c421...
+         * data_type           (data_type) <U9 'quantiles' 'samples'
+         * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
+       Data variables:
+           parameter_1         (data_type, parameter_sets) float64 0.0 0.5 ... 7.5 2.5
+           parameter_2         (data_type, parameter_sets) float64 0.0 0.5 ... 4.25
+    """
+
+    def _validate(self):
+        """Validate the Sobol sequence parameter schema. Executed by class initiation."""
+        # TODO: Add ``scipy>=1.7.0`` runtime requirement to recipe/meta.yaml and remove this conditional when
+        # aea-beta supports this minimum version of scipy. May also be possible to remove the setuptools runtime
+        # requirement if there are no other uses of pkg_resources in WAVES.
+        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
+        import pkg_resources
+        current_scipy = pkg_resources.parse_version(pkg_resources.get_distribution('scipy').version)
+        minimum_scipy = pkg_resources.parse_version('1.7.0')
+        if current_scipy < minimum_scipy:
+            raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
+
+        # TODO: Settle on an input file schema and validation library
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
+        if 'num_simulations' not in self.parameter_schema.keys():
+            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
+        elif not isinstance(self.parameter_schema['num_simulations'], int):
+            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+        self._create_parameter_names()
+        for name in self._parameter_names:
+            parameter_definition = self.parameter_schema[name]
+            if not isinstance(parameter_definition, (list, set, tuple)):
+                raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
+            if not len(parameter_definition) == 2:
+                raise ValueError(f"Parameter '{name}' must have exactly length two: [lower_bound, upper_bound]")
+            for value in parameter_definition:
+                if not isinstance(value, numbers.Number):
+                    raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
+            if parameter_definition[1] < parameter_definition[0]:
+                raise ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound, "
+                                 "upper_bound]")
+
+    def generate(self, sobol_kwargs=None):
+        """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
+        generate the parameter study.
+
+        To produce consistent Sobol sequences on repeat instantiations, the ``sobol_kwargs`` must include either
+        ``{'scramble': False}`` or ``{'seed': <int>}``. See the `scipy Sobol`_ documentation for details.
+
+        :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class.  The ``d`` keyword
+            argument is internally managed and will be overwritten to match the number of parameters defined in the
+            parameter schema.
+        """
+
+        # Instantiate the Sobol Sequence
+        parameter_count = len(self._parameter_names)
+        override_kwargs = {'d': parameter_count}
+        if sobol_kwargs:
+            sobol_kwargs.update(override_kwargs)
+        else:
+            sobol_kwargs = override_kwargs
+        sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
+
+        # Draw quantiles
+        set_count = self.parameter_schema['num_simulations']
+        self._quantiles = sampler.random(set_count)
+
+        # Convert quantiles to scaled samples
+        lower_bounds = [self.parameter_schema[name][0] for name in self._parameter_names]
+        upper_bounds = [self.parameter_schema[name][1] for name in self._parameter_names]
+        self._samples = scipy.stats.qmc.scale(self._quantiles, lower_bounds, upper_bounds)
+
+        # Common work to create a parameter study Xarray Dataset
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
+        self._create_parameter_study()
+        if self.previous_parameter_study:
+            self._merge_parameter_studies()
+
+    def write(self):
+        # Get the ABC docstring into each paramter generator API
+        super().write()
+
+    def _create_parameter_names(self):
+        """Construct the Sobol sequence parameter names"""
+        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
