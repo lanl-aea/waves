@@ -150,10 +150,14 @@ def _abaqus_solver_emitter(target, source, env):
 def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
     """Abaqus solver SCons builder
 
-    This builder requires that the root input file is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds optional Builder keyword arguments ``job_name`` and
-    ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. The Builder emitter will
-    append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
+    This builder requires that the root input file is the first source in the list. The first target deterimines the 
+    working directory for the builder's action, as shown in the action code snippet below. The action changes the 
+    working directory to the first target's parent directory prior to executing the journal file.
+
+    The builder returned by this function accepts all SCons Builder arguments and adds optional Builder keyword 
+    arguments ``job_name`` and ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. 
+    The Builder emitter will append common Abaqus output files as targets automatically from the ``job_name``, e.g. 
+    ``job_name.odb``.
 
     This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets
     automatically. The target list only appends those extensions which are common to Abaqus analysis operations. Some
@@ -288,8 +292,12 @@ def python_script():
     this function accepts all SCons Builder arguments and adds the ``script_options`` and ``python_options`` string
     arguments.
 
-    At least one target must be specified. The Builder emitter will append the builder managed targets automatically.
-    Appends ``target[0]``.stdout to the ``target`` list.
+    At least one target must be specified. The first target deterimines the working directory for the builder's action, 
+    as shown in the action code snippet below. The action changes the working directory to the first target's parent 
+    directory prior to executing the journal file.
+
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout to the 
+    ``target`` list.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
