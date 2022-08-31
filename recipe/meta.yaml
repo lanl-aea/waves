@@ -56,6 +56,9 @@ requirements:
     - pyyaml
     - scipy
     - scons
+    # TODO: Remove after updating minimum scipy requirement
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
+    - setuptools
     - pyDOE2 >=1
     - xarray
 
