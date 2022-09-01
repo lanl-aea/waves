@@ -121,6 +121,25 @@ differences:
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
+      :emphasize-lines: 4-5, 11
+
+The first two highlighted lines above demonstrate the usage of ``--input-file`` and ``--output--file`` command line 
+arguments for the ``single_element_mesh.py`` file. In previous tutorials, we have accepted the default values for input 
+and output files. In this case, however, we must specify that a common input file is used, as we want to re-use the 
+target from the Partition workflow that happened before the ``for`` loop. If we would have accepted the default input 
+file name, ``SCons`` would try to find a source file in the ``build/parameter_set{0,1,2,3}`` directory. We avoid this 
+issue by providing the absolute path to the ``single_element_partition.cae`` as the ``--input-file``.
+
+The ``--output-file`` command line argument is specified in this case only for demonstration (the default value would 
+actually work just fine). It is important to note that the ``--output-file`` name is **not** given as ``set_name / 
+journal_file``. This is because the :meth:`waves.builders.abaqus_journal` builder's action first changes the build 
+directory to the parent directory of the first specified target, then the journal file is executed. This behavior is 
+explained further in the :meth:`waves.builders.abaqus_journal` API.
+
+The final highlighted line in the code above demonstrates the usage of an ``SCons`` file object as a source. Rathern 
+than pointing to the ``single_element_partition.cae`` file via absolute path, we can let ``SCons`` find the file for us 
+in the build directory. This is achieve by simply pointing to the ``SCons`` file object that was created when we 
+specified ``single_element_partition.cae`` as a target in the ``# Partition`` workflow.
 
 **********
 SConstruct
