@@ -8,6 +8,11 @@ Changelog
 0.3.7 (unreleased)
 ******************
 
+Documentation
+=============
+- Clarify the WAVES builder behavior of setting the working directory to the parent directory of the first specified 
+  target (:issue:`265`, :merge:`279`). By `Thomas Roberts`_.
+
 Enhancements
 ============
 - Provide the data downselection dictionary as a CLI argument rather than hardcoding it in ``plot_scatter.py``
