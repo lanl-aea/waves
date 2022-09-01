@@ -15,6 +15,9 @@ tutorials. Specifically, this tutorial will discuss
 References
 **********
 
+* `Mesh Convergence`_ Studies
+* SCons file objects: `SCons Node Package`_
+
 ***********
 Environment
 ***********
@@ -178,7 +181,7 @@ SConstruct
 Build Targets
 *************
 
-5. Build the datacheck targets without executing the full simulation workflow
+8. Build the new targets
 
 .. code-block:: bash
 
@@ -195,7 +198,7 @@ script.
 Output Files
 ************
 
-Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
+9. Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
 
 .. code-block::
 
