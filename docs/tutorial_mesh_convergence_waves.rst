@@ -4,6 +4,13 @@
 Tutorial Mesh Convergence
 #########################
 
+This tutorial is intended to demonstrate several key advanced usage features that were glossed over in previous 
+tutorials. Specifically, this tutorial will discuss
+
+* Building a parameter study from somewhere in the middle of the SCons workflow using a common target
+* Utilizing journal file ``--input-file`` and ``--output-file`` arguments
+* Using the ``plot_scatter.py`` script to create multiple plots
+
 **********
 References
 **********
@@ -35,18 +42,32 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_10_regression_testing/SConscript tutorial_mesh_convergence
 
+********************
+Parameter Study File
+********************
+
+5. Create a new file ``eabm_package/python/single_element_compression_mesh_convergence.py`` from the content below.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_mesh_convergence.py
+
+   .. literalinclude:: python_single_element_compression_mesh_convergence.py
+      :language: Python
+
 **********
 SConscript
 **********
 
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
-changes made in this tutorial.
+changes made in this tutorial. Use the diff to update your ``tutorial_10_regression_testing/SConscript`` file, and then 
+follow along in paragraphs that follow to understand the meaning of these changes.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
    .. literalinclude:: tutorial_mesh_convergence_SConscript
       :language: Python
       :diff: tutorial_10_regression_testing_SConscript
+
+
 
 **********
 SConstruct
