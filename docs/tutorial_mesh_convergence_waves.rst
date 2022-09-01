@@ -60,9 +60,9 @@ decreased several times by a factor of two.
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
-changes made in this tutorial. Use the diff to update your ``tutorial_10_regression_testing/SConscript`` file, and then 
-follow along in paragraphs that follow to understand the meaning of these changes.
+6. A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
+  identify the changes made in this tutorial. Use the diff to update your ``tutorial_10_regression_testing/SConscript`` 
+  file, and then follow along in paragraphs that follow to understand the meaning of these changes.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
@@ -141,12 +141,19 @@ than pointing to the ``single_element_partition.cae`` file via absolute path, we
 in the build directory. This is achieve by simply pointing to the ``SCons`` file object that was created when we 
 specified ``single_element_partition.cae`` as a target in the ``# Partition`` workflow.
 
+.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
+
+   .. literalinclude:: tutorial_mesh_convergence_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-4
+
 **********
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
-changes made in this tutorial.
+7. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
+  identify the changes made in this tutorial. Make these changes to your ``SConstruct`` file.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
