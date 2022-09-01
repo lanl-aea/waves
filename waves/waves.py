@@ -13,17 +13,22 @@ def main():
 
     :returns: return code
     """
+    return_code = None
     parser = get_parser()
     args, unknown = parser.parse_known_args()
 
     if args.subcommand == 'docs':
         open_docs()
     elif args.subcommand == 'build':
-        build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
-              working_directory=args.working_directory)
+        return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
+                            working_directory=args.working_directory)
     else:
         parser.print_help()
-    return 0
+
+    if return_code:
+        return return_code
+    else:
+        return 0
 
 
 def get_parser():
@@ -71,7 +76,7 @@ def get_parser():
         help=f"Thin SCons wrapper",
         description=f"Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
         parents=[build_parser])
-    build_parser.add_argument("TARGET", nargs="*",
+    build_parser.add_argument("TARGET", nargs="+",
                               help=f"SCons target list")
     build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
                               help="Maximum number of SCons command iterations")
@@ -89,24 +94,30 @@ def open_docs():
 def build(targets, scons_args=[], max_iterations=5, working_directory=None):
     """Submit an iterative SCons command
 
-    SCons command is re-submitting until SCons reports that the target(s) 'is up to date.'
+    SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
+    reached. If multiple targets are submitted, they are executed sequentially in the order provided.
 
     :param list targets: list of SCons targets (positional arguments)
     :param list scons_args: list of SCons arguments
     :param int max_iterations: maximum number of iterations before the iterative loop is terminated
     :param str working_directory: Change the SCons command working directory
     """
+    if not targets:
+        print('At least one target must be provided')
+        return 1
     stop_trigger = 'is up to date.'
     scons_command = ['scons']
     scons_command.extend(scons_args)
-    if targets:
-        scons_command.extend(targets)
-    scons_stdout = b"Go boat"
-    count = 0
-    while stop_trigger not in scons_stdout.decode('utf-8') and count < max_iterations:
-        count += 1
-        print(f"iteration {count}: '{' '.join(scons_command)}'")
-        scons_stdout = subprocess.check_output(scons_command, cwd=working_directory)
+    for target in targets:
+        scons_stdout = b"Go boat"
+        count = 0
+        command = scons_command + [target]
+        while stop_trigger not in scons_stdout.decode('utf-8') and count < max_iterations:
+            count += 1
+            print(f"iteration {count}: '{' '.join(command)}'")
+            scons_stdout = subprocess.check_output(command, cwd=working_directory)
+
+    return 0
 
 
 if __name__ == "__main__":
