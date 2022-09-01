@@ -406,9 +406,9 @@ def abaqus_extract(abaqus_program='abaqus'):
     file are ignored by ``odb_extract``.
 
     This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets 
-    and ``odb_extract`` target name constructions automatically. The first automatically appended target determines the 
-    working directory for the builder's action, as shown in the action code snippet below. The action changes the 
-    working directory to the first target's parent directory prior to performing other builder actions.
+    and ``odb_extract`` target name constructions automatically. The first target determines the working directory for 
+    the builder's action, as shown in the action code snippet below. The action changes the working directory to the 
+    first target's parent directory prior to performing other builder actions.
 
     The target list may specify an output H5 file name that differs from the ODB file base name as ``new_name.h5``. If
     the first file in the target list does not contain the ``*.h5`` extension, or if there is no file in the target
