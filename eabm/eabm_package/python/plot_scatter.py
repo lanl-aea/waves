@@ -26,7 +26,6 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     :param str selection_dict: YAML formatted dictionary string, e.g. ``{'data_var': value}``, to define the down selection 
                                of data to be plotted. Dictionary key: value pairs must match the data variables and 
                                coordinates of the expected Xarray Dataset object.
-    :param str selection_dict: Dictionary (written as a string) to define the downselection of data to be plotted
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
     """
