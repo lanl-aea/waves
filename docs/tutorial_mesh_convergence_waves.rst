@@ -147,6 +147,19 @@ specified ``single_element_partition.cae`` as a target in the ``# Partition`` wo
       :language: Python
       :lineno-match:
       :start-after: marker-6
+      :emphasize-lines: 12-21
+
+The highlighted code above demonstrated the usage of the ``plot_scatter.py`` script to generate a second plot. The first 
+plot is a simple stress-strain comparison for each parameter set. The highlighted code is used to generate a plot of 
+global mesh size versus final stress in the model. As the global mesh size decreased, the final stress should start 
+to converge to a common value.
+
+The specification of a ``selection_dict`` demonstrates another non-default usage of a command line argument. In this 
+case, the only key: value pair added to the ``selection_dict`` that does not already exist in the ``plot_scatter.py`` 
+CLI defaults is the specification of the time point ``'time': 1.0``.
+
+The remaining changes are rather simple. The ``--x-units`` and ``--x-var`` command line arguments are updated to reflect 
+the usage of the ``global_seed`` parameter as the independent variable.
 
 **********
 SConstruct
@@ -173,6 +186,35 @@ Build Targets
    /path/to/waves-eabm-tutorial
    $ scons tutorial_mesh_convergence --jobs=4
 
+The output from building the targets is not shown explicitly here, but look for one particular aspect of the terminal 
+output. You should notice the execution of the ``single_element_geometry.py`` and ``single_element_partition.py`` 
+scripts first, and then the parameter study is kicked off with multiple executions of the ``single_element_mesh.py`` 
+script.
+
 ************
 Output Files
 ************
+
+Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
+
+.. code-block::
+
+    $ cat build/tutorial_09_post-processing/stress_strain_comparison.stdout
+
+    <xarray.Dataset>
+    Dimensions:             (LE values: 4, S values: 4, elements: 64, step: 1,
+                             time: 5, parameter_sets: 4, data_type: 1)
+    Coordinates:
+      * LE values           (LE values) object 'LE11' 'LE22' 'LE33' 'LE12'
+      * S values            (S values) object 'S11' 'S22' 'S33' 'S12'
+      * elements            (elements) int64 1 2 3 4 5 6 7 ... 58 59 60 61 62 63 64
+      * step                (step) object 'Step-1'
+      * time                (time) float64 0.0175 0.07094 0.2513 0.86 1.0
+        integrationPoint    (parameter_sets, elements) float64 1.0 nan ... 1.0 1.0
+      * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
+      * data_type           (data_type) object 'samples'
+        parameter_set_hash  (parameter_sets) object ...
+    Data variables:
+        LE                  (parameter_sets, step, time, elements, LE values) float32 ...
+        S                   (parameter_sets, step, time, elements, S values) float32 ...
+        global_seed         (data_type, parameter_sets) float64 ...
