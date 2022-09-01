@@ -19,7 +19,7 @@ def main():
     if args.subcommand == 'docs':
         open_docs()
     elif args.subcommand == 'build':
-        build(args.TARGET, scons_args=unknown)
+        build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations)
     else:
         parser.print_help()
     return 0
@@ -72,6 +72,8 @@ def get_parser():
         parents=[build_parser])
     build_parser.add_argument("TARGET", nargs="*",
                               help=f"SCons target list")
+    build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
+                              help="Maximum number of SCons command iterations")
 
     return main_parser
 
@@ -81,12 +83,18 @@ def open_docs():
     return
 
 
-def build(targets, scons_args=[]):
+def build(targets, scons_args=[], max_iterations=5):
+    stop_trigger = 'is up to date.'
     scons_command = ['scons']
     scons_command.extend(scons_args)
     if targets:
         scons_command.extend(targets)
-    scons_stdout = subprocess.check_output(scons_command)
+    scons_stdout = b"Go boat"
+    count = 0
+    while stop_trigger not in scons_stdout.decode('utf-8') and count < max_iterations:
+        count += 1
+        print(f"iteration {count}: '{' '.join(scons_command)}'")
+        scons_stdout = subprocess.check_output(scons_command)
 
 
 if __name__ == "__main__":
