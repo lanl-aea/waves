@@ -56,7 +56,7 @@ env = Environment(ENV=os.environ.copy(),
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env['sphinx_build'] = waves.builders.find_program(['sphinx-build'], env)
-env['touch'] = waves.builders.find_program(['touch'], env)
+env['echo'] = waves.builders.find_program(['echo'], env)
 
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM'
