@@ -10,7 +10,7 @@ Changelog
 
 Enhancements
 ============
-- Provide the data downslection dictionary as a CLI argument rather than hardcoding it in ``plot_scatter.py``
+- Provide the data downselection dictionary as a CLI argument rather than hardcoding it in ``plot_scatter.py``
   (:issue:`273`, :merge:`281`). By `Thomas Roberts`_.
 
 ******************
