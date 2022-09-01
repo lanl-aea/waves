@@ -88,7 +88,7 @@ def abaqus_journal(abaqus_program='abaqus'):
     function accepts all SCons Builder arguments and adds the ``journal_options`` and ``abaqus_options`` string
     arguments.
 
-    At least one target must be specified. The first target deterimines the working directory for the builder's action, 
+    At least one target must be specified. The first target determines the working directory for the builder's action, 
     as shown in the action code snippet below. The action changes the working directory to the first target's parent 
     directory prior to executing the journal file.
 
@@ -150,14 +150,14 @@ def _abaqus_solver_emitter(target, source, env):
 def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
     """Abaqus solver SCons builder
 
-    This builder requires that the root input file is the first source in the list. The first target deterimines the 
-    working directory for the builder's action, as shown in the action code snippet below. The action changes the 
-    working directory to the first target's parent directory prior to executing the journal file.
+    This builder requires that the root input file is the first source in the list. The builder returned by this 
+    function accepts all SCons Builder arguments and adds optional Builder keyword arguments ``job_name`` and 
+    ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. The Builder emitter will 
+    append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
 
-    The builder returned by this function accepts all SCons Builder arguments and adds optional Builder keyword 
-    arguments ``job_name`` and ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. 
-    The Builder emitter will append common Abaqus output files as targets automatically from the ``job_name``, e.g. 
-    ``job_name.odb``.
+    The first target determines the working directory for the builder's action, as shown in the action code snippet 
+    below. The action changes the working directory to the first target's parent directory prior to executing the 
+    journal file.
 
     This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets
     automatically. The target list only appends those extensions which are common to Abaqus analysis operations. Some
@@ -292,9 +292,9 @@ def python_script():
     this function accepts all SCons Builder arguments and adds the ``script_options`` and ``python_options`` string
     arguments.
 
-    At least one target must be specified. The first target deterimines the working directory for the builder's action, 
+    At least one target must be specified. The first target determines the working directory for the builder's action, 
     as shown in the action code snippet below. The action changes the working directory to the first target's parent 
-    directory prior to executing the journal file.
+    directory prior to executing the python script.
 
     The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout to the 
     ``target`` list.
@@ -331,6 +331,15 @@ def conda_environment():
     This builder is intended to help WAVES workflows document the Conda environment used in the current build. At least
     one target file must be specified for the ``conda env export --file ${TARGET}`` output. Additional options to the
     Conda ``env export`` subcommand may be passed as the builder keyword argument ``conda_env_export_options``.
+
+    At least one target must be specified. The first target determines the working directory for the builder's action, 
+    as shown in the action code snippet below. The action changes the working directory to the first target's parent 
+    directory prior to creating the Conda environment file.
+
+    .. code-block::
+       :caption: Conda environment builder action
+
+       cd ${TARGET.dir.abspath} && conda env export ${conda_env_export_options} --file ${TARGET.file}
 
     The modsim owner may choose to re-use this builder throughout their project configuration to provide various levels
     of granularity in the recorded Conda environment state. It's recommended to include this builder at least once for
@@ -396,8 +405,10 @@ def abaqus_extract(abaqus_program='abaqus'):
     must be the first file in the source list. If there is more than one ODB file in the source list, all but the first
     file are ignored by ``odb_extract``.
 
-    This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets
-    and ``odb_extract`` target name constructions automatically.
+    This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets 
+    and ``odb_extract`` target name constructions automatically. The first automatically appended target determines the 
+    working directory for the builder's action, as shown in the action code snippet below. The action changes the 
+    working directory to the first target's parent directory prior to performing other builder actions.
 
     The target list may specify an output H5 file name that differs from the ODB file base name as ``new_name.h5``. If
     the first file in the target list does not contain the ``*.h5`` extension, or if there is no file in the target
