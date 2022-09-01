@@ -14,21 +14,18 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
-    parameter study dataset file is assumed to be written by a WAVES parameter generator. Currently assumes the selected
-    data as the ``selection_dict`` dictionary parameter written as a string
+    parameter study dataset file is assumed to be written by a WAVES parameter generator.
 
-    .. code-block::
-
-       selection_dict = "{'LE values': 'LE22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}"
-
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray
-        Datasets
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray Datasets
     :param str output_file: The plot file name. Relative or absolute path.
     :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
     :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
     :param str x_units: The independent (x-axis) units
     :param str y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
     :param str y_units: The dependent (y-axis) units
+    :param str selection_dict: YAML formatted dictionary string, e.g. ``{'data_var': value}``, to define the down selection 
+                               of data to be plotted. Dictionary key: value pairs must match the data variables and 
+                               coordinates of the expected Xarray Dataset object.
     :param str selection_dict: Dictionary (written as a string) to define the downselection of data to be plotted
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
@@ -99,7 +96,9 @@ def get_parser():
     parser.add_argument("-y", "--y-var", type=str, default=default_y_var,
                         help="The dependent (y-axis) variable name (default: %(default)s)")
     parser.add_argument("-s", "--selection-dict", type=str, default=default_selection_dict,
-                        help="Dictionary (written as a string) to define the downselection of data to be plotted")
+                        help="YAML formatted dictionary string to define the down selection of data to be plotted. " \
+                             "Dictionary key: value pairs must match the data variables and coordinates of the expected Xarray Dataset object. " \
+                             "(default: %(default)s)")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
                         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)")
 
