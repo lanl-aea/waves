@@ -8,6 +8,11 @@ Changelog
 0.3.7 (unreleased)
 ******************
 
+Enhancements
+============
+- Provide the data downselection dictionary as a CLI argument rather than hardcoding it in ``plot_scatter.py``
+  (:issue:`273`, :merge:`281`). By `Thomas Roberts`_.
+
 ******************
 0.3.6 (2022-08-31)
 ******************
