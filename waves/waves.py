@@ -2,6 +2,7 @@ import argparse
 import webbrowser
 import pathlib
 import sys
+import subprocess
 
 from waves import _settings
 from waves import __version__
@@ -13,12 +14,12 @@ def main():
     :returns: return code
     """
     parser = get_parser()
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
 
     if args.subcommand == 'docs':
         open_docs()
     elif args.subcommand == 'build':
-        build()
+        build(args.TARGET, scons_args=unknown)
     else:
         parser.print_help()
     return 0
@@ -69,6 +70,8 @@ def get_parser():
         help=f"Thin SCons wrapper",
         description=f"Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
         parents=[build_parser])
+    build_parser.add_argument("TARGET", nargs="*",
+                              help=f"SCons target list")
 
     return main_parser
 
@@ -78,8 +81,12 @@ def open_docs():
     return
 
 
-def build():
-    pass
+def build(targets, scons_args=[]):
+    scons_command = ['scons']
+    scons_command.extend(scons_args)
+    if targets:
+        scons_command.extend(targets)
+    scons_stdout = subprocess.check_output(scons_command)
 
 
 if __name__ == "__main__":
