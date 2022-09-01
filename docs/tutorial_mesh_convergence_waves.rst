@@ -70,7 +70,26 @@ follow along in paragraphs that follow to understand the meaning of these change
       :language: Python
       :diff: tutorial_10_regression_testing_SConscript
 
+.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
+   
+   .. literalinclude:: tutorial_mesh_convergence_SConscript
+      :language: Python
+      :lineno-match:
+      :end-before: marker-2
+      :emphasize-lines: 7, 27-31
 
+The highlighted code above points out two key changes from ``diff`` at the beginning of the file. First, we import the 
+parameter_schema from the ``single_element_compression_mesh_convergence.py`` file you created in the beginning of this 
+tutorial. The second change is the addition of a ``simulation_constants`` dictionary. This parameter study only changes 
+the meshing ``global_seed`` parameter, and all other model parameters stay constant. One way to achieve this would be to 
+set the remaining parameters as single-value parameter sets in the ``parameter_schema``. This was done with the 
+``global_seed`` and ``displacement`` parameters in :ref:`tutorial_cartesian_product_waves`. Rather, we will set the 
+``width``, ``height``, and ``displacement`` variables as constants in the ``SConscript`` file, and they will not appear 
+in our parameter study definition. The ``parameter_schema`` and ``simulaiton_constants`` dictionaries will be combined 
+later in the ``SConscript`` file.
+
+
+      
 
 **********
 SConstruct
