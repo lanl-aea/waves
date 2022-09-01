@@ -17,6 +17,7 @@ Documentation
 =============
 - Clarify the WAVES builder behavior of setting the working directory to the parent directory of the first specified
   target (:issue:`265`, :merge:`279`). By `Thomas Roberts`_.
+- Complete WAVES Tutorial Mesh Convergence (:issue:`272`, :merge:`282`). By `Thomas Roberts`_.
 
 Enhancements
 ============
