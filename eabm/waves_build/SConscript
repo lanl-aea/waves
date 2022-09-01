@@ -4,8 +4,7 @@ import pathlib
 
 import numpy
 import waves
-
-from eabm_package.python.waves_build import parameter_schema
+import yaml
 
 # Inherit the parent construction environment
 Import('env')
@@ -17,12 +16,21 @@ project_dir = pathlib.Path(env['project_dir'])
 python_source_dir = env['python_source_dir']
 python_source_abspath = project_dir / python_source_dir
 
+
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
 model = "single_element"
+
+parameter_schema_file = python_source_abspath / "waves_build.yaml"
+extended_schema_file = build_directory / 'parameter_schema.yaml'
+if extended_schema_file.exists():
+    parameter_schema_file = extended_schema_file
+with open(parameter_schema_file) as schema_file:
+    parameter_schema = yaml.safe_load(schema_file)
+parameter_schema['parameter_samples'] = numpy.array(parameter_schema['parameter_samples'])
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -47,6 +55,11 @@ def write_parameter_study(target, source, env):
     parameter_generator.write()
     return None
 
+workflow.extend(env.Command(
+    target=[parameter_study_file.name],
+    source=[str(python_source_abspath / "waves_build.py")],
+    action=[write_parameter_study]))
+
 # Comment used in tutorial code snippets: marker-3
 
 # Parameterized targets must live inside current simulation_variables for loop
@@ -57,7 +70,7 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
     output_file_task = env.Command(
         target=[str(set_name / "echo.txt")],
         source=['touch.txt.in'],
-        action=[f"cd ${{TARGET.dir.abspath}} && {env['echo']} ${{TARGET.name}} > ${{TARGET.name}}"])
+        action=[f"cd ${{TARGET.dir.abspath}} && {env['echo']} stuff > ${{TARGET.name}}"])
     workflow.extend(output_file_task)
 
 compile_output_task = env.Command(
@@ -66,11 +79,22 @@ compile_output_task = env.Command(
     action=["cd ${TARGET.dir.abspath} && cat parameter_set?/echo.txt > ${TARGET.name}"])
 workflow.extend(compile_output_task)
 
-parameter_study_task = env.Command(
-    target=[parameter_study_file.name],
+def write_new_schema(target, source, env):
+    with open(source[0].abspath) as compiled_file:
+        set_count = len(compiled_file.readlines())
+    if set_count < 4:
+        new_set = parameter_schema['parameter_samples'][-1] + 0.1
+        parameter_schema['parameter_samples'] = numpy.append(parameter_schema['parameter_samples'], [new_set], axis=0)
+    parameter_schema['parameter_samples'] = parameter_schema['parameter_samples'].tolist()
+    with open(target[0].abspath, 'w') as schema_file:
+        schema_file.write(yaml.safe_dump(parameter_schema))
+
+parameter_schema_update = env.Command(
+    target=[str(build_directory / 'parameter_schema.yaml')],
     source=[compile_output_task],
-    action=[write_parameter_study])
-workflow.extend(parameter_study_task)
+    action=[write_new_schema])
+env.AlwaysBuild(parameter_schema_update)
+workflow.extend(parameter_schema_update)
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
