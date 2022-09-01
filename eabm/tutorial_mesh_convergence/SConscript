@@ -160,6 +160,7 @@ workflow.extend(env.PythonScript(
     source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
+"""
 plot_name = "mesh_convergence_stress.pdf"
 selection_dict = "{}"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
@@ -171,11 +172,13 @@ workflow.extend(env.PythonScript(
     target=[plot_name],
     source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
+"""
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)
 env.Alias(f"{parent_directory}_datacheck", datacheck)
+env.Alias(env['datacheck_alias'], datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
