@@ -53,6 +53,9 @@ Parameter Study File
    .. literalinclude:: python_single_element_compression_mesh_convergence.py
       :language: Python
 
+This parameter study will define a mesh convergence study where the global size of the finite elements in the model 
+decreased several times by a factor of two.
+
 **********
 SConscript
 **********
