@@ -59,7 +59,8 @@ project_variables = {
     'project_dir': Dir('.').abspath,
     'version': version,
     'abaqus_source_dir': 'eabm_package/abaqus',
-    'python_source_dir': 'eabm_package/python'
+    'python_source_dir': 'eabm_package/python',
+    'datacheck_alias': 'datacheck'
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -77,6 +78,9 @@ env.Append(BUILDERS={
     'PythonScript': waves.builders.python_script()})
 
 # Comments used in tutorial code snippets: marker-6
+
+# Create a datacheck alias for reduced cost regression testing
+env.Alias(env['datacheck_alias'])
 
 # Add simulation targets
 eabm_simulation_directories = [
