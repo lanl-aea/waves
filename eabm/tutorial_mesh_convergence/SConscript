@@ -73,20 +73,15 @@ workflow.extend(env.AbaqusJournal(
 # Partition
 journal_file = f"{model}_partition"
 journal_options = f"--width {simulation_constants['width']} --height {simulation_constants['height']}"
-workflow.extend(env.AbaqusJournal(
+partition_targets = env.AbaqusJournal(
     target=[f"{journal_file}.cae",
             f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py",
             f"{model}_geometry.cae"],
-    journal_options=journal_options))
-
-# Extract the SCons workflow object and absolute path for the single_element_partition.cae file
-for workflow_object in workflow:
-    file_abspath = pathlib.Path(workflow_object.abspath)
-    if file_abspath.name == f"{journal_file}.cae":
-        partition_cae_file = file_abspath
-        partition_cae_object = workflow_object
-        break
+    journal_options=journal_options)
+workflow.extend(partition_targets)
+partition_cae_object = partition_targets[0]
+partition_cae_file = pathlib.Path(partition_cae_object.abspath)
 
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name, parameters in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
@@ -160,6 +155,18 @@ post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
+workflow.extend(env.PythonScript(
+    target=[plot_name],
+    source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
+    script_options=script_options))
+
+plot_name = "mesh_convergence_stress.pdf"
+selection_dict = "{}"
+post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
+script_options = "--input-file " + " ".join(str(path) for path in post_processsing_source)
+script_options += f" --output-file {plot_name} --x-units 'mm' --y-units 'MPa'"
+script_options += f" --parameter-study-file {parameter_study_file.name}"
+script_options += f" --selection-dict {selction_dict}"
 workflow.extend(env.PythonScript(
     target=[plot_name],
     source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
