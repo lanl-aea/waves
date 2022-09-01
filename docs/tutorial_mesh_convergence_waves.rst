@@ -61,8 +61,8 @@ SConscript
 **********
 
 6. A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
-  identify the changes made in this tutorial. Use the diff to update your ``tutorial_10_regression_testing/SConscript`` 
-  file, and then follow along in paragraphs that follow to understand the meaning of these changes.
+   identify the changes made in this tutorial. Use the diff to update your ``tutorial_10_regression_testing/SConscript`` 
+   file, and then follow along in paragraphs that follow to understand the meaning of these changes.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
@@ -146,14 +146,14 @@ specified ``single_element_partition.cae`` as a target in the ``# Partition`` wo
    .. literalinclude:: tutorial_mesh_convergence_SConscript
       :language: Python
       :lineno-match:
-      :start-after: marker-4
+      :start-after: marker-6
 
 **********
 SConstruct
 **********
 
 7. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
-  identify the changes made in this tutorial. Make these changes to your ``SConstruct`` file.
+   identify the changes made in this tutorial. Make these changes to your ``SConstruct`` file.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
