@@ -85,8 +85,8 @@ the meshing ``global_seed`` parameter, and all other model parameters stay const
 set the remaining parameters as single-value parameter sets in the ``parameter_schema``. This was done with the 
 ``global_seed`` and ``displacement`` parameters in :ref:`tutorial_cartesian_product_waves`. Rather, we will set the 
 ``width``, ``height``, and ``displacement`` variables as constants in the ``SConscript`` file, and they will not appear 
-in our parameter study definition. The ``parameter_schema`` and ``simulaiton_constants`` dictionaries will be combined 
-later in the ``SConscript`` file.
+in our parameter study definition. The individual parameters from the ``parameter_schema`` and ``simulaiton_constants`` 
+dictionaries will be combined later in the ``SConscript`` file.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
@@ -95,7 +95,7 @@ later in the ``SConscript`` file.
       :lineno-match:
       :start-after: marker-3
       :end-before: marker-4
-      :emphasize-lines: 5-6, 14-15, 20-21
+      :emphasize-lines: 5-6, 14-15, 20-21, 26
 
 The code above is largely copy and paste from :ref:`tutorial_regression_testing_waves`, with a few significant 
 differences:
@@ -107,10 +107,12 @@ differences:
   code is no longer inside of the ``for`` loop, the ``set_name`` directory has been dropped from the ``target`` 
   definitions. As the first bullet eluded to, the targets for ``# Geometry`` and ``# Partition`` will be built in the 
   overall build directory, ``build/tutorial_mesh_convergence``.
-* The list two highlighted lines are necessary for the parameterized ``# Mesh`` workflow steps to re-use a common 
+* The folling two highlighted lines are necessary for the parameterized ``# Mesh`` workflow steps to re-use a common 
   target. First, the SCons file object for the ``single_element_partition.cae`` file is extracted from the target list, 
   ``partition_target``. The absolute path to the ``single_element_partition.cae`` file in the build directory is 
   made available as a variable in the second highlighted line.
+* The final highlighted line shows how the ``simulation_variables`` dictionary is constructed by combining the 
+  ``simulation_constants`` and the ``global_seed`` parameters for every simulation.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
