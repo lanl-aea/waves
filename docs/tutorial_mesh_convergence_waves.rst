@@ -112,6 +112,13 @@ differences:
   ``partition_target``. The absolute path to the ``single_element_partition.cae`` file in the build directory is 
   made available as a variable in the second highlighted line.
 
+.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
+
+   .. literalinclude:: tutorial_mesh_convergence_SConscript
+      :language: Python
+      :lineno-match:
+      :start-after: marker-4
+      :end-before: marker-5
 
 **********
 SConstruct
