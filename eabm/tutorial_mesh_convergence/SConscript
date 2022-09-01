@@ -160,19 +160,16 @@ workflow.extend(env.PythonScript(
     source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
-"""
 plot_name = "mesh_convergence_stress.pdf"
-selection_dict = "{}"
-post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
-script_options = "--input-file " + " ".join(str(path) for path in post_processsing_source)
-script_options += f" --output-file {plot_name} --x-units 'mm' --y-units 'MPa'"
+selection_dict = '"{\'LE values\': \'LE22\', \'S values\': \'S22\', \'elements\': 1, \'step\': \'Step-1\'}"'
+script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options += f" --output-file {plot_name} --x-units 'mm' --y-units 'MPa' --x-var 'LE' --y-var 'S'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
-script_options += f" --selection-dict {selction_dict}"
+script_options += f" --selection-dict {selection_dict}"
 workflow.extend(env.PythonScript(
     target=[plot_name],
     source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
-"""
 
 # Collector alias based on parent directory name
 parent_directory = Dir('.').srcnode().name
