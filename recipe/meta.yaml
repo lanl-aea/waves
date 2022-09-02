@@ -114,7 +114,7 @@ test:
     - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --keep-going --unconditional-build
-    - waves build tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --max-iterations=6
+    - waves build --max-iterations=4 --working-directory=eabm tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
     # Re-run the full WAVES-EABM suite once more with the full, advanced project configuration in SContruct.
     # Uses "rm" instead of "scons --clean" to ensure a complete re-build even if the tutorial files and the default
     # SConstruct file target definitions differ or something is incompletely cleaned.
