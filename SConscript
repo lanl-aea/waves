@@ -1,16 +1,16 @@
 #! /usr/bin/env python
 #
 # Inherit the parent construction environment
-Import('documentation_source_dir')
+Import('source_dir')
 
-Command(target=f"{documentation_source_dir}/README.txt",
+Command(target=f"{source_dir}/README.txt",
         source="README.rst",
         action=Copy("$TARGET", "$SOURCE"))
 
-Command(target=f"{documentation_source_dir}/eabm_README.txt",
+Command(target=f"{source_dir}/eabm_README.txt",
         source="eabm/README.rst",
         action=Copy("$TARGET", "$SOURCE"))
 
-Command(target=f"{documentation_source_dir}/environment.txt",
+Command(target=f"{source_dir}/environment.txt",
         source="environment.txt",
         action=Copy("$TARGET", "$SOURCE"))
