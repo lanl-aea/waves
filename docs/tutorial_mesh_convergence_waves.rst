@@ -15,7 +15,7 @@ tutorials. Specifically, this tutorial will discuss
 References
 **********
 
-* `Mesh Convergence`_ Studies
+* `Mesh Convergence`_ Studies :cite:`ABAQUS`
 * SCons file objects: `SCons Node Package`_
 
 ***********
