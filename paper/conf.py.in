@@ -72,7 +72,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for LaTeX output ---------------------------------------------
 latex_elements = {
     'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
-    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{\\textcopyright\\ {copyright}}}\sphinxmaketitle'
+    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{\\textcopyright\\ {copyright}}}\sphinxmaketitle',
+    'releasename': 'WAVES'
 }
 latex_documents = [
     (master_doc, project.lower() + '.tex', None,
