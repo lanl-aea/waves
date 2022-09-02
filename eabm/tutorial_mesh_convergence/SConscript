@@ -27,7 +27,7 @@ model = "single_element"
 simulation_constants = {
     'width': 1.0,
     'height': 1.0,
-    'displacement': -1.0
+    'displacement': -0.1
 }
 
 # Collect the target nodes to build a concise alias for all targets
