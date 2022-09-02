@@ -74,4 +74,6 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       hypercube
                    00:30 :ref:`tutorial_sobol_sequence_waves`         Parameter study introduction using a Sobol
                                                                       sequence
+                   00:30 :ref:`tutorial_extend_study_waves`           Automatically extending and re-executing a
+                                                                      parameter study
 ======================== ============================================ ==================================================
