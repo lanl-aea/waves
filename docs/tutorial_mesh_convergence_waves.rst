@@ -161,7 +161,9 @@ the simulation. As the global mesh size decreases, the final stress should start
 
 The specification of a ``selection_dict`` demonstrates another non-default usage of a command line argument. In this 
 case, the only ``key: value`` pair added to the ``selection_dict`` that does not already exist in the 
-:ref:`eabm_plot_scatter_cli` CLI defaults is the specification of the time point ``'time': 1.0``.
+:ref:`eabm_plot_scatter_cli` CLI defaults is the specification of the time point ``'time': 1.0``. This down selects our 
+data to the largest compressive stress produced by the simulation, which will be our quantity of interest (QoI) for this 
+simulation workflow.
 
 The remaining changes are rather simple. The ``--x-units`` and ``--x-var`` command line arguments are updated to reflect 
 the usage of the ``global_seed`` parameter as the independent variable.
