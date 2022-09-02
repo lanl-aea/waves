@@ -35,6 +35,15 @@ single_element_mesh.py
    .. literalinclude:: abaqus_single_element_mesh.py
       :lineno-match:
 
+***************************
+abaqus_journal_utilities.py
+***************************
+
+.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/abaqus_journal_utilities.py
+
+   .. literalinclude:: abaqus_abaqus_journal_utilities.py
+      :lineno-match:
+
 ******************************
 single_element_compression.inp
 ******************************
