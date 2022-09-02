@@ -99,7 +99,6 @@
 .. _`Abaqus Scripting`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKERRefMap/simaker-c-ov.htm
 .. _`Abaqus Solid Continuum Elements`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAEELMRefMap/simaelm-c-solidcont.htm
 .. _`Abaqus Standard/Explicit Execution`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEEXCRefMap/simaexc-c-analysisproc.htm
-.. _`Abaqus Surfaces`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEMODRefMap/simamod-c-deformablesurf.htm
 .. _`Abaqus UMAT documentation`: http://simulia.lanl.gov:8080/EstProdDocs2019/English/DSSIMULIA_Established.htm?show=SIMACAESUBRefMap/simasub-c-umat.htm
 .. _`Abaqus scripting manual "Specifying a region"`: http://simulia.lanl.gov:8080/EstProdDocs2020/English/DSSIMULIA_Established.htm?show=SIMACAECMDRefMap/simacmd-c-intaclregions.htm
 .. _`Mesh Convergence`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEGSARefMap/simagsa-c-ctmmeshconverg.htm
