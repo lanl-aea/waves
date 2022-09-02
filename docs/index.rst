@@ -42,13 +42,14 @@
    tutorial_05_parameter_substitution_waves
    tutorial_06_include_files_waves
    tutorial_07_cartesian_product_waves
-   tutorial_07_latin_hypercube_waves
-   tutorial_07_sobol_sequence_waves
    tutorial_08_data_extraction_waves
    tutorial_09_post_processing_waves
    tutorial_10_regression_testing_waves
-   tutorial_cubit
    scons_multiactiontask
+   tutorial_cubit
+   tutorial_07_latin_hypercube_waves
+   tutorial_07_sobol_sequence_waves
+   tutorial_extend_study_waves
 
 .. raw:: latex
 
