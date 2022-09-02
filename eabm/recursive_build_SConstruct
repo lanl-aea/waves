@@ -78,7 +78,7 @@ def write_parameter_study(target, source, env):
 
 
 env.Command(
-    target=[parameter_study_file.name],
+    target=[str(parameter_study_file)],
     source=[str(semaphore) for semaphore in semaphore_file_list],
     action=[write_parameter_study],
     parameter_generator=parameter_generator)
