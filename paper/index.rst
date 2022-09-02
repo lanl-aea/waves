@@ -56,17 +56,3 @@ Engineering Computational Practices
    eabm_api
    eabm_cli
    eabm_abaqus_files
-
-.. raw:: latex
-
-   \part{Indices and Tables}
-
-.. only:: html
-
-   ##################
-   Indices and tables
-   ##################
-
-   * :ref:`genindex`
-   * :ref:`modindex`
-   * :ref:`search`
