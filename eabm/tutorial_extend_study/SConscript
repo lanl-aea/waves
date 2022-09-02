@@ -5,7 +5,7 @@ import pathlib
 import numpy
 import waves
 
-from eabm_package.python.waves_build import parameter_schema
+from eabm_package.python.tutorial_extend_study import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')

@@ -105,6 +105,7 @@ env.Alias(env['datacheck_alias'])
 # Add simulation targets
 eabm_simulation_directories = [
     'tutorial_cubit',
+    'tutorial_extend_study',
     'tutorial_01_geometry',
     'tutorial_02_partition_mesh',
     'tutorial_03_solverprep',
