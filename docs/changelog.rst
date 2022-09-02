@@ -8,9 +8,14 @@ Changelog
 0.3.7 (unreleased)
 ******************
 
+New Features
+============
+- Experimental waves build command for automatically re-running workflows which extend a parameter study (:issue:`279`,
+  :merge:`285`). By `Kyle Brindley`_.
+
 Documentation
 =============
-- Clarify the WAVES builder behavior of setting the working directory to the parent directory of the first specified 
+- Clarify the WAVES builder behavior of setting the working directory to the parent directory of the first specified
   target (:issue:`265`, :merge:`279`). By `Thomas Roberts`_.
 
 Enhancements
