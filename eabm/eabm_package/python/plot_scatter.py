@@ -38,14 +38,14 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
                           path.parent.name}) for path in paths)
     combined_data = xarray.concat(data_generator, concat_coord)
 
-    # Add units
-    combined_data[x_var].attrs["units"] = x_units
-    combined_data[y_var].attrs["units"] = y_units
-
     # Open and merge WAVES parameter study if provided
     if parameter_study_file:
         parameter_study = xarray.open_dataset(parameter_study_file)
         combined_data = combined_data.merge(parameter_study)
+
+    # Add units
+    combined_data[x_var].attrs["units"] = x_units
+    combined_data[y_var].attrs["units"] = y_units
 
     # Write results dataset to stdout for tutorial demonstration
     print(combined_data)

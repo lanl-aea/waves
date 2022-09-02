@@ -11,7 +11,6 @@ References
 * Adding to `PYTHONPATH`_ with `Python sys`_ :cite:`python`
 * `Abaqus Node Sets`_ :cite:`ABAQUS`
 * `Abaqus Element Sets`_ and `Abaqus Elements Guide`_ :cite:`ABAQUS`
-* `Abaqus Surfaces`_ :cite:`ABAQUS`
 * `Abaqus Assembly Definition`_ :cite:`ABAQUS`
 
 ***********
@@ -157,8 +156,7 @@ code that does a few specific tasks:
 
   * Create node sets at four corners of the single element part. See the `Abaqus Node Sets`_ documentation :cite:`ABAQUS` for more
     information about node sets.
-  * Create surfaces for the four sides of the single element part. See the `Abaqus Surfaces`_ documentation :cite:`ABAQUS` for more
-    information about surfaces.
+  * Create node sets for the four sides of the single element part.
 
 * Save the ``output_file`` with the changes made
 
