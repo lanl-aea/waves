@@ -64,7 +64,7 @@ SConscript
 **********
 
 6. A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
-   identify the changes made in this tutorial. Use the diff to update your ``tutorial_10_regression_testing/SConscript`` 
+   identify the changes made in this tutorial. Use the diff to update your ``tutorial_mesh_convergence/SConscript`` 
    file, and then review the paragraphs that follow to understand the meaning of these changes.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
