@@ -4,7 +4,6 @@ import pathlib
 
 import numpy
 import waves
-import yaml
 
 from eabm_package.python.waves_build import parameter_schema
 
@@ -15,6 +14,8 @@ Import('env')
 
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(env['project_dir'])
+abaqus_source_dir = env['abaqus_source_dir']
+abaqus_source_abspath = project_dir / abaqus_source_dir
 python_source_dir = env['python_source_dir']
 python_source_abspath = project_dir / python_source_dir
 
@@ -57,6 +58,8 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
         with open(semaphore_file, 'w') as semaphore:
             semaphore.write(f"{set_name.name}\n")
 
+    # Comment used in tutorial code snippets: marker-4
+
 def write_parameter_study(target, source, env):
     """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
@@ -94,6 +97,6 @@ env.Alias(parent_directory, workflow)
 env.Alias(f"{parent_directory}_datacheck", datacheck)
 env.Alias(env['datacheck_alias'], datacheck)
 
-if not env['unconditional_build'] and not env['echo']:
+if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
     Ignore(['.', parent_directory], workflow)
