@@ -28,7 +28,7 @@ previous_parameter_study = str(parameter_study_file) if parameter_study_file.exi
 # Parameter Study with CustomStudy
 parameter_names = ['parameter_1', 'parameter_2', 'parameter_3']
 parameter_schema = {
-    'parameter_samples': numpy.array([[1., 2., 3.]]),
+    'parameter_samples': numpy.array([[1., 1., 1.]]),
     'parameter_names': parameter_names
 }
 parameter_generator = waves.parameter_generators.CustomStudy(
@@ -56,10 +56,12 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
 
 
 def write_parameter_study(target, source, env):
-    if len(source) < 4:
+    set_count = len(source)
+    if set_count < 4:
+        new_set_value = set_count + 1.
         samples = env['parameter_generator']._samples
-        new_set = samples[-1] + 0.1
-        samples = numpy.append(samples, [new_set], axis=0)
+        new_set = numpy.array([[new_set_value, new_set_value, new_set_value]])
+        samples = numpy.append(samples, new_set, axis=0)
         new_schema = {
             "parameter_samples": samples,
             "parameter_names": parameter_names
