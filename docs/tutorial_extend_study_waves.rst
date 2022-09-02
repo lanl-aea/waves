@@ -24,6 +24,7 @@ Automatically Extending a Parameter Study
 References
 **********
 
+* :ref:`waves_cli`
 * |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.SobolSequence`
 * `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
 
@@ -90,7 +91,7 @@ Build Targets
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ scons tutorial_extend_study --jobs=4
+   $ waves build --max-iterations=4 tutorial_extend_study --jobs=4
 
 ************
 Output Files
