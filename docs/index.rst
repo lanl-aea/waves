@@ -47,8 +47,9 @@
    tutorial_08_data_extraction_waves
    tutorial_09_post_processing_waves
    tutorial_10_regression_testing_waves
-   tutorial_cubit
    scons_multiactiontask
+   tutorial_cubit
+   tutorial_extend_study_waves
 
 .. raw:: latex
 

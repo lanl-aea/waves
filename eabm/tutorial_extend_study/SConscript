@@ -164,7 +164,6 @@ workflow.extend(env.Command(
 parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)
 env.Alias(f"{parent_directory}_datacheck", datacheck)
-env.Alias(env['datacheck_alias'], datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")

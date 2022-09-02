@@ -59,8 +59,7 @@ project_variables = {
     'project_dir': Dir('.').abspath,
     'version': version,
     'abaqus_source_dir': 'eabm_package/abaqus',
-    'python_source_dir': 'eabm_package/python',
-    'datacheck_alias': 'datacheck'
+    'python_source_dir': 'eabm_package/python'
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -77,9 +76,6 @@ env.Append(BUILDERS={
 
 # Comments used in tutorial code snippets: marker-6
 
-# Create a datacheck alias for reduced cost regression testing
-env.Alias(env['datacheck_alias'])
-
 # Add simulation targets
 eabm_simulation_directories = [
     'tutorial_01_geometry',
@@ -89,7 +85,8 @@ eabm_simulation_directories = [
     'tutorial_05_parameter_substitution',
     'tutorial_06_include_files',
     'tutorial_07_cartesian_product',
-    'tutorial_extend_study',
+    'tutorial_07_sobol_sequence',
+    'tutorial_extend_study'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
