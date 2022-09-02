@@ -70,7 +70,6 @@ def write_parameter_study(target, source, env):
             new_schema,
             output_file=parameter_study_file,
             output_file_type=output_file_type)
-        import pdb; pdb.set_trace()
         new_generator.generate()
         new_generator.write()
     else:
