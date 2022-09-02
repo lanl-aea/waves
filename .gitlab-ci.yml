@@ -126,6 +126,7 @@ fast-test:
     GIT_STRATEGY: clone
   script:
     - scons . --keep-going --unconditional-build
+    - python -m waves.waves build tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --max-iterations=8
     - cd eabm
     # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going

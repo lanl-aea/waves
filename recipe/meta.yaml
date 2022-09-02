@@ -95,6 +95,7 @@ test:
     - waves
   commands:
     - scons . --keep-going --unconditional-build --ignore-documentation
+    - waves build tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --max-iterations=8
     - cd eabm
     # Regression test the files used in the tutorial documentation
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
