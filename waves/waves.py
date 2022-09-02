@@ -112,8 +112,11 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None):
         scons_stdout = b"Go boat"
         count = 0
         command = scons_command + [target]
-        while stop_trigger not in scons_stdout.decode('utf-8') and count < max_iterations:
+        while stop_trigger not in scons_stdout.decode('utf-8'):
             count += 1
+            if count > max_iterations:
+                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'")
+                return 2
             print(f"iteration {count}: '{' '.join(command)}'")
             scons_stdout = subprocess.check_output(command, cwd=working_directory)
 
