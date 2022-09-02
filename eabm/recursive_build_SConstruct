@@ -1,0 +1,84 @@
+#! /usr/bin/env python
+
+import os
+import sys
+import copy
+import pathlib
+
+import numpy
+# Only required when WAVES is not installed as a package, e.g. for local testing in WAVES repository.
+try:
+    import waves
+except ModuleNotFoundError:
+    sys.path.insert(0, str(pathlib.Path('..').resolve()))
+    import waves
+
+# Inherit user's full environment and set project options
+env = Environment(ENV=os.environ.copy())
+
+# Separate target output from source files
+variant_dir_base = pathlib.Path('build_recursive')
+VariantDir(variant_dir_base.name, '.', duplicate=False)
+
+# Simulation variables
+build_directory = pathlib.Path(Dir('.').abspath)
+output_file_type = "h5"
+parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
+previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
+
+# Parameter Study with CustomStudy
+parameter_names = ['parameter_1', 'parameter_2', 'parameter_3']
+parameter_schema = {
+    'parameter_samples': numpy.array([[1., 2., 3.], [1.1, 2.1, 3.1]]),
+    'parameter_names': parameter_names
+}
+parameter_generator = waves.parameter_generators.CustomStudy(
+    parameter_schema,
+    output_file=parameter_study_file,
+    output_file_type=output_file_type,
+    previous_parameter_study=previous_parameter_study)
+parameter_generator.generate()
+parameter_study = parameter_generator.parameter_study
+
+semaphore_filename = "semaphore.txt"
+semaphore_file_list = []
+
+# Parameterized targets must live inside current simulation_variables for loop
+for set_name, parameters in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
+    set_name = pathlib.Path(set_name)
+    simulation_variables = parameters.squeeze().to_array().to_series().to_dict()
+
+    semaphore_file = variant_dir_base / set_name / semaphore_file_name
+    semaphore_file_list.append(semaphore_file)
+    semaphore_file.parent.mkdir(parents=True, exist_ok=True)
+    if not semaphore_file.exists():
+        with open(semaphore_file, 'w') as semaphore:
+            semaphore.write(f"{set_name.name}\n")
+
+
+def write_parameter_study(target, source, env):
+    if len(source) < 4:
+        samples = env['parameter_generator']._samples
+        new_set = samples[-1] + 0.1
+        samples = numpy.append(samples, [new_set], axis=0)
+        new_schema = {
+            "parameter_samples": samples,
+            "parameter_names": parameter_names
+        }
+        new_generator = waves.parameter_generators.CustomStudy(
+            new_schema,
+            output_file=parameter_study_file,
+            output_file_type=output_file_type,
+            previous_parameter_study=previous_parameter_study)
+        new_generator.generate()
+        new_generator.write()
+    else:
+        parameter_generator.write()
+    return None
+
+
+workflow.extend(env.Command(
+    target=[parameter_study_file.name],
+    source=[str(semaphore) for semaphore in semaphore_file_list],
+    action=[write_parameter_study],
+    parameter_generator=parameter_generator))
