@@ -23,6 +23,7 @@ project_variables = {
     'tutorial_07_cartesian_product_dir': 'tutorial_07_cartesian_product',
     'tutorial_07_latin_hypercube_dir': 'tutorial_07_latin_hypercube',
     'tutorial_07_sobol_sequence_dir': 'tutorial_07_sobol_sequence',
+    'tutorial_extend_study_dir': 'tutorial_extend_study',
     'tutorial_08_dir': 'tutorial_08_data_extraction',
     'tutorial_09_dir': 'tutorial_09_post_processing',
     'tutorial_10_dir': 'tutorial_10_regression_testing',

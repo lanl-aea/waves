@@ -2,6 +2,8 @@
 Command Line Utilities
 ######################
 
+.. _waves_cli:
+
 ******************************
 |PROJECT| Command Line Utility
 ******************************
