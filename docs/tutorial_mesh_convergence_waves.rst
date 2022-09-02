@@ -206,7 +206,7 @@ Output Files
 
 .. code-block::
 
-    $ cat build/tutorial_09_post-processing/stress_strain_comparison.stdout
+    $ cat build/tutorial_mesh_convergence/mesh_convergence_stress.stdout
 
     <xarray.Dataset>
     Dimensions:             (LE values: 4, S values: 4, elements: 64, step: 1,
