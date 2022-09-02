@@ -77,8 +77,10 @@ def write_parameter_study(target, source, env):
     return None
 
 
-env.Command(
+recursive_study = env.Command(
     target=[str(parameter_study_file)],
     source=[str(semaphore) for semaphore in semaphore_file_list],
     action=[write_parameter_study],
     parameter_generator=parameter_generator)
+
+env.Alias('recursive_build', recursive_study)
