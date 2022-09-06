@@ -12,6 +12,7 @@ New Features
 ============
 - Experimental waves build command for automatically re-running workflows which extend a parameter study (:issue:`279`,
   :merge:`285`). By `Kyle Brindley`_.
+- Add a custom study subcommand to the parameter study CLI (:issue:`276`, :merge:`289`). By `Kyle Brindley`_.
 
 Documentation
 =============
