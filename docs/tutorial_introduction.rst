@@ -76,6 +76,6 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       sequence
                    00:30 :ref:`tutorial_extend_study_waves`           Automatically extending and re-executing a
                                                                       parameter study
-                   00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that utilizes 
-                                                                      common Geometry and Partition files as sources
+                   00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that uses 
+                                                                      common Geometry and Partition tasks.
 ======================== ============================================ ==================================================
