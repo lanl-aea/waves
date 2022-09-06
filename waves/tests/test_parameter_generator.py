@@ -263,6 +263,38 @@ class TestParameterDistributions():
             finally:
                 pass
 
+    generate_input = {
+        "good schema 5x2": (
+            {'num_simulations': 5,
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
+            [{"loc":  50, "scale": 1},
+             {"loc": -50, "scale": 1}],
+        ),
+        "good schema 2x1": (
+            {'num_simulations': 2,
+            'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
+            [{"loc":  50, "scale": 1}]
+        ),
+        "good schema 1x2": (
+            {'num_simulations': 1,
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
+            [{"loc":  50, "scale": 1},
+             {"loc": -50, "scale": 1}]
+        )
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize("parameter_schema, expected_scipy_kwds",
+                             generate_input.values(),
+                             ids=generate_input.keys())
+    def test_generate_parameter_distributions(self, parameter_schema, expected_scipy_kwds):
+        TestDistributions = ParameterDistributions(parameter_schema)
+        assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
+        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds):
+            assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
+
 
 class NoQuantilesGenerator(_ParameterGenerator):
 

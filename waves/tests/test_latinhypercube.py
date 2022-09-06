@@ -76,17 +76,6 @@ class TestLatinHypercube:
         parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
         assert numpy.all(parameter_set_names == expected_set_names)
 
-    @pytest.mark.unittest
-    @pytest.mark.parametrize(generate_input_interface,
-                             generate_input.values(),
-                             ids=generate_input.keys())
-    def test_generate_parameter_distributions(self, parameter_schema, random_state,
-                                              expected_samples, expected_quantiles, expected_scipy_kwds):
-        TestDistributions = LatinHypercube(parameter_schema)
-        assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
-        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds):
-            assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
-
     merge_test = {
         'increase simulations': (
             {'num_simulations': 1,
