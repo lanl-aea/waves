@@ -1,8 +1,8 @@
 .. _tutorial_mesh_convergence_waves:
 
-#########################
-Tutorial Mesh Convergence
-#########################
+##########################
+Tutorial: Mesh Convergence
+##########################
 
 This tutorial is intended to demonstrate several advanced usage features that were glossed over in previous 
 tutorials. Specifically, this tutorial will discuss
