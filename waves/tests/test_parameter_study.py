@@ -1,4 +1,5 @@
 from unittest.mock import patch
+import sys
 
 import pytest
 
@@ -23,9 +24,12 @@ parameter_study_args = {
                          parameter_study_args.values(),
                          ids=list(parameter_study_args.keys()))
 def test_parameter_study(subcommand):
-    with patch('sys.argv', return_value=[subcommand, '-h']):
+    with patch('sys.argv', ['parameter_study.py', subcommand, '-h']), \
+         pytest.raises(SystemExit):
         parameter_study.main()
 
     schema_file = _project_root_abspath / f"tests/{subcommand}.yaml"
-    with patch('sys.argv', return_value=[subcommand, str(schema_file)]):
+    with patch('sys.argv', ['parameter_study.py', subcommand, str(schema_file)]), \
+         pytest.raises(SystemExit):
         parameter_study.main()
+    assert pytest_exit.value.code == 0
