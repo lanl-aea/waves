@@ -66,8 +66,8 @@ class TestSobolSequence:
     generate_input = {
         "good schema 5x2": (
             {'num_simulations': 5,
-             'parameter_1': [0., 10.],
-             'parameter_2': [2.,  5.]},
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             numpy.array([[0.   , 2.   ],
                          [5.   , 3.5  ],
@@ -82,15 +82,15 @@ class TestSobolSequence:
         ),
         "good schema 2x1": (
             {'num_simulations': 2,
-             'parameter_1': [0., 10.]},
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10}},
             {'scramble': False},
             numpy.array([[0.], [5.0]]),
             numpy.array([[0.], [0.5]]),
         ),
         "good schema 1x2": (
             {'num_simulations': 1,
-             'parameter_1': [0., 10.],
-             'parameter_2': [2.,  5.]},
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             numpy.array([[0., 2.]]),
             numpy.array([[0., 0.]])
@@ -119,8 +119,12 @@ class TestSobolSequence:
 
     merge_test = {
         'new sets': (
-            {'num_simulations': 5, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
-            {'num_simulations': 8, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
+            {'num_simulations': 5,
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
+            {'num_simulations': 8,
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[5.   , 3.5  ],
@@ -141,8 +145,12 @@ class TestSobolSequence:
                          [0.875, 0.875]])
         ),
         'unchanged sets': (
-            {'num_simulations': 5, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
-            {'num_simulations': 5, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
+            {'num_simulations': 5,
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
+            {'num_simulations': 5,
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[5.   , 3.5  ],
