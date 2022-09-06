@@ -779,7 +779,7 @@ class CustomStudy(_ParameterGenerator):
         super().write()
 
 
-class SobolSequence(_ParameterGenerator):
+class SobolSequence(_ParameterDistributions):
     """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
 
     .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
