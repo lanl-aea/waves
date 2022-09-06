@@ -719,6 +719,10 @@ class CustomStudy(_ParameterGenerator):
             raise KeyError('parameter_schema must contain the key: parameter_names')
         if 'parameter_samples' not in self.parameter_schema:
             raise KeyError('parameter_schema must contain the key: parameter_samples')
+        # Always convert to numpy array for shape check and generate()
+        else:
+            self.parameter_schema['parameter_samples'] = numpy.array(self.parameter_schema['parameter_samples'],
+                                                                     dtype=object)
         if len(self._parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
             raise ValueError("The parameter samples must be an array of shape MxN, "
                              "where N is the number of parameters.")
@@ -727,7 +731,8 @@ class CustomStudy(_ParameterGenerator):
     def generate(self):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study."""
-        self._samples = numpy.array(self.parameter_schema['parameter_samples'], dtype=object)
+        # Converted to numpy array by _validate. Simply assign to correct attribute
+        self._samples = self.parameter_schema['parameter_samples']
 
         # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
