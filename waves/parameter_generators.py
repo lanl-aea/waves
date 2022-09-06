@@ -783,7 +783,7 @@ class SobolSequence(_ParameterGenerator):
        and quantiles.
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
-        SobolSequence expects "schema value" to be a dictionary with a strict structure and one required key.
+        SobolSequence expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param str output_file_template: Output file name template. Required if parameter sets will be written to files
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
@@ -808,8 +808,16 @@ class SobolSequence(_ParameterGenerator):
 
        parameter_schema = {
            'num_simulations': 4,  # Required key. Value must be an integer.
-           'parameter_1': [0., 10.],  # Must be ordered as [lower_bound, upper_bound]
-           'parameter_2': [2.,  5.]
+           'parameter_1': {
+               'distribution': 'uniform',  # Required key. Value must be a valid scipy.stats
+               'loc': 0,                   # distribution name.
+               'scale': 10
+           },
+           'parameter_2': {
+               'distribution': 'uniform',
+               'loc': 2,
+               'scale': 3
+           }
        }
        parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
        parameter_generator.generate(sobol_kwargs={'scramble': False})
@@ -850,8 +858,7 @@ class SobolSequence(_ParameterGenerator):
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
-
-        # Instantiate the Sobol Sequence
+        set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
         if sobol_kwargs:
@@ -859,15 +866,10 @@ class SobolSequence(_ParameterGenerator):
         else:
             sobol_kwargs = override_kwargs
         sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
-
-        # Draw quantiles
-        set_count = self.parameter_schema['num_simulations']
         self._quantiles = sampler.random(set_count)
-
-        # Convert quantiles to scaled samples
-        lower_bounds = [self.parameter_schema[name][0] for name in self._parameter_names]
-        upper_bounds = [self.parameter_schema[name][1] for name in self._parameter_names]
-        self._samples = scipy.stats.qmc.scale(self._quantiles, lower_bounds, upper_bounds)
+        self._samples = numpy.zeros((set_count, parameter_count))
+        for i, distribution in enumerate(self.parameter_distributions.values()):
+            self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
 
         # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
