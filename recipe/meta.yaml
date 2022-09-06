@@ -84,6 +84,7 @@ test:
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
+    - waves/tests/*.yaml
     - eabm/README.rst
     - eabm/SC*
     - eabm/*SConstruct
