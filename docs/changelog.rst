@@ -14,6 +14,10 @@ New Features
   :merge:`285`). By `Kyle Brindley`_.
 - Add a custom study subcommand to the parameter study CLI (:issue:`276`, :merge:`289`). By `Kyle Brindley`_.
 
+Bug fixes
+=========
+- Accept any 2D array like for the Custom Study parameter generator (:issue:`276`, :merge:`289`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Clarify the WAVES builder behavior of setting the working directory to the parent directory of the first specified
@@ -25,6 +29,11 @@ Enhancements
 ============
 - Provide the data downselection dictionary as a CLI argument rather than hardcoding it in ``plot_scatter.py``
   (:issue:`273`, :merge:`281`). By `Thomas Roberts`_.
+
+Internal Changes
+================
+- Sign-of-life tests for the parameter study CLI generator sub-commands (:issue:`276`, :merge:`289`). By `Kyle
+  Brindley`_.
 
 ******************
 0.3.6 (2022-08-31)
