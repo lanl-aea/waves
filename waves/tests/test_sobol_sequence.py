@@ -16,7 +16,7 @@ class TestSobolSequence:
 
     validate_input = {
         "good schema": (
-            {'num_simulations': 1, 'parameter_1': [0., 1.]},
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
             does_not_raise()
         ),
         "not a dict": (
@@ -31,26 +31,22 @@ class TestSobolSequence:
             {'num_simulations': 'not_a_number'},
             pytest.raises(TypeError)
         ),
-        "wrong order": (
-            {'num_simulations': 1, 'parameter_1': [1., 0.]},
-            pytest.raises(ValueError)
+        "missing distribution": (
+            {'num_simulations': 1, 'parameter_1': {}},
+            pytest.raises(AttributeError)
         ),
-        "not an iterable": (
-            {'num_simulations': 1, 'parameter_1': 0.},
+        "distribution non-string": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 1}},
             pytest.raises(TypeError)
         ),
-        "too short": (
-            {'num_simulations': 1, 'parameter_1': [0.]},
-            pytest.raises(ValueError)
-        ),
-        "too long": (
-            {'num_simulations': 1, 'parameter_1': [0., 1., 3.]},
-            pytest.raises(ValueError)
-        ),
-        "strings": (
-            {'num_simulations': 1, 'parameter_1': ['a', 'b']},
+        "distribution bad identifier": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'my norm'}},
             pytest.raises(TypeError)
         ),
+        "kwarg bad identifier": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg 1': 1}},
+            pytest.raises(TypeError)
+        )
     }
 
     @pytest.mark.unittest
@@ -58,10 +54,12 @@ class TestSobolSequence:
                              validate_input.values(),
                              ids=validate_input.keys())
     def test__validate(self, parameter_schema, outcome):
-        with outcome:
+        with patch("waves.parameter_generators.SobolSequence._generate_parameter_distributions") as mock_distros, \
+             outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
                 TestValidate = SobolSequence(parameter_schema)
+                mock_distros.assert_called_once()
             finally:
                 pass
 
