@@ -436,6 +436,71 @@ class _ParameterGenerator(ABC):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
+class _ParameterDistributions(_ParameterGenerator, ABC):
+
+    def _validate(self):
+        """Validate the parameter distribution schema. Executed by class initiation.
+
+        .. code-block::
+
+           parameter_schema = {
+               'num_simulations': 4,  # Required key. Value must be an integer.
+               'parameter_1': {
+                   'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
+                   'loc': 50,               # distribution name.
+                   'scale': 1
+               },
+               'parameter_2': {
+                   'distribution': 'skewnorm',
+                   'a': 4,
+                   'loc': 30,
+                   'scale': 2
+               }
+           }
+        """
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
+        # TODO: Settle on an input file schema and validation library
+        if 'num_simulations' not in self.parameter_schema.keys():
+            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
+        elif not isinstance(self.parameter_schema['num_simulations'], int):
+            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+        self._create_parameter_names()
+        for name in self._parameter_names:
+            parameter_keys = self.parameter_schema[name].keys()
+            parameter_definition = self.parameter_schema[name]
+            if 'distribution' not in parameter_keys:
+                raise AttributeError(f"Parameter '{name}' does not contain the required 'distribution' key")
+            elif not isinstance(parameter_definition['distribution'], str) or \
+                 not parameter_definition['distribution'].isidentifier():
+                raise TypeError(f"Parameter '{name}' distribution '{parameter_definition['distribution']}' is not a " \
+                                "valid Python identifier")
+            else:
+                for key in parameter_keys:
+                    if not isinstance(key, str) or not key.isidentifier():
+                        raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
+                                        "Python identifier")
+        # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
+        self.parameter_distributions = self._generate_parameter_distributions()
+
+    def _generate_parameter_distributions(self):
+        """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
+
+        :return: parameter_distributions
+        :rtype: dict
+        """
+        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self._parameter_names})
+        parameter_distributions = {}
+        for parameter, attributes in parameter_dictionary.items():
+            distribution_name = attributes.pop('distribution')
+            parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
+        return parameter_distributions
+
+    def _create_parameter_names(self):
+        """Construct the Latin-Hypercube parameter names"""
+        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+
+
 class CartesianProduct(_ParameterGenerator):
     """Builds a cartesian product parameter study
 
@@ -512,7 +577,7 @@ class CartesianProduct(_ParameterGenerator):
         super().write()
 
 
-class LatinHypercube(_ParameterGenerator):
+class LatinHypercube(_ParameterDistributions):
     """Builds a Latin-Hypercube parameter study from the `pyDOE2`_ latin-hypercube class
 
     The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
@@ -583,33 +648,6 @@ class LatinHypercube(_ParameterGenerator):
     * parameter_study: The final parameter study XArray Dataset object
     """
 
-    def _validate(self):
-        """Validate the Latin-Hypercube parameter schema. Executed by class initiation."""
-        if not isinstance(self.parameter_schema, dict):
-            raise TypeError("parameter_schema must be a dictionary")
-        # TODO: Settle on an input file schema and validation library
-        if 'num_simulations' not in self.parameter_schema.keys():
-            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
-        elif not isinstance(self.parameter_schema['num_simulations'], int):
-            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        self._create_parameter_names()
-        for name in self._parameter_names:
-            parameter_keys = self.parameter_schema[name].keys()
-            parameter_definition = self.parameter_schema[name]
-            if 'distribution' not in parameter_keys:
-                raise AttributeError(f"Parameter '{name}' does not contain the required 'distribution' key")
-            elif not isinstance(parameter_definition['distribution'], str) or \
-                 not parameter_definition['distribution'].isidentifier():
-                raise TypeError(f"Parameter '{name}' distribution '{parameter_definition['distribution']}' is not a " \
-                                "valid Python identifier")
-            else:
-                for key in parameter_keys:
-                    if not isinstance(key, str) or not key.isidentifier():
-                        raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
-                                        "Python identifier")
-        # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
-        self.parameter_distributions = self._generate_parameter_distributions()
-
     def generate(self, lhs_kwargs=None):
         """Generate the Latin-Hypercube parameter sets. Must be called directly to generate the parameter study.
 
@@ -636,26 +674,9 @@ class LatinHypercube(_ParameterGenerator):
         if self.previous_parameter_study:
             self._merge_parameter_studies()
 
-    def _generate_parameter_distributions(self):
-        """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
-
-        :return: parameter_distributions
-        :rtype: dict
-        """
-        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self._parameter_names})
-        parameter_distributions = {}
-        for parameter, attributes in parameter_dictionary.items():
-            distribution_name = attributes.pop('distribution')
-            parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
-        return parameter_distributions
-
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
-
-    def _create_parameter_names(self):
-        """Construct the Latin-Hypercube parameter names"""
-        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
 
 
 class CustomStudy(_ParameterGenerator):
