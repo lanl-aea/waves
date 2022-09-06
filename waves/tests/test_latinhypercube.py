@@ -14,55 +14,6 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key
 class TestLatinHypercube:
     """Class for testing LatinHypercube parameter study generator class"""
 
-    validate_input = {
-        "good schema": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
-            does_not_raise()
-        ),
-        "not a dict": (
-            'not a dict',
-            pytest.raises(TypeError)
-        ),
-        "missing num_simulation": (
-            {},
-            pytest.raises(AttributeError)
-        ),
-        "num_simulation non-integer": (
-            {'num_simulations': 'not_a_number'},
-            pytest.raises(TypeError)
-        ),
-        "missing distribution": (
-            {'num_simulations': 1, 'parameter_1': {}},
-            pytest.raises(AttributeError)
-        ),
-        "distribution non-string": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 1}},
-            pytest.raises(TypeError)
-        ),
-        "distribution bad identifier": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'my norm'}},
-            pytest.raises(TypeError)
-        ),
-        "kwarg bad identifier": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg 1': 1}},
-            pytest.raises(TypeError)
-        )
-    }
-
-    @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, outcome',
-                             validate_input.values(),
-                             ids=validate_input.keys())
-    def test__validate(self, parameter_schema, outcome):
-        with patch("waves.parameter_generators.LatinHypercube._generate_parameter_distributions") as mock_distros, \
-             outcome:
-            try:
-                # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = LatinHypercube(parameter_schema)
-                mock_distros.assert_called_once()
-            finally:
-                pass
-
     generate_input_interface = "parameter_schema, random_state, expected_samples, expected_quantiles, " \
                                "expected_scipy_kwds"
     generate_input = {
@@ -119,7 +70,7 @@ class TestLatinHypercube:
         assert numpy.allclose(quantiles_array, expected_quantiles)
         # Verify that the parameter set name creation method was called
         expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
-        assert list(TestGenerate._parameter_set_names.values()) == expected_set_names 
+        assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
         # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
         expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
         parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
