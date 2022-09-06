@@ -1,9 +1,9 @@
-import tempfile
-import subprocess
+from unittest.mock import patch
 
 import pytest
 
 from waves._settings import _project_root_abspath
+from waves import parameter_study
 
 parameter_study_args = {
     'cartesian product': (
@@ -23,9 +23,9 @@ parameter_study_args = {
                          parameter_study_args.values(),
                          ids=list(parameter_study_args.keys()))
 def test_parameter_study(subcommand):
-    command = ["python", "-m", "waves.parameter_study", subcommand, '-h']
-    output = subprocess.check_output(command, cwd=_project_root_abspath.parent)
+    with patch('sys.argv', return_value=[subcommand, '-h']):
+        parameter_study.main()
 
     schema_file = _project_root_abspath / f"tests/{subcommand}.yaml"
-    command = ["python", "-m", "waves.parameter_study", subcommand, str(schema_file)]
-    output = subprocess.check_output(command, cwd=_project_root_abspath.parent)
+    with patch('sys.argv', return_value=[subcommand, str(schema_file)]):
+        parameter_study.main()
