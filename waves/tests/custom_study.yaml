@@ -1,0 +1,2 @@
+parameter_samples: [[1, 'a', 5.0], [2.0, 'b', 6]]
+parameter_names: ['height', 'prefix', 'index']
