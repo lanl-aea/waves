@@ -6,6 +6,7 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
+import pkg_resources
 
 from waves.parameter_generators import SobolSequence
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
@@ -13,55 +14,6 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 class TestSobolSequence:
     """Class for testing Sobol Sequence parameter study generator class"""
-
-    validate_input = {
-        "good schema": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
-            does_not_raise()
-        ),
-        "not a dict": (
-            'not a dict',
-            pytest.raises(TypeError)
-        ),
-        "missing num_simulation": (
-            {},
-            pytest.raises(AttributeError)
-        ),
-        "num_simulation non-integer": (
-            {'num_simulations': 'not_a_number'},
-            pytest.raises(TypeError)
-        ),
-        "missing distribution": (
-            {'num_simulations': 1, 'parameter_1': {}},
-            pytest.raises(AttributeError)
-        ),
-        "distribution non-string": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 1}},
-            pytest.raises(TypeError)
-        ),
-        "distribution bad identifier": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'my norm'}},
-            pytest.raises(TypeError)
-        ),
-        "kwarg bad identifier": (
-            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg 1': 1}},
-            pytest.raises(TypeError)
-        )
-    }
-
-    @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, outcome',
-                             validate_input.values(),
-                             ids=validate_input.keys())
-    def test__validate(self, parameter_schema, outcome):
-        with patch("waves.parameter_generators.SobolSequence._generate_parameter_distributions") as mock_distros, \
-             outcome:
-            try:
-                # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = SobolSequence(parameter_schema)
-                mock_distros.assert_called_once()
-            finally:
-                pass
 
     generate_input = {
         "good schema 5x2": (
