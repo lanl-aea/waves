@@ -1,9 +1,9 @@
 from unittest.mock import patch
 import sys
+import pathlib
 
 import pytest
 
-from waves._settings import _project_root_abspath
 from waves import parameter_study
 
 parameter_study_args = {
@@ -29,7 +29,7 @@ def test_parameter_study(subcommand):
         sys.exit(parameter_study.main())
     assert pytest_exit.value.code == 0
 
-    schema_file = _project_root_abspath / f"tests/{subcommand}.yaml"
+    schema_file = pathlib.Path(f"tests/{subcommand}.yaml")
     with patch('sys.argv', ['parameter_study.py', subcommand, str(schema_file)]), \
          pytest.raises(SystemExit) as pytest_exit:
         sys.exit(parameter_study.main())
