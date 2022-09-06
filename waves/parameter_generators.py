@@ -496,8 +496,26 @@ class _ParameterDistributions(_ParameterGenerator, ABC):
             parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
         return parameter_distributions
 
+    def _generate_distribution_samples(self, set_count, parameter_count):
+        """Convert quantiles to parameter distribution samples
+
+        Requires attibrutes:
+
+        * ``self.parameter_distributions``: dictionary containing the {parameter name: scipy.stats distribution} defined
+          by the parameter schema. Set by
+          :meth:`waves.parameter_generators._ParameterDistributions._generate_parameter_distributions`.
+
+        Sets attribute(s):
+
+        * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets, number
+          of parameters).
+        """
+        self._samples = numpy.zeros((set_count, parameter_count))
+        for i, distribution in enumerate(self.parameter_distributions.values()):
+            self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
+
     def _create_parameter_names(self):
-        """Construct the Latin-Hypercube parameter names"""
+        """Construct the parameter names from a distribution parameter schema"""
         self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
 
 
@@ -664,8 +682,7 @@ class LatinHypercube(_ParameterDistributions):
             lhs_kwargs = override_kwargs
         self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **lhs_kwargs)
         self._samples = numpy.zeros((set_count, parameter_count))
-        for i, distribution in enumerate(self.parameter_distributions.values()):
-            self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
+        self._generate_distribution_samples(set_count, parameter_count)
 
         # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
@@ -778,7 +795,7 @@ class SobolSequence(_ParameterGenerator):
 
     .. warning::
 
-       The merged parameter study feature does *not* check for consistent parameter ranges. Changing the
+       The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions will result in incorrect relationships between parameters and the parameter study samples
        and quantiles.
 
@@ -867,9 +884,7 @@ class SobolSequence(_ParameterGenerator):
             sobol_kwargs = override_kwargs
         sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
         self._quantiles = sampler.random(set_count)
-        self._samples = numpy.zeros((set_count, parameter_count))
-        for i, distribution in enumerate(self.parameter_distributions.values()):
-            self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
+        self._generate_distribution_samples(set_count, parameter_count)
 
         # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
