@@ -836,27 +836,8 @@ class SobolSequence(_ParameterGenerator):
         minimum_scipy = pkg_resources.parse_version('1.7.0')
         if current_scipy < minimum_scipy:
             raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
+        super()._validate()
 
-        # TODO: Settle on an input file schema and validation library
-        if not isinstance(self.parameter_schema, dict):
-            raise TypeError("parameter_schema must be a dictionary")
-        if 'num_simulations' not in self.parameter_schema.keys():
-            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
-        elif not isinstance(self.parameter_schema['num_simulations'], int):
-            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        self._create_parameter_names()
-        for name in self._parameter_names:
-            parameter_definition = self.parameter_schema[name]
-            if not isinstance(parameter_definition, (list, set, tuple)):
-                raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
-            if not len(parameter_definition) == 2:
-                raise ValueError(f"Parameter '{name}' must have exactly length two: [lower_bound, upper_bound]")
-            for value in parameter_definition:
-                if not isinstance(value, numbers.Number):
-                    raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
-            if parameter_definition[1] < parameter_definition[0]:
-                raise ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound, "
-                                 "upper_bound]")
 
     def generate(self, sobol_kwargs=None):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
@@ -898,7 +879,3 @@ class SobolSequence(_ParameterGenerator):
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
-
-    def _create_parameter_names(self):
-        """Construct the Sobol sequence parameter names"""
-        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
