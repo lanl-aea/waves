@@ -17,8 +17,9 @@ from waves import parameter_generators
 # Variables normally found in a project's root settings.py file(s)
 _program_name = pathlib.Path(__file__).stem
 cartesian_product_subcommand = 'cartesian_product'
-latin_hypercube_subcommand = 'latin_hypercube'
 custom_study_subcommand = 'custom_study'
+latin_hypercube_subcommand = 'latin_hypercube'
+sobol_sequence_subcommand = 'sobol_sequence'
 
 
 # =========================================================================================== COMMAND LINE INTERFACE ===
@@ -114,10 +115,19 @@ def get_parser(return_subparser_dictionary=False):
         parents=[parent_parser]
     )
 
+    sobol_sequence_parser = subparsers.add_parser(
+        sobol_sequence_subcommand,
+        description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
+                    "parameter samples and quantiles.",
+        help='Sobol sequence generator',
+        parents=[parent_parser]
+    )
+
     subparser_dictionary = {
         cartesian_product_subcommand: cartesian_product_parser,
         custom_study_subcommand: custom_study_parser,
-        latin_hypercube_subcommand: latin_hypercube_parser
+        latin_hypercube_subcommand: latin_hypercube_parser,
+        sobol_sequence_subcommand: sobol_sequence_parser
     }
 
     if return_subparser_dictionary:
@@ -180,7 +190,8 @@ def main():
     available_parameter_generators = {
         cartesian_product_subcommand: parameter_generators.CartesianProduct,
         custom_study_subcommand: parameter_generators.CustomStudy,
-        latin_hypercube_subcommand: parameter_generators.LatinHypercube
+        latin_hypercube_subcommand: parameter_generators.LatinHypercube,
+        sobol_sequence_subcommand: parameter_generators.SobolSequence
     }
     parameter_generator = \
         available_parameter_generators[subcommand](
