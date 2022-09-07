@@ -8,6 +8,11 @@ Changelog
 0.4.2 (unreleased)
 ******************
 
+Breaking changes
+================
+- Add '_Assembly' to name of assembly instance in hdf5 output of odb_extract. Added to differentiate it from part
+  instance of the same name (:issue:`260`, :merge:`263`). By `Prabhu Khalsa`_.
+
 Internal Changes
 ================
 - Use ``scipy`` for latin hypercube sampling instead of ``pyDOE2``. Reduces package dependency count and standardizes
