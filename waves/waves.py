@@ -21,7 +21,7 @@ def main():
         open_docs()
     elif args.subcommand == 'build':
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
-                            working_directory=args.working_directory)
+                            working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     else:
         parser.print_help()
 
@@ -86,7 +86,7 @@ def get_parser():
     directory_group.add_argument("-g", "--git-clone-directory", type=str, default=None,
                                   help="Perform a shallow git clone operation to the specified directory before " \
                                        "executing the scons command, " \
-                                       "``git clone --no-hardlinks --depth=1 ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
+                                       "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
                                        "(default: %(default)s).")
 
     return main_parser
@@ -97,7 +97,7 @@ def open_docs():
     return
 
 
-def build(targets, scons_args=[], max_iterations=5, working_directory=None):
+def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_clone_directory=None):
     """Submit an iterative SCons command
 
     SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
@@ -109,16 +109,23 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None):
     :param str working_directory: Change the SCons command working directory
     """
     if not targets:
-        print('At least one target must be provided')
+        print("At least one target must be provided")
         return 1
-    stop_trigger = 'is up to date.'
-    scons_command = ['scons']
+    if git_clone_directory:
+        current_directory = pathlib.Path().cwd().resolve()
+        git_clone_directory = pathlib.Path(git_clone_directory).resolve()
+        git_clone_directory.mkdir(parents=True, exist_ok=True)
+        working_directory = str(git_clone_directory)
+        command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
+        git_clone_stdout = subprocess.check_output(command)
+    stop_trigger = "is up to date."
+    scons_command = ["scons"]
     scons_command.extend(scons_args)
     for target in targets:
         scons_stdout = b"Go boat"
         count = 0
         command = scons_command + [target]
-        while stop_trigger not in scons_stdout.decode('utf-8'):
+        while stop_trigger not in scons_stdout.decode("utf-8"):
             count += 1
             if count > max_iterations:
                 print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'")
