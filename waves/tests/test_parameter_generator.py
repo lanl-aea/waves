@@ -253,7 +253,7 @@ class TestParameterDistributions():
     @pytest.mark.parametrize('parameter_schema, outcome',
                              validate_input.values(),
                              ids=validate_input.keys())
-    def test__validate(self, parameter_schema, outcome):
+    def test_validate(self, parameter_schema, outcome):
         with patch("waves.parameter_generators._ParameterDistributions._generate_parameter_distributions") as mock_distros, \
              outcome:
             try:
