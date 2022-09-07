@@ -32,8 +32,7 @@ Enhancements
 
 Internal Changes
 ================
-- Sign-of-life tests for the parameter study CLI generator sub-commands (:issue:`276`, :merge:`289`). By `Kyle
-  Brindley`_.
+- Test the parameter study CLI generator sub-commands (:issue:`276`, :merge:`289`). By `Kyle Brindley`_.
 
 ******************
 0.3.6 (2022-08-31)
