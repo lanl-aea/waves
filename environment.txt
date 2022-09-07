@@ -6,10 +6,9 @@ pytest
 pytest-xdist
 pyyaml
 scons >=4
-scipy
-setuptools
-setuptools_scm
-pyDOE2 >=1
+scipy >=1
+setuptools >=45
+setuptools_scm[toml] >=6.2
 sphinx
 sphinx-argparse
 sphinx_rtd_theme >=0.5

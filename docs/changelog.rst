@@ -5,6 +5,15 @@ Changelog
 #########
 
 ******************
+0.4.2 (unreleased)
+******************
+
+Internal Changes
+================
+- Use ``scipy`` for latin hypercube sampling instead of ``pyDOE2``. Reduces package dependency count and standardizes
+  the current parameter generators on a single package (:issue:`286`, :merge:`293`). By `Kyle Brindley`_.
+
+******************
 0.4.1 (2022-09-07)
 ******************
 
