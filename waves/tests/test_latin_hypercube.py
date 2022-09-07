@@ -40,7 +40,7 @@ class TestLatinHypercube:
             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
             42,
             numpy.array([[50.2872041 ], [49.41882358]]),
-            numpy.array([[0.61302198], [0.28056078]]),
+            numpy.array([[ 0.61302198], [ 0.28056078]]),
             [{"loc":  50, "scale": 1}]
         ),
         "good schema 1x2": (
@@ -48,8 +48,8 @@ class TestLatinHypercube:
              'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
              'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
             42,
-            numpy.array([[49.68014762, -48.34818067]]),
-            numpy.array([[0.37454012 ,  0.95071431 ]]),
+            numpy.array([[49.24806127, -49.84618661]]),
+            numpy.array([[ 0.22604395,   0.56112156]]),
             [{"loc":  50, "scale": 1},
              {"loc": -50, "scale": 1}]
         )
