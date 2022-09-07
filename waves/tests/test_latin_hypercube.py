@@ -14,7 +14,7 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key
 class TestLatinHypercube:
     """Class for testing LatinHypercube parameter study generator class"""
 
-    generate_input_interface = "parameter_schema, random_state, expected_samples, expected_quantiles, " \
+    generate_input_interface = "parameter_schema, seed, expected_samples, expected_quantiles, " \
                                "expected_scipy_kwds"
     generate_input = {
         "good schema 5x2": (
@@ -39,8 +39,8 @@ class TestLatinHypercube:
             {'num_simulations': 2,
             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
             42,
-            numpy.array([[51.96611184], [49.11199882]]),
-            numpy.array([[0.97535715 ], [0.18727006 ]]),
+            numpy.array([[50.2872041 ], [49.41882358]]),
+            numpy.array([[0.61302198], [0.28056078]]),
             [{"loc":  50, "scale": 1}]
         ),
         "good schema 1x2": (
@@ -59,11 +59,11 @@ class TestLatinHypercube:
     @pytest.mark.parametrize(generate_input_interface,
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate(self, parameter_schema, random_state,
+    def test_generate(self, parameter_schema, seed,
                       expected_samples, expected_quantiles, expected_scipy_kwds):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = LatinHypercube(parameter_schema)
-        TestGenerate.generate(kwargs={'random_state': random_state})
+        TestGenerate.generate(kwargs={'seed': seed})
         samples_array = TestGenerate._samples
         quantiles_array = TestGenerate._quantiles
         assert numpy.allclose(samples_array, expected_samples)
@@ -95,15 +95,15 @@ class TestLatinHypercube:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('first_schema, second_schema, random_state, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize('first_schema, second_schema, seed, expected_samples, expected_quantiles',
                                  merge_test.values(),
                              ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, random_state, expected_samples, expected_quantiles):
+    def test_merge(self, first_schema, second_schema, seed, expected_samples, expected_quantiles):
         TestMerge1 = LatinHypercube(first_schema)
-        TestMerge1.generate(kwargs={'random_state': random_state})
+        TestMerge1.generate(kwargs={'seed': seed})
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = LatinHypercube(second_schema, previous_parameter_study='dummy_string')
-            TestMerge2.generate(kwargs={'random_state': random_state})
+            TestMerge2.generate(kwargs={'seed': seed})
         samples = TestMerge2._samples.astype(float)
         quantiles = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples, expected_samples)
