@@ -11,7 +11,6 @@ import yaml
 import numpy
 import xarray
 import scipy.stats
-import pyDOE2
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key, _quantiles_attribute_key
 
@@ -596,7 +595,7 @@ class CartesianProduct(_ParameterGenerator):
 
 
 class LatinHypercube(_ParameterDistributions):
-    """Builds a Latin-Hypercube parameter study from the `pyDOE2`_ latin-hypercube class
+    """Builds a Latin-Hypercube parameter study from the `scipy Latin Hypercube`_ class
 
     The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
 
@@ -667,20 +666,24 @@ class LatinHypercube(_ParameterDistributions):
     """
 
     def generate(self, kwargs=None):
-        """Generate the Latin-Hypercube parameter sets. Must be called directly to generate the parameter study.
+        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
 
-        :param dict kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin-Hypercube sampling method.
-            The ``samples`` keyword argument is internally managed and will be overwritten to match ``num_simulations``
-            from the parameter schema.
+        To produce consistent Latin Hypercubes on repeat instantiations, the ``kwargs`` must include
+        ``{'seed': <int>}``. See the `scipy Latin Hypercube`_ documentation for details.
+
+        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.LatinHypercube`` LatinHypercube class. The
+            ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
+            defined in the parameter schema.
         """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
-        override_kwargs = {'samples': set_count}
+        override_kwargs = {'d': parameter_count}
         if kwargs:
             kwargs.update(override_kwargs)
         else:
             kwargs = override_kwargs
-        self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **kwargs)
+        sampler = scipy.stats.qmc.LatinHypercube(**kwargs)
+        self._quantiles = sampler.random(set_count)
         self._samples = numpy.zeros((set_count, parameter_count))
         self._generate_distribution_samples(set_count, parameter_count)
 
@@ -876,7 +879,7 @@ class SobolSequence(_ParameterDistributions):
         To produce consistent Sobol sequences on repeat instantiations, the ``kwargs`` must include either
         ``{'scramble': False}`` or ``{'seed': <int>}``. See the `scipy Sobol`_ documentation for details.
 
-        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class.  The ``d`` keyword
+        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class. The ``d`` keyword
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
