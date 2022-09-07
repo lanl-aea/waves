@@ -5,7 +5,7 @@ Changelog
 #########
 
 ******************
-0.3.7 (unreleased)
+0.4.1 (2022-09-07)
 ******************
 
 Breaking changes
@@ -14,6 +14,8 @@ Breaking changes
   :merge:`288`). By `Kyle Brindley`_.
 - Change the keyword arguments variable name to the more general ``kwargs`` in Latin Hypercube and Sobol Sequence for
   consistency between classes (:issue:`282`, :merge:`288`). By `Kyle Brindley`_.
+- Remove the Linux wrapper shell script in favor of merging the ``git clone`` feature with the OS-agnostic ``waves build``
+  subcommand (:issue:`283`, :merge:`291`). By `Kyle Brindley`_.
 
 New Features
 ============
@@ -21,6 +23,7 @@ New Features
   :merge:`285`). By `Kyle Brindley`_.
 - Add a custom study subcommand to the parameter study CLI (:issue:`276`, :merge:`289`). By `Kyle Brindley`_.
 - Add a sobol sequence subcommand to the parameter study CLI (:issue:`277`, :merge:`290`). By `Kyle Brindley`_.
+- Add a ``git clone`` feature to the ``waves build`` subcommand (:issue:`282`, :merge:`291`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
