@@ -79,9 +79,15 @@ def get_parser():
     build_parser.add_argument("TARGET", nargs="+",
                               help=f"SCons target list")
     build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
-                              help="Maximum number of SCons command iterations")
-    build_parser.add_argument("--working-directory", type=str, default=None,
-                              help=argparse.SUPPRESS)
+                              help="Maximum number of SCons command iterations (default: %(default)s)")
+    directory_group = build_parser.add_mutually_exclusive_group()
+    directory_group.add_argument("--working-directory", type=str, default=None,
+                                 help=argparse.SUPPRESS)
+    directory_group.add_argument("-g", "--git-clone-directory", type=str, default=None,
+                                  help="Perform a shallow git clone operation to the specified directory before " \
+                                       "executing the scons command, " \
+                                       "``git clone --no-hardlinks --depth=1 ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
+                                       "(default: %(default)s).")
 
     return main_parser
 
