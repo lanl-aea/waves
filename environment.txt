@@ -9,7 +9,6 @@ scons >=4
 scipy
 setuptools
 setuptools_scm
-pyDOE2 >=1
 sphinx
 sphinx-argparse
 sphinx_rtd_theme >=0.5

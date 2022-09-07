@@ -55,7 +55,6 @@ requirements:
     # TODO: Remove after updating minimum scipy requirement
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
     - setuptools
-    - pyDOE2 >=1
     - xarray
 
 test:
@@ -70,7 +69,6 @@ test:
     - scipy
     - scons
     - setuptools_scm
-    - pyDOE2 >=1
     - xarray
   source_files:
     # Everything copied here will make it into the "info" directory of the Conda package

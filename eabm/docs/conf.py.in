@@ -15,7 +15,7 @@ sys.path.insert(0, str(project_dir))
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.
 mock_modules = ['abaqus', 'abaqusConstants', 'mesh', 'cubit', 'scipy', 'scipy.stats', 'xarray', 'pyyaml', 'h5py',
-                'numpy', 'pyDOE2', 'matplotlib', 'matplotlib.pyplot', 'waves']
+                'numpy', 'matplotlib', 'matplotlib.pyplot', 'waves']
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
