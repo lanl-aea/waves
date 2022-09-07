@@ -36,7 +36,6 @@
 .. _`PEP-287`: https://peps.python.org/pep-0287/
 .. _`PEP-440`: https://www.python.org/dev/peps/pep-0440/
 .. _`PEP-8`: https://www.python.org/dev/peps/pep-0008/
-.. _`pyDOE2`: https://github.com/clicumu/pyDOE2
 .. _`PYTHONPATH`: https://docs.python.org/3/library/sys.html#sys.path
 .. _`Python 2.7 argparse`: https://docs.python.org/2.7/library/argparse.html
 .. _`Python 2`: https://docs.python.org/2.7/
@@ -50,6 +49,7 @@
 .. _`Python sys`: https://docs.python.org/3/library/sys.html
 .. _`Python`: https://www.python.org/
 .. _`scipy Sobol`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.Sobol.html
+.. _`scipy Latin Hypercube`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.LatinHypercube.html
 .. _`SCons Command`: https://scons.org/doc/production/HTML/scons-user/ch18.html
 .. _`SCons Python build function`: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
 .. _`SCons Substfile`: https://scons.org/doc/production/HTML/scons-user.html#b-Substfile
