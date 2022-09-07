@@ -8,6 +8,11 @@ Changelog
 0.4.2 (unreleased)
 ******************
 
+Breaking changes
+================
+- Add '_Assembly' to name of assembly instance in hdf5 output of odb_extract. Added to differentiate it from part
+  instance of the same name (:issue:`260`, :merge:`263`). By `Prabhu Khalsa`_.
+
 Internal Changes
 ================
 - Use ``scipy`` for latin hypercube sampling instead of ``pyDOE2``. Reduces package dependency count and standardizes
@@ -25,8 +30,6 @@ Breaking changes
   consistency between classes (:issue:`282`, :merge:`288`). By `Kyle Brindley`_.
 - Remove the Linux wrapper shell script in favor of merging the ``git clone`` feature with the OS-agnostic ``waves build``
   subcommand (:issue:`283`, :merge:`291`). By `Kyle Brindley`_.
-- Add '_Assembly' to name of assembly instance in hdf5 output of odb_extract. Added to differentiate it from part
-  instance of the same name (:issue:`260`, :merge:`263`). By `Prabhu Khalsa`_.
 
 New Features
 ============
