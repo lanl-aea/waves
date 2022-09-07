@@ -18,6 +18,7 @@ from waves import parameter_generators
 _program_name = pathlib.Path(__file__).stem
 cartesian_product_subcommand = 'cartesian_product'
 latin_hypercube_subcommand = 'latin_hypercube'
+custom_study_subcommand = 'custom_study'
 
 
 # =========================================================================================== COMMAND LINE INTERFACE ===
@@ -91,18 +92,33 @@ def get_parser(return_subparser_dictionary=False):
         description=f"Available parameter study generators",
         dest='subcommand')
 
-    cartesian_product_parser = subparsers.add_parser(cartesian_product_subcommand, description=generator_description,
-                                                     help='Cartesian product generator',
-                                                     parents=[parent_parser])
+    cartesian_product_parser = subparsers.add_parser(
+        cartesian_product_subcommand,
+        description=generator_description,
+        help='Cartesian product generator',
+        parents=[parent_parser]
+    )
+
+    custom_study_parser = subparsers.add_parser(
+        custom_study_subcommand,
+        description=generator_description,
+        help='Custom study generator',
+        parents=[parent_parser]
+    )
+
     latin_hypercube_parser = subparsers.add_parser(
         latin_hypercube_subcommand,
         description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
                     "parameter samples and quantiles.",
         help='Latin hypercube generator',
-        parents=[parent_parser])
+        parents=[parent_parser]
+    )
 
-    subparser_dictionary = {cartesian_product_subcommand: cartesian_product_parser,
-                            latin_hypercube_subcommand: latin_hypercube_parser}
+    subparser_dictionary = {
+        cartesian_product_subcommand: cartesian_product_parser,
+        custom_study_subcommand: custom_study_parser,
+        latin_hypercube_subcommand: latin_hypercube_parser
+    }
 
     if return_subparser_dictionary:
         return subparser_dictionary
@@ -161,9 +177,11 @@ def main():
     input_file.close()
 
     # Retrieve and instantiate the subcommand class
-    available_parameter_generators = \
-        {cartesian_product_subcommand: parameter_generators.CartesianProduct,
-         latin_hypercube_subcommand: parameter_generators.LatinHypercube}
+    available_parameter_generators = {
+        cartesian_product_subcommand: parameter_generators.CartesianProduct,
+        custom_study_subcommand: parameter_generators.CustomStudy,
+        latin_hypercube_subcommand: parameter_generators.LatinHypercube
+    }
     parameter_generator = \
         available_parameter_generators[subcommand](
             parameter_schema,
