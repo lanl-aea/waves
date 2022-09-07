@@ -28,7 +28,7 @@ simulation_constants = {
     'global_seed': 1,
     'displacement': -0.1
 }
-sobol_kwargs = {'scramble': False}
+kwargs = {'scramble': False}
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -42,7 +42,7 @@ parameter_generator = waves.parameter_generators.SobolSequence(
     output_file=parameter_study_file,
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
-parameter_generator.generate(sobol_kwargs=sobol_kwargs)
+parameter_generator.generate(kwargs=kwargs)
 parameter_study = parameter_generator.parameter_study
 
 # TODO: Find a way to write the parameter study without a user-custom Python build function

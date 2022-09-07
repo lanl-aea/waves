@@ -50,13 +50,13 @@ class TestSobolSequence:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize("parameter_schema, sobol_kwargs, expected_samples, expected_quantiles",
+    @pytest.mark.parametrize("parameter_schema, kwargs, expected_samples, expected_quantiles",
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate(self, parameter_schema, sobol_kwargs, expected_samples, expected_quantiles):
+    def test_generate(self, parameter_schema, kwargs, expected_samples, expected_quantiles):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = SobolSequence(parameter_schema)
-        TestGenerate.generate(sobol_kwargs=sobol_kwargs)
+        TestGenerate.generate(kwargs=kwargs)
         samples_array = TestGenerate._samples
         quantiles_array = TestGenerate._quantiles
         assert numpy.allclose(samples_array, expected_samples)
@@ -119,15 +119,15 @@ class TestSobolSequence:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('first_schema, second_schema, sobol_kwargs, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize('first_schema, second_schema, kwargs, expected_samples, expected_quantiles',
                                  merge_test.values(),
                              ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, sobol_kwargs, expected_samples, expected_quantiles):
+    def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
         TestMerge1 = SobolSequence(first_schema)
-        TestMerge1.generate(sobol_kwargs=sobol_kwargs)
+        TestMerge1.generate(kwargs=kwargs)
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = SobolSequence(second_schema, previous_parameter_study='dummy_string')
-            TestMerge2.generate(sobol_kwargs=sobol_kwargs)
+            TestMerge2.generate(kwargs=kwargs)
         samples_array = TestMerge2._samples.astype(float)
         quantiles_array = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)

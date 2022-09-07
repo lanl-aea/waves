@@ -666,21 +666,21 @@ class LatinHypercube(_ParameterDistributions):
     * parameter_study: The final parameter study XArray Dataset object
     """
 
-    def generate(self, lhs_kwargs=None):
+    def generate(self, kwargs=None):
         """Generate the Latin-Hypercube parameter sets. Must be called directly to generate the parameter study.
 
-        :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin-Hypercube sampling method.
+        :param dict kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin-Hypercube sampling method.
             The ``samples`` keyword argument is internally managed and will be overwritten to match ``num_simulations``
             from the parameter schema.
         """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'samples': set_count}
-        if lhs_kwargs:
-            lhs_kwargs.update(override_kwargs)
+        if kwargs:
+            kwargs.update(override_kwargs)
         else:
-            lhs_kwargs = override_kwargs
-        self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **lhs_kwargs)
+            kwargs = override_kwargs
+        self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **kwargs)
         self._samples = numpy.zeros((set_count, parameter_count))
         self._generate_distribution_samples(set_count, parameter_count)
 
@@ -837,7 +837,7 @@ class SobolSequence(_ParameterDistributions):
            }
        }
        parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
-       parameter_generator.generate(sobol_kwargs={'scramble': False})
+       parameter_generator.generate(kwargs={'scramble': False})
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_sets: 4)
@@ -864,25 +864,25 @@ class SobolSequence(_ParameterDistributions):
         super()._validate()
 
 
-    def generate(self, sobol_kwargs=None):
+    def generate(self, kwargs=None):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study.
 
-        To produce consistent Sobol sequences on repeat instantiations, the ``sobol_kwargs`` must include either
+        To produce consistent Sobol sequences on repeat instantiations, the ``kwargs`` must include either
         ``{'scramble': False}`` or ``{'seed': <int>}``. See the `scipy Sobol`_ documentation for details.
 
-        :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class.  The ``d`` keyword
+        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class.  The ``d`` keyword
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
-        if sobol_kwargs:
-            sobol_kwargs.update(override_kwargs)
+        if kwargs:
+            kwargs.update(override_kwargs)
         else:
-            sobol_kwargs = override_kwargs
-        sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
+            kwargs = override_kwargs
+        sampler = scipy.stats.qmc.Sobol(**kwargs)
         self._quantiles = sampler.random(set_count)
         self._generate_distribution_samples(set_count, parameter_count)
 

@@ -63,7 +63,7 @@ class TestLatinHypercube:
                       expected_samples, expected_quantiles, expected_scipy_kwds):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = LatinHypercube(parameter_schema)
-        TestGenerate.generate(lhs_kwargs={'random_state': random_state})
+        TestGenerate.generate(kwargs={'random_state': random_state})
         samples_array = TestGenerate._samples
         quantiles_array = TestGenerate._quantiles
         assert numpy.allclose(samples_array, expected_samples)
@@ -100,10 +100,10 @@ class TestLatinHypercube:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, random_state, expected_samples, expected_quantiles):
         TestMerge1 = LatinHypercube(first_schema)
-        TestMerge1.generate(lhs_kwargs={'random_state': random_state})
+        TestMerge1.generate(kwargs={'random_state': random_state})
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = LatinHypercube(second_schema, previous_parameter_study='dummy_string')
-            TestMerge2.generate(lhs_kwargs={'random_state': random_state})
+            TestMerge2.generate(kwargs={'random_state': random_state})
         samples = TestMerge2._samples.astype(float)
         quantiles = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples, expected_samples)
