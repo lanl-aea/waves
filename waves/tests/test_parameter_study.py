@@ -18,6 +18,10 @@ parameter_study_args = {
         'latin_hypercube',
         'LatinHypercube'
     ),
+    'sobol sequence': (
+        'sobol_sequence',
+        'SobolSequence'
+    ),
 }
 
 
