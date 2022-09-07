@@ -8,11 +8,13 @@ from unittest.mock import patch
 
 from waves import waves
 
+
 @pytest.mark.unittest
 def test_open_docs():
     with patch('webbrowser.open') as mock_webbrowser_open:
         waves.open_docs()
         mock_webbrowser_open.assert_called()
+
 
 @pytest.mark.unittest
 def test_main():
@@ -27,3 +29,14 @@ def test_main():
         waves.main()
         mock_build.assert_called_once()
         mock_build.call_args[0] == [target_string]
+
+
+@pytest.mark.unittest
+def test_build():
+    with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output:
+        waves.build(['dummy.target'])
+        mock_check_output.assert_called_once() 
+
+    with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output:
+        waves.build(['dummy.target'], git_clone_directory='dummy/clone')
+        assert mock_check_output.call_count == 2
