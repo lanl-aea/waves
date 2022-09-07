@@ -9,7 +9,6 @@ documentation_source_dir = 'docs'
 package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
-    'build_wrapper': 'waves/bin/waves_build_wrapper',
     'eabm_dir': 'eabm',
     'abaqus_dir': 'eabm_package/abaqus',
     'cubit_dir': 'eabm_package/cubit',
