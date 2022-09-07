@@ -3,13 +3,13 @@
 
 from unittest.mock import patch, mock_open
 import pathlib
-
-from waves.parameter_generators import _ParameterGenerator
+from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
 import xarray
 
+from waves.parameter_generators import _ParameterGenerator, _ParameterDistributions
 
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
@@ -211,6 +211,91 @@ class TestParameterGenerator:
         assert numpy.all(returned_samples == DataParameterGenerator._samples)
 
 
+class TestParameterDistributions():
+    """Class for testing _ParameterDistributions ABC class common methods"""
+
+    validate_input = {
+        "good schema": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg1': 1}},
+            does_not_raise()
+        ),
+        "not a dict": (
+            'not a dict',
+            pytest.raises(TypeError)
+        ),
+        "missing num_simulation": (
+            {},
+            pytest.raises(AttributeError)
+        ),
+        "num_simulation non-integer": (
+            {'num_simulations': 'not_a_number'},
+            pytest.raises(TypeError)
+        ),
+        "missing distribution": (
+            {'num_simulations': 1, 'parameter_1': {}},
+            pytest.raises(AttributeError)
+        ),
+        "distribution non-string": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 1}},
+            pytest.raises(TypeError)
+        ),
+        "distribution bad identifier": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'my norm'}},
+            pytest.raises(TypeError)
+        ),
+        "kwarg bad identifier": (
+            {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg 1': 1}},
+            pytest.raises(TypeError)
+        )
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('parameter_schema, outcome',
+                             validate_input.values(),
+                             ids=validate_input.keys())
+    def test_validate(self, parameter_schema, outcome):
+        with patch("waves.parameter_generators._ParameterDistributions._generate_parameter_distributions") as mock_distros, \
+             outcome:
+            try:
+                # Validate is called in __init__. Do not need to call explicitly.
+                TestValidate = ParameterDistributions(parameter_schema)
+                mock_distros.assert_called_once()
+            finally:
+                pass
+
+    generate_input = {
+        "good schema 5x2": (
+            {'num_simulations': 5,
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
+            [{"loc":  50, "scale": 1},
+             {"loc": -50, "scale": 1}],
+        ),
+        "good schema 2x1": (
+            {'num_simulations': 2,
+            'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
+            [{"loc":  50, "scale": 1}]
+        ),
+        "good schema 1x2": (
+            {'num_simulations': 1,
+             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1},
+             'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
+            [{"loc":  50, "scale": 1},
+             {"loc": -50, "scale": 1}]
+        )
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize("parameter_schema, expected_scipy_kwds",
+                             generate_input.values(),
+                             ids=generate_input.keys())
+    def test_generate_parameter_distributions(self, parameter_schema, expected_scipy_kwds):
+        TestDistributions = ParameterDistributions(parameter_schema)
+        assert TestDistributions._parameter_names == list(TestDistributions.parameter_distributions.keys())
+        for parameter_name, expected_kwds in zip(TestDistributions._parameter_names, expected_scipy_kwds):
+            assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
+
+
 class NoQuantilesGenerator(_ParameterGenerator):
 
     def _validate(self):
@@ -224,3 +309,8 @@ class NoQuantilesGenerator(_ParameterGenerator):
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
+
+class ParameterDistributions(_ParameterDistributions):
+
+    def generate(self):
+        pass

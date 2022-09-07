@@ -8,6 +8,13 @@ Changelog
 0.3.7 (unreleased)
 ******************
 
+Breaking changes
+================
+- Use the same parameter distribution schema as Latin Hypercube in the Sobol Sequence generator (:issue:`282`,
+  :merge:`288`). By `Kyle Brindley`_.
+- Change the keyword arguments variable name to the more general ``kwargs`` in Latin Hypercube and Sobol Sequence for
+  consistency between classes (:issue:`282`, :merge:`288`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Experimental waves build command for automatically re-running workflows which extend a parameter study (:issue:`279`,

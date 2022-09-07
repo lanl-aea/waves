@@ -6,6 +6,7 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
+import pkg_resources
 
 from waves.parameter_generators import SobolSequence
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
@@ -14,62 +15,11 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key
 class TestSobolSequence:
     """Class for testing Sobol Sequence parameter study generator class"""
 
-    validate_input = {
-        "good schema": (
-            {'num_simulations': 1, 'parameter_1': [0., 1.]},
-            does_not_raise()
-        ),
-        "not a dict": (
-            'not a dict',
-            pytest.raises(TypeError)
-        ),
-        "missing num_simulation": (
-            {},
-            pytest.raises(AttributeError)
-        ),
-        "num_simulation non-integer": (
-            {'num_simulations': 'not_a_number'},
-            pytest.raises(TypeError)
-        ),
-        "wrong order": (
-            {'num_simulations': 1, 'parameter_1': [1., 0.]},
-            pytest.raises(ValueError)
-        ),
-        "not an iterable": (
-            {'num_simulations': 1, 'parameter_1': 0.},
-            pytest.raises(TypeError)
-        ),
-        "too short": (
-            {'num_simulations': 1, 'parameter_1': [0.]},
-            pytest.raises(ValueError)
-        ),
-        "too long": (
-            {'num_simulations': 1, 'parameter_1': [0., 1., 3.]},
-            pytest.raises(ValueError)
-        ),
-        "strings": (
-            {'num_simulations': 1, 'parameter_1': ['a', 'b']},
-            pytest.raises(TypeError)
-        ),
-    }
-
-    @pytest.mark.unittest
-    @pytest.mark.parametrize('parameter_schema, outcome',
-                             validate_input.values(),
-                             ids=validate_input.keys())
-    def test__validate(self, parameter_schema, outcome):
-        with outcome:
-            try:
-                # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = SobolSequence(parameter_schema)
-            finally:
-                pass
-
     generate_input = {
         "good schema 5x2": (
             {'num_simulations': 5,
-             'parameter_1': [0., 10.],
-             'parameter_2': [2.,  5.]},
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             numpy.array([[0.   , 2.   ],
                          [5.   , 3.5  ],
@@ -84,15 +34,15 @@ class TestSobolSequence:
         ),
         "good schema 2x1": (
             {'num_simulations': 2,
-             'parameter_1': [0., 10.]},
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10}},
             {'scramble': False},
             numpy.array([[0.], [5.0]]),
             numpy.array([[0.], [0.5]]),
         ),
         "good schema 1x2": (
             {'num_simulations': 1,
-             'parameter_1': [0., 10.],
-             'parameter_2': [2.,  5.]},
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             numpy.array([[0., 2.]]),
             numpy.array([[0., 0.]])
@@ -100,13 +50,13 @@ class TestSobolSequence:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize("parameter_schema, sobol_kwargs, expected_samples, expected_quantiles",
+    @pytest.mark.parametrize("parameter_schema, kwargs, expected_samples, expected_quantiles",
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate(self, parameter_schema, sobol_kwargs, expected_samples, expected_quantiles):
+    def test_generate(self, parameter_schema, kwargs, expected_samples, expected_quantiles):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         TestGenerate = SobolSequence(parameter_schema)
-        TestGenerate.generate(sobol_kwargs=sobol_kwargs)
+        TestGenerate.generate(kwargs=kwargs)
         samples_array = TestGenerate._samples
         quantiles_array = TestGenerate._quantiles
         assert numpy.allclose(samples_array, expected_samples)
@@ -121,8 +71,12 @@ class TestSobolSequence:
 
     merge_test = {
         'new sets': (
-            {'num_simulations': 5, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
-            {'num_simulations': 8, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
+            {'num_simulations': 5,
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
+            {'num_simulations': 8,
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[5.   , 3.5  ],
@@ -143,8 +97,12 @@ class TestSobolSequence:
                          [0.875, 0.875]])
         ),
         'unchanged sets': (
-            {'num_simulations': 5, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
-            {'num_simulations': 5, 'parameter_1': [0., 10.], 'parameter_2': [2.,  5.]},
+            {'num_simulations': 5,
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
+            {'num_simulations': 5,
+             'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
+             'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[5.   , 3.5  ],
@@ -161,15 +119,15 @@ class TestSobolSequence:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('first_schema, second_schema, sobol_kwargs, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize('first_schema, second_schema, kwargs, expected_samples, expected_quantiles',
                                  merge_test.values(),
                              ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, sobol_kwargs, expected_samples, expected_quantiles):
+    def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
         TestMerge1 = SobolSequence(first_schema)
-        TestMerge1.generate(sobol_kwargs=sobol_kwargs)
+        TestMerge1.generate(kwargs=kwargs)
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = SobolSequence(second_schema, previous_parameter_study='dummy_string')
-            TestMerge2.generate(sobol_kwargs=sobol_kwargs)
+            TestMerge2.generate(kwargs=kwargs)
         samples_array = TestMerge2._samples.astype(float)
         quantiles_array = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)

@@ -436,6 +436,89 @@ class _ParameterGenerator(ABC):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
+class _ParameterDistributions(_ParameterGenerator, ABC):
+
+    def _validate(self):
+        """Validate the parameter distribution schema. Executed by class initiation.
+
+        .. code-block::
+
+           parameter_schema = {
+               'num_simulations': 4,  # Required key. Value must be an integer.
+               'parameter_1': {
+                   'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
+                   'loc': 50,               # distribution name.
+                   'scale': 1
+               },
+               'parameter_2': {
+                   'distribution': 'skewnorm',
+                   'a': 4,
+                   'loc': 30,
+                   'scale': 2
+               }
+           }
+        """
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
+        # TODO: Settle on an input file schema and validation library
+        if 'num_simulations' not in self.parameter_schema.keys():
+            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
+        elif not isinstance(self.parameter_schema['num_simulations'], int):
+            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+        self._create_parameter_names()
+        for name in self._parameter_names:
+            parameter_keys = self.parameter_schema[name].keys()
+            parameter_definition = self.parameter_schema[name]
+            if 'distribution' not in parameter_keys:
+                raise AttributeError(f"Parameter '{name}' does not contain the required 'distribution' key")
+            elif not isinstance(parameter_definition['distribution'], str) or \
+                 not parameter_definition['distribution'].isidentifier():
+                raise TypeError(f"Parameter '{name}' distribution '{parameter_definition['distribution']}' is not a " \
+                                "valid Python identifier")
+            else:
+                for key in parameter_keys:
+                    if not isinstance(key, str) or not key.isidentifier():
+                        raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
+                                        "Python identifier")
+        # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
+        self.parameter_distributions = self._generate_parameter_distributions()
+
+    def _generate_parameter_distributions(self):
+        """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
+
+        :return: parameter_distributions
+        :rtype: dict
+        """
+        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self._parameter_names})
+        parameter_distributions = {}
+        for parameter, attributes in parameter_dictionary.items():
+            distribution_name = attributes.pop('distribution')
+            parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
+        return parameter_distributions
+
+    def _generate_distribution_samples(self, set_count, parameter_count):
+        """Convert quantiles to parameter distribution samples
+
+        Requires attibrutes:
+
+        * ``self.parameter_distributions``: dictionary containing the {parameter name: scipy.stats distribution} defined
+          by the parameter schema. Set by
+          :meth:`waves.parameter_generators._ParameterDistributions._generate_parameter_distributions`.
+
+        Sets attribute(s):
+
+        * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets, number
+          of parameters).
+        """
+        self._samples = numpy.zeros((set_count, parameter_count))
+        for i, distribution in enumerate(self.parameter_distributions.values()):
+            self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
+
+    def _create_parameter_names(self):
+        """Construct the parameter names from a distribution parameter schema"""
+        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
+
+
 class CartesianProduct(_ParameterGenerator):
     """Builds a cartesian product parameter study
 
@@ -512,7 +595,7 @@ class CartesianProduct(_ParameterGenerator):
         super().write()
 
 
-class LatinHypercube(_ParameterGenerator):
+class LatinHypercube(_ParameterDistributions):
     """Builds a Latin-Hypercube parameter study from the `pyDOE2`_ latin-hypercube class
 
     The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
@@ -583,51 +666,23 @@ class LatinHypercube(_ParameterGenerator):
     * parameter_study: The final parameter study XArray Dataset object
     """
 
-    def _validate(self):
-        """Validate the Latin-Hypercube parameter schema. Executed by class initiation."""
-        if not isinstance(self.parameter_schema, dict):
-            raise TypeError("parameter_schema must be a dictionary")
-        # TODO: Settle on an input file schema and validation library
-        if 'num_simulations' not in self.parameter_schema.keys():
-            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
-        elif not isinstance(self.parameter_schema['num_simulations'], int):
-            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        self._create_parameter_names()
-        for name in self._parameter_names:
-            parameter_keys = self.parameter_schema[name].keys()
-            parameter_definition = self.parameter_schema[name]
-            if 'distribution' not in parameter_keys:
-                raise AttributeError(f"Parameter '{name}' does not contain the required 'distribution' key")
-            elif not isinstance(parameter_definition['distribution'], str) or \
-                 not parameter_definition['distribution'].isidentifier():
-                raise TypeError(f"Parameter '{name}' distribution '{parameter_definition['distribution']}' is not a " \
-                                "valid Python identifier")
-            else:
-                for key in parameter_keys:
-                    if not isinstance(key, str) or not key.isidentifier():
-                        raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
-                                        "Python identifier")
-        # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
-        self.parameter_distributions = self._generate_parameter_distributions()
-
-    def generate(self, lhs_kwargs=None):
+    def generate(self, kwargs=None):
         """Generate the Latin-Hypercube parameter sets. Must be called directly to generate the parameter study.
 
-        :param dict lhs_kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin-Hypercube sampling method.
+        :param dict kwargs: Keyword arguments for the ``pyDOE2.doe_lhs.lhs`` Latin-Hypercube sampling method.
             The ``samples`` keyword argument is internally managed and will be overwritten to match ``num_simulations``
             from the parameter schema.
         """
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'samples': set_count}
-        if lhs_kwargs:
-            lhs_kwargs.update(override_kwargs)
+        if kwargs:
+            kwargs.update(override_kwargs)
         else:
-            lhs_kwargs = override_kwargs
-        self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **lhs_kwargs)
+            kwargs = override_kwargs
+        self._quantiles = pyDOE2.doe_lhs.lhs(parameter_count, **kwargs)
         self._samples = numpy.zeros((set_count, parameter_count))
-        for i, distribution in enumerate(self.parameter_distributions.values()):
-            self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
+        self._generate_distribution_samples(set_count, parameter_count)
 
         # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
@@ -636,26 +691,9 @@ class LatinHypercube(_ParameterGenerator):
         if self.previous_parameter_study:
             self._merge_parameter_studies()
 
-    def _generate_parameter_distributions(self):
-        """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
-
-        :return: parameter_distributions
-        :rtype: dict
-        """
-        parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self._parameter_names})
-        parameter_distributions = {}
-        for parameter, attributes in parameter_dictionary.items():
-            distribution_name = attributes.pop('distribution')
-            parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
-        return parameter_distributions
-
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
-
-    def _create_parameter_names(self):
-        """Construct the Latin-Hypercube parameter names"""
-        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
 
 
 class CustomStudy(_ParameterGenerator):
@@ -746,7 +784,7 @@ class CustomStudy(_ParameterGenerator):
         super().write()
 
 
-class SobolSequence(_ParameterGenerator):
+class SobolSequence(_ParameterDistributions):
     """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
 
     .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
@@ -762,12 +800,12 @@ class SobolSequence(_ParameterGenerator):
 
     .. warning::
 
-       The merged parameter study feature does *not* check for consistent parameter ranges. Changing the
+       The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions will result in incorrect relationships between parameters and the parameter study samples
        and quantiles.
 
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
-        SobolSequence expects "schema value" to be a dictionary with a strict structure and one required key.
+        SobolSequence expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param str output_file_template: Output file name template. Required if parameter sets will be written to files
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
@@ -792,11 +830,19 @@ class SobolSequence(_ParameterGenerator):
 
        parameter_schema = {
            'num_simulations': 4,  # Required key. Value must be an integer.
-           'parameter_1': [0., 10.],  # Must be ordered as [lower_bound, upper_bound]
-           'parameter_2': [2.,  5.]
+           'parameter_1': {
+               'distribution': 'uniform',  # Required key. Value must be a valid scipy.stats
+               'loc': 0,                   # distribution name.
+               'scale': 10
+           },
+           'parameter_2': {
+               'distribution': 'uniform',
+               'loc': 2,
+               'scale': 3
+           }
        }
        parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
-       parameter_generator.generate(sobol_kwargs={'scramble': False})
+       parameter_generator.generate(kwargs={'scramble': False})
        print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_sets: 4)
@@ -820,57 +866,30 @@ class SobolSequence(_ParameterGenerator):
         minimum_scipy = pkg_resources.parse_version('1.7.0')
         if current_scipy < minimum_scipy:
             raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
+        super()._validate()
 
-        # TODO: Settle on an input file schema and validation library
-        if not isinstance(self.parameter_schema, dict):
-            raise TypeError("parameter_schema must be a dictionary")
-        if 'num_simulations' not in self.parameter_schema.keys():
-            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
-        elif not isinstance(self.parameter_schema['num_simulations'], int):
-            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
-        self._create_parameter_names()
-        for name in self._parameter_names:
-            parameter_definition = self.parameter_schema[name]
-            if not isinstance(parameter_definition, (list, set, tuple)):
-                raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
-            if not len(parameter_definition) == 2:
-                raise ValueError(f"Parameter '{name}' must have exactly length two: [lower_bound, upper_bound]")
-            for value in parameter_definition:
-                if not isinstance(value, numbers.Number):
-                    raise TypeError(f"Parameter '{name}' value '{value}' is not a number type")
-            if parameter_definition[1] < parameter_definition[0]:
-                raise ValueError(f"Parameter '{name}' has an upper bound less than the lower bound: [lower_bound, "
-                                 "upper_bound]")
 
-    def generate(self, sobol_kwargs=None):
+    def generate(self, kwargs=None):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study.
 
-        To produce consistent Sobol sequences on repeat instantiations, the ``sobol_kwargs`` must include either
+        To produce consistent Sobol sequences on repeat instantiations, the ``kwargs`` must include either
         ``{'scramble': False}`` or ``{'seed': <int>}``. See the `scipy Sobol`_ documentation for details.
 
-        :param dict sobol_kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class.  The ``d`` keyword
+        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class.  The ``d`` keyword
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
-
-        # Instantiate the Sobol Sequence
+        set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
-        if sobol_kwargs:
-            sobol_kwargs.update(override_kwargs)
+        if kwargs:
+            kwargs.update(override_kwargs)
         else:
-            sobol_kwargs = override_kwargs
-        sampler = scipy.stats.qmc.Sobol(**sobol_kwargs)
-
-        # Draw quantiles
-        set_count = self.parameter_schema['num_simulations']
+            kwargs = override_kwargs
+        sampler = scipy.stats.qmc.Sobol(**kwargs)
         self._quantiles = sampler.random(set_count)
-
-        # Convert quantiles to scaled samples
-        lower_bounds = [self.parameter_schema[name][0] for name in self._parameter_names]
-        upper_bounds = [self.parameter_schema[name][1] for name in self._parameter_names]
-        self._samples = scipy.stats.qmc.scale(self._quantiles, lower_bounds, upper_bounds)
+        self._generate_distribution_samples(set_count, parameter_count)
 
         # Common work to create a parameter study Xarray Dataset
         self._create_parameter_set_hashes()
@@ -882,7 +901,3 @@ class SobolSequence(_ParameterGenerator):
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
-
-    def _create_parameter_names(self):
-        """Construct the Sobol sequence parameter names"""
-        self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
