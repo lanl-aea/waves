@@ -34,23 +34,23 @@ requirements:
     - python {{ python }}
     - git
     - scons >=4
-    - setuptools
-    - setuptools_scm
+    - setuptools >=45
+    - setuptools_scm[toml] >=6.2
     - sphinx >=3,<5
     - sphinx-argparse
     - sphinx_rtd_theme >=0.5
     - sphinxcontrib-bibtex
   host:
     - python
-    - setuptools
-    - setuptools_scm
+    - setuptools >=45
+    - setuptools_scm[toml] >=6.2
   run:
     - python >=3.8
     - h5netcdf
     - h5py
     - numpy
     - pyyaml
-    - scipy
+    - scipy >=1
     - scons
     # TODO: Remove after updating minimum scipy requirement
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
@@ -66,7 +66,7 @@ test:
     - pytest
     - pytest-xdist
     - pyyaml
-    - scipy
+    - scipy >=1
     - scons
     - setuptools_scm
     - xarray
