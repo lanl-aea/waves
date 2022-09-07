@@ -20,3 +20,10 @@ def test_main():
          patch("waves.waves.open_docs") as mock_open_docs:
         waves.main()
         mock_open_docs.assert_called()
+
+    target_string = 'dummy.target'
+    with patch('sys.argv', ['waves.py', 'build', target_string]), \
+         patch("waves.waves.build") as mock_build:
+        waves.main()
+        mock_build.assert_called_once()
+        mock_build.call_args[0] == [target_string]
