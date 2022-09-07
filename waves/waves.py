@@ -84,7 +84,7 @@ def get_parser():
     directory_group.add_argument("--working-directory", type=str, default=None,
                                  help=argparse.SUPPRESS)
     directory_group.add_argument("-g", "--git-clone-directory", type=str, default=None,
-                                  help="Perform a shallow git clone operation to the specified directory before " \
+                                  help="Perform a full local git clone operation to the specified directory before " \
                                        "executing the scons command, " \
                                        "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
                                        "(default: %(default)s).")
