@@ -1,6 +1,5 @@
 from unittest.mock import patch
 import sys
-import pathlib
 
 import pytest
 
