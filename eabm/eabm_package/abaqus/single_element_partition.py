@@ -63,16 +63,16 @@ def main(input_file, output_file, model_name, part_name, width, height):
     s = p.edges
 
     side1Edges = s.findAt(((0, height / 2., 0),),)
-    p.Surface(side1Edges=side1Edges, name='left')
+    p.Set(edges=side1Edges, name='left')
 
     side1Edges = s.findAt(((width / 2., height, 0),),)
-    p.Surface(side1Edges=side1Edges, name='top')
+    p.Set(edges=side1Edges, name='top')
 
     side1Edges = s.findAt(((width, height / 2., 0),),)
-    p.Surface(side1Edges=side1Edges, name='right')
+    p.Set(edges=side1Edges, name='right')
 
     side1Edges = s.findAt(((width / 2., 0, 0),),)
-    p.Surface(side1Edges=side1Edges, name='bottom')
+    p.Set(edges=side1Edges, name='bottom')
 
     abaqus.mdb.save()
 

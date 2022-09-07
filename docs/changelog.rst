@@ -5,8 +5,45 @@ Changelog
 #########
 
 ******************
-0.3.7 (unreleased)
+0.4.1 (2022-09-07)
 ******************
+
+Breaking changes
+================
+- Use the same parameter distribution schema as Latin Hypercube in the Sobol Sequence generator (:issue:`282`,
+  :merge:`288`). By `Kyle Brindley`_.
+- Change the keyword arguments variable name to the more general ``kwargs`` in Latin Hypercube and Sobol Sequence for
+  consistency between classes (:issue:`282`, :merge:`288`). By `Kyle Brindley`_.
+- Remove the Linux wrapper shell script in favor of merging the ``git clone`` feature with the OS-agnostic ``waves build``
+  subcommand (:issue:`283`, :merge:`291`). By `Kyle Brindley`_.
+
+New Features
+============
+- Experimental waves build command for automatically re-running workflows which extend a parameter study (:issue:`279`,
+  :merge:`285`). By `Kyle Brindley`_.
+- Add a custom study subcommand to the parameter study CLI (:issue:`276`, :merge:`289`). By `Kyle Brindley`_.
+- Add a sobol sequence subcommand to the parameter study CLI (:issue:`277`, :merge:`290`). By `Kyle Brindley`_.
+- Add a ``git clone`` feature to the ``waves build`` subcommand (:issue:`282`, :merge:`291`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Accept any 2D array like for the Custom Study parameter generator (:issue:`276`, :merge:`289`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Clarify the WAVES builder behavior of setting the working directory to the parent directory of the first specified
+  target (:issue:`265`, :merge:`279`). By `Thomas Roberts`_.
+- Complete WAVES Tutorial: Mesh Convergence (:issue:`272`, :merge:`282`). By `Thomas Roberts`_.
+- Add Tutorial: Mesh Convergence to the tutorial introduction page (:issue:`281`, :merge:`287`). By `Thomas Roberts`_.
+
+Enhancements
+============
+- Provide the data downselection dictionary as a CLI argument rather than hardcoding it in ``plot_scatter.py``
+  (:issue:`273`, :merge:`281`). By `Thomas Roberts`_.
+
+Internal Changes
+================
+- Test the parameter study CLI generator sub-commands (:issue:`276`, :merge:`289`). By `Kyle Brindley`_.
 
 ******************
 0.3.6 (2022-08-31)

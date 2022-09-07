@@ -57,6 +57,15 @@ def main(input_file, output_file, global_seed):
     cubit.cmd("nodeset 4 add vertex 4")
     cubit.cmd("nodeset 4 name 'top_left'")
 
+    cubit.cmd("nodeset 5 add curve 3")
+    cubit.cmd("nodeset 5 name 'top'")
+    cubit.cmd("nodeset 6 add curve 1")
+    cubit.cmd("nodeset 6 name 'bottom'")
+    cubit.cmd("nodeset 7 add curve 4")
+    cubit.cmd("nodeset 7 name 'left'")
+    cubit.cmd("nodeset 8 add curve 2")
+    cubit.cmd("nodeset 8 name 'right'")
+
     cubit.cmd("block 1 add surface 1")
     cubit.cmd("block 1 name 'ELEMENTS' Element type QUAD")
 

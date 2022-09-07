@@ -29,7 +29,7 @@ substitution_syntax_input = {
 @pytest.mark.parametrize('substitution_dictionary, keyword_arguments, expected_dictionary',
                          substitution_syntax_input.values(),
                          ids=substitution_syntax_input.keys())
-def test__substitution_syntax(substitution_dictionary, keyword_arguments, expected_dictionary):
+def test_substitution_syntax(substitution_dictionary, keyword_arguments, expected_dictionary):
     output_dictionary = builders.substitution_syntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
 
@@ -62,7 +62,7 @@ find_program_input = {
 @pytest.mark.parametrize('names, checkprog_side_effect, first_found_path',
                          find_program_input.values(),
                          ids=find_program_input.keys())
-def test__find_program(names, checkprog_side_effect, first_found_path):
+def test_find_program(names, checkprog_side_effect, first_found_path):
     env = SCons.Environment.Environment()
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
@@ -86,13 +86,13 @@ journal_emitter_input = {
 @pytest.mark.parametrize('target, source, expected',
                          journal_emitter_input.values(),
                          ids=journal_emitter_input.keys())
-def test__abaqus_journal_emitter(target, source, expected):
+def test_abaqus_journal_emitter(target, source, expected):
     target, source = builders._abaqus_journal_emitter(target, source, None)
     assert target == expected
 
 
 @pytest.mark.unittest
-def test__abaqus_journal():
+def test_abaqus_journal():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={'AbaqusJournal': builders.abaqus_journal()})
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
@@ -129,7 +129,7 @@ solver_emitter_input = {
 @pytest.mark.parametrize('job_name, target, source, expected, outcome',
                          solver_emitter_input.values(),
                          ids=solver_emitter_input.keys())
-def test__abaqus_solver_emitter(job_name, target, source, expected, outcome):
+def test_abaqus_solver_emitter(job_name, target, source, expected, outcome):
     env = SCons.Environment.Environment()
     env['job_name'] = job_name
     with outcome:
@@ -140,7 +140,7 @@ def test__abaqus_solver_emitter(job_name, target, source, expected, outcome):
 
 
 @pytest.mark.unittest
-def test__abaqus_solver():
+def test_abaqus_solver():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={'AbaqusSolver': builders.abaqus_solver()})
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
@@ -159,7 +159,7 @@ copy_substitute_input = {
 @pytest.mark.parametrize('source_list, expected_list',
                          copy_substitute_input.values(),
                          ids=copy_substitute_input.keys())
-def test__copy_substitute(source_list, expected_list):
+def test_copy_substitute(source_list, expected_list):
     target_list = builders.copy_substitute(source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
@@ -180,13 +180,13 @@ python_emitter_input = {
 @pytest.mark.parametrize('target, source, expected',
                          python_emitter_input.values(),
                          ids=python_emitter_input.keys())
-def test__python_script_emitter(target, source, expected):
+def test_python_script_emitter(target, source, expected):
     target, source = builders._python_script_emitter(target, source, None)
     assert target == expected
 
 
 @pytest.mark.unittest
-def test__python_script():
+def test_python_script():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={'PythonScript': builders.python_script()})
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
@@ -195,7 +195,7 @@ def test__python_script():
 
 
 @pytest.mark.unittest
-def test__conda_environment():
+def test_conda_environment():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={'CondaEnvironment': builders.conda_environment()})
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.
@@ -224,13 +224,13 @@ abaqus_extract_emitter_input = {
 @pytest.mark.parametrize('target, source, expected',
                          abaqus_extract_emitter_input.values(),
                          ids=abaqus_extract_emitter_input.keys())
-def test__abaqus_extract_emitter(target, source, expected):
+def test_abaqus_extract_emitter(target, source, expected):
     target, source = builders._abaqus_extract_emitter(target, source, None)
     assert target == expected
 
 
 @pytest.mark.unittest
-def test__abaqus_extract():
+def test_abaqus_extract():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={'AbaqusExtract': builders.abaqus_extract()})
     # TODO: Figure out how to inspect a builder's action definition after creating the associated target.

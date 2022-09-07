@@ -9,7 +9,6 @@ documentation_source_dir = 'docs'
 package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
-    'build_wrapper': 'waves/bin/waves_build_wrapper',
     'eabm_dir': 'eabm',
     'abaqus_dir': 'eabm_package/abaqus',
     'cubit_dir': 'eabm_package/cubit',
@@ -23,10 +22,12 @@ project_variables = {
     'tutorial_07_cartesian_product_dir': 'tutorial_07_cartesian_product',
     'tutorial_07_latin_hypercube_dir': 'tutorial_07_latin_hypercube',
     'tutorial_07_sobol_sequence_dir': 'tutorial_07_sobol_sequence',
+    'tutorial_extend_study_dir': 'tutorial_extend_study',
     'tutorial_08_dir': 'tutorial_08_data_extraction',
     'tutorial_09_dir': 'tutorial_09_post_processing',
     'tutorial_10_dir': 'tutorial_10_regression_testing',
-    'tutorial_cubit_dir': 'tutorial_cubit'
+    'tutorial_cubit_dir': 'tutorial_cubit',
+    'tutorial_mesh_convergence_dir': 'tutorial_mesh_convergence'
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===

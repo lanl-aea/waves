@@ -2,29 +2,17 @@
 Command Line Utilities
 ######################
 
+.. _waves_cli:
+
 ******************************
 |PROJECT| Command Line Utility
 ******************************
 
-The |PROJECT| command line utility provides HTML documentation and meta information about the |PROJECT| Conda package.
+The |PROJECT| command line utility provides access to bundled HTML documentation, meta information about the |PROJECT|
+Conda package, and a thin `SCons`_ build wrapper.
 
 .. argparse::
    :ref: waves.waves.get_parser
-
-***********************
-|PROJECT| Build Wrapper
-***********************
-
-|PROJECT| provides a build wrapper for the model repository `SCons`_ configuration build process. The build wrapper
-creates a new, unique build directory for every build execution.
-
-Optionally, the build wrapper will create a model repository clone in the build directory to separate the original
-repository's source files from that of the build directory. This is useful for launching builds while continuing
-development efforts in the original repositoy that would otherwise produce ambiguous build states.
-
-The build wrapper command line options and behavior are described in the help message as
-
-.. literalinclude:: waves_build_wrapper_message.txt
 
 .. _parameter_study_cli:
 

@@ -2,6 +2,7 @@ import argparse
 import webbrowser
 import pathlib
 import sys
+import subprocess
 
 from waves import _settings
 from waves import __version__
@@ -9,22 +10,30 @@ from waves import __version__
 
 def main():
     """This is the main function that performs actions based on command line arguments.
-    
+
     :returns: return code
     """
+    return_code = None
     parser = get_parser()
-    args = parser.parse_args()
-    
+    args, unknown = parser.parse_known_args()
+
     if args.subcommand == 'docs':
         open_docs()
+    elif args.subcommand == 'build':
+        return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
+                            working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     else:
         parser.print_help()
-    return 0
+
+    if return_code:
+        return return_code
+    else:
+        return 0
 
 
 def get_parser():
     """Get parser object for command line options
-    
+
     :return: parser
     :rtype: ArgumentParser
     """
@@ -39,22 +48,46 @@ def get_parser():
         '-V', '--version',
         action='version',
         version=f'{_settings._project_name_short.upper()} {__version__}')
-    
+
     subparsers = main_parser.add_subparsers(
         help=f"Specify {_settings._project_name_short.lower()} sub-commands",
         title=f"{_settings._project_name_short} sub-commands",
-        description=f"Common {_settings._project_name_short.lower()} sub-commands to specify {_settings._project_name_short} usage",
-        dest='subcommand')  # so args.subcommand will contain the name of the subcommand called
-    
+        description=f"Common {_settings._project_name_short.lower()} sub-commands to specify " \
+                    f"{_settings._project_name_short} usage",
+        # So args.subcommand will contain the name of the subcommand called
+        dest='subcommand')
+
     docs_parser = argparse.ArgumentParser(add_help=False)
-    docs_parser = subparsers.add_parser('docs', help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
-                                        description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the system default web browser",
-                                        parents=[docs_parser])
+    docs_parser = subparsers.add_parser('docs',
+            help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
+            description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
+                         "system default web browser",
+            parents=[docs_parser])
     docs_parser.add_argument('-p', '--print-local-path',
                              action='version',
-                             version=f"{_settings._docs_directory}/index.html",  # unconventional usage of version argument. Usage here is to print the docs directory and exit
+                             # Unconventional usage of version argument.
+                             # Usage here is to print the docs directory and exit.
+                             version=f"{_settings._docs_directory}/index.html",
                              help=f"Print the path to the locally installed documentation index file. " \
                                   f"As an alternative to the docs sub-command, open index.html in a web browser.")
+
+    build_parser = argparse.ArgumentParser(add_help=False)
+    build_parser = subparsers.add_parser('build',
+        help=f"Thin SCons wrapper",
+        description=f"Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
+        parents=[build_parser])
+    build_parser.add_argument("TARGET", nargs="+",
+                              help=f"SCons target list")
+    build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
+                              help="Maximum number of SCons command iterations (default: %(default)s)")
+    directory_group = build_parser.add_mutually_exclusive_group()
+    directory_group.add_argument("--working-directory", type=str, default=None,
+                                 help=argparse.SUPPRESS)
+    directory_group.add_argument("-g", "--git-clone-directory", type=str, default=None,
+                                  help="Perform a full local git clone operation to the specified directory before " \
+                                       "executing the scons command, " \
+                                       "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
+                                       "(default: %(default)s).")
 
     return main_parser
 
@@ -62,6 +95,45 @@ def get_parser():
 def open_docs():
     webbrowser.open(f'{_settings._docs_directory}/index.html')
     return
+
+
+def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_clone_directory=None):
+    """Submit an iterative SCons command
+
+    SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
+    reached. If multiple targets are submitted, they are executed sequentially in the order provided.
+
+    :param list targets: list of SCons targets (positional arguments)
+    :param list scons_args: list of SCons arguments
+    :param int max_iterations: maximum number of iterations before the iterative loop is terminated
+    :param str working_directory: Change the SCons command working directory
+    """
+    if not targets:
+        print("At least one target must be provided")
+        return 1
+    if git_clone_directory:
+        current_directory = pathlib.Path().cwd().resolve()
+        git_clone_directory = pathlib.Path(git_clone_directory).resolve()
+        git_clone_directory.mkdir(parents=True, exist_ok=True)
+        working_directory = str(git_clone_directory)
+        command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
+        git_clone_stdout = subprocess.check_output(command)
+    stop_trigger = "is up to date."
+    scons_command = ["scons"]
+    scons_command.extend(scons_args)
+    for target in targets:
+        scons_stdout = b"Go boat"
+        count = 0
+        command = scons_command + [target]
+        while stop_trigger not in scons_stdout.decode("utf-8"):
+            count += 1
+            if count > max_iterations:
+                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'")
+                return 2
+            print(f"iteration {count}: '{' '.join(command)}'")
+            scons_stdout = subprocess.check_output(command, cwd=working_directory)
+
+    return 0
 
 
 if __name__ == "__main__":

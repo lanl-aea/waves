@@ -15,8 +15,12 @@ class TestCustomStudy:
     """Class for testing CustomStudy parameter study generator class"""
 
     validate_input = {
-        "good schema": (
-            {'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
+        "good schema list of lists": (
+            {'parameter_names': ['a', 'b'], 'parameter_samples': [[1, 2.0], [3, 4.5]]},
+            does_not_raise()
+        ),
+        "good schema numpy array": (
+            {'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]])},
             does_not_raise()
         ),
         "not a dict": (
