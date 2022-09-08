@@ -2,6 +2,12 @@
 Engineering Computational Practices
 ###################################
 
+.. note::
+
+   This paper describes the core concepts for the `WAVES`_ software :cite:`WAVES`. The software is undergoing the Los
+   Alamos National Laboratory licensing and release process. This paper will be followed by the full documentation
+   :cite:`WAVES` of `WAVES`_ pending the open source release.
+
 .. include:: project_brief.txt
 
 .. raw:: latex
