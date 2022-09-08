@@ -1,6 +1,6 @@
-#######################
-|project| Documentation
-#######################
+#########
+|project|
+#########
 
 .. include:: project_brief.txt
 
