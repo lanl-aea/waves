@@ -15,8 +15,8 @@ similar complexity to a large software project, and many of the same documentati
 
 * User manual
 * Theory manual
-* Application program interface (API)
-* Command line interface (CLI)
+* Application program interface (:term:`API`)
+* Command line interface (:term:`CLI`)
 * Developer manual
 * Release philosophy
 * Strategic plan/feature schedule
