@@ -46,17 +46,6 @@ Engineering Computational Practices
 
 .. raw:: latex
 
-   \part{Help and Reference}
-
-.. toctree::
-   :caption: Help and Reference
-   :maxdepth: 1
-
-   zreferences
-   glossary
-
-.. raw:: latex
-
    \part{Appendices}
 
 .. toctree::
@@ -66,3 +55,5 @@ Engineering Computational Practices
    eabm_api
    eabm_cli
    eabm_abaqus_files
+   glossary
+   zreferences
