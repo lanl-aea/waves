@@ -8,6 +8,10 @@ Engineering Computational Practices
    Alamos National Laboratory licensing and release process. This paper will be followed by the full documentation
    :cite:`WAVES` of `WAVES`_ pending the open source release.
 
+   Until the open source release of `WAVES`_, the :ref:`user_manual` introduces the build system concepts implemented
+   directly in `SCons`_. These tutorials lack the parametric study tools, but can be implemented with currently
+   available open-source packages.
+
 .. include:: project_brief.txt
 
 .. raw:: latex
