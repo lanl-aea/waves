@@ -820,6 +820,8 @@ class OdbReportFileParser(AbaqusFileParser):
                    <region name>/ # Group with datasets containing history output data for specified history region name
                                   # If no history region name is specified, the <region name> will be 'ALL NODES'
                Mesh/              # Group written from an xarray dataset with all mesh information for this instance
+           /<instance name>_Assembly/ # Group containing data of assembly instance found in an odb
+               Mesh/              # Group written from an xarray dataset with all mesh information for this instance
            /odb/             # Catch all group for data found in the odbreport file not already organized by instance
                info/              # Group with datasets that mostly give odb meta-data like name, path, etc.
                jobData/           # Group with datasets that contain additional odb meta-data
@@ -978,6 +980,8 @@ class OdbReportFileParser(AbaqusFileParser):
             while not line.startswith('-----------------------------------------------------------') and line != "":
                 if line.strip().startswith('Part instance') or line.strip().startswith('Assembly instance'):
                     instance['name'] = line.strip().split("'")[1]
+                    if line.strip().startswith('Assembly'):  # Add suffix to specify it is an assembly instance
+                        instance['name'] += "_Assembly"  # The suffix serves to differentiate the name
                     while line != '\n' and line != "":
                         line = f.readline()
                         if line.strip().startswith('embedded space'):
@@ -1637,7 +1641,7 @@ class OdbReportFileParser(AbaqusFileParser):
         :param file object f: open file
         :param str line: current line of file
         :param dict field: dictionary for storing field output
-        :param bool nodal: Says whether or not data is nodal
+        :param bool nodal: says whether data is nodal
         :return: current line of file
         :rtype: str
         """
@@ -1665,7 +1669,7 @@ class OdbReportFileParser(AbaqusFileParser):
         """Do setup of field output formatting for extract format
 
         :param dict field: dictionary with field data
-        :param bool nodal: Indicates whether or not field data includes nodal data
+        :param bool nodal: indicates whether field data includes nodal data
         :return: dictionary for which to store field values
         :rtype: dict
         """
@@ -1707,6 +1711,8 @@ class OdbReportFileParser(AbaqusFileParser):
         instance_match = re.match(r".*for part instance '(.*?)'", line, re.IGNORECASE)
         if instance_match:
             value_instance = instance_match.group(1)
+            if not value_instance.strip():  # If the string is empty
+                value_instance = "rootAssembly"
         else:
             value_instance = "rootAssembly"  # The element or node belongs to the rootAssembly
         line = f.readline()
