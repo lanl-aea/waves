@@ -4,7 +4,9 @@
 Version Control
 ***************
 
-Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html :cite:`swc-git,SoftwareCarpentry`
+.. note:: Related curriculum
+
+   Software Carpentry: Git Novice - https://swcarpentry.github.io/git-novice/index.html :cite:`swc-git,SoftwareCarpentry`
 
 As mentioned in the :ref:`practices_introduction`, version control software fills the role of a laboratory notebook for
 computational engineering. Keeping a laboratory notebook is a fundamental practice of experimental engineering and

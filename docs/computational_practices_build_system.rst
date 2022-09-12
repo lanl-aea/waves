@@ -4,7 +4,9 @@
 Build System
 ************
 
-Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`SoftwareCarpentry`
+.. note:: Related curriculum
+
+   Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`SoftwareCarpentry`
 
 Directed graphs
 ---------------
