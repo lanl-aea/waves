@@ -10,9 +10,9 @@ Directed graphs
 ---------------
 
 At their core, the majority of software build systems provide two features: `directed acyclic graph`_ (DAG) construction
-and automated task execution according to DAG. Modern software projects are often composed from a large number of source
-files with complex file and library interactions. Consequently, determining the build order and executing the build
-process is a complex and error prone task. Build systems provide a solution for automating the construction and
+and automated task execution according to that DAG. Modern software projects are often composed from a large number of
+source files with complex file and library interactions. Consequently, determining the build order and executing the
+build process is a complex and error prone task. Build systems provide a solution for automating the construction and
 execution of the build DAG to reduce build errors and inconsistencies. In addition to the DAG construction and
 execution, most build systems will also provide a feature to avoid unnecessary re-execution for portions of the DAG that
 haven't changed since the last execution.
@@ -28,8 +28,8 @@ is not executed programmatically on a regular basis, a manual process will be er
 Build systems are able to construct directed graphs from task definitions. Each task is defined by the developer and
 subsequently linked by the build system. Tasks are composed of targets, sources, and actions. A target is the output of
 the task. Sources are the required direct dependency files used by the task and may be files tracked by the version
-control for the project or files produced by other tasks. Actions are the commands to execute to produce the target
-files. In pseudocode, this might look like a dictionary
+control system for the project or files produced by other tasks. Actions are the commands to execute to produce the
+target files. In pseudocode, this might look like a dictionary
 
 .. code-block:: YAML
 
@@ -47,21 +47,21 @@ As the number of discrete tasks increases, and as cross-dependencies grow, the i
 construct the build order becomes more important.
 
 Task definitions go by different names in different build systems, such as "recipe" in `GNU Make`_ :cite:`gnu-make` or
-"builder" in `SCons` :cite:`SCons`. For software projects, the task definition may be simplified by "rules" for common
-actions, such as associating a particular file extension with a predefined action or auto-generating an target file name
+"builder" in `SCons`_ :cite:`SCons`. For software projects, the task definition may be simplified by "rules" for common
+actions, such as associating a particular file extension with a predefined action or auto-generating a target file name
 that matches the source file name. Build systems usually provide a set of common rules for compiling different
 programming languages.
 
 For the purpose of executing simulations, it is important to use a build system that allows developers to write custom
-task generators for the numeric solvers and post processing programs used in the project. `WAVES`_ is a collection of
-`SCons`_ custom builders for common engineering simulation software and packaged for re-use by many projects. However,
+task generators for the numeric solvers and post processing programs used in the project. `WAVES`_ contains a collection
+of `SCons`_ custom builders for common engineering simulation software packaged for re-use by many projects.  However,
 it is likely that engineers will need to become familiar with their build system's task definition syntax to support the
 wide array of engineering software available for use.
 
-Task defintions and task generators help engineering simulation developers to use build systems designed for software
+Task definitions and task generators help engineering simulation developers to use build systems designed for software
 compilation. Breaking an engineering pre-processing, simulation, and post-processing workflow into small unit tasks can
-maximize the effectiveness of using a build system, but may require a deeper look at existing workflows to break the
-workflow up in a suitable way.
+maximize the effectiveness of using a build system, but may require a deeper look at existing workflows to determine how
+to break the workflow up in a suitable way.
 
 There are trade-offs to workflow granularity which will depend on the needs of the current simulation or simulation
 suite in a :term:`modsim repository`, so a prescriptive process for performing this work may be difficult. A generic template
@@ -81,7 +81,7 @@ files is changed, only those simulations that depend on the updated input file w
 Parameter studies
 -----------------
 
-Besides the difference in task defintions, another reason that build systems may not be an obvious choice for
+Besides the difference in task definitions, another reason that build systems may not be an obvious choice for
 computational engineering simulation and analysis control is the practice of running parameter studies. In computational
 engineering, a parameter study is composed of many parameter sets. The parameter sets themselves are typically small
 variations on input variable values, which do not change the overall workflow.
@@ -89,32 +89,32 @@ variations on input variable values, which do not change the overall workflow.
 At face value, parameter studies are most closely related to "build configurations" of software build systems, where the
 software may be compiled with different options for a debugging build as opposed to the final release build. Unlike
 engineering parameter studies, software build systems are generally designed to produce a single build configuration at
-a time. This makes using the build configuration features of a build system difficult to apply to the execution of
-engineering parameter studies.
+a time. This makes the build configuration features of a build system difficult to apply to the execution of engineering
+parameter studies.
 
 Another way to interpret a parameter study is that the parameter sets are targets of a parameter study generation task.
 These parameter set files could then be used as the sources for a common workflow repeated for each parameter set.  The
-ability to conditionally re-build only those sets that are new or changed when the parameter study defintion changes is
+ability to conditionally re-build only those sets that are new or changed when the parameter study definition changes is
 appealing.
 
-However, most build systems split the DAG construction and execution into exactly two steps. The DAG is first
-constructed during the build systems configuration stage. At this stage, the DAG must be fully known. Having fixed the
-DAG, the execution phase will execute the workflow. If the parameter study is created as a task that is executed as part
-of the build, the DAG will not re-configure mid build to account for the workflow repitition of each parameter set. This
-approach may work if the number of parameter sets is known or fixed as part of the task definitions, but it is not
-robust against changing the parameter study size.
+However, most build systems split the DAG construction and execution into exactly two steps: configuration and
+execution. The DAG is first constructed during the build system's configuration stage. At this stage, the DAG must be
+fully known. Having fixed the DAG, the execution phase will execute the workflow. If the parameter study is created as a
+task that is executed as part of the build, the DAG will not re-configure mid build to account for the workflow
+repitition of each parameter set. This approach may work if the number of parameter sets is known or fixed as part of
+the task definitions, but it is not robust against changing the parameter study size.
 
 A more robust solution is to perform the parameter study generation at configuration time such that the repeated
-workflow can create task nodes in the DAG prior to beginning the execution phase. A similar configuration time workflow
-is not common to software build system guides, so adopting this solution is not immediately obvious. This solution may
-also require that the configuration time parameter generation tool performs its own conditional re-building logic for
-any parameter set files that are produced.
+workflow can create task nodes in the DAG prior to the execution phase. A similar configuration time workflow is not
+common to software build system guides, so adopting this solution is not immediately obvious. This solution may also
+require the configuration time parameter generation tool to perform its own conditional re-building logic for any
+parameter set files that are produced.
 
 The `WAVES`_ package includes a collection of command line utilities and Python modules to aid in adopting software
 build systems for engineering workflows. The `WAVES`_ parameter generator utility, :ref:`parameter_study_cli`, is
-designed to work with most build systems, but were originally developed with the requirements of `CMake`_ in mind.
+designed to work with most build systems, but was originally developed with the requirements of `CMake`_ in mind.
 
 The `WAVES`_ :ref:`user_manual` focuses on extending the build system `SCons`_ because `SCons`_ configuration files use
 `Python`_ as a fully featured scripting language. This choice is primarily driven by the familiarity of the engineering
-community with `Python`_ as a programming language, but also because the parameter generation utility can be integrated
-more closely with the build system, :ref:`parameter_generator_api`.
+community with `Python`_ as a programming language. Using Python as the build system scripting language also means the
+parameter generation utility can be integrated more closely with the build system, :ref:`parameter_generator_api`.
