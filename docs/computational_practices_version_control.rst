@@ -12,10 +12,10 @@ science disciplines. They keep a record of who did what, when and how they did i
 the original data records from experimental observations. Laboratory notebooks with bound pages and recorded in ink also
 provide legal protections against fraud and to establish intellectual property (IP) precedence.
 
-While there are software available that provide electronic laboratory notebooks, for computational practice version
-control software provides a similar record of who, what, when, how, and why. Additionally, version control software
-provides the usual benefits of version control such as the ability to uniquely reproduce the state of previous work and
-the ability to manage and resolve content conflicts from contributors working in parallel.
+While there are software available that provide electronic laboratory notebooks, version control software provides a
+similar record of who, what, when, how, and why. Additionally, version control software provides the usual benefits of
+version control such as the ability to uniquely reproduce the state of previous work and the ability to manage and
+resolve content conflicts from contributors working in parallel.
 
 Version control software is also referred to as revision control, source control, or source code management. There have
 been a variety of popular version control software dating back to the early 1970s. Today, there are many version control
@@ -23,7 +23,7 @@ software to choose from, with a range of implmente concepts. This section will f
 system `git`_ :cite:`git`, which was released in 2005 :cite:`pro-git`.
 
 Git tracks changes to collections of files in a project. The user creates incremental "commits" which form a directed
-graph of project history, called "branches". As the commits are created and added to history, the use can supply a
+graph of project history, called "branches". As the commits are created and added to history, the user can supply a
 commit message to describe the changes. Good messages answer questions about the purpose and design intent about the
 changes; the "why" of a laboratory notebook. Included with the commit is meta data identifying the commit author, "who",
 the files and the granular changes themselves, "what", and a timestamp, "when". The commit is assigned a unique
