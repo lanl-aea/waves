@@ -32,3 +32,6 @@ Glossary
    modsim repository
    modsim repositories
      A version controlled repository for source files related to a modsim project
+
+   OS
+     operating system
