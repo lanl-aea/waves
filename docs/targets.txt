@@ -77,7 +77,7 @@
 .. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
 .. _`shebang`: https://en.wikipedia.org/wiki/Shebang_(Unix)
 .. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
-.. _`sphinx`: https://www.sphinx-doc.org/en/master/
+.. _`Sphinx`: https://www.sphinx-doc.org/en/master/
 .. _`xarray dataset`: https://xarray.pydata.org/en/v2022.03.0/generated/xarray.Dataset.html
 
 .. Project specific links
