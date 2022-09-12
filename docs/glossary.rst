@@ -40,4 +40,4 @@ Glossary
      A version controlled repository for source files related to a modsim project
 
    OS
-     operating system
+     Operating system
