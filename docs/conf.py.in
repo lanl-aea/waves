@@ -75,7 +75,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 # -- Options for LaTeX output ---------------------------------------------
-copyright_latex = """\\textbf{Copyright Notice}
+copyright_latex = """\\textbf{\\large{Copyright Notice}}
 
 \\textbf{For Scientific and Technical Information Only}
 

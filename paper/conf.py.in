@@ -70,7 +70,7 @@ source_suffix = ['.rst']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for LaTeX output ---------------------------------------------
-copyright_latex = """\\textbf{Copyright Notice}
+copyright_latex = """\\textbf{\\large{Copyright Notice}}
 
 \\textbf{For Scientific and Technical Information Only}
 
