@@ -70,9 +70,7 @@ source_suffix = ['.rst']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for LaTeX output ---------------------------------------------
-copyright_latex = """\\textbf{\\large{Copyright Notice}}
-
-\\textcopyright\\  Copyright Triad National Security, LLC. All Rights Reserved.
+copyright_latex = """\\textcopyright\\ Copyright Triad National Security, LLC. All Rights Reserved.
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government has rights to use, reproduce, and distribute this information. The public may copy and use this information without charge, provided that this Notice and any statement of authorship are reproduced on all copies. Neither the Government nor Triad makes any warranty, express or implied, or assumes any liability or responsibility for the use of this information.
 """
@@ -80,7 +78,7 @@ Unless otherwise indicated, this information has been authored by an employee or
 latex_elements = {
     'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
     'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
-    'releasename': 'WAVES'
+    'releasename': _project_name_short
 }
 latex_documents = [
     (master_doc, project.lower() + '.tex', None,
