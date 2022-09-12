@@ -38,16 +38,7 @@ from waves._settings import _project_name_short
 project = _project_name_short
 release = __version__
 version = release
-copyright = """\\textbf{Copyright Notice}
-
-\\textbf{For Scientific and Technical Information Only}
-
-\\textcopyright\\  Copyright Triad National Security, LLC. All Rights Reserved.
-
-\\textbf{For All Information}
-
-Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government has rights to use, reproduce, and distribute this information. The public may copy and use this information without charge, provided that this Notice and any statement of authorship are reproduced on all copies. Neither the Government nor Triad makes any warranty, express or implied, or assumes any liability or responsibility for the use of this information.
-"""
+copyright = "Triad National Security, LLC. All Rights Reserved."
 
 #============================================================================================== SPHINX CONFIGURATION ===
 # -- Project Variables -------------------------------------------------------
@@ -79,9 +70,20 @@ source_suffix = ['.rst']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for LaTeX output ---------------------------------------------
+copyright_latex = """\\textbf{Copyright Notice}
+
+\\textbf{For Scientific and Technical Information Only}
+
+\\textcopyright\\  Copyright Triad National Security, LLC. All Rights Reserved.
+
+\\textbf{For All Information}
+
+Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government has rights to use, reproduce, and distribute this information. The public may copy and use this information without charge, provided that this Notice and any statement of authorship are reproduced on all copies. Neither the Government nor Triad makes any warranty, express or implied, or assumes any liability or responsibility for the use of this information.
+"""
+
 latex_elements = {
     'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
-    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright}}}\sphinxmaketitle',
+    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
     'releasename': 'WAVES'
 }
 latex_documents = [
