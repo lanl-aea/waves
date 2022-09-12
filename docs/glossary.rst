@@ -8,6 +8,9 @@ Glossary
    API
      An application program interface (API) is a software's documented interface for communication with other software
 
+   CI
+     Continuous integration
+
    CLI
      A command line interface (CLI) is the text based user interface for modifying software execution behavior
 
@@ -21,6 +24,9 @@ Glossary
 
    HPC
      High performance computing
+
+   I/O
+     Input and output
 
    IP
      Intellectual property
