@@ -1,5 +1,6 @@
 import sys
 import pathlib
+import datetime
 import unittest.mock
 
 # -- Project information -----------------------------------------------------
@@ -38,7 +39,7 @@ from waves._settings import _project_name_short
 project = _project_name_short
 release = __version__
 version = release
-copyright = "Triad National Security, LLC. All Rights Reserved."
+copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
 
 #============================================================================================== SPHINX CONFIGURATION ===
 # -- Project Variables -------------------------------------------------------
@@ -75,7 +76,7 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
 # -- Options for LaTeX output ---------------------------------------------
-copyright_latex = """\\textcopyright\\ Copyright Triad National Security, LLC. All Rights Reserved.
+copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
 Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government
