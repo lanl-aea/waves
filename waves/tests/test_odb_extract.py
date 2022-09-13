@@ -108,6 +108,20 @@ def test_odb_extract():
          patch(
              'waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']) \
                  as mock_run_external:
+        # Test case where output name doesn't match odb name
+        odb_extract.odb_extract(['sample.odb'], 'new_name.h5', odb_report_args="odbreport all")
+        mock_run_external.assert_called_with('abaqus odbreport job=new_name odb=sample.odb all blocked mode=CSV')
+
+    with patch('pathlib.Path.exists', return_value=[True, False]), \
+         patch('builtins.open', mock_open(read_data="data")), \
+         patch('yaml.safe_dump') as mock_safe_dump, \
+         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('select.select', return_value=['y', None, None]), \
+         patch('sys.stdin', return_value='y'), \
+         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
+         patch(
+             'waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']) \
+                 as mock_run_external:
         # Test case where yaml dump is called
         odb_extract.odb_extract(['sample.odb'], None, odb_report_args="odbreport all", output_type='yaml')
         mock_run_external.assert_called_with('abaqus odbreport job=sample odb=sample.odb all blocked mode=CSV')
