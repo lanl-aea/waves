@@ -85,7 +85,7 @@ def odb_extract(input_file,
     .. warning::
 
        ``odb_extract`` *requires* Abaqus arguments for ``odb_report_args`` in the form of ``option=value``, e.g.
-       ``job=job_name``.
+       ``step=step_name``.
 
     :param list input_file: A list of ``*.odb`` files to extract. Current implementation only supports extraction on the
         first file in the list.
@@ -118,7 +118,7 @@ def odb_extract(input_file,
                        f'Changing output file extension. Output file name {output_file}')
         file_suffix = output_type
     odb_report_args = odb_report_args
-    job_name = file_base_name
+    job_name = path_output_file.stem
     time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
     if not odb_report_args:
         odb_report_args = f'job={job_name} odb={input_file} all mode=CSV blocked'
