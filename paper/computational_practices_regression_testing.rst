@@ -7,7 +7,7 @@ Regression Testing
 There are several types of testing performed in software development. The three most relevant to :term:`modsim
 repositories` are unit, integration, and system testing. Executing the test suite at regular intervals or after making
 changes to a project is called regression testing. If the regression test suite is performed prior to merging any change
-to a project, it is called continuous testing.
+to a project, it is called continuous integration (CI).
 
 Since :term:`modsim repositories` will inevitably involve some amount of scripting and may contain small, project
 specific re-usable libraries, it is important to learn the practices of software testing. However, these testing
@@ -37,20 +37,21 @@ or library.
 
 When testing includes file I/O or external executables and programs, it is often called system testing. In a modsim
 repository, integration testing may require execution of several stand-alone scripts, such as those introduced in
-:ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves`, which communicate through file I/O operations
-and must be executed by external software. For this reason, this project will often use integration and system testing
-interchangeably. Unless a :term:`modsim repository` contains project specific, re-usable libraries, most integration testing of
-a simulation workflow will actually be system testing. One important aspect of such system testing is to provide a
-regression test suite that will verify expected behavior when external libraries, programs, and software change versions
-or when executing the simulation on a new server. Regular execution of the modsim integration and system tests helps
-catch breaking changes in external dependencies early after changes in the system software and architecture.
+"Tutorial 01: Geometry" and "Tutorial 02: Partition and Mesh" :cite:`WAVES`, which communicate through file I/O
+operations and must be executed by external software. For this reason, this project will often use integration and
+system testing interchangeably. Unless a :term:`modsim repository` contains project specific, re-usable libraries, most
+integration testing of a simulation workflow will actually be system testing. One important aspect of such system
+testing is to provide a regression test suite that will verify expected behavior when external libraries, programs, and
+software change versions or when executing the simulation on a new server. Regular execution of the modsim integration
+and system tests helps catch breaking changes in external dependencies early after changes in the system software and
+architecture.
 
 Finally, regression testing may take several forms depending on the cost of test suite execution. In modsim
 repositories, it is good to perform unit and integration testing on any project specific code prior to every proposed
 change. Relative to simulation workflow integration tests, testing a code base is relatively quick and inexpensive and
 can usually be performed at daily or even hourly intervals as small, single-purpose changes are made incrementally.
-Such continuous testing of regression tests can be performed by manual kick-off of the regression test suite, but is
-often implemented in an automated continuous integration (CI) framework.
+Such continuous integration of regression tests can be performed by manual kick-off of the regression test suite, but is
+often implemented in an automated continuous integration framework.
 
 Full simulation workflow testing is often computationally expensive and time consuming. Instead of testing with every
 proposed change to the project, it may be more appropriate to schedule a separate collection of tests for regular
