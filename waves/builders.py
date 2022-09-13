@@ -446,7 +446,8 @@ def _build_odb_extract(target, source, env):
     """Define the odb_extract action when used as an internal package and not a command line utility"""
     # Default odb_extract arguments
     output_type = 'h5'
-    odb_report_args = f"-job {pathlib.Path(target[0].get_abspath()).stem}"
+    job_name = pathlib.Path(str(target[0])).stem
+    odb_report_args = f"-job {job_name}"
     delete_report_file = False
 
     # Grab arguments from environment if they exist
