@@ -424,7 +424,7 @@ def abaqus_extract(abaqus_program='abaqus'):
     .. warning::
 
        ``odb_extract`` *requires* Abaqus arguments for ``odb_report_args`` in the form of ``option=value``, e.g.
-       ``job=job_name``.
+       ``step=step_name``.
 
     .. code-block::
        :caption: SConstruct
@@ -451,15 +451,14 @@ def _build_odb_extract(target, source, env):
     """Define the odb_extract action when used as an internal package and not a command line utility"""
     # Default odb_extract arguments
     output_type = 'h5'
-    job_name = pathlib.Path(str(target[0])).stem
-    odb_report_args = f"job={job_name}"
+    odb_report_args = None
     delete_report_file = False
 
     # Grab arguments from environment if they exist
     if 'output_type' in env:
         output_type = env['output_type']
     if 'odb_report_args' in env:
-        odb_report_args = f"{odb_report_args} {env['odb_report_args']}"
+        odb_report_args = env['odb_report_args']
     if 'delete_report_file' in env:
         delete_report_file = env['delete_report_file']
 
