@@ -210,13 +210,16 @@ abaqus_extract_emitter_input = {
                       ['dummy.h5', 'dummy_datasets.h5', 'dummy.csv', 'dummy.h5.stdout']),
     'one target': (['new_name.h5'],
                    [source_file],
-                   ['new_name.h5', 'new_name_datasets.h5', 'dummy.csv', 'new_name.h5.stdout']),
+                   ['new_name.h5', 'new_name_datasets.h5', 'new_name.csv', 'new_name.h5.stdout']),
     'bad extension': (['new_name.txt'],
                       [source_file],
                       ['dummy.h5', 'new_name.txt', 'dummy_datasets.h5', 'dummy.csv', 'dummy.h5.stdout']),
     'subdirectory': (['set1/dummy.h5'],
                     [source_file],
-                    ['set1/dummy.h5', 'set1/dummy_datasets.h5', 'set1/dummy.csv', 'set1/dummy.h5.stdout'])
+                    ['set1/dummy.h5', 'set1/dummy_datasets.h5', 'set1/dummy.csv', 'set1/dummy.h5.stdout']),
+    'subdirectory new name': (['set1/new_name.h5'],
+                    [source_file],
+                    ['set1/new_name.h5', 'set1/new_name_datasets.h5', 'set1/new_name.csv', 'set1/new_name.h5.stdout'])
 }
 
 
@@ -242,12 +245,12 @@ source_file = fs.File('/dummy.source')
 target_file = fs.File('/dummy.target')
 build_odb_extract_input = {
     'no kwargs': ([target_file], [source_file], {'abaqus_program': 'NA'},
-                  [call(['/dummy.source'], '/dummy.target', output_type='h5', odb_report_args=None,
+                  [call(['/dummy.source'], '/dummy.target', output_type='h5', odb_report_args='-job dummy',
                        abaqus_command='NA', delete_report_file=False)]),
     'all kwargs': ([target_file], [source_file],
                    {'abaqus_program': 'NA', 'output_type': 'different', 'odb_report_args': 'notnone',
                     'delete_report_file': True},
-                   [call(['/dummy.source'], '/dummy.target', output_type='different', odb_report_args='notnone',
+                   [call(['/dummy.source'], '/dummy.target', output_type='different', odb_report_args='-job dummy notnone',
                         abaqus_command='NA', delete_report_file=True)])
 }
 
