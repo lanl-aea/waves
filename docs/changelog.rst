@@ -10,7 +10,7 @@ Changelog
 
 Bug fixes
 =========
-- Match the CSV file name to the H5 target name in the Abaqus extract builder. Will allow multiple builders to
+- Match the CSV file name to the H5 target name in the Abaqus extract builder. Will allow multiple tasks to
   extract separate output from the same ODB file (:issue:`287`, :merge:`296`). By `Kyle Brindley`_.
 - Match the job name to the output file name instead of the input file name in ``odb_extract`` (:issue:`287`,
   :merge:`296`). By `Kyle Brindley`_.
