@@ -8,6 +8,11 @@ Changelog
 0.4.3 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Match the CSV file name to the specified target name in the Abaqus extract builder. Will allow multiple calls to
+  extract the same ODB file (:issue:`287`, :merge:`296`). By `Kyle Brindley`_.
+
 ******************
 0.4.2 (2022-09-08)
 ******************
