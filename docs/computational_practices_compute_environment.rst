@@ -4,23 +4,26 @@
 Compute Environment
 *******************
 
-Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
-:cite:`conda,conda-gettingstarted`
+.. note:: Related Curriculum
+
+   Conda environments: https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
+   :cite:`conda,conda-gettingstarted`
 
 Compute environment management is critical to any project that executes on more than one server or computer. This is
 true of most projects, where local development is performed on a local desktop or laptop, but the simulations must be
-executed on a high performance computer (HPC). Because modsim developers may not have administrative or root permissions
-on the remote servers where their simulations are executed, virtal environments are used to provide consistency between
-servers. Some types of virtual environments may also provide some amount of cross-platform environment consistency.
+executed on a remote server or computer cluster with high performance computing (HPC). Because modsim developers may not
+have administrative or root permissions on the remote servers where their simulations are executed, virtual environments
+are used to provide consistency between servers. Some types of virtual environments may also provide cross-platform
+environment consistency.
 
 There are two major components relevant to the compute environment discussion for modsim workflows: the installed
-software and the operating system search ``PATH``. Most modsim developers will be familiar with installing software on
-their local computer. When running a simulation workflow from a command line shell, the system ``PATH`` variable tells
-the shell how to find executable software. System paths may be modified by user configuration files; however, managing
-and maintaining a common set of configuration files among several servers and multiple collaborators can be a difficult
-and error prone task, often resulting in the command "but it works on *my* computer" complaint.
+software and the operating system (OS) search ``PATH``. Most modsim developers will be familiar with installing software
+on their local computer. When running a simulation workflow from a command line shell, the system ``PATH`` variable
+tells the shell how to find executable software. System paths may be modified by user configuration files; however,
+managing and maintaining a common set of configuration files among several servers and multiple collaborators can be a
+difficult and error prone task, often resulting in the common "but it works on *my* computer" complaint.
 
-Instead of managin an ever growing ``case`` or ``if`` structure to handle system changes out of your control, one
+Instead of managing an ever growing ``case`` or ``if`` structure to handle system changes out of your control, one
 solution to managing a common environment is to keep a version controlled environment file used for creating a common
 virtual compute environment. Virtual environments will handle ``PATH`` manipulation and many come with associated
 package managers that can install software to a common location managed by the virtual environment. The software
@@ -51,6 +54,6 @@ package manager and instead provides licenced installation media. In this case, 
 commercial software in a virtual environment. For collaborative efforts and version controlled consistency, system
 ``PATH`` management with `Environment modules`_ and the ``module`` software can augment the virtual environnment. The
 `WAVES`_ project implements a version controlled modulefile for the ``module`` command to manage the Abaqus and Cubit
-software versions in a consistent manner between systems. When deployed with a shared compute environment deployed with
-continuous integration, the ``module`` and `Conda`_ solutions provide an easy-to-use entry point for new developers
-unfamiliar with compute environment management.
+software versions in a consistent manner between systems. When deployed with a shared compute environment, the
+``module`` and `Conda`_ solutions provide an easy-to-use entry point for new developers unfamiliar with compute
+environment management.

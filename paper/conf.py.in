@@ -29,7 +29,7 @@ sys.path.insert(0, str(eabm_dir))
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.
 mock_modules = ['abaqus', 'abaqusConstants', 'mesh', 'cubit', 'scipy', 'scipy.stats', 'xarray', 'pyyaml', 'h5py',
-                'numpy', 'matplotlib', 'matplotlib.pyplot']
+                'numpy', 'pyDOE2', 'matplotlib', 'matplotlib.pyplot']
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
@@ -70,11 +70,6 @@ templates_path = ['_templates']
 source_suffix = ['.rst']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-# -- Options for HTML output -------------------------------------------------
-html_logo = 'waves_logo_brandmark_smaller.png'
-html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
-
 # -- Options for LaTeX output ---------------------------------------------
 copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
 
@@ -89,14 +84,9 @@ information.
 latex_elements = {
     'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
     'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
+    'releasename': _project_name_short
 }
 latex_documents = [
-    (master_doc, project.lower() + '.tex', project.upper() + ' Documentation',
+    (master_doc, project.lower() + '.tex', None,
      author_latex, 'manual'),
-]
-
-# -- Options for manual page output ---------------------------------------
-man_pages = [
-    (master_doc, project.lower(), project.upper(),
-     [author_manpage], 1)
 ]

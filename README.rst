@@ -33,10 +33,13 @@ Description
 
 .. project-description-start-do-not-remove
 
-A collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
-`WAVES`_ also includes custom `SCons`_ builders that are commonly re-used in model simulation (modsim)
-repositories. The simulations in this project use `SCons`_ as the automated build system. The `SCons documentation`_
-covers build system concepts, command line options, and project configuration.
+`WAVES`_ is a computational engineering workflow tool that integrates parametric studies with traditional software build systems.
+
+In addition to the parametric study Python package and command line utilities, `WAVES`_ also includes `SCons`_ builders
+for common engineering software used by model simulation (modsim) repositories. The tutorial simulations in this project
+use `SCons`_ as the automated build system and translate software build system concepts in the language of engineering
+simulation and analysis. The `SCons documentation`_ should be consulted as a reference for additional build system
+concepts, command line options, and project configuration.
 
 This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
 testing of the `WAVES`_ extensions to SCons.

@@ -1,0 +1,20 @@
+.. note::
+
+   Unlike the "Scons-WAVES Quickstart" :cite:`WAVES`, this tutorial will use native `SCons`_ code without the `WAVES`_ extensions and
+   builders. This tutorial is included as an example for using native `SCons`_ techniques when `WAVES`_ does not support
+   required third-party software, such as numeric solvers, or for when a modsim project requires unique builder behavior.
+
+This quickstart will create a pure `SCons`_, minimal, single file project configuration matching the `WAVES`_ tutorials
+:cite:`WAVES` listed below.
+
+* Tutorial 00: SConstruct
+* Tutorial 01: Geometry
+* Tutorial 02: Partition and Mesh
+* Tutorial 03: SolverPrep
+* Tutorial 04: Simulation
+
+These tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using
+a single project configuration file requires `SCons`_ techniques that differ between the quickstart ``SConstruct`` file
+and the project configuration files, ``SConstruct`` and ``SConscript``, found in the full tutorials. Consequently, this
+quickstart will use a separate name for the project configuration file, ``scons_quickstart_SConstruct``, to allow the
+tutorials and this quickstart to share a common tutorial directory.
