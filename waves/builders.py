@@ -415,7 +415,8 @@ def abaqus_extract(abaqus_program='abaqus'):
     list, the target list will be prepended with a name matching the ODB file base name and the ``*.h5`` extension.
 
     The builder emitter always appends the CSV file created by the ``abaqus odbreport`` command as executed by
-    ``odb_extract``.
+    ``odb_extract``. The ``odb_report_args`` are always prepended with ``-job target[0]`` to match the CSV file name to
+    the H5 file name.
 
     This builder supports the keyword arguments: ``output_type``, ``odb_report_args``, ``delete_report_file`` with
     behavior as described in the :ref:`odb_extract_cli` command line interface.
