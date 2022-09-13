@@ -121,11 +121,11 @@ def odb_extract(input_file,
     job_name = path_output_file.with_suffix('.csv')
     time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
     if not odb_report_args:
-        odb_report_args = f'job={job_name.stem} odb={input_file} all mode=CSV blocked'
+        odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
     else:
         if 'odb=' in odb_report_args or 'job=' in odb_report_args:
             print_warning(verbose, f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
-            odb_report_args = f'job={job_name.stem} odb={input_file} all mode=CSV blocked'
+            odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
     if path_output_file.exists():
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
         print_warning(verbose, f'{output_file} already exists. Will use {new_output_file} instead.')
@@ -136,7 +136,7 @@ def odb_extract(input_file,
     if 'odb=' not in odb_report_args:
         odb_report_args = f'odb={input_file} {odb_report_args.strip()}'
     if 'job=' not in odb_report_args:
-        odb_report_args = f'job={job_name.stem} {odb_report_args.strip()}'
+        odb_report_args = f"job={job_name.with_suffix('')} {odb_report_args.strip()}"
     if 'blocked' not in odb_report_args:
         odb_report_args = f'{odb_report_args.strip()} blocked'
     if 'invariants' in odb_report_args:
