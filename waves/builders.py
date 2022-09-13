@@ -447,7 +447,7 @@ def _build_odb_extract(target, source, env):
     # Default odb_extract arguments
     output_type = 'h5'
     job_name = pathlib.Path(str(target[0])).stem
-    odb_report_args = f"-job {job_name}"
+    odb_report_args = f"job={job_name}"
     delete_report_file = False
 
     # Grab arguments from environment if they exist
