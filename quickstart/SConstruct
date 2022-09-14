@@ -1,16 +1,9 @@
 #! /usr/bin/env python
 
 import os
-import sys
 import pathlib
 
-# Only required when WAVES is not installed as a package, e.g. for local testing in WAVES repository.
-# EABMs may simply use "import waves"
-try:
-    import waves
-except ModuleNotFoundError:
-    sys.path.insert(0, str(pathlib.Path('..').resolve()))
-    import waves
+import waves
 
 # Inherit user's full environment
 env = Environment(ENV=os.environ.copy())
@@ -20,9 +13,9 @@ env.Default()
 
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(Dir('.').abspath)
-abaqus_source_dir = 'eabm_package/abaqus'
-abaqus_source_abspath = project_dir / abaqus_source_dir
-variant_dir_base = pathlib.Path('build_waves_quickstart')
+eabm_package_dir = 'eabm_package'
+eabm_package_abspath = project_dir / eabm_package_dir
+variant_dir_base = pathlib.Path('build')
 
 # Separate target output from source files
 VariantDir(variant_dir_base.name, '.', duplicate=False)
@@ -41,13 +34,14 @@ model = "single_element"
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
+alias_list = []
 
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
+    source=[f"{eabm_package_abspath / journal_file}.py"],
     journal_options=journal_options))
 
 # Partition
@@ -55,7 +49,7 @@ journal_file = f"{model}_partition"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_geometry.cae")],
+    source=[f"{eabm_package_abspath / journal_file}.py", str(variant_dir_base / f"{model}_geometry.cae")],
     journal_options=journal_options))
 
 # Mesh
@@ -63,19 +57,19 @@ journal_file = f"{model}_mesh"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{variant_dir_base / journal_file}.cae", f"{variant_dir_base / journal_file}.inp"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
+    source=[f"{eabm_package_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
     journal_options=journal_options))
 
 # SolverPrep
 abaqus_source_list = [
-    f"#/{abaqus_source_dir}/{model}_compression.inp",
-    f"#/{abaqus_source_dir}/amplitudes.inp",
-    f"#/{abaqus_source_dir}/assembly.inp",
-    f"#/{abaqus_source_dir}/boundary.inp",
-    f"#/{abaqus_source_dir}/field_output.inp",
-    f"#/{abaqus_source_dir}/materials.inp",
-    f"#/{abaqus_source_dir}/parts.inp",
-    f"#/{abaqus_source_dir}/history_output.inp"
+    f"#/{eabm_package_dir}/{model}_compression.inp",
+    f"#/{eabm_package_dir}/amplitudes.inp",
+    f"#/{eabm_package_dir}/assembly.inp",
+    f"#/{eabm_package_dir}/boundary.inp",
+    f"#/{eabm_package_dir}/field_output.inp",
+    f"#/{eabm_package_dir}/materials.inp",
+    f"#/{eabm_package_dir}/parts.inp",
+    f"#/{eabm_package_dir}/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdirectory=variant_dir_base))
@@ -100,9 +94,23 @@ workflow.extend(env.AbaqusSolver(
     abaqus_options=abaqus_options))
 
 # Collector alias named after the model simulation
-env.Alias(model, workflow)
-env.Alias(f"{model}_datacheck", datacheck)
+alias_list.extend(env.Alias(model, workflow))
+alias_list.extend(env.Alias(f"{model}_datacheck", datacheck))
 
 if not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{model}' target(s)")
     Ignore(['.', model], workflow)
+
+# Add aliases to help message so users know what build target options are available
+# This must come *after* all expected Alias definitions and SConscript files.
+try:
+    # Recover from SCons configuration
+    from SCons.Node.Alias import default_ans
+    alias_list = default_ans
+except ImportError:
+    # Fall back to manually constructed alias list(s)
+    pass
+alias_help = "\nTarget Aliases:\n"
+for alias in alias_list:
+    alias_help += f"    {alias}\n"
+Help(alias_help)
