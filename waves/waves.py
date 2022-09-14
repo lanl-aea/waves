@@ -18,7 +18,7 @@ def main():
     args, unknown = parser.parse_known_args()
 
     if args.subcommand == 'docs':
-        open_docs()
+        return_code = docs(print_local_path=args.print_local_path)
     elif args.subcommand == 'build':
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
@@ -64,10 +64,7 @@ def get_parser():
                          "system default web browser",
             parents=[docs_parser])
     docs_parser.add_argument('-p', '--print-local-path',
-                             action='version',
-                             # Unconventional usage of version argument.
-                             # Usage here is to print the docs directory and exit.
-                             version=f"{_settings._docs_directory}/index.html",
+                             action='store_true',
                              help=f"Print the path to the locally installed documentation index file. " \
                                   f"As an alternative to the docs sub-command, open index.html in a web browser.")
 
@@ -92,9 +89,19 @@ def get_parser():
     return main_parser
 
 
-def open_docs():
-    webbrowser.open(f'{_settings._docs_directory}/index.html')
-    return
+def docs(print_local_path=False):
+    
+    if print_local_path:
+        if _settings._installed_docs_index.exists():
+            print(_settings._installed_docs_index, file=sys.stdout)
+        else:
+            # This should only be reached if the package installation structure doesn't match the assumptions in
+            # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
+            print('Could not find local HTML index file')
+            return 1
+    else:
+        webbrowser.open(_settings._installed_docs_index)
+    return 0
 
 
 def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_clone_directory=None):
