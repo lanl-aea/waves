@@ -10,6 +10,28 @@ from waves import waves
 
 
 @pytest.mark.unittest
+def test_main():
+    with patch('sys.argv', ['waves.py', 'docs']), \
+         patch("waves.waves.docs") as mock_docs:
+        waves.main()
+        mock_docs.assert_called()
+
+    target_string = 'dummy.target'
+    with patch('sys.argv', ['waves.py', 'build', target_string]), \
+         patch("waves.waves.build") as mock_build:
+        waves.main()
+        mock_build.assert_called_once()
+        mock_build.call_args[0] == [target_string]
+
+    project_directory = 'project_directory'
+    with patch('sys.argv', ['waves.py', 'quickstart', project_directory]), \
+         patch("waves.waves.quickstart") as mock_quickstart:
+        waves.main()
+        mock_quickstart.assert_called_once()
+        mock_quickstart.call_args[0] == [project_directory]
+
+
+@pytest.mark.unittest
 def test_docs():
     with patch('webbrowser.open') as mock_webbrowser_open:
         waves.docs()
@@ -26,21 +48,6 @@ def test_docs():
         return_code = waves.docs(print_local_path=True)
         assert return_code != 0
         mock_webbrowser_open.not_called()
-
-
-@pytest.mark.unittest
-def test_main():
-    with patch('sys.argv', ['waves.py', 'docs']), \
-         patch("waves.waves.docs") as mock_docs:
-        waves.main()
-        mock_docs.assert_called()
-
-    target_string = 'dummy.target'
-    with patch('sys.argv', ['waves.py', 'build', target_string]), \
-         patch("waves.waves.build") as mock_build:
-        waves.main()
-        mock_build.assert_called_once()
-        mock_build.call_args[0] == [target_string]
 
 
 @pytest.mark.unittest
