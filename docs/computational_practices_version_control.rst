@@ -21,7 +21,7 @@ resolve content conflicts from contributors working in parallel.
 
 Version control software is also referred to as revision control, source control, or source code management. There have
 been a variety of popular version control software dating back to the early 1970s. Today, there are many version control
-software to choose from, with a range of implmente concepts. This section will focus on the distributed version control
+software to choose from, with a range of implemented concepts. This section will focus on the distributed version control
 system `git`_ :cite:`git`, which was released in 2005 :cite:`pro-git`.
 
 Git tracks changes to collections of files in a project. The user creates incremental "commits" which form a directed
