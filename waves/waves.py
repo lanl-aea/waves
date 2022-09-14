@@ -95,6 +95,8 @@ def docs(print_local_path=False):
         if _settings._installed_docs_index.exists():
             print(_settings._installed_docs_index, file=sys.stdout)
         else:
+            # This should only be reached if the package installation structure doesn't match the assumptions in
+            # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
             print('Could not find local HTML index file')
             return 1
     else:
