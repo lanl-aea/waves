@@ -23,13 +23,11 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     :param str x_units: The independent (x-axis) units
     :param str y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
     :param str y_units: The dependent (y-axis) units
-    :param str selection_dict: YAML formatted dictionary string, e.g. ``{'data_var': value}``, to define the down selection 
-                               of data to be plotted. Dictionary key: value pairs must match the data variables and 
-                               coordinates of the expected Xarray Dataset object.
+    :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
+        pairs must match the data variables and coordinates of the expected Xarray Dataset object.
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
     """
-    select_dict = yaml.safe_load(selection_dict)
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
@@ -47,11 +45,8 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     combined_data[x_var].attrs["units"] = x_units
     combined_data[y_var].attrs["units"] = y_units
 
-    # Write results dataset to stdout for tutorial demonstration
-    print(combined_data)
-
     # Plot
-    combined_data.sel(select_dict).plot.scatter(x_var, y_var, hue=concat_coord)
+    combined_data.sel(selection_dict).plot.scatter(x_var, y_var, hue=concat_coord)
     matplotlib.pyplot.savefig(output_file)
 
     # Clean up open files
@@ -107,6 +102,7 @@ def get_parser():
 if __name__ == "__main__":
     parser = get_parser()
     args, unknown = parser.parse_known_args()
+    selection_dict = yaml.safe_load(args.selection_dict)
     sys.exit(main(input_files=args.input_file,
                   output_file=args.output_file,
                   group_path=args.group_path,
@@ -114,5 +110,5 @@ if __name__ == "__main__":
                   x_units=args.x_units,
                   y_var=args.y_var,
                   y_units=args.y_units,
-                  selection_dict=args.selection_dict,
+                  selection_dict=selection_dict,
                   parameter_study_file=args.parameter_study_file))
