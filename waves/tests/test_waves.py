@@ -67,6 +67,7 @@ def test_build():
 def test_quickstart():
     # Project directory does not exist. Copy the quickstart file tree.
     with patch('shutil.copytree') as mock_shutil_copytree, \
+         patch('pathlib.Path.iterdir', side_effect=[['quickstart_directory']]), \
          patch('pathlib.Path.exists', side_effect=[False, True]):
         return_code = waves.quickstart()
         assert return_code == 0
@@ -74,15 +75,15 @@ def test_quickstart():
 
     # Project directory exists, but is empty. Copy the quickstart file tree.
     with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.iterdir', return_value=[]), \
+         patch('pathlib.Path.iterdir', side_effect=[[], ['quickstart_directory']]), \
          patch('pathlib.Path.exists', side_effect=[True, True]):
         return_code = waves.quickstart()
         assert return_code == 0
         mock_shutil_copytree.assert_called_once()
 
-    # Project directory exists, but is not-empty. Copy the quickstart file tree.
+    # Project directory exists, but is not-empty. Don't copy the quickstart file tree.
     with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.iterdir', return_value=['dummy']), \
+         patch('pathlib.Path.iterdir', side_effect=[['project_directory']]), \
          patch('pathlib.Path.exists', side_effect=[True, True]):
         return_code = waves.quickstart()
         assert return_code == 1
