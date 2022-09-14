@@ -161,7 +161,14 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
 def quickstart(directory=''):
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     directory = pathlib.Path(directory).resolve()
-    print(f"Project root path: '{directory}'")
+    # TODO: future versions can be more subtle and only error out when directory content filenames clash with the
+    # quickstart files.
+    if directory.exists() and any(directory.iterdir()):
+        print(f"Project root path: '{directory}' exists and is non-empty. Please specify an empty or new directory.",
+              file=sys.stderr)
+        return 1
+    else:
+        print(f"Project root path: '{directory}'", file=sys.stdout)
 
     # Do the work
     directory.mkdir(parents=True, exist_ok=True)
