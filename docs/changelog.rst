@@ -25,8 +25,10 @@ Enhancements
 ============
 - Implement separate project and simulation configuration files for the ``waves quickstart`` subcommand (:issue:`292`,
   :merge:`302`). By `Kyle Brindley`_.
-- Add extraction, post-processing, and global data_check alias to ``waves_quickstart`` subcommand (:issue:`293`,
+- Add extraction, post-processing, and global data_check alias to ``waves quickstart`` subcommand (:issue:`293`,
   :merge:`304`). By `Kyle Brindley`_.
+- Add a mesh convergence template to the ``waves quickstart`` subcommand (:issue:`294`, :merge:`305`). By `Kyle
+  Brindley`_.
 
 ******************
 0.4.3 (2022-09-13)
