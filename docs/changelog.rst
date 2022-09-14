@@ -18,6 +18,8 @@ Internal Changes
 - Do not install as the deprecated zipped EGG file (:issue:`290`, :merge:`301`). By `Kyle Brindley`_.
 - Test the as-installed HTML documentation index file location used by the ``waves docs`` subcommand (:issue:`290`,
   :merge:`301`). By `Kyle Brindley`_.
+- Dereference symbolic links during ``copy_substitute`` tasks by default (:issue:`297`, :merge:`303`). By `Kyle
+  Brindley`_.
 
 ******************
 0.4.3 (2022-09-13)
