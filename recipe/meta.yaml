@@ -27,7 +27,7 @@ build:
     # Bundle quickstart files. Must come after install so that SP_DIR path exists
     - quickstart_path="$SP_DIR/$PKG_NAME/quickstart"
     - mkdir -p ${quickstart_path}
-    - cp -r quickstart/* ${quickstart_path}
+    - cp -r --dereference quickstart/* ${quickstart_path}
   script_env:
     - VERSION
   ignore_run_exports:
