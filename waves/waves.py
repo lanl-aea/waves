@@ -23,7 +23,7 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
-        return_code = quickstart()
+        return_code = quickstart(args.PROJECT_DIRECTORY)
     else:
         parser.print_help()
 
@@ -94,6 +94,12 @@ def get_parser():
         description="Create an SCons-WAVES project template from the single element compression simulation found in " \
                     "the WAVES tutorials.",
         parents=[quickstart_parser])
+    quickstart_parser.add_argument("PROJECT_DIRECTORY",
+        nargs='?',
+        help="Directory for new project template (default: PWD).",
+        type=pathlib.Path,
+        default=pathlib.Path().cwd())
+
 
     return main_parser
 
@@ -152,8 +158,13 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart():
-    pass
+def quickstart(directory=''):
+    print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
+    directory = pathlib.Path(directory).resolve()
+    print(f"Project root path: '{directory}'")
+
+    # Do the work
+    directory.mkdir(parents=True, exist_ok=True)
 
 
 if __name__ == "__main__":
