@@ -12,14 +12,19 @@ New Features
 ============
 - Add a ``waves quickstart`` subcommand to copy the single element compression project as a template for a new project.
   Currently limited to the "SCons-WAVES quickstart" tutorial files. (:issue:`284`, :merge:`300`). By `Kyle Brindley`_.
-- Implement separate project and simulation configuration files for the ``waves quickstart`` subcommand (:issue:`292`,
-  :merge:`302`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
 - Do not install as the deprecated zipped EGG file (:issue:`290`, :merge:`301`). By `Kyle Brindley`_.
 - Test the as-installed HTML documentation index file location used by the ``waves docs`` subcommand (:issue:`290`,
   :merge:`301`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Implement separate project and simulation configuration files for the ``waves quickstart`` subcommand (:issue:`292`,
+  :merge:`302`). By `Kyle Brindley`_.
+- Add extraction, post-processing, and global data_check alias to ``waves_quickstart`` subcommand (:issue:`293`,
+  :merge:`304`). By `Kyle Brindley`_.
 
 ******************
 0.4.3 (2022-09-13)
