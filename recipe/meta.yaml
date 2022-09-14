@@ -88,6 +88,9 @@ test:
   imports:
     - waves
   commands:
+    # Tests that depend on correct install path
+    - waves docs --print-local-path
+    # Project unit tests
     - scons . --keep-going --unconditional-build --ignore-documentation
     - cd eabm
     # Regression test the files used in the tutorial documentation
