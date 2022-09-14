@@ -59,3 +59,11 @@ def test_build():
     with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output:
         waves.build(['dummy.target'], git_clone_directory='dummy/clone')
         assert mock_check_output.call_count == 2
+
+
+@pytest.mark.unittest
+def test_docs():
+    with patch('shutil.copytree') as mock_shutil_copytree, \
+         patch('pathlib.Path.exists', side_effect=[False, True]):
+        waves.quickstart()
+        mock_shutil_copytree.assert_called_once()
