@@ -10,7 +10,7 @@ import xarray
 import matplotlib.pyplot
 
 
-def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict, parameter_study_file=None):
+def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict, parameter_study_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
@@ -103,7 +103,7 @@ if __name__ == "__main__":
     parser = get_parser()
     args, unknown = parser.parse_known_args()
     selection_dict = yaml.safe_load(args.selection_dict)
-    sys.exit(main(input_files=args.input_file,
+    sys.exit(plot(input_files=args.input_file,
                   output_file=args.output_file,
                   group_path=args.group_path,
                   x_var=args.x_var,
