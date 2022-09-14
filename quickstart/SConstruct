@@ -5,101 +5,61 @@ import pathlib
 
 import waves
 
-# Inherit user's full environment
-env = Environment(ENV=os.environ.copy())
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+
+# Inherit user's full environment and set project options
+env = Environment(ENV=os.environ.copy(),
+                  variant_dir_base=GetOption("variant_dir_base"))
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
-# Set project-wide paths with os-agnostic path separators
-project_dir = pathlib.Path(Dir('.').abspath)
-eabm_package_dir = 'eabm_package'
-eabm_package_abspath = project_dir / eabm_package_dir
-variant_dir_base = pathlib.Path('build')
-
-# Separate target output from source files
-VariantDir(variant_dir_base.name, '.', duplicate=False)
-
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
 
+# Set project internal variables and variable substitution dictionaries
+project_dir = pathlib.Path(Dir('.').abspath)
+eabm_package_dir = 'eabm_package'
+project_variables = {
+    'project_dir': str(project_dir),
+    'eabm_package_dir': eabm_package_dir,
+    'eabm_package_abspath': str(project_dir / eabm_package_dir)
+}
+for key, value in project_variables.items():
+    env[key] = value
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
+
 # Add WAVES builders
-env.Append(BUILDERS=
-    {'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])})
+env.Append(BUILDERS={
+    'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
+    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])
+})
 
-# Simulation variables
-model = "single_element"
-
-# Collect the target nodes to build a concise alias for all targets
-workflow = []
-datacheck = []
-alias_list = []
-
-# Geometry
-journal_file = f"{model}_geometry"
-journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{eabm_package_abspath / journal_file}.py"],
-    journal_options=journal_options))
-
-# Partition
-journal_file = f"{model}_partition"
-journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{eabm_package_abspath / journal_file}.py", str(variant_dir_base / f"{model}_geometry.cae")],
-    journal_options=journal_options))
-
-# Mesh
-journal_file = f"{model}_mesh"
-journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae", f"{variant_dir_base / journal_file}.inp"],
-    source=[f"{eabm_package_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
-    journal_options=journal_options))
-
-# SolverPrep
-abaqus_source_list = [
-    f"#/{eabm_package_dir}/{model}_compression.inp",
-    f"#/{eabm_package_dir}/amplitudes.inp",
-    f"#/{eabm_package_dir}/assembly.inp",
-    f"#/{eabm_package_dir}/boundary.inp",
-    f"#/{eabm_package_dir}/field_output.inp",
-    f"#/{eabm_package_dir}/materials.inp",
-    f"#/{eabm_package_dir}/parts.inp",
-    f"#/{eabm_package_dir}/history_output.inp"
+# Add simulation targets
+eabm_simulation_directories = [
+    'nominal'
 ]
-abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdirectory=variant_dir_base))
+for source_dir in eabm_simulation_directories:
+    build_dir = variant_dir_base / source_dir
+    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
 
-# Abaqus Solve
-solve_source_list = [str(variant_dir_base /source_file.name.rstrip('.in')) for source_file in abaqus_source_list]
-solve_source_list.append([str(variant_dir_base / f"{journal_file}.inp")])
-job_name = pathlib.Path(solve_source_list[0]).stem
-datacheck_name = f"{job_name}_DATACHECK"
-datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
-abaqus_options='-double both'
-datacheck.extend(env.AbaqusSolver(
-    target=[f"{variant_dir_base / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
-    source=solve_source_list,
-    job_name=datacheck_name,
-    abaqus_options=f'{abaqus_options} -datacheck'))
-
-workflow.extend(env.AbaqusSolver(
-    target=[f"{variant_dir_base / job_name}.sta"],
-    source=solve_source_list,
-    job_name=job_name,
-    abaqus_options=abaqus_options))
-
-# Collector alias named after the model simulation
-alias_list.extend(env.Alias(model, workflow))
-alias_list.extend(env.Alias(f"{model}_datacheck", datacheck))
-
-if not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{model}' target(s)")
-    Ignore(['.', model], workflow)
+# Add default target list to help message
+default_targets_help = "\nDefault Targets:\n"
+for target in DEFAULT_TARGETS:
+    default_targets_help += f"    {str(target)}\n"
+Help(default_targets_help, append=True)
 
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
@@ -109,7 +69,7 @@ try:
     alias_list = default_ans
 except ImportError:
     # Fall back to manually constructed alias list(s)
-    pass
+    alias_list = eabm_simulation_directories
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
