@@ -56,7 +56,8 @@ env.Append(BUILDERS={
 
 # Add simulation targets
 eabm_simulation_directories = [
-    'nominal'
+    'nominal',
+    'mesh_convergence'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
