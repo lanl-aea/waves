@@ -37,7 +37,8 @@ eabm_package_dir = 'eabm_package'
 project_variables = {
     'project_dir': str(project_dir),
     'eabm_package_dir': eabm_package_dir,
-    'eabm_package_abspath': str(project_dir / eabm_package_dir)
+    'eabm_package_abspath': str(project_dir / eabm_package_dir),
+    'datacheck_alias': 'datacheck'
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -48,7 +49,9 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 # Add WAVES builders
 env.Append(BUILDERS={
     'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])
+    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
+    'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus']),
+    'PythonScript': waves.builders.python_script()
 })
 
 # Add simulation targets
