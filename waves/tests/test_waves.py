@@ -1,10 +1,10 @@
 """Test WAVES
 
 Test waves.py
-""" 
+"""
+from unittest.mock import patch
 
 import pytest
-from unittest.mock import patch
 
 from waves import waves
 
@@ -14,6 +14,18 @@ def test_open_docs():
     with patch('webbrowser.open') as mock_webbrowser_open:
         waves.open_docs()
         mock_webbrowser_open.assert_called()
+
+    with patch('webbrowser.open') as mock_webbrowser_open, \
+         patch('pathlib.Path.exists', return_value=True):
+        return_code = waves.open_docs(print_local_path=True)
+        assert return_code == 0
+        mock_webbrowser_open.not_called()
+
+    with patch('webbrowser.open') as mock_webbrowser_open, \
+         patch('pathlib.Path.exists', return_value=False):
+        return_code = waves.open_docs(print_local_path=True)
+        assert return_code != 0
+        mock_webbrowser_open.not_called()
 
 
 @pytest.mark.unittest
@@ -35,7 +47,7 @@ def test_main():
 def test_build():
     with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output:
         waves.build(['dummy.target'])
-        mock_check_output.assert_called_once() 
+        mock_check_output.assert_called_once()
 
     with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output:
         waves.build(['dummy.target'], git_clone_directory='dummy/clone')
