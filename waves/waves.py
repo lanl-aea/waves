@@ -185,6 +185,8 @@ def quickstart(directory=''):
     # Do the work
     shutil.copytree(_settings._installed_quickstart_directory, directory)
 
+    return 0
+
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover

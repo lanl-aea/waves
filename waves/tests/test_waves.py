@@ -43,6 +43,8 @@ def test_docs():
         assert return_code == 0
         mock_webbrowser_open.not_called()
 
+    # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
+    # _settings.py are correct.
     with patch('webbrowser.open') as mock_webbrowser_open, \
          patch('pathlib.Path.exists', return_value=False):
         return_code = waves.docs(print_local_path=True)
@@ -62,8 +64,17 @@ def test_build():
 
 
 @pytest.mark.unittest
-def test_docs():
+def test_quickstart():
     with patch('shutil.copytree') as mock_shutil_copytree, \
          patch('pathlib.Path.exists', side_effect=[False, True]):
-        waves.quickstart()
+        return_code = waves.quickstart()
+        assert return_code == 0
         mock_shutil_copytree.assert_called_once()
+
+    # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
+    # _settings.py are correct.
+    with patch('shutil.copytree') as mock_shutil_copytree, \
+         patch('pathlib.Path.exists', side_effect=[False, False]):
+        return_code = waves.quickstart()
+        assert return_code != 0
+        mock_shutil_copytree.assert_not_called()
