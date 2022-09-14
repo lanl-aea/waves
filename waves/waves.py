@@ -18,7 +18,7 @@ def main():
     args, unknown = parser.parse_known_args()
 
     if args.subcommand == 'docs':
-        return_code = open_docs(print_local_path=args.print_local_path)
+        return_code = docs(print_local_path=args.print_local_path)
     elif args.subcommand == 'build':
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
@@ -89,7 +89,7 @@ def get_parser():
     return main_parser
 
 
-def open_docs(print_local_path=False):
+def docs(print_local_path=False):
     docs_local_path = _settings._docs_directory / 'index.html'
     if print_local_path:
         if docs_local_path.exists():

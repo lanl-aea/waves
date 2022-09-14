@@ -10,20 +10,20 @@ from waves import waves
 
 
 @pytest.mark.unittest
-def test_open_docs():
+def test_docs():
     with patch('webbrowser.open') as mock_webbrowser_open:
-        waves.open_docs()
+        waves.docs()
         mock_webbrowser_open.assert_called()
 
     with patch('webbrowser.open') as mock_webbrowser_open, \
          patch('pathlib.Path.exists', return_value=True):
-        return_code = waves.open_docs(print_local_path=True)
+        return_code = waves.docs(print_local_path=True)
         assert return_code == 0
         mock_webbrowser_open.not_called()
 
     with patch('webbrowser.open') as mock_webbrowser_open, \
          patch('pathlib.Path.exists', return_value=False):
-        return_code = waves.open_docs(print_local_path=True)
+        return_code = waves.docs(print_local_path=True)
         assert return_code != 0
         mock_webbrowser_open.not_called()
 
@@ -31,9 +31,9 @@ def test_open_docs():
 @pytest.mark.unittest
 def test_main():
     with patch('sys.argv', ['waves.py', 'docs']), \
-         patch("waves.waves.open_docs") as mock_open_docs:
+         patch("waves.waves.docs") as mock_docs:
         waves.main()
-        mock_open_docs.assert_called()
+        mock_docs.assert_called()
 
     target_string = 'dummy.target'
     with patch('sys.argv', ['waves.py', 'build', target_string]), \
