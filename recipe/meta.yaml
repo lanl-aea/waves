@@ -125,7 +125,6 @@ test:
     - scons . --jobs=4 --keep-going --unconditional-build --ignore-documentation
     # Quickstart regression tests
     - quickstart_regression_directory="${test_root}/quickstart_test"
-    - mkdir -p ${quickstart_regression_directory}
+    - waves quickstart ${quickstarte_regression_directory}
     - cd ${quickstart_regression_directory}
-    - waves quickstart
     - scons . --jobs=4
