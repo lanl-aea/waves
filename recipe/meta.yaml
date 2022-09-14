@@ -92,12 +92,13 @@ test:
   imports:
     - waves
   commands:
+    - test_root=${PWD}
     # Tests that depend on correct install path
     - waves docs --print-local-path
     # Project unit tests
     - scons . --keep-going --unconditional-build --ignore-documentation
-    - cd eabm
     # Regression test the files used in the tutorial documentation
+    - cd eabm
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
@@ -122,3 +123,8 @@ test:
     # SConstruct file target definitions differ or something is incompletely cleaned.
     - rm -rf build/
     - scons . --jobs=4 --keep-going --unconditional-build --ignore-documentation
+    # Quickstart regression tests
+    - quickstart_regression_directory="${test_root}/quickstart_test"
+    - cd ${quickstart_regression_directory}
+    - waves quickstart
+    - scons . --jobs=4
