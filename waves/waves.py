@@ -22,6 +22,8 @@ def main():
     elif args.subcommand == 'build':
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
+    elif args.subcommand == 'quickstart':
+        pass
     else:
         parser.print_help()
 
@@ -70,8 +72,8 @@ def get_parser():
 
     build_parser = argparse.ArgumentParser(add_help=False)
     build_parser = subparsers.add_parser('build',
-        help=f"Thin SCons wrapper",
-        description=f"Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
+        help="Thin SCons wrapper",
+        description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
         parents=[build_parser])
     build_parser.add_argument("TARGET", nargs="+",
                               help=f"SCons target list")
@@ -85,6 +87,13 @@ def get_parser():
                                        "executing the scons command, " \
                                        "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
                                        "(default: %(default)s).")
+
+    quickstart_parser = argparse.ArgumentParser(add_help=False)
+    quickstart_parser = subparsers.add_parser('quickstart',
+        help="Create an SCons-WAVES project template",
+        description="Create an SCons-WAVES project template from the single element compression simulation found in " \
+                    "the WAVES tutorials.",
+        parents=[quickstart_parser])
 
     return main_parser
 
