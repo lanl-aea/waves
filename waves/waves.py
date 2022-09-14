@@ -3,6 +3,7 @@ import webbrowser
 import pathlib
 import sys
 import subprocess
+import shutil
 
 from waves import _settings
 from waves import __version__
@@ -105,14 +106,14 @@ def get_parser():
 
 
 def docs(print_local_path=False):
-    
+
     if print_local_path:
         if _settings._installed_docs_index.exists():
             print(_settings._installed_docs_index, file=sys.stdout)
         else:
             # This should only be reached if the package installation structure doesn't match the assumptions in
             # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
-            print('Could not find local HTML index file')
+            print('Could not find package documentation HTML index file')
             return 1
     else:
         webbrowser.open(_settings._installed_docs_index)
@@ -159,6 +160,8 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
 
 
 def quickstart(directory=''):
+
+    # User I/O
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     directory = pathlib.Path(directory).resolve()
     # TODO: future versions can be more subtle and only error out when directory content filenames clash with the
@@ -169,9 +172,18 @@ def quickstart(directory=''):
         return 1
     else:
         print(f"Project root path: '{directory}'", file=sys.stdout)
+    if _settings._installed_quickstart_directory.exists():
+        quickstart_contents = list(_settings._installed_quickstart_directory.iterdir())
+        print("Copying the following to project root path: ", file=sys.stdout)
+        [print(f"\t{item}", file=sys.stdout) for item in quickstart_contents]
+    else:
+        # This should only be reached if the package installation structure doesn't match the assumptions in
+        # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
+        print('Could not find package quickstart directory')
+        return 1
 
     # Do the work
-    directory.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(_settings._installed_quickstart_directory, directory)
 
 
 if __name__ == "__main__":
