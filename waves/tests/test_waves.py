@@ -65,11 +65,28 @@ def test_build():
 
 @pytest.mark.unittest
 def test_quickstart():
+    # Project directory does not exist. Copy the quickstart file tree.
     with patch('shutil.copytree') as mock_shutil_copytree, \
          patch('pathlib.Path.exists', side_effect=[False, True]):
         return_code = waves.quickstart()
         assert return_code == 0
         mock_shutil_copytree.assert_called_once()
+
+    # Project directory exists, but is empty. Copy the quickstart file tree.
+    with patch('shutil.copytree') as mock_shutil_copytree, \
+         patch('pathlib.Path.iterdir', return_value=[]), \
+         patch('pathlib.Path.exists', side_effect=[True, True]):
+        return_code = waves.quickstart()
+        assert return_code == 0
+        mock_shutil_copytree.assert_called_once()
+
+    # Project directory exists, but is not-empty. Copy the quickstart file tree.
+    with patch('shutil.copytree') as mock_shutil_copytree, \
+         patch('pathlib.Path.iterdir', return_value=['dummy']), \
+         patch('pathlib.Path.exists', side_effect=[True, True]):
+        return_code = waves.quickstart()
+        assert return_code == 1
+        mock_shutil_copytree.assert_not_called()
 
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
