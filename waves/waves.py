@@ -90,15 +90,15 @@ def get_parser():
 
 
 def docs(print_local_path=False):
-    docs_local_path = _settings._docs_directory / 'index.html'
+    
     if print_local_path:
-        if docs_local_path.exists():
-            print(docs_local_path, file=sys.stdout)
+        if _settings._installed_docs_index.exists():
+            print(_settings._installed_docs_index, file=sys.stdout)
         else:
             print('Could not find local HTML index file')
             return 1
     else:
-        webbrowser.open(docs_local_path)
+        webbrowser.open(_settings._installed_docs_index)
     return 0
 
 
