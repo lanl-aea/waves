@@ -113,7 +113,7 @@ def docs(print_local_path=False):
         else:
             # This should only be reached if the package installation structure doesn't match the assumptions in
             # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
-            print('Could not find package documentation HTML index file')
+            print('Could not find package documentation HTML index file', file=sys.stderr)
             return 1
     else:
         webbrowser.open(_settings._installed_docs_index)
@@ -179,7 +179,7 @@ def quickstart(directory=''):
     else:
         # This should only be reached if the package installation structure doesn't match the assumptions in
         # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
-        print('Could not find package quickstart directory')
+        print('Could not find package quickstart directory', file=sys.stderr)
         return 1
 
     # Do the work
