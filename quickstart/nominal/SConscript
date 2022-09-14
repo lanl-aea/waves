@@ -75,11 +75,12 @@ workflow.extend(env.AbaqusSolver(
     job_name=job_name,
     abaqus_options=abaqus_options))
 
-# Collector alias named after the model simulation
-env.Alias(model, workflow)
-env.Alias(f"{model}_datacheck", datacheck)
+# Collector alias based on parent directory name
+parent_directory = Dir('.').srcnode().name
+env.Alias(parent_directory, workflow)
+env.Alias(f"{parent_directory}_datacheck", datacheck)
 
 if not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{model}' target(s)")
-    Ignore(['.', model], workflow)
-    Ignore(['.', model], datacheck)
+    Ignore(['.', parent_directory], workflow)
+    Ignore(['.', parent_directory], datacheck)
