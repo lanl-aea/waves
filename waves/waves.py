@@ -23,7 +23,7 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
-        pass
+        return_code = quickstart()
     else:
         parser.print_help()
 
@@ -125,7 +125,7 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     :param str working_directory: Change the SCons command working directory
     """
     if not targets:
-        print("At least one target must be provided")
+        print("At least one target must be provided", file=sys.stderr)
         return 1
     if git_clone_directory:
         current_directory = pathlib.Path().cwd().resolve()
@@ -144,12 +144,16 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
         while stop_trigger not in scons_stdout.decode("utf-8"):
             count += 1
             if count > max_iterations:
-                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'")
+                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'", file=sys.stderr)
                 return 2
-            print(f"iteration {count}: '{' '.join(command)}'")
+            print(f"iteration {count}: '{' '.join(command)}'", file=sys.stdout)
             scons_stdout = subprocess.check_output(command, cwd=working_directory)
 
     return 0
+
+
+def quickstart():
+    pass
 
 
 if __name__ == "__main__":
