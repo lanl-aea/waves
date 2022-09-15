@@ -9,7 +9,6 @@
    :caption: Model Repository
 
    user
-   theory
    api
    cli
    devops

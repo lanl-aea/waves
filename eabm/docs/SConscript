@@ -37,7 +37,6 @@ documentation_file_list = [
     'references.bib',
     'release_philosophy.rst',
     'targets.txt',
-    'theory.rst',
     'user.rst',
     'waves_logo_brandmark_smaller.png',
     'zreferences.rst',
