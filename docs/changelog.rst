@@ -31,6 +31,7 @@ Internal Changes
   Brindley`_.
 - Ignore ``*.pyc`` and cache files during ``waves quickstart`` project template creation (:issue:`300`, :merge:`310`).
   By `Kyle Brindley`_.
+- Ignore the datacheck alias tasks when Abaqus is missing (:issue:`296`, :merge:`312`). By `Kyle Brindley`_.
 
 Enhancements
 ============
