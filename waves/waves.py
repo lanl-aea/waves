@@ -183,7 +183,8 @@ def quickstart(directory=''):
         return 1
 
     # Do the work
-    shutil.copytree(_settings._installed_quickstart_directory, directory)
+    ignore_patterns = shutil.ignore_patterns("*.pyc", "__pycache__")
+    shutil.copytree(_settings._installed_quickstart_directory, directory, ignore=ignore_patterns)
 
     return 0
 
