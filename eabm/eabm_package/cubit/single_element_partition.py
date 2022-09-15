@@ -18,9 +18,10 @@ def main(input_file, output_file, width, height):
     * ``left`` - left edge
     * ``right`` - right edge
 
-    :param str input_file: The Cubit model file created by ``single_element_geometry.py`` without extension, e.g.
-        ``input_file``.cub
-    :param str output_file: The output file for the Cubit model without extension, e.g. ``output_file``.cub
+    :param str input_file: The Cubit model file created by ``single_element_geometry.py`` without extension. Will be
+        appended with the required extension, e.g. ``input_file``.cub
+    :param str output_file: The output file for the Cubit model without extension. Will be appended with the required
+        extension, e.g. ``output_file``.cub
     :param float width: The rectangle width
     :param float height: The rectangle height
 
@@ -62,14 +63,16 @@ def get_parser():
     default_height = 1.0
 
     prog = f"python {script_name.name} "
-    cli_description = "Create a simple rectangle geometry and write an ``output_file``.cub Cubit model file."
+    cli_description = "Partition the simple rectangle geometry created by ``single_element_geometry.py`` " \
+                      "and write an ``output_file``.cub Cubit model file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
-                        help="The Cubit model file created by ``single_element_geometry.py`` without extension, " \
-                             "e.g. ``input_file``.cub")
+                        help="The Cubit model file created by ``single_element_geometry.py`` without extension. " \
+                             "Will be appended with the required extension, e.g. ``input_file``.cub")
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
-                        help="The output file for the Cubit model without extension, e.g. ``output_file``.cub")
+                        help="The output file for the Cubit model without extension. Will be appended with the " \
+                             "required extension, e.g. ``output_file``.cub")
     parser.add_argument('-w', '--width', type=float, default=default_width,
                         help="The rectangle width")
     # Short option '-h' is reserved for the help message

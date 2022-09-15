@@ -19,6 +19,8 @@ Documentation
   :merge:`250`. Some of the tutorial body text was missed in the update (:issue:`298`, :merge:`307`). By `Kyle
   Brindley`_.
 - Update the Cubit journal file descriptions (:issue:`299`, :merge:`308`). By `Kyle Brindley`_.
+- Clarify input and output file extension behavior in the journal file API and CLI (:issue:`301`, :merge:`311`). By
+  `Kyle Brindley`_.
 
 Internal Changes
 ================

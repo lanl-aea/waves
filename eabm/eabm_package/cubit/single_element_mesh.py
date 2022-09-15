@@ -26,9 +26,10 @@ def main(input_file, output_file, global_seed):
 
     * ``ELEMENTS`` - all part elements
 
-    :param str input_file: The Cubit model file created by ``single_element_geometry.py`` without extension, e.g.
-        ``input_file``.cub
-    :param str output_file: The output file for the Cubit model without extension, e.g. ``output_file``.cub
+    :param str input_file: The Cubit model file created by ``single_element_geometry.py`` without extension. Will be
+        appended with the required extension, e.g. ``input_file``.cub
+    :param str output_file: The output file for the Cubit model without extension. Will be appended with the required
+        extension, e.g. ``output_file``.cub
     :param float global_seed: The global mesh seed size
 
     :returns: writes ``output_file``.cub and ``output_file``.inp
@@ -85,14 +86,16 @@ def get_parser():
     default_global_seed = 1.0
 
     prog = f"python {script_name.name} "
-    cli_description = "Create a simple rectangle geometry and write an ``output_file``.cub Cubit model file."
+    cli_description = "Mesh the simple rectangle geometry partitioned by ``single_element_partition.py`` " \
+                      "and write an ``output_file``.cub Cubit model file and ``output_file``.inp orphan mesh file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
-                        help="The Cubit model file created by ``single_element_geometry.py`` without extension, " \
-                             "e.g. ``input_file``.cub")
+                        help="The Cubit model file created by ``single_element_geometry.py`` without extension. " \
+                             "Will be appended with the required extension, e.g. ``input_file``.cub")
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
-                        help="The output file for the Cubit model without extension, e.g. ``output_file``.cub")
+                        help="The output file for the Cubit model without extension. Will be appended with the " \
+                             "required extension, e.g. ``output_file``.cub")
     parser.add_argument('-g', '--global-seed', type=float, default=default_global_seed,
                         help="The global mesh seed size")
     return parser
