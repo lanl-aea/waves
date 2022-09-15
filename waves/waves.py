@@ -101,7 +101,7 @@ def get_parser():
         default=pathlib.Path().cwd())
     quickstart_parser.add_argument("--overwrite",
         action="store_true",
-        help="Overwrite any existing files and directories (default %(default)s).")
+        help="Overwrite any existing files and directories (default: %(default)s).")
 
     return main_parser
 
