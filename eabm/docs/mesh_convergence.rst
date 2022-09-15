@@ -3,10 +3,6 @@ Single Element: Mesh Convergence
 ################################
 
 **********
-Background
-**********
-
-**********
 Simulation
 **********
 
