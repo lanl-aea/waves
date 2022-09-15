@@ -144,43 +144,32 @@ is specified by name to reduce clutter in the ouptut shown.
 
 .. code-block:: bash
 
-    $ pwd
-    /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/tutorial_cubit
-    build/tutorial_cubit/
-    ├── amplitudes.inp
-    ├── assembly.inp
-    ├── boundary.inp
-    ├── field_output.inp
-    ├── history_output.inp
-    ├── materials.inp
-    ├── parts.inp
-    ├── single_element_compression.abaqus_v6.env
-    ├── single_element_compression.com
-    ├── single_element_compression.dat
-    ├── single_element_compression_DATACHECK.023
-    ├── single_element_compression_DATACHECK.abaqus_v6.env
-    ├── single_element_compression_DATACHECK.com
-    ├── single_element_compression_DATACHECK.dat
-    ├── single_element_compression_DATACHECK.mdl
-    ├── single_element_compression_DATACHECK.msg
-    ├── single_element_compression_DATACHECK.odb
-    ├── single_element_compression_DATACHECK.prt
-    ├── single_element_compression_DATACHECK.sim
-    ├── single_element_compression_DATACHECK.stdout
-    ├── single_element_compression_DATACHECK.stt
-    ├── single_element_compression.inp
-    ├── single_element_compression.msg
-    ├── single_element_compression.odb
-    ├── single_element_compression.prt
-    ├── single_element_compression.sta
-    ├── single_element_compression.stdout
-    ├── single_element_geometry.cub
-    ├── single_element_geometry.stdout
-    ├── single_element_mesh.cub
-    ├── single_element_mesh.inp
-    ├── single_element_mesh.stdout
-    ├── single_element_partition.cub
-    └── single_element_partition.stdout
+   $ pwd
+   /home/roppenheimer/waves-eabm-tutorial
+   $ tree build/tutorial_cubit/
+   build/tutorial_cubit/
+   |-- amplitudes.inp
+   |-- assembly.inp
+   |-- boundary.inp
+   |-- field_output.inp
+   |-- history_output.inp
+   |-- materials.inp
+   |-- parts.inp
+   |-- single_element_compression.abaqus_v6.env
+   |-- single_element_compression.com
+   |-- single_element_compression.dat
+   |-- single_element_compression.inp
+   |-- single_element_compression.msg
+   |-- single_element_compression.odb
+   |-- single_element_compression.prt
+   |-- single_element_compression.sta
+   |-- single_element_compression.stdout
+   |-- single_element_geometry.cub
+   |-- single_element_geometry.stdout
+   |-- single_element_mesh.cub
+   |-- single_element_mesh.inp
+   |-- single_element_mesh.stdout
+   |-- single_element_partition.cub
+   `-- single_element_partition.stdout
 
-    0 directories, 34 files
+   0 directories, 23 files
