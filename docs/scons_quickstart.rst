@@ -56,8 +56,10 @@ Output Files
    $ tree build_scons_quickstart/
    build_scons_quickstart/
    |-- abaqus.rpy
-   |-- abaqus.rpy.1
-   |-- abaqus.rpy.2
+   |-- abaqus.rpy.10
+   |-- abaqus.rpy.7
+   |-- abaqus.rpy.8
+   |-- abaqus.rpy.9
    |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
@@ -72,15 +74,6 @@ Output Files
    |-- single_element_compression.odb
    |-- single_element_compression.prt
    |-- single_element_compression.sta
-   |-- single_element_compression_DATACHECK.023
-   |-- single_element_compression_DATACHECK.com
-   |-- single_element_compression_DATACHECK.dat
-   |-- single_element_compression_DATACHECK.mdl
-   |-- single_element_compression_DATACHECK.msg
-   |-- single_element_compression_DATACHECK.odb
-   |-- single_element_compression_DATACHECK.prt
-   |-- single_element_compression_DATACHECK.sim
-   |-- single_element_compression_DATACHECK.stt
    |-- single_element_geometry.cae
    |-- single_element_geometry.jnl
    |-- single_element_mesh.cae
@@ -88,5 +81,5 @@ Output Files
    |-- single_element_mesh.jnl
    |-- single_element_partition.cae
    `-- single_element_partition.jnl
-   
-   0 directories, 33 files
+
+   0 directories, 26 files
