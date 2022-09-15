@@ -51,10 +51,19 @@ A mock material definition was developed using the following parameters in the m
 Results
 *******
 
-.. figure:: stress_strain_comparison.png
-   :align: center
+.. only:: html
 
-   Stress-strain
+   .. figure:: stress_strain_comparison.png
+      :align: center
+
+      Stress-strain
+
+.. only:: latex
+
+   .. figure:: stress_strain_comparison.pdf
+      :align: center
+
+      Stress-strain
 
 ***********
 Conclusions
