@@ -92,7 +92,7 @@ def get_parser():
     default_global_seed = 1.0
 
     cli_description = "Mesh the simple rectangle geometry partitioned by ``single_element_partition.py`` " \
-                      "and write an ``output_file``.cae Abaqus model file."
+                      "and write an ``output_file``.cae Abaqus model file and ``output_file``.inp orphan mesh file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=os.path.basename(filename))
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,

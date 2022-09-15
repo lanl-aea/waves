@@ -63,7 +63,8 @@ def get_parser():
     default_height = 1.0
 
     prog = f"python {script_name.name} "
-    cli_description = "Create a simple rectangle geometry and write an ``output_file``.cub Cubit model file."
+    cli_description = "Partition the simple rectangle geometry created by ``single_element_geometry.py`` " \
+                      "and write an ``output_file``.cub Cubit model file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
