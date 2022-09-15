@@ -173,15 +173,16 @@ def quickstart(directory='', overwrite=False):
         return 1
     else:
         print(f"Project root path: '{directory}'", file=sys.stdout)
-    if _settings._installed_quickstart_directory.exists():
-        quickstart_contents = list(_settings._installed_quickstart_directory.iterdir())
-        print("Copying the following to project root path: ", file=sys.stdout)
-        [print(f"\t{item}", file=sys.stdout) for item in quickstart_contents]
-    else:
+
+    if not _settings._installed_quickstart_directory.exists():
         # This should only be reached if the package installation structure doesn't match the assumptions in
         # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
         print('Could not find package quickstart directory', file=sys.stderr)
         return 1
+    # TODO: Print the full copy directory tree with the same logic used in the copy command
+    quickstart_contents = list(_settings._installed_quickstart_directory.iterdir())
+    print("Copying the following to project root path: ", file=sys.stdout)
+    [print(f"\t{item}", file=sys.stdout) for item in quickstart_contents]
 
     # Do the work
     ignore_patterns = shutil.ignore_patterns("*.pyc", "__pycache__")
