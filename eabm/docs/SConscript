@@ -34,6 +34,8 @@ documentation_file_list = [
     'glossary.rst',
     'index.rst',
     'mesh_convergence.rst',
+    'mesh_convergence_stress.png',
+    'mesh_convergence_stress.pdf',
     'nominal.rst',
     'project_brief.txt',
     'references.bib',
