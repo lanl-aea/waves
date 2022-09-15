@@ -11,6 +11,11 @@ It is a single 2D square element oriented in the 1-2 plane consisting of a simpl
 conditions, and a simple uniaxial compression loading scheme. The simulation preparation and solve are conducted in
 Abaqus :cite:`ABAQUS`.
 
+.. figure:: waves_logo_brandmark_smaller.png
+   :align: center
+
+   Placeholder for simulation schematic
+
 The single element model is comprised of a single 2D square part with nominal dimensions 1mm x 1mm, but which can be
 parameterized by width and height by the journal file: :meth:`eabm_package.abaqus.single_element_geometry`.
 
@@ -28,6 +33,7 @@ continuum elements can be found in the Abaqus documentation section titled "Soli
 A mock material definition was developed using the following parameters in the mmNsK unit system:
 
 .. table:: Material Parameters
+   :align: center
 
    ================== ========= ==================
    **Parameter name** **Value** **Units**
