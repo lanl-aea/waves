@@ -27,9 +27,10 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     * ``ELEMENTS`` - all part elements
 
-    :param str input_file: The Abaqus model file created by single_element_partition.py without extension, e.g.
-        ``input_file``.cae
-    :param str output_file: The output file for the Abaqus model without extension, e.g. ``output_file``.cae
+    :param str input_file: The Abaqus model file created by ``single_element_geometry.py`` without extension. Will be
+        appended with the required extension, e.g. ``input_file``.cae
+    :param str output_file: The output file for the Abaqus model without extension. Will be appended with the required
+        extension, e.g. ``output_file``.cae
     :param str model_name: The name of the Abaqus model
     :param str part_name: The name of the Abaqus part
     :param float global_seed: The global mesh seed size
@@ -95,10 +96,11 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=os.path.basename(filename))
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
-                        help="The Abaqus model file created by single_element_partition.py without extension, " \
-                             "e.g. ``input_file``.cae")
+                        help="The Abaqus model file created by ``single_element_geometry.py`` without extension. " \
+                             "Will be appended with the required extension, e.g. ``input_file``.cae")
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
-                        help="The output file for the Abaqus model without extension, e.g. ``output_file``.cae")
+                        help="The output file for the Abaqus model without extension. Will be appended with the " \
+                             "required extension, e.g. ``output_file``.cae")
     parser.add_argument('-m', '--model-name', type=str, default=default_part_name,
                         help="The name of the Abaqus model")
     parser.add_argument('-p', '--part-name', type=str, default=default_part_name,
