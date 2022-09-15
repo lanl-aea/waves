@@ -18,6 +18,7 @@ Documentation
 - Update tutorial output examples to match the separation of datacheck and simulation tasks performed in :issue:`244`,
   :merge:`250`. Some of the tutorial body text was missed in the update (:issue:`298`, :merge:`307`). By `Kyle
   Brindley`_.
+- Update the Cubit journal file descriptions (:issue:`299`, :merge:`308`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

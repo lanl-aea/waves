@@ -7,9 +7,9 @@ import cubit
 
 
 def main(input_file, output_file, global_seed):
-    """Create a simple rectangle geometry.
+    """Mesh the simple rectangle geometry partitioned by ``single_element_partition.py``
 
-    This script creates a simple Cubit model with a single rectangle part.
+    This script meshes a simple Cubit model with a single rectangle part.
 
     **Node sets:**
 
@@ -17,6 +17,10 @@ def main(input_file, output_file, global_seed):
     * ``bottom_right`` - bottom right node
     * ``top_right`` - top right node
     * ``top_left`` - top left node
+    * ``top`` - top edge nodes
+    * ``bottom`` - bottom edge nodes
+    * ``left`` - left edge nodes
+    * ``right`` - right edge nodes
 
     **Element sets:**
 

@@ -7,11 +7,11 @@ import cubit
 
 
 def main(input_file, output_file, width, height):
-    """Create a simple rectangle geometry.
+    """Partition the simple rectangle geometry created by ``single_element_geometry.py``
 
-    This script creates a simple Cubit model with a single rectangle part.
+    This script partitions a simple Cubit model with a single rectangle part.
 
-    **Feature labels:**
+    **Element sets:**
 
     * ``top`` - top edge
     * ``bottom`` - bottom edge
