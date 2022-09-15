@@ -15,3 +15,9 @@ _set_coordinate_key = "parameter_sets"
 _quantiles_attribute_key = "_quantiles"
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _installed_quickstart_directory = _project_root_abspath / "quickstart"
+
+# For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
+# Enables ``python -m waves.waves quickstart ...`` execution from repository root directory
+_repository_quickstart_directory = _project_root_abspath.parent / "quickstart"
+if not _installed_quickstart_directory.exists() and _repository_quickstart_directory.exists():
+    _installed_quickstart_directory = _repository_quickstart_directory
