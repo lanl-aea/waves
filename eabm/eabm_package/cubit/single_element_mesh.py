@@ -17,6 +17,10 @@ def main(input_file, output_file, global_seed):
     * ``bottom_right`` - bottom right node
     * ``top_right`` - top right node
     * ``top_left`` - top left node
+    * ``top`` - top edge nodes
+    * ``bottom`` - bottom edge nodes
+    * ``left`` - left edge nodes
+    * ``right`` - right edge nodes
 
     **Element sets:**
 

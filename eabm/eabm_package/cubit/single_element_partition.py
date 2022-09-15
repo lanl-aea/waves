@@ -11,7 +11,7 @@ def main(input_file, output_file, width, height):
 
     This script partitions a simple Cubit model with a single rectangle part.
 
-    **Feature labels:**
+    **Element sets:**
 
     * ``top`` - top edge
     * ``bottom`` - bottom edge
