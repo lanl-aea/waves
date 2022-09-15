@@ -27,6 +27,8 @@ Internal Changes
   :merge:`301`). By `Kyle Brindley`_.
 - Dereference symbolic links during ``copy_substitute`` tasks by default (:issue:`297`, :merge:`303`). By `Kyle
   Brindley`_.
+- Ignore ``*.pyc`` and cache files during ``waves quickstart`` project template creation (:issue:`300`, :merge:`310`).
+  By `Kyle Brindley`_.
 
 Enhancements
 ============
