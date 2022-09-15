@@ -128,8 +128,6 @@ Build Targets
    Copy("build/tutorial_cubit/materials.inp", "eabm_package/abaqus/materials.inp")
    Copy("build/tutorial_cubit/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_cubit/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2021 -information environment > single_element_compression_DATACHECK.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2021 -job single_element_compression_DATACHECK -input single_element_compression -double both -datacheck -interactive -ask_delete no > single_element_compression_DATACHECK.stdout 2>&1
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2021 -information environment > single_element_compression.abaqus_v6.env
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2021 -job single_element_compression -input single_element_compression -double both -interactive -ask_delete no > single_element_compression.stdout 2>&1
    scons: done building targets.
