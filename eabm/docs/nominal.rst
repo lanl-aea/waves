@@ -17,7 +17,7 @@ Abaqus :cite:`ABAQUS`.
    Placeholder for simulation schematic
 
 The single element model is comprised of a single 2D square part with nominal dimensions 1mm x 1mm, but which can be
-parameterized by width and height by the journal file: :meth:`eabm_package.abaqus.single_element_geometry`.
+parameterized by width and height by the journal file: :mod:`eabm_package.abaqus.single_element_geometry`.
 
 The bottom left node of the geometry is restricted in all six translational/rotational degrees of freedom using an
 encastre boundary condition. The bottom edge uses a roller boundary condition, with no translation in the 2 direction,
@@ -27,8 +27,9 @@ Loading is prescribed as a uniaxial displacement of the top edge of the part in 
 with a nominal displacement of 0.1mm, which can be parameterized in the workflow.
 
 A continuum plain strain (CPE4) element type is used for the single element model. The nominal mesh is 1 element for the
-square geometry, but this can be parameterized in :meth:`eabm_package.abaqus.single_element_mesh`. More about Abaqus
-continuum elements can be found in the Abaqus documentation section titled "Solid Continuum Elements" :cite:`ABAQUS`.
+square geometry, but this can be parameterized by the journal file :mod:`eabm_package.abaqus.single_element_mesh`. More
+about Abaqus continuum elements can be found in the Abaqus documentation section titled "Solid Continuum Elements"
+:cite:`ABAQUS`.
 
 A mock material definition was developed using the following parameters in the mmNsK unit system:
 
