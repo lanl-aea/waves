@@ -38,6 +38,8 @@ documentation_file_list = [
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
+    'stress_strain_comparison.pdf',
+    'stress_strain_comparison.png',
     'targets.txt',
     'user.rst',
     'waves_logo_brandmark_smaller.png',
