@@ -13,6 +13,12 @@ New Features
 - Add a ``waves quickstart`` subcommand to copy the single element compression project as a template for a new project.
   Currently limited to the "SCons-WAVES quickstart" tutorial files. (:issue:`284`, :merge:`300`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Update tutorial output examples to match the separation of datacheck and simulation tasks performed in :issue:`244`,
+  :merge:`250`. Some of the tutorial body text was missed in the update (:issue:`298`, :merge:`307`). By `Kyle
+  Brindley`_.
+
 Internal Changes
 ================
 - Do not install as the deprecated zipped EGG file (:issue:`290`, :merge:`301`). By `Kyle Brindley`_.
