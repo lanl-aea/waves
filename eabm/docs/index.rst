@@ -14,6 +14,18 @@
    devops
 
 .. toctree::
+   :maxdepth: 2
+   :caption: Nominal
+
+   nominal
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Mesh Convergence
+
+   mesh_convergence
+
+.. toctree::
    :caption: Help & Reference
    :maxdepth: 1
 

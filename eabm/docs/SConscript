@@ -33,6 +33,8 @@ documentation_file_list = [
     'documentation.txt',
     'glossary.rst',
     'index.rst',
+    'mesh_convergence.rst',
+    'nominal.rst',
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
