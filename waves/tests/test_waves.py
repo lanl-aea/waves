@@ -67,27 +67,27 @@ def test_build():
 def test_quickstart():
     # Project directory does not exist. Copy the quickstart file tree.
     with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.iterdir', side_effect=[['quickstart_directory']]), \
+         patch('pathlib.Path.iterdir', return_value=['quickstart_directory']), \
          patch('pathlib.Path.exists', side_effect=[False, True]):
         return_code = waves.quickstart()
         assert return_code == 0
         mock_shutil_copytree.assert_called_once()
 
-    # Project directory exists and is empty. Don't copy the quickstart file tree.
+    # Project directory exists. Don't copy the quickstart file tree.
     with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.iterdir', side_effect=[[], ['quickstart_directory']]), \
+         patch('pathlib.Path.iterdir', return_value=['quickstart_directory']), \
          patch('pathlib.Path.exists', side_effect=[True, True]):
         return_code = waves.quickstart()
         assert return_code == 1
         mock_shutil_copytree.assert_not_called()
 
-    # Project directory exists, but is not-empty. Don't copy the quickstart file tree.
+    # Project directory exists, but we want to overwrite contents. Copy the quickstart file tree.
     with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.iterdir', side_effect=[['project_directory']]), \
+         patch('pathlib.Path.iterdir', return_value=['quickstart_directory']), \
          patch('pathlib.Path.exists', side_effect=[True, True]):
-        return_code = waves.quickstart()
-        assert return_code == 1
-        mock_shutil_copytree.assert_not_called()
+        return_code = waves.quickstart(overwrite=True)
+        assert return_code == 0
+        mock_shutil_copytree.assert_called_once()
 
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.

@@ -24,7 +24,7 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
-        return_code = quickstart(args.PROJECT_DIRECTORY)
+        return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite)
     else:
         parser.print_help()
 
@@ -96,11 +96,12 @@ def get_parser():
                     "the WAVES tutorials.",
         parents=[quickstart_parser])
     quickstart_parser.add_argument("PROJECT_DIRECTORY",
-        nargs='?',
-        help="Directory for new project template (default: PWD).",
+        help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not exist.",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
-
+    quickstart_parser.add_argument("--overwrite",
+        action="store_true",
+        help="Overwrite any existing files and directories (default %(deafult)s).")
 
     return main_parser
 
@@ -159,14 +160,14 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart(directory=''):
+def quickstart(directory='', overwrite=False):
 
     # User I/O
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     directory = pathlib.Path(directory).resolve()
     # TODO: future versions can be more subtle and only error out when directory content filenames clash with the
     # quickstart files.
-    if directory.exists():
+    if directory.exists() and not overwrite:
         print(f"Project root path: '{directory}' exists. Please specify a new directory.",
               file=sys.stderr)
         return 1
@@ -184,7 +185,9 @@ def quickstart(directory=''):
 
     # Do the work
     ignore_patterns = shutil.ignore_patterns("*.pyc", "__pycache__")
-    shutil.copytree(_settings._installed_quickstart_directory, directory, ignore=ignore_patterns)
+    shutil.copytree(_settings._installed_quickstart_directory, directory,
+                    ignore=ignore_patterns,
+                    dirs_exist_ok=overwrite)
 
     return 0
 
