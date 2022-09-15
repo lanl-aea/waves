@@ -104,17 +104,8 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    |-- single_element_compression.odb
    |-- single_element_compression.prt
    |-- single_element_compression.sta
-   |-- single_element_compression_DATACHECK.023
-   |-- single_element_compression_DATACHECK.com
-   |-- single_element_compression_DATACHECK.dat
-   |-- single_element_compression_DATACHECK.mdl
-   |-- single_element_compression_DATACHECK.msg
-   |-- single_element_compression_DATACHECK.odb
-   |-- single_element_compression_DATACHECK.prt
-   |-- single_element_compression_DATACHECK.sim
-   |-- single_element_compression_DATACHECK.stt
    |-- single_element_mesh.cae
    |-- single_element_mesh.inp
    `-- single_element_mesh.jnl
 
-   0 directories, 29 files
+   0 directories, 20 files
