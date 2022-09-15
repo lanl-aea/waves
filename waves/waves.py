@@ -166,8 +166,8 @@ def quickstart(directory=''):
     directory = pathlib.Path(directory).resolve()
     # TODO: future versions can be more subtle and only error out when directory content filenames clash with the
     # quickstart files.
-    if directory.exists() and any(directory.iterdir()):
-        print(f"Project root path: '{directory}' exists and is non-empty. Please specify an empty or new directory.",
+    if directory.exists():
+        print(f"Project root path: '{directory}' exists. Please specify a new directory.",
               file=sys.stderr)
         return 1
     else:
