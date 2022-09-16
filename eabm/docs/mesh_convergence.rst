@@ -56,3 +56,8 @@ simulation journal files for applications to future parameter studies of materia
 ***********
 Future Work
 ***********
+
+Future work will apply more complex material models and a template sensitivity study between a more realistic QoI,
+structural strength, and the parameterized geometry, and material parameters. Following a sensitivity study, uncertainty
+propagation (UP) may be performed with representative bounds on input uncertainty, which will be stand in templates for
+known experimental measurement uncertain on the input parameters.
