@@ -37,7 +37,4 @@ Results
 Conclusions
 ***********
 
-The stress-strain plot shows that the simulation model is acting as expected with a linear elastic response through a
-10% compressive strain load. This verifies that the geometry journal file and linear elastic material model are
-implemented correctly and provides confidence in the journal file and simulation input files for future simulations and
-analysis.
+.. include:: nominal_conclusions.txt
