@@ -82,8 +82,6 @@ test:
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
-    - eabm/README.rst
-    - eabm/SC*
     - eabm/*SConstruct
     - eabm/eabm_package/abaqus/*
     - eabm/eabm_package/cubit/*
