@@ -6,10 +6,10 @@ Single Element: Nominal
 Simulation
 **********
 
-The single element model is representative of the simplest model possible to exercise the capabilities of the workflow.
-It is a single 2D square element oriented in the 1-2 plane consisting of a simple material model, simple boundary
-conditions, and a simple uniaxial compression loading scheme. The simulation preparation and solve are conducted in
-Abaqus :cite:`ABAQUS`.
+The single element model is representative of the simplest model possible to exercise the capabilities of a WAVES
+workflow. It is a single 2D square element oriented in the 1-2 plane consisting of a simple material model, simple
+boundary conditions, and a simple uniaxial compression loading scheme. The simulation preparation and solve are
+conducted in Abaqus :cite:`ABAQUS`.
 
 .. figure:: waves_logo_brandmark_smaller.png
    :align: center

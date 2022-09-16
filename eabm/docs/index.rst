@@ -15,14 +15,9 @@
 
 .. toctree::
    :maxdepth: 2
-   :caption: Nominal
+   :caption: Analyses
 
    nominal
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Mesh Convergence
-
    mesh_convergence
 
 .. toctree::
