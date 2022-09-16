@@ -122,9 +122,9 @@ test:
     # Uses "rm" instead of "scons --clean" to ensure a complete re-build even if the tutorial files and the default
     # SConstruct file target definitions differ or something is incompletely cleaned.
     - rm -rf build/
-    - scons . --jobs=4 --keep-going --unconditional-build --ignore-documentation
+    - scons . --jobs=4 --keep-going --unconditional-build
     # Quickstart regression tests
     - quickstart_regression_directory="${test_root}/quickstart_test"
     - waves quickstart ${quickstart_regression_directory}
     - cd ${quickstart_regression_directory}
-    - scons . --jobs=4
+    - scons . --jobs=4 --ignore-documentation
