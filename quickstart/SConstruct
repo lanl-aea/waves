@@ -38,6 +38,7 @@ documentation_source_dir = 'docs'
 project_dir = pathlib.Path(Dir('.').abspath)
 eabm_package_dir = 'eabm_package'
 project_variables = {
+    'project_name': project_name,
     'project_dir': str(project_dir),
     'version': '0.1.0',
     'eabm_package_dir': eabm_package_dir,
