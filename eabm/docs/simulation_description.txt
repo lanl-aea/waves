@@ -1,0 +1,20 @@
+The single element model is representative of the simplest model possible to exercise the capabilities of a WAVES
+workflow. It is a single 2D square element oriented in the 1-2 plane consisting of a simple material model, simple
+boundary conditions, and a simple uniaxial compression loading scheme. The simulation preparation and solve are
+conducted in Abaqus :cite:`ABAQUS`.
+
+.. figure:: single_element_schematic.*
+   :align: center
+   :scale: 25%
+
+   Simulation schematic
+
+The single element model is comprised of a single 2D square part with nominal dimensions 1mm x 1mm, but which can be
+parameterized by width and height by the journal file: :mod:`eabm_package.abaqus.single_element_geometry`.
+
+The bottom left node of the geometry is restricted in all six translational/rotational degrees of freedom using an
+encastre boundary condition. The bottom edge uses a roller boundary condition, with no translation in the 2 direction,
+but is free to move in the 1 direction.
+
+Loading is prescribed as a uniaxial displacement of the top edge of the part in the negative 2 direction (compression),
+with a nominal displacement of 0.1mm, which can be parameterized in the workflow.

@@ -6,11 +6,7 @@ Single Element: Mesh Convergence
 Simulation
 **********
 
-.. figure:: single_element_schematic.*
-   :align: center
-   :scale: 25%
-
-   Simulation schematic
+.. include:: simulation_description.txt
 
 *******
 Results
