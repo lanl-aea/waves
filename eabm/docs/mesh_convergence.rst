@@ -18,10 +18,10 @@ convergence study includes four seed sizes in the table below.
    ================= ============================
    **Parameter Set** **global seed** :math:`[mm]`
    ----------------- ----------------------------
-   0                 1.0 
-   1                 0.5 
-   2                 0.25 
-   3                 0.125 
+   0                 1.0
+   1                 0.5
+   2                 0.25
+   3                 0.125
    ================= ============================
 
 .. include:: simulation_material.txt
@@ -47,6 +47,11 @@ Results
 ***********
 Conclusions
 ***********
+
+As expected from the simple loading and boundary conditions, the mesh convergence study shows that the quantity of
+interest (QoI), stress in the loading direction, converges with a single element. This verifies that the parameterized
+implementation of the load and boundary conditions correctly handles the mesh density and provides confidence in the
+simulation journal files for applications to future parameter studies of material properties and load.
 
 ***********
 Future Work

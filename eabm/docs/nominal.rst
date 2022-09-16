@@ -37,6 +37,9 @@ Results
 Conclusions
 ***********
 
+The stress-strain plot shows that the simulation model is acting as expected with a linear elastic response through a
+10% compressive strain load.
+
 ***********
 Future Work
 ***********
