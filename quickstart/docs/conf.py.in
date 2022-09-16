@@ -1,6 +1,6 @@
 import sys
-import os
 import pathlib
+import datetime
 import unittest.mock
 
 # -- Project information -----------------------------------------------------
@@ -8,6 +8,21 @@ import unittest.mock
 project = '@project_name@'
 VERSION = '@version@'
 project_dir = pathlib.Path('@project_dir@').resolve()
+
+# Name, Group, Email
+authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
+           ('Prabhu S. Khalsa', 'W-13', '<pkhalsa@lanl.gov>'),
+           ('Thomas Roberts', 'W-13', '<tproberts@lanl.gov>'),
+           ('Sergio Cordova', 'W-13', '<sergioc@lanl.gov>'),
+           ('Matthew Fister', 'W-13', '<mwfister@lanl.gov>'),
+           ('Scott Ouellette', 'W-13', '<souellette@lanl.gov>')]
+author_latex = ''
+author_manpage = ''
+for author, group, email in authors:
+    author_latex += f"{author}, {group} " + r'\and '
+    author_manpage += f"{author} {email}, "
+author_latex = author_latex.rstrip(r'\and ')
+author_manpage = author_manpage.rstrip(', ')
 
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
@@ -21,13 +36,15 @@ for mod_name in mock_modules:
 
 release = VERSION
 version = release
-copyright = '2022, Triad National Security, LLC.'
+copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
 
 # ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # -- Project Variables -------------------------------------------------------
 rst_prolog = f'.. |project| replace:: {project}\n.. include:: targets.txt'
 
 # -- General configuration ---------------------------------------------------
+master_doc = 'index'
+
 # Add custom style sheet to make the html docs wider
 def setup(app):
     app.add_css_file('custom.css')
@@ -39,13 +56,6 @@ extensions = ['sphinx.ext.autodoc',
               'sphinxcontrib.bibtex',
               'sphinxarg.ext']
 bibtex_bibfiles = ['references.bib']
-
-# Links to PRs, Jira issues.
-extlinks = {
-     "merge": ("https://re-git.lanl.gov/aea/python-projects/waves/-/merge_requests/%s", "MERGE-%s"),
-     "issue": ("https://re-git.lanl.gov/aea/python-projects/waves/-/issues/%s", "ISSUE-%s"),
-}
-
 templates_path = ['_templates']
 source_suffix = ['.rst']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -54,3 +64,23 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 html_logo = 'waves_logo_brandmark_smaller.png'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+
+# -- Options for LaTeX output ---------------------------------------------
+copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
+
+Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
+Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government
+has rights to use, reproduce, and distribute this information. The public may copy and use this information without
+charge, provided that this Notice and any statement of authorship are reproduced on all copies. Neither the Government
+nor Triad makes any warranty, express or implied, or assumes any liability or responsibility for the use of this
+information.
+"""
+
+latex_elements = {
+    'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
+    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
+}
+latex_documents = [
+    (master_doc, project.lower() + '.tex', project.upper(),
+     author_latex, 'manual'),
+]

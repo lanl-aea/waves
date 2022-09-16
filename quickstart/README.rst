@@ -53,7 +53,11 @@ Developers
 ==========
 
 * `Kyle Brindley`_
+* `Prabhu Khalsa`_
 * `Thomas Roberts`_
+* `Sergio Cordova`_
+* `Matthew Fister`_
+* `Scott Ouellette`_
 
 ********************
 Activate Environment
