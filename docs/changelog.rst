@@ -21,6 +21,7 @@ Documentation
 - Update the Cubit journal file descriptions (:issue:`299`, :merge:`308`). By `Kyle Brindley`_.
 - Clarify input and output file extension behavior in the journal file API and CLI (:issue:`301`, :merge:`311`). By
   `Kyle Brindley`_.
+- Add analysis report examples to the WAVES-EABM documentation (:issue:`202`, :merge:`313`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

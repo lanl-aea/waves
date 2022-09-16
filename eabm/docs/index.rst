@@ -9,10 +9,17 @@
    :caption: Model Repository
 
    user
-   theory
    api
    cli
    devops
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Analyses
+
+   simulation_summary
+   nominal
+   mesh_convergence
 
 .. toctree::
    :caption: Help & Reference

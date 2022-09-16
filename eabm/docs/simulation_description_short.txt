@@ -1,0 +1,4 @@
+The single element model is representative of the simplest model possible to exercise the capabilities of a WAVES
+workflow. It is a single 2D square, plane-strain element oriented in the 1-2 plane consisting of a mock, linear-elastic
+material model, simple boundary conditions, and applied uniaxial compression. The simulation preparation and solve are
+conducted in Abaqus :cite:`ABAQUS`.
