@@ -12,6 +12,7 @@ New Features
 ============
 - Add a ``waves quickstart`` subcommand to copy the single element compression project as a template for a new project.
   Currently limited to the "SCons-WAVES quickstart" tutorial files. (:issue:`284`, :merge:`300`). By `Kyle Brindley`_.
+- Add a documentation template to the ``waves quickstart`` subcommand (:issue:`291`, :merge:`314`). By `Kyle Brindley`_.
 
 Documentation
 =============

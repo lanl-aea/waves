@@ -69,12 +69,21 @@ env.Clean(html, Dir('html'))
 env.AlwaysBuild(html)
 alias_list.extend(env.Alias('html', html))
 
-# Collector alias to build all documentation
-alias_list.extend(env.Alias('documentation', html))
+latexpdf = env.Command(
+    target=[Dir('latex')],
+    source=documentation_file_list,
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
+env.Clean(latexpdf, Dir('latex'))
+env.AlwaysBuild(latexpdf)
+alias_list.extend(env.Alias('latexpdf', latexpdf))
 
-if not env['unconditional_build'] and not env['sphinx_build']:
+# Collector alias to build all documentation
+alias_list.extend(env.Alias('documentation', html + latexpdf))
+
+if not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore(['.', 'html', 'html'], html)
+    Ignore(['.', 'latex', 'latexpdf'], latexpdf)
 else:
     env.Default(html)
 

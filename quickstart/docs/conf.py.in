@@ -4,8 +4,10 @@ import datetime
 import unittest.mock
 
 # -- Project information -----------------------------------------------------
+# Meta data from SCons project
+project = '@project_name@'
+VERSION = '@version@'
 project_dir = pathlib.Path('@project_dir@').resolve()
-eabm_dir = project_dir / pathlib.Path('@eabm_dir@')
 
 # Name, Group, Email
 authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
@@ -24,26 +26,21 @@ author_manpage = author_manpage.rstrip(', ')
 
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
-sys.path.insert(0, str(eabm_dir))
 
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.
 mock_modules = ['abaqus', 'abaqusConstants', 'mesh', 'cubit', 'scipy', 'scipy.stats', 'xarray', 'pyyaml', 'h5py',
-                'numpy', 'matplotlib', 'matplotlib.pyplot']
+                'numpy', 'matplotlib', 'matplotlib.pyplot', 'waves']
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
-from waves import __version__
-from waves._settings import _project_name_short
-
-project = _project_name_short
-release = __version__
+release = VERSION
 version = release
 copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
 
-#============================================================================================== SPHINX CONFIGURATION ===
+# ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # -- Project Variables -------------------------------------------------------
-rst_prolog = f'.. |project| replace:: {_project_name_short}\n.. include:: targets.txt'
+rst_prolog = f'.. |project| replace:: {project}\n.. include:: targets.txt'
 
 # -- General configuration ---------------------------------------------------
 master_doc = 'index'
@@ -59,13 +56,6 @@ extensions = ['sphinx.ext.autodoc',
               'sphinxcontrib.bibtex',
               'sphinxarg.ext']
 bibtex_bibfiles = ['references.bib']
-
-# Links to PRs, Jira issues.
-extlinks = {
-     "merge": ("https://re-git.lanl.gov/aea/python-projects/waves/-/merge_requests/%s", "MERGE-%s"),
-     "issue": ("https://re-git.lanl.gov/aea/python-projects/waves/-/issues/%s", "ISSUE-%s"),
-}
-
 templates_path = ['_templates']
 source_suffix = ['.rst']
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -93,10 +83,4 @@ latex_elements = {
 latex_documents = [
     (master_doc, project.lower() + '.tex', project.upper(),
      author_latex, 'manual'),
-]
-
-# -- Options for manual page output ---------------------------------------
-man_pages = [
-    (master_doc, project.lower(), project.upper(),
-     [author_manpage], 1)
 ]
