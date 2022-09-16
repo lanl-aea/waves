@@ -185,7 +185,7 @@ def quickstart(directory='', overwrite=False):
     [print(f"\t{item}", file=sys.stdout) for item in quickstart_contents]
 
     # Do the work
-    ignore_patterns = shutil.ignore_patterns("*.pyc", "__pycache__")
+    ignore_patterns = shutil.ignore_patterns("*.pyc", "__pycache__", "build")
     shutil.copytree(_settings._installed_quickstart_directory, directory,
                     ignore=ignore_patterns,
                     dirs_exist_ok=overwrite)
