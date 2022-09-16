@@ -29,13 +29,17 @@ env = Environment(ENV=os.environ.copy(),
 env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
+env['sphinx_build'] = waves.builders.find_program(['sphinx-build'], env)
 env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
 
 # Set project internal variables and variable substitution dictionaries
+project_name = 'WAVES-EABM'
+documentation_source_dir = 'docs'
 project_dir = pathlib.Path(Dir('.').abspath)
 eabm_package_dir = 'eabm_package'
 project_variables = {
     'project_dir': str(project_dir),
+    'version': '0.1.0',
     'eabm_package_dir': eabm_package_dir,
     'eabm_package_abspath': str(project_dir / eabm_package_dir),
     'datacheck_alias': 'datacheck'
@@ -51,8 +55,14 @@ env.Append(BUILDERS={
     'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
     'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus']),
-    'PythonScript': waves.builders.python_script()
+    'PythonScript': waves.builders.python_script(),
+    'CondaEnvironment': waves.builders.conda_environment()
 })
+
+# Add documentation target(s)
+build_dir = variant_dir_base / documentation_source_dir
+SConscript(dirs='.', variant_dir=str(variant_dir_base), exports=['env', 'documentation_source_dir'], duplicate=False)
+docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_variables'])
 
 # Add simulation targets
 eabm_simulation_directories = [
@@ -77,7 +87,7 @@ try:
     alias_list = default_ans
 except ImportError:
     # Fall back to manually constructed alias list(s)
-    alias_list = eabm_simulation_directories
+    alias_list = docs_aliases + eabm_simulation_directories
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
