@@ -13,21 +13,7 @@ square geometry, but this can be parameterized by the journal file :mod:`eabm_pa
 about Abaqus continuum elements can be found in the Abaqus documentation section titled "Solid Continuum Elements"
 :cite:`ABAQUS`.
 
-A mock material definition was developed using the following parameters in the mmNsK unit system:
-
-.. table:: Material Parameters
-   :align: center
-
-   ================== ========= ==================
-   **Parameter name** **Value** **Units**
-   ------------------ --------- ------------------
-   Density            2.7E-09   :math:`[Mg/mm^3]`
-   Elastic Modulus    100       :math:`[MPa]`
-   Poisson's Ratio    0.3       :math:`[-]`
-   Specific Heat      8.96E08   :math:`[mJ/(MgK)]`
-   Conductivity       132       :math:`[mW/(mmK)]`
-   Thermal Expansion  23.58E-6  :math:`[1/K]`
-   ================== ========= ==================
+.. include:: simulation_material.txt
 
 *******
 Results

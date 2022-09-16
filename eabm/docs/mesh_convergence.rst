@@ -8,6 +8,24 @@ Simulation
 
 .. include:: simulation_description.txt
 
+A continuum plain strain (CPE4) element type is used for the single element model. The mesh convergence study varies the
+mesh seed size through the ``global_seed`` parameter used by :mod:`eabm_package.abaqus.single_element_mesh`. The mesh
+convergence study includes four seed sizes in the table below.
+
+.. table:: Mesh convergence parameters
+   :align: center
+
+   ================= ============================
+   **Parameter Set** **global seed** :math:`[mm]`
+   ----------------- ----------------------------
+   0                 1.0 
+   1                 0.5 
+   2                 0.25 
+   3                 0.125 
+   ================= ============================
+
+.. include:: simulation_material.txt
+
 *******
 Results
 *******

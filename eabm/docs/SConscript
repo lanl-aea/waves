@@ -41,6 +41,7 @@ documentation_file_list = [
     'references.bib',
     'release_philosophy.rst',
     'simulation_description.txt',
+    'simulation_material.txt',
     'single_element_schematic.png',
     'single_element_schematic.pdf',
     'stress_strain_comparison.pdf',
