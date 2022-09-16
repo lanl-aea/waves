@@ -35,14 +35,6 @@ AddOption(
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
 AddOption(
-    "--ignore-documentation",
-    dest="ignore_documentation",
-    default=False,
-    action="store_true",
-    help="Boolean flag to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the " \
-         "'--unconditional-build' option. (default: '%default')"
-)
-AddOption(
     "--unconditional-build",
     dest="unconditional_build",
     default=False,
@@ -54,7 +46,6 @@ AddOption(
 # Inherit user's full environment and set project options
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
-                  ignore_documentation=GetOption("ignore_documentation"),
                   unconditional_build=GetOption("unconditional_build"))
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
@@ -64,7 +55,6 @@ env['cubit'] = waves.builders.find_program(['cubit'], env)
 
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM'
-documentation_source_dir = 'docs'
 project_variables = {
     'project_name': project_name,
     'project_dir': Dir('.').abspath,
@@ -88,16 +78,6 @@ env.Append(BUILDERS={
     'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus']),
     'PythonScript': waves.builders.python_script(),
     'CondaEnvironment': waves.builders.conda_environment()})
-
-# Add documentation target(s)
-# The 'ignore_documentation' variable is used by WAVES during packaging. Not required for an EABM.
-if not env['ignore_documentation']:
-    build_dir = variant_dir_base / documentation_source_dir
-    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports=['env', 'documentation_source_dir'], duplicate=False)
-    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_variables'])
-else:
-    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
-    docs_aliases = []
 
 # Create a datacheck alias for reduced cost regression testing
 env.Alias(env['datacheck_alias'])
