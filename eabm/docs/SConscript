@@ -40,6 +40,8 @@ documentation_file_list = [
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
+    'single_element_schematic.png',
+    'single_element_schematic.pdf',
     'stress_strain_comparison.pdf',
     'stress_strain_comparison.png',
     'targets.txt',

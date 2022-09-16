@@ -11,10 +11,11 @@ workflow. It is a single 2D square element oriented in the 1-2 plane consisting 
 boundary conditions, and a simple uniaxial compression loading scheme. The simulation preparation and solve are
 conducted in Abaqus :cite:`ABAQUS`.
 
-.. figure:: waves_logo_brandmark_smaller.png
+.. figure:: single_element_schematic.*
    :align: center
+   :scale: 25%
 
-   Placeholder for simulation schematic
+   Simulation schematic
 
 The single element model is comprised of a single 2D square part with nominal dimensions 1mm x 1mm, but which can be
 parameterized by width and height by the journal file: :mod:`eabm_package.abaqus.single_element_geometry`.
