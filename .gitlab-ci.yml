@@ -224,7 +224,7 @@ pages:
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
     - unset LD_LIBRARY_PATH
     # Set job-wide variables and directories
-    - repo_root=$PWD
+    - project_root=$PWD
     - rm -rf public && mkdir -p public
     - cp docs/_static/index.html public
     # Every documentation version must be re-built for *every* gitlab-pages job execution
@@ -234,7 +234,7 @@ pages:
     - documentation_branches="main dev"
     - |
         for ref in ${documentation_branches}; do
-            cd ${repo_root}
+            cd ${project_root}
             # TODO: match the branch to the correct module. unload/load for each branch.
             # https://re-git.lanl.gov/aea/python-projects/waves/-/boards
             git checkout $ref
@@ -244,15 +244,15 @@ pages:
             # Clean instead of "rm" to help catch incomplete target clean operations.
             scons . --clean --unconditional-build
             scons html --unconditional-build
-            cp -r build/docs/html/* ${repo_root}/public/$ref
+            cp -r build/docs/html/* ${project_root}/public/$ref
             scons . --clean --unconditional-build
             # Build WAVES-EABM HTML documentation
             cd quickstart
-            scons . --clean --unconditional-build
-            scons html --unconditional-build
-            cp -r build/docs/html/* ${repo_root}/public/$ref/waves-eabm
-            scons . --clean --unconditional-build
-            cd ${repo_root}
+            PYTHONPATH=${project_root} scons . --clean --unconditional-build
+            PYTHONPATH=${project_root} scons html --unconditional-build
+            cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
+            PYTHONPATH=${project_root} scons . --clean --unconditional-build
+            cd ${project_root}
         done
   artifacts:
     paths:
