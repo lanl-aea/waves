@@ -38,6 +38,9 @@ Internal Changes
 - Ignore ``*.pyc`` and cache files during ``waves quickstart`` project template creation (:issue:`300`, :merge:`310`).
   By `Kyle Brindley`_.
 - Ignore the datacheck alias tasks when Abaqus is missing (:issue:`296`, :merge:`312`). By `Kyle Brindley`_.
+- Fix the WAVES-EABM Gitlab-CI pages job. The quickstart WAVES-EABM removed the logic to help find WAVES in the
+  repository instead of the Conda environment, so the build commands must modify PYTHONPATH (:issue:`307`,
+  :merge:`317`). By `Kyle Brindley`_.
 
 Enhancements
 ============
