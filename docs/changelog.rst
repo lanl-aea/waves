@@ -13,7 +13,7 @@ Internal Changes
 
 - Fix the WAVES-EABM Gitlab-CI pages job. The quickstart WAVES-EABM removed the logic to help find WAVES in the
   repository instead of the Conda environment, so the build commands must modify PYTHONPATH (:issue:`307`,
-  :merge:`317`). By `Kyle Brindley`_.
+  :merge:`317`, :merge:`318`). By `Kyle Brindley`_.
 
 ******************
 0.4.4 (2022-09-19)
