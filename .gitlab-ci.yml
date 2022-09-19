@@ -248,10 +248,10 @@ pages:
             scons . --clean --unconditional-build
             # Build WAVES-EABM HTML documentation
             cd quickstart
-            PYTHONPATH=${project_root} scons . --clean --unconditional-build
-            PYTHONPATH=${project_root} scons html --unconditional-build
+            PYTHONPATH=${project_root} scons . --clean
+            PYTHONPATH=${project_root} scons html
             cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
-            PYTHONPATH=${project_root} scons . --clean --unconditional-build
+            PYTHONPATH=${project_root} scons . --clean
             cd ${project_root}
         done
   artifacts:
