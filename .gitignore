@@ -1,5 +1,7 @@
 # Project files
 build*/
+quickstart_test/
+test_quickstart/
 *.tar.bz2
 *.zip
 

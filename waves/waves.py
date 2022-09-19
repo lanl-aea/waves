@@ -3,6 +3,7 @@ import webbrowser
 import pathlib
 import sys
 import subprocess
+import shutil
 
 from waves import _settings
 from waves import __version__
@@ -18,10 +19,12 @@ def main():
     args, unknown = parser.parse_known_args()
 
     if args.subcommand == 'docs':
-        open_docs()
+        return_code = docs(print_local_path=args.print_local_path)
     elif args.subcommand == 'build':
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
+    elif args.subcommand == 'quickstart':
+        return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite)
     else:
         parser.print_help()
 
@@ -64,17 +67,14 @@ def get_parser():
                          "system default web browser",
             parents=[docs_parser])
     docs_parser.add_argument('-p', '--print-local-path',
-                             action='version',
-                             # Unconventional usage of version argument.
-                             # Usage here is to print the docs directory and exit.
-                             version=f"{_settings._docs_directory}/index.html",
+                             action='store_true',
                              help=f"Print the path to the locally installed documentation index file. " \
                                   f"As an alternative to the docs sub-command, open index.html in a web browser.")
 
     build_parser = argparse.ArgumentParser(add_help=False)
     build_parser = subparsers.add_parser('build',
-        help=f"Thin SCons wrapper",
-        description=f"Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
+        help="Thin SCons wrapper",
+        description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
         parents=[build_parser])
     build_parser.add_argument("TARGET", nargs="+",
                               help=f"SCons target list")
@@ -89,12 +89,36 @@ def get_parser():
                                        "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
                                        "(default: %(default)s).")
 
+    quickstart_parser = argparse.ArgumentParser(add_help=False)
+    quickstart_parser = subparsers.add_parser('quickstart',
+        help="Create an SCons-WAVES project template",
+        description="Create an SCons-WAVES project template from the single element compression simulation found in " \
+                    "the WAVES tutorials.",
+        parents=[quickstart_parser])
+    quickstart_parser.add_argument("PROJECT_DIRECTORY",
+        help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not exist.",
+        type=pathlib.Path,
+        default=pathlib.Path().cwd())
+    quickstart_parser.add_argument("--overwrite",
+        action="store_true",
+        help="Overwrite any existing files and directories (default: %(default)s).")
+
     return main_parser
 
 
-def open_docs():
-    webbrowser.open(f'{_settings._docs_directory}/index.html')
-    return
+def docs(print_local_path=False):
+
+    if print_local_path:
+        if _settings._installed_docs_index.exists():
+            print(_settings._installed_docs_index, file=sys.stdout)
+        else:
+            # This should only be reached if the package installation structure doesn't match the assumptions in
+            # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
+            print('Could not find package documentation HTML index file', file=sys.stderr)
+            return 1
+    else:
+        webbrowser.open(_settings._installed_docs_index)
+    return 0
 
 
 def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_clone_directory=None):
@@ -109,7 +133,7 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     :param str working_directory: Change the SCons command working directory
     """
     if not targets:
-        print("At least one target must be provided")
+        print("At least one target must be provided", file=sys.stderr)
         return 1
     if git_clone_directory:
         current_directory = pathlib.Path().cwd().resolve()
@@ -128,10 +152,43 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
         while stop_trigger not in scons_stdout.decode("utf-8"):
             count += 1
             if count > max_iterations:
-                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'")
+                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'", file=sys.stderr)
                 return 2
-            print(f"iteration {count}: '{' '.join(command)}'")
+            print(f"iteration {count}: '{' '.join(command)}'", file=sys.stdout)
             scons_stdout = subprocess.check_output(command, cwd=working_directory)
+
+    return 0
+
+
+def quickstart(directory='', overwrite=False):
+
+    # User I/O
+    print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
+    directory = pathlib.Path(directory).resolve()
+    # TODO: future versions can be more subtle and only error out when directory content filenames clash with the
+    # quickstart files.
+    if directory.exists() and not overwrite:
+        print(f"Project root path: '{directory}' exists. Please specify a new directory.",
+              file=sys.stderr)
+        return 1
+    else:
+        print(f"Project root path: '{directory}'", file=sys.stdout)
+
+    if not _settings._installed_quickstart_directory.exists():
+        # This should only be reached if the package installation structure doesn't match the assumptions in
+        # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
+        print('Could not find package quickstart directory', file=sys.stderr)
+        return 1
+    # TODO: Print the full copy directory tree with the same logic used in the copy command
+    quickstart_contents = list(_settings._installed_quickstart_directory.iterdir())
+    print("Copying the following to project root path: ", file=sys.stdout)
+    [print(f"\t{item}", file=sys.stdout) for item in quickstart_contents]
+
+    # Do the work
+    ignore_patterns = shutil.ignore_patterns("*.pyc", "__pycache__", "build")
+    shutil.copytree(_settings._installed_quickstart_directory, directory,
+                    ignore=ignore_patterns,
+                    dirs_exist_ok=overwrite)
 
     return 0
 

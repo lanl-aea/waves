@@ -209,7 +209,8 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
     return abaqus_solver_builder
 
 
-def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment(), build_subdirectory='.'):
+def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment(),
+                    build_subdirectory='.', symlink=False):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
     Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
@@ -238,6 +239,9 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
         template characters if present, e.g. ``@variable@``. The template character, e.g. ``@``, can be anything that
         works in the `SCons Substfile`_ builder.
     :param SCons.Environment.Environment env: An SCons construction environment to use when defining the targets.
+    :param str build_subdirectory: build subdirectory relative path prepended to target files
+    :param bool symlink: Whether symbolic links are created as new symbolic links. If true, symbolic links are shallow
+        copies as a new symbolic link. If false, symbolic links are copied as a new file (dereferenced).
 
     :return: SCons NodeList of Copy and Substfile objects
     :rtype: SCons.Node.NodeList
@@ -250,7 +254,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
         target_list += env.Command(
                 target=str(copy_target),
                 source=str(source_file),
-                action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}'))
+                action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}', symlink))
         if source_file.suffix == _scons_substfile_suffix:
             substfile_target = build_subdirectory / source_file.name
             target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)

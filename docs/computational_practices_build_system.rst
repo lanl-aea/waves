@@ -103,7 +103,7 @@ However, most build systems split the DAG construction and execution into exactl
 execution. The DAG is first constructed during the build system's configuration stage. At this stage, the DAG must be
 fully known. Having fixed the DAG, the execution phase will execute the workflow. If the parameter study is created as a
 task that is executed as part of the build, the DAG will not re-configure mid build to account for the workflow
-repitition of each parameter set. This approach may work if the number of parameter sets is known or fixed as part of
+repetition of each parameter set. This approach may work if the number of parameter sets is known or fixed as part of
 the task definitions, but it is not robust against changing the parameter study size.
 
 A more robust solution is to perform the parameter study generation at configuration time such that the repeated

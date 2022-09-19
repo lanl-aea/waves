@@ -5,8 +5,48 @@ Changelog
 #########
 
 ******************
-0.4.4 (unreleased)
+0.4.5 (unreleased)
 ******************
+
+******************
+0.4.4 (2022-09-19)
+******************
+
+New Features
+============
+- Add a ``waves quickstart`` subcommand to copy the single element compression project as a template for a new project.
+  Currently limited to the "SCons-WAVES quickstart" tutorial files. (:issue:`284`, :merge:`300`). By `Kyle Brindley`_.
+- Add a documentation template to the ``waves quickstart`` subcommand (:issue:`291`, :merge:`314`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Update tutorial output examples to match the separation of datacheck and simulation tasks performed in :issue:`244`,
+  :merge:`250`. Some of the tutorial body text was missed in the update (:issue:`298`, :merge:`307`). By `Kyle
+  Brindley`_.
+- Update the Cubit journal file descriptions (:issue:`299`, :merge:`308`). By `Kyle Brindley`_.
+- Clarify input and output file extension behavior in the journal file API and CLI (:issue:`301`, :merge:`311`). By
+  `Kyle Brindley`_.
+- Add analysis report examples to the WAVES-EABM documentation (:issue:`202`, :merge:`313`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Do not install as the deprecated zipped EGG file (:issue:`290`, :merge:`301`). By `Kyle Brindley`_.
+- Test the as-installed HTML documentation index file location used by the ``waves docs`` subcommand (:issue:`290`,
+  :merge:`301`). By `Kyle Brindley`_.
+- Dereference symbolic links during ``copy_substitute`` tasks by default (:issue:`297`, :merge:`303`). By `Kyle
+  Brindley`_.
+- Ignore ``*.pyc`` and cache files during ``waves quickstart`` project template creation (:issue:`300`, :merge:`310`).
+  By `Kyle Brindley`_.
+- Ignore the datacheck alias tasks when Abaqus is missing (:issue:`296`, :merge:`312`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Implement separate project and simulation configuration files for the ``waves quickstart`` subcommand (:issue:`292`,
+  :merge:`302`). By `Kyle Brindley`_.
+- Add extraction, post-processing, and global data_check alias to ``waves quickstart`` subcommand (:issue:`293`,
+  :merge:`304`). By `Kyle Brindley`_.
+- Add a mesh convergence template to the ``waves quickstart`` subcommand (:issue:`294`, :merge:`305`). By `Kyle
+  Brindley`_.
 
 ******************
 0.4.3 (2022-09-13)

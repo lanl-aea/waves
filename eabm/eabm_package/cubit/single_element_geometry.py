@@ -10,7 +10,8 @@ def main(output_file, width, height):
 
     This script creates a simple Cubit model with a single rectangle part.
 
-    :param str output_file: The output file for the Cubit model without extension, e.g. ``output_file``.cub
+    :param str output_file: The output file for the Cubit model without extension. Will be appended with the required
+        extension, e.g. ``output_file``.cub
     :param float width: The rectangle width
     :param float height: The rectangle height
 
@@ -43,7 +44,8 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
-                        help="The output file for the Cubit model without extension, e.g. ``output_file``.cub")
+                        help="The output file for the Cubit model without extension. Will be appended with the " \
+                             "required extension, e.g. ``output_file``.cub")
     parser.add_argument('-w', '--width', type=float, default=default_width,
                         help="The rectangle width")
     # Short option '-h' is reserved for the help message

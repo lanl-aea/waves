@@ -1,0 +1,108 @@
+#! /usr/bin/env python
+
+import os
+import sys
+import pathlib
+
+import waves
+
+# Make the EABM package importable
+sys.path.insert(0, str(pathlib.Path('.').resolve()))
+
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+AddOption(
+    "--ignore-documentation",
+    dest="ignore_documentation",
+    default=False,
+    action="store_true",
+    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the " \
+         "'--unconditional-build' option. (default: '%default')"
+)
+
+# Inherit user's full environment and set project options
+env = Environment(ENV=os.environ.copy(),
+                  variant_dir_base=GetOption("variant_dir_base"),
+                  ignore_documentation=GetOption("ignore_documentation"))
+
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
+
+# Find required programs for conditional target ignoring and absolute path for use in target actions
+env['sphinx_build'] = waves.builders.find_program(['sphinx-build'], env)
+env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
+
+# Set project internal variables and variable substitution dictionaries
+project_name = 'WAVES-EABM'
+documentation_source_dir = 'docs'
+project_dir = pathlib.Path(Dir('.').abspath)
+eabm_package_dir = 'eabm_package'
+project_variables = {
+    'project_name': project_name,
+    'project_dir': str(project_dir),
+    'version': '0.1.0',
+    'eabm_package_dir': eabm_package_dir,
+    'eabm_package_abspath': str(project_dir / eabm_package_dir),
+    'datacheck_alias': 'datacheck'
+}
+for key, value in project_variables.items():
+    env[key] = value
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
+
+# Add WAVES builders
+env.Append(BUILDERS={
+    'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
+    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
+    'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus']),
+    'PythonScript': waves.builders.python_script(),
+    'CondaEnvironment': waves.builders.conda_environment()
+})
+
+# Add documentation target(s)
+if not env['ignore_documentation']:
+    build_dir = variant_dir_base / documentation_source_dir
+    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports=['env', 'documentation_source_dir'], duplicate=False)
+    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_variables'])
+else:
+    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
+    docs_aliases = []
+
+# Add simulation targets
+eabm_simulation_directories = [
+    'nominal',
+    'mesh_convergence'
+]
+for source_dir in eabm_simulation_directories:
+    build_dir = variant_dir_base / source_dir
+    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+
+# Add default target list to help message
+default_targets_help = "\nDefault Targets:\n"
+for target in DEFAULT_TARGETS:
+    default_targets_help += f"    {str(target)}\n"
+Help(default_targets_help, append=True)
+
+# Add aliases to help message so users know what build target options are available
+# This must come *after* all expected Alias definitions and SConscript files.
+try:
+    # Recover from SCons configuration
+    from SCons.Node.Alias import default_ans
+    alias_list = default_ans
+except ImportError:
+    # Fall back to manually constructed alias list(s)
+    alias_list = docs_aliases + eabm_simulation_directories
+alias_help = "\nTarget Aliases:\n"
+for alias in alias_list:
+    alias_help += f"    {alias}\n"
+Help(alias_help)

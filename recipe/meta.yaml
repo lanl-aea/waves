@@ -24,6 +24,10 @@ build:
     - docspath="$SP_DIR/$PKG_NAME/docs"
     - mkdir -p $docspath
     - cp -r build/docs/html/* $docspath
+    # Bundle quickstart files. Must come after install so that SP_DIR path exists
+    - quickstart_path="$SP_DIR/$PKG_NAME/quickstart"
+    - mkdir -p ${quickstart_path}
+    - cp -r --dereference quickstart/* ${quickstart_path}
   script_env:
     - VERSION
   ignore_run_exports:
@@ -78,8 +82,6 @@ test:
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
-    - eabm/README.rst
-    - eabm/SC*
     - eabm/*SConstruct
     - eabm/eabm_package/abaqus/*
     - eabm/eabm_package/cubit/*
@@ -88,9 +90,13 @@ test:
   imports:
     - waves
   commands:
+    - test_root=${PWD}
+    # Tests that depend on correct install path
+    - waves docs --print-local-path
+    # Project unit tests
     - scons . --keep-going --unconditional-build --ignore-documentation
-    - cd eabm
     # Regression test the files used in the tutorial documentation
+    - cd eabm
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
@@ -114,4 +120,9 @@ test:
     # Uses "rm" instead of "scons --clean" to ensure a complete re-build even if the tutorial files and the default
     # SConstruct file target definitions differ or something is incompletely cleaned.
     - rm -rf build/
-    - scons . --jobs=4 --keep-going --unconditional-build --ignore-documentation
+    - scons . --jobs=4 --keep-going --unconditional-build
+    # Quickstart regression tests
+    - quickstart_regression_directory="${test_root}/test_quickstart"
+    - waves quickstart ${quickstart_regression_directory}
+    - cd ${quickstart_regression_directory}
+    - scons . --jobs=4 --ignore-documentation

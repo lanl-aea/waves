@@ -158,3 +158,4 @@ env.Alias(f"{parent_directory}_datacheck", datacheck)
 if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
     Ignore(['.', parent_directory], workflow)
+    Ignore(['.', parent_directory], datacheck)

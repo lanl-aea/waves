@@ -100,22 +100,11 @@ Output Files
    |-- single_element_compression.com
    |-- single_element_compression.dat
    |-- single_element_compression.inp
-   |-- single_element_compression.stdout
    |-- single_element_compression.msg
    |-- single_element_compression.odb
    |-- single_element_compression.prt
    |-- single_element_compression.sta
-   |-- single_element_compression_DATACHECK.023
-   |-- single_element_compression_DATACHECK.abaqus_v6.env
-   |-- single_element_compression_DATACHECK.com
-   |-- single_element_compression_DATACHECK.dat
-   |-- single_element_compression_DATACHECK.stdout
-   |-- single_element_compression_DATACHECK.mdl
-   |-- single_element_compression_DATACHECK.msg
-   |-- single_element_compression_DATACHECK.odb
-   |-- single_element_compression_DATACHECK.prt
-   |-- single_element_compression_DATACHECK.sim
-   |-- single_element_compression_DATACHECK.stt
+   |-- single_element_compression.stdout
    |-- single_element_geometry.abaqus_v6.env
    |-- single_element_geometry.cae
    |-- single_element_geometry.jnl
@@ -130,4 +119,4 @@ Output Files
    |-- single_element_partition.jnl
    `-- single_element_partition.stdout
 
-   0 directories, 43 files
+   0 directories, 32 files

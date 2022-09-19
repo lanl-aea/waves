@@ -13,8 +13,11 @@ _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"
 _set_coordinate_key = "parameter_sets"
 _quantiles_attribute_key = "_quantiles"
-# When built with ``noarch: python`` in recipe/meta.yaml, WAVES installs to:
-#   $CONDA_PREFIX/lib/python3.8/site-packages/WAVES-*-py3.?.egg
-# but documentation installs at
-#   $CONDA_PREFIX/lib/python3.8/site-packages/waves/docs
-_docs_directory = _project_root_abspath.parent.parent / "waves/docs"
+_installed_docs_index = _project_root_abspath / "docs/index.html"
+_installed_quickstart_directory = _project_root_abspath / "quickstart"
+
+# For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
+# Enables ``python -m waves.waves quickstart ...`` execution from repository root directory
+_repository_quickstart_directory = _project_root_abspath.parent / "quickstart"
+if not _installed_quickstart_directory.exists() and _repository_quickstart_directory.exists():
+    _installed_quickstart_directory = _repository_quickstart_directory

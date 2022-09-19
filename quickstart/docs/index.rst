@@ -1,18 +1,37 @@
-#######################
-|project| Documentation
-#######################
+#########
+|project|
+#########
 
 .. include:: project_brief.txt
+
+.. raw:: latex
+
+   \part{Model Repository}
 
 .. toctree::
    :maxdepth: 2
    :caption: Model Repository
 
    user
-   theory
    api
    cli
    devops
+
+.. raw:: latex
+
+   \part{Analyses}
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Analyses
+
+   simulation_summary
+   nominal
+   mesh_convergence
+
+.. raw:: latex
+
+   \part{Help and Reference}
 
 .. toctree::
    :caption: Help & Reference
@@ -22,6 +41,10 @@
    changelog
    zreferences
    glossary
+
+.. raw:: latex
+
+   \part{Appendices}
 
 .. only:: html
 

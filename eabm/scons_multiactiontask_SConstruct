@@ -112,3 +112,4 @@ env.Alias(f"{model}_datacheck", datacheck)
 if not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{model}' target(s)")
     Ignore(['.', model], workflow)
+    Ignore(['.', model], datacheck)

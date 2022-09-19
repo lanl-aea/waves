@@ -125,6 +125,8 @@ fast-test:
   variables:
     GIT_STRATEGY: clone
   script:
+    - project_root=${PWD}
+    # Project unit tests
     - scons . --keep-going --unconditional-build
     - python -m waves.waves build --max-iterations=4 --working-directory=eabm tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
     - cd eabm
@@ -152,6 +154,11 @@ fast-test:
     # SConstruct file target definitions differ or something is incompletely cleaned.
     - rm -rf build/
     - scons . --jobs=4 --keep-going --unconditional-build
+    # Quickstart regression tests
+    - quickstart_regression_directory="${project_root}/test_quickstart"
+    - PYTHONPATH=${project_root} python -m waves.waves quickstart ${quickstart_regression_directory}
+    - cd ${quickstart_regression_directory}
+    - PYTHONPATH=${project_root} scons . --jobs=4
   tags:
     - sstelmo-shell-aea
   only:
@@ -240,7 +247,7 @@ pages:
             cp -r build/docs/html/* ${repo_root}/public/$ref
             scons . --clean --unconditional-build
             # Build WAVES-EABM HTML documentation
-            cd eabm
+            cd quickstart
             scons . --clean --unconditional-build
             scons html --unconditional-build
             cp -r build/docs/html/* ${repo_root}/public/$ref/waves-eabm
