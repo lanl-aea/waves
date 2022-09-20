@@ -180,18 +180,19 @@ def quickstart(directory, overwrite=False, dry_run=False):
                            any(map(str(path).__contains__, exclude_strings))]
     quickstart_dirs = [path for path in quickstart_contents if path.is_dir()]
     quickstart_files = list(set(quickstart_contents) - set(quickstart_dirs))
-    directory_dirs = [directory / path.relative_to(_settings._installed_quickstart_directory) for path in quickstart_dirs]
-    directory_files = [directory / path.relative_to(_settings._installed_quickstart_directory) for path in quickstart_files]
+    directory_dirs = [directory / path.relative_to(_settings._installed_quickstart_directory)
+                      for path in quickstart_dirs]
+    directory_files = [directory / path.relative_to(_settings._installed_quickstart_directory)
+                       for path in quickstart_files]
     existing_files = [path for path in directory_files if path.exists()]
 
     # User I/O
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     print(f"Project root path: '{directory}'", file=sys.stdout)
     if not overwrite and existing_files:
-        print(f"Found conflicting files in destination '{directory}':",
-              file=sys.stderr)
+        print(f"Found conflicting files in destination '{directory}':", file=sys.stderr)
         for path in existing_files:
-            print(f"\t{path}")
+            print(f"\t{path}", file=sys.stderr)
         return 1
     if dry_run:
         print("Files to create:")
