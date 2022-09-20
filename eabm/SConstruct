@@ -12,14 +12,6 @@ except ModuleNotFoundError:
     sys.path.insert(0, str(pathlib.Path('..').resolve()))
     import waves
 
-try:
-    version = setuptools_scm.get_version(root='..')
-# Only required for WAVES-EABM in the WAVES repository.
-# Most EABMs only need ``setuptools_scm.get_version('.')`` to find their version number.
-except LookupError:
-    from importlib.metadata import version, PackageNotFoundError
-    version = version("waves")
-
 # Make the EABM package importable
 sys.path.insert(0, str(pathlib.Path('.').resolve()))
 
@@ -58,7 +50,6 @@ project_name = 'WAVES-EABM'
 project_variables = {
     'project_name': project_name,
     'project_dir': Dir('.').abspath,
-    'version': version,
     'abaqus_source_dir': 'eabm_package/abaqus',
     'cubit_source_dir': 'eabm_package/cubit',
     'python_source_dir': 'eabm_package/python',

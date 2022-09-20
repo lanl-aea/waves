@@ -1,3 +1,4 @@
+git
 h5netcdf
 h5py
 matplotlib
@@ -5,8 +6,8 @@ numpy
 pytest
 pytest-xdist
 pyyaml
-scons >=4
 scipy >=1
+scons >=4
 setuptools >=45
 setuptools_scm[toml] >=6.2
 sphinx

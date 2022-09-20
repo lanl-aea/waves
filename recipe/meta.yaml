@@ -63,6 +63,7 @@ requirements:
 
 test:
   requires:
+    - git
     - h5netcdf
     - h5py
     - matplotlib
