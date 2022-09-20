@@ -17,8 +17,8 @@ Internal Changes
 
 Enhancements
 ============
-- WAVES ``quickstart`` subcommand now forces owner read/write permissions on quickstart tree even when source files are
-  read-only (:issue:`304`, :merge:`320`). By `Kyle Brindley`_.
+- WAVES ``quickstart`` subcommand no longer preserves source tree read/write meta data (:issue:`304`, :merge:`320`). By
+  `Kyle Brindley`_.
 
 ******************
 0.4.4 (2022-09-19)
