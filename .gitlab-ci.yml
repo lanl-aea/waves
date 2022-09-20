@@ -155,9 +155,11 @@ fast-test:
     - rm -rf build/
     - scons . --jobs=4 --keep-going --unconditional-build
     # Quickstart regression tests
+    - cd ${project_root}
     - quickstart_regression_directory="${project_root}/test_quickstart"
-    - PYTHONPATH=${project_root} python -m waves.waves quickstart ${quickstart_regression_directory}
+    - mkdir -p ${quickstart_regression_directory}
     - cd ${quickstart_regression_directory}
+    - PYTHONPATH=${project_root} python -m waves.waves quickstart
     - PYTHONPATH=${project_root} scons . --jobs=4
   tags:
     - sstelmo-shell-aea
