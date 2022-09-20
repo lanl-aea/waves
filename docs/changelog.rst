@@ -16,7 +16,7 @@ Internal Changes
   :merge:`317`, :merge:`318`). By `Kyle Brindley`_.
 - Add Conda managed Git package to the development environment (:issue:`285`, :merge:`322`). By `Kyle Brindley`_.
 - Add TeXLive to version controlled development environment and Conda build requirements. Don't rely on system installed
-  TeXLive package or module for Gitlab-CI (:issue:`289`, :merge:`323`). By `Kyle Brindley`_.
+  TeXLive package or module for Gitlab-CI (:issue:`289`, :merge:`323`, :issue:`308`, :merge:`324`). By `Kyle Brindley`_.
 
 Documentation
 =============
