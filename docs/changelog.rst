@@ -15,6 +15,10 @@ Internal Changes
   repository instead of the Conda environment, so the build commands must modify PYTHONPATH (:issue:`307`,
   :merge:`317`, :merge:`318`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Clarify ``waves quickstart`` project directory behavior in the CLI (:merge:`321`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - WAVES ``quickstart`` subcommand no longer preserves source tree read/write meta data (:issue:`304`, :merge:`320`). By
