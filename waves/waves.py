@@ -173,7 +173,7 @@ def quickstart(directory, overwrite=False, dry_run=False):
     if not _settings._installed_quickstart_directory.exists():
         # This should only be reached if the package installation structure doesn't match the assumptions in
         # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
-        print(f"Could not find {_settings.project_name_short} quickstart directory", file=sys.stderr)
+        print(f"Could not find {_settings._project_name_short} quickstart directory", file=sys.stderr)
         return 1
     exclude_strings = ["__pycache__", "build", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
     quickstart_contents = [path for path in _settings._installed_quickstart_directory.rglob("*") if not
@@ -193,7 +193,7 @@ def quickstart(directory, overwrite=False, dry_run=False):
         print(f"Found conflicting files in destination '{directory}':", file=sys.stderr)
         for path in existing_files:
             print(f"\t{path}", file=sys.stderr)
-        return 1
+        return 2
     if dry_run:
         print("Files to create:")
         for path in directory_files:
