@@ -213,10 +213,8 @@ def quickstart(directory, overwrite=False, dry_run=False):
     # Do the work
     for path in directory_dirs:
         path.mkdir(parents=True, exist_ok=True)
-        os.chmod(path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
     for source, destination in zip(quickstart_files, directory_files):
         shutil.copyfile(source, destination)
-        os.chmod(destination, stat.S_IRUSR | stat.S_IWUSR)
     return 0
 
 
