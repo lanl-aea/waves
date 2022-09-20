@@ -1,3 +1,5 @@
+import os
+import stat
 import argparse
 import webbrowser
 import pathlib
@@ -160,36 +162,46 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart(directory='', overwrite=False):
+def quickstart(directory='', overwrite=False, dry_run=False):
 
-    # User I/O
-    print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
+    # Gather source and destination lists
     directory = pathlib.Path(directory).resolve()
-    # TODO: future versions can be more subtle and only error out when directory content filenames clash with the
-    # quickstart files.
-    if directory.exists() and not overwrite:
-        print(f"Project root path: '{directory}' exists. Please specify a new directory.",
-              file=sys.stderr)
-        return 1
-    else:
-        print(f"Project root path: '{directory}'", file=sys.stdout)
-
     if not _settings._installed_quickstart_directory.exists():
         # This should only be reached if the package installation structure doesn't match the assumptions in
         # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
-        print('Could not find package quickstart directory', file=sys.stderr)
+        print(f"Could not find {_settings.project_name_short} quickstart directory", file=sys.stderr)
         return 1
-    # TODO: Print the full copy directory tree with the same logic used in the copy command
-    quickstart_contents = list(_settings._installed_quickstart_directory.iterdir())
-    print("Copying the following to project root path: ", file=sys.stdout)
-    [print(f"\t{item}", file=sys.stdout) for item in quickstart_contents]
+    exclude_strings = ["__pycache__", "build", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
+    quickstart_contents = [path for path in _settings._installed_quickstart_directory.rglob("*") if not
+                           any(map(str(path).__contains__, exclude_strings))]
+    quickstart_dirs = [path for path in quickstart_contents if path.is_dir()]
+    quickstart_files = list(set(quickstart_contents) - set(quickstart_dirs))
+    directory_dirs = [directory / path.relative_to(_settings._installed_quickstart_directory) for path in quickstart_dirs]
+    directory_files = [directory / path.relative_to(_settings._installed_quickstart_directory) for path in quickstart_files]
+
+    # User I/O
+    print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
+    print(f"Project root path: '{directory}'", file=sys.stdout)
+    if dry_run:
+        print("Files to create:")
+        for path in directory_files:
+            print(f"\t{path}", file=sys.stdout)
+        return 0
+    if not overwrite and any(path.exists() for path in directory_files):
+        print(f"Found conflicting files in destination '{directory}':",
+              file=sys.stderr)
+        for path in directory_files:
+            if path.exists():
+                print(f"\t{path}")
+        return 1
 
     # Do the work
-    ignore_patterns = shutil.ignore_patterns("*.pyc", "__pycache__", "build")
-    shutil.copytree(_settings._installed_quickstart_directory, directory,
-                    ignore=ignore_patterns,
-                    dirs_exist_ok=overwrite)
-
+    for path in directory_dirs:
+        path.mkdir(parents=True, exist_ok=True)
+        os.chmod(destination, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
+    for source, destination in zip(quickstart_files, directory_files):
+        shutil.copyfile(source, destination)
+        os.chmod(destination, stat.S_IRUSR | stat.S_IWUSR)
     return 0
 
 
