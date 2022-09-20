@@ -99,12 +99,13 @@ def get_parser():
         parents=[quickstart_parser])
     quickstart_parser.add_argument("PROJECT_DIRECTORY",
         nargs="?",
-        help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not exist.",
+        help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not exist " \
+             "(default: PWD).",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
     quickstart_parser.add_argument("--overwrite",
         action="store_true",
-        help="Overwrite any existing files and directories (default: %(default)s).")
+        help="Overwrite any existing files (default: %(default)s).")
     quickstart_parser.add_argument("--dry-run",
         action="store_true",
         help="Print the files that would be created (default: %(default)s).")
