@@ -26,7 +26,7 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
-        return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite)
+        return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
     else:
         parser.print_help()
 
@@ -98,12 +98,16 @@ def get_parser():
                     "the WAVES tutorials.",
         parents=[quickstart_parser])
     quickstart_parser.add_argument("PROJECT_DIRECTORY",
+        nargs="?",
         help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not exist.",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
     quickstart_parser.add_argument("--overwrite",
         action="store_true",
         help="Overwrite any existing files and directories (default: %(default)s).")
+    quickstart_parser.add_argument("--dry-run",
+        action="store_true",
+        help="Print the files that would be created (default: %(default)s).")
 
     return main_parser
 
@@ -162,7 +166,7 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart(directory='', overwrite=False, dry_run=False):
+def quickstart(directory, overwrite=False, dry_run=False):
 
     # Gather source and destination lists
     directory = pathlib.Path(directory).resolve()
@@ -178,22 +182,22 @@ def quickstart(directory='', overwrite=False, dry_run=False):
     quickstart_files = list(set(quickstart_contents) - set(quickstart_dirs))
     directory_dirs = [directory / path.relative_to(_settings._installed_quickstart_directory) for path in quickstart_dirs]
     directory_files = [directory / path.relative_to(_settings._installed_quickstart_directory) for path in quickstart_files]
+    existing_files = [path for path in directory_files if path.exists()]
 
     # User I/O
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     print(f"Project root path: '{directory}'", file=sys.stdout)
+    if not overwrite and existing_files:
+        print(f"Found conflicting files in destination '{directory}':",
+              file=sys.stderr)
+        for path in existing_files:
+            print(f"\t{path}")
+        return 1
     if dry_run:
         print("Files to create:")
         for path in directory_files:
             print(f"\t{path}", file=sys.stdout)
         return 0
-    if not overwrite and any(path.exists() for path in directory_files):
-        print(f"Found conflicting files in destination '{directory}':",
-              file=sys.stderr)
-        for path in directory_files:
-            if path.exists():
-                print(f"\t{path}")
-        return 1
 
     # Do the work
     for path in directory_dirs:
