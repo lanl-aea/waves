@@ -130,11 +130,9 @@ fast-test:
     - scons . --keep-going --unconditional-build
     # WAVES CLI regression tests
     - python -m waves.waves build --max-iterations=4 --working-directory=eabm tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
-    - cd ${project_root}
     - quickstart_regression_directory="${project_root}/test_quickstart"
-    - mkdir -p ${quickstart_regression_directory}
+    - PYTHONPATH=${project_root} python -m waves.waves quickstart ${quickstart_regression_directory}
     - cd ${quickstart_regression_directory}
-    - PYTHONPATH=${project_root} python -m waves.waves quickstart
     - PYTHONPATH=${project_root} scons . --jobs=4
     # Regression test the files used in the tutorial documentation
     - cd ${project_root}/eabm
