@@ -95,8 +95,14 @@ test:
     - waves docs --print-local-path
     # Project unit tests
     - scons . --keep-going --unconditional-build --ignore-documentation
+    # WAVES CLI regression tests
+    - quickstart_regression_directory="${test_root}/test_quickstart"
+    - waves quickstart ${quickstart_regression_directory}
+    - cd ${quickstart_regression_directory}
+    - scons . --jobs=4 --ignore-documentation
+    - cd ${test_root}
     # Regression test the files used in the tutorial documentation
-    - cd eabm
+    - cd ${test_root}/eabm
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
@@ -121,8 +127,3 @@ test:
     # SConstruct file target definitions differ or something is incompletely cleaned.
     - rm -rf build/
     - scons . --jobs=4 --keep-going --unconditional-build
-    # Quickstart regression tests
-    - quickstart_regression_directory="${test_root}/test_quickstart"
-    - waves quickstart ${quickstart_regression_directory}
-    - cd ${quickstart_regression_directory}
-    - scons . --jobs=4 --ignore-documentation

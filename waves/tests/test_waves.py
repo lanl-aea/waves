@@ -2,6 +2,7 @@
 
 Test waves.py
 """
+import pathlib
 from unittest.mock import patch
 
 import pytest
@@ -65,34 +66,73 @@ def test_build():
 
 @pytest.mark.unittest
 def test_quickstart():
-    # Project directory does not exist. Copy the quickstart file tree.
-    with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.iterdir', return_value=['quickstart_directory']), \
-         patch('pathlib.Path.exists', side_effect=[False, True]):
-        return_code = waves.quickstart()
-        assert return_code == 0
-        mock_shutil_copytree.assert_called_once()
 
-    # Project directory exists. Don't copy the quickstart file tree.
-    with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.iterdir', return_value=['quickstart_directory']), \
-         patch('pathlib.Path.exists', side_effect=[True, True]):
-        return_code = waves.quickstart()
-        assert return_code == 1
-        mock_shutil_copytree.assert_not_called()
+    # Dummy quickstart tree
+    quickstart_tree = [pathlib.Path("dummy.file")]
 
-    # Project directory exists, but we want to overwrite contents. Copy the quickstart file tree.
-    with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.iterdir', return_value=['quickstart_directory']), \
-         patch('pathlib.Path.exists', side_effect=[True, True]):
-        return_code = waves.quickstart(overwrite=True)
+    # Files in destination tree do not exist. Copy the quickstart file tree.
+    with patch("shutil.copyfile") as mock_copyfile, \
+         patch("pathlib.Path.mkdir") as mock_mkdir, \
+         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
+         patch("pathlib.Path.exists", side_effect=[True, False]):
+        return_code = waves.quickstart("/dummy/path")
         assert return_code == 0
-        mock_shutil_copytree.assert_called_once()
+        mock_mkdir.assert_not_called()
+        mock_copyfile.assert_called_once()
+
+    # Files in destination tree do not exist, but dry run. Print quickstart file tree.
+    with patch("shutil.copyfile") as mock_copyfile, \
+         patch("pathlib.Path.mkdir") as mock_mkdir, \
+         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
+         patch("pathlib.Path.exists", side_effect=[True, False]):
+        return_code = waves.quickstart("/dummy/path", dry_run=True)
+        assert return_code == 0
+        mock_mkdir.assert_not_called()
+        mock_copyfile.assert_not_called()
+
+    # Files in destination tree do exist. Don"t copy the quickstart file tree.
+    with patch("shutil.copyfile") as mock_copyfile, \
+         patch("pathlib.Path.mkdir") as mock_mkdir, \
+         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
+         patch("pathlib.Path.exists", side_effect=[True, True]):
+        return_code = waves.quickstart("/dummy/path")
+        assert return_code != 0
+        mock_mkdir.assert_not_called()
+        mock_copyfile.assert_not_called()
+
+    # Files in destination tree do exist, but we want to overwrite contents. Copy the quickstart file tree.
+    with patch("shutil.copyfile") as mock_copyfile, \
+         patch("pathlib.Path.mkdir") as mock_mkdir, \
+         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
+         patch("pathlib.Path.exists", side_effect=[True, True]):
+        return_code = waves.quickstart("/dummy/path", overwrite=True)
+        assert return_code == 0
+        mock_mkdir.assert_not_called()
+        mock_copyfile.assert_called_once()
+
+    # Files in destination tree do exist, but we want to overwrite contents and dry run. Print the quickstart file tree.
+    with patch("shutil.copyfile") as mock_copyfile, \
+         patch("pathlib.Path.mkdir") as mock_mkdir, \
+         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
+         patch("pathlib.Path.exists", side_effect=[True, True]):
+        return_code = waves.quickstart("/dummy/path", overwrite=True, dry_run=True)
+        assert return_code == 0
+        mock_mkdir.assert_not_called()
+        mock_copyfile.assert_not_called()
 
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
-    with patch('shutil.copytree') as mock_shutil_copytree, \
-         patch('pathlib.Path.exists', side_effect=[False, False]):
-        return_code = waves.quickstart()
+    with patch("shutil.copyfile") as mock_copyfile, \
+         patch("pathlib.Path.mkdir") as mock_mkdir, \
+         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
+         patch("pathlib.Path.exists", side_effect=[False, False]):
+        return_code = waves.quickstart("/dummy/path")
         assert return_code != 0
-        mock_shutil_copytree.assert_not_called()
+        mock_mkdir.assert_not_called()
+        mock_copyfile.assert_not_called()
