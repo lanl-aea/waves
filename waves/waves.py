@@ -108,7 +108,7 @@ def get_parser():
         help="Overwrite any existing files (default: %(default)s).")
     quickstart_parser.add_argument("--dry-run",
         action="store_true",
-        help="Print the files that would be created (default: %(default)s).")
+        help="Print the files that would be created and exit (default: %(default)s).")
 
     return main_parser
 
@@ -168,6 +168,15 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
 
 
 def quickstart(directory, overwrite=False, dry_run=False):
+    """Copy project quickstart template files into directory
+
+    Copies from the project quickstart tree to the directory. If files exist, report conflicting files and exit with a
+    non-zero return code unless overwrite is specified.
+
+    :param str directory: String or pathlike object for the new template directory destination
+    :param bool overwrite: Boolean to overwrite any existing files in directory destination
+    :param bool dry_run: Print the template destination tree and exit
+    """
 
     # Gather source and destination lists
     directory = pathlib.Path(directory).resolve()
