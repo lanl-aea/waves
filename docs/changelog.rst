@@ -15,6 +15,11 @@ Internal Changes
   repository instead of the Conda environment, so the build commands must modify PYTHONPATH (:issue:`307`,
   :merge:`317`, :merge:`318`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- WAVES ``quickstart`` subcommand now forces owner read/write permissions on quickstart tree even when source files are
+  read-only (:issue:`304`, :merge:`320`). By `Kyle Brindley`_.
+
 ******************
 0.4.4 (2022-09-19)
 ******************
