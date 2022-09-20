@@ -185,7 +185,7 @@ def quickstart(directory, overwrite=False, dry_run=False):
         # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
         print(f"Could not find {_settings._project_name_short} quickstart directory", file=sys.stderr)
         return 1
-    exclude_strings = ["__pycache__", "build", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
+    exclude_strings = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
     quickstart_contents = [path for path in _settings._installed_quickstart_directory.rglob("*") if not
                            any(map(str(path).__contains__, exclude_strings))]
     quickstart_dirs = [path for path in quickstart_contents if path.is_dir()]
