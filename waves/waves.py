@@ -190,6 +190,10 @@ def quickstart(directory, overwrite=False, dry_run=False):
                            any(map(str(path).__contains__, exclude_strings))]
     quickstart_dirs = [path for path in quickstart_contents if path.is_dir()]
     quickstart_files = list(set(quickstart_contents) - set(quickstart_dirs))
+    if not quickstart_dirs or not quickstart_files:
+        print(f"Did not find any quickstart files or directories in {_settings._installed_quickstart_directory}",
+              file=sys.stderr)
+        return 1
     directory_dirs = [directory / path.relative_to(_settings._installed_quickstart_directory)
                       for path in quickstart_dirs]
     directory_files = [directory / path.relative_to(_settings._installed_quickstart_directory)
