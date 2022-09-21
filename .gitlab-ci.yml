@@ -128,9 +128,14 @@ fast-test:
     - project_root=${PWD}
     # Project unit tests
     - scons . --keep-going --unconditional-build
+    # WAVES CLI regression tests
     - python -m waves.waves build --max-iterations=4 --working-directory=eabm tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
-    - cd eabm
+    - quickstart_regression_directory="${project_root}/test_quickstart"
+    - python -m waves.waves quickstart ${quickstart_regression_directory}
+    - cd ${quickstart_regression_directory}
+    - PYTHONPATH=${project_root} scons . --jobs=4
     # Regression test the files used in the tutorial documentation
+    - cd ${project_root}/eabm
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
@@ -149,16 +154,6 @@ fast-test:
     - scons . --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
-    # Re-run the full WAVES-EABM suite once more with the full, advanced project configuration in SContruct.
-    # Uses "rm" instead of "scons --clean" to ensure a complete re-build even if the tutorial files and the default
-    # SConstruct file target definitions differ or something is incompletely cleaned.
-    - rm -rf build/
-    - scons . --jobs=4 --keep-going --unconditional-build
-    # Quickstart regression tests
-    - quickstart_regression_directory="${project_root}/test_quickstart"
-    - PYTHONPATH=${project_root} python -m waves.waves quickstart ${quickstart_regression_directory}
-    - cd ${quickstart_regression_directory}
-    - PYTHONPATH=${project_root} scons . --jobs=4
   tags:
     - sstelmo-shell-aea
   only:
@@ -224,7 +219,7 @@ pages:
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
     - unset LD_LIBRARY_PATH
     # Set job-wide variables and directories
-    - repo_root=$PWD
+    - project_root=$PWD
     - rm -rf public && mkdir -p public
     - cp docs/_static/index.html public
     # Every documentation version must be re-built for *every* gitlab-pages job execution
@@ -234,7 +229,7 @@ pages:
     - documentation_branches="main dev"
     - |
         for ref in ${documentation_branches}; do
-            cd ${repo_root}
+            cd ${project_root}
             # TODO: match the branch to the correct module. unload/load for each branch.
             # https://re-git.lanl.gov/aea/python-projects/waves/-/boards
             git checkout $ref
@@ -244,15 +239,15 @@ pages:
             # Clean instead of "rm" to help catch incomplete target clean operations.
             scons . --clean --unconditional-build
             scons html --unconditional-build
-            cp -r build/docs/html/* ${repo_root}/public/$ref
+            cp -r build/docs/html/* ${project_root}/public/$ref
             scons . --clean --unconditional-build
             # Build WAVES-EABM HTML documentation
             cd quickstart
-            scons . --clean --unconditional-build
-            scons html --unconditional-build
-            cp -r build/docs/html/* ${repo_root}/public/$ref/waves-eabm
-            scons . --clean --unconditional-build
-            cd ${repo_root}
+            PYTHONPATH=${project_root} scons . --clean
+            PYTHONPATH=${project_root} scons html
+            cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
+            PYTHONPATH=${project_root} scons . --clean
+            cd ${project_root}
         done
   artifacts:
     paths:

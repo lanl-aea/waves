@@ -115,7 +115,6 @@ tutorial_files_list = [
     eabm_dir / env['tutorial_10_dir'] / 'SConscript',
     eabm_dir / env['tutorial_cubit_dir'] / 'SConscript',
     eabm_dir / env['tutorial_mesh_convergence_dir'] / 'SConscript',
-    eabm_dir / 'SConstruct',
     eabm_dir / env['abaqus_dir'] / 'single_element_geometry.py',
     eabm_dir / env['abaqus_dir'] / 'single_element_partition.py',
     eabm_dir / env['abaqus_dir'] / 'single_element_mesh.py',

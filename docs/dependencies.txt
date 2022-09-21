@@ -9,6 +9,9 @@ The Python package dependencies are found in the project's ``environment.txt`` f
 .. literalinclude:: environment.txt
    :linenos:
 
+In addition to the Conda environment managed packages, this project also requires a separately managed installation of
+TeXLive to build the PDF documentation.
+
 The :term:`EABM` in this project, `WAVES-EABM`_, also requires:
 
 #. Abaqus
