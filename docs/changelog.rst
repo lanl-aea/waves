@@ -5,8 +5,23 @@ Changelog
 #########
 
 ******************
-0.4.6 (unreleased)
+0.4.7 (unreleased)
 ******************
+
+******************
+0.4.6 (2022-09-21)
+******************
+
+Internal Changes
+================
+- Stop webhosting the WAVES-EABM quickstart HTML documentation until the build can be fixed in :issue:`311`
+  (:merge:`329`). By `Kyle Brindley`_.
+- Test if the Git-LFS configuration errors were the cause of the bad version number and the Gitlab-Pages failures
+  (:merge:`330`). By `Kyle Brindley`_.
+- Chase the Git-LFS bug with a ``before_script`` debugging statement and ``git lfs install`` (:merge:`331`). By `Kyle
+  Brindley`_.
+- Test version number and Gitlab-Pages possible fix with a production release (:issue:`306`, :merge:`332`). By `Kyle
+  Brindley`_.
 
 ******************
 0.4.5 (2022-09-21)
@@ -18,7 +33,6 @@ Documentation
 
 Internal Changes
 ================
-
 - Fix the WAVES-EABM Gitlab-CI pages job. The quickstart WAVES-EABM removed the logic to help find WAVES in the
   repository instead of the Conda environment, so the build commands must modify PYTHONPATH (:issue:`307`,
   :merge:`317`, :merge:`318`). By `Kyle Brindley`_.
