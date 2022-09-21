@@ -8,6 +8,10 @@ Changelog
 0.4.5 (unreleased)
 ******************
 
+Documentation
+=============
+- Clarify ``waves quickstart`` project directory behavior in the CLI (:merge:`321`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 
@@ -16,10 +20,8 @@ Internal Changes
   :merge:`317`, :merge:`318`). By `Kyle Brindley`_.
 - Add Conda managed Git package to the development environment (:issue:`285`, :merge:`322`). By `Kyle Brindley`_.
 - Remove unused packages from quickstart template environemnt file (:issue:`309`, :merge:`325`). By `Kyle Brindley`_.
-
-Documentation
-=============
-- Clarify ``waves quickstart`` project directory behavior in the CLI (:merge:`321`). By `Kyle Brindley`_.
+- Remove the duplicate tutorial suite regression tests. WAVES-EABM documentation test build now lives in the quickstart
+  template and individual tutorial configuration are tested directly (:issue:`310`, :merge:`326`). By `Kyle Brindley`_.
 
 Enhancements
 ============
