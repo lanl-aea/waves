@@ -44,7 +44,6 @@ requirements:
     - sphinx-argparse
     - sphinx_rtd_theme >=0.5
     - sphinxcontrib-bibtex
-    - texlive-core
   host:
     - python
     - setuptools >=45

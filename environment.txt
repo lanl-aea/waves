@@ -14,5 +14,4 @@ sphinx
 sphinx-argparse
 sphinx_rtd_theme >=0.5
 sphinxcontrib-bibtex
-texlive-core
 xarray
