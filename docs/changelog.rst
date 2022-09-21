@@ -8,6 +8,11 @@ Changelog
 0.4.6 (unreleased)
 ******************
 
+Internal Changes
+================
+- Stop webhosting the WAVES-EABM quickstart HTML documentation until the build can be fixed in :issue:`311`
+  (:merge:`329`). By `Kyle Brindley`_.
+
 ******************
 0.4.5 (2022-09-21)
 ******************
@@ -18,7 +23,6 @@ Documentation
 
 Internal Changes
 ================
-
 - Fix the WAVES-EABM Gitlab-CI pages job. The quickstart WAVES-EABM removed the logic to help find WAVES in the
   repository instead of the Conda environment, so the build commands must modify PYTHONPATH (:issue:`307`,
   :merge:`317`, :merge:`318`). By `Kyle Brindley`_.
