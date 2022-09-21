@@ -12,6 +12,8 @@ Internal Changes
 ================
 - Stop webhosting the WAVES-EABM quickstart HTML documentation until the build can be fixed in :issue:`311`
   (:merge:`329`). By `Kyle Brindley`_.
+- Test if the Git-LFS configuration errors were the cause of the bad version number and the Gitlab-Pages failures
+  (:merge:`330`). By `Kyle Brindley`_.
 
 ******************
 0.4.5 (2022-09-21)
