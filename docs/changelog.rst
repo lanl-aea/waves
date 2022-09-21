@@ -14,6 +14,8 @@ Internal Changes
   (:merge:`329`). By `Kyle Brindley`_.
 - Test if the Git-LFS configuration errors were the cause of the bad version number and the Gitlab-Pages failures
   (:merge:`330`). By `Kyle Brindley`_.
+- Chase the Git-LFS bug with a ``before_script`` debugging statement and ``git lfs install`` (:merge:`331`). By `Kyle
+  Brindley`_.
 
 ******************
 0.4.5 (2022-09-21)
