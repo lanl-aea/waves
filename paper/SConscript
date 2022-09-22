@@ -37,6 +37,7 @@ documentation_file_list = [
     'scons_tutorial_environment.txt',
     'scons_tutorial_introduction.txt',
     'targets.txt',
+    'waves_access_and_appendix.txt',
     'zreferences.rst',
 ]
 
