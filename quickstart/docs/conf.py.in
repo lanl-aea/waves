@@ -40,7 +40,7 @@ copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rig
 
 # ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # -- Project Variables -------------------------------------------------------
-rst_prolog = f'.. |project| replace:: {project}\n.. include:: targets.txt'
+rst_prolog = f'.. |PROJECT| replace:: {project.upper()}\n.. |project| replace:: {project}\n.. include:: targets.txt'
 
 # -- General configuration ---------------------------------------------------
 master_doc = 'index'
