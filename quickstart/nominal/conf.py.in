@@ -1,0 +1,56 @@
+import datetime
+
+# -- Project information -----------------------------------------------------
+# Meta data from SCons project
+project = '@project_name@'
+VERSION = '@version@'
+
+# Name, Group, Email
+authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
+           ('Prabhu S. Khalsa', 'W-13', '<pkhalsa@lanl.gov>'),
+           ('Thomas Roberts', 'W-13', '<tproberts@lanl.gov>'),
+           ('Sergio Cordova', 'W-13', '<sergioc@lanl.gov>'),
+           ('Matthew Fister', 'W-13', '<mwfister@lanl.gov>'),
+           ('Scott Ouellette', 'W-13', '<souellette@lanl.gov>')]
+author_latex = ''
+for author, group, email in authors:
+    author_latex += f"{author}, {group} " + r'\and '
+author_latex = author_latex.rstrip(r'\and ')
+
+release = VERSION
+version = release
+copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
+
+# ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
+# -- Project Variables -------------------------------------------------------
+rst_prolog = f'.. |PROJECT| replace:: {project.upper()}\n.. |project| replace:: {project}\n.. include:: targets.txt'
+
+# -- General configuration ---------------------------------------------------
+master_doc = 'index'
+
+# Add any Sphinx extension module names here, as strings.
+extensions = ['sphinxcontrib.bibtex']
+bibtex_bibfiles = ['references.bib']
+templates_path = ['_templates']
+source_suffix = ['.rst']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+
+# -- Options for LaTeX output ---------------------------------------------
+copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
+
+Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
+Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government
+has rights to use, reproduce, and distribute this information. The public may copy and use this information without
+charge, provided that this Notice and any statement of authorship are reproduced on all copies. Neither the Government
+nor Triad makes any warranty, express or implied, or assumes any liability or responsibility for the use of this
+information.
+"""
+# Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
+latex_project = project.replace('_', '-')
+latex_elements = {
+    'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
+    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
+}
+latex_documents = [
+    (master_doc, latex_project.lower() + '.tex', latex_project.upper(), author_latex, 'manual'),
+]
