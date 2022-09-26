@@ -78,9 +78,9 @@ if not env["ignore_documentation"]:
     docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=["env", "project_variables"])
 
     # Nominal analysis report
-    nominal_report_dir = pathlib.Path(documentation_source_dir) / "nominal_report"
-    build_dir = variant_dir_base / documentation_source_dir / "nominal_report"
-    SConscript(dirs=str(nominal_report_dir),
+    nominal_report_dir = "nominal_report"
+    build_dir = variant_dir_base / nominal_report_dir 
+    SConscript(dirs=nominal_report_dir,
                variant_dir=str(build_dir),
                exports=["env", "project_variables"],
                duplicate=True)
