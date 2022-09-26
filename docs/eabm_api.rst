@@ -1,4 +1,4 @@
-.. _sphinx_api:
+.. _waves_eabm_api:
 
 ##############
 WAVES-EABM API

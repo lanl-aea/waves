@@ -1,4 +1,4 @@
-.. _sphinx_cli:
+.. _waves_eabm_cli:
 
 ##############
 WAVES-EABM CLI

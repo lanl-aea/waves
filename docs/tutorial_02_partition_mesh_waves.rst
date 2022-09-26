@@ -76,7 +76,7 @@ in the Abaqus kernel, but now the default behavior of the journal is different.
 .. TODO: figure out how to link to a specific entry in the CLI. There's gotta be some way to do this similat to :meth:
    directive. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/175
 
-6. Investigate the :ref:`sphinx_cli` documentation for the ``single_element_partition.py`` file. Notice that a new
+6. Investigate the :ref:`waves_eabm_cli` documentation for the ``single_element_partition.py`` file. Notice that a new
    parameter is defined here that was absent in ``single_element_geometry.py``. This parameter is defined in short with
    ``-i`` or verbosely by ``--input-file``.
 
@@ -98,7 +98,7 @@ meshing journal file name  to reduce hard-coded duplication of strings. We defin
 utilize the :meth:`waves.builders.abaqus_journal` builder on the ``source`` list. Just like the code for ``#
 Partition``, we have two sources. In this tutorial, we rely on the ``single_element_mesh.py`` CLI default arguments
 which will use the ``single_element_partition.cae`` file as the input model file. Readers are encouraged to return to
-the :ref:`sphinx_cli` to become familiar with the command line arguments available for the journal files in this
+the :ref:`waves_eabm_cli` to become familiar with the command line arguments available for the journal files in this
 tutorial.
 
 The ``target`` list, however, shows another difference with the behavior we have seen previously. Now, we have two
@@ -106,7 +106,7 @@ targets instead of one. You should now be familiar with the behavior that genera
 target. The new target is the ``single_element_mesh.inp`` file. This file is called an *orphan mesh* file. When the
 :meth:`waves.builders.abaqus_journal` builder acts on the ``single_element_mesh.py`` file, our two target files are
 created. The orphan mesh file is created by calling the ``export_mesh()`` function within the ``single_element_mesh.py``
-file. See the :ref:`sphinx_api`, specifically the :ref:`sphinx_abaqus_journal_utilities_api` API, for more information
+file. See the :ref:`waves_eabm_api`, specifically the :ref:`sphinx_abaqus_journal_utilities_api` API, for more information
 about the ``export_mesh()`` function.
 
 In summary of the changes you just made to the ``tutorial_02_partition_mesh/SConscript`` file, a ``diff`` against the
@@ -161,7 +161,7 @@ code that does a few specific tasks:
 * Save the ``output_file`` with the changes made
 
 The ``single_element_partition.py`` script also contains an argument parser function, whose auto-generated CLI
-documentation can be found in the :ref:`sphinx_cli`. The argument parser functions in a very similar way to that in the
+documentation can be found in the :ref:`waves_eabm_cli`. The argument parser functions in a very similar way to that in the
 ``single_element_geometry.py`` file, but a new command line argument ``--input-file`` is added. This command line
 argument is how the script knows which file to copy and then modify in the Abaqus python code.
 

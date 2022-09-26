@@ -96,7 +96,7 @@ In the code you just added, a ``simulation_variables`` dictionary is defined.  E
 in the previous tutorials. The ``width`` and ``height`` parameters are used in the ``single_element_geometry.py`` and
 ``single_element_partition.py`` scripts, and ``global_seed`` is used in the ``single_element_mesh.py`` script. Recall
 that each of these scripts is called using a command line interface that has default parameters. See the
-:ref:`sphinx_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
+:ref:`waves_eabm_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
 parser for each of these scripts will supply a default value for each command line argument that is not specified
 (assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
 passed to the :meth:`waves.builders.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that

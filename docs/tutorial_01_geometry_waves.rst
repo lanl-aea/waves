@@ -183,7 +183,7 @@ interpret the comments as ReStructured Text. Docstrings discuss the function beh
 its interface. See the `PEP-257`_ conventions for docstring formatting along with
 `PEP-287`_ for syntax specific to reStructured Text. Using the `Sphinx automodule`_
 directive, the docstring can be used to autobuild documentation for your functions. An
-example of this is in the :ref:`sphinx_api`.
+example of this is in the :ref:`waves_eabm_api`.
 
 .. _tutorial_geometry_waves_abaqus_python_code:
 
@@ -222,7 +222,7 @@ small software utility. Command line interfaces allow for scripts to be executed
 with optional command line arguments. This allows us to change the values of input
 arguments to the ``main()`` function without any source code modification.
 ``argparse`` also helps automate command line interface (CLI) documentation. An example of
-this is the :ref:`sphinx_cli`.
+this is the :ref:`waves_eabm_cli`.
 
 The first highlighted portion of the ``get_parser()`` function defines variables based on
 the name of the script. While this method of determining the file name is non-standard
