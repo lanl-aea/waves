@@ -16,7 +16,7 @@ report.extend(env.Substfile(
     SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
 
 # Copy project root files required by the report
-report.extend(Command(
+report.extend(env.Command(
     target=["README.txt"],
     source=["#/README.rst"],
     action=Copy("$TARGET", "$SOURCE")))
