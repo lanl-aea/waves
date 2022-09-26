@@ -9,4 +9,5 @@
    :caption: Report
 
    nominal
+   mesh_convergence
    zreferences

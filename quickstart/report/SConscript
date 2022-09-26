@@ -22,6 +22,9 @@ report_copy_list = [
     f"#/{env['documentation_dir']}/simulation_material.txt",
     f"#/{env['documentation_dir']}/single_element_schematic.pdf",
     f"#/{env['documentation_dir']}/stress_strain_comparison.pdf",
+    f"#/{env['documentation_dir']}/mesh_convergence.rst",
+    f"#/{env['documentation_dir']}/mesh_convergence_stress.pdf",
+    f"#/{env['documentation_dir']}/mesh_convergence_conclusions.txt",
     f"#/{env['documentation_dir']}/nominal_conclusions.txt"
 ]
 report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]

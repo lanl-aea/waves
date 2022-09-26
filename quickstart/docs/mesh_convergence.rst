@@ -30,19 +30,10 @@ convergence study includes four seed sizes in the table below.
 Results
 *******
 
-.. only:: html
+.. figure:: mesh_convergence_stress.*
+   :align: center
 
-   .. figure:: mesh_convergence_stress.png
-      :align: center
-
-      Stress mesh convergence
-
-.. only:: latex
-
-   .. figure:: mesh_convergence_stress.pdf
-      :align: center
-
-      Stress mesh convergence
+   Stress mesh convergence
 
 ***********
 Conclusions
