@@ -4,9 +4,13 @@
 WAVES-EABM API
 ##############
 
+.. _abaqus_journal_api:
+
 ******
 abaqus
 ******
+
+.. _abaqus_single_element_geometry_api:
 
 single_element_geometry.py
 ==========================
