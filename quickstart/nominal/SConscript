@@ -98,9 +98,13 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 # PDF Report
-report_source_list = ["conf.py"]
+report_source_list = ["conf.py", "index.rst"]
 report_copy_list = [
     f"#/{env['documentation_dir']}/nominal.rst",
+    f"#/{env['documentation_dir']}/project_brief.txt",
+    f"#/{env['documentation_dir']}/zreferences.rst",
+    f"#/{env['documentation_dir']}/references.bib",
+    f"#/{env['documentation_dir']}/targets.txt",
     f"#/{env['documentation_dir']}/simulation_description.txt",
     f"#/{env['documentation_dir']}/simulation_material.txt",
     f"#/{env['documentation_dir']}/stress_strain_comparison.pdf",
@@ -116,7 +120,7 @@ for file_path in report_copy_list:
 env.Substfile(
     "conf.py.in",
     SUBST_DICT=waves.builders.substitution_syntax(simulation_variables))
-report_directory = Dir("report")
+report_directory = Dir("latex")
 report.extend(env.Command(
     target=[report_directory],
     source=report_source_list,
