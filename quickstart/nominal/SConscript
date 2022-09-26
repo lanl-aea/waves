@@ -7,11 +7,11 @@ import waves
 from eabm_package import single_element_compression
 
 # Inherit the parent construction environment
-Import('env')
+Import(["env", "project_variables"])
 
 # Set project-wide paths with os-agnostic path separators
-eabm_package_dir = env['eabm_package_dir']
-eabm_package_abspath = pathlib.Path(env['eabm_package_abspath'])
+eabm_package_dir = env["eabm_package_dir"]
+eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
 
 # Simulation variables
 model = "single_element"
@@ -20,6 +20,7 @@ simulation_variables = single_element_compression.nominal
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
+report = []
 
 # Geometry
 journal_file = f"{model}_geometry"
@@ -93,16 +94,43 @@ script_options = "--input-file " + " ".join(str(path) for path in post_processin
 script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
 workflow.extend(env.PythonScript(
     target=[plot_name],
-    source=[str(eabm_package_abspath / 'plot_scatter.py')] + post_processing_source,
+    source=[str(eabm_package_abspath / "plot_scatter.py")] + post_processing_source,
     script_options=script_options))
 
-# Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
+# PDF Report
+report_source_list = ["conf.py"]
+report_copy_list = [
+    f"#/{env['documentation_dir']}/nominal.rst",
+    f"#/{env['documentation_dir']}/simulation_description.txt",
+    f"#/{env['documentation_dir']}/simulation_material.txt",
+    f"#/{env['documentation_dir']}/stress_strain_comparison.pdf",
+    f"#/{env['documentation_dir']}/nominal_conclusions.txt"
+]
+report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
+for file_path in report_copy_list:
+    target = f'{file_path.parts[-2]}_{file_path.name}'
+    Command(target=target,
+            source=str(file_path),
+            action=Copy("$TARGET", "$SOURCE"))
+    report_source_list.append(target)
+env.Substfile(
+    "conf.py.in",
+    SUBST_DICT=waves.builders.substitution_syntax(simulation_variables))
+report_directory = Dir("report")
+report.extend(env.Command(
+    target=[report_directory],
+    source=report_source_list,
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}"))
+env.Clean(report, report_directory)
+
+# Collector alias(es) based on parent directory name
+parent_directory = Dir(".").srcnode().name
 env.Alias(parent_directory, workflow)
 env.Alias(f"{parent_directory}_datacheck", datacheck)
-env.Alias(env['datacheck_alias'], datacheck)
+env.Alias(f"{parent_directory}_report", report)
+env.Alias(env["datacheck_alias"], datacheck)
 
-if not env['abaqus']:
+if not env["abaqus"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+    Ignore([".", parent_directory], workflow)
+    Ignore([".", parent_directory], datacheck)
