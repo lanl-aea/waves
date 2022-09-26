@@ -1,6 +1,6 @@
-##############################
-|PROJECT|: Compression Nominal
-##############################
+##########################
+|PROJECT|: Analysis Report
+##########################
 
 .. include:: project_brief.txt
 
