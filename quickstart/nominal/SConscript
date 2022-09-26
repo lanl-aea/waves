@@ -20,7 +20,6 @@ simulation_variables = single_element_compression.nominal
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
-report = []
 
 # Geometry
 journal_file = f"{model}_geometry"
@@ -97,44 +96,10 @@ workflow.extend(env.PythonScript(
     source=[str(eabm_package_abspath / "plot_scatter.py")] + post_processing_source,
     script_options=script_options))
 
-# PDF Report
-report_source_list = ["index.rst", plot_name]
-report_copy_list = [
-    f"#/{env['documentation_dir']}/nominal.rst",
-    f"#/{env['documentation_dir']}/project_brief.txt",
-    f"#/{env['documentation_dir']}/zreferences.rst",
-    f"#/{env['documentation_dir']}/references.bib",
-    f"#/{env['documentation_dir']}/targets.txt",
-    f"#/{env['documentation_dir']}/simulation_description.txt",
-    f"#/{env['documentation_dir']}/simulation_description_short.txt",
-    f"#/{env['documentation_dir']}/simulation_material.txt",
-    f"#/{env['documentation_dir']}/single_element_schematic.pdf",
-    f"#/{env['documentation_dir']}/nominal_conclusions.txt"
-]
-report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
-report_source_list = report_source_list + [source_file.name.rstrip('.in') for source_file in report_copy_list]
-report.extend(waves.builders.copy_substitute(
-    report_copy_list,
-    substitution_dictionary=waves.builders.substitution_syntax(simulation_variables)))
-report.extend(env.Substfile(
-    "conf.py.in",
-    SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
-report.extend(Command(
-    target=["README.txt"],
-    source=["#/README.rst"],
-    action=Copy("$TARGET", "$SOURCE")))
-report_directory = Dir("latex")
-report.extend(env.Command(
-    target=[report_directory],
-    source=report_source_list,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}"))
-env.Clean(report, report_directory)
-
 # Collector alias(es) based on parent directory name
 parent_directory = Dir(".").srcnode().name
 env.Alias(parent_directory, workflow)
 env.Alias(f"{parent_directory}_datacheck", datacheck)
-env.Alias(f"{parent_directory}_report", report)
 env.Alias(env["datacheck_alias"], datacheck)
 
 if not env["abaqus"]:

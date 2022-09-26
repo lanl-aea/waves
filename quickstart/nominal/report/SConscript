@@ -1,0 +1,46 @@
+#! /usr/bin/env python
+
+import pathlib
+
+import waves
+
+# Inherit the parent construction environment
+Import(["env", "project_variables", "source_dir"])
+
+report = []
+
+# PDF Report
+report_source_list = ["index.rst"]
+report_copy_list = [
+    f"#/{env['documentation_dir']}/nominal.rst",
+    f"#/{env['documentation_dir']}/project_brief.txt",
+    f"#/{env['documentation_dir']}/zreferences.rst",
+    f"#/{env['documentation_dir']}/references.bib",
+    f"#/{env['documentation_dir']}/targets.txt",
+    f"#/{env['documentation_dir']}/simulation_description.txt",
+    f"#/{env['documentation_dir']}/simulation_description_short.txt",
+    f"#/{env['documentation_dir']}/simulation_material.txt",
+    f"#/{env['documentation_dir']}/single_element_schematic.pdf",
+    f"#/{env['documentation_dir']}/stress_strain_comparison.pdf",
+    f"#/{env['documentation_dir']}/nominal_conclusions.txt"
+]
+report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
+report_source_list = report_source_list + [source_file.name.rstrip('.in') for source_file in report_copy_list]
+report.extend(waves.builders.copy_substitute(
+    report_copy_list,
+    substitution_dictionary=waves.builders.substitution_syntax(project_variables)))
+report.extend(env.Substfile(
+    "conf.py.in",
+    SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
+report.extend(Command(
+    target=["README.txt"],
+    source=["#/README.rst"],
+    action=Copy("$TARGET", "$SOURCE")))
+report_directory = Dir("latex")
+report.extend(env.Command(
+    target=[report_directory],
+    source=report_source_list,
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}"))
+env.Clean(report, report_directory)
+
+env.Alias(f"{source_dir}_report", report)
