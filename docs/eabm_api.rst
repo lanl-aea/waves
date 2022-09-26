@@ -21,6 +21,8 @@ single_element_geometry.py
     :show-inheritance:
     :synopsis: The Abaqus single element geometry creation script
 
+.. _abaqus_single_element_partition_api:
+
 single_element_partition.py
 ===========================
 
@@ -29,6 +31,8 @@ single_element_partition.py
     :members:
     :show-inheritance:
     :synopsis: The Abaqus single element partition script
+
+.. _abaqus_single_element_mesh_api:
 
 single_element_mesh.py
 ======================

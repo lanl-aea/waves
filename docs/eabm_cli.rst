@@ -18,11 +18,15 @@ single_element_geometry.py
 .. argparse::
     :ref: eabm_package.abaqus.single_element_geometry.get_parser
 
+.. _abaqus_single_element_partition_cli:
+
 single_element_parition.py
 ==========================
 
 .. argparse::
     :ref: eabm_package.abaqus.single_element_partition.get_parser
+
+.. _abaqus_single_element_mesh_cli:
 
 single_element_mesh.py
 ==========================
