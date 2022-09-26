@@ -7,7 +7,7 @@ import pathlib
 import waves
 
 # Make the EABM package importable
-sys.path.insert(0, str(pathlib.Path('.').resolve()))
+sys.path.insert(0, str(pathlib.Path(".").resolve()))
 
 # Accept command line options with fall back default values
 AddOption(
@@ -38,54 +38,55 @@ env = Environment(ENV=os.environ.copy(),
 env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['sphinx_build'] = waves.builders.find_program(['sphinx-build'], env)
-env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
+env["sphinx_build"] = waves.builders.find_program(["sphinx-build"], env)
+env["abaqus"] = waves.builders.find_program(["abq2021", "abq2020"], env)
 
 # Set project internal variables and variable substitution dictionaries
-project_dir = pathlib.Path(Dir('.').abspath)
+project_dir = pathlib.Path(Dir(".").abspath)
 project_name = project_dir.name
-documentation_source_dir = 'docs'
-eabm_package_dir = 'eabm_package'
+documentation_source_dir = "docs"
+eabm_package_dir = "eabm_package"
 project_variables = {
-    'project_name': project_name,
-    'project_dir': str(project_dir),
-    'version': '0.1.0',
-    'eabm_package_dir': eabm_package_dir,
-    'eabm_package_abspath': str(project_dir / eabm_package_dir),
-    'datacheck_alias': 'datacheck'
+    "project_name": project_name,
+    "project_dir": str(project_dir),
+    "version": "0.1.0",
+    "documentation_dir": documentation_source_dir,
+    "eabm_package_dir": eabm_package_dir,
+    "eabm_package_abspath": str(project_dir / eabm_package_dir),
+    "datacheck_alias": "datacheck"
 }
 for key, value in project_variables.items():
     env[key] = value
 
 # Build path object for extension and re-use
-variant_dir_base = pathlib.Path(env['variant_dir_base'])
+variant_dir_base = pathlib.Path(env["variant_dir_base"])
 
 # Add WAVES builders
 env.Append(BUILDERS={
-    'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
-    'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus']),
-    'PythonScript': waves.builders.python_script(),
-    'CondaEnvironment': waves.builders.conda_environment()
+    "AbaqusJournal": waves.builders.abaqus_journal(abaqus_program=env["abaqus"]),
+    "AbaqusSolver": waves.builders.abaqus_solver(abaqus_program=env["abaqus"]),
+    "AbaqusExtract": waves.builders.abaqus_extract(abaqus_program=env["abaqus"]),
+    "PythonScript": waves.builders.python_script(),
+    "CondaEnvironment": waves.builders.conda_environment()
 })
 
 # Add documentation target(s)
-if not env['ignore_documentation']:
+if not env["ignore_documentation"]:
     build_dir = variant_dir_base / documentation_source_dir
-    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports=['env', 'documentation_source_dir'], duplicate=False)
-    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=['env', 'project_variables'])
+    SConscript(dirs=".", variant_dir=str(variant_dir_base), exports=["env"], duplicate=False)
+    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=["env", "project_variables"])
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
     docs_aliases = []
 
 # Add simulation targets
 eabm_simulation_directories = [
-    'nominal',
-    'mesh_convergence'
+    "nominal",
+    "mesh_convergence"
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
-    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+    SConscript(dirs=source_dir, variant_dir=build_dir, exports=["env", "project_variables"], duplicate=False)
 
 # Add default target list to help message
 default_targets_help = "\nDefault Targets:\n"
