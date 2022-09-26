@@ -46,7 +46,7 @@ report.extend(waves.builders.copy_substitute(
     substitution_dictionary=waves.builders.substitution_syntax(project_variables)))
 
 # PDF Report build task
-report_source_list = ["index.rst"] + [source_file.name.rstrip('.in') for source_file in report_copy_list]
+report_source_list = ["index.rst"] + [source_file.name.rstrip(".in") for source_file in report_copy_list]
 report_directory = Dir("latex")
 report.extend(env.Command(
     target=[report_directory],
