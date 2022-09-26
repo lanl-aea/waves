@@ -1,5 +1,5 @@
 #########
-|project|
+|PROJECT|
 #########
 
 .. include:: project_brief.txt

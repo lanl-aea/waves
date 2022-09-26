@@ -8,6 +8,11 @@ Changelog
 0.4.7 (unreleased)
 ******************
 
+Enhancements
+============
+- Reduce instances of hardcoded project name in the ``waves quickstart`` template files (:issue:`312`, :merge:`336`). By
+  `Kyle Brindley`_.
+
 ******************
 0.4.6 (2022-09-21)
 ******************

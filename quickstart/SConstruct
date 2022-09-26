@@ -42,9 +42,9 @@ env['sphinx_build'] = waves.builders.find_program(['sphinx-build'], env)
 env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
 
 # Set project internal variables and variable substitution dictionaries
-project_name = 'WAVES-EABM'
-documentation_source_dir = 'docs'
 project_dir = pathlib.Path(Dir('.').abspath)
+project_name = project_dir.name
+documentation_source_dir = 'docs'
 eabm_package_dir = 'eabm_package'
 project_variables = {
     'project_name': project_name,
