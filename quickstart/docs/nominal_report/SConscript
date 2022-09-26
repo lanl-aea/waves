@@ -5,7 +5,7 @@ import pathlib
 import waves
 
 # Inherit the parent construction environment
-Import(["env", "project_variables", "source_dir"])
+Import(["env", "project_variables"])
 
 report = []
 
@@ -43,4 +43,5 @@ report.extend(env.Command(
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}"))
 env.Clean(report, report_directory)
 
-env.Alias(f"{source_dir}_report", report)
+parent_directory = Dir(".").srcnode().name
+env.Alias(parent_directory, report)

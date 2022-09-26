@@ -72,9 +72,18 @@ env.Append(BUILDERS={
 
 # Add documentation target(s)
 if not env["ignore_documentation"]:
+    # Project documentation
     build_dir = variant_dir_base / documentation_source_dir
     SConscript(dirs=".", variant_dir=str(variant_dir_base), exports=["env"], duplicate=False)
     docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=["env", "project_variables"])
+
+    # Nominal analysis report
+    nominal_report_dir = pathlib.Path(documentation_source_dir) / "nominal_report"
+    build_dir = variant_dir_base / documentation_source_dir / "nominal_report"
+    SConscript(dirs=str(nominal_report_dir),
+               variant_dir=str(build_dir),
+               exports=["env", "project_variables"],
+               duplicate=True)
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
     docs_aliases = []
@@ -87,12 +96,6 @@ eabm_simulation_directories = [
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
     SConscript(dirs=source_dir, variant_dir=build_dir, exports=["env", "project_variables"], duplicate=False)
-
-    if source_dir == 'nominal':
-        SConscript(dirs=str(pathlib.Path(source_dir) / "report"),
-                   variant_dir=str(build_dir / "report"),
-                   exports=["env", "project_variables", "source_dir"],
-                   duplicate=True)
 
 # Add default target list to help message
 default_targets_help = "\nDefault Targets:\n"
