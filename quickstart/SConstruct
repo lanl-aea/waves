@@ -86,7 +86,7 @@ eabm_simulation_directories = [
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
-    SConscript(dirs=source_dir, variant_dir=build_dir, exports=["env", "project_variables"], duplicate=False)
+    SConscript(dirs=source_dir, variant_dir=build_dir, exports=["env", "project_variables"])
 
 # Add default target list to help message
 default_targets_help = "\nDefault Targets:\n"

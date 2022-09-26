@@ -108,6 +108,7 @@ report_copy_list = [
     f"#/{env['documentation_dir']}/simulation_description.txt",
     f"#/{env['documentation_dir']}/simulation_description_short.txt",
     f"#/{env['documentation_dir']}/simulation_material.txt",
+    f"#/{env['documentation_dir']}/single_element_schematic.pdf",
     f"#/{env['documentation_dir']}/nominal_conclusions.txt"
 ]
 report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
