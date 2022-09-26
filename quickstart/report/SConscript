@@ -7,10 +7,21 @@ import waves
 # Inherit the parent construction environment
 Import(["env", "project_variables"])
 
+# Set empty workflow list
 report = []
 
-# PDF Report
-report_source_list = ["index.rst"]
+# Perform variable substitution on Sphinx configuration file
+report.extend(env.Substfile(
+    "conf.py.in",
+    SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
+
+# Copy project root files required by the report
+report.extend(Command(
+    target=["README.txt"],
+    source=["#/README.rst"],
+    action=Copy("$TARGET", "$SOURCE")))
+
+# Copy documentation source files re-used in the report
 report_copy_list = [
     f"#/{env['documentation_dir']}/nominal.rst",
     f"#/{env['documentation_dir']}/project_brief.txt",
@@ -28,17 +39,12 @@ report_copy_list = [
     f"#/{env['documentation_dir']}/nominal_conclusions.txt"
 ]
 report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
-report_source_list = report_source_list + [source_file.name.rstrip('.in') for source_file in report_copy_list]
 report.extend(waves.builders.copy_substitute(
     report_copy_list,
     substitution_dictionary=waves.builders.substitution_syntax(project_variables)))
-report.extend(env.Substfile(
-    "conf.py.in",
-    SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
-report.extend(Command(
-    target=["README.txt"],
-    source=["#/README.rst"],
-    action=Copy("$TARGET", "$SOURCE")))
+
+# PDF Report build task
+report_source_list = ["index.rst"] + [source_file.name.rstrip('.in') for source_file in report_copy_list]
 report_directory = Dir("latex")
 report.extend(env.Command(
     target=[report_directory],
@@ -47,5 +53,6 @@ report.extend(env.Command(
 env.AlwaysBuild(report)
 env.Clean(report, report_directory)
 
+# Collector alias to build the PDF report
 parent_directory = Dir(".").srcnode().name
 env.Alias(parent_directory, report)
