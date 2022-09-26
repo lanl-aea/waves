@@ -8,6 +8,11 @@ Changelog
 0.4.7 (unreleased)
 ******************
 
+New Features
+============
+- Add demonstration PDF report that re-uses the documentation source files to the ``waves quickstart`` template files
+  (:issue:`305`, :merge:`338`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add direct links to the Abaqus journal file API/CLI in the tutorials (:issue:`175`, :merge:`337`). By `Kyle
