@@ -67,7 +67,8 @@ The Cubit journal files include the same CLI introduced in :ref:`tutorial_partit
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
 files is the opportunity to use Python 3 with Cubit, where Abaqus journal files must use the Abaqus controlled
 installation of Python 2. The API and CLI built from the Cubit journal files' docstrings may be found in the
-:ref:`sphinx_api` for :ref:`cubit_journal_api` and the :ref:`sphinx_cli` for :ref:`cubit_journal_cli`, respectively.
+:ref:`waves_eabm_api` for :ref:`cubit_journal_api` and the :ref:`waves_eabm_cli` for :ref:`cubit_journal_cli`,
+respectively.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/cubit/single_element_geometry.py
 
