@@ -82,6 +82,5 @@ latex_elements = {
     'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
 }
 latex_documents = [
-    (master_doc, latex_project.lower() + '.tex', latex_project.upper(),
-     author_latex, 'manual'),
+    (master_doc, latex_project.lower() + '.tex', latex_project.upper(), author_latex, 'manual'),
 ]

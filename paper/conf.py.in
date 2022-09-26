@@ -80,13 +80,13 @@ charge, provided that this Notice and any statement of authorship are reproduced
 nor Triad makes any warranty, express or implied, or assumes any liability or responsibility for the use of this
 information.
 """
-
+# Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
+latex_project = project.replace('_', '-')
 latex_elements = {
     'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
     'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
     'releasename': _project_name_short
 }
 latex_documents = [
-    (master_doc, project.lower() + '.tex', None,
-     author_latex, 'manual'),
+    (master_doc, latex_project.lower() + '.tex', latex_project.upper(), author_latex, 'manual'),
 ]
