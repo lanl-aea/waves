@@ -41,6 +41,7 @@ report.extend(env.Command(
     target=[report_directory],
     source=report_source_list,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}"))
+env.AlwaysBuild(report)
 env.Clean(report, report_directory)
 
 parent_directory = Dir(".").srcnode().name
