@@ -13,6 +13,10 @@ Documentation
 - Add direct links to the Abaqus journal file API/CLI in the tutorials (:issue:`175`, :merge:`337`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- Remove waves internal import from quickstart files (:issue:`313`, :merge:`339`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Reduce instances of hardcoded project name in the ``waves quickstart`` template files (:issue:`312`, :merge:`336`). By
