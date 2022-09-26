@@ -15,11 +15,13 @@ report.extend(env.Substfile(
     "conf.py.in",
     SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
 
-# Copy project root files required by the report
-report.extend(env.Command(
-    target=["README.txt"],
-    source=["#/README.rst"],
-    action=Copy("$TARGET", "$SOURCE")))
+# Copy project root files required by the documentation
+root_files = [("README.txt", "#/README.rst")]
+for target, source in root_files:
+    report.extend(env.Command(
+        target=[target],
+        source=[source],
+        action=Copy("$TARGET", "$SOURCE")))
 
 # Copy documentation source files re-used in the report
 report_copy_list = [

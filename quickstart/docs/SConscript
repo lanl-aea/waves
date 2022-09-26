@@ -13,11 +13,20 @@ env.Substfile(
     "conf.py.in",
     SUBST_DICT=waves.builders.substitution_syntax(project_variables))
 
+# Copy project root files required by the documentation
+root_files = [("README.txt", "#/README.rst"),
+              ("environment.txt", "#/environment.txt")]
+for target, source in root_files:
+    env.Command(
+        target=[target],
+        source=[source],
+        action=Copy("$TARGET", "$SOURCE"))
+
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
     'conf.py',
-    'README.txt',  # Copied from README.rst to docs build directory by root SConscript
-    'environment.txt',  # Copied from environment.txt to docs build directory by root SConscript
+    'README.txt',
+    'environment.txt',
     'api.rst',
     'cli.rst',
     'build.txt',
