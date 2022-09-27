@@ -6,8 +6,6 @@ import pathlib
 
 import waves
 
-version = '0.1.0'
-
 # Comments used in tutorial code snippets: marker-1
 
 # Accept command line options with fall back default values
@@ -47,6 +45,7 @@ env['cubit'] = waves.builders.find_program(['cubit'], env)
 
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM-TUTORIAL'
+version = '0.1.0'
 project_variables = {
     'project_name': project_name,
     'project_dir': Dir('.').abspath,
