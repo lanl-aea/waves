@@ -19,19 +19,10 @@ about Abaqus continuum elements can be found in the Abaqus documentation section
 Results
 *******
 
-.. only:: html
+.. figure:: stress_strain_comparison.*
+   :align: center
 
-   .. figure:: stress_strain_comparison.png
-      :align: center
-
-      Stress-strain
-
-.. only:: latex
-
-   .. figure:: stress_strain_comparison.pdf
-      :align: center
-
-      Stress-strain
+   Stress-strain
 
 ***********
 Conclusions

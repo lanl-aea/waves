@@ -1,0 +1,60 @@
+#! /usr/bin/env python
+
+import pathlib
+
+import waves
+
+# Inherit the parent construction environment
+Import(["env", "project_variables"])
+
+# Set empty workflow list
+report = []
+
+# Perform variable substitution on Sphinx configuration file
+report.extend(env.Substfile(
+    "conf.py.in",
+    SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
+
+# Copy project root files required by the documentation
+root_files = [("README.txt", "#/README.rst")]
+for target, source in root_files:
+    report.extend(env.Command(
+        target=[target],
+        source=[source],
+        action=Copy("$TARGET", "$SOURCE")))
+
+# Copy documentation source files re-used in the report
+report_copy_list = [
+    f"#/{env['documentation_dir']}/nominal.rst",
+    f"#/{env['documentation_dir']}/project_brief.txt",
+    f"#/{env['documentation_dir']}/zreferences.rst",
+    f"#/{env['documentation_dir']}/references.bib",
+    f"#/{env['documentation_dir']}/targets.txt",
+    f"#/{env['documentation_dir']}/simulation_description.txt",
+    f"#/{env['documentation_dir']}/simulation_description_short.txt",
+    f"#/{env['documentation_dir']}/simulation_material.txt",
+    f"#/{env['documentation_dir']}/single_element_schematic.pdf",
+    f"#/{env['documentation_dir']}/stress_strain_comparison.pdf",
+    f"#/{env['documentation_dir']}/mesh_convergence.rst",
+    f"#/{env['documentation_dir']}/mesh_convergence_stress.pdf",
+    f"#/{env['documentation_dir']}/mesh_convergence_conclusions.txt",
+    f"#/{env['documentation_dir']}/nominal_conclusions.txt"
+]
+report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
+report.extend(waves.builders.copy_substitute(
+    report_copy_list,
+    substitution_dictionary=waves.builders.substitution_syntax(project_variables)))
+
+# PDF Report build task
+report_source_list = ["index.rst"] + [source_file.name.rstrip(".in") for source_file in report_copy_list]
+report_directory = Dir("latex")
+report.extend(env.Command(
+    target=[report_directory],
+    source=report_source_list,
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}"))
+env.AlwaysBuild(report)
+env.Clean(report, report_directory)
+
+# Collector alias to build the PDF report
+parent_directory = Dir(".").srcnode().name
+env.Alias(parent_directory, report)

@@ -7,23 +7,23 @@ import waves
 from eabm_package import single_element_compression
 
 # Inherit the parent construction environment
-Import('env')
+Import("env")
 
 # Set project-wide paths with os-agnostic path separators
-eabm_package_dir = env['eabm_package_dir']
-eabm_package_abspath = pathlib.Path(env['eabm_package_abspath'])
+eabm_package_dir = env["eabm_package_dir"]
+eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
 
 # Simulation variables
-build_directory = pathlib.Path(Dir('.').abspath)
+build_directory = pathlib.Path(Dir(".").abspath)
 parameter_schema = single_element_compression.mesh_convergence
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
 model = "single_element"
 simulation_constants = {
-    'width': 1.0,
-    'height': 1.0,
-    'displacement': -0.1
+    "width": 1.0,
+    "height": 1.0,
+    "displacement": -0.1
 }
 
 # Collect the target nodes to build a concise alias for all targets
@@ -73,7 +73,7 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
     semaphore_file_list.append(semaphore_file)
     semaphore_file.parent.mkdir(parents=True, exist_ok=True)
     if not semaphore_file.exists():
-        with open(semaphore_file, 'w') as semaphore:
+        with open(semaphore_file, "w") as semaphore:
             semaphore.write(f"{set_name.name}\n")
     # Mesh
     journal_file = f"{model}_mesh"
@@ -108,15 +108,15 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
     # Abaqus Solve
     solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
     solve_source_list.append([f"{set_name / journal_file}.inp"])
-    job_name = pathlib.Path(solve_source_list[0]).with_suffix('').name
+    job_name = pathlib.Path(solve_source_list[0]).with_suffix("").name
     datacheck_name = f"{job_name}_DATACHECK"
-    datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
-    abaqus_options='-double both'
+    datacheck_suffixes = ("023", "mdl", "sim", "stt")
+    abaqus_options="-double both"
     datacheck.extend(env.AbaqusSolver(
         target=[f"{set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
         source=solve_source_list,
         job_name=datacheck_name,
-        abaqus_options=f'{abaqus_options} -datacheck'))
+        abaqus_options=f"{abaqus_options} -datacheck"))
 
     workflow.extend(env.AbaqusSolver(
         target=[f"{set_name / job_name}.sta"],
@@ -152,7 +152,7 @@ script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
     target=[plot_name],
-    source=[str(eabm_package_abspath / 'plot_scatter.py'), parameter_study_file.name] + post_processing_source,
+    source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 plot_name = "mesh_convergence_stress.pdf"
@@ -163,16 +163,16 @@ script_options += f" --parameter-study-file {parameter_study_file.name}"
 script_options += f" --selection-dict {selection_dict}"
 workflow.extend(env.PythonScript(
     target=[plot_name],
-    source=[str(eabm_package_abspath / 'plot_scatter.py'), parameter_study_file.name] + post_processing_source,
+    source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 # Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
+parent_directory = Dir(".").srcnode().name
 env.Alias(parent_directory, workflow)
 env.Alias(f"{parent_directory}_datacheck", datacheck)
-env.Alias(env['datacheck_alias'], datacheck)
+env.Alias(env["datacheck_alias"], datacheck)
 
-if not env['abaqus']:
+if not env["abaqus"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+    Ignore([".", parent_directory], workflow)
+    Ignore([".", parent_directory], datacheck)

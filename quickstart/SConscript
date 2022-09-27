@@ -1,22 +1,12 @@
 #! /usr/bin/env python
-#
+
 # Inherit the parent construction environment
-Import(['env', 'documentation_source_dir'])
-
-readme_target = Command(
-    target=f"{documentation_source_dir}/README.txt",
-    source="README.rst",
-    action=Copy("$TARGET", "$SOURCE"))
-
-Command(
-    target=f"{documentation_source_dir}/environment.txt",
-    source="environment.txt",
-    action=Copy("$TARGET", "$SOURCE"))
+Import(["env"])
 
 environment_target = env.CondaEnvironment(
-    target=['environment.yaml'],
+    target=["environment.yaml"],
     source=[])
 env.AlwaysBuild(environment_target)
 
 # Add this target to the defaults list
-Default(readme_target, environment_target)
+Default(environment_target)
