@@ -135,7 +135,7 @@ fast-test:
     # Project unit tests
     - scons . --keep-going --unconditional-build
     # Set PYTHONPATH for WAVES import in tutorials/quickstart system/integration/regression tests
-    - export PYTHONPATH=${project_root}
+    - export PYTHONPATH=${project_root}:$PYTHONPATH
     # WAVES CLI regression tests
     - quickstart_regression_directory="${project_root}/test_quickstart"
     - python -m waves.waves quickstart ${quickstart_regression_directory}
