@@ -15,8 +15,8 @@ sys.path.insert(0, str(project_dir))
 
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.
-mock_modules = ['abaqus', 'abaqusConstants', 'mesh', 'cubit', 'scipy', 'scipy.stats', 'xarray', 'pyyaml', 'h5py',
-                'numpy', 'matplotlib', 'matplotlib.pyplot', 'waves']
+mock_modules = ["abaqus", "abaqusConstants", "mesh", "cubit", "scipy", "scipy.stats", "xarray", "pyyaml", "h5py",
+                "numpy", "matplotlib", "matplotlib.pyplot", "waves"]
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
@@ -26,30 +26,30 @@ copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rig
 
 # ============================================================================ GENERATE CLI OUTPUT FOR SHELL SCRIPTS ===
 # -- Project Variables -------------------------------------------------------
-rst_prolog = f'.. |PROJECT| replace:: {project.upper()}\n.. |project| replace:: {project}\n.. include:: targets.txt'
+rst_prolog = f".. |PROJECT| replace:: {project.upper()}\n.. |project| replace:: {project}\n.. include:: targets.txt"
 
 # -- General configuration ---------------------------------------------------
-master_doc = 'index'
+master_doc = "index"
 
 # Add custom style sheet to make the html docs wider
 def setup(app):
-    app.add_css_file('custom.css')
+    app.add_css_file("custom.css")
 
 # Add any Sphinx extension module names here, as strings.
-extensions = ['sphinx.ext.autodoc',
-              'sphinx.ext.viewcode',
-              'sphinx.ext.extlinks',
-              'sphinxcontrib.bibtex',
-              'sphinxarg.ext']
-bibtex_bibfiles = ['references.bib']
-templates_path = ['_templates']
-source_suffix = ['.rst']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+extensions = ["sphinx.ext.autodoc",
+              "sphinx.ext.viewcode",
+              "sphinx.ext.extlinks",
+              "sphinxcontrib.bibtex",
+              "sphinxarg.ext"]
+bibtex_bibfiles = ["references.bib"]
+templates_path = ["_templates"]
+source_suffix = [".rst"]
+exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 # -- Options for HTML output -------------------------------------------------
-html_logo = 'waves_logo_brandmark_smaller.png'
-html_theme = 'sphinx_rtd_theme'
-html_static_path = ['_static']
+html_logo = "waves_logo_brandmark_smaller.png"
+html_theme = "sphinx_rtd_theme"
+html_static_path = ["_static"]
 
 # -- Options for LaTeX output ---------------------------------------------
 copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
@@ -62,11 +62,11 @@ nor Triad makes any warranty, express or implied, or assumes any liability or re
 information.
 """
 # Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
-latex_project = project.replace('_', '-')
+latex_project = project.replace("_", "-")
 latex_elements = {
-    'preamble': '\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}',
-    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
+    "preamble": "\\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}",
+    "maketitle": f"\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle",
 }
 latex_documents = [
-    (master_doc, latex_project.lower() + '.tex', latex_project.upper(), author_latex, 'manual'),
+    (master_doc, latex_project.lower() + ".tex", latex_project.upper(), author_latex, "manual"),
 ]
