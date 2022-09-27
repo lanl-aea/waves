@@ -65,7 +65,6 @@
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`Sphinx automodule`: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
-.. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
 .. _`Xarray`: https://docs.xarray.dev/en/stable/
 .. _`automated build system`: https://en.wikipedia.org/wiki/List_of_build_automation_software
 .. _`conda-forge`: https://conda-forge.org/
