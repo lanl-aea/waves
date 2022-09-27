@@ -44,12 +44,21 @@ env["abaqus"] = waves.builders.find_program(["abq2021", "abq2020"], env)
 # Set project internal variables and variable substitution dictionaries
 project_dir = pathlib.Path(Dir(".").abspath)
 project_name = project_dir.name
+author_list = ["Kyle Brindley",
+               "Prabhu S. Khalsa",
+               "Thomas Roberts",
+               "Sergio Cordova",
+               "Matthew Fister",
+               "Scott Ouellette"]
+author_latex = r" \and ".join(author_list)
 documentation_source_dir = "docs"
 eabm_package_dir = "eabm_package"
 project_variables = {
     "project_name": project_name,
     "project_dir": str(project_dir),
     "version": "0.1.0",
+    "author_list": author_list,
+    "author_latex": author_latex,
     "documentation_dir": documentation_source_dir,
     "eabm_package_dir": eabm_package_dir,
     "eabm_package_abspath": str(project_dir / eabm_package_dir),

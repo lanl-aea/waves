@@ -5,24 +5,10 @@ import unittest.mock
 
 # -- Project information -----------------------------------------------------
 # Meta data from SCons project
-project = '@project_name@'
-VERSION = '@version@'
-project_dir = pathlib.Path('@project_dir@').resolve()
-
-# Name, Email
-authors = [('Kyle Brindley', '<kbrindley@lanl.gov>'),
-           ('Prabhu S. Khalsa', '<pkhalsa@lanl.gov>'),
-           ('Thomas Roberts', '<tproberts@lanl.gov>'),
-           ('Sergio Cordova', '<sergioc@lanl.gov>'),
-           ('Matthew Fister', '<mwfister@lanl.gov>'),
-           ('Scott Ouellette', '<souellette@lanl.gov>')]
-author_latex = ''
-author_manpage = ''
-for author, email in authors:
-    author_latex += f"{author} " + r'\and '
-    author_manpage += f"{author} {email}, "
-author_latex = author_latex.rstrip(r'\and ')
-author_manpage = author_manpage.rstrip(', ')
+project = "@project_name@"
+VERSION = "@version@"
+project_dir = pathlib.Path("@project_dir@").resolve()
+author_latex = r"@author_latex@"
 
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))

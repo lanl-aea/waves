@@ -4,21 +4,7 @@ import datetime
 # Meta data from SCons project
 project = '@project_name@'
 VERSION = '@version@'
-
-# Name, Email
-authors = [('Kyle Brindley', '<kbrindley@lanl.gov>'),
-           ('Prabhu S. Khalsa', '<pkhalsa@lanl.gov>'),
-           ('Thomas Roberts', '<tproberts@lanl.gov>'),
-           ('Sergio Cordova', '<sergioc@lanl.gov>'),
-           ('Matthew Fister', '<mwfister@lanl.gov>'),
-           ('Scott Ouellette', '<souellette@lanl.gov>')]
-author_latex = ''
-author_manpage = ''
-for author, email in authors:
-    author_latex += f"{author} " + r'\and '
-    author_manpage += f"{author} {email}, "
-author_latex = author_latex.rstrip(r'\and ')
-author_manpage = author_manpage.rstrip(', ')
+author_latex = r"@author_latex@"
 
 release = VERSION
 version = release
