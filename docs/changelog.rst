@@ -21,6 +21,7 @@ Documentation
 Internal Changes
 ================
 - Remove waves internal import from quickstart files (:issue:`313`, :merge:`339`). By `Kyle Brindley`_.
+- Remove the waves internal import from the tutorial files (:issue:`315`, :merge:`340`). By `Kyle Brindley`_.
 
 Enhancements
 ============
