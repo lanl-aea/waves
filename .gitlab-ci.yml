@@ -134,8 +134,8 @@ fast-test:
     - project_root=${PWD}
     # Project unit tests
     - scons . --keep-going --unconditional-build
-    # Development "install" to avoid setting PYTHONPATH for tutorials/quickstart system/integration/regression tests
-    - conda develop .
+    # Set PYTHONPATH for WAVES import in tutorials/quickstart system/integration/regression tests
+    - export PYTHONPATH=${project_root}
     # WAVES CLI regression tests
     - quickstart_regression_directory="${project_root}/test_quickstart"
     - python -m waves.waves quickstart ${quickstart_regression_directory}
