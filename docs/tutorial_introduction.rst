@@ -70,12 +70,13 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:10 :ref:`scons_multiactiontask`                 Execute multiple actions on the same target file
                    00:20 :ref:`tutorial_cubit_waves`                  Geometry, partition, and mesh examples with Cubit
                                                                       replicating :ref:`tutorial_simulation_waves`
+                   00:10 :ref:`tutorial_pseudo_variables_waves`       Changing task actions without re-building the task
                    00:30 :ref:`tutorial_latin_hypercube_waves`        Parameter study introduction using a latin
                                                                       hypercube
                    00:30 :ref:`tutorial_sobol_sequence_waves`         Parameter study introduction using a Sobol
                                                                       sequence
                    00:30 :ref:`tutorial_extend_study_waves`           Automatically extending and re-executing a
                                                                       parameter study
-                   00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that uses 
+                   00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that uses
                                                                       common Geometry and Partition tasks.
 ======================== ============================================ ==================================================
