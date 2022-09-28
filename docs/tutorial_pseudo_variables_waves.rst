@@ -114,6 +114,44 @@ Build Targets
    $ pwd
    /path/to/waves-eabm-tutorial
    $ scons tutorial_pseudo_variables
+   scons: Reading SConscript files ...
+   Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
+   Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
+   scons: done reading SConscript files.
+   scons: Building targets ...
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_pseudo_variables && /apps/abaqus/Commands/abq2021 -information environment > single_element_geometry.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_pseudo_variables && /apps/abaqus/Commands/abq2021 cae -noGui /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_pseudo_variables && /apps/abaqus/Commands/abq2021 -information environment > single_element_partition.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_pseudo_variables && /apps/abaqus/Commands/abq2021 cae -noGui /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_pseudo_variables && /apps/abaqus/Commands/abq2021 -information environment > single_element_mesh.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_pseudo_variables && /apps/abaqus/Commands/abq2021 cae -noGui /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+   Copy("build/tutorial_pseudo_variables/single_element_compression.inp", "eabm_package/abaqus/single_element_compression.inp")
+   Copy("build/tutorial_pseudo_variables/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
+   Copy("build/tutorial_pseudo_variables/assembly.inp", "eabm_package/abaqus/assembly.inp")
+   Copy("build/tutorial_pseudo_variables/boundary.inp", "eabm_package/abaqus/boundary.inp")
+   Copy("build/tutorial_pseudo_variables/field_output.inp", "eabm_package/abaqus/field_output.inp")
+   Copy("build/tutorial_pseudo_variables/materials.inp", "eabm_package/abaqus/materials.inp")
+   Copy("build/tutorial_pseudo_variables/parts.inp", "eabm_package/abaqus/parts.inp")
+   Copy("build/tutorial_pseudo_variables/history_output.inp", "eabm_package/abaqus/history_output.inp")
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_pseudo_variables && /apps/abaqus/Commands/abq2021 -information environment > single_element_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_pseudo_variables && /apps/abaqus/Commands/abq2021 -job single_element_compression -input single_element_compression -double both -cpus 1 -interactive -ask_delete no > single_element_compression.stdout 2>&1
+   scons: done building targets.
+
+7. Execute the build command again with a different number of solve cpus. Observe that the workflow is reported as
+   up-to-date.
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ scons tutorial_pseudo_variables --solve-cpus=2
+   scons: Reading SConscript files ...
+   Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
+   Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
+   scons: done reading SConscript files.
+   scons: Building targets ...
+   scons: `tutorial_pseudo_variables' is up to date.
+   scons: done building targets.
 
 ************
 Output Files
@@ -129,3 +167,37 @@ is specified by name to reduce clutter in the ouptut shown.
    /home/roppenheimer/waves-eabm-tutorial
    $ tree build/tutorial_pseudo_variables/
    build/tutorial_pseudo_variables/
+   ├── abaqus.rpy
+   ├── abaqus.rpy.1
+   ├── abaqus.rpy.2
+   ├── amplitudes.inp
+   ├── assembly.inp
+   ├── boundary.inp
+   ├── field_output.inp
+   ├── history_output.inp
+   ├── materials.inp
+   ├── parts.inp
+   ├── single_element_compression.abaqus_v6.env
+   ├── single_element_compression.com
+   ├── single_element_compression.dat
+   ├── single_element_compression.inp
+   ├── single_element_compression.msg
+   ├── single_element_compression.odb
+   ├── single_element_compression.prt
+   ├── single_element_compression.sta
+   ├── single_element_compression.stdout
+   ├── single_element_geometry.abaqus_v6.env
+   ├── single_element_geometry.cae
+   ├── single_element_geometry.jnl
+   ├── single_element_geometry.stdout
+   ├── single_element_mesh.abaqus_v6.env
+   ├── single_element_mesh.cae
+   ├── single_element_mesh.inp
+   ├── single_element_mesh.jnl
+   ├── single_element_mesh.stdout
+   ├── single_element_partition.abaqus_v6.env
+   ├── single_element_partition.cae
+   ├── single_element_partition.jnl
+   └── single_element_partition.stdout
+
+   0 directories, 32 files
