@@ -96,3 +96,20 @@ Build Targets
 ************
 Output Files
 ************
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ tree build/tutorial_extend_study -d
+   build/tutorial_extend_study
+   |-- parameter_set0
+   |-- parameter_set1
+   |-- parameter_set2
+   |-- parameter_set3
+   |-- parameter_set4
+   |-- parameter_set5
+   |-- parameter_set6
+   `-- parameter_set7
+
+   8 directories

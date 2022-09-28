@@ -380,18 +380,17 @@ separation if more than one simulation is built at the same time.
 
 .. code-block:: bash
 
-    $ pwd
-     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/
-    build/
-    └── tutorial_01_geometry
-        ├── abaqus.rpy
-        ├── single_element_geometry.abaqus_v6.env
-        ├── single_element_geometry.cae
-        ├── single_element_geometry.jnl
-        └── single_element_geometry.stdout
+   $ pwd
+   /home/roppenheimer/waves-eabm-tutorial
+   $ tree build/tutorial_01_geometry/
+   build/tutorial_01_geometry/
+   |-- abaqus.rpy
+   |-- single_element_geometry.abaqus_v6.env
+   |-- single_element_geometry.cae
+   |-- single_element_geometry.jnl
+   `-- single_element_geometry.stdout
 
-    1 directory, 5 files
+   0 directories, 5 files
 
 At this point, the only directory in the ``build`` directory is that pertaining to the
 specific target that was specified to be built. In this case, that is
