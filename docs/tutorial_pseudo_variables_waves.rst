@@ -140,7 +140,7 @@ Build Targets
 7. Execute the build command again with a different number of solve cpus. Observe that the workflow is reported as
    up-to-date.
 
-.. code-block:: bash
+.. code-block::
 
    $ pwd
    /path/to/waves-eabm-tutorial
