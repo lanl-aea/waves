@@ -12,6 +12,8 @@ New Features
 ============
 - Add demonstration PDF report that re-uses the documentation source files to the ``waves quickstart`` template files
   (:issue:`305`, :merge:`338`). By `Kyle Brindley`_.
+- Add Abaqus solve cpu option as a build action signature escaped sequence in the ``waves quickstart`` template files
+  (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
 
 Documentation
 =============
