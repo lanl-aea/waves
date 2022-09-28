@@ -17,6 +17,8 @@ Documentation
 =============
 - Add direct links to the Abaqus journal file API/CLI in the tutorials (:issue:`175`, :merge:`337`). By `Kyle
   Brindley`_.
+- Add a rough draft "pseudo variable" tutorial to demonstrate build action signature escape sequence usage
+  (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
