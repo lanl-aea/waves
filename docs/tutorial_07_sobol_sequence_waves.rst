@@ -100,3 +100,45 @@ Build Targets
 ************
 Output Files
 ************
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ tree build/tutorial_07_sobol_sequence/parameter_set0/
+   build/tutorial_07_sobol_sequence/parameter_set0/
+   |-- abaqus.rpy
+   |-- abaqus.rpy.1
+   |-- abaqus.rpy.2
+   |-- amplitudes.inp
+   |-- assembly.inp
+   |-- boundary.inp
+   |-- field_output.inp
+   |-- history_output.inp
+   |-- materials.inp
+   |-- parts.inp
+   |-- single_element_compression.abaqus_v6.env
+   |-- single_element_compression.com
+   |-- single_element_compression.dat
+   |-- single_element_compression.inp
+   |-- single_element_compression.inp.in
+   |-- single_element_compression.msg
+   |-- single_element_compression.odb
+   |-- single_element_compression.prt
+   |-- single_element_compression.sta
+   |-- single_element_compression.stdout
+   |-- single_element_geometry.abaqus_v6.env
+   |-- single_element_geometry.cae
+   |-- single_element_geometry.jnl
+   |-- single_element_geometry.stdout
+   |-- single_element_mesh.abaqus_v6.env
+   |-- single_element_mesh.cae
+   |-- single_element_mesh.inp
+   |-- single_element_mesh.jnl
+   |-- single_element_mesh.stdout
+   |-- single_element_partition.abaqus_v6.env
+   |-- single_element_partition.cae
+   |-- single_element_partition.jnl
+   `-- single_element_partition.stdout
+
+   0 directories, 33 files
