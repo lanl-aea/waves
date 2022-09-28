@@ -231,43 +231,53 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
 
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial_0[1,2,3]*'
-    build
-    └── tutorial_04_simulation
-        ├── abaqus.rpy
-        ├── abaqus.rpy.1
-        ├── abaqus.rpy.2
-        ├── amplitudes.inp
-        ├── assembly.inp
-        ├── boundary.inp
-        ├── field_output.inp
-        ├── history_output.inp
-        ├── materials.inp
-        ├── parts.inp
-        ├── single_element_compression.abaqus_v6.env
-        ├── single_element_compression.com
-        ├── single_element_compression.dat
-        ├── single_element_compression.inp
-        ├── single_element_compression.msg
-        ├── single_element_compression.odb
-        ├── single_element_compression.prt
-        ├── single_element_compression.sta
-        ├── single_element_compression.stdout
-        ├── single_element_geometry.abaqus_v6.env
-        ├── single_element_geometry.cae
-        ├── single_element_geometry.jnl
-        ├── single_element_geometry.stdout
-        ├── single_element_mesh.abaqus_v6.env
-        ├── single_element_mesh.cae
-        ├── single_element_mesh.inp
-        ├── single_element_mesh.jnl
-        ├── single_element_mesh.stdout
-        ├── single_element_partition.abaqus_v6.env
-        ├── single_element_partition.cae
-        ├── single_element_partition.jnl
-        └── single_element_partition.stdout
+    $ tree build/tutorial_04_simulation/
+    build/tutorial_04_simulation/
+    |-- abaqus.rpy
+    |-- abaqus.rpy.1
+    |-- abaqus.rpy.2
+    |-- amplitudes.inp
+    |-- assembly.inp
+    |-- boundary.inp
+    |-- field_output.inp
+    |-- history_output.inp
+    |-- materials.inp
+    |-- parts.inp
+    |-- single_element_compression.abaqus_v6.env
+    |-- single_element_compression.com
+    |-- single_element_compression.dat
+    |-- single_element_compression.inp
+    |-- single_element_compression.msg
+    |-- single_element_compression.odb
+    |-- single_element_compression.prt
+    |-- single_element_compression.sta
+    |-- single_element_compression.stdout
+    |-- single_element_compression_DATACHECK.023
+    |-- single_element_compression_DATACHECK.abaqus_v6.env
+    |-- single_element_compression_DATACHECK.com
+    |-- single_element_compression_DATACHECK.dat
+    |-- single_element_compression_DATACHECK.mdl
+    |-- single_element_compression_DATACHECK.msg
+    |-- single_element_compression_DATACHECK.odb
+    |-- single_element_compression_DATACHECK.prt
+    |-- single_element_compression_DATACHECK.sim
+    |-- single_element_compression_DATACHECK.stdout
+    |-- single_element_compression_DATACHECK.stt
+    |-- single_element_geometry.abaqus_v6.env
+    |-- single_element_geometry.cae
+    |-- single_element_geometry.jnl
+    |-- single_element_geometry.stdout
+    |-- single_element_mesh.abaqus_v6.env
+    |-- single_element_mesh.cae
+    |-- single_element_mesh.inp
+    |-- single_element_mesh.jnl
+    |-- single_element_mesh.stdout
+    |-- single_element_partition.abaqus_v6.env
+    |-- single_element_partition.cae
+    |-- single_element_partition.jnl
+    `-- single_element_partition.stdout
 
-    1 directory, 32 files
+    0 directories, 43 files
 
 The ``tutorial_04_simulation`` directory contains several different subsets of related files:
 

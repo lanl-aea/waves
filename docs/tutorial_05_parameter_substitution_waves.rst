@@ -121,7 +121,7 @@ this is implemented with the :meth:`waves.builders.copy_substitute` builder will
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 6, 16, 24 
+      :emphasize-lines: 6, 16, 24
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
 pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using a formatted string as
@@ -270,49 +270,56 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
 
 .. code-block:: bash
 
-    $ pwd
-    /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial_0[1,2,3,4]*'
-    build/
-    └── tutorial_05_parameter_substitution
-        ├── abaqus.rpy
-        ├── abaqus.rpy.1
-        ├── abaqus.rpy.2
-        ├── amplitudes.inp
-        ├── assembly.inp
-        ├── boundary.inp
-        ├── field_output.inp
-        ├── history_output.inp
-        ├── materials.inp
-        ├── parts.inp
-        ├── single_element_compression.abaqus_v6.env
-        ├── single_element_compression.com
-        ├── single_element_compression.dat
-        ├── single_element_compression.inp
-        ├── single_element_compression.inp.in
-        ├── single_element_compression.msg
-        ├── single_element_compression.odb
-        ├── single_element_compression.par
-        ├── single_element_compression.pes
-        ├── single_element_compression.pmg
-        ├── single_element_compression.prt
-        ├── single_element_compression.sta
-        ├── single_element_compression.stdout
-        ├── single_element_geometry.abaqus_v6.env
-        ├── single_element_geometry.cae
-        ├── single_element_geometry.jnl
-        ├── single_element_geometry.stdout
-        ├── single_element_mesh.abaqus_v6.env
-        ├── single_element_mesh.cae
-        ├── single_element_mesh.inp
-        ├── single_element_mesh.jnl
-        ├── single_element_mesh.stdout
-        ├── single_element_partition.abaqus_v6.env
-        ├── single_element_partition.cae
-        ├── single_element_partition.jnl
-        └── single_element_partition.stdout
+   $ pwd
+   /home/roppenheimer/waves-eabm-tutorial
+   $ tree build/tutorial_05_parameter_substitution
+   build/tutorial_05_parameter_substitution
+   |-- abaqus.rpy
+   |-- abaqus.rpy.1
+   |-- abaqus.rpy.2
+   |-- amplitudes.inp
+   |-- assembly.inp
+   |-- boundary.inp
+   |-- field_output.inp
+   |-- history_output.inp
+   |-- materials.inp
+   |-- parts.inp
+   |-- single_element_compression.abaqus_v6.env
+   |-- single_element_compression.com
+   |-- single_element_compression.dat
+   |-- single_element_compression.inp
+   |-- single_element_compression.inp.in
+   |-- single_element_compression.msg
+   |-- single_element_compression.odb
+   |-- single_element_compression.prt
+   |-- single_element_compression.sta
+   |-- single_element_compression.stdout
+   |-- single_element_compression_DATACHECK.023
+   |-- single_element_compression_DATACHECK.abaqus_v6.env
+   |-- single_element_compression_DATACHECK.com
+   |-- single_element_compression_DATACHECK.dat
+   |-- single_element_compression_DATACHECK.mdl
+   |-- single_element_compression_DATACHECK.msg
+   |-- single_element_compression_DATACHECK.odb
+   |-- single_element_compression_DATACHECK.prt
+   |-- single_element_compression_DATACHECK.sim
+   |-- single_element_compression_DATACHECK.stdout
+   |-- single_element_compression_DATACHECK.stt
+   |-- single_element_geometry.abaqus_v6.env
+   |-- single_element_geometry.cae
+   |-- single_element_geometry.jnl
+   |-- single_element_geometry.stdout
+   |-- single_element_mesh.abaqus_v6.env
+   |-- single_element_mesh.cae
+   |-- single_element_mesh.inp
+   |-- single_element_mesh.jnl
+   |-- single_element_mesh.stdout
+   |-- single_element_partition.abaqus_v6.env
+   |-- single_element_partition.cae
+   |-- single_element_partition.jnl
+   `-- single_element_partition.stdout
 
-    1 directory, 36 files
+   0 directories, 44 files
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation_waves` with a few key
 differences.
