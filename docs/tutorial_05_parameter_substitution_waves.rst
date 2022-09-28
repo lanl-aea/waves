@@ -294,17 +294,6 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
    |-- single_element_compression.prt
    |-- single_element_compression.sta
    |-- single_element_compression.stdout
-   |-- single_element_compression_DATACHECK.023
-   |-- single_element_compression_DATACHECK.abaqus_v6.env
-   |-- single_element_compression_DATACHECK.com
-   |-- single_element_compression_DATACHECK.dat
-   |-- single_element_compression_DATACHECK.mdl
-   |-- single_element_compression_DATACHECK.msg
-   |-- single_element_compression_DATACHECK.odb
-   |-- single_element_compression_DATACHECK.prt
-   |-- single_element_compression_DATACHECK.sim
-   |-- single_element_compression_DATACHECK.stdout
-   |-- single_element_compression_DATACHECK.stt
    |-- single_element_geometry.abaqus_v6.env
    |-- single_element_geometry.cae
    |-- single_element_geometry.jnl
@@ -319,7 +308,7 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
    |-- single_element_partition.jnl
    `-- single_element_partition.stdout
 
-   0 directories, 44 files
+   0 directories, 33 files
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation_waves` with a few key
 differences.

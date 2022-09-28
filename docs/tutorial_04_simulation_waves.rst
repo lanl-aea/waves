@@ -252,17 +252,6 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
     |-- single_element_compression.prt
     |-- single_element_compression.sta
     |-- single_element_compression.stdout
-    |-- single_element_compression_DATACHECK.023
-    |-- single_element_compression_DATACHECK.abaqus_v6.env
-    |-- single_element_compression_DATACHECK.com
-    |-- single_element_compression_DATACHECK.dat
-    |-- single_element_compression_DATACHECK.mdl
-    |-- single_element_compression_DATACHECK.msg
-    |-- single_element_compression_DATACHECK.odb
-    |-- single_element_compression_DATACHECK.prt
-    |-- single_element_compression_DATACHECK.sim
-    |-- single_element_compression_DATACHECK.stdout
-    |-- single_element_compression_DATACHECK.stt
     |-- single_element_geometry.abaqus_v6.env
     |-- single_element_geometry.cae
     |-- single_element_geometry.jnl
@@ -277,7 +266,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
     |-- single_element_partition.jnl
     `-- single_element_partition.stdout
 
-    0 directories, 43 files
+    0 directories, 32 files
 
 The ``tutorial_04_simulation`` directory contains several different subsets of related files:
 
