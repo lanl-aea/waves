@@ -47,7 +47,7 @@
    tutorial_10_regression_testing_waves
    scons_multiactiontask
    tutorial_cubit
-   tutorial_pseudo_variables_waves
+   tutorial_escape_sequences_waves
    tutorial_07_latin_hypercube_waves
    tutorial_07_sobol_sequence_waves
    tutorial_mesh_convergence_waves
