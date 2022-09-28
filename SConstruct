@@ -28,7 +28,8 @@ project_variables = {
     'tutorial_09_dir': 'tutorial_09_post_processing',
     'tutorial_10_dir': 'tutorial_10_regression_testing',
     'tutorial_cubit_dir': 'tutorial_cubit',
-    'tutorial_mesh_convergence_dir': 'tutorial_mesh_convergence'
+    'tutorial_mesh_convergence_dir': 'tutorial_mesh_convergence',
+    'tutorial_pseudo_variables_dir': 'tutorial_pseudo_variables'
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===
