@@ -78,7 +78,7 @@ workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
-    abaqus_options=abaqus_options))
+    abaqus_options=f"{abaqus_options} -cpus $({env['solve_cpus']}$)"))
 
 # Abaqus Extract
 extract_source_list = [f"{job_name}.odb"]
