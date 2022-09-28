@@ -122,7 +122,7 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
         target=[f"{set_name / job_name}.sta"],
         source=solve_source_list,
         job_name=job_name,
-        abaqus_options=abaqus_options))
+        abaqus_options=f"{abaqus_options} -cpus $({env['solve_cpus']}$)"))
 
     # Extract Abaqus
     extract_source_list = [f"{set_name / job_name}.odb"]

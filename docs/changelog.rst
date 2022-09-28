@@ -12,11 +12,15 @@ New Features
 ============
 - Add demonstration PDF report that re-uses the documentation source files to the ``waves quickstart`` template files
   (:issue:`305`, :merge:`338`). By `Kyle Brindley`_.
+- Add Abaqus solve cpu option as a build action signature escaped sequence in the ``waves quickstart`` template files
+  (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
 
 Documentation
 =============
 - Add direct links to the Abaqus journal file API/CLI in the tutorials (:issue:`175`, :merge:`337`). By `Kyle
   Brindley`_.
+- Add a rough draft "build action signature escape sequence" tutorial to demonstrate escape sequence usage
+  (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
