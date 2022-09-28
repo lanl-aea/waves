@@ -48,9 +48,9 @@
    scons_multiactiontask
    tutorial_cubit
    tutorial_pseudo_variables_waves
-   tutorial_mesh_convergence_waves
    tutorial_07_latin_hypercube_waves
    tutorial_07_sobol_sequence_waves
+   tutorial_mesh_convergence_waves
    tutorial_extend_study_waves
 
 .. raw:: latex
