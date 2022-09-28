@@ -21,6 +21,7 @@ Documentation
   Brindley`_.
 - Add a rough draft "build action signature escape sequence" tutorial to demonstrate escape sequence usage
   (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
+- Update the ``tree`` command usage for consistency across tutorials (:issue:`317`, :merge:`342`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
