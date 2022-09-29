@@ -55,6 +55,7 @@ documentation_file_list = [
     "stress_strain_comparison.pdf",
     "stress_strain_comparison.png",
     "targets.txt",
+    "theory.txt",
     "user.rst",
     "waves_logo_brandmark_smaller.png",
     "zreferences.rst",

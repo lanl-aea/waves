@@ -114,10 +114,10 @@ Output Files
    $ cat build/tutorial_09_post-processing/stress_strain_comparison.stdout
    <xarray.Dataset>
    Dimensions:             (parameter_sets: 4, step: 1, time: 5, elements: 1,
-                            LE values: 4, S values: 4, data_type: 1,
+                            E values: 4, S values: 4, data_type: 1,
                             parameter_set_hash: 4)
    Coordinates:
-     * LE values           (LE values) object 'LE11' 'LE22' 'LE33' 'LE12'
+     * E values            (E values) object 'E11' 'E22' 'E33' 'E12'
      * S values            (S values) object 'S11' 'S22' 'S33' 'S12'
      * elements            (elements) int64 1
        integrationPoint    (elements) int64 1
@@ -127,7 +127,7 @@ Output Files
      * data_type           (data_type) object 'samples'
      * parameter_set_hash  (parameter_set_hash) object 'cfd965cb3f219ad308195242...
    Data variables:
-       LE                  (parameter_sets, step, time, elements, LE values) float32 ...
+       E                  (parameter_sets, step, time, elements, E values) float32 ...
        S                   (parameter_sets, step, time, elements, S values) float32 ...
        displacement        (data_type, parameter_set_hash) float64 ...
        global_seed         (data_type, parameter_set_hash) float64 ...
