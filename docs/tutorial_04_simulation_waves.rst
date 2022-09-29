@@ -69,10 +69,16 @@ Running a Datacheck
        :end-before: marker-5
        :emphasize-lines: 4-12
 
-In the changes you just made, the first line of code removes any trailing ``.in`` extensions from the file names in the
-``abaqus_source_list`` (which you defined in the previous tutorial). While this step is not strictly neccessary for this
-tutorial, it is required when it comes to substituting parameters into files. This is discussed in detail in the next
-tutorial, :ref:`tutorial_parameter_substitution_waves`.
+In the changes you just made, the first line of code extracts the file ``name`` from the `Python pathlib`_ objects in 
+the ``abaqus_source_list`` (which you defined in the previous tutorial) and removes any trailing ``.in`` extensions from 
+the file names. In this tutorial, there are no files with ``.in`` extension; this is required when it comes to 
+substituting parameters into files which is discussed in the next tutorial,
+:ref:`tutorial_parameter_substitution_waves`. For this tutorial, we only require that the file names be extracted from
+the ``abaqus_source_list``. This tutorial would behave identially if the ``solve_source_list`` was defined as
+
+.. code-block:: Python
+    
+    solve_source_list = [source_file.name for source_file in abaqus_source_list]
 
 Next, ``{journal_file}.inp`` needs to be appended to the list of simulation source files. Recall from
 :ref:`tutorial_partition_mesh_waves` that this file is one of the targets that is generated from
