@@ -27,6 +27,8 @@ Internal Changes
 ================
 - Remove waves internal import from quickstart files (:issue:`313`, :merge:`339`). By `Kyle Brindley`_.
 - Remove the waves internal import from the tutorial files (:issue:`315`, :merge:`340`). By `Kyle Brindley`_.
+- Change from a plane strain to plane stress tutorial and quickstart simulation (:issue:`319`, :merge:`344`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
