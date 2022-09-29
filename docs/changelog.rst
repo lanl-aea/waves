@@ -17,6 +17,11 @@ Internal Changes
 - Reduce duplicate code by moving common, required, generate method calls to the ABC abstract method (:issue:`322`,
   :merge:`350`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Accept a list of strings for the ``abaqus_solver`` ``post_action`` argument (:issue:`318`, :merge:`349`). By `Kyle
+  Brindley`_.
+
 ******************
 0.4.7 (2022-09-29)
 ******************
