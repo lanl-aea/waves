@@ -69,10 +69,27 @@ Running a Datacheck
        :end-before: marker-5
        :emphasize-lines: 4-12
 
-In the changes you just made, the first line of code removes any trailing ``.in`` extensions from the file names in the
-``abaqus_source_list`` (which you defined in the previous tutorial). While this step is not strictly neccessary for this
-tutorial, it is required when it comes to substituting parameters into files. This is discussed in detail in the next
-tutorial, :ref:`tutorial_parameter_substitution_waves`.
+In the changes you just made, the first line of code extracts the file ``name`` from the `Python pathlib`_ objects in 
+the ``abaqus_source_list`` (which you defined in the previous tutorial) and removes any trailing ``.in`` extensions from 
+the file names. The ``pathlib.Path.name`` method strips the leading path from the `Python pathlib`_ object and leaves 
+the file name, for example:
+
+.. code-block:: Text
+    
+    >>> source_file = pathlib.Path('/path/to/file.extension')
+    >>> print(type(source_file), str(source_file))
+    <class 'pathlib.PosixPath'> /path/to/file.extension
+    >>> print(type(source_file.name), source_file.name)
+    <class 'str'> file.extension
+
+In this tutorial, there are no files with ``.in`` extension; this is required when it comes to substituting parameters 
+into files which is discussed in the next tutorial,
+:ref:`tutorial_parameter_substitution_waves`. For this tutorial, we only require that the file names be extracted from
+the ``abaqus_source_list``. This tutorial would behave identically if the ``solve_source_list`` was defined as
+
+.. code-block:: Python
+    
+    solve_source_list = [source_file.name for source_file in abaqus_source_list]
 
 Next, ``{journal_file}.inp`` needs to be appended to the list of simulation source files. Recall from
 :ref:`tutorial_partition_mesh_waves` that this file is one of the targets that is generated from
@@ -205,7 +222,6 @@ Build Targets
    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_04_simulation/single_element_compression.inp",
    "eabm_package/abaqus/single_element_compression.inp")
-   Copy("build/tutorial_04_simulation/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
    Copy("build/tutorial_04_simulation/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_04_simulation/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_04_simulation/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -231,43 +247,41 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
 
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial_0[1,2,3]*'
-    build
-    └── tutorial_04_simulation
-        ├── abaqus.rpy
-        ├── abaqus.rpy.1
-        ├── abaqus.rpy.2
-        ├── amplitudes.inp
-        ├── assembly.inp
-        ├── boundary.inp
-        ├── field_output.inp
-        ├── history_output.inp
-        ├── materials.inp
-        ├── parts.inp
-        ├── single_element_compression.abaqus_v6.env
-        ├── single_element_compression.com
-        ├── single_element_compression.dat
-        ├── single_element_compression.inp
-        ├── single_element_compression.msg
-        ├── single_element_compression.odb
-        ├── single_element_compression.prt
-        ├── single_element_compression.sta
-        ├── single_element_compression.stdout
-        ├── single_element_geometry.abaqus_v6.env
-        ├── single_element_geometry.cae
-        ├── single_element_geometry.jnl
-        ├── single_element_geometry.stdout
-        ├── single_element_mesh.abaqus_v6.env
-        ├── single_element_mesh.cae
-        ├── single_element_mesh.inp
-        ├── single_element_mesh.jnl
-        ├── single_element_mesh.stdout
-        ├── single_element_partition.abaqus_v6.env
-        ├── single_element_partition.cae
-        ├── single_element_partition.jnl
-        └── single_element_partition.stdout
+    $ tree build/tutorial_04_simulation/
+    build/tutorial_04_simulation/
+    |-- abaqus.rpy
+    |-- abaqus.rpy.1
+    |-- abaqus.rpy.2
+    |-- assembly.inp
+    |-- boundary.inp
+    |-- field_output.inp
+    |-- history_output.inp
+    |-- materials.inp
+    |-- parts.inp
+    |-- single_element_compression.abaqus_v6.env
+    |-- single_element_compression.com
+    |-- single_element_compression.dat
+    |-- single_element_compression.inp
+    |-- single_element_compression.msg
+    |-- single_element_compression.odb
+    |-- single_element_compression.prt
+    |-- single_element_compression.sta
+    |-- single_element_compression.stdout
+    |-- single_element_geometry.abaqus_v6.env
+    |-- single_element_geometry.cae
+    |-- single_element_geometry.jnl
+    |-- single_element_geometry.stdout
+    |-- single_element_mesh.abaqus_v6.env
+    |-- single_element_mesh.cae
+    |-- single_element_mesh.inp
+    |-- single_element_mesh.jnl
+    |-- single_element_mesh.stdout
+    |-- single_element_partition.abaqus_v6.env
+    |-- single_element_partition.cae
+    |-- single_element_partition.jnl
+    `-- single_element_partition.stdout
 
-    1 directory, 32 files
+    0 directories, 31 files
 
 The ``tutorial_04_simulation`` directory contains several different subsets of related files:
 

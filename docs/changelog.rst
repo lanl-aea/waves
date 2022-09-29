@@ -5,8 +5,51 @@ Changelog
 #########
 
 ******************
-0.4.7 (unreleased)
+0.5.1 (unreleased)
 ******************
+
+******************
+0.4.7 (2022-09-29)
+******************
+
+New Features
+============
+- Add demonstration PDF report that re-uses the documentation source files to the ``waves quickstart`` template files
+  (:issue:`305`, :merge:`338`). By `Kyle Brindley`_.
+- Add Abaqus solve cpu option as a build action signature escaped sequence in the ``waves quickstart`` template files
+  (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Remove the ``amplitudes.inp`` file which conflicts with the direct displacement specification change introduced in
+  :merge:`272` (:issue:`320`, :merge:`346`). By `Kyle Brindley`_.
+- Fix the partially broken single element simulation schematic in the quickstart template files (:issue:`321`,
+  :merge:`347`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add direct links to the Abaqus journal file API/CLI in the tutorials (:issue:`175`, :merge:`337`). By `Kyle
+  Brindley`_.
+- Add a rough draft "build action signature escape sequence" tutorial to demonstrate escape sequence usage
+  (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
+- Update the ``tree`` command usage for consistency across tutorials (:issue:`317`, :merge:`342`). By `Kyle Brindley`_.
+- Clarify the usage of `Python pathlib`_ methods to generate the ``solve_source_list`` in :ref:`tutorial_simulation_waves`
+  (:issue:`314`, :merge:`343`). By `Thomas Roberts`_.
+- Add a theory section to the quickstart template analysis report(s) and fix the images to match the intended simulation
+  design (:issue:`320`, :merge:`345`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Remove waves internal import from quickstart files (:issue:`313`, :merge:`339`). By `Kyle Brindley`_.
+- Remove the waves internal import from the tutorial files (:issue:`315`, :merge:`340`). By `Kyle Brindley`_.
+- Change from a plane strain to plane stress tutorial and quickstart simulation (:issue:`319`, :merge:`344`). By `Kyle
+  Brindley`_.
+- Change to the Abaqus linear solver in the example simulation (:issue:`320`, :merge:`345`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Reduce instances of hardcoded project name in the ``waves quickstart`` template files (:issue:`312`, :merge:`336`). By
+  `Kyle Brindley`_.
 
 ******************
 0.4.6 (2022-09-21)

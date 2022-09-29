@@ -68,7 +68,7 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_mesh"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae", f"{variant_dir_base / journal_file}.inp"],
+    target=[f"{variant_dir_base / journal_file}.inp", f"{variant_dir_base / journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
     abaqus_program=env['abaqus'],
     journal_options=journal_options))
@@ -76,7 +76,6 @@ workflow.extend(env.AbaqusJournal(
 # SolverPrep
 abaqus_source_list = [
     f"#/{abaqus_source_dir}/{model}_compression.inp",
-    f"#/{abaqus_source_dir}/amplitudes.inp",
     f"#/{abaqus_source_dir}/assembly.inp",
     f"#/{abaqus_source_dir}/boundary.inp",
     f"#/{abaqus_source_dir}/field_output.inp",

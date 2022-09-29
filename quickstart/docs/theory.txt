@@ -1,0 +1,32 @@
+For an isotropic, homogeneous solid under plane stress conditions at constant temperature, as assumed in the simulation
+problem description, the constitutive model for stress and strain is given by the equations :cite:`bower`
+
+.. math::
+
+   \sigma_{33} = \sigma_{23} = \sigma_{13} = 0
+
+.. math::
+
+   \sigma_{11} = \frac{E}{1 - \nu^{2}} \left ( \epsilon_{11} + \nu\epsilon_{22} \right )
+
+   \sigma_{22} = \frac{E}{1 - \nu^{2}} \left ( \epsilon_{22} + \nu\epsilon_{11} \right )
+
+In the case of unconstrained transverse expansion, the transverse stress :math:`\sigma_{11}` is zero and the theoretical
+expected stress in the direction of the applied displacement, :math:`\sigma_{22}` is given by
+
+.. math::
+
+   \sigma_{22} = E \epsilon_{22}
+
+With the material parameters from the Material Parameters Table and an applied strain of
+
+.. math::
+
+   \epsilon_{22} = \delta / L = -0.01 mm / 1.0 mm = -0.01 mm/mm
+
+where :math:`L` is the nominal starting height and :math:`\delta` is the change in height, the expected stress for this
+simulation is
+
+.. math::
+
+   \sigma_{22} = E \epsilon_{22} = \left ( 100 MPa \right ) \left ( -0.01 mm/mm \right ) = -1 MPa

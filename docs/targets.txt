@@ -22,6 +22,8 @@
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
 .. _`Environment modules`: https://modules.readthedocs.io/en/stable/modulefile.html
 .. _`GNU Make`: https://www.gnu.org/software/make/
+.. _`GNU sed`: https://www.gnu.org/software/sed/
+.. _`conda-forge sed`: https://anaconda.org/conda-forge/sed
 .. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
 .. _`Gitlab`: https://about.gitlab.com/
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
@@ -62,10 +64,10 @@
 .. _`SCons project build help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idm46358284707920
 .. _`SCons sharing environments`: https://scons.org/doc/production/HTML/scons-user/ch14s05.html
 .. _`SCons Node Package`: https://scons.org/doc/production/HTML/scons-api/SCons.Node/?highlight=file+object
+.. _`SCons Appendix D`: https://scons.org/doc/production/HTML/scons-user/apd.html
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`Sphinx automodule`: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
-.. _`W-13`: https://int.lanl.gov/org/ddw/aldw/weapon-systems-engineering/advanced-engineering-analysis/index.shtml
 .. _`Xarray`: https://docs.xarray.dev/en/stable/
 .. _`automated build system`: https://en.wikipedia.org/wiki/List_of_build_automation_software
 .. _`conda-forge`: https://conda-forge.org/

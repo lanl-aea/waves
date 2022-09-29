@@ -4,13 +4,7 @@ import os
 import sys
 import pathlib
 
-# Only required when WAVES is not installed as a package, e.g. for local testing in WAVES repository.
-# EABMs may simply use "import waves"
-try:
-    import waves
-except ModuleNotFoundError:
-    sys.path.insert(0, str(pathlib.Path('..').resolve()))
-    import waves
+import waves
 
 # Inherit user's full environment
 env = Environment(ENV=os.environ.copy())
@@ -62,14 +56,13 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_mesh"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae", f"{variant_dir_base / journal_file}.inp"],
+    target=[f"{variant_dir_base / journal_file}.inp", f"{variant_dir_base / journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
     journal_options=journal_options))
 
 # SolverPrep
 abaqus_source_list = [
     f"#/{abaqus_source_dir}/{model}_compression.inp",
-    f"#/{abaqus_source_dir}/amplitudes.inp",
     f"#/{abaqus_source_dir}/assembly.inp",
     f"#/{abaqus_source_dir}/boundary.inp",
     f"#/{abaqus_source_dir}/field_output.inp",

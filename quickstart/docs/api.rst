@@ -1,8 +1,8 @@
 .. _sphinx_api:
 
-##############
-WAVES-EABM API
-##############
+#############
+|PROJECT| API
+#############
 
 single_element_geometry.py
 ==========================

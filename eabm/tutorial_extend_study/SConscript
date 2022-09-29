@@ -27,7 +27,7 @@ previous_parameter_study = str(parameter_study_file) if parameter_study_file.exi
 model = "single_element"
 simulation_constants = {
     'global_seed': 1,
-    'displacement': -1
+    'displacement': -0.01
 }
 kwargs = {'scramble': False}
 
@@ -88,9 +88,9 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
     journal_file = f"{model}_mesh"
     journal_options = f"--global-seed {simulation_variables['global_seed']}"
     workflow.extend(env.AbaqusJournal(
-        target=[f"{set_name / journal_file}.cae",
-                f"{set_name / journal_file}.jnl",
-                f"{set_name / journal_file}.inp"],
+        target=[f"{set_name / journal_file}.inp",
+                f"{set_name / journal_file}.cae",
+                f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{set_name / model}_partition.cae"],
         journal_options=journal_options))
@@ -98,7 +98,6 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
     # SolverPrep
     abaqus_source_list = [
         f"#/{abaqus_source_dir}/{model}_compression.inp.in",
-        f"#/{abaqus_source_dir}/amplitudes.inp",
         f"#/{abaqus_source_dir}/assembly.inp",
         f"#/{abaqus_source_dir}/boundary.inp",
         f"#/{abaqus_source_dir}/field_output.inp",

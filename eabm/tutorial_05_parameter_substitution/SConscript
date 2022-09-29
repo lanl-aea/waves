@@ -20,7 +20,7 @@ simulation_variables = {
     'width': 1.0,
     'height': 1.0,
     'global_seed': 1.0,
-    'displacement': -0.1
+    'displacement': -0.01
 }
 
 # Comment used in tutorial code snippets: marker-1
@@ -51,7 +51,7 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_mesh"
 journal_options = f"--global-seed {simulation_variables['global_seed']}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl", f"{journal_file}.inp"],
+    target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options))
 
@@ -60,7 +60,6 @@ workflow.extend(env.AbaqusJournal(
 # SolverPrep
 abaqus_source_list = [
     f"#/{abaqus_source_dir}/{model}_compression.inp.in",
-    f"#/{abaqus_source_dir}/amplitudes.inp",
     f"#/{abaqus_source_dir}/assembly.inp",
     f"#/{abaqus_source_dir}/boundary.inp",
     f"#/{abaqus_source_dir}/field_output.inp",

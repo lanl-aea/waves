@@ -1,8 +1,8 @@
 .. _sphinx_cli:
 
-##############
-WAVES-EABM CLI
-##############
+#############
+|PROJECT| CLI
+#############
 
 single_element_geometry.py
 ==========================

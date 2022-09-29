@@ -96,7 +96,7 @@ In the code you just added, a ``simulation_variables`` dictionary is defined.  E
 in the previous tutorials. The ``width`` and ``height`` parameters are used in the ``single_element_geometry.py`` and
 ``single_element_partition.py`` scripts, and ``global_seed`` is used in the ``single_element_mesh.py`` script. Recall
 that each of these scripts is called using a command line interface that has default parameters. See the
-:ref:`sphinx_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
+:ref:`waves_eabm_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
 parser for each of these scripts will supply a default value for each command line argument that is not specified
 (assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
 passed to the :meth:`waves.builders.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that
@@ -121,7 +121,7 @@ this is implemented with the :meth:`waves.builders.copy_substitute` builder will
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 6, 16, 24 
+      :emphasize-lines: 6, 16, 24
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
 pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using a formatted string as
@@ -245,7 +245,6 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in",
     "eabm_package/abaqus/single_element_compression.inp.in")
     Creating 'build/tutorial_05_parameter_substitution/single_element_compression.inp'
-    Copy("build/tutorial_05_parameter_substitution/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
     Copy("build/tutorial_05_parameter_substitution/assembly.inp", "eabm_package/abaqus/assembly.inp")
     Copy("build/tutorial_05_parameter_substitution/boundary.inp", "eabm_package/abaqus/boundary.inp")
     Copy("build/tutorial_05_parameter_substitution/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -270,49 +269,44 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
 
 .. code-block:: bash
 
-    $ pwd
-    /home/roppenheimer/waves-eabm-tutorial
-    $ tree build/ -I 'tutorial_0[1,2,3,4]*'
-    build/
-    └── tutorial_05_parameter_substitution
-        ├── abaqus.rpy
-        ├── abaqus.rpy.1
-        ├── abaqus.rpy.2
-        ├── amplitudes.inp
-        ├── assembly.inp
-        ├── boundary.inp
-        ├── field_output.inp
-        ├── history_output.inp
-        ├── materials.inp
-        ├── parts.inp
-        ├── single_element_compression.abaqus_v6.env
-        ├── single_element_compression.com
-        ├── single_element_compression.dat
-        ├── single_element_compression.inp
-        ├── single_element_compression.inp.in
-        ├── single_element_compression.msg
-        ├── single_element_compression.odb
-        ├── single_element_compression.par
-        ├── single_element_compression.pes
-        ├── single_element_compression.pmg
-        ├── single_element_compression.prt
-        ├── single_element_compression.sta
-        ├── single_element_compression.stdout
-        ├── single_element_geometry.abaqus_v6.env
-        ├── single_element_geometry.cae
-        ├── single_element_geometry.jnl
-        ├── single_element_geometry.stdout
-        ├── single_element_mesh.abaqus_v6.env
-        ├── single_element_mesh.cae
-        ├── single_element_mesh.inp
-        ├── single_element_mesh.jnl
-        ├── single_element_mesh.stdout
-        ├── single_element_partition.abaqus_v6.env
-        ├── single_element_partition.cae
-        ├── single_element_partition.jnl
-        └── single_element_partition.stdout
+   $ pwd
+   /home/roppenheimer/waves-eabm-tutorial
+   $ tree build/tutorial_05_parameter_substitution
+   build/tutorial_05_parameter_substitution
+   |-- abaqus.rpy
+   |-- abaqus.rpy.1
+   |-- abaqus.rpy.2
+   |-- assembly.inp
+   |-- boundary.inp
+   |-- field_output.inp
+   |-- history_output.inp
+   |-- materials.inp
+   |-- parts.inp
+   |-- single_element_compression.abaqus_v6.env
+   |-- single_element_compression.com
+   |-- single_element_compression.dat
+   |-- single_element_compression.inp
+   |-- single_element_compression.inp.in
+   |-- single_element_compression.msg
+   |-- single_element_compression.odb
+   |-- single_element_compression.prt
+   |-- single_element_compression.sta
+   |-- single_element_compression.stdout
+   |-- single_element_geometry.abaqus_v6.env
+   |-- single_element_geometry.cae
+   |-- single_element_geometry.jnl
+   |-- single_element_geometry.stdout
+   |-- single_element_mesh.abaqus_v6.env
+   |-- single_element_mesh.cae
+   |-- single_element_mesh.inp
+   |-- single_element_mesh.jnl
+   |-- single_element_mesh.stdout
+   |-- single_element_partition.abaqus_v6.env
+   |-- single_element_partition.cae
+   |-- single_element_partition.jnl
+   `-- single_element_partition.stdout
 
-    1 directory, 36 files
+   0 directories, 32 files
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation_waves` with a few key
 differences.
@@ -325,10 +319,9 @@ the file we created earlier in this tutorial. There is also a file named ``singl
 
 .. code-block:: text
    :linenos:
-   :emphasize-lines: 7
+   :emphasize-lines: 6
 
    *STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
-   Compress cushions and pads.
    *STATIC
    .005, 1.00, 0.000001, 0.5
    **

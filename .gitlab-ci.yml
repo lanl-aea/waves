@@ -134,12 +134,13 @@ fast-test:
     - project_root=${PWD}
     # Project unit tests
     - scons . --keep-going --unconditional-build
+    # Set PYTHONPATH for WAVES import in tutorials/quickstart system/integration/regression tests
+    - export PYTHONPATH=${project_root}:$PYTHONPATH
     # WAVES CLI regression tests
-    - python -m waves.waves build --max-iterations=4 --working-directory=eabm tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
     - quickstart_regression_directory="${project_root}/test_quickstart"
     - python -m waves.waves quickstart ${quickstart_regression_directory}
     - cd ${quickstart_regression_directory}
-    - PYTHONPATH=${project_root} scons . --jobs=4
+    - scons . --jobs=4
     # Regression test the files used in the tutorial documentation
     - cd ${project_root}/eabm
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
@@ -151,6 +152,7 @@ fast-test:
     - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_cubit_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build
@@ -160,6 +162,7 @@ fast-test:
     - scons . --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
+    - python -m waves.waves build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
   tags:
     - sstelmo-shell-aea
   only:

@@ -9,7 +9,7 @@
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://aea.re-pages.lanl.gov/python-projects/waves/main/
 .. _WAVES repository: https://re-git.lanl.gov/aea/python-projects/waves
-.. _WAVES-EABM: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/eabm
+.. _WAVES-EABM: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/quickstart
 .. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov

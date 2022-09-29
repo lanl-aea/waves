@@ -60,7 +60,6 @@ Output Files
    |-- abaqus.rpy.7
    |-- abaqus.rpy.8
    |-- abaqus.rpy.9
-   |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp
@@ -82,4 +81,4 @@ Output Files
    |-- single_element_partition.cae
    `-- single_element_partition.jnl
 
-   0 directories, 26 files
+   0 directories, 25 files

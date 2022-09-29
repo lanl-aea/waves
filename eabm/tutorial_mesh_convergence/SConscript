@@ -27,7 +27,7 @@ model = "single_element"
 simulation_constants = {
     'width': 1.0,
     'height': 1.0,
-    'displacement': -0.1
+    'displacement': -0.01
 }
 
 # Collect the target nodes to build a concise alias for all targets
@@ -96,9 +96,9 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
         f"--input-file {partition_cae_file.with_suffix('')} " \
         f"--output-file {journal_file}"
     workflow.extend(env.AbaqusJournal(
-        target=[f"{set_name / journal_file}.cae",
-                f"{set_name / journal_file}.jnl",
-                f"{set_name / journal_file}.inp"],
+        target=[f"{set_name / journal_file}.inp",
+                f"{set_name / journal_file}.cae",
+                f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 partition_cae_object],
         journal_options=journal_options))
@@ -106,7 +106,6 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
     # SolverPrep
     abaqus_source_list = [
         f"#/{abaqus_source_dir}/{model}_compression.inp.in",
-        f"#/{abaqus_source_dir}/amplitudes.inp",
         f"#/{abaqus_source_dir}/assembly.inp",
         f"#/{abaqus_source_dir}/boundary.inp",
         f"#/{abaqus_source_dir}/field_output.inp",
@@ -161,7 +160,7 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 plot_name = "mesh_convergence_stress.pdf"
-selection_dict = '"{\'LE values\': \'LE22\', \'S values\': \'S22\', \'elements\': 1, \'step\': \'Step-1\', \'time\': 1.0}"'
+selection_dict = '"{\'E values\': \'E22\', \'S values\': \'S22\', \'elements\': 1, \'step\': \'Step-1\', \'time\': 1.0}"'
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file {plot_name} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"

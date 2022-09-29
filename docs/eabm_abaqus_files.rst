@@ -53,15 +53,6 @@ single_element_compression.inp
    .. literalinclude:: abaqus_single_element_compression.inp
       :lineno-match:
 
-**************
-amplitudes.inp
-**************
-
-.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/amplitudes.inp
-
-   .. literalinclude:: abaqus_amplitudes.inp
-      :lineno-match:
-
 ************
 assembly.inp
 ************

@@ -14,6 +14,8 @@ References
 
 * `Cubit`_: Python Interface :cite:`cubit`
 * `Cubit`_: Importing Cubit into Python :cite:`cubit`
+* `SCons Appendix D`_: ``AddPostAction`` :cite:`scons-user`
+* `GNU sed`_ and `conda-forge sed` :cite:`gnu-sed`
 
 ***********
 Environment
@@ -57,6 +59,16 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorial_04_simulation_SConscript
 
+Note that Cubit does not support the Abaqus plane stress element ``CPS4``, so we must add a post-action to the orphan
+mesh target to change the element type. A post-action is used to avoid generating intermediate target files, which would
+be required if we created a separate task for the file modification. This post-action is written to apply to a list, so
+if additional orphan mesh files needed the same modification, the post-action would be added to each targets' build
+signature definition with a single ``AddPostAction`` definition.
+
+The ``sed`` command is not available on all systems, but a `Conda`_ packaged version, `conda-forge sed`_, of the `GNU
+sed`_ program can be used to provide system-to-system consistency with `Conda environment management`_. See the `Conda`_
+documentation for more information about virtual environment management with `Conda`_.
+
 *******************
 Cubit Journal Files
 *******************
@@ -67,7 +79,8 @@ The Cubit journal files include the same CLI introduced in :ref:`tutorial_partit
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
 files is the opportunity to use Python 3 with Cubit, where Abaqus journal files must use the Abaqus controlled
 installation of Python 2. The API and CLI built from the Cubit journal files' docstrings may be found in the
-:ref:`sphinx_api` for :ref:`cubit_journal_api` and the :ref:`sphinx_cli` for :ref:`cubit_journal_cli`, respectively.
+:ref:`waves_eabm_api` for :ref:`cubit_journal_api` and the :ref:`waves_eabm_cli` for :ref:`cubit_journal_cli`,
+respectively.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/cubit/single_element_geometry.py
 
@@ -121,7 +134,6 @@ Build Targets
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && python /home/roppenheimer/waves-eabm-tutorial/eabm_package/cubit/single_element_partition.py > single_element_partition.stdout 2>&1
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && python /home/roppenheimer/waves-eabm-tutorial/eabm_package/cubit/single_element_mesh.py > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_cubit/single_element_compression.inp", "eabm_package/abaqus/single_element_compression.inp")
-   Copy("build/tutorial_cubit/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
    Copy("build/tutorial_cubit/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_cubit/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_cubit/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -146,7 +158,6 @@ is specified by name to reduce clutter in the ouptut shown.
    /home/roppenheimer/waves-eabm-tutorial
    $ tree build/tutorial_cubit/
    build/tutorial_cubit/
-   |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp
@@ -170,4 +181,4 @@ is specified by name to reduce clutter in the ouptut shown.
    |-- single_element_partition.cub
    `-- single_element_partition.stdout
 
-   0 directories, 23 files
+   0 directories, 22 files
