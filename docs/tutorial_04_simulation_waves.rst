@@ -222,7 +222,6 @@ Build Targets
    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_04_simulation/single_element_compression.inp",
    "eabm_package/abaqus/single_element_compression.inp")
-   Copy("build/tutorial_04_simulation/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
    Copy("build/tutorial_04_simulation/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_04_simulation/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_04_simulation/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -253,7 +252,6 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- amplitudes.inp
     |-- assembly.inp
     |-- boundary.inp
     |-- field_output.inp
@@ -283,7 +281,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
     |-- single_element_partition.jnl
     `-- single_element_partition.stdout
 
-    0 directories, 32 files
+    0 directories, 31 files
 
 The ``tutorial_04_simulation`` directory contains several different subsets of related files:
 

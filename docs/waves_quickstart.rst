@@ -89,7 +89,6 @@ Output Files
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
-   |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp
@@ -119,4 +118,4 @@ Output Files
    |-- single_element_partition.jnl
    `-- single_element_partition.stdout
 
-   0 directories, 32 files
+   0 directories, 31 files

@@ -134,7 +134,6 @@ Build Targets
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && python /home/roppenheimer/waves-eabm-tutorial/eabm_package/cubit/single_element_partition.py > single_element_partition.stdout 2>&1
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && python /home/roppenheimer/waves-eabm-tutorial/eabm_package/cubit/single_element_mesh.py > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_cubit/single_element_compression.inp", "eabm_package/abaqus/single_element_compression.inp")
-   Copy("build/tutorial_cubit/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
    Copy("build/tutorial_cubit/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_cubit/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_cubit/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -159,7 +158,6 @@ is specified by name to reduce clutter in the ouptut shown.
    /home/roppenheimer/waves-eabm-tutorial
    $ tree build/tutorial_cubit/
    build/tutorial_cubit/
-   |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp
@@ -183,4 +181,4 @@ is specified by name to reduce clutter in the ouptut shown.
    |-- single_element_partition.cub
    `-- single_element_partition.stdout
 
-   0 directories, 23 files
+   0 directories, 22 files

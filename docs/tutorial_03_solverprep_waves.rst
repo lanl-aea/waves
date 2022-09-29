@@ -72,12 +72,12 @@ directory. Check the contents of this directory using the ``ls`` command.
     $ pwd
     /home/roppenheimer/waves-eabm-tutorial
     $ ls eabm_package/abaqus
-    abaqus_journal_utilities.py  materials.inp
-    amplitudes.inp               parts.inp
+    abaqus_journal_utilities.py  parts.inp
     assembly.inp                 single_element_compression.inp
     boundary.inp                 single_element_geometry.py
     field_output.inp             single_element_mesh.py
     history_output.inp           single_element_partition.py
+    materials.inp
 
 .. _tutorial_solverprep_waves_SConscript:
 
@@ -197,7 +197,6 @@ Build Targets
    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_03_solverprep/single_element_compression.inp",
    "eabm_package/abaqus/single_element_compression.inp")
-   Copy("build/tutorial_03_solverprep/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
    Copy("build/tutorial_03_solverprep/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_03_solverprep/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_03_solverprep/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -245,7 +244,6 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- amplitudes.inp
     |-- assembly.inp
     |-- boundary.inp
     |-- field_output.inp
@@ -267,7 +265,7 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     |-- single_element_partition.jnl
     `-- single_element_partition.stdout
 
-    0 directories, 45 files
+    0 directories, 44 files
 
 Inside the build directory are three sub-directories. ``tutorial_01_geometry`` and
 ``tutorial_02_partition_mesh``  remain from the previous two tutorials. The third

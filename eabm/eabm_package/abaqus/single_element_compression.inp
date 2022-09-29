@@ -13,18 +13,15 @@ Compressing a single element
 *BOUNDARY,OP=NEW
 *INCLUDE,INPUT=boundary.inp
 **
-*INCLUDE,INPUT=amplitudes.inp
-**
 *CONSTRAINT CONTROLS, PRINT=YES
 *************************************************************************
 **  STEP-1 LOAD STEP
 *************************************************************************
 *STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
-Compress cushions and pads.
 *STATIC
 .005, 1.00, 0.000001, 0.5
 **
-*BOUNDARY,OP=MOD, AMPLITUDE=SINGLE_ELEMENT
+*BOUNDARY, OP=MOD
 A.single_element.top,2,2,-0.1
 **
 *MONITOR, DOF=2, NODE=A.single_element.top_right

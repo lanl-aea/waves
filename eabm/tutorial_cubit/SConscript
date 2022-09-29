@@ -61,7 +61,6 @@ env.AddPostAction(mesh_files, "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
 # SolverPrep
 abaqus_source_list = [
     f"#/{abaqus_source_dir}/{model}_compression.inp",
-    f"#/{abaqus_source_dir}/amplitudes.inp",
     f"#/{abaqus_source_dir}/assembly.inp",
     f"#/{abaqus_source_dir}/boundary.inp",
     f"#/{abaqus_source_dir}/field_output.inp",
