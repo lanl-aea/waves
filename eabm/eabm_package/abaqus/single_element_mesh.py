@@ -55,8 +55,8 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     p.seedPart(size=global_seed, deviationFactor=0.1, minSizeFactor=0.1)
     p.generateMesh()
 
-    elemType1 = mesh.ElemType(elemCode=abaqusConstants.CPE4, elemLibrary=abaqusConstants.STANDARD)
-    elemType2 = mesh.ElemType(elemCode=abaqusConstants.CPE3, elemLibrary=abaqusConstants.STANDARD)
+    elemType1 = mesh.ElemType(elemCode=abaqusConstants.CPS4, elemLibrary=abaqusConstants.STANDARD)
+    elemType2 = mesh.ElemType(elemCode=abaqusConstants.CPS3, elemLibrary=abaqusConstants.STANDARD)
 
     f = p.faces
     s = p.edges
