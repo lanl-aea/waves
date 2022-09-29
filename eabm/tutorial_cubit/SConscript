@@ -22,6 +22,7 @@ model = "single_element"
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
+mesh_files = []
 
 # Geometry
 journal_file = f"{model}_geometry"
@@ -44,10 +45,16 @@ workflow.extend(env.PythonScript(
 # Mesh
 journal_file = f"{model}_mesh"
 journal_options = ""
-workflow.extend(env.PythonScript(
-    target=[f"{journal_file}.cub", f"{journal_file}.inp"],
+mesh_targets = env.PythonScript(
+    target=[f"{journal_file}.inp", f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
-    script_options=journal_options))
+    script_options=journal_options)
+workflow.extend(mesh_targets)
+mesh_files.append(mesh_targets[0])
+
+# Modify mesh target(s) element type.
+# Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
+env.AddPostAction(mesh_files, "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
 
 # Comment used in tutorial code snippets: marker-3
 
@@ -98,4 +105,4 @@ env.Alias(f"{parent_directory}_datacheck", datacheck)
 if not env['unconditional_build'] and (not env['cubit'] or not env['abaqus']):
     print(f"Program 'cubit' or 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
     Ignore(['.', parent_directory], workflow)
-    Ignore(['.', model], datacheck)
+    Ignore(['.', parent_directory], datacheck)

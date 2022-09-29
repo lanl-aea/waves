@@ -73,6 +73,7 @@ test:
     - pyyaml
     - scipy >=1
     - scons
+    - sed
     - setuptools_scm
     - xarray
   source_files:

@@ -56,7 +56,7 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_mesh"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae", f"{variant_dir_base / journal_file}.inp"],
+    target=[f"{variant_dir_base / journal_file}.inp", f"{variant_dir_base / journal_file}.cae"],
     source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
     journal_options=journal_options))
 

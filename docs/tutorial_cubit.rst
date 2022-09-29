@@ -14,6 +14,8 @@ References
 
 * `Cubit`_: Python Interface :cite:`cubit`
 * `Cubit`_: Importing Cubit into Python :cite:`cubit`
+* `SCons Appendix D`_: ``AddPostAction`` :cite:`scons-user`
+* `GNU sed`_ and `conda-forge sed` :cite:`gnu-sed`
 
 ***********
 Environment
@@ -56,6 +58,16 @@ changes made in this tutorial.
    .. literalinclude:: tutorial_cubit_SConscript
       :language: Python
       :diff: tutorial_04_simulation_SConscript
+
+Note that Cubit does not support the Abaqus plane stress element ``CPS4``, so we must add a post-action to the orphan
+mesh target to change the element type. A post-action is used to avoid generating intermediate target files, which would
+be required if we created a separate task for the file modification. This post-action is written to apply to a list, so
+if additional orphan mesh files needed the same modification, the post-action would be added to each targets' build
+signature definition with a single ``AddPostAction`` definition.
+
+The ``sed`` command is not available on all systems, but a `Conda`_ packaged version, `conda-forge sed`_, of the `GNU
+sed`_ program can be used to provide system-to-system consistency with `Conda environment management`_. See the `Conda`_
+documentation for more information about virtual environment management with `Conda`_.
 
 *******************
 Cubit Journal Files
