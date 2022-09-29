@@ -22,6 +22,7 @@ model = "single_element"
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
+mesh_files = []
 
 # Geometry
 journal_file = f"{model}_geometry"
@@ -44,10 +45,16 @@ workflow.extend(env.PythonScript(
 # Mesh
 journal_file = f"{model}_mesh"
 journal_options = ""
-workflow.extend(env.PythonScript(
+mesh_targets = env.PythonScript(
     target=[f"{journal_file}.cub", f"{journal_file}.inp"],
     source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
-    script_options=journal_options))
+    script_options=journal_options)
+workflow.extend(mesh_targets)
+mesh_files.append(mesh_targets[1])
+
+# Modify mesh target(s) element type.
+# Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
+env.AddPostAction(mesh_files, "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
 
 # Comment used in tutorial code snippets: marker-3
 
