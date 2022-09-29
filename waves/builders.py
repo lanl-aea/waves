@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import pathlib
+from collections.abc import Iterable
 
 import SCons.Defaults
 import SCons.Builder
@@ -147,7 +148,7 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver(abaqus_program='abaqus', post_action=None):
+def abaqus_solver(abaqus_program='abaqus', post_action=[]):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -192,17 +193,20 @@ def abaqus_solver(abaqus_program='abaqus', post_action=None):
        cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
-    :param str post_action: Shell command string to append to the builder's action list. Implemented to allow
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to allow
         post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a non-zero
         exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax.
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
+        ${TARGET.dir.abspath} && ${post_action}``
     """
     action = [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
-    if post_action:
-        action.append(f"cd ${{TARGET.dir.abspath}} && {post_action}")
+    if not isinstance(post_action, Iterable):
+        post_action = [post_action]
+    for new_action in post_action:
+        action.extend(f"cd ${{TARGET.dir.abspath}} && {new_action}")
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_solver_emitter)
