@@ -27,7 +27,7 @@ previous_parameter_study = str(parameter_study_file) if parameter_study_file.exi
 model = "single_element"
 simulation_constants = {
     'global_seed': 1,
-    'displacement': -1
+    'displacement': -0.1
 }
 kwargs = {'scramble': False}
 
