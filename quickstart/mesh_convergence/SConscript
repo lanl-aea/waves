@@ -91,7 +91,6 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
     # SolverPrep
     abaqus_source_list = [
         f"#/{eabm_package_dir}/{model}_compression.inp.in",
-        f"#/{eabm_package_dir}/amplitudes.inp",
         f"#/{eabm_package_dir}/assembly.inp",
         f"#/{eabm_package_dir}/boundary.inp",
         f"#/{eabm_package_dir}/field_output.inp",

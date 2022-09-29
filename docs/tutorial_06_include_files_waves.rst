@@ -182,7 +182,6 @@ Build Targets
     Copy("build/tutorial_06_include_files/single_element_compression.inp.in",
     "eabm_package/abaqus/single_element_compression.inp.in")
     Creating 'build/tutorial_06_include_files/single_element_compression.inp'
-    Copy("build/tutorial_06_include_files/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
     Copy("build/tutorial_06_include_files/assembly.inp", "eabm_package/abaqus/assembly.inp")
     Copy("build/tutorial_06_include_files/boundary.inp", "eabm_package/abaqus/boundary.inp")
     Copy("build/tutorial_06_include_files/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -212,7 +211,6 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- amplitudes.inp
     |-- assembly.inp
     |-- boundary.inp
     |-- field_output.inp
@@ -243,7 +241,7 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
     |-- single_element_partition.jnl
     `-- single_element_partition.stdout
 
-    0 directories, 33 files
+    0 directories, 32 files
 
 The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution_waves`. As
 was mentioned when modifying the :ref:`tutorial_include_files_waves_SConscript` file, the use of an included Python file

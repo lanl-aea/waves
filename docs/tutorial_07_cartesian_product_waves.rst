@@ -306,7 +306,6 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
-   |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp
@@ -337,7 +336,7 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
    |-- single_element_partition.jnl
    `-- single_element_partition.stdout
 
-   0 directories, 33 files
+   0 directories, 32 files
 
 The contents of the ``parameter_set0`` directory will appear identical to the contents of the previous tutorials. In
 this case, the contents of the files is different, as we have inserted parameters as part of the parameter study.

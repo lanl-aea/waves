@@ -126,7 +126,6 @@ Build Targets
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2021 -information environment > single_element_mesh.abaqus_v6.env
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2021 cae -noGui /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_escape_sequences/single_element_compression.inp", "eabm_package/abaqus/single_element_compression.inp")
-   Copy("build/tutorial_escape_sequences/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
    Copy("build/tutorial_escape_sequences/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_escape_sequences/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_escape_sequences/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -170,7 +169,6 @@ is specified by name to reduce clutter in the ouptut shown.
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
-   |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp
@@ -200,4 +198,4 @@ is specified by name to reduce clutter in the ouptut shown.
    |-- single_element_partition.jnl
    `-- single_element_partition.stdout
 
-   0 directories, 32 files
+   0 directories, 31 files

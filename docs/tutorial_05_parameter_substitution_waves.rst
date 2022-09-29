@@ -245,7 +245,6 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in",
     "eabm_package/abaqus/single_element_compression.inp.in")
     Creating 'build/tutorial_05_parameter_substitution/single_element_compression.inp'
-    Copy("build/tutorial_05_parameter_substitution/amplitudes.inp", "eabm_package/abaqus/amplitudes.inp")
     Copy("build/tutorial_05_parameter_substitution/assembly.inp", "eabm_package/abaqus/assembly.inp")
     Copy("build/tutorial_05_parameter_substitution/boundary.inp", "eabm_package/abaqus/boundary.inp")
     Copy("build/tutorial_05_parameter_substitution/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -277,7 +276,6 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
-   |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp
@@ -308,7 +306,7 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
    |-- single_element_partition.jnl
    `-- single_element_partition.stdout
 
-   0 directories, 33 files
+   0 directories, 32 files
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation_waves` with a few key
 differences.

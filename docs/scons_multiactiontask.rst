@@ -90,7 +90,6 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
-   |-- amplitudes.inp
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp
@@ -108,4 +107,4 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    |-- single_element_mesh.inp
    `-- single_element_mesh.jnl
 
-   0 directories, 20 files
+   0 directories, 19 files
