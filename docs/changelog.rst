@@ -8,6 +8,10 @@ Changelog
 0.5.1 (unreleased)
 ******************
 
+Breaking changes
+================
+- Use a more generic name for the builder-global post action argument (:issue:`318`, :merge:`349`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Reduce duplicate code by moving common, required, generate method calls to the ABC abstract method (:issue:`322`,
