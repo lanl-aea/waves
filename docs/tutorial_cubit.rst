@@ -14,6 +14,7 @@ References
 
 * `Cubit`_: Python Interface :cite:`cubit`
 * `Cubit`_: Importing Cubit into Python :cite:`cubit`
+* `SCons Appendix D`_: ``AddPostAction`` :cite:`scons-user`
 
 ***********
 Environment

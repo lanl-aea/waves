@@ -62,6 +62,7 @@
 .. _`SCons project build help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idm46358284707920
 .. _`SCons sharing environments`: https://scons.org/doc/production/HTML/scons-user/ch14s05.html
 .. _`SCons Node Package`: https://scons.org/doc/production/HTML/scons-api/SCons.Node/?highlight=file+object
+.. _`SCons Appendix D`: https://scons.org/doc/production/HTML/scons-user/apd.html
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`Sphinx automodule`: https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
