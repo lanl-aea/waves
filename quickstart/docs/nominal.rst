@@ -15,6 +15,12 @@ about Abaqus continuum elements can be found in the Abaqus documentation section
 
 .. include:: simulation_material.txt
 
+******
+Theory
+******
+
+.. include:: theory.txt
+
 *******
 Results
 *******

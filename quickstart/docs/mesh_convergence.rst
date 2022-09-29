@@ -26,6 +26,12 @@ convergence study includes four seed sizes in the table below.
 
 .. include:: simulation_material.txt
 
+******
+Theory
+******
+
+.. include:: theory.txt
+
 *******
 Results
 *******

@@ -29,6 +29,8 @@ Documentation
 - Update the ``tree`` command usage for consistency across tutorials (:issue:`317`, :merge:`342`). By `Kyle Brindley`_.
 - Clarify the usage of `Python pathlib`_ methods to generate the ``solve_source_list`` in :ref:`tutorial_simulation_waves`
   (:issue:`314`, :merge:`343`). By `Thomas Roberts`_.
+- Add a theory section to the quickstart template analysis report(s) and fix the images to match the intended simulation
+  design (:issue:`320`, :merge:`345`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -36,6 +38,7 @@ Internal Changes
 - Remove the waves internal import from the tutorial files (:issue:`315`, :merge:`340`). By `Kyle Brindley`_.
 - Change from a plane strain to plane stress tutorial and quickstart simulation (:issue:`319`, :merge:`344`). By `Kyle
   Brindley`_.
+- Change to the Abaqus linear solver in the example simulation (:issue:`320`, :merge:`345`). By `Kyle Brindley`_.
 
 Enhancements
 ============
