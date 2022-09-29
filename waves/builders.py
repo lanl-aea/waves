@@ -147,7 +147,7 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
+def abaqus_solver(abaqus_program='abaqus', post_action=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -183,7 +183,7 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
        env.Append(BUILDERS=
            {'AbaqusSolver': waves.builders.abaqus_solver(),
             'AbaqusOld': waves.builders.abaqus_solver(abaqus_program='abq2019'),
-            'AbaqusPost': waves.builders.abaqus_solver(post_simulation='grep -E "\<SUCCESSFULLY" ${job_name}.sta')})
+            'AbaqusPost': waves.builders.abaqus_solver(post_action='grep -E "\<SUCCESSFULLY" ${job_name}.sta')})
        AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
 
     .. code-block::
@@ -192,17 +192,17 @@ def abaqus_solver(abaqus_program='abaqus', post_simulation=None):
        cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
-    :param str post_simulation: Shell command string to execute after the simulation command finishes. Intended to allow
+    :param str post_action: Shell command string to execute after the simulation command finishes. Intended to allow
         modification of the Abaqus exit code, e.g. return a non-zero (error) exit code when Abaqus reports a simulation
         error or incomplete simulation. Builder keyword variables are available for substitution in the
-        ``post_simulation`` action using the ``${}`` syntax.
+        ``post_action`` action using the ``${}`` syntax.
     """
     action = [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
-    if post_simulation:
-        action.append(f"cd ${{TARGET.dir.abspath}} && {post_simulation}")
+    if post_action:
+        action.append(f"cd ${{TARGET.dir.abspath}} && {post_action}")
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_solver_emitter)
