@@ -13,8 +13,6 @@ Compressing a single element
 *BOUNDARY,OP=NEW
 *INCLUDE,INPUT=boundary.inp
 **
-*INCLUDE,INPUT=amplitudes.inp
-**
 *CONSTRAINT CONTROLS, PRINT=YES
 *************************************************************************
 **  STEP-1 LOAD STEP
