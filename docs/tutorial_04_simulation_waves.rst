@@ -74,7 +74,7 @@ the ``abaqus_source_list`` (which you defined in the previous tutorial) and remo
 the file names. In this tutorial, there are no files with ``.in`` extension; this is required when it comes to 
 substituting parameters into files which is discussed in the next tutorial,
 :ref:`tutorial_parameter_substitution_waves`. For this tutorial, we only require that the file names be extracted from
-the ``abaqus_source_list``. This tutorial would behave identially if the ``solve_source_list`` was defined as
+the ``abaqus_source_list``. This tutorial would behave identically if the ``solve_source_list`` was defined as
 
 .. code-block:: Python
     
