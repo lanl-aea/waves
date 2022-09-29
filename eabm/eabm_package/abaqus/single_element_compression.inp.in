@@ -22,7 +22,7 @@ Compress cushions and pads.
 *STATIC
 .005, 1.00, 0.000001, 0.5
 **
-*BOUNDARY,OP=MOD, AMPLITUDE=SINGLE_ELEMENT
+*BOUNDARY, OP=MOD
 A.single_element.top,2,2,@displacement@
 **
 *MONITOR, DOF=2, NODE=A.single_element.top_right
