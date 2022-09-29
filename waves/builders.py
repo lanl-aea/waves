@@ -192,9 +192,9 @@ def abaqus_solver(abaqus_program='abaqus', post_action=None):
        cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
-    :param str post_action: Shell command string to execute after the simulation command finishes. Intended to allow
-        modification of the Abaqus exit code, e.g. return a non-zero (error) exit code when Abaqus reports a simulation
-        error or incomplete simulation. Builder keyword variables are available for substitution in the
+    :param str post_action: Shell command string to append to the builder's action list. Implemented to allow
+        post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a non-zero
+        exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax.
     """
     action = [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
