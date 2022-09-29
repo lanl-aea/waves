@@ -15,6 +15,11 @@ New Features
 - Add Abaqus solve cpu option as a build action signature escaped sequence in the ``waves quickstart`` template files
   (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
 
+Bug fixes
+=========
+- Remove the ``amplitudes.inp`` file which conflicts with the direct displacement specification change introduced in
+  :merge:`272` (:issue:`320`, :merge:`346`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add direct links to the Abaqus journal file API/CLI in the tutorials (:issue:`175`, :merge:`337`). By `Kyle
