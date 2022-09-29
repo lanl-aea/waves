@@ -72,9 +72,9 @@ Running a Datacheck
 In the changes you just made, the first line of code extracts the file ``name`` from the `Python pathlib`_ objects in 
 the ``abaqus_source_list`` (which you defined in the previous tutorial) and removes any trailing ``.in`` extensions from 
 the file names. The ``pathlib.Path.name`` method strips the leading path from the `Python pathlib`_ object and leaves 
-the file name, for example 
+the file name, for example:
 
-.. code-block:: Python
+.. code-block:: Text
     
     >>> source_file = pathlib.Path('/path/to/file.extension')
     >>> print(type(source_file), str(source_file))
