@@ -19,6 +19,8 @@ Bug fixes
 =========
 - Remove the ``amplitudes.inp`` file which conflicts with the direct displacement specification change introduced in
   :merge:`272` (:issue:`320`, :merge:`346`). By `Kyle Brindley`_.
+- Fix the partially broken single element simulation schematic in the quickstart template files (:issue:`321`,
+  :merge:`347`). By `Kyle Brindley`_.
 
 Documentation
 =============
