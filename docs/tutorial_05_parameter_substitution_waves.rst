@@ -319,10 +319,9 @@ the file we created earlier in this tutorial. There is also a file named ``singl
 
 .. code-block:: text
    :linenos:
-   :emphasize-lines: 7
+   :emphasize-lines: 6
 
    *STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
-   Compress cushions and pads.
    *STATIC
    .005, 1.00, 0.000001, 0.5
    **

@@ -18,7 +18,6 @@ Compressing a single element
 **  STEP-1 LOAD STEP
 *************************************************************************
 *STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
-Compress cushions and pads.
 *STATIC
 .005, 1.00, 0.000001, 0.5
 **
