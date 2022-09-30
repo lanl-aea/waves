@@ -71,6 +71,21 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     assert program == first_found_path
 
 
+prepended_string = f"cd ${{TARGET.dir.abspath}} && "
+post_action_list = {
+    "list": (['thing1'], [prepended_string + 'thing1'])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize('post_action, expected',
+                         post_action_list.values(),
+                         ids=post_action_list.keys())
+def test_construct_post_action_list(post_action, expected):
+    output = builders._construct_post_action_list(post_action)
+    assert output == expected
+
+
 source_file = fs.File('dummy.py')
 journal_emitter_input = {
     'one target': (['target.cae'],

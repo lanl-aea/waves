@@ -68,10 +68,10 @@ def _construct_post_action_list(post_action):
     :param list post_action: List of post-action strings
     """
     new_actions = []
-    if not isinstance(post_action, Iterable):
+    if isinstance(post_action, str) or not isinstance(post_action, Iterable):
         post_action = [post_action]
     for new_action in post_action:
-        new_actions.extend(f"cd ${{TARGET.dir.abspath}} && {new_action}")
+        new_actions.append(f"cd ${{TARGET.dir.abspath}} && {new_action}")
     return new_actions
 
 
