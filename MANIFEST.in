@@ -1,2 +1,2 @@
 recursive-exclude docs *
-recursive-exclude eabm/docs *
+recursive-exclude quickstart/docs *

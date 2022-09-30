@@ -52,7 +52,7 @@ Documentation
 * Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/
 * Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/
 
-The `WAVES-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
+The `WAVES-EABM documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
 * `WAVES-EABM`_ Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
