@@ -108,7 +108,7 @@ def _abaqus_journal_emitter(target, source, env):
     return target, source
 
 
-def abaqus_journal(abaqus_program="abaqus"):
+def abaqus_journal(abaqus_program="abaqus", post_action=[]):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -141,13 +141,19 @@ def abaqus_journal(abaqus_program="abaqus"):
        AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program.
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
+        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
+        ${TARGET.dir.abspath} && ${post_action}``
     """
-    abaqus_journal_builder = SCons.Builder.Builder(
-        action=
-            [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
+    action = [f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > " \
                  f"${{TARGET.filebase}}{_abaqus_environment_extension}",
-             f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
-                 f"${{journal_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"],
+              f"cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
+                 f"${{journal_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+    action.extend(_construct_post_action_list(post_action))
+    abaqus_journal_builder = SCons.Builder.Builder(
+        action=action,
         emitter=_abaqus_journal_emitter)
     return abaqus_journal_builder
 
@@ -219,9 +225,9 @@ def abaqus_solver(abaqus_program="abaqus", post_action=[]):
        cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
-    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to allow
-        post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a non-zero
-        exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
+        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
@@ -317,7 +323,7 @@ def _python_script_emitter(target, source, env):
     return target, source
 
 
-def python_script():
+def python_script(post_action=[]):
     """Python script SCons builder
 
     This builder requires that the python script to execute is the first source in the list. The builder returned by
@@ -348,11 +354,18 @@ def python_script():
        env = Environment()
        env.Append(BUILDERS={"PythonScript": waves.builders.python_script()})
        PythonScript(target=["my_output.stdout"], source=["my_script.py"], python_options="", script_options="")
+
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
+        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
+        ${TARGET.dir.abspath} && ${post_action}``
     """
+    action = [f"cd ${{TARGET.dir.abspath}} && python ${{python_options}} ${{SOURCE.abspath}} " \
+                f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+    action.extend(_construct_post_action_list(post_action))
     python_builder = SCons.Builder.Builder(
-        action=
-            [f"cd ${{TARGET.dir.abspath}} && python ${{python_options}} ${{SOURCE.abspath}} " \
-                f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"],
+        action=action,
         emitter=_python_script_emitter)
     return python_builder
 
