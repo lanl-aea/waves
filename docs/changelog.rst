@@ -16,6 +16,8 @@ New Features
 ============
 - Add builder-global post action feature to Abaqus journal and Python script builders (:issue:`318`, :merge:`349`). By
   `Kyle Brindley`_.
+- Add a ``.gitignore`` file to the ``waves quickstart`` template files (:issue:`324`, :merge:`352`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
