@@ -148,13 +148,13 @@ class _ParameterGenerator(ABC):
            self._samples = numpy.zeros((set_count, parameter_count))
 
            # Work performed by common ABC methods
-           self._create_parameter_set_hashes()
-           self._create_parameter_set_names()
-           self._create_parameter_study()
-           if self.previous_parameter_study:
-               self._merge_parameter_studies()
+           super().generate()
         """
-        pass
+        self._create_parameter_set_hashes()
+        self._create_parameter_set_names()
+        self._create_parameter_study()
+        if self.previous_parameter_study:
+            self._merge_parameter_studies()
 
     def write(self):
         """Write the parameter study to STDOUT or an output file.
@@ -581,13 +581,7 @@ class CartesianProduct(_ParameterGenerator):
     def generate(self):
         """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
-
-        # Common work to create a parameter study Xarray Dataset
-        self._create_parameter_set_hashes()
-        self._create_parameter_set_names()
-        self._create_parameter_study()
-        if self.previous_parameter_study:
-            self._merge_parameter_studies()
+        super().generate()
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -686,13 +680,7 @@ class LatinHypercube(_ParameterDistributions):
         self._quantiles = sampler.random(set_count)
         self._samples = numpy.zeros((set_count, parameter_count))
         self._generate_distribution_samples(set_count, parameter_count)
-
-        # Common work to create a parameter study Xarray Dataset
-        self._create_parameter_set_hashes()
-        self._create_parameter_set_names()
-        self._create_parameter_study()
-        if self.previous_parameter_study:
-            self._merge_parameter_studies()
+        super().generate()
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -774,13 +762,7 @@ class CustomStudy(_ParameterGenerator):
         generate the parameter study."""
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self.parameter_schema['parameter_samples']
-
-        # Common work to create a parameter study Xarray Dataset
-        self._create_parameter_set_hashes()
-        self._create_parameter_set_names()
-        self._create_parameter_study()
-        if self.previous_parameter_study:
-            self._merge_parameter_studies()
+        super().generate()
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -893,13 +875,7 @@ class SobolSequence(_ParameterDistributions):
         sampler = scipy.stats.qmc.Sobol(**kwargs)
         self._quantiles = sampler.random(set_count)
         self._generate_distribution_samples(set_count, parameter_count)
-
-        # Common work to create a parameter study Xarray Dataset
-        self._create_parameter_set_hashes()
-        self._create_parameter_set_names()
-        self._create_parameter_study()
-        if self.previous_parameter_study:
-            self._merge_parameter_studies()
+        super().generate()
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
