@@ -31,6 +31,7 @@ def substitution_syntax(substitution_dictionary, prefix='@', postfix='@'):
     """
     return {f"{prefix}{key}{postfix}": value for key, value in substitution_dictionary.items()}
 
+
 def find_program(names, env):
     """Search for a program from a list of possible program names.
 
@@ -292,6 +293,7 @@ def _python_script_emitter(target, source, env):
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
     return target, source
+
 
 def python_script():
     """Python script SCons builder
