@@ -54,6 +54,27 @@ def find_program(names, env):
     return first_found_path
 
 
+def _construct_post_action_list(post_action):
+    """Return a post-action list
+
+    Returns the constructed post-action list with prepended directory change as
+
+    .. code-block::
+
+       f"cd ${{TARGET.dir.abspath}} && {new_action}"
+
+    If an empty list is passed, and empty list is returned.
+
+    :param list post_action: List of post-action strings
+    """
+    new_actions = []
+    if not isinstance(post_action, Iterable):
+        post_action = [post_action]
+    for new_action in post_action:
+        new_actions.extend(f"cd ${{TARGET.dir.abspath}} && {new_action}")
+    return new_actions
+
+
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
@@ -204,10 +225,7 @@ def abaqus_solver(abaqus_program='abaqus', post_action=[]):
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
-    if not isinstance(post_action, Iterable):
-        post_action = [post_action]
-    for new_action in post_action:
-        action.extend(f"cd ${{TARGET.dir.abspath}} && {new_action}")
+    action.extend(_construct_post_action_list(post_action))
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_solver_emitter)
