@@ -87,9 +87,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_09_post_processing_SConstruct
+   .. literalinclude:: tutorials_tutorial_09_post_processing_SConstruct
       :language: Python
-      :diff: eabm_tutorial_08_data_extraction_SConstruct
+      :diff: tutorials_tutorial_08_data_extraction_SConstruct
 
 *************
 Build Targets

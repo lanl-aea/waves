@@ -83,9 +83,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_10_regression_testing_SConstruct
+   .. literalinclude:: tutorials_tutorial_10_regression_testing_SConstruct
       :language: Python
-      :diff: eabm_tutorial_09_post_processing_SConstruct
+      :diff: tutorials_tutorial_09_post_processing_SConstruct
 
 *************
 Build Targets

@@ -177,9 +177,9 @@ SConstruct
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_mesh_convergence_SConstruct
+   .. literalinclude:: tutorials_tutorial_mesh_convergence_SConstruct
       :language: Python
-      :diff: eabm_tutorial_10_regression_testing_SConstruct
+      :diff: tutorials_tutorial_10_regression_testing_SConstruct
 
 *************
 Build Targets

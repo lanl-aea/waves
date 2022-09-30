@@ -109,9 +109,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_cubit_SConstruct
+   .. literalinclude:: tutorials_tutorial_cubit_SConstruct
       :language: Python
-      :diff: eabm_tutorial_04_simulation_SConstruct
+      :diff: tutorials_tutorial_04_simulation_SConstruct
 
 *************
 Build Targets
