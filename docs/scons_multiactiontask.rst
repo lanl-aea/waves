@@ -41,7 +41,7 @@ SConstruct File
 
 .. admonition:: waves-eabm-tutorial/scons_multiactiontask_SConstruct
 
-    .. literalinclude:: eabm_scons_multiactiontask_SConstruct
+    .. literalinclude:: tutorials_scons_multiactiontask_SConstruct
        :language: Python
        :lineno-match:
 
@@ -53,9 +53,9 @@ more flexible, general purpose `SCons Command`_ builder is used.
 
 ..  admonition:: waves-eabm-tutorial/SConstruct
 
-  .. literalinclude:: eabm_scons_multiactiontask_SConstruct
+  .. literalinclude:: tutorials_scons_multiactiontask_SConstruct
      :language: python
-     :diff: eabm_scons_quickstart_SConstruct
+     :diff: tutorials_scons_quickstart_SConstruct
 
 ****************
 Building targets

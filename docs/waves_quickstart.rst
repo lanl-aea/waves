@@ -57,7 +57,7 @@ SConstruct File
 
 .. admonition:: waves-eabm-tutorial/waves_quickstart_SConstruct
 
-    .. literalinclude:: eabm_waves_quickstart_SConstruct
+    .. literalinclude:: tutorials_waves_quickstart_SConstruct
        :language: Python
        :lineno-match:
 
