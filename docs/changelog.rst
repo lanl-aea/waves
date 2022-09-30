@@ -8,6 +8,11 @@ Changelog
 0.5.1 (unreleased)
 ******************
 
+Internal Changes
+================
+- Reduce duplicate code by moving common, required, generate method calls to the ABC abstract method (:issue:`322`,
+  :merge:`350`). By `Kyle Brindley`_.
+
 ******************
 0.4.7 (2022-09-29)
 ******************
