@@ -21,6 +21,8 @@ Internal Changes
 ================
 - Reduce duplicate code by moving common, required, generate method calls to the ABC abstract method (:issue:`322`,
   :merge:`350`). By `Kyle Brindley`_.
+- Update the tutorials directory name. It no longer contains the WAVES-EABM template, which moved to the quickstart
+  directory (:issue:`323`, :merge:`351`). By `Kyle Brindley`_.
 
 Enhancements
 ============
