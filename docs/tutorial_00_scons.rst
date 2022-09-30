@@ -58,7 +58,7 @@ SCons Project Configuration
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :end-before: marker-1
@@ -76,7 +76,7 @@ package.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-1
@@ -111,7 +111,7 @@ end of this tutorial, you will see how to explore the project specific command l
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-2
@@ -134,7 +134,7 @@ environment for re-use throughout the project configuration files, SConstruct an
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -166,7 +166,7 @@ without changes to the project configuration.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-4
@@ -182,7 +182,7 @@ introduced in :ref:`tutorial_geometry_waves`.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-5
@@ -201,7 +201,7 @@ builders`_.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-6
@@ -217,7 +217,7 @@ list in :ref:`tutorial_geometry_waves`.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-7
@@ -248,7 +248,7 @@ use of the ``Help()`` `SCons`_ method must include the ``append=True`` keyword a
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_00_SConstruct
+   .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
       :lineno-match:
       :start-after: marker-8

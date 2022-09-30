@@ -330,9 +330,9 @@ build specified in the ``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` f
 
     .. admonition:: waves-eabm-tutorial/SConstruct diff
 
-        .. literalinclude:: eabm_tutorial_01_geometry_SConstruct
+        .. literalinclude:: tutorials_tutorial_01_geometry_SConstruct
            :language: Python
-           :diff: eabm_tutorial_00_SConstruct
+           :diff: tutorials_tutorial_00_SConstruct
 
 .. _tutorial_geometry_waves_build_targets:
 

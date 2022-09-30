@@ -81,9 +81,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_07_sobol_sequence_SConstruct
+   .. literalinclude:: tutorials_tutorial_07_sobol_sequence_SConstruct
       :language: Python
-      :diff: eabm_tutorial_07_cartesian_product_SConstruct
+      :diff: tutorials_tutorial_07_cartesian_product_SConstruct
 
 *************
 Build Targets

@@ -52,7 +52,7 @@ Documentation
 * Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/
 * Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/
 
-The `WAVES-EABM`_ documentation is hosted as a separate webpage as a demonstration for what EABM documentation can look
+The `WAVES-EABM documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
 * `WAVES-EABM`_ Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
@@ -146,9 +146,14 @@ knowledge.
 This project contains several, separate `SCons`_ project configurations, where the ``SConstruct`` file name indicates an
 `SCons`_ project by convention. The WAVES package and documentation are defined in the ``waves/SConstruct`` file. The
 WAVES-EABM modsim template and regression tests are defined in a separate ``waves/quickstart/Sconstruct`` file. The
-WAVES tutorials each have a tutorial specific configuration file ``waves/eabm/*SConstruct``. The following build
-commands apply to each, but must be run from their respective project configuration parent directories, ``waves`` and
-``waves/eabm``. The available targets and aliases differ accordingly.
+WAVES tutorials each have a tutorial specific configuration file ``waves/tutorials/*SConstruct``. The following build
+commands apply to each, but must be run from their respective project configuration parent directories, ``waves``,
+``waves/quickstart`` and ``waves/tutorials``. The available targets and aliases differ accordingly.
+
+When executing the tutorials or quickstart build commands directly in the repository, the WAVES project root repository
+must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environments, the preferred method is to run
+``conda develop .`` once from the project root directory. See the `Conda`_ documentation for more information about
+"development" mode installs.
 
 - View project specific command line options
 

@@ -247,9 +247,9 @@ changes made in this tutorial.
 
    ..  admonition:: waves-eabm-tutorial/SConstruct
 
-     .. literalinclude:: eabm_tutorial_02_partition_mesh_SConstruct
+     .. literalinclude:: tutorials_tutorial_02_partition_mesh_SConstruct
         :language: python
-        :diff: eabm_tutorial_01_geometry_SConstruct
+        :diff: tutorials_tutorial_01_geometry_SConstruct
 
 *************
 Build Targets

@@ -26,7 +26,7 @@ SConstruct File
 
 .. admonition:: waves-eabm-tutorial/scons_quickstart_SConstruct
 
-    .. literalinclude:: eabm_scons_quickstart_SConstruct
+    .. literalinclude:: tutorials_scons_quickstart_SConstruct
        :language: Python
        :lineno-match:
 

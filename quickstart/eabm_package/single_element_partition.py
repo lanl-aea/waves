@@ -1,1 +1,1 @@
-../../eabm/eabm_package/abaqus/single_element_partition.py
+../../tutorials/eabm_package/abaqus/single_element_partition.py
