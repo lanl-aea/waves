@@ -84,12 +84,13 @@ datacheck.extend(env.AbaqusSolver(
 # Assumes build directory is at least two deep, .e.g. ``.../project/build/simulation``.
 remote = []
 project_id = f"{env['project_name']}-{env['version']}"
-tar_filename = build_directory / f"{project_id}-{build_directory.parent.name}.tar.bz2"
+tar_filename = build_directory.parent / f"{project_id}-{build_directory.parent.name}.tar.bz2"
 remote_directory = f"/scratch/$${{USER}}/{project_id}/{build_directory.parent.name}"
 tar_action = [f"tar --directory={build_directory.parent} -cjf {tar_filename} {build_directory.name}"]
-rsync_action = [
+remote_action = [
     "ssh ${server} mkdir -p ${remote_directory}",
-    "rsync -rlptv ${SOURCE.abspath} ${server}:${remote_directory}"
+    "rsync -rlptv ${SOURCE.abspath} ${server}:${remote_directory}",
+    f'ssh ${{server}} "cd ${{remote_directory}} && tar -xjf {tar_filename.name}"'
 ]
 
 remote.extend(env.Command(
@@ -100,7 +101,7 @@ remote.extend(env.Command(
 remote.extend(env.Command(
     target=[f"{job_name}.odb"],
     source=[tar_filename.name],
-    action=rsync_action,
+    action=remote_action,
     server="sstelmo.lanl.gov",
     remote_directory=remote_directory
 ))
