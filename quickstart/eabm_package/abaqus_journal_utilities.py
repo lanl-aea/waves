@@ -1,1 +1,1 @@
-../../eabm/eabm_package/abaqus/abaqus_journal_utilities.py
+../../tutorials/eabm_package/abaqus/abaqus_journal_utilities.py
