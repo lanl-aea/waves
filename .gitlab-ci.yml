@@ -142,7 +142,7 @@ fast-test:
     - cd ${quickstart_regression_directory}
     - scons . --jobs=4
     # Regression test the files used in the tutorial documentation
-    - cd ${project_root}/eabm
+    - cd ${project_root}/tutorials
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
