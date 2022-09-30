@@ -87,7 +87,7 @@ project_id = f"{env['project_name']}-{env['version']}"
 remote_directory = f"/scratch/$${{USER}}/{project_id}/"
 remote_action = [
     'ssh ${server} "mkdir -p ${remote_directory}"',
-    "rsync -rlptv ${SOURCE.dir.abspath} ${server}:${remote_directory}",
+    "rsync -rlptv ${SOURCES.abspath} ${server}:${remote_directory}",
     'ssh ${server} "cd ${remote_directory} && tree"',
 ]
 
