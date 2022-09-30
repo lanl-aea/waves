@@ -36,10 +36,11 @@ Description
 
 .. project-description-start-do-not-remove
 
-The `WAVES-EABM`_ contains the demonstration engineering analysis baseline model (EABM) that matches the `WAVES`_
-collection of parametric study and simulation helper utilities. Besides the handful of command line utilities, `WAVES`_
-also includes custom SCons builders that are commonly re-used in model simulation (modsim) repositories. This EABM is
-the `WAVES`_ ``quickstart`` subcommand template and is included in the `WAVES repository`_ integration and system tests.
+This `WAVES-EABM`_ example contains the demonstration engineering analysis baseline model (EABM) that matches the
+`WAVES`_ collection of parametric study and simulation helper utilities. Besides the handful of command line utilities,
+`WAVES`_ also includes custom SCons builders that are commonly re-used in model simulation (modsim) repositories. This
+EABM is the `WAVES`_ ``quickstart`` subcommand template and is included in the `WAVES repository`_ integration and
+system tests.
 
 .. project-description-end-do-not-remove
 
