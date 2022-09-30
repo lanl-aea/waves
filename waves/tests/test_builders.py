@@ -73,8 +73,10 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
 
 prepended_string = f"cd ${{TARGET.dir.abspath}} && "
 post_action_list = {
-    "list": (["thing1"], [prepended_string + "thing1"]),
-    "str":  ("thing1", [prepended_string + "thing1"])
+    "list1": (["thing1"], [prepended_string + "thing1"]),
+    "list2": (["thing1", "thing2"], [prepended_string + "thing1", prepended_string + "thing2"]),
+    "tuple": (("thing1",), [prepended_string + "thing1"]),
+    "str":  ("thing1", [prepended_string + "thing1"]),
 }
 
 

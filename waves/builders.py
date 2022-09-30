@@ -57,19 +57,25 @@ def find_program(names, env):
 def _construct_post_action_list(post_action):
     """Return a post-action list
 
-    Returns the constructed post-action list with prepended directory change as
+    Returns the constructed post-action list of strings with prepended directory change as
 
     .. code-block::
 
        f"cd ${{TARGET.dir.abspath}} && {new_action}"
 
-    If an empty list is passed, and empty list is returned.
+    where action objects are converted to their string representation. If a string is passed instead of a list, it is
+    first convert to a list. Other string-like objects, e.g. bytes, are not converted, but iterated on
+    character-by-character. If an empty list is passed, and empty list is returned.
 
     :param list post_action: List of post-action strings
     """
-    if isinstance(post_action, str) or not isinstance(post_action, Iterable):
+    if isinstance(post_action, str):
         post_action = [post_action]
-    new_actions = [f"cd ${{TARGET.dir.abspath}} && {action}" for action in post_action]
+    try:
+        iterator = iter(post_action)
+    except TypeError:
+        iterator = iter([post_action])
+    new_actions = [f"cd ${{TARGET.dir.abspath}} && {action}" for action in iterator]
     return new_actions
 
 
