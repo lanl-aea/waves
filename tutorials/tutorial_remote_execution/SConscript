@@ -87,15 +87,25 @@ project_id = f"{env['project_name']}-{env['version']}"
 tar_filename = build_directory / f"{project_id}-{build_directory.parent.name}.tar.bz2"
 remote_directory = f"/scratch/$${{USER}}/{project_id}/{build_directory.parent.name}"
 tar_action = [f"tar --directory={build_directory.parent} -cjf {tar_filename} {build_directory.name}"]
+rsync_action = [
+    "ssh ${server} mkdir -p ${remote_directory}",
+    "rsync -rlptv ${SOURCE.abspath} ${server}:${remote_directory}"
+]
+
 remote.extend(env.Command(
     target=[tar_filename.name],
     source=solve_source_list,
-    action=tar_action,
+    action=tar_action
+))
+remote.extend(env.Command(
+    target=[f"{job_name}.odb"],
+    source=[tar_filename.name],
+    action=rsync_action,
     server="sstelmo.lanl.gov",
     remote_directory=remote_directory
 ))
 env.Alias("remote", remote)
-#    f"rsync -rlptv ${build_directory.parent / tar_filename} ${{server}}:${{remote_directory}}",
+
 #    f"ssh tar --directory={remote_directory} -xjf {tar_filename}"
 
 # Comment used in tutorial code snippets: marker-6
