@@ -142,7 +142,7 @@ fast-test:
     - cd ${quickstart_regression_directory}
     - scons . --jobs=4
     # Regression test the files used in the tutorial documentation
-    - cd ${project_root}/eabm
+    - cd ${project_root}/tutorials
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
@@ -153,6 +153,7 @@ fast-test:
     - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_cubit_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_builder_post_actions_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build

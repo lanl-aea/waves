@@ -84,11 +84,11 @@ test:
     - waves/SConscript
     - waves/pytest.ini
     - waves/tests/*.py
-    - eabm/*SConstruct
-    - eabm/eabm_package/abaqus/*
-    - eabm/eabm_package/cubit/*
-    - eabm/eabm_package/python/*
-    - eabm/tutorial*/*
+    - tutorials/*SConstruct
+    - tutorials/eabm_package/abaqus/*
+    - tutorials/eabm_package/cubit/*
+    - tutorials/eabm_package/python/*
+    - tutorials/tutorial*/*
   imports:
     - waves
   commands:
@@ -104,7 +104,7 @@ test:
     - scons . --jobs=4 --ignore-documentation
     - cd ${test_root}
     # Regression test the files used in the tutorial documentation
-    - cd ${test_root}/eabm
+    - cd ${test_root}/tutorials/
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
@@ -115,6 +115,7 @@ test:
     - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_cubit_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_builder_post_actions_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build

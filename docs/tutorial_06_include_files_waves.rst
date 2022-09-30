@@ -138,9 +138,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_06_include_files_SConstruct
+   .. literalinclude:: tutorials_tutorial_06_include_files_SConstruct
       :language: Python
-      :diff: eabm_tutorial_05_parameter_substitution_SConstruct
+      :diff: tutorials_tutorial_05_parameter_substitution_SConstruct
 
 The first change you made allows for us to import modules from the ``eabm_package`` package. This step is neccessary to
 be able to import the ``eabm_package.python`` module in the ``tutorial_06_include_files/SConscript`` file.

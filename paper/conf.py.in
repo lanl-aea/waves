@@ -5,7 +5,7 @@ import unittest.mock
 
 # -- Project information -----------------------------------------------------
 project_dir = pathlib.Path('@project_dir@').resolve()
-eabm_dir = project_dir / pathlib.Path('@eabm_dir@')
+tutorials_dir = project_dir / pathlib.Path('@tutorials_dir@')
 
 # Name, Group, Email
 authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
@@ -24,7 +24,7 @@ author_manpage = author_manpage.rstrip(', ')
 
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
-sys.path.insert(0, str(eabm_dir))
+sys.path.insert(0, str(tutorials_dir))
 
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.

@@ -8,6 +8,29 @@ Changelog
 0.5.1 (unreleased)
 ******************
 
+Breaking changes
+================
+- Use a more generic name for the builder-global post action argument (:issue:`318`, :merge:`349`). By `Kyle Brindley`_.
+
+New Features
+============
+- Add builder-global post action feature to Abaqus journal and Python script builders (:issue:`318`, :merge:`349`). By
+  `Kyle Brindley`_.
+- Add a ``.gitignore`` file to the ``waves quickstart`` template files (:issue:`324`, :merge:`352`). By `Kyle
+  Brindley`_.
+
+Internal Changes
+================
+- Reduce duplicate code by moving common, required, generate method calls to the ABC abstract method (:issue:`322`,
+  :merge:`350`). By `Kyle Brindley`_.
+- Update the tutorials directory name. It no longer contains the WAVES-EABM template, which moved to the quickstart
+  directory (:issue:`323`, :merge:`351`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Accept a list of strings for the ``abaqus_solver`` ``post_action`` argument (:issue:`318`, :merge:`349`). By `Kyle
+  Brindley`_.
+
 ******************
 0.4.7 (2022-09-29)
 ******************

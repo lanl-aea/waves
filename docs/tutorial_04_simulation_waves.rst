@@ -154,7 +154,7 @@ list by the builder. The ``source`` list once again utlizes the existing ``solve
 
     The :meth:`waves.builders.solve_abaqus` builder has the option to retrieve non-zero exit codes from the Abaqus
     solver by parsing the output ``.sta`` file using ``grep``. The :meth:`waves.builders.solve_abaqus` API provides and
-    example of the ``post_simulation`` builder argument as well as how exit codes are returned to the build system.
+    example of the ``post_action`` builder argument as well as how exit codes are returned to the build system.
 
     This functionality is useful in cases where the model developer wants the build system to exit its processes if an
     Abaqus analysis does not complete successfully. By default, Abaqus will return a zero exit code regardless of
@@ -188,9 +188,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_04_simulation_SConstruct
+   .. literalinclude:: tutorials_tutorial_04_simulation_SConstruct
       :language: Python
-      :diff: eabm_tutorial_03_solverprep_SConstruct
+      :diff: tutorials_tutorial_03_solverprep_SConstruct
 
 *************
 Build Targets

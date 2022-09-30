@@ -60,7 +60,7 @@ Solver Input Files
    $ file_list=("single_element_compression" "amplitudes" "assembly" "boundary" "field_output" "materials" "parts" "history_output")
    $ file_list=("${file_list[@]/%/.inp}")
    $ repo_ssh="ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git"
-   $ git archive --format=zip --remote=$repo_ssh HEAD:eabm/eabm_package/abaqus ${file_list[*]} > source_abaqus.zip
+   $ git archive --format=zip --remote=$repo_ssh HEAD:tutorials/eabm_package/abaqus ${file_list[*]} > source_abaqus.zip
    $ unzip source_abaqus.zip -d eabm_package/abaqus
 
 This action will unzip the source files we included in the
@@ -163,9 +163,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: eabm_tutorial_03_solverprep_SConstruct
+   .. literalinclude:: tutorials_tutorial_03_solverprep_SConstruct
       :language: Python
-      :diff: eabm_tutorial_02_partition_mesh_SConstruct
+      :diff: tutorials_tutorial_02_partition_mesh_SConstruct
 
 *************
 Build Targets

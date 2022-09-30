@@ -10,7 +10,7 @@ paper_source_dir = 'paper'
 package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
-    'eabm_dir': 'eabm',
+    'tutorials_dir': 'tutorials',
     'abaqus_dir': 'eabm_package/abaqus',
     'cubit_dir': 'eabm_package/cubit',
     'python_dir': 'eabm_package/python',
