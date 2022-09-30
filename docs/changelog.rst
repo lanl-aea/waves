@@ -12,6 +12,11 @@ Breaking changes
 ================
 - Use a more generic name for the builder-global post action argument (:issue:`318`, :merge:`349`). By `Kyle Brindley`_.
 
+New Features
+============
+- Add builder-global post action feature to Abaqus journal and Python script builders (:issue:`318`, :merge:`349`). By
+  `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Reduce duplicate code by moving common, required, generate method calls to the ABC abstract method (:issue:`322`,
