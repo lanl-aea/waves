@@ -71,7 +71,8 @@ eabm_simulation_directories = [
     'tutorial_01_geometry',
     'tutorial_02_partition_mesh',
     'tutorial_03_solverprep',
-    'tutorial_04_simulation'
+    'tutorial_04_simulation',
+    'tutorial_remote_execution'
 ]
 for source_dir in eabm_simulation_directories:
     build_dir = variant_dir_base / source_dir
