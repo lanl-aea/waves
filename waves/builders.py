@@ -15,7 +15,7 @@ from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 
 
-def substitution_syntax(substitution_dictionary, prefix='@', postfix='@'):
+def substitution_syntax(substitution_dictionary, prefix="@", postfix="@"):
     """Return a dictionary copy with the pre/postfix added to the key strings
 
     Assumes a flat dictionary with keys of type str. Keys that aren't strings will be converted to their string
@@ -100,7 +100,7 @@ def _abaqus_journal_emitter(target, source, env):
     try:
         build_subdirectory = first_target.parents[0]
     except IndexError as err:
-        build_subdirectory = pathlib.Path('.')
+        build_subdirectory = pathlib.Path(".")
     suffixes = [_stdout_extension, _abaqus_environment_extension]
     for suffix in suffixes:
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
@@ -108,7 +108,7 @@ def _abaqus_journal_emitter(target, source, env):
     return target, source
 
 
-def abaqus_journal(abaqus_program='abaqus'):
+def abaqus_journal(abaqus_program="abaqus"):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -137,8 +137,8 @@ def abaqus_journal(abaqus_program='abaqus'):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal()})
-       AbaqusJournal(target=['my_journal.cae'], source=['my_journal.py'], journal_options='')
+       env.Append(BUILDERS={"AbaqusJournal": waves.builders.abaqus_journal()})
+       AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program.
     """
@@ -160,21 +160,21 @@ def _abaqus_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    if not 'job_name' in env or not env['job_name']:
-        env['job_name'] = pathlib.Path(source[0].path).stem
+    if not "job_name" in env or not env["job_name"]:
+        env["job_name"] = pathlib.Path(source[0].path).stem
     builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
     suffixes = builder_suffixes + _abaqus_solver_common_suffixes
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
-        build_subdirectory = pathlib.Path('.')
+        build_subdirectory = pathlib.Path(".")
     for suffix in suffixes:
         emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
         target.append(str(emitter_target))
     return target, source
 
 
-def abaqus_solver(abaqus_program='abaqus', post_action=[]):
+def abaqus_solver(abaqus_program="abaqus", post_action=[]):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -208,10 +208,10 @@ def abaqus_solver(abaqus_program='abaqus', post_action=[]):
        import waves
        env = Environment()
        env.Append(BUILDERS=
-           {'AbaqusSolver': waves.builders.abaqus_solver(),
-            'AbaqusOld': waves.builders.abaqus_solver(abaqus_program='abq2019'),
-            'AbaqusPost': waves.builders.abaqus_solver(post_action='grep -E "\<SUCCESSFULLY" ${job_name}.sta')})
-       AbaqusSolver(target=[], source=['input.inp'], job_name='my_job', abaqus_options='-cpus 4')
+           {"AbaqusSolver": waves.builders.abaqus_solver(),
+            "AbaqusOld": waves.builders.abaqus_solver(abaqus_program="abq2019"),
+            "AbaqusPost": waves.builders.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")})
+       AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
 
     .. code-block::
        :caption: Abaqus journal builder action
@@ -237,7 +237,7 @@ def abaqus_solver(abaqus_program='abaqus', post_action=[]):
 
 
 def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment(),
-                    build_subdirectory='.', symlink=False):
+                    build_subdirectory=".", symlink=False):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
     Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
@@ -251,13 +251,13 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
        import waves
        env = Environment()
        source_list = [
-           'file_one.ext',  # File found in current SConscript directory
-           'subdir2/file_two',  # File found below current SConscript directory
-           '#/subdir3/file_three.ext',  # File found with respect to project root directory
-           'file_four.ext.in'  # File with substitutions matching substitution dictionary keys
+           "file_one.ext",  # File found in current SConscript directory
+           "subdir2/file_two",  # File found below current SConscript directory
+           "#/subdir3/file_three.ext",  # File found with respect to project root directory
+           "file_four.ext.in"  # File with substitutions matching substitution dictionary keys
        ]
        substitution_dictionary = {
-           '@variable_one@': 'value_one'
+           "@variable_one@": "value_one"
        }
        waves.builders.copy_substitution(source_list, substitution_dictionary, env)
 
@@ -281,7 +281,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
         target_list += env.Command(
                 target=str(copy_target),
                 source=str(source_file),
-                action=SCons.Defaults.Copy('${TARGET}', '${SOURCE}', symlink))
+                action=SCons.Defaults.Copy("${TARGET}", "${SOURCE}", symlink))
         if source_file.suffix == _scons_substfile_suffix:
             substfile_target = build_subdirectory / source_file.name
             target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
@@ -309,7 +309,7 @@ def _python_script_emitter(target, source, env):
     try:
         build_subdirectory = first_target.parents[0]
     except IndexError as err:
-        build_subdirectory = pathlib.Path('.')
+        build_subdirectory = pathlib.Path(".")
     suffixes = [_stdout_extension]
     for suffix in suffixes:
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
@@ -346,8 +346,8 @@ def python_script():
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={'PythonScript': waves.builders.python_script()})
-       PythonScript(target=['my_output.stdout'], source=['my_script.py'], python_options='', script_options='')
+       env.Append(BUILDERS={"PythonScript": waves.builders.python_script()})
+       PythonScript(target=["my_output.stdout"], source=["my_script.py"], python_options="", script_options="")
     """
     python_builder = SCons.Builder.Builder(
         action=
@@ -389,8 +389,8 @@ def conda_environment():
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={'CondaEnvironment': waves.builders.conda_environment()})
-       environment_target = env.CondaEnvironment(target=['environment.yaml'])
+       env.Append(BUILDERS={"CondaEnvironment": waves.builders.conda_environment()})
+       environment_target = env.CondaEnvironment(target=["environment.yaml"])
        env.AlwaysBuild(environment_target)
     """
     conda_environment_builder = SCons.Builder.Builder(
@@ -420,17 +420,17 @@ def _abaqus_extract_emitter(target, source, env):
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
-        build_subdirectory = pathlib.Path('.')
-    if not target or pathlib.Path(str(target[0])).suffix != '.h5':
-        target.insert(0, str(build_subdirectory / odb_file.with_suffix('.h5')))
+        build_subdirectory = pathlib.Path(".")
+    if not target or pathlib.Path(str(target[0])).suffix != ".h5":
+        target.insert(0, str(build_subdirectory / odb_file.with_suffix(".h5")))
     first_target = pathlib.Path(str(target[0]))
     target.append(f"{build_subdirectory / first_target.stem}_datasets.h5")
-    target.append(str(build_subdirectory / first_target.with_suffix('.csv').name))
+    target.append(str(build_subdirectory / first_target.with_suffix(".csv").name))
     target.append(f"{first_target}{_stdout_extension}")
     return target, source
 
 
-def abaqus_extract(abaqus_program='abaqus'):
+def abaqus_extract(abaqus_program="abaqus"):
     """Abaqus ODB file extraction Builder
 
     This builder executes the ``odb_extract`` command line utility against an ODB file in the source list. The ODB file
@@ -462,8 +462,8 @@ def abaqus_extract(abaqus_program='abaqus'):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={'AbaqusExtract': waves.builders.abaqus_extract()})
-       AbaqusExtract(target=['my_job.h5', 'my_job.csv'], source=['my_job.odb'])
+       env.Append(BUILDERS={"AbaqusExtract": waves.builders.abaqus_extract()})
+       AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
     """
@@ -471,7 +471,7 @@ def abaqus_extract(abaqus_program='abaqus'):
         action = [
             "cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.csv ${TARGET.filebase}.h5 " \
                 f"${{TARGET.filebase}}_datasets.h5 > ${{TARGET.file}}{_stdout_extension} 2>&1 || true",
-            SCons.Action.Action(_build_odb_extract, varlist=['output_type', 'odb_report_args', 'delete_report_file'])
+            SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
         ],
         emitter=_abaqus_extract_emitter,
         abaqus_program=abaqus_program)
@@ -481,21 +481,21 @@ def abaqus_extract(abaqus_program='abaqus'):
 def _build_odb_extract(target, source, env):
     """Define the odb_extract action when used as an internal package and not a command line utility"""
     # Default odb_extract arguments
-    output_type = 'h5'
+    output_type = "h5"
     odb_report_args = None
     delete_report_file = False
 
     # Grab arguments from environment if they exist
-    if 'output_type' in env:
-        output_type = env['output_type']
-    if 'odb_report_args' in env:
-        odb_report_args = env['odb_report_args']
-    if 'delete_report_file' in env:
-        delete_report_file = env['delete_report_file']
+    if "output_type" in env:
+        output_type = env["output_type"]
+    if "odb_report_args" in env:
+        odb_report_args = env["odb_report_args"]
+    if "delete_report_file" in env:
+        delete_report_file = env["delete_report_file"]
 
     odb_extract.odb_extract([source[0].abspath], target[0].abspath,
                             output_type=output_type,
                             odb_report_args=odb_report_args,
-                            abaqus_command=env['abaqus_program'],
+                            abaqus_command=env["abaqus_program"],
                             delete_report_file=delete_report_file)
     return None
