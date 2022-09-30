@@ -83,12 +83,15 @@ datacheck.extend(env.AbaqusSolver(
 # Abaqus Solve. Performed remotely by SLURM job submission.
 # Assumes build directory is at least two deep, .e.g. ``.../project/build/simulation``.
 remote = []
+abaqus_command = f"{env['abaqus']} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive " \
+                  "-ask_delete no"
 project_id = f"{env['project_name']}-{env['version']}"
 remote_directory = f"/scratch/$${{USER}}/{project_id}/"
 remote_action = [
     'ssh ${server} "mkdir -p ${remote_directory}"',
     "rsync -rlptv ${SOURCES.abspath} ${server}:${remote_directory}",
-    'ssh ${server} "cd ${remote_directory} && tree"',
+    'ssh ${server} "cd ${remote_directory} && ${abaqus_command}"',
+    "rsync -rlptv ${server}:${remote_directory}/${TARGET.name} ${SOURCE.dir.abspath}",
 ]
 
 remote.extend(env.Command(
@@ -96,7 +99,9 @@ remote.extend(env.Command(
     source=solve_source_list,
     action=remote_action,
     server="sstelmo.lanl.gov",
-    remote_directory=remote_directory
+    remote_directory=remote_directory,
+    job_name=job_name,
+    abaqus_command=abaqus_command
 ))
 env.Alias("remote", remote)
 
