@@ -105,8 +105,6 @@ remote.extend(env.Command(
 ))
 env.Alias("remote", remote)
 
-#    f"ssh tar --directory={remote_directory} -xjf {tar_filename}"
-
 # Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
