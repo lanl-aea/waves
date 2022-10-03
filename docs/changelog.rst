@@ -5,7 +5,16 @@ Changelog
 #########
 
 ******************
-0.5.1 (unreleased)
+0.5.2 (unreleased)
+******************
+
+Internal Changes
+================
+- Remove references to the deprecated "amplitudes" file from the tutorials (:issue:`326`, :merge:`355`). By `Kyle
+  Brindley`_.
+
+******************
+0.5.1 (2022-09-30)
 ******************
 
 Breaking changes
