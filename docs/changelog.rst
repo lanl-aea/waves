@@ -25,6 +25,8 @@ Internal Changes
   :merge:`350`). By `Kyle Brindley`_.
 - Update the tutorials directory name. It no longer contains the WAVES-EABM template, which moved to the quickstart
   directory (:issue:`323`, :merge:`351`). By `Kyle Brindley`_.
+- Remove references to the deprecated "amplitudes" file from the tutorials (:issue:`326`, :merge:`355`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
