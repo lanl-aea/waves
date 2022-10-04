@@ -8,16 +8,16 @@ Command Line Utilities
 |project| Command Line Utility
 ******************************
 
-The |PROJECT| command line utility provides access to bundled HTML documentation, meta information about the |PROJECT|
-Conda package, a quickstart modsim template, and a thin `SCons`_ build wrapper.
-
 .. argparse::
    :ref: waves.waves.get_parser
    :nodefault:
    :nosubcommands:
 
+Sub-commands:
+=============
+
 docs
-====
+----
 
 .. argparse::
    :ref: waves.waves.get_parser
@@ -27,7 +27,7 @@ docs
 .. _waves_quickstart_cli:
 
 quickstart
-==========
+----------
 
 .. argparse::
    :ref: waves.waves.get_parser
@@ -37,7 +37,7 @@ quickstart
 .. _waves_build_cli:
 
 build
-=====
+-----
 
 .. argparse::
    :ref: waves.waves.get_parser

@@ -43,8 +43,8 @@ def get_parser():
     :rtype: ArgumentParser
     """
     main_description = \
-        f"Print information about the {_settings._project_name_short.upper()} Conda package and access the " \
-         "bundled HTML documentation"
+        f"Provides a minimal SCons build wrapper, access to locally packaged HTML " \
+         "documentation, and modsim template file generator."
     main_parser = argparse.ArgumentParser(
         description=main_description,
         prog=_settings._project_name_short.lower())
