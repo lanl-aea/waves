@@ -34,7 +34,7 @@ for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
 from waves import __version__
-from waves._settings import _project_name_short
+from waves._settings import _project_name, _project_name_short
 
 project = _project_name_short
 release = __version__
@@ -44,9 +44,13 @@ copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rig
 #============================================================================================== SPHINX CONFIGURATION ===
 # -- Project Variables -------------------------------------------------------
 rst_prolog = f'.. |project| replace:: {_project_name_short}\n.. include:: targets.txt'
-
-# -- General configuration ---------------------------------------------------
-master_doc = 'index'
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+if tags.has('man'):
+    master_doc='man_index'
+    include_patterns = [f"{master_doc}.rst"]
+else:
+    master_doc = 'index'
+    exclude_patterns.append('man_*.rst')
 
 # Add custom style sheet to make the html docs wider
 def setup(app):
@@ -68,7 +72,6 @@ extlinks = {
 
 templates_path = ['_templates']
 source_suffix = ['.rst']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
 # -- Options for HTML output -------------------------------------------------
 html_logo = 'waves_logo_brandmark_smaller.png'
@@ -97,6 +100,6 @@ latex_documents = [
 
 # -- Options for manual page output ---------------------------------------
 man_pages = [
-    (master_doc, project.lower(), project.upper(),
+    (master_doc, project.lower(), _project_name,
      [author_manpage], 1)
 ]

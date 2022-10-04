@@ -41,6 +41,7 @@ documentation_file_list = [
     'documentation.txt',
     'glossary.rst',
     'index.rst',
+    'man_index.rst',
     'line_number_jump_note.txt',
     'project_brief.txt',
     'references.bib',
@@ -177,7 +178,7 @@ alias_list.extend(env.Alias('latexpdf', latexpdf))
 man = env.Command(
     target=[Dir('man')],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man -t man",
     sphinx_options=sphinx_options)
 env.Clean(man, Dir('man'))
 env.AlwaysBuild(man)
