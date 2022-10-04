@@ -13,8 +13,11 @@ Command Line Utilities
    :nodefault:
    :nosubcommands:
 
+Sub-commands:
+=============
+
 docs
-====
+----
 
 .. argparse::
    :ref: waves.waves.get_parser
@@ -24,7 +27,7 @@ docs
 .. _waves_quickstart_cli:
 
 quickstart
-==========
+----------
 
 .. argparse::
    :ref: waves.waves.get_parser
@@ -34,7 +37,7 @@ quickstart
 .. _waves_build_cli:
 
 build
-=====
+-----
 
 .. argparse::
    :ref: waves.waves.get_parser
