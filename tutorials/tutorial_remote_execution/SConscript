@@ -13,6 +13,7 @@ abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = project_dir / abaqus_source_dir
 
 # Simulation variables
+parent_directory = Dir('.').srcnode().name
 build_directory = pathlib.Path(Dir('.').abspath)
 model = "single_element"
 
@@ -80,9 +81,9 @@ datacheck.extend(env.AbaqusSolver(
 
 # Comment used in tutorial code snippets: marker-5
 
-# Abaqus Solve. Performed remotely by SLURM job submission.
-# Assumes build directory is at least two deep, .e.g. ``.../project/build/simulation``.
+# Remote Abaqus Solve with SSH
 remote = []
+
 abaqus_command = f"{env['abaqus']} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive " \
                   "-ask_delete no"
 project_id = f"{env['project_name']}-{env['version']}"
@@ -94,6 +95,11 @@ remote_action = [
     "rsync -rlptv ${server}:${remote_directory}/${TARGET.name} ${SOURCE.dir.abspath}",
 ]
 
+remote.extend(env.Tar(
+    target=f"{project_id}-build",
+    source=solve_source_list,
+))
+
 remote.extend(env.Command(
     target=[f"{job_name}.odb"],
     source=solve_source_list,
@@ -103,12 +109,11 @@ remote.extend(env.Command(
     job_name=job_name,
     abaqus_command=abaqus_command
 ))
-env.Alias("remote", remote)
+env.Alias(f"{parent_directory}_remote", remote)
 
 # Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
 env.Alias(parent_directory, workflow)
 env.Alias(f"{parent_directory}_datacheck", datacheck)
 
