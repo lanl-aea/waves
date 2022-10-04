@@ -154,6 +154,7 @@ fast-test:
     - scons . --sconstruct=tutorial_cubit_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_builder_post_actions_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_remote_execution_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build
