@@ -29,7 +29,8 @@ project_variables = {
     'tutorial_10_dir': 'tutorial_10_regression_testing',
     'tutorial_cubit_dir': 'tutorial_cubit',
     'tutorial_mesh_convergence_dir': 'tutorial_mesh_convergence',
-    'tutorial_escape_sequences_dir': 'tutorial_escape_sequences'
+    'tutorial_escape_sequences_dir': 'tutorial_escape_sequences',
+    'tutorial_remote_execution_dir': 'tutorial_remote_execution'
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===

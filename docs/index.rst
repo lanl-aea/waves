@@ -51,6 +51,7 @@
    tutorial_07_latin_hypercube_waves
    tutorial_07_sobol_sequence_waves
    tutorial_mesh_convergence_waves
+   tutorial_remote_execution_waves
    tutorial_extend_study_waves
 
 .. raw:: latex
