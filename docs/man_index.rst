@@ -8,6 +8,8 @@ Synopsis
 
 .. argparse::
    :ref: waves.waves.get_parser
+   :nodefault:
+   :nosubcommands:
 
 ***********
 Description

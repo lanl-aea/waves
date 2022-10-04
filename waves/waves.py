@@ -43,7 +43,7 @@ def get_parser():
     :rtype: ArgumentParser
     """
     main_description = \
-        f"{_settings._project_name} - Provides a minimal SCons builder wrapper, access to locally packaged HTML " \
+        f"Provides a minimal SCons build wrapper, access to locally packaged HTML " \
          "documentation, and modsim template file generator."
     main_parser = argparse.ArgumentParser(
         description=main_description,
