@@ -13,6 +13,28 @@ Conda package, a quickstart modsim template, and a thin `SCons`_ build wrapper.
 
 .. argparse::
    :ref: waves.waves.get_parser
+   :nosubcommands:
+
+docs
+====
+
+.. argparse::
+   :ref: waves.waves.get_parser
+   :path: docs
+
+quickstart
+==========
+
+.. argparse::
+   :ref: waves.waves.get_parser
+   :path: quickstart
+
+build
+=====
+
+.. argparse::
+   :ref: waves.waves.get_parser
+   :path: build
 
 .. _parameter_study_cli:
 
