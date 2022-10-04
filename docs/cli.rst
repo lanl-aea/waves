@@ -31,6 +31,8 @@ quickstart
    :ref: waves.waves.get_parser
    :path: quickstart
 
+.. _waves_build_cli:
+
 build
 =====
 

@@ -24,7 +24,7 @@ Automatically Extending a Parameter Study
 References
 **********
 
-* :ref:`waves_cli`
+* :ref:`waves_cli` :ref:`waves_build_cli`
 * |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.SobolSequence`
 * `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
 
