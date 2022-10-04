@@ -77,6 +77,20 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       sequence
                    00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that uses
                                                                       common Geometry and Partition tasks.
+======================== ============================================ ==================================================
+
+Work-in-progress Lessons
+========================
+
+.. warning::
+
+   The lessons in this section represent `WAVES`_ features in the "alpha" development stage or draft solutions to common
+   problems that require additional user testing to better define the user story, needs, and desired behavior.
+
+======================== ============================================ ==================================================
+Time to complete (HH:MM) Tutorial                                     Summary
+------------------------ -------------------------------------------- --------------------------------------------------
+                   00:30 :ref:`tutorial_remote_execution_waves`       Run the simulation on a remote server via SSH
                    00:30 :ref:`tutorial_extend_study_waves`           Automatically extending and re-executing a
                                                                       parameter study
 ======================== ============================================ ==================================================
