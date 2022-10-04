@@ -53,39 +53,6 @@ Parameter Study
 .. argparse::
    :ref: waves.parameter_study.get_parser
    :nodefault:
-   :nosubcommands:
-
-cartesian_product
-=================
-
-.. argparse::
-   :ref: waves.parameter_study.get_parser
-   :nodefault:
-   :path: cartesian_product
-
-custom_study
-============
-
-.. argparse::
-   :ref: waves.parameter_study.get_parser
-   :nodefault:
-   :path: custom_study
-
-latin_hypercube
-===============
-
-.. argparse::
-   :ref: waves.parameter_study.get_parser
-   :nodefault:
-   :path: latin_hypercube 
-
-sobol_sequence
-==============
-
-.. argparse::
-   :ref: waves.parameter_study.get_parser
-   :nodefault:
-   :path: sobol_sequence 
 
 .. _odb_extract_cli:
 
