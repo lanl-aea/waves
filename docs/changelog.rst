@@ -11,6 +11,8 @@ Changelog
 Documentation
 =============
 - Add draft example for running tasks remotely via SSH (:issue:`316`, :merge:`354`). By `Kyle Brindley`_.
+- Match the user manual TOC tree to the tutorials table for less sidebar clutter (:issue:`331`, :merge:`356`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
