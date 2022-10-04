@@ -66,8 +66,9 @@ def get_parser():
             parents=[docs_parser])
     docs_parser.add_argument('-p', '--print-local-path',
                              action='store_true',
-                             help=f"Print the path to the locally installed documentation index file. " \
-                                  f"As an alternative to the docs sub-command, open index.html in a web browser.")
+                             help="Print the path to the locally installed documentation index file. " \
+                                  "As an alternative to the docs sub-command, open index.html in a web browser " \
+                                  "(default: %(default)s)")
 
     build_parser = argparse.ArgumentParser(add_help=False)
     build_parser = subparsers.add_parser('build',
