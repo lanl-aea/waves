@@ -8,6 +8,10 @@ Changelog
 0.5.2 (unreleased)
 ******************
 
+Documentation
+=============
+- Add draft example for running tasks remotely via SSH (:issue:`316`, :merge:`354`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Remove references to the deprecated "amplitudes" file from the tutorials (:issue:`326`, :merge:`355`). By `Kyle
