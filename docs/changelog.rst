@@ -15,6 +15,7 @@ Documentation
   Brindley`_.
 - Add reference to the ``waves quickstart`` modsim template to the user manual introduction (:issue:`332`,
   :merge:`357`). By `Kyle Brindley`_.
+- Reduce man pages to a reference manual for the package API and CLI (:issue:`333`, :merge:`358`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
