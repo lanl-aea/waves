@@ -49,6 +49,9 @@ testing of the `WAVES`_ extensions to SCons.
 Documentation
 =============
 
+The documentation is bundled with the Conda package and can be accessed locally without a network connection after
+installation from the command line as ``waves docs``. The documentation is also web-hosted:
+
 * Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/
 * Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/
 
