@@ -22,6 +22,8 @@ docs
    :ref: waves.waves.get_parser
    :path: docs
 
+.. _waves_quickstart_cli:
+
 quickstart
 ==========
 

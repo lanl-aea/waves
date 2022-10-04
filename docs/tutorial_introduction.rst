@@ -15,9 +15,9 @@ For a detailed discussion of recommended best practices for `SCons`_  and `WAVES
 features, start with :ref:`tutorialsconstruct`. It's also possible to skip the detailed project setup discussion and
 start with the simulation task definitions and discussion directly in :ref:`tutorial_geometry_waves`.
 
-Finally, users who are are ready to create their own modsim repository can use the :ref:`waves_cli` ``quickstart``
-subcommand to generate a modsim template directory structure from the single element example model. The template files
-include project documentation and two simulation configurations: nominal and mesh convergence.
+Finally, users who are are ready to create their own modsim repository can use the :ref:`waves_cli`
+:ref:`waves_quickstart_cli` subcommand to generate a modsim template directory structure from the single element example
+model. The template files include project documentation and two simulation configurations: nominal and mesh convergence.
 
 *************
 Prerequisites
