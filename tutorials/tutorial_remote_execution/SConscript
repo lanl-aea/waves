@@ -118,6 +118,7 @@ remote.extend(env.Command(
     relative_build_directory=str(relative_build_directory)
 ))
 env.Alias(f"{parent_directory}_remote", remote)
+workflow.extend(remote)
 
 # Comment used in tutorial code snippets: marker-6
 
