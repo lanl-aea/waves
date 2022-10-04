@@ -55,10 +55,6 @@ def get_parser():
         version=f'{_settings._project_name_short.upper()} {__version__}')
 
     subparsers = main_parser.add_subparsers(
-        help=f"Specify {_settings._project_name_short.lower()} sub-commands",
-        title=f"{_settings._project_name_short} sub-commands",
-        description=f"Common {_settings._project_name_short.lower()} sub-commands to specify " \
-                    f"{_settings._project_name_short} usage",
         # So args.subcommand will contain the name of the subcommand called
         dest='subcommand')
 
@@ -70,8 +66,9 @@ def get_parser():
             parents=[docs_parser])
     docs_parser.add_argument('-p', '--print-local-path',
                              action='store_true',
-                             help=f"Print the path to the locally installed documentation index file. " \
-                                  f"As an alternative to the docs sub-command, open index.html in a web browser.")
+                             help="Print the path to the locally installed documentation index file. " \
+                                  "As an alternative to the docs sub-command, open index.html in a web browser " \
+                                  "(default: %(default)s)")
 
     build_parser = argparse.ArgumentParser(add_help=False)
     build_parser = subparsers.add_parser('build',

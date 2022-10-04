@@ -47,7 +47,6 @@
 
    api
    cli
-   devops
 
 .. raw:: latex
 
@@ -58,6 +57,7 @@
    :maxdepth: 1
 
    internal_api
+   devops
    release_philosophy
    changelog
    zreferences
