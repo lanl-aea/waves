@@ -1441,7 +1441,10 @@ class OdbReportFileParser(AbaqusFileParser):
                 elif line_values[0] == 'LINE':
                     segment['name'] = line_values[0]
                     segment['endPoint'] = [float(_.strip()) for _ in line_values[1:]]
-                # TODO: get odb with circle and parabola segments and parse that data here
+                elif line_values[0] == 'CIRCLE':
+                    segment['name'] = line_values[0]
+                    segment['endPoint'] = [float(_.strip()) for _ in line_values[1:]]
+                # TODO: get odb with parabola segments and parse that data here
                 instance['analyticSurface']['segments'][segment['name']] = segment
 
     def parse_rigid_bodies(self, f, instance, number_of_rigid_bodies):
