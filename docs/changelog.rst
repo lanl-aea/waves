@@ -8,6 +8,11 @@ Changelog
 0.5.2 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Fixed abaqus_file_parser (odb_extract) to correctly parse multiple steps in an odb (:issue:`177`, :merge:`359`). By
+  `Prabhu Khalsa`_.
+
 Documentation
 =============
 - Add draft example for running tasks remotely via SSH (:issue:`316`, :merge:`354`). By `Kyle Brindley`_.

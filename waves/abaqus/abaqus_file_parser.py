@@ -926,7 +926,6 @@ class OdbReportFileParser(AbaqusFileParser):
 
         if number_of_steps > 0:
             self.parsed['odb']['steps'] = dict()
-            self.parse_steps(f, self.parsed['odb']['steps'], number_of_steps)
             try:
                 self.parse_steps(f, self.parsed['odb']['steps'], number_of_steps)
             except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
@@ -1441,7 +1440,10 @@ class OdbReportFileParser(AbaqusFileParser):
                 elif line_values[0] == 'LINE':
                     segment['name'] = line_values[0]
                     segment['endPoint'] = [float(_.strip()) for _ in line_values[1:]]
-                # TODO: get odb with circle and parabola segments and parse that data here
+                elif line_values[0] == 'CIRCLE':
+                    segment['name'] = line_values[0]
+                    segment['endPoint'] = [float(_.strip()) for _ in line_values[1:]]
+                # TODO: get odb with parabola segments and parse that data here
                 instance['analyticSurface']['segments'][segment['name']] = segment
 
     def parse_rigid_bodies(self, f, instance, number_of_rigid_bodies):
@@ -1532,7 +1534,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 if line.strip().startswith('Number of history regions'):
                     number_of_history_regions = int(line.split('=')[1].strip())
                 step['historyRegions'] = dict()
-                self.parse_history_regions(f, step['historyRegions'], number_of_history_regions)
+                line = self.parse_history_regions(f, step['historyRegions'], number_of_history_regions)
                 steps[step['name']] = step
                 self.current_step_count += 1
             else:
@@ -1902,7 +1904,8 @@ class OdbReportFileParser(AbaqusFileParser):
         :param file object f: open file
         :param dict regions: dict for storing the history region data
         :param int number_of_history_regions: number of history regions to parse
-        :return: None
+        :return: current line of file
+        :rtype: str
         """
         line = f.readline()
         history_region_summary = False
@@ -1952,6 +1955,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 line = f.readline()
             if line == "":
                 break
+        return line
 
     def setup_extract_history_format(self, output, current_history_output):
         """Do setup of history output formatting for extract format
@@ -2045,7 +2049,8 @@ class OdbReportFileParser(AbaqusFileParser):
         """
         if not line.strip().startswith('History Output'):
             line = f.readline()
-        while not line.strip().startswith('History Region') and line != "":
+        while not line.strip().startswith('History Region') and line != "" \
+                and not line.startswith('-----------------------------------------------------------'):
             if line.strip().startswith('History Output'):
                 output = dict()
                 if line.strip()[-1] == '/':  # Line has continuation
