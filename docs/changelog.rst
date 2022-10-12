@@ -12,6 +12,8 @@ Bug fixes
 =========
 - Fixed abaqus_file_parser (odb_extract) to correctly parse multiple steps in an odb (:issue:`177`, :merge:`359`). By
   `Prabhu Khalsa`_.
+- Added code to abaqus_file_parser (odb_extract) to handle case where odbreport file lists an incorrect number of
+  surface sets (:issue:`335`, :merge:`360`). By `Prabhu Khalsa`_.
 
 Documentation
 =============

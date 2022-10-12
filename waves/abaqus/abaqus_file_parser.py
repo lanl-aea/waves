@@ -1338,7 +1338,6 @@ class OdbReportFileParser(AbaqusFileParser):
                 surface['name'] = line.replace('Surface set ', '').strip()[
                                   1:-1]  # removing single quote at front and end
                 line = f.readline()
-                set_size = int(line.split('=')[1].strip())
                 line = f.readline()
                 instance_names = set()
                 faces = set()
@@ -1366,7 +1365,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     if self.format == 'extract':
                         surface['elements'] = dict()
                         element_count = 0
-                        while element_count < set_size:
+                        while line != '\n':
                             line = f.readline()
                             if line.strip().startswith('element label:face pairs from instance '):
                                 instance_name = line.replace('element label:face pairs from instance ', '').replace(
@@ -1386,7 +1385,7 @@ class OdbReportFileParser(AbaqusFileParser):
                                 break
                     else:
                         surface['elements'] = list()
-                        while len(surface['elements']) < set_size:
+                        while line != '\n':
                             line = f.readline()
                             if line.strip().startswith('element label:face pairs from instance '):
                                 instance_name = line.replace('element label:face pairs from instance ', '').replace(
