@@ -1852,6 +1852,7 @@ class OdbReportFileParser(AbaqusFileParser):
                                 else:
                                     values[value_instance]['values'][previous_step][previous_frame].append(
                                         [None for _ in range(number_of_data_values)])
+                        values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
                 else:
                     values[value_instance]['values'][self.current_step_count][time_index][index_key] = data_value
         return line
