@@ -1852,8 +1852,17 @@ class OdbReportFileParser(AbaqusFileParser):
                                 else:
                                     values[value_instance]['values'][previous_step][previous_frame].append(
                                         [None for _ in range(number_of_data_values)])
+                        if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
+                            values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
+                        else:
+                            values[value_instance]['values'][self.current_step_count][time_index][
+                                index_key] = data_value
                 else:
-                    values[value_instance]['values'][self.current_step_count][time_index][index_key] = data_value
+                    if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
+                        # If the index_key is the length of the list, then it is one more index than currently exists
+                        values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
+                    else:
+                        values[value_instance]['values'][self.current_step_count][time_index][index_key] = data_value
         return line
 
 
@@ -2301,7 +2310,7 @@ class OdbReportFileParser(AbaqusFileParser):
 
                     # Create data array and put it in the current dataset
                     current_dataset[field_name] = xarray.DataArray(data=numpy.asarray(data, dtype='f'),
-                                                               coords=coords, dims=dims)
+                                                                   coords=coords, dims=dims)
 
         del self.field_extract_format
 
