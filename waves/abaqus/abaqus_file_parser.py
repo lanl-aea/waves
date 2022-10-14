@@ -1852,7 +1852,11 @@ class OdbReportFileParser(AbaqusFileParser):
                                 else:
                                     values[value_instance]['values'][previous_step][previous_frame].append(
                                         [None for _ in range(number_of_data_values)])
-                        values[value_instance]['values'][self.current_step_count][time_index][0] = data_value
+                        if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
+                            values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
+                        else:
+                            values[value_instance]['values'][self.current_step_count][time_index][
+                                index_key] = data_value
                 else:
                     if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
                         # If the index_key is the length of the list, then it is one more index than currently exists
