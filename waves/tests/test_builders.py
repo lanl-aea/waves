@@ -259,6 +259,12 @@ abaqus_extract_emitter_input = {
         ["new_name.h5", "new_name_datasets.h5", "new_name.h5.stdout"],
         {"delete_report_file": True}
     ),
+    "subdirectory delete report": (
+        ["set1/dummy.h5"],
+        [source_file],
+        ["set1/dummy.h5", "set1/dummy_datasets.h5", "set1/dummy.h5.stdout"],
+        {"delete_report_file": True}
+    ),
 }
 
 
