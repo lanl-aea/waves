@@ -28,6 +28,7 @@ Internal Changes
 ================
 - Remove references to the deprecated "amplitudes" file from the tutorials (:issue:`326`, :merge:`355`). By `Kyle
   Brindley`_.
+- Add preferred CITATION file to the project root (:issue:`337`, :merge:`362`). By `Kyle Brindley`_.
 
 ******************
 0.5.1 (2022-09-30)
