@@ -438,7 +438,8 @@ def _abaqus_extract_emitter(target, source, env):
         target.insert(0, str(build_subdirectory / odb_file.with_suffix(".h5")))
     first_target = pathlib.Path(str(target[0]))
     target.append(f"{build_subdirectory / first_target.stem}_datasets.h5")
-    target.append(str(build_subdirectory / first_target.with_suffix(".csv").name))
+    if not "delete_report_file" in env or not env["delete_report_file"]:
+        target.append(str(build_subdirectory / first_target.with_suffix(".csv").name))
     target.append(f"{first_target}{_stdout_extension}")
     return target, source
 
