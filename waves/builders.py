@@ -413,8 +413,8 @@ def conda_environment():
 
 
 def _abaqus_extract_emitter(target, source, env):
-    """Prepends the abaqus extract builder target H5 file if none is specified. Always appends the source[0].csv file.
-    Always appends the ``target[0]_datasets.h5`` file.
+    """Prepends the abaqus extract builder target H5 file if none is specified. Appends the source[0].csv file unless
+    ``delete_report_file`` is ``True``.  Always appends the ``target[0]_datasets.h5`` file.
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
@@ -460,8 +460,8 @@ def abaqus_extract(abaqus_program="abaqus"):
     the first file in the target list does not contain the ``*.h5`` extension, or if there is no file in the target
     list, the target list will be prepended with a name matching the ODB file base name and the ``*.h5`` extension.
 
-    The builder emitter always appends the CSV file created by the ``abaqus odbreport`` command as executed by
-    ``odb_extract``.
+    The builder emitter appends the CSV file created by the ``abaqus odbreport`` command as executed by
+    ``odb_extract`` unless ``delete_report_file`` is set to ``True``.
 
     This builder supports the keyword arguments: ``output_type``, ``odb_report_args``, ``delete_report_file`` with
     behavior as described in the :ref:`odb_extract_cli` command line interface.
