@@ -227,32 +227,38 @@ abaqus_extract_emitter_input = {
         [],
         [source_file],
         ["dummy.h5", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
-        None
+        {}
     ),
     "one target": (
         ["new_name.h5"],
         [source_file],
         ["new_name.h5", "new_name_datasets.h5", "new_name.csv", "new_name.h5.stdout"],
-        None
+        {}
     ),
     "bad extension": (
         ["new_name.txt"],
         [source_file],
         ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
-        None
+        {}
     ),
     "subdirectory": (
         ["set1/dummy.h5"],
         [source_file],
         ["set1/dummy.h5", "set1/dummy_datasets.h5", "set1/dummy.csv", "set1/dummy.h5.stdout"],
-        None
+        {}
     ),
     "subdirectory new name": (
         ["set1/new_name.h5"],
         [source_file],
         ["set1/new_name.h5", "set1/new_name_datasets.h5", "set1/new_name.csv", "set1/new_name.h5.stdout"],
-        None
-    )
+        {}
+    ),
+    "one target delete report": (
+        ["new_name.h5"],
+        [source_file],
+        ["new_name.h5", "new_name_datasets.h5", "new_name.h5.stdout"],
+        {"delete_report_file": True}
+    ),
 }
 
 
