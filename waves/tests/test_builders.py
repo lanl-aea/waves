@@ -223,30 +223,45 @@ def test_conda_environment():
 
 source_file = fs.File("dummy.odb")
 abaqus_extract_emitter_input = {
-    "empty targets": ([],
-                      [source_file],
-                      ["dummy.h5", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"]),
-    "one target": (["new_name.h5"],
-                   [source_file],
-                   ["new_name.h5", "new_name_datasets.h5", "new_name.csv", "new_name.h5.stdout"]),
-    "bad extension": (["new_name.txt"],
-                      [source_file],
-                      ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"]),
-    "subdirectory": (["set1/dummy.h5"],
-                    [source_file],
-                    ["set1/dummy.h5", "set1/dummy_datasets.h5", "set1/dummy.csv", "set1/dummy.h5.stdout"]),
-    "subdirectory new name": (["set1/new_name.h5"],
-                    [source_file],
-                    ["set1/new_name.h5", "set1/new_name_datasets.h5", "set1/new_name.csv", "set1/new_name.h5.stdout"])
+    "empty targets": (
+        [],
+        [source_file],
+        ["dummy.h5", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        None
+    ),
+    "one target": (
+        ["new_name.h5"],
+        [source_file],
+        ["new_name.h5", "new_name_datasets.h5", "new_name.csv", "new_name.h5.stdout"],
+        None
+    ),
+    "bad extension": (
+        ["new_name.txt"],
+        [source_file],
+        ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        None
+    ),
+    "subdirectory": (
+        ["set1/dummy.h5"],
+        [source_file],
+        ["set1/dummy.h5", "set1/dummy_datasets.h5", "set1/dummy.csv", "set1/dummy.h5.stdout"],
+        None
+    ),
+    "subdirectory new name": (
+        ["set1/new_name.h5"],
+        [source_file],
+        ["set1/new_name.h5", "set1/new_name_datasets.h5", "set1/new_name.csv", "set1/new_name.h5.stdout"],
+        None
+    )
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("target, source, expected",
+@pytest.mark.parametrize("target, source, expected, env",
                          abaqus_extract_emitter_input.values(),
                          ids=abaqus_extract_emitter_input.keys())
-def test_abaqus_extract_emitter(target, source, expected):
-    target, source = builders._abaqus_extract_emitter(target, source, None)
+def test_abaqus_extract_emitter(target, source, expected, env):
+    target, source = builders._abaqus_extract_emitter(target, source, env)
     assert target == expected
 
 
