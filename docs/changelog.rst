@@ -14,6 +14,8 @@ Bug fixes
   `Prabhu Khalsa`_.
 - Added code to abaqus_file_parser (odb_extract) to handle case where odbreport file lists an incorrect number of
   surface sets (:issue:`335`, :merge:`360`). By `Prabhu Khalsa`_.
+- Do not append the CSV target when the odb extract builder option is set to delete that file (:issue:`334`,
+  :merge:`363`). By `Kyle Brindley`_.
 
 Documentation
 =============
