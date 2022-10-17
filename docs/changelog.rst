@@ -5,7 +5,39 @@ Changelog
 #########
 
 ******************
-0.5.1 (unreleased)
+0.5.3 (unreleased)
+******************
+
+******************
+0.5.2 (2022-10-17)
+******************
+
+Bug fixes
+=========
+- Fixed abaqus_file_parser (odb_extract) to correctly parse multiple steps in an odb (:issue:`177`, :merge:`359`). By
+  `Prabhu Khalsa`_.
+- Added code to abaqus_file_parser (odb_extract) to handle case where odbreport file lists an incorrect number of
+  surface sets (:issue:`335`, :merge:`360`). By `Prabhu Khalsa`_.
+- Do not append the CSV target when the odb extract builder option is set to delete that file (:issue:`334`,
+  :merge:`363`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add draft example for running tasks remotely via SSH (:issue:`316`, :merge:`354`). By `Kyle Brindley`_.
+- Match the user manual TOC tree to the tutorials table for less sidebar clutter (:issue:`331`, :merge:`356`). By `Kyle
+  Brindley`_.
+- Add reference to the ``waves quickstart`` modsim template to the user manual introduction (:issue:`332`,
+  :merge:`357`). By `Kyle Brindley`_.
+- Reduce man pages to a reference manual for the package API and CLI (:issue:`333`, :merge:`358`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Remove references to the deprecated "amplitudes" file from the tutorials (:issue:`326`, :merge:`355`). By `Kyle
+  Brindley`_.
+- Add preferred CITATION file to the project root (:issue:`337`, :merge:`362`). By `Kyle Brindley`_.
+
+******************
+0.5.1 (2022-09-30)
 ******************
 
 Breaking changes

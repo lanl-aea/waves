@@ -88,9 +88,6 @@ def get_parser(return_subparser_dictionary=False):
                                     "parameter set file names (default: %(default)s)")
 
     subparsers = main_parser.add_subparsers(
-        help=f"Specify which parameter study generator to use",
-        title="subcommands",
-        description=f"Available parameter study generators",
         dest='subcommand')
 
     cartesian_product_parser = subparsers.add_parser(

@@ -40,7 +40,7 @@ requirements:
     - scons >=4
     - setuptools >=45
     - setuptools_scm[toml] >=6.2
-    - sphinx >=3,<5
+    - sphinx >=5.1
     - sphinx-argparse
     - sphinx_rtd_theme >=0.5
     - sphinxcontrib-bibtex

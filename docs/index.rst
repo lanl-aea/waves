@@ -32,26 +32,10 @@
    :caption: User Manual
 
    tutorial_introduction
-   scons_quickstart
-   waves_quickstart
-   tutorial_00_scons
-   tutorial_01_geometry_waves
-   tutorial_02_partition_mesh_waves
-   tutorial_03_solverprep_waves
-   tutorial_04_simulation_waves
-   tutorial_05_parameter_substitution_waves
-   tutorial_06_include_files_waves
-   tutorial_07_cartesian_product_waves
-   tutorial_08_data_extraction_waves
-   tutorial_09_post_processing_waves
-   tutorial_10_regression_testing_waves
-   scons_multiactiontask
-   tutorial_cubit
-   tutorial_escape_sequences_waves
-   tutorial_07_latin_hypercube_waves
-   tutorial_07_sobol_sequence_waves
-   tutorial_mesh_convergence_waves
-   tutorial_extend_study_waves
+   tutorial_quickstart
+   tutorial_core
+   tutorial_supplemental
+   tutorial_wip
 
 .. raw:: latex
 
@@ -63,7 +47,6 @@
 
    api
    cli
-   devops
 
 .. raw:: latex
 
@@ -73,7 +56,9 @@
    :caption: Help and Reference
    :maxdepth: 1
 
+   citation
    internal_api
+   devops
    release_philosophy
    changelog
    zreferences

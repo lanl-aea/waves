@@ -1,6 +1,6 @@
-###
-API
-###
+############
+External API
+############
 
 .. _waves_builders_api:
 

@@ -10,9 +10,14 @@ Start Options
 
 Users who want to jump straight to a minimally functional simulation workflow with native `SCons`_ can start with the
 :ref:`scons_quickstart`. The :ref:`waves_quickstart` has the same features but uses the `WAVES`_ extension to `SCons`_.
-For a detailed discussion of a recommended best practices `SCons`_  and `WAVES-EABM`_ project setup, meta data, and
+
+For a detailed discussion of recommended best practices for `SCons`_  and `WAVES-EABM`_ project setup, meta data, and
 features, start with :ref:`tutorialsconstruct`. It's also possible to skip the detailed project setup discussion and
 start with the simulation task definitions and discussion directly in :ref:`tutorial_geometry_waves`.
+
+Finally, users who are are ready to create their own modsim repository can use the :ref:`waves_cli`
+:ref:`waves_quickstart_cli` subcommand to generate a modsim template directory structure from the single element example
+model. The template files include project documentation and two simulation configurations: nominal and mesh convergence.
 
 *************
 Prerequisites
@@ -20,12 +25,9 @@ Prerequisites
 
 .. include:: tutorial_00_prerequisites.txt
 
-********
-Schedule
-********
-
+**********
 Quickstart
-==========
+**********
 
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
@@ -36,8 +38,9 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       workflow using `SCons`_ and `WAVES`_
 ======================== ============================================ ==================================================
 
+************
 Core Lessons
-============
+************
 
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
@@ -61,8 +64,9 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       regression testing
 ======================== ============================================ ==================================================
 
+********************
 Supplemental Lessons
-====================
+********************
 
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
@@ -77,6 +81,21 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       sequence
                    00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that uses
                                                                       common Geometry and Partition tasks.
+======================== ============================================ ==================================================
+
+************************
+Work-in-progress Lessons
+************************
+
+.. warning::
+
+   The lessons in this section represent `WAVES`_ features in the "alpha" development stage or draft solutions to common
+   problems that require additional user testing to better define the user story, needs, and desired behavior.
+
+======================== ============================================ ==================================================
+Time to complete (HH:MM) Tutorial                                     Summary
+------------------------ -------------------------------------------- --------------------------------------------------
+                   00:30 :ref:`tutorial_remote_execution_waves`       Run the simulation on a remote server via SSH
                    00:30 :ref:`tutorial_extend_study_waves`           Automatically extending and re-executing a
                                                                       parameter study
 ======================== ============================================ ==================================================
