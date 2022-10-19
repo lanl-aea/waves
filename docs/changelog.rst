@@ -8,6 +8,11 @@ Changelog
 0.5.3 (unreleased)
 ******************
 
+New Features
+============
+- Add the preferred WAVES citation bibtex file to the ``waves quickstart`` template files (:issue:`342`, :merge:`367`).
+  By `Kyle Brindley`_.
+
 Documentation
 =============
 - Update the ``CITATION.bib`` file to use the most recent production release number. Update the version release
