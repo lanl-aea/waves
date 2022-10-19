@@ -37,7 +37,7 @@ or library.
 
 When testing includes file I/O or external executables and programs, it is often called system testing. In a modsim
 repository, integration testing may require execution of several stand-alone scripts, such as those introduced in
-"Tutorial 01: Geometry" and "Tutorial 02: Partition and Mesh" :cite:`WAVES`, which communicate through file I/O
+"Tutorial 01: Geometry" and "Tutorial 02: Partition and Mesh" :cite:`waves-webpage`, which communicate through file I/O
 operations and must be executed by external software. For this reason, this project will often use integration and
 system testing interchangeably. Unless a :term:`modsim repository` contains project specific, re-usable libraries, most
 integration testing of a simulation workflow will actually be system testing. One important aspect of such system

@@ -62,7 +62,7 @@ extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.extlinks',
               'sphinxcontrib.bibtex',
               'sphinxarg.ext']
-bibtex_bibfiles = ['references.bib']
+bibtex_bibfiles = ['references.bib', 'CITATION.bib']
 
 # Links to PRs, Jira issues.
 extlinks = {

@@ -70,6 +70,6 @@ tutorials are considered prerequisites.
 #. Conda environments - https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
    :cite:`conda,conda-gettingstarted`
 #. Sphinx tutorial - https://www.sphinx-doc.org/en/master/tutorial/index.html :cite:`sphinx,sphinx-tutorial`
-#. SCons-WAVES-EABM tutorials - https://aea.re-pages.lanl.gov/python-projects/waves/main/tutorial_introduction.html :cite:`WAVES`
+#. SCons-WAVES-EABM tutorials - https://aea.re-pages.lanl.gov/python-projects/waves/main/tutorial_introduction.html :cite:`waves-webpage`
 #. Library Carpentry: Regular Expressions - https://librarycarpentry.org/lc-data-intro/index.html
    :cite:`lbc-re,LibraryCarpentry`
