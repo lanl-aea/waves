@@ -58,6 +58,7 @@ documentation_file_list = [
     "theory.txt",
     "user.rst",
     "waves_logo_brandmark_smaller.png",
+    "waves.bib",
     "zreferences.rst",
     "_static/custom.css"
 ]
