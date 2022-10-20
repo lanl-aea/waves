@@ -81,8 +81,8 @@ test:
     - SConstruct
     - SConscript
     - README.rst
+    - pyproject.toml
     - waves/SConscript
-    - waves/pytest.ini
     - waves/tests/*.py
     - tutorials/*SConstruct
     - tutorials/eabm_package/abaqus/*

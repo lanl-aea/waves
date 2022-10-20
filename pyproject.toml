@@ -22,3 +22,11 @@ waves = "waves.waves:main"
 
 [tool.setuptools_scm]
 write_to = "waves/_version.py"
+
+[tool.pytest.ini_options]
+markers = [
+    "unittest: marks codebase unit tests",
+    "integrationtest: marks integration tests",
+    "fast: marks fast tests"
+]
+addopts = "-vvv --capture=sys --tb=long  --tb=auto -l --durations=10 --failed-first --strict-markers -r a --junitxml=test_results.xml -n 4"

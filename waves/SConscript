@@ -6,7 +6,7 @@ Import('env')
 # Limit list of source files to allow Conda build test to avoid copying waves source code and test off the installed
 # waves package
 waves_source_list = [
-    'pytest.ini',
+    '../pyproject.toml',
 ]
 
 pytest_node = env.Command(
