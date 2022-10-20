@@ -12,6 +12,8 @@ New Features
 ============
 - Add the preferred WAVES citation bibtex file to the ``waves quickstart`` template files (:issue:`342`, :merge:`367`).
   By `Kyle Brindley`_.
+- Fixed the Sphinx usage of the preferred project citation. Sphinx uses BibTeX, which doesn't have the ``@software``
+  style. Added project citations to the quickstart template files (:issue:`343`, :merge:`368`). By `Kyle Brindley`_.
 
 Documentation
 =============
