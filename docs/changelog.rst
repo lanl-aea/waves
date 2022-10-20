@@ -21,6 +21,10 @@ Documentation
   instructions to include this step (:issue:`339`, :merge:`366`). By `Kyle Brindley`_.
 - Minor typographical fix in API (:issue:`340`, :merge:`369`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Remove Gitlab-CI developer note that is no longer relevant (:issue:`370`, :merge:`370`). By `Kyle Brindley`_.
+
 ******************
 0.5.2 (2022-10-17)
 ******************
