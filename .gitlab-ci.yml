@@ -243,8 +243,6 @@ pages:
     - |
         for ref in ${documentation_branches}; do
             cd ${project_root}
-            # TODO: match the branch to the correct module. unload/load for each branch.
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/boards
             git checkout $ref
             git reset --hard origin/$ref
             mkdir -p public/$ref/waves-eabm
