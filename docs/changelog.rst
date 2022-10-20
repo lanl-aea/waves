@@ -23,7 +23,8 @@ Documentation
 
 Internal Changes
 ================
-- Remove Gitlab-CI developer note that is no longer relevant (:issue:`370`, :merge:`370`). By `Kyle Brindley`_.
+- Remove Gitlab-CI developer note that is no longer relevant (:issue:`9`, :merge:`370`). By `Kyle Brindley`_.
+- Remove pytest.ini and put settings in pyproject.toml (:issue:`344`, :merge:`371`). By `Prabhu Khalsa`_.
 
 ******************
 0.5.2 (2022-10-17)
