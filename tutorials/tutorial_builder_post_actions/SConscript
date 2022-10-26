@@ -9,7 +9,6 @@ Import('env')
 
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(env['project_dir'])
-abaqus_source_dir = env['abaqus_source_dir']
 abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 # Simulation variables
 model = "single_element"
