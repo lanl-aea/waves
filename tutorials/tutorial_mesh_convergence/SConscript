@@ -105,7 +105,7 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
 
     # SolverPrep
     abaqus_source_list = [
-        abaqus_source_abspath / "{model}_compression.inp.in",
+        abaqus_source_abspath / f"{model}_compression.inp.in",
         abaqus_source_abspath / "assembly.inp",
         abaqus_source_abspath / "boundary.inp",
         abaqus_source_abspath / "field_output.inp",
