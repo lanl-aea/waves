@@ -127,6 +127,8 @@ tutorial_files_list = [
     tutorials_dir / env['tutorial_09_dir'] / 'SConscript',
     tutorials_dir / env['tutorial_10_dir'] / 'SConscript',
     tutorials_dir / 'tutorial_task_reuse',
+    tutorials_dir / 'single_element_geometry_partition.scons',
+    tutorials_dir / 'single_element_mesh_solverprep_solve_extract.scons',
     tutorials_dir / env['tutorial_cubit_dir'] / 'SConscript',
     tutorials_dir / env['tutorial_mesh_convergence_dir'] / 'SConscript',
     tutorials_dir / env['tutorial_escape_sequences_dir'] / 'SConscript',
