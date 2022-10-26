@@ -16,7 +16,8 @@ report.extend(env.Substfile(
     SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
 
 # Copy project root files required by the documentation
-root_files = [("README.txt", "#/README.rst")]
+project_dir = pathlib.Path(env["project_dir"])
+root_files = [("README.txt", str(project_dir / "README.rst"))]
 for target, source in root_files:
     report.extend(env.Command(
         target=[target],
@@ -24,7 +25,7 @@ for target, source in root_files:
         action=Copy("$TARGET", "$SOURCE")))
 
 # Copy documentation source files re-used in the report
-documentation_abspath = env["documentation_abspath"]
+documentation_abspath = pathlib.Path(env["documentation_abspath"])
 report_copy_list = [
     documentation_abspath / "nominal.rst",
     documentation_abspath / "project_brief.txt",
