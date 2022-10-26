@@ -48,12 +48,15 @@ env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM-TUTORIAL'
 version = '0.1.0'
+project_dir = pathlib.Path(Dir(".").abspath)
+abaqus_source_dir = "eabm_package/abaqus"
+python_source_dir = "eabm_package/python"
 project_variables = {
     'project_name': project_name,
-    'project_dir': Dir('.').abspath,
+    'project_dir': str(project_dir),
     'version': version,
-    'abaqus_source_dir': 'eabm_package/abaqus',
-    'python_source_dir': 'eabm_package/python'
+    'abaqus_source_abspath': str(project_dir / abaqus_source_dir),
+    'python_source_abspath': str(project_dir / python_source_dir)
 }
 for key, value in project_variables.items():
     env[key] = value
