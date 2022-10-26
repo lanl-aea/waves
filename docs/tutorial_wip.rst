@@ -7,3 +7,4 @@ Work-in-progress Lessons
 
    tutorial_remote_execution_waves
    tutorial_extend_study_waves
+   tutorial_task_reuse_waves

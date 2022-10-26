@@ -1,0 +1,107 @@
+#! /usr/bin/env python
+
+import pathlib
+
+import waves
+
+from eabm_package.python.single_element_compression_cartesian_product import parameter_schema
+
+# Inherit the parent construction environment
+Import('env')
+
+# Comment used in tutorial code snippets: marker-1
+
+# Set project-wide paths with os-agnostic path separators
+project_dir = pathlib.Path(env['project_dir'])
+abaqus_source_dir = env['abaqus_source_dir']
+abaqus_source_abspath = project_dir / abaqus_source_dir
+python_source_dir = env['python_source_dir']
+python_source_abspath = project_dir / python_source_dir
+
+# Simulation variables
+build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
+output_file_type = "h5"
+parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
+previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
+model = "single_element"
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+datacheck = []
+
+# Comment used in tutorial code snippets: marker-2
+
+# Parameter Study with Cartesian Product
+parameter_generator = waves.parameter_generators.CartesianProduct(
+    parameter_schema,
+    output_file=parameter_study_file,
+    output_file_type=output_file_type,
+    previous_parameter_study=previous_parameter_study)
+parameter_generator.generate()
+parameter_study = parameter_generator.parameter_study
+
+# TODO: Find a way to write the parameter study without a user-custom Python build function
+def write_parameter_study(target, source, env):
+    """`SCons Python build function`_ wrapper for the parameter generator's write() function.
+
+    Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
+    """
+    parameter_generator.write()
+    return None
+
+workflow.extend(env.Command(
+    target=[parameter_study_file.name],
+    source=[str(python_source_abspath / "single_element_compression_cartesian_product.py")],
+    action=[write_parameter_study]))
+
+# Comment used in tutorial code snippets: marker-3
+
+# Parameterized targets must live inside current simulation_variables for loop
+for set_name, parameters in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
+    set_name = pathlib.Path(set_name)
+    simulation_variables = parameters.squeeze().to_array().to_series().to_dict()
+
+    # Comment used in tutorial code snippets: marker-4
+
+    # Geometry, Partition
+    workflow, datacheck = env.SConscript(
+        f"{model}_geometry_partition.scons",
+        variant_dir=set_name.name,
+        exports=["env", "simulation_variables", "workflow", "datacheck"],
+        duplicate=False
+    )
+
+    # Mesh, SolverPrep, Abaqus Solve, Extract Abaqus
+    workflow, datacheck = env.SConscript(
+        f"{model}_mesh_solverprep_solve_extract.scons",
+        variant_dir=set_name.name,
+        exports=["env", "simulation_variables", "workflow", "datacheck"],
+        duplicate=False
+    )
+
+# Comment used in tutorial code snippets: marker-5
+
+# Comment used in tutorial code snippets: marker-6
+
+# Post-processing
+job_name = "single_element_compression"
+plot_name = "stress_strain_comparison.pdf"
+post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
+script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += f" --parameter-study-file {parameter_study_file.name}"
+workflow.extend(env.PythonScript(
+    target=[plot_name],
+    source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
+    script_options=script_options))
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
+env.Alias(env['datacheck_alias'], datacheck)
+
+if not env['unconditional_build'] and not env['abaqus']:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
+    Ignore(['.', workflow_name], datacheck)
