@@ -63,6 +63,14 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
 
     # Comment used in tutorial code snippets: marker-4
 
+    # Geometry, Partition
+    workflow, datacheck = env.SConscript(
+        f"{model}_geometry_partition.scons",
+        variant_dir=set_name.name,
+        exports=["env", "simulation_variables", "workflow", "datacheck"],
+        duplicate=False
+    )
+
     # Mesh
     journal_file = f"{model}_mesh"
     journal_options = f"--global-seed {simulation_variables['global_seed']}"
