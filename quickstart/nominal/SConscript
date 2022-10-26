@@ -10,7 +10,6 @@ from eabm_package import single_element_compression
 Import("env")
 
 # Set project-wide paths with os-agnostic path separators
-eabm_package_dir = env["eabm_package_dir"]
 eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
 
 # Simulation variables
@@ -47,13 +46,13 @@ workflow.extend(env.AbaqusJournal(
 
 # SolverPrep
 abaqus_source_list = [
-    f"#/{eabm_package_dir}/{model}_compression.inp.in",
-    f"#/{eabm_package_dir}/assembly.inp",
-    f"#/{eabm_package_dir}/boundary.inp",
-    f"#/{eabm_package_dir}/field_output.inp",
-    f"#/{eabm_package_dir}/materials.inp",
-    f"#/{eabm_package_dir}/parts.inp",
-    f"#/{eabm_package_dir}/history_output.inp"
+    eabm_package_abspath / f"{model}_compression.inp.in",
+    eabm_package_abspath / "assembly.inp",
+    eabm_package_abspath / "boundary.inp",
+    eabm_package_abspath / "field_output.inp",
+    eabm_package_abspath / "materials.inp",
+    eabm_package_abspath / "parts.inp",
+    eabm_package_abspath / "history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.builders.copy_substitute(

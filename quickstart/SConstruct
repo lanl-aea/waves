@@ -71,7 +71,6 @@ project_variables = {
     "author_list": author_list,
     "author_latex": author_latex,
     "documentation_dir": documentation_source_dir,
-    "eabm_package_dir": eabm_package_dir,
     "eabm_package_abspath": str(project_dir / eabm_package_dir),
     "datacheck_alias": "datacheck"
 }
