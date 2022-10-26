@@ -72,63 +72,20 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
         duplicate=False
     )
 
-    # Mesh
-    journal_file = f"{model}_mesh"
-    journal_options = f"--global-seed {simulation_variables['global_seed']}"
-    workflow.extend(env.AbaqusJournal(
-        target=[f"{set_name / journal_file}.inp",
-                f"{set_name / journal_file}.cae",
-                f"{set_name / journal_file}.jnl"],
-        source=[f"{abaqus_source_abspath / journal_file}.py",
-                f"{set_name / model}_partition.cae"],
-        journal_options=journal_options))
-
-    # SolverPrep
-    abaqus_source_list = [
-        f"#/{abaqus_source_dir}/{model}_compression.inp.in",
-        f"#/{abaqus_source_dir}/assembly.inp",
-        f"#/{abaqus_source_dir}/boundary.inp",
-        f"#/{abaqus_source_dir}/field_output.inp",
-        f"#/{abaqus_source_dir}/materials.inp",
-        f"#/{abaqus_source_dir}/parts.inp",
-        f"#/{abaqus_source_dir}/history_output.inp"
-    ]
-    abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-    workflow.extend(waves.builders.copy_substitute(
-        abaqus_source_list,
-        substitution_dictionary=waves.builders.substitution_syntax(simulation_variables),
-        build_subdirectory=set_name))
+    # Mesh, SolverPrep, Abaqus Solve, Extract Abaqus
+    workflow, datacheck = env.SConscript(
+        f"{model}_mesh_solverprep_solve_extract.scons",
+        variant_dir=set_name.name,
+        exports=["env", "simulation_variables", "workflow", "datacheck"],
+        duplicate=False
+    )
 
 # Comment used in tutorial code snippets: marker-5
-
-    # Abaqus Solve
-    solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
-    solve_source_list.append([f"{set_name / journal_file}.inp"])
-    job_name = pathlib.Path(solve_source_list[0]).with_suffix('').name
-    datacheck_name = f"{job_name}_DATACHECK"
-    datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
-    abaqus_options='-double both'
-    datacheck.extend(env.AbaqusSolver(
-        target=[f"{set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
-        source=solve_source_list,
-        job_name=datacheck_name,
-        abaqus_options=f'{abaqus_options} -datacheck'))
-
-    workflow.extend(env.AbaqusSolver(
-        target=[f"{set_name / job_name}.sta"],
-        source=solve_source_list,
-        job_name=job_name,
-        abaqus_options=abaqus_options))
-
-    # Extract Abaqus
-    extract_source_list = [f"{set_name / job_name}.odb"]
-    workflow.extend(env.AbaqusExtract(
-        target=[f"{set_name / job_name}.h5"],
-        source=extract_source_list))
 
 # Comment used in tutorial code snippets: marker-6
 
 # Post-processing
+job_name = "single_element_compression"
 plot_name = "stress_strain_comparison.pdf"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)

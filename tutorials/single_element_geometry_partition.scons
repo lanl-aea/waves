@@ -24,23 +24,24 @@ Example usage:
 
 .. code-block::
 
+   import pathlib
+
    env = Environment()
-   env["eabm_package_abspath"] = str(pathlib.Path(".").resolve() / "eabm_package")
-   env["solve_cpus"] = 1
+   project_dir = pathlib.Path(Dir(".").abspath)
+   abaqus_source_dir = "eabm_package/abaqus"
+   env["abaqus_source_abspath"] = str(project_dir / abaqus_source_dir)
 
    workflow = []
    datacheck = []
 
-   simulation_variables = {"plate_mesh_path": "plate.inp"}
    nominal_workflow, nominal_datacheck = SConscript(
-       "plate_solverprep_solve_extract.scons",
+       "single_element_geometry_partition.scons",
        exports=["env", "simulation_variables", "workflow", "datacheck",
        duplicate=False)
 
-   simulation_variables = {"plate_mesh_path": "../plate.inp"}
    for set_name in [f"parmameter_set{number}" for number in range(4)]
        parameters_workflow, parameter_datacheck = SConscript(
-           "plate_solverprep_solve_extract.scons",
+           "single_element_geometry_partition.scons",
            variant_dir=set_name,
            exports=["env", "simulation_variables", "workflow", "datacheck")
            duplicate=False)
