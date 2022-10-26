@@ -54,13 +54,13 @@ workflow.extend(env.AbaqusJournal(
 
 # SolverPrep
 abaqus_source_list = [
-    f"#/{abaqus_source_dir}/{model}_compression.inp",
-    f"#/{abaqus_source_dir}/assembly.inp",
-    f"#/{abaqus_source_dir}/boundary.inp",
-    f"#/{abaqus_source_dir}/field_output.inp",
-    f"#/{abaqus_source_dir}/materials.inp",
-    f"#/{abaqus_source_dir}/parts.inp",
-    f"#/{abaqus_source_dir}/history_output.inp"
+    abaqus_source_abspath/"{model}_compression.inp",
+    abaqus_source_abspath/"assembly.inp",
+    abaqus_source_abspath/"boundary.inp",
+    abaqus_source_abspath/"field_output.inp",
+    abaqus_source_abspath/"materials.inp",
+    abaqus_source_abspath/"parts.inp",
+    abaqus_source_abspath/"history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
