@@ -1,13 +1,58 @@
 #! /usr/bin/env python
+"""Single element model's Geometry and Partition task definitions
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
+
+* ``simulation_variables`` - The dictionary of simulation variables with the following required keys
+
+  * ``'width'`` - The single element model width
+  * ``'height'`` - The single element model height
+
+* ``workflow`` - list of targets in the main workflow
+* ``datacheck`` - list of targets in the datacheck workflow
+
+Returns the following variables
+
+* ``workflow`` - updated list of targets in the main workflow
+* ``datacheck`` - updated list of targets in the datacheck workflow
+
+Example usage:
+
+.. code-block::
+
+   env = Environment()
+   env["eabm_package_abspath"] = str(pathlib.Path(".").resolve() / "eabm_package")
+   env["solve_cpus"] = 1
+
+   workflow = []
+   datacheck = []
+
+   simulation_variables = {"plate_mesh_path": "plate.inp"}
+   nominal_workflow, nominal_datacheck = SConscript(
+       "plate_solverprep_solve_extract.scons",
+       exports=["env", "simulation_variables", "workflow", "datacheck",
+       duplicate=False)
+
+   simulation_variables = {"plate_mesh_path": "../plate.inp"}
+   for set_name in [f"parmameter_set{number}" for number in range(4)]
+       parameters_workflow, parameter_datacheck = SConscript(
+           "plate_solverprep_solve_extract.scons",
+           variant_dir=set_name,
+           exports=["env", "simulation_variables", "workflow", "datacheck")
+           duplicate=False)
+"""
 
 import pathlib
 
-import waves
-
 # Inherit the parent construction environment
-Import('env')
+Import(["env", "simulation_variables", "workflow", "datacheck"])
 
 # Set project-wide paths with os-agnostic path separators
+abaqus_source_abspath = project_dir / abaqus_source_dir
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
@@ -17,8 +62,8 @@ model = "single_element"
 journal_file = f"{model}_geometry"
 journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{set_name / journal_file}.cae",
-            f"{set_name / journal_file}.jnl"],
+    target=[f"{journal_file}.cae",
+            f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options))
 
@@ -26,8 +71,10 @@ workflow.extend(env.AbaqusJournal(
 journal_file = f"{model}_partition"
 journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{set_name / journal_file}.cae",
-            f"{set_name / journal_file}.jnl"],
+    target=[f"{journal_file}.cae",
+            f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py",
-            f"{set_name / model}_geometry.cae"],
+            f"{model}_geometry.cae"],
     journal_options=journal_options))
+
+Return(["workflow", "datacheck"])
