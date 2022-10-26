@@ -22,7 +22,7 @@ may look like one of
    |-- SConscruct
    |-- workflow1
    |-- workflow2
-   |-- common1
+   |-- common
    `-- build directory/
        |-- workflow1 directory/
        |   |-- workflow1 output
@@ -38,7 +38,7 @@ may look like one of
    |-- workflow1
    |-- workflow2
    |-- common directory/
-   |   `-- common1
+   |   `-- common
    `-- build directory/
        |-- workflow1 directory/
        |   |-- workflow1 output
