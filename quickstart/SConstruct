@@ -70,7 +70,7 @@ project_variables = {
     "version": "0.1.0",
     "author_list": author_list,
     "author_latex": author_latex,
-    "documentation_dir": documentation_source_dir,
+    "documentation_abspath": str(project_dir / documentation_source_dir),
     "eabm_package_abspath": str(project_dir / eabm_package_dir),
     "datacheck_alias": "datacheck"
 }

@@ -24,22 +24,23 @@ for target, source in root_files:
         action=Copy("$TARGET", "$SOURCE")))
 
 # Copy documentation source files re-used in the report
+documentation_abspath = env["documentation_abspath"]
 report_copy_list = [
-    f"#/{env['documentation_dir']}/nominal.rst",
-    f"#/{env['documentation_dir']}/project_brief.txt",
-    f"#/{env['documentation_dir']}/zreferences.rst",
-    f"#/{env['documentation_dir']}/references.bib",
-    f"#/{env['documentation_dir']}/targets.txt",
-    f"#/{env['documentation_dir']}/simulation_description.txt",
-    f"#/{env['documentation_dir']}/simulation_description_short.txt",
-    f"#/{env['documentation_dir']}/simulation_material.txt",
-    f"#/{env['documentation_dir']}/single_element_schematic.pdf",
-    f"#/{env['documentation_dir']}/stress_strain_comparison.pdf",
-    f"#/{env['documentation_dir']}/theory.txt",
-    f"#/{env['documentation_dir']}/mesh_convergence.rst",
-    f"#/{env['documentation_dir']}/mesh_convergence_stress.pdf",
-    f"#/{env['documentation_dir']}/mesh_convergence_conclusions.txt",
-    f"#/{env['documentation_dir']}/nominal_conclusions.txt"
+    documentation_abspath / "nominal.rst",
+    documentation_abspath / "project_brief.txt",
+    documentation_abspath / "zreferences.rst",
+    documentation_abspath / "references.bib",
+    documentation_abspath / "targets.txt",
+    documentation_abspath / "simulation_description.txt",
+    documentation_abspath / "simulation_description_short.txt",
+    documentation_abspath / "simulation_material.txt",
+    documentation_abspath / "single_element_schematic.pdf",
+    documentation_abspath / "stress_strain_comparison.pdf",
+    documentation_abspath / "theory.txt",
+    documentation_abspath / "mesh_convergence.rst",
+    documentation_abspath / "mesh_convergence_stress.pdf",
+    documentation_abspath / "mesh_convergence_conclusions.txt",
+    documentation_abspath / "nominal_conclusions.txt"
 ]
 report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
 report.extend(waves.builders.copy_substitute(
