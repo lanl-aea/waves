@@ -52,7 +52,7 @@ import pathlib
 Import(["env", "simulation_variables", "workflow", "datacheck"])
 
 # Set project-wide paths with os-agnostic path separators
-abaqus_source_abspath = project_dir / abaqus_source_dir
+abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
