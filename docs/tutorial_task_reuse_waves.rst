@@ -14,53 +14,40 @@ The presented solution comes with significant restrictions to directory organiza
 identification. First, due to the way `SCons`_ constructs variant (build) directory directed graphs, the re-usable
 portions of the workflow must be co-located with the calling file or found in a subdirectory. The choice of organization
 has implications for the build directory organization options, too. For example, the two possible directory organization
-may look like
+may look like one of
 
-* *project directory*
+.. code-block:: bash
 
-  * SConscruct
-  * workflow1
-  * workflow2
-  * common1
-  * *build directory*
+   project directory/
+   |-- SConscruct
+   |-- workflow1
+   |-- workflow2
+   |-- common1
+   `-- build directory/
+       |-- workflow1 directory/
+       |   |-- workflow1 output
+       |   |-- common1 output
+       `-- workflow2 directory*
+           |-- workflow2 output
+           `-- common2 output
 
-    * *workflow1 directory*
+.. code-block:: bash
 
-      * workflow1 output
-      * common1 output
-
-    * *workflow2 directory*
-
-      * workflow2 output
-      * common1 output
-
-* *project directory*
-
-  * SConscruct
-  * workflow1
-  * workflow2
-
-  * *common directory*
-
-    * common1
-
-  * *build directory*
-
-    * *workflow1 directory*
-
-      * workflow1 output
-
-      * *common directory*
-
-        * common1 output
-
-    * *workflow2 directory*
-
-      * workflow2 output
-
-      * *common directory*
-
-        * common1 output
+   project directory/
+   |-- SConscruct
+   |-- workflow1
+   |-- workflow2
+   |-- common directory/
+   |   `-- common1
+   `-- build directory/
+       |-- workflow1 directory/
+       |   |-- workflow1 output
+       |   `-- common directory/
+       |       `-- common1 output
+       `-- workflow2 directory/
+           |-- workflow2 output
+           `-- common directory/
+               `-- common2 output
 
 Second, if a target from the parent file is used as a source in the common file, `SCons`_ will recognize the build path
 correctly when provided with the target file base name, but it may not associate the source and target nodes correctly.
