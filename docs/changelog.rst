@@ -26,6 +26,7 @@ Internal Changes
 ================
 - Remove Gitlab-CI developer note that is no longer relevant (:issue:`9`, :merge:`370`). By `Kyle Brindley`_.
 - Remove pytest.ini and put settings in pyproject.toml (:issue:`344`, :merge:`371`). By `Prabhu Khalsa`_.
+- Standardize on ``pathlib`` constructed absolute paths (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
 
 ******************
 0.5.2 (2022-10-17)
