@@ -139,40 +139,13 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the datacheck targets without executing the full simulation workflow
+6. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ scons datacheck --jobs=4
-
-The full simulation suite may also be executed with a single command, but will take much longer to run as the full
-simulation solve, data extraction, and post-processing will be performed. To compare the time of execution of the full
-simulation suite against the limited datacheck workflow, perform the following sequence of commands.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-
-   # Find all workflows that use the datacheck alias for one-to-one real time comparison
-   datacheck_aliases=$(for file in $(grep -riIE "env\['datacheck_alias'\]" --include=SConscript -l); do echo $(dirname $file); done)
-
-   # Verify that the list matches those files you changed for this tutorial
-   echo ${datacheck_aliases}
-   ...
-
-   # Clean all and build datacheck alias
-   $ scons . --clean --jobs=4 > clean.stdout 2>&1
-   $ { time scons datacheck --jobs=4 > scons.stdout 2>&1 ; } 2> time_datacheck_workflow.txt
-
-   # Clean all and build matching full workflows
-   $ scons . --clean --jobs=4 > clean.stdout 2>&1
-   $ { time scons ${datacheck_aliases} --jobs=4 > scons.stdout 2>&1 ; } 2> time_full_workflow.txt
-
-   # Compare times
-   $ grep "real" time_{datacheck,full}_workflow.txt
+   $ scons tutorial_task_reuse --jobs=4
 
 ************
 Output Files
@@ -221,16 +194,3 @@ Output Files
    `-- single_element_partition.stdout
 
    0 directories, 35 files
-
-**********
-Automation
-**********
-
-There are many tools that can help automate the execution of the modsim project regression tests. With the collector
-alias, those tools need only execute a single `SCons`_ command to perform the selected, lower cost tasks for simulation
-workflow verification, ``scons datacheck``. If `git`_ :cite:`git` is used as the version control system, developer
-operations software such as `Gitlab`_ :cite:`gitlab` provide continuous integration software that can automate
-verification tests on triggers, such as merge requests, or on a regular schedule.
-
-.. TODO: template .gitlab-ci.yml file
-.. TODO: add references to alternative to gitlab
