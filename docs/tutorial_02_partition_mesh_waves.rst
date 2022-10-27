@@ -8,7 +8,7 @@ Tutorial 02: Partition and Mesh
 References
 **********
 
-* Adding to `PYTHONPATH`_ with `Python sys`_ :cite:`python`
+* Adding to `PYTHONPATH`_ with `SCons PrependENVPath`_ method :cite:`scons-user`
 * `Abaqus Node Sets`_ :cite:`ABAQUS`
 * `Abaqus Element Sets`_ and `Abaqus Elements Guide`_ :cite:`ABAQUS`
 * `Abaqus Assembly Definition`_ :cite:`ABAQUS`
@@ -197,10 +197,10 @@ The ``single_element_mesh.py`` file will have many similarities in code structur
 and ``single_element_partition.py`` files. The first significant change is within the ``import`` statements at the top
 of the file. The ``single_element_mesh.py`` file uses the ``export_mesh()`` function that is imported from the
 ``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utilities.py`` exists in the
-``eabm_package/abaqus`` directory, and is never copied to the build directory. Without any modifications to your
-``sys.path``, the Abaqus kernel will attempt to ``import abaqus_journal_utilities`` but will not be able to find the
-file. In order to solve this problem, we must add the location of the ``abaqus_journal_utilities.py`` file to
-``sys.path`` at run time.
+``eabm_package/abaqus`` directory, and is never copied to the build directory. It is possible to use a normal looking
+import statement because we will modify `PYTHONPATH`_ in the project ``SConstruct`` configuration file. Abaqus Python
+and Python 3 environments will both inherit the `PYTHONPATH`_ and search for packages on the paths in this environment
+variable.
 
 .. note::
 
@@ -208,11 +208,6 @@ file. In order to solve this problem, we must add the location of the ``abaqus_j
    ``single_element_mesh.py`` file to point to the location of the ``abaqus_journal_utilities`` file as well. The journal
    files are executed via absolute path from within the build directory, so the output from these scripts is placed in
    the build directory.
-
-Before importing ``abaqus_journal_utilities``, the ``filename`` is extracted in the same way as in
-:ref:`tutorial_geometry_waves`'s :ref:`tutorial_geometry_waves_command_line_interfaces` code. Then, we use
-``sys.path.insert`` from the `Python sys`_ package to add the parent directory of the current file
-(``single_element_mesh.py``) to the `PYTHONPATH`_.
 
 From this point, the ``main()`` function proceeds to copy the input file just like in ``single_element_partition.py``.
 The code that follows performs the following tasks within the new ``output_file``:
@@ -250,6 +245,9 @@ changes made in this tutorial.
      .. literalinclude:: tutorials_tutorial_02_partition_mesh_SConstruct
         :language: python
         :diff: tutorials_tutorial_01_geometry_SConstruct
+
+Note the `PYTHONPATH`_ modification by `SCons PrependENVPath`_. This modification to the project's construction
+environment will allow Abaqus Python to import the project module files used by ``single_element_mesh.py``.
 
 *************
 Build Targets

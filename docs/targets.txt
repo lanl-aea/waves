@@ -54,6 +54,7 @@
 .. _`scipy Latin Hypercube`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.LatinHypercube.html
 .. _`SCons Command`: https://scons.org/doc/production/HTML/scons-user/ch18.html
 .. _`SCons Python build function`: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
+.. _`SCons PrependENVPath`: https://scons.org/doc/production/HTML/scons-user/ch07s03.html#idp105548827108944
 .. _`SCons Substfile`: https://scons.org/doc/production/HTML/scons-user.html#b-Substfile
 .. _`SCons Alias`: https://scons.org/doc/production/HTML/scons-user/ch23.html
 .. _`SCons command-line build options`: https://scons.org/doc/production/HTML/scons-user/ch10.html#idm46358236334624
