@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Single element compression workflow
+"""Single element mesh convergence workflow
 
 Requires the following ``SConscript(..., exports=[])``
 

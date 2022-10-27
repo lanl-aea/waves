@@ -1,4 +1,15 @@
 #! /usr/bin/env python
+"""Single element mesh convergence workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``eabm_package_abspath`` - String absolute path to the EABM package
+  * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
+  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
+  * ``abaqus`` - String path for the Abaqus executable
+"""
 
 import pathlib
 
