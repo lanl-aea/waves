@@ -51,7 +51,8 @@ report_copy_list = [
     documentation_abspath / "mesh_convergence.rst",
     documentation_abspath / "mesh_convergence_stress.pdf",
     documentation_abspath / "mesh_convergence_conclusions.txt",
-    documentation_abspath / "nominal_conclusions.txt"
+    documentation_abspath / "nominal_conclusions.txt",
+    documentation_abspath / "waves.bib"
 ]
 report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
 report.extend(waves.builders.copy_substitute(
