@@ -153,7 +153,7 @@ starting with familiar Abaqus Python code, and adding in the following:
         :language: Python
         :lineno-match:
         :end-before: marker-1
-        :emphasize-lines: 11-22
+        :emphasize-lines: 11-23
 
 It is important to note that ``single_element_geometry.py`` is, indeed, an Abaqus journal
 file - even though it does not look like a journal file produced by an Abaqus CAE GUI
