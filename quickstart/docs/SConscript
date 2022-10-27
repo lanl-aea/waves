@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""quickstart report workflow
+"""quickstart documentation workflow
 
 Requires the following ``SConscript(..., exports=[])``
 
