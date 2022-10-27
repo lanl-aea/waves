@@ -10,9 +10,6 @@ VERSION = "@version@"
 project_dir = pathlib.Path("@project_dir@").resolve()
 author_latex = r"@author_latex@"
 
-# Add paths to API/CLI files
-sys.path.insert(0, str(project_dir))
-
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.
 mock_modules = ["abaqus", "abaqusConstants", "mesh", "cubit", "scipy", "scipy.stats", "xarray", "pyyaml", "h5py",
