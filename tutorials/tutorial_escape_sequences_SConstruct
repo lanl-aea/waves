@@ -67,6 +67,9 @@ project_variables = {
 for key, value in project_variables.items():
     env[key] = value
 
+# Make the EABM package importable for Python and Abaqus Python environments
+env.PrependENVPath("PYTHONPATH", str(project_dir))
+
 # Comments used in tutorial code snippets: marker-5
 
 # Build path object for extension and re-use
