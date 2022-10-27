@@ -88,6 +88,8 @@ test:
     - tutorials/eabm_package/abaqus/*
     - tutorials/eabm_package/cubit/*
     - tutorials/eabm_package/python/*
+    - tutorials/*.scons
+    - tutorials/tutorial*
     - tutorials/tutorial*/*
   imports:
     - waves
