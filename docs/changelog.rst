@@ -21,6 +21,7 @@ Documentation
   instructions to include this step (:issue:`339`, :merge:`366`). By `Kyle Brindley`_.
 - Minor typographical fix in API (:issue:`340`, :merge:`369`). By `Kyle Brindley`_.
 - Add a work-in-progress tutorial for re-using task definitions (:issue:`63`, :merge:`373`). By `Kyle Brindley`_.
+- Add SConscript interface doc strings (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
