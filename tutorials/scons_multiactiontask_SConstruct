@@ -7,9 +7,6 @@ import pathlib
 # Inherit user's full environment
 env = Environment(ENV=os.environ.copy())
 
-# Make the EABM package importable for Python and Abaqus Python environments
-env.PrependENVPath("PYTHONPATH", str(project_dir))
-
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
@@ -18,6 +15,9 @@ project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'eabm_package/abaqus'
 abaqus_source_abspath = project_dir / abaqus_source_dir
 variant_dir_base = pathlib.Path('build_scons_multiactiontask')
+
+# Make the EABM package importable for Python and Abaqus Python environments
+env.PrependENVPath("PYTHONPATH", str(project_dir))
 
 # Separate target output from source files
 VariantDir(variant_dir_base.name, '.', duplicate=False)
