@@ -7,6 +7,9 @@ import pathlib
 # Inherit user's full environment
 env = Environment(ENV=os.environ.copy())
 
+# Make the EABM package importable for Python and Abaqus Python environments
+env.PrependENVPath("PYTHONPATH", str(project_dir))
+
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
