@@ -62,7 +62,7 @@ the contents below.
         :language: Python
         :lineno-match:
         :end-before: marker-1
-        :emphasize-lines: 6, 9-11
+        :emphasize-lines: 16, 19 
 
 The ``SConscript`` file begins with imports of standard Python libraries. The first
 highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set
