@@ -21,11 +21,13 @@ Documentation
   instructions to include this step (:issue:`339`, :merge:`366`). By `Kyle Brindley`_.
 - Minor typographical fix in API (:issue:`340`, :merge:`369`). By `Kyle Brindley`_.
 - Add a work-in-progress tutorial for re-using task definitions (:issue:`63`, :merge:`373`). By `Kyle Brindley`_.
+- Add SConscript interface doc strings (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
 - Remove Gitlab-CI developer note that is no longer relevant (:issue:`9`, :merge:`370`). By `Kyle Brindley`_.
 - Remove pytest.ini and put settings in pyproject.toml (:issue:`344`, :merge:`371`). By `Prabhu Khalsa`_.
+- Standardize on ``pathlib`` constructed absolute paths (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
 
 ******************
 0.5.2 (2022-10-17)

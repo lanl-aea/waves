@@ -1,4 +1,16 @@
 #! /usr/bin/env python
+"""Single element mesh convergence workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
+  * ``python_source_abspath`` - String absolute path to the EABM's Python 3 files
+  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``abaqus`` - String path for the Abaqus executable
+"""
 
 import pathlib
 
@@ -12,11 +24,8 @@ Import('env')
 # Comment used in tutorial code snippets: marker-1
 
 # Set project-wide paths with os-agnostic path separators
-project_dir = pathlib.Path(env['project_dir'])
-abaqus_source_dir = env['abaqus_source_dir']
-abaqus_source_abspath = project_dir / abaqus_source_dir
-python_source_dir = env['python_source_dir']
-python_source_abspath = project_dir / python_source_dir
+abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
+python_source_abspath = pathlib.Path(env["python_source_abspath"])
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
@@ -105,13 +114,13 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
 
     # SolverPrep
     abaqus_source_list = [
-        f"#/{abaqus_source_dir}/{model}_compression.inp.in",
-        f"#/{abaqus_source_dir}/assembly.inp",
-        f"#/{abaqus_source_dir}/boundary.inp",
-        f"#/{abaqus_source_dir}/field_output.inp",
-        f"#/{abaqus_source_dir}/materials.inp",
-        f"#/{abaqus_source_dir}/parts.inp",
-        f"#/{abaqus_source_dir}/history_output.inp"
+        abaqus_source_abspath / f"{model}_compression.inp.in",
+        abaqus_source_abspath / "assembly.inp",
+        abaqus_source_abspath / "boundary.inp",
+        abaqus_source_abspath / "field_output.inp",
+        abaqus_source_abspath / "materials.inp",
+        abaqus_source_abspath / "parts.inp",
+        abaqus_source_abspath / "history_output.inp"
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     workflow.extend(waves.builders.copy_substitute(

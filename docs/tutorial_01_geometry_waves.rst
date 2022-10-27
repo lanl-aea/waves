@@ -62,7 +62,7 @@ the contents below.
         :language: Python
         :lineno-match:
         :end-before: marker-1
-        :emphasize-lines: 6, 9-11
+        :emphasize-lines: 16, 19 
 
 The ``SConscript`` file begins with imports of standard Python libraries. The first
 highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set
@@ -153,7 +153,7 @@ starting with familiar Abaqus Python code, and adding in the following:
         :language: Python
         :lineno-match:
         :end-before: marker-1
-        :emphasize-lines: 11-22
+        :emphasize-lines: 11-23
 
 It is important to note that ``single_element_geometry.py`` is, indeed, an Abaqus journal
 file - even though it does not look like a journal file produced by an Abaqus CAE GUI
@@ -213,7 +213,7 @@ Command Line Interfaces
         :lineno-match:
         :start-after: marker-1
         :end-before: marker-2
-        :emphasize-lines: 3-5, 12-14, 16-30
+        :emphasize-lines: 3-5, 12-14, 16-31
 
 This portion of ``single_element_geometry.py`` defines the argument parsing function, ``get_parser()``, which is the
 next step in turning our simple Python script into a small software utility. Command line interfaces allow for scripts
@@ -313,7 +313,7 @@ but that may change in production EABMs.
      .. literalinclude:: abaqus_single_element_geometry.py
          :language: Python
          :linenos:
-         :emphasize-lines: 10-22, 26-37, 53, 56-59, 62, 65-75, 84-88
+         :emphasize-lines: 11-23, 27-38, 54, 57-60, 63, 66-76, 85-89
 
 ***************
 SConstruct File

@@ -93,7 +93,7 @@ SConscript
     .. literalinclude:: tutorial_03_solverprep_SConscript
        :language: Python
        :lineno-match:
-       :emphasize-lines: 5
+       :emphasize-lines: 15
        :end-before: marker-1
 
 The first few lines of the ``SConscript`` file should look very familiar with exception to
@@ -125,14 +125,11 @@ The ``abaqus_source_list`` contains the names of all the files that are used to 
 included within it. See the `Abaqus *INCLUDE`_ keyword documentaiton :cite:`ABAQUS` for more information about how
 this is implemented.
 
-Each file in the ``abaqus_source_list`` is specified with its absolute path. `SCons`_
-interprets the ``#`` character in any target or source string as the absolute path to the
-project root directory. The ``abaqus_source_dir`` variable was previously constructed
-using variables from the ``env`` object. After constructing the ``abaqus_source_list``, we
-must first convert each string (which represent the aboslute paths of each file in the
-list) to a `Python pathlib`_ object. While not strictly neccessary for the
-:meth:`waves.builders.copy_substitute` method, the `Python pathlib`_ objects are used
-elsewhere in the `SConscript` file.
+Each file in the ``abaqus_source_list`` is specified with its absolute path with ``pathlib`` and the
+``abaqus_source_abspath`` variable constructed in the project configuration ``SConstruct`` file.  After constructing the
+``abaqus_source_list``, we must first convert each string (which represent the aboslute paths of each file in the list)
+to a `Python pathlib`_ object.  While not strictly neccessary for the :meth:`waves.builders.copy_substitute` method, the
+`Python pathlib`_ objects are used elsewhere in the `SConscript` file.
 
 Just as in the previous tutorials, we now need to extend the ``workflow`` list. Recall
 that we have already extended the workflow three times - once each for the Geometry,

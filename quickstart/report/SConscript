@@ -1,4 +1,14 @@
 #! /usr/bin/env python
+"""quickstart report workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``project_dir`` - String absolute path to the EABM project root directory
+  * ``documentation_abspath`` - String absolute path to the EABM HTML documentation source files
+  * ``sphinx_build`` - String path for the Sphinx build executable
+"""
 
 import pathlib
 
@@ -16,7 +26,8 @@ report.extend(env.Substfile(
     SUBST_DICT=waves.builders.substitution_syntax(project_variables)))
 
 # Copy project root files required by the documentation
-root_files = [("README.txt", "#/README.rst")]
+project_dir = pathlib.Path(env["project_dir"])
+root_files = [("README.txt", str(project_dir / "README.rst"))]
 for target, source in root_files:
     report.extend(env.Command(
         target=[target],
@@ -24,22 +35,23 @@ for target, source in root_files:
         action=Copy("$TARGET", "$SOURCE")))
 
 # Copy documentation source files re-used in the report
+documentation_abspath = pathlib.Path(env["documentation_abspath"])
 report_copy_list = [
-    f"#/{env['documentation_dir']}/nominal.rst",
-    f"#/{env['documentation_dir']}/project_brief.txt",
-    f"#/{env['documentation_dir']}/zreferences.rst",
-    f"#/{env['documentation_dir']}/references.bib",
-    f"#/{env['documentation_dir']}/targets.txt",
-    f"#/{env['documentation_dir']}/simulation_description.txt",
-    f"#/{env['documentation_dir']}/simulation_description_short.txt",
-    f"#/{env['documentation_dir']}/simulation_material.txt",
-    f"#/{env['documentation_dir']}/single_element_schematic.pdf",
-    f"#/{env['documentation_dir']}/stress_strain_comparison.pdf",
-    f"#/{env['documentation_dir']}/theory.txt",
-    f"#/{env['documentation_dir']}/mesh_convergence.rst",
-    f"#/{env['documentation_dir']}/mesh_convergence_stress.pdf",
-    f"#/{env['documentation_dir']}/mesh_convergence_conclusions.txt",
-    f"#/{env['documentation_dir']}/nominal_conclusions.txt"
+    documentation_abspath / "nominal.rst",
+    documentation_abspath / "project_brief.txt",
+    documentation_abspath / "zreferences.rst",
+    documentation_abspath / "references.bib",
+    documentation_abspath / "targets.txt",
+    documentation_abspath / "simulation_description.txt",
+    documentation_abspath / "simulation_description_short.txt",
+    documentation_abspath / "simulation_material.txt",
+    documentation_abspath / "single_element_schematic.pdf",
+    documentation_abspath / "stress_strain_comparison.pdf",
+    documentation_abspath / "theory.txt",
+    documentation_abspath / "mesh_convergence.rst",
+    documentation_abspath / "mesh_convergence_stress.pdf",
+    documentation_abspath / "mesh_convergence_conclusions.txt",
+    documentation_abspath / "nominal_conclusions.txt"
 ]
 report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_list]
 report.extend(waves.builders.copy_substitute(

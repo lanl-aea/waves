@@ -1,4 +1,15 @@
 #! /usr/bin/env python
+"""quickstart documentation workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``project_dir`` - String absolute path to the EABM project root directory
+  * ``sphinx_build`` - String path for the Sphinx build executable
+"""
+
+import pathlib
 
 import waves
 
@@ -14,8 +25,9 @@ env.Substfile(
     SUBST_DICT=waves.builders.substitution_syntax(project_variables))
 
 # Copy project root files required by the documentation
-root_files = [("README.txt", "#/README.rst"),
-              ("environment.txt", "#/environment.txt")]
+project_dir = pathlib.Path(env["project_dir"])
+root_files = [("README.txt", str(project_dir / "README.rst")),
+              ("environment.txt", str(project_dir / "environment.txt"))]
 for target, source in root_files:
     env.Command(
         target=[target],
