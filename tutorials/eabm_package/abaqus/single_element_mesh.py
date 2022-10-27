@@ -9,9 +9,7 @@ import abaqus
 import abaqusConstants
 import mesh
 
-filename = inspect.getfile(lambda: None)
-sys.path.insert(0, os.path.dirname(filename))
-import abaqus_journal_utilities
+import eabm_package.abaqus.abaqus_journal_utilities
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
