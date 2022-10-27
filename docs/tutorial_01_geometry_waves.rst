@@ -213,7 +213,7 @@ Command Line Interfaces
         :lineno-match:
         :start-after: marker-1
         :end-before: marker-2
-        :emphasize-lines: 3-5, 12-14, 16-30
+        :emphasize-lines: 3-5, 12-14, 16-31
 
 This portion of ``single_element_geometry.py`` defines the argument parsing function, ``get_parser()``, which is the
 next step in turning our simple Python script into a small software utility. Command line interfaces allow for scripts
@@ -313,7 +313,7 @@ but that may change in production EABMs.
      .. literalinclude:: abaqus_single_element_geometry.py
          :language: Python
          :linenos:
-         :emphasize-lines: 10-22, 26-37, 53, 56-59, 62, 65-75, 84-88
+         :emphasize-lines: 11-23, 27-38, 54, 57-60, 63, 66-76, 85-89
 
 ***************
 SConstruct File

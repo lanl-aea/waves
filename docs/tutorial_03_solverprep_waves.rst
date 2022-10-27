@@ -93,7 +93,7 @@ SConscript
     .. literalinclude:: tutorial_03_solverprep_SConscript
        :language: Python
        :lineno-match:
-       :emphasize-lines: 5
+       :emphasize-lines: 15
        :end-before: marker-1
 
 The first few lines of the ``SConscript`` file should look very familiar with exception to

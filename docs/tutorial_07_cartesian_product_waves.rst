@@ -112,7 +112,7 @@ Step-By-Step SConscript Discussion
       :language: Python
       :lineno-match:
       :end-before: marker-1
-      :emphasize-lines: 7, 10
+      :emphasize-lines: 18, 21 
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
@@ -130,7 +130,7 @@ dictionary in previous tutorials.
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 5-6, 9-12
+      :emphasize-lines: 2-3, 7-10 
 
 The unhighlighted portions of the code snippet above do not present any unique code that has not been previously
 discussed.
