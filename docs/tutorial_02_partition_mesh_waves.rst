@@ -197,10 +197,14 @@ The ``single_element_mesh.py`` file will have many similarities in code structur
 and ``single_element_partition.py`` files. The first significant change is within the ``import`` statements at the top
 of the file. The ``single_element_mesh.py`` file uses the ``export_mesh()`` function that is imported from the
 ``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utilities.py`` exists in the
-``eabm_package/abaqus`` directory, and is never copied to the build directory. It is possible to use a normal looking
-import statement because we will modify `PYTHONPATH`_ in the project ``SConstruct`` configuration file. Abaqus Python
-and Python 3 environments will both inherit the `PYTHONPATH`_ and search for packages on the paths in this environment
-variable.
+``eabm_package/abaqus`` directory, and is never copied to the build directory.
+
+It is possible to use a normal looking import statement because we will modify `PYTHONPATH`_ in the project
+``SConstruct`` configuration file. Abaqus Python and Python 3 environments will both inherit the `PYTHONPATH`_ and
+search for packages on the paths in this environment variable. While this path modification would be bad practice for a
+Python package, since we aren't packaging and deploying our modsim Python modules this path modification is required.
+Care should still be taken to avoid naming conflicts between the modsim package directory and any Python packages that
+may exist in the active Conda environment.
 
 .. note::
 
