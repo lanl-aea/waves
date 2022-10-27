@@ -1,4 +1,14 @@
 #! /usr/bin/env python
+"""Single element compression workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``abaqus`` - String path for the Abaqus executable
+"""
 
 import pathlib
 
@@ -8,7 +18,6 @@ import waves
 Import('env')
 
 # Set project-wide paths with os-agnostic path separators
-project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 
 # Comment used in tutorial code snippets: marker-0
