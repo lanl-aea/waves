@@ -46,14 +46,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_extend_study
 
-4. Copy the ``tutorial_07_sobol_sequence/SConscript`` file into the newly created ``tutorial_extend_study``
+4. Copy the ``tutorial_07_sobol_sequence`` file into the newly created ``tutorial_extend_study``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_07_sobol_sequence/SConscript tutorial_extend_study/
+   $ cp tutorial_07_sobol_sequence tutorial_extend_study/
 
 **********
 SConscript
@@ -62,7 +62,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 differences between the two parameter generators.
 
-.. admonition:: waves-eabm-tutorial/tutorial_extend_study/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_extend_study
 
    .. literalinclude:: tutorials_tutorial_extend_study
       :language: Python

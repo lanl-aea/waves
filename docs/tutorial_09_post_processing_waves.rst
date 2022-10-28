@@ -36,14 +36,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_09_post_processing
 
-4. Copy the ``tutorial_08_data_extraction/SConscript`` file into the newly created ``tutorial_09_post_processing``
+4. Copy the ``tutorial_08_data_extraction`` file into the newly created ``tutorial_09_post_processing``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_08_data_extraction/SConscript tutorial_09_post_processing/
+   $ cp tutorial_08_data_extraction tutorial_09_post_processing/
 
 **********
 SConscript
@@ -52,7 +52,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_09_post_processing/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_09_post_processing
 
    .. literalinclude:: tutorials_tutorial_09_post_processing
       :language: Python

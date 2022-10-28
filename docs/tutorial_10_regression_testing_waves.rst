@@ -49,14 +49,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_10_regression_testing
 
-4. Copy the ``tutorial_09_post_processing/SConscript`` file into the newly created ``tutorial_10_regression_testing``
+4. Copy the ``tutorial_09_post_processing`` file into the newly created ``tutorial_10_regression_testing``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_09_post_processing/SConscript tutorial_10_regression_testing/
+   $ cp tutorial_09_post_processing tutorial_10_regression_testing/
 
 **********
 SConscript
@@ -65,7 +65,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_10_regression_testing/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_10_regression_testing
 
    .. literalinclude:: tutorials_tutorial_10_regression_testing
       :language: Python

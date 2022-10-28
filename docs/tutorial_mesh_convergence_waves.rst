@@ -36,14 +36,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_mesh_convergence
 
-4. Copy the ``tutorial_10_regression_testing/SConscript`` file into the newly created ``tutorial_mesh_convergence``
+4. Copy the ``tutorial_10_regression_testing`` file into the newly created ``tutorial_mesh_convergence``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_10_regression_testing/SConscript tutorial_mesh_convergence/
+   $ cp tutorial_10_regression_testing tutorial_mesh_convergence/
 
 ********************
 Parameter Study File
@@ -64,16 +64,16 @@ SConscript
 **********
 
 6. A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
-   identify the changes made in this tutorial. Use the diff to update your ``tutorial_mesh_convergence/SConscript`` 
+   identify the changes made in this tutorial. Use the diff to update your ``tutorial_mesh_convergence`` 
    file, and then review the paragraphs that follow to understand the meaning of these changes.
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
    
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
@@ -91,7 +91,7 @@ the ``global_seed`` and ``displacement`` parameters in :ref:`tutorial_cartesian_
 in the parameter study definition. The individual parameters from the ``parameter_schema`` and ``simulation_constants`` 
 dictionaries will be combined later in the ``SConscript`` file.
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
@@ -117,7 +117,7 @@ differences:
 * The final highlighted line shows how the ``simulation_variables`` dictionary is constructed by combining the 
   ``simulation_constants`` and the ``global_seed`` parameters for every simulation.
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
@@ -146,7 +146,7 @@ than pointing to the ``single_element_partition.cae`` file via absolute path, we
 in the build directory. This is achieved by simply pointing to the ``SCons`` file object that was created when we 
 specified ``single_element_partition.cae`` as a target in the ``# Partition`` workflow.
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python

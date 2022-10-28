@@ -29,14 +29,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_06_include_files
 
-4. Copy the ``tutorial_05_parameter_substitution/SConscript`` file into the newly created ``tutorial_06_include_files``
+4. Copy the ``tutorial_05_parameter_substitution`` file into the newly created ``tutorial_06_include_files``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_05_parameter_substitution/SConscript tutorial_06_include_files/
+   $ cp tutorial_05_parameter_substitution tutorial_06_include_files/
 
 5. Create a new directory in ``eabm_package/python`` in the ``waves-eabm-tutorial`` directory.
 
@@ -63,7 +63,7 @@ re-use between simulations.
    .. literalinclude:: python_single_element_compression_nominal.py
       :language: Python
 
-The file you just created is an exact copy of the code snippet in your ``tutorial_05_parameter_substitution/SConscript``
+The file you just created is an exact copy of the code snippet in your ``tutorial_05_parameter_substitution``
 file that defines the parameter key-value pairs.
 
 7. Create Python module initialization files to create a project specific local Python package.
@@ -88,7 +88,7 @@ need any content. You can read more about `Python Modules`_ in the `Python docum
 SConscript
 **********
 
-8. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files/SConscript`` file:
+8. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files`` file:
 
    * Import ``single_element_compression_nominal`` from the ``eabm_package.python`` module
    * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution_waves`'s
@@ -98,7 +98,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help
 identify the changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_06_include_files/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_06_include_files
 
    .. literalinclude:: tutorials_tutorial_06_include_files
       :language: Python
@@ -117,7 +117,7 @@ information about importing modules. You can access those variables with the fol
 The second change removes the code that defines ``simulation_variables`` that remained from
 :ref:`tutorial_parameter_substitution_waves`'s code.
 
-The final change made in the ``tutorial_06_include_files/SConscript`` file is to re-define the ``simulation_variables``
+The final change made in the ``tutorial_06_include_files`` file is to re-define the ``simulation_variables``
 from the ``single_element_compression_nominal`` module. The end result at this point in the code is the same between
 this tutorial and :ref:`tutorial_parameter_substitution_waves`.  However, now we import variables from a separate file,
 list that file as a source dependency of the parameterized targets, and allow ourselves the ability to change parameters
@@ -143,7 +143,7 @@ changes made in this tutorial.
       :diff: tutorials_tutorial_05_parameter_substitution_SConstruct
 
 The first change you made allows for us to import modules from the ``eabm_package`` package. This step is neccessary to
-be able to import the ``eabm_package.python`` module in the ``tutorial_06_include_files/SConscript`` file.
+be able to import the ``eabm_package.python`` module in the ``tutorial_06_include_files`` file.
 
 The last change to be made is adding ``tutorial_06_include_files`` to the ``workflow_configurations`` list. This
 process should be quite familiar by now.

@@ -35,14 +35,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir -p tutorial_cubit eabm_package_cubit
 
-4. Copy the ``tutorial_04_simulation/SConscript`` file into the newly created ``tutorial_cubit``
+4. Copy the ``tutorial_04_simulation`` file into the newly created ``tutorial_cubit``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation/SConscript tutorial_cubit/
+   $ cp tutorial_04_simulation tutorial_cubit/
 
 .. _tutorials_tutorial_cubit_waves:
 
@@ -53,7 +53,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_cubit/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_cubit
 
    .. literalinclude:: tutorials_tutorial_cubit
       :language: Python

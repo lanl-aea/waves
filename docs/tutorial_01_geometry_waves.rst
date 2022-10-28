@@ -56,7 +56,7 @@ In this tutorial, we will build the geometry for a single element part using the
 4. In the ``tutorial_01_geometry`` directory, create a file called ``SConscript`` using
 the contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
     .. literalinclude:: tutorials_tutorial_01_geometry
         :language: Python
@@ -81,7 +81,7 @@ exist.
 5. In the ``tutorial_01_geometry`` directory, continue editing the file called
 ``SConscript`` using contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
      .. literalinclude:: tutorials_tutorial_01_geometry
          :language: Python
@@ -115,7 +115,7 @@ For more information about the behavior of the
 6. In the ``tutorial_01_geometry`` directory, continue editing the file called
 ``SConscript`` using the contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
      .. literalinclude:: tutorials_tutorial_01_geometry
          :language: Python
@@ -321,7 +321,7 @@ SConstruct File
 
 In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias
 matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to
-build specified in the ``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` file.
+build specified in the ``waves-eabm-tutorial/tutorial_01_geometry`` file.
 
 10. Modify the ``waves-eabm-tutorial/SConstruct`` file by adding the
     ``tutorial_01_geometry`` collector alias to the ``workflow_configurations`` list.

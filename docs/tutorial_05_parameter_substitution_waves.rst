@@ -28,14 +28,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_05_parameter_substitution
 
-4. Copy the ``tutorial_04_simulation/SConscript`` file into the newly created ``tutorial_05_parameter_substitution``
+4. Copy the ``tutorial_04_simulation`` file into the newly created ``tutorial_05_parameter_substitution``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation/SConscript tutorial_05_parameter_substitution/
+   $ cp tutorial_04_simulation tutorial_05_parameter_substitution/
 
 ******************
 Solver Input Files
@@ -78,11 +78,11 @@ the substitution occurs.
 SConscript
 **********
 
-7. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by adding the contents shown below to the code
+7. Modify your ``tutorial_05_parameter_substitution`` file by adding the contents shown below to the code
    pertaining to ``# Simulation variables``. The entire code snippet shows how your code should look after editing, and
    the highlghted portion is what needs to be added to your existing code.
 
-.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
@@ -111,10 +111,10 @@ command line interface. Recall from earlier in this tutorial, we created a new f
 the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
 this is implemented with the :meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
 
-8. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the
+8. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
 
-.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
@@ -137,10 +137,10 @@ the completed action string as part of the task definition. If the substituted p
 recognize that the tasks need to be re-executed in the same way that tasks need to be re-executed when the contents of a
 source file change.
 
-9. Modify your ``tutorial_05_parameter_substitution/SConscript`` file by using the highlighed lines below to modify the
+9. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    code pertaining to ``# SolverPrep``.
 
-.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
@@ -152,7 +152,7 @@ source file change.
 Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` must be updated to reflect the replacement
 of ``single_element_compression.inp`` with the parameterized ``single_element_compression.inp.in`` file.
 
-The final change to be made in the ``tutorial_05_parameter_substitution/SConscript`` file is to utilize the
+The final change to be made in the ``tutorial_05_parameter_substitution`` file is to utilize the
 ``substitution_dictionary`` parameter in the usage of the :meth:`waves.builders.copy_substitute` builder.
 
 In this tutorial, we leverage two different builder behaviors when defining sources and targets for the
@@ -183,7 +183,7 @@ In summary of the changes you just made to the ``tutorial_05_parameter_substitut
 ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python

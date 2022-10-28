@@ -30,14 +30,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_04_simulation
 
-4. Copy the ``tutorial_03_solverprep/SConscript`` file into the newly created ``tutorial_04_simulation``
+4. Copy the ``tutorial_03_solverprep`` file into the newly created ``tutorial_04_simulation``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_03_solverprep/SConscript tutorial_04_simulation/
+   $ cp tutorial_03_solverprep tutorial_04_simulation/
 
 
 .. _tutorials_tutorial_simulation_waves:
@@ -57,10 +57,10 @@ SConscript
 Running a Datacheck
 ===================
 
-5. Modify your ``tutorial_04_simulation/SConscript`` file by adding the contents shown below immediately after the code
+5. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation
 
     .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
@@ -125,10 +125,10 @@ default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be
 Running the Analysis
 ====================
 
-6. Modify your ``tutorial_04_simulation/SConscript`` file by adding the contents below immediately after the Abaqus
+6. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
    datacheck code that was just discussed.
 
-.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation
 
     .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
@@ -161,12 +161,12 @@ list by the builder. The ``source`` list once again utlizes the existing ``solve
     analysis success, and the build system will continue to build targets. If an analysis fails, the source files which
     are required to build certain targets may not exist, which will also cause the build system to fail.
 
-In summary of the changes you just made to the ``tutorial_04_simulation/SConscript`` file, a ``diff`` against the
+In summary of the changes you just made to the ``tutorial_04_simulation`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the changes made in this
 tutorial. Note the addition of a separate datacheck alias, which will be used in
 :ref:`tutorial_regression_testing_waves`.
 
-.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation
 
    .. literalinclude:: tutorials_tutorial_04_simulation
       :language: Python

@@ -44,14 +44,14 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_08_data_extraction
 
-4. Copy the ``tutorial_07_cartesian_product/SConscript`` file into the newly created ``tutorial_08_data_extraction``
+4. Copy the ``tutorial_07_cartesian_product`` file into the newly created ``tutorial_08_data_extraction``
    directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_07_cartesian_product/SConscript tutorial_08_data_extraction/
+   $ cp tutorial_07_cartesian_product tutorial_08_data_extraction/
 
 **********
 SConscript
@@ -60,7 +60,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction
 
    .. literalinclude:: tutorials_tutorial_08_data_extraction
       :language: Python

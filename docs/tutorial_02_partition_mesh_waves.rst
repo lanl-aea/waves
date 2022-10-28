@@ -31,13 +31,13 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ mkdir tutorial_02_partition_mesh
 
-4. Copy the ``tutorial_01_geometry/SConscript`` file into the newly created ``tutorial_02_partition_mesh`` directory.
+4. Copy the ``tutorial_01_geometry`` file into the newly created ``tutorial_02_partition_mesh`` directory.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_01_geometry/SConscript tutorial_02_partition_mesh/
+   $ cp tutorial_01_geometry tutorial_02_partition_mesh/
 
 .. _tutorials_tutorial_partition_mesh_waves:
 
@@ -45,10 +45,10 @@ Directory Structure
 SConscript
 **********
 
-5. Modify your ``tutorial_02_partition_mesh/SConscript`` file by adding the contents below immediately after the code
+5. Modify your ``tutorial_02_partition_mesh`` file by adding the contents below immediately after the code
    pertaining to ``# Geometry`` from the previous tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh
 
    .. literalinclude:: tutorials_tutorial_02_partition_mesh
       :language: Python
@@ -109,11 +109,11 @@ created. The orphan mesh file is created by calling the ``export_mesh()`` functi
 file. See the :ref:`waves_eabm_api` for the :ref:`sphinx_abaqus_journal_utilities_api` file for more information about
 the ``export_mesh()`` function.
 
-In summary of the changes you just made to the ``tutorial_02_partition_mesh/SConscript`` file, a ``diff`` against the
+In summary of the changes you just made to the ``tutorial_02_partition_mesh`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_geometry_waves` is included below to help identify the changes made in this
 tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh
 
    .. literalinclude:: tutorials_tutorial_02_partition_mesh
       :language: Python
@@ -327,7 +327,7 @@ from the code pertaining to :ref:`tutorial_geometry_waves` to build the targets 
 distinction to be made here. This tutorial is **NOT** utilizing the outputs from :ref:`tutorial_geometry_waves`'s
 :ref:`tutorial_geometry_waves_build_targets` section when we executed the ``$ scons tutorial_01_geometry`` command. This
 tutorial is utilizing the outputs generated from executing the same code, but from our new
-``tutorial_02_partition_mesh/SConscript`` file. For this reason, we see the same outputs from the
+``tutorial_02_partition_mesh`` file. For this reason, we see the same outputs from the
 ``build/tutorial_01_geometry`` directory in the ``build/tutorial_02_partition_mesh`` directory (along with other
 :ref:`tutorial_partition_mesh_waves` output files).
 
