@@ -110,13 +110,13 @@ else:
     docs_aliases = []
 
 # Add simulation targets
-eabm_simulation_directories = [
+workflow_configurations = [
     "nominal",
     "mesh_convergence"
 ]
-for source_dir in eabm_simulation_directories:
-    build_dir = variant_dir_base / source_dir
-    SConscript(dirs=source_dir, variant_dir=build_dir, exports=["env", "project_variables"], duplicate=False)
+for workflow in workflow_configurations:
+    build_dir = variant_dir_base / workflow
+    SConscript(workflow, variant_dir=build_dir, exports='env', duplicate=False)
 
 # Add default target list to help message
 default_targets_help = "\nDefault Targets:\n"
@@ -132,7 +132,7 @@ try:
     alias_list = default_ans
 except ImportError:
     # Fall back to manually constructed alias list(s)
-    alias_list = docs_aliases + eabm_simulation_directories
+    alias_list = docs_aliases + workflow_configurations
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"
