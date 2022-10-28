@@ -85,10 +85,11 @@ test:
     - waves/SConscript
     - waves/tests/*.py
     - tutorials/*SConstruct
+    - tutorials/*.scons
+    - tutorials/eabm_package/*
     - tutorials/eabm_package/abaqus/*
     - tutorials/eabm_package/cubit/*
     - tutorials/eabm_package/python/*
-    - tutorials/*.scons
     - tutorials/tutorial*
     - tutorials/tutorial*/*
   imports:

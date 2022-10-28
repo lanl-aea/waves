@@ -19,7 +19,7 @@ master_doc = "index"
 
 # Add any Sphinx extension module names here, as strings.
 extensions = ["sphinxcontrib.bibtex"]
-bibtex_bibfiles = ["references.bib"]
+bibtex_bibfiles = ["references.bib", "waves.bib"]
 templates_path = ["_templates"]
 source_suffix = [".rst"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]

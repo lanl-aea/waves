@@ -9,9 +9,7 @@ import abaqus
 import abaqusConstants
 import mesh
 
-filename = inspect.getfile(lambda: None)
-sys.path.insert(0, os.path.dirname(filename))
-import abaqus_journal_utilities
+import eabm_package.abaqus.abaqus_journal_utilities
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
@@ -68,7 +66,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     p.Set(faces=faces, name='ALLNODES')
 
     model_object = abaqus.mdb.models[model_name]
-    abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
+    eabm_package.abaqus.abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
 
     abaqus.mdb.save()
 
