@@ -115,7 +115,7 @@ workflow_configurations = [
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
-    SConscript(workflow, variant_dir=build_dir, exports='env', duplicate=False)
+    SConscript(workflow, variant_dir=build_dir, exports="env", duplicate=False)
 
 # Add default target list to help message
 default_targets_help = "\nDefault Targets:\n"
