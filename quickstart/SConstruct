@@ -59,7 +59,7 @@ author_list = ["Kyle Brindley",
                "Matthew Fister",
                "Scott Ouellette"]
 author_latex = r" \and ".join(author_list)
-documentation_source_dir = "docs"
+documentation_source_dir = pathlib.Path("docs")
 eabm_package_dir = "eabm_package"
 project_variables = {
     "project_name": project_name,
@@ -94,13 +94,12 @@ env.Append(BUILDERS={
 if not env["ignore_documentation"]:
     # Project documentation
     build_dir = variant_dir_base / documentation_source_dir
-    SConscript(dirs=".", variant_dir=str(variant_dir_base), exports=["env"], duplicate=False)
-    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=["env", "project_variables"])
+    docs_aliases = SConscript(str(documentation_source_dir / "SConscript"), variant_dir=str(build_dir), exports=["env", "project_variables"])
 
     # Analysis report
-    report_dir = "report"
+    report_dir = pathlib.Path("report")
     build_dir = variant_dir_base / report_dir
-    SConscript(dirs=report_dir,
+    SConscript(str(report_dir / "SConscript"),
                variant_dir=str(build_dir),
                exports=["env", "project_variables"],
                duplicate=True)
