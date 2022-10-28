@@ -27,7 +27,7 @@ abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
 relative_build_directory = build_directory.relative_to(project_dir)
-parent_directory = build_directory.name
+workflow_name = build_directory.name
 model = "single_element"
 
 # Comment used in tutorial code snippets: marker-1
@@ -129,16 +129,16 @@ remote.extend(env.Command(
     project_id=project_id,
     relative_build_directory=str(relative_build_directory)
 ))
-env.Alias(f"{parent_directory}_remote", remote)
+env.Alias(f"{workflow_name}_remote", remote)
 workflow.extend(remote)
 
 # Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
-env.Alias(parent_directory, workflow)
-env.Alias(f"{parent_directory}_datacheck", datacheck)
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
+    Ignore(['.', workflow_name], datacheck)

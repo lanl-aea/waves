@@ -96,11 +96,11 @@ workflow.extend(env.AbaqusSolverPost(
 # Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
-env.Alias(parent_directory, workflow)
-env.Alias(f"{parent_directory}_datacheck", datacheck)
+workflow_name = Dir('.').srcnode().name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
+    Ignore(['.', workflow_name], datacheck)
