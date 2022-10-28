@@ -168,7 +168,6 @@ workflow.extend(env.Command(
     parameter_generator=parameter_generator))
 
 # Collector alias based on parent directory name
-workflow_name = Dir('.').srcnode().name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 

@@ -55,7 +55,6 @@ workflow.extend(env.AbaqusJournal(
 # Comment used in tutorial code snippets: marker-3
 
 # Collector alias based on parent directory name
-workflow_name = Dir('.').srcnode().name
 env.Alias(workflow_name, workflow)
 
 if not env['unconditional_build'] and not env['abaqus']:

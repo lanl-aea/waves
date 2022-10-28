@@ -105,7 +105,6 @@ workflow.extend(env.AbaqusSolver(
 # Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
-workflow_name = Dir('.').srcnode().name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 

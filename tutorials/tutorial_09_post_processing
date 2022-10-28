@@ -158,7 +158,6 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 # Collector alias based on parent directory name
-workflow_name = Dir('.').srcnode().name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 
