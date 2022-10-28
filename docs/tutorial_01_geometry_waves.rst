@@ -324,7 +324,7 @@ matching the tutorial directory name in the SContruct file. This collector alias
 build specified in the ``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` file.
 
 10. Modify the ``waves-eabm-tutorial/SConstruct`` file by adding the
-    ``tutorial_01_geometry`` collector alias to the ``eabm_simulation_directories`` list.
+    ``tutorial_01_geometry`` collector alias to the ``workflow_configurations`` list.
     The ``diff`` output below shows the difference between the ``SConstruct`` file created
     in :ref:`tutorialsconstruct` and what the new ``SConstruct`` file will be.
 

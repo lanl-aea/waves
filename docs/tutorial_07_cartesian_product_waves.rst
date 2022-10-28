@@ -241,7 +241,7 @@ to include the *tasks for all parameter sets* in the convenience alias, ``tutori
 SConstruct
 **********
 
-10. Add ``tutorial_07_cartesian_product`` to the ``eabm_simulation_directories`` list in the
+10. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
     ``waves-eabm-tutorial/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the

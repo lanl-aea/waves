@@ -238,7 +238,7 @@ All other aspects of the ``single_element_mesh.py`` file are the same as ``singl
 SConstruct
 **********
 
-10. Add ``tutorial_02_partition_mesh`` to the ``eabm_simulation_directories`` list in the
+10. Add ``tutorial_02_partition_mesh`` to the ``workflow_configurations`` list in the
     ``waves-eabm-tutorial/SConscruct`` file.
 
 A ``diff`` against the SConstruct file from :ref:`tutorial_geometry_waves` is included below to help identify the
