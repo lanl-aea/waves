@@ -31,16 +31,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_07_sobol_sequence`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_07_sobol_sequence
-
-4. Copy the ``tutorial_07_cartesian_product`` file into the newly created ``tutorial_07_sobol_sequence``
-   directory.
+3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_sobol_sequence``
 
 .. code-block:: bash
 
@@ -52,7 +43,7 @@ Directory Structure
 Parameter Study File
 ********************
 
-5. Create a new file ``eabm_package/python/single_element_compression_sobol_sequence.py`` from the content below.
+4. Create a new file ``eabm_package/python/single_element_compression_sobol_sequence.py`` from the content below.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_sobol_sequence.py
 
@@ -89,7 +80,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 

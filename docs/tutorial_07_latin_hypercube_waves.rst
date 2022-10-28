@@ -23,16 +23,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_07_latin_hypercube`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_07_latin_hypercube
-
-4. Copy the ``tutorial_07_cartesian_product`` file into the newly created ``tutorial_07_latin_hypercube``
-   directory.
+3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_latin_hypercube``
 
 .. code-block:: bash
 
@@ -44,7 +35,7 @@ Directory Structure
 Parameter Study File
 ********************
 
-5. Create a new file ``eabm_package/python/single_element_compression_latin_hypercube.py`` from the content below.
+4. Create a new file ``eabm_package/python/single_element_compression_latin_hypercube.py`` from the content below.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_latin_hypercube.py
 
@@ -55,8 +46,8 @@ Parameter Study File
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
-differences between the two parameter generators.
+A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
+below to help identify the differences between the two parameter generators.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_latin_hypercube
 
@@ -81,7 +72,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 

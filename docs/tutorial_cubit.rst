@@ -27,16 +27,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create directories ``tutorial_cubit`` and ``eabm_package/cubit`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir -p tutorial_cubit eabm_package_cubit
-
-4. Copy the ``tutorial_04_simulation`` file into the newly created ``tutorial_cubit``
-   directory.
+3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_cubit``
 
 .. code-block:: bash
 
@@ -50,7 +41,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_cubit
@@ -73,7 +64,7 @@ documentation for more information about virtual environment management with `Co
 Cubit Journal Files
 *******************
 
-5. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
+4. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
 
 The Cubit journal files include the same CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
@@ -117,7 +108,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 

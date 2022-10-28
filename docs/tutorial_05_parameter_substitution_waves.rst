@@ -20,16 +20,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_05_parameter_substitution`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_05_parameter_substitution
-
-4. Copy the ``tutorial_04_simulation`` file into the newly created ``tutorial_05_parameter_substitution``
-   directory.
+3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_05_parameter_substitution``
 
 .. code-block:: bash
 
@@ -41,7 +32,7 @@ Directory Structure
 Solver Input Files
 ******************
 
-5. Copy the ``eabm_package/abaqus/single_element_compression.inp`` file and all of its contents to a new file in the
+4. Copy the ``eabm_package/abaqus/single_element_compression.inp`` file and all of its contents to a new file in the
    same directory named ``single_element_compression.inp.in``. **Note:** the only change in the file name is the
    addition of the ``.in`` suffix.
 
@@ -59,7 +50,7 @@ the ``.in`` extension that are passed to the :meth:`waves.builders.copy_substitu
 characters matching the parameter definitions using substitution with `SCons Substfile`_. This is discussed in
 more detail later in this tutorial.
 
-6. Use the ``diff`` below to modify your ``single_element_compression.inp.in`` file.
+5. Use the ``diff`` below to modify your ``single_element_compression.inp.in`` file.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_compression.inp.in
 
@@ -78,7 +69,7 @@ the substitution occurs.
 SConscript
 **********
 
-7. Modify your ``tutorial_05_parameter_substitution`` file by adding the contents shown below to the code
+6. Modify your ``tutorial_05_parameter_substitution`` file by adding the contents shown below to the code
    pertaining to ``# Simulation variables``. The entire code snippet shows how your code should look after editing, and
    the highlghted portion is what needs to be added to your existing code.
 
@@ -111,7 +102,7 @@ command line interface. Recall from earlier in this tutorial, we created a new f
 the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
 this is implemented with the :meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
 
-8. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
+7. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
 
 .. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
@@ -137,7 +128,7 @@ the completed action string as part of the task definition. If the substituted p
 recognize that the tasks need to be re-executed in the same way that tasks need to be re-executed when the contents of a
 source file change.
 
-9. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
+8. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    code pertaining to ``# SolverPrep``.
 
 .. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
@@ -193,7 +184,7 @@ changes made in this tutorial.
 SConstruct
 **********
 
-10. Add ``tutorial_05_parameter_substitution`` to the ``workflow_configurations`` list in the
+9. Add ``tutorial_05_parameter_substitution`` to the ``workflow_configurations`` list in the
     ``waves-eabm-tutorial/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
@@ -215,7 +206,7 @@ apply the parameter substitution syntax (leading and trailing ``@`` character) t
 Build Targets
 *************
 
-11. Build the new targets
+10. Build the new targets
 
 .. code-block:: bash
 
@@ -314,7 +305,7 @@ differences.
 Most importantly, note that the build directory contains a file named ``single_element_compression.inp.in``, which is
 the file we created earlier in this tutorial. There is also a file named ``single_element_compression.inp``.
 
-12. Investigate the contents of ``single_element_compression.inp`` using your preferred text editor. Specifically, look
+11. Investigate the contents of ``single_element_compression.inp`` using your preferred text editor. Specifically, look
     in the step definition where we defined the ``displacement`` parameter. You should see the following:
 
 .. code-block:: text

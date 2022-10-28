@@ -21,16 +21,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_03_solverprep`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_03_solverprep
-
-4. Copy the ``tutorial_02_partition_mesh`` file into the newly created ``tutorial_03_solverprep``
-   directory.
+3. Copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
 
 .. code-block:: bash
 
@@ -42,7 +33,7 @@ Directory Structure
 Solver Input Files
 ******************
 
-5. Download and copy the `WAVES-EABM abaqus source files`_ into your existing
+4. Download and copy the `WAVES-EABM abaqus source files`_ into your existing
    ``eabm_package/abaqus`` sub-directory. If you're on a linux system with `git`_ installed and
    read access on the `WAVES`_ repository, you can use `git archive`_ as below.
 
@@ -85,8 +76,7 @@ directory. Check the contents of this directory using the ``ls`` command.
 SConscript
 **********
 
-6. Add the highlighted import statement shown below to the
-   ``tutorial_03_solverprep`` file.
+5. Add the highlighted import statement shown below to the ``tutorial_03_solverprep`` file.
 
 .. admonition:: waves-eabm-tutorial/tutorial_03_solverprep
 
@@ -109,7 +99,7 @@ we will require a custom builder that functions differently than the previously 
     end of the :ref:`tutorials_tutorial_solverprep_waves` section will demonstrate this
     more clearly.
 
-7. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
+6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
    below immediately after the code pertaining to ``# Mesh`` from the previous tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_03_solverprep
@@ -152,7 +142,7 @@ included below to help identify the changes made in this tutorial.
 SConstruct
 **********
 
-8. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
+7. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
    ``waves-eabm-tutorial/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
@@ -168,7 +158,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+8. Build the new targets
 
 .. code-block:: bash
 

@@ -58,16 +58,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_escape_sequences`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir -p tutorial_escape_sequences eabm_package_cubit
-
-4. Copy the ``tutorial_04_simulation`` file into the newly created ``tutorial_escape_sequences``
-   directory.
+3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_escape_sequences``
 
 .. code-block:: bash
 
@@ -81,7 +72,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_escape_sequences
@@ -107,7 +98,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+4. Build the new targets
 
 .. code-block:: bash
 
@@ -136,7 +127,7 @@ Build Targets
    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2021 -job single_element_compression -input single_element_compression -double both -cpus 1 -interactive -ask_delete no > single_element_compression.stdout 2>&1
    scons: done building targets.
 
-7. Execute the build command again with a different number of solve cpus. Observe that the workflow is reported as
+5. Execute the build command again with a different number of solve cpus. Observe that the workflow is reported as
    up-to-date.
 
 .. code-block::

@@ -38,16 +38,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_extend_study`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_extend_study
-
-4. Copy the ``tutorial_07_sobol_sequence`` file into the newly created ``tutorial_extend_study``
-   directory.
+3. Copy the ``tutorial_07_sobol_sequence`` file to a new file named ``tutorial_extend_study``
 
 .. code-block:: bash
 
@@ -59,7 +50,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_07_sobol_sequence`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 differences between the two parameter generators.
 
 .. admonition:: waves-eabm-tutorial/tutorial_extend_study
@@ -85,7 +76,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+4. Build the new targets
 
 .. code-block:: bash
 

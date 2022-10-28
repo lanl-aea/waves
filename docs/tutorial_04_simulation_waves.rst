@@ -22,16 +22,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_04_simulation`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_04_simulation
-
-4. Copy the ``tutorial_03_solverprep`` file into the newly created ``tutorial_04_simulation``
-   directory.
+3. Copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
 
 .. code-block:: bash
 
@@ -57,7 +48,7 @@ SConscript
 Running a Datacheck
 ===================
 
-5. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
+4. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_04_simulation
@@ -125,7 +116,7 @@ default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be
 Running the Analysis
 ====================
 
-6. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
+5. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
    datacheck code that was just discussed.
 
 .. admonition:: waves-eabm-tutorial/tutorial_04_simulation
@@ -176,7 +167,7 @@ tutorial. Note the addition of a separate datacheck alias, which will be used in
 SConstruct
 **********
 
-7. Make the following additions to the ``waves-eabm-tutorial/SConstruct`` file using the ``diff`` against the
+6. Make the following additions to the ``waves-eabm-tutorial/SConstruct`` file using the ``diff`` against the
    ``SConstruct`` file from the last tutorial:
 
    * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add custom
@@ -196,7 +187,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+7. Build the new targets
 
 .. code-block:: bash
 
@@ -283,7 +274,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
 
     0 directories, 31 files
 
-The ``tutorial_04_simulation`` directory contains several different subsets of related files:
+The ``build/tutorial_04_simulation`` directory contains several different subsets of related files:
 
 * ``single_element_{geometry,partition,mesh}.*`` - output files generated from the code pertaining to ``# Geometry``,
   ``# Partition``, and ``# Mesh`` in the ``SConscript`` file. This code was first introduced in

@@ -36,16 +36,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_08_data_extraction`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_08_data_extraction
-
-4. Copy the ``tutorial_07_cartesian_product`` file into the newly created ``tutorial_08_data_extraction``
-   directory.
+3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
 
 .. code-block:: bash
 
@@ -57,8 +48,8 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
-changes made in this tutorial.
+A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
+below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction
 
@@ -92,7 +83,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+4. Build the new targets
 
 .. code-block:: bash
 
@@ -104,7 +95,7 @@ Build Targets
 Output Files
 ************
 
-6. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
+5. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
    the addition of the :ref:`odb_extract_cli` output files.
 
 .. code-block:: bash

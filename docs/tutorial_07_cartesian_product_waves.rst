@@ -24,16 +24,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_07_cartesian_product`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_07_cartesian_product
-
-4. Copy the ``tutorial_06_include_files`` file into the newly created ``tutorial_07_cartesian_product``
-   directory.
+3. Copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
 
 .. code-block:: bash
 
@@ -60,7 +51,7 @@ Product`_ sampling methodology.
 
    For more information, see this `Cartesian Product`_ Wiki page.
 
-5. Create a new file ``eabm_package/python/single_element_compression_cartesian_product.py`` from the content below.
+4. Create a new file ``eabm_package/python/single_element_compression_cartesian_product.py`` from the content below.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_cartesian_product.py
 
@@ -88,9 +79,9 @@ wholesale copy and paste when creating the new ``SConscript`` file.
 .. note::
 
    In the :ref:`tutorial_cartesian_product_waves_directory_structure` section of this tutorial, you were instructed to
-   copy the ``SConscript`` file from :ref:`tutorial_include_files_waves` to the ``tutorial_07_cartesian_product``
-   directory. If you prefer, you may start with a blank ``SConscript`` file in the ``tutorial_07_cartesian_product``
-   directory and simply copy and paste the contents below into your blank file.
+   copy the ``tutorial_06_include_files`` file to the ``tutorial_07_cartesian_product`` file. If you prefer, you may
+   start with a blank ``tutorial_07_cartesian_product`` file and simply copy and paste the contents below into your
+   blank file.
 
 After viewing the full file contents below, continue to read the
 :ref:`tutorial_cartesian_product_waves_step_by_step_sconscript_discussion` for building the
@@ -112,7 +103,7 @@ Step-By-Step SConscript Discussion
       :language: Python
       :lineno-match:
       :end-before: marker-1
-      :emphasize-lines: 18, 21 
+      :emphasize-lines: 18, 21
 
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
@@ -130,7 +121,7 @@ dictionary in previous tutorials.
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-2
-      :emphasize-lines: 2-3, 7-10 
+      :emphasize-lines: 2-3, 7-10
 
 The unhighlighted portions of the code snippet above do not present any unique code that has not been previously
 discussed.
@@ -241,8 +232,8 @@ to include the *tasks for all parameter sets* in the convenience alias, ``tutori
 SConstruct
 **********
 
-10. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
-    ``waves-eabm-tutorial/SConstruct`` file.
+5. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
+   ``waves-eabm-tutorial/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.

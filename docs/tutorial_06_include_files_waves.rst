@@ -21,16 +21,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_06_include_files`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_06_include_files
-
-4. Copy the ``tutorial_05_parameter_substitution`` file into the newly created ``tutorial_06_include_files``
-   directory.
+3. Copy the ``tutorial_05_parameter_substitution`` file to a new file named ``tutorial_06_include_files``
 
 .. code-block:: bash
 
@@ -38,7 +29,7 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_05_parameter_substitution tutorial_06_include_files
 
-5. Create a new directory in ``eabm_package/python`` in the ``waves-eabm-tutorial`` directory.
+4. Create a new directory in ``eabm_package/python`` in the ``waves-eabm-tutorial`` directory.
 
 .. code-block:: bash
 
@@ -56,7 +47,7 @@ In this tutorial, we will update the code from :ref:`tutorial_parameter_substitu
 file instead of hardcoding the parameter definitions in the ``SConscript`` file. This technique will allow parameter
 re-use between simulations.
 
-6. Create a new file ``eabm_package/python/single_element_compression_nominal.py`` from the content below.
+5. Create a new file ``eabm_package/python/single_element_compression_nominal.py`` from the content below.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_nominal.py
 
@@ -66,7 +57,7 @@ re-use between simulations.
 The file you just created is an exact copy of the code snippet in your ``tutorial_05_parameter_substitution``
 file that defines the parameter key-value pairs.
 
-7. Create Python module initialization files to create a project specific local Python package.
+6. Create Python module initialization files to create a project specific local Python package.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/__init__.py and waves-eabm-tutorial/eabm_package/python/__init__.py
 
@@ -88,7 +79,7 @@ need any content. You can read more about `Python Modules`_ in the `Python docum
 SConscript
 **********
 
-8. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files`` file:
+7. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files`` file:
 
    * Import ``single_element_compression_nominal`` from the ``eabm_package.python`` module
    * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution_waves`'s
@@ -127,7 +118,7 @@ without modification to the ``SConscript`` file.
 SConstruct
 **********
 
-9. Use the ``diff`` below to modify your ``waves-eabm-tutorial/SConstruct`` file in the following ways:
+8. Use the ``diff`` below to modify your ``waves-eabm-tutorial/SConstruct`` file in the following ways:
 
    * Add the ``waves-eabm-tutorial`` directory to your `PYTHONPATH`_ to make the ``eabm_package`` - and thus
      the modules within it - importable
@@ -152,7 +143,7 @@ process should be quite familiar by now.
 Build Targets
 *************
 
-10. Build the new targets
+9. Build the new targets
 
 .. code-block:: bash
 

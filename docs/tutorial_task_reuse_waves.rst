@@ -72,7 +72,7 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_10_regression_testing`` file into a new file named ``tutorial_task_reuse``
+3. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_task_reuse``
 
 .. code-block:: bash
 
@@ -84,7 +84,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_task_reuse

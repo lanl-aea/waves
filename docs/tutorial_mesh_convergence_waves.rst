@@ -28,16 +28,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_mesh_convergence`` in the ``waves-eabm-tutorial`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_mesh_convergence
-
-4. Copy the ``tutorial_10_regression_testing`` file into the newly created ``tutorial_mesh_convergence``
-   directory.
+3. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_mesh_convergence``
 
 .. code-block:: bash
 
@@ -49,7 +40,7 @@ Directory Structure
 Parameter Study File
 ********************
 
-5. Create a new file ``eabm_package/python/single_element_compression_mesh_convergence.py`` from the content below.
+4. Create a new file ``eabm_package/python/single_element_compression_mesh_convergence.py`` from the content below.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_mesh_convergence.py
 
@@ -63,9 +54,10 @@ decreased several times by a factor of two.
 SConscript
 **********
 
-6. A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
-   identify the changes made in this tutorial. Use the diff to update your ``tutorial_mesh_convergence`` 
-   file, and then review the paragraphs that follow to understand the meaning of these changes.
+5. A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is
+   included below to help identify the changes made in this tutorial. Use the diff to update your
+   ``tutorial_mesh_convergence`` file, and then review the paragraphs that follow to understand the meaning of these
+   changes.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
 
@@ -172,7 +164,7 @@ the usage of the ``global_seed`` parameter as the independent variable.
 SConstruct
 **********
 
-7. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
+6. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help 
    identify the changes made in this tutorial. Make these changes to your ``SConstruct`` file.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
@@ -185,7 +177,7 @@ SConstruct
 Build Targets
 *************
 
-8. Build the new targets
+7. Build the new targets
 
 .. code-block:: bash
 
@@ -202,7 +194,7 @@ script.
 Output Files
 ************
 
-9. Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
+8. Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
 
 .. code-block::
 
