@@ -97,7 +97,7 @@ if not env["ignore_documentation"]:
     SConscript(dirs=".", variant_dir=str(variant_dir_base), exports=["env"], duplicate=False)
     docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=["env", "project_variables"])
 
-    # Nominal analysis report
+    # Analysis report
     report_dir = "report"
     build_dir = variant_dir_base / report_dir
     SConscript(dirs=report_dir,
