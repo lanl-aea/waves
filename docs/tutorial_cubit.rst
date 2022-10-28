@@ -44,7 +44,7 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_04_simulation/SConscript tutorial_cubit/
 
-.. _tutorial_cubit_waves_SConscript:
+.. _tutorials_tutorial_cubit_waves:
 
 **********
 SConscript
@@ -55,9 +55,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_cubit/SConscript
 
-   .. literalinclude:: tutorial_cubit_SConscript
+   .. literalinclude:: tutorials_tutorial_cubit
       :language: Python
-      :diff: tutorial_04_simulation_SConscript
+      :diff: tutorials_tutorial_04_simulation
 
 Note that Cubit does not support the Abaqus plane stress element ``CPS4``, so we must add a post-action to the orphan
 mesh target to change the element type. A post-action is used to avoid generating intermediate target files, which would

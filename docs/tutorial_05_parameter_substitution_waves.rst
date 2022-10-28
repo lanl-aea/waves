@@ -72,7 +72,7 @@ of ``-1.0`` with the parameter substitution key ``@displacement@``. Note that th
 literal string substitution in the target file, so it is necessary to prepare the correct syntax for the file type where
 the substitution occurs.
 
-.. _tutorial_parameter_substitution_waves_SConscript:
+.. _tutorials_tutorial_parameter_substitution_waves:
 
 **********
 SConscript
@@ -84,7 +84,7 @@ SConscript
 
 .. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
 
-   .. literalinclude:: tutorial_05_parameter_substitution_SConscript
+   .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
       :lineno-match:
       :start-after: marker-0
@@ -116,7 +116,7 @@ this is implemented with the :meth:`waves.builders.copy_substitute` builder will
 
 .. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
 
-   .. literalinclude:: tutorial_05_parameter_substitution_SConscript
+   .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
       :lineno-match:
       :start-after: marker-1
@@ -142,7 +142,7 @@ source file change.
 
 .. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
 
-   .. literalinclude:: tutorial_05_parameter_substitution_SConscript
+   .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -185,9 +185,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution/SConscript
 
-   .. literalinclude:: tutorial_05_parameter_substitution_SConscript
+   .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
-      :diff: tutorial_04_simulation_SConscript
+      :diff: tutorials_tutorial_04_simulation
 
 **********
 SConstruct

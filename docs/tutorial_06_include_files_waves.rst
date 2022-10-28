@@ -82,7 +82,7 @@ file that defines the parameter key-value pairs.
 The ``__init__.py`` files tell Python what directories to treat as a package or module. They need to exist, but do not
 need any content. You can read more about `Python Modules`_ in the `Python documentation`_.
 
-.. _tutorial_include_files_waves_SConscript:
+.. _tutorials_tutorial_include_files_waves:
 
 **********
 SConscript
@@ -100,9 +100,9 @@ identify the changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_06_include_files/SConscript
 
-   .. literalinclude:: tutorial_06_include_files_SConscript
+   .. literalinclude:: tutorials_tutorial_06_include_files
       :language: Python
-      :diff: tutorial_05_parameter_substitution_SConscript
+      :diff: tutorials_tutorial_05_parameter_substitution
 
 The first change to be made is importing the ``single_element_compression_nominal`` module from the
 ``eabm_package.python`` module you created in the :ref:`tutorial_include_files_waves_python_parameter_file` section of
@@ -244,7 +244,7 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
     0 directories, 32 files
 
 The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution_waves`. As
-was mentioned when modifying the :ref:`tutorial_include_files_waves_SConscript` file, the use of an included Python file
+was mentioned when modifying the :ref:`tutorials_tutorial_include_files_waves` file, the use of an included Python file
 to define our parameters provides the same result as when we hard-code the parameters into the ``SConscript`` file. It
 is also worth noting that the ``eabm_package/python/single_element_compression_nominal.py`` file did not get copied to
 the build directory. Instead, we added the ``eabm_package`` directory to `PYTHONPATH`_. This way we can import the

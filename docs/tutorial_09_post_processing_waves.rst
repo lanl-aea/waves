@@ -54,9 +54,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_09_post_processing/SConscript
 
-   .. literalinclude:: tutorial_09_post_processing_SConscript
+   .. literalinclude:: tutorials_tutorial_09_post_processing
       :language: Python
-      :diff: tutorial_08_data_extraction_SConscript
+      :diff: tutorials_tutorial_08_data_extraction
 
 **********************
 Post-processing script

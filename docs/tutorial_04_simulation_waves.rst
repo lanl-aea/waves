@@ -40,7 +40,7 @@ Directory Structure
    $ cp tutorial_03_solverprep/SConscript tutorial_04_simulation/
 
 
-.. _tutorial_simulation_waves_SConscript:
+.. _tutorials_tutorial_simulation_waves:
 
 **********
 SConscript
@@ -50,7 +50,7 @@ SConscript
 
     There is a large section of lines in the ``SConscript`` file that are not included before the next section of code
     shown here, as they are identical to those from :ref:`tutorial_solverprep_waves`. The ``diff`` of the ``SConscript``
-    file at the end of the :ref:`tutorial_simulation_waves_SConscript` section will demonstrate this more clearly.
+    file at the end of the :ref:`tutorials_tutorial_simulation_waves` section will demonstrate this more clearly.
 
 .. _tutorial_simulation_waves_running_datacheck:
 
@@ -62,7 +62,7 @@ Running a Datacheck
 
 .. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
 
-    .. literalinclude:: tutorial_04_simulation_SConscript
+    .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
        :lineno-match:
        :start-after: marker-4
@@ -130,7 +130,7 @@ Running the Analysis
 
 .. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
 
-    .. literalinclude:: tutorial_04_simulation_SConscript
+    .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
        :lineno-match:
        :start-after: marker-5
@@ -168,9 +168,9 @@ tutorial. Note the addition of a separate datacheck alias, which will be used in
 
 .. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
 
-   .. literalinclude:: tutorial_04_simulation_SConscript
+   .. literalinclude:: tutorials_tutorial_04_simulation
       :language: Python
-      :diff: tutorial_03_solverprep_SConscript
+      :diff: tutorials_tutorial_03_solverprep
 
 **********
 SConstruct

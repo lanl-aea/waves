@@ -68,9 +68,9 @@ differences between the two parameter generators.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_sobol_sequence/SConscript
 
-   .. literalinclude:: tutorial_07_sobol_sequence_SConscript
+   .. literalinclude:: tutorials_tutorial_07_sobol_sequence
       :language: Python
-      :diff: tutorial_07_cartesian_product_SConscript
+      :diff: tutorials_tutorial_07_cartesian_product
 
 **********
 SConstruct

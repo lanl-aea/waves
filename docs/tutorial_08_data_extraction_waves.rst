@@ -62,9 +62,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction/SConscript
 
-   .. literalinclude:: tutorial_08_data_extraction_SConscript
+   .. literalinclude:: tutorials_tutorial_08_data_extraction
       :language: Python
-      :diff: tutorial_07_cartesian_product_SConscript
+      :diff: tutorials_tutorial_07_cartesian_product
 
 The only new code in this tutorial adds the :meth:`waves.builders.abaqus_extract` builder task. Note that this task
 falls within the parameterization loop and will be executed once per parameter set. :ref:`odb_extract_cli` will output

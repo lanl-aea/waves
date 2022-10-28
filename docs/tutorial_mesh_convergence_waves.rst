@@ -69,13 +69,13 @@ SConscript
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
-   .. literalinclude:: tutorial_mesh_convergence_SConscript
+   .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
-      :diff: tutorial_10_regression_testing_SConscript
+      :diff: tutorials_tutorial_10_regression_testing
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
    
-   .. literalinclude:: tutorial_mesh_convergence_SConscript
+   .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
       :lineno-match:
       :end-before: marker-2
@@ -93,7 +93,7 @@ dictionaries will be combined later in the ``SConscript`` file.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
-   .. literalinclude:: tutorial_mesh_convergence_SConscript
+   .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -119,7 +119,7 @@ differences:
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
-   .. literalinclude:: tutorial_mesh_convergence_SConscript
+   .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
       :lineno-match:
       :start-after: marker-4
@@ -148,7 +148,7 @@ specified ``single_element_partition.cae`` as a target in the ``# Partition`` wo
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence/SConscript
 
-   .. literalinclude:: tutorial_mesh_convergence_SConscript
+   .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
       :lineno-match:
       :start-after: marker-6

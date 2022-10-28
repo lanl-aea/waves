@@ -98,7 +98,7 @@ After viewing the full file contents below, continue to read the
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
 
 .. _tutorial_cartesian_product_waves_step_by_step_sconscript_discussion:
@@ -108,7 +108,7 @@ Step-By-Step SConscript Discussion
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
       :lineno-match:
       :end-before: marker-1
@@ -125,7 +125,7 @@ dictionary in previous tutorials.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
       :lineno-match:
       :start-after: marker-1
@@ -141,7 +141,7 @@ to extend previously executed parameter studies without re-computing existing pa
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
       :lineno-match:
       :start-after: marker-2
@@ -167,7 +167,7 @@ introduced in :ref:`tutorial_post_processing_waves`.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
       :lineno-match:
       :start-after: marker-3
@@ -192,7 +192,7 @@ text file parameter substitution.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
       :lineno-match:
       :start-after: marker-4
@@ -213,7 +213,7 @@ Note the following two important aspects of the code above:
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
       :lineno-match:
       :start-after: marker-5
@@ -227,7 +227,7 @@ sets. In this case, we will solve four Abaqus simulations.
 
 .. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product/SConscript
 
-   .. literalinclude:: tutorial_07_cartesian_product_SConscript
+   .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
       :lineno-match:
       :start-after: marker-6

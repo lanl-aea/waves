@@ -58,7 +58,7 @@ the contents below.
 
 .. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
 
-    .. literalinclude:: tutorial_01_geometry_SConscript
+    .. literalinclude:: tutorials_tutorial_01_geometry
         :language: Python
         :lineno-match:
         :end-before: marker-1
@@ -83,7 +83,7 @@ exist.
 
 .. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
 
-     .. literalinclude:: tutorial_01_geometry_SConscript
+     .. literalinclude:: tutorials_tutorial_01_geometry
          :language: Python
          :lineno-match:
          :start-after: marker-1
@@ -117,7 +117,7 @@ For more information about the behavior of the
 
 .. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
 
-     .. literalinclude:: tutorial_01_geometry_SConscript
+     .. literalinclude:: tutorials_tutorial_01_geometry
          :language: Python
          :lineno-match:
          :start-after: marker-3

@@ -67,9 +67,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_10_regression_testing/SConscript
 
-   .. literalinclude:: tutorial_10_regression_testing_SConscript
+   .. literalinclude:: tutorials_tutorial_10_regression_testing
       :language: Python
-      :diff: tutorial_09_post_processing_SConscript
+      :diff: tutorials_tutorial_09_post_processing
 
 To see the full power of the new project-wide ``datacheck`` alias, go back through the previous tutorials and add each
 simulation specific datacheck task to the new alias.

@@ -91,7 +91,7 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_task_reuse
       :language: Python
-      :diff: tutorial_10_regression_testing_SConscript
+      :diff: tutorials_tutorial_10_regression_testing
 
 4. Create a new file named ``single_element_geometry_partition.scons`` from the contents below
 

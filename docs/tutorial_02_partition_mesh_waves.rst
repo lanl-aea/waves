@@ -39,7 +39,7 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_01_geometry/SConscript tutorial_02_partition_mesh/
 
-.. _tutorial_partition_mesh_waves_SConscript:
+.. _tutorials_tutorial_partition_mesh_waves:
 
 **********
 SConscript
@@ -50,7 +50,7 @@ SConscript
 
 .. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh/SConscript
 
-   .. literalinclude:: tutorial_02_partition_mesh_SConscript
+   .. literalinclude:: tutorials_tutorial_02_partition_mesh
       :language: Python
       :lineno-match:
       :start-after: marker-2
@@ -115,9 +115,9 @@ tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh/SConscript
 
-   .. literalinclude:: tutorial_02_partition_mesh_SConscript
+   .. literalinclude:: tutorials_tutorial_02_partition_mesh
       :language: Python
-      :diff: tutorial_01_geometry_SConscript
+      :diff: tutorials_tutorial_01_geometry
 
 *******************
 Abaqus Journal File
@@ -322,7 +322,7 @@ below.
    0 directories, 21 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
-Recall from the note this tutorial's :ref:`tutorial_partition_mesh_waves_SConscript` section that we require the targets
+Recall from the note this tutorials_tutorial's :ref:`tutorial_partition_mesh_waves` section that we require the targets
 from the code pertaining to :ref:`tutorial_geometry_waves` to build the targets for this tutorial. There is an important
 distinction to be made here. This tutorial is **NOT** utilizing the outputs from :ref:`tutorial_geometry_waves`'s
 :ref:`tutorial_geometry_waves_build_targets` section when we executed the ``$ scons tutorial_01_geometry`` command. This

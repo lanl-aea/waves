@@ -79,7 +79,7 @@ directory. Check the contents of this directory using the ``ls`` command.
     history_output.inp           single_element_partition.py
     materials.inp
 
-.. _tutorial_solverprep_waves_SConscript:
+.. _tutorials_tutorial_solverprep_waves:
 
 **********
 SConscript
@@ -90,7 +90,7 @@ SConscript
 
 .. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
 
-    .. literalinclude:: tutorial_03_solverprep_SConscript
+    .. literalinclude:: tutorials_tutorial_03_solverprep
        :language: Python
        :lineno-match:
        :emphasize-lines: 15
@@ -106,7 +106,7 @@ we will require a custom builder that functions differently than the previously 
     There is a large section of lines in the ``SConscript`` file that are not included
     before the next section of code shown here, as they are identical to those from
     :ref:`tutorial_partition_mesh_waves`. The ``diff`` of the ``SConscript`` file at the
-    end of the :ref:`tutorial_solverprep_waves_SConscript` section will demonstrate this
+    end of the :ref:`tutorials_tutorial_solverprep_waves` section will demonstrate this
     more clearly.
 
 7. Modify your ``tutorial_03_solverprep/SConscript`` file by adding the contents shown
@@ -114,7 +114,7 @@ we will require a custom builder that functions differently than the previously 
 
 .. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
 
-    .. literalinclude:: tutorial_03_solverprep_SConscript
+    .. literalinclude:: tutorials_tutorial_03_solverprep
        :language: Python
        :lineno-match:
        :start-after: marker-3
@@ -144,9 +144,9 @@ included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
 
-   .. literalinclude:: tutorial_03_solverprep_SConscript
+   .. literalinclude:: tutorials_tutorial_03_solverprep
       :language: Python
-      :diff: tutorial_02_partition_mesh_SConscript
+      :diff: tutorials_tutorial_02_partition_mesh
 
 **********
 SConstruct

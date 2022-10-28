@@ -43,7 +43,7 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_04_simulation/SConscript tutorial_remote_execution/
 
-.. _tutorial_remote_execution_waves_SConscript:
+.. _tutorials_tutorial_remote_execution_waves:
 
 **********
 SConscript
@@ -54,9 +54,9 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_remote_execution/SConscript
 
-   .. literalinclude:: tutorial_remote_execution_SConscript
+   .. literalinclude:: tutorials_tutorial_remote_execution
       :language: Python
-      :diff: tutorial_04_simulation_SConscript
+      :diff: tutorials_tutorial_04_simulation
 
 **********
 SConstruct
