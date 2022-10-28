@@ -26,37 +26,28 @@ Environment
 Directory Structure
 *******************
 
-3. Create directory``tutorial_remote_execution`` in the ``waves-eabm-tutorial`` directory.
+3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_remote_execution``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir -p tutorial_remote_execution
+   $ cp tutorial_04_simulation tutorial_remote_execution
 
-4. Copy the ``tutorial_04_simulation/SConscript`` file into the newly created ``tutorial_remote_execution``
-   directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation/SConscript tutorial_remote_execution/
-
-.. _tutorial_remote_execution_waves_SConscript:
+.. _tutorials_tutorial_remote_execution_waves:
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_remote_execution/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_remote_execution
 
-   .. literalinclude:: tutorial_remote_execution_SConscript
+   .. literalinclude:: tutorials_tutorial_remote_execution
       :language: Python
-      :diff: tutorial_04_simulation_SConscript
+      :diff: tutorials_tutorial_04_simulation
 
 **********
 SConstruct
@@ -75,7 +66,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+4. Build the new targets
 
 .. code-block:: bash
 

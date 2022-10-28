@@ -7,7 +7,6 @@ Requires the following ``SConscript(..., exports=[])``
 
   * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
   * ``python_source_abspath`` - String absolute path to the EABM's Python 3 files
-  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -29,6 +28,7 @@ python_source_abspath = pathlib.Path(env["python_source_abspath"])
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
@@ -139,32 +139,13 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
         job_name=job_name,
         abaqus_options=abaqus_options))
 
-    # Extract Abaqus
-    extract_source_list = [f"{set_name / job_name}.odb"]
-    workflow.extend(env.AbaqusExtract(
-        target=[f"{set_name / job_name}.h5"],
-        source=extract_source_list))
-
 # Comment used in tutorial code snippets: marker-6
 
-# Post-processing
-plot_name = "stress_strain_comparison.pdf"
-post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
-script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
-script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
-script_options += f" --parameter-study-file {parameter_study_file.name}"
-workflow.extend(env.PythonScript(
-    target=[plot_name],
-    source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
-    script_options=script_options))
-
 # Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
-env.Alias(parent_directory, workflow)
-env.Alias(f"{parent_directory}_datacheck", datacheck)
-env.Alias(env['datacheck_alias'], datacheck)
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
+    Ignore(['.', workflow_name], datacheck)

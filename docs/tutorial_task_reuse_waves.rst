@@ -72,26 +72,26 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_10_regression_testing/SConscript`` file into a new file named ``tutorial_task_reuse``
+3. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_task_reuse``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_10_regression_testing/SConscript tutorial_task_reuse
+   $ cp tutorial_10_regression_testing tutorial_task_reuse
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_task_reuse/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_task_reuse
 
    .. literalinclude:: tutorials_tutorial_task_reuse
       :language: Python
-      :diff: tutorial_10_regression_testing_SConscript
+      :diff: tutorials_tutorial_10_regression_testing
 
 4. Create a new file named ``single_element_geometry_partition.scons`` from the contents below
 

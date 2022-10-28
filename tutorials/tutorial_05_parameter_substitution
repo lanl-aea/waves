@@ -6,7 +6,6 @@ Requires the following ``SConscript(..., exports=[])``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
-  * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -21,8 +20,18 @@ Import('env')
 # Set project-wide paths with os-agnostic path separators
 abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 
+# Comment used in tutorial code snippets: marker-0
+
 # Simulation variables
+build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
 model = "single_element"
+simulation_variables = {
+    'width': 1.0,
+    'height': 1.0,
+    'global_seed': 1.0,
+    'displacement': -0.01
+}
 
 # Comment used in tutorial code snippets: marker-1
 
@@ -32,7 +41,7 @@ datacheck = []
 
 # Geometry
 journal_file = f"{model}_geometry"
-journal_options = ""
+journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
@@ -42,7 +51,7 @@ workflow.extend(env.AbaqusJournal(
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = ""
+journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
@@ -50,7 +59,7 @@ workflow.extend(env.AbaqusJournal(
 
 # Mesh
 journal_file = f"{model}_mesh"
-journal_options = ""
+journal_options = f"--global-seed {simulation_variables['global_seed']}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
@@ -60,7 +69,7 @@ workflow.extend(env.AbaqusJournal(
 
 # SolverPrep
 abaqus_source_list = [
-    abaqus_source_abspath / f"{model}_compression.inp",
+    abaqus_source_abspath / f"{model}_compression.inp.in",
     abaqus_source_abspath / "assembly.inp",
     abaqus_source_abspath / "boundary.inp",
     abaqus_source_abspath / "field_output.inp",
@@ -69,7 +78,9 @@ abaqus_source_list = [
     abaqus_source_abspath / "history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
+workflow.extend(waves.builders.copy_substitute(
+    abaqus_source_list,
+    substitution_dictionary=waves.builders.substitution_syntax(simulation_variables)))
 
 # Comment used in tutorial code snippets: marker-4
 
@@ -92,16 +103,15 @@ workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
-    abaqus_options=f"{abaqus_options} -cpus $({env['solve_cpus']}$)"))
+    abaqus_options=abaqus_options))
 
 # Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
-env.Alias(parent_directory, workflow)
-env.Alias(f"{parent_directory}_datacheck", datacheck)
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
+    Ignore(['.', workflow_name], datacheck)

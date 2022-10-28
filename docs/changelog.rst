@@ -30,6 +30,8 @@ Internal Changes
 - Standardize on ``pathlib`` constructed absolute paths (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
 - Make all ``PATH``-like modifications once in the project configuration instead of distributed ``sys.path`` calls
   (:issue:`345`, :merge:`375`). By `Kyle Brindley`.
+- Remove unecessary tutorial and quickstart intermediate workflow directories (:issue:`347`, :merge:`376`). By `Kyle
+  Brindley`_.
 
 ******************
 0.5.2 (2022-10-17)

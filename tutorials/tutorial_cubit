@@ -6,8 +6,10 @@ Requires the following ``SConscript(..., exports=[])``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
+  * ``cubit_source_abspath`` - String absolute path to the EABM's Cubit journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
+  * ``cubit`` - String path for the Cubit executable
 """
 
 import pathlib
@@ -19,8 +21,11 @@ Import('env')
 
 # Set project-wide paths with os-agnostic path separators
 abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
+cubit_source_abspath = pathlib.Path(env["cubit_source_abspath"])
 
 # Simulation variables
+build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
 model = "single_element"
 
 # Comment used in tutorial code snippets: marker-1
@@ -28,32 +33,39 @@ model = "single_element"
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
+mesh_files = []
 
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
-    journal_options=journal_options))
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub"],
+    source=[f"{cubit_source_abspath / journal_file}.py"],
+    script_options=journal_options))
 
 # Comment used in tutorial code snippets: marker-2
 
 # Partition
 journal_file = f"{model}_partition"
 journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
-    journal_options=journal_options))
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub"],
+    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
+    script_options=journal_options))
 
 # Mesh
 journal_file = f"{model}_mesh"
 journal_options = ""
-workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
-    journal_options=journal_options))
+mesh_targets = env.PythonScript(
+    target=[f"{journal_file}.inp", f"{journal_file}.cub"],
+    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
+    script_options=journal_options)
+workflow.extend(mesh_targets)
+mesh_files.append(mesh_targets[0])
+
+# Modify mesh target(s) element type.
+# Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
+env.AddPostAction(mesh_files, "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
 
 # Comment used in tutorial code snippets: marker-3
 
@@ -96,11 +108,10 @@ workflow.extend(env.AbaqusSolver(
 # Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
-env.Alias(parent_directory, workflow)
-env.Alias(f"{parent_directory}_datacheck", datacheck)
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
 
-if not env['unconditional_build'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+if not env['unconditional_build'] and (not env['cubit'] or not env['abaqus']):
+    print(f"Program 'cubit' or 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
+    Ignore(['.', workflow_name], datacheck)

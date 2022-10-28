@@ -19,6 +19,8 @@ Import('env')
 abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 
 # Simulation variables
+build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
 model = "single_element"
 
 # Comment used in tutorial code snippets: marker-1
@@ -37,9 +39,8 @@ workflow.extend(env.AbaqusJournal(
 # Comment used in tutorial code snippets: marker-3
 
 # Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
-env.Alias(parent_directory, workflow)
+env.Alias(workflow_name, workflow)
 
 if not env['unconditional_build'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)

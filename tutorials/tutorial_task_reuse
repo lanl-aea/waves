@@ -104,7 +104,7 @@ workflow.extend(env.PythonScript(
     source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
-# Collector alias based on parent directory name
+# Collector alias based on build directory name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 env.Alias(env['datacheck_alias'], datacheck)

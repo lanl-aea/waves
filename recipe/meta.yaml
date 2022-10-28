@@ -86,12 +86,11 @@ test:
     - waves/tests/*.py
     - tutorials/*SConstruct
     - tutorials/*.scons
+    - tutorials/tutorial*
     - tutorials/eabm_package/*
     - tutorials/eabm_package/abaqus/*
     - tutorials/eabm_package/cubit/*
     - tutorials/eabm_package/python/*
-    - tutorials/tutorial*
-    - tutorials/tutorial*/*
   imports:
     - waves
   commands:

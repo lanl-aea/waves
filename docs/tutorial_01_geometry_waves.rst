@@ -31,14 +31,14 @@ Environment
 Directory Structure
 *******************
 
-3. Within the ``waves-eabm-tutorial`` directory, create two directories called
-   ``tutorial_01_geometry`` and ``eabm_package/abaqus``. For example, in a bash shell:
+3. Within the ``waves-eabm-tutorial`` directory, create a new directory called
+   ``eabm_package/abaqus``. For example, in a bash shell:
 
    .. code-block::
 
        $ pwd
        /home/roppenheimer/waves-eabm-tutorial
-       $ mkdir -p tutorial_01_geometry eabm_package/abaqus
+       $ mkdir -p eabm_package/abaqus
 
 ***************
 SConscript File
@@ -53,16 +53,15 @@ In this tutorial, we will build the geometry for a single element part using the
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the
 :ref:`waves_builders_api`).
 
-4. In the ``tutorial_01_geometry`` directory, create a file called ``SConscript`` using
-the contents below.
+4. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
-    .. literalinclude:: tutorial_01_geometry_SConscript
+    .. literalinclude:: tutorials_tutorial_01_geometry
         :language: Python
         :lineno-match:
         :end-before: marker-1
-        :emphasize-lines: 16, 19 
+        :emphasize-lines: 16, 19
 
 The ``SConscript`` file begins with imports of standard Python libraries. The first
 highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set
@@ -78,12 +77,11 @@ the code. For example, the variable ``abaqus_source_abspath`` is used in source
 definitions to point at the absolute path to the directory where the Abaqus journal files
 exist.
 
-5. In the ``tutorial_01_geometry`` directory, continue editing the file called
-``SConscript`` using contents below.
+5. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
-     .. literalinclude:: tutorial_01_geometry_SConscript
+     .. literalinclude:: tutorials_tutorial_01_geometry
          :language: Python
          :lineno-match:
          :start-after: marker-1
@@ -112,18 +110,17 @@ For more information about the behavior of the
 :meth:`waves.builders.abaqus_journal` task's action, which is defined in the
 :ref:`waves_builders_api`.
 
-6. In the ``tutorial_01_geometry`` directory, continue editing the file called
-``SConscript`` using the contents below.
+6. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
-     .. literalinclude:: tutorial_01_geometry_SConscript
+     .. literalinclude:: tutorials_tutorial_01_geometry
          :language: Python
          :lineno-match:
          :start-after: marker-3
 
-First, we create an alias for the workflow that was extended previously to the name
-of the current working directory, in this case ``tutorial_01_geometry``.
+First, we create an alias for the workflow that was extended previously to match the name of the current file, which
+will double as the build directory name: ``tutorial_01_geometry``.
 
 The final lines of code in the ``SConstruct`` file allow SCons to skip building a target
 sequence if the Abaqus executable is not found.
@@ -321,10 +318,10 @@ SConstruct File
 
 In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias
 matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to
-build specified in the ``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` file.
+build specified in the ``waves-eabm-tutorial/tutorial_01_geometry`` file.
 
 10. Modify the ``waves-eabm-tutorial/SConstruct`` file by adding the
-    ``tutorial_01_geometry`` collector alias to the ``eabm_simulation_directories`` list.
+    ``tutorial_01_geometry`` collector alias to the ``workflow_configurations`` list.
     The ``diff`` output below shows the difference between the ``SConstruct`` file created
     in :ref:`tutorialsconstruct` and what the new ``SConstruct`` file will be.
 
@@ -340,11 +337,10 @@ build specified in the ``waves-eabm-tutorial/tutorial_01_geometry/SConscript`` f
 Building Targets
 ****************
 
-Now that you've created the geometry part build file in your ``tutorial_01_geometry``
-directory, this section will walk through building the ``tutorial_01_geometry`` targets
-using Scons.
+Now that you've created the geometry task in ``tutorial_01_geometry``, this section will walk through building the
+``tutorial_01_geometry`` targets using Scons.
 
-11. To build the targets only for the ``tutorial_01_geometry``, execute the following
+11. To build the targets only for the ``tutorial_01_geometry`` workflow, execute the following
     command:
 
     .. code-block::
@@ -396,7 +392,7 @@ At this point, the only directory in the ``build`` directory is that pertaining 
 specific target that was specified to be built. In this case, that is
 ``tutorial_01_geometry``.
 
-The ``tutorial_01_geomtry/`` directory should contain the following files:
+The ``build/tutorial_01_geomtry/`` directory should contain the following files:
 
 * ``abaqus.rpy``, the replay file from the ``abaqus cae -nogui`` command
 * ``single_element_geometry.abaqus_v6.env``, the environment file that allows for

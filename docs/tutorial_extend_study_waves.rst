@@ -38,35 +38,26 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_extend_study`` in the ``waves-eabm-tutorial`` directory.
+3. Copy the ``tutorial_07_sobol_sequence`` file to a new file named ``tutorial_extend_study``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_extend_study
-
-4. Copy the ``tutorial_07_sobol_sequence/SConscript`` file into the newly created ``tutorial_extend_study``
-   directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_07_sobol_sequence/SConscript tutorial_extend_study/
+   $ cp tutorial_07_sobol_sequence tutorial_extend_study
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_07_sobol_sequence`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 differences between the two parameter generators.
 
-.. admonition:: waves-eabm-tutorial/tutorial_extend_study/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_extend_study
 
-   .. literalinclude:: tutorial_extend_study_SConscript
+   .. literalinclude:: tutorials_tutorial_extend_study
       :language: Python
-      :diff: tutorial_07_sobol_sequence_SConscript
+      :diff: tutorials_tutorial_07_sobol_sequence
 
 **********
 SConstruct
@@ -85,7 +76,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+4. Build the new targets
 
 .. code-block:: bash
 

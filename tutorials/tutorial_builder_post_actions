@@ -5,10 +5,7 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``project_dir`` - String absolute path to the EABM project root directory
   * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
-  * ``project_name`` - String project name
-  * ``version`` - String project version number
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -21,13 +18,11 @@ import waves
 Import('env')
 
 # Set project-wide paths with os-agnostic path separators
-project_dir = pathlib.Path(env['project_dir'])
 abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
-relative_build_directory = build_directory.relative_to(project_dir)
-parent_directory = build_directory.name
+workflow_name = build_directory.name
 model = "single_element"
 
 # Comment used in tutorial code snippets: marker-1
@@ -79,7 +74,7 @@ workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
 
 # Comment used in tutorial code snippets: marker-4
 
-# Datacheck Solve. Performed locally.
+# Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
@@ -94,51 +89,19 @@ datacheck.extend(env.AbaqusSolver(
 
 # Comment used in tutorial code snippets: marker-5
 
-# Remote Abaqus Solve with SSH
-remote = []
-
-solve_string = "${abaqus_command} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive " \
-                   "-ask_delete no"
-project_id = f"{env['project_name']}-{env['version']}"
-remote_directory = f"/scratch/$${{USER}}/{project_id}/"
-relative_build_path = pathlib.Path()
-remote_action = [
-    'ssh ${server} "mkdir -p ${remote_directory}"',
-    "rsync -rlptv ${tar_archive.abspath} ${server}:${remote_directory}",
-    'ssh ${server} "cd ${remote_directory} && tar -xjf ${project_id}${TARSUFFIX} && ' \
-        f'cd ${{relative_build_directory}} && {solve_string}"',
-    "rsync -rlptv ${server}:${remote_directory}/${relative_build_directory}/${TARGET.name} ${SOURCE.dir.abspath}",
-]
-
-tar_archive = env.Tar(
-    target=f"{project_id}",
+workflow.extend(env.AbaqusSolverPost(
+    target=[f"{job_name}.sta"],
     source=solve_source_list,
-)
-remote.extend(tar_archive)
-
-remote.extend(env.Command(
-    target=[f"{job_name}.odb"],
-    source=solve_source_list + tar_archive,
-    action=remote_action,
-    abaqus_command=env['abaqus'],
     job_name=job_name,
-    abaqus_options=abaqus_options,
-    server="sstelmo.lanl.gov",
-    remote_directory=remote_directory,
-    tar_archive=tar_archive[0],
-    project_id=project_id,
-    relative_build_directory=str(relative_build_directory)
-))
-env.Alias(f"{parent_directory}_remote", remote)
-workflow.extend(remote)
+    abaqus_options=abaqus_options))
 
 # Comment used in tutorial code snippets: marker-6
 
 # Collector alias based on parent directory name
-env.Alias(parent_directory, workflow)
-env.Alias(f"{parent_directory}_datacheck", datacheck)
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
+    Ignore(['.', workflow_name], datacheck)

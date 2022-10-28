@@ -21,28 +21,19 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_03_solverprep`` in the ``waves-eabm-tutorial`` directory.
+3. Copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_03_solverprep
-
-4. Copy the ``tutorial_02_partition_mesh/SConscript`` file into the newly created ``tutorial_03_solverprep``
-   directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_02_partition_mesh/SConscript tutorial_03_solverprep/
+   $ cp tutorial_02_partition_mesh tutorial_03_solverprep
 
 ******************
 Solver Input Files
 ******************
 
-5. Download and copy the `WAVES-EABM abaqus source files`_ into your existing
+4. Download and copy the `WAVES-EABM abaqus source files`_ into your existing
    ``eabm_package/abaqus`` sub-directory. If you're on a linux system with `git`_ installed and
    read access on the `WAVES`_ repository, you can use `git archive`_ as below.
 
@@ -64,7 +55,7 @@ Solver Input Files
    $ unzip source_abaqus.zip -d eabm_package/abaqus
 
 This action will unzip the source files we included in the
-``tutorial_03_solverprep/SConscript`` file into the ``waves-eabm-tutorial/eabm_package/abaqus/``
+``tutorial_03_solverprep`` file into the ``waves-eabm-tutorial/eabm_package/abaqus/``
 directory. Check the contents of this directory using the ``ls`` command.
 
 .. code-block::
@@ -79,18 +70,17 @@ directory. Check the contents of this directory using the ``ls`` command.
     history_output.inp           single_element_partition.py
     materials.inp
 
-.. _tutorial_solverprep_waves_SConscript:
+.. _tutorials_tutorial_solverprep_waves:
 
 **********
 SConscript
 **********
 
-6. Add the highlighted import statement shown below to the
-   ``tutorial_03_solverprep/SConscript`` file.
+5. Add the highlighted import statement shown below to the ``tutorial_03_solverprep`` file.
 
-.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep
 
-    .. literalinclude:: tutorial_03_solverprep_SConscript
+    .. literalinclude:: tutorials_tutorial_03_solverprep
        :language: Python
        :lineno-match:
        :emphasize-lines: 15
@@ -106,15 +96,15 @@ we will require a custom builder that functions differently than the previously 
     There is a large section of lines in the ``SConscript`` file that are not included
     before the next section of code shown here, as they are identical to those from
     :ref:`tutorial_partition_mesh_waves`. The ``diff`` of the ``SConscript`` file at the
-    end of the :ref:`tutorial_solverprep_waves_SConscript` section will demonstrate this
+    end of the :ref:`tutorials_tutorial_solverprep_waves` section will demonstrate this
     more clearly.
 
-7. Modify your ``tutorial_03_solverprep/SConscript`` file by adding the contents shown
+6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
    below immediately after the code pertaining to ``# Mesh`` from the previous tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep
 
-    .. literalinclude:: tutorial_03_solverprep_SConscript
+    .. literalinclude:: tutorials_tutorial_03_solverprep
        :language: Python
        :lineno-match:
        :start-after: marker-3
@@ -138,21 +128,21 @@ as we now need to call the :meth:`waves.builders.copy_substitute` builder as a f
 from the ``waves`` module. This is required because we need to perform the
 ``copy_substitute`` task for each item in the ``abaqus_source_list``.
 
-In summary of the changes you just made to the ``tutorial_03_solverprep/SConscript`` file,
+In summary of the changes you just made to the ``tutorial_03_solverprep`` file,
 a ``diff`` against the ``SConscript`` file from :ref:`tutorial_partition_mesh_waves` is
 included below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep
 
-   .. literalinclude:: tutorial_03_solverprep_SConscript
+   .. literalinclude:: tutorials_tutorial_03_solverprep
       :language: Python
-      :diff: tutorial_02_partition_mesh_SConscript
+      :diff: tutorials_tutorial_02_partition_mesh
 
 **********
 SConstruct
 **********
 
-8. Add ``tutorial_03_solverprep`` to the ``eabm_simulation_directories`` list in the
+7. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
    ``waves-eabm-tutorial/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
@@ -168,7 +158,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+8. Build the new targets
 
 .. code-block:: bash
 

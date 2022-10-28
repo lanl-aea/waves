@@ -7,6 +7,7 @@ Requires the following ``SConscript(..., exports=[])``
 
   * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
   * ``python_source_abspath`` - String absolute path to the EABM's Python 3 files
+  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -28,6 +29,7 @@ python_source_abspath = pathlib.Path(env["python_source_abspath"])
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
@@ -158,11 +160,11 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 # Collector alias based on parent directory name
-parent_directory = Dir('.').srcnode().name
-env.Alias(parent_directory, workflow)
-env.Alias(f"{parent_directory}_datacheck", datacheck)
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
+env.Alias(env['datacheck_alias'], datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore(['.', parent_directory], workflow)
-    Ignore(['.', parent_directory], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
+    Ignore(['.', workflow_name], datacheck)

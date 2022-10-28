@@ -59,7 +59,7 @@ author_list = ["Kyle Brindley",
                "Matthew Fister",
                "Scott Ouellette"]
 author_latex = r" \and ".join(author_list)
-documentation_source_dir = "docs"
+documentation_source_dir = pathlib.Path("docs")
 eabm_package_dir = "eabm_package"
 project_variables = {
     "project_name": project_name,
@@ -77,7 +77,6 @@ for key, value in project_variables.items():
 # Make the EABM package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
 sys.path.insert(0, str(project_dir))
 env.PrependENVPath("PYTHONPATH", str(project_dir))
-print(env["ENV"]["PYTHONPATH"])
 
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env["variant_dir_base"])
@@ -91,17 +90,23 @@ env.Append(BUILDERS={
     "CondaEnvironment": waves.builders.conda_environment()
 })
 
+# Dump the Conda environment as documentation of as-built target environment
+environment_target = env.CondaEnvironment(
+    target=["environment.yaml"],
+    source=[])
+env.AlwaysBuild(environment_target)
+Default(environment_target)
+
 # Add documentation target(s)
 if not env["ignore_documentation"]:
     # Project documentation
     build_dir = variant_dir_base / documentation_source_dir
-    SConscript(dirs=".", variant_dir=str(variant_dir_base), exports=["env"], duplicate=False)
-    docs_aliases = SConscript(dirs=documentation_source_dir, variant_dir=str(build_dir), exports=["env", "project_variables"])
+    docs_aliases = SConscript(str(documentation_source_dir / "SConscript"), variant_dir=str(build_dir), exports=["env", "project_variables"])
 
-    # Nominal analysis report
-    report_dir = "report"
+    # Analysis report
+    report_dir = pathlib.Path("report")
     build_dir = variant_dir_base / report_dir
-    SConscript(dirs=report_dir,
+    SConscript(str(report_dir / "SConscript"),
                variant_dir=str(build_dir),
                exports=["env", "project_variables"],
                duplicate=True)
@@ -110,13 +115,13 @@ else:
     docs_aliases = []
 
 # Add simulation targets
-eabm_simulation_directories = [
+workflow_configurations = [
     "nominal",
     "mesh_convergence"
 ]
-for source_dir in eabm_simulation_directories:
-    build_dir = variant_dir_base / source_dir
-    SConscript(dirs=source_dir, variant_dir=build_dir, exports=["env", "project_variables"], duplicate=False)
+for workflow in workflow_configurations:
+    build_dir = variant_dir_base / workflow
+    SConscript(workflow, variant_dir=build_dir, exports="env", duplicate=False)
 
 # Add default target list to help message
 default_targets_help = "\nDefault Targets:\n"
@@ -132,7 +137,7 @@ try:
     alias_list = default_ans
 except ImportError:
     # Fall back to manually constructed alias list(s)
-    alias_list = docs_aliases + eabm_simulation_directories
+    alias_list = docs_aliases + workflow_configurations
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"

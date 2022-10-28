@@ -36,35 +36,26 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_08_data_extraction`` in the ``waves-eabm-tutorial`` directory.
+3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_08_data_extraction
-
-4. Copy the ``tutorial_07_cartesian_product/SConscript`` file into the newly created ``tutorial_08_data_extraction``
-   directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_07_cartesian_product/SConscript tutorial_08_data_extraction/
+   $ cp tutorial_07_cartesian_product tutorial_08_data_extraction
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
-changes made in this tutorial.
+A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
+below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction
 
-   .. literalinclude:: tutorial_08_data_extraction_SConscript
+   .. literalinclude:: tutorials_tutorial_08_data_extraction
       :language: Python
-      :diff: tutorial_07_cartesian_product_SConscript
+      :diff: tutorials_tutorial_07_cartesian_product
 
 The only new code in this tutorial adds the :meth:`waves.builders.abaqus_extract` builder task. Note that this task
 falls within the parameterization loop and will be executed once per parameter set. :ref:`odb_extract_cli` will output
@@ -92,7 +83,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+4. Build the new targets
 
 .. code-block:: bash
 
@@ -104,7 +95,7 @@ Build Targets
 Output Files
 ************
 
-6. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
+5. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
    the addition of the :ref:`odb_extract_cli` output files.
 
 .. code-block:: bash
