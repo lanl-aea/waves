@@ -23,6 +23,8 @@ abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 # Comment used in tutorial code snippets: marker-0
 
 # Simulation variables
+build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
 model = "single_element"
 simulation_variables = {
     'width': 1.0,
