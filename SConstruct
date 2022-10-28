@@ -13,24 +13,7 @@ project_variables = {
     'tutorials_dir': 'tutorials',
     'abaqus_dir': 'eabm_package/abaqus',
     'cubit_dir': 'eabm_package/cubit',
-    'python_dir': 'eabm_package/python',
-    'tutorial_01_dir': 'tutorial_01_geometry',
-    'tutorial_02_dir': 'tutorial_02_partition_mesh',
-    'tutorial_03_dir': 'tutorial_03_solverprep',
-    'tutorial_04_dir': 'tutorial_04_simulation',
-    'tutorial_05_dir': 'tutorial_05_parameter_substitution',
-    'tutorial_06_dir': 'tutorial_06_include_files',
-    'tutorial_07_cartesian_product_dir': 'tutorial_07_cartesian_product',
-    'tutorial_07_latin_hypercube_dir': 'tutorial_07_latin_hypercube',
-    'tutorial_07_sobol_sequence_dir': 'tutorial_07_sobol_sequence',
-    'tutorial_extend_study_dir': 'tutorial_extend_study',
-    'tutorial_08_dir': 'tutorial_08_data_extraction',
-    'tutorial_09_dir': 'tutorial_09_post_processing',
-    'tutorial_10_dir': 'tutorial_10_regression_testing',
-    'tutorial_cubit_dir': 'tutorial_cubit',
-    'tutorial_mesh_convergence_dir': 'tutorial_mesh_convergence',
-    'tutorial_escape_sequences_dir': 'tutorial_escape_sequences',
-    'tutorial_remote_execution_dir': 'tutorial_remote_execution'
+    'python_dir': 'eabm_package/python'
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===
