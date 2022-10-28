@@ -25,6 +25,7 @@ eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
 parameter_schema = single_element_compression.mesh_convergence
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
@@ -175,13 +176,12 @@ workflow.extend(env.PythonScript(
     source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
-# Collector alias based on parent directory name
-parent_directory = Dir(".").srcnode().name
-env.Alias(parent_directory, workflow)
-env.Alias(f"{parent_directory}_datacheck", datacheck)
+# Collector alias based on build directory name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
 
 if not env["abaqus"]:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{parent_directory}' target(s)")
-    Ignore([".", parent_directory], workflow)
-    Ignore([".", parent_directory], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)
+    Ignore([".", workflow_name], datacheck)
