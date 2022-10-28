@@ -77,7 +77,6 @@ for key, value in project_variables.items():
 # Make the EABM package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
 sys.path.insert(0, str(project_dir))
 env.PrependENVPath("PYTHONPATH", str(project_dir))
-print(env["ENV"]["PYTHONPATH"])
 
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env["variant_dir_base"])
