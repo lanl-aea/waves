@@ -90,6 +90,13 @@ env.Append(BUILDERS={
     "CondaEnvironment": waves.builders.conda_environment()
 })
 
+# Dump the Conda environment as documentation of as-built target environment
+environment_target = env.CondaEnvironment(
+    target=["environment.yaml"],
+    source=[])
+env.AlwaysBuild(environment_target)
+Default(environment_target)
+
 # Add documentation target(s)
 if not env["ignore_documentation"]:
     # Project documentation
