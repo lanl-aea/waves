@@ -46,7 +46,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_07_cartesian_product tutorial_07_sobol_sequence/
+   $ cp tutorial_07_cartesian_product tutorial_07_sobol_sequence
 
 ********************
 Parameter Study File

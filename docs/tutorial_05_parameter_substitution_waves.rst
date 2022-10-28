@@ -35,7 +35,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation tutorial_05_parameter_substitution/
+   $ cp tutorial_04_simulation tutorial_05_parameter_substitution
 
 ******************
 Solver Input Files

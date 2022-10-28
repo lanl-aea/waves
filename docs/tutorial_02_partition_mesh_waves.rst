@@ -37,7 +37,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_01_geometry tutorial_02_partition_mesh/
+   $ cp tutorial_01_geometry tutorial_02_partition_mesh
 
 .. _tutorials_tutorial_partition_mesh_waves:
 

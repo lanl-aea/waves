@@ -36,7 +36,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_05_parameter_substitution tutorial_06_include_files/
+   $ cp tutorial_05_parameter_substitution tutorial_06_include_files
 
 5. Create a new directory in ``eabm_package/python`` in the ``waves-eabm-tutorial`` directory.
 

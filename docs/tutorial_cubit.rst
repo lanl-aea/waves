@@ -42,7 +42,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation tutorial_cubit/
+   $ cp tutorial_04_simulation tutorial_cubit
 
 .. _tutorials_tutorial_cubit_waves:
 

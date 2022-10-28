@@ -37,7 +37,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_03_solverprep tutorial_04_simulation/
+   $ cp tutorial_03_solverprep tutorial_04_simulation
 
 
 .. _tutorials_tutorial_simulation_waves:

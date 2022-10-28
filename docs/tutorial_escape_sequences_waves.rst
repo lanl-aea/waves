@@ -73,7 +73,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation tutorial_escape_sequences/
+   $ cp tutorial_04_simulation tutorial_escape_sequences
 
 .. _tutorials_tutorial_escape_sequences_waves:
 

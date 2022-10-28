@@ -43,7 +43,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_08_data_extraction tutorial_09_post_processing/
+   $ cp tutorial_08_data_extraction tutorial_09_post_processing
 
 **********
 SConscript

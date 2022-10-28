@@ -53,7 +53,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_07_sobol_sequence tutorial_extend_study/
+   $ cp tutorial_07_sobol_sequence tutorial_extend_study
 
 **********
 SConscript

@@ -39,7 +39,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_06_include_files tutorial_07_cartesian_product/
+   $ cp tutorial_06_include_files tutorial_07_cartesian_product
 
 .. _tutorial_cartesian_product_waves_parameter_study_file:
 

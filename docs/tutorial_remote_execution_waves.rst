@@ -41,7 +41,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation tutorial_remote_execution/
+   $ cp tutorial_04_simulation tutorial_remote_execution
 
 .. _tutorials_tutorial_remote_execution_waves:
 

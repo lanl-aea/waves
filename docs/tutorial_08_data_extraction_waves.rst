@@ -51,7 +51,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_07_cartesian_product tutorial_08_data_extraction/
+   $ cp tutorial_07_cartesian_product tutorial_08_data_extraction
 
 **********
 SConscript

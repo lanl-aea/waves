@@ -38,7 +38,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_07_cartesian_product tutorial_07_latin_hypercube/
+   $ cp tutorial_07_cartesian_product tutorial_07_latin_hypercube
 
 ********************
 Parameter Study File

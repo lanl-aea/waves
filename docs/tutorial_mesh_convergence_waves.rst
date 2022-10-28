@@ -43,7 +43,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_10_regression_testing tutorial_mesh_convergence/
+   $ cp tutorial_10_regression_testing tutorial_mesh_convergence
 
 ********************
 Parameter Study File

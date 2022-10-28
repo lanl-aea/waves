@@ -36,7 +36,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_02_partition_mesh tutorial_03_solverprep/
+   $ cp tutorial_02_partition_mesh tutorial_03_solverprep
 
 ******************
 Solver Input Files

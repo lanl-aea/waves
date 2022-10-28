@@ -56,7 +56,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_09_post_processing tutorial_10_regression_testing/
+   $ cp tutorial_09_post_processing tutorial_10_regression_testing
 
 **********
 SConscript
