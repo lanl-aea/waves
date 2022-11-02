@@ -5,7 +5,11 @@ Changelog
 #########
 
 ******************
-0.5.3 (unreleased)
+0.5.4 (unreleased)
+******************
+
+******************
+0.5.3 (2022-11-02)
 ******************
 
 New Features
@@ -29,7 +33,7 @@ Internal Changes
 - Remove pytest.ini and put settings in pyproject.toml (:issue:`344`, :merge:`371`). By `Prabhu Khalsa`_.
 - Standardize on ``pathlib`` constructed absolute paths (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
 - Make all ``PATH``-like modifications once in the project configuration instead of distributed ``sys.path`` calls
-  (:issue:`345`, :merge:`375`). By `Kyle Brindley`.
+  (:issue:`345`, :merge:`375`). By `Kyle Brindley`_.
 - Remove unecessary tutorial and quickstart intermediate workflow directories (:issue:`347`, :merge:`376`). By `Kyle
   Brindley`_.
 
