@@ -27,37 +27,28 @@ Environment
 Directory Structure
 *******************
 
-3. Create directories ``tutorial_cubit`` and ``eabm_package/cubit`` in the ``waves-eabm-tutorial`` directory.
+3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_cubit``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir -p tutorial_cubit eabm_package_cubit
+   $ cp tutorial_04_simulation tutorial_cubit
 
-4. Copy the ``tutorial_04_simulation/SConscript`` file into the newly created ``tutorial_cubit``
-   directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation/SConscript tutorial_cubit/
-
-.. _tutorial_cubit_waves_SConscript:
+.. _tutorials_tutorial_cubit_waves:
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_cubit/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_cubit
 
-   .. literalinclude:: tutorial_cubit_SConscript
+   .. literalinclude:: tutorials_tutorial_cubit
       :language: Python
-      :diff: tutorial_04_simulation_SConscript
+      :diff: tutorials_tutorial_04_simulation
 
 Note that Cubit does not support the Abaqus plane stress element ``CPS4``, so we must add a post-action to the orphan
 mesh target to change the element type. A post-action is used to avoid generating intermediate target files, which would
@@ -73,7 +64,7 @@ documentation for more information about virtual environment management with `Co
 Cubit Journal Files
 *******************
 
-5. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
+4. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
 
 The Cubit journal files include the same CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
@@ -117,7 +108,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 

@@ -265,7 +265,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
        substitution_dictionary = {
            "@variable_one@": "value_one"
        }
-       waves.builders.copy_substitution(source_list, substitution_dictionary, env)
+       waves.builders.copy_substitute(source_list, substitution_dictionary, env)
 
     :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
     :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional

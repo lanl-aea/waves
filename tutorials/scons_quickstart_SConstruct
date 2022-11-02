@@ -16,6 +16,9 @@ abaqus_source_dir = 'eabm_package/abaqus'
 abaqus_source_abspath = project_dir / abaqus_source_dir
 variant_dir_base = pathlib.Path('build_scons_quickstart')
 
+# Make the EABM package importable for Python and Abaqus Python environments
+env.PrependENVPath("PYTHONPATH", str(project_dir))
+
 # Separate target output from source files
 VariantDir(variant_dir_base.name, '.', duplicate=False)
 
@@ -75,13 +78,13 @@ workflow.extend(env.AbaqusJournal(
 
 # SolverPrep
 abaqus_source_list = [
-    f"#/{abaqus_source_dir}/{model}_compression.inp",
-    f"#/{abaqus_source_dir}/assembly.inp",
-    f"#/{abaqus_source_dir}/boundary.inp",
-    f"#/{abaqus_source_dir}/field_output.inp",
-    f"#/{abaqus_source_dir}/materials.inp",
-    f"#/{abaqus_source_dir}/parts.inp",
-    f"#/{abaqus_source_dir}/history_output.inp"
+    abaqus_source_abspath / f"{model}_compression.inp",
+    abaqus_source_abspath / "assembly.inp",
+    abaqus_source_abspath / "boundary.inp",
+    abaqus_source_abspath / "field_output.inp",
+    abaqus_source_abspath / "materials.inp",
+    abaqus_source_abspath / "parts.inp",
+    abaqus_source_abspath / "history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 for source_file in abaqus_source_list:

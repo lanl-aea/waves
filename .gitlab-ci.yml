@@ -165,6 +165,7 @@ fast-test:
     - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
     - python -m waves.waves build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
   tags:
@@ -243,8 +244,6 @@ pages:
     - |
         for ref in ${documentation_branches}; do
             cd ${project_root}
-            # TODO: match the branch to the correct module. unload/load for each branch.
-            # https://re-git.lanl.gov/aea/python-projects/waves/-/boards
             git checkout $ref
             git reset --hard origin/$ref
             mkdir -p public/$ref/waves-eabm

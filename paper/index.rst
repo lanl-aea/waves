@@ -4,9 +4,9 @@ Engineering Computational Practices
 
 .. note::
 
-   This document describes the core concepts for the `WAVES`_ software :cite:`WAVES`. The software is undergoing the Los
+   This document describes the core concepts for the `WAVES`_ software :cite:`waves-webpage`. The software is undergoing the Los
    Alamos National Laboratory licensing and release process. This document will be followed by the full documentation
-   :cite:`WAVES` of `WAVES`_ pending the open source release.
+   :cite:`waves-webpage` of `WAVES`_ pending the open source release.
 
    Until the open source release of `WAVES`_, the :ref:`user_manual` introduces the build system concepts implemented
    directly in `SCons`_. These tutorials lack the parametric study tools, but can be implemented with currently

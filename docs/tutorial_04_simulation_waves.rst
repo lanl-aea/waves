@@ -22,25 +22,16 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_04_simulation`` in the ``waves-eabm-tutorial`` directory.
+3. Copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_04_simulation
-
-4. Copy the ``tutorial_03_solverprep/SConscript`` file into the newly created ``tutorial_04_simulation``
-   directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_03_solverprep/SConscript tutorial_04_simulation/
+   $ cp tutorial_03_solverprep tutorial_04_simulation
 
 
-.. _tutorial_simulation_waves_SConscript:
+.. _tutorials_tutorial_simulation_waves:
 
 **********
 SConscript
@@ -50,19 +41,19 @@ SConscript
 
     There is a large section of lines in the ``SConscript`` file that are not included before the next section of code
     shown here, as they are identical to those from :ref:`tutorial_solverprep_waves`. The ``diff`` of the ``SConscript``
-    file at the end of the :ref:`tutorial_simulation_waves_SConscript` section will demonstrate this more clearly.
+    file at the end of the :ref:`tutorials_tutorial_simulation_waves` section will demonstrate this more clearly.
 
 .. _tutorial_simulation_waves_running_datacheck:
 
 Running a Datacheck
 ===================
 
-5. Modify your ``tutorial_04_simulation/SConscript`` file by adding the contents shown below immediately after the code
+4. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation
 
-    .. literalinclude:: tutorial_04_simulation_SConscript
+    .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
        :lineno-match:
        :start-after: marker-4
@@ -125,12 +116,12 @@ default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be
 Running the Analysis
 ====================
 
-6. Modify your ``tutorial_04_simulation/SConscript`` file by adding the contents below immediately after the Abaqus
+5. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
    datacheck code that was just discussed.
 
-.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation
 
-    .. literalinclude:: tutorial_04_simulation_SConscript
+    .. literalinclude:: tutorials_tutorial_04_simulation
        :language: Python
        :lineno-match:
        :start-after: marker-5
@@ -161,27 +152,27 @@ list by the builder. The ``source`` list once again utlizes the existing ``solve
     analysis success, and the build system will continue to build targets. If an analysis fails, the source files which
     are required to build certain targets may not exist, which will also cause the build system to fail.
 
-In summary of the changes you just made to the ``tutorial_04_simulation/SConscript`` file, a ``diff`` against the
+In summary of the changes you just made to the ``tutorial_04_simulation`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the changes made in this
 tutorial. Note the addition of a separate datacheck alias, which will be used in
 :ref:`tutorial_regression_testing_waves`.
 
-.. admonition:: waves-eabm-tutorial/tutorial_04_simulation/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_04_simulation
 
-   .. literalinclude:: tutorial_04_simulation_SConscript
+   .. literalinclude:: tutorials_tutorial_04_simulation
       :language: Python
-      :diff: tutorial_03_solverprep_SConscript
+      :diff: tutorials_tutorial_03_solverprep
 
 **********
 SConstruct
 **********
 
-7. Make the following additions to the ``waves-eabm-tutorial/SConstruct`` file using the ``diff`` against the
+6. Make the following additions to the ``waves-eabm-tutorial/SConstruct`` file using the ``diff`` against the
    ``SConstruct`` file from the last tutorial:
 
    * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add custom
      builders``
-   * Add ``tutorial_04_simulation`` to the ``eabm_simulation_directories`` list
+   * Add ``tutorial_04_simulation`` to the ``workflow_configurations`` list
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the
 changes made in this tutorial.
@@ -196,7 +187,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+7. Build the new targets
 
 .. code-block:: bash
 
@@ -283,7 +274,7 @@ option is used in the ``tree`` command below to reduce clutter in the ouptut sho
 
     0 directories, 31 files
 
-The ``tutorial_04_simulation`` directory contains several different subsets of related files:
+The ``build/tutorial_04_simulation`` directory contains several different subsets of related files:
 
 * ``single_element_{geometry,partition,mesh}.*`` - output files generated from the code pertaining to ``# Geometry``,
   ``# Partition``, and ``# Mesh`` in the ``SConscript`` file. This code was first introduced in

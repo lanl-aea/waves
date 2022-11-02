@@ -45,11 +45,13 @@ env['abaqus'] = waves.builders.find_program(['abq2021', 'abq2020'], env)
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM-TUTORIAL'
 version = '0.1.0'
+project_dir = pathlib.Path(Dir(".").abspath)
+abaqus_source_dir = "eabm_package/abaqus"
 project_variables = {
     'project_name': project_name,
-    'project_dir': Dir('.').abspath,
+    'project_dir': str(project_dir),
     'version': version,
-    'abaqus_source_dir': 'eabm_package/abaqus'
+    'abaqus_source_abspath': str(project_dir / abaqus_source_dir)
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -65,11 +67,11 @@ env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_progr
 # Comments used in tutorial code snippets: marker-6
 
 # Add simulation targets
-eabm_simulation_directories = [
+workflow_configurations = [
 ]
-for source_dir in eabm_simulation_directories:
-    build_dir = variant_dir_base / source_dir
-    SConscript(dirs=source_dir, variant_dir=build_dir, exports='env', duplicate=False)
+for workflow in workflow_configurations:
+    build_dir = variant_dir_base / workflow
+    SConscript(workflow, variant_dir=build_dir, exports='env', duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
 
@@ -90,7 +92,7 @@ try:
     alias_list = default_ans
 except ImportError:
     # Fall back to manually constructed alias list(s)
-    alias_list = eabm_simulation_directories
+    alias_list = workflow_configurations
 alias_help = "\nTarget Aliases:\n"
 for alias in alias_list:
     alias_help += f"    {alias}\n"

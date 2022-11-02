@@ -1,11 +1,11 @@
 .. note::
 
-   Unlike the "Scons-WAVES Quickstart" :cite:`WAVES`, this tutorial will use native `SCons`_ code without the `WAVES`_ extensions and
+   Unlike the "Scons-WAVES Quickstart" :cite:`waves-webpage`, this tutorial will use native `SCons`_ code without the `WAVES`_ extensions and
    builders. This tutorial is included as an example for using native `SCons`_ techniques when `WAVES`_ does not support
    required third-party software, such as numeric solvers, or for when a modsim project requires unique builder behavior.
 
 This quickstart will create a pure `SCons`_, minimal, single file project configuration matching the `WAVES`_ tutorials
-:cite:`WAVES` listed below.
+:cite:`waves-webpage` listed below.
 
 * Tutorial 00: SConstruct
 * Tutorial 01: Geometry

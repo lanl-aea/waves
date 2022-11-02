@@ -8,7 +8,7 @@ Tutorial 02: Partition and Mesh
 References
 **********
 
-* Adding to `PYTHONPATH`_ with `Python sys`_ :cite:`python`
+* Adding to `PYTHONPATH`_ with `SCons PrependENVPath`_ method :cite:`scons-user`
 * `Abaqus Node Sets`_ :cite:`ABAQUS`
 * `Abaqus Element Sets`_ and `Abaqus Elements Guide`_ :cite:`ABAQUS`
 * `Abaqus Assembly Definition`_ :cite:`ABAQUS`
@@ -23,34 +23,26 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_02_partition_mesh`` in the ``waves-eabm-turorial`` directory.
+3. Copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh``.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_02_partition_mesh
+   $ cp tutorial_01_geometry tutorial_02_partition_mesh
 
-4. Copy the ``tutorial_01_geometry/SConscript`` file into the newly created ``tutorial_02_partition_mesh`` directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_01_geometry/SConscript tutorial_02_partition_mesh/
-
-.. _tutorial_partition_mesh_waves_SConscript:
+.. _tutorials_tutorial_partition_mesh_waves:
 
 **********
 SConscript
 **********
 
-5. Modify your ``tutorial_02_partition_mesh/SConscript`` file by adding the contents below immediately after the code
+4. Modify your ``tutorial_02_partition_mesh`` file by adding the contents below immediately after the code
    pertaining to ``# Geometry`` from the previous tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh
 
-   .. literalinclude:: tutorial_02_partition_mesh_SConscript
+   .. literalinclude:: tutorials_tutorial_02_partition_mesh
       :language: Python
       :lineno-match:
       :start-after: marker-2
@@ -76,7 +68,7 @@ in the Abaqus kernel, but now the default behavior of the journal is different.
 .. TODO: figure out how to link to a specific entry in the CLI. There's gotta be some way to do this similat to :meth:
    directive. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/175
 
-6. Investigate the :ref:`waves_eabm_cli` documentation for the :ref:`abaqus_single_element_partition_cli` file. Notice that
+5. Investigate the :ref:`waves_eabm_cli` documentation for the :ref:`abaqus_single_element_partition_cli` file. Notice that
    a new parameter is defined here that was absent in ``single_element_geometry.py``. This parameter is defined in short
    with ``-i`` or verbosely by ``--input-file``.
 
@@ -109,15 +101,15 @@ created. The orphan mesh file is created by calling the ``export_mesh()`` functi
 file. See the :ref:`waves_eabm_api` for the :ref:`sphinx_abaqus_journal_utilities_api` file for more information about
 the ``export_mesh()`` function.
 
-In summary of the changes you just made to the ``tutorial_02_partition_mesh/SConscript`` file, a ``diff`` against the
+In summary of the changes you just made to the ``tutorial_02_partition_mesh`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_geometry_waves` is included below to help identify the changes made in this
 tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh
 
-   .. literalinclude:: tutorial_02_partition_mesh_SConscript
+   .. literalinclude:: tutorials_tutorial_02_partition_mesh
       :language: Python
-      :diff: tutorial_01_geometry_SConscript
+      :diff: tutorials_tutorial_01_geometry
 
 *******************
 Abaqus Journal File
@@ -135,7 +127,7 @@ journal files:
 * :ref:`tutorial_geometry_waves_top_level_code_environment`
 * :ref:`tutorial_geometry_waves_retrieving_exit_codes`
 
-7. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_partition.py`` using all the contents
+6. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_partition.py`` using all the contents
    below.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py
@@ -168,7 +160,7 @@ argument is how the script knows which file to copy and then modify in the Abaqu
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":``
 statement, and the ``main()`` function is called within ``sys.exit()`` for exit code retrieval.
 
-8. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_journal_utilities.py`` using the contents
+7. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_journal_utilities.py`` using the contents
    below.
 
 .. admonition:: waves-eabm-tutoria/eabm_package/abaqus/abaqus_journal_utilities.py
@@ -184,7 +176,7 @@ an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and ``orphan
 orphan mesh file. Orphan mesh files define the entire part's mesh in a text-based file. The node and element locations
 and labels are listed in a tabular format that the Abaqus file parser understands.
 
-9. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents
+8. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents
    below.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py
@@ -197,10 +189,14 @@ The ``single_element_mesh.py`` file will have many similarities in code structur
 and ``single_element_partition.py`` files. The first significant change is within the ``import`` statements at the top
 of the file. The ``single_element_mesh.py`` file uses the ``export_mesh()`` function that is imported from the
 ``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utilities.py`` exists in the
-``eabm_package/abaqus`` directory, and is never copied to the build directory. Without any modifications to your
-``sys.path``, the Abaqus kernel will attempt to ``import abaqus_journal_utilities`` but will not be able to find the
-file. In order to solve this problem, we must add the location of the ``abaqus_journal_utilities.py`` file to
-``sys.path`` at run time.
+``eabm_package/abaqus`` directory, and is never copied to the build directory.
+
+It is possible to use a normal looking import statement because we will modify `PYTHONPATH`_ in the project
+``SConstruct`` configuration file. Abaqus Python and Python 3 environments will both inherit the `PYTHONPATH`_ and
+search for packages on the paths in this environment variable. While this path modification would be bad practice for a
+Python package, since we aren't packaging and deploying our modsim Python modules this path modification is required.
+Care should still be taken to avoid naming conflicts between the modsim package directory and any Python packages that
+may exist in the active Conda environment.
 
 .. note::
 
@@ -208,11 +204,6 @@ file. In order to solve this problem, we must add the location of the ``abaqus_j
    ``single_element_mesh.py`` file to point to the location of the ``abaqus_journal_utilities`` file as well. The journal
    files are executed via absolute path from within the build directory, so the output from these scripts is placed in
    the build directory.
-
-Before importing ``abaqus_journal_utilities``, the ``filename`` is extracted in the same way as in
-:ref:`tutorial_geometry_waves`'s :ref:`tutorial_geometry_waves_command_line_interfaces` code. Then, we use
-``sys.path.insert`` from the `Python sys`_ package to add the parent directory of the current file
-(``single_element_mesh.py``) to the `PYTHONPATH`_.
 
 From this point, the ``main()`` function proceeds to copy the input file just like in ``single_element_partition.py``.
 The code that follows performs the following tasks within the new ``output_file``:
@@ -239,7 +230,7 @@ All other aspects of the ``single_element_mesh.py`` file are the same as ``singl
 SConstruct
 **********
 
-10. Add ``tutorial_02_partition_mesh`` to the ``eabm_simulation_directories`` list in the
+9. Add ``tutorial_02_partition_mesh`` to the ``workflow_configurations`` list in the
     ``waves-eabm-tutorial/SConscruct`` file.
 
 A ``diff`` against the SConstruct file from :ref:`tutorial_geometry_waves` is included below to help identify the
@@ -251,11 +242,14 @@ changes made in this tutorial.
         :language: python
         :diff: tutorials_tutorial_01_geometry_SConstruct
 
+Note the `PYTHONPATH`_ modification by `SCons PrependENVPath`_. This modification to the project's construction
+environment will allow Abaqus Python to import the project module files used by ``single_element_mesh.py``.
+
 *************
 Build Targets
 *************
 
-5. Build the new targets
+10. Build the new targets
 
 .. code-block:: bash
 
@@ -320,12 +314,12 @@ below.
    0 directories, 21 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
-Recall from the note this tutorial's :ref:`tutorial_partition_mesh_waves_SConscript` section that we require the targets
+Recall from the note this tutorials_tutorial's :ref:`tutorial_partition_mesh_waves` section that we require the targets
 from the code pertaining to :ref:`tutorial_geometry_waves` to build the targets for this tutorial. There is an important
 distinction to be made here. This tutorial is **NOT** utilizing the outputs from :ref:`tutorial_geometry_waves`'s
 :ref:`tutorial_geometry_waves_build_targets` section when we executed the ``$ scons tutorial_01_geometry`` command. This
 tutorial is utilizing the outputs generated from executing the same code, but from our new
-``tutorial_02_partition_mesh/SConscript`` file. For this reason, we see the same outputs from the
+``tutorial_02_partition_mesh`` file. For this reason, we see the same outputs from the
 ``build/tutorial_01_geometry`` directory in the ``build/tutorial_02_partition_mesh`` directory (along with other
 :ref:`tutorial_partition_mesh_waves` output files).
 

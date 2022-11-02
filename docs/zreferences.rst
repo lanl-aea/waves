@@ -4,5 +4,5 @@
    References
    ##########
 
-.. bibliography:: references.bib
+.. bibliography:: references.bib CITATION.bib
    :style: unsrt

@@ -5,8 +5,37 @@ Changelog
 #########
 
 ******************
-0.5.3 (unreleased)
+0.5.4 (unreleased)
 ******************
+
+******************
+0.5.3 (2022-11-02)
+******************
+
+New Features
+============
+- Add the preferred WAVES citation bibtex file to the ``waves quickstart`` template files (:issue:`342`, :merge:`367`).
+  By `Kyle Brindley`_.
+- Fixed the Sphinx usage of the preferred project citation. Sphinx uses BibTeX, which doesn't have the ``@software``
+  style. Added project citations to the quickstart template files (:issue:`343`, :merge:`368`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Update the ``CITATION.bib`` file to use the most recent production release number. Update the version release
+  instructions to include this step (:issue:`339`, :merge:`366`). By `Kyle Brindley`_.
+- Minor typographical fix in API (:issue:`340`, :merge:`369`). By `Kyle Brindley`_.
+- Add a work-in-progress tutorial for re-using task definitions (:issue:`63`, :merge:`373`). By `Kyle Brindley`_.
+- Add SConscript interface doc strings (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Remove Gitlab-CI developer note that is no longer relevant (:issue:`9`, :merge:`370`). By `Kyle Brindley`_.
+- Remove pytest.ini and put settings in pyproject.toml (:issue:`344`, :merge:`371`). By `Prabhu Khalsa`_.
+- Standardize on ``pathlib`` constructed absolute paths (:issue:`346`, :merge:`374`). By `Kyle Brindley`_.
+- Make all ``PATH``-like modifications once in the project configuration instead of distributed ``sys.path`` calls
+  (:issue:`345`, :merge:`375`). By `Kyle Brindley`_.
+- Remove unecessary tutorial and quickstart intermediate workflow directories (:issue:`347`, :merge:`376`). By `Kyle
+  Brindley`_.
 
 ******************
 0.5.2 (2022-10-17)

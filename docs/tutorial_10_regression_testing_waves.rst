@@ -41,35 +41,26 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_10_regression_testing`` in the ``waves-eabm-tutorial`` directory.
+3. Copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_10_regression_testing``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_10_regression_testing
-
-4. Copy the ``tutorial_09_post_processing/SConscript`` file into the newly created ``tutorial_10_regression_testing``
-   directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_09_post_processing/SConscript tutorial_10_regression_testing/
+   $ cp tutorial_09_post_processing tutorial_10_regression_testing
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_10_regression_testing/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_10_regression_testing
 
-   .. literalinclude:: tutorial_10_regression_testing_SConscript
+   .. literalinclude:: tutorials_tutorial_10_regression_testing
       :language: Python
-      :diff: tutorial_09_post_processing_SConscript
+      :diff: tutorials_tutorial_09_post_processing
 
 To see the full power of the new project-wide ``datacheck`` alias, go back through the previous tutorials and add each
 simulation specific datacheck task to the new alias.
@@ -91,7 +82,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the datacheck targets without executing the full simulation workflow
+4. Build the datacheck targets without executing the full simulation workflow
 
 .. code-block:: bash
 

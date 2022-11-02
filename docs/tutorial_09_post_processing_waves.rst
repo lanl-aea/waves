@@ -28,41 +28,32 @@ Environment
 Directory Structure
 *******************
 
-3. Create a directory ``tutorial_09_post_processing`` in the ``waves-eabm-tutorial`` directory.
+3. Copy the ``tutorial_08_data_extraction`` file to a new file named ``tutorial_09_post_processing``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ mkdir tutorial_09_post_processing
-
-4. Copy the ``tutorial_08_data_extraction/SConscript`` file into the newly created ``tutorial_09_post_processing``
-   directory.
-
-.. code-block:: bash
-
-   $ pwd
-   /path/to/waves-eabm-tutorial
-   $ cp tutorial_08_data_extraction/SConscript tutorial_09_post_processing/
+   $ cp tutorial_08_data_extraction tutorial_09_post_processing
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_08_data_extraction`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_09_post_processing/SConscript
+.. admonition:: waves-eabm-tutorial/tutorial_09_post_processing
 
-   .. literalinclude:: tutorial_09_post_processing_SConscript
+   .. literalinclude:: tutorials_tutorial_09_post_processing
       :language: Python
-      :diff: tutorial_08_data_extraction_SConscript
+      :diff: tutorials_tutorial_08_data_extraction
 
 **********************
 Post-processing script
 **********************
 
-5. In the ``waves-eabm-tutorial/eabm_package/python`` directory, create a file called ``plot_scatter.py`` using the
+4. In the ``waves-eabm-tutorial/eabm_package/python`` directory, create a file called ``plot_scatter.py`` using the
    contents below.
 
 .. note::
@@ -95,7 +86,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 
@@ -107,7 +98,7 @@ Build Targets
 Output Files
 ************
 
-7. Observe the catenated parameter results and paramter study dataset in the post-processing task's STDOUT file
+6. Observe the catenated parameter results and paramter study dataset in the post-processing task's STDOUT file
 
 .. code-block::
 

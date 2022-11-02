@@ -1,0 +1,187 @@
+#! /usr/bin/env python
+"""Single element mesh convergence workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``eabm_package_abspath`` - String absolute path to the EABM package
+  * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
+  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
+  * ``abaqus`` - String path for the Abaqus executable
+"""
+
+import pathlib
+
+import waves
+
+from eabm_package import single_element_compression
+
+# Inherit the parent construction environment
+Import("env")
+
+# Set project-wide paths with os-agnostic path separators
+eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+parameter_schema = single_element_compression.mesh_convergence
+output_file_type = "h5"
+parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
+previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
+model = "single_element"
+simulation_constants = {
+    "width": 1.0,
+    "height": 1.0,
+    "displacement": -0.01
+}
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+datacheck = []
+
+# Parameter Study with Cartesian Product
+parameter_generator = waves.parameter_generators.CartesianProduct(
+    parameter_schema,
+    output_file=parameter_study_file,
+    output_file_type=output_file_type,
+    previous_parameter_study=previous_parameter_study)
+parameter_generator.generate()
+parameter_study = parameter_generator.parameter_study
+
+semaphore_filename = "semaphore.txt"
+semaphore_file_list = []
+
+# Geometry
+journal_file = f"{model}_geometry"
+journal_options = f"--width {simulation_constants['width']} --height {simulation_constants['height']}"
+workflow.extend(env.AbaqusJournal(
+    target=[f"{journal_file}.cae",
+            f"{journal_file}.jnl"],
+    source=[f"{eabm_package_abspath / journal_file}.py"],
+    journal_options=journal_options))
+
+# Partition
+journal_file = f"{model}_partition"
+journal_options = f"--width {simulation_constants['width']} --height {simulation_constants['height']}"
+partition_targets = env.AbaqusJournal(
+    target=[f"{journal_file}.cae",
+            f"{journal_file}.jnl"],
+    source=[f"{eabm_package_abspath / journal_file}.py",
+            f"{model}_geometry.cae"],
+    journal_options=journal_options)
+workflow.extend(partition_targets)
+partition_cae_object = partition_targets[0]
+partition_cae_file = pathlib.Path(partition_cae_object.abspath)
+
+# Parameterized targets must live inside current simulation_variables for loop
+for set_name, parameters in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
+    set_name = pathlib.Path(set_name)
+    simulation_variables = {**parameters.squeeze().to_array().to_series().to_dict(), **simulation_constants}
+
+    semaphore_file = build_directory / set_name / semaphore_filename
+    semaphore_file_list.append(semaphore_file)
+    semaphore_file.parent.mkdir(parents=True, exist_ok=True)
+    if not semaphore_file.exists():
+        with open(semaphore_file, "w") as semaphore:
+            semaphore.write(f"{set_name.name}\n")
+    # Mesh
+    journal_file = f"{model}_mesh"
+    journal_options = f"--global-seed {simulation_variables['global_seed']} " \
+        f"--input-file {partition_cae_file.with_suffix('')} " \
+        f"--output-file {journal_file}"
+    workflow.extend(env.AbaqusJournal(
+        target=[f"{set_name / journal_file}.inp",
+                f"{set_name / journal_file}.cae",
+                f"{set_name / journal_file}.jnl"],
+        source=[f"{eabm_package_abspath / journal_file}.py",
+                partition_cae_object],
+        journal_options=journal_options))
+
+    # SolverPrep
+    abaqus_source_list = [
+        eabm_package_abspath / f"{model}_compression.inp.in",
+        eabm_package_abspath / "assembly.inp",
+        eabm_package_abspath / "boundary.inp",
+        eabm_package_abspath / "field_output.inp",
+        eabm_package_abspath / "materials.inp",
+        eabm_package_abspath / "parts.inp",
+        eabm_package_abspath / "history_output.inp"
+    ]
+    abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
+    workflow.extend(waves.builders.copy_substitute(
+        abaqus_source_list,
+        substitution_dictionary=waves.builders.substitution_syntax(simulation_variables),
+        build_subdirectory=set_name))
+
+    # Abaqus Solve
+    solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
+    solve_source_list.append([f"{set_name / journal_file}.inp"])
+    job_name = pathlib.Path(solve_source_list[0]).with_suffix("").name
+    datacheck_name = f"{job_name}_DATACHECK"
+    datacheck_suffixes = ("023", "mdl", "sim", "stt")
+    abaqus_options="-double both"
+    datacheck.extend(env.AbaqusSolver(
+        target=[f"{set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+        source=solve_source_list,
+        job_name=datacheck_name,
+        abaqus_options=f"{abaqus_options} -datacheck"))
+
+    workflow.extend(env.AbaqusSolver(
+        target=[f"{set_name / job_name}.sta"],
+        source=solve_source_list,
+        job_name=job_name,
+        abaqus_options=f"{abaqus_options} -cpus $({env['solve_cpus']}$)"))
+
+    # Extract Abaqus
+    extract_source_list = [f"{set_name / job_name}.odb"]
+    workflow.extend(env.AbaqusExtract(
+        target=[f"{set_name / job_name}.h5"],
+        source=extract_source_list))
+
+def write_parameter_study(target, source, env):
+    """`SCons Python build function`_ wrapper for the parameter generator's write() function.
+
+    Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
+    """
+    parameter_generator.write()
+    return None
+
+workflow.extend(env.Command(
+    target=[parameter_study_file.name],
+    source=[str(semaphore) for semaphore in semaphore_file_list],
+    action=[write_parameter_study],
+    parameter_generator=parameter_generator))
+
+# Post-processing
+plot_name = "stress_strain_comparison.pdf"
+post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
+script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += f" --parameter-study-file {parameter_study_file.name}"
+workflow.extend(env.PythonScript(
+    target=[plot_name],
+    source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
+    script_options=script_options))
+
+plot_name = "mesh_convergence_stress.pdf"
+selection_dict = '"{\'E values\': \'E22\', \'S values\': \'S22\', \'elements\': 1, \'step\': \'Step-1\', \'time\': 1.0}"'
+script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options += f" --output-file {plot_name} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
+script_options += f" --parameter-study-file {parameter_study_file.name}"
+script_options += f" --selection-dict {selection_dict}"
+workflow.extend(env.PythonScript(
+    target=[plot_name],
+    source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
+    script_options=script_options))
+
+# Collector alias based on build directory name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
+env.Alias(env["datacheck_alias"], datacheck)
+
+if not env["abaqus"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)
+    Ignore([".", workflow_name], datacheck)

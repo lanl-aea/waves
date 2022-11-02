@@ -10,9 +10,6 @@ VERSION = "@version@"
 project_dir = pathlib.Path("@project_dir@").resolve()
 author_latex = r"@author_latex@"
 
-# Add paths to API/CLI files
-sys.path.insert(0, str(project_dir))
-
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.
 mock_modules = ["abaqus", "abaqusConstants", "mesh", "cubit", "scipy", "scipy.stats", "xarray", "pyyaml", "h5py",
@@ -41,7 +38,7 @@ extensions = ["sphinx.ext.autodoc",
               "sphinx.ext.extlinks",
               "sphinxcontrib.bibtex",
               "sphinxarg.ext"]
-bibtex_bibfiles = ["references.bib"]
+bibtex_bibfiles = ["references.bib", "waves.bib"]
 templates_path = ["_templates"]
 source_suffix = [".rst"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]

@@ -209,7 +209,7 @@ builders`_.
 
 The for loop in this code-snippet is the method for implementing an `SCons hierarchical build`_. The ``exports`` keyword
 argument allows the project configuration file to pass the ``env`` construction environment variable with the `SCons
-sharing environments`_ feature. The first simulation configuration will be added to the ``eabm_simulation_directories``
+sharing environments`_ feature. The first simulation configuration will be added to the ``workflow_configurations``
 list in :ref:`tutorial_geometry_waves`.
 
 11. Add the content below to the ``SConstruct`` file to add an empty default target list and to list the default targets

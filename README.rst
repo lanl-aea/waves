@@ -248,12 +248,13 @@ The documentation build is also automated with SCons as the ``documentation`` ta
      path/to/local/git/clone/waves/
      $ scons documentation
 
-- Build the `WAVES-EABM`_ documentation
+- Build the `WAVES-EABM`_ documentation. The WAVES package must be on ``PYTHONPATH``. For developers, the least
+  disruptive solution is a per-command modification of ``PYTHONPATH``.
 
   .. code-block::
 
      $ pwd
      path/to/local/git/clone/waves/eabm
-     $ scons documentation
+     $ PYTHONPATH=/path/to/local/git/clone/waves:$PYTHONPATH scons documentation
 
 .. docs-end-do-not-remove
