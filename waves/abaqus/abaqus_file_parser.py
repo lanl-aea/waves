@@ -1716,9 +1716,9 @@ class OdbReportFileParser(AbaqusFileParser):
                 value_instance = "rootAssembly"
         else:
             value_instance = "rootAssembly"  # The element or node belongs to the rootAssembly
-        element_match = re.match(r".*element type '.*(\d+).*'", line, re.IGNORECASE)
+        element_match = re.match(r".*element type '.*?(\d+)\D*'", line, re.IGNORECASE)
         if element_match:
-            number_of_elements = element_match.group(1)
+            number_of_elements = int(element_match.group(1))
         line = f.readline()
         headers = line.split(',')
         number_of_data_values = 0  # The number of values that don't include: Instance, Element, Node, SP, IP
