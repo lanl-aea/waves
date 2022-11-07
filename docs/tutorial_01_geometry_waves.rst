@@ -34,11 +34,24 @@ Directory Structure
 3. Within the ``waves-eabm-tutorial`` directory, create a new directory called
    ``eabm_package/abaqus``. For example, in a bash shell:
 
+.. code-block::
+
+    $ pwd
+    /home/roppenheimer/waves-eabm-tutorial
+    $ mkdir -p eabm_package/abaqus
+
+4. Create Python module initialization files to create a project specific local Python package.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/__init__.py and waves-eabm-tutorial/eabm_package/abaqus/__init__.py
+
    .. code-block::
 
-       $ pwd
-       /home/roppenheimer/waves-eabm-tutorial
-       $ mkdir -p eabm_package/abaqus
+      $ pwd
+      /path/to/waves-eabm-tutorial
+      $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
+      $ find . -name "__init__.py"
+      ./waves-eabm-tutorial/eabm_package/abaqus/__init__.py
+      ./waves-eabm-tutorial/eabm_package/__init__.py
 
 ***************
 SConscript File

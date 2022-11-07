@@ -59,14 +59,15 @@ file that defines the parameter key-value pairs.
 
 6. Create Python module initialization files to create a project specific local Python package.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/__init__.py and waves-eabm-tutorial/eabm_package/python/__init__.py
+.. admonition:: waves-eabm-tutorial/eabm_package/python/__init__.py
 
    .. code-block::
 
       $ pwd
       /path/to/waves-eabm-tutorial
-      $ touch eabm_package/__init__.py eabm_package/python/__init__.py
+      $ touch eabm_package/python/__init__.py
       $ find . -name "__init__.py"
+      ./waves-eabm-tutorial/eabm_package/abaqus/__init__.py
       ./waves-eabm-tutorial/eabm_package/python/__init__.py
       ./waves-eabm-tutorial/eabm_package/__init__.py
 
