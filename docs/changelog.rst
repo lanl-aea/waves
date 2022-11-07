@@ -5,8 +5,17 @@ Changelog
 #########
 
 ******************
-0.5.4 (unreleased)
+0.5.5 (unreleased)
 ******************
+
+******************
+0.5.4 (2022-11-07)
+******************
+
+Internal Changes
+================
+- Revert the "short" paper title for external publication. Entire paper build may be removed after final draft
+  submission (:issue:`352`:, :merge:`380`). By `Kyle Brindley`_.
 
 ******************
 0.5.3 (2022-11-02)
