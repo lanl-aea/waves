@@ -88,5 +88,5 @@ latex_elements = {
     'releasename': _project_name_short
 }
 latex_documents = [
-    (master_doc, latex_project.lower() + '.tex', latex_project.upper(), author_latex, 'manual'),
+    (master_doc, latex_project.lower() + '.tex', None, author_latex, 'manual'),
 ]
