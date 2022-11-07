@@ -35,6 +35,21 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_04_simulation tutorial_cubit
 
+4. Create Python module initialization files to create a project specific local Python package.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/cubit/__init__.py
+
+   .. code-block::
+
+      $ pwd
+      /path/to/waves-eabm-tutorial
+      $ touch eabm_package/cubit/__init__.py
+      $ find . -name "__init__.py"
+      ./waves-eabm-tutorial/eabm_package/abaqus/__init__.py
+      ./waves-eabm-tutorial/eabm_package/cubit/__init__.py
+      ./waves-eabm-tutorial/eabm_package/python/__init__.py
+      ./waves-eabm-tutorial/eabm_package/__init__.py
+
 .. _tutorials_tutorial_cubit_waves:
 
 **********
@@ -64,7 +79,7 @@ documentation for more information about virtual environment management with `Co
 Cubit Journal Files
 *******************
 
-4. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
+5. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
 
 The Cubit journal files include the same CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
@@ -108,7 +123,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 

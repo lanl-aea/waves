@@ -66,7 +66,7 @@ In this tutorial, we will build the geometry for a single element part using the
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the
 :ref:`waves_builders_api`).
 
-4. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
+5. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
 
 .. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
@@ -90,7 +90,7 @@ the code. For example, the variable ``abaqus_source_abspath`` is used in source
 definitions to point at the absolute path to the directory where the Abaqus journal files
 exist.
 
-5. Continue editing the file ``tutorial_01_geometry`` using contents below.
+6. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
 .. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
@@ -123,7 +123,7 @@ For more information about the behavior of the
 :meth:`waves.builders.abaqus_journal` task's action, which is defined in the
 :ref:`waves_builders_api`.
 
-6. Continue editing the file ``tutorial_01_geometry`` using contents below.
+7. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
 .. admonition:: waves-eabm-tutorial/tutorial_01_geometry
 
@@ -154,7 +154,7 @@ starting with familiar Abaqus Python code, and adding in the following:
 * Adding a command line interface to your Python code
 * Protecting ``main()`` function execution and returning exit codes
 
-7. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_geometry.py``
+8. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_geometry.py``
    using the contents below which contains the ``main()`` function.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
@@ -212,7 +212,7 @@ environment *not* the SCons/EABM Python 3 environment. See the `Abaqus Python En
 
 Command Line Interfaces
 =======================
-8. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
+9. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
    using the contents below which contains the ``get_parser()`` function. Note that
    missing line numbers may be ignored.
 
@@ -270,7 +270,7 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 2.7. See the `Python 2.7 argparse`_ documentation for more information about how
 ``argparse`` will behave in an Abaqus journal file.
 
-9. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
+10. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
    using the contents below to create the ``if`` statement within which we will call the
    ``main()`` function. Note that missing line numbers may be ignored.
 
@@ -333,7 +333,7 @@ In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenienc
 matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to
 build specified in the ``waves-eabm-tutorial/tutorial_01_geometry`` file.
 
-10. Modify the ``waves-eabm-tutorial/SConstruct`` file by adding the
+11. Modify the ``waves-eabm-tutorial/SConstruct`` file by adding the
     ``tutorial_01_geometry`` collector alias to the ``workflow_configurations`` list.
     The ``diff`` output below shows the difference between the ``SConstruct`` file created
     in :ref:`tutorialsconstruct` and what the new ``SConstruct`` file will be.
@@ -353,7 +353,7 @@ Building Targets
 Now that you've created the geometry task in ``tutorial_01_geometry``, this section will walk through building the
 ``tutorial_01_geometry`` targets using Scons.
 
-11. To build the targets only for the ``tutorial_01_geometry`` workflow, execute the following
+12. To build the targets only for the ``tutorial_01_geometry`` workflow, execute the following
     command:
 
     .. code-block::
