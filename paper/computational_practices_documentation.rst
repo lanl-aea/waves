@@ -1,1 +1,0 @@
-../docs/computational_practices_documentation.rst

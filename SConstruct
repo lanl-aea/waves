@@ -6,7 +6,6 @@ import pathlib
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
 documentation_source_dir = 'docs'
-paper_source_dir = 'paper'
 package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
@@ -76,13 +75,6 @@ if not env['ignore_documentation']:
     SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='source_dir', duplicate=False)
     docs_aliases = SConscript(dirs=documentation_source_dir,
                               variant_dir=str(build_dir),
-                              exports=['env', 'project_substitution_dictionary'])
-
-    paper_dir = variant_dir_base / paper_source_dir
-    source_dir = paper_source_dir
-    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='source_dir', duplicate=False)
-    docs_aliases = SConscript(dirs=paper_source_dir,
-                              variant_dir=str(paper_dir),
                               exports=['env', 'project_substitution_dictionary'])
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")

@@ -1,1 +1,0 @@
-../docs/eabm_abaqus_files.rst
