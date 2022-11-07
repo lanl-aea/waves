@@ -8,6 +8,11 @@ Changelog
 0.5.5 (unreleased)
 ******************
 
+Internal Changes
+================
+- Remove the "short" paper used for external publication. Next external release will be the open source repository
+  (:issue:`353`, :merge:`382`). By `Kyle Brindley`_.
+
 ******************
 0.5.4 (2022-11-07)
 ******************
