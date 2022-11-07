@@ -271,8 +271,8 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 ``argparse`` will behave in an Abaqus journal file.
 
 10. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
-   using the contents below to create the ``if`` statement within which we will call the
-   ``main()`` function. Note that missing line numbers may be ignored.
+    using the contents below to create the ``if`` statement within which we will call the
+    ``main()`` function. Note that missing line numbers may be ignored.
 
 .. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
 
