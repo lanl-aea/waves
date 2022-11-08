@@ -257,6 +257,7 @@ Build Targets
     /path/to/waves-eabm-tutorial
     $ scons tutorial_02_partition_mesh
     scons: Reading SConscript files ...
+    Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
     Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
     Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
