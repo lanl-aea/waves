@@ -46,7 +46,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     combined_data[y_var].attrs["units"] = y_units
 
     # Plot
-    combined_data.sel(selection_dict).plot.scatter(x_var, y_var, hue=concat_coord)
+    combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
     matplotlib.pyplot.savefig(output_file)
 
     # Clean up open files

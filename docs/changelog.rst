@@ -17,6 +17,8 @@ Internal Changes
 ================
 - Remove the "short" paper used for external publication. Next external release will be the open source repository
   (:issue:`353`, :merge:`382`). By `Kyle Brindley`_.
+- Use keyword arguments in xarray plotting method(s) because positional arguments were deprecated in xarray 2022.11.0:
+  https://docs.xarray.dev/en/stable/whats-new.html#deprecations (issue:`354`, :merge:`385`). By `Kyle Brindley`_..
 
 ******************
 0.5.4 (2022-11-07)
