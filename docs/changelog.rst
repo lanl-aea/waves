@@ -13,6 +13,11 @@ Bug fixes
 - Add ``__init__.py`` file creation earlier in the tutorials to match the ``PYTHONPATH`` ``SContruct`` changes made in
   :merge:`375` (:issue:`355`, :merge:`383`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Add a note about avoiding dependency cycles to the ``copy_substitute`` method (:issue:`338`, :merge:`388`). By `Kyle
+  Brindley`_.
+
 Internal Changes
 ================
 - Remove the "short" paper used for external publication. Next external release will be the open source repository
