@@ -87,7 +87,7 @@ environment:
       - "modulefiles/*"
       - "environment.txt"
   tags:
-    - sstelmo-shell-aea
+    - shell-aea
 
 microbump:
   stage: version
@@ -122,7 +122,7 @@ microbump:
     - git tag -a ${developer_version} -m "developer pre-release ${developer_version}" ${last_merge_hash} || true
     - git push oauth2-origin --tags
   tags:
-    - sstelmo-shell-aea
+    - shell-aea
   only:
     - main
 
@@ -169,7 +169,7 @@ fast-test:
     - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
     - python -m waves.waves build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
   tags:
-    - sstelmo-shell-aea
+    - shell-aea
   only:
     - merge_requests
 
@@ -192,7 +192,7 @@ conda-build:
     paths:
       - conda-build-artifacts/noarch/waves-*-*.tar.bz2
   tags:
-    - sstelmo-shell-aea
+    - shell-aea
   only:
     - merge_requests
     - main
@@ -218,7 +218,7 @@ deploy:
     # Troubleshooting conda channel deploy and index update
     - conda search --channel file://${aea_conda_channel}/ --override-channels waves
   tags:
-    - sstelmo-shell-aea
+    - shell-aea
   only:
     - main
     - dev
@@ -266,7 +266,7 @@ pages:
       # It MUST be called public
       - public
   tags:
-    - sstelmo-shell-aea
+    - shell-aea
   only:
     - main
     - dev

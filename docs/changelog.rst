@@ -25,6 +25,7 @@ Internal Changes
 - Use keyword arguments in xarray plotting method(s) because positional arguments were deprecated in xarray 2022.11.0:
   https://docs.xarray.dev/en/stable/whats-new.html#deprecations (:issue:`354`, :merge:`385`). By `Kyle Brindley`_.
 - Update the preferred Abaqus version to 2022 (:issue:`350`, :merge:`387`). By `Kyle Brindley`_.
+- Run Gitlab-CI jobs on either AEA server (:issue:`357`, :merge:`389`). By `Kyle Brindley`_.
 
 ******************
 0.5.4 (2022-11-07)
