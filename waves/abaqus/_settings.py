@@ -4,7 +4,7 @@ _default_yaml_extension = '.yaml'
 _default_parsed_extension = '.parsed'
 _default_odbreport_extension = '.csv'
 _default_timestamp_format = '%Y%m%d-%H%M%S'
-_default_abaqus_command = 'abaqus'
+_default_abaqus_command = 'abq2022'
 _default_xarray_engine = 'h5netcdf'
 # Temporary contact info
 _parsing_error_contact = 'prabhu@lanl.gov'
