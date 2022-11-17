@@ -1719,6 +1719,8 @@ class OdbReportFileParser(AbaqusFileParser):
         element_match = re.match(r".*element type '.*?(\d+)\D*'", line, re.IGNORECASE)
         if element_match:
             number_of_elements = int(element_match.group(1))
+        else:
+            number_of_elements = None
         line = f.readline()
         headers = line.split(',')
         number_of_data_values = 0  # The number of values that don't include: Instance, Element, Node, SP, IP
@@ -1799,21 +1801,40 @@ class OdbReportFileParser(AbaqusFileParser):
                     position_length = len(values[value_instance]['nodes'])
                     line_value_number += 1
                 if section_point_given:
-                    if just_added:
-                        values[value_instance]['sectionPoint'].append(int(line_values[line_value_number]))
+                    current_section_point = int(line_values[line_value_number])
+                    if number_of_elements:
+                        if just_added:
+                            values[value_instance]['sectionPoint'].append(list())
+                            values[value_instance]['sectionPoint'][index_key].append(current_section_point)
+                        else:
+                            if current_section_point not in values[value_instance]['sectionPoint'][index_key]:
+                                values[value_instance]['sectionPoint'][index_key].append(current_section_point)
+                    else:
+                        if just_added:
+                            values[value_instance]['sectionPoint'].append(int(line_values[line_value_number]))
                     line_value_number += 1
                 if integration_point_given:
-                    if just_added:
-                        try:
-                            values[value_instance]['integrationPoint'].append(int(line_values[line_value_number]))
-                        except ValueError:
-                            values[value_instance]['integrationPoint'].append(None)
+                    try:
+                        current_integration_point = int(line_values[line_value_number])
+                    except ValueError:
+                        current_integration_point = None
+                    if number_of_elements:
+                        if just_added:
+                            values[value_instance]['integrationPoint'].append(list())
+                            values[value_instance]['integrationPoint'][index_key].append(current_integration_point)
+                        else:
+                            if current_integration_point not in values[value_instance]['integrationPoint'][index_key]:
+                                values[value_instance]['integrationPoint'][index_key].append(current_integration_point)
+                    else:
+                        if just_added:
+                            values[value_instance]['integrationPoint'].append(current_integration_point)
 
                 if self.new_step and not values[value_instance]['values'][self.current_step_count]:
                     for time_index in range(len(values[value_instance]['time_index'])):
                         values[value_instance]['values'][self.current_step_count].append(list())
                         self.pad_none_values(self.current_step_count, time_index, position_length,
-                                             number_of_data_values, values[value_instance]['values'])
+                                             number_of_data_values, number_of_elements,
+                                             values[value_instance]['values'])
 
                 try:
                     time_index = values[value_instance]['time_index'][time_value]
@@ -1825,13 +1846,14 @@ class OdbReportFileParser(AbaqusFileParser):
                     values[value_instance]['values'][self.current_step_count].append(list())
 
                     if not self.first_field_data:
-                        self.pad_none_values(self.current_step_count, time_index,
-                                             position_length, number_of_data_values, values[value_instance]['values'])
+                        self.pad_none_values(self.current_step_count, time_index, position_length,
+                                             number_of_data_values, number_of_elements,
+                                             values[value_instance]['values'])
                     if self.current_step_count > 0:  # If there's a new time in a step after the first step
                         for previous_step in range(self.current_step_count):  # Then all previous steps must be padded
                             values[value_instance]['values'][previous_step].append(list())
-                            self.pad_none_values(previous_step, time_index, position_length,
-                                                 number_of_data_values, values[value_instance]['values'])
+                            self.pad_none_values(previous_step, time_index, position_length, number_of_data_values,
+                                                 number_of_elements, values[value_instance]['values'])
 
                 # get the values after the first 5 values of: Instance, Element, Node, SP, IP
                 if number_of_data_values == 1:
@@ -1894,19 +1916,28 @@ class OdbReportFileParser(AbaqusFileParser):
             index_key = values['keys'][position]
         return index_key, just_added
 
-    def pad_none_values(self, step_number, frame_number, position_length, data_length, values):
+    def pad_none_values(self, step_number, frame_number, position_length, data_length, element_size, values):
         """Pad the values list with None or lists of None values in the locations indicated by the parameters
 
         :param int step_number: index of current step
         :param int frame_number: index of current frame
         :param int position_length: number of nodes or elements
         :param int data_length: length of data given in field
+        :param int element_size: number of element lines that could be listed, e.g. for a hex this value woulbe be 6
         :param list values: list that holds the data values
         """
-        if data_length == 1:
-            values[step_number][frame_number] = [None for _ in range(position_length)]
+        if element_size:
+            if data_length == 1:
+                values[step_number][frame_number] = \
+                    [[None for _ in range(element_size)] for _ in range(position_length)]
+            else:
+                values[step_number][frame_number] = \
+                    [[[None for _ in range(data_length)] for _ in range(element_size)] for _ in range(position_length)]
         else:
-            values[step_number][frame_number] = [[None for _ in range(data_length)] for _ in range(position_length)]
+            if data_length == 1:
+                values[step_number][frame_number] = [None for _ in range(position_length)]
+            else:
+                values[step_number][frame_number] = [[None for _ in range(data_length)] for _ in range(position_length)]
         return
 
     def parse_history_regions(self, f, regions, number_of_history_regions):
