@@ -1866,28 +1866,59 @@ class OdbReportFileParser(AbaqusFileParser):
                         except ValueError:  # Should be raised on None values
                             data_value.append(None)
 
-                if just_added:
-                    if self.first_field_data:
-                        values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
-                    else:  # Must pad all previous steps and frames, don't really expect to hit this
-                        for previous_step in range(self.current_step_count + 1):
-                            for previous_frame in range(time_index):
-                                if number_of_data_values == 1:
-                                    values[value_instance]['values'][previous_step][previous_frame].append(None)
-                                else:
-                                    values[value_instance]['values'][previous_step][previous_frame].append(
-                                        [None for _ in range(number_of_data_values)])
+                if number_of_elements:
+                    value_length = len(values[value_instance]['values'][self.current_step_count][time_index])
+                    if just_added:
+                        if self.first_field_data:
+                            values[value_instance]['values'][self.current_step_count][time_index].append(list())
+                            values[value_instance]['values'][self.current_step_count][time_index][
+                                value_length].append(data_value)
+                        else:  # Must pad all previous steps and frames, don't really expect to hit this
+                            for previous_step in range(self.current_step_count + 1):
+                                for previous_frame in range(time_index):
+                                    if number_of_data_values == 1:
+                                        values[value_instance]['values'][previous_step][previous_frame].append(list())
+                                    else:
+                                        values[value_instance]['values'][previous_step][previous_frame].append(
+                                            [[None for _ in range(number_of_data_values)] for _ in range(
+                                                number_of_elements)])
+                            if index_key == value_length:
+                                values[value_instance]['values'][self.current_step_count][time_index].append(list())
+                                values[value_instance]['values'][self.current_step_count][time_index][
+                                    value_length].append(data_value)
+                            else:
+                                values[value_instance]['values'][self.current_step_count][time_index][
+                                    index_key].append(data_value)
+                    else:
                         if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
+                            # If the index_key is the length of the list, then it is one more index than currently exists
                             values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
                         else:
                             values[value_instance]['values'][self.current_step_count][time_index][
                                 index_key] = data_value
                 else:
-                    if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
-                        # If the index_key is the length of the list, then it is one more index than currently exists
-                        values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
+                    if just_added:
+                        if self.first_field_data:
+                            values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
+                        else:  # Must pad all previous steps and frames, don't really expect to hit this
+                            for previous_step in range(self.current_step_count + 1):
+                                for previous_frame in range(time_index):
+                                    if number_of_data_values == 1:
+                                        values[value_instance]['values'][previous_step][previous_frame].append(None)
+                                    else:
+                                        values[value_instance]['values'][previous_step][previous_frame].append(
+                                            [None for _ in range(number_of_data_values)])
+                            if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
+                                values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
+                            else:
+                                values[value_instance]['values'][self.current_step_count][time_index][
+                                    index_key] = data_value
                     else:
-                        values[value_instance]['values'][self.current_step_count][time_index][index_key] = data_value
+                        if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
+                            # If the index_key is the length of the list, then it is one more index than currently exists
+                            values[value_instance]['values'][self.current_step_count][time_index].append(data_value)
+                        else:
+                            values[value_instance]['values'][self.current_step_count][time_index][index_key] = data_value
         return line
 
 
