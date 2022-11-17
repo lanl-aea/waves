@@ -1812,11 +1812,10 @@ class OdbReportFileParser(AbaqusFileParser):
                     current_section_point = int(line_values[line_value_number])
                     if element_size:
                         if just_added:
-                            values[value_instance]['sectionPoint'].append(list())
-                            values[value_instance]['sectionPoint'][index_key].append(current_section_point)
+                            values[value_instance]['sectionPoint'].append([None for _ in range(element_size)])
+                            values[value_instance]['sectionPoint'][index_key][element_index] = current_section_point
                         else:
-                            if current_section_point not in values[value_instance]['sectionPoint'][index_key]:
-                                values[value_instance]['sectionPoint'][index_key].append(current_section_point)
+                            values[value_instance]['sectionPoint'][index_key][element_index] = current_section_point
                     else:
                         if just_added:
                             values[value_instance]['sectionPoint'].append(int(line_values[line_value_number]))
@@ -1828,11 +1827,12 @@ class OdbReportFileParser(AbaqusFileParser):
                         current_integration_point = None
                     if element_size:
                         if just_added:
-                            values[value_instance]['integrationPoint'].append(list())
-                            values[value_instance]['integrationPoint'][index_key].append(current_integration_point)
+                            values[value_instance]['integrationPoint'].append([None for _ in range(element_size)])
+                            values[value_instance]['integrationPoint'][index_key][element_index] \
+                                = current_integration_point
                         else:
-                            if current_integration_point not in values[value_instance]['integrationPoint'][index_key]:
-                                values[value_instance]['integrationPoint'][index_key].append(current_integration_point)
+                            values[value_instance]['integrationPoint'][index_key][element_index] \
+                                = current_integration_point
                     else:
                         if just_added:
                             values[value_instance]['integrationPoint'].append(current_integration_point)
@@ -1878,9 +1878,14 @@ class OdbReportFileParser(AbaqusFileParser):
                     value_length = len(values[value_instance]['values'][self.current_step_count][time_index])
                     if just_added:
                         if self.first_field_data:
-                            values[value_instance]['values'][self.current_step_count][time_index].append(list())
-                            values[value_instance]['values'][self.current_step_count][time_index][
-                                value_length].append(data_value)
+                            if number_of_data_values == 1:
+                                values[value_instance]['values'][self.current_step_count][time_index].append(
+                                    [None for _ in range(element_size)])
+                                values[value_instance]['values'][self.current_step_count][time_index][0] = data_value
+                            else:
+                                values[value_instance]['values'][self.current_step_count][time_index].append(
+                                    [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
+                                values[value_instance]['values'][self.current_step_count][time_index][0][0] = data_value
                         else:  # Must pad all previous steps and frames as new field data has shown up
                             for previous_step in range(self.current_step_count + 1):
                                 for previous_frame in range(time_index):
@@ -1892,9 +1897,16 @@ class OdbReportFileParser(AbaqusFileParser):
                                             [[None for _ in range(number_of_data_values)] for _ in range(
                                                 element_size)])
                             if index_key == len(values[value_instance]['values'][self.current_step_count][time_index]):
-                                values[value_instance]['values'][self.current_step_count][time_index].append(list())
-                                values[value_instance]['values'][self.current_step_count][time_index][
-                                    value_length].append(data_value)
+                                if number_of_data_values == 1:
+                                    values[value_instance]['values'][self.current_step_count][time_index].append(
+                                        [None for _ in range(element_size)])
+                                    values[value_instance]['values'][self.current_step_count][time_index][0] \
+                                        = data_value
+                                else:
+                                    values[value_instance]['values'][self.current_step_count][time_index].append(
+                                        [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
+                                    values[value_instance]['values'][self.current_step_count][time_index][0][0] \
+                                        = data_value
                             else:
                                 if len(values[value_instance]['values'][self.current_step_count][time_index][
                                            index_key]) > element_index:
@@ -1905,10 +1917,14 @@ class OdbReportFileParser(AbaqusFileParser):
                                         index_key][element_index].append(data_value)
                     else:
                         if index_key == value_length:
-                            # If the index_key is the length of the list, then it's one more index than currently exists
-                            values[value_instance]['values'][self.current_step_count][time_index].append(list())
-                            values[value_instance]['values'][self.current_step_count][time_index][
-                                index_key].append(data_value)
+                            if number_of_data_values == 1:
+                                values[value_instance]['values'][self.current_step_count][time_index].append(
+                                    [None for _ in range(element_size)])
+                                values[value_instance]['values'][self.current_step_count][time_index][0] = data_value
+                            else:
+                                values[value_instance]['values'][self.current_step_count][time_index].append(
+                                    [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
+                                values[value_instance]['values'][self.current_step_count][time_index][0][0] = data_value
                         else:
                             if len(values[value_instance]['values'][self.current_step_count][time_index][
                                        index_key]) > element_index:
