@@ -1718,9 +1718,9 @@ class OdbReportFileParser(AbaqusFileParser):
             value_instance = "rootAssembly"  # The element or node belongs to the rootAssembly
         element_match = re.match(r".*element type '.*?(\d+)\D*'", line, re.IGNORECASE)
         if element_match:
-            number_of_elements = int(element_match.group(1))
+            element_size = int(element_match.group(1))
         else:
-            number_of_elements = None
+            element_size = None
         line = f.readline()
         headers = line.split(',')
         number_of_data_values = 0  # The number of values that don't include: Instance, Element, Node, SP, IP
@@ -1788,7 +1788,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     values[value_instance]['sectionPoint'] = list()
                     values[value_instance]['integrationPoint'] = list()
                     values[value_instance]['value_names'] = value_headers
-                    values[value_instance]['number_of_elements'] = number_of_elements
+                    values[value_instance]['element_size'] = element_size
                     values[value_instance]['values'] = [list() for _ in range(self.number_of_steps)]
 
                 if element_given:
@@ -1803,7 +1803,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     line_value_number += 1
                 if section_point_given:
                     current_section_point = int(line_values[line_value_number])
-                    if number_of_elements:
+                    if element_size:
                         if just_added:
                             values[value_instance]['sectionPoint'].append(list())
                             values[value_instance]['sectionPoint'][index_key].append(current_section_point)
@@ -1819,7 +1819,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         current_integration_point = int(line_values[line_value_number])
                     except ValueError:
                         current_integration_point = None
-                    if number_of_elements:
+                    if element_size:
                         if just_added:
                             values[value_instance]['integrationPoint'].append(list())
                             values[value_instance]['integrationPoint'][index_key].append(current_integration_point)
@@ -1834,7 +1834,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     for time_index in range(len(values[value_instance]['time_index'])):
                         values[value_instance]['values'][self.current_step_count].append(list())
                         self.pad_none_values(self.current_step_count, time_index, position_length,
-                                             number_of_data_values, number_of_elements,
+                                             number_of_data_values, element_size,
                                              values[value_instance]['values'])
 
                 try:
@@ -1848,13 +1848,13 @@ class OdbReportFileParser(AbaqusFileParser):
 
                     if not self.first_field_data:
                         self.pad_none_values(self.current_step_count, time_index, position_length,
-                                             number_of_data_values, number_of_elements,
+                                             number_of_data_values, element_size,
                                              values[value_instance]['values'])
                     if self.current_step_count > 0:  # If there's a new time in a step after the first step
                         for previous_step in range(self.current_step_count):  # Then all previous steps must be padded
                             values[value_instance]['values'][previous_step].append(list())
                             self.pad_none_values(previous_step, time_index, position_length, number_of_data_values,
-                                                 number_of_elements, values[value_instance]['values'])
+                                                 element_size, values[value_instance]['values'])
 
                 # get the values after the first 5 values of: Instance, Element, Node, SP, IP
                 if number_of_data_values == 1:
@@ -1867,7 +1867,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         except ValueError:  # Should be raised on None values
                             data_value.append(None)
 
-                if number_of_elements:
+                if element_size:
                     value_length = len(values[value_instance]['values'][self.current_step_count][time_index])
                     if just_added:
                         if self.first_field_data:
@@ -1879,11 +1879,11 @@ class OdbReportFileParser(AbaqusFileParser):
                                 for previous_frame in range(time_index):
                                     if number_of_data_values == 1:
                                         values[value_instance]['values'][previous_step][previous_frame].append(
-                                            [None for _ in range(number_of_elements)])
+                                            [None for _ in range(element_size)])
                                     else:
                                         values[value_instance]['values'][previous_step][previous_frame].append(
                                             [[None for _ in range(number_of_data_values)] for _ in range(
-                                                number_of_elements)])
+                                                element_size)])
                             if index_key == value_length:
                                 values[value_instance]['values'][self.current_step_count][time_index].append(list())
                                 values[value_instance]['values'][self.current_step_count][time_index][
@@ -1959,7 +1959,7 @@ class OdbReportFileParser(AbaqusFileParser):
         :param int frame_number: index of current frame
         :param int position_length: number of nodes or elements
         :param int data_length: length of data given in field
-        :param int element_size: number of element lines that could be listed, e.g. for a hex this value woulbe be 6
+        :param int element_size: number of element lines that could be listed, e.g. for a hex this value would be 6
         :param list values: list that holds the data values
         """
         if element_size:
@@ -2320,11 +2320,11 @@ class OdbReportFileParser(AbaqusFileParser):
                     data = current_output['values']
                     if current_output['sectionPoint']:
                         coords['sectionPoint'] = (position, current_output['sectionPoint'])
-                        if current_output['number_of_elements'] and len(data[0][0][0]) > 1:
+                        if current_output['element_size'] and len(data[0][0][0]) > 1:
                             dims.append('section point')  # In this case section point would also be a dimension
                     if current_output['integrationPoint']:
                         coords['integrationPoint'] = (position, current_output['integrationPoint'])
-                        if current_output['number_of_elements'] and len(data[0][0][0]) > 1:
+                        if current_output['element_size'] and len(data[0][0][0]) > 1:
                             dims.append('integration point')  # In this case IP would also be a dimension
 
                     if len(current_output['value_names']) > 1:
@@ -2392,7 +2392,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         print(f'steps: {len(data)}\n')
                         print(f'time: {len(data[0])}\n')
                         print(f'{position}: {len(data[0][0])}\n')
-                        print(f'number_of_elements: {len(data[0][0][0])}\n')
+                        print(f'element_size: {len(data[0][0][0])}\n')
                         print(f'data_items: {data[0][0][0][0]}\n')
                         raise e
 
