@@ -1881,11 +1881,13 @@ class OdbReportFileParser(AbaqusFileParser):
                             if number_of_data_values == 1:
                                 values[value_instance]['values'][self.current_step_count][time_index].append(
                                     [None for _ in range(element_size)])
-                                values[value_instance]['values'][self.current_step_count][time_index][0] = data_value
+                                values[value_instance]['values'][self.current_step_count][time_index][value_length] \
+                                    = data_value
                             else:
                                 values[value_instance]['values'][self.current_step_count][time_index].append(
                                     [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
-                                values[value_instance]['values'][self.current_step_count][time_index][0][0] = data_value
+                                values[value_instance]['values'][self.current_step_count][time_index][value_length][
+                                    element_index] = data_value
                         else:  # Must pad all previous steps and frames as new field data has shown up
                             for previous_step in range(self.current_step_count + 1):
                                 for previous_frame in range(time_index):
@@ -1900,13 +1902,13 @@ class OdbReportFileParser(AbaqusFileParser):
                                 if number_of_data_values == 1:
                                     values[value_instance]['values'][self.current_step_count][time_index].append(
                                         [None for _ in range(element_size)])
-                                    values[value_instance]['values'][self.current_step_count][time_index][0] \
-                                        = data_value
+                                    values[value_instance]['values'][self.current_step_count][time_index][
+                                        value_length] = data_value
                                 else:
                                     values[value_instance]['values'][self.current_step_count][time_index].append(
                                         [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
-                                    values[value_instance]['values'][self.current_step_count][time_index][0][0] \
-                                        = data_value
+                                    values[value_instance]['values'][self.current_step_count][time_index][
+                                        value_length][element_index] = data_value
                             else:
                                 if len(values[value_instance]['values'][self.current_step_count][time_index][
                                            index_key]) > element_index:
@@ -1920,11 +1922,13 @@ class OdbReportFileParser(AbaqusFileParser):
                             if number_of_data_values == 1:
                                 values[value_instance]['values'][self.current_step_count][time_index].append(
                                     [None for _ in range(element_size)])
-                                values[value_instance]['values'][self.current_step_count][time_index][0] = data_value
+                                values[value_instance]['values'][self.current_step_count][time_index][
+                                    value_length] = data_value
                             else:
                                 values[value_instance]['values'][self.current_step_count][time_index].append(
                                     [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
-                                values[value_instance]['values'][self.current_step_count][time_index][0][0] = data_value
+                                values[value_instance]['values'][self.current_step_count][time_index][value_length][
+                                    element_index] = data_value
                         else:
                             if len(values[value_instance]['values'][self.current_step_count][time_index][
                                        index_key]) > element_index:
