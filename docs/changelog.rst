@@ -5,7 +5,11 @@ Changelog
 #########
 
 ******************
-0.5.5 (unreleased)
+0.5.6 (unreleased)
+******************
+
+******************
+0.5.5 (2022-11-23)
 ******************
 
 Bug fixes
@@ -33,6 +37,7 @@ Internal Changes
 - Revert to ``sstelmo`` for deploy jobs until ``aea_service`` account changes are finalized (:merge:`392`). By `Kyle
   Brindley`_.
 - Avoid unnecessary job artifact download in Gitlab-CI jobs (:issue:`359`, :merge:`393`). By `Kyle Brindley`_.
+- Protect Gitlab-CI deploy type jobs from scheduled pipelines (:issue:`361`, :merge:`394`). By `Kyle Brindley`_.
 
 ******************
 0.5.4 (2022-11-07)
