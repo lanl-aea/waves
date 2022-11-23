@@ -2,6 +2,7 @@ git
 h5netcdf
 h5py
 matplotlib
+mamba
 numpy
 pytest
 pytest-xdist
