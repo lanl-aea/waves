@@ -28,6 +28,8 @@ Internal Changes
 - Run Gitlab-CI jobs on either AEA server (:issue:`357`, :merge:`389`). By `Kyle Brindley`_.
 - Update the ``odb_extract`` default abaqus executable name convention to match the AEA server installation
   (:issue:`358`, :merge:`390`). By `Kyle Brindley`_.
+- Use ``mamba`` for the Gitlab-CI package build process. Testing suggests it will save several minutes (maybe ~10% total
+  time) in the ``conda-build`` CI job (:issue:`360`, :merge:`391`). By `Kyle Brindley`_.
 
 ******************
 0.5.4 (2022-11-07)
