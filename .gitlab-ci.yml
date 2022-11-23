@@ -87,7 +87,7 @@ environment:
       - "modulefiles/*"
       - "environment.txt"
   tags:
-    - shell-aea
+    - sstelmo-shell-aea
 
 microbump:
   stage: version
@@ -218,7 +218,7 @@ deploy:
     # Troubleshooting conda channel deploy and index update
     - conda search --channel file://${aea_conda_channel}/ --override-channels waves
   tags:
-    - shell-aea
+    - sstelmo-shell-aea
   only:
     - main
     - dev

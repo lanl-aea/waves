@@ -30,6 +30,8 @@ Internal Changes
   (:issue:`358`, :merge:`390`). By `Kyle Brindley`_.
 - Use ``mamba`` for the Gitlab-CI package build process. Testing suggests it will save several minutes (maybe ~10% total
   time) in the ``conda-build`` CI job (:issue:`360`, :merge:`391`). By `Kyle Brindley`_.
+- Revert to ``sstelmo`` for deploy jobs until ``aea_service`` account changes are finalized (:merge:`392`). By `Kyle
+  Brindley`_.
 
 ******************
 0.5.4 (2022-11-07)
