@@ -251,16 +251,20 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     Substfile Builder, which will perform template substitution with the provided dictionary in-place in the current
     variant directory and remove the ``.in`` suffix.
 
+    To avoid dependency cycles, the source file(s) should be passed by absolute path.
+
     .. code-block::
        :caption: SConstruct
 
+       import pathlib
        import waves
        env = Environment()
+       current_directory = pathlib.Path(Dir(".").abspath)
        source_list = [
-           "file_one.ext",  # File found in current SConscript directory
-           "subdir2/file_two",  # File found below current SConscript directory
-           "#/subdir3/file_three.ext",  # File found with respect to project root directory
-           "file_four.ext.in"  # File with substitutions matching substitution dictionary keys
+           "#/subdir3/file_three.ext",              # File found with respect to project root directory using SCons notation
+           current_directory / file_one.ext,        # File found in current SConscript directory
+           current_directory / "subdir2/file_two",  # File found below current SConscript directory
+           current_directory / "file_four.ext.in"   # File with substitutions matching substitution dictionary keys
        ]
        substitution_dictionary = {
            "@variable_one@": "value_one"

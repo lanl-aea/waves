@@ -24,7 +24,7 @@ VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 conf = env.Configure()
-env['abaqus'] = conf.CheckProg('abq2021')
+env['abaqus'] = conf.CheckProg('abq2022')
 conf.Finish()
 
 # Write project builders for re-use in task definitions

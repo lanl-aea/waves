@@ -5,8 +5,40 @@ Changelog
 #########
 
 ******************
-0.5.5 (unreleased)
+0.5.6 (unreleased)
 ******************
+
+******************
+0.5.5 (2022-11-23)
+******************
+
+Bug fixes
+=========
+- Add ``__init__.py`` file creation earlier in the tutorials to match the ``PYTHONPATH`` ``SContruct`` changes made in
+  :merge:`375` (:issue:`355`, :merge:`383`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add a note about avoiding dependency cycles to the ``copy_substitute`` method (:issue:`338`, :merge:`388`). By `Kyle
+  Brindley`_.
+
+Internal Changes
+================
+- Remove the "short" paper used for external publication. Next external release will be the open source repository
+  (:issue:`353`, :merge:`382`). By `Kyle Brindley`_.
+- Use keyword arguments in xarray plotting method(s) because positional arguments were deprecated in xarray 2022.11.0:
+  https://docs.xarray.dev/en/stable/whats-new.html#deprecations (:issue:`354`, :merge:`385`). By `Kyle Brindley`_.
+- Update the preferred Abaqus version to 2022 (:issue:`350`, :merge:`387`). By `Kyle Brindley`_.
+- Run Gitlab-CI jobs on either AEA server (:issue:`357`, :merge:`389`). By `Kyle Brindley`_.
+- Update the ``odb_extract`` default abaqus executable name convention to match the AEA server installation
+  (:issue:`358`, :merge:`390`). By `Kyle Brindley`_.
+- Use ``mamba`` for the Gitlab-CI package build process. Testing suggests it will save several minutes (maybe ~10% total
+  time) in the ``conda-build`` CI job (:issue:`360`, :merge:`391`). By `Kyle Brindley`_.
+- Revert to ``sstelmo`` for deploy jobs until ``aea_service`` account changes are finalized (:merge:`392`). By `Kyle
+  Brindley`_.
+- Avoid unnecessary job artifact download in Gitlab-CI jobs (:issue:`359`, :merge:`393`). By `Kyle Brindley`_.
+- Protect Gitlab-CI deploy type jobs from scheduled pipelines (:issue:`361`, :merge:`394`). By `Kyle Brindley`_.
+- No fast-test job on push pipelines to production branches (:merge:`395`). By `Kyle Brindley`_.
 
 ******************
 0.5.4 (2022-11-07)

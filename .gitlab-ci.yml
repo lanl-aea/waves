@@ -61,6 +61,11 @@ environment:
   stage: environment
   variables:
     GIT_STRATEGY: clone
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
+      changes:
+        - "modulefiles/*"
+        - "environment.txt"
   script:
     # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
@@ -79,13 +84,6 @@ environment:
     - ln ${environment_path}/scons.1 ${environment_path}/man/man1/scons.1
     - ln ${environment_path}/sconsign.1 ${environment_path}/man/man1/sconsign.1
     - ln ${environment_path}/scons-time.1 ${environment_path}/man/man1/scons-time.1
-  only:
-    refs:
-      - main
-      - dev
-    changes:
-      - "modulefiles/*"
-      - "environment.txt"
   tags:
     - sstelmo-shell-aea
 
@@ -93,6 +91,10 @@ microbump:
   stage: version
   variables:
     GIT_STRATEGY: clone
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "main"
   script:
     # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
@@ -122,14 +124,15 @@ microbump:
     - git tag -a ${developer_version} -m "developer pre-release ${developer_version}" ${last_merge_hash} || true
     - git push oauth2-origin --tags
   tags:
-    - sstelmo-shell-aea
-  only:
-    - main
+    - shell-aea
 
 fast-test:
   stage: test
   variables:
     GIT_STRATEGY: clone
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
     - project_root=${PWD}
     # Project unit tests
@@ -169,14 +172,18 @@ fast-test:
     - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
     - python -m waves.waves build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
   tags:
-    - sstelmo-shell-aea
-  only:
-    - merge_requests
+    - shell-aea
 
 conda-build:
   stage: build
   variables:
     GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "dev"
   script:
     # Set the LANL internal proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
@@ -186,22 +193,25 @@ conda-build:
     - umask 0022
     - output_folder='conda-build-artifacts'
     - mkdir ${output_folder}
-    - VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+    - VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
   artifacts:
     expire_in: '2 hrs'
     paths:
       - conda-build-artifacts/noarch/waves-*-*.tar.bz2
   tags:
-    - sstelmo-shell-aea
-  only:
-    - merge_requests
-    - main
-    - dev
+    - shell-aea
 
 deploy:
   stage: deploy
   variables:
     GIT_STRATEGY: clone
+  dependencies:
+    - conda-build
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "dev"
   script:
     # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
@@ -219,15 +229,18 @@ deploy:
     - conda search --channel file://${aea_conda_channel}/ --override-channels waves
   tags:
     - sstelmo-shell-aea
-  only:
-    - main
-    - dev
 
 # It MUST be called pages
 pages:
   stage: deploy
   variables:
     GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_COMMIT_BRANCH == "dev"
   script:
     # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
@@ -266,7 +279,4 @@ pages:
       # It MUST be called public
       - public
   tags:
-    - sstelmo-shell-aea
-  only:
-    - main
-    - dev
+    - shell-aea

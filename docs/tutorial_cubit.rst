@@ -35,6 +35,21 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_04_simulation tutorial_cubit
 
+4. Create Python module initialization files to create a project specific local Python package.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/cubit/__init__.py
+
+   .. code-block::
+
+      $ pwd
+      /path/to/waves-eabm-tutorial
+      $ touch eabm_package/cubit/__init__.py
+      $ find . -name "__init__.py"
+      ./waves-eabm-tutorial/eabm_package/abaqus/__init__.py
+      ./waves-eabm-tutorial/eabm_package/cubit/__init__.py
+      ./waves-eabm-tutorial/eabm_package/python/__init__.py
+      ./waves-eabm-tutorial/eabm_package/__init__.py
+
 .. _tutorials_tutorial_cubit_waves:
 
 **********
@@ -64,7 +79,7 @@ documentation for more information about virtual environment management with `Co
 Cubit Journal Files
 *******************
 
-4. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
+5. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
 
 The Cubit journal files include the same CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
@@ -108,7 +123,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 
@@ -116,6 +131,7 @@ Build Targets
    /path/to/waves-eabm-tutorial
    $ scons tutorial_cubit
    scons: Reading SConscript files ...
+   Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
    Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
@@ -131,8 +147,8 @@ Build Targets
    Copy("build/tutorial_cubit/materials.inp", "eabm_package/abaqus/materials.inp")
    Copy("build/tutorial_cubit/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_cubit/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2021 -information environment > single_element_compression.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2021 -job single_element_compression -input single_element_compression -double both -interactive -ask_delete no > single_element_compression.stdout 2>&1
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -information environment > single_element_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -job single_element_compression -input single_element_compression -double both -interactive -ask_delete no > single_element_compression.stdout 2>&1
    scons: done building targets.
 
 ************
