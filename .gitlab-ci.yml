@@ -177,6 +177,7 @@ conda-build:
   stage: build
   variables:
     GIT_STRATEGY: clone
+  dependencies: []
   script:
     # Set the LANL internal proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
@@ -202,6 +203,8 @@ deploy:
   stage: deploy
   variables:
     GIT_STRATEGY: clone
+  dependencies:
+    - conda-build
   script:
     # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
@@ -228,6 +231,7 @@ pages:
   stage: deploy
   variables:
     GIT_STRATEGY: clone
+  dependencies: []
   script:
     # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
