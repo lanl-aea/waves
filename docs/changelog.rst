@@ -12,6 +12,7 @@ New Features
 ============
 - Experimental ``sbatch`` builder and work-in-progress tutorial. Not a final draft with CI regression testing, but a
   starting point to solicit user stories (:issue:`327`, :merge:`398`). By `Kyle Brindley`_.
+- Add an archival task tutorial to the core lesson plan (:issue:`351`, :merge:`400`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
