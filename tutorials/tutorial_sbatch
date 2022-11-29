@@ -90,8 +90,9 @@ datacheck.extend(env.AbaqusSolver(
 # Comment used in tutorial code snippets: marker-5
 
 slurm_job=f"{env['abaqus']} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abqus_options}} -interactive -ask_delete no"
+abaqus_implicit_extensions = ["sta", "odb", "dat", "msg", "com", "prt"]
 workflow.extend(env.AbaqusSolver(
-    target=[f"{job_name}.sta"],
+    target=[f"{job_name}.{suffix}" for suffix in abaqus_implicit_extensions],
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options,
