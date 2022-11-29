@@ -8,6 +8,12 @@ Changelog
 0.5.6 (unreleased)
 ******************
 
+Internal Changes
+================
+- Remove ``LD_LIBRARY_PATH`` modification from Gitlab-CI modulefile. Modification is used in the AEA shared compute
+  environments for c++ user subroutines, but is not necessary for WAVES and interferes with RHEL 7 system libraries
+  (:issue:`227`, :merge:`397`). By `Kyle Brindley`_.
+
 ******************
 0.5.5 (2022-11-23)
 ******************

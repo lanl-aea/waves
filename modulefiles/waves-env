@@ -49,16 +49,6 @@ set environment_man "$environment_path/share/man"
 set cubit_bin "$cubit_path/bin"
 set cubit_bin_python "$cubit_path/bin/python3"
 
-set environment_lib "$environment_path/lib64"
-# Do the following only on RHEL 7 machines
-set release_file "/etc/redhat-release"
-if { [file exists $release_file] == 1} {
-    set rhel_version [exec cat $release_file]
-    if { [ string match "?*release 7?*" $rhel_version ] } {
-        set environment_lib "$environment_path/lib:$environment_path/lib64"
-    }
-}
-
 # Set the bash environment variables similarly to HPC anaconda module
 # Reference - sn-rfe.lanl.gov:/usr/projects/hpcsoft/modulefiles/toss3/snow/tools/python/3.8-anaconda-2020.07
 prepend-path PATH "$environment_bin:$anaconda_bin"
@@ -72,7 +62,6 @@ append-path PATH "$matlab_path"
 append-path PYTHONPATH "$cubit_bin"
 
 # Set the bash environment variables for deployed AEA libraries
-prepend-path LD_LIBRARY_PATH "$environment_lib"
 prepend-path LD_LIBRARY_PATH "$cubit_bin_python"
 
 # Set some aliases similarly to W-13 compute servers
@@ -113,7 +102,6 @@ proc ModulesHelp {} {
     global environment_path
     global environment_bin
     global environment_man
-    global environment_lib
     global cubit_version
     global abaqus_path
     global matlab_path
@@ -138,7 +126,6 @@ proc ModulesHelp {} {
     puts stderr "PATH appended with: $abaqus_path:$cubit_path:$cubit_bin:$matlab_path"
     puts stderr "PYTHONPATH appended with: $cubit_bin"
     puts stderr "MANPATH prepended with: $environment_man"
-    puts stderr "LD_LIBRARY_PATH prepended with: $environment_lib"
 
     puts stderr "\n\nSets aliases:"
     puts stderr "ipy\t\t open ipython"
