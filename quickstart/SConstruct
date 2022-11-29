@@ -40,7 +40,9 @@ AddOption(
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
                   ignore_documentation=GetOption("ignore_documentation"),
-                  solve_cpus=GetOption("solve_cpus"))
+                  solve_cpus=GetOption("solve_cpus"),
+                  TARFLAGS="-c -j",
+                  TARSUFFIX=".tar.bz2")
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()

@@ -69,7 +69,7 @@ simulation specific datacheck task to the new alias.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct

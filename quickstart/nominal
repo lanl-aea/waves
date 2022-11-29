@@ -107,10 +107,17 @@ workflow.extend(env.PythonScript(
     source=[str(eabm_package_abspath / "plot_scatter.py")] + post_processing_source,
     script_options=script_options))
 
+# Data archival
+archive_name = f"{env['project_name']}-{workflow_name}-{env['version']}"
+archive_target = env.Tar(
+    target=archive_name,
+    source=workflow)
+
 # Collector alias based on build directory name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
+env.Alias(f"{workflow_name}_archive", archive_target)
 
 if not env["abaqus"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")

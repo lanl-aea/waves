@@ -130,6 +130,7 @@ test:
     - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_11_archival_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
     - waves build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4

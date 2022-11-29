@@ -112,7 +112,7 @@ remote_action = [
 ]
 
 tar_archive = env.Tar(
-    target=f"{project_id}",
+    target=project_id,
     source=solve_source_list,
 )
 remote.extend(tar_archive)
