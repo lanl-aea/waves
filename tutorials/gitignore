@@ -1,0 +1,33 @@
+# Project files
+build*/
+quickstart_test/
+test_quickstart/
+*.tar.bz2
+
+# SCons files
+.sconsign.dblite
+config.log
+
+# Binary image files
+*.png
+*.jpg
+*.pdf
+
+# Abaqus output files
+*.com
+*.dat
+*.msg
+*.odb
+*.prt
+*.sim
+*.sta
+*.rpy*
+*.cae
+*.jnl
+
+# Cubit output file
+*.cub
+
+# Sphinx/Python
+__pycache__/
+*.pyc
