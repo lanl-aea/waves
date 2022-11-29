@@ -89,21 +89,14 @@ datacheck.extend(env.AbaqusSolver(
 
 # Comment used in tutorial code snippets: marker-5
 
-if env["sbatch"]:
-    slurm_job=f"{env['abaqus']} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abqus_options}} -interactive -ask_delete no"
-    workflow.extend(env.SlurmSbatch(
-        target=[f"{job_name}.sta"],
-        source=solve_source_list,
-        job_name=job_name,
-        abaqus_options=abaqus_options,
-        slurm_job=slurm_job
-    ))
-else:
-    workflow.extend(env.AbaqusSolver(
-        target=[f"{job_name}.sta"],
-        source=solve_source_list,
-        job_name=job_name,
-        abaqus_options=abaqus_options))
+slurm_job=f"{env['abaqus']} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abqus_options}} -interactive -ask_delete no"
+workflow.extend(env.AbaqusSolver(
+    target=[f"{job_name}.sta"],
+    source=solve_source_list,
+    job_name=job_name,
+    abaqus_options=abaqus_options,
+    slurm_job=slurm_job
+))
 
 # Comment used in tutorial code snippets: marker-6
 

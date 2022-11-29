@@ -67,11 +67,19 @@ env.PrependENVPath("PYTHONPATH", str(project_dir))
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
+
 # Add custom builders
+def solve_builder_select():
+    """Run the SLURM sbatch builder if available. Fall back to AbaqusSolver builder in not."""
+    if env["sbatch"]:
+        return waves.builders.sbatch(sbatch_program=env['sbatch'])
+    else:
+        return waves.builders.abaqus_solver(abaqus_program=env['abaqus'])
+
+
 env.Append(BUILDERS={
     'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
-    'SlurmSbatch': waves.builders.sbatch(sbatch_program=env['sbatch'])})
+    'AbaqusSolver': solve_builder_select()})
 
 # Comments used in tutorial code snippets: marker-6
 
