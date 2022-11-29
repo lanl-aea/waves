@@ -34,7 +34,7 @@ configuration ``env["version"]`` in the archive file name.
 setuptools_scm configuration
 ****************************
 
-3. Create a file name ``pyproject.toml`` using the contents below.
+3. Create a file named ``pyproject.toml`` using the contents below.
 
 .. admonition:: waves-eabm-tutorial/pyproject.toml
 
@@ -113,7 +113,7 @@ Output Files
 The output should look identical to :ref:`tutorial_archival_waves` with the exception that the archive ``*.tar.bz2``
 file may contain version information relating to the git short commit hash. One side effect of the dynamic version
 number is that the archive task will always re-run when changes are made to the project repository, including any
-uncommitted files.
+uncommitted changes to tracked files.
 
 .. code-block:: bash
 
@@ -142,7 +142,7 @@ from the contents below
     1 file changed, 33 insertions(+)
     create mode 100644 .gitignore
 
-10. Observe the dynamic version number change. The git short hash, ``gad02fc7``, will differ for every user and is
+10. Observe the dynamic version number change. The git short hash, ``ad02fc7``, will differ for every user and is
     specific to your git repository.
 
 .. code-block:: bash
@@ -151,6 +151,11 @@ from the contents below
    /path/to/waves-eabm-tutorial
    $ python -m setuptools_scm
    0.1.0.dev1+gad02fc7
+
+.. note::
+
+   The leading ``g`` before the short hash ``ad02fc7`` is not part of the hash. `setuptools_scm`_ can work with several
+   version control systems and uses the leading ``g`` to indicate that this is a git repository.
 
 11. Re-build the archive target and note the archive file name change to match the version number from the previous step
 
