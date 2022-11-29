@@ -95,8 +95,7 @@ workflow.extend(env.AbaqusSolver(
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options,
-    slurm_job=slurm_job
-))
+    slurm_job=slurm_job))
 
 # Comment used in tutorial code snippets: marker-6
 

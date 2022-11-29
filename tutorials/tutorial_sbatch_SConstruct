@@ -32,8 +32,6 @@ AddOption(
 
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
-                  TARFLAGS='-c -j',
-                  TARSUFFIX='.tar.bz2',
                   variant_dir_base=GetOption("variant_dir_base"),
                   unconditional_build=GetOption("unconditional_build"))
 
