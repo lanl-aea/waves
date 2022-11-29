@@ -166,12 +166,12 @@ archive_name = f"{env['project_name']}-{env['version']}"
 archive_target = env.Tar(
     target=archive_name,
     source=workflow)
-env.Alias(f"{workflow_name}_archive", archive_target)
 
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 env.Alias(env['datacheck_alias'], datacheck)
+env.Alias(f"{workflow_name}_archive", archive_target)
 
 if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")

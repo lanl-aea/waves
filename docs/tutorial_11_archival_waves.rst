@@ -24,7 +24,7 @@ appended with the short git hash to uniquely identify the project commit. Settin
 References
 **********
 
-* `SCons` Tar builder :cite:`scons-man`
+* `SCons`_ Tar builder :cite:`scons-man`
 
 ***********
 Environment
