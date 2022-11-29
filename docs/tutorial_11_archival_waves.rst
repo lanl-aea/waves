@@ -9,7 +9,9 @@ Tutorial 11: Regression Testing
 The final step of any analysis workflow should be to archive your simulation files used in reporting and documenation,
 both input and output files. The archival task is generally performed once at the end of a project and limited to the
 final, peer-reviewed simulation results. However, if the task of archiving these files is added to the automated
-workflow, it is easier to guarantee that the archived files are in sync with the simulation results.
+workflow, it is easier to guarantee that the archived files are in sync with the simulation results. Of course, it's not
+enough to produce the archive, it must also be stored somewhere for retrieval by colleagues and the analysis report
+audience.
 
 The archive can include compute environment information and repository version information for improved reproducibility.
 For the reproducible version number, it is beneficial to use a versioning scheme that includes information from the
