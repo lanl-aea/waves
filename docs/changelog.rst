@@ -8,6 +8,11 @@ Changelog
 0.5.6 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Cast the documentation index file Pathlib object to a string to comply with the ``webbrowser.open()`` required 
+  input variable type (:issue:`362`, :merge:`399`). By `Thomas Roberts`_.
+
 Internal Changes
 ================
 - Remove ``LD_LIBRARY_PATH`` modification from Gitlab-CI modulefile. Modification is used in the AEA shared compute
