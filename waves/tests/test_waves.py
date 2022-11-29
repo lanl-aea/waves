@@ -36,6 +36,7 @@ def test_main():
 def test_docs():
     with patch('webbrowser.open') as mock_webbrowser_open:
         waves.docs()
+        # Make sure the correct type is passed to webbrowser.open
         mock_webbrowser_open.assert_called_with(str(waves._settings._installed_docs_index))
 
     with patch('webbrowser.open') as mock_webbrowser_open, \
