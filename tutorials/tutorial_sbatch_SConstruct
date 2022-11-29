@@ -71,7 +71,7 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 env.Append(BUILDERS={
     'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
-    'SlurmSbatch': waves.builders.sbatch(sbatch_program=env['sbatch']})
+    'SlurmSbatch': waves.builders.sbatch(sbatch_program=env['sbatch'])})
 
 # Comments used in tutorial code snippets: marker-6
 
@@ -81,7 +81,7 @@ workflow_configurations = [
     'tutorial_02_partition_mesh',
     'tutorial_03_solverprep',
     'tutorial_04_simulation',
-    'tutorial_remote_execution'
+    'tutorial_sbatch'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow

@@ -95,7 +95,7 @@ if env["sbatch"]:
         target=[f"{job_name}.sta"],
         source=solve_source_list,
         job_name=job_name,
-        abaqus_options,
+        abaqus_options=abaqus_options,
         slurm_job=slurm_job
     ))
 else:
