@@ -308,3 +308,27 @@ def test_build_odb_extract(target, source, env, calls):
     with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract:
         builders._build_odb_extract(target, source, env)
     mock_odb_extract.assert_has_calls(calls)
+
+
+source_file = fs.File("dummy.ext")
+sbatch_emitter_input = {
+    "one target": (["target.out"],
+                   [source_file],
+                   ["target.out", "target.stdout"]),
+    "subdirectory": (["set1/target.out"],
+                    [source_file],
+                    ["set1/target.out", "set1/target.stdout"])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("target, source, expected",
+                         sbatch_emitter_input.values(),
+                         ids=sbatch_emitter_input.keys())
+def test_abaqus_journal_emitter(target, source, expected):
+    target, source = builders._sbatch_emitter(target, source, None)
+    assert target == expected
+
+@pytest.mark.unittest
+def test_sbatch():
+    pass
