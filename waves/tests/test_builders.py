@@ -329,6 +329,11 @@ def test_abaqus_journal_emitter(target, source, expected):
     target, source = builders._sbatch_emitter(target, source, None)
     assert target == expected
 
+
 @pytest.mark.unittest
 def test_sbatch():
-    pass
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"SlurmSbatch": builders.sbatch()})
+    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
+    node = env.SlurmSbatch(target=["target.out"], source=["source.in"], slurm_options="",
+                             slurm_job="echo $SOURCE > $TARGET")
