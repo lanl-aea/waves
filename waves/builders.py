@@ -82,7 +82,8 @@ def _construct_post_action_list(post_action):
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder requires at least one target.
+    Appends ``target[0]``.stdout and ``target[0]``.abaqus_v6.env to the ``target`` list. The abaqus_journal Builder
+    requires at least one target.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
