@@ -102,4 +102,5 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:30 :ref:`tutorial_extend_study_waves`           Automatically extending and re-executing a
                                                                       parameter study
                    00:30 :ref:`tutorial_task_reuse_waves`             Re-use task definitions
+                   00:10 :ref:`tutorial_setuptools_scm_waves`         Dynamic version number from git tags 
 ======================== ============================================ ==================================================

@@ -72,8 +72,9 @@ Version control system
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ git add SConstruct pyproject.toml
+   $ git add SConstruct pyproject.toml tutorial_11_archival
    $ git commit -m "Initial commit for git tag version numbers using setuptools_scm"
+   <output truncated>
 
 6. Create a git tag version number
 
@@ -103,6 +104,7 @@ Build Targets
    $ pwd
    /path/to/waves-eabm-tutorial
    $ scons tutorial_11_archival_archive --jobs=4
+   <output truncated>
 
 ************
 Output Files
@@ -134,17 +136,21 @@ from the contents below
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ git add .gitignore 
+   $ git add .gitignore
    $ git commit -m "MAINT: Ignore build artifacts"
+   [main ad02fc7] MAINT: Ignore build artifacts
+    1 file changed, 33 insertions(+)
+    create mode 100644 .gitignore
 
-10. Observe the dynamic version number change
+10. Observe the dynamic version number change. The git short hash, ``gad02fc7``, will differ for every user and is
+    specific to your git repository.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
    $ python -m setuptools_scm
-   0.1.0
+   0.1.0.dev1+gad02fc7
 
 11. Re-build the archive target and note the archive file name change to match the version number from the previous step
 
@@ -153,4 +159,7 @@ from the contents below
    $ pwd
    /path/to/waves-eabm-tutorial
    $ scons tutorial_11_archival_archive --jobs=4
+   <output truncated>
    $ find build -name "*.tar.bz2"
+   build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.tar.bz2
+   build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.dev1+gad02fc7.tar.bz2
