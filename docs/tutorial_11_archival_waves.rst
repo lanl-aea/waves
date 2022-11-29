@@ -15,10 +15,10 @@ audience.
 
 The archive can include compute environment information and repository version information for improved reproducibility.
 For the reproducible version number, it is beneficial to use a versioning scheme that includes information from the
-project's version control system, e.g. `git`_. The `WAVES`_ project uses `git`_ and `setuptools_scm`_ to build version
-numbers with a clean version number that is uniquely tied to a single commit, e.g. ``1.2.3``, or a version number
-appended with the short git hash to uniquely identify the project commit. Setting up git, git tags, and a
-`setuptools_scm`_ version number is outside the scope of this tutorial, but highly recommended.
+project's version control system, e.g. `git`_. The `WAVES`_ project uses `git`_ and `setuptools_scm`_
+:cite:`setuptools_scm` to build version numbers with a clean version number that is uniquely tied to a single commit,
+e.g. ``1.2.3``, or a version number appended with the short git hash to uniquely identify the project commit. Setting up
+git, git tags, and a `setuptools_scm`_ version number is outside the scope of this tutorial, but highly recommended.
 
 **********
 References
