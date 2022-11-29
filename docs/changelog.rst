@@ -14,6 +14,8 @@ New Features
   starting point to solicit user stories (:issue:`327`, :merge:`398`). By `Kyle Brindley`_.
 - Add an archival task tutorial to the core lesson plan (:issue:`351`, :merge:`400`). By `Kyle Brindley`_.
 - Add archive task to ``waves quickstart`` template files (:issue:`351`, :merge:`400`). By `Kyle Brindley`_.
+- Experimental ``setuptools_scm`` for dynamic version numbering tied to git as a version control system (:issue:`363`,
+  :merge:`401`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
