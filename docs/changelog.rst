@@ -8,9 +8,14 @@ Changelog
 0.5.6 (unreleased)
 ******************
 
+New Features
+============
+- Experimental ``sbatch`` builder and work-in-progress tutorial. Not a final draft with CI regression testing, but a
+  starting point to solicit user stories (:issue:`327`, :merge:`398`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
-- Cast the documentation index file Pathlib object to a string to comply with the ``webbrowser.open()`` required 
+- Cast the documentation index file Pathlib object to a string to comply with the ``webbrowser.open()`` required
   input variable type (:issue:`362`, :merge:`399`). By `Thomas Roberts`_.
 
 Internal Changes

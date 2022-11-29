@@ -82,7 +82,8 @@ def _construct_post_action_list(post_action):
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder requires at least one target.
+    Appends ``target[0]``.stdout and ``target[0]``.abaqus_v6.env to the ``target`` list. The abaqus_journal Builder
+    requires at least one target.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
@@ -517,3 +518,69 @@ def _build_odb_extract(target, source, env):
                             abaqus_command=env["abaqus_program"],
                             delete_report_file=delete_report_file)
     return None
+
+
+def _sbatch_emitter(target, source, env):
+    """Appends the sbatch builder target list with the builder managed targets
+
+    Appends ``target[0]``.stdout to the ``target`` list. The sbatch Builder requires at least one target.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
+    first_target = pathlib.Path(str(target[0]))
+    try:
+        build_subdirectory = first_target.parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path(".")
+    suffixes = [_stdout_extension]
+    for suffix in suffixes:
+        emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
+        target.append(str(emitter_target))
+    return target, source
+
+
+def sbatch(sbatch_program="sbatch", post_action=[]):
+    """SLURM sbatch SCons builder
+
+    The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
+    the command string to execute.
+
+    At least one target must be specified. The first target determines the working directory for the builder's action,
+    as shown in the action code snippet below. The action changes the working directory to the first target's parent
+    directory prior to executing the journal file.
+
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout to the
+    ``target`` list.
+
+    .. code-block::
+       :caption: SLURM sbatch builder action
+
+       cd ${TARGET.dir.abspath} && sbatch --wait ${slurm_options} --wrap ${slurm_job} > ${TARGET.filebase}.stdout 2>&1
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={"SlurmSbatch": waves.builders.sbatch()})
+       SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="echo $SOURCE > $TARGET")
+
+    :param str sbatch_program: An absolute path or basename string for the sbatch program.
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
+        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
+        ${TARGET.dir.abspath} && ${post_action}``
+    """
+    action = [f"cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
+                 f"${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+    action.extend(_construct_post_action_list(post_action))
+    sbatch_builder = SCons.Builder.Builder(
+        action=action,
+        emitter=_sbatch_emitter)
+    return sbatch_builder
