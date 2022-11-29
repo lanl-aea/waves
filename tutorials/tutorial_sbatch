@@ -75,24 +75,26 @@ workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
 # Comment used in tutorial code snippets: marker-4
 
 # Abaqus Solve
+slurm_job=f"{env['abaqus']} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no"
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
 datacheck_name = f"{job_name}_DATACHECK"
+common_suffixes = ("odb", "dat", "msg", "com", "prt")
 datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
 abaqus_options='-double both'
 datacheck.extend(env.AbaqusSolver(
-    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
+    target=[f"{datacheck_name}.{suffix}" for suffix in common_suffixes + datacheck_suffixes],
     source=solve_source_list,
     job_name=datacheck_name,
-    abaqus_options=f'{abaqus_options} -datacheck'))
+    abaqus_options=f'{abaqus_options} -datacheck',
+    slurm_job=slurm_job))
 
 # Comment used in tutorial code snippets: marker-5
 
-slurm_job=f"{env['abaqus']} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abqus_options}} -interactive -ask_delete no"
-abaqus_implicit_extensions = ["sta", "odb", "dat", "msg", "com", "prt"]
+abaqus_implicit_extensions = ("sta",)
 workflow.extend(env.AbaqusSolver(
-    target=[f"{job_name}.{suffix}" for suffix in abaqus_implicit_extensions],
+    target=[f"{job_name}.{suffix}" for suffix in common_suffixes + abaqus_implicit_extensions],
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options,
