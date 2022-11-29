@@ -577,7 +577,7 @@ def sbatch(sbatch_program="sbatch", post_action=[]):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
-    action = [f"cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} --wrap \"${slurm_job}\" > " \
+    action = [f"cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
                  f"${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
