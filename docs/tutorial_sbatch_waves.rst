@@ -1,8 +1,10 @@
 .. _tutorial_sbatch_waves:
 
-############################
-Tutorial: Simulation via SSH
-############################
+##############################
+Tutorial: Simulation via SLURM 
+##############################
+
+.. include:: wip_warning.txt
 
 This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but executes the simulation
 with the SLURM workfload manager.

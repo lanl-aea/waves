@@ -4,6 +4,8 @@
 Tutorial: Simulation via SSH
 ############################
 
+.. include:: wip_warning.txt
+
 This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but executes the simulation
 on a remote server via SSH.
 
