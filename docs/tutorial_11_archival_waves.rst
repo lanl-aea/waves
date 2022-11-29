@@ -94,9 +94,9 @@ file. You can inspect the contents of the archive as below.
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ find build -name "*.tar"
-   build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.tar
-   $ tar -tf $(find build -name "*.tar") | grep parameter_set0
+   $ find build -name "*.tar.bz2"
+   build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.tar.bz2
+   $ tar -tjf $(find build -name "*.tar.bz2") | grep parameter_set0
    build/tutorial_11_archival/parameter_set0/single_element_geometry.cae
    build/tutorial_11_archival/parameter_set0/single_element_geometry.jnl
    build/tutorial_11_archival/parameter_set0/single_element_geometry.stdout

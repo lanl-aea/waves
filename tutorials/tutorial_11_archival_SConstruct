@@ -33,7 +33,9 @@ AddOption(
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
-                  unconditional_build=GetOption("unconditional_build"))
+                  unconditional_build=GetOption("unconditional_build"),
+                  TARFLAGS='-c -j',
+                  TARSUFFIX='.tar.bz2')
 
 # Comments used in tutorial code snippets: marker-3
 
