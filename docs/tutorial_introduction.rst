@@ -62,6 +62,8 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       concatenation with the parameter study definition
                    00:10 :ref:`tutorial_regression_testing_waves`     Alias for partial simulation verification and
                                                                       regression testing
+                   00:10 :ref:`tutorial_archival_waves`               Archive simulation files for reproducibility and
+                                                                      reporting
 ======================== ============================================ ==================================================
 
 ********************
