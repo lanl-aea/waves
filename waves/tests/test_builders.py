@@ -148,7 +148,6 @@ abaqus_journal_input = {
 @pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, target_list",
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
-@pytest.mark.unittest
 def test_abaqus_journal(abaqus_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(abaqus_program, post_action)})
@@ -200,12 +199,29 @@ def test_abaqus_solver_emitter(job_name, target, source, expected, outcome):
             assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+abaqus_solver_input = {
+    "default behavior": ("abaqus", [], 7, 1, ["input1.inp"]),
+    "different command": ("dummy", [], 7, 1, ["input2.inp"]),
+    "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"])
+}
+
+
 @pytest.mark.unittest
-def test_abaqus_solver():
+@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list",
+                         abaqus_solver_input.values(),
+                         ids=abaqus_solver_input.keys())
+def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.AbaqusSolver(target=[], source=["root.inp"], job_name="job", abaqus_options="")
+    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action)})
+    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="")
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
+                       '${job_name}.abaqus_v6.env\n' \
+                      f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ' \
+                       '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
+                       '> ${job_name}.stdout 2>&1'
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
 copy_substitute_input = {
