@@ -351,7 +351,8 @@ def test_sbatch_emitter(target, source, expected):
 
 sbatch_input = {
     "default behavior": ("sbatch", [], 2, 1),
-    "different command": ("dummy", [], 2, 1)
+    "different command": ("dummy", [], 2, 1),
+    "post action": ("sbatch", ["post action"], 2, 1)
 }
 
 
@@ -367,6 +368,8 @@ def test_sbatch(sbatch_program, post_action, node_count, action_count):
                             slurm_job="echo $SOURCE > $TARGET")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
                        '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+    for action in post_action:
+        expected_string = expected_string + f"\ncd ${{TARGET.dir.abspath}} && {action}"
     assert len(nodes) == node_count
     for node in nodes:
         node.get_executor()
