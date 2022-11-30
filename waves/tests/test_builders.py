@@ -110,8 +110,8 @@ def test_abaqus_journal_emitter(target, source, expected):
 
 
 abaqus_journal_input = {
-    "default behavior": ("abaqus", [], 3, 2),
-    "different command": ("dummy", [], 3, 2)
+    "default behavior": ("abaqus", [], 3, 1),
+    "different command": ("dummy", [], 3, 1)
 }
 
 
@@ -124,7 +124,9 @@ def test_abaqus_journal(abaqus_program, post_action, node_count, action_count):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(abaqus_program, post_action)})
     nodes = env.AbaqusJournal(target=["journal.cae"], source=["journal.py"], journal_options="")
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
+                       '${TARGET.filebase}.abaqus_v6.env\n' \
+                      f'cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ' \
                        '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
     assert len(nodes) == node_count
     for node in nodes:
