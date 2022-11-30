@@ -136,7 +136,6 @@ def test_abaqus_journal(abaqus_program, post_action, node_count, action_count):
         node.get_executor()
         assert len(node.executor.action_list) == action_count
         assert str(node.executor.action_list[0]) == expected_string
-    del env
 
 
 source_file = fs.File("root.inp")
@@ -353,21 +352,21 @@ def test_sbatch_emitter(target, source, expected):
 
 
 sbatch_input = {
-    "default behavior": ("sbatch", [], 2, 1),
-    "different command": ("dummy", [], 2, 1),
-    "post action": ("sbatch", ["post action"], 2, 1)
+    "default behavior": ("sbatch", [], 2, 1, ["target1.out"]),
+    "different command": ("dummy", [], 2, 1, ["target2.out"]),
+    "post action": ("sbatch", ["post action"], 2, 1, ["target3.out"])
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("sbatch_program, post_action, node_count, action_count",
+@pytest.mark.parametrize("sbatch_program, post_action, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
 @pytest.mark.unittest
-def test_sbatch(sbatch_program, post_action, node_count, action_count):
+def test_sbatch(sbatch_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(sbatch_program, post_action)})
-    nodes = env.SlurmSbatch(target=["target.out"], source=["source.in"], slurm_options="",
+    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
                             slurm_job="echo $SOURCE > $TARGET")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
                        '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
@@ -378,4 +377,3 @@ def test_sbatch(sbatch_program, post_action, node_count, action_count):
         node.get_executor()
         assert len(node.executor.action_list) == action_count
         assert str(node.executor.action_list[0]) == expected_string
-    del env
