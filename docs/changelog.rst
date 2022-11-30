@@ -8,6 +8,11 @@ Changelog
 0.5.7 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Update the ``plot_scatter.py`` tutorial and quickstart post-processing script to account for the new dimension in
+  ``odb_extract`` output (:issue:`365`, :merge:`405`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Add builder action unit tests (:issue:`364`, :merge:`404`). By `Kyle Brindley`_.

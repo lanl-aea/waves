@@ -47,6 +47,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 
     # Plot
     combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
+    matplotlib.pyplot.title(None)
     matplotlib.pyplot.savefig(output_file)
 
     # Clean up open files
@@ -63,7 +64,8 @@ def get_parser():
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
     default_x_var = "E"
     default_y_var = "S"
-    default_selection_dict = "{'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}"
+    default_selection_dict = "{'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', " \
+                             "'integration point': 0}"
     default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
