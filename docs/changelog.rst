@@ -5,8 +5,32 @@ Changelog
 #########
 
 ******************
-0.5.6 (unreleased)
+0.5.7 (unreleased)
 ******************
+
+******************
+0.5.6 (2022-11-29)
+******************
+
+New Features
+============
+- Experimental ``sbatch`` builder and work-in-progress tutorial. Not a final draft with CI regression testing, but a
+  starting point to solicit user stories (:issue:`327`, :merge:`398`). By `Kyle Brindley`_.
+- Add an archival task tutorial to the core lesson plan (:issue:`351`, :merge:`400`). By `Kyle Brindley`_.
+- Add archive task to ``waves quickstart`` template files (:issue:`351`, :merge:`400`). By `Kyle Brindley`_.
+- Experimental ``setuptools_scm`` for dynamic version numbering tied to git as a version control system (:issue:`363`,
+  :merge:`401`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Cast the documentation index file Pathlib object to a string to comply with the ``webbrowser.open()`` required
+  input variable type (:issue:`362`, :merge:`399`). By `Thomas Roberts`_.
+
+Internal Changes
+================
+- Remove ``LD_LIBRARY_PATH`` modification from Gitlab-CI modulefile. Modification is used in the AEA shared compute
+  environments for c++ user subroutines, but is not necessary for WAVES and interferes with RHEL 7 system libraries
+  (:issue:`227`, :merge:`397`). By `Kyle Brindley`_.
 
 ******************
 0.5.5 (2022-11-23)

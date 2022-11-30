@@ -121,7 +121,7 @@ def docs(print_local_path=False):
             print('Could not find package documentation HTML index file', file=sys.stderr)
             return 1
     else:
-        webbrowser.open(_settings._installed_docs_index)
+        webbrowser.open(str(_settings._installed_docs_index))
     return 0
 
 

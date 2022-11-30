@@ -16,3 +16,4 @@ Core Lessons
    tutorial_08_data_extraction_waves
    tutorial_09_post_processing_waves
    tutorial_10_regression_testing_waves
+   tutorial_11_archival_waves

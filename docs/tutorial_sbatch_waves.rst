@@ -1,22 +1,19 @@
-.. _tutorial_remote_execution_waves:
+.. _tutorial_sbatch_waves:
 
-############################
-Tutorial: Simulation via SSH
-############################
+##############################
+Tutorial: Simulation via SLURM
+##############################
 
 .. include:: wip_warning.txt
 
 This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but executes the simulation
-on a remote server via SSH.
+with the SLURM workload manager.
 
 **********
 References
 **********
 
-* SCons Tar builder
-* ``ssh``
-* ``rsync``
-* ``tar``
+* `SLURM`_ `sbatch`_ :cite:`slurm`
 
 ***********
 Environment
@@ -28,15 +25,15 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_remote_execution``
+3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_sbatch``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_04_simulation tutorial_remote_execution
+   $ cp tutorial_04_simulation tutorial_sbatch
 
-.. _tutorials_tutorial_remote_execution_waves:
+.. _tutorials_tutorial_sbatch_waves:
 
 **********
 SConscript
@@ -45,11 +42,16 @@ SConscript
 A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_remote_execution
+.. admonition:: waves-eabm-tutorial/tutorial_sbatch
 
-   .. literalinclude:: tutorials_tutorial_remote_execution
+   .. literalinclude:: tutorials_tutorial_sbatch
       :language: Python
       :diff: tutorials_tutorial_04_simulation
+
+Note that the new ``AbaqusSolver`` builder will be conditionally defined in the ``SConstruct`` file according to the
+availability of the ``sbatch`` command. If ``sbatch`` is not available, the ``slurm_job`` variable will go unused by the
+:meth:`waves.builders.abaqus_solver`` builder. Since `SCons`_ builders don't throw errors for unused keyword arguments,
+we do not need to define the task twice in the ``SConscript`` file.
 
 **********
 SConstruct
@@ -60,7 +62,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
-   .. literalinclude:: tutorials_tutorial_remote_execution_SConstruct
+   .. literalinclude:: tutorials_tutorial_sbatch_SConstruct
       :language: Python
       :diff: tutorials_tutorial_04_simulation_SConstruct
 
@@ -74,7 +76,7 @@ Build Targets
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ scons tutorial_remote_execution
+   $ scons tutorial_sbatch
 
 ************
 Output Files
@@ -88,4 +90,4 @@ is specified by name to reduce clutter in the ouptut shown.
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
-   $ tree build/tutorial_remote_execution/
+   $ tree build/tutorial_sbatch/

@@ -62,6 +62,8 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       concatenation with the parameter study definition
                    00:10 :ref:`tutorial_regression_testing_waves`     Alias for partial simulation verification and
                                                                       regression testing
+                   00:10 :ref:`tutorial_archival_waves`               Archive simulation files for reproducibility and
+                                                                      reporting
 ======================== ============================================ ==================================================
 
 ********************
@@ -96,7 +98,9 @@ Work-in-progress Lessons
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
                    00:30 :ref:`tutorial_remote_execution_waves`       Run the simulation on a remote server via SSH
+                   00:30 :ref:`tutorial_sbatch_waves`                 Run the simulation with the SLURM workload manager
                    00:30 :ref:`tutorial_extend_study_waves`           Automatically extending and re-executing a
                                                                       parameter study
                    00:30 :ref:`tutorial_task_reuse_waves`             Re-use task definitions
+                   00:10 :ref:`tutorial_setuptools_scm_waves`         Dynamic version number from git tags
 ======================== ============================================ ==================================================
