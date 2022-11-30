@@ -262,13 +262,27 @@ def test_python_script_emitter(target, source, expected):
     assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+python_script_input = {
+    "default behavior": ([], 2, 1, ["python_script1.out"]),
+    "different command": ([], 2, 1, ["python_script2.out"]),
+    "post action": (["post action"], 2, 1, ["python_script3.out"])
+}
+
+
 @pytest.mark.unittest
-def test_python_script():
+@pytest.mark.parametrize("post_action, node_count, action_count, target_list",
+                         python_script_input.values(),
+                         ids=python_script_input.keys())
+@pytest.mark.unittest
+def test_python_script(post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"PythonScript": builders.python_script()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.PythonScript(
-        target=["python_script_journal.cub"], source=["python_script_journal.py"], journal_options="")
+    env.Append(BUILDERS={"PythonScript": builders.python_script(post_action)})
+    nodes = env.PythonScript(target=target_list, source=["python_script.py"], journal_options="")
+    expected_string = 'cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} ' \
+                      '> ${TARGET.filebase}.stdout 2>&1'
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
 @pytest.mark.unittest
