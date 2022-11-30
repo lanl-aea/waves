@@ -111,7 +111,8 @@ def test_abaqus_journal_emitter(target, source, expected):
 
 abaqus_journal_input = {
     "default behavior": ("abaqus", [], 3, 1),
-    "different command": ("dummy", [], 3, 1)
+    "different command": ("dummy", [], 3, 1),
+    "post action": ("abaqus", ["post action"], 3, 1)
 }
 
 
@@ -128,6 +129,8 @@ def test_abaqus_journal(abaqus_program, post_action, node_count, action_count):
                        '${TARGET.filebase}.abaqus_v6.env\n' \
                       f'cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ' \
                        '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
+    for action in post_action:
+        expected_string = expected_string + f"\ncd ${{TARGET.dir.abspath}} && {action}"
     assert len(nodes) == node_count
     for node in nodes:
         node.get_executor()
