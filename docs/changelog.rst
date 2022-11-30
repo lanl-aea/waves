@@ -8,6 +8,10 @@ Changelog
 0.5.7 (unreleased)
 ******************
 
+Internal Changes
+================
+- Add builder action unit tests (:issue:`364`, :merge:`404`). By `Kyle Brindley`_.
+
 ******************
 0.5.6 (2022-11-29)
 ******************

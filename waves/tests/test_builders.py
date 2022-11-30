@@ -9,9 +9,36 @@ from unittest.mock import patch, call
 import SCons.Node.FS
 
 from waves import builders
+from waves._settings import _cd_action_prefix
 
 
 fs = SCons.Node.FS.FS()
+
+
+def check_action_string(nodes, post_action, node_count, action_count, expected_string):
+    """Verify the expected action string against a builder's target nodes
+
+    :param SCons.Node.NodeList nodes: Target node list returned by a builder
+    :param list post_action: list of post action strings passed to builder
+    :param int node_count: expected length of ``nodes``
+    :param int action_count: expected length of action list for each node
+    :param str expected_string: the builder's action string.
+
+    .. note::
+
+       The method of interrogating a node's action list results in a newline separated string instead of a list of
+       actions. The ``expected_string`` should contain all elements of the expected action list as a single, newline
+       separated string. The ``action_count`` should be set to ``1`` until this method is updated to search for the
+       finalized action list.
+    """
+    for action in post_action:
+        expected_string = expected_string + f"\ncd ${{TARGET.dir.abspath}} && {action}"
+    assert len(nodes) == node_count
+    for node in nodes:
+        node.get_executor()
+        assert len(node.executor.action_list) == action_count
+        assert str(node.executor.action_list[0]) == expected_string
+
 
 substitution_dictionary = {"thing1": 1, "thing_two": "two"}
 substitution_syntax_input = {
@@ -71,7 +98,7 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     assert program == first_found_path
 
 
-prepended_string = f"cd ${{TARGET.dir.abspath}} && "
+prepended_string = f"{_cd_action_prefix} "
 post_action_list = {
     "list1": (["thing1"], [prepended_string + "thing1"]),
     "list2": (["thing1", "thing2"], [prepended_string + "thing1", prepended_string + "thing2"]),
@@ -109,12 +136,28 @@ def test_abaqus_journal_emitter(target, source, expected):
     assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+abaqus_journal_input = {
+    "default behavior": ("abaqus", [], 3, 1, ["journal1.cae"]),
+    "different command": ("dummy", [], 3, 1, ["journal2.cae"]),
+    "post action": ("abaqus", ["post action"], 3, 1, ["journal3.cae"])
+}
+
+
 @pytest.mark.unittest
-def test_abaqus_journal():
+@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, target_list",
+                         abaqus_journal_input.values(),
+                         ids=abaqus_journal_input.keys())
+def test_abaqus_journal(abaqus_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.AbaqusJournal(target=["journal.cae"], source=["journal.py"], journal_options="")
+    env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(abaqus_program, post_action)})
+    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
+                       '${TARGET.filebase}.abaqus_v6.env\n' \
+                      f'cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ' \
+                       '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
 source_file = fs.File("root.inp")
@@ -157,12 +200,29 @@ def test_abaqus_solver_emitter(job_name, target, source, expected, outcome):
             assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+abaqus_solver_input = {
+    "default behavior": ("abaqus", [], 7, 1, ["input1.inp"]),
+    "different command": ("dummy", [], 7, 1, ["input2.inp"]),
+    "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"])
+}
+
+
 @pytest.mark.unittest
-def test_abaqus_solver():
+@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list",
+                         abaqus_solver_input.values(),
+                         ids=abaqus_solver_input.keys())
+def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.AbaqusSolver(target=[], source=["root.inp"], job_name="job", abaqus_options="")
+    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action)})
+    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="")
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
+                       '${job_name}.abaqus_v6.env\n' \
+                      f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ' \
+                       '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
+                       '> ${job_name}.stdout 2>&1'
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
 copy_substitute_input = {
@@ -203,22 +263,37 @@ def test_python_script_emitter(target, source, expected):
     assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+python_script_input = {
+    "default behavior": ([], 2, 1, ["python_script1.out"]),
+    "different command": ([], 2, 1, ["python_script2.out"]),
+    "post action": (["post action"], 2, 1, ["python_script3.out"])
+}
+
+
 @pytest.mark.unittest
-def test_python_script():
+@pytest.mark.parametrize("post_action, node_count, action_count, target_list",
+                         python_script_input.values(),
+                         ids=python_script_input.keys())
+@pytest.mark.unittest
+def test_python_script(post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"PythonScript": builders.python_script()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.PythonScript(
-        target=["python_script_journal.cub"], source=["python_script_journal.py"], journal_options="")
+    env.Append(BUILDERS={"PythonScript": builders.python_script(post_action)})
+    nodes = env.PythonScript(target=target_list, source=["python_script.py"], journal_options="")
+    expected_string = 'cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} ' \
+                      '> ${TARGET.filebase}.stdout 2>&1'
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
 @pytest.mark.unittest
 def test_conda_environment():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"CondaEnvironment": builders.conda_environment()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.CondaEnvironment(
+    nodes = env.CondaEnvironment(
         target=["environment.yaml"], source=[], conda_env_export_options="")
+    expected_string = 'cd ${TARGET.dir.abspath} && conda env export ${conda_env_export_options} --file ${TARGET.file}'
+    check_action_string(nodes, [], 1, 1, expected_string)
 
 
 source_file = fs.File("dummy.odb")
@@ -281,9 +356,12 @@ def test_abaqus_extract_emitter(target, source, expected, env):
 def test_abaqus_extract():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"AbaqusExtract": builders.abaqus_extract()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.AbaqusExtract(
+    nodes = env.AbaqusExtract(
         target=["abaqus_extract.h5"], source=["abaqus_extract.odb"], journal_options="")
+    expected_string = 'cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.csv ${TARGET.filebase}.h5 ' \
+                      '${TARGET.filebase}_datasets.h5 > ${TARGET.file}.stdout 2>&1 || true' \
+                      '\n_build_odb_extract(target, source, env)'
+    check_action_string(nodes, [], 4, 1, expected_string)
 
 
 source_file = fs.File("/dummy.source")
@@ -325,15 +403,30 @@ sbatch_emitter_input = {
 @pytest.mark.parametrize("target, source, expected",
                          sbatch_emitter_input.values(),
                          ids=sbatch_emitter_input.keys())
-def test_abaqus_journal_emitter(target, source, expected):
+def test_sbatch_emitter(target, source, expected):
     target, source = builders._sbatch_emitter(target, source, None)
     assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+sbatch_input = {
+    "default behavior": ("sbatch", [], 2, 1, ["target1.out"]),
+    "different command": ("dummy", [], 2, 1, ["target2.out"]),
+    "post action": ("sbatch", ["post action"], 2, 1, ["target3.out"])
+}
+
+
 @pytest.mark.unittest
-def test_sbatch():
+@pytest.mark.parametrize("sbatch_program, post_action, node_count, action_count, target_list",
+                         sbatch_input.values(),
+                         ids=sbatch_input.keys())
+@pytest.mark.unittest
+def test_sbatch(sbatch_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"SlurmSbatch": builders.sbatch()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.SlurmSbatch(target=["target.out"], source=["source.in"], slurm_options="",
-                             slurm_job="echo $SOURCE > $TARGET")
+    env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(sbatch_program, post_action)})
+    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
+                            slurm_job="echo $SOURCE > $TARGET")
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
+                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
