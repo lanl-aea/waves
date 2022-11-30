@@ -335,5 +335,10 @@ def test_sbatch():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"SlurmSbatch": builders.sbatch()})
     # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.SlurmSbatch(target=["target.out"], source=["source.in"], slurm_options="",
-                             slurm_job="echo $SOURCE > $TARGET")
+    nodes = env.SlurmSbatch(target=["target.out"], source=["source.in"], slurm_options="",
+                            slurm_job="echo $SOURCE > $TARGET")
+    assert len(nodes) == 2
+    for node in nodes:
+        node.get_executor()
+        assert len(node.executor.action_list) == 1
+        assert str(node.executor.action_list[0]) == 'cd ${TARGET.dir.abspath} && sbatch --wait ${slurm_options} --wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
