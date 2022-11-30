@@ -344,7 +344,6 @@ sbatch_input = {
 def test_sbatch(sbatch_program, post_action, node_count, action_count):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(sbatch_program, post_action)})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
     nodes = env.SlurmSbatch(target=["target.out"], source=["source.in"], slurm_options="",
                             slurm_job="echo $SOURCE > $TARGET")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
