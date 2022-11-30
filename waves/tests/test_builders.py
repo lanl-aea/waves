@@ -13,6 +13,17 @@ from waves import builders
 
 fs = SCons.Node.FS.FS()
 
+
+def check_action_string(nodes, post_action, node_count, action_count, expected_string):
+    for action in post_action:
+        expected_string = expected_string + f"\ncd ${{TARGET.dir.abspath}} && {action}"
+    assert len(nodes) == node_count
+    for node in nodes:
+        node.get_executor()
+        assert len(node.executor.action_list) == action_count
+        assert str(node.executor.action_list[0]) == expected_string
+
+
 substitution_dictionary = {"thing1": 1, "thing_two": "two"}
 substitution_syntax_input = {
     "default characters": (substitution_dictionary, {}, {"@thing1@": 1, "@thing_two@": "two"}),
@@ -131,13 +142,7 @@ def test_abaqus_journal(abaqus_program, post_action, node_count, action_count, t
                        '${TARGET.filebase}.abaqus_v6.env\n' \
                       f'cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ' \
                        '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
-    for action in post_action:
-        expected_string = expected_string + f"\ncd ${{TARGET.dir.abspath}} && {action}"
-    assert len(nodes) == node_count
-    for node in nodes:
-        node.get_executor()
-        assert len(node.executor.action_list) == action_count
-        assert str(node.executor.action_list[0]) == expected_string
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
 source_file = fs.File("root.inp")
@@ -374,10 +379,4 @@ def test_sbatch(sbatch_program, post_action, node_count, action_count, target_li
                             slurm_job="echo $SOURCE > $TARGET")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
                        '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
-    for action in post_action:
-        expected_string = expected_string + f"\ncd ${{TARGET.dir.abspath}} && {action}"
-    assert len(nodes) == node_count
-    for node in nodes:
-        node.get_executor()
-        assert len(node.executor.action_list) == action_count
-        assert str(node.executor.action_list[0]) == expected_string
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
