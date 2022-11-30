@@ -15,6 +15,21 @@ fs = SCons.Node.FS.FS()
 
 
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
+    """Verify the expected action string against a builder's target nodes
+
+    :param SCons.Node.NodeList nodes: Target node list returned by a builder
+    :param list post_action: list of post action strings passed to builder
+    :param int node_count: expected length of ``nodes``
+    :param int action_count: expected length of action list for each node
+    :param str expected_string: the builder's action string.
+
+    .. note::
+
+       The method of interrogating a node's action list results in a newline separated string instead of a list of
+       actions. The ``expected_string`` should contain all elements of the expected action list as a single, newline
+       separated string. The ``action_count`` should be set to ``1`` until this method is updated to search for the
+       finalized action list.
+    """
     for action in post_action:
         expected_string = expected_string + f"\ncd ${{TARGET.dir.abspath}} && {action}"
     assert len(nodes) == node_count
