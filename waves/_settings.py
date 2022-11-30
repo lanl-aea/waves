@@ -13,7 +13,7 @@ _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"
 _set_coordinate_key = "parameter_sets"
 _quantiles_attribute_key = "_quantiles"
-_cd_action_prefix = 'cd ${TARGET.dir.abspath}'
+_cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _installed_quickstart_directory = _project_root_abspath / "quickstart"
 

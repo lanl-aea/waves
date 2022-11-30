@@ -76,7 +76,7 @@ def _construct_post_action_list(post_action):
         iterator = iter(post_action)
     except TypeError:
         iterator = iter([post_action])
-    new_actions = [f"{_cd_action_prefix} && {action}" for action in iterator]
+    new_actions = [f"{_cd_action_prefix} {action}" for action in iterator]
     return new_actions
 
 
@@ -149,9 +149,9 @@ def abaqus_journal(abaqus_program="abaqus", post_action=[]):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
-    action = [f"{_cd_action_prefix} && {abaqus_program} -information environment > " \
+    action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
                  f"${{TARGET.filebase}}{_abaqus_environment_extension}",
-              f"{_cd_action_prefix} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
+              f"{_cd_action_prefix} {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
                  f"${{journal_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     abaqus_journal_builder = SCons.Builder.Builder(
@@ -233,9 +233,9 @@ def abaqus_solver(abaqus_program="abaqus", post_action=[]):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
-    action = [f"{_cd_action_prefix} && {abaqus_program} -information environment > " \
+    action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
-              f"{_cd_action_prefix} && {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
+              f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     abaqus_solver_builder = SCons.Builder.Builder(
@@ -367,7 +367,7 @@ def python_script(post_action=[]):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
-    action = [f"{_cd_action_prefix} && python ${{python_options}} ${{SOURCE.abspath}} " \
+    action = [f"{_cd_action_prefix} python ${{python_options}} ${{SOURCE.abspath}} " \
                 f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     python_builder = SCons.Builder.Builder(
@@ -414,7 +414,7 @@ def conda_environment():
     """
     conda_environment_builder = SCons.Builder.Builder(
         action=
-            [f"{_cd_action_prefix} && conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"])
+            [f"{_cd_action_prefix} conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"])
     return conda_environment_builder
 
 
@@ -489,7 +489,7 @@ def abaqus_extract(abaqus_program="abaqus"):
     """
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
-            f"{_cd_action_prefix} && rm ${{TARGET.filebase}}.csv ${{TARGET.filebase}}.h5 " \
+            f"{_cd_action_prefix} rm ${{TARGET.filebase}}.csv ${{TARGET.filebase}}.h5 " \
                 f"${{TARGET.filebase}}_datasets.h5 > ${{TARGET.file}}{_stdout_extension} 2>&1 || true",
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
         ],
@@ -578,7 +578,7 @@ def sbatch(sbatch_program="sbatch", post_action=[]):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
-    action = [f"{_cd_action_prefix} && {sbatch_program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
+    action = [f"{_cd_action_prefix} {sbatch_program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
                  f"${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(

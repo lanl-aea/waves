@@ -9,6 +9,7 @@ from unittest.mock import patch, call
 import SCons.Node.FS
 
 from waves import builders
+from waves._settings import _cd_action_prefix
 
 
 fs = SCons.Node.FS.FS()
@@ -97,7 +98,7 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     assert program == first_found_path
 
 
-prepended_string = f"cd ${{TARGET.dir.abspath}} && "
+prepended_string = f"{_cd_action_prefix} "
 post_action_list = {
     "list1": (["thing1"], [prepended_string + "thing1"]),
     "list2": (["thing1", "thing2"], [prepended_string + "thing1", prepended_string + "thing2"]),
