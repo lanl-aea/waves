@@ -331,7 +331,8 @@ def test_abaqus_journal_emitter(target, source, expected):
 
 
 sbatch_input = {
-    "default behavior": ("sbatch", [], 2, 1)
+    "default behavior": ("sbatch", [], 2, 1),
+    "different command": ("dummy", [], 2, 1)
 }
 
 
@@ -342,7 +343,7 @@ sbatch_input = {
 @pytest.mark.unittest
 def test_sbatch(sbatch_program, post_action, node_count, action_count):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"SlurmSbatch": builders.sbatch()})
+    env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(sbatch_program, post_action)})
     # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
     nodes = env.SlurmSbatch(target=["target.out"], source=["source.in"], slurm_options="",
                             slurm_job="echo $SOURCE > $TARGET")
