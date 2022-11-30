@@ -65,7 +65,7 @@ def get_parser():
     default_x_var = "E"
     default_y_var = "S"
     default_selection_dict = "{'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', " \
-                             "'integration point': 0, 'data_type': 'samples'}"
+                             "'integration point': 0}"
     default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
