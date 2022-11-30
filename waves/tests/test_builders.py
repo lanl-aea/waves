@@ -355,9 +355,12 @@ def test_abaqus_extract_emitter(target, source, expected, env):
 def test_abaqus_extract():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"AbaqusExtract": builders.abaqus_extract()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.AbaqusExtract(
+    nodes = env.AbaqusExtract(
         target=["abaqus_extract.h5"], source=["abaqus_extract.odb"], journal_options="")
+    expected_string = 'cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.csv ${TARGET.filebase}.h5 ' \
+                      '${TARGET.filebase}_datasets.h5 > ${TARGET.file}.stdout 2>&1 || true' \
+                      '\n_build_odb_extract(target, source, env)'
+    check_action_string(nodes, [], 4, 1, expected_string)
 
 
 source_file = fs.File("/dummy.source")
