@@ -289,9 +289,10 @@ def test_python_script(post_action, node_count, action_count, target_list):
 def test_conda_environment():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"CondaEnvironment": builders.conda_environment()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.CondaEnvironment(
+    nodes = env.CondaEnvironment(
         target=["environment.yaml"], source=[], conda_env_export_options="")
+    expected_string = 'cd ${TARGET.dir.abspath} && conda env export ${conda_env_export_options} --file ${TARGET.file}'
+    check_action_string(nodes, [], 1, 1, expected_string)
 
 
 source_file = fs.File("dummy.odb")
