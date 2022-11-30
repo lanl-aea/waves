@@ -109,22 +109,24 @@ def test_abaqus_journal_emitter(target, source, expected):
     assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
 abaqus_journal_input = {
-    "default behavior": ("abaqus", [], 3, 1),
-    "different command": ("dummy", [], 3, 1),
-    "post action": ("abaqus", ["post action"], 3, 1)
+    "default behavior": ("abaqus", [], 3, 1, ["journal1.cae"]),
+    "different command": ("dummy", [], 3, 1, ["journal2.cae"]),
+    "post action": ("abaqus", ["post action"], 3, 1, ["journal3.cae"])
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count",
+@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, target_list",
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
 @pytest.mark.unittest
-def test_abaqus_journal(abaqus_program, post_action, node_count, action_count):
+def test_abaqus_journal(abaqus_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(abaqus_program, post_action)})
-    nodes = env.AbaqusJournal(target=["journal.cae"], source=["journal.py"], journal_options="")
+    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
                        '${TARGET.filebase}.abaqus_v6.env\n' \
                       f'cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ' \
@@ -351,6 +353,8 @@ def test_sbatch_emitter(target, source, expected):
     assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
 sbatch_input = {
     "default behavior": ("sbatch", [], 2, 1, ["target1.out"]),
     "different command": ("dummy", [], 2, 1, ["target2.out"]),
