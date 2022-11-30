@@ -64,7 +64,8 @@ def get_parser():
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
     default_x_var = "E"
     default_y_var = "S"
-    default_selection_dict = "{'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}"
+    default_selection_dict = "{'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', " \
+                             "'integration point': 0, 'data_type': 'samples'}"
     default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
