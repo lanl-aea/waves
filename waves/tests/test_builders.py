@@ -109,12 +109,29 @@ def test_abaqus_journal_emitter(target, source, expected):
     assert target == expected
 
 
+abaqus_journal_input = {
+    "default behavior": ("abaqus", [], 3, 2),
+    "different command": ("dummy", [], 3, 2)
+}
+
+
 @pytest.mark.unittest
-def test_abaqus_journal():
+@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count",
+                         abaqus_journal_input.values(),
+                         ids=abaqus_journal_input.keys())
+@pytest.mark.unittest
+def test_abaqus_journal(abaqus_program, post_action, node_count, action_count):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal()})
-    # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
-    node = env.AbaqusJournal(target=["journal.cae"], source=["journal.py"], journal_options="")
+    env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(abaqus_program, post_action)})
+    nodes = env.AbaqusJournal(target=["journal.cae"], source=["journal.py"], journal_options="")
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ' \
+                       '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
+    assert len(nodes) == node_count
+    for node in nodes:
+        node.get_executor()
+        assert len(node.executor.action_list) == action_count
+        assert str(node.executor.action_list[0]) == expected_string
+    del env
 
 
 source_file = fs.File("root.inp")
@@ -325,7 +342,7 @@ sbatch_emitter_input = {
 @pytest.mark.parametrize("target, source, expected",
                          sbatch_emitter_input.values(),
                          ids=sbatch_emitter_input.keys())
-def test_abaqus_journal_emitter(target, source, expected):
+def test_sbatch_emitter(target, source, expected):
     target, source = builders._sbatch_emitter(target, source, None)
     assert target == expected
 
@@ -353,3 +370,4 @@ def test_sbatch(sbatch_program, post_action, node_count, action_count):
         node.get_executor()
         assert len(node.executor.action_list) == action_count
         assert str(node.executor.action_list[0]) == expected_string
+    del env
