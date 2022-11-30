@@ -330,15 +330,26 @@ def test_abaqus_journal_emitter(target, source, expected):
     assert target == expected
 
 
+sbatch_input = {
+    "default behavior": ("sbatch", [], 2, 1)
+}
+
+
 @pytest.mark.unittest
-def test_sbatch():
+@pytest.mark.parametrize("sbatch_program, post_action, node_count, action_count",
+                         sbatch_input.values(),
+                         ids=sbatch_input.keys())
+@pytest.mark.unittest
+def test_sbatch(sbatch_program, post_action, node_count, action_count):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"SlurmSbatch": builders.sbatch()})
     # TODO: Figure out how to inspect a builder"s action definition after creating the associated target.
     nodes = env.SlurmSbatch(target=["target.out"], source=["source.in"], slurm_options="",
                             slurm_job="echo $SOURCE > $TARGET")
-    assert len(nodes) == 2
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
+                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+    assert len(nodes) == node_count
     for node in nodes:
         node.get_executor()
-        assert len(node.executor.action_list) == 1
-        assert str(node.executor.action_list[0]) == 'cd ${TARGET.dir.abspath} && sbatch --wait ${slurm_options} --wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+        assert len(node.executor.action_list) == action_count
+        assert str(node.executor.action_list[0]) == expected_string
