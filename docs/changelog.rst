@@ -12,6 +12,8 @@ New Features
 ============
 - Add quantitative regression test option to the tutorial and quickstart post-processing script (:issue:`329`,
   :merge:`406`). By `Kyle Brindley`_.
+- Manage Cubit environment ``PATH``-like variables from the project configuration file instead of relying on the user
+  environment or a project modulefile (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
