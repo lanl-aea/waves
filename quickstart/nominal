@@ -99,9 +99,11 @@ workflow.extend(env.AbaqusExtract(
 
 # Post-processing
 plot_name = "stress_strain_comparison"
-post_processing_source = [f"{job_name}_datasets.h5"]
+regression_file = eabm_package_abspath / f"{workflow_name}_{plot_name}.csv"
+post_processing_source = [f"{job_name}_datasets.h5", str(regression_file)]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += f" --csv-regression-file {regression_file}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[str(eabm_package_abspath / "plot_scatter.py")] + post_processing_source,
