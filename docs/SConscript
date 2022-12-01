@@ -164,7 +164,7 @@ tutorial_files_list = [
     tutorials_dir / env['python_dir'] / 'single_element_compression_latin_hypercube.py',
     tutorials_dir / env['python_dir'] / 'single_element_compression_sobol_sequence.py',
     tutorials_dir / env['python_dir'] / 'single_element_compression_mesh_convergence.py',
-    tutorials_dir / env['python_dir'] / 'plot_scatter.py'
+    tutorials_dir / env['python_dir'] / 'post_processing.py'
 ]
 for file_path in tutorial_files_list:
     target = f'{file_path.parts[-2]}_{file_path.name}'

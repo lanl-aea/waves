@@ -22,8 +22,8 @@ single_element_mesh.py
 .. argparse::
     :ref: eabm_package.single_element_mesh.get_parser
 
-plot_scatter.py
+post_processing.py
 ==========================
 
 .. argparse::
-    :ref: eabm_package.plot_scatter.get_parser
+    :ref: eabm_package.post_processing.get_parser

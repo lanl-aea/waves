@@ -91,12 +91,12 @@ single_element_mesh.py
 python
 ******
 
-.. _eabm_plot_scatter_api:
+.. _eabm_post_processing_api:
 
-plot_scatter.py
+post_processing.py
 ===============
 
-.. automodule:: eabm_package.python.plot_scatter
+.. automodule:: eabm_package.python.post_processing
     :noindex:
     :members:
     :show-inheritance:

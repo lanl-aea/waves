@@ -164,7 +164,7 @@ script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
+    source=[str(eabm_package_abspath / "post_processing.py"), parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 plot_name = "mesh_convergence_stress"
@@ -175,7 +175,7 @@ script_options += f" --parameter-study-file {parameter_study_file.name}"
 script_options += f" --selection-dict {selection_dict}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
+    source=[str(eabm_package_abspath / "post_processing.py"), parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 # Data archival

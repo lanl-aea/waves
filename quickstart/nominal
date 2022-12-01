@@ -106,7 +106,7 @@ script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 
 script_options += f" --csv-regression-file {regression_file}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[str(eabm_package_abspath / "plot_scatter.py")] + [str(regression_file)] + post_processing_source,
+    source=[str(eabm_package_abspath / "post_processing.py")] + [str(regression_file)] + post_processing_source,
     script_options=script_options))
 
 # Data archival

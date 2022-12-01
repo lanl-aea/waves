@@ -53,7 +53,7 @@ changes made in this tutorial.
 Post-processing script
 **********************
 
-4. In the ``waves-eabm-tutorial/eabm_package/python`` directory, create a file called ``plot_scatter.py`` using the
+4. In the ``waves-eabm-tutorial/eabm_package/python`` directory, create a file called ``post_processing.py`` using the
    contents below.
 
 .. note::
@@ -61,13 +61,13 @@ Post-processing script
    Depending on the memory and disk resources available and the size of the simulation workflow results, modsim projects
    may need to review the `Xarray`_ documentation for resource management specific to the projects' use case.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/plot_scatter.py
+.. admonition:: waves-eabm-tutorial/eabm_package/python/post_processing.py
 
-   .. literalinclude:: python_plot_scatter.py
+   .. literalinclude:: python_post_processing.py
       :language: Python
 
-The script API and CLI are included in the :ref:`waves_eabm_api`: :ref:`eabm_plot_scatter_api` and :ref:`waves_eabm_cli`:
-:ref:`eabm_plot_scatter_cli`, respectively.
+The script API and CLI are included in the :ref:`waves_eabm_api`: :ref:`eabm_post_processing_api` and :ref:`waves_eabm_cli`:
+:ref:`eabm_post_processing_cli`, respectively.
 
 **********
 SConstruct

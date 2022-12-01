@@ -42,12 +42,12 @@ abaqus_journal_utilities.py
     :show-inheritance:
     :synopsis: Abaqus utilities to be re-used in multiple places
 
-.. _eabm_plot_scatter_api:
+.. _eabm_post_processing_api:
 
-plot_scatter.py
+post_processing.py
 ===============
 
-.. automodule:: eabm_package.plot_scatter
+.. automodule:: eabm_package.post_processing
     :noindex:
     :members:
     :show-inheritance:
