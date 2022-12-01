@@ -102,25 +102,38 @@ Output Files
 
 .. code-block::
 
-   $ cat build/tutorial_09_post-processing/stress_strain_comparison.stdout
+   $ tree build/tutorial_09_post_processing/ -L 1
+   build/tutorial_09_post_processing/
+   |-- parameter_set0
+   |-- parameter_set1
+   |-- parameter_set2
+   |-- parameter_set3
+   |-- parameter_study.h5
+   |-- stress_strain_comparison.csv
+   |-- stress_strain_comparison.pdf
+   `-- stress_strain_comparison.stdout
+
+   4 directories, 4 files
+   $ cat build/tutorial_09_post_processing/stress_strain_comparison.stdout
    <xarray.Dataset>
-   Dimensions:             (parameter_sets: 4, step: 1, time: 5, elements: 1,
-                            E values: 4, S values: 4, data_type: 1,
-                            parameter_set_hash: 4)
+   Dimensions:             (step: 1, time: 5, elements: 1, integration point: 4,
+                            E values: 4, parameter_sets: 4, S values: 4,
+                            data_type: 1)
    Coordinates:
-     * E values            (E values) object 'E11' 'E22' 'E33' 'E12'
-     * S values            (S values) object 'S11' 'S22' 'S33' 'S12'
-     * elements            (elements) int64 1
-       integrationPoint    (elements) int64 1
      * step                (step) object 'Step-1'
      * time                (time) float64 0.0175 0.07094 0.2513 0.86 1.0
+     * elements            (elements) int64 1
+       integrationPoint    (elements, integration point) float64 1.0 nan nan nan
+     * E values            (E values) object 'E11' 'E22' 'E33' 'E12'
+     * S values            (S values) object 'S11' 'S22' 'S33' 'S12'
      * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
      * data_type           (data_type) object 'samples'
-     * parameter_set_hash  (parameter_set_hash) object 'cfd965cb3f219ad308195242...
+       parameter_set_hash  (parameter_sets) object ...
+   Dimensions without coordinates: integration point
    Data variables:
-       E                  (parameter_sets, step, time, elements, E values) float32 ...
-       S                   (parameter_sets, step, time, elements, S values) float32 ...
-       displacement        (data_type, parameter_set_hash) float64 ...
-       global_seed         (data_type, parameter_set_hash) float64 ...
-       height              (data_type, parameter_set_hash) float64 ...
-       width               (data_type, parameter_set_hash) float64 ...
+       E                   (parameter_sets, step, time, elements, integration point, E values) float32 ...
+       S                   (parameter_sets, step, time, elements, integration point, S values) float32 ...
+       displacement        (data_type, parameter_sets) float64 ...
+       global_seed         (data_type, parameter_sets) float64 ...
+       height              (data_type, parameter_sets) float64 ...
+       width               (data_type, parameter_sets) float64 ...

@@ -53,6 +53,9 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     combined_data[x_var].attrs["units"] = x_units
     combined_data[y_var].attrs["units"] = y_units
 
+    # Tutorial 09: post processing print statement to view data structure
+    print(combined_data)
+
     # Plot
     combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
     matplotlib.pyplot.title(None)
