@@ -94,7 +94,7 @@ python
 .. _eabm_post_processing_api:
 
 post_processing.py
-===============
+==================
 
 .. automodule:: eabm_package.python.post_processing
     :noindex:

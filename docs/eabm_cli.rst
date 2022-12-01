@@ -65,7 +65,7 @@ python
 .. _eabm_post_processing_cli:
 
 post_processing.py
-===============
+==================
 
 .. argparse::
     :ref: eabm_package.python.post_processing.get_parser
