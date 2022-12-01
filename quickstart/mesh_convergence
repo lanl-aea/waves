@@ -157,25 +157,25 @@ workflow.extend(env.Command(
     parameter_generator=parameter_generator))
 
 # Post-processing
-plot_name = "stress_strain_comparison.pdf"
+plot_name = "stress_strain_comparison"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
-script_options += f" --output-file {plot_name} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
-    target=[plot_name],
-    source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
+    target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+    source=[str(eabm_package_abspath / "post_processing.py"), parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
-plot_name = "mesh_convergence_stress.pdf"
+plot_name = "mesh_convergence_stress"
 selection_dict = '"{\'E values\': \'E22\', \'S values\': \'S22\', \'elements\': 1, \'step\': \'Step-1\', \'time\': 1.0, \'integration point\': 0}"'
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
-script_options += f" --output-file {plot_name} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
+script_options += f" --output-file ${{TARGET.file}} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 script_options += f" --selection-dict {selection_dict}"
 workflow.extend(env.PythonScript(
-    target=[plot_name],
-    source=[str(eabm_package_abspath / "plot_scatter.py"), parameter_study_file.name] + post_processing_source,
+    target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+    source=[str(eabm_package_abspath / "post_processing.py"), parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 # Data archival

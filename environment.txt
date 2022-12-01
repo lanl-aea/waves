@@ -1,9 +1,10 @@
 git
 h5netcdf
 h5py
-matplotlib
 mamba
+matplotlib
 numpy
+pandas
 pytest
 pytest-xdist
 pyyaml
