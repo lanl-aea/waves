@@ -49,6 +49,17 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_09_post_processing tutorial_10_regression_testing
 
+********
+CSV file
+********
+
+4. Create a new file named ``single_element_compression_cartesian_product.csv`` from the contents below
+
+.. admonition:: waves-eabm-tutorial/python_single_element_compression_cartesian_product.csv
+
+   .. literalinclude:: python_single_element_compression_cartesian_product.csv
+      :lineno-match:
+
 **********
 SConscript
 **********
