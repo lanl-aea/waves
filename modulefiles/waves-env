@@ -5,8 +5,6 @@ conflict aea-release
 conflict aea-beta
 
 # Set AEA standard software version and environment names
-set cubit_version "Cubit-15.8"
-set matlab_version "R2021b"
 set anaconda_version "2020.07"
 set python_version "3.8"
 set environment "waves-env"
@@ -17,8 +15,6 @@ set hostname [info hostname]
 # Set host specific environment information
 set projects ""
 set software_prefix ""
-set cubit_path ""
-set matlab_path ""
 set abaqus_path ""
 set anaconda_path ""
 # HPC case
@@ -26,7 +22,6 @@ if { [ string match "sn-rfe?.lanl.gov" $hostname ] ||
      [ string match "sn???.localdomain" $hostname ] } {
     set software_prefix "/usr/projects/hpcsoft/common/x86_64"
     set projects "/usr/projects/ea"
-    set cubit_path "$projects/Cubit/$cubit_version"
     set abaqus_path "$projects/abaqus/Commands"
 
     module load intel
@@ -34,8 +29,6 @@ if { [ string match "sn-rfe?.lanl.gov" $hostname ] ||
 } elseif { [ string match "*.lanl.gov" $hostname ] } {
     set software_prefix "/apps"
     set projects "/projects"
-    set cubit_path "$software_prefix/$cubit_version"
-    set matlab_path "$software_prefix/matlab/$matlab_version/bin"
     set abaqus_path "$software_prefix/abaqus/Commands"
 # Error out
 } else {
@@ -46,8 +39,6 @@ set anaconda_bin "$anaconda_path/bin"
 set environment_path "$projects/aea_compute/$environment"
 set environment_bin "$environment_path/bin"
 set environment_man "$environment_path/share/man"
-set cubit_bin "$cubit_path/bin"
-set cubit_bin_python "$cubit_path/bin/python3"
 
 # Set the bash environment variables similarly to HPC anaconda module
 # Reference - sn-rfe.lanl.gov:/usr/projects/hpcsoft/modulefiles/toss3/snow/tools/python/3.8-anaconda-2020.07
@@ -56,13 +47,6 @@ prepend-path MANPATH "$environment_man"
 
 # Set the bash environment variables for commonly used AEA software
 append-path PATH "$abaqus_path"
-append-path PATH "$cubit_path"
-append-path PATH "$cubit_bin"
-append-path PATH "$matlab_path"
-append-path PYTHONPATH "$cubit_bin"
-
-# Set the bash environment variables for deployed AEA libraries
-prepend-path LD_LIBRARY_PATH "$cubit_bin_python"
 
 # Set some aliases similarly to W-13 compute servers
 # Reference - sstelmo.lanl.gov:/usr/share/Modules/modulefiles/python/2020.07-python-3.8
@@ -102,11 +86,7 @@ proc ModulesHelp {} {
     global environment_path
     global environment_bin
     global environment_man
-    global cubit_version
     global abaqus_path
-    global matlab_path
-    global cubit_path
-    global cubit_bin
 
     puts stderr "\nWAVES modulefiles debugging information"
     puts stderr "hostname: $hostname"
@@ -117,14 +97,11 @@ proc ModulesHelp {} {
     puts stderr "python_version: $python_version"
     puts stderr "anaconda_path: $anaconda_path"
     puts stderr "environment_path: $environment_path"
-    puts stderr "cubit_version: $cubit_version"
     puts stderr "abaqus_path: $abaqus_path"
-    puts stderr "matlab_path: $matlab_path"
 
     puts stderr "\n\nModifies environment variables"
     puts stderr "PATH prepended with: $environment_bin:$anaconda_bin"
-    puts stderr "PATH appended with: $abaqus_path:$cubit_path:$cubit_bin:$matlab_path"
-    puts stderr "PYTHONPATH appended with: $cubit_bin"
+    puts stderr "PATH appended with: $abaqus_path"
     puts stderr "MANPATH prepended with: $environment_man"
 
     puts stderr "\n\nSets aliases:"

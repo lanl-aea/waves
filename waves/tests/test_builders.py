@@ -40,6 +40,28 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
         assert str(node.executor.action_list[0]) == expected_string
 
 
+cubit_environment_input = {
+    "path exists": ("/cubit_program", True, does_not_raise()),
+    "path does not exist": ("/notapath", False, pytest.raises(FileNotFoundError))
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("cubit_program, mock_exists, outcome",
+                         cubit_environment_input.values(),
+                         ids=cubit_environment_input.keys())
+def test_prepend_cubit_environment(cubit_program, mock_exists, outcome):
+    env = SCons.Environment.Environment()
+    with patch("pathlib.Path.exists", return_value=mock_exists), outcome:
+        try:
+            builders.prepend_cubit_environment(cubit_program, env)
+            assert "/" in env["ENV"]["PATH"]
+            assert "/bin" in env["ENV"]["PYTHONPATH"]
+            assert "/bin/python3" in env["ENV"]["LD_LIBRARY_PATH"]
+        finally:
+            pass
+
+
 substitution_dictionary = {"thing1": 1, "thing_two": "two"}
 substitution_syntax_input = {
     "default characters": (substitution_dictionary, {}, {"@thing1@": 1, "@thing_two@": "two"}),
