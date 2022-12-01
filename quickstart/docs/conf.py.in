@@ -13,7 +13,7 @@ author_latex = r"@author_latex@"
 # Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.
 mock_modules = ["abaqus", "abaqusConstants", "mesh", "cubit", "scipy", "scipy.stats", "xarray", "pyyaml", "h5py",
-                "numpy", "matplotlib", "matplotlib.pyplot", "waves"]
+                "numpy", "matplotlib", "matplotlib.pyplot", "waves", "pandas"]
 for mod_name in mock_modules:
     sys.modules[mod_name] = unittest.mock.Mock()
 
