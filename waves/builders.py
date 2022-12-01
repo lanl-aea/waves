@@ -33,7 +33,7 @@ def prepend_cubit_environment(cubit_program, env):
     """
     cubit_program = pathlib.Path(cubit_program).resolve()
     if not cubit_program.exists():
-        raise RuntimeError("The cubit program '{cubit_program}' does not exist.")
+        raise RuntimeError(f"The cubit program '{cubit_program}' does not exist.")
     cubit_python_dir = cubit_program.parent / "bin"
     cubit_python_library_dir = cubit_python_dir / "python3"
     env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
