@@ -12,6 +12,7 @@ New Features
 ============
 - Add quantitative regression test option to the tutorial and quickstart post-processing script (:issue:`329`,
   :merge:`406`). By `Kyle Brindley`_.
+- Add a Cubit environment modifier helper method (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
 - Manage Cubit environment ``PATH``-like variables from the project configuration file instead of relying on the user
   environment or a project modulefile (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
 - Update the expected Cubit version from 15.8 to 16.04 (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
