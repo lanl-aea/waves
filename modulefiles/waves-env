@@ -15,21 +15,18 @@ set hostname [info hostname]
 # Set host specific environment information
 set projects ""
 set software_prefix ""
-set abaqus_path ""
 set anaconda_path ""
 # HPC case
 if { [ string match "sn-rfe?.lanl.gov" $hostname ] ||
      [ string match "sn???.localdomain" $hostname ] } {
     set software_prefix "/usr/projects/hpcsoft/common/x86_64"
     set projects "/usr/projects/ea"
-    set abaqus_path "$projects/abaqus/Commands"
 
     module load intel
 # W-13 machine cases
 } elseif { [ string match "*.lanl.gov" $hostname ] } {
     set software_prefix "/apps"
     set projects "/projects"
-    set abaqus_path "$software_prefix/abaqus/Commands"
 # Error out
 } else {
     error "Unknown or unsupported host"
@@ -44,9 +41,6 @@ set environment_man "$environment_path/share/man"
 # Reference - sn-rfe.lanl.gov:/usr/projects/hpcsoft/modulefiles/toss3/snow/tools/python/3.8-anaconda-2020.07
 prepend-path PATH "$environment_bin:$anaconda_bin"
 prepend-path MANPATH "$environment_man"
-
-# Set the bash environment variables for commonly used AEA software
-append-path PATH "$abaqus_path"
 
 # Set some aliases similarly to W-13 compute servers
 # Reference - sstelmo.lanl.gov:/usr/share/Modules/modulefiles/python/2020.07-python-3.8
@@ -86,7 +80,6 @@ proc ModulesHelp {} {
     global environment_path
     global environment_bin
     global environment_man
-    global abaqus_path
 
     puts stderr "\nWAVES modulefiles debugging information"
     puts stderr "hostname: $hostname"
@@ -97,11 +90,9 @@ proc ModulesHelp {} {
     puts stderr "python_version: $python_version"
     puts stderr "anaconda_path: $anaconda_path"
     puts stderr "environment_path: $environment_path"
-    puts stderr "abaqus_path: $abaqus_path"
 
     puts stderr "\n\nModifies environment variables"
     puts stderr "PATH prepended with: $environment_bin:$anaconda_bin"
-    puts stderr "PATH appended with: $abaqus_path"
     puts stderr "MANPATH prepended with: $environment_man"
 
     puts stderr "\n\nSets aliases:"
