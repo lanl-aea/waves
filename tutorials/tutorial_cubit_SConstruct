@@ -39,7 +39,7 @@ env = Environment(ENV=os.environ.copy(),
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env['abaqus'] = waves.builders.find_program(["abq2022", "abq2021", "abq2020"], env)
-env["cubit"] = waves.builders.find_program(["/apps/Cubit-16.04/cubit"], env)
+env["cubit"] = waves.builders.find_program(["/apps/Cubit-16.04/cubit", "cubit"], env)
 
 # Add Cubit paths to construction environment
 cubit_python_dir = pathlib.Path(env["cubit"]).parent / "bin"
