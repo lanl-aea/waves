@@ -62,10 +62,10 @@ single_element_mesh.py
 python
 ******
 
-.. _eabm_plot_scatter_cli:
+.. _eabm_post_processing_cli:
 
-plot_scatter.py
-===============
+post_processing.py
+==================
 
 .. argparse::
-    :ref: eabm_package.python.plot_scatter.get_parser
+    :ref: eabm_package.python.post_processing.get_parser

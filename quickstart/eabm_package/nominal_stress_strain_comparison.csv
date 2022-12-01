@@ -1,0 +1,6 @@
+time,parameter_sets,step,elements,integrationPoint,E values,E,S values,S
+0.0175000000745058,nominal,Step-1,1,1.0,E22,-0.000175,S22,-0.0175
+0.0709374994039536,nominal,Step-1,1,1.0,E22,-0.000709375,S22,-0.0709375
+0.251289069652557,nominal,Step-1,1,1.0,E22,-0.00251289,S22,-0.251289
+0.859975576400757,nominal,Step-1,1,1.0,E22,-0.00859976,S22,-0.859976
+1.0,nominal,Step-1,1,1.0,E22,-0.01,S22,-1.0

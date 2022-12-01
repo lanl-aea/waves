@@ -5,8 +5,28 @@ Changelog
 #########
 
 ******************
-0.5.7 (unreleased)
+0.5.8 (unreleased)
 ******************
+
+******************
+0.5.7 (2022-12-01)
+******************
+
+New Features
+============
+- Add quantitative regression test option to the tutorial and quickstart post-processing script (:issue:`329`,
+  :merge:`406`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Update the ``plot_scatter.py`` tutorial and quickstart post-processing script to account for the new dimension in
+  ``odb_extract`` output (:issue:`365`, :merge:`405`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Add builder action unit tests (:issue:`364`, :merge:`404`). By `Kyle Brindley`_.
+- Change post processing script name in the tutorials and quickstart template files to match broader scope
+  (:issue:`329`, :merge:`406`). By `Kyle Brindley`_.
 
 ******************
 0.5.6 (2022-11-29)

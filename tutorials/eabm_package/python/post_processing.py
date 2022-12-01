@@ -7,10 +7,12 @@ import pathlib
 import yaml
 
 import xarray
+import pandas
 import matplotlib.pyplot
 
 
-def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict, parameter_study_file=None):
+def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
+         parameter_study_file=None, csv_regression_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
@@ -27,7 +29,13 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
         pairs must match the data variables and coordinates of the expected Xarray Dataset object.
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
+    :param str csv_regression_file: path-like or file-like object containing the CSV dataset to compare with the current
+        plot data. If the data sets do not match a non-zero exit code is returned.
     """
+    output_file = pathlib.Path(output_file)
+    output_csv = output_file.with_suffix(".csv")
+    if csv_regression_file:
+        csv_regression_file = pathlib.Path(csv_regression_file)
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
@@ -45,14 +53,31 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     combined_data[x_var].attrs["units"] = x_units
     combined_data[y_var].attrs["units"] = y_units
 
+    # Tutorial 09: post processing print statement to view data structure
+    print(combined_data)
+
     # Plot
     combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
+    matplotlib.pyplot.title(None)
     matplotlib.pyplot.savefig(output_file)
+
+    # Table
+    combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
 
     # Clean up open files
     combined_data.close()
     if parameter_study_file:
         parameter_study.close()
+
+    # Regression test
+    if csv_regression_file:
+        current_csv = pandas.read_csv(output_csv)
+        regression_csv = pandas.read_csv(csv_regression_file)
+        equal = regression_csv.equals(current_csv)
+        if not equal:
+            print(f"The CSV regression test failed. Data in '{csv_regression_file.resolve()}' and " \
+                  f"'{output_csv.resolve()}' do not match.", file=sys.stderr)
+            return 1
 
     return 0
 
@@ -63,7 +88,8 @@ def get_parser():
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
     default_x_var = "E"
     default_y_var = "S"
-    default_selection_dict = "{'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1'}"
+    default_selection_dict = "{'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', " \
+                             "'integration point': 0}"
     default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
@@ -81,8 +107,8 @@ def get_parser():
 
     parser.add_argument("-o", "--output-file", type=str, default=default_output_file,
                         help="The output file for the stress-strain comparison plot with extension, " \
-                             "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. " \
-                             "(default: %(default)s)")
+                             "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also " \
+                             "used for the CSV table output, e.g. ``output_file.csv``. (default: %(default)s)")
     parser.add_argument("-g", "--group-path", type=str, default=default_group_path,
                         help="The h5py group path to the dataset object (default: %(default)s)")
     parser.add_argument("-x", "--x-var", type=str, default=default_x_var,
@@ -95,6 +121,10 @@ def get_parser():
                              "(default: %(default)s)")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
                         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)")
+    parser.add_argument("--csv-regression-file", type=str, default=None,
+                        help="An optional CSV file to compare with the current plot data. If the CSV file data and " \
+                             "the current plot data do not match, a non-zero exit code is returned " \
+                             "(default: %(default)s)")
 
     return parser
 
@@ -111,4 +141,5 @@ if __name__ == "__main__":
                   y_var=args.y_var,
                   y_units=args.y_units,
                   selection_dict=selection_dict,
-                  parameter_study_file=args.parameter_study_file))
+                  parameter_study_file=args.parameter_study_file,
+                  csv_regression_file=args.csv_regression_file))

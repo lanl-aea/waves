@@ -49,6 +49,17 @@ Directory Structure
    /path/to/waves-eabm-tutorial
    $ cp tutorial_09_post_processing tutorial_10_regression_testing
 
+********
+CSV file
+********
+
+4. Create a new file named ``single_element_compression_cartesian_product.csv`` from the contents below
+
+.. admonition:: waves-eabm-tutorial/python_single_element_compression_cartesian_product.csv
+
+   .. literalinclude:: python_single_element_compression_cartesian_product.csv
+      :lineno-match:
+
 **********
 SConscript
 **********
@@ -117,6 +128,17 @@ simulation suite against the limited datacheck workflow, perform the following s
    # Compare times
    $ grep "real" time_{datacheck,full}_workflow.txt
 
+5. Run the full workflow and verify that the CSV regression test passes
+
+.. code-block:: bash
+
+   $ pwd
+   /path/to/waves-eabm-tutorial
+   $ scons tutorial_10_regression_testing --jobs=4
+   <output truncated>
+   $ echo $?
+   0
+
 ************
 Output Files
 ************
@@ -164,6 +186,18 @@ Output Files
    `-- single_element_partition.stdout
 
    0 directories, 35 files
+   $ tree build/tutorial_10_regression_testing/ -L 1
+   build/tutorial_10_regression_testing/
+   |-- parameter_set0
+   |-- parameter_set1
+   |-- parameter_set2
+   |-- parameter_set3
+   |-- parameter_study.h5
+   |-- stress_strain_comparison.csv
+   |-- stress_strain_comparison.pdf
+   `-- stress_strain_comparison.stdout
+
+   4 directories, 4 files
 
 **********
 Automation
