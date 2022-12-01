@@ -21,6 +21,8 @@ Bug fixes
 Internal Changes
 ================
 - Add builder action unit tests (:issue:`364`, :merge:`404`). By `Kyle Brindley`_.
+- Change post processing script name in the tutorials and quickstart template files to match broader scope
+  (:issue:`329`, :merge:`406`). By `Kyle Brindley`_.
 
 ******************
 0.5.6 (2022-11-29)
