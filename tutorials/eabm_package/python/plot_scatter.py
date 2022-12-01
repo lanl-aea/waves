@@ -34,7 +34,8 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     """
     output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
-    csv_regression_file = pathlib.Path(csv_regression_file)
+    if csv_regression_file:
+        csv_regression_file = pathlib.Path(csv_regression_file)
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
