@@ -42,7 +42,7 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
 
 cubit_environment_input = {
     "path exists": ("/cubit_program", True, does_not_raise()),
-    "path does not exist": ("/notapath", False, pytest.raises(RuntimeError))
+    "path does not exist": ("/notapath", False, pytest.raises(FileNotFoundError))
 }
 
 
