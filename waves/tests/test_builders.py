@@ -55,6 +55,7 @@ def test_prepend_cubit_environment(cubit_program, mock_exists, outcome):
     with patch("pathlib.Path.exists", return_value=mock_exists), outcome:
         try:
             builders.prepend_cubit_environment(cubit_program, env)
+            assert "/" in env["ENV"]["PATH"]
             assert "/bin" in env["ENV"]["PYTHONPATH"]
             assert "/bin/python3" in env["ENV"]["LD_LIBRARY_PATH"]
         finally:

@@ -38,6 +38,7 @@ def prepend_cubit_environment(cubit_program, env):
         raise FileNotFoundError(f"The cubit program '{cubit_program}' does not exist.")
     cubit_python_dir = cubit_program.parent / "bin"
     cubit_python_library_dir = cubit_python_dir / "python3"
+    env.PrependENVPath("PATH", str(cubit_program.parent))
     env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
     env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
 
