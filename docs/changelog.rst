@@ -8,6 +8,11 @@ Changelog
 0.5.7 (unreleased)
 ******************
 
+New Features
+============
+- Add quantitative regression test option to the tutorial and quickstart post-processing script (:issue:`329`,
+  :merge:`406`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
 - Update the ``plot_scatter.py`` tutorial and quickstart post-processing script to account for the new dimension in
