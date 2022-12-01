@@ -34,6 +34,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     """
     output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
+    csv_regression_file = pathlib.Path(csv_regression_file)
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
@@ -70,7 +71,8 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
         regression_csv = pandas.read_csv(csv_regression_file)
         equal = regression_csv.equals(current_csv)
         if not equal:
-            print("The CSV regression data does not match the current data", file=sys.stderr)
+            print(f"The CSV regression test failed. Data in '{csv_regression_file.resolve()}' and " \
+                  f"'{output_csv.resolve()}' do not match.", file=sys.stderr)
             return 1
 
     return 0
