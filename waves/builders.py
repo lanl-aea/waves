@@ -37,7 +37,7 @@ def prepend_env_path(program, env):
     env.PrependENVPath("PATH", str(program.parent))
 
 
-def prepend_cubit_environment(cubit_program, env):
+def prepend_env_cubit(cubit_program, env):
     """Prepend environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Prepends the SCons construction environment, ``env``, ``PATH`` with the parent directory of the cubit program.
@@ -55,7 +55,7 @@ def prepend_cubit_environment(cubit_program, env):
 
        env["cubit"] = waves.builders.find_program(["cubit"], env)
        if env["cubit"]:
-           waves.prepend_cubit_environment(env["cubit"], env)
+           waves.prepend_env_cubit(env["cubit"], env)
     """
     cubit_program = pathlib.Path(cubit_program)
     prepend_env_path(cubit_program, env)

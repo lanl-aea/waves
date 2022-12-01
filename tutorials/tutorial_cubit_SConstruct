@@ -45,7 +45,7 @@ env["cubit"] = waves.builders.find_program(["/apps/Cubit-16.04/cubit", "cubit"],
 
 # Add Cubit paths to construction environment
 if env["cubit"]:
-    waves.builders.prepend_cubit_environment(env["cubit"], env)
+    waves.builders.prepend_env_cubit(env["cubit"], env)
 
 # Comments used in tutorial code snippets: marker-4
 

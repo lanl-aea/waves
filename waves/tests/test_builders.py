@@ -66,11 +66,11 @@ def test_prepend_env_path(program, mock_exists, outcome):
 @pytest.mark.parametrize("program, mock_exists, outcome",
                          prepend_env_input.values(),
                          ids=prepend_env_input.keys())
-def test_prepend_cubit_environment(program, mock_exists, outcome):
+def test_prepend_env_cubit(program, mock_exists, outcome):
     env = SCons.Environment.Environment()
     with patch("pathlib.Path.exists", return_value=mock_exists), outcome:
         try:
-            builders.prepend_cubit_environment(program, env)
+            builders.prepend_env_cubit(program, env)
             assert "/" in env["ENV"]["PATH"]
             assert "/bin" in env["ENV"]["PYTHONPATH"]
             assert "/bin/python3" in env["ENV"]["LD_LIBRARY_PATH"]
