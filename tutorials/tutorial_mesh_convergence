@@ -160,10 +160,12 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
 
 # Post-processing
 plot_name = "stress_strain_comparison"
+regression_file = python_source_abspath / "single_element_compression_cartesian_product.csv"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
+script_options += f" --csv-regression-file {regression_file}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[f"{python_source_abspath}/plot_scatter.py", parameter_study_file.name] + post_processing_source,
