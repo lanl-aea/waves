@@ -42,8 +42,10 @@ env['abaqus'] = waves.builders.find_program(["abq2022", "abq2021", "abq2020"], e
 env["cubit"] = waves.builders.find_program(["/apps/Cubit-16.04/cubit"], env)
 
 # Add Cubit paths to construction environment
-cubit_python_dir = pathlib.Path(env["cubit"]) / "bin"
+cubit_python_dir = pathlib.Path(env["cubit"]).parent / "bin"
 cubit_python_library_dir = cubit_python_dir / "python3"
+print(cubit_python_dir)
+print(cubit_python_library_dir)
 env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
 env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
 
