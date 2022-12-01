@@ -28,6 +28,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
     """
+    output_file = pathlib.Path(output_file)
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
@@ -49,6 +50,10 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
     matplotlib.pyplot.title(None)
     matplotlib.pyplot.savefig(output_file)
+
+    # Table
+    output_csv = output_file.with_suffix(".csv")
+    combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
 
     # Clean up open files
     combined_data.close()
