@@ -68,6 +68,7 @@ test:
     - h5py
     - matplotlib
     - numpy
+    - pandas
     - pytest
     - pytest-xdist
     - pyyaml
