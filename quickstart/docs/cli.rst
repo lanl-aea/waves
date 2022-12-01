@@ -23,7 +23,7 @@ single_element_mesh.py
     :ref: eabm_package.single_element_mesh.get_parser
 
 post_processing.py
-==========================
+==================
 
 .. argparse::
     :ref: eabm_package.post_processing.get_parser

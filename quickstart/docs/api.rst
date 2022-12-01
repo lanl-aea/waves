@@ -45,7 +45,7 @@ abaqus_journal_utilities.py
 .. _eabm_post_processing_api:
 
 post_processing.py
-===============
+==================
 
 .. automodule:: eabm_package.post_processing
     :noindex:
