@@ -17,7 +17,10 @@ from waves._settings import _cd_action_prefix
 
 
 def prepend_cubit_environment(cubit_program, env):
-    """Prepend environment variables with the paths required ``import cubit`` in a Python3 environment
+    """Prepend environment variables with the paths required to ``import cubit`` in a Python3 environment.
+
+    Prepends the SCons construction environment, ``env``, ``PATH`` with the parent directory of the cubit program.
+    Prepends ``PYTHONPATH`` with ``parent/bin``.  Prepends ``LD_LIBRARY_PATH`` with ``parent/bin/python3``.
 
     Raises a ``FileNotFoundError`` if the ``cubit_program`` absolute path does not exist.
 
