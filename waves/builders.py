@@ -16,6 +16,27 @@ from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 
 
+def prepend_env_path(program, env):
+    """Prepend SCons contruction environment ``PATH`` with the program's parent directory
+
+    :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    .. code-block::
+       :caption: Example environment modification
+
+       import waves
+
+       env["program"] = waves.builders.find_program(["program"], env)
+       if env["program"]:
+           waves.prepend_env_path(env["program"], env)
+    """
+    program = pathlib.Path(program).resolve()
+    if not program.exists():
+        raise FileNotFoundError(f"The program '{program}' does not exist.")
+    env.PrependENVPath("PATH", str(program.parent))
+
+
 def prepend_cubit_environment(cubit_program, env):
     """Prepend environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
@@ -36,12 +57,10 @@ def prepend_cubit_environment(cubit_program, env):
        if env["cubit"]:
            waves.prepend_cubit_environment(env["cubit"], env)
     """
-    cubit_program = pathlib.Path(cubit_program).resolve()
-    if not cubit_program.exists():
-        raise FileNotFoundError(f"The cubit program '{cubit_program}' does not exist.")
+    cubit_program = pathlib.Path(cubit_program)
+    prepend_env_path(cubit_program, env)
     cubit_python_dir = cubit_program.parent / "bin"
     cubit_python_library_dir = cubit_python_dir / "python3"
-    env.PrependENVPath("PATH", str(cubit_program.parent))
     env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
     env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
 
