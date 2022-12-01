@@ -29,7 +29,7 @@ def prepend_cubit_environment(cubit_program, env):
 
        env["cubit"] = waves.builders.find_program(["cubit"], env)
        if env["cubit"]:
-           waves.prepend_cubit_environment_variables(env["cubit"], env)
+           waves.prepend_cubit_environment(env["cubit"], env)
     """
     cubit_program = pathlib.Path(cubit_program).resolve()
     if not cubit_program.exists():
