@@ -49,7 +49,7 @@ env = Environment(ENV=os.environ.copy(),
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = waves.builders.find_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
+env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
 
 # Comments used in tutorial code snippets: marker-4
 
