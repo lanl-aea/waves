@@ -25,8 +25,9 @@ VariantDir(variant_dir_base.name, '.', duplicate=False)
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 conf = env.Configure()
 env['abaqus'] = conf.CheckProg('/apps/abaqus/Commands/abq2022')
-env.PrependENVPath(str(pathlib.Path(env['abaqus']).parent))
 conf.Finish()
+if env['abaqus']:
+    env.PrependENVPath("PATH", str(pathlib.Path(env['abaqus']).parent))
 
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
