@@ -19,6 +19,8 @@ from waves._settings import _cd_action_prefix
 def prepend_env_path(program, env):
     """Prepend SCons contruction environment ``PATH`` with the program's parent directory
 
+    Raises a ``FileNotFoundError`` if the ``program`` absolute path does not exist.
+
     :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
@@ -88,6 +90,7 @@ def find_program(names, env):
     Returns the absolute path of the first program name found.
 
     :param names list: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
     :rtype: str
@@ -101,6 +104,30 @@ def find_program(names, env):
     conf.Finish()
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
+    return first_found_path
+
+
+def add_program(names, env, missing_ok=False):
+    """Search for a program from a list of possible program names. Add first found to system ``PATH``.
+
+    Returns the absolute path of the first program name found. Raises a ``FileNotFoundError`` if no ``program``
+    absolute path is found.
+
+    :param names list: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param bool missing_ok: When False (default) raises a ``FileNotFoundError`` if no absolute path is found
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
+    """
+    first_found_path = find_program(names, env)
+    if not first_found_path and not missing_ok:
+        raise FileNotFoundError(f"None of {names} found in SCons construction environment")
+    try:
+        prepend_env_path(first_found_path, env)
+    except FileNotFoundError as err:
+        if not missing_ok:
+            raise err
     return first_found_path
 
 
