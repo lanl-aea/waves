@@ -15,13 +15,14 @@ New Features
   environment or a project modulefile (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
 - Update the expected Cubit version from 15.8 to 16.04 (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
 - Add a general construction environment ``PATH`` modifier method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
+- Wrap ``PATH`` modifier and program search into a single method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
 - Remove Matlab and Cubit environment modification from project modulefile (:issue:`367`, :merge:`407`). By `Kyle
   Brindley`_.
 - Remove Abaqus environment modification from project modulefile (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
-- Match naming convenvtion for general construction environment ``PATH`` modifier method and Cubit modified method. By
+- Match naming convention for general construction environment ``PATH`` modifier method and Cubit modified method. By
   (:issue:`151`, :merge:`410`) `Kyle Brindley`_.
 
 ******************
