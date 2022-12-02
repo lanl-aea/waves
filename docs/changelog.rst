@@ -8,6 +8,22 @@ Changelog
 0.5.8 (unreleased)
 ******************
 
+New Features
+============
+- Add a general construction environment ``PATH`` modifier method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
+- Add a Cubit environment modifier helper method (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
+- Manage Cubit environment ``PATH``-like variables from the project configuration file instead of relying on the user
+  environment or a project modulefile (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
+- Update the expected Cubit version from 15.8 to 16.04 (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Remove Matlab and Cubit environment modification from project modulefile (:issue:`367`, :merge:`407`). By `Kyle
+  Brindley`_.
+- Remove Abaqus environment modification from project modulefile (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
+- Match naming convenvtion for general construction environment ``PATH`` modifier method and Cubit modified method. By
+  (:issue:`151`, :merge:`410`) `Kyle Brindley`_.
+
 ******************
 0.5.7 (2022-12-01)
 ******************
@@ -16,11 +32,6 @@ New Features
 ============
 - Add quantitative regression test option to the tutorial and quickstart post-processing script (:issue:`329`,
   :merge:`406`). By `Kyle Brindley`_.
-- Add a Cubit environment modifier helper method (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
-- Manage Cubit environment ``PATH``-like variables from the project configuration file instead of relying on the user
-  environment or a project modulefile (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
-- Update the expected Cubit version from 15.8 to 16.04 (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
-- Add a general construction environment ``PATH`` modifier method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
@@ -32,9 +43,6 @@ Internal Changes
 - Add builder action unit tests (:issue:`364`, :merge:`404`). By `Kyle Brindley`_.
 - Change post processing script name in the tutorials and quickstart template files to match broader scope
   (:issue:`329`, :merge:`406`). By `Kyle Brindley`_.
-- Remove Matlab and Cubit environment modification from project modulefile (:issue:`367`, :merge:`407`). By `Kyle
-  Brindley`_.
-- Remove Abaqus environment modification from project modulefile (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
 
 ******************
 0.5.6 (2022-11-29)
