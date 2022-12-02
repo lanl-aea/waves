@@ -42,8 +42,6 @@ env['abaqus'] = waves.builders.find_program(["/apps/abaqus/Commands/abq2022", "a
 if env["abaqus"]:
     waves.builders.prepend_env_path(env["abaqus"], env)
 env["cubit"] = waves.builders.find_program(["/apps/Cubit-16.04/cubit", "cubit"], env)
-
-# Add Cubit paths to construction environment
 if env["cubit"]:
     waves.builders.prepend_env_cubit(env["cubit"], env)
 
