@@ -142,11 +142,18 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
                          ids=find_program_input.keys())
 def test_add_program(names, checkprog_side_effect, first_found_path):
     env = SCons.Environment.Environment()
+    original_path = env["ENV"]["PATH"]
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf):
-        program = builders.add_program(names, env, missing_ok=True)
+    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("pathlib.Path.exists", return_value=True):
+        program = builders.add_program(names, env)
     assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = str(pathlib.Path(first_found_path).parent)
+        assert parent_path in env["ENV"]["PATH"]
+    else:
+        assert original_path == env["ENV"]["PATH"]
 
 
 prepended_string = f"{_cd_action_prefix} "
