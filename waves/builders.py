@@ -16,7 +16,30 @@ from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 
 
-def prepend_cubit_environment(cubit_program, env):
+def prepend_env_path(program, env):
+    """Prepend SCons contruction environment ``PATH`` with the program's parent directory
+
+    Raises a ``FileNotFoundError`` if the ``program`` absolute path does not exist.
+
+    :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    .. code-block::
+       :caption: Example environment modification
+
+       import waves
+
+       env["program"] = waves.builders.find_program(["program"], env)
+       if env["program"]:
+           waves.prepend_env_path(env["program"], env)
+    """
+    program = pathlib.Path(program).resolve()
+    if not program.exists():
+        raise FileNotFoundError(f"The program '{program}' does not exist.")
+    env.PrependENVPath("PATH", str(program.parent))
+
+
+def prepend_env_cubit(cubit_program, env):
     """Prepend environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Prepends the SCons construction environment, ``env``, ``PATH`` with the parent directory of the cubit program.
@@ -34,14 +57,12 @@ def prepend_cubit_environment(cubit_program, env):
 
        env["cubit"] = waves.builders.find_program(["cubit"], env)
        if env["cubit"]:
-           waves.prepend_cubit_environment(env["cubit"], env)
+           waves.prepend_env_cubit(env["cubit"], env)
     """
-    cubit_program = pathlib.Path(cubit_program).resolve()
-    if not cubit_program.exists():
-        raise FileNotFoundError(f"The cubit program '{cubit_program}' does not exist.")
+    cubit_program = pathlib.Path(cubit_program)
+    prepend_env_path(cubit_program, env)
     cubit_python_dir = cubit_program.parent / "bin"
     cubit_python_library_dir = cubit_python_dir / "python3"
-    env.PrependENVPath("PATH", str(cubit_program.parent))
     env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
     env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
 
@@ -69,6 +90,7 @@ def find_program(names, env):
     Returns the absolute path of the first program name found.
 
     :param names list: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
     :rtype: str
@@ -82,6 +104,24 @@ def find_program(names, env):
     conf.Finish()
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
+    return first_found_path
+
+
+def add_program(names, env):
+    """Search for a program from a list of possible program names. Add first found to system ``PATH``.
+
+    Returns the absolute path of the first program name found. Prepends ``PATH`` with first program's parent directory
+    if a program is found. Returns None if no program name is found.
+
+    :param names list: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
+    """
+    first_found_path = find_program(names, env)
+    if first_found_path:
+        prepend_env_path(first_found_path, env)
     return first_found_path
 
 
