@@ -136,6 +136,19 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     assert program == first_found_path
 
 
+@pytest.mark.unittest
+@pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",
+                         find_program_input.values(),
+                         ids=find_program_input.keys())
+def test_add_program(names, checkprog_side_effect, first_found_path):
+    env = SCons.Environment.Environment()
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    with patch("SCons.SConf.SConfBase", return_value=mock_conf):
+        program = builders.add_program(names, env, missing_ok=True)
+    assert program == first_found_path
+
+
 prepended_string = f"{_cd_action_prefix} "
 post_action_list = {
     "list1": (["thing1"], [prepended_string + "thing1"]),

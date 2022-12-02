@@ -123,11 +123,12 @@ def add_program(names, env, missing_ok=False):
     first_found_path = find_program(names, env)
     if not first_found_path and not missing_ok:
         raise FileNotFoundError(f"None of {names} found in SCons construction environment")
-    try:
-        prepend_env_path(first_found_path, env)
-    except FileNotFoundError as err:
-        if not missing_ok:
-            raise err
+    if first_found_path:
+        try:
+            prepend_env_path(first_found_path, env)
+        except FileNotFoundError as err:
+            if not missing_ok:
+                raise err
     return first_found_path
 
 
