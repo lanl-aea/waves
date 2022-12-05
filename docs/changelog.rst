@@ -24,6 +24,8 @@ Internal Changes
 - Remove Abaqus environment modification from project modulefile (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
 - Match naming convention for general construction environment ``PATH`` modifier method and Cubit modified method. By
   (:issue:`151`, :merge:`410`) `Kyle Brindley`_.
+- Prefer appending over prepending to system ``PATH``. Wrap Cubit environment modifier for behavior consistent with the
+  other program search methods (:issue:`368`, :merge:`411`). By `Kyle Brindley`_.
 
 ******************
 0.5.7 (2022-12-01)
