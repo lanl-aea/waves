@@ -135,7 +135,7 @@ For more information about the behavior of the
 First, we create an alias for the workflow that was extended previously to match the name of the current file, which
 will double as the build directory name: ``tutorial_01_geometry``.
 
-The final lines of code in the ``SConstruct`` file allow SCons to skip building a target
+The final lines of code in the ``SConscript`` file allow SCons to skip building a target
 sequence if the Abaqus executable is not found.
 
 *******************
