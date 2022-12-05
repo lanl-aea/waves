@@ -12,8 +12,7 @@ Users who want to jump straight to a minimally functional simulation workflow wi
 :ref:`scons_quickstart`. The :ref:`waves_quickstart` has the same features but uses the `WAVES`_ extension to `SCons`_.
 
 For a detailed discussion of recommended best practices for `SCons`_  and `WAVES-EABM`_ project setup, meta data, and
-features, start with :ref:`tutorialsconstruct`. It's also possible to skip the detailed project setup discussion and
-start with the simulation task definitions and discussion directly in :ref:`tutorial_geometry_waves`.
+features, start with :ref:`tutorialsconstruct`.
 
 Finally, users who are are ready to create their own modsim repository can use the :ref:`waves_cli`
 :ref:`waves_quickstart_cli` subcommand to generate a modsim template directory structure from the single element example

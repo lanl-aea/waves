@@ -4,17 +4,11 @@
 Tutorial 01: Geometry
 #####################
 
-*************
-Prerequisites
-*************
-
-.. include:: tutorial_00_prerequisites.txt
-
 **********
 References
 **********
 
-Below is a list of refrences for more information about topics that are not explicitly
+Below is a list of references for more information about topics that are not explicitly
 covered in this tutorial.
 
 * `Abaqus Scripting`_ :cite:`ABAQUS`
