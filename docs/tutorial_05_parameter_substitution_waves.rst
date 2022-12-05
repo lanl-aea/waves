@@ -80,7 +80,7 @@ SConscript
       :lineno-match:
       :start-after: marker-0
       :end-before: marker-1
-      :emphasize-lines: 3-8
+      :emphasize-lines: 5-10
 
 In the code you just added, a ``simulation_variables`` dictionary is defined.  Each key-value pair in the
 ``simulation_variables`` dictionary defines a parameter that already exists in several of the scripts we have utilized
