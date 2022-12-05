@@ -144,14 +144,14 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
 @pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",
                          find_program_input.values(),
                          ids=find_program_input.keys())
-def add_cubit(program, mock_exists, outcome):
+def test_add_cubit(names, checkprog_side_effect, first_found_path):
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
          patch("pathlib.Path.exists", return_value=True):
-        program = builders.add_program(names, env)
+        program = builders.add_cubit(names, env)
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent

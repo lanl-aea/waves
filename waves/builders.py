@@ -121,7 +121,8 @@ def add_cubit(names, env):
     """
     first_found_path = add_program(names, env)
     if first_found_path:
-        cubit_python_dir = first_found_path.parent / "bin"
+        cubit_program = pathlib.Path(first_found_path)
+        cubit_python_dir = cubit_program.parent / "bin"
         cubit_python_library_dir = cubit_python_dir / "python3"
         env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
