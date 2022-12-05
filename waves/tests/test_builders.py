@@ -50,11 +50,11 @@ prepend_env_input = {
 @pytest.mark.parametrize("program, mock_exists, outcome",
                          prepend_env_input.values(),
                          ids=prepend_env_input.keys())
-def test_prepend_env_path(program, mock_exists, outcome):
+def test_append_env_path(program, mock_exists, outcome):
     env = SCons.Environment.Environment()
     with patch("pathlib.Path.exists", return_value=mock_exists), outcome:
         try:
-            builders.prepend_env_path(program, env)
+            builders.append_env_path(program, env)
             assert "/" in env["ENV"]["PATH"]
             assert "PYTHONPATH" not in env["ENV"]
             assert "LD_LIBRARY_PATH" not in env["ENV"]
