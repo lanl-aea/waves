@@ -1,4 +1,21 @@
-.. include:: quickstart_README.txt
-   :start-after: env-start-do-not-remove
-   :end-before: env-end-do-not-remove
+`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
+`Conda environment management`_ documentation for more details about using `Conda`_. The `WAVES`_ package must be
+installed from the `AEA Conda channel`_.
 
+    **WARNING** The `AEA Conda channel`_ is not yet available from a webserver. Until the channel is webhosted, local,
+    minimal `WAVES-EABM`_ Conda environments can only be created on ``sstelmo`` or AEA RHEL desktops with the method
+    described below. Advanced users may copy the `WAVES`_ package from the `AEA Conda channel`_ to their local machines
+    and attempt the `WAVES`_ installation from a local file instead of from a Conda channel. Check the `AEA Conda
+    channel`_ official documentation for updates in the channel access and availability.
+
+1. Create the environment if it doesn't exist
+
+   .. code-block::
+
+      $ conda create --name waves-eabm-env waves scons matplotlib pandas pyyaml xarray --channel file:///projects/aea_compute/aea-conda/ --channel conda-forge
+
+2. Activate the environment
+
+   .. code-block::
+
+      $ conda activate waves-eabm-env
