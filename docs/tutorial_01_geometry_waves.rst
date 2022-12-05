@@ -187,7 +187,7 @@ Python Docstrings
 =================
 
 The highlighted lines of code at the beginning of the ``main()`` function are called a docstring.  Docstrings are
-specially formatted comment blocks the help automate documentation builds. In this case, the docstrings are formatted so
+specially formatted comment blocks that help automate documentation builds. In this case, the docstrings are formatted so
 the `Sphinx automodule`_ directive can interpret the comments as ReStructured Text. Docstrings discuss the function
 behavior and its interface. See the `PEP-257`_ conventions for docstring formatting along with `PEP-287`_ for syntax
 specific to reStructured Text. Using the `Sphinx automodule`_ directive, the docstring can be used to autobuild
