@@ -108,7 +108,7 @@ def add_cubit(names, env):
 
     Returns None if no program name is found.
 
-    :param str cubit_program: An absolute path for the Cubit program
+    :param names list: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     .. code-block::
@@ -121,7 +121,7 @@ def add_cubit(names, env):
     """
     first_found_path = add_program(names, env)
     if first_found_path:
-        cubit_python_dir = cubit_program.parent / "bin"
+        cubit_python_dir = first_found_path.parent / "bin"
         cubit_python_library_dir = cubit_python_dir / "python3"
         env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
