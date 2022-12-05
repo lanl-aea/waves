@@ -93,7 +93,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-4. Build the datacheck targets without executing the full simulation workflow
+5. Build the datacheck targets without executing the full simulation workflow
 
 .. code-block:: bash
 
@@ -128,7 +128,7 @@ simulation suite against the limited datacheck workflow, perform the following s
    # Compare times
    $ grep "real" time_{datacheck,full}_workflow.txt
 
-5. Run the full workflow and verify that the CSV regression test passes
+6. Run the full workflow and verify that the CSV regression test passes
 
 .. code-block:: bash
 
