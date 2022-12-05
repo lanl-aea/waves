@@ -112,7 +112,7 @@ this is implemented with the :meth:`waves.builders.copy_substitute` builder will
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 6, 16, 24
+      :emphasize-lines: 7, 17, 25
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
 pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using a formatted string as
