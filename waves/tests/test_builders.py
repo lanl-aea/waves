@@ -41,6 +41,17 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
         assert str(node.executor.action_list[0]) == expected_string
 
 
+def test_default_targets_message():
+    env = SCons.Environment.Environment()
+    env.Default()
+    with patch("SCons.Environment.Environment.Help") as mock_help:
+        builders.default_targets_message(env) 
+    assert mock_help.called_once_with(call("\nDefault Targets:\n"))
+    env.Default("dummy.target")
+    with patch("SCons.Environment.Environment.Help") as mock_help:
+        builders.default_targets_message(env) 
+    assert mock_help.called_once_with(call("\nDefault Targets:\n    dummy.target"))
+
 prepend_env_input = {
     "path exists": ("/program", True, does_not_raise()),
     "path does not exist": ("/notapath", False, pytest.raises(FileNotFoundError))
