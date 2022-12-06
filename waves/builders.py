@@ -16,6 +16,14 @@ from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 
 
+def default_targets_message(env, append=True):
+    from SCons.Script import DEFAULT_TARGETS
+    default_targets_help = "\nDefault Targets:\n"
+    for target in DEFAULT_TARGETS:
+        default_targets_help += f"    {str(target)}\n"
+    env.Help(default_targets_help, append=append)
+
+
 def append_env_path(program, env):
     """Append SCons contruction environment ``PATH`` with the program's parent directory
 
