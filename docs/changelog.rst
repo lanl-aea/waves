@@ -17,6 +17,11 @@ New Features
 - Add a general construction environment ``PATH`` modifier method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
 - Wrap ``PATH`` modifier and program search into a single method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Clarify tutorial instructions, edit for grammar and typos, and remove deprecated instructions based on user feedback
+  and review (:merge:`412`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Remove Matlab and Cubit environment modification from project modulefile (:issue:`367`, :merge:`407`). By `Kyle

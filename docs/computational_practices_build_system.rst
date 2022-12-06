@@ -21,7 +21,7 @@ haven't changed since the last execution.
 
 Many engineering simulation projects suffer from similar complexity in simulation construction, where the geometry of
 many separate parts must be created or defeatured from existing files, partitioned for meshing, meshed, and linked to
-simulation boundary and loading conditions. These tasks may be interconnected, where one part's paritioning depends on
+simulation boundary and loading conditions. These tasks may be interconnected, where one part's partitioning depends on
 another part's mesh. After executing a simulation, there may be a similarly complex post-processing workflow. When this
 process is repeated many times, as in parameter studies, it is desirable to enable programmatic execution of the
 workflow because manual processes do not scale and are prone to consistency errors. Even in the case where this process

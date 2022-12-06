@@ -23,6 +23,8 @@ Environment
 Directory Structure
 *******************
 
+.. include:: directory_structure_purpose.txt
+
 3. Copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh``.
 
 .. code-block:: bash
@@ -30,6 +32,7 @@ Directory Structure
    $ pwd
    /path/to/waves-eabm-tutorial
    $ cp tutorial_01_geometry tutorial_02_partition_mesh
+
 
 .. _tutorials_tutorial_partition_mesh_waves:
 

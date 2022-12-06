@@ -80,7 +80,7 @@ SConscript
       :lineno-match:
       :start-after: marker-0
       :end-before: marker-1
-      :emphasize-lines: 3-8
+      :emphasize-lines: 5-10
 
 In the code you just added, a ``simulation_variables`` dictionary is defined.  Each key-value pair in the
 ``simulation_variables`` dictionary defines a parameter that already exists in several of the scripts we have utilized
@@ -112,7 +112,7 @@ this is implemented with the :meth:`waves.builders.copy_substitute` builder will
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 6, 16, 24
+      :emphasize-lines: 7, 17, 25
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
 pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using a formatted string as
