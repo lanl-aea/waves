@@ -7,6 +7,7 @@ import SCons.Defaults
 import SCons.Builder
 import SCons.Environment
 import SCons.Node
+from SCons.Script import DEFAULT_TARGETS
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
@@ -17,7 +18,6 @@ from waves._settings import _cd_action_prefix
 
 
 def default_targets_message(env, append=True):
-    from SCons.Script import DEFAULT_TARGETS
     default_targets_help = "\nDefault Targets:\n"
     for target in DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
