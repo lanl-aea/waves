@@ -33,7 +33,7 @@ def default_targets_message(env=None, append=True):
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     """
-    import SCons.Script
+    import SCons.Script  # Required to get a full construction environment
     if not env:
         env = SCons.Environment.Environment()
     default_targets_help = "\nDefault Targets:\n"
@@ -42,7 +42,7 @@ def default_targets_message(env=None, append=True):
     env.Help(default_targets_help, append=append)
 
 
-def alias_list_message(env, append=True):
+def alias_list_message(env=None, append=True):
     """Add the alias list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -59,9 +59,11 @@ def alias_list_message(env, append=True):
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     """
-    from SCons.Node.Alias import default_ans
+    import SCons.Script  # Required to get a full construction environment
+    if not env:
+        env = SCons.Environment.Environment()
     alias_help = "\nTarget Aliases:\n"
-    for alias in default_ans:
+    for alias in SCons.Node.Alias.default_ans:
         alias_help += f"    {alias}\n"
     env.Help(alias_help, append=append)
 

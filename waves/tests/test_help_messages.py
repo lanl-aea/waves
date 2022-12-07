@@ -35,10 +35,19 @@ def test_default_targets_message():
 def test_alias_list_message():
     import SCons.Script
     import SCons.Defaults
+
+    # No environment provided
+    with patch("SCons.Environment.Environment.Help") as mock_help:
+        builders.alias_list_message()
+    mock_help.assert_called_once_with("\nTarget Aliases:\n", append=True)
+
+    # Provide environment with no aliases
     env = SCons.Defaults.DefaultEnvironment()
     with patch("SCons.Environment.Environment.Help") as mock_help:
         builders.alias_list_message(env)
     mock_help.assert_called_once_with("\nTarget Aliases:\n", append=True)
+
+    # Provide environment with alias
     env.Alias("dummy_alias", "dummy.target")
     with patch("SCons.Environment.Environment.Help") as mock_help:
         builders.alias_list_message(env)
