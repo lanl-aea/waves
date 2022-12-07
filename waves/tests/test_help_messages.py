@@ -52,3 +52,12 @@ def test_alias_list_message():
     with patch("SCons.Environment.Environment.Help") as mock_help:
         builders.alias_list_message(env)
     mock_help.assert_called_once_with("\nTarget Aliases:\n    dummy_alias\n", append=True)
+
+
+@pytest.mark.unittest
+def test_project_help_message():
+    with patch("waves.builders.default_targets_message") as mock_default, \
+         patch("waves.builders.alias_list_message") as mock_alias:
+        builders.project_help_message()
+    mock_default.assert_called_once()
+    mock_alias.assert_called_once()

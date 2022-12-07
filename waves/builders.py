@@ -16,7 +16,7 @@ from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 
 
-def project_help_messages(env=None, append=True):
+def project_help_message(env=None, append=True):
     """Add default targets and alias lists to project help message
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
