@@ -2,8 +2,11 @@
 
 from unittest.mock import patch
 
+import pytest
+
 from waves import builders
 
+@pytest.mark.unittest
 def test_default_targets_message():
     import SCons.Script  # Magic smoke that turns SCons.Defaults.DefaultEnvironment from a SCons.Environment.Base to SCons.Script.SConscript.SConsEnvironment
     import SCons.Defaults
