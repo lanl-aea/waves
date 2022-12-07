@@ -83,16 +83,6 @@ waves.builders.default_targets_message(env)
 
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-try:
-    # Recover from SCons configuration
-    from SCons.Node.Alias import default_ans
-    alias_list = default_ans
-except ImportError:
-    # Fall back to manually constructed alias list(s)
-    alias_list = workflow_configurations
-alias_help = "\nTarget Aliases:\n"
-for alias in alias_list:
-    alias_help += f"    {alias}\n"
-Help(alias_help)
+waves.builders.alias_list_message(env)
 
 # Comments used in tutorial code snippets: marker-9
