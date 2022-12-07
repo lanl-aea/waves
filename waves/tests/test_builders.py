@@ -45,11 +45,11 @@ def test_default_targets_message():
     env = SCons.Environment.Environment()
     env.Default()
     with patch("SCons.Environment.Environment.Help") as mock_help:
-        builders.default_targets_message(env) 
+        builders.default_targets_message(env)
     mock_help.assert_called_once_with("\nDefault Targets:\n", append=True)
     env.Default("dummy.target")
     with patch("SCons.Environment.Environment.Help") as mock_help:
-        builders.default_targets_message(env) 
+        builders.default_targets_message(env)
     mock_help.assert_called_once_with("\nDefault Targets:\n    dummy.target\n", append=True)
 
 
