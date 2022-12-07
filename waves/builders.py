@@ -21,11 +21,11 @@ def default_targets_message(env, append=True):
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
 
-    ```
-    Default Targets:
-        Default_Target_1
-        Default_Target_2
-    ```
+    .. code-block::
+
+       Default Targets:
+           Default_Target_1
+           Default_Target_2
 
     where the targets are recovered from ``SCons.Script.DEFAULT_TARGETS``.
 
