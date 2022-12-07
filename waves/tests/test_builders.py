@@ -46,11 +46,12 @@ def test_default_targets_message():
     env.Default()
     with patch("SCons.Environment.Environment.Help") as mock_help:
         builders.default_targets_message(env) 
-    assert mock_help.called_once_with(call("\nDefault Targets:\n"))
+    mock_help.assert_called_once_with("\nDefault Targets:\n", append=True)
     env.Default("dummy.target")
     with patch("SCons.Environment.Environment.Help") as mock_help:
         builders.default_targets_message(env) 
-    assert mock_help.called_once_with(call("\nDefault Targets:\n    dummy.target"))
+    mock_help.assert_called_once_with("\nDefault Targets:\n    dummy.target\n", append=True)
+
 
 prepend_env_input = {
     "path exists": ("/program", True, does_not_raise()),
