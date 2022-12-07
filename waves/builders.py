@@ -16,6 +16,30 @@ from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 
 
+def default_targets_message(env, append=True):
+    """Add a default targets list to the project's help message
+
+    See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
+
+    .. code-block::
+
+       Default Targets:
+           Default_Target_1
+           Default_Target_2
+
+    where the targets are recovered from ``SCons.Script.DEFAULT_TARGETS``.
+
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+        overwritten if ``env.Help`` has not been previously called.
+    """
+    from SCons.Script import DEFAULT_TARGETS
+    default_targets_help = "\nDefault Targets:\n"
+    for target in DEFAULT_TARGETS:
+        default_targets_help += f"    {str(target)}\n"
+    env.Help(default_targets_help, append=append)
+
+
 def append_env_path(program, env):
     """Append SCons contruction environment ``PATH`` with the program's parent directory
 

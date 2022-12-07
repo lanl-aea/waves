@@ -16,6 +16,8 @@ New Features
 - Update the expected Cubit version from 15.8 to 16.04 (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
 - Add a general construction environment ``PATH`` modifier method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
 - Wrap ``PATH`` modifier and program search into a single method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
+- Add a WAVES helper method to add default targets text to a project's help message (:issue:`371`, :merge:`413`). By
+  `Kyle Brindley`_.
 
 Documentation
 =============
