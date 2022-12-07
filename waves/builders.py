@@ -31,7 +31,7 @@ def default_targets_message(env, append=True):
 
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
-        overwritten if ``env.Help`` has not be previously called.
+        overwritten if ``env.Help`` has not been previously called.
     """
     from SCons.Script import DEFAULT_TARGETS
     default_targets_help = "\nDefault Targets:\n"
