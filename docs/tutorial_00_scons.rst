@@ -213,8 +213,8 @@ argument allows the project configuration file to pass the ``env`` construction 
 sharing environments`_ feature. The first simulation configuration will be added to the ``workflow_configurations``
 list in :ref:`tutorial_geometry_waves`.
 
-11. Add the content below to the ``SConstruct`` file to add an empty default target list and to list the default targets
-    in the project help message.
+11. Add the content below to the ``SConstruct`` file to add an empty default target list and to modify the project help
+    message.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
@@ -228,13 +228,26 @@ Because the `WAVES-EABM`_ contains a suite of simulations, it is useful to limit
 protect against running all simulations by default, create an empty default list. This will require that simulation
 targets are specified by name in the `SCons`_ build command. In addition to limiting the default target list, it is
 useful to print the list of default targets in the project help to remind developers what targets will build when no
-target is specified in the call to ``scons``. The second call to ``Help()`` will append the default target list to the
-output of ``scons -h``.
+target is specified in the call to ``scons``.
 
-Additionally, the ``Help(...)`` line adds the help messages for the command-line build options to the project help
-message displayed wheen running ``scons -h``. The help messages are added to the construction environment, so this line
-must come after the construction environment instantiation. To display the project specific command line options, the first
-use of the ``Help()`` `SCons`_ method must include the ``append=True`` keyword argument.
+Simulation build workflows will typically involve many targets and tasks in a non-trivial execution order. The target
+file names may also be cumbersome to type when explicitly listing build targets in the `SCons`_ build command. For
+convenience, the `WAVES-EABM`_ simulation configurations will add a collector alias for the list of simulation targets
+with the `SCons Alias`_ feature. By convention, `WAVES-EABM`_ matches the alias name to the simulation subdirectory
+name. :ref:`tutorial_geometry_waves` will introduce the first target alias, which will then populate the project help
+message diplayed by the ``scons -h`` command option.
+
+The :meth:`waves.builders.project_help_message` wraps two common calls to the `SCons Help`_ construction environment
+method that will append the following to the project help message accessed by ``scons -h``:
+
+* the command line build options
+* the default target list
+* the project alias list
+
+The help messages are added to the construction environment, so the :meth:`waves.builders.project_help_message` call
+must come after the construction environment instantiation. To properly capture all targets and aliases, the method call
+must also come after all ``SConscript`` and ``Alias`` method calls. Generally, it's best to simply call
+:meth:`waves.builders.project_help_message` as the final line in your project configuration.
 
 .. note::
 
@@ -244,20 +257,25 @@ use of the ``Help()`` `SCons`_ method must include the ``append=True`` keyword a
    tutorials and documentation will not discuss the full range of `SCons`_ command options, so modsim developers are
    encouraged to read the `SCons`_ usage summary and `SCons manpage`_ to learn more about available build control options.
 
+12. Explore the project help message
 
-12. Add the content below to the ``SConstruct`` file to add the project aliases to the project help message.
+.. code-block::
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+   $ pwd
+   /home/roppenheimer/waves-eabm-tutorial
+   $ scons -h | grep "Local Options:" -A 10
+   Local Options:
+     --build-dir=DIR             SCons build (variant) root directory. Relative or
+                                   absolute path. (default: 'build')
+     --unconditional-build       Boolean flag to force building of conditionally
+                                   ignored targets, e.g. if the target's action
+                                   program is missing and it would normally be
+                                   ignored. (default: 'False')
 
-   .. literalinclude:: tutorials_tutorial_00_SConstruct
-      :language: Python
-      :lineno-match:
-      :start-after: marker-8
-      :end-before: marker-9
+   Default Targets:
 
-Simulation build workflows will typically involve many targets and tasks in a non-trivial execution order. The target
-file names may also be cumbersome to type when explicitly listing build targets in the `SCons`_ build command. For
-convenience, the `WAVES-EABM`_ simulation configurations will add a collector alias for the list of simulation targets
-with the `SCons Alias`_ feature. By convention, `WAVES-EABM`_ matches the alias name to the simulation subdirectory
-name. :ref:`tutorial_geometry_waves` will introduce the first target alias, which will then populate the project help
-message diplayed by the ``scons -h`` command option.
+   Target Aliases:
+
+Without piping the ``scons -h`` command through ``grep``, you will see a lot of ``scons`` help output before your
+project help message. The text shown in the sample code block above is the project specific help message(s) added in the
+previous step. The ``Default Targets:`` and ``Target Aliases:`` lists will begin to populate in the following tutorial.

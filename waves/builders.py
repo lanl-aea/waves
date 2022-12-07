@@ -16,7 +16,19 @@ from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 
 
-def default_targets_message(env, append=True):
+def project_help_message(env=None, append=True):
+    """Add default targets and alias lists to project help message
+
+    See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
+
+    * :meth:`waves.builders.default_targets_message`
+    * :meth:`waves.builders.alias_list_message`
+    """
+    default_targets_message(env=env, append=append)
+    alias_list_message(env=env, append=append)
+
+
+def default_targets_message(env=None, append=True):
     """Add a default targets list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -33,11 +45,39 @@ def default_targets_message(env, append=True):
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     """
-    from SCons.Script import DEFAULT_TARGETS
+    import SCons.Script  # Required to get a full construction environment
+    if not env:
+        env = SCons.Environment.Environment()
     default_targets_help = "\nDefault Targets:\n"
-    for target in DEFAULT_TARGETS:
+    for target in SCons.Script.DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
     env.Help(default_targets_help, append=append)
+
+
+def alias_list_message(env=None, append=True):
+    """Add the alias list to the project's help message
+
+    See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
+
+    .. code-block::
+
+       Target Aliases:
+           Alias_1
+           Alias_2
+
+    where the aliases are recovered from ``SCons.Node.Alias.default_ans``.
+
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+        overwritten if ``env.Help`` has not been previously called.
+    """
+    import SCons.Script  # Required to get a full construction environment
+    if not env:
+        env = SCons.Environment.Environment()
+    alias_help = "\nTarget Aliases:\n"
+    for alias in SCons.Node.Alias.default_ans:
+        alias_help += f"    {alias}\n"
+    env.Help(alias_help, append=append)
 
 
 def append_env_path(program, env):

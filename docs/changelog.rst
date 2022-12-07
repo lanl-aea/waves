@@ -18,11 +18,15 @@ New Features
 - Wrap ``PATH`` modifier and program search into a single method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
 - Add a WAVES helper method to add default targets text to a project's help message (:issue:`371`, :merge:`413`). By
   `Kyle Brindley`_.
+- Add a WAVES helper method to add alias list text to a project's help message (:issue:`370`, :merge:`414`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============
 - Clarify tutorial instructions, edit for grammar and typos, and remove deprecated instructions based on user feedback
   and review (:merge:`412`). By `Kyle Brindley`_.
+- Reduce common project configuration boilerplate code in the tutorials and quickstart template files (:issue:`370`,
+  :merge:`414`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

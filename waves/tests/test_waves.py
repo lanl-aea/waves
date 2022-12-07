@@ -60,7 +60,8 @@ def test_build():
         waves.build(['dummy.target'])
         mock_check_output.assert_called_once()
 
-    with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output:
+    with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output, \
+         patch("pathlib.Path.mkdir") as mock_mkdir:
         waves.build(['dummy.target'], git_clone_directory='dummy/clone')
         assert mock_check_output.call_count == 2
 
