@@ -7,7 +7,6 @@ import SCons.Defaults
 import SCons.Builder
 import SCons.Environment
 import SCons.Node
-from SCons.Script import DEFAULT_TARGETS
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
@@ -34,6 +33,7 @@ def default_targets_message(env, append=True):
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not be previously called.
     """
+    from SCons.Script import DEFAULT_TARGETS
     default_targets_help = "\nDefault Targets:\n"
     for target in DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
