@@ -40,18 +40,12 @@ def default_targets_message(env, append=True):
     env.Help(default_targets_help, append=append)
 
 
-def alias_list_message(env, append=True, fall_back_list=[]):
-    try:
-        # Recover from SCons configuration
-        from SCons.Node.Alias import default_ans
-        alias_list = default_ans
-    except ImportError:
-        # Fall back to manually constructed alias list(s)
-        alias_list = docs_aliases + workflow_configurations
+def alias_list_message(env, append=True):
+    from SCons.Node.Alias import default_ans
     alias_help = "\nTarget Aliases:\n"
-    for alias in alias_list:
+    for alias in default_ans:
         alias_help += f"    {alias}\n"
-    env.Help(alias_help)
+    env.Help(alias_help, append=append)
 
 
 def append_env_path(program, env):
