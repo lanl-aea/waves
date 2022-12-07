@@ -82,10 +82,7 @@ for workflow in workflow_configurations:
 
 # Add default target list to help message
 env.Default()  # Empty defaults list to avoid building all simulation targets by default
-default_targets_help = "\nDefault Targets:\n"
-for target in DEFAULT_TARGETS:
-    default_targets_help += f"    {str(target)}\n"
-Help(default_targets_help, append=True)
+waves.builders.default_targets_message(env)
 
 # Comments used in tutorial code snippets: marker-8
 
