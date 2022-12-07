@@ -256,3 +256,26 @@ must also come after all ``SConscript`` and ``Alias`` method calls. Generally, i
    options are displayed with the unconventional capitalized option, ``-H``, as ``scons -H``. The `WAVES-EABM`_
    tutorials and documentation will not discuss the full range of `SCons`_ command options, so modsim developers are
    encouraged to read the `SCons`_ usage summary and `SCons manpage`_ to learn more about available build control options.
+
+12. Explore the project help message
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-eabm-tutorial
+   $ scons -h | grep "Local Options:" -A 10
+   Local Options:
+     --build-dir=DIR             SCons build (variant) root directory. Relative or
+                                   absolute path. (default: 'build')
+     --unconditional-build       Boolean flag to force building of conditionally
+                                   ignored targets, e.g. if the target's action
+                                   program is missing and it would normally be
+                                   ignored. (default: 'False')
+
+   Default Targets:
+
+   Target Aliases:
+
+Without piping the ``scons -h`` command through ``grep``, you will see a lot of ``scons`` help output before your
+project help message. The text shown in the sample code block above is the project specific help message(s) added in the
+previous step. The ``Default Targets:`` and ``Target Aliases:`` lists will begin to populate in the following tutorial.
