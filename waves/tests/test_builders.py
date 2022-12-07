@@ -8,7 +8,6 @@ import unittest
 from unittest.mock import patch, call
 
 import SCons.Node.FS
-import SCons.Defaults
 
 from waves import builders
 from waves._settings import _cd_action_prefix
@@ -40,19 +39,6 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
         node.get_executor()
         assert len(node.executor.action_list) == action_count
         assert str(node.executor.action_list[0]) == expected_string
-
-
-def test_default_targets_message():
-    import SCons.Script  # Magic smoke that turns SCons.Defaults.DefaultEnvironment from a SCons.Environment.Base to SCons.Script.SConscript.SConsEnvironment
-    env = SCons.Defaults.DefaultEnvironment() 
-    env.Default()
-    with patch("SCons.Environment.Environment.Help") as mock_help:
-        builders.default_targets_message(env)
-    mock_help.assert_called_once_with("\nDefault Targets:\n", append=True)
-    env.Default("dummy.target")
-    with patch("SCons.Environment.Environment.Help") as mock_help:
-        builders.default_targets_message(env)
-    mock_help.assert_called_once_with("\nDefault Targets:\n    dummy.target\n", append=True)
 
 
 prepend_env_input = {
