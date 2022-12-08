@@ -15,6 +15,7 @@
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
    $ git archive --format=zip --remote=ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git HEAD:tutorials/eabm_package/abaqus > source_abaqus.zip
+   $ mkdir -p eabm_package/abaqus
    $ unzip source_abaqus.zip -d eabm_package/abaqus
 
 .. include:: waves_access_and_appendix.txt

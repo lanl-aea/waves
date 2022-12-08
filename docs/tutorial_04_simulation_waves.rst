@@ -128,10 +128,6 @@ Running the Analysis
        :end-before: marker-6
 
 The changes you just made will be used to define the task for running the ``single_element_compression`` analysis.
-Before running the analysis, we add the output from the datacheck to the ``solve_source_list``. Appending the
-``{datacheck_name}.odb`` file to the list of source files ensures that the simulation targets are rebuilt if something
-in the datacheck outputs changes. The build system will recognize this dependency automatically, so long as
-``{datacheck_name}.odb`` is defined as a source.
 
 The next step should now be quite familiar - we extend the ``workflow`` list to include that task for running the
 simulation with the :meth:`waves.builders.abaqus_solver` builder. The ``target`` list includes only the
@@ -144,7 +140,7 @@ list by the builder. The ``source`` list once again utlizes the existing ``solve
 .. note::
 
     The :meth:`waves.builders.solve_abaqus` builder has the option to retrieve non-zero exit codes from the Abaqus
-    solver by parsing the output ``.sta`` file using ``grep``. The :meth:`waves.builders.solve_abaqus` API provides and
+    solver by parsing the output ``.sta`` file using ``grep``. The :meth:`waves.builders.solve_abaqus` API provides an
     example of the ``post_action`` builder argument as well as how exit codes are returned to the build system.
 
     This functionality is useful in cases where the model developer wants the build system to exit its processes if an

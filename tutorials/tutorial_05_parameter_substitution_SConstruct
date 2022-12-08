@@ -38,7 +38,7 @@ env = Environment(ENV=os.environ.copy(),
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = waves.builders.find_program(["abq2022", "abq2021", "abq2020"], env)
+env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -87,25 +87,8 @@ for workflow in workflow_configurations:
 
 # Add default target list to help message
 env.Default()  # Empty defaults list to avoid building all simulation targets by default
-default_targets_help = "\nDefault Targets:\n"
-for target in DEFAULT_TARGETS:
-    default_targets_help += f"    {str(target)}\n"
-Help(default_targets_help, append=True)
-
-# Comments used in tutorial code snippets: marker-8
-
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-try:
-    # Recover from SCons configuration
-    from SCons.Node.Alias import default_ans
-    alias_list = default_ans
-except ImportError:
-    # Fall back to manually constructed alias list(s)
-    alias_list = workflow_configurations
-alias_help = "\nTarget Aliases:\n"
-for alias in alias_list:
-    alias_help += f"    {alias}\n"
-Help(alias_help)
+waves.builders.project_help_message()
 
-# Comments used in tutorial code snippets: marker-9
+# Comments used in tutorial code snippets: marker-8

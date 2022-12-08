@@ -16,6 +16,95 @@ from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 
 
+def project_help_message(env=None, append=True):
+    """Add default targets and alias lists to project help message
+
+    See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
+
+    * :meth:`waves.builders.default_targets_message`
+    * :meth:`waves.builders.alias_list_message`
+    """
+    default_targets_message(env=env, append=append)
+    alias_list_message(env=env, append=append)
+
+
+def default_targets_message(env=None, append=True):
+    """Add a default targets list to the project's help message
+
+    See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
+
+    .. code-block::
+
+       Default Targets:
+           Default_Target_1
+           Default_Target_2
+
+    where the targets are recovered from ``SCons.Script.DEFAULT_TARGETS``.
+
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+        overwritten if ``env.Help`` has not been previously called.
+    """
+    import SCons.Script  # Required to get a full construction environment
+    if not env:
+        env = SCons.Environment.Environment()
+    default_targets_help = "\nDefault Targets:\n"
+    for target in SCons.Script.DEFAULT_TARGETS:
+        default_targets_help += f"    {str(target)}\n"
+    env.Help(default_targets_help, append=append)
+
+
+def alias_list_message(env=None, append=True):
+    """Add the alias list to the project's help message
+
+    See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
+
+    .. code-block::
+
+       Target Aliases:
+           Alias_1
+           Alias_2
+
+    where the aliases are recovered from ``SCons.Node.Alias.default_ans``.
+
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+        overwritten if ``env.Help`` has not been previously called.
+    """
+    import SCons.Script  # Required to get a full construction environment
+    if not env:
+        env = SCons.Environment.Environment()
+    alias_help = "\nTarget Aliases:\n"
+    for alias in SCons.Node.Alias.default_ans:
+        alias_help += f"    {alias}\n"
+    env.Help(alias_help, append=append)
+
+
+def append_env_path(program, env):
+    """Append SCons contruction environment ``PATH`` with the program's parent directory
+
+    Raises a ``FileNotFoundError`` if the ``program`` absolute path does not exist. Uses the `SCons AppendENVPath`_
+    method. If the program parent directory is already on ``PATH``, the ``PATH`` directory order is preserved.
+
+    :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    .. code-block::
+       :caption: Example environment modification
+
+       import waves
+
+       env = Environment()
+       env["program"] = waves.builders.find_program(["program"], env)
+       if env["program"]:
+           waves.append_env_path(env["program"], env)
+    """
+    program = pathlib.Path(program).resolve()
+    if not program.exists():
+        raise FileNotFoundError(f"The program '{program}' does not exist.")
+    env.AppendENVPath("PATH", str(program.parent), delete_existing=False)
+
+
 def substitution_syntax(substitution_dictionary, prefix="@", postfix="@"):
     """Return a dictionary copy with the pre/postfix added to the key strings
 
@@ -39,6 +128,7 @@ def find_program(names, env):
     Returns the absolute path of the first program name found.
 
     :param names list: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
     :rtype: str
@@ -52,6 +142,65 @@ def find_program(names, env):
     conf.Finish()
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
+    return first_found_path
+
+
+def add_program(names, env):
+    """Search for a program from a list of possible program names. Add first found to system ``PATH``.
+
+    Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
+    if a program is found and the directory is not already on ``PATH``. Returns None if no program name is found.
+
+    :param names list: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
+
+    .. code-block::
+       :caption: Example Cubit environment modification
+
+       import waves
+
+       env = Environment()
+       env["program"] = waves.builders.add_program(["program"], env)
+    """
+    first_found_path = find_program(names, env)
+    if first_found_path:
+        append_env_path(first_found_path, env)
+    return first_found_path
+
+
+def add_cubit(names, env):
+    """Modifies environment variables with the paths required to ``import cubit`` in a Python3 environment.
+
+    Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
+    a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with ``parent/bin``.
+    Prepends ``LD_LIBRARY_PATH`` with ``parent/bin/python3``.
+
+    Returns None if no program name is found.
+
+    :param names list: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
+
+    .. code-block::
+       :caption: Example Cubit environment modification
+
+       import waves
+
+       env = Environment()
+       env["cubit"] = waves.builders.add_cubit(["cubit"], env)
+    """
+    first_found_path = add_program(names, env)
+    if first_found_path:
+        cubit_program = pathlib.Path(first_found_path)
+        cubit_python_dir = cubit_program.parent / "bin"
+        cubit_python_library_dir = cubit_python_dir / "python3"
+        env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
+        env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
     return first_found_path
 
 

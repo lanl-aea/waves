@@ -4,17 +4,11 @@
 Tutorial 01: Geometry
 #####################
 
-*************
-Prerequisites
-*************
-
-.. include:: tutorial_00_prerequisites.txt
-
 **********
 References
 **********
 
-Below is a list of refrences for more information about topics that are not explicitly
+Below is a list of references for more information about topics that are not explicitly
 covered in this tutorial.
 
 * `Abaqus Scripting`_ :cite:`ABAQUS`
@@ -135,7 +129,7 @@ For more information about the behavior of the
 First, we create an alias for the workflow that was extended previously to match the name of the current file, which
 will double as the build directory name: ``tutorial_01_geometry``.
 
-The final lines of code in the ``SConstruct`` file allow SCons to skip building a target
+The final lines of code in the ``SConscript`` file allow SCons to skip building a target
 sequence if the Abaqus executable is not found.
 
 *******************
@@ -187,7 +181,7 @@ Python Docstrings
 =================
 
 The highlighted lines of code at the beginning of the ``main()`` function are called a docstring.  Docstrings are
-specially formatted comment blocks the help automate documentation builds. In this case, the docstrings are formatted so
+specially formatted comment blocks that help automate documentation builds. In this case, the docstrings are formatted so
 the `Sphinx automodule`_ directive can interpret the comments as ReStructured Text. Docstrings discuss the function
 behavior and its interface. See the `PEP-257`_ conventions for docstring formatting along with `PEP-287`_ for syntax
 specific to reStructured Text. Using the `Sphinx automodule`_ directive, the docstring can be used to autobuild

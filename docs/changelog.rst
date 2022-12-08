@@ -5,8 +5,47 @@ Changelog
 #########
 
 ******************
-0.5.8 (unreleased)
+0.5.9 (unreleased)
 ******************
+
+******************
+0.5.8 (2022-12-08)
+******************
+
+New Features
+============
+- Add a Cubit environment modifier helper method (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
+- Manage Cubit environment ``PATH``-like variables from the project configuration file instead of relying on the user
+  environment or a project modulefile (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
+- Update the expected Cubit version from 15.8 to 16.04 (:issue:`367`, :merge:`407`). By `Kyle Brindley`_.
+- Add a general construction environment ``PATH`` modifier method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
+- Wrap ``PATH`` modifier and program search into a single method (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
+- Add a WAVES helper method to add default targets text to a project's help message (:issue:`371`, :merge:`413`). By
+  `Kyle Brindley`_.
+- Add a WAVES helper method to add alias list text to a project's help message (:issue:`370`, :merge:`414`). By `Kyle
+  Brindley`_.
+
+Bug fixes
+=========
+- Fix issue in abaqus_file_parser where coordinates and dimensions didn't match due to history output appearing in
+  second step, but not in first (:issue:`372`, :merge:`415`). By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Clarify tutorial instructions, edit for grammar and typos, and remove deprecated instructions based on user feedback
+  and review (:merge:`412`). By `Kyle Brindley`_.
+- Reduce common project configuration boilerplate code in the tutorials and quickstart template files (:issue:`370`,
+  :merge:`414`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Remove Matlab and Cubit environment modification from project modulefile (:issue:`367`, :merge:`407`). By `Kyle
+  Brindley`_.
+- Remove Abaqus environment modification from project modulefile (:issue:`151`, :merge:`410`). By `Kyle Brindley`_.
+- Match naming convention for general construction environment ``PATH`` modifier method and Cubit modified method. By
+  (:issue:`151`, :merge:`410`) `Kyle Brindley`_.
+- Prefer appending over prepending to system ``PATH``. Wrap Cubit environment modifier for behavior consistent with the
+  other program search methods (:issue:`368`, :merge:`411`). By `Kyle Brindley`_.
 
 ******************
 0.5.7 (2022-12-01)

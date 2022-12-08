@@ -21,7 +21,6 @@ documentation_file_list = [
     'CITATION.bib',  # Copied from CITATION.bib to docs build directory by root SConscript
     'environment.txt',  # Copied from environment.txt to docs build directory by root SConscript
     'tutorials_tutorial_00_SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
-    'quickstart_README.txt',   # Copied from the eabm directory to waves docs build directory by root SConscript
     'eabm_api.rst',
     'eabm_cli.rst',
     'eabm_abaqus_files.rst',
@@ -40,6 +39,7 @@ documentation_file_list = [
     'contribution.txt',
     'dependencies.txt',
     'devops.rst',
+    'directory_structure_purpose.txt',
     'documentation.txt',
     'glossary.rst',
     'index.rst',

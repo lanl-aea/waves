@@ -1,0 +1,6 @@
+Instead of incrementally modifying a single ``SConscript`` workflow file, each
+tutorial will create a copy of the ``SConscript`` file and build on the
+previous tutorial. Each tutorial will be a separate, stand-alone, fully
+functional workflow. This is intended to help compare output file and behavior
+changes between tutorials and to emphasize that a simulation project may
+contain more than one simulation workflow.

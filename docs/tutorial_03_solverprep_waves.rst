@@ -52,6 +52,7 @@ Solver Input Files
    $ file_list=("${file_list[@]/%/.inp}")
    $ repo_ssh="ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git"
    $ git archive --format=zip --remote=$repo_ssh HEAD:tutorials/eabm_package/abaqus ${file_list[*]} > source_abaqus.zip
+   $ mkdir -p eabm_package/abaqus
    $ unzip source_abaqus.zip -d eabm_package/abaqus
 
 This action will unzip the source files we included in the
