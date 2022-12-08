@@ -21,6 +21,11 @@ New Features
 - Add a WAVES helper method to add alias list text to a project's help message (:issue:`370`, :merge:`414`). By `Kyle
   Brindley`_.
 
+Bug fixes
+=========
+- Fix issue in abaqus_file_parser where coordinates and dimensions didn't match due to history output appearing in
+  second step, but not in first (:issue:`372`, :merge:`415`). By `Prabhu Khalsa`_.
+
 Documentation
 =============
 - Clarify tutorial instructions, edit for grammar and typos, and remove deprecated instructions based on user feedback
