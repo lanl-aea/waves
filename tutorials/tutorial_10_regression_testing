@@ -50,14 +50,6 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
 parameter_generator.generate()
 parameter_study = parameter_generator.parameter_study
 
-# TODO: Find a way to write the parameter study without a user-custom Python build function
-def write_parameter_study(target, source, env):
-    """`SCons Python build function`_ wrapper for the parameter generator's write() function.
-
-    Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
-    """
-    parameter_generator.write()
-    return None
 
 workflow.extend(env.Command(
     target=[parameter_study_file.name],
