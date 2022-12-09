@@ -14,6 +14,7 @@ from waves.parameter_generators import _ParameterGenerator, _ParameterDistributi
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
 
+    @pytest.mark.unittest
     def test_output_file_conflict(self):
         with pytest.raises(RuntimeError):
             try:
@@ -22,12 +23,20 @@ class TestParameterGenerator:
             finally:
                 pass
 
+    @pytest.mark.unittest
     def test_output_file_type(self):
         with pytest.raises(RuntimeError):
             try:
                 OutputTypeError = NoQuantilesGenerator({}, output_file_type='notsupported')
             finally:
                 pass
+
+    @pytest.mark.unittest
+    def test_scons_write(self):
+        sconsWrite = NoQuantilesGenerator({})
+        with patch("waves.parameter_generators._ParameterGenerator.write") as mock_write:
+            sconsWrite.scons_write([], [], {})
+        mock_write.assert_called_once()
 
     templates = {      #schema, file_template, set_template,          expected
         'no template':   (    {},        None,         None, ['parameter_set0']),

@@ -24,6 +24,8 @@ New Features
   `Kyle Brindley`_.
 - Add a WAVES helper method to add alias list text to a project's help message (:issue:`370`, :merge:`414`). By `Kyle
   Brindley`_.
+- Add an SCons build function to wrap the parameter generator write method. Removes the need for a user-defined build
+  function (:issue:`373`, :merge:`418`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
