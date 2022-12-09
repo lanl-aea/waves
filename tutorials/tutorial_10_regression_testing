@@ -54,7 +54,7 @@ parameter_study = parameter_generator.parameter_study
 workflow.extend(env.Command(
     target=[parameter_study_file.name],
     source=[str(python_source_abspath / "single_element_compression_cartesian_product.py")],
-    action=[write_parameter_study]))
+    action=[parameter_generator.scons_write]))
 
 # Comment used in tutorial code snippets: marker-3
 
