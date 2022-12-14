@@ -118,7 +118,7 @@ for set_name, parameters in parameter_generator.parameter_study.sel(data_type='s
     # Abaqus Solve
     solve_source_list = [f"{set_name / source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
     solve_source_list.append([f"{set_name / journal_file}.inp"])
-    job_name = pathlib.Path(solve_source_list[0]).with_suffix("").name
+    job_name = pathlib.Path(solve_source_list[0]).stem
     datacheck_name = f"{job_name}_DATACHECK"
     datacheck_suffixes = ("023", "mdl", "sim", "stt")
     abaqus_options="-double both"
