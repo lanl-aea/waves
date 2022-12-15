@@ -3,6 +3,7 @@
 import os
 import sys
 import pathlib
+import inspect
 
 import waves
 
@@ -52,7 +53,8 @@ env["sphinx_build"] = waves.builders.add_program(["sphinx-build"], env)
 env["abaqus"] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
 
 # Set project internal variables and variable substitution dictionaries
-project_dir = pathlib.Path(Dir(".").abspath)
+project_configuration = pathlib.Path(inspect.getfile(lambda: None))
+project_dir = project_configuration.parent
 project_name = project_dir.name
 author_list = ["Kyle Brindley",
                "Prabhu S. Khalsa",
@@ -64,8 +66,9 @@ author_latex = r" \and ".join(author_list)
 documentation_source_dir = pathlib.Path("docs")
 eabm_package_dir = "eabm_package"
 project_variables = {
-    "project_name": project_name,
+    "project_configuration": str(project_configuration)
     "project_dir": str(project_dir),
+    "project_name": project_name,
     "version": "0.1.0",
     "author_list": author_list,
     "author_latex": author_latex,
