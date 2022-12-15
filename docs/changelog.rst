@@ -8,6 +8,11 @@ Changelog
 0.5.10 (unreleased)
 *******************
 
+New Features
+============
+- Add configuration files to the archive tutorial and quickstart archival task (:issue:`369`, :merge:`423`). By `Kyle
+  Brindley`_.
+
 ******************
 0.5.9 (2022-12-14)
 ******************
