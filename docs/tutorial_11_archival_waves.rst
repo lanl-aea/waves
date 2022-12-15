@@ -57,6 +57,12 @@ below to help identify the changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing
 
+Note that we assume that the build directory name will match the current ``SConscript`` file name when constructing the
+``workflow_configuration`` source files for the Tar archive task. For workflows that re-use ``SConscript`` files, it may
+be necessary to recover the current ``SConscript`` with a `Python lambda expression`_ as seen in the ``SConstruct``
+modifications below. If the current workflow uses more than one ``SConscript`` file, the ``workflow_configuration`` list
+should be updated to include all configuration files for the archive task.
+
 **********
 SConstruct
 **********
@@ -69,6 +75,13 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_11_archival_SConstruct
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing_SConstruct
+
+Note that we retrieve the project configuration ``SConstruct`` file name and location with a `Python lambda expression`_
+:cite:`python`. In Python 3, you would normally use the ``__file__`` attribute; however, this attribute is not defined
+for `SCons`_ configuation files. Instead, we can recover the configuration file name and absolute path with the same
+method used in :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves` for the Abaqus Python 2
+journal files. For consistency with the configuration file path, we assume that the parent directory of the
+configuration file is the same as the project root directory.
 
 *************
 Build Targets
@@ -96,7 +109,7 @@ file. You can inspect the contents of the archive as below.
    /path/to/waves-eabm-tutorial
    $ find build -name "*.tar.bz2"
    build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.tar.bz2
-   $ tar -tjf $(find build -name "*.tar.bz2") | grep parameter_set0
+   $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_11_archival"
    build/tutorial_11_archival/parameter_set0/single_element_geometry.cae
    build/tutorial_11_archival/parameter_set0/single_element_geometry.jnl
    build/tutorial_11_archival/parameter_set0/single_element_geometry.stdout
@@ -130,3 +143,5 @@ file. You can inspect the contents of the archive as below.
    build/tutorial_11_archival/parameter_set0/single_element_compression_datasets.h5
    build/tutorial_11_archival/parameter_set0/single_element_compression.csv
    build/tutorial_11_archival/parameter_set0/single_element_compression.h5.stdout
+   tutorial_11_archival_SConstruct
+   tutorial_11_archival
