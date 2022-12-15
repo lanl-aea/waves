@@ -72,26 +72,26 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_task_reuse``
+3. Copy the ``tutorial_11_archival`` file to a new file named ``tutorial_task_reuse``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-eabm-tutorial
-   $ cp tutorial_10_regression_testing tutorial_task_reuse
+   $ cp tutorial_11_archival tutorial_task_reuse
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_11_archival`` file from :ref:`tutorial_archival_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/tutorial_task_reuse
 
    .. literalinclude:: tutorials_tutorial_task_reuse
       :language: Python
-      :diff: tutorials_tutorial_10_regression_testing
+      :diff: tutorials_tutorial_11_archival
 
 4. Create a new file named ``single_element_geometry_partition.scons`` from the contents below
 
@@ -113,14 +113,14 @@ changes made in this tutorial.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
 
    .. literalinclude:: tutorials_tutorial_task_reuse_SConstruct
       :language: Python
-      :diff: tutorials_tutorial_10_regression_testing_SConstruct
+      :diff: tutorials_tutorial_11_archival_SConstruct
 
 *************
 Build Targets
