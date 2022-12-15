@@ -87,7 +87,7 @@ workflow.extend(waves.builders.copy_substitute(
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
-job_name = pathlib.Path(solve_source_list[0]).with_suffix('')
+job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
 abaqus_options='-double both'

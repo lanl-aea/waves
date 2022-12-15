@@ -4,9 +4,22 @@
 Changelog
 #########
 
+*******************
+0.5.10 (unreleased)
+*******************
+
 ******************
-0.5.9 (unreleased)
+0.5.9 (2022-12-14)
 ******************
+
+New Features
+============
+- Add an SCons build function to wrap the parameter generator write method. Removes the need for a user-defined build
+  function (:issue:`373`, :merge:`418`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Standardize job name construction throughout tutorials (:issue:`374`, :merge:`420`). By `Kyle Brindley`_.
 
 ******************
 0.5.8 (2022-12-08)
