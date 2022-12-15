@@ -71,7 +71,7 @@ SConscript
       :language: Python
       :lineno-match:
       :end-before: marker-2
-      :emphasize-lines: 7, 27-31
+      :emphasize-lines: 19, 37-41 
 
 The highlighted code above points out two key changes from ``diff`` at the beginning of the file. First, we import the
 ``parameter_schema`` from the ``single_element_compression_mesh_convergence.py`` file you created in the beginning of
