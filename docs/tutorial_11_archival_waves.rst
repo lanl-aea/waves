@@ -103,7 +103,7 @@ file. You can inspect the contents of the archive as below.
    /path/to/waves-eabm-tutorial
    $ find build -name "*.tar.bz2"
    build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.tar.bz2
-   $ tar -tjf $(find build -name "*.tar.bz2") | grep parameter_set0
+   $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_11_archival"
    build/tutorial_11_archival/parameter_set0/single_element_geometry.cae
    build/tutorial_11_archival/parameter_set0/single_element_geometry.jnl
    build/tutorial_11_archival/parameter_set0/single_element_geometry.stdout
@@ -137,3 +137,5 @@ file. You can inspect the contents of the archive as below.
    build/tutorial_11_archival/parameter_set0/single_element_compression_datasets.h5
    build/tutorial_11_archival/parameter_set0/single_element_compression.csv
    build/tutorial_11_archival/parameter_set0/single_element_compression.h5.stdout
+   tutorial_11_archival_SConstruct
+   tutorial_11_archival
