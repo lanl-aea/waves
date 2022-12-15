@@ -70,6 +70,13 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing_SConstruct
 
+Note that we retrieve the project configuration ``SConstruct`` file name and location with a `Python lambda expression`_
+:cite:`python`. In Python 3, you would normally use the ``__file__`` attribute; however, this attribute is not defined
+for `SCons`_ configuation files. Instead, we can recover the configuration file name and absolute path with the same
+method used in :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves` for the Abaqus Python 2
+journal files. For consistency with the configuration file path, we assume that the parent directory of the
+configuration file is the same as the project root directory.
+
 *************
 Build Targets
 *************
