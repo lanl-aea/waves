@@ -26,6 +26,7 @@ eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
+workflow_configuration = [env["project_configuration"], workflow_name]
 parameter_schema = single_element_compression.mesh_convergence
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
@@ -172,7 +173,7 @@ workflow.extend(env.PythonScript(
 archive_name = f"{env['project_name']}-{workflow_name}-{env['version']}"
 archive_target = env.Tar(
     target=archive_name,
-    source=workflow)
+    source=workflow + workflow_configuration)
 
 # Collector alias based on build directory name
 env.Alias(workflow_name, workflow)
