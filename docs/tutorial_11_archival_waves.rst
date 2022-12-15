@@ -57,6 +57,12 @@ below to help identify the changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing
 
+Note that we assume that the build directory name will match the current ``SConscript`` file name when constructing the
+``workflow_configuration`` source files for the Tar archive task. For workflows that re-use ``SConscript`` files, it may
+be necessary to recover the current ``SConscript`` with a `Python lamda expression`_ as seen in the ``SConstruct``
+modifications below. If the current workflow uses more than one ``SConscript`` file, the ``workflow_configuration`` list
+should be updated to include all configuration files for the archive task.
+
 **********
 SConstruct
 **********
