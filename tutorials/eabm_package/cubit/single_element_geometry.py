@@ -4,6 +4,8 @@ import pathlib
 
 import cubit
 
+from eabm_package.argparse_types import positive_float
+
 
 def main(output_file, width, height):
     """Create a simple rectangle geometry.
@@ -30,24 +32,6 @@ def main(output_file, width, height):
     cubit.cmd(f"save as '{output_file}.cub' overwrite")
 
     return 0
-
-
-def positive_float(argument):
-    """Type function for argparse - positive floats
-
-    :param str argument: string argument from argparse
-
-    :returns: argument
-    :rtype: float
-    """
-    MINIMUM_VALUE = 0.0
-    try:
-        argument = float(argument)
-    except ValueError:
-        raise argparse.ArgumentTypeError("invalid float value: '{}'".format(argument))
-    if argument < MINIMUM_VALUE:
-        raise argparse.ArgumentTypeError("invalid positive float: '{}'".format(argument))
-    return argument
 
 
 def get_parser():

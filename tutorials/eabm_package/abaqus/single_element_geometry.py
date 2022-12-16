@@ -6,6 +6,8 @@ import inspect
 import abaqus
 import abaqusConstants
 
+from eabm_package.argparse_types import positive_float
+
 
 def main(output_file, model_name, part_name, width, height):
     """Create a simple rectangle geometry.
@@ -42,24 +44,6 @@ def main(output_file, model_name, part_name, width, height):
     return 0
 
 # Comment used in tutorial code snippets: marker-1
-
-
-def positive_float(argument):
-    """Type function for argparse - positive floats
-
-    :param str argument: string argument from argparse
-
-    :returns: argument
-    :rtype: float
-    """
-    MINIMUM_VALUE = 0.0
-    try:
-        argument = float(argument)
-    except ValueError:
-        raise argparse.ArgumentTypeError("invalid float value: '{}'".format(argument))
-    if argument < MINIMUM_VALUE:
-        raise argparse.ArgumentTypeError("invalid positive float: '{}'".format(argument))
-    return argument
 
 
 def get_parser():
