@@ -13,6 +13,6 @@ def positive_float(argument):
         argument = float(argument)
     except ValueError:
         raise argparse.ArgumentTypeError("invalid float value: '{}'".format(argument))
-    if argument < MINIMUM_VALUE:
+    if not argument > MINIMUM_VALUE:
         raise argparse.ArgumentTypeError("invalid positive float: '{}'".format(argument))
     return argument
