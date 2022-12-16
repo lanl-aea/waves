@@ -101,3 +101,12 @@ post_processing.py
     :members:
     :show-inheritance:
     :synopsis: Post-process with data catenation and plotting
+
+argparse_types.py
+=================
+
+.. automodule:: eabm_package.argparse_types
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: Python 2/3 compatible argparse types for input verification
