@@ -44,9 +44,9 @@ def positive_float(argument):
     try:
         argument = float(argument)
     except ValueError:
-        raise argparse.ArgumentTypeError(f"invalid float value: '{argument}'")
+        raise argparse.ArgumentTypeError("invalid float value: '{}'".format(argument))
     if argument < MINIMUM_VALUE:
-        raise argparse.ArgumentTypeError(f"invalid positive float: '{argument}'")
+        raise argparse.ArgumentTypeError("invalid positive float: '{}'".format(argument))
     return argument
 
 
