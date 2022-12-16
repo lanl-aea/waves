@@ -44,6 +44,24 @@ def main(output_file, model_name, part_name, width, height):
 # Comment used in tutorial code snippets: marker-1
 
 
+def positive_float(argument):
+    """Type function for argparse - positive floats
+
+    :param str argument: string argument from argparse
+
+    :returns: argument
+    :rtype: float
+    """
+    MINIMUM_VALUE = 0.0
+    try:
+        argument = float(argument)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"invalid float value: '{argument}'")
+    if argument < MINIMUM_VALUE:
+        raise argparse.ArgumentTypeError(f"invalid positive float: '{argument}'")
+    return argument
+
+
 def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     filename = inspect.getfile(lambda: None)
@@ -70,11 +88,11 @@ def get_parser():
                         help="The name of the Abaqus model")
     parser.add_argument('-p', '--part-name', type=str, default=default_part_name,
                         help="The name of the Abaqus part")
-    parser.add_argument('-w', '--width', type=float, default=default_width,
-                        help="The rectangle width")
+    parser.add_argument('-w', '--width', type=positive_float, default=default_width,
+                        help="The rectangle width. Positive float.")
     # Short option '-h' is reserved for the help message
-    parser.add_argument('--height', type=float, default=default_height,
-                        help="The rectangle height")
+    parser.add_argument('--height', type=positive_float, default=default_height,
+                        help="The rectangle height. Positive float.")
     return parser
 
 # Comment used in tutorial code snippets: marker-2

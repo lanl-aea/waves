@@ -32,6 +32,24 @@ def main(output_file, width, height):
     return 0
 
 
+def positive_float(argument):
+    """Type function for argparse - positive floats
+
+    :param str argument: string argument from argparse
+
+    :returns: argument
+    :rtype: float
+    """
+    MINIMUM_VALUE = 0.0
+    try:
+        argument = float(argument)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"invalid float value: '{argument}'")
+    if argument < MINIMUM_VALUE:
+        raise argparse.ArgumentTypeError(f"invalid positive float: '{argument}'")
+    return argument
+
+
 def get_parser():
     script_name = pathlib.Path(__file__)
     # Set default parameter values
@@ -46,11 +64,11 @@ def get_parser():
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
                         help="The output file for the Cubit model without extension. Will be appended with the " \
                              "required extension, e.g. ``output_file``.cub")
-    parser.add_argument('-w', '--width', type=float, default=default_width,
-                        help="The rectangle width")
+    parser.add_argument('-w', '--width', type=positive_float, default=default_width,
+                        help="The rectangle width. Positive float.")
     # Short option '-h' is reserved for the help message
-    parser.add_argument('--height', type=float, default=default_height,
-                        help="The rectangle height")
+    parser.add_argument('--height', type=positive_float, default=default_height,
+                        help="The rectangle height. Positive float.")
     return parser
 
 
