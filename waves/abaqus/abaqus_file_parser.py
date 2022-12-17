@@ -1881,8 +1881,8 @@ class OdbReportFileParser(AbaqusFileParser):
                             if number_of_data_values == 1:
                                 values[value_instance]['values'][self.current_step_count][time_index].append(
                                     [None for _ in range(element_size)])
-                                values[value_instance]['values'][self.current_step_count][time_index][value_length] \
-                                    = data_value
+                                values[value_instance]['values'][self.current_step_count][time_index][value_length][
+                                    element_index] = data_value
                             else:
                                 values[value_instance]['values'][self.current_step_count][time_index].append(
                                     [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
@@ -1903,7 +1903,7 @@ class OdbReportFileParser(AbaqusFileParser):
                                     values[value_instance]['values'][self.current_step_count][time_index].append(
                                         [None for _ in range(element_size)])
                                     values[value_instance]['values'][self.current_step_count][time_index][
-                                        value_length] = data_value
+                                        value_length][element_index] = data_value
                                 else:
                                     values[value_instance]['values'][self.current_step_count][time_index].append(
                                         [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
@@ -1923,7 +1923,7 @@ class OdbReportFileParser(AbaqusFileParser):
                                 values[value_instance]['values'][self.current_step_count][time_index].append(
                                     [None for _ in range(element_size)])
                                 values[value_instance]['values'][self.current_step_count][time_index][
-                                    value_length] = data_value
+                                    value_length][element_index] = data_value
                             else:
                                 values[value_instance]['values'][self.current_step_count][time_index].append(
                                     [[None for _ in range(number_of_data_values)] for _ in range(element_size)])
