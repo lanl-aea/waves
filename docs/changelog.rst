@@ -13,6 +13,11 @@ New Features
 - Add configuration files to the archive tutorial and quickstart archival task (:issue:`369`, :merge:`423`). By `Kyle
   Brindley`_.
 
+Bug fixes
+=========
+- Fix issue in abaqus_file_parser where first frame of field output didn't get all the dimensions
+  (:issue:`376`, :merge:`425`). By `Prabhu Khalsa`_.
+
 ******************
 0.5.9 (2022-12-14)
 ******************
