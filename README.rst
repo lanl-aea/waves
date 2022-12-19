@@ -71,6 +71,40 @@ Developers
 * `Matthew Fister`_
 * `Scott Ouellette`_
 
+****************
+Repository Notes
+****************
+
+This project uses symbolic links to minimize duplication of files where possible. Some files, such as the tutorial and
+quickstart eabm package files, can not be shared in common due to their applications and the necessary directory
+structure for each. However, if the file content is identical, a symbolic link is used to avoid duplicating the entire
+file.
+
+Symbolic links require special handling on Windows computers. If contributors are developing from a Windows machine,
+they are encouraged to
+
+1. Read about ``mklink`` and "developer mode" for Windows 10/11
+2. Use an up-to-date version of git
+3. Use one of the following git configurations
+
+   .. code-block::
+
+      # Global configuration. Run from anywhere.
+      > git config --global core.symlinks true
+
+      # Local configuration. Run from repository root directory after cloning.
+      > git config core.symlinks true
+
+4. Use unix line endings with one of the following git configurations
+
+   .. code-block::
+
+      # Global configuration. Run from anywhere.
+      > git config --global core.autocrlf true
+
+      # Local configuration. Run from repository root directory after cloning.
+      > git config core.autocrlf true
+
 ********************
 Activate Environment
 ********************
@@ -156,7 +190,8 @@ commands apply to each, but must be run from their respective project configurat
 When executing the tutorials or quickstart build commands directly in the repository, the WAVES project root repository
 must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environments, the preferred method is to run
 ``conda develop .`` once from the project root directory. See the `Conda`_ documentation for more information about
-"development" mode installs.
+"development" mode installs. For shared environments, the preferred solution is to prefix the following commands with
+``PYTHONPATH=.. ``, where it is assumed that the ``PWD`` is the tutorial or quickstart root directory.
 
 - View project specific command line options
 
