@@ -1,4 +1,4 @@
-.. _tutorial_solverprep_waves:
+.. _tutorial_argparse_types_waves:
 
 ############################
 Tutorial: Input Verification

@@ -10,7 +10,9 @@ package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
     'tutorials_dir': 'tutorials',
+    'eabm_dir': 'eabm_package',
     'abaqus_dir': 'eabm_package/abaqus',
+    'argparse_types_dir': 'eabm_package/argparse_types',
     'cubit_dir': 'eabm_package/cubit',
     'python_dir': 'eabm_package/python'
 }
