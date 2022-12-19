@@ -17,6 +17,8 @@ References
 **********
 
 * `Argparse type`_ :cite:`python`
+* :ref:`tutorial_partition_mesh_waves`
+* :ref:`tutorial_parameter_substitution_waves`
 
 ***********
 Environment
