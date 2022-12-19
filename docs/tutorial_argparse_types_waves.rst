@@ -9,7 +9,7 @@ some input verification by specifying the expected variable types. This input ve
 specified type methods. This is useful when a journal file should limit the range of allowable float values, for
 instance. In the case of these tutorials, one might wish to limit the width, height, and global seed parameters to
 positive float values. The solution approach is sufficiently general to allow modsim owners to similarly implement
-ranges of floats or integers, specific value choices, or any other restriction may be necessary to ensure that a
+ranges of floats or integers, specific value choices, or any other restriction which may be necessary to ensure that a
 simulation workflow is used within its designed assumptions.
 
 **********
