@@ -9,6 +9,7 @@ Requires the following ``SConscript(..., exports=[])``
   * ``sphinx_build`` - String path for the Sphinx build executable
 """
 
+import os
 import pathlib
 
 import waves
@@ -75,14 +76,12 @@ documentation_file_list = [
     "_static/custom.css"
 ]
 
-# TODO: os agnostic pathsep for the html directory
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/4
 html_directory = Dir("html")
 sphinx_options = "-W"
 html = env.Command(
     target=[html_directory],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}html",
     sphinx_options=sphinx_options)
 env.Clean(html, html_directory)
 env.AlwaysBuild(html)
