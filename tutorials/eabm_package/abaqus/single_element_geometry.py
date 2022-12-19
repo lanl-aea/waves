@@ -6,8 +6,6 @@ import inspect
 import abaqus
 import abaqusConstants
 
-from eabm_package.argparse_types import positive_float
-
 
 def main(output_file, model_name, part_name, width, height):
     """Create a simple rectangle geometry.
@@ -72,11 +70,11 @@ def get_parser():
                         help="The name of the Abaqus model")
     parser.add_argument('-p', '--part-name', type=str, default=default_part_name,
                         help="The name of the Abaqus part")
-    parser.add_argument('-w', '--width', type=positive_float, default=default_width,
-                        help="The rectangle width. Positive float.")
+    parser.add_argument('-w', '--width', type=float, default=default_width,
+                        help="The rectangle width")
     # Short option '-h' is reserved for the help message
-    parser.add_argument('--height', type=positive_float, default=default_height,
-                        help="The rectangle height. Positive float.")
+    parser.add_argument('--height', type=float, default=default_height,
+                        help="The rectangle height")
     return parser
 
 # Comment used in tutorial code snippets: marker-2

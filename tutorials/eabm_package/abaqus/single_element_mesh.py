@@ -10,7 +10,6 @@ import abaqusConstants
 import mesh
 
 import eabm_package.abaqus.abaqus_journal_utilities
-from eabm_package.argparse_types import positive_float
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
@@ -103,8 +102,8 @@ def get_parser():
                         help="The name of the Abaqus model")
     parser.add_argument('-p', '--part-name', type=str, default=default_part_name,
                         help="The name of the Abaqus part")
-    parser.add_argument('-g', '--global-seed', type=positive_float, default=default_global_seed,
-                        help="The global mesh seed size. Positive float.")
+    parser.add_argument('-g', '--global-seed', type=float, default=default_global_seed,
+                        help="The global mesh seed size")
     return parser
 
 
