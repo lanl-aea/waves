@@ -37,10 +37,3 @@ Style Guide
 
 This project does not yet have a full style guide. Generally, wherever a style can't be inferred from surrounding code
 this project falls back to `PEP-8`_-like styles. There are two notable exceptions to the notional PEP-8 fall back:
-
-Windows users
-=============
-
-.. include:: README.txt
-   :start-after: windows-notes-start-do-not-remove
-   :end-before: windows-notes-end-do-not-remove
