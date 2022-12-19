@@ -25,6 +25,11 @@ Documentation
 - Add a supplemental tutorial for input verification using `Argparse type`_ user-defined methods (:issue:`375`,
   :merge:`424`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Account for OS path separator differences in the documentation build for WAVES and the quickstart template files
+  (:issue:`4`, :merge:`426`). By `Kyle Brindley`_.
+
 ******************
 0.5.9 (2022-12-14)
 ******************
