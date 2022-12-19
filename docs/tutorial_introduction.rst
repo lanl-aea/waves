@@ -73,6 +73,7 @@ Supplemental Lessons
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
                    00:10 :ref:`scons_multiactiontask`                 Execute multiple actions on the same target file
+                   00:20 :ref:`tutorial_argparse_types_waves`         Add input verification to workflow parameters
                    00:20 :ref:`tutorial_cubit_waves`                  Geometry, partition, and mesh examples with Cubit
                                                                       replicating :ref:`tutorial_simulation_waves`
                    00:10 :ref:`tutorial_escape_sequences_waves`       Changing task actions without re-building the task
