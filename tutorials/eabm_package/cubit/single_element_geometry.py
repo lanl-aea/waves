@@ -4,8 +4,6 @@ import pathlib
 
 import cubit
 
-from eabm_package.argparse_types import positive_float
-
 
 def main(output_file, width, height):
     """Create a simple rectangle geometry.
@@ -48,11 +46,11 @@ def get_parser():
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
                         help="The output file for the Cubit model without extension. Will be appended with the " \
                              "required extension, e.g. ``output_file``.cub")
-    parser.add_argument('-w', '--width', type=positive_float, default=default_width,
-                        help="The rectangle width. Positive float.")
+    parser.add_argument('-w', '--width', type=float, default=default_width,
+                        help="The rectangle width")
     # Short option '-h' is reserved for the help message
-    parser.add_argument('--height', type=positive_float, default=default_height,
-                        help="The rectangle height. Positive float.")
+    parser.add_argument('--height', type=float, default=default_height,
+                        help="The rectangle height")
     return parser
 
 

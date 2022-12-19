@@ -5,8 +5,6 @@ import shutil
 
 import cubit
 
-from eabm_package.argparse_types import positive_float
-
 
 def main(input_file, output_file, global_seed):
     """Mesh the simple rectangle geometry partitioned by ``single_element_partition.py``
@@ -98,8 +96,8 @@ def get_parser():
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
                         help="The output file for the Cubit model without extension. Will be appended with the " \
                              "required extension, e.g. ``output_file``.cub")
-    parser.add_argument('-g', '--global-seed', type=positive_float, default=default_global_seed,
-                        help="The global mesh seed size. Positive float.")
+    parser.add_argument('-g', '--global-seed', type=float, default=default_global_seed,
+                        help="The global mesh seed size")
     return parser
 
 
