@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import os
 import pathlib
 
 # Inherit the parent construction environment
@@ -186,7 +187,7 @@ sphinx_options = '-W'
 html = env.Command(
     target=[Dir('html')],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}html",
     sphinx_options=sphinx_options)
 env.Clean(html, Dir('html'))
 env.AlwaysBuild(html)
@@ -203,7 +204,7 @@ alias_list.extend(env.Alias('latexpdf', latexpdf))
 man = env.Command(
     target=[Dir('man')],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man -t man",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}man -t man",
     sphinx_options=sphinx_options)
 env.Clean(man, Dir('man'))
 env.AlwaysBuild(man)
