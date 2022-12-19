@@ -75,6 +75,8 @@ Developers
 Repository Notes
 ****************
 
+.. windows-notes-start-do-not-remove
+
 This project uses symbolic links to minimize duplication of files where possible. Some files, such as the tutorial and
 quickstart eabm package files, can not be shared in common due to their applications and the necessary directory
 structure for each. However, if the file content is identical, a symbolic link is used to avoid duplicating the entire
@@ -104,6 +106,8 @@ they are encouraged to
 
       # Local configuration. Run from repository root directory after cloning.
       > git config core.autocrlf true
+
+.. windows-notes-end-do-not-remove
 
 ********************
 Activate Environment
