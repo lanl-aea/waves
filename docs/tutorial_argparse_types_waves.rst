@@ -157,6 +157,8 @@ following to the Geometry task definition.
 
    journal_options="--width '-1.0'"
 
+See :ref:`tutorial_parameter_substitution_waves` for more details about using the command line interface and
+``journal_options`` task argument.
 
 ************
 Output Files
