@@ -1,7 +1,8 @@
 def positive_float(argument):
     """Type function for argparse - positive floats
 
-    Both Abaqus Python 2 and Python 3 compatible
+    Abaqus Python 2 and Python 3 compatible argparse type method:
+    https://docs.python.org/3.8/library/argparse.html#type.
 
     :param str argument: string argument from argparse
 
