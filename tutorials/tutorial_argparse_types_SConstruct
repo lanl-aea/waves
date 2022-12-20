@@ -3,7 +3,6 @@
 import os
 import sys
 import pathlib
-import inspect
 
 import waves
 
@@ -34,9 +33,7 @@ AddOption(
 # Inherit user's full environment and set project variables
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
-                  unconditional_build=GetOption("unconditional_build"),
-                  TARFLAGS="-c -j",
-                  TARSUFFIX=".tar.bz2")
+                  unconditional_build=GetOption("unconditional_build"))
 
 # Comments used in tutorial code snippets: marker-3
 
@@ -48,24 +45,18 @@ env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "ab
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-EABM-TUTORIAL'
 version = '0.1.0'
-project_configuration = pathlib.Path(inspect.getfile(lambda: None))
-project_dir = project_configuration.parent
-abaqus_source_dir = "eabm_package/abaqus"
-python_source_dir = "eabm_package/python"
+project_dir = pathlib.Path(Dir(".").abspath)
+abaqus_source_dir = "eabm_package/argparse_types"
 project_variables = {
-    "project_configuration": str(project_configuration),
     'project_name': project_name,
     'project_dir': str(project_dir),
     'version': version,
-    'abaqus_source_abspath': str(project_dir / abaqus_source_dir),
-    'python_source_abspath': str(project_dir / python_source_dir),
-    'datacheck_alias': 'datacheck'
+    'abaqus_source_abspath': str(project_dir / abaqus_source_dir)
 }
 for key, value in project_variables.items():
     env[key] = value
 
-# Make the EABM package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
-sys.path.insert(0, str(project_dir))
+# Make the EABM package importable for Python and Abaqus Python environments
 env.PrependENVPath("PYTHONPATH", str(project_dir))
 
 # Comments used in tutorial code snippets: marker-5
@@ -74,31 +65,15 @@ env.PrependENVPath("PYTHONPATH", str(project_dir))
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
-env.Append(BUILDERS={
-    'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
-    'AbaqusExtract': waves.builders.abaqus_extract(abaqus_program=env['abaqus']),
-    'PythonScript': waves.builders.python_script()})
+env.Append(BUILDERS={'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus'])})
 
 # Comments used in tutorial code snippets: marker-6
-
-# Create a datacheck alias for reduced cost regression testing
-env.Alias(env['datacheck_alias'])
 
 # Add simulation targets
 workflow_configurations = [
     'tutorial_01_geometry',
     'tutorial_02_partition_mesh',
-    'tutorial_03_solverprep',
-    'tutorial_04_simulation',
-    'tutorial_05_parameter_substitution',
-    'tutorial_06_include_files',
-    'tutorial_07_cartesian_product',
-    'tutorial_08_data_extraction',
-    'tutorial_09_post_processing',
-    'tutorial_10_regression_testing',
-    'tutorial_11_archival',
-    'tutorial_task_reuse'
+    'tutorial_argparse_types'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow

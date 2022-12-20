@@ -3,28 +3,27 @@ import os
 import argparse
 import inspect
 import shutil
-import re
 
 import abaqus
-import abaqusConstants
-import mesh
 
-import eabm_package.abaqus_journal_utilities
 from eabm_package.argparse_types import positive_float
 
 
-def main(input_file, output_file, model_name, part_name, global_seed):
-    """Mesh the simple rectangle geometry partitioned by ``single_element_partition.py``
+def main(input_file, output_file, model_name, part_name, width, height):
+    """Partition the simple rectangle geometry created by ``single_element_geometry.py``
 
-    This script meshes a simple Abaqus model with a single rectangle part.
+    This script partitions a simple Abaqus model with a single rectangle part.
 
-    **Node sets:**
+    **Feature labels:**
 
-    * ``ALLNODES`` - all part nodes
-
-    **Element sets:**
-
-    * ``ELEMENTS`` - all part elements
+    * ``bottom_left`` - bottom left vertex
+    * ``bottom_right`` - bottom right vertex
+    * ``top_right`` - top right vertex
+    * ``top_left`` - top left vertex
+    * ``left`` - left edge
+    * ``top`` - top edge
+    * ``right`` - right edge
+    * ``bottom`` - bottom edge
 
     :param str input_file: The Abaqus model file created by ``single_element_geometry.py`` without extension. Will be
         appended with the required extension, e.g. ``input_file``.cae
@@ -32,9 +31,10 @@ def main(input_file, output_file, model_name, part_name, global_seed):
         extension, e.g. ``output_file``.cae
     :param str model_name: The name of the Abaqus model
     :param str part_name: The name of the Abaqus part
-    :param float global_seed: The global mesh seed size
+    :param float width: The rectangle width
+    :param float height: The rectangle height
 
-    :returns: ``output_file``.cae, ``output_file``.inp
+    :returns: writes ``output_file``.cae
     """
 
     input_with_extension = '{}.cae'.format(input_file)
@@ -48,26 +48,34 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     abaqus.openMdb(pathName=output_with_extension)
 
     p = abaqus.mdb.models[model_name].parts[part_name]
-    a = abaqus.mdb.models[model_name].rootAssembly
-    a.Instance(name=part_name, part=p, dependent=abaqusConstants.ON)
 
-    p.seedPart(size=global_seed, deviationFactor=0.1, minSizeFactor=0.1)
-    p.generateMesh()
+    v = p.vertices
 
-    elemType1 = mesh.ElemType(elemCode=abaqusConstants.CPS4R, elemLibrary=abaqusConstants.STANDARD)
+    verts = v.findAt(((0, 0, 0),),)
+    p.Set(vertices=verts, name='bottom_left')
 
-    f = p.faces
+    verts = v.findAt(((width, 0, 0),),)
+    p.Set(vertices=verts, name='bottom_right')
+
+    verts = v.findAt(((width, height, 0),),)
+    p.Set(vertices=verts, name='top_right')
+
+    verts = v.findAt(((0, height, 0),),)
+    p.Set(vertices=verts, name='top_left')
+
     s = p.edges
-    faces = f[:]
 
-    pickedRegions = (faces, )
+    side1Edges = s.findAt(((0, height / 2., 0),),)
+    p.Set(edges=side1Edges, name='left')
 
-    p.setElementType(regions=pickedRegions, elemTypes=(elemType1,))
-    p.Set(faces=faces, name='ELEMENTS')
-    p.Set(faces=faces, name='ALLNODES')
+    side1Edges = s.findAt(((width / 2., height, 0),),)
+    p.Set(edges=side1Edges, name='top')
 
-    model_object = abaqus.mdb.models[model_name]
-    eabm_package.abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
+    side1Edges = s.findAt(((width, height / 2., 0),),)
+    p.Set(edges=side1Edges, name='right')
+
+    side1Edges = s.findAt(((width / 2., 0, 0),),)
+    p.Set(edges=side1Edges, name='bottom')
 
     abaqus.mdb.save()
 
@@ -81,16 +89,17 @@ def get_parser():
     basename_without_extension, extension = os.path.splitext(basename)
     # Construct a part name from the filename less the workflow step
     default_part_name = basename_without_extension
-    suffix = '_mesh'
+    suffix = '_partition'
     if default_part_name.endswith(suffix):
         default_part_name = default_part_name[:-len(suffix)]
     # Set default parameter values
-    default_input_file = '{}_partition'.format(default_part_name)
+    default_input_file = '{}_geometry'.format(default_part_name)
     default_output_file = '{}'.format(basename_without_extension)
-    default_global_seed = 1.0
+    default_width = 1.0
+    default_height = 1.0
 
-    cli_description = "Mesh the simple rectangle geometry partitioned by ``single_element_partition.py`` " \
-                      "and write an ``output_file``.cae Abaqus model file and ``output_file``.inp orphan mesh file."
+    cli_description = "Partition the simple rectangle geometry created by ``single_element_geometry.py`` " \
+                      "and write an ``output_file``.cae Abaqus model file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=os.path.basename(filename))
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
@@ -103,8 +112,11 @@ def get_parser():
                         help="The name of the Abaqus model")
     parser.add_argument('-p', '--part-name', type=str, default=default_part_name,
                         help="The name of the Abaqus part")
-    parser.add_argument('-g', '--global-seed', type=positive_float, default=default_global_seed,
-                        help="The global mesh seed size. Positive float.")
+    parser.add_argument('-w', '--width', type=positive_float, default=default_width,
+                        help="The rectangle width. Positive float.")
+    # Short option '-h' is reserved for the help message
+    parser.add_argument('--height', type=positive_float, default=default_height,
+                        help="The rectangle height. Positive float.")
     return parser
 
 
@@ -116,4 +128,5 @@ if __name__ == '__main__':
                   output_file=args.output_file,
                   model_name=args.model_name,
                   part_name=args.part_name,
-                  global_seed=args.global_seed))
+                  width=args.width,
+                  height=args.height))

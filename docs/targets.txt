@@ -11,6 +11,7 @@
 .. _`ASC RE Gitlab User Documentation`: https://re-git.lanl.gov/help/user/index.md
 .. _`ASC RE Gitlab`: https://re-git.lanl.gov/
 .. _`Anaconda Documentation`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
+.. _`Argparse type`: https://docs.python.org/3.8/library/argparse.html#type
 .. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
 .. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
 .. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
@@ -41,7 +42,7 @@
 .. _`PYTHONPATH`: https://docs.python.org/3/library/sys.html#sys.path
 .. _`Python 2.7 argparse`: https://docs.python.org/2.7/library/argparse.html
 .. _`Python 2`: https://docs.python.org/2.7/
-.. _`Python 3`: https://docs.python.org/3.6/
+.. _`Python 3`: https://docs.python.org/3.8/
 .. _`Python Modules`: https://docs.python.org/3/tutorial/modules.html
 .. _`Python Template Strings`: https://docs.python.org/3/library/string.html#template-strings
 .. _`Python Top-Level Code Environment`: https://docs.python.org/3/library/__main__.html
@@ -50,6 +51,7 @@
 .. _`Python pathlib`: https://docs.python.org/3/library/pathlib.html
 .. _`Python sys`: https://docs.python.org/3/library/sys.html
 .. _`Python`: https://www.python.org/
+.. _`Python lambda expression`: https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
 .. _`scipy Sobol`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.Sobol.html
 .. _`scipy Latin Hypercube`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.LatinHypercube.html
 .. _`SCons Command`: https://scons.org/doc/production/HTML/scons-user/ch18.html

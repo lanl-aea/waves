@@ -1,5 +1,6 @@
 #! /usr/bin/env python
 
+import os
 import pathlib
 
 # Inherit the parent construction environment
@@ -63,6 +64,7 @@ documentation_file_list = [
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
     'tutorial_02_partition_mesh_waves.rst',
+    'tutorial_argparse_types_waves.rst',
     'tutorial_03_solverprep_waves.rst',
     'tutorial_04_simulation_waves.rst',
     'tutorial_05_parameter_substitution_waves.rst',
@@ -102,6 +104,8 @@ tutorial_files_list = [
     tutorials_dir / 'tutorial_01_geometry_SConstruct',
     tutorials_dir / 'tutorial_02_partition_mesh',
     tutorials_dir / 'tutorial_02_partition_mesh_SConstruct',
+    tutorials_dir / 'tutorial_argparse_types',
+    tutorials_dir / 'tutorial_argparse_types_SConstruct',
     tutorials_dir / 'tutorial_03_solverprep',
     tutorials_dir / 'tutorial_03_solverprep_SConstruct',
     tutorials_dir / 'tutorial_04_simulation',
@@ -155,9 +159,13 @@ tutorial_files_list = [
     tutorials_dir / env['abaqus_dir'] / 'materials.inp',
     tutorials_dir / env['abaqus_dir'] / 'parts.inp',
     tutorials_dir / env['abaqus_dir'] / 'single_element_compression.inp.in',
+    tutorials_dir / env['argparse_types_dir'] / 'single_element_geometry.py',
+    tutorials_dir / env['argparse_types_dir'] / 'single_element_partition.py',
+    tutorials_dir / env['argparse_types_dir'] / 'single_element_mesh.py',
     tutorials_dir / env['cubit_dir'] / 'single_element_geometry.py',
     tutorials_dir / env['cubit_dir'] / 'single_element_partition.py',
     tutorials_dir / env['cubit_dir'] / 'single_element_mesh.py',
+    tutorials_dir / env['eabm_dir'] / 'argparse_types.py',
     tutorials_dir / env['python_dir'] / 'single_element_compression_nominal.py',
     tutorials_dir / env['python_dir'] / 'single_element_compression_cartesian_product.py',
     tutorials_dir / env['python_dir'] / 'single_element_compression_cartesian_product.csv',
@@ -173,13 +181,11 @@ for file_path in tutorial_files_list:
             action=Copy("$TARGET", "$SOURCE"))
     documentation_file_list.append(target)
 
-# TODO: os agnostic pathsep for the html directory
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/4
 sphinx_options = '-W'
 html = env.Command(
     target=[Dir('html')],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/html",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}html",
     sphinx_options=sphinx_options)
 env.Clean(html, Dir('html'))
 env.AlwaysBuild(html)
@@ -196,7 +202,7 @@ alias_list.extend(env.Alias('latexpdf', latexpdf))
 man = env.Command(
     target=[Dir('man')],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}/man -t man",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}man -t man",
     sphinx_options=sphinx_options)
 env.Clean(man, Dir('man'))
 env.AlwaysBuild(man)

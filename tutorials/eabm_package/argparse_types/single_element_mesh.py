@@ -9,7 +9,7 @@ import abaqus
 import abaqusConstants
 import mesh
 
-import eabm_package.abaqus_journal_utilities
+import eabm_package.abaqus.abaqus_journal_utilities
 from eabm_package.argparse_types import positive_float
 
 
@@ -67,7 +67,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     p.Set(faces=faces, name='ALLNODES')
 
     model_object = abaqus.mdb.models[model_name]
-    eabm_package.abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
+    eabm_package.abaqus.abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
 
     abaqus.mdb.save()
 

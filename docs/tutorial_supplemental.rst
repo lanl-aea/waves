@@ -6,6 +6,7 @@ Supplemental Lessons
    :maxdepth: 1
 
    scons_multiactiontask
+   tutorial_argparse_types_waves
    tutorial_cubit
    tutorial_escape_sequences_waves
    tutorial_07_latin_hypercube_waves

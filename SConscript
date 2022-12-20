@@ -1,16 +1,18 @@
 #! /usr/bin/env python
-#
+
+import pathlib
+
 # Inherit the parent construction environment
 Import('source_dir')
 
-Command(target=f"{source_dir}/README.txt",
-        source="README.rst",
-        action=Copy("$TARGET", "$SOURCE"))
+copy_files = (
+    (f"{source_dir}/README.txt", "README.rst"),
+    (f"{source_dir}/CITATION.bib", "CITATION.bib"),
+    (f"{source_dir}/environment.txt", "environment.txt")
+)
 
-Command(target=f"{source_dir}/CITATION.bib",
-        source="CITATION.bib",
-        action=Copy("$TARGET", "$SOURCE"))
-
-Command(target=f"{source_dir}/environment.txt",
-        source="environment.txt",
-        action=Copy("$TARGET", "$SOURCE"))
+for target, source in copy_files:
+    target = str(pathlib.Path(target))
+    Command(target=target,
+            source=source,
+            action=Copy("$TARGET", "$SOURCE"))
