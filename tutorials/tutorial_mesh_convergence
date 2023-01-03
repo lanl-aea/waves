@@ -161,7 +161,7 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 plot_name = "mesh_convergence_stress"
-selection_dict = '"{\'E values\': \'E22\', \'S values\': \'S22\', \'elements\': 1, \'step\': \'Step-1\', \'time\': 1.0, \'integration point\': 0,}"'
+selection_dict = python_source_abspath / f"{plot_name}.yaml"
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file ${{TARGET.file}} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
