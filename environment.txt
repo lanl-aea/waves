@@ -10,6 +10,7 @@ pytest-xdist
 pyyaml
 scipy >=1
 scons >=4
+seaborn
 sed
 setuptools >=45
 setuptools_scm[toml] >=6.2

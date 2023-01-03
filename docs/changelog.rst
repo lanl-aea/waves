@@ -13,6 +13,10 @@ New Features
 - Add a parameter-set-as-dictionaries method to the parameter generator class (:issue:`378`, :merge:`430`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- Add seaborn package to the development and CI environments (:issue:`380`, :merge:`432`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Use a YAML file instead of a nested string construction for the post-processing selection dictionary (:issue:`379`,
