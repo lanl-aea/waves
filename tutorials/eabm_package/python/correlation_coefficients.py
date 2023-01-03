@@ -6,13 +6,15 @@ import argparse
 import pathlib
 import yaml
 
+import numpy
+import seaborn
 import xarray
 import pandas
 import matplotlib.pyplot
 
 
 default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'time': 1.0,
-                          'integration point': 0}
+                          'integration point': 0, 'data_type': 'samples'}
 
 
 def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
@@ -64,6 +66,13 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 
     # Table
     combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
+
+    # Correlation coefficients
+    correlation_data = combined_data.sel(selection_dict).to_array().to_pandas().transpose()
+    correlation_matrix = numpy.corrcoef(correlation_data.to_numpy(), rowvar=False)
+    correlation_dataframe = pandas.DataFrame(correlation_matrix.transpose(), index=correlation_data.index, columns=correlation_data.column)
+    seaborn.pairplot(correlation_dataframe)
+    matplotlib.pyplot.savefig("correlation_coefficients.pdf")
 
     # Clean up open files
     combined_data.close()
