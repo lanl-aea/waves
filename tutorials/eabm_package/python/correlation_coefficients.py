@@ -74,7 +74,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 
     correlation_matrix = numpy.corrcoef(correlation_data.to_numpy(), rowvar=False)
     correlation_coefficients = pandas.DataFrame(correlation_matrix, index=correlation_data.columns,
-                                             columns=correlation_data.columns)
+                                                columns=correlation_data.columns)
     correlation_coefficients.to_csv("correlation_coefficients.csv")
 
     # Clean up open files
