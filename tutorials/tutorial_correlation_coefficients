@@ -15,7 +15,7 @@ import pathlib
 
 import waves
 
-from eabm_package.python.correlation_coefficients import parameter_schema
+from eabm_package.python.correlation_coefficients_schema import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
@@ -146,7 +146,7 @@ script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[f"{python_source_abspath}/post_processing.py", parameter_study_file.name] + post_processing_source,
+    source=[f"{python_source_abspath}/correlation_coefficients.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 # Collector alias based on parent directory name
