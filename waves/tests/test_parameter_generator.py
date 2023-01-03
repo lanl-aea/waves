@@ -46,6 +46,14 @@ class TestParameterGenerator:
     }
 
     @pytest.mark.unittest
+    def test_set_sample_iterator(self):
+        length = 5
+        sconsIterator = NoQuantilesGenerator({})
+        sconsIterator.generate(length)
+        set_samples = sconsIterator.set_sample_iterator()
+        assert set_samples == [(f"parameter_set{index}", {"parameter_1": float(index)}) for index in range(length)]
+
+    @pytest.mark.unittest
     @pytest.mark.parametrize('schema, file_template, set_template, expected',
                                  templates.values(),
                              ids=templates.keys())
@@ -311,6 +319,7 @@ class NoQuantilesGenerator(_ParameterGenerator):
         self._parameter_names = ['parameter_1']
 
     def generate(self, sets):
+        """Generate float samples for all parameters. Value matches parameter set index"""
         parameter_count = len(self._parameter_names)
         self._samples = numpy.ones((sets, parameter_count))
         for row in range(sets):
