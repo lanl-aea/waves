@@ -47,10 +47,10 @@ class TestParameterGenerator:
 
     @pytest.mark.unittest
     @pytest.mark.parametrize("length", range(1, 20, 5))
-    def test_set_sample_dictionary(self, length):
+    def test_parameter_study_to_dict(self, length):
         sconsIterator = NoQuantilesGenerator({})
         sconsIterator.generate(length)
-        set_samples = sconsIterator.set_sample_dictionary()
+        set_samples = sconsIterator.parameter_study_to_dict()
         assert set_samples == {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
 
     @pytest.mark.unittest

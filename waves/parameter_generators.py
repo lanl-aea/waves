@@ -197,8 +197,8 @@ class _ParameterGenerator(ABC):
         """
         self.write()
 
-    def set_sample_dictionary(self):
-        """Return parameter sets as dictionaries
+    def parameter_study_to_dict(self):
+        """Return parameter study as a dictionary
 
         Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
 
@@ -208,7 +208,7 @@ class _ParameterGenerator(ABC):
            >>> parameter_schema = {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}
            >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
            >>> parameter_generator.generate()
-           >>> for set_name, parameters in parameter_generator.set_sample_dictionary().items():
+           >>> for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
            ...     print(f"{set_name}: {parameters}")
            ...
            parameter_set0: {'parameter_1': 1, 'parameter_2': 'a'}
