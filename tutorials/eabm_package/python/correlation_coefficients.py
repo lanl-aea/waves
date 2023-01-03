@@ -69,10 +69,13 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 
     # Correlation coefficients
     correlation_data = combined_data.sel(selection_dict).to_array().to_pandas().transpose()
+    seaborn.pairplot(correlation_data)
+    matplotlib.pyplot.savefig("correlation_pairplot.pdf")
+
     correlation_matrix = numpy.corrcoef(correlation_data.to_numpy(), rowvar=False)
-    correlation_dataframe = pandas.DataFrame(correlation_matrix.transpose(), index=correlation_data.index, columns=correlation_data.column)
-    seaborn.pairplot(correlation_dataframe)
-    matplotlib.pyplot.savefig("correlation_coefficients.pdf")
+    correlation_coefficients = pandas.DataFrame(correlation_matrix, index=correlation_data.columns,
+                                             columns=correlation_data.columns)
+    correlation_coefficients.to_csv("correlation_coefficients.csv")
 
     # Clean up open files
     combined_data.close()
