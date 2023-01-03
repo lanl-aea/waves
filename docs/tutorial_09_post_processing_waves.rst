@@ -49,6 +49,12 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_08_data_extraction
 
+Here we use the ``post_processing.py`` CLI instead of the module's API for the task definition because the
+post-processing will include plotting with ``matplotlib``, which is not thread-safe. When the CLI is used, multiple
+post-processing tasks from *separate* workflows can be executed in parallel because each task will be launched from a
+separate thread. Care must still be taken to ensure that the post-processing tasks do not write to the same files,
+however.
+
 **********************
 Post-processing script
 **********************

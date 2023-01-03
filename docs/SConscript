@@ -172,6 +172,7 @@ tutorial_files_list = [
     tutorials_dir / env['python_dir'] / 'single_element_compression_latin_hypercube.py',
     tutorials_dir / env['python_dir'] / 'single_element_compression_sobol_sequence.py',
     tutorials_dir / env['python_dir'] / 'single_element_compression_mesh_convergence.py',
+    tutorials_dir / env['python_dir'] / 'mesh_convergence_stress.yaml',
     tutorials_dir / env['python_dir'] / 'post_processing.py'
 ]
 for file_path in tutorial_files_list:
