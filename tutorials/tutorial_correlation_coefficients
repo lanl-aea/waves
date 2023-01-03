@@ -32,6 +32,7 @@ workflow_name = build_directory.name
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
+seed = 42
 model = "single_element"
 simulation_constants = {
     'global_seed': 1,
@@ -50,7 +51,7 @@ parameter_generator = waves.parameter_generators.LatinHypercube(
     output_file=parameter_study_file,
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
-parameter_generator.generate()
+parameter_generator.generate(kwargs={'seed': seed})
 parameter_study = parameter_generator.parameter_study
 
 workflow.extend(env.Command(
