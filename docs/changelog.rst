@@ -8,6 +8,11 @@ Changelog
 0.5.11 (unreleased)
 *******************
 
+Enhancements
+============
+- Use a YAML file instead of a nested string construction for the post-processing selection dictionary (:issue:`379`,
+  :merge:`431`). By `Kyle Brindley`_.
+
 *******************
 0.5.10 (2022-12-19)
 *******************
