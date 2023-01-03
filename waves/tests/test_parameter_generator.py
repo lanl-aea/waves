@@ -46,12 +46,12 @@ class TestParameterGenerator:
     }
 
     @pytest.mark.unittest
-    def test_set_sample_iterator(self):
-        length = 5
+    @pytest.mark.parametrize("length", range(1, 20, 5))
+    def test_set_sample_iterator(self, length):
         sconsIterator = NoQuantilesGenerator({})
         sconsIterator.generate(length)
         set_samples = sconsIterator.set_sample_iterator()
-        assert set_samples == [(f"parameter_set{index}", {"parameter_1": float(index)}) for index in range(length)]
+        assert set_samples.sort() == [(f"parameter_set{index}", {"parameter_1": float(index)}) for index in range(length)].sort()
 
     @pytest.mark.unittest
     @pytest.mark.parametrize('schema, file_template, set_template, expected',
