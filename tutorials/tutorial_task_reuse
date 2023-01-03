@@ -63,7 +63,7 @@ workflow.extend(env.Command(
 # Comment used in tutorial code snippets: marker-3
 
 # Parameterized targets must live inside current simulation_variables for loop
-for set_name, parameters in parameter_generator.set_sample_iterator():
+for set_name, parameters in parameter_generator.set_sample_dictionary().items():
     set_name = pathlib.Path(set_name)
     simulation_variables = parameters
 
