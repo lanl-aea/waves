@@ -8,6 +8,11 @@ Changelog
 0.5.11 (unreleased)
 *******************
 
+New Features
+============
+- Add a parameter-set-as-dictionaries method to the parameter generator class (:issue:`378`, :merge:`430`). By `Kyle
+  Brindley`_.
+
 Enhancements
 ============
 - Use a YAML file instead of a nested string construction for the post-processing selection dictionary (:issue:`379`,
@@ -22,8 +27,6 @@ New Features
 - Add configuration files to the archive tutorial and quickstart archival task (:issue:`369`, :merge:`423`). By `Kyle
   Brindley`_.
 - Add positive-float input verification to the tutorial and quickstart files (:issue:`375`, :merge:`424`). By `Kyle
-  Brindley`_.
-- Add a parameter-set-as-dictionaries method to the parameter generator class (:issue:`378`, :merge:`430`). By `Kyle
   Brindley`_.
 
 Bug fixes
