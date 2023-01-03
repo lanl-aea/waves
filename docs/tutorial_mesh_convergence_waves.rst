@@ -50,11 +50,24 @@ Parameter Study File
 This parameter study will define a mesh convergence study where the global size of the finite elements in the model is
 decreased several times by a factor of two.
 
+*************************************
+Mesh Convergence Selection Dictionary
+*************************************
+
+5. Create a new file ``eabm_package/python/mesh_convergence_stress.yaml`` from the content below.
+
+.. admonition:: waves-eabm-tutorial/eabm_package/python/mesh_convergence_stress.yaml
+
+   .. literalinclude:: python_mesh_convergence_stress.yaml
+
+This file defines a YAML formatted dictionary that will be used to change the default data selection of the
+``post_processing.py`` script.
+
 **********
 SConscript
 **********
 
-5. A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is
+6. A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is
    included below to help identify the changes made in this tutorial. Use the diff to update your
    ``tutorial_mesh_convergence`` file, and then review the paragraphs that follow to understand the meaning of these
    changes.
@@ -71,7 +84,7 @@ SConscript
       :language: Python
       :lineno-match:
       :end-before: marker-2
-      :emphasize-lines: 19, 37-41 
+      :emphasize-lines: 19, 37-41
 
 The highlighted code above points out two key changes from ``diff`` at the beginning of the file. First, we import the
 ``parameter_schema`` from the ``single_element_compression_mesh_convergence.py`` file you created in the beginning of
@@ -151,11 +164,11 @@ plot, as demonstrated in :ref:`tutorial_post_processing_waves`, is a simple stre
 set. The highlighted code is used to generate a plot of global mesh size versus the stress in the model at the end of
 the simulation. As the global mesh size decreases, the final stress should start to converge to a common value.
 
-The specification of a ``selection_dict`` demonstrates another non-default usage of a command line argument. In this
-case, the only ``key: value`` pair added to the ``selection_dict`` that does not already exist in the
-:ref:`eabm_post_processing_cli` CLI defaults is the specification of the time point ``'time': 1.0``. This down selects our
-data to the largest compressive stress produced by the simulation, which will be our quantity of interest (QoI) for this
-simulation workflow.
+The specification of a ``selection_dict`` demonstrates another feature of the ``post_processing.py`` command line
+interface. In this case, the only ``key: value`` pair added to the ``selection_dict`` that does not already exist in the
+:ref:`eabm_post_processing_cli` CLI defaults is the specification of the time point ``'time': 1.0``. This down selects
+our data to the largest compressive stress produced by the simulation, which will be our quantity of interest (QoI) for
+this simulation workflow.
 
 The remaining changes are rather simple. The ``--x-units`` and ``--x-var`` command line arguments are updated to reflect
 the usage of the ``global_seed`` parameter as the independent variable.
@@ -164,7 +177,7 @@ the usage of the ``global_seed`` parameter as the independent variable.
 SConstruct
 **********
 
-6. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help
+7. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help
    identify the changes made in this tutorial. Make these changes to your ``SConstruct`` file.
 
 .. admonition:: waves-eabm-tutorial/SConstruct
@@ -177,7 +190,7 @@ SConstruct
 Build Targets
 *************
 
-7. Build the new targets
+8. Build the new targets
 
 .. code-block:: bash
 
@@ -194,7 +207,7 @@ script.
 Output Files
 ************
 
-8. Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
+9. Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
 
 .. code-block::
 
