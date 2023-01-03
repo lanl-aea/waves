@@ -197,34 +197,6 @@ class _ParameterGenerator(ABC):
         """
         self.write()
 
-    def parameter_study_to_dict(self):
-        """Return parameter study as a dictionary
-
-        Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
-
-        .. code-block::
-
-           >>> import waves
-           >>> parameter_schema = {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}
-           >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
-           >>> parameter_generator.generate()
-           >>> for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
-           ...     print(f"{set_name}: {parameters}")
-           ...
-           parameter_set0: {'parameter_1': 1, 'parameter_2': 'a'}
-           parameter_set1: {'parameter_1': 1, 'parameter_2': 'b'}
-           parameter_set2: {'parameter_1': 2, 'parameter_2': 'a'}
-           parameter_set3: {'parameter_1': 2, 'parameter_2': 'b'}
-
-        :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
-        :rtype: dict - {str: {str: value}}
-        """
-        parameter_study_dictionary = {}
-        for set_name, parameters in self.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
-            parameter_dict = parameters.squeeze().to_array().to_series().to_dict()
-            parameter_study_dictionary[set_name] = parameter_dict
-        return parameter_study_dictionary
-
     def _write_dataset(self):
         """Write Xarray Datset formatted output to STDOUT, separate set files, or a single file
 
@@ -439,6 +411,36 @@ class _ParameterGenerator(ABC):
         for set_hash, data_row in self.parameter_study.sel(data_type=data_type).groupby(_hash_coordinate_key):
             data.append(data_row.squeeze().to_array().to_numpy())
         return numpy.array(data, dtype=object)
+
+    def parameter_study_to_dict(self, data_type='samples'):
+        """Return parameter study as a dictionary
+
+        Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
+
+        .. code-block::
+
+           >>> import waves
+           >>> parameter_schema = {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}
+           >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
+           >>> parameter_generator.generate()
+           >>> for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
+           ...     print(f"{set_name}: {parameters}")
+           ...
+           parameter_set0: {'parameter_1': 1, 'parameter_2': 'a'}
+           parameter_set1: {'parameter_1': 1, 'parameter_2': 'b'}
+           parameter_set2: {'parameter_1': 2, 'parameter_2': 'a'}
+           parameter_set3: {'parameter_1': 2, 'parameter_2': 'b'}
+
+        :param str data_type: The data_type selection to return - samples or quantiles
+
+        :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
+        :rtype: dict - {str: {str: value}}
+        """
+        parameter_study_dictionary = {}
+        for set_name, parameters in self.parameter_study.sel(data_type=data_type).groupby(_set_coordinate_key):
+            parameter_dict = parameters.squeeze().to_array().to_series().to_dict()
+            parameter_study_dictionary[set_name] = parameter_dict
+        return parameter_study_dictionary
 
     def _merge_parameter_studies(self):
         """Merge the current parameter study into a previous parameter study.
