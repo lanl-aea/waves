@@ -69,7 +69,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 
     # Correlation coefficients
     correlation_data = combined_data.sel(selection_dict).to_array().to_pandas().transpose()
-    seaborn.pairplot(correlation_data)
+    seaborn.pairplot(correlation_data, corner=True)
     matplotlib.pyplot.savefig("correlation_pairplot.pdf")
 
     correlation_matrix = numpy.corrcoef(correlation_data.to_numpy(), rowvar=False)
