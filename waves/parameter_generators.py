@@ -197,6 +197,18 @@ class _ParameterGenerator(ABC):
         """
         self.write()
 
+    def set_sample_iterator(self):
+        """
+        :return: [(set_name, set_samples), ...] tuple of parameter set name and parameter set dictionary
+            {parameter: value}
+        :rtype: list of tuples - [(str, dict)]
+        """
+        set_list = []
+        for set_name, parameters in self.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
+            parameter_dict = parameters.squeeze().to_array().to_series().to_dict()
+            set_list.append((set_name, parameter_dict))
+        return set_list
+
     def _write_dataset(self):
         """Write Xarray Datset formatted output to STDOUT, separate set files, or a single file
 
