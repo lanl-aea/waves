@@ -33,6 +33,10 @@ output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
 model = "single_element"
+simulation_constants = {
+    'global_seed': 1,
+    'displacement': -0.01
+}
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -59,7 +63,7 @@ workflow.extend(env.Command(
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
     set_name = pathlib.Path(set_name)
-    simulation_variables = parameters
+    simulation_variables = {**parameters, **simulation_constants}
 
     # Comment used in tutorial code snippets: marker-4
 

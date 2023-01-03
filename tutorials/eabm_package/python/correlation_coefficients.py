@@ -11,7 +11,8 @@ import pandas
 import matplotlib.pyplot
 
 
-default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'integration point': 0}
+default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'time': 1.0,
+                          'integration point': 0}
 
 
 def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
@@ -55,9 +56,6 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     # Add units
     combined_data[x_var].attrs["units"] = x_units
     combined_data[y_var].attrs["units"] = y_units
-
-    # Tutorial 09: post processing print statement to view data structure
-    print(combined_data)
 
     # Plot
     combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
