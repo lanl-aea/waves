@@ -197,10 +197,10 @@ class _ParameterGenerator(ABC):
         """
         self.write()
 
-    def set_sample_iterator(self):
+    def set_sample_dictionary(self):
         """Return parameter sets as dictionaries
 
-        Used for iterating on parameter sets in an SCons workflow, e.g.
+        Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
 
         .. code-block::
 
@@ -208,7 +208,7 @@ class _ParameterGenerator(ABC):
            >>> parameter_schema = {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}
            >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
            >>> parameter_generator.generate()
-           >>> for set_name, parameters in parameter_generator.set_sample_iterator():
+           >>> for set_name, parameters in parameter_generator.set_sample_dictionary().items():
            ...     print(f"{set_name}: {parameters}")
            ...
            parameter_set0: {'parameter_1': 1, 'parameter_2': 'a'}
@@ -216,14 +216,14 @@ class _ParameterGenerator(ABC):
            parameter_set2: {'parameter_1': 2, 'parameter_2': 'a'}
            parameter_set3: {'parameter_1': 2, 'parameter_2': 'b'}
 
-        :return: [(set_name, {parameter: value}), ...] list of parameter set names and parameter set dictionaries
-        :rtype: list of tuples - [(str, dict)]
+        :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
+        :rtype: dict - {str: {str: value}}
         """
-        set_list = []
+        parameter_study_dictionary = {}
         for set_name, parameters in self.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
             parameter_dict = parameters.squeeze().to_array().to_series().to_dict()
-            set_list.append((set_name, parameter_dict))
-        return set_list
+            parameter_study_dictionary[set_name] = parameter_dict
+        return parameter_study_dictionary
 
     def _write_dataset(self):
         """Write Xarray Datset formatted output to STDOUT, separate set files, or a single file
