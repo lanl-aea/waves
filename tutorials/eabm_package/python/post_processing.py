@@ -11,6 +11,9 @@ import pandas
 import matplotlib.pyplot
 
 
+default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'integration point': 0}
+
+
 def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
          parameter_study_file=None, csv_regression_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
@@ -88,8 +91,6 @@ def get_parser():
     default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
     default_x_var = "E"
     default_y_var = "S"
-    default_selection_dict = "{'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', " \
-                             "'integration point': 0}"
     default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
@@ -115,10 +116,11 @@ def get_parser():
                         help="The independent (x-axis) variable name (default: %(default)s)")
     parser.add_argument("-y", "--y-var", type=str, default=default_y_var,
                         help="The dependent (y-axis) variable name (default: %(default)s)")
-    parser.add_argument("-s", "--selection-dict", type=str, default=default_selection_dict,
-                        help="YAML formatted dictionary string to define the down selection of data to be plotted. " \
+    parser.add_argument("-s", "--selection-dict", type=str, default=None,
+                        help="The YAML formatted dictionary file to define the down selection of data to be plotted. " \
                              "Dictionary key: value pairs must match the data variables and coordinates of the expected Xarray Dataset object. " \
-                             "(default: %(default)s)")
+                             "If no file is provided, the a default selection dict will be used " \
+                             f"(default: {default_selection_dict})")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
                         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)")
     parser.add_argument("--csv-regression-file", type=str, default=None,
@@ -132,7 +134,11 @@ def get_parser():
 if __name__ == "__main__":
     parser = get_parser()
     args, unknown = parser.parse_known_args()
-    selection_dict = yaml.safe_load(args.selection_dict)
+    if not args.selection_dict:
+        selection_dict = default_selection_dict
+    else:
+        with open(args.selection_dict, 'r') as input_yaml:
+            selection_dict = yaml.safe_load(input_yaml)
     sys.exit(plot(input_files=args.input_file,
                   output_file=args.output_file,
                   group_path=args.group_path,
