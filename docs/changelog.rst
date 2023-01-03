@@ -18,6 +18,8 @@ New Features
   Brindley`_.
 - Add positive-float input verification to the tutorial and quickstart files (:issue:`375`, :merge:`424`). By `Kyle
   Brindley`_.
+- Add a parameter-set-as-dictionaries method to the parameter generator class (:issue:`378`, :merge:`430`). By `Kyle
+  Brindley`_.
 
 Bug fixes
 =========
