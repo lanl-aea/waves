@@ -45,8 +45,13 @@ class TestSALibSampler:
     def _expected_set_names(self, sampler, N, num_vars):
         number_of_simulations = N
         if sampler == "sobol":
-            number_of_simulations = N * (2*num_vars + 2)
+            number_of_simulations = N * (num_vars + 2)
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
+
+    def _adjust_kwargs(self, sampler, kwargs):
+        if sampler == "sobol":
+            kwargs = {**kwargs, "calc_second_order": False}
+        return kwargs
 
     @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, kwargs",
@@ -55,7 +60,7 @@ class TestSALibSampler:
     def test_generate(self, parameter_schema, kwargs):
         for sampler in _supported_salib_samplers:
             TestGenerate = SALibSampler(sampler, parameter_schema)
-            TestGenerate.generate(kwargs=kwargs)
+            TestGenerate.generate(kwargs=self._adjust_kwargs(sampler, kwargs))
             samples_array = TestGenerate._samples
             # Verify that the parameter set name creation method was called
             expected_set_names = self._expected_set_names(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"])
@@ -100,7 +105,7 @@ class TestSALibSampler:
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_salib_samplers:
             TestMerge1 = SALibSampler(sampler, first_schema)
-            TestMerge1.generate(kwargs=kwargs)
+            TestMerge1.generate(kwargs=self._adjust_kwargs(sampler, kwargs))
             with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
                 TestMerge2 = SALibSampler(sampler, second_schema, previous_parameter_study='dummy_string')
                 TestMerge2.generate(kwargs=kwargs)
