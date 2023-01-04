@@ -1028,6 +1028,10 @@ class ScipySampler(_ScipyGenerator):
         """
         super().generate(kwargs=kwargs)
 
+    def parameter_study_to_dict(self, *args, **kwargs):
+        # Get the ABC docstring into each paramter generator API
+        return super().parameter_study_to_dict(*args, **kwargs)
+
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
