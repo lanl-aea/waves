@@ -1078,7 +1078,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         __import__("SALib.sample", fromlist=[self.sampler_class])
         sampler = getattr(SALib.sample, self.sampler_class)
         problem = self.parameter_schema["problem"]
-        self._samples = sampler.sample(problem, parameter_count, **kwargs)
+        self._samples = sampler.sample(problem, set_count, **kwargs)
         super().generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
