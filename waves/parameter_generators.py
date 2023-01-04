@@ -937,7 +937,8 @@ class SobolSequence(_ScipyGenerator):
 class ScipySampler(_ScipyGenerator):
     """Builds a scipy sampler parameter study from a `scipy.stats.qmc`_ ``sampler_class``
 
-    Samplers must use the ``d`` parameter space dimension keyword argument. Tested samplers:
+    Samplers must use the ``d`` parameter space dimension keyword argument. The following samplers are tested for
+    parameter study shape and merge behavior:
 
     * Sobol
     * Halton
