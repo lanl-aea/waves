@@ -1079,8 +1079,8 @@ class SALibSampler(_ParameterGenerator, ABC):
     """
 
     def __init__(self, sampler_class, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.sampler_class = sampler_class
+        super().__init__(*args, **kwargs)
 
     def _validate(self):
         if not isinstance(self.parameter_schema, dict):
@@ -1100,6 +1100,34 @@ class SALibSampler(_ParameterGenerator, ABC):
         if not isinstance(self.parameter_schema["problem"]["names"], (list, set, tuple)):
             raise TypeError(f"Parameter 'names' is not one of list, set, or tuple")
         self._create_parameter_names()
+        # Sampler specific validation
+        self._sampler_validation()
+
+    def _sampler_validation(self):
+        """Call campler specific schema validation check methods"""
+        if self.sampler_class == "sobol":
+            self._sobol_validation()
+
+    def _sobol_validation(self):
+        """Validate the SALib sobol schema
+
+        :raises: ValueError if the parameter count is less than 2
+        """
+        parameter_count = len(self._parameter_names)
+        if parameter_count < 2:
+            raise ValueError("The SALib Sobol sampler requires at least two parameters")
+
+    def _sampler_overrides(self, override_kwargs={}):
+        """Provide sampler specific kwarg override dictionaries
+
+        :param dict override_kwargs: any common kwargs to include in the override dictionary
+        :return: override kwarg dictionary
+        :rtype: dict
+        """
+        parameter_count = len(self._parameter_names)
+        if self.sampler_class == "sobol" and parameter_count == 2:
+            override_kwargs = {**override_kwargs, "calc_second_order": False}
+        return override_kwargs
 
     def _create_parameter_names(self):
         """Construct the parameter names from a distribution parameter schema"""
@@ -1113,7 +1141,8 @@ class SALibSampler(_ParameterGenerator, ABC):
         """
         N = self.parameter_schema['N']
         parameter_count = len(self._parameter_names)
-        override_kwargs = {}
+        common_override_kwargs = {}
+        override_kwargs = self._sampler_overrides(common_override_kwargs)
         if kwargs:
             kwargs.update(override_kwargs)
         else:
