@@ -42,8 +42,11 @@ class TestSALibSampler:
         )
     }
 
-    def _expected_set_names(self, sampler, N):
-        return [f"parameter_set{num}" for num in range(N)]
+    def _expected_set_names(self, sampler, N, num_vars):
+        number_of_simulations = N
+        if sampler == "sobol":
+            number_of_simulations = N * (2*num_vars + 2)
+        return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
     @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, kwargs",
@@ -55,7 +58,7 @@ class TestSALibSampler:
             TestGenerate.generate(kwargs=kwargs)
             samples_array = TestGenerate._samples
             # Verify that the parameter set name creation method was called
-            expected_set_names = self._expected_set_names(sampler, parameter_schema["N"])
+            expected_set_names = self._expected_set_names(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"])
             assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
             # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
             parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
