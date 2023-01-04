@@ -717,7 +717,7 @@ class LatinHypercube(_ParameterDistributions):
             kwargs.update(override_kwargs)
         else:
             kwargs = override_kwargs
-        sampler = scipy.stats.qmc.LatinHypercube(**kwargs)
+        sampler = getattr(scipy.stats.qmc, 'LatinHypercube')(**kwargs)
         self._quantiles = sampler.random(set_count)
         self._generate_distribution_samples(set_count, parameter_count)
         super().generate()
@@ -912,7 +912,7 @@ class SobolSequence(_ParameterDistributions):
             kwargs.update(override_kwargs)
         else:
             kwargs = override_kwargs
-        sampler = scipy.stats.qmc.Sobol(**kwargs)
+        sampler = getattr(scipy.stats.qmc, 'Sobol')(**kwargs)
         self._quantiles = sampler.random(set_count)
         self._generate_distribution_samples(set_count, parameter_count)
         super().generate()
