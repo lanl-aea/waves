@@ -719,7 +719,6 @@ class LatinHypercube(_ParameterDistributions):
             kwargs = override_kwargs
         sampler = scipy.stats.qmc.LatinHypercube(**kwargs)
         self._quantiles = sampler.random(set_count)
-        self._samples = numpy.zeros((set_count, parameter_count))
         self._generate_distribution_samples(set_count, parameter_count)
         super().generate()
 
