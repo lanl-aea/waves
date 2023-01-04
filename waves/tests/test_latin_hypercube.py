@@ -64,7 +64,6 @@ class TestLatinHypercube:
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         generator_classes = (LatinHypercube(parameter_schema), ScipySampler("LatinHypercube", parameter_schema))
         for TestGenerate in generator_classes:
-            TestGenerate = LatinHypercube(parameter_schema)
             TestGenerate.generate(kwargs={'seed': seed})
             samples_array = TestGenerate._samples
             quantiles_array = TestGenerate._quantiles
