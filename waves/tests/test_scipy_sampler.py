@@ -10,10 +10,7 @@ import numpy
 import pkg_resources
 
 from waves.parameter_generators import ScipySampler
-from waves._settings import _hash_coordinate_key, _set_coordinate_key
-
-
-scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
+from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supported_scipy_samplers
 
 
 class TestScipySampler:
@@ -59,7 +56,7 @@ class TestScipySampler:
                              ids=generate_input.keys())
     def test_generate(self, parameter_schema, kwargs, expected_samples, expected_quantiles):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
-        for sampler in scipy_samplers:
+        for sampler in _supported_scipy_samplers:
             TestGenerate = ScipySampler(sampler, parameter_schema)
             TestGenerate.generate(kwargs=kwargs)
             samples_array = TestGenerate._samples
@@ -126,8 +123,7 @@ class TestScipySampler:
                                  merge_test.values(),
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
-        # ScipySampler
-        for sampler in scipy_samplers:
+        for sampler in _supported_scipy_samplers:
             TestMerge1 = ScipySampler(sampler, first_schema)
             TestMerge1.generate(kwargs=kwargs)
             with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
