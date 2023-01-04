@@ -1048,10 +1048,10 @@ class SALibSampler(_ParameterGenerator, ABC):
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
-        if 'num_simulations' not in self.parameter_schema.keys():
-            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
-        elif not isinstance(self.parameter_schema['num_simulations'], int):
-            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+        if 'N' not in self.parameter_schema.keys():
+            raise AttributeError("Parameter schema is missing the required 'N' key")
+        elif not isinstance(self.parameter_schema['N'], int):
+            raise TypeError("Parameter schema 'N' must be an integer.")
         # Check the SALib owned "problem" dictionary for necessary WAVES elements
         if "problem" not in self.parameter_schema.keys():
             raise AttributeError("Parameter schema is missing the required 'problem' key")
@@ -1068,7 +1068,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         self._parameter_names = self.parameter_schema["problem"]["names"]
 
     def generate(self, kwargs=None):
-        set_count = self.parameter_schema['num_simulations']
+        N = self.parameter_schema['N']
         parameter_count = len(self._parameter_names)
         override_kwargs = {}
         if kwargs:
@@ -1078,7 +1078,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         __import__("SALib.sample", fromlist=[self.sampler_class])
         sampler = getattr(SALib.sample, self.sampler_class)
         problem = self.parameter_schema["problem"]
-        self._samples = sampler.sample(problem, set_count, **kwargs)
+        self._samples = sampler.sample(problem, N, **kwargs)
         super().generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
