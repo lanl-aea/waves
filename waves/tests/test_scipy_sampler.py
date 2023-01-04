@@ -13,7 +13,7 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supporte
 
 
 class TestScipySampler:
-    """Class for testing Sobol Sequence parameter study generator class"""
+    """Class for testing Scipy Sequence parameter study generator class"""
 
     generate_input = {
         "good schema 5x2": (
@@ -84,7 +84,7 @@ class TestScipySampler:
             TestMerge1 = ScipySampler(sampler, first_schema)
             TestMerge1.generate(kwargs=kwargs)
             with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-                TestMerge2 = ScipySampler("Sobol", second_schema, previous_parameter_study='dummy_string')
+                TestMerge2 = ScipySampler(sampler, second_schema, previous_parameter_study='dummy_string')
                 TestMerge2.generate(kwargs=kwargs)
             samples_array = TestMerge2._samples.astype(float)
             quantiles_array = TestMerge2._quantiles.astype(float)
