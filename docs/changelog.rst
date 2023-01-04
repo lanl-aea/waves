@@ -23,6 +23,7 @@ Internal Changes
 - Add seaborn package to the development and CI environments (:issue:`380`, :merge:`432`). By `Kyle Brindley`_.
 - Consolidate the scipy based parameter generator logic (:issue:`383`, :merge:`433`). By `Kyle Brindley`_.
 - Remove unused variables from tutorial workflow configurations (:issue:`382`, :merge:`434`). By `Kyle Brindley`_.
+- Add salib package to the development and CI environments (:merge:`437`). By `Kyle Brindley`_.
 
 Enhancements
 ============
