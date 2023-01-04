@@ -54,6 +54,7 @@ requirements:
     - h5py
     - numpy
     - pyyaml
+    - salib >=1
     - scipy >=1
     - scons
     # TODO: Remove after updating minimum scipy requirement
@@ -72,6 +73,7 @@ test:
     - pytest
     - pytest-xdist
     - pyyaml
+    - salib >=1
     - scipy >=1
     - scons
     - sed
