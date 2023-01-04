@@ -637,6 +637,10 @@ class CartesianProduct(_ParameterGenerator):
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         super().generate()
 
+    def parameter_study_to_dict(self):
+        # Get the ABC docstring into each paramter generator API
+        super().parameter_study_to_dict()
+
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
@@ -729,6 +733,10 @@ class LatinHypercube(_ScipyGenerator):
         """
         super().generate(kwargs=kwargs)
 
+    def parameter_study_to_dict(self):
+        # Get the ABC docstring into each paramter generator API
+        super().parameter_study_to_dict()
+
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
@@ -810,6 +818,10 @@ class CustomStudy(_ParameterGenerator):
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self.parameter_schema['parameter_samples']
         super().generate()
+
+    def parameter_study_to_dict(self):
+        # Get the ABC docstring into each paramter generator API
+        super().parameter_study_to_dict()
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -916,6 +928,10 @@ class SobolSequence(_ScipyGenerator):
             parameter schema.
         """
         super().generate(kwargs=kwargs)
+
+    def parameter_study_to_dict(self):
+        # Get the ABC docstring into each paramter generator API
+        super().parameter_study_to_dict()
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
