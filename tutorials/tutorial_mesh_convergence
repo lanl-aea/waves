@@ -53,7 +53,6 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
 parameter_generator.generate()
-parameter_study = parameter_generator.parameter_study
 
 workflow.extend(env.Command(
     target=[parameter_study_file.name],
@@ -151,7 +150,8 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
 # Post-processing
 plot_name = "stress_strain_comparison"
-post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
+post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
+                          parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"

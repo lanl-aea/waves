@@ -419,10 +419,6 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
-           >>> import waves
-           >>> parameter_schema = {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}
-           >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
-           >>> parameter_generator.generate()
            >>> for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
            ...     print(f"{set_name}: {parameters}")
            ...
@@ -637,6 +633,10 @@ class CartesianProduct(_ParameterGenerator):
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         super().generate()
 
+    def parameter_study_to_dict(self, *args, **kwargs):
+        # Get the ABC docstring into each paramter generator API
+        return super().parameter_study_to_dict(*args, **kwargs)
+
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
@@ -729,6 +729,10 @@ class LatinHypercube(_ScipyGenerator):
         """
         super().generate(kwargs=kwargs)
 
+    def parameter_study_to_dict(self, *args, **kwargs):
+        # Get the ABC docstring into each paramter generator API
+        return super().parameter_study_to_dict(*args, **kwargs)
+
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
@@ -810,6 +814,10 @@ class CustomStudy(_ParameterGenerator):
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self.parameter_schema['parameter_samples']
         super().generate()
+
+    def parameter_study_to_dict(self, *args, **kwargs):
+        # Get the ABC docstring into each paramter generator API
+        return super().parameter_study_to_dict(*args, **kwargs)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -916,6 +924,10 @@ class SobolSequence(_ScipyGenerator):
             parameter schema.
         """
         super().generate(kwargs=kwargs)
+
+    def parameter_study_to_dict(self, *args, **kwargs):
+        # Get the ABC docstring into each paramter generator API
+        return super().parameter_study_to_dict(*args, **kwargs)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API

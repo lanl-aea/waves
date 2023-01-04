@@ -13,10 +13,16 @@ New Features
 - Add a parameter-set-as-dictionaries method to the parameter generator class (:issue:`378`, :merge:`430`). By `Kyle
   Brindley`_.
 
+Documentation
+=============
+- Add the parameter study dictionary method to each parameter generator's external API and update the CartesianProduct
+  tutorial discussion (:issue:`382`, :merge:`434`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Add seaborn package to the development and CI environments (:issue:`380`, :merge:`432`). By `Kyle Brindley`_.
 - Consolidate the scipy based parameter generator logic (:issue:`383`, :merge:`433`). By `Kyle Brindley`_.
+- Remove unused variables from tutorial workflow configurations (:issue:`382`, :merge:`434`). By `Kyle Brindley`_.
 
 Enhancements
 ============

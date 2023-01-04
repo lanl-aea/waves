@@ -144,7 +144,7 @@ is used to define the parameter bounds. The ``parameter_study_file`` and ``previ
 parameter generator to extend previously executed parameter studies without re-computing existing parameter set output
 files on repeat executions of this simulation workflow.
 
-The ``parameter_study`` object is an `xarray dataset`_. For more information about the structure of the
+The ``parameter_generator.parameter_study`` object is an `xarray dataset`_. For more information about the structure of the
 ``parameter_generator`` and ``parameter_study`` objects, see the :meth:`waves.parameter_generators.CartesianProduct`
 API. The API contains an example that prints ``parameter_study`` and shows the organization of the `xarray dataset`_.
 Note that the API's example does not use the same ``parameter_schema`` as this tutorial, but rather a general set of
@@ -165,10 +165,10 @@ introduced in :ref:`tutorial_post_processing_waves`.
       :end-before: marker-4
 
 In the ``for`` loop definition above, the ``set_name`` and ``parameters`` variables are defined by iterating on the
-``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``).  The ``samples`` ``data_type``
-coordinate of the ``parameter_study`` is grouped by the coordinate ``parameter_sets``. This will return an iterable to
-the ``for`` loop definition that contains the ``set_name`` and the ``parameters`` information. ``parameters`` contains
-both the names of the parameters and the parameter values for a given ``set_name``.
+``parameter_study`` `xarray dataset`_ (i.e. ``parameter_generator.parameter_study``). The
+:meth:`waves.parameter_generators.CartesianProduct.parameter_study_to_dict` method will return an iterable to the
+``for`` loop definition that contains the ``set_name`` and the ``parameters`` information. ``parameters`` contains both
+the names of the parameters and the parameter values for a given ``set_name``.
 
 Inside the ``for`` loop, the ``set_name`` variable is cast to a `Python pathlib`_ object, as it will aid in constructing
 file locations later in the ``SConscript`` file. The suffix is stripped from the set name to separate the parameter set

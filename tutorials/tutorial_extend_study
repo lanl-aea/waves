@@ -53,7 +53,6 @@ parameter_generator = waves.parameter_generators.SobolSequence(
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
 parameter_generator.generate(kwargs=kwargs)
-parameter_study = parameter_generator.parameter_study
 
 semaphore_filename = "semaphore.txt"
 semaphore_file_list = []
