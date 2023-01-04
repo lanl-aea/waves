@@ -1035,3 +1035,43 @@ class ScipySampler(_ScipyGenerator):
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
+
+
+class SALibSampler(_ParameterGenerator, ABC):
+
+    def __init__(self, sampler_class, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sampler_class = sampler_class
+
+    def _validate(self):
+        if not isinstance(self.parameter_schema, dict):
+            raise TypeError("parameter_schema must be a dictionary")
+        # TODO: Settle on an input file schema and validation library
+        if 'num_simulations' not in self.parameter_schema.keys():
+            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
+        elif not isinstance(self.parameter_schema['num_simulations'], int):
+            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+        if "problem" not in self.parameter_schema.keys():
+            raise AttributeError("Parameter schema is missing the required 'problem' key")
+        elif not isinstance(self.parameter_schema["problem"], dict):
+            raise TypeError("'problem' must be a dictionary")
+        if "names" not in self.parameter_schema["problem"].keys():
+            raise AttributeError("Parameter schema 'problem' dict is missing the required 'names' key")
+        if not isinstance(self.parameter_schema["problem"]["names"], (list, set, tuple)):
+            raise TypeError(f"Parameter 'names' is not one of list, set, or tuple")
+        self._create_parameter_names()
+
+    def _create_parameter_names(self):
+        """Construct the parameter names from a distribution parameter schema"""
+        self._parameter_names = self.parameter_schema["problem"]["names"]
+
+    def generate(self, kwargs=None):
+        pass
+
+    def parameter_study_to_dict(self, *args, **kwargs):
+        # Get the ABC docstring into each paramter generator API
+        return super().parameter_study_to_dict(*args, **kwargs)
+
+    def write(self):
+        # Get the ABC docstring into each paramter generator API
+        super().write()
