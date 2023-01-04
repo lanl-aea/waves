@@ -706,7 +706,7 @@ class LatinHypercube(_ScipyGenerator):
 
     Attributes after class instantiation
 
-    * parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
+    * parameter_distributions: A dictionary mapping parameter names to the `scipy.stats`_ distribution
 
     Attributes after set generation
 
@@ -1014,7 +1014,7 @@ class ScipySampler(_ScipyGenerator):
         """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets. Must be called directly to generate the
         parameter study.
 
-        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.LatinHypercube`` LatinHypercube class. The
+        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The
             ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
             defined in the parameter schema.
         """

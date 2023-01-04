@@ -54,6 +54,8 @@
 .. _`Python lambda expression`: https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
 .. _`scipy Sobol`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.Sobol.html
 .. _`scipy Latin Hypercube`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.LatinHypercube.html
+.. _`scipy.stats`: https://docs.scipy.org/doc/scipy/reference/stats.html
+.. _`scipy.stats.qmc`: https://docs.scipy.org/doc/scipy/reference/stats.qmc.html
 .. _`SCons Command`: https://scons.org/doc/production/HTML/scons-user/ch18.html
 .. _`SCons Help`: https://scons.org/doc/production/HTML/scons-user/ch09.html#idp105548827004112
 .. _`SCons Python build function`: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
