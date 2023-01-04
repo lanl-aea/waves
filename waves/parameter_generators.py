@@ -523,7 +523,7 @@ class _ParameterDistributions(_ParameterGenerator, ABC):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
-    def _scipy_generate(self, kwargs=None, sampler_class=None):
+    def _generate(self, kwargs=None, sampler_class=None):
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
@@ -723,7 +723,7 @@ class LatinHypercube(_ParameterDistributions):
             ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
             defined in the parameter schema.
         """
-        super()._scipy_generate(kwargs=kwargs, sampler_class="LatinHypercube")
+        super()._generate(kwargs=kwargs, sampler_class="LatinHypercube")
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -908,7 +908,7 @@ class SobolSequence(_ParameterDistributions):
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
-        super()._scipy_generate(kwargs=kwargs, sampler_class="Sobol")
+        super()._generate(kwargs=kwargs, sampler_class="Sobol")
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
