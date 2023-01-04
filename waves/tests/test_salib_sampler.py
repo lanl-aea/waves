@@ -17,7 +17,7 @@ class TestSALibSampler:
 
     generate_input = {
         "good schema 5x2": (
-            {"num_simulations": 5,
+            {"N": 5,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
                          "bounds": [[-1, 1], [-2, 2]]},
@@ -25,7 +25,7 @@ class TestSALibSampler:
             {"seed": 42},
         ),
         "good schema 2x1": (
-            {"num_simulations": 2,
+            {"N": 2,
              "problem": {"num_vars": 1,
                          "names": ["parameter_1"],
                          "bounds": [[-1, 1]]},
@@ -33,7 +33,7 @@ class TestSALibSampler:
             {"seed": 42},
         ),
         "good schema 1x2": (
-            {"num_simulations": 1,
+            {"N": 1,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
                          "bounds": [[-1, 1], [-2, 2]]}
@@ -42,32 +42,33 @@ class TestSALibSampler:
         )
     }
 
+    def _expected_set_names(self, sampler, N):
+        return [f"parameter_set{num}" for num in range(N)]
+
     @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, kwargs",
                              generate_input.values(),
                              ids=generate_input.keys())
     def test_generate(self, parameter_schema, kwargs):
-        parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         for sampler in _supported_salib_samplers:
             TestGenerate = SALibSampler(sampler, parameter_schema)
             TestGenerate.generate(kwargs=kwargs)
             samples_array = TestGenerate._samples
             # Verify that the parameter set name creation method was called
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+            expected_set_names = self._expected_set_names(sampler, parameter_schema["N"])
             assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
             # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
             parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
             assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
         "new sets": (
-            {"num_simulations": 5,
+            {"N": 5,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
                          "bounds": [[-1, 1], [-2, 2]]},
             },
-            {"num_simulations": 8,
+            {"N": 8,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
                          "bounds": [[-1, 1], [-2, 2]]},
@@ -75,12 +76,12 @@ class TestSALibSampler:
             {"seed": 42},
         ),
         "unchanged sets": (
-            {"num_simulations": 5,
+            {"N": 5,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
                          "bounds": [[-1, 1], [-2, 2]]},
             },
-            {"num_simulations": 5,
+            {"N": 5,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
                          "bounds": [[-1, 1], [-2, 2]]},
