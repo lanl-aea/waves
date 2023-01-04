@@ -9,7 +9,7 @@ import pytest
 import numpy
 import xarray
 
-from waves.parameter_generators import _ParameterGenerator, _ParameterDistributions
+from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator
 
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
@@ -229,7 +229,7 @@ class TestParameterGenerator:
 
 
 class TestParameterDistributions():
-    """Class for testing _ParameterDistributions ABC class common methods"""
+    """Class for testing _ScipyGenerator ABC class common methods"""
 
     validate_input = {
         "good schema": (
@@ -271,7 +271,7 @@ class TestParameterDistributions():
                              validate_input.values(),
                              ids=validate_input.keys())
     def test_validate(self, parameter_schema, outcome):
-        with patch("waves.parameter_generators._ParameterDistributions._generate_parameter_distributions") as mock_distros, \
+        with patch("waves.parameter_generators._ScipyGenerator._generate_parameter_distributions") as mock_distros, \
              outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -327,7 +327,7 @@ class NoQuantilesGenerator(_ParameterGenerator):
         super().generate()
 
 
-class ParameterDistributions(_ParameterDistributions):
+class ParameterDistributions(_ScipyGenerator):
 
     def generate(self):
         pass

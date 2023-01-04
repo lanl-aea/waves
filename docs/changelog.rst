@@ -16,6 +16,7 @@ New Features
 Internal Changes
 ================
 - Add seaborn package to the development and CI environments (:issue:`380`, :merge:`432`). By `Kyle Brindley`_.
+- Consolidate the scipy based parameter generator logic (:issue:`383`, :merge:`433`). By `Kyle Brindley`_.
 
 Enhancements
 ============

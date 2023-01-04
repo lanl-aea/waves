@@ -476,7 +476,7 @@ class _ParameterGenerator(ABC):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
-class _ParameterDistributions(_ParameterGenerator, ABC):
+class _ScipyGenerator(_ParameterGenerator, ABC):
 
     def _validate(self):
         """Validate the parameter distribution schema. Executed by class initiation.
@@ -523,6 +523,19 @@ class _ParameterDistributions(_ParameterGenerator, ABC):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
+    def generate(self, kwargs=None):
+        set_count = self.parameter_schema['num_simulations']
+        parameter_count = len(self._parameter_names)
+        override_kwargs = {'d': parameter_count}
+        if kwargs:
+            kwargs.update(override_kwargs)
+        else:
+            kwargs = override_kwargs
+        sampler = getattr(scipy.stats.qmc, self.sampler_class)(**kwargs)
+        self._quantiles = sampler.random(set_count)
+        self._generate_distribution_samples(set_count, parameter_count)
+        super().generate()
+
     def _generate_parameter_distributions(self):
         """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
 
@@ -543,7 +556,7 @@ class _ParameterDistributions(_ParameterGenerator, ABC):
 
         * ``self.parameter_distributions``: dictionary containing the {parameter name: scipy.stats distribution} defined
           by the parameter schema. Set by
-          :meth:`waves.parameter_generators._ParameterDistributions._generate_parameter_distributions`.
+          :meth:`waves.parameter_generators._ScipyGenerator._generate_parameter_distributions`.
 
         Sets attribute(s):
 
@@ -629,7 +642,7 @@ class CartesianProduct(_ParameterGenerator):
         super().write()
 
 
-class LatinHypercube(_ParameterDistributions):
+class LatinHypercube(_ScipyGenerator):
     """Builds a Latin-Hypercube parameter study from the `scipy Latin Hypercube`_ class
 
     The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
@@ -700,6 +713,10 @@ class LatinHypercube(_ParameterDistributions):
     * parameter_study: The final parameter study XArray Dataset object
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sampler_class = "LatinHypercube"
+
     def generate(self, kwargs=None):
         """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
 
@@ -710,18 +727,7 @@ class LatinHypercube(_ParameterDistributions):
             ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
             defined in the parameter schema.
         """
-        set_count = self.parameter_schema['num_simulations']
-        parameter_count = len(self._parameter_names)
-        override_kwargs = {'d': parameter_count}
-        if kwargs:
-            kwargs.update(override_kwargs)
-        else:
-            kwargs = override_kwargs
-        sampler = scipy.stats.qmc.LatinHypercube(**kwargs)
-        self._quantiles = sampler.random(set_count)
-        self._samples = numpy.zeros((set_count, parameter_count))
-        self._generate_distribution_samples(set_count, parameter_count)
-        super().generate()
+        super().generate(kwargs=kwargs)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -810,7 +816,7 @@ class CustomStudy(_ParameterGenerator):
         super().write()
 
 
-class SobolSequence(_ParameterDistributions):
+class SobolSequence(_ScipyGenerator):
     """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
 
     .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
@@ -881,6 +887,10 @@ class SobolSequence(_ParameterDistributions):
            parameter_2         (data_type, parameter_sets) float64 0.0 0.5 ... 4.25
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sampler_class = "Sobol"
+
     def _validate(self):
         """Validate the Sobol sequence parameter schema. Executed by class initiation."""
         # TODO: Add ``scipy>=1.7.0`` runtime requirement to recipe/meta.yaml and remove this conditional when
@@ -894,7 +904,6 @@ class SobolSequence(_ParameterDistributions):
             raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
         super()._validate()
 
-
     def generate(self, kwargs=None):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study.
@@ -906,17 +915,7 @@ class SobolSequence(_ParameterDistributions):
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
-        set_count = self.parameter_schema['num_simulations']
-        parameter_count = len(self._parameter_names)
-        override_kwargs = {'d': parameter_count}
-        if kwargs:
-            kwargs.update(override_kwargs)
-        else:
-            kwargs = override_kwargs
-        sampler = scipy.stats.qmc.Sobol(**kwargs)
-        self._quantiles = sampler.random(set_count)
-        self._generate_distribution_samples(set_count, parameter_count)
-        super().generate()
+        super().generate(kwargs=kwargs)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
