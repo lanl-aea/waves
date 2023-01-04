@@ -8,9 +8,9 @@ pandas
 pytest
 pytest-xdist
 pyyaml
+salib >=1
 scipy >=1
 scons >=4
-salib
 seaborn
 sed
 setuptools >=45
