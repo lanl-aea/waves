@@ -523,7 +523,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
-    def _generate(self, kwargs=None, sampler_class=None):
+    def _generate(self, kwargs=None):
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
@@ -531,7 +531,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
             kwargs.update(override_kwargs)
         else:
             kwargs = override_kwargs
-        sampler = getattr(scipy.stats.qmc, sampler_class)(**kwargs)
+        sampler = getattr(scipy.stats.qmc, self.sampler_class)(**kwargs)
         self._quantiles = sampler.random(set_count)
         self._generate_distribution_samples(set_count, parameter_count)
         super().generate()
@@ -713,6 +713,10 @@ class LatinHypercube(_ScipyGenerator):
     * parameter_study: The final parameter study XArray Dataset object
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sampler_class = "LatinHypercube"
+
     def generate(self, kwargs=None):
         """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
 
@@ -723,7 +727,7 @@ class LatinHypercube(_ScipyGenerator):
             ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
             defined in the parameter schema.
         """
-        super()._generate(kwargs=kwargs, sampler_class="LatinHypercube")
+        super()._generate(kwargs=kwargs)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -883,6 +887,10 @@ class SobolSequence(_ScipyGenerator):
            parameter_2         (data_type, parameter_sets) float64 0.0 0.5 ... 4.25
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sampler_class = "Sobol"
+
     def _validate(self):
         """Validate the Sobol sequence parameter schema. Executed by class initiation."""
         # TODO: Add ``scipy>=1.7.0`` runtime requirement to recipe/meta.yaml and remove this conditional when
@@ -908,7 +916,7 @@ class SobolSequence(_ScipyGenerator):
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
-        super()._generate(kwargs=kwargs, sampler_class="Sobol")
+        super()._generate(kwargs=kwargs)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
