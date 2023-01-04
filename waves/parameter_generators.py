@@ -476,7 +476,7 @@ class _ParameterGenerator(ABC):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
-class _ParameterDistributions(_ParameterGenerator, ABC):
+class _ScipyGenerator(_ParameterGenerator, ABC):
 
     def _validate(self):
         """Validate the parameter distribution schema. Executed by class initiation.
@@ -556,7 +556,7 @@ class _ParameterDistributions(_ParameterGenerator, ABC):
 
         * ``self.parameter_distributions``: dictionary containing the {parameter name: scipy.stats distribution} defined
           by the parameter schema. Set by
-          :meth:`waves.parameter_generators._ParameterDistributions._generate_parameter_distributions`.
+          :meth:`waves.parameter_generators._ScipyGenerator._generate_parameter_distributions`.
 
         Sets attribute(s):
 
@@ -642,7 +642,7 @@ class CartesianProduct(_ParameterGenerator):
         super().write()
 
 
-class LatinHypercube(_ParameterDistributions):
+class LatinHypercube(_ScipyGenerator):
     """Builds a Latin-Hypercube parameter study from the `scipy Latin Hypercube`_ class
 
     The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
@@ -812,7 +812,7 @@ class CustomStudy(_ParameterGenerator):
         super().write()
 
 
-class SobolSequence(_ParameterDistributions):
+class SobolSequence(_ScipyGenerator):
     """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
 
     .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
