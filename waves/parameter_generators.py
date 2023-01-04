@@ -419,10 +419,6 @@ class _ParameterGenerator(ABC):
 
         .. code-block::
 
-           >>> import waves
-           >>> parameter_schema = {'parameter_1': [1, 2], 'parameter_2': ['a', 'b']}
-           >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
-           >>> parameter_generator.generate()
            >>> for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
            ...     print(f"{set_name}: {parameters}")
            ...
