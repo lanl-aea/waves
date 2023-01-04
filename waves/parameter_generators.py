@@ -937,6 +937,13 @@ class SobolSequence(_ScipyGenerator):
 class ScipySampler(_ScipyGenerator):
     """Builds a scipy sampler parameter study from a `scipy.stats.qmc`_ ``sampler_class``
 
+    Samplers must use the ``d`` parameter space dimension keyword argument. Tested samplers:
+
+    * Sobol
+    * Halton
+    * LatinHypercube
+    * PoissonDisk
+
     The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
 
     .. warning::
