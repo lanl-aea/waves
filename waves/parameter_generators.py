@@ -904,7 +904,6 @@ class SobolSequence(_ScipyGenerator):
             raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
         super()._validate()
 
-
     def generate(self, kwargs=None):
         """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
         generate the parameter study.
