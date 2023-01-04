@@ -7,7 +7,7 @@ from contextlib import nullcontext as does_not_raise
 import pytest
 import numpy
 
-from waves.parameter_generators import LatinHypercube
+from waves.parameter_generators import LatinHypercube, ScipySampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 
@@ -62,19 +62,21 @@ class TestLatinHypercube:
     def test_generate(self, parameter_schema, seed,
                       expected_samples, expected_quantiles, expected_scipy_kwds):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
-        TestGenerate = LatinHypercube(parameter_schema)
-        TestGenerate.generate(kwargs={'seed': seed})
-        samples_array = TestGenerate._samples
-        quantiles_array = TestGenerate._quantiles
-        assert numpy.allclose(samples_array, expected_samples)
-        assert numpy.allclose(quantiles_array, expected_quantiles)
-        # Verify that the parameter set name creation method was called
-        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
-        assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
-        # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
-        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-        assert numpy.all(parameter_set_names == expected_set_names)
+        generator_classes = (LatinHypercube(parameter_schema), ScipySampler("LatinHypercube", parameter_schema))
+        for TestGenerate in generator_classes:
+            TestGenerate = LatinHypercube(parameter_schema)
+            TestGenerate.generate(kwargs={'seed': seed})
+            samples_array = TestGenerate._samples
+            quantiles_array = TestGenerate._quantiles
+            assert numpy.allclose(samples_array, expected_samples)
+            assert numpy.allclose(quantiles_array, expected_quantiles)
+            # Verify that the parameter set name creation method was called
+            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+            assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
+            # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
+            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+            parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+            assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
         'increase simulations': (
