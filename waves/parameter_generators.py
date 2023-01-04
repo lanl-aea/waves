@@ -1068,6 +1068,11 @@ class SALibSampler(_ParameterGenerator, ABC):
         self._parameter_names = self.parameter_schema["problem"]["names"]
 
     def generate(self, kwargs=None):
+        """Generate the `SALib.sample`_ ``sampler_class`` parameter sets. Must be called directly to generate the
+        parameter study.
+
+        :param dict kwargs: Keyword arguments for the `SALib.sample`_ ``sampler_class`` ``sample`` method.
+        """
         N = self.parameter_schema['N']
         parameter_count = len(self._parameter_names)
         override_kwargs = {}
