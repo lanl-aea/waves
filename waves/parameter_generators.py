@@ -523,6 +523,19 @@ class _ParameterDistributions(_ParameterGenerator, ABC):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
+    def _scipy_generate(self, kwargs=None, sampler_class=None):
+        set_count = self.parameter_schema['num_simulations']
+        parameter_count = len(self._parameter_names)
+        override_kwargs = {'d': parameter_count}
+        if kwargs:
+            kwargs.update(override_kwargs)
+        else:
+            kwargs = override_kwargs
+        sampler = getattr(scipy.stats.qmc, sampler_class)(**kwargs)
+        self._quantiles = sampler.random(set_count)
+        self._generate_distribution_samples(set_count, parameter_count)
+        super().generate()
+
     def _generate_parameter_distributions(self):
         """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
 
@@ -710,17 +723,7 @@ class LatinHypercube(_ParameterDistributions):
             ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
             defined in the parameter schema.
         """
-        set_count = self.parameter_schema['num_simulations']
-        parameter_count = len(self._parameter_names)
-        override_kwargs = {'d': parameter_count}
-        if kwargs:
-            kwargs.update(override_kwargs)
-        else:
-            kwargs = override_kwargs
-        sampler = getattr(scipy.stats.qmc, 'LatinHypercube')(**kwargs)
-        self._quantiles = sampler.random(set_count)
-        self._generate_distribution_samples(set_count, parameter_count)
-        super().generate()
+        super()._scipy_generate(kwargs=kwargs, sampler_class="LatinHypercube")
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -905,17 +908,7 @@ class SobolSequence(_ParameterDistributions):
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
-        set_count = self.parameter_schema['num_simulations']
-        parameter_count = len(self._parameter_names)
-        override_kwargs = {'d': parameter_count}
-        if kwargs:
-            kwargs.update(override_kwargs)
-        else:
-            kwargs = override_kwargs
-        sampler = getattr(scipy.stats.qmc, 'Sobol')(**kwargs)
-        self._quantiles = sampler.random(set_count)
-        self._generate_distribution_samples(set_count, parameter_count)
-        super().generate()
+        super()._scipy_generate(kwargs=kwargs, sampler_class="Sobol")
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
