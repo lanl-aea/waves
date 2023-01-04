@@ -523,7 +523,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
-    def _generate(self, kwargs=None):
+    def generate(self, kwargs=None):
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
@@ -727,7 +727,7 @@ class LatinHypercube(_ScipyGenerator):
             ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
             defined in the parameter schema.
         """
-        super()._generate(kwargs=kwargs)
+        super().generate(kwargs=kwargs)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -916,7 +916,7 @@ class SobolSequence(_ScipyGenerator):
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
-        super()._generate(kwargs=kwargs)
+        super().generate(kwargs=kwargs)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
