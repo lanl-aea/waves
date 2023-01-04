@@ -1,4 +1,4 @@
-"""Test Sobol Sequence Class
+"""Test ScipySampler Class
 """
 
 from unittest.mock import patch
@@ -7,7 +7,6 @@ import inspect
 
 import pytest
 import numpy
-import pkg_resources
 
 from waves.parameter_generators import ScipySampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supported_scipy_samplers
