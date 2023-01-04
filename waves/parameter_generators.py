@@ -1051,6 +1051,7 @@ class SALibSampler(_ParameterGenerator, ABC):
             raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
             raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+        # Check the SALib owned "problem" dictionary for necessary WAVES elements
         if "problem" not in self.parameter_schema.keys():
             raise AttributeError("Parameter schema is missing the required 'problem' key")
         elif not isinstance(self.parameter_schema["problem"], dict):
@@ -1066,7 +1067,17 @@ class SALibSampler(_ParameterGenerator, ABC):
         self._parameter_names = self.parameter_schema["problem"]["names"]
 
     def generate(self, kwargs=None):
-        pass
+        set_count = self.parameter_schema['num_simulations']
+        parameter_count = len(self._parameter_names)
+        override_kwargs = {}
+        if kwargs:
+            kwargs.update(override_kwargs)
+        else:
+            kwargs = override_kwargs
+        sampler = getattr(SALib.sample, self.sampler_class)
+        problem = self.parameter_schema["problem"]
+        self._samples = sampler.sample(problem, parameter_count, **kwargs)
+        super().generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
