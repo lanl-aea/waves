@@ -44,8 +44,10 @@ class TestSALibSampler:
 
     def _expected_set_names(self, sampler, N, num_vars):
         number_of_simulations = N
-        if sampler == "sobol":
+        if sampler == "sobol" and num_vars <= 2:
             number_of_simulations = N * (num_vars + 2)
+        elif sampler == "sobol":
+            number_of_simulations = N * (2 * num_vars + 2)
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
     @pytest.mark.unittest
@@ -69,7 +71,7 @@ class TestSALibSampler:
             assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
-        "new sets": (
+        "new sets, 2 params": (
             {"N": 5,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
@@ -82,7 +84,20 @@ class TestSALibSampler:
             },
             {"seed": 42},
         ),
-        "unchanged sets": (
+        "new sets, 3 params": (
+            {"N": 5,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"N": 8,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"seed": 42},
+        ),
+        "unchanged sets, 2 param": (
             {"N": 5,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
@@ -92,6 +107,19 @@ class TestSALibSampler:
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
                          "bounds": [[-1, 1], [-2, 2]]},
+            },
+            {"seed": 42},
+        ),
+        "unchanged sets, 3 param": (
+            {"N": 5,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"N": 5,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
             },
             {"seed": 42},
         )
