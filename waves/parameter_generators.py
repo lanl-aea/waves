@@ -11,6 +11,7 @@ import yaml
 import numpy
 import xarray
 import scipy.stats
+import SALib
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key, _quantiles_attribute_key
 
