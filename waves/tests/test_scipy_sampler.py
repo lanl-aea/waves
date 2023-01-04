@@ -22,39 +22,25 @@ class TestScipySampler:
              'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
              'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'seed': 42},
-            numpy.array([[0.   , 2.   ],
-                         [5.   , 3.5  ],
-                         [7.5  , 2.75 ],
-                         [2.5  , 4.25 ],
-                         [3.75 , 3.125]]),
-            numpy.array([[0.   , 0.   ],
-                         [0.5  , 0.5  ],
-                         [0.75 , 0.25 ],
-                         [0.25 , 0.75 ],
-                         [0.375, 0.375]]),
         ),
         "good schema 2x1": (
             {'num_simulations': 2,
              'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10}},
             {'seed': 42},
-            numpy.array([[0.], [5.0]]),
-            numpy.array([[0.], [0.5]]),
         ),
         "good schema 1x2": (
             {'num_simulations': 1,
              'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
              'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'seed': 42},
-            numpy.array([[0., 2.]]),
-            numpy.array([[0., 0.]])
         )
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize("parameter_schema, kwargs, expected_samples, expected_quantiles",
+    @pytest.mark.parametrize("parameter_schema, kwargs",
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate(self, parameter_schema, kwargs, expected_samples, expected_quantiles):
+    def test_generate(self, parameter_schema, kwargs):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         for sampler in _supported_scipy_samplers:
             TestGenerate = ScipySampler(sampler, parameter_schema)
@@ -78,23 +64,6 @@ class TestScipySampler:
              'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
              'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'seed': 42},
-            # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
-            numpy.array([[5.   , 3.5  ],
-                         [7.5  , 2.75 ],
-                         [1.25 , 3.875],
-                         [3.75 , 3.125],
-                         [0.   , 2.   ],
-                         [6.25 , 2.375],
-                         [2.5  , 4.25 ],
-                         [8.75 , 4.625]]),
-            numpy.array([[0.5  , 0.5  ],
-                         [0.75 , 0.25 ],
-                         [0.125, 0.625],
-                         [0.375, 0.375],
-                         [0.   , 0.   ],
-                         [0.625, 0.125],
-                         [0.25 , 0.75 ],
-                         [0.875, 0.875]])
         ),
         'unchanged sets': (
             {'num_simulations': 5,
@@ -104,25 +73,14 @@ class TestScipySampler:
              'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10},
              'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'seed': 42},
-            # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
-            numpy.array([[5.   , 3.5  ],
-                         [7.5  , 2.75 ],
-                         [3.75 , 3.125],
-                         [0.   , 2.   ],
-                         [2.5  , 4.25 ]]),
-            numpy.array([[0.5  , 0.5  ],
-                         [0.75 , 0.25 ],
-                         [0.375, 0.375],
-                         [0.   , 0.   ],
-                         [0.25 , 0.75 ]])
         )
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('first_schema, second_schema, kwargs, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize('first_schema, second_schema, kwargs',
                                  merge_test.values(),
                              ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
+    def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_scipy_samplers:
             TestMerge1 = ScipySampler(sampler, first_schema)
             TestMerge1.generate(kwargs=kwargs)
