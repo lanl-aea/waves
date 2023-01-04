@@ -39,6 +39,14 @@ class TestSALibSampler:
                          "bounds": [[-1, 1], [-2, 2]]}
             },
             {"seed": 42},
+        ),
+        "good schema 1x3": (
+            {"N": 1,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"seed": 42},
         )
     }
 
