@@ -633,9 +633,9 @@ class CartesianProduct(_ParameterGenerator):
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         super().generate()
 
-    def parameter_study_to_dict(self):
+    def parameter_study_to_dict(self, data_type="samples"):
         # Get the ABC docstring into each paramter generator API
-        super().parameter_study_to_dict()
+        return super().parameter_study_to_dict(data_type=data_type)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -729,9 +729,9 @@ class LatinHypercube(_ScipyGenerator):
         """
         super().generate(kwargs=kwargs)
 
-    def parameter_study_to_dict(self):
+    def parameter_study_to_dict(self, data_type="samples"):
         # Get the ABC docstring into each paramter generator API
-        super().parameter_study_to_dict()
+        return super().parameter_study_to_dict(data_type=data_type)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -815,9 +815,9 @@ class CustomStudy(_ParameterGenerator):
         self._samples = self.parameter_schema['parameter_samples']
         super().generate()
 
-    def parameter_study_to_dict(self):
+    def parameter_study_to_dict(self, data_type="samples"):
         # Get the ABC docstring into each paramter generator API
-        super().parameter_study_to_dict()
+        return super().parameter_study_to_dict(data_type=data_type)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
@@ -925,9 +925,9 @@ class SobolSequence(_ScipyGenerator):
         """
         super().generate(kwargs=kwargs)
 
-    def parameter_study_to_dict(self):
+    def parameter_study_to_dict(self, data_type="samples"):
         # Get the ABC docstring into each paramter generator API
-        super().parameter_study_to_dict()
+        return super().parameter_study_to_dict(data_type=data_type)
 
     def write(self):
         # Get the ABC docstring into each paramter generator API
