@@ -932,3 +932,94 @@ class SobolSequence(_ScipyGenerator):
     def write(self):
         # Get the ABC docstring into each paramter generator API
         super().write()
+
+
+class ScipySampler(_ScipyGenerator):
+    """Builds a scipy sampler parameter study from a `scipy.stats.qmc`_ ``sampler_class``
+
+    The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
+
+    .. warning::
+
+       The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
+       parameter definitions will result in incorrect relationships between parameters and the parameter study samples
+       and quantiles.
+
+    :param str sampler_class: The `scipy.stats.qmc`_ sampler class name. Case sensitive.
+    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+        ScipySampler expects "schema value" to be a dictionary with a strict structure and several required keys.
+        Validated on class instantiation.
+    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
+        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
+        will be appended to the template string.
+    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
+        is always overwritten.
+    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+        study Xarray Dataset
+    :param bool overwrite: Overwrite existing output files
+    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param bool debug: Print internal variables to STDOUT and exit
+    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+        Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    Example
+
+    .. code-block::
+
+       parameter_schema = {
+           'num_simulations': 4,  # Required key. Value must be an integer.
+           'parameter_1': {
+               'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
+               'loc': 50,               # distribution name.
+               'scale': 1
+           },
+           'parameter_2': {
+               'distribution': 'skewnorm',
+               'a': 4,
+               'loc': 30,
+               'scale': 2
+           }
+       }
+       parameter_generator = waves.parameter_generators.ScipySampler("LatinHypercube", parameter_schema)
+       parameter_generator.generate()
+       print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:             (data_type: 2, parameter_set_hash: 4)
+       Coordinates:
+           parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
+         * data_type           (data_type) <U9 'quantiles' 'samples'
+         * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
+       Data variables:
+           parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
+           parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
+
+    Attributes after class instantiation
+
+    * parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
+
+    Attributes after set generation
+
+    * parameter_study: The final parameter study XArray Dataset object
+    """
+
+    def __init__(self, sampler_class, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sampler_class = sampler_class
+
+    def generate(self, kwargs=None):
+        """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets. Must be called directly to generate the
+        parameter study.
+
+        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.LatinHypercube`` LatinHypercube class. The
+            ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
+            defined in the parameter schema.
+        """
+        super().generate(kwargs=kwargs)
+
+    def write(self):
+        # Get the ABC docstring into each paramter generator API
+        super().write()
