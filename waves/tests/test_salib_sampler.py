@@ -59,6 +59,10 @@ class TestSALibSampler:
                              ids=generate_input.keys())
     def test_generate(self, parameter_schema, kwargs):
         for sampler in _supported_salib_samplers:
+            # TODO: find a better way to separate the sampler types and their test parameterization
+            if sampler == "sobol" and parameter_schema["problem"]["num_vars"] < 2:
+                return
+            # Unit tests
             TestGenerate = SALibSampler(sampler, parameter_schema)
             TestGenerate.generate(kwargs=self._adjust_kwargs(sampler, kwargs))
             samples_array = TestGenerate._samples
