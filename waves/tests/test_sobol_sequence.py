@@ -8,7 +8,7 @@ import pytest
 import numpy
 import pkg_resources
 
-from waves.parameter_generators import SobolSequence
+from waves.parameter_generators import SobolSequence, ScipySampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 
 
@@ -55,19 +55,20 @@ class TestSobolSequence:
                              ids=generate_input.keys())
     def test_generate(self, parameter_schema, kwargs, expected_samples, expected_quantiles):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
-        TestGenerate = SobolSequence(parameter_schema)
-        TestGenerate.generate(kwargs=kwargs)
-        samples_array = TestGenerate._samples
-        quantiles_array = TestGenerate._quantiles
-        assert numpy.allclose(samples_array, expected_samples)
-        assert numpy.allclose(quantiles_array, expected_quantiles)
-        # Verify that the parameter set name creation method was called
-        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
-        assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
-        # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-        expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
-        parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-        assert numpy.all(parameter_set_names == expected_set_names)
+        generator_classes = (SobolSequence(parameter_schema), ScipySampler("Sobol", parameter_schema))
+        for TestGenerate in generator_classes:
+            TestGenerate.generate(kwargs=kwargs)
+            samples_array = TestGenerate._samples
+            quantiles_array = TestGenerate._quantiles
+            assert numpy.allclose(samples_array, expected_samples)
+            assert numpy.allclose(quantiles_array, expected_quantiles)
+            # Verify that the parameter set name creation method was called
+            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+            assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
+            # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
+            expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
+            parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+            assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
         'new sets': (
@@ -123,10 +124,28 @@ class TestSobolSequence:
                                  merge_test.values(),
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
+        # Sobol
         TestMerge1 = SobolSequence(first_schema)
         TestMerge1.generate(kwargs=kwargs)
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = SobolSequence(second_schema, previous_parameter_study='dummy_string')
+            TestMerge2.generate(kwargs=kwargs)
+        samples_array = TestMerge2._samples.astype(float)
+        quantiles_array = TestMerge2._quantiles.astype(float)
+        assert numpy.allclose(samples_array, expected_samples)
+        assert numpy.allclose(quantiles_array, expected_quantiles)
+        # Check for consistent hash-parameter set relationships
+        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
+            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
+        # Self-consistency checks
+        assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
+        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+
+        # ScipySampler
+        TestMerge1 = ScipySampler("Sobol", first_schema)
+        TestMerge1.generate(kwargs=kwargs)
+        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
+            TestMerge2 = ScipySampler("Sobol", second_schema, previous_parameter_study='dummy_string')
             TestMerge2.generate(kwargs=kwargs)
         samples_array = TestMerge2._samples.astype(float)
         quantiles_array = TestMerge2._quantiles.astype(float)
