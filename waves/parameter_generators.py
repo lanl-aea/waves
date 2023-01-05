@@ -596,13 +596,14 @@ class CartesianProduct(_ParameterGenerator):
 
     .. code-block::
 
-       parameter_schema = {
-           'parameter_1': [1, 2],
-           'parameter_2': ['a', 'b']
-       }
-       parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
-       parameter_generator.generate()
-       print(parameter_generator.parameter_study)
+       >>> import waves
+       >>> parameter_schema = {
+       ...     'parameter_1': [1, 2],
+       ...     'parameter_2': ['a', 'b']
+       ... }
+       >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
+       >>> parameter_generator.generate()
+       >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 1, parameter_set_hash: 4)
        Coordinates:
@@ -678,23 +679,24 @@ class LatinHypercube(_ScipyGenerator):
 
     .. code-block::
 
-       parameter_schema = {
-           'num_simulations': 4,  # Required key. Value must be an integer.
-           'parameter_1': {
-               'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
-               'loc': 50,               # distribution name.
-               'scale': 1
-           },
-           'parameter_2': {
-               'distribution': 'skewnorm',
-               'a': 4,
-               'loc': 30,
-               'scale': 2
-           }
-       }
-       parameter_generator = waves.parameter_generators.LatinHypercube(parameter_schema)
-       parameter_generator.generate()
-       print(parameter_generator.parameter_study)
+       >>> import waves
+       >>> parameter_schema = {
+       ...     'num_simulations': 4,  # Required key. Value must be an integer.
+       ...     'parameter_1': {
+       ...         'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
+       ...         'loc': 50,               # distribution name.
+       ...         'scale': 1
+       ...     },
+       ...     'parameter_2': {
+       ...         'distribution': 'skewnorm',
+       ...         'a': 4,
+       ...         'loc': 30,
+       ...         'scale': 2
+       ...     }
+       ... }
+       >>> parameter_generator = waves.parameter_generators.LatinHypercube(parameter_schema)
+       >>> parameter_generator.generate()
+       >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_set_hash: 4)
        Coordinates:
@@ -768,12 +770,14 @@ class CustomStudy(_ParameterGenerator):
 
     .. code-block::
 
-       parameter_schema = dict(
-               parameter_samples = numpy.array([[1.0, 'a', 5], [2.0, 'b', 6]], dtype=object),
-               parameter_names = numpy.array(['height', 'prefix', 'index']))
-       parameter_generator = waves.parameter_generators.CustomStudy(parameter_schema)
-       parameter_generator.generate()
-       print(parameter_generator.parameter_study)
+       >>> import waves
+       >>> import numpy
+       >>> parameter_schema = dict(
+       ...     parameter_samples = numpy.array([[1.0, 'a', 5], [2.0, 'b', 6]], dtype=object),
+       ...     parameter_names = numpy.array(['height', 'prefix', 'index']))
+       >>> parameter_generator = waves.parameter_generators.CustomStudy(parameter_schema)
+       >>> parameter_generator.generate()
+       >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 1, parameter_set_hash: 2)
        Coordinates:
@@ -869,22 +873,23 @@ class SobolSequence(_ScipyGenerator):
 
     .. code-block::
 
-       parameter_schema = {
-           'num_simulations': 4,  # Required key. Value must be an integer.
-           'parameter_1': {
-               'distribution': 'uniform',  # Required key. Value must be a valid scipy.stats
-               'loc': 0,                   # distribution name.
-               'scale': 10
-           },
-           'parameter_2': {
-               'distribution': 'uniform',
-               'loc': 2,
-               'scale': 3
-           }
-       }
-       parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
-       parameter_generator.generate(kwargs={'scramble': False})
-       print(parameter_generator.parameter_study)
+       >>> import waves
+       >>> parameter_schema = {
+       ...     'num_simulations': 4,  # Required key. Value must be an integer.
+       ...     'parameter_1': {
+       ...         'distribution': 'uniform',  # Required key. Value must be a valid scipy.stats
+       ...         'loc': 0,                   # distribution name.
+       ...         'scale': 10
+       ...     },
+       ...     'parameter_2': {
+       ...         'distribution': 'uniform',
+       ...         'loc': 2,
+       ...         'scale': 3
+       ...     }
+       ... }
+       >>> parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
+       >>> parameter_generator.generate(kwargs={'scramble': False})
+       >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_sets: 4)
        Coordinates:
@@ -979,23 +984,24 @@ class ScipySampler(_ScipyGenerator):
 
     .. code-block::
 
-       parameter_schema = {
-           'num_simulations': 4,  # Required key. Value must be an integer.
-           'parameter_1': {
-               'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
-               'loc': 50,               # distribution name.
-               'scale': 1
-           },
-           'parameter_2': {
-               'distribution': 'skewnorm',
-               'a': 4,
-               'loc': 30,
-               'scale': 2
-           }
-       }
-       parameter_generator = waves.parameter_generators.ScipySampler("LatinHypercube", parameter_schema)
-       parameter_generator.generate()
-       print(parameter_generator.parameter_study)
+       >>> import waves
+       >>> parameter_schema = {
+       ...     'num_simulations': 4,  # Required key. Value must be an integer.
+       ...     'parameter_1': {
+       ...         'distribution': 'norm',  # Required key. Value must be a valid scipy.stats
+       ...         'loc': 50,               # distribution name.
+       ...         'scale': 1
+       ...     },
+       ...     'parameter_2': {
+       ...         'distribution': 'skewnorm',
+       ...         'a': 4,
+       ...         'loc': 30,
+       ...         'scale': 2
+       ...     }
+       ... }
+       >>> parameter_generator = waves.parameter_generators.ScipySampler("LatinHypercube", parameter_schema)
+       >>> parameter_generator.generate()
+       >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_set_hash: 4)
        Coordinates:
