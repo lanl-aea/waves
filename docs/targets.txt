@@ -53,6 +53,7 @@
 .. _`Python`: https://www.python.org/
 .. _`Python lambda expression`: https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
 .. _`SALib.sample`: https://salib.readthedocs.io/en/latest/api.html#
+.. _`SALib sobol`: https://salib.readthedocs.io/en/latest/api.html#sobol-sensitivity-analysis 
 .. _`scipy Sobol`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.Sobol.html
 .. _`scipy Latin Hypercube`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.LatinHypercube.html
 .. _`scipy.stats`: https://docs.scipy.org/doc/scipy/reference/stats.html

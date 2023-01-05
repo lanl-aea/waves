@@ -1045,7 +1045,7 @@ class SALibSampler(_ParameterGenerator, ABC):
     the number of simulations. The following samplers are tested for parameter study shape and merge behavior:
 
     * latin
-    * sobol 
+    * sobol
 
     .. warning::
 
@@ -1074,9 +1074,21 @@ class SALibSampler(_ParameterGenerator, ABC):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
-    Attributes after set generation
+    :var self.parameter_study: The final parameter study XArray Dataset object
 
-    * parameter_study: The final parameter study XArray Dataset object
+    :raises ValueError: If the `SALib sobol`_ sampler is specified and there are fewer than 2 parameters.
+    :raises AttributeError:
+
+        * ``N`` is not a key of ``parameter_schema``
+        * ``problem`` is not a key of ``parameter_schema``
+        * ``names`` is not a key of ``parameter_schema['problem']``
+
+    :raises TypeError:
+
+        * ``parameter_schema`` is not a dictionary
+        * ``parameter_schema['N']`` is not an integer
+        * ``parameter_schema['problem']`` is not a dictionary
+        * ``parameter_schema['problem']['names']`` is not a YAML compliant iterable (list, set, tuple)
     """
 
     def __init__(self, sampler_class, *args, **kwargs):
@@ -1112,7 +1124,7 @@ class SALibSampler(_ParameterGenerator, ABC):
     def _sobol_validation(self):
         """Validate the SALib sobol schema
 
-        :raises: ValueError if the parameter count is less than 2
+        :raises ValueError: if the parameter count is less than 2
         """
         parameter_count = len(self._parameter_names)
         if parameter_count < 2:
