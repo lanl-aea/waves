@@ -4,9 +4,17 @@
 Changelog
 #########
 
-*******************
-0.5.12 (unreleased)
-*******************
+******************
+0.6.1 (unreleased)
+******************
+
+New Features
+============
+- Add a general SALib sampler parameter generator (:issue:`385`, :merge:`436`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Adds salib to the runtime requirements (:issue:`385`, :merge:`436`). By `Kyle Brindley`_.
 
 *******************
 0.5.11 (2022-01-05)
