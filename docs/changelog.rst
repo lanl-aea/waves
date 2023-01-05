@@ -8,6 +8,14 @@ Changelog
 0.5.12 (unreleased)
 *******************
 
+New Features
+============
+- Add a general SALib sampler parameter generator (:issue:`385`, :merge:`436`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Adds salib to the runtime requirements (:issue:`385`, :merge:`436`). By `Kyle Brindley`_.
+
 *******************
 0.5.11 (2022-01-05)
 *******************
@@ -17,7 +25,6 @@ New Features
 - Add a parameter-set-as-dictionaries method to the parameter generator class (:issue:`378`, :merge:`430`). By `Kyle
   Brindley`_.
 - Add a general scipy sampler parameter generator (:issue:`384`, :merge:`435`). By `Kyle Brindley`_.
-- Add a general SALib sampler parameter generator (:issue:`385`, :merge:`436`). By `Kyle Brindley`_.
 
 Documentation
 =============
