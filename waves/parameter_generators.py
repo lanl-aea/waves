@@ -55,7 +55,7 @@ class _ParameterGenerator(ABC):
     """
     def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
                  set_name_template=default_set_name_template, previous_parameter_study=None,
-                 overwrite=False, dryrun=False, debug=False, write_meta=False):
+                 overwrite=False, dryrun=False, debug=False, write_meta=False, **kwargs):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
@@ -99,7 +99,7 @@ class _ParameterGenerator(ABC):
         self.parameter_study_meta_file = self.output_directory / parameter_study_meta_file
 
         self._validate()
-        self._generate()
+        self._generate(**kwargs)
 
     @abstractmethod
     def _validate(self):
@@ -121,6 +121,9 @@ class _ParameterGenerator(ABC):
     @abstractmethod
     def _generate(self):
         """Generate the parameter study definition
+
+        ABC method doesn't accept kwargs, but implemented class method should accept kwargs as ``_generate(self,
+        **kwargs)``
 
         Must set the class attributes:
 
@@ -521,7 +524,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
-    def _generate(self, kwargs=None):
+    def _generate(self, **kwargs):
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
@@ -628,7 +631,7 @@ class CartesianProduct(_ParameterGenerator):
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
 
-    def _generate(self):
+    def _generate(self, **kwargs):
         """Generate the Cartesian Product parameter sets."""
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         super()._generate()
@@ -712,7 +715,7 @@ class LatinHypercube(_ScipyGenerator):
         super().__init__(*args, **kwargs)
         self.sampler_class = "LatinHypercube"
 
-    def _generate(self, kwargs=None):
+    def _generate(self, **kwargs):
         """Generate the Latin Hypercube parameter sets.
 
         To produce consistent Latin Hypercubes on repeat instantiations, the ``kwargs`` must include
@@ -722,7 +725,7 @@ class LatinHypercube(_ScipyGenerator):
             ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
             defined in the parameter schema.
         """
-        super()._generate(kwargs=kwargs)
+        super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
@@ -802,7 +805,7 @@ class CustomStudy(_ParameterGenerator):
                              "where N is the number of parameters.")
         return
 
-    def _generate(self):
+    def _generate(self, **kwargs):
         """Generate the parameter study dataset from the user provided parameter array."""
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self.parameter_schema['parameter_samples']
@@ -905,7 +908,7 @@ class SobolSequence(_ScipyGenerator):
             raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
         super()._validate()
 
-    def _generate(self, kwargs=None):
+    def _generate(self, **kwargs):
         """Generate the parameter study dataset from the user provided parameter array.
 
         To produce consistent Sobol sequences on repeat instantiations, the ``kwargs`` must include either
@@ -915,7 +918,7 @@ class SobolSequence(_ScipyGenerator):
             argument is internally managed and will be overwritten to match the number of parameters defined in the
             parameter schema.
         """
-        super()._generate(kwargs=kwargs)
+        super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
@@ -1005,14 +1008,14 @@ class ScipySampler(_ScipyGenerator):
         super().__init__(*args, **kwargs)
         self.sampler_class = sampler_class
 
-    def _generate(self, kwargs=None):
+    def _generate(self, **kwargs):
         """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets.
 
         :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The
             ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
             defined in the parameter schema.
         """
-        super()._generate(kwargs=kwargs)
+        super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
@@ -1160,7 +1163,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         """Construct the parameter names from a distribution parameter schema"""
         self._parameter_names = self.parameter_schema["problem"]["names"]
 
-    def _generate(self, kwargs=None):
+    def _generate(self, **kwargs):
         """Generate the `SALib.sample`_ ``sampler_class`` parameter sets.
 
         :param dict kwargs: Keyword arguments for the `SALib.sample`_ ``sampler_class`` ``sample`` method.
