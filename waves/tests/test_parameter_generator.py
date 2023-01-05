@@ -9,7 +9,7 @@ import pytest
 import numpy
 import xarray
 
-from waves.parameter_generators import _ParameterGenerator, _ParameterDistributions
+from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator
 
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
@@ -44,6 +44,14 @@ class TestParameterGenerator:
         'file template': (    {},        None,        'out',           ['out0']),
         'file template': (    {},       'out', 'overridden',           ['out0'])
     }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize("length", range(1, 20, 5))
+    def test_parameter_study_to_dict(self, length):
+        sconsIterator = NoQuantilesGenerator({})
+        sconsIterator.generate(length)
+        set_samples = sconsIterator.parameter_study_to_dict()
+        assert set_samples == {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
 
     @pytest.mark.unittest
     @pytest.mark.parametrize('schema, file_template, set_template, expected',
@@ -221,7 +229,7 @@ class TestParameterGenerator:
 
 
 class TestParameterDistributions():
-    """Class for testing _ParameterDistributions ABC class common methods"""
+    """Class for testing _ScipyGenerator ABC class common methods"""
 
     validate_input = {
         "good schema": (
@@ -263,7 +271,7 @@ class TestParameterDistributions():
                              validate_input.values(),
                              ids=validate_input.keys())
     def test_validate(self, parameter_schema, outcome):
-        with patch("waves.parameter_generators._ParameterDistributions._generate_parameter_distributions") as mock_distros, \
+        with patch("waves.parameter_generators._ScipyGenerator._generate_parameter_distributions") as mock_distros, \
              outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
@@ -311,6 +319,7 @@ class NoQuantilesGenerator(_ParameterGenerator):
         self._parameter_names = ['parameter_1']
 
     def generate(self, sets):
+        """Generate float samples for all parameters. Value matches parameter set index"""
         parameter_count = len(self._parameter_names)
         self._samples = numpy.ones((sets, parameter_count))
         for row in range(sets):
@@ -318,7 +327,7 @@ class NoQuantilesGenerator(_ParameterGenerator):
         super().generate()
 
 
-class ParameterDistributions(_ParameterDistributions):
+class ParameterDistributions(_ScipyGenerator):
 
     def generate(self):
         pass

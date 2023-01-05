@@ -51,7 +51,6 @@ parameter_generator = waves.parameter_generators.LatinHypercube(
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
 parameter_generator.generate()
-parameter_study = parameter_generator.parameter_study
 
 workflow.extend(env.Command(
     target=[parameter_study_file.name],
@@ -61,9 +60,9 @@ workflow.extend(env.Command(
 # Comment used in tutorial code snippets: marker-3
 
 # Parameterized targets must live inside current simulation_variables for loop
-for set_name, parameters in parameter_generator.parameter_study.sel(data_type='samples').groupby('parameter_sets'):
+for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
     set_name = pathlib.Path(set_name)
-    simulation_variables = {**parameters.squeeze().to_array().to_series().to_dict(), **simulation_constants}
+    simulation_variables = {**parameters, **simulation_constants}
 
     # Comment used in tutorial code snippets: marker-4
 

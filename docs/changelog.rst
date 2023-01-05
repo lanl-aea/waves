@@ -5,8 +5,35 @@ Changelog
 #########
 
 *******************
-0.5.11 (unreleased)
+0.5.12 (unreleased)
 *******************
+
+*******************
+0.5.11 (2022-01-05)
+*******************
+
+New Features
+============
+- Add a parameter-set-as-dictionaries method to the parameter generator class (:issue:`378`, :merge:`430`). By `Kyle
+  Brindley`_.
+- Add a general scipy sampler parameter generator (:issue:`384`, :merge:`435`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add the parameter study dictionary method to each parameter generator's external API and update the CartesianProduct
+  tutorial discussion (:issue:`382`, :merge:`434`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Add seaborn package to the development and CI environments (:issue:`380`, :merge:`432`). By `Kyle Brindley`_.
+- Consolidate the scipy based parameter generator logic (:issue:`383`, :merge:`433`). By `Kyle Brindley`_.
+- Remove unused variables from tutorial workflow configurations (:issue:`382`, :merge:`434`). By `Kyle Brindley`_.
+- Add salib package to the development and CI environments (:merge:`437`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Use a YAML file instead of a nested string construction for the post-processing selection dictionary (:issue:`379`,
+  :merge:`431`). By `Kyle Brindley`_.
 
 *******************
 0.5.10 (2022-12-19)
