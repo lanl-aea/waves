@@ -614,9 +614,7 @@ class CartesianProduct(_ParameterGenerator):
            parameter_1         (data_type, parameter_set_hash) object 1 1 2 2
            parameter_2         (data_type, parameter_set_hash) object 'a' 'b' 'a' 'b'
 
-    Attributes after set generation
-
-    * parameter_study: The final parameter study XArray Dataset object
+    :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
     def _validate(self):
@@ -707,13 +705,8 @@ class LatinHypercube(_ScipyGenerator):
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
 
-    Attributes after class instantiation
-
-    * parameter_distributions: A dictionary mapping parameter names to the `scipy.stats`_ distribution
-
-    Attributes after set generation
-
-    * parameter_study: The final parameter study XArray Dataset object
+    :var self.parameter_distributions: A dictionary mapping parameter names to the `scipy.stats`_ distribution
+    :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
     def __init__(self, *args, **kwargs):
@@ -789,9 +782,7 @@ class CustomStudy(_ParameterGenerator):
            prefix              (data_type, parameter_set_hash) object 'a' 'b'
            index               (data_type, parameter_set_hash) object 5 6
 
-    Attributes after set generation
-
-    * parameter_study: The final parameter study XArray Dataset object
+    :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
     def _validate(self):
@@ -1012,13 +1003,8 @@ class ScipySampler(_ScipyGenerator):
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
 
-    Attributes after class instantiation
-
-    * parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
-
-    Attributes after set generation
-
-    * parameter_study: The final parameter study XArray Dataset object
+    :var parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
+    :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
     def __init__(self, sampler_class, *args, **kwargs):
