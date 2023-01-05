@@ -712,8 +712,8 @@ class LatinHypercube(_ScipyGenerator):
     """
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.sampler_class = "LatinHypercube"
+        super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs):
         """Generate the Latin Hypercube parameter sets.
@@ -892,8 +892,8 @@ class SobolSequence(_ScipyGenerator):
     """
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.sampler_class = "Sobol"
+        super().__init__(*args, **kwargs)
 
     def _validate(self):
         """Validate the Sobol sequence parameter schema. Executed by class initiation."""
@@ -1005,8 +1005,8 @@ class ScipySampler(_ScipyGenerator):
     """
 
     def __init__(self, sampler_class, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.sampler_class = sampler_class
+        super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs):
         """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets.
