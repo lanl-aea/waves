@@ -27,6 +27,52 @@ class TestSALibSampler:
             },
             does_not_raise()
         ),
+        "sobol: one parameter": (
+            "sobol",
+            {"N": 4,
+             "problem": {
+                 "num_vars": 1,
+                 "names": ["parameter_1",],
+                 "bounds": [[-1, 1]]
+             }
+            },
+            pytest.raises(ValueError)
+        ),
+        "missing N": (
+            "latin",
+            {"problem": {"num_vars": 4, "names": ["p1"], "bounds": [[-1, 1]]}},
+            pytest.raises(AttributeError)
+        ),
+        "missing problem": (
+            "latin",
+            {"N": 4},
+            pytest.raises(AttributeError)
+        ),
+        "missing names": (
+            "latin",
+            {"N": 4, "problem": {"num_vars": 4, "bounds": [[-1, 1]]}},
+            pytest.raises(AttributeError)
+        ),
+        "schema not a dict": (
+            "latin",
+            "not a dict",
+            pytest.raises(TypeError)
+        ),
+        "N not an int": (
+            "latin",
+            {"N": "not an int", "problem": {"num_vars": 4, "names": ["p1"], "bounds": [[-1, 1]]}},
+            pytest.raises(TypeError)
+        ),
+        "problem not a dict": (
+            "latin",
+            {"N": 4, "problem": "not a dict"},
+            pytest.raises(TypeError)
+        ),
+        "names not a list": (
+            "latin",
+            {"N": 4, "problem": {"num_vars": 4, "names": "not a list", "bounds": [[-1, 1]]}},
+            pytest.raises(TypeError)
+        ),
     }
 
     @pytest.mark.unittest
