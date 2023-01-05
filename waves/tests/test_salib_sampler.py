@@ -15,6 +15,32 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supporte
 class TestSALibSampler:
     """Class for testing SALib Sampler parameter study generator class"""
 
+    validate_input = {
+        "sobol: good schema": (
+            "sobol",
+            {"N": 4,
+             "problem": {
+                 "num_vars": 3,
+                 "names": ["parameter_1", "parameter_2", "parameter_3"],
+                 "bounds": [[-1, 1], [-2, 2], [-3, 3]]
+             }
+            },
+            does_not_raise()
+        ),
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('sampler_class, parameter_schema, outcome',
+                             validate_input.values(),
+                             ids=validate_input.keys())
+    def test_validate(self, sampler_class, parameter_schema, outcome):
+        with outcome:
+            try:
+                # Validate is called in __init__. Do not need to call explicitly.
+                TestValidate = SALibSampler(sampler_class, parameter_schema)
+            finally:
+                pass
+
     generate_input = {
         "good schema 5x2": (
             {"N": 5,
