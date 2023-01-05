@@ -1074,6 +1074,33 @@ class SALibSampler(_ParameterGenerator, ABC):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
+    *Example*
+
+    .. code-block::
+
+       >>> import waves
+       >>> parameter_schema = {
+       ...     "N": 4,  # Required key. Value must be an integer.
+       ...     "problem": {  # Required key. See the SALib sampler interface documentation
+       ...         "num_vars": 3,
+       ...         "names": ["parameter_1", "parameter_2", "parameter_3"],
+       ...         "bounds": [[-1, 1], [-2, 2], [-3, 3]]
+       ...     }
+       ... }
+       >>> parameter_generator = waves.parameter_generators.SALibSampler("sobol", parameter_schema)
+       >>> parameter_generator.generate()
+       >>> print(parameter_generator.parameter_study)
+       <xarray.Dataset>
+       Dimensions:             (data_type: 1, parameter_sets: 32)
+       Coordinates:
+         * data_type           (data_type) object 'samples'
+           parameter_set_hash  (parameter_sets) <U32 'e0cb1990f9d70070eaf5638101dcaf...
+         * parameter_sets      (parameter_sets) <U15 'parameter_set0' ... 'parameter...
+       Data variables:
+           parameter_1         (data_type, parameter_sets) float64 -0.2029 ... 0.187
+           parameter_2         (data_type, parameter_sets) float64 -0.801 ... 0.6682
+           parameter_3         (data_type, parameter_sets) float64 0.4287 ... -2.871
+
     :var self.parameter_study: The final parameter study XArray Dataset object
 
     :raises ValueError: If the `SALib sobol`_ sampler is specified and there are fewer than 2 parameters.
