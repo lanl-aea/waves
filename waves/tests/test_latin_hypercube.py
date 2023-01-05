@@ -62,9 +62,10 @@ class TestLatinHypercube:
     def test_generate(self, parameter_schema, seed,
                       expected_samples, expected_quantiles, expected_scipy_kwds):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
-        generator_classes = (LatinHypercube(parameter_schema), ScipySampler("LatinHypercube", parameter_schema))
+        kwargs={'seed': seed}
+        generator_classes = (LatinHypercube(parameter_schema, **kwargs),
+                             ScipySampler("LatinHypercube", parameter_schema, **kwargs))
         for TestGenerate in generator_classes:
-            TestGenerate.generate(kwargs={'seed': seed})
             samples_array = TestGenerate._samples
             quantiles_array = TestGenerate._quantiles
             assert numpy.allclose(samples_array, expected_samples)
@@ -101,11 +102,10 @@ class TestLatinHypercube:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, seed, expected_samples, expected_quantiles):
         # LatinHypercube
-        TestMerge1 = LatinHypercube(first_schema)
-        TestMerge1.generate(kwargs={'seed': seed})
+        kwargs={'seed': seed}
+        TestMerge1 = LatinHypercube(first_schema, **kwargs)
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-            TestMerge2 = LatinHypercube(second_schema, previous_parameter_study='dummy_string')
-            TestMerge2.generate(kwargs={'seed': seed})
+            TestMerge2 = LatinHypercube(second_schema, previous_parameter_study='dummy_string', **kwargs)
         samples = TestMerge2._samples.astype(float)
         quantiles = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples, expected_samples)
@@ -117,12 +117,10 @@ class TestLatinHypercube:
         assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
         assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
-        # ScipySampler 
-        TestMerge1 = ScipySampler("LatinHypercube", first_schema)
-        TestMerge1.generate(kwargs={'seed': seed})
+        # ScipySampler
+        TestMerge1 = ScipySampler("LatinHypercube", first_schema, **kwargs)
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-            TestMerge2 = ScipySampler("LatinHypercube", second_schema, previous_parameter_study='dummy_string')
-            TestMerge2.generate(kwargs={'seed': seed})
+            TestMerge2 = ScipySampler("LatinHypercube", second_schema, previous_parameter_study='dummy_string', **kwargs)
         samples = TestMerge2._samples.astype(float)
         quantiles = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples, expected_samples)

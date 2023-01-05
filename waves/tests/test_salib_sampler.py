@@ -173,8 +173,7 @@ class TestSALibSampler:
             if sampler == "sobol" and parameter_schema["problem"]["num_vars"] < 2:
                 return
             # Unit tests
-            TestGenerate = SALibSampler(sampler, parameter_schema)
-            TestGenerate.generate(kwargs=kwargs)
+            TestGenerate = SALibSampler(sampler, parameter_schema, **kwargs)
             samples_array = TestGenerate._samples
             # Verify that the parameter set name creation method was called
             expected_set_names = self._expected_set_names(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"])
@@ -244,11 +243,9 @@ class TestSALibSampler:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_salib_samplers:
-            TestMerge1 = SALibSampler(sampler, first_schema)
-            TestMerge1.generate(kwargs=kwargs)
+            TestMerge1 = SALibSampler(sampler, first_schema, **kwargs)
             with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-                TestMerge2 = SALibSampler(sampler, second_schema, previous_parameter_study='dummy_string')
-                TestMerge2.generate(kwargs=kwargs)
+                TestMerge2 = SALibSampler(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
             samples_array = TestMerge2._samples.astype(float)
             # Check for consistent hash-parameter set relationships
             for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
