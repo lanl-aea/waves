@@ -1136,21 +1136,24 @@ class SALibSampler(_ParameterGenerator, ABC):
         self._sampler_validation()
 
     def _sampler_validation(self):
-        """Call campler specific schema validation check methods"""
-        if self.sampler_class == "sobol":
-            self._sobol_validation()
+        """Call campler specific schema validation check methods
 
-    def _sobol_validation(self):
-        """Validate the SALib sobol schema
+        * sobol requires at least two parameters
 
-        :raises ValueError: if the parameter count is less than 2
+        Requires attributes:
+
+        * ``self._sampler_class`` set by class initiation
+        * ``self._parameter_names`` set by ``self._create_parameter_names()``
         """
         parameter_count = len(self._parameter_names)
-        if parameter_count < 2:
+        if self.sampler_class == "sobol" and parameter_count < 2:
             raise ValueError("The SALib Sobol sampler requires at least two parameters")
 
     def _sampler_overrides(self, override_kwargs={}):
         """Provide sampler specific kwarg override dictionaries
+
+        * sobol produces duplicate parameter sets for two parameters when ``calc_second_order`` is ``True``. Override
+          this kwarg to be ``False`` if there are only two parameters.
 
         :param dict override_kwargs: any common kwargs to include in the override dictionary
         :return: override kwarg dictionary
