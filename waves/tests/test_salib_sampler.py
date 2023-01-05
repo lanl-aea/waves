@@ -27,6 +27,17 @@ class TestSALibSampler:
             },
             does_not_raise()
         ),
+        "latin: good schema": (
+            "latin",
+            {"N": 4,
+             "problem": {
+                 "num_vars": 3,
+                 "names": ["parameter_1", "parameter_2", "parameter_3"],
+                 "bounds": [[-1, 1], [-2, 2], [-3, 3]]
+             }
+            },
+            does_not_raise()
+        ),
         "sobol: one parameter": (
             "sobol",
             {"N": 4,
