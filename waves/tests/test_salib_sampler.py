@@ -15,6 +15,29 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supporte
 class TestSALibSampler:
     """Class for testing SALib Sampler parameter study generator class"""
 
+    sampler_overrides = {
+        "sobol: two parameter": (
+            "sobol",
+            {"N": 4,
+             "problem": {
+                 "num_vars": 2,
+                 "names": ["parameter_1", "parameter_2"],
+                 "bounds": [[-1, 1], [-2, 2]]
+             }
+            },
+            {},
+            {"calc_second_order": False}
+        )
+    }
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('sampler_class, parameter_schema, original, expected',
+                             sampler_overrides.values(),
+                             ids=sampler_overrides.keys())
+    def test_sampler_overrides(self, sampler_class, parameter_schema, original, expected):
+        TestValidate = SALibSampler(sampler_class, parameter_schema)
+        override_kwargs = TestValidate._sampler_overrides(original)
+        assert override_kwargs == expected
+
     validate_input = {
         "sobol: good schema": (
             "sobol",
