@@ -51,8 +51,8 @@ parameter_generator = waves.parameter_generators.SALibSampler(
     parameter_schema,
     output_file=parameter_study_file,
     output_file_type=output_file_type,
-    previous_parameter_study=previous_parameter_study)
-parameter_generator.generate(**kwargs)
+    previous_parameter_study=previous_parameter_study,
+    **kwargs)
 parameter_study = parameter_generator.parameter_study
 
 semaphore_filename = "semaphore.txt"
