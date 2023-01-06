@@ -173,6 +173,13 @@ class TestSALibSampler:
             number_of_simulations = N * num_vars
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
+    def _big_enough(self, sampler, N, num_vars):
+        if sampler == "sobol" and num_vars < 2:
+            return False
+        if sampler == "fast_sampler" and N < 64:
+            return False
+        return True
+
     @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, kwargs",
                              generate_input.values(),
@@ -180,9 +187,7 @@ class TestSALibSampler:
     def test_generate(self, parameter_schema, kwargs):
         for sampler in _supported_salib_samplers:
             # TODO: find a better way to separate the sampler types and their test parameterization
-            if sampler == "sobol" and parameter_schema["problem"]["num_vars"] < 2:
-                return
-            if sampler == "fast_sampler" and parameter_schema["N"] < 64:
+            if not self._big_enough(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]):
                 return
             # Unit tests
             TestGenerate = SALibSampler(sampler, parameter_schema, **kwargs)
@@ -282,9 +287,7 @@ class TestSALibSampler:
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_salib_samplers:
             # TODO: find a better way to separate the sampler types and their test parameterization
-            if sampler == "sobol" and first_schema["problem"]["num_vars"] < 2:
-                return
-            if sampler == "fast_sampler" and first_schema["N"] < 64:
+            if not self._big_enough(sampler, first_schema["N"], first_schema["problem"]["num_vars"]):
                 return
             # Unit tests
             TestMerge1 = SALibSampler(sampler, first_schema, **kwargs)
