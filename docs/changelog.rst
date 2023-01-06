@@ -8,6 +8,11 @@ Changelog
 0.6.2 (unreleased)
 ******************
 
+New Features
+============
+- Add the SALib ``fast_sampler`` to the list of tested samplers for parameter generation (:merge:`444`). By `Kyle
+  Brindley`_.
+
 ******************
 0.6.1 (2022-01-06)
 ******************
