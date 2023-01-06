@@ -152,6 +152,14 @@ class TestSALibSampler:
                          "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
             },
             {"seed": 42},
+        ),
+        "good schema 65x3": (
+            {"N": 65,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"seed": 42},
         )
     }
 
@@ -161,7 +169,16 @@ class TestSALibSampler:
             number_of_simulations = N * (num_vars + 2)
         elif sampler == "sobol":
             number_of_simulations = N * (2 * num_vars + 2)
+        elif sampler == "fast_sampler":
+            number_of_simulations = N * num_vars
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
+
+    def _big_enough(self, sampler, N, num_vars):
+        if sampler == "sobol" and num_vars < 2:
+            return False
+        if sampler == "fast_sampler" and N < 64:
+            return False
+        return True
 
     @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, kwargs",
@@ -170,7 +187,7 @@ class TestSALibSampler:
     def test_generate(self, parameter_schema, kwargs):
         for sampler in _supported_salib_samplers:
             # TODO: find a better way to separate the sampler types and their test parameterization
-            if sampler == "sobol" and parameter_schema["problem"]["num_vars"] < 2:
+            if not self._big_enough(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]):
                 return
             # Unit tests
             TestGenerate = SALibSampler(sampler, parameter_schema, **kwargs)
@@ -183,7 +200,7 @@ class TestSALibSampler:
             assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
-        "new sets, 2 params": (
+        "new sets, 5(8)x2": (
             {"N": 5,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
@@ -196,7 +213,7 @@ class TestSALibSampler:
             },
             {"seed": 42},
         ),
-        "new sets, 3 params": (
+        "new sets, 5(8)x3": (
             {"N": 5,
              "problem": {"num_vars": 3,
                          "names": ["parameter_1", "parameter_2", "parameter_3"],
@@ -209,7 +226,7 @@ class TestSALibSampler:
             },
             {"seed": 42},
         ),
-        "unchanged sets, 2 param": (
+        "unchanged sets, 5x2": (
             {"N": 5,
              "problem": {"num_vars": 2,
                          "names": ["parameter_1", "parameter_2"],
@@ -222,13 +239,39 @@ class TestSALibSampler:
             },
             {"seed": 42},
         ),
-        "unchanged sets, 3 param": (
+        "unchanged sets, 5x3": (
             {"N": 5,
              "problem": {"num_vars": 3,
                          "names": ["parameter_1", "parameter_2", "parameter_3"],
                          "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
             },
             {"N": 5,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"seed": 42},
+        ),
+        "changed sets, 65(70)x3": (
+            {"N": 65,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"N": 70,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"seed": 42},
+        ),
+        "unchanged sets, 65x3": (
+            {"N": 65,
+             "problem": {"num_vars": 3,
+                         "names": ["parameter_1", "parameter_2", "parameter_3"],
+                         "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
+            },
+            {"N": 65,
              "problem": {"num_vars": 3,
                          "names": ["parameter_1", "parameter_2", "parameter_3"],
                          "bounds": [[-1, 1], [-2, 2], [-3, 3]]},
@@ -243,6 +286,10 @@ class TestSALibSampler:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_salib_samplers:
+            # TODO: find a better way to separate the sampler types and their test parameterization
+            if not self._big_enough(sampler, first_schema["N"], first_schema["problem"]["num_vars"]):
+                return
+            # Unit tests
             TestMerge1 = SALibSampler(sampler, first_schema, **kwargs)
             with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
                 TestMerge2 = SALibSampler(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
