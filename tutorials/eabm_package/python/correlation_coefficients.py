@@ -11,7 +11,7 @@ import seaborn
 import xarray
 import pandas
 import matplotlib.pyplot
-import SALib.analyze.sobol
+import SALib.analyze.rbd_fast
 
 from eabm_package.python.correlation_coefficients_schema import parameter_schema
 
@@ -60,12 +60,13 @@ def plot(input_files, output_file, group_path, selection_dict,
                                                 columns=correlation_data.columns)
     correlation_coefficients.to_csv(output_csv)
 
-    # Sobol sensitivity
+    # Sensitivity analysis
     stress = combined_data.sel(selection_dict)['S'].to_numpy()
-    print(stress)
-    sobol_sensitivity = SALib.analyze.sobol.analyze(parameter_schema["problem"], stress)
-    with open("sobol_sensitivity.yaml") as sobol_output:
-        yaml.safe_dump(sobol_sensitivity, sobol_output)
+    inputs = combined_data.sel(selection_dict)[['width', 'height']].to_array().transpose().to_numpy()
+    print(inputs)
+    sensitivity = SALib.analyze.rbd_fast.analyze(parameter_schema["problem"], inputs, stress)
+    with open("sensitivity.yaml") as output:
+        yaml.safe_dump(sensitivity, output)
 
     # Clean up open files
     combined_data.close()
