@@ -1,5 +1,5 @@
 parameter_schema = {
-    'N': 20,
+    'N': 5,
     'problem': {
         'num_vars': 2,
         'names': ['width', 'height'],
