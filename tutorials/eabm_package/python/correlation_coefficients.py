@@ -11,7 +11,7 @@ import seaborn
 import xarray
 import pandas
 import matplotlib.pyplot
-import SALib.analyze.rbd_fast
+import SALib.analyze.delta
 
 from eabm_package.python.correlation_coefficients_schema import parameter_schema
 
@@ -63,10 +63,17 @@ def plot(input_files, output_file, group_path, selection_dict,
     # Sensitivity analysis
     stress = combined_data.sel(selection_dict)['S'].to_numpy()
     inputs = combined_data.sel(selection_dict)[['width', 'height']].to_array().transpose().to_numpy()
-    print(inputs)
-    sensitivity = SALib.analyze.rbd_fast.analyze(parameter_schema["problem"], inputs, stress)
-    with open("sensitivity.yaml") as output:
-        yaml.safe_dump(sensitivity, output)
+    sensitivity = SALib.analyze.delta.analyze(parameter_schema["problem"], inputs, stress)
+    sensitivity_yaml = {}
+    for key, value in sensitivity.items():
+        try:
+            value = value.tolist()
+        # TODO: catch the actual exception expected
+        except:
+            pass
+        sensitivity_yaml[key] = value
+    with open("sensitivity.yaml", "w") as output:
+        output.write(yaml.safe_dump(sensitivity_yaml))
 
     # Clean up open files
     combined_data.close()
