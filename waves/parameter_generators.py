@@ -169,8 +169,9 @@ class _ParameterGenerator(ABC):
         compatibility. Method will overwrite the class instantiated study with a new parameter study each time it is
         called instead of duplicating or merging the parameter study.
         """
-        warnings.warn("Parameter studies are now generated during class instantitation. "
-                      "The generate method is deprecated and will be removed in a future release.", DeprecationWarning)
+        warning_message = "Parameter studies are now generated during class instantiation. " \
+                          "The generate method is deprecated and will be removed in a future release."
+        warnings.warn(warning_message, DeprecationWarning)
         self._generate(**kwargs)
 
     def write(self):

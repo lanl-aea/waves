@@ -15,6 +15,12 @@ class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
 
     @pytest.mark.unittest
+    def test_generate(self):
+        with patch('waves.parameter_generators._ParameterGenerator._generate') as private_generate:
+            NoQuantilesGenerator({}).generate()
+        private_generate.assert_called()
+
+    @pytest.mark.unittest
     def test_output_file_conflict(self):
         with pytest.raises(RuntimeError):
             try:
