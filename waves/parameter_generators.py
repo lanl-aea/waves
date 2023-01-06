@@ -1040,6 +1040,7 @@ class SALibSampler(_ParameterGenerator, ABC):
     Samplers must use the ``N`` sample count argument. Note that in `SALib.sample`_ ``N`` is *not* always equivalent to
     the number of simulations. The following samplers are tested for parameter study shape and merge behavior:
 
+    * fast_sampler
     * latin
     * sobol
 
