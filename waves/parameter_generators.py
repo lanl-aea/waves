@@ -119,11 +119,11 @@ class _ParameterGenerator(ABC):
         pass
 
     @abstractmethod
-    def _generate(self):
+    def _generate(self, **kwargs):
         """Generate the parameter study definition
 
-        ABC method doesn't accept kwargs, but implemented class method should accept kwargs as ``_generate(self,
-        **kwargs)``
+        All implemented class method should accept kwargs as ``_generate(self, **kwargs)``. The ABC class accepts, but
+        does not use any ``kwargs``.
 
         Must set the class attributes:
 
@@ -160,6 +160,14 @@ class _ParameterGenerator(ABC):
         self._create_parameter_study()
         if self.previous_parameter_study:
             self._merge_parameter_studies()
+
+    def generate(self, kwargs={}):
+        """Deprecated public generate method.
+
+        Parameter study is now generated as part of class instantiation. Kept for backward compatibility. Method will
+        overwrite the class instantiation with a new parameter study when called.
+        """
+        self._generate(**kwargs)
 
     def write(self):
         """Write the parameter study to STDOUT or an output file.
