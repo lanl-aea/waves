@@ -19,13 +19,17 @@ class TestParameterGenerator:
     def test_generate(self):
         kwargs = {"thing1": 1}
         with patch('waves.parameter_generators.LatinHypercube._validate'), \
-            patch('waves.parameter_generators.LatinHypercube._generate') as private_generate:
+            patch('waves.parameter_generators.LatinHypercube._generate') as private_generate, \
+            patch('warnings.warn') as mock_warning:
             LatinHypercube({}).generate(kwargs={"thing1": 1})
         private_generate.assert_called_with(**kwargs)
+        mock_warning.assert_called_once()
         with patch('waves.parameter_generators.SobolSequence._validate'), \
-            patch('waves.parameter_generators.SobolSequence._generate') as private_generate:
+            patch('waves.parameter_generators.SobolSequence._generate') as private_generate, \
+            patch('warnings.warn') as mock_warning:
             SobolSequence({}).generate(kwargs={"thing1": 1})
         private_generate.assert_called_with(**kwargs)
+        mock_warning.assert_called_once()
 
     @pytest.mark.unittest
     def test_output_file_conflict(self):
