@@ -688,6 +688,7 @@ class LatinHypercube(_ScipyGenerator):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     Example
 
@@ -872,6 +873,7 @@ class SobolSequence(_ScipyGenerator):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     Example
 
@@ -981,6 +983,7 @@ class ScipySampler(_ScipyGenerator):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     Example
 
@@ -1074,6 +1077,7 @@ class SALibSampler(_ParameterGenerator, ABC):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
     *Example*
 
