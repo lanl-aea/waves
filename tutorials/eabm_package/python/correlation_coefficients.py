@@ -11,6 +11,9 @@ import seaborn
 import xarray
 import pandas
 import matplotlib.pyplot
+import SALib.analyze.sobol
+
+from eabm_package.python.correlation_coefficients_schema import parameter_schema
 
 
 default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'time': 1.0,
@@ -56,6 +59,13 @@ def plot(input_files, output_file, group_path, selection_dict,
     correlation_coefficients = pandas.DataFrame(correlation_matrix, index=correlation_data.columns,
                                                 columns=correlation_data.columns)
     correlation_coefficients.to_csv(output_csv)
+
+    # Sobol sensitivity
+    stress = combined_data.sel(selection_dict)['S'].transpose().to_numpy()
+    print(stress)
+    sobol_sensitivity = SALib.analyze.sobol.analyze(parameter_schema["problem"], correlation_data)
+    with open("sobol_sensitivity.yaml") as sobol_output:
+        yaml.safe_dump(sobol_sensitivity, sobol_output)
 
     # Clean up open files
     combined_data.close()
