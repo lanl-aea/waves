@@ -91,7 +91,7 @@ information.
 
 preamble = """
 \\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}
-\\AtBeginEnvironment{sphinxVerbatim}{\small}
+\\AtBeginEnvironment{sphinxVerbatim}{\\scriptsize}
 """
 # Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
 latex_project = project.replace('_', '-')
