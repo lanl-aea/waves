@@ -1156,6 +1156,8 @@ class SALibSampler(_ParameterGenerator, ABC):
         parameter_count = len(self._parameter_names)
         if self.sampler_class == "sobol" and parameter_count < 2:
             raise ValueError("The SALib Sobol sampler requires at least two parameters")
+        if self.sampler_class == "morris" and parameter_count < 2:
+            raise ValueError("The SALib Morris sampler requires at least two parameters")
 
     def _sampler_overrides(self, override_kwargs={}):
         """Provide sampler specific kwarg override dictionaries
