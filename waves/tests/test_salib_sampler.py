@@ -173,6 +173,9 @@ class TestSALibSampler:
             number_of_simulations = N * num_vars
         elif sampler == "finite_diff":
             number_of_simulations = N * (num_vars + 1)
+        elif sampler == "morris":
+            # Default interface settings
+            number_of_simulations = int((num_vars + 1) * N)
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
     def _big_enough(self, sampler, N, num_vars):
@@ -190,6 +193,8 @@ class TestSALibSampler:
         for sampler in _supported_salib_samplers:
             # TODO: find a better way to separate the sampler types and their test parameterization
             if not self._big_enough(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]):
+                return
+            elif sampler == "morris" and parameter_schema["problem"]["num_vars"] < 2:
                 return
             # Unit tests
             TestGenerate = SALibSampler(sampler, parameter_schema, **kwargs)
