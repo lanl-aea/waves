@@ -6,6 +6,7 @@ import itertools
 import copy
 import hashlib
 import numbers
+import warnings
 
 import yaml
 import numpy
@@ -164,9 +165,12 @@ class _ParameterGenerator(ABC):
     def generate(self, kwargs={}):
         """Deprecated public generate method.
 
-        Parameter study is now generated as part of class instantiation. Kept for backward compatibility. Method will
-        overwrite the class instantiation with a new parameter study when called.
+        The parameter study is now generated as part of class instantiation. This method has been kept for backward
+        compatibility. Method will overwrite the class instantiated study with a new parameter study each time it is
+        called instead of duplicating or merging the parameter study.
         """
+        warnings.warn("Parameter studies are now generated during class instantitation. "
+                      "The generate method is deprecated and will be removed in a future release.", DeprecationWarning)
         self._generate(**kwargs)
 
     def write(self):
