@@ -32,7 +32,7 @@ workflow_name = build_directory.name
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
-seed = 42
+kwargs={'seed': 42, 'calc_second_order': False}
 model = "single_element"
 simulation_constants = {
     'global_seed': 1,
@@ -46,12 +46,13 @@ datacheck = []
 # Comment used in tutorial code snippets: marker-2
 
 # Parameter Study with Latin Hypercube
-parameter_generator = waves.parameter_generators.LatinHypercube(
+parameter_generator = waves.parameter_generators.SALibSampler(
+    "sobol",
     parameter_schema,
     output_file=parameter_study_file,
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
-parameter_generator.generate(kwargs={'seed': seed})
+parameter_generator.generate(**kwargs)
 parameter_study = parameter_generator.parameter_study
 
 semaphore_filename = "semaphore.txt"
