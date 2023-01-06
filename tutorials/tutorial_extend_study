@@ -51,8 +51,8 @@ parameter_generator = waves.parameter_generators.SobolSequence(
     parameter_schema,
     output_file=parameter_study_file,
     output_file_type=output_file_type,
-    previous_parameter_study=previous_parameter_study)
-parameter_generator.generate(kwargs=kwargs)
+    previous_parameter_study=previous_parameter_study,
+    **kwargs)
 
 semaphore_filename = "semaphore.txt"
 semaphore_file_list = []
@@ -154,8 +154,8 @@ def write_parameter_study(target, source, env):
         new_generator = waves.parameter_generators.SobolSequence(
             new_schema,
             output_file=parameter_study_file,
-            output_file_type=output_file_type)
-        new_generator.generate(kwargs=kwargs)
+            output_file_type=output_file_type,
+            **kwargs)
         new_generator.write()
     else:
         parameter_generator.write()

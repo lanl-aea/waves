@@ -4,9 +4,25 @@
 Changelog
 #########
 
-*******************
-0.5.12 (unreleased)
-*******************
+******************
+0.6.2 (unreleased)
+******************
+
+******************
+0.6.1 (2022-01-06)
+******************
+
+New Features
+============
+- Add a general SALib sampler parameter generator (:issue:`385`, :merge:`436`). By `Kyle Brindley`_.
+- Allow passing of arbitrary keyword arguments to the parameter generator sampling method through the parameter
+  generator interface (:issue:`381`, :merge:`440`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Adds salib to the runtime requirements (:issue:`385`, :merge:`436`). By `Kyle Brindley`_.
+- Generate the parameter study on parameter generator class instantiation. Preserve the public ``generate()`` method
+  with a deprecation warning (:issue:`381`, :merge:`440`). By `Kyle Brindley`_.
 
 *******************
 0.5.11 (2022-01-05)

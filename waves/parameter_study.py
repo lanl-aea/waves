@@ -205,7 +205,6 @@ def main():
         )
 
     # Build the parameter study.
-    parameter_generator.generate()
     parameter_generator.write()
 
     return 0

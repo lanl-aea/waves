@@ -42,5 +42,5 @@ def test_parameter_study(subcommand, class_name):
          pytest.raises(SystemExit) as pytest_exit:
         sys.exit(parameter_study.main())
         assert mock_generator.assert_called_once()
-        assert mock_generator.method_calls == [call.generate(), call.write()]
+        assert mock_generator.method_calls == [call.write()]
     assert pytest_exit.value.code == 0

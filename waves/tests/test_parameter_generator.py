@@ -9,10 +9,27 @@ import pytest
 import numpy
 import xarray
 
-from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator
+from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
 
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
+
+    # TODO: Remove when the public generate method is removed
+    @pytest.mark.unittest
+    def test_generate(self):
+        kwargs = {"thing1": 1}
+        with patch('waves.parameter_generators.LatinHypercube._validate'), \
+            patch('waves.parameter_generators.LatinHypercube._generate') as private_generate, \
+            patch('warnings.warn') as mock_warning:
+            LatinHypercube({}).generate(kwargs={"thing1": 1})
+        private_generate.assert_called_with(**kwargs)
+        mock_warning.assert_called_once()
+        with patch('waves.parameter_generators.SobolSequence._validate'), \
+            patch('waves.parameter_generators.SobolSequence._generate') as private_generate, \
+            patch('warnings.warn') as mock_warning:
+            SobolSequence({}).generate(kwargs={"thing1": 1})
+        private_generate.assert_called_with(**kwargs)
+        mock_warning.assert_called_once()
 
     @pytest.mark.unittest
     def test_output_file_conflict(self):
@@ -48,8 +65,8 @@ class TestParameterGenerator:
     @pytest.mark.unittest
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
-        sconsIterator = NoQuantilesGenerator({})
-        sconsIterator.generate(length)
+        kwargs = {"sets": length}
+        sconsIterator = NoQuantilesGenerator({}, **kwargs)
         set_samples = sconsIterator.parameter_study_to_dict()
         assert set_samples == {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
 
@@ -65,12 +82,12 @@ class TestParameterGenerator:
         :param str set_template: user supplied string to be used as a template for parameter names
         :param list expected: list of expected parameter name strings
         """
+        kwargs = {"sets": 1}
         if not set_template:
-            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template)
+            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template, **kwargs)
         else:
             TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template,
-                                                     set_name_template=set_template)
-        TemplateGenerator.generate(1)
+                                                     set_name_template=set_template, **kwargs)
         assert list(TemplateGenerator._parameter_set_names.values()) == expected
 
     init_write_stdout = {# schema, template, overwrite, dryrun, debug,         is_file,  sets, stdout_calls
@@ -101,9 +118,9 @@ class TestParameterGenerator:
         :param int stdout_calls: number of calls to stdout. Should only differ from set count when no template is
             provides. Should always be 1 when no template is provided.
         """
+        kwargs = {"sets": sets}
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
-                                                       overwrite=overwrite, dryrun=dryrun, debug=debug)
-        WriteParameterGenerator.generate(sets)
+                                                       overwrite=overwrite, dryrun=dryrun, debug=debug, **kwargs)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
@@ -141,9 +158,9 @@ class TestParameterGenerator:
         :param int sets: test specific argument for the number of sets to build for the test
         :param int files: integer number of files that should be written
         """
+        kwargs = {"sets": sets}
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
-                                                       overwrite=overwrite, dryrun=dryrun, debug=debug)
-        WriteParameterGenerator.generate(sets)
+                                                       overwrite=overwrite, dryrun=dryrun, debug=debug, **kwargs)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
@@ -170,9 +187,9 @@ class TestParameterGenerator:
         :param int sets: test specific argument for the number of sets to build for the test
         :param int files: integer number of files that should be written
         """
+        kwargs = {"sets": sets}
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='h5',
-                                                       overwrite=overwrite, dryrun=dryrun, debug=debug)
-        WriteParameterGenerator.generate(sets)
+                                                       overwrite=overwrite, dryrun=dryrun, debug=debug, **kwargs)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
@@ -318,16 +335,16 @@ class NoQuantilesGenerator(_ParameterGenerator):
     def _validate(self):
         self._parameter_names = ['parameter_1']
 
-    def generate(self, sets):
+    def _generate(self, sets=1):
         """Generate float samples for all parameters. Value matches parameter set index"""
         parameter_count = len(self._parameter_names)
         self._samples = numpy.ones((sets, parameter_count))
         for row in range(sets):
             self._samples[row, :] = self._samples[row, :]*row
-        super().generate()
+        super()._generate()
 
 
 class ParameterDistributions(_ScipyGenerator):
 
-    def generate(self):
+    def _generate(self):
         pass

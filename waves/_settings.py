@@ -17,6 +17,7 @@ _cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _installed_quickstart_directory = _project_root_abspath / "quickstart"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
+_supported_salib_samplers = ["latin", "sobol"]
 
 # For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
 # Enables ``python -m waves.waves quickstart ...`` execution from repository root directory

@@ -13,7 +13,7 @@ from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supporte
 
 
 class TestScipySampler:
-    """Class for testing Sobol Sequence parameter study generator class"""
+    """Class for testing Scipy Sequence parameter study generator class"""
 
     generate_input = {
         "good schema 5x2": (
@@ -42,8 +42,7 @@ class TestScipySampler:
     def test_generate(self, parameter_schema, kwargs):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         for sampler in _supported_scipy_samplers:
-            TestGenerate = ScipySampler(sampler, parameter_schema)
-            TestGenerate.generate(kwargs=kwargs)
+            TestGenerate = ScipySampler(sampler, parameter_schema, **kwargs)
             samples_array = TestGenerate._samples
             quantiles_array = TestGenerate._quantiles
             # Verify that the parameter set name creation method was called
@@ -81,11 +80,9 @@ class TestScipySampler:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_scipy_samplers:
-            TestMerge1 = ScipySampler(sampler, first_schema)
-            TestMerge1.generate(kwargs=kwargs)
+            TestMerge1 = ScipySampler(sampler, first_schema, **kwargs)
             with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-                TestMerge2 = ScipySampler("Sobol", second_schema, previous_parameter_study='dummy_string')
-                TestMerge2.generate(kwargs=kwargs)
+                TestMerge2 = ScipySampler(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
             samples_array = TestMerge2._samples.astype(float)
             quantiles_array = TestMerge2._quantiles.astype(float)
             # Check for consistent hash-parameter set relationships
