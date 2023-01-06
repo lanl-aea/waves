@@ -161,7 +161,7 @@ script_options = "--input-file " + " ".join(str(path) for path in post_processin
 script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
-    target=[f"{output_name}.csv", f"correlation_pairplot.pdf"],
+    target=[f"{output_name}.csv", "correlation_pairplot.pdf", "sensitivity.yaml"],
     source=[f"{python_source_abspath}/{output_name}.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
