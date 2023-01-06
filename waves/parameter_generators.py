@@ -690,6 +690,11 @@ class LatinHypercube(_ScipyGenerator):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
+    To produce consistent Latin Hypercubes on repeat instantiations, the ``**kwargs`` must include ``{'seed': <int>}``.
+    See the `scipy Latin Hypercube`_ ``scipy.stats.qmc.LatinHypercube`` class documentation for details The ``d``
+    keyword argument is internally managed and will be overwritten to match the number of parameters defined in the
+    parameter schema.
+
     Example
 
     .. code-block::
@@ -730,15 +735,7 @@ class LatinHypercube(_ScipyGenerator):
         super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs):
-        """Generate the Latin Hypercube parameter sets.
-
-        To produce consistent Latin Hypercubes on repeat instantiations, the ``kwargs`` must include
-        ``{'seed': <int>}``. See the `scipy Latin Hypercube`_ documentation for details.
-
-        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.LatinHypercube`` LatinHypercube class. The
-            ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
-            defined in the parameter schema.
-        """
+        """Generate the Latin Hypercube parameter sets"""
         super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
@@ -875,6 +872,11 @@ class SobolSequence(_ScipyGenerator):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
+    To produce consistent Sobol sequences on repeat instantiations, the ``**kwargs`` must include either
+    ``scramble=False`` or ``seed=<int>``. See the `scipy Sobol`_ ``scipy.stats.qmc.Sobol`` class documentation for
+    details.  The ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
+    defined in the parameter schema.
+
     Example
 
     .. code-block::
@@ -924,15 +926,7 @@ class SobolSequence(_ScipyGenerator):
         super()._validate()
 
     def _generate(self, **kwargs):
-        """Generate the parameter study dataset from the user provided parameter array.
-
-        To produce consistent Sobol sequences on repeat instantiations, the ``kwargs`` must include either
-        ``{'scramble': False}`` or ``{'seed': <int>}``. See the `scipy Sobol`_ documentation for details.
-
-        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class. The ``d`` keyword
-            argument is internally managed and will be overwritten to match the number of parameters defined in the
-            parameter schema.
-        """
+        """Generate the parameter study dataset from the user provided parameter array"""
         super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
@@ -985,6 +979,9 @@ class ScipySampler(_ScipyGenerator):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
+    Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The ``d`` keyword argument is internally managed
+    and will be overwritten to match the number of parameters defined in the parameter schema.
+
     Example
 
     .. code-block::
@@ -1025,12 +1022,7 @@ class ScipySampler(_ScipyGenerator):
         super().__init__(*args, **kwargs)
 
     def _generate(self, **kwargs):
-        """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets.
-
-        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The
-            ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
-            defined in the parameter schema.
-        """
+        """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets"""
         super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
@@ -1078,6 +1070,8 @@ class SALibSampler(_ParameterGenerator, ABC):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
+
+    Keyword arguments for the `SALib.sample`_ ``sampler_class`` ``sample`` method.
 
     *Example*
 
@@ -1181,10 +1175,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         self._parameter_names = self.parameter_schema["problem"]["names"]
 
     def _generate(self, **kwargs):
-        """Generate the `SALib.sample`_ ``sampler_class`` parameter sets.
-
-        :param dict kwargs: Keyword arguments for the `SALib.sample`_ ``sampler_class`` ``sample`` method.
-        """
+        """Generate the `SALib.sample`_ ``sampler_class`` parameter sets"""
         N = self.parameter_schema['N']
         parameter_count = len(self._parameter_names)
         common_override_kwargs = {}
