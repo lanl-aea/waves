@@ -13,6 +13,11 @@ New Features
 - Add the SALib ``fast_sampler`` to the list of tested samplers for parameter generation (:merge:`444`). By `Kyle
   Brindley`_.
 
+Documentation
+=============
+- Adjust PDF documentation build's font size of code-blocks to fit 120 character width files (:issue:`445`). By `Kyle
+  Brindley`_.
+
 ******************
 0.6.1 (2022-01-06)
 ******************
