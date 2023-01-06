@@ -9,16 +9,23 @@ import pytest
 import numpy
 import xarray
 
-from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator
+from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
 
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
 
+    # TODO: Remove when the public generate method is removed
     @pytest.mark.unittest
     def test_generate(self):
-        with patch('waves.parameter_generators._ParameterGenerator._generate') as private_generate:
-            NoQuantilesGenerator({}).generate()
-        private_generate.assert_called()
+        kwargs = {"thing1": 1}
+        with patch('waves.parameter_generators.LatinHypercube._validate'), \
+            patch('waves.parameter_generators.LatinHypercube._generate') as private_generate:
+            LatinHypercube({}).generate(kwargs={"thing1": 1})
+        private_generate.assert_called_with(**kwargs)
+        with patch('waves.parameter_generators.SobolSequence._validate'), \
+            patch('waves.parameter_generators.SobolSequence._generate') as private_generate:
+            SobolSequence({}).generate(kwargs={"thing1": 1})
+        private_generate.assert_called_with(**kwargs)
 
     @pytest.mark.unittest
     def test_output_file_conflict(self):
