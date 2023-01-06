@@ -61,9 +61,9 @@ def plot(input_files, output_file, group_path, selection_dict,
     correlation_coefficients.to_csv(output_csv)
 
     # Sobol sensitivity
-    stress = combined_data.sel(selection_dict)['S'].transpose().to_numpy()
+    stress = combined_data.sel(selection_dict)['S'].to_numpy()
     print(stress)
-    sobol_sensitivity = SALib.analyze.sobol.analyze(parameter_schema["problem"], correlation_data)
+    sobol_sensitivity = SALib.analyze.sobol.analyze(parameter_schema["problem"], stress)
     with open("sobol_sensitivity.yaml") as sobol_output:
         yaml.safe_dump(sobol_sensitivity, sobol_output)
 
