@@ -6,6 +6,7 @@ import itertools
 import copy
 import hashlib
 import numbers
+import warnings
 
 import yaml
 import numpy
@@ -55,7 +56,7 @@ class _ParameterGenerator(ABC):
     """
     def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
                  set_name_template=default_set_name_template, previous_parameter_study=None,
-                 overwrite=False, dryrun=False, debug=False, write_meta=False):
+                 overwrite=False, dryrun=False, debug=False, write_meta=False, **kwargs):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
@@ -99,6 +100,7 @@ class _ParameterGenerator(ABC):
         self.parameter_study_meta_file = self.output_directory / parameter_study_meta_file
 
         self._validate()
+        self._generate(**kwargs)
 
     @abstractmethod
     def _validate(self):
@@ -118,8 +120,11 @@ class _ParameterGenerator(ABC):
         pass
 
     @abstractmethod
-    def generate(self):
+    def _generate(self, **kwargs):
         """Generate the parameter study definition
+
+        All implemented class method should accept kwargs as ``_generate(self, **kwargs)``. The ABC class accepts, but
+        does not use any ``kwargs``.
 
         Must set the class attributes:
 
@@ -156,6 +161,18 @@ class _ParameterGenerator(ABC):
         self._create_parameter_study()
         if self.previous_parameter_study:
             self._merge_parameter_studies()
+
+    def generate(self, kwargs={}):
+        """Deprecated public generate method.
+
+        The parameter study is now generated as part of class instantiation. This method has been kept for backward
+        compatibility. Method will overwrite the class instantiated study with a new parameter study each time it is
+        called instead of duplicating or merging the parameter study.
+        """
+        warning_message = "Parameter studies are now generated during class instantiation. " \
+                          "The generate method is deprecated and will be removed in a future release."
+        warnings.warn(warning_message, DeprecationWarning)
+        self._generate(**kwargs)
 
     def write(self):
         """Write the parameter study to STDOUT or an output file.
@@ -305,7 +322,7 @@ class _ParameterGenerator(ABC):
     def _create_parameter_set_names(self):
         """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
 
-        Creates the class attribute ``self._parameter_set_names`` required to populate the ``generate()`` method's
+        Creates the class attribute ``self._parameter_set_names`` required to populate the ``_generate()`` method's
         parameter study Xarray dataset object.
 
         requires:
@@ -520,7 +537,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
-    def generate(self, kwargs=None):
+    def _generate(self, **kwargs):
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
@@ -531,7 +548,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         sampler = getattr(scipy.stats.qmc, self.sampler_class)(**kwargs)
         self._quantiles = sampler.random(set_count)
         self._generate_distribution_samples(set_count, parameter_count)
-        super().generate()
+        super()._generate()
 
     def _generate_parameter_distributions(self):
         """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
@@ -602,7 +619,6 @@ class CartesianProduct(_ParameterGenerator):
        ...     'parameter_2': ['a', 'b']
        ... }
        >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
-       >>> parameter_generator.generate()
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 1, parameter_set_hash: 4)
@@ -628,10 +644,10 @@ class CartesianProduct(_ParameterGenerator):
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
 
-    def generate(self):
-        """Generate the Cartesian Product parameter sets. Must be called directly to generate the parameter study."""
+    def _generate(self, **kwargs):
+        """Generate the Cartesian Product parameter sets."""
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
-        super().generate()
+        super()._generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
@@ -672,6 +688,12 @@ class LatinHypercube(_ScipyGenerator):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param kwargs: Any additional keyword arguments are passed through to the sampler method
+
+    To produce consistent Latin Hypercubes on repeat instantiations, the ``**kwargs`` must include ``{'seed': <int>}``.
+    See the `scipy Latin Hypercube`_ ``scipy.stats.qmc.LatinHypercube`` class documentation for details The ``d``
+    keyword argument is internally managed and will be overwritten to match the number of parameters defined in the
+    parameter schema.
 
     Example
 
@@ -693,7 +715,6 @@ class LatinHypercube(_ScipyGenerator):
        ...     }
        ... }
        >>> parameter_generator = waves.parameter_generators.LatinHypercube(parameter_schema)
-       >>> parameter_generator.generate()
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_set_hash: 4)
@@ -710,20 +731,12 @@ class LatinHypercube(_ScipyGenerator):
     """
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.sampler_class = "LatinHypercube"
+        super().__init__(*args, **kwargs)
 
-    def generate(self, kwargs=None):
-        """Generate the Latin Hypercube parameter sets. Must be called directly to generate the parameter study.
-
-        To produce consistent Latin Hypercubes on repeat instantiations, the ``kwargs`` must include
-        ``{'seed': <int>}``. See the `scipy Latin Hypercube`_ documentation for details.
-
-        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.LatinHypercube`` LatinHypercube class. The
-            ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
-            defined in the parameter schema.
-        """
-        super().generate(kwargs=kwargs)
+    def _generate(self, **kwargs):
+        """Generate the Latin Hypercube parameter sets"""
+        super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
@@ -769,7 +782,6 @@ class CustomStudy(_ParameterGenerator):
        ...     parameter_samples = numpy.array([[1.0, 'a', 5], [2.0, 'b', 6]], dtype=object),
        ...     parameter_names = numpy.array(['height', 'prefix', 'index']))
        >>> parameter_generator = waves.parameter_generators.CustomStudy(parameter_schema)
-       >>> parameter_generator.generate()
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 1, parameter_set_hash: 2)
@@ -795,7 +807,7 @@ class CustomStudy(_ParameterGenerator):
             raise KeyError('parameter_schema must contain the key: parameter_names')
         if 'parameter_samples' not in self.parameter_schema:
             raise KeyError('parameter_schema must contain the key: parameter_samples')
-        # Always convert to numpy array for shape check and generate()
+        # Always convert to numpy array for shape check and _generate()
         else:
             self.parameter_schema['parameter_samples'] = numpy.array(self.parameter_schema['parameter_samples'],
                                                                      dtype=object)
@@ -804,12 +816,11 @@ class CustomStudy(_ParameterGenerator):
                              "where N is the number of parameters.")
         return
 
-    def generate(self):
-        """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
-        generate the parameter study."""
+    def _generate(self, **kwargs):
+        """Generate the parameter study dataset from the user provided parameter array."""
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self.parameter_schema['parameter_samples']
-        super().generate()
+        super()._generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
@@ -859,6 +870,12 @@ class SobolSequence(_ScipyGenerator):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param kwargs: Any additional keyword arguments are passed through to the sampler method
+
+    To produce consistent Sobol sequences on repeat instantiations, the ``**kwargs`` must include either
+    ``scramble=False`` or ``seed=<int>``. See the `scipy Sobol`_ ``scipy.stats.qmc.Sobol`` class documentation for
+    details.  The ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
+    defined in the parameter schema.
 
     Example
 
@@ -879,7 +896,6 @@ class SobolSequence(_ScipyGenerator):
        ...     }
        ... }
        >>> parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
-       >>> parameter_generator.generate(kwargs={'scramble': False})
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_sets: 4)
@@ -893,8 +909,8 @@ class SobolSequence(_ScipyGenerator):
     """
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.sampler_class = "Sobol"
+        super().__init__(*args, **kwargs)
 
     def _validate(self):
         """Validate the Sobol sequence parameter schema. Executed by class initiation."""
@@ -909,18 +925,9 @@ class SobolSequence(_ScipyGenerator):
             raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
         super()._validate()
 
-    def generate(self, kwargs=None):
-        """Generate the parameter study dataset from the user provided parameter array. Must be called directly to
-        generate the parameter study.
-
-        To produce consistent Sobol sequences on repeat instantiations, the ``kwargs`` must include either
-        ``{'scramble': False}`` or ``{'seed': <int>}``. See the `scipy Sobol`_ documentation for details.
-
-        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc.Sobol`` Sobol class. The ``d`` keyword
-            argument is internally managed and will be overwritten to match the number of parameters defined in the
-            parameter schema.
-        """
-        super().generate(kwargs=kwargs)
+    def _generate(self, **kwargs):
+        """Generate the parameter study dataset from the user provided parameter array"""
+        super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
@@ -970,6 +977,10 @@ class ScipySampler(_ScipyGenerator):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param kwargs: Any additional keyword arguments are passed through to the sampler method
+
+    Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The ``d`` keyword argument is internally managed
+    and will be overwritten to match the number of parameters defined in the parameter schema.
 
     Example
 
@@ -991,7 +1002,6 @@ class ScipySampler(_ScipyGenerator):
        ...     }
        ... }
        >>> parameter_generator = waves.parameter_generators.ScipySampler("LatinHypercube", parameter_schema)
-       >>> parameter_generator.generate()
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 2, parameter_set_hash: 4)
@@ -1008,18 +1018,12 @@ class ScipySampler(_ScipyGenerator):
     """
 
     def __init__(self, sampler_class, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.sampler_class = sampler_class
+        super().__init__(*args, **kwargs)
 
-    def generate(self, kwargs=None):
-        """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets. Must be called directly to generate the
-        parameter study.
-
-        :param dict kwargs: Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The
-            ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
-            defined in the parameter schema.
-        """
-        super().generate(kwargs=kwargs)
+    def _generate(self, **kwargs):
+        """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets"""
+        super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API
@@ -1065,6 +1069,9 @@ class SALibSampler(_ParameterGenerator, ABC):
     :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+    :param kwargs: Any additional keyword arguments are passed through to the sampler method
+
+    Keyword arguments for the `SALib.sample`_ ``sampler_class`` ``sample`` method.
 
     *Example*
 
@@ -1080,7 +1087,6 @@ class SALibSampler(_ParameterGenerator, ABC):
        ...     }
        ... }
        >>> parameter_generator = waves.parameter_generators.SALibSampler("sobol", parameter_schema)
-       >>> parameter_generator.generate()
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
        Dimensions:             (data_type: 1, parameter_sets: 32)
@@ -1168,12 +1174,8 @@ class SALibSampler(_ParameterGenerator, ABC):
         """Construct the parameter names from a distribution parameter schema"""
         self._parameter_names = self.parameter_schema["problem"]["names"]
 
-    def generate(self, kwargs=None):
-        """Generate the `SALib.sample`_ ``sampler_class`` parameter sets. Must be called directly to generate the
-        parameter study.
-
-        :param dict kwargs: Keyword arguments for the `SALib.sample`_ ``sampler_class`` ``sample`` method.
-        """
+    def _generate(self, **kwargs):
+        """Generate the `SALib.sample`_ ``sampler_class`` parameter sets"""
         N = self.parameter_schema['N']
         parameter_count = len(self._parameter_names)
         common_override_kwargs = {}
@@ -1186,7 +1188,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         sampler = getattr(SALib.sample, self.sampler_class)
         problem = self.parameter_schema["problem"]
         self._samples = sampler.sample(problem, N, **kwargs)
-        super().generate()
+        super()._generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
         # Get the ABC docstring into each paramter generator API

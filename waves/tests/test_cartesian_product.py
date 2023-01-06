@@ -71,7 +71,6 @@ class TestCartesianProduct:
                              ids=generate_io.keys())
     def test_generate(self, parameter_schema, expected_array):
         TestGenerate = CartesianProduct(parameter_schema)
-        TestGenerate.generate()
         generate_array = TestGenerate._samples
         assert numpy.all(generate_array == expected_array)
         # Verify that the parameter set name creation method was called
@@ -106,10 +105,8 @@ class TestCartesianProduct:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, expected_array):
         TestMerge1 = CartesianProduct(first_schema)
-        TestMerge1.generate()
         with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
             TestMerge2 = CartesianProduct(second_schema, previous_parameter_study='dummy_string')
-            TestMerge2.generate()
         generate_array = TestMerge2._samples
         assert numpy.all(generate_array == expected_array)
         # Check for consistent hash-parameter set relationships
@@ -184,7 +181,6 @@ class TestCartesianProduct:
                                              output_file_template=output_file_template,
                                              output_file=output_file,
                                              output_file_type=output_type)
-            TestWriteYAML.generate()
             TestWriteYAML.write()
             stdout_write.assert_not_called()
             xarray_to_netcdf.assert_not_called()
