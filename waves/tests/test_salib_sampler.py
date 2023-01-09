@@ -71,6 +71,17 @@ class TestSALibSampler:
             },
             pytest.raises(ValueError)
         ),
+        "morris: one parameter": (
+            "morris",
+            {"N": 4,
+             "problem": {
+                 "num_vars": 1,
+                 "names": ["parameter_1",],
+                 "bounds": [[-1, 1]]
+             }
+            },
+            pytest.raises(ValueError)
+        ),
         "missing N": (
             "latin",
             {"problem": {"num_vars": 4, "names": ["p1"], "bounds": [[-1, 1]]}},
