@@ -1045,6 +1045,7 @@ class SALibSampler(_ParameterGenerator, ABC):
     * finite_diff
     * latin
     * sobol
+    * morris
 
     .. warning::
 

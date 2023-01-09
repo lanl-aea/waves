@@ -10,9 +10,10 @@ Changelog
 
 New Features
 ============
-- Add the SALib ``fast_sampler`` to the list of tested samplers for parameter generation (:merge:`444`). By `Kyle
+- Add SALib ``fast_sampler`` to the list of tested samplers for parameter generation (:merge:`444`). By `Kyle
   Brindley`_.
-- Add the SALib ``finite_diff`` to the list of tested samplers (:merge:`447`). By `Kyle Brindley`_.
+- Add SALib ``finite_diff`` to the list of tested samplers (:merge:`447`). By `Kyle Brindley`_.
+- Add SALib ``morris`` to the list of tested samplers (:issue:`386`, :merge:`443`). By `Kyle Brindley`_.
 
 Documentation
 =============
