@@ -12,10 +12,11 @@ New Features
 ============
 - Add the SALib ``fast_sampler`` to the list of tested samplers for parameter generation (:merge:`444`). By `Kyle
   Brindley`_.
+- Add the SALib ``finite_diff`` to the list of tested samplers (:merge:`447`). By `Kyle Brindley`_.
 
 Documentation
 =============
-- Adjust PDF documentation build's font size of code-blocks to fit 120 character width files (:merge:`446` :merge:`446`). By `Kyle
+- Adjust PDF documentation build's font size of code-blocks to fit 120 character width files (:merge:`445` :merge:`446`). By `Kyle
   Brindley`_.
 
 ******************

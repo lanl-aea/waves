@@ -1041,6 +1041,7 @@ class SALibSampler(_ParameterGenerator, ABC):
     the number of simulations. The following samplers are tested for parameter study shape and merge behavior:
 
     * fast_sampler
+    * finite_diff
     * latin
     * sobol
 
