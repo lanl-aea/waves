@@ -71,6 +71,17 @@ class TestSALibSampler:
             },
             pytest.raises(ValueError)
         ),
+        "morris: one parameter": (
+            "morris",
+            {"N": 4,
+             "problem": {
+                 "num_vars": 1,
+                 "names": ["parameter_1",],
+                 "bounds": [[-1, 1]]
+             }
+            },
+            pytest.raises(ValueError)
+        ),
         "missing N": (
             "latin",
             {"problem": {"num_vars": 4, "names": ["p1"], "bounds": [[-1, 1]]}},
@@ -173,12 +184,17 @@ class TestSALibSampler:
             number_of_simulations = N * num_vars
         elif sampler == "finite_diff":
             number_of_simulations = N * (num_vars + 1)
+        elif sampler == "morris":
+            # Default interface settings
+            number_of_simulations = int((num_vars + 1) * N)
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
     def _big_enough(self, sampler, N, num_vars):
         if sampler == "sobol" and num_vars < 2:
             return False
-        if sampler == "fast_sampler" and N < 64:
+        elif sampler == "fast_sampler" and N < 64:
+            return False
+        elif sampler == "morris" and num_vars < 2:
             return False
         return True
 
@@ -194,12 +210,16 @@ class TestSALibSampler:
             # Unit tests
             TestGenerate = SALibSampler(sampler, parameter_schema, **kwargs)
             samples_array = TestGenerate._samples
+            assert samples_array.shape[1] == parameter_schema["problem"]["num_vars"]
             # Verify that the parameter set name creation method was called
-            expected_set_names = self._expected_set_names(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"])
-            assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
-            # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
-            parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
-            assert numpy.all(parameter_set_names == expected_set_names)
+            # Morris produces inconsistent set counts depending on seed. Rely on the variable count shape check above.
+            if not sampler == "morris":
+                expected_set_names = self._expected_set_names(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"])
+                assert samples_array.shape[0] == len(expected_set_names)
+                assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
+                # Check that the parameter set names are correctly populated in the parameter study Xarray Dataset
+                parameter_set_names = list(TestGenerate.parameter_study[_set_coordinate_key])
+                assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
         "new sets, 5(8)x2": (
