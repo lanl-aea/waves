@@ -181,8 +181,10 @@ class TestSALibSampler:
     def _big_enough(self, sampler, N, num_vars):
         if sampler == "sobol" and num_vars < 2:
             return False
-        if sampler == "fast_sampler" and N < 64:
+        elif sampler == "fast_sampler" and N < 64:
             return False
+        elif sampler == "morris" and num_vars < 2:
+            return
         return True
 
     @pytest.mark.unittest
@@ -193,8 +195,6 @@ class TestSALibSampler:
         for sampler in _supported_salib_samplers:
             # TODO: find a better way to separate the sampler types and their test parameterization
             if not self._big_enough(sampler, parameter_schema["N"], parameter_schema["problem"]["num_vars"]):
-                return
-            elif sampler == "morris" and parameter_schema["problem"]["num_vars"] < 2:
                 return
             # Unit tests
             TestGenerate = SALibSampler(sampler, parameter_schema, **kwargs)
