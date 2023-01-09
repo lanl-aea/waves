@@ -1049,6 +1049,12 @@ class SALibSampler(_ParameterGenerator, ABC):
 
     .. warning::
 
+       For small numbers of parameters, some SALib generators produce duplicate parameter sets. These duplicate sets are
+       removed during parameter study generation. This may cause the SALib analyze method(s) to raise errors related to
+       the expected parameter set count.
+
+    .. warning::
+
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
        parameters and the parameter study samples.
