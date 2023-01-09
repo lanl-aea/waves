@@ -32,12 +32,6 @@ class TestParameterGenerator:
         mock_warning.assert_called_once()
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize("sets", range(1, 4))
-    def test_duplicate_removal(self, sets):
-        duplicateRemoval = DuplicatesGenerator({})
-        assert duplicateRemoval._samples.shape == (1, 1)
-
-    @pytest.mark.unittest
     def test_output_file_conflict(self):
         with pytest.raises(RuntimeError):
             try:
@@ -347,18 +341,6 @@ class NoQuantilesGenerator(_ParameterGenerator):
         self._samples = numpy.ones((sets, parameter_count))
         for row in range(sets):
             self._samples[row, :] = self._samples[row, :]*row
-        super()._generate()
-
-
-class DuplicatesGenerator(_ParameterGenerator):
-
-    def _validate(self):
-        self._parameter_names = ['parameter_1']
-
-    def _generate(self, sets=1):
-        """Generate float samples for all parameters. Value matches parameter set index"""
-        parameter_count = len(self._parameter_names)
-        self._samples = numpy.ones((sets, parameter_count))
         super()._generate()
 
 

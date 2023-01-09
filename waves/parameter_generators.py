@@ -156,7 +156,6 @@ class _ParameterGenerator(ABC):
            # Work performed by common ABC methods
            super().generate()
         """
-        self._samples = numpy.unique(self._samples, axis=0)
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
@@ -1200,6 +1199,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         sampler = getattr(SALib.sample, self.sampler_class)
         problem = self.parameter_schema["problem"]
         self._samples = sampler.sample(problem, N, **kwargs)
+        self._samples = numpy.unique(self._samples, axis=0)
         super()._generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
