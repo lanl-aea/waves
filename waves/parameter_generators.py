@@ -156,6 +156,7 @@ class _ParameterGenerator(ABC):
            # Work performed by common ABC methods
            super().generate()
         """
+        self._samples = numpy.unique(self._samples, axis=0)
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
