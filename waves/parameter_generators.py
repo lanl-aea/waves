@@ -1104,7 +1104,7 @@ class SALibSampler(_ParameterGenerator, ABC):
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
-    :raises ValueError: If the `SALib sobol`_ sampler is specified and there are fewer than 2 parameters.
+    :raises ValueError: If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
     :raises AttributeError:
 
         * ``N`` is not a key of ``parameter_schema``
