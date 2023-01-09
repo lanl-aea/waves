@@ -171,6 +171,8 @@ class TestSALibSampler:
             number_of_simulations = N * (2 * num_vars + 2)
         elif sampler == "fast_sampler":
             number_of_simulations = N * num_vars
+        elif sampler == "finite_diff":
+            number_of_simulations = N * (num_vars + 1)
         return [f"parameter_set{num}" for num in range(number_of_simulations)]
 
     def _big_enough(self, sampler, N, num_vars):
