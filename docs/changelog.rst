@@ -19,6 +19,8 @@ Documentation
 =============
 - Adjust PDF documentation build's font size of code-blocks to fit 120 character width files (:merge:`445` :merge:`446`). By `Kyle
   Brindley`_.
+- Remove unnecessary nested f-string and SCons variable replacement syntax from post-processing tasks in core tutorials
+  (:issue:`377`, :merge:`448`). By `Kyle Brindley`_.
 
 ******************
 0.6.1 (2022-01-06)
