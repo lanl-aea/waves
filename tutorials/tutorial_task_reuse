@@ -94,7 +94,7 @@ regression_file = python_source_abspath / "single_element_compression_cartesian_
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
-script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += " --output-file  ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 script_options += f" --csv-regression-file {regression_file}"
 workflow.extend(env.PythonScript(

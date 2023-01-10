@@ -152,7 +152,7 @@ plot_name = "stress_strain_comparison"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
-script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += " --output-file  ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
@@ -162,7 +162,7 @@ workflow.extend(env.PythonScript(
 plot_name = "mesh_convergence_stress"
 selection_dict = python_source_abspath / f"{plot_name}.yaml"
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
-script_options += f" --output-file ${{TARGET.file}} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
+script_options += " --output-file  ${TARGET.file} --x-units 'mm' --y-units 'MPa' --x-var 'global_seed' --y-var 'S'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 script_options += f" --selection-dict {selection_dict}"
 workflow.extend(env.PythonScript(
