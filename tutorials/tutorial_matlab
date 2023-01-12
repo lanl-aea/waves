@@ -30,7 +30,7 @@ workflow = []
 
 # Matlab
 matlab_script = matlab_source_abspath / "hello_world.m"
-script_options = "world"
+script_options = "'world'"
 workflow.extend(env.MatlabScript(
     target=[f"{script_options}.txt"],
     source=[str(matlab_script)],
@@ -42,5 +42,5 @@ workflow.extend(env.MatlabScript(
 env.Alias(workflow_name, workflow)
 
 if not env["unconditional_build"] and not env["matlab"]:
-    print(f"Program "matlab" was not found in construction environment. Ignoring "{workflow_name}" target(s)")
+    print(f"Program 'matlab' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore([".", workflow_name], workflow)
