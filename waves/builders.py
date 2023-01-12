@@ -478,7 +478,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     return target_list
 
 
-def _python_script_target_emitter(target, source, env):
+def _python_script_emitter(target, source, env):
     """Appends the python_script builder target list with the builder managed targets
 
     Appends ``target[0]``.stdout to the ``target`` list. The python_script Builder requires at least one target.
