@@ -479,26 +479,6 @@ def test_build_odb_extract(target, source, env, calls):
     mock_odb_extract.assert_has_calls(calls)
 
 
-source_file = fs.File("dummy.ext")
-sbatch_emitter_input = {
-    "one target": (["target.out"],
-                   [source_file],
-                   ["target.out", "target.stdout"]),
-    "subdirectory": (["set1/target.out"],
-                    [source_file],
-                    ["set1/target.out", "set1/target.stdout"])
-}
-
-
-@pytest.mark.unittest
-@pytest.mark.parametrize("target, source, expected",
-                         sbatch_emitter_input.values(),
-                         ids=sbatch_emitter_input.keys())
-def test_sbatch_emitter(target, source, expected):
-    target, source = builders._sbatch_emitter(target, source, None)
-    assert target == expected
-
-
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 sbatch_input = {

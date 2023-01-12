@@ -478,26 +478,6 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     return target_list
 
 
-def _python_script_emitter(target, source, env):
-    """Appends the python_script builder target list with the builder managed targets
-
-    Appends ``target[0]``.stdout to the ``target`` list. The python_script Builder requires at least one target.
-
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
-
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-
-    :return: target, source
-    :rtype: tuple with two lists
-    """
-    return _first_target_emitter(target, source, env)
-
-
 def python_script(post_action=[]):
     """Python script SCons builder
 
@@ -541,28 +521,8 @@ def python_script(post_action=[]):
     action.extend(_construct_post_action_list(post_action))
     python_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_python_script_emitter)
+        emitter=_first_target_emitter)
     return python_builder
-
-
-def _matlab_script_emitter(target, source, env):
-    """Appends the matlab_script builder target list with the builder managed targets
-
-    Appends ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires at least one target.
-
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
-
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-
-    :return: target, source
-    :rtype: tuple with two lists
-    """
-    return _first_target_emitter(target, source, env)
 
 
 def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
@@ -603,7 +563,7 @@ def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
     action.extend(_construct_post_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_matlab_script_emitter)
+        emitter=_first_target_emitter)
     return matlab_builder
 
 
@@ -752,21 +712,6 @@ def _build_odb_extract(target, source, env):
     return None
 
 
-def _sbatch_emitter(target, source, env):
-    """Appends the sbatch builder target list with the builder managed targets
-
-    Appends ``target[0]``.stdout to the ``target`` list. The sbatch Builder requires at least one target.
-
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-
-    :return: target, source
-    :rtype: tuple with two lists
-    """
-    return _first_target_emitter(target, source, env)
-
-
 def sbatch(sbatch_program="sbatch", post_action=[]):
     """SLURM sbatch SCons builder
 
@@ -805,5 +750,5 @@ def sbatch(sbatch_program="sbatch", post_action=[]):
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_sbatch_emitter)
+        emitter=_first_target_emitter)
     return sbatch_builder
