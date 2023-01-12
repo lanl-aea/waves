@@ -594,7 +594,7 @@ def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
        cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
     """
     # TODO: Figure out how to match the copy location to the first target when the first target has a leading subdirectory
-    action = [SCons.Defaults.Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}", symlink)),
+    action = [SCons.Defaults.Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}", symlink),
               f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch \"${{SOURCE.filebase}}(" \
                 f"${{script_options}})\" > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
