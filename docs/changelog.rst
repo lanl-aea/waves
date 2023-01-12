@@ -23,6 +23,11 @@ Documentation
 - Remove unnecessary nested f-string and SCons variable replacement syntax from post-processing tasks in core tutorials
   (:issue:`377`, :merge:`448`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Reduce builer emitter code duplication with a common "first target" emitter (:issue:`388`, :merge:`449`). By `Kyle
+  Brindley`_.
+
 ******************
 0.6.1 (2022-01-06)
 ******************
