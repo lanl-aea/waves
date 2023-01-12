@@ -14,6 +14,7 @@ New Features
   Brindley`_.
 - Add SALib ``finite_diff`` to the list of tested samplers (:merge:`447`). By `Kyle Brindley`_.
 - Add SALib ``morris`` to the list of tested samplers (:issue:`386`, :merge:`443`). By `Kyle Brindley`_.
+- Add an experimental draft builder for Matlab scripts (:issue:`388`, :merge:`449`). By `Kyle Brindley`_.
 
 Documentation
 =============
