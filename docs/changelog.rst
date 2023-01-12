@@ -14,6 +14,7 @@ New Features
   Brindley`_.
 - Add SALib ``finite_diff`` to the list of tested samplers (:merge:`447`). By `Kyle Brindley`_.
 - Add SALib ``morris`` to the list of tested samplers (:issue:`386`, :merge:`443`). By `Kyle Brindley`_.
+- Add an experimental draft builder for Matlab scripts (:issue:`388`, :merge:`449`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -21,6 +22,11 @@ Documentation
   Brindley`_.
 - Remove unnecessary nested f-string and SCons variable replacement syntax from post-processing tasks in core tutorials
   (:issue:`377`, :merge:`448`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Reduce builder emitter code duplication with a common "first target" emitter (:issue:`388`, :merge:`449`). By `Kyle
+  Brindley`_.
 
 ******************
 0.6.1 (2022-01-06)

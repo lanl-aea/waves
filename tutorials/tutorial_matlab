@@ -1,0 +1,46 @@
+#! /usr/bin/env python
+"""Single element compression workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``matlab_source_abspath`` - String absolute path to the EABM's Matlab journal files
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``matlab`` - String path for the Matlab executable
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env")
+
+# Set project-wide paths with os-agnostic path separators
+matlab_source_abspath = pathlib.Path(env["matlab_source_abspath"])
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+output_name = "world"
+
+# Comment used in tutorial code snippets: marker-1
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
+# Matlab
+matlab_script = matlab_source_abspath / "hello_world.m"
+script_options = f"'{output_name}'"
+workflow.extend(env.MatlabScript(
+    target=[f"{output_name}.txt"],
+    source=[str(matlab_script)],
+    script_options=script_options))
+
+# Comment used in tutorial code snippets: marker-3
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+
+if not env["unconditional_build"] and not env["matlab"]:
+    print(f"Program 'matlab' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)

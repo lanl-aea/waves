@@ -325,8 +325,8 @@ python_emitter_input = {
 @pytest.mark.parametrize("target, source, expected",
                          python_emitter_input.values(),
                          ids=python_emitter_input.keys())
-def test_python_script_emitter(target, source, expected):
-    target, source = builders._python_script_emitter(target, source, None)
+def test_first_target_emitter(target, source, expected):
+    target, source = builders._first_target_emitter(target, source, None)
     assert target == expected
 
 
@@ -347,9 +347,33 @@ python_script_input = {
 def test_python_script(post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": builders.python_script(post_action)})
-    nodes = env.PythonScript(target=target_list, source=["python_script.py"], journal_options="")
+    nodes = env.PythonScript(target=target_list, source=["python_script.py"], script_options="")
     expected_string = 'cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} ' \
                       '> ${TARGET.filebase}.stdout 2>&1'
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+matlab_script_input = {
+    "default behavior": ("matlab", [], 2, 1, ["matlab_script1.out"]),
+    "different command": ("/different/matlab", [], 2, 1, ["matlab_script2.out"]),
+    "post action": ("matlab", ["post action"], 2, 1, ["matlab_script3.out"])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("matlab_program, post_action, node_count, action_count, target_list",
+                         matlab_script_input.values(),
+                         ids=matlab_script_input.keys())
+@pytest.mark.unittest
+def test_matlab_script(matlab_program, post_action, node_count, action_count, target_list):
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action, symlink=False)})
+    nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
+    expected_string = 'Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}")\n' \
+                      f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
+                      '"${SOURCE.filebase}(${script_options})\" > ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
@@ -453,26 +477,6 @@ def test_build_odb_extract(target, source, env, calls):
     with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract:
         builders._build_odb_extract(target, source, env)
     mock_odb_extract.assert_has_calls(calls)
-
-
-source_file = fs.File("dummy.ext")
-sbatch_emitter_input = {
-    "one target": (["target.out"],
-                   [source_file],
-                   ["target.out", "target.stdout"]),
-    "subdirectory": (["set1/target.out"],
-                    [source_file],
-                    ["set1/target.out", "set1/target.stdout"])
-}
-
-
-@pytest.mark.unittest
-@pytest.mark.parametrize("target, source, expected",
-                         sbatch_emitter_input.values(),
-                         ids=sbatch_emitter_input.keys())
-def test_sbatch_emitter(target, source, expected):
-    target, source = builders._sbatch_emitter(target, source, None)
-    assert target == expected
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
