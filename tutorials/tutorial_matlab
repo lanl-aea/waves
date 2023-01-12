@@ -21,7 +21,7 @@ matlab_source_abspath = pathlib.Path(env["matlab_source_abspath"])
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
-model = "single_element"
+output_name = "world"
 
 # Comment used in tutorial code snippets: marker-1
 
@@ -30,9 +30,9 @@ workflow = []
 
 # Matlab
 matlab_script = matlab_source_abspath / "hello_world.m"
-script_options = "'world'"
+script_options = f"'{output_name}'"
 workflow.extend(env.MatlabScript(
-    target=[f"{script_options}.txt"],
+    target=[f"{output_name}.txt"],
     source=[str(matlab_script)],
     script_options=script_options))
 
