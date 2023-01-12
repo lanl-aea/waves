@@ -115,6 +115,7 @@ test:
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
     - scons . --sconstruct=tutorial_00_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_matlab_SConstruct --keep-going --unconditional_build
     - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_argparse_types_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build
