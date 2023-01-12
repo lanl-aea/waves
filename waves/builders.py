@@ -566,7 +566,11 @@ def _matlab_script_emitter(target, source, env):
 
 
 def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
-    """Matlab script SCons builder **experimental and subject to change**
+    """Matlab script SCons builder
+
+    .. warning::
+
+       Experimental implementation is subject to change
 
     This builder requires that the Matlab script to execute is provided by absolute path and the first source in the
     list. The builder returned by this function accepts all SCons Builder arguments and adds the ``script_options`` and
