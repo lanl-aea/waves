@@ -229,6 +229,35 @@ def _construct_post_action_list(post_action):
     return new_actions
 
 
+def _first_target_emitter(target, source, env):
+    """Appends the target list with the builder managed targets
+
+    Appends ``target[0]``.stdout to the ``target`` list. The associated Builder requires at least one target.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``target[0].stdout``.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
+    first_target = pathlib.Path(str(target[0]))
+    try:
+        build_subdirectory = first_target.parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path(".")
+    suffixes = [_stdout_extension]
+    for suffix in suffixes:
+        emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
+        target.append(str(emitter_target))
+    return target, source
+
+
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
@@ -449,7 +478,7 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     return target_list
 
 
-def _python_script_emitter(target, source, env):
+def _python_script_target_emitter(target, source, env):
     """Appends the python_script builder target list with the builder managed targets
 
     Appends ``target[0]``.stdout to the ``target`` list. The python_script Builder requires at least one target.
@@ -466,16 +495,7 @@ def _python_script_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    first_target = pathlib.Path(str(target[0]))
-    try:
-        build_subdirectory = first_target.parents[0]
-    except IndexError as err:
-        build_subdirectory = pathlib.Path(".")
-    suffixes = [_stdout_extension]
-    for suffix in suffixes:
-        emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
-        target.append(str(emitter_target))
-    return target, source
+    return _first_target_emitter(target, source, env)
 
 
 def python_script(post_action=[]):
@@ -523,6 +543,65 @@ def python_script(post_action=[]):
         action=action,
         emitter=_python_script_emitter)
     return python_builder
+
+
+def _matlab_script_emitter(target, source, env):
+    """Appends the matlab_script builder target list with the builder managed targets
+
+    Appends ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires at least one target.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``target[0].stdout``.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
+    return _first_target_emitter(target, source, env)
+
+
+def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
+    """Matlab script SCons builder **experimental and subject to change**
+
+    This builder requires that the Matlab script to execute is provided by absolute path and the first source in the
+    list. The builder returned by this function accepts all SCons Builder arguments and adds the ``script_options`` and
+    ``matlab_options`` string arguments.
+
+    First the Matlab script is copied to the first target file's build directory and then the script is executed
+    locally.
+
+    At least one target must be specified. The first target determines the working directory for the builder's action,
+    as shown in the action code snippet below. The action changes the working directory to the first target's parent
+    directory prior to executing the python script.
+
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout to the
+    ``target`` list.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``my_target.stdout``.
+
+    .. code-block::
+       :caption: Matlab script builder action
+
+       Copy("${TARGET.dir.abspath}", ${SOURCE.abspath}, False)
+       cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
+    """
+    # TODO: Figure out how to match the copy location to the first target when the first target has a leading subdirectory
+    action = [SCons.Defaults.Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}", symlink)),
+              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch \"${{SOURCE.filebase}}(" \
+                f"${{script_options}})\" > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+    action.extend(_construct_post_action_list(post_action))
+    matlab_builder = SCons.Builder.Builder(
+        action=action,
+        emitter=_matlab_script_emitter)
+    return matlab_builder
 
 
 def conda_environment():
