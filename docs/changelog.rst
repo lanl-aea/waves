@@ -25,8 +25,8 @@ Documentation
 
 Internal Changes
 ================
-- Reduce builder emitter code duplication with a common "first target" emitter (:issue:`388`, :merge:`449`). By `Kyle
-  Brindley`_.
+- Reduce builder emitter code duplication with a common "first target" emitter (:issue:`388`, :merge:`449`,
+  :merge:`450`). By `Kyle Brindley`_.
 
 ******************
 0.6.1 (2022-01-06)
