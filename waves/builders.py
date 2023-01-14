@@ -229,7 +229,7 @@ def _construct_post_action_list(post_action):
     return new_actions
 
 
-def _first_target_emitter(target, source, env):
+def _first_target_emitter(target, source, env, suffixes=[_stdout_extension]):
     """Appends the target list with the builder managed targets
 
     Appends ``target[0]``.stdout to the ``target`` list. The associated Builder requires at least one target.
@@ -251,7 +251,6 @@ def _first_target_emitter(target, source, env):
         build_subdirectory = first_target.parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path(".")
-    suffixes = [_stdout_extension]
     for suffix in suffixes:
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
@@ -276,16 +275,8 @@ def _abaqus_journal_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    first_target = pathlib.Path(str(target[0]))
-    try:
-        build_subdirectory = first_target.parents[0]
-    except IndexError as err:
-        build_subdirectory = pathlib.Path(".")
     suffixes = [_stdout_extension, _abaqus_environment_extension]
-    for suffix in suffixes:
-        emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
-        target.append(str(emitter_target))
-    return target, source
+    return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
 def abaqus_journal(abaqus_program="abaqus", post_action=[]):

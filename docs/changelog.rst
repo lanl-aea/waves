@@ -5,7 +5,11 @@ Changelog
 #########
 
 ******************
-0.6.2 (unreleased)
+0.6.3 (unreleased)
+******************
+
+******************
+0.6.2 (2023-01-13)
 ******************
 
 New Features
@@ -25,11 +29,11 @@ Documentation
 
 Internal Changes
 ================
-- Reduce builder emitter code duplication with a common "first target" emitter (:issue:`388`, :merge:`449`). By `Kyle
-  Brindley`_.
+- Reduce builder emitter code duplication with a common "first target" emitter (:issue:`388`, :merge:`449`,
+  :merge:`450`). By `Kyle Brindley`_.
 
 ******************
-0.6.1 (2022-01-06)
+0.6.1 (2023-01-06)
 ******************
 
 New Features
@@ -45,7 +49,7 @@ Internal Changes
   with a deprecation warning (:issue:`381`, :merge:`440`). By `Kyle Brindley`_.
 
 *******************
-0.5.11 (2022-01-05)
+0.5.11 (2023-01-05)
 *******************
 
 New Features
