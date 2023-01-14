@@ -1040,8 +1040,17 @@ class SALibSampler(_ParameterGenerator, ABC):
     Samplers must use the ``N`` sample count argument. Note that in `SALib.sample`_ ``N`` is *not* always equivalent to
     the number of simulations. The following samplers are tested for parameter study shape and merge behavior:
 
+    * fast_sampler
+    * finite_diff
     * latin
     * sobol
+    * morris
+
+    .. warning::
+
+       For small numbers of parameters, some SALib generators produce duplicate parameter sets. These duplicate sets are
+       removed during parameter study generation. This may cause the SALib analyze method(s) to raise errors related to
+       the expected parameter set count.
 
     .. warning::
 
@@ -1101,7 +1110,7 @@ class SALibSampler(_ParameterGenerator, ABC):
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
-    :raises ValueError: If the `SALib sobol`_ sampler is specified and there are fewer than 2 parameters.
+    :raises ValueError: If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
     :raises AttributeError:
 
         * ``N`` is not a key of ``parameter_schema``
@@ -1154,6 +1163,8 @@ class SALibSampler(_ParameterGenerator, ABC):
         parameter_count = len(self._parameter_names)
         if self.sampler_class == "sobol" and parameter_count < 2:
             raise ValueError("The SALib Sobol sampler requires at least two parameters")
+        if self.sampler_class == "morris" and parameter_count < 2:
+            raise ValueError("The SALib Morris sampler requires at least two parameters")
 
     def _sampler_overrides(self, override_kwargs={}):
         """Provide sampler specific kwarg override dictionaries
@@ -1188,6 +1199,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         sampler = getattr(SALib.sample, self.sampler_class)
         problem = self.parameter_schema["problem"]
         self._samples = sampler.sample(problem, N, **kwargs)
+        self._samples = numpy.unique(self._samples, axis=0)
         super()._generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
