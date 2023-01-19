@@ -12,6 +12,11 @@ Documentation
 =============
 - Add the BSD-3-Clause license and copyright notice (:issue:`389`, :merge:`452`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Add a Matlab environment file output to the experimental Matlab script builder and emitter (:issue:`390`,
+  :merge:`453`). By `Kyle Brindley`_.
+
 ******************
 0.6.2 (2023-01-13)
 ******************
