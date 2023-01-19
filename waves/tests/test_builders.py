@@ -310,8 +310,22 @@ def test_copy_substitute(source_list, expected_list):
     assert target_files == expected_list
 
 
+build_subdirectory_input = {
+    "no parent": ("target.ext", pathlib.Path(".")),
+    "one parent": ("set1/target.ext", pathlib.Path("set1"))
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("target, expected",
+                         build_subdirectory_input.values(),
+                         ids=build_subdirectory_input.keys())
+def test_build_subdirectory(target, expected):
+    assert builders._build_subdirectory(target) == expected
+
+
 source_file = fs.File("dummy.py")
-python_emitter_input = {
+first_target_emitter_input = {
     "one target": (["target.cub"],
                    [source_file],
                    ["target.cub", "target.stdout"]),
@@ -323,8 +337,8 @@ python_emitter_input = {
 
 @pytest.mark.unittest
 @pytest.mark.parametrize("target, source, expected",
-                         python_emitter_input.values(),
-                         ids=python_emitter_input.keys())
+                         first_target_emitter_input.values(),
+                         ids=first_target_emitter_input.keys())
 def test_first_target_emitter(target, source, expected):
     target, source = builders._first_target_emitter(target, source, None)
     assert target == expected
