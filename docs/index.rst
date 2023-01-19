@@ -56,6 +56,7 @@
    :caption: Help and Reference
    :maxdepth: 1
 
+   license
    citation
    internal_api
    devops

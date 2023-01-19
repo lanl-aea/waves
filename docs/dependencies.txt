@@ -4,7 +4,8 @@
 Dependencies
 ************
 
-The Python package dependencies are found in the project's ``environment.txt`` file. For convenience, the file is reproduced here
+The development environment dependencies are found in the project's ``environment.txt`` file. For convenience, the file
+is reproduced here
 
 .. literalinclude:: environment.txt
    :linenos:
@@ -12,7 +13,7 @@ The Python package dependencies are found in the project's ``environment.txt`` f
 In addition to the Conda environment managed packages, this project also requires a separately managed installation of
 TeXLive to build the PDF documentation.
 
-The :term:`EABM` in this project, `WAVES-EABM`_, also requires:
+The tutorials and :term:`modsim` repository template, `WAVES-EABM`_, in this project also require:
 
 #. Abaqus
 #. Cubit

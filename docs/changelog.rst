@@ -8,6 +8,10 @@ Changelog
 0.6.3 (unreleased)
 ******************
 
+Documentation
+=============
+- Add the BSD-3-Clause license and copyright notice (:issue:`389`, :merge:`452`). By `Kyle Brindley`_.
+
 ******************
 0.6.2 (2023-01-13)
 ******************
