@@ -311,8 +311,9 @@ def test_copy_substitute(source_list, expected_list):
 
 
 build_subdirectory_input = {
-    "no parent": ("target.ext", pathlib.Path(".")),
-    "one parent": ("set1/target.ext", pathlib.Path("set1"))
+    "no target": ([], pathlib.Path(".")),
+    "no parent": (["target.ext"], pathlib.Path(".")),
+    "one parent": (["set1/target.ext"], pathlib.Path("set1"))
 }
 
 

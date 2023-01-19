@@ -233,13 +233,12 @@ def _construct_post_action_list(post_action):
 def _build_subdirectory(target):
     """Return the build subdirectory of the target file
 
-    :param str target: The target file string
+    :param list target: The target file list of strings
     :return: build directory
     :rtype: pathlib.Path
     """
-    target = pathlib.Path(target)
     try:
-        build_subdirectory = target.parents[0]
+        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
     except IndexError as err:
         build_subdirectory = pathlib.Path(".")
     return build_subdirectory
@@ -262,8 +261,8 @@ def _first_target_emitter(target, source, env, suffixes=[_stdout_extension]):
     :return: target, source
     :rtype: tuple with two lists
     """
+    build_subdirectory = _build_subdirectory(target)
     first_target = pathlib.Path(str(target[0]))
-    build_subdirectory = _build_subdirectory(first_target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
@@ -354,10 +353,7 @@ def _abaqus_solver_emitter(target, source, env):
         env["job_name"] = pathlib.Path(source[0].path).stem
     builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
     suffixes = builder_suffixes + _abaqus_solver_common_suffixes
-    try:
-        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
-    except IndexError as err:
-        build_subdirectory = pathlib.Path(".")
+    build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
         target.append(str(emitter_target))
@@ -658,10 +654,7 @@ def _abaqus_extract_emitter(target, source, env):
     """
     odb_file = pathlib.Path(source[0].path).name
     odb_file = pathlib.Path(odb_file)
-    try:
-        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
-    except IndexError as err:
-        build_subdirectory = pathlib.Path(".")
+    build_subdirectory = _build_subdirectory(target)
     if not target or pathlib.Path(str(target[0])).suffix != ".h5":
         target.insert(0, str(build_subdirectory / odb_file.with_suffix(".h5")))
     first_target = pathlib.Path(str(target[0]))
