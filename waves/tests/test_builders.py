@@ -310,8 +310,23 @@ def test_copy_substitute(source_list, expected_list):
     assert target_files == expected_list
 
 
+build_subdirectory_input = {
+    "no target": ([], pathlib.Path(".")),
+    "no parent": (["target.ext"], pathlib.Path(".")),
+    "one parent": (["set1/target.ext"], pathlib.Path("set1"))
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("target, expected",
+                         build_subdirectory_input.values(),
+                         ids=build_subdirectory_input.keys())
+def test_build_subdirectory(target, expected):
+    assert builders._build_subdirectory(target) == expected
+
+
 source_file = fs.File("dummy.py")
-python_emitter_input = {
+first_target_emitter_input = {
     "one target": (["target.cub"],
                    [source_file],
                    ["target.cub", "target.stdout"]),
@@ -323,8 +338,8 @@ python_emitter_input = {
 
 @pytest.mark.unittest
 @pytest.mark.parametrize("target, source, expected",
-                         python_emitter_input.values(),
-                         ids=python_emitter_input.keys())
+                         first_target_emitter_input.values(),
+                         ids=first_target_emitter_input.keys())
 def test_first_target_emitter(target, source, expected):
     target, source = builders._first_target_emitter(target, source, None)
     assert target == expected
@@ -353,12 +368,32 @@ def test_python_script(post_action, node_count, action_count, target_list):
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
+source_file = fs.File("dummy.m")
+matlab_emitter_input = {
+    "one target": (["target.matlab"],
+                   [source_file],
+                   ["target.matlab", "target.stdout", "target.matlab.env"]),
+    "subdirectory": (["set1/dummy.matlab"],
+                    [source_file],
+                    ["set1/dummy.matlab", "set1/dummy.stdout", "set1/dummy.matlab.env"])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("target, source, expected",
+                         matlab_emitter_input.values(),
+                         ids=matlab_emitter_input.keys())
+def test_matlab_script_emitter(target, source, expected):
+    target, source = builders._matlab_script_emitter(target, source, None)
+    assert target == expected
+
+
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 matlab_script_input = {
-    "default behavior": ("matlab", [], 2, 1, ["matlab_script1.out"]),
-    "different command": ("/different/matlab", [], 2, 1, ["matlab_script2.out"]),
-    "post action": ("matlab", ["post action"], 2, 1, ["matlab_script3.out"])
+    "default behavior": ("matlab", [], 3, 1, ["matlab_script1.out"]),
+    "different command": ("/different/matlab", [], 3, 1, ["matlab_script2.out"]),
+    "post action": ("matlab", ["post action"], 3, 1, ["matlab_script3.out"])
 }
 
 
@@ -372,8 +407,12 @@ def test_matlab_script(matlab_program, post_action, node_count, action_count, ta
     env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action, symlink=False)})
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
     expected_string = 'Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}")\n' \
+                      f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch "[fList, pList] = ' \
+                          'matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); display(fList); ' \
+                          'display(struct2table(pList, \'AsArray\', true)); exit;" > ${TARGET.filebase}.matlab.env ' \
+                          '2>&1\n' \
                       f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
-                      '"${SOURCE.filebase}(${script_options})\" > ${TARGET.filebase}.stdout 2>&1'
+                          '"${SOURCE.filebase}(${script_options})\" > ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 

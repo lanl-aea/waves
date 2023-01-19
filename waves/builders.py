@@ -14,6 +14,7 @@ from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
+from waves._settings import _matlab_environment_extension
 
 
 def project_help_message(env=None, append=True):
@@ -229,6 +230,20 @@ def _construct_post_action_list(post_action):
     return new_actions
 
 
+def _build_subdirectory(target):
+    """Return the build subdirectory of the first target file
+
+    :param list target: The target file list of strings
+    :return: build directory
+    :rtype: pathlib.Path
+    """
+    try:
+        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path(".")
+    return build_subdirectory
+
+
 def _first_target_emitter(target, source, env, suffixes=[_stdout_extension]):
     """Appends the target list with the builder managed targets
 
@@ -246,11 +261,8 @@ def _first_target_emitter(target, source, env, suffixes=[_stdout_extension]):
     :return: target, source
     :rtype: tuple with two lists
     """
+    build_subdirectory = _build_subdirectory(target)
     first_target = pathlib.Path(str(target[0]))
-    try:
-        build_subdirectory = first_target.parents[0]
-    except IndexError as err:
-        build_subdirectory = pathlib.Path(".")
     for suffix in suffixes:
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
@@ -341,10 +353,7 @@ def _abaqus_solver_emitter(target, source, env):
         env["job_name"] = pathlib.Path(source[0].path).stem
     builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
     suffixes = builder_suffixes + _abaqus_solver_common_suffixes
-    try:
-        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
-    except IndexError as err:
-        build_subdirectory = pathlib.Path(".")
+    build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
         target.append(str(emitter_target))
@@ -516,6 +525,29 @@ def python_script(post_action=[]):
     return python_builder
 
 
+def _matlab_script_emitter(target, source, env):
+    """Appends the matlab_script builder target list with the builder managed targets
+
+    Appends ``target[0]``.stdout and ``target[0]``.matlab.env to the ``target`` list. The matlab_script Builder requires
+    at least one target. The build tree copy of the Matlab script is not added to the target list to avoid multiply
+    defined targets when the script is used more than once in the same build directory.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``target[0].stdout``.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
+    suffixes = [_stdout_extension, _matlab_environment_extension]
+    return _first_target_emitter(target, source, env, suffixes=suffixes)
+
+
 def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
     """Matlab script SCons builder
 
@@ -549,12 +581,16 @@ def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
        cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
     """
     action = [SCons.Defaults.Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}", symlink),
+              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
+                  "\"[fList, pList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
+                  "display(fList); display(struct2table(pList, 'AsArray', true)); exit;\" " \
+                  f"> ${{TARGET.filebase}}{_matlab_environment_extension} 2>&1",
               f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch \"${{SOURCE.filebase}}(" \
-                f"${{script_options}})\" > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                  f"${{script_options}})\" > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter)
+        emitter=_matlab_script_emitter)
     return matlab_builder
 
 
@@ -618,10 +654,7 @@ def _abaqus_extract_emitter(target, source, env):
     """
     odb_file = pathlib.Path(source[0].path).name
     odb_file = pathlib.Path(odb_file)
-    try:
-        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
-    except IndexError as err:
-        build_subdirectory = pathlib.Path(".")
+    build_subdirectory = _build_subdirectory(target)
     if not target or pathlib.Path(str(target[0])).suffix != ".h5":
         target.insert(0, str(build_subdirectory / odb_file.with_suffix(".h5")))
     first_target = pathlib.Path(str(target[0]))
