@@ -12,7 +12,7 @@ Documentation
 =============
 - Add the BSD-3-Clause license and copyright notice (:issue:`389`, :merge:`452`). By `Kyle Brindley`_.
 - Add installation and interim installation (pending conda-forge deployment) instructions. Reduce
-  computer-server-specific language. By `Kyle Brindley`_.
+  compute-server-specific language. By `Kyle Brindley`_.
 
 Internal Changes
 ================
