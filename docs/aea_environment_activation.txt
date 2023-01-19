@@ -1,0 +1,22 @@
+Do one of the following to activate a Conda environment for the tutorials: 1) use one of the AEA server environments or 2) create a local environment.
+
+AEA server environments
+=======================
+
+A shared `AEA Compute environment`_ is maintained on AEA servers. See the `AEA Compute environment`_ documentation for
+the official use and activation instructions. A minimal activation description is included below for convenience.
+
+1. Add the AEA modulefiles directory
+
+   .. code-block::
+
+      $ module use /projects/aea_compute/modulefiles
+
+2. Load the shared environment modulefile
+
+   .. code-block::
+
+      $ module load aea-release
+
+Local environment
+=================
