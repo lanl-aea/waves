@@ -356,9 +356,9 @@ def test_python_script(post_action, node_count, action_count, target_list):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 matlab_script_input = {
-    "default behavior": ("matlab", [], 2, 1, ["matlab_script1.out"]),
-    "different command": ("/different/matlab", [], 2, 1, ["matlab_script2.out"]),
-    "post action": ("matlab", ["post action"], 2, 1, ["matlab_script3.out"])
+    "default behavior": ("matlab", [], 3, 1, ["matlab_script1.out"]),
+    "different command": ("/different/matlab", [], 3, 1, ["matlab_script2.out"]),
+    "post action": ("matlab", ["post action"], 3, 1, ["matlab_script3.out"])
 }
 
 
@@ -372,8 +372,12 @@ def test_matlab_script(matlab_program, post_action, node_count, action_count, ta
     env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action, symlink=False)})
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
     expected_string = 'Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}")\n' \
+                      f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch "[fList, pList] = ' \
+                          'matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); display(fList); ' \
+                          'display(struct2table(pList, \'AsArray\', true)); exit;" > ${TARGET.filebase}.matlab.env ' \
+                          '2>&1\n' \
                       f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
-                      '"${SOURCE.filebase}(${script_options})\" > ${TARGET.filebase}.stdout 2>&1'
+                          '"${SOURCE.filebase}(${script_options})\" > ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
