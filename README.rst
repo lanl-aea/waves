@@ -66,9 +66,15 @@ Installation
 
 .. installation-start-do-not-remove
 
-This project is intended for deployment to ``conda-forge``. Until then, please contact the development team for a copy
-of the most recent build. From an active Conda environment, the project can then be installed directly from the package
-file as
+`WAVES`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
+`Conda environment management`_ documentation for more details about using `Conda`_.
+
+.. code-block::
+
+   $ conda install waves --channel conda-forge
+
+Project deployment to ``conda-forge`` is incomplete. Until then, please contact the development team for a copy of the
+most recent build. From an active Conda environment, the project can then be installed directly from the package file as
 
 .. code-block::
 
