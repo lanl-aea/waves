@@ -231,7 +231,7 @@ def _construct_post_action_list(post_action):
 
 
 def _build_subdirectory(target):
-    """Return the build subdirectory of the target file
+    """Return the build subdirectory of the first target file
 
     :param list target: The target file list of strings
     :return: build directory
