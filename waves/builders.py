@@ -14,6 +14,7 @@ from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
+from waves._settings import _matlab_environment_extension
 
 
 def project_help_message(env=None, append=True):
@@ -549,8 +550,12 @@ def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
        cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
     """
     action = [SCons.Defaults.Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}", symlink),
+              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
+                  "\"[fList, pList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
+                  "display(fList); display(struct2table(pList, 'AsArray', true)); exit;\" " \
+                  f"> ${{TARGET.filebase}}{_matlab_environment_extension} 2>&1",
               f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch \"${{SOURCE.filebase}}(" \
-                f"${{script_options}})\" > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                  f"${{script_options}})\" > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
