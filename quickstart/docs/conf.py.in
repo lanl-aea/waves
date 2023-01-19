@@ -10,7 +10,7 @@ VERSION = "@version@"
 project_dir = pathlib.Path("@project_dir@").resolve()
 author_latex = r"@author_latex@"
 
-# Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
+# Mock modules unavailable in the Conda environment, e.g. Abaqus Python modules, and large imports not required by
 # the documentation build, e.g. cubit.
 mock_modules = ["abaqus", "abaqusConstants", "mesh", "cubit", "scipy", "scipy.stats", "xarray", "pyyaml", "h5py",
                 "numpy", "matplotlib", "matplotlib.pyplot", "waves", "pandas"]
