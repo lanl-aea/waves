@@ -26,8 +26,8 @@ author_manpage = author_manpage.rstrip(', ')
 sys.path.insert(0, str(project_dir))
 sys.path.insert(0, str(tutorials_dir))
 
-# Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
-# the documentation build, e.g. cubit.
+# Mock modules unavailable in the Conda development environment, e.g. Abaqus Python modules, and large imports not
+# required by the documentation build, e.g. cubit.
 mock_modules = ['abaqus', 'abaqusConstants', 'mesh', 'cubit', 'SALib', 'scipy', 'scipy.stats', 'xarray', 'pyyaml',
                 'h5py', 'numpy', 'matplotlib', 'matplotlib.pyplot', 'pandas']
 for mod_name in mock_modules:
