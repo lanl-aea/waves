@@ -353,6 +353,26 @@ def test_python_script(post_action, node_count, action_count, target_list):
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
+source_file = fs.File("dummy.m")
+matlab_emitter_input = {
+    "one target": (["target.matlab"],
+                   [source_file],
+                   ["target.matlab", "target.stdout", "target.matlab.env"]),
+    "subdirectory": (["set1/dummy.matlab"],
+                    [source_file],
+                    ["set1/dummy.matlab", "set1/dummy.stdout", "set1/dummy.matlab.env"])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("target, source, expected",
+                         matlab_emitter_input.values(),
+                         ids=matlab_emitter_input.keys())
+def test_matlab_script_emitter(target, source, expected):
+    target, source = builders._matlab_script_emitter(target, source, None)
+    assert target == expected
+
+
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 matlab_script_input = {
