@@ -230,6 +230,21 @@ def _construct_post_action_list(post_action):
     return new_actions
 
 
+def _build_subdirectory(target):
+    """Return the build subdirectory of the target file
+
+    :param str target: The target file string
+    :return: build directory
+    :rtype: pathlib.Path
+    """
+    target = pathlib.Path(target)
+    try:
+        build_subdirectory = target.parents[0]
+    except IndexError as err:
+        build_subdirectory = pathlib.Path(".")
+    return build_subdirectory
+
+
 def _first_target_emitter(target, source, env, suffixes=[_stdout_extension]):
     """Appends the target list with the builder managed targets
 
@@ -248,10 +263,7 @@ def _first_target_emitter(target, source, env, suffixes=[_stdout_extension]):
     :rtype: tuple with two lists
     """
     first_target = pathlib.Path(str(target[0]))
-    try:
-        build_subdirectory = first_target.parents[0]
-    except IndexError as err:
-        build_subdirectory = pathlib.Path(".")
+    build_subdirectory = _build_subdirectory(first_target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
         target.append(str(emitter_target))
