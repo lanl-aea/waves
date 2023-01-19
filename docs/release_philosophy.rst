@@ -6,30 +6,17 @@ Release Philosophy
 
 This section discusses topics related to |project| releases and version numbering.
 
-**********************
-Release and Deployment
-**********************
+.. only:: aea
 
-The |project| project is built and installed as a Conda package in the `AEA Compute environment`_ available on sstelmo,
-sstbigbird, and any local linux machines with home and project drives mapped from the W-13 NFS server. These are
-Anaconda Python 3 environments with installed packages required for W-13 software development and engineering analysis.
-There are two versions of the W-13 Python Environments:
+   .. include:: aea_release_discussion.txt
 
-1) aea-release
-2) aea-beta
-
-The aea-release environment contains the deployed production release versions of W-13 software projects, e.g. WAVES and
-EQMU, as tested against the installed Python packages. The aea-beta environment contains the deployed developer release
-of W-13 software projects. While the deployed projects in aea-beta have been unit and integration tested, the aea-beta
-environment may include updated or new Python modules that result in less stable behavior. The aea-beta environment is
-used to test W-13 software projects against an updated Python environment before releasing the new environment.
-
+***************
 Version Numbers
-===============
+***************
 
 The |project| project follows the `PEP-440`_ standard for version numbering. The
 production release version number uses the three component ("major.minor.micro")
-scheme. The developer (a.k.a. dev or aea-beta) version number follows the production 
+scheme. The developer (a.k.a. dev) version number follows the production
 release number with an appended ".dev" local version number. The version numbers
 correspond to git tags in the `upstream repository`_ which point to a static
 release of the |project| project.
@@ -42,13 +29,13 @@ information contains the most recent git tag ("major.minor.micro+dev") followed
 by the number of commits since the last production release and a short hash.
 
 Major Number
-------------
+============
 
 The major number is expected to increment infrequently. After the first major release, it is recommended that the major
 version number only increments for major breaking changes.
 
 Minor Number
-------------
+============
 
 The minor number is updated for the following reasons:
 
@@ -61,7 +48,7 @@ dedicated release commit. Until the first major release, minor version changes m
 recommended that all minor version changes are announced to the user community prior to release.
 
 Micro Number
-------------
+============
 
 The micro number is automatically incremented after any merge from the
 development (dev) branch into the production (main) branch. The micro version
@@ -76,16 +63,15 @@ with the user community.
 
 .. _releasebranchreq:
 
+***************************
 Release Branch Requirements
-===========================
+***************************
 
-All production releases require a release branch.
-Releases correspond to a variety of bug fixes and features that characterize
-the release, as documented in :ref:`changelog`.
+All production releases require a release branch. Releases correspond to a variety of bug fixes and features that
+characterize the release, as documented in :ref:`changelog`.
 
-The following steps will trigger a micro bump. Major and minor version bumps
-require a manual Git tag update for the otherwise automated ``setuptools_scm``
-SCM version.
+The following steps will trigger a micro bump. Major and minor version bumps require a manual Git tag update for the
+otherwise automated ``setuptools_scm`` SCM version.
 
 Steps needed for a release include:
 
