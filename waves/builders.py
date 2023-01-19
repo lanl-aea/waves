@@ -517,6 +517,28 @@ def python_script(post_action=[]):
     return python_builder
 
 
+def _matlab_script_emitter(target, source, env):
+    """Appends the matlab_script builder target list with the builder managed targets
+
+    Appends ``target[0]``.stdout and ``target[0]``.matlab.env to the ``target`` list. The matlab_script Builder
+    requires at least one target.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``target[0].stdout``.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
+    suffixes = [_stdout_extension, _matlab_environment_extension]
+    return _first_target_emitter(target, source, env, suffixes=suffixes)
+
+
 def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
     """Matlab script SCons builder
 
@@ -559,7 +581,7 @@ def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
     action.extend(_construct_post_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter)
+        emitter=_matlab_script_emitter)
     return matlab_builder
 
 
