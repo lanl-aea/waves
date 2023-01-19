@@ -58,6 +58,7 @@ documentation_file_list = [
     'scons_tutorial_environment.txt',
     'scons_tutorial_introduction.txt',
     'targets.txt',
+    'installation.rst',
     'tutorial_introduction.rst',
     'tutorial_quickstart.rst',
     'tutorial_core.rst',

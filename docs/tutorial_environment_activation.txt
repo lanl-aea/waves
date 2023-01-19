@@ -9,8 +9,11 @@
 
    .. warning::
    
-      |project| is not yet deployed to conda-forge. Users will need to build a local copy and install separately. Local
-      build and install instructions pending.
+      |project| is not yet deployed to conda-forge. Users will need to request or build a local copy and install separately.
+
+      .. include:: README.txt
+         :start-after: installation-start-do-not-remove
+         :end-before: installation-end-do-not-remove
 
 .. only:: aea
 
