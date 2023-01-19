@@ -191,43 +191,49 @@ for file_path in tutorial_files_list:
 
 sphinx_options = '-W'
 aea_tag = "-t aea"
+html_directory = "html"
+html_target = Dir(html_directory)
 html = env.Command(
-    target=[Dir('html')],
+    target=[html_target],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}html ${{tags}}",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{html_directory} ${{tags}}",
     sphinx_options=sphinx_options,
     tags=aea_tag)
-env.Clean(html, Dir('html'))
+env.Clean(html, html_target)
 env.AlwaysBuild(html)
-alias_list.extend(env.Alias('html', html))
+alias_list.extend(env.Alias(html_directory, html))
 
+latex_directory = "latex"
+latex_target = Dir(latex_directory)
 latexpdf = env.Command(
-    target=[Dir('latex')],
+    target=[latex_target],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}}",
     tags=aea_tag)
-env.Clean(latexpdf, Dir('latex'))
+env.Clean(latexpdf, latex_target)
 env.AlwaysBuild(latexpdf)
 alias_list.extend(env.Alias('latexpdf', latexpdf))
 
+man_directory = "man"
+man_target = Dir(man_directory)
 man = env.Command(
-    target=[Dir('man')],
+    target=[man_target],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}man ${{tags}}",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{man_directory} ${{tags}}",
     sphinx_options=sphinx_options,
     tags="-t man")
-env.Clean(man, Dir('man'))
+env.Clean(man, man_target)
 env.AlwaysBuild(man)
-alias_list.extend(env.Alias('man', man))
+alias_list.extend(env.Alias(man_directory, man))
 
 # Collector alias to build all documentation
 alias_list.extend(env.Alias('documentation', html + latexpdf + man))
 
 if not env['unconditional_build'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
-    Ignore(['.', 'html', 'html'], html)
-    Ignore(['.', 'latex', 'latexpdf'], latexpdf)
-    Ignore(['.', 'man', 'man'], man)
+    Ignore(['.', html_directory, 'html'], html)
+    Ignore(['.', latex_directory, 'latexpdf'], latexpdf)
+    Ignore(['.', man_directory, 'man'], man)
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')
