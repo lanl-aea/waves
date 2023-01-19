@@ -1,0 +1,4 @@
+.. warning::
+
+   The `AEA Compute environment`_ ``aea-{release,beta}`` does not yet support ``scipy>=1.7.0`` :issue:`278`. This
+   tutorial can only be completed in a user-created environment. `WAVES`_ is available on the `AEA Conda channel`_.

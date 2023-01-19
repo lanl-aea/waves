@@ -74,6 +74,7 @@ documentation_file_list = [
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_07_latin_hypercube_waves.rst',
     'tutorial_07_sobol_sequence_waves.rst',
+    'scipy_warning.txt',
     'tutorial_extend_study_waves.rst',
     'tutorial_08_data_extraction_waves.rst',
     'tutorial_09_post_processing_waves.rst',
@@ -189,7 +190,7 @@ aea_tag = "-t aea"
 html = env.Command(
     target=[Dir('html')],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}html ${tags}",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}html ${{tags}}",
     sphinx_options=sphinx_options,
     tags=aea_tag)
 env.Clean(html, Dir('html'))
@@ -199,7 +200,7 @@ alias_list.extend(env.Alias('html', html))
 latexpdf = env.Command(
     target=[Dir('latex')],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${tags}",
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}}",
     tags=aea_tag)
 env.Clean(latexpdf, Dir('latex'))
 env.AlwaysBuild(latexpdf)
@@ -208,7 +209,7 @@ alias_list.extend(env.Alias('latexpdf', latexpdf))
 man = env.Command(
     target=[Dir('man')],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}man ${tags}",
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}man ${{tags}}",
     sphinx_options=sphinx_options,
     tags="-t man")
 env.Clean(man, Dir('man'))
