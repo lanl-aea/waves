@@ -216,6 +216,9 @@ CI configuration file. The current command may be found as
    $ mkdir ${output_folder}
    $ VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
 
+A second recipe that bundles the GitHub linked documentation is found in ``waves/recipe-github`` and can be built
+similarly by replacing ``recipe`` with ``recipe-github`` in the above command.
+
 This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
 `SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
 installed with `Scons`_ in the environment and can be opened from the command line as ``man scons`` in the `AEA Compute
