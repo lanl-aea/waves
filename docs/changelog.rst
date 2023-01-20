@@ -19,6 +19,8 @@ Documentation
 Internal Changes
 ================
 - Fix the man page build/ignore alias (:merge:`458`). By `Kyle Brindley`_.
+- Full depth GitHub-Pages checkout to guarantee version tags in the documentation build (:merge:`461`). By `Kyle
+  Brindley`_.
 
 ******************
 0.6.3 (2023-01-20)
