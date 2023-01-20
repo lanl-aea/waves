@@ -8,6 +8,7 @@
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://lanl.github.io/waves/index.html
 .. _WAVES repository: https://github.com/lanl/waves
+.. _WAVES releases: https://github.com/lanl/waves/releases/
 .. _WAVES-EABM: https://github.com/lanl/waves/tree/main/quickstart
 .. _WAVES-EABM documentation: https://lanl.github.io/waves/waves-eabm/index.html
 
@@ -81,8 +82,9 @@ Installation
 
    $ conda install waves --channel conda-forge
 
-Project deployment to ``conda-forge`` is incomplete. Until then, please contact the development team for a copy of the
-most recent build. From an active Conda environment, the project can then be installed directly from the package file as
+Project deployment to ``conda-forge`` is incomplete. Until then, please download a copy of the Conda package from the
+`WAVES releases`_ or contact the development team for a copy of the most recent build. From an active Conda environment,
+the project can then be installed directly from the package file as
 
 .. code-block::
 
@@ -215,6 +217,9 @@ CI configuration file. The current command may be found as
    $ output_folder='conda-build-artifacts'
    $ mkdir ${output_folder}
    $ VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+
+A second recipe that bundles the GitHub linked documentation is found in ``waves/recipe-github`` and can be built
+similarly by replacing ``recipe`` with ``recipe-github`` in the above command.
 
 This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
 `SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
