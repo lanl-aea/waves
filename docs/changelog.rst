@@ -5,8 +5,20 @@ Changelog
 #########
 
 ******************
-0.6.4 (unreleased)
+0.6.5 (unreleased)
 ******************
+
+******************
+0.6.4 (2023-01-20)
+******************
+
+Documentation
+=============
+- Add GitHub.com Pages workflow (:merge:`459`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Fix the man page build/ignore alias (:merge:`458`). By `Kyle Brindley`_.
 
 ******************
 0.6.3 (2023-01-20)
