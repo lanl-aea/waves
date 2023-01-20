@@ -31,6 +31,7 @@
    :maxdepth: 1
    :caption: User Manual
 
+   installation
    tutorial_introduction
    tutorial_quickstart
    tutorial_core
@@ -56,6 +57,7 @@
    :caption: Help and Reference
    :maxdepth: 1
 
+   license
    citation
    internal_api
    devops

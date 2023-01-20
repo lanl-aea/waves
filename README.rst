@@ -33,7 +33,7 @@ Description
 
 .. project-description-start-do-not-remove
 
-`WAVES`_ is a computational engineering workflow tool that integrates parametric studies with traditional software build systems.
+`WAVES`_ (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with traditional software build systems.
 
 In addition to the parametric study Python package and command line utilities, `WAVES`_ also includes `SCons`_ builders
 for common engineering software used by model simulation (modsim) repositories. The tutorial simulations in this project
@@ -61,6 +61,27 @@ like.
 * `WAVES-EABM`_ Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
 * `WAVES-EABM`_ Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
 
+Installation
+============
+
+.. installation-start-do-not-remove
+
+`WAVES`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
+`Conda environment management`_ documentation for more details about using `Conda`_.
+
+.. code-block::
+
+   $ conda install waves --channel conda-forge
+
+Project deployment to ``conda-forge`` is incomplete. Until then, please contact the development team for a copy of the
+most recent build. From an active Conda environment, the project can then be installed directly from the package file as
+
+.. code-block::
+
+   $ conda install waves-*.tar.bz2
+
+.. installation-end-do-not-remove
+
 Developers
 ==========
 
@@ -71,9 +92,19 @@ Developers
 * `Matthew Fister`_
 * `Scott Ouellette`_
 
-****************
-Repository Notes
-****************
+***************
+Developer Notes
+***************
+
+Clone the project
+=================
+
+.. code-block::
+
+   $ git clone ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git
+
+Symlinks
+========
 
 .. windows-notes-start-do-not-remove
 
@@ -109,14 +140,10 @@ they are encouraged to
 
 .. windows-notes-end-do-not-remove
 
-********************
-Activate Environment
-********************
-
 .. env-start-do-not-remove
 
-Local environments
-==================
+Local development environments
+==============================
 
 `SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
 `Conda environment management`_ documentation for more details about using `Conda`_.
@@ -135,10 +162,10 @@ Local environments
 
       $ conda activate waves-env
 
-AEA server environments
-=======================
+AEA CI server environment
+=========================
 
-A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA servers.
+A minimal development environment for the waves project Gitlab-CI jobs is maintained on AEA servers.
 
 1. Add the AEA modulefiles directory
 
@@ -154,11 +181,24 @@ A minimal environment for the waves project Gitlab-CI jobs is maintained on AEA 
 
 .. env-end-do-not-remove
 
-*****************
-Build Simulations
-*****************
+Build
+=====
 
 .. build-start-do-not-remove
+
+To build the Conda package activate the development environment and run the conda (or mamba) build command found in the
+CI configuration file. The current command may be found as
+
+.. code-block::
+
+   $ sed -n '/output_folder=/,/VERSION/p' .gitlab-ci.yml
+   ...
+
+.. code-block::
+
+   $ output_folder='conda-build-artifacts'
+   $ mkdir ${output_folder}
+   $ VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
 
 This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
 `SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
@@ -197,14 +237,7 @@ must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environmen
 "development" mode installs. For shared environments, the preferred solution is to prefix the following commands with
 ``PYTHONPATH=.. ``, where it is assumed that the ``PWD`` is the tutorial or quickstart root directory.
 
-- View project specific command line options
-
-  .. code-block::
-
-     $ scons -h
-     ...
-
-- View the default targets and target aliases
+- View project specific command line options, default targets, and aliases
 
   .. code-block::
 
@@ -237,9 +270,8 @@ must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environmen
 
 .. build-end-do-not-remove
 
-*******
-Testing
-*******
+Test
+====
 
 .. test-start-do-not-remove
 
@@ -271,9 +303,8 @@ The full list of continuous integration test targets can be found in the Gitlab-
 
 .. test-end-do-not-remove
 
-*************
 Documentation
-*************
+=============
 
 .. docs-start-do-not-remove
 

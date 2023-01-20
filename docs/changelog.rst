@@ -5,8 +5,28 @@ Changelog
 #########
 
 ******************
-0.6.3 (unreleased)
+0.6.4 (unreleased)
 ******************
+
+******************
+0.6.3 (2023-01-20)
+******************
+
+Documentation
+=============
+- Add the BSD-3-Clause license and copyright notice (:issue:`389`, :merge:`452`). By `Kyle Brindley`_.
+- Add installation and interim installation (pending conda-forge deployment) instructions. Reduce
+  compute-server-specific language. By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Use a common solution to finding the build subdirectory in all emitters (:issue:`390`, :merge:`453`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Add a Matlab environment file output to the experimental Matlab script builder and emitter (:issue:`390`,
+  :merge:`453`). By `Kyle Brindley`_.
 
 ******************
 0.6.2 (2023-01-13)

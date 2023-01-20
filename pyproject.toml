@@ -6,6 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "WAVES"
 description = "WAVES Analysis for Verified Engineering Simulations"
 readme = "README.rst"
+license = {text = "BSD-3-Clause"}
 classifiers = ["Programming Language:: Python :: 3"]
 dynamic = ["version"]
 

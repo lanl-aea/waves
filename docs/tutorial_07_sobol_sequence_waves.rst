@@ -9,10 +9,9 @@ Tutorial 07: Sobol Sequence
 .. TODO: remove the scipy minimum version note after requiring scipy>=1.7.0 in Conda package runtime requirements
 .. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
 
-.. warning::
+.. only:: aea
 
-   The `AEA Compute environment`_ ``aea-{release,beta}`` does not yet support ``scipy>=1.7.0`` :issue:`278`. This
-   tutorial can only be completed in a user-created environment. `WAVES`_ is available on the `AEA Conda channel`_.
+   .. include:: scipy_warning.txt
 
 **********
 References
