@@ -8,6 +8,7 @@
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://lanl.github.io/waves/index.html
 .. _WAVES repository: https://github.com/lanl/waves
+.. _WAVES releases: https://github.com/lanl/waves/releases/
 .. _WAVES-EABM: https://github.com/lanl/waves/tree/main/quickstart
 .. _WAVES-EABM documentation: https://lanl.github.io/waves/waves-eabm/index.html
 
@@ -81,8 +82,9 @@ Installation
 
    $ conda install waves --channel conda-forge
 
-Project deployment to ``conda-forge`` is incomplete. Until then, please contact the development team for a copy of the
-most recent build. From an active Conda environment, the project can then be installed directly from the package file as
+Project deployment to ``conda-forge`` is incomplete. Until then, please download a copy of the Conda package from the
+`WAVES releases`_ or contact the development team for a copy of the most recent build. From an active Conda environment,
+the project can then be installed directly from the package file as
 
 .. code-block::
 
