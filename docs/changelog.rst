@@ -8,6 +8,11 @@ Changelog
 0.6.5 (unreleased)
 ******************
 
+Documentation
+=============
+- Use the GitHub repository URL wherever possible as the officially published repository and documentation. Duplicate
+  URLs where necessary (:issue:`393`, :merge:`463`). By `Kyle Brindley`_.
+
 ******************
 0.6.4 (2023-01-20)
 ******************

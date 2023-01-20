@@ -4,6 +4,7 @@
    :end-before: target-end-do-not-remove
 
 .. General references
+.. _`AEA Compute environment`: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
 .. _`AEA Conda channel`: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea-release/aea_compute_environment.html#aea-conda-channel
 .. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
 .. _`AEA Gitlab group`: https://re-git.lanl.gov/aea
@@ -53,8 +54,8 @@
 .. _`Python`: https://www.python.org/
 .. _`Python lambda expression`: https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
 .. _`SALib.sample`: https://salib.readthedocs.io/en/latest/api.html#
-.. _`SALib sobol`: https://salib.readthedocs.io/en/latest/api.html#sobol-sensitivity-analysis 
-.. _`SALib morris`: https://salib.readthedocs.io/en/latest/api.html#method-of-morris 
+.. _`SALib sobol`: https://salib.readthedocs.io/en/latest/api.html#sobol-sensitivity-analysis
+.. _`SALib morris`: https://salib.readthedocs.io/en/latest/api.html#method-of-morris
 .. _`scipy Sobol`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.Sobol.html
 .. _`scipy Latin Hypercube`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.LatinHypercube.html
 .. _`scipy.stats`: https://docs.scipy.org/doc/scipy/reference/stats.html
@@ -98,10 +99,10 @@
 
 .. Project specific links
 .. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
-.. _`WAVES-EABM abaqus source files`: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/tutorials/eabm_package/abaqus
-.. _`WAVES-EABM environment file`: https://re-git.lanl.gov/aea/python-projects/waves/-/blob/dev/quickstart/environment.txt
+.. _`WAVES-EABM abaqus source files`: https://github.com/lanl/waves/tree/main/tutorials/eabm_package/abaqus
+.. _`WAVES-EABM environment file`: https://github.com/lanl/waves/blob/main/quickstart/environment.txt
 .. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves
-.. _`CITATION`: https://re-git.lanl.gov/aea/python-projects/waves/-/blob/dev/CITATION.bib
+.. _`CITATION`: https://github.com/lanl/waves/blob/main/CITATION.bib
 
 .. Abaqus reference links
 .. _`Abaqus *INCLUDE`: http://simulia.lanl.gov:8080/EstProdDocs2021/English/DSSIMULIA_Established.htm?show=SIMACAEKEYRefMap/simakey-r-include.htm
