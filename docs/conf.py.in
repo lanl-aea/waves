@@ -8,16 +8,16 @@ project_dir = pathlib.Path('@project_dir@').resolve()
 tutorials_dir = project_dir / pathlib.Path('@tutorials_dir@')
 
 # Name, Group, Email
-authors = [('Kyle Brindley', 'W-13', '<kbrindley@lanl.gov>'),
-           ('Prabhu S. Khalsa', 'W-13', '<pkhalsa@lanl.gov>'),
-           ('Thomas Roberts', 'W-13', '<tproberts@lanl.gov>'),
-           ('Sergio Cordova', 'W-13', '<sergioc@lanl.gov>'),
-           ('Matthew Fister', 'W-13', '<mwfister@lanl.gov>'),
-           ('Scott Ouellette', 'W-13', '<souellette@lanl.gov>')]
+authors = [('Kyle Brindley', '<kbrindley@lanl.gov>'),
+           ('Prabhu S. Khalsa', '<pkhalsa@lanl.gov>'),
+           ('Thomas Roberts', '<tproberts@lanl.gov>'),
+           ('Sergio Cordova', '<sergioc@lanl.gov>'),
+           ('Matthew Fister', '<mwfister@lanl.gov>'),
+           ('Scott Ouellette', '<souellette@lanl.gov>')]
 author_latex = ''
 author_manpage = ''
-for author, group, email in authors:
-    author_latex += f"{author}, {group} " + r'\and '
+for author, email in authors:
+    author_latex += f"{author} " + r'\and '
     author_manpage += f"{author} {email}, "
 author_latex = author_latex.rstrip(r'\and ')
 author_manpage = author_manpage.rstrip(', ')
@@ -26,8 +26,8 @@ author_manpage = author_manpage.rstrip(', ')
 sys.path.insert(0, str(project_dir))
 sys.path.insert(0, str(tutorials_dir))
 
-# Mock modules unavailable in the AEA Compute environment, e.g. Abaqus Python modules, and large imports not required by
-# the documentation build, e.g. cubit.
+# Mock modules unavailable in the Conda development environment, e.g. Abaqus Python modules, and large imports not
+# required by the documentation build, e.g. cubit.
 mock_modules = ['abaqus', 'abaqusConstants', 'mesh', 'cubit', 'SALib', 'scipy', 'scipy.stats', 'xarray', 'pyyaml',
                 'h5py', 'numpy', 'matplotlib', 'matplotlib.pyplot', 'pandas']
 for mod_name in mock_modules:

@@ -1,0 +1,13 @@
+The |project| project is built and installed as a Conda package in the `AEA Compute environment`_ available on sstelmo,
+sstbigbird, and any local linux machines with home and project drives mapped from the W-13 NFS server. These are
+Anaconda Python 3 environments with installed packages required for W-13 software development and engineering analysis.
+There are two versions of the W-13 Python Environments:
+
+1) aea-release
+2) aea-beta
+
+The aea-release environment contains the deployed production release versions of W-13 software projects, e.g. WAVES and
+EQMU, as tested against the installed Python packages. The aea-beta environment contains the deployed developer release
+of W-13 software projects. While the deployed projects in aea-beta have been unit and integration tested, the aea-beta
+environment may include updated or new Python modules that result in less stable behavior. The aea-beta environment is
+used to test W-13 software projects against an updated Python environment before releasing the new environment.

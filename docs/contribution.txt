@@ -2,7 +2,7 @@
 Contribution Guidelines
 ***********************
 
-W-13 python projects, including the |project| project, use the `Gitlab Flow`_ :cite:`gitlab` workflow model.
+The |project| project uses the `Gitlab Flow`_ :cite:`gitlab` workflow model.
 
 Git Commit Message
 ==================

@@ -51,12 +51,14 @@ documentation_file_list = [
     'project_brief.txt',
     'references.bib',
     'release_philosophy.rst',
+    'aea_release_discussion.txt',
     'scons_quickstart.rst',
     'scons_multiactiontask.rst',
     'scons_tutorial_directory.txt',
     'scons_tutorial_environment.txt',
     'scons_tutorial_introduction.txt',
     'targets.txt',
+    'installation.rst',
     'tutorial_introduction.rst',
     'tutorial_quickstart.rst',
     'tutorial_core.rst',
@@ -74,6 +76,7 @@ documentation_file_list = [
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_07_latin_hypercube_waves.rst',
     'tutorial_07_sobol_sequence_waves.rst',
+    'scipy_warning.txt',
     'tutorial_extend_study_waves.rst',
     'tutorial_08_data_extraction_waves.rst',
     'tutorial_09_post_processing_waves.rst',
@@ -87,6 +90,8 @@ documentation_file_list = [
     'tutorial_sbatch_waves.rst',
     'tutorial_task_reuse_waves.rst',
     'tutorial_environment_activation.txt',
+    'aea_environment_activation.txt',
+    'aea_environment_local_warning.txt',
     'waves_access_and_appendix.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
@@ -185,40 +190,63 @@ for file_path in tutorial_files_list:
     documentation_file_list.append(target)
 
 sphinx_options = '-W'
+aea_tag = "-t aea"
+html_directory = "html"
+html_target = Dir(html_directory)
 html = env.Command(
-    target=[Dir('html')],
+    target=[html_target],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}html",
-    sphinx_options=sphinx_options)
-env.Clean(html, Dir('html'))
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{html_directory} ${{tags}}",
+    sphinx_options=sphinx_options,
+    tags=aea_tag)
+env.Clean(html, html_target)
 env.AlwaysBuild(html)
-alias_list.extend(env.Alias('html', html))
+alias_list.extend(env.Alias(html_directory, html))
 
+latex_directory = "latex"
+latex_target = Dir(latex_directory)
 latexpdf = env.Command(
-    target=[Dir('latex')],
+    target=[latex_target],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}")
-env.Clean(latexpdf, Dir('latex'))
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}}",
+    tags=aea_tag)
+env.Clean(latexpdf, latex_target)
 env.AlwaysBuild(latexpdf)
 alias_list.extend(env.Alias('latexpdf', latexpdf))
 
+man_directory = "man"
+man_target = Dir(man_directory)
 man = env.Command(
-    target=[Dir('man')],
+    target=[man_target],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}man -t man",
-    sphinx_options=sphinx_options)
-env.Clean(man, Dir('man'))
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{man_directory} ${{tags}}",
+    sphinx_options=sphinx_options,
+    tags="-t man")
+env.Clean(man, man_target)
 env.AlwaysBuild(man)
-alias_list.extend(env.Alias('man', man))
+alias_list.extend(env.Alias(man_directory, man))
+
+# TODO: Combine the two html builds
+github_directory = "html-github"
+github_target = Dir(github_directory)
+github = env.Command(
+    target=[github_target],
+    source=documentation_file_list,
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{github_directory} ${{tags}}",
+    sphinx_options=sphinx_options)
+env.Clean(github, github_target)
+env.AlwaysBuild(github)
+alias_list.extend(env.Alias(github_directory, github))
 
 # Collector alias to build all documentation
 alias_list.extend(env.Alias('documentation', html + latexpdf + man))
 
 if not env['unconditional_build'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
-    Ignore(['.', 'html', 'html'], html)
-    Ignore(['.', 'latex', 'latexpdf'], latexpdf)
-    Ignore(['.', 'man', 'man'], man)
+    Ignore(['.', html_directory, 'html'], html)
+    Ignore(['.', github_directory, 'html-github'], github)
+    Ignore(['.', latex_directory, 'latexpdf'], latexpdf)
+    Ignore(['.', man_directory, man_alias], man)
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')
