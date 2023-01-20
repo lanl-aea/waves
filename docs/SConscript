@@ -246,7 +246,7 @@ if not env['unconditional_build'] and not env['sphinx_build']:
     Ignore(['.', html_directory, 'html'], html)
     Ignore(['.', github_directory, 'html-github'], github)
     Ignore(['.', latex_directory, 'latexpdf'], latexpdf)
-    Ignore(['.', man_directory, man_alias], man)
+    Ignore(['.', man_directory, 'man'], man)
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')
