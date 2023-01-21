@@ -1,16 +1,16 @@
 .. target-start-do-not-remove
 
-.. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
 .. _Conda: https://docs.conda.io/en/latest/
 .. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
 .. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
-.. _WAVES: https://aea.re-pages.lanl.gov/python-projects/waves/main/
-.. _WAVES repository: https://re-git.lanl.gov/aea/python-projects/waves
-.. _WAVES-EABM: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/quickstart
-.. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
+.. _WAVES: https://lanl.github.io/waves/index.html
+.. _WAVES repository: https://github.com/lanl/waves
+.. _WAVES releases: https://github.com/lanl/waves/releases/
+.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/quickstart
+.. _WAVES-EABM documentation: https://lanl.github.io/waves/waves-eabm/index.html
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
@@ -42,7 +42,8 @@ simulation and analysis. The `SCons documentation`_ should be consulted as a ref
 concepts, command line options, and project configuration.
 
 This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
-testing of the `WAVES`_ extensions to SCons.
+testing of the `WAVES`_ extensions to SCons. The template modsim project can be duplicated with from the command line as
+``waves quickstart`` after installation.
 
 .. project-description-end-do-not-remove
 
@@ -50,7 +51,11 @@ Documentation
 =============
 
 The documentation is bundled with the Conda package and can be accessed locally without a network connection after
-installation from the command line as ``waves docs``. The documentation is also web-hosted:
+installation from the command line as ``waves docs``. The documentation is also web-hosted on GitHub:
+
+* GitHub: https://lanl.github.io/waves/index.html
+
+Los Alamos staff can also access the development documentation:
 
 * Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/
 * Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/
@@ -58,8 +63,12 @@ installation from the command line as ``waves docs``. The documentation is also 
 The `WAVES-EABM documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
-* `WAVES-EABM`_ Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
-* `WAVES-EABM`_ Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
+* GitHub: https://lanl.github.io/waves/waves-eabm/index.html
+
+Los Alamos staff can also access the development documentation:
+
+* Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
+* Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
 
 Installation
 ============
@@ -73,8 +82,9 @@ Installation
 
    $ conda install waves --channel conda-forge
 
-Project deployment to ``conda-forge`` is incomplete. Until then, please contact the development team for a copy of the
-most recent build. From an active Conda environment, the project can then be installed directly from the package file as
+Project deployment to ``conda-forge`` is incomplete. Until then, please download a copy of the Conda package from the
+`WAVES releases`_ or contact the development team for a copy of the most recent build. From an active Conda environment,
+the project can then be installed directly from the package file as
 
 .. code-block::
 
@@ -99,9 +109,17 @@ Developer Notes
 Clone the project
 =================
 
-.. code-block::
+* GitHub
 
-   $ git clone ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git
+  .. code-block::
+
+     $ git clone git@github.com:lanl/waves.git
+
+* LANL
+
+  .. code-block::
+
+     $ git clone ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git
 
 Symlinks
 ========
@@ -199,6 +217,9 @@ CI configuration file. The current command may be found as
    $ output_folder='conda-build-artifacts'
    $ mkdir ${output_folder}
    $ VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+
+A second recipe that bundles the GitHub linked documentation is found in ``waves/recipe-github`` and can be built
+similarly by replacing ``recipe`` with ``recipe-github`` in the above command.
 
 This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
 `SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also

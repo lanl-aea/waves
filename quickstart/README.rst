@@ -2,18 +2,15 @@
 
 .. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
 .. _AEA Conda channel: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea-release/aea_compute_environment.html#aea-conda-channel
-.. _ECMF: https://aea.re-pages.lanl.gov/python-projects/ecmf/main/
 .. _Conda: https://docs.conda.io/en/latest/
 .. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
 .. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
-.. _ctest: https://cmake.org/cmake/help/latest/manual/ctest.1.html
-.. _cmake-simulation: https://re-git.lanl.gov/aea/python-projects/cmake-simulation
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
-.. _WAVES: https://aea.re-pages.lanl.gov/python-projects/waves/main/
-.. _WAVES repository: https://re-git.lanl.gov/aea/python-projects/waves
-.. _WAVES-EABM: https://re-git.lanl.gov/aea/python-projects/waves/-/tree/dev/quickstart
+.. _WAVES: https://lanl.github.io/waves/index.html
+.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/quickstart
+.. _WAVES-EABM documentation: https://lanl.github.io/waves/waves-eabm/index.html
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
@@ -45,6 +42,7 @@ subcommand template.
 Documentation
 =============
 
+* GitHub: https://lanl.github.io/waves/waves-eabm/index.html
 * Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
 * Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
 
