@@ -21,8 +21,6 @@ Internal Changes
 ================
 - Add a Conda recipe that bundles the documentation built with external/GitHub URLs (:issue:`392`, :merge:`464`). By
   `Kyle Brindley`_.
-- Build and deploy the WAVES-EABM documentation to host on GitHub-Pages (:issue:`394`, :merge:`465`). By `Kyle
-  Brindley`_.
 
 ******************
 0.6.4 (2023-01-20)
