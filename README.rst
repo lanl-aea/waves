@@ -10,7 +10,7 @@
 .. _WAVES repository: https://github.com/lanl/waves
 .. _WAVES releases: https://github.com/lanl/waves/releases/
 .. _WAVES-EABM: https://github.com/lanl/waves/tree/main/quickstart
-.. _WAVES-EABM documentation: https://lanl.github.io/waves/waves-eabm/index.html
+.. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
@@ -63,7 +63,7 @@ Los Alamos staff can also access the development documentation:
 The `WAVES-EABM documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
-* GitHub: https://lanl.github.io/waves/waves-eabm/index.html
+* GitHub (pending): https://lanl.github.io/waves/waves-eabm/index.html
 
 Los Alamos staff can also access the development documentation:
 
