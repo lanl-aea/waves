@@ -47,10 +47,6 @@ jobs:
           mkdir -p public/waves-eabm
           scons html-github
           cp -r build/docs/html-github/* ${project_root}/public
-          cd quickstart
-          PYTHONPATH=${project_root} scons html
-          cp -r build/docs/html/* ${project_root}/public/waves-eabm
-          cd ${project_root}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
