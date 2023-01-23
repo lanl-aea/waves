@@ -203,13 +203,24 @@ env.Clean(html, html_target)
 env.AlwaysBuild(html)
 alias_list.extend(env.Alias(html_directory, html))
 
+# TODO: Combine the two html builds
+github_directory = "html-github"
+github_target = Dir(github_directory)
+github = env.Command(
+    target=[github_target],
+    source=documentation_file_list,
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{github_directory} ${{tags}}",
+    sphinx_options=sphinx_options)
+env.Clean(github, github_target)
+env.AlwaysBuild(github)
+alias_list.extend(env.Alias(github_directory, github))
+
 latex_directory = "latex"
 latex_target = Dir(latex_directory)
 latexpdf = env.Command(
     target=[latex_target],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}}",
-    tags=aea_tag)
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}}")
 env.Clean(latexpdf, latex_target)
 env.AlwaysBuild(latexpdf)
 alias_list.extend(env.Alias('latexpdf', latexpdf))
@@ -225,18 +236,6 @@ man = env.Command(
 env.Clean(man, man_target)
 env.AlwaysBuild(man)
 alias_list.extend(env.Alias(man_directory, man))
-
-# TODO: Combine the two html builds
-github_directory = "html-github"
-github_target = Dir(github_directory)
-github = env.Command(
-    target=[github_target],
-    source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{github_directory} ${{tags}}",
-    sphinx_options=sphinx_options)
-env.Clean(github, github_target)
-env.AlwaysBuild(github)
-alias_list.extend(env.Alias(github_directory, github))
 
 # Collector alias to build all documentation
 alias_list.extend(env.Alias('documentation', html + latexpdf + man))
