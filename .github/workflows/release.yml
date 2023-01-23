@@ -18,6 +18,11 @@ jobs:
         with:
           lfs: 'true'
           fetch-depth: 0
+     - name: GitHub Tag Name example
+       run: |
+         echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
+         echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+         echo "Tag name from env.GITHUB_REF_NAME: ${{env.GITHUB_REF_NAME}}"
       - name: MiniConda setup
         uses: conda-incubator/setup-miniconda@v2
         with:
@@ -25,11 +30,11 @@ jobs:
           activate-environment: ""
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install 'setuptools>=45' 'setuptools_scm[toml]>=6.2' conda-build --yes --channel conda-forge
+        run: conda install 'setuptools>=45' 'setuptools_scm[toml]>=6.2' conda-build conda-verify --yes --channel conda-forge
       - name: Conda build
         shell: bash -el {0}
         run: VERSION=$(python -m setuptools_scm) conda build recipe-github --channel conda-forge --no-anaconda-upload --output-folder conda-build-artifacts
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: conda-build-artifacts/noarch/waves-${{  github.ref_name }}-py_0.tar.bz2
+          files: conda-build-artifacts/noarch/waves-${{ github.ref_name }}-py_0.tar.bz2
