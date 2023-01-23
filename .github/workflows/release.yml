@@ -25,7 +25,7 @@ jobs:
           activate-environment: ""
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install 'scons>=4' 'setuptools>=45' 'setuptools_scm[toml]>=6.2' 'sphinx>=5.1' sphinx-argparse 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes --channel conda-forge
+        run: conda install 'setuptools>=45' 'setuptools_scm[toml]>=6.2' conda-build --yes --channel conda-forge
       - name: Conda build
         shell: bash -el {0}
         run: VERSION=$(python -m setuptools_scm) conda build recipe-github --channel conda-forge --no-anaconda-upload --output-folder conda-build-artifacts
