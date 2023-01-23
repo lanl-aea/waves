@@ -42,7 +42,7 @@ jobs:
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload Github documentation build
-          path: 'build/docs/html'
+          path: 'build/docs/html-github'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
