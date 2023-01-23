@@ -2,25 +2,20 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
 
 jobs:
-  # Single deploy job since we're just deploying
   deploy:
     environment:
       name: github-pages
@@ -42,16 +37,12 @@ jobs:
         run: conda install 'scons>=4' 'setuptools>=45' 'setuptools_scm[toml]>=6.2' 'sphinx>=5.1' sphinx-argparse 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes --channel conda-forge
       - name: Build documentation
         shell: bash -el {0}
-        run: |
-          project_root=$PWD
-          mkdir -p public/waves-eabm
-          scons html-github
-          cp -r build/docs/html-github/* ${project_root}/public
+        run: scons html-github
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload Github documentation build
-          path: 'public'
+          path: 'build/docs/html-github'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
