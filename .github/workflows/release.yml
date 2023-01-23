@@ -1,25 +1,17 @@
-# Simple workflow for deploying static content to GitHub Pages
-name: Deploy static content to Pages
+# Reference: https://github.com/softprops/action-gh-release
+name: Release on new tags
 
 on:
   push:
-    branches: ["main"]
+    tags:
+      - "*"
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
+  contents: write
 
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,12 +29,13 @@ jobs:
         run: conda install 'scons>=4' 'setuptools>=45' 'setuptools_scm[toml]>=6.2' 'sphinx>=5.1' sphinx-argparse 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes --channel conda-forge
       - name: Build documentation
         shell: bash -el {0}
-        run: scons html-github
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        run: scons latexpdf
+      - name: Conda build
+        shell: bash -el {0}
+        run: VERSION=$(python -m setuptools_scm) conda build recipe-github --channel conda-forge --no-anaconda-upload --output-folder conda-build-artifacts
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          # Upload Github documentation build
-          path: 'build/docs/html-github'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+          files: |
+            build/docs/latex/waves-${GITHUB_REF_NAME}.pdf
+            conda-build-artifacts/noarch/waves-${GITHUB_REF_NAME}-py_0.tar.bz2
