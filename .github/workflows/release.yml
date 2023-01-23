@@ -1,0 +1,37 @@
+# Reference: https://github.com/softprops/action-gh-release
+name: Release on new tags
+
+on:
+  push:
+    tags: 
+      - "0.6.6"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          lfs: 'true'
+          fetch-depth: 0
+      - name: MiniConda setup
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+      - name: Conda environment
+        shell: bash -el {0}
+        run: conda install 'setuptools>=45' 'setuptools_scm[toml]>=6.2' --yes --channel conda-forge
+      - name: Conda build
+        shell: bash -el {0}
+        run: VERSION=$(python -m setuptools_scm) conda build recipe-github --channel conda-forge --no-anaconda-upload
+--output-folder conda-build-artifacts
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: conda-build-artifacts/noarch/waves-${GITHUB_REF_NAME}-py_0.tar.bz2
