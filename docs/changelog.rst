@@ -11,6 +11,7 @@ Changelog
 Documentation
 =============
 - Add package meta data to conda build recipes (:issue:`401`, :merge:`476`). By `Kyle Brindley`_.
+- Add PDF documentation to the GitHub release workflow (:issue:`402`, :merge:`477`). By `Kyle Brindley`_.
 
 ******************
 0.6.6 (2023-01-23)
