@@ -32,4 +32,4 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: conda-build-artifacts/noarch/waves-${GITHUB_REF_NAME}-py_0.tar.bz2
+          files: conda-build-artifacts/noarch/waves-${{  github.ref_name }}-py_0.tar.bz2
