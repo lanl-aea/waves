@@ -8,6 +8,11 @@ Changelog
 0.6.6 (unreleased)
 ******************
 
+Internal Changes
+================
+- Update CI minimum dependency versions, specifically ``sphinx_rtd_theme`` to fix the GitHub Pages build (:issue:`398`,
+  :merge:`470`). By `Kyle Brindley`_.
+
 ******************
 0.6.5 (2023-01-20)
 ******************
