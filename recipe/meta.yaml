@@ -3,6 +3,12 @@ package:
   # TODO: Figure out how to use pyproject.toml or setup.py and a Conda build Jinja template
   version: {{ VERSION }}
 
+about:
+  home: https://re-git.lanl.gov/aea/python-projects/waves
+  license: BSD-3-Clause
+  license_file: LICENSE.txt
+  summary: WAVES (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with traditional software build systems.
+
 source:
   path: '..'
 
