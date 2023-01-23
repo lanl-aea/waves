@@ -80,8 +80,6 @@ test:
   source_files:
     # Everything copied here will make it into the "info" directory of the Conda package
     - SConstruct
-    - SConscript
-    - README.rst
     - pyproject.toml
     - waves/SConscript
     - waves/tests/*.py
@@ -92,4 +90,4 @@ test:
     # Tests that depend on correct install path
     - waves docs --print-local-path
     # Project unit tests
-    - scons pytest --unconditional-build --ignore-documentation
+    - scons pytest --ignore-documentation
