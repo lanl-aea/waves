@@ -29,8 +29,7 @@ jobs:
         run: conda install 'setuptools>=45' 'setuptools_scm[toml]>=6.2' --yes --channel conda-forge
       - name: Conda build
         shell: bash -el {0}
-        run: VERSION=$(python -m setuptools_scm) conda build recipe-github --channel conda-forge --no-anaconda-upload
---output-folder conda-build-artifacts
+        run: VERSION=$(python -m setuptools_scm) conda build recipe-github --channel conda-forge --no-anaconda-upload --output-folder conda-build-artifacts
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
