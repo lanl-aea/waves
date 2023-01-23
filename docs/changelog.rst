@@ -8,6 +8,10 @@ Changelog
 0.6.8 (unreleased)
 ******************
 
+Internal Changes
+================
+- Add more meta data to the Conda recipes using the conda-forge example style (:merge:`480`). By `Kyle Brindley`_.
+
 ******************
 0.6.7 (2023-01-23)
 ******************
