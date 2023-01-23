@@ -8,6 +8,10 @@ Changelog
 0.6.7 (unreleased)
 ******************
 
+Documentation
+=============
+- Add package meta data to conda build recipes (:issue:`401`, :merge:`476`). By `Kyle Brindley`_.
+
 ******************
 0.6.6 (2023-01-23)
 ******************
