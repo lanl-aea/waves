@@ -17,6 +17,8 @@ Internal Changes
 - Update CI minimum dependency versions, specifically ``sphinx_rtd_theme`` to fix the GitHub Pages build (:issue:`398`,
   :merge:`470`). By `Kyle Brindley`_.
 - Draft GitHub release workflow (:issue:`399`, :merge:`471`). By `Kyle Brindley`_.
+- Build PDF documentation as external audience variation. Add PDF to GitHub release workflow (:issue:`400`,
+  :merge:`472`). By `Kyle Brindley`_.
 
 ******************
 0.6.5 (2023-01-20)
