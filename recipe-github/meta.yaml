@@ -64,25 +64,8 @@ requirements:
 
 test:
   requires:
-    - h5netcdf
-    - h5py
-    - matplotlib
-    - numpy
-    - pandas
     - pytest
     - pytest-xdist
-    - pyyaml
-    - salib >=1
-    - scipy >=1.7
-    - scons
-    - setuptools_scm
-    - xarray
-  source_files:
-    # Everything copied here will make it into the "info" directory of the Conda package
-    - SConstruct
-    - pyproject.toml
-    - waves/SConscript
-    - waves/tests/*.py
   imports:
     - waves
   commands:
@@ -90,4 +73,5 @@ test:
     # Tests that depend on correct install path
     - waves docs --print-local-path
     # Project unit tests
-    - scons pytest --ignore-documentation
+    - cd $SP_DIR/$PKG_NAME
+    - pytest
