@@ -42,16 +42,12 @@ jobs:
         run: conda install 'scons>=4' 'setuptools>=45' 'setuptools_scm[toml]>=6.2' 'sphinx>=5.1' sphinx-argparse 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes --channel conda-forge
       - name: Build documentation
         shell: bash -el {0}
-        run: |
-          project_root=$PWD
-          mkdir -p public/waves-eabm
-          scons html-github
-          cp -r build/docs/html-github/* ${project_root}/public
+        run: scons html-github
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload Github documentation build
-          path: 'public'
+          path: 'build/docs/html'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
