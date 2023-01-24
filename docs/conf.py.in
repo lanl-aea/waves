@@ -4,8 +4,8 @@ import datetime
 import unittest.mock
 
 # -- Project information -----------------------------------------------------
-project_dir = pathlib.Path('@project_dir@').resolve()
-tutorials_dir = project_dir / pathlib.Path('@tutorials_dir@')
+project_dir = pathlib.Path(r'@project_dir@').resolve()
+tutorials_dir = project_dir / pathlib.Path(r'@tutorials_dir@')
 
 # Name, Group, Email
 authors = [('Kyle Brindley', '<kbrindley@lanl.gov>'),
