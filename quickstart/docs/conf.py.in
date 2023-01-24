@@ -7,7 +7,7 @@ import unittest.mock
 # Meta data from SCons project
 project = "@project_name@"
 VERSION = "@version@"
-project_dir = pathlib.Path("@project_dir@").resolve()
+project_dir = pathlib.Path(r"@project_dir@").resolve()
 author_latex = r"@author_latex@"
 
 # Mock modules unavailable in the Conda environment, e.g. Abaqus Python modules, and large imports not required by

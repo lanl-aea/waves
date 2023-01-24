@@ -18,6 +18,7 @@ Internal Changes
 - MacOS friendly cp symlink dereference in conda recipes (:merge:`481`). By `Kyle Brindley`_.
 - List modules in setuptools packages configuration (:merge:`482`). By `Kyle Brindley`_.
 - Use Python for OS-agnostic documentation packaging in conda build recipes (:merge:`483`). By `Kyle Brindley`_.
+- Windows friendly path construction in the Sphinx configuration (:merge:`486`). By `Kyle Brindley`_.
 
 ******************
 0.6.7 (2023-01-23)
