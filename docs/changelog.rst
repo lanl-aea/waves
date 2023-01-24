@@ -8,6 +8,10 @@ Changelog
 0.6.9 (unreleased)
 ******************
 
+Internal Changes
+================
+- Windows friendly test scripts for GitHub conda build recipe (:merge:`488`). By `Kyle Brindley`_.
+
 ******************
 0.6.8 (2023-01-24)
 ******************
