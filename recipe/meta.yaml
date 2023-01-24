@@ -20,25 +20,13 @@ source:
 build:
   noarch: python
   script:
-    # Build package documentation to bundle in Conda package
-    - scons man html
-    - manpath1="$PREFIX/share/man/man1"
-    - manpath2="$PREFIX/man/man1"
-    - mkdir -p $manpath1 $manpath2
-    - cp build/docs/man/waves.1 $manpath1
-    - cp build/docs/man/waves.1 $manpath2 || true
     # Build and install Conda package
     # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
     # deprecated setup.py solutions
     - {{ PYTHON }} setup.py install
-    # Bundle HTML documentation. Must come after install so that SP_DIR path exists
-    - docspath="$SP_DIR/$PKG_NAME/docs"
-    - mkdir -p $docspath
-    - cp -RL build/docs/html/* $docspath
-    # Bundle quickstart files. Must come after install so that SP_DIR path exists
-    - quickstart_path="$SP_DIR/$PKG_NAME/quickstart"
-    - mkdir -p ${quickstart_path}
-    - cp -RL --dereference quickstart/* ${quickstart_path}
+    # Build man page and HTML documentation to bundle in Conda package
+    - scons man html
+    - {{ PYTHON }} package_documentation.py
   script_env:
     - VERSION
   ignore_run_exports:
