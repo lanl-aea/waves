@@ -18,11 +18,9 @@ fs = SCons.Node.FS.FS()
 
 if platform.system().lower() == "windows":
     root_fs = "C:\\"
-    pathsep = "\\"
     testing_windows = True
 else:
     root_fs = "/"
-    pathsep = "/"
     testing_windows = False
 
 
@@ -203,7 +201,7 @@ journal_emitter_input = {
                    ["target.cae", "target.stdout", "target.abaqus_v6.env"]),
     "subdirectory": (["set1/dummy.cae"],
                     [source_file],
-                    ["set1/dummy.cae", "set1/dummy.stdout", "set1/dummy.abaqus_v6.env"])
+                    ["set1/dummy.cae", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.abaqus_v6.env"])
 }
 
 
@@ -255,8 +253,8 @@ solver_emitter_input = {
     "subdirectory": ("job",
                     ["set1/job.sta"],
                     [source_file],
-                    ["set1/job.sta", "set1/job.stdout", "set1/job.abaqus_v6.env", "set1/job.odb", "set1/job.dat",
-                     "set1/job.msg", "set1/job.com", "set1/job.prt"],
+                    ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
+                     f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt"],
                     does_not_raise()),
     "missing job_name": (None,
                         [],
@@ -345,7 +343,7 @@ first_target_emitter_input = {
                    ["target.cub", "target.stdout"]),
     "subdirectory": (["set1/dummy.cub"],
                     [source_file],
-                    ["set1/dummy.cub", "set1/dummy.stdout"])
+                    ["set1/dummy.cub", f"set1{os.sep}dummy.stdout"])
 }
 
 
@@ -388,7 +386,7 @@ matlab_emitter_input = {
                    ["target.matlab", "target.stdout", "target.matlab.env"]),
     "subdirectory": (["set1/dummy.matlab"],
                     [source_file],
-                    ["set1/dummy.matlab", "set1/dummy.stdout", "set1/dummy.matlab.env"])
+                    ["set1/dummy.matlab", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.matlab.env"])
 }
 
 
@@ -462,13 +460,13 @@ abaqus_extract_emitter_input = {
     "subdirectory": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", "set1/dummy_datasets.h5", "set1/dummy.csv", "set1/dummy.h5.stdout"],
+        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.csv", f"set1{os.sep}dummy.h5.stdout"],
         {}
     ),
     "subdirectory new name": (
         ["set1/new_name.h5"],
         [source_file],
-        ["set1/new_name.h5", "set1/new_name_datasets.h5", "set1/new_name.csv", "set1/new_name.h5.stdout"],
+        ["set1/new_name.h5", f"set1{os.sep}new_name_datasets.h5", f"set1{os.sep}new_name.csv", f"set1{os.sep}new_name.h5.stdout"],
         {}
     ),
     "one target delete report": (
@@ -480,7 +478,7 @@ abaqus_extract_emitter_input = {
     "subdirectory delete report": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", "set1/dummy_datasets.h5", "set1/dummy.h5.stdout"],
+        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.h5.stdout"],
         {"delete_report_file": True}
     ),
 }
