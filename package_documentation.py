@@ -7,7 +7,9 @@ sp_dir = pathlib.Path(os.getenv("SP_DIR")).resolve()
 pkg_name = os.getenv("PKG_NAME")
 
 man_path = pathlib.Path("build/docs/man").resolve()
-html_path = pathlib.Path("build/docs/html-github").resolve()
+html_path_github = pathlib.Path("build/docs/html-github").resolve()
+html_path_internal = pathlib.Path("build/docs/html").resolve()
+html_path = html_path_github if html_path_github.exists() else html_path_internal
 quickstart_path = pathlib.Path("quickstart").resolve()
 
 new_paths = [
@@ -17,5 +19,6 @@ new_paths = [
     (sp_dir / pkg_name / "quickstart", quickstart_path)
 ]
 for destination, source in new_paths:
+    assert source.exists()
     destination.mkdir(parents=True, exist_ok=True)
     shutil.copytree(source, destination, symlinks=False, dirs_exist_ok=True)
