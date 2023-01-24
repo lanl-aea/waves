@@ -34,11 +34,11 @@ build:
     # Bundle HTML documentation. Must come after install so that SP_DIR path exists
     - docspath="$SP_DIR/$PKG_NAME/docs"
     - mkdir -p $docspath
-    - cp -r build/docs/html/* $docspath
+    - cp -RL build/docs/html/* $docspath
     # Bundle quickstart files. Must come after install so that SP_DIR path exists
     - quickstart_path="$SP_DIR/$PKG_NAME/quickstart"
     - mkdir -p ${quickstart_path}
-    - cp -r --dereference quickstart/* ${quickstart_path}
+    - cp -RL --dereference quickstart/* ${quickstart_path}
   script_env:
     - VERSION
   ignore_run_exports:
