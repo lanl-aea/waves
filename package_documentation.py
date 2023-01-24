@@ -20,5 +20,6 @@ new_paths = [
 ]
 for destination, source in new_paths:
     assert source.exists()
+    print(f"Copying '{source}' to '{destination}'...")
     destination.mkdir(parents=True, exist_ok=True)
     shutil.copytree(source, destination, symlinks=False, dirs_exist_ok=True)
