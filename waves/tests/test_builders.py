@@ -6,6 +6,7 @@ import pytest
 from contextlib import nullcontext as does_not_raise
 import unittest
 from unittest.mock import patch, call
+import platform
 
 import SCons.Node.FS
 
@@ -14,6 +15,13 @@ from waves._settings import _cd_action_prefix
 
 
 fs = SCons.Node.FS.FS()
+
+if platform.system().lower() == "windows":
+    root_fs = "C:\\"
+    pathsep = "\\"
+else:
+    root_fs = "/"
+    pathsep = "/"
 
 
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
@@ -42,8 +50,8 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
 
 
 prepend_env_input = {
-    "path exists": ("/program", True, does_not_raise()),
-    "path does not exist": ("/notapath", False, pytest.raises(FileNotFoundError))
+    "path exists": (f"{root_fs}program", True, does_not_raise()),
+    "path does not exist": (f"{root_fs}notapath", False, pytest.raises(FileNotFoundError))
 }
 
 
@@ -56,7 +64,7 @@ def test_append_env_path(program, mock_exists, outcome):
     with patch("pathlib.Path.exists", return_value=mock_exists), outcome:
         try:
             builders.append_env_path(program, env)
-            assert "/" == env["ENV"]["PATH"].split(os.pathsep)[-1]
+            assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
             assert "PYTHONPATH" not in env["ENV"]
             assert "LD_LIBRARY_PATH" not in env["ENV"]
         finally:
