@@ -11,6 +11,7 @@ Changelog
 Internal Changes
 ================
 - Windows friendly test scripts for GitHub conda build recipe (:merge:`488`). By `Kyle Brindley`_.
+- Windows friendly unit test path expectations (:issue:`403`, :merge:`489`). By `Kyle Brindley`_.
 
 ******************
 0.6.8 (2023-01-24)
