@@ -18,4 +18,4 @@ new_paths = [
 ]
 for destination, source in new_paths:
     destination.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(source, destination, symlinks=False)
+    shutil.copytree(source, destination, symlinks=False, dirs_exist_ok=True)
