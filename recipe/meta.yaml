@@ -7,7 +7,12 @@ about:
   home: https://re-git.lanl.gov/aea/python-projects/waves
   license: BSD-3-Clause
   license_file: LICENSE.txt
-  summary: WAVES (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with traditional software build systems.
+  summary: 'Parameteric study computational engineering workflow tool'
+  description: |
+    WAVES (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with
+    traditional software build systems.
+  doc_url: https://aea.re-pages.lanl.gov/python-projects/waves/main/index.html
+  dev_url: https://re-git.lanl.gov/aea/python-projects/waves
 
 source:
   path: '..'
