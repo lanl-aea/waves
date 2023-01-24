@@ -6,7 +6,7 @@ prefix = pathlib.Path(os.getenv("PREFIX")).resolve()
 sp_dir = pathlib.Path(os.getenv("SP_DIR")).resolve()
 pkg_name = os.getenv("PKG_NAME")
 
-man_path = pathlib.Path("build/docs/man/waves.1").resolve()
+man_path = pathlib.Path("build/docs/man").resolve()
 html_path = pathlib.Path("build/docs/html-github").resolve()
 quickstart_path = pathlib.Path("quickstart").resolve()
 
