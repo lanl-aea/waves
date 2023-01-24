@@ -116,7 +116,7 @@ find_program_input = {
 }
 
 
-@pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows.")
+@pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
 @pytest.mark.unittest
 @pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",
                          find_program_input.values(),
@@ -130,7 +130,7 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     assert program == first_found_path
 
 
-@pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows.")
+@pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
 @pytest.mark.unittest
 @pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",
                          find_program_input.values(),
@@ -151,7 +151,7 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
         assert original_path == env["ENV"]["PATH"]
 
 
-@pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows.")
+@pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
 @pytest.mark.unittest
 @pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",
                          find_program_input.values(),
