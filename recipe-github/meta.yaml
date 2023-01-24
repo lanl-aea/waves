@@ -7,7 +7,12 @@ about:
   home: https://github.com/lanl/waves
   license: BSD-3-Clause
   license_file: LICENSE.txt
-  summary: WAVES (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with traditional software build systems.
+  summary: 'Parameteric study computational engineering workflow tool'
+  description: |
+    WAVES (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with
+    traditional software build systems.
+  doc_url: https://lanl.github.io/waves/index.html
+  dev_url: https://github.com/lanl/waves
 
 source:
   path: '..'
@@ -15,25 +20,13 @@ source:
 build:
   noarch: python
   script:
-    # Build package documentation to bundle in Conda package
-    - scons man html-github
-    - manpath1="$PREFIX/share/man/man1"
-    - manpath2="$PREFIX/man/man1"
-    - mkdir -p $manpath1 $manpath2
-    - cp build/docs/man/waves.1 $manpath1
-    - cp build/docs/man/waves.1 $manpath2 || true
     # Build and install Conda package
     # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
     # deprecated setup.py solutions
     - {{ PYTHON }} setup.py install
-    # Bundle HTML documentation. Must come after install so that SP_DIR path exists
-    - docspath="$SP_DIR/$PKG_NAME/docs"
-    - mkdir -p $docspath
-    - cp -r build/docs/html-github/* $docspath
-    # Bundle quickstart files. Must come after install so that SP_DIR path exists
-    - quickstart_path="$SP_DIR/$PKG_NAME/quickstart"
-    - mkdir -p ${quickstart_path}
-    - cp -r --dereference quickstart/* ${quickstart_path}
+    # Build man page and HTML documentation to bundle in Conda package
+    - scons man html-github
+    - {{ PYTHON }} package_documentation.py
   script_env:
     - VERSION
   ignore_run_exports:
