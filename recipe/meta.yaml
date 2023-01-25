@@ -34,7 +34,6 @@ build:
 
 requirements:
   build:
-    - python {{ python }}
     - git
     - scons >=4
     - setuptools >=45

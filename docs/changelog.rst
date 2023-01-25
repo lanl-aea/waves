@@ -8,6 +8,10 @@ Changelog
 0.6.10 (unreleased)
 *******************
 
+Internal Changes
+================
+- Remove unecessary elements of conda recipes (:merge:`491`). By `Kyle Brindley`_.
+
 ******************
 0.6.9 (2023-01-24)
 ******************
