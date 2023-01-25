@@ -34,7 +34,6 @@ build:
 
 requirements:
   build:
-    - python {{ python }}
     - git
     - scons >=4
     - setuptools >=45
@@ -45,8 +44,6 @@ requirements:
     - sphinxcontrib-bibtex
   host:
     - python
-    - setuptools >=45
-    - setuptools_scm[toml] >=6.2
   run:
     - python >=3.8
     - h5netcdf
