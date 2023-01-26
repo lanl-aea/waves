@@ -91,7 +91,6 @@ documentation_file_list = [
     'tutorial_task_reuse_waves.rst',
     'tutorial_environment_activation.txt',
     'aea_environment_activation.txt',
-    'aea_environment_local_warning.txt',
     'waves_access_and_appendix.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
