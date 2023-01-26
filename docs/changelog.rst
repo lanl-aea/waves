@@ -10,6 +10,7 @@ Changelog
 
 Documentation
 =============
+- Add DOI and conda-forge badges to the README (:issue:`406`, :merge:`496`). By `Kyle Brindley`_.
 - Add the GitHub citation file format with Zenodo DOI (:issue:`397`, :merge:`497`). By `Kyle Brindley`_.
 
 *******************
