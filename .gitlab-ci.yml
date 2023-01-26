@@ -267,8 +267,8 @@ pages:
             # Build WAVES HTML documentation. Clean up after to avoid leftover targets from main/dev filename differences.
             # Clean instead of "rm" to help catch incomplete target clean operations.
             scons . --clean --unconditional-build
-            scons html --unconditional-build
-            cp -r build/docs/html/* ${project_root}/public/$ref
+            scons html-internal --unconditional-build
+            cp -r build/docs/html-internal/* ${project_root}/public/$ref
             scons . --clean --unconditional-build
             # Build WAVES-EABM HTML documentation
             cd quickstart

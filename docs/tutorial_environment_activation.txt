@@ -2,24 +2,10 @@
 
    .. include:: aea_environment_activation.txt
 
-`SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
-`Conda environment management`_ documentation for more details about using `Conda`_.
+`SCons`_ and `WAVES`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda
+installation`_ and `Conda environment management`_ documentation for more details about using `Conda`_.
 
-.. only:: not aea
-
-   .. warning::
-   
-      |project| is not yet deployed to conda-forge. Users will need to request or build a local copy and install separately.
-
-      .. include:: README.txt
-         :start-after: installation-start-do-not-remove
-         :end-before: installation-end-do-not-remove
-
-.. only:: aea
-
-   .. include:: aea_environment_local_warning.txt
-
-1. Create the environment if it doesn't exist
+1. Create the tutorials environment if it doesn't exist
 
    .. code-block::
 
