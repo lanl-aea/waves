@@ -42,7 +42,7 @@ simulation and analysis. The `SCons documentation`_ should be consulted as a ref
 concepts, command line options, and project configuration.
 
 This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
-testing of the `WAVES`_ extensions to SCons. The template modsim project can be duplicated with from the command line as
+testing of the `WAVES`_ extensions to SCons. The template modsim project can be duplicated from the command line as
 ``waves quickstart`` after installation.
 
 .. project-description-end-do-not-remove
@@ -51,7 +51,7 @@ Documentation
 =============
 
 The documentation is bundled with the Conda package and can be accessed locally without a network connection after
-installation from the command line as ``waves docs``. The documentation is also web-hosted on GitHub:
+installation from the command line as ``waves docs``. The documentation is also web-hosted:
 
 * GitHub: https://lanl.github.io/waves/index.html
 
