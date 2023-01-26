@@ -8,6 +8,10 @@ Changelog
 0.6.11 (unreleased)
 *******************
 
+Documentation
+=============
+- Add the GitHub citation file format with Zenodo DOI (:issue:`397`, :merge:`497`). By `Kyle Brindley`_.
+
 *******************
 0.6.10 (2023-01-26)
 *******************
