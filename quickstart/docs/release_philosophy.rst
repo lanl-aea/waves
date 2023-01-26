@@ -74,7 +74,6 @@ Steps needed for a release include:
 1. Create a release branch.
 2. Modify ``docs/changelog.rst`` to move version number for release PR commit and
    add description as relevant.
-3. Update the ``CITATION.bib`` file to use the new version number.
 4. Commit changes and submit a pull request to the ``dev`` branch at the `upstream repository`_.
 5. **Major and Minor bumps ONLY**: Manually add the new developer version tag to the "Merge" commit on the ``dev``
    branch.  Reset all numbers to the right of the bump to ``0``, e.g. ``1.2.3`` becomes ``2.0.0+dev`` for a Major version
