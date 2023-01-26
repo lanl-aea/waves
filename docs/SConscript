@@ -91,7 +91,6 @@ documentation_file_list = [
     'tutorial_task_reuse_waves.rst',
     'tutorial_environment_activation.txt',
     'aea_environment_activation.txt',
-    'aea_environment_local_warning.txt',
     'waves_access_and_appendix.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
@@ -190,30 +189,29 @@ for file_path in tutorial_files_list:
     documentation_file_list.append(target)
 
 sphinx_options = '-W'
-aea_tag = "-t aea"
 html_directory = "html"
 html_target = Dir(html_directory)
 html = env.Command(
     target=[html_target],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{html_directory} ${{tags}}",
-    sphinx_options=sphinx_options,
-    tags=aea_tag)
+    sphinx_options=sphinx_options)
 env.Clean(html, html_target)
 env.AlwaysBuild(html)
 alias_list.extend(env.Alias(html_directory, html))
 
-# TODO: Combine the two html builds
-github_directory = "html-github"
-github_target = Dir(github_directory)
-github = env.Command(
-    target=[github_target],
+# TODO: Combine the two html build logic
+internal_directory = "html-internal"
+internal_target = Dir(internal_directory)
+internal = env.Command(
+    target=[internal_target],
     source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{github_directory} ${{tags}}",
-    sphinx_options=sphinx_options)
-env.Clean(github, github_target)
-env.AlwaysBuild(github)
-alias_list.extend(env.Alias(github_directory, github))
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{internal_directory} ${{tags}}",
+    sphinx_options=sphinx_options,
+    tags="-t aea")
+env.Clean(internal, internal_target)
+env.AlwaysBuild(internal)
+alias_list.extend(env.Alias(internal_directory, internal))
 
 latex_directory = "latex"
 latex_target = Dir(latex_directory)
@@ -243,7 +241,7 @@ alias_list.extend(env.Alias('documentation', html + latexpdf + man))
 if not env['unconditional_build'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
     Ignore(['.', html_directory, 'html'], html)
-    Ignore(['.', github_directory, 'html-github'], github)
+    Ignore(['.', internal_directory, 'html-internal'], internal)
     Ignore(['.', latex_directory, 'latexpdf'], latexpdf)
     Ignore(['.', man_directory, 'man'], man)
 

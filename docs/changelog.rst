@@ -5,8 +5,24 @@ Changelog
 #########
 
 *******************
-0.6.10 (unreleased)
+0.6.11 (unreleased)
 *******************
+
+*******************
+0.6.10 (2023-01-26)
+*******************
+
+Documentation
+=============
+- GitHub recognized BSD 3-Clause license file. Moves the copyright notice to the README (:issue:`404`, :merge:`492`). By
+  `Kyle Brindley`_.
+- Update installation instructions to reflect conda-forge deployed package (:issue:`405`, :merge:`493`). By `Kyle
+  Brindley`_.
+
+Internal Changes
+================
+- Remove unecessary elements of conda recipes (:merge:`491`). By `Kyle Brindley`_.
+- Default to the external/GitHub/conda-forge documentation variant (:issue:`405`, :merge:`493`). By `Kyle Brindley`_.
 
 ******************
 0.6.9 (2023-01-24)

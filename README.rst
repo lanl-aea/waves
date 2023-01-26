@@ -42,7 +42,7 @@ simulation and analysis. The `SCons documentation`_ should be consulted as a ref
 concepts, command line options, and project configuration.
 
 This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
-testing of the `WAVES`_ extensions to SCons. The template modsim project can be duplicated with from the command line as
+testing of the `WAVES`_ extensions to SCons. The template modsim project can be duplicated from the command line as
 ``waves quickstart`` after installation.
 
 .. project-description-end-do-not-remove
@@ -51,7 +51,7 @@ Documentation
 =============
 
 The documentation is bundled with the Conda package and can be accessed locally without a network connection after
-installation from the command line as ``waves docs``. The documentation is also web-hosted on GitHub:
+installation from the command line as ``waves docs``. The documentation is also web-hosted:
 
 * GitHub: https://lanl.github.io/waves/index.html
 
@@ -80,18 +80,7 @@ Installation
 
 .. code-block::
 
-   $ conda install waves --channel conda-forge
-
-Project deployment to ``conda-forge`` is incomplete. Until then, please download a copy of the Conda package from the
-`WAVES releases`_ or contact the development team for a copy of the most recent build. The project dependencies must be
-install exlicitly when installing from the package archive ``*.tar.bz2`` file. The project can then be installed
-directly from the package file as
-
-.. code-block::
-
-   $ conda create --name myenv --channel conda-forge h5netcdf h5py numpy pyyaml 'salib>=1' 'scipy>=1' scons setuptools xarray
-   $ conda activate myenv
-   $ conda install waves-*.tar.bz2
+   $ conda install --channel conda-forge waves
 
 .. installation-end-do-not-remove
 
@@ -104,6 +93,23 @@ Developers
 * `Sergio Cordova`_
 * `Matthew Fister`_
 * `Scott Ouellette`_
+
+****************
+Copyright Notice
+****************
+
+.. copyright-start-do-not-remove
+
+Copyright (c) 2023, Triad National Security, LLC. All rights reserved.
+
+This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos National Laboratory (LANL),
+which is operated by Triad National Security, LLC for the U.S.  Department of Energy/National Nuclear Security
+Administration. All rights in the program are reserved by Triad National Security, LLC, and the U.S. Department of
+Energy/National Nuclear Security Administration. The Government is granted for itself and others acting on its behalf a
+nonexclusive, paid-up, irrevocable worldwide license in this material to reproduce, prepare derivative works, distribute
+copies to the public, perform publicly and display publicly, and to permit others to do so.
+
+.. copyright-end-do-not-remove
 
 ***************
 Developer Notes
@@ -221,8 +227,8 @@ CI configuration file. The current command may be found as
    $ mkdir ${output_folder}
    $ VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
 
-A second recipe that bundles the GitHub linked documentation is found in ``waves/recipe-github`` and can be built
-similarly by replacing ``recipe`` with ``recipe-github`` in the above command.
+A second recipe that bundles the LANL internally linked documentation is found in ``waves/recipe-internal`` and can be
+built similarly by replacing ``recipe`` with ``recipe-internal`` in the above command.
 
 This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
 `SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
