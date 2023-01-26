@@ -80,18 +80,7 @@ Installation
 
 .. code-block::
 
-   $ conda install waves --channel conda-forge
-
-Project deployment to ``conda-forge`` is incomplete. Until then, please download a copy of the Conda package from the
-`WAVES releases`_ or contact the development team for a copy of the most recent build. The project dependencies must be
-install exlicitly when installing from the package archive ``*.tar.bz2`` file. The project can then be installed
-directly from the package file as
-
-.. code-block::
-
-   $ conda create --name myenv --channel conda-forge h5netcdf h5py numpy pyyaml 'salib>=1' 'scipy>=1' scons setuptools xarray
-   $ conda activate myenv
-   $ conda install waves-*.tar.bz2
+   $ conda install --channel conda-forge waves
 
 .. installation-end-do-not-remove
 
