@@ -38,12 +38,12 @@ jobs:
         run: conda install 'scons>=4' 'setuptools>=45' 'setuptools_scm[toml]>=6.2' 'sphinx>=5.1' sphinx-argparse 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes --channel conda-forge
       - name: Build documentation
         shell: bash -el {0}
-        run: scons html-github
+        run: scons html
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload Github documentation build
-          path: 'build/docs/html-github'
+          path: 'build/docs/html'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1

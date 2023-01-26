@@ -1,0 +1,140 @@
+package:
+  name: waves
+  # TODO: Figure out how to use pyproject.toml or setup.py and a Conda build Jinja template
+  version: {{ VERSION }}
+
+about:
+  home: https://re-git.lanl.gov/aea/python-projects/waves
+  license: BSD-3-Clause
+  license_file: LICENSE.txt
+  summary: 'Parameteric study computational engineering workflow tool'
+  description: |
+    WAVES (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with
+    traditional software build systems.
+  doc_url: https://aea.re-pages.lanl.gov/python-projects/waves/main/index.html
+  dev_url: https://re-git.lanl.gov/aea/python-projects/waves
+
+source:
+  path: '..'
+
+build:
+  noarch: python
+  script:
+    # Build and install Conda package
+    # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
+    # deprecated setup.py solutions
+    - {{ PYTHON }} setup.py install
+    # Build man page and HTML documentation to bundle in Conda package
+    - scons man html-internal
+    - {{ PYTHON }} package_documentation.py
+  script_env:
+    - VERSION
+  ignore_run_exports:
+    - python_abi
+
+requirements:
+  build:
+    - git
+    - scons >=4
+    - setuptools >=45
+    - setuptools_scm[toml] >=6.2
+    - sphinx >=5.1
+    - sphinx-argparse
+    - sphinx_rtd_theme >=1
+    - sphinxcontrib-bibtex
+  host:
+    - python
+    - setuptools >=45
+    - setuptools_scm[toml] >=6.2
+  run:
+    - python >=3.8
+    - h5netcdf
+    - h5py
+    - numpy
+    - pyyaml
+    - salib >=1
+    - scipy >=1
+    - scons
+    # TODO: Remove after updating minimum scipy requirement
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
+    - setuptools
+    - xarray
+
+test:
+  requires:
+    - git
+    - h5netcdf
+    - h5py
+    - matplotlib
+    - numpy
+    - pandas
+    - pytest
+    - pytest-xdist
+    - pyyaml
+    - salib >=1
+    - scipy >=1
+    - scons
+    - sed
+    - setuptools_scm
+    - xarray
+  source_files:
+    # Everything copied here will make it into the "info" directory of the Conda package
+    - SConstruct
+    - SConscript
+    - README.rst
+    - pyproject.toml
+    - waves/SConscript
+    - waves/tests/*.py
+    - tutorials/*SConstruct
+    - tutorials/*.scons
+    - tutorials/tutorial*
+    - tutorials/eabm_package/*
+    - tutorials/eabm_package/abaqus/*
+    - tutorials/eabm_package/cubit/*
+    - tutorials/eabm_package/python/*
+    - tutorials/eabm_package/matlab/*
+  imports:
+    - waves
+  commands:
+    - test_root=${PWD}
+    # Tests that depend on correct install path
+    - waves docs --print-local-path
+    # Project unit tests
+    - scons . --keep-going --unconditional-build --ignore-documentation
+    # WAVES CLI regression tests
+    - quickstart_regression_directory="${test_root}/test_quickstart"
+    - waves quickstart ${quickstart_regression_directory}
+    - cd ${quickstart_regression_directory}
+    - scons . --jobs=4 --ignore-documentation
+    - cd ${test_root}
+    # Regression test the files used in the tutorial documentation
+    - cd ${test_root}/tutorials/
+    - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
+    - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
+    - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
+    - scons . --sconstruct=tutorial_00_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_matlab_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_argparse_types_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_cubit_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_builder_post_actions_SConstruct --keep-going --unconditional-build
+    # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure.
+    # Until then, the SSH remote execution can't be integration/regression tested.
+    #- scons . --sconstruct=tutorial_remote_execution_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_sbatch_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_06_include_files_SConstruct --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_11_archival_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
+    - waves build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
