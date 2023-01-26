@@ -25,6 +25,15 @@
 WAVES
 #####
 
+.. image:: https://anaconda.org/conda-forge/waves/badges/version.svg
+   :target: https://anaconda.org/conda-forge/waves
+
+.. image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
+   :target: https://anaconda.org/conda-forge/waves
+
+.. image:: https://zenodo.org/badge/591388602.svg
+   :target: https://zenodo.org/badge/latestdoi/591388602
+
 .. inclusion-marker-do-not-remove
 
 ***********

@@ -8,6 +8,11 @@ Changelog
 0.6.11 (unreleased)
 *******************
 
+Documentation
+=============
+- Add DOI and conda-forge badges to the README (:issue:`406`, :merge:`496`). By `Kyle Brindley`_.
+- Add the GitHub citation file format with Zenodo DOI (:issue:`397`, :merge:`497`). By `Kyle Brindley`_.
+
 *******************
 0.6.10 (2023-01-26)
 *******************
