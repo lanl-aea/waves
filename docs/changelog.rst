@@ -8,6 +8,11 @@ Changelog
 0.6.10 (unreleased)
 *******************
 
+Documentation
+=============
+- GitHub recognized BSD 3-Clause license file. Moves the copyright notice to the README (:issue:`404`, :merge:`492`). By
+  `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Remove unecessary elements of conda recipes (:merge:`491`). By `Kyle Brindley`_.
