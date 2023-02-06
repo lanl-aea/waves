@@ -9,6 +9,8 @@ _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
 _abaqus_solver_common_suffixes = [".odb", ".dat", ".msg", ".com", ".prt"]
 _matlab_environment_extension = ".matlab.env"
+_scons_command = "scons"
+_scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"

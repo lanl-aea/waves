@@ -163,7 +163,7 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
         git_clone_stdout = subprocess.check_output(command)
     stop_trigger = "is up to date."
-    scons_command = ["scons"]
+    scons_command = [_settings._scons_command]
     scons_command.extend(scons_args)
     for target in targets:
         scons_stdout = b"Go boat"
@@ -247,6 +247,10 @@ def visualize(target, output_file, project_directory, print_graphml=False):
     :param str project_directory: Directory where the WAVES/SCons project can be found
     :param bool print_graphml: Whether to print the graph in graphml format
     """
+    scons_command = [_settings._scons_command, target]
+    scons_command.extend(_settings._scons_visualize_arguments)
+    scons_stdout = subprocess.check_output(command, cwd=working_directory)
+    tree_output = scons_stdout.decode("utf-8")
     return 0
 
 
