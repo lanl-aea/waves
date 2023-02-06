@@ -27,6 +27,9 @@ def main():
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
         return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
+    elif args.subcommand == 'visualize':
+        return_code = visualize(target=args.TARGET[0], output_file=args.output_file,
+                                project_directory=args.project_directory, print_graphml=args.print_graphml)
     else:
         parser.print_help()
 
@@ -106,6 +109,19 @@ def get_parser():
     quickstart_parser.add_argument("--dry-run",
         action="store_true",
         help="Print the files that would be created and exit (default: %(default)s).")
+
+    visualize_parser = argparse.ArgumentParser(add_help=False)
+    visualize_parser = subparsers.add_parser('visualize',
+        help="Create an SCons-WAVES project visualization",
+        description="Create a visual representation of the directed acyclic graph used by your SCons-WAVES project ",
+        parents=[visualize_parser])
+    visualize_parser.add_argument("TARGET", nargs="+", help=f"SCons target")
+    visualize_parser.add_argument("-p", "--project-directory", type=str, default=str(pathlib.Path().cwd()),
+        help='path to SConstruct file')
+    visualize_parser.add_argument("-o", "--output-file", type=str, metavar='waves_visualization.svg',
+        help='path to output file')
+    visualize_parser.add_argument("-g", "--print-graphml", dest='print_graphml', action='store_true',
+        help='print the visualization in graphml format')
 
     return main_parser
 
@@ -216,6 +232,21 @@ def quickstart(directory, overwrite=False, dry_run=False):
         path.mkdir(parents=True, exist_ok=True)
     for source, destination in zip(quickstart_files, directory_files):
         shutil.copyfile(source, destination)
+    return 0
+
+
+def visualize(target, output_file, project_directory, print_graphml=False):
+    """Visualize the directed acyclic graph created by a WAVES/SCons build
+
+    Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
+    dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
+    as well.
+
+    :param str target: String specifying an SCons target
+    :param str output_file: File for saving the visualization
+    :param str project_directory: Directory where the WAVES/SCons project can be found
+    :param bool print_graphml: Whether to print the graph in graphml format
+    """
     return 0
 
 
