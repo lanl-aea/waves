@@ -11,6 +11,9 @@ _abaqus_solver_common_suffixes = [".odb", ".dat", ".msg", ".com", ".prt"]
 _matlab_environment_extension = ".matlab.env"
 _scons_command = "scons"
 _scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
+_scons_tree_status = {'E': 'exists', 'R': 'exists in repository only', 'b': 'implicit builder', 'B': 'explicit builder',
+                      'S': 'side effect', 'P': 'precious', 'A': 'always build', 'C': 'current', 'N': 'no clean',
+                      'H ': 'no cache'}
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"

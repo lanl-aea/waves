@@ -9,6 +9,7 @@ import shutil
 
 from waves import _settings
 from waves import __version__
+from waves import visualize
 
 
 def main():
@@ -28,7 +29,7 @@ def main():
     elif args.subcommand == 'quickstart':
         return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
-        return_code = visualize(target=args.TARGET[0], output_file=args.output_file,
+        return_code = visualization(target=args.TARGET[0], output_file=args.output_file,
                                 project_directory=args.project_directory, print_graphml=args.print_graphml)
     else:
         parser.print_help()
@@ -235,7 +236,7 @@ def quickstart(directory, overwrite=False, dry_run=False):
     return 0
 
 
-def visualize(target, output_file, project_directory, print_graphml=False):
+def visualization(target, output_file, project_directory, print_graphml=False):
     """Visualize the directed acyclic graph created by a WAVES/SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -250,7 +251,10 @@ def visualize(target, output_file, project_directory, print_graphml=False):
     scons_command = [_settings._scons_command, target]
     scons_command.extend(_settings._scons_visualize_arguments)
     scons_stdout = subprocess.check_output(scons_command, cwd=project_directory)
-    tree_output = scons_stdout.decode("utf-8")
+    tree_output = scons_stdout.decode("utf-8").split('\n')
+    tree_dict = visualize.parse_output(tree_output)
+    if print_graphml:
+        print(tree_dict['graphml'])
     return 0
 
 
