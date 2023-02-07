@@ -249,7 +249,7 @@ def visualize(target, output_file, project_directory, print_graphml=False):
     """
     scons_command = [_settings._scons_command, target]
     scons_command.extend(_settings._scons_visualize_arguments)
-    scons_stdout = subprocess.check_output(command, cwd=working_directory)
+    scons_stdout = subprocess.check_output(scons_command, cwd=project_directory)
     tree_output = scons_stdout.decode("utf-8")
     return 0
 
