@@ -42,7 +42,6 @@ requirements:
     - sphinx-argparse
     - sphinx_rtd_theme >=1
     - sphinxcontrib-bibtex
-    - networkx
   host:
     - python
     - setuptools >=45
@@ -51,6 +50,7 @@ requirements:
     - python >=3.8
     - h5netcdf
     - h5py
+    - networkx
     - numpy
     - pyyaml
     - salib >=1
