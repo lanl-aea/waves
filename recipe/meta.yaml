@@ -50,6 +50,7 @@ requirements:
     - python >=3.8
     - h5netcdf
     - h5py
+    - matplotlib
     - networkx
     - numpy
     - pyyaml
