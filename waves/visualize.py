@@ -8,11 +8,12 @@ import matplotlib.pyplot as plt
 
 from waves import _settings
 
-def parse_output(tree_lines):
+def parse_output(tree_lines, exclude_list):
     """
     Parse the string that has the tree output and store it in a dictionary
 
     :param list tree_lines: output of the scons tree command
+    :param list exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :returns: dictionary of tree output
     :rtype: dict
     """
@@ -33,8 +34,12 @@ def parse_output(tree_lines):
             placement = line_match.group(2)
             node_name = line_match.group(3)
             current_indent = int(len(placement) / 2) + 1
-            if node_name.startswith('/usr/bin'):  # Skip any system dependencies like /usr/bin/cd
-                last_indent = current_indent
+            exclude_node = False
+            for exclude in exclude_list: 
+                if node_name.startswith(exclude):
+                    last_indent = current_indent
+                    exclude_node = True
+            if exclude_node:
                 continue
             node_number += 1  # Increment the node_number
             if node_name not in nodes:

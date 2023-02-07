@@ -14,6 +14,7 @@ _scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
 _scons_tree_status = {'E': 'exists', 'R': 'exists in repository only', 'b': 'implicit builder', 'B': 'explicit builder',
                       'S': 'side effect', 'P': 'precious', 'A': 'always build', 'C': 'current', 'N': 'no clean',
                       'H ': 'no cache'}
+_scons_visualize_exclude = ["/usr/bin"]
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"

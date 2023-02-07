@@ -30,7 +30,7 @@ def main():
         return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET[0], output_file=args.output_file,
-                                project_directory=args.project_directory, print_graphml=args.print_graphml)
+                                project_directory=args.project_directory, print_graphml=args.print_graphml, exclude_list=args.exclude_list)
     else:
         parser.print_help()
 
@@ -121,6 +121,8 @@ def get_parser():
         help='path to SConstruct file')
     visualize_parser.add_argument("-o", "--output-file", type=str, metavar='waves_visualization.svg',
         help='path to output file')
+    visualize_parser.add_argument("-e", "--exclude-list", nargs="*",
+        help="If a node starts with one of these strings, don't visualize it")
     visualize_parser.add_argument("-g", "--print-graphml", dest='print_graphml', action='store_true',
         help='print the visualization in graphml format')
 
@@ -236,7 +238,7 @@ def quickstart(directory, overwrite=False, dry_run=False):
     return 0
 
 
-def visualization(target, project_directory, output_file=None, print_graphml=False):
+def visualization(target, project_directory, output_file=None, print_graphml=False, exclude_list=_settings._scons_visualize_exclude):
     """Visualize the directed acyclic graph created by a WAVES/SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -247,12 +249,13 @@ def visualization(target, project_directory, output_file=None, print_graphml=Fal
     :param str project_directory: Directory where the WAVES/SCons project can be found
     :param str output_file: File for saving the visualization
     :param bool print_graphml: Whether to print the graph in graphml format
+    :param list exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     """
     scons_command = [_settings._scons_command, target]
     scons_command.extend(_settings._scons_visualize_arguments)
     scons_stdout = subprocess.check_output(scons_command, cwd=project_directory)
     tree_output = scons_stdout.decode("utf-8").split('\n')
-    tree_dict = visualize.parse_output(tree_output)
+    tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list)
 
     if print_graphml:
         print(tree_dict['graphml'])
