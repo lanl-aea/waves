@@ -177,6 +177,8 @@ def visualize(tree, output_file, height, width):
         suffix = file_name.suffix
         if not suffix or suffix[1:] not in list(fig.canvas.get_supported_filetypes().keys()):
             # If there is no suffix or it's not supported by matplotlib, use svg
+            print(f"WARNING: extension '{suffix}' is not supported by matplotlib. Falling back to '{file_name}.svg'",
+                  file=sys.stderr)
             file_name = file_name.with_suffix('.svg')
         fig = plt.gcf()
         fig.set_size_inches((width, height), forward=False)

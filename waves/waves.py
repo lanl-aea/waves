@@ -119,17 +119,18 @@ def get_parser():
         parents=[visualize_parser])
     visualize_parser.add_argument("TARGET", help=f"SCons target")
     visualize_parser.add_argument("-p", "--project-directory", type=str, default=str(pathlib.Path().cwd()),
-        help='Path to SConstruct file (%(default)s)')
-    visualize_parser.add_argument("-o", "--output-file", type=str, metavar='waves_visualization.svg',
+        help='Path to SConstruct file (default: present working directory)')
+    visualize_parser.add_argument("-o", "--output-file", type=str,
+        default=str(pathlib.Path.cwd() / 'visualization.svg'),
         help='Path to output file (default: %(default)s)')
-    visualize_parser.add_argument("--height", type=int, metavar='12',
-                                  help='Height of visualization if being saved to a file')
-    visualize_parser.add_argument("--width", type=int, metavar='36',
-                                  help='Width of visualization if being saved to a file')
-    visualize_parser.add_argument("-e", "--exclude-list", nargs="*",
-        help="If a node starts with one of these strings, don't visualize it")
+    visualize_parser.add_argument("--height", type=int, default=12,
+        help='Height of visualization in inches if being saved to a file (default: %(default)s)')
+    visualize_parser.add_argument("--width", type=int, default=36,
+        help='Width of visualization in inches if being saved to a file (default: %(default)s)')
+    visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
+        help="If a node starts with one of these strings, don't visualize it (default: %(default)s)")
     visualize_parser.add_argument("-g", "--print-graphml", dest='print_graphml', action='store_true',
-        help='Print the visualization in graphml format')
+        help='Print the visualization in graphml format (default: %(default)s)')
 
     return main_parser
 
@@ -253,7 +254,7 @@ def visualization(target, project_directory, exclude_list, output_file=None, pri
 
     :param str target: String specifying an SCons target
     :param str project_directory: Directory where the WAVES/SCons project can be found
-    :param list exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
+    :param list exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
     :param str output_file: File for saving the visualization
     :param bool print_graphml: Whether to print the graph in graphml format
     :param int height: Height of visualization if being saved to a file
@@ -266,8 +267,6 @@ def visualization(target, project_directory, exclude_list, output_file=None, pri
         return 1
     scons_stdout = subprocess.check_output(scons_command, cwd=project_directory)
     tree_output = scons_stdout.decode("utf-8").split('\n')
-    if not exclude_list:
-        exclude_list = _settings._visualize_exclude
     tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list)
 
     if print_graphml:
