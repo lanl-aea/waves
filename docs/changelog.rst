@@ -8,6 +8,10 @@ Changelog
 0.6.12 (unreleased)
 *******************
 
+Internal Changes
+================
+- Add networkx to WAVES environment for new visualization feature (:issue:`412`, :merge:`501`). By `Prabhu Khalsa`_.
+
 *******************
 0.6.11 (2023-01-26)
 *******************
