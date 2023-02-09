@@ -152,7 +152,8 @@ def visualize(tree, output_file, height, width):
         annotations[A] = patchA
         annotations[B] = patchB
         dark_props = dict(arrowstyle="<-", color="0.0", connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        dark_arrow = ax.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=dark_props)
+        dark_arrow = ax.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data',
+                                 arrowprops=dark_props)
         dark_arrow.set_visible(False)  # Draw simultaneous darker arrow, but don't show it
         try:
             arrows[A]['from'].append(dark_arrow)
@@ -172,10 +173,14 @@ def visualize(tree, output_file, height, width):
     fig.canvas.mpl_connect("button_press_event", lambda x: click_arrow(x, annotations, arrows))
 
     if output_file:
-        file_name = f'{str(pathlib.Path(output_file).stem)}.svg'  # Make sure it ends with .svg
+        file_name = pathlib.Path(output_file)
+        suffix = file_name.suffix
+        if not suffix or suffix[1:] not in list(fig.canvas.get_supported_filetypes().keys()):
+            # If there is no suffix or it's not supported by matplotlib, use svg
+            file_name = file_name.with_suffix('.svg')
         fig = plt.gcf()
         fig.set_size_inches((width, height), forward=False)
-        fig.savefig(file_name)
+        fig.savefig(str(file_name))
     else:
         plt.show()
     plt.clf()  # Indicates that we are done with the plot

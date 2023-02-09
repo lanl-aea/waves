@@ -114,14 +114,14 @@ def get_parser():
 
     visualize_parser = argparse.ArgumentParser(add_help=False)
     visualize_parser = subparsers.add_parser('visualize',
-        help="Create an SCons-WAVES project visualization",
-        description="Create a visual representation of the directed acyclic graph used by your SCons-WAVES project ",
+        help="Create an SCons project visualization",
+        description="Create a visual representation of the directed acyclic graph used by your SCons project ",
         parents=[visualize_parser])
     visualize_parser.add_argument("TARGET", help=f"SCons target")
     visualize_parser.add_argument("-p", "--project-directory", type=str, default=str(pathlib.Path().cwd()),
-        help='path to SConstruct file')
+        help='Path to SConstruct file (%(default)s)')
     visualize_parser.add_argument("-o", "--output-file", type=str, metavar='waves_visualization.svg',
-        help='path to output file')
+        help='Path to output file (default: %(default)s)')
     visualize_parser.add_argument("--height", type=int, metavar='12',
                                   help='Height of visualization if being saved to a file')
     visualize_parser.add_argument("--width", type=int, metavar='36',
@@ -129,7 +129,7 @@ def get_parser():
     visualize_parser.add_argument("-e", "--exclude-list", nargs="*",
         help="If a node starts with one of these strings, don't visualize it")
     visualize_parser.add_argument("-g", "--print-graphml", dest='print_graphml', action='store_true',
-        help='print the visualization in graphml format')
+        help='Print the visualization in graphml format')
 
     return main_parser
 
