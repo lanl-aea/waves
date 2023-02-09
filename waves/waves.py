@@ -29,7 +29,7 @@ def main():
     elif args.subcommand == 'quickstart':
         return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
-        return_code = visualization(target=args.TARGET[0], output_file=args.output_file,
+        return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                 project_directory=args.project_directory, print_graphml=args.print_graphml, exclude_list=args.exclude_list)
     else:
         parser.print_help()
