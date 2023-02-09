@@ -121,8 +121,7 @@ def get_parser():
     visualize_parser.add_argument("-p", "--project-directory", type=str, default=str(pathlib.Path().cwd()),
         help='Path to SConstruct file (default: present working directory)')
     visualize_parser.add_argument("-o", "--output-file", type=str,
-        default=str(pathlib.Path.cwd() / 'visualization.svg'),
-        help='Path to output file (default: %(default)s)')
+        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg'")
     visualize_parser.add_argument("--height", type=int, default=12,
         help='Height of visualization in inches if being saved to a file (default: %(default)s)')
     visualize_parser.add_argument("--width", type=int, default=36,
@@ -130,7 +129,7 @@ def get_parser():
     visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
         help="If a node starts with one of these strings, don't visualize it (default: %(default)s)")
     visualize_parser.add_argument("-g", "--print-graphml", dest='print_graphml', action='store_true',
-        help='Print the visualization in graphml format (default: %(default)s)')
+        help='Print the visualization in graphml format (default: %(d')
 
     return main_parser
 
