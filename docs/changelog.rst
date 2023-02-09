@@ -8,6 +8,10 @@ Changelog
 0.6.12 (unreleased)
 *******************
 
+New Features
+============
+- Add alpha release of new visualization feature (:issue:`408`, :merge:`500`). By `Prabhu Khalsa`_.
+
 Documentation
 =============
 - Update highlighted, non-boilerplate code in the Geometry tutorial (:issue:`410`, :merge:`503`). By `Kyle Brindley`_.
