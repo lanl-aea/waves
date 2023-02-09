@@ -3,6 +3,7 @@ h5netcdf
 h5py
 mamba
 matplotlib
+networkx
 numpy
 pandas
 pytest
