@@ -30,7 +30,8 @@ def main():
         return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
-                                project_directory=args.project_directory, print_graphml=args.print_graphml, exclude_list=args.exclude_list)
+                                    project_directory=args.project_directory, print_graphml=args.print_graphml,
+                                    exclude_list=args.exclude_list, height=args.height, width=args.width)
     else:
         parser.print_help()
 
@@ -121,6 +122,10 @@ def get_parser():
         help='path to SConstruct file')
     visualize_parser.add_argument("-o", "--output-file", type=str, metavar='waves_visualization.svg',
         help='path to output file')
+    visualize_parser.add_argument("--height", type=int, metavar='12',
+                                  help='Height of visualization if being saved to a file')
+    visualize_parser.add_argument("--width", type=int, metavar='36',
+                                  help='Width of visualization if being saved to a file')
     visualize_parser.add_argument("-e", "--exclude-list", nargs="*",
         help="If a node starts with one of these strings, don't visualize it")
     visualize_parser.add_argument("-g", "--print-graphml", dest='print_graphml', action='store_true',
@@ -238,7 +243,8 @@ def quickstart(directory, overwrite=False, dry_run=False):
     return 0
 
 
-def visualization(target, project_directory, output_file=None, print_graphml=False, exclude_list=_settings._scons_visualize_exclude):
+def visualization(target, project_directory, exclude_list, output_file=None, print_graphml=False,
+                  height=_settings._visualize_default_height, width=_settings._visualize_default_width):
     """Visualize the directed acyclic graph created by a WAVES/SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -247,19 +253,26 @@ def visualization(target, project_directory, output_file=None, print_graphml=Fal
 
     :param str target: String specifying an SCons target
     :param str project_directory: Directory where the WAVES/SCons project can be found
+    :param list exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param str output_file: File for saving the visualization
     :param bool print_graphml: Whether to print the graph in graphml format
-    :param list exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
+    :param int height: Height of visualization if being saved to a file
+    :param int width: Width of visualization if being saved to a file
     """
     scons_command = [_settings._scons_command, target]
     scons_command.extend(_settings._scons_visualize_arguments)
+    if not pathlib.Path(project_directory).exists():
+        print(f"\t{project_directory} does not exist.", file=sys.stdout)
+        return 1
     scons_stdout = subprocess.check_output(scons_command, cwd=project_directory)
     tree_output = scons_stdout.decode("utf-8").split('\n')
+    if not exclude_list:
+        exclude_list = _settings._visualize_exclude
     tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list)
 
     if print_graphml:
-        print(tree_dict['graphml'])
-    visualize.visualize(tree_dict, output_file)
+        print(tree_dict['graphml'], file=sys.stdout)
+    visualize.visualize(tree_dict, output_file, height, width)
     return 0
 
 

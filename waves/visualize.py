@@ -113,12 +113,14 @@ def click_arrow(event, annotations, arrows):
                         from_arrow.set_visible(True)
                     fig.canvas.draw_idle()
 
-def visualize(tree, output_file):
+def visualize(tree, output_file, height, width):
     """
     Create a visualization showing the tree
 
     :param dict tree: output of the scons tree command stored as dictionary
     :param str output_file: Name of file to store visualization
+    :param int height: Height of visualization if being saved to a file
+    :param int width: Width of visualization if being saved to a file
     """
     graph = networkx.DiGraph()
     graph.add_nodes_from(tree['nodes'])
@@ -172,7 +174,7 @@ def visualize(tree, output_file):
     if output_file:
         file_name = f'{str(pathlib.Path(output_file).stem)}.svg'  # Make sure it ends with .svg
         fig = plt.gcf()
-        fig.set_size_inches((36, 12), forward=False)
+        fig.set_size_inches((width, height), forward=False)
         fig.savefig(file_name)
     else:
         plt.show()
