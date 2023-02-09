@@ -35,6 +35,7 @@ build:
 requirements:
   build:
     - git
+    - networkx
     - scons >=4
     - setuptools >=45
     - setuptools_scm[toml] >=6.2
@@ -51,7 +52,6 @@ requirements:
     - h5netcdf
     - h5py
     - matplotlib
-    - networkx
     - numpy
     - pyyaml
     - salib >=1
