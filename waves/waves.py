@@ -116,7 +116,7 @@ def get_parser():
         help="Create an SCons-WAVES project visualization",
         description="Create a visual representation of the directed acyclic graph used by your SCons-WAVES project ",
         parents=[visualize_parser])
-    visualize_parser.add_argument("TARGET", nargs="+", help=f"SCons target")
+    visualize_parser.add_argument("TARGET", help=f"SCons target")
     visualize_parser.add_argument("-p", "--project-directory", type=str, default=str(pathlib.Path().cwd()),
         help='path to SConstruct file')
     visualize_parser.add_argument("-o", "--output-file", type=str, metavar='waves_visualization.svg',
