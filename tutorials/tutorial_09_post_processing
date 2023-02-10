@@ -140,9 +140,9 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 plot_name = "stress_strain_comparison"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
-script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options = "--input-file ${SOURCES[2:]}"
 script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
-script_options += f" --parameter-study-file {parameter_study_file.name}"
+script_options += " --parameter-study-file ${SOURCES[1]}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[f"{python_source_abspath}/post_processing.py", parameter_study_file.name] + post_processing_source,
