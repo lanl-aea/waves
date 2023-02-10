@@ -69,6 +69,7 @@ workflow.extend(env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options,
     global_seed=simulation_variables['global_seed']))
+
 # Comment used in tutorial code snippets: marker-3
 
 # SolverPrep

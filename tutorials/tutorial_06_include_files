@@ -40,29 +40,34 @@ datacheck = []
 
 # Geometry
 journal_file = f"{model}_geometry"
-journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+journal_options = "--width ${width} --height ${height}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
-    journal_options=journal_options))
+    journal_options=journal_options,
+    width=simulation_variables['width'],
+    height=simulation_variables['height']))
 
 # Comment used in tutorial code snippets: marker-2
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+journal_options = "--width ${width} --height ${height}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
-    journal_options=journal_options))
+    journal_options=journal_options,
+    width=simulation_variables['width'],
+    height=simulation_variables['height']))
 
 # Mesh
 journal_file = f"{model}_mesh"
-journal_options = f"--global-seed {simulation_variables['global_seed']}"
+journal_options = "--global-seed ${global_seed}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
-    journal_options=journal_options))
+    journal_options=journal_options,
+    global_seed=simulation_variables['global_seed']))
 
 # Comment used in tutorial code snippets: marker-3
 
