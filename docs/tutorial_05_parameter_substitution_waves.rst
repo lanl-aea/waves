@@ -155,16 +155,22 @@ this is implemented with the :meth:`waves.builders.copy_substitute` method will 
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 7, 17, 25
+      :emphasize-lines: 7, 11-13, 19, 23-25, 29, 33-34
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
-pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using a formatted string as
-shown in the first highlighted section, we will end up passing a string that looks like the following to the
-``single_element_geometry.py`` CLI:
+pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using SCons variable
+substitution as shown in the first highlighted section, we will end up passing a string that looks like the following to
+the ``single_element_geometry.py`` CLI:
 
 .. code-block:: python
 
-   journal_options = "--width 1.0 --height 1.0"
+   --width 1.0 --height 1.0
+
+Note that the keyword arguments ``journal_options``, ``width``, ``height``, and ``global_options`` are not part of the
+normal builder interface. `SCons`_ will accept these keyword arguments and use them as substitution variables as part of
+the task definition. We can use this feature to pass arbitrary variables to the builder task construction on a per-task
+basis without affecting other tasks which use the same builder. For instance, the ``# Mesh`` task will not have access
+to the ``width`` and ``height`` substitutions because we have not specified those keyword arguments.
 
 This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mesh``. `SCons`_ will save a signature of
 the completed action string as part of the task definition. If the substituted parameter values change, `SCons`_ will
