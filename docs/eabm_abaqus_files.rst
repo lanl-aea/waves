@@ -4,9 +4,8 @@
 WAVES-EABM Abaqus files
 #######################
 
-Abaqus files as text for those without access to the `WAVES repository`_ and the `WAVES-EABM`_ to perform the tutorial
-``git archive`` commands. This section is most relevant to the :ref:`scons_quickstart` and :ref:`scons_multiactiontask`
-tutorials.
+Abaqus files as text for those without access to the `WAVES repository`_ to perform the tutorial ``git archive``
+commands. This section is most relevant to the :ref:`scons_quickstart` and :ref:`scons_multiactiontask` tutorials.
 
 **************************
 single_element_geometry.py
