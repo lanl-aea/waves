@@ -9,7 +9,6 @@ import shutil
 
 from waves import _settings
 from waves import __version__
-from waves import visualize
 
 
 def main():
@@ -259,6 +258,7 @@ def visualization(target, sconstruct, exclude_list, output_file=None, print_grap
     :param int height: Height of visualization if being saved to a file
     :param int width: Width of visualization if being saved to a file
     """
+    from waves import visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
     if not sconstruct.is_file():
         sconstruct = sconstruct / "SConstruct"
