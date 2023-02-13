@@ -9,6 +9,49 @@ References
 **********
 
 * `SCons Substfile`_ :cite:`scons-user`
+* `SCons`_ Variable Substitution :cite:`scons-man`
+
+
+The relevant portion of the `SCons`_ documentation can't be hyperlinked directly. Instead, the relevant portion of the
+"Substitution Variables" and "Substitution: Special Variables" sections of the man page is quoted below :cite:`scons-man`.
+
+   Before executing a command, scons performs parameter expansion (substitution) on the string that makes up the action
+   part of the builder. The format of a substitutable parameter is ``${expression}``. If ``expression`` refers to a
+   variable, the braces in ``${expression}`` can be omitted unless the variable name is immediately followed by a
+   character that could either be interpreted as part of the name, or is Python syntax such as ``[`` (for
+   indexing/slicing) or ``.`` (for attribute access - see Special Attributes below).
+
+   If ``expression`` refers to a construction variable, it is replaced with the value of that variable in the
+   construction environment at the time of execution. If ``expression`` looks like a variable name but is not defined in
+   the construction environment it is replaced with an empty string. If ``expression`` refers to one of the Special
+   Variables (see below) the corresponding value of the variable is substituted. ``expression`` may also be a Python
+   expression to be evaluated. See Python Code Substitution below for a description.
+
+   ...
+
+   Besides regular construction variables, scons provides the following Special Variables for use in expanding commands:
+
+   ...
+
+   ``$SOURCE``
+
+      The file name of the source of the build command, or the file name of the first source if multiple sources are being built.
+
+   ``$SOURCES``
+
+      The file names of the sources of the build command.
+
+   ``$TARGET``
+
+      The file name of the target being built, or the file name of the first target if multiple targets are being built.
+
+   ``$TARGETS``
+
+      The file names of all targets being built.
+
+   These names are reserved and may not be assigned to or used as construction variables. SCons computes them in a
+   context-dependent manner and they and are not retrieved from a construction environment.
+
 
 ***********
 Environment
@@ -112,16 +155,22 @@ this is implemented with the :meth:`waves.builders.copy_substitute` method will 
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 7, 17, 25
+      :emphasize-lines: 7, 11-13, 19, 23-25, 29, 33-34
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
-pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using a formatted string as
-shown in the first highlighted section, we will end up passing a string that looks like the following to the
-``single_element_geometry.py`` CLI:
+pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using SCons variable
+substitution as shown in the first highlighted section, we will end up passing a string that looks like the following to
+the ``single_element_geometry.py`` CLI:
 
 .. code-block:: python
 
-   journal_options = "--width 1.0 --height 1.0"
+   --width 1.0 --height 1.0
+
+Note that the keyword arguments ``journal_options``, ``width``, ``height``, and ``global_options`` are not part of the
+normal builder interface. `SCons`_ will accept these keyword arguments and use them as substitution variables as part of
+the task definition. We can use this feature to pass arbitrary variables to the builder task construction on a per-task
+basis without affecting other tasks which use the same builder. For instance, the ``# Mesh`` task will not have access
+to the ``width`` and ``height`` substitutions because we have not specified those keyword arguments.
 
 This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mesh``. `SCons`_ will save a signature of
 the completed action string as part of the task definition. If the substituted parameter values change, `SCons`_ will

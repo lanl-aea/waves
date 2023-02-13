@@ -13,7 +13,8 @@ is reproduced here
 In addition to the Conda environment managed packages, this project also requires a separately managed installation of
 TeXLive to build the PDF documentation.
 
-The tutorials and :term:`modsim` repository template, `WAVES-EABM`_, in this project also require:
+The tutorials in this project may also require:
 
 #. Abaqus
 #. Cubit
+#. Matlab

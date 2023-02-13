@@ -13,6 +13,7 @@ Documentation
 - Update highlighted, non-boilerplate code in the Geometry tutorial (:issue:`410`, :merge:`503`). By `Kyle Brindley`_.
 - Clarify the difference between a builder and the ``copy_substitute`` method (:issue:`411`, :merge:`504`). By `Kyle
   Brindley`_.
+- Prefer SCons variable substitution over f-strings where possible (:merge:`502`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

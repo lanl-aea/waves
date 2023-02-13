@@ -33,7 +33,7 @@ Directory Structure
 Solver Input Files
 ******************
 
-4. Download and copy the `WAVES-EABM abaqus source files`_ into your existing
+4. Download and copy the `WAVES tutorials abaqus source files`_ into your existing
    ``eabm_package/abaqus`` sub-directory. If you're on a linux system with `git`_ installed and
    read access on the `WAVES`_ repository, you can use `git archive`_ as below.
 

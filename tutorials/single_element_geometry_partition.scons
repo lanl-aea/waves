@@ -61,21 +61,22 @@ model = "single_element"
 
 # Geometry
 journal_file = f"{model}_geometry"
-journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+journal_options = "--width ${width} --height ${height}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae",
-            f"{journal_file}.jnl"],
+    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
-    journal_options=journal_options))
+    journal_options=journal_options,
+    width=simulation_variables['width'],
+    height=simulation_variables['height']))
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+journal_options = "--width ${width} --height ${height}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae",
-            f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py",
-            f"{model}_geometry.cae"],
-    journal_options=journal_options))
+    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
+    journal_options=journal_options,
+    width=simulation_variables['width'],
+    height=simulation_variables['height']))
 
 Return(["workflow", "datacheck"])
