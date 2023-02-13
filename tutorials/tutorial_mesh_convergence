@@ -78,7 +78,7 @@ partition_targets = env.AbaqusJournal(
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
     journal_options=journal_options,
     width=simulation_variables['width'],
-    height=simulation_variables['height']))
+    height=simulation_variables['height'])
 workflow.extend(partition_targets)
 partition_cae_object = partition_targets[0]
 partition_cae_file = pathlib.Path(partition_cae_object.abspath)
