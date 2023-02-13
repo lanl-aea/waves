@@ -91,7 +91,7 @@ def get_parser():
                                   help="Perform a full local git clone operation to the specified directory before " \
                                        "executing the scons command, " \
                                        "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
-                                       "(default: %(default)s).")
+                                       "(default: %(default)s)")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
@@ -102,34 +102,34 @@ def get_parser():
     quickstart_parser.add_argument("PROJECT_DIRECTORY",
         nargs="?",
         help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not " \
-             "contain conflicting filenames. (default: PWD).",
+             "contain conflicting filenames. (default: PWD)",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
     quickstart_parser.add_argument("--overwrite",
         action="store_true",
-        help="Overwrite any existing files (default: %(default)s).")
+        help="Overwrite any existing files (default: %(default)s)")
     quickstart_parser.add_argument("--dry-run",
         action="store_true",
-        help="Print the files that would be created and exit (default: %(default)s).")
+        help="Print the files that would be created and exit (default: %(default)s)")
 
     visualize_parser = argparse.ArgumentParser(add_help=False)
-    visualize_parser = subparsers.add_parser('visualize',
+    visualize_parser = subparsers.add_parser("visualize",
         help="Create an SCons project visualization",
         description="Create a visual representation of the directed acyclic graph used by your SCons project ",
         parents=[visualize_parser])
     visualize_parser.add_argument("TARGET", help=f"SCons target")
     visualize_parser.add_argument("-p", "--project-directory", type=str, default=str(pathlib.Path().cwd()),
-        help='Path to SConstruct file (default: present working directory)')
+        help="Path to SConstruct file (default: PWD)")
     visualize_parser.add_argument("-o", "--output-file", type=str,
-        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg'")
+        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' (default: %(default)s)")
     visualize_parser.add_argument("--height", type=int, default=12,
-        help='Height of visualization in inches if being saved to a file (default: %(default)s)')
+        help="Height of visualization in inches if being saved to a file (default: %(default)s)")
     visualize_parser.add_argument("--width", type=int, default=36,
-        help='Width of visualization in inches if being saved to a file (default: %(default)s)')
+        help="Width of visualization in inches if being saved to a file (default: %(default)s)")
     visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
-        help="If a node starts with one of these strings, don't visualize it (default: %(default)s)")
-    visualize_parser.add_argument("-g", "--print-graphml", dest='print_graphml', action='store_true',
-        help='Print the visualization in graphml format (default: %(d')
+        help="If a node starts with one of these strings, do not visualize it (default: %(default)s)")
+    visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
+        help="Print the visualization in graphml format (default: %(default)s)")
 
     return main_parser
 
