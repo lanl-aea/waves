@@ -67,8 +67,8 @@ workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
     journal_options=journal_options,
-    width=simulation_variables['width'],
-    height=simulation_variables['height']))
+    width=simulation_constants['width'],
+    height=simulation_constants['height']))
 
 # Partition
 journal_file = f"{model}_partition"
@@ -77,8 +77,8 @@ partition_targets = env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
     journal_options=journal_options,
-    width=simulation_variables['width'],
-    height=simulation_variables['height'])
+    width=simulation_constants['width'],
+    height=simulation_constants['height'])
 workflow.extend(partition_targets)
 partition_cae_object = partition_targets[0]
 partition_cae_file = pathlib.Path(partition_cae_object.abspath)
