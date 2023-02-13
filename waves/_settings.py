@@ -9,6 +9,11 @@ _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
 _abaqus_solver_common_suffixes = [".odb", ".dat", ".msg", ".com", ".prt"]
 _matlab_environment_extension = ".matlab.env"
+_scons_command = "scons"
+_scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
+_scons_tree_status = {'E': 'exists', 'R': 'exists in repository only', 'b': 'implicit builder', 'B': 'explicit builder',
+                      'S': 'side effect', 'P': 'precious', 'A': 'always build', 'C': 'current', 'N': 'no clean',
+                      'H ': 'no cache'}
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"
@@ -19,6 +24,9 @@ _installed_docs_index = _project_root_abspath / "docs/index.html"
 _installed_quickstart_directory = _project_root_abspath / "quickstart"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
 _supported_salib_samplers = ["latin", "fast_sampler", "sobol", "finite_diff", "morris"]
+_visualize_exclude = ["/usr/bin"]
+_visualize_default_height = 12
+_visualize_default_width = 36
 
 # For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
 # Enables ``python -m waves.waves quickstart ...`` execution from repository root directory
