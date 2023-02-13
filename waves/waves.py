@@ -244,14 +244,14 @@ def quickstart(directory, overwrite=False, dry_run=False):
 
 def visualization(target, sconstruct, exclude_list, output_file=None, print_graphml=False,
                   height=_settings._visualize_default_height, width=_settings._visualize_default_width):
-    """Visualize the directed acyclic graph created by a WAVES/SCons build
+    """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
     dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
     as well.
 
     :param str target: String specifying an SCons target
-    :param str sconstruct: Directory where the WAVES/SCons project can be found
+    :param str sconstruct: Path to an SConstruct file or parent directory
     :param list exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
     :param str output_file: File for saving the visualization
     :param bool print_graphml: Whether to print the graph in graphml format
