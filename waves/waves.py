@@ -265,9 +265,8 @@ def visualization(target, sconstruct, exclude_list, output_file=None, print_grap
     if not sconstruct.exists():
         print(f"\t{sconstruct} does not exist.", file=sys.stderr)
         return 1
-    scons_command = [_settings._scons_command, target]
+    scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
     scons_command.extend(_settings._scons_visualize_arguments)
-    scons_command.extend([f"--sconstruct={sconstruct.name}"])
     scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
     tree_output = scons_stdout.decode("utf-8").split('\n')
     tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list)
