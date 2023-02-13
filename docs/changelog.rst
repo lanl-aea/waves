@@ -8,6 +8,10 @@ Changelog
 0.6.12 (unreleased)
 *******************
 
+Documentation
+=============
+- Update highlighted, non-boilerplate code in the Geometry tutorial (:issue:`410`, :merge:`503`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Add networkx to WAVES environment for new visualization feature (:issue:`412`, :merge:`501`). By `Prabhu Khalsa`_.
