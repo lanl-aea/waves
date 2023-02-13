@@ -174,6 +174,7 @@ def visualize(tree, output_file, height, width):
 
     if output_file:
         file_name = pathlib.Path(output_file)
+        file_name.parent.mkdir(parents=True, exist_ok=True)
         suffix = file_name.suffix
         if not suffix or suffix[1:] not in list(fig.canvas.get_supported_filetypes().keys()):
             # If there is no suffix or it's not supported by matplotlib, use svg
