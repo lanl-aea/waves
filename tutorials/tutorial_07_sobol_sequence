@@ -69,33 +69,38 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
     # Geometry
     journal_file = f"{model}_geometry"
-    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+    journal_options = "--width ${width} --height ${height}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        width=simulation_variables['width'],
+        height=simulation_variables['height']))
 
     # Partition
     journal_file = f"{model}_partition"
-    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+    journal_options = "--width ${width} --height ${height}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{set_name / model}_geometry.cae"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        width=simulation_variables['width'],
+        height=simulation_variables['height']))
 
     # Mesh
     journal_file = f"{model}_mesh"
-    journal_options = f"--global-seed {simulation_variables['global_seed']}"
+    journal_options = "--global-seed ${global_seed}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.inp",
                 f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{set_name / model}_partition.cae"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        global_seed=simulation_variables['global_seed']))
 
     # SolverPrep
     abaqus_source_list = [
