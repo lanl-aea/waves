@@ -107,7 +107,7 @@ test:
     - cd ${quickstart_regression_directory}
     - scons . --jobs=4 --ignore-documentation
     - cd ${test_root}
-    - waves visualize --sconstruct quickstart/SConstruct nominal --output-file quickstart/build/nominal/visualize.svg
+    - waves visualize nominal --sconstruct ${quickstart_regression_directory}/SConstruct --output-file ${quickstart_regression_directory}/nominal.svg
     # Regression test the files used in the tutorial documentation
     - cd ${test_root}/tutorials/
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
