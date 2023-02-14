@@ -834,15 +834,6 @@ class CustomStudy(_ParameterGenerator):
 class SobolSequence(_ScipyGenerator):
     """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
 
-    .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
-    .. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
-
-    .. warning::
-
-       WAVES does not currently enforce a minimum version of scipy, but this class requires scipy >=1.7.0. Conda may
-       install WAVES even if the minimum version of scipy required by this class can't be met during environment
-       dependency resolution. If the minimum scipy version is not met, this class will raise a runtime error.
-
     The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
 
     .. warning::

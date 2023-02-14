@@ -6,13 +6,6 @@ Tutorial 07: Sobol Sequence
 
 .. include:: wip_warning.txt
 
-.. TODO: remove the scipy minimum version note after requiring scipy>=1.7.0 in Conda package runtime requirements
-.. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
-
-.. only:: aea
-
-   .. include:: scipy_warning.txt
-
 **********
 References
 **********
