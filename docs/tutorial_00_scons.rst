@@ -89,21 +89,6 @@ command line without modifying the ``SConstruct`` file source code. For example,
 the default build directory named ``build`` and the second ``scons`` call will create a build directory named
 ``non_default_build``.
 
-.. code-block::
-
-   $ ls .
-   SConstruct
-   $ scons
-   $ ls .
-   SConstruct
-   build/
-
-   $ scons --build-dir=non_default_build
-   $ ls .
-   SConstruct
-   build/
-   non_default_build/
-
 The ``--unconditional-build`` option is mostly useful for :ref:`testing` and continuous integration. At the
 end of this tutorial, you will see how to explore the project specific command line options help and usage.
 
