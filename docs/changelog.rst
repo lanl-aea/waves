@@ -18,6 +18,7 @@ Documentation
 - Clarify the difference between a builder and the ``copy_substitute`` method (:issue:`411`, :merge:`504`). By `Kyle
   Brindley`_.
 - Prefer SCons variable substitution over f-strings where possible (:merge:`502`). By `Kyle Brindley`_.
+- Miscellaneous clarifications and updates to the tutorials (:issue:`409`, :merge:`505`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
