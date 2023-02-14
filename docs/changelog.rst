@@ -25,8 +25,9 @@ Internal Changes
 - Add networkx to WAVES environment for new visualization feature (:issue:`412`, :merge:`501`). By `Prabhu Khalsa`_.
 - Fall back to system anaconda shared environment when project CI environment doesn't exist (:issue:`417`,
   :merge:`511`). By `Kyle Brindley`_.
-- Update the minimum scipy version runtime requirement for the scipy Sobol generator (:issue:`278`, :merge:`506`). By
-  `Kyle Brindley`_.
+- Update the minimum scipy version runtime requirement to support the scipy Sobol generator. This change was already
+  implemented for the conda-forge and GitHub packages. Change affects AEA Conda channel. (:issue:`278`, :merge:`506`).
+  By `Kyle Brindley`_.
 
 Enhancements
 ============
