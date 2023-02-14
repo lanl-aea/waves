@@ -60,26 +60,26 @@ Running a Datacheck
        :end-before: marker-5
        :emphasize-lines: 4-12
 
-In the changes you just made, the first line of code extracts the file ``name`` from the `Python pathlib`_ objects in 
-the ``abaqus_source_list`` (which you defined in the previous tutorial) and removes any trailing ``.in`` extensions from 
-the file names. The ``pathlib.Path.name`` method strips the leading path from the `Python pathlib`_ object and leaves 
+In the changes you just made, the first line of code extracts the file ``name`` from the `Python pathlib`_ objects in
+the ``abaqus_source_list`` (which you defined in the previous tutorial) and removes any trailing ``.in`` extensions from
+the file names. The ``pathlib.Path.name`` method strips the leading path from the `Python pathlib`_ object and leaves
 the file name, for example:
 
 .. code-block:: Text
-    
+
     >>> source_file = pathlib.Path('/path/to/file.extension')
     >>> print(type(source_file), str(source_file))
     <class 'pathlib.PosixPath'> /path/to/file.extension
     >>> print(type(source_file.name), source_file.name)
     <class 'str'> file.extension
 
-In this tutorial, there are no files with ``.in`` extension; this is required when it comes to substituting parameters 
+In this tutorial, there are no files with ``.in`` extension; this is required when it comes to substituting parameters
 into files which is discussed in the next tutorial,
 :ref:`tutorial_parameter_substitution_waves`. For this tutorial, we only require that the file names be extracted from
 the ``abaqus_source_list``. This tutorial would behave identically if the ``solve_source_list`` was defined as
 
 .. code-block:: Python
-    
+
     solve_source_list = [source_file.name for source_file in abaqus_source_list]
 
 Next, ``{journal_file}.inp`` needs to be appended to the list of simulation source files. Recall from
@@ -228,8 +228,7 @@ Output Files
 ************
 
 Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
-below. Note that the output files from the previous tutorials also exist in the ``build`` directory, but the ``-I``
-option is used in the ``tree`` command below to reduce clutter in the ouptut shown.
+below.
 
 .. code-block:: bash
 
