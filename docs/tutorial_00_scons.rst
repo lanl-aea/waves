@@ -179,7 +179,7 @@ provided by `WAVES`_ reduce the requisite background knowledge to begin creating
 construction environment ``BUILDERS`` variable must be updated to include these custom `SCons`_ builders and make them
 available to the simulation configuration starting in :ref:`tutorial_geometry_waves`.
 
-The `WAVES`_ :ref:`waves_builders_api` describes the available builders and their usage. As `WAVES`_ matures, more software will be
+The `WAVES`_ :ref:`waves_builders_api` API describes the available builders and their usage. As `WAVES`_ matures, more software will be
 supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
 builders`_.
 
