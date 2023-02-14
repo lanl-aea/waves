@@ -6,7 +6,6 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
-import pkg_resources
 
 from waves.parameter_generators import SobolSequence, ScipySampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
