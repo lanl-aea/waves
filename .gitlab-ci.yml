@@ -21,7 +21,7 @@ before_script:
   # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/7
   - aea_projects='/projects'
-  - aea_deploy_directory="${aea_projects}/python"
+  - aea_deploy_directory="${aea_projects}/aea_compute"
   - aea_conda_channel="${aea_deploy_directory}/aea-conda"
   - aea_modulefiles=${aea_deploy_directory}/modulefiles
   - environment='waves-env'
