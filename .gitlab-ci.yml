@@ -85,7 +85,7 @@ environment:
     - ln ${environment_path}/sconsign.1 ${environment_path}/man/man1/sconsign.1
     - ln ${environment_path}/scons-time.1 ${environment_path}/man/man1/scons-time.1
   tags:
-    - sstelmo-shell-aea
+    - shell-aea
 
 microbump:
   stage: version
@@ -234,7 +234,7 @@ deploy:
     # Troubleshooting conda channel deploy and index update
     - conda search --channel file://${aea_conda_channel}/ --override-channels waves
   tags:
-    - sstelmo-shell-aea
+    - shell-aea
 
 # It MUST be called pages
 pages:
