@@ -126,7 +126,7 @@ def get_parser():
     visualize_parser.add_argument("--width", type=int, default=36,
         help="Width of visualization in inches if being saved to a file (default: %(default)s)")
     visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
-        help="If a node starts with one of these strings, do not visualize it (default: %(default)s)")
+        help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
 

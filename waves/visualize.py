@@ -37,7 +37,7 @@ def parse_output(tree_lines, exclude_list):
             current_indent = int(len(placement) / 2) + 1
             exclude_node = False
             for exclude in exclude_list:
-                if node_name.startswith(exclude):
+                if node_name.startswith(exclude) or node_name.endswith(exclude):
                     last_indent = current_indent
                     exclude_node = True
             if exclude_node:

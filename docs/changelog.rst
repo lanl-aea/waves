@@ -24,6 +24,11 @@ Internal Changes
 ================
 - Add networkx to WAVES environment for new visualization feature (:issue:`412`, :merge:`501`). By `Prabhu Khalsa`_.
 
+Enhancements
+============
+- Check beginning and end of strings in ``visualize --exclude-list`` to enable excluding by file extension
+  (:issue:`418`, :merge:`510`). By `Kyle Brindley`_.
+
 *******************
 0.6.11 (2023-01-26)
 *******************
