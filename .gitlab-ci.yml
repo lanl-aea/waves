@@ -18,34 +18,38 @@ before_script:
   - git status
   - git lfs install
   - git status
+  # Assumes CI executes on AEA compute servers
   # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/7
-  - aea_projects='/projects'
-  - aea_deploy_directory="${aea_projects}/aea_compute"
-  - aea_conda_channel="${aea_deploy_directory}/aea-conda"
-  - aea_modulefiles=${aea_deploy_directory}/modulefiles
-  - environment='waves-env'
-  - environment_path="${aea_deploy_directory}/${environment}"
-  - conda_options='--yes --channel conda-forge'
-  # Activate the project specific environment from the project specific modulefile
-  - module use ${PWD}/modulefiles
-  - module load ${environment}
-  # Make LaTeX available
-  # TODO: Account for different systems, e.g. AEA servers and HPC, modulefiles
+  - aea_compute_path="/projects/aea_compute"
+  - aea_conda_channel="${aea_compute_path}/aea-conda"
+  - aea_modulefiles="${aea_compute_path}/modulefiles"
+  - module use ${aea_modulefiles}
   - module load texlive
-  # Build the Conda environment if it's missing
+  - module use ${PWD}/modulefiles
+  # Prefer the CI environment and fall back to AEA environment(s)
+  - project_environment='waves-env'
+  - environment_choices="${project_environment} aea-beta aea-release"
+  - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then environment=${env}; break; fi; done
+  - echo ${environment}
+  - module load ${environment}
+  - conda info
   # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/8
+  - environment_path="${aea_compute_path}/${project_environment}"
+  - conda_options='--yes --channel conda-forge'
   - |
       if [[ ! -d ${environment_path} ]]; then
           export ALL_PROXY="proxyout.lanl.gov:8080"
           export HTTP_PROXY="http://$ALL_PROXY"
           export HTTPS_PROXY=$HTTP_PROXY
           conda create --prefix ${environment_path} --file environment.txt ${conda_options};
+          chmod -R 755 ${environment_path}
           unset ALL_PROXY
           unset HTTP_PROXY
           unset HTTPS_PROXY
       fi
+  - if [[ ${project_environment} != ${environment} ]]; then module unload ${environment}; module load ${project_environment}; fi
   # FIXME: (1) Without setting this to false, Git webserver API calls to re-git.lanl.gov will throw errors about
   # self-signed certificates. Work on CI server and Gitlab webserver configurations so that this is no longer
   # necessary. There is a matching "FIXME: (1)" tag where the process is reversed that must also be removed when this
