@@ -96,10 +96,11 @@ def get_parser():
     default_width = 1.0
     default_height = 1.0
 
+    prog = "abaqus cae -noGui {} --".format(basename)
     cli_description = "Partition the simple rectangle geometry created by ``single_element_geometry.py`` " \
                       "and write an ``output_file``.cae Abaqus model file."
     parser = argparse.ArgumentParser(description=cli_description,
-                                     prog=os.path.basename(filename))
+                                     prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
                         help="The Abaqus model file created by ``single_element_geometry.py`` without extension. " \
                              "Will be appended with the required extension, e.g. ``input_file``.cae")

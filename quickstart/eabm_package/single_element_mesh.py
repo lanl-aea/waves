@@ -89,10 +89,11 @@ def get_parser():
     default_output_file = '{}'.format(basename_without_extension)
     default_global_seed = 1.0
 
+    prog = "abaqus cae -noGui {} --".format(basename)
     cli_description = "Mesh the simple rectangle geometry partitioned by ``single_element_partition.py`` " \
                       "and write an ``output_file``.cae Abaqus model file and ``output_file``.inp orphan mesh file."
     parser = argparse.ArgumentParser(description=cli_description,
-                                     prog=os.path.basename(filename))
+                                     prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
                         help="The Abaqus model file created by ``single_element_geometry.py`` without extension. " \
                              "Will be appended with the required extension, e.g. ``input_file``.cae")
