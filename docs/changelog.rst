@@ -24,6 +24,7 @@ Documentation
 - Prefer SCons variable substitution over f-strings where possible (:merge:`502`). By `Kyle Brindley`_.
 - Miscellaneous clarifications and updates to the tutorials (:issue:`409`, :merge:`505`). By `Kyle Brindley`_.
 - Add additional author ORCIDs to the citation file (:issue:`407`, :merge:`512`). By `Kyle Brindley`_.
+- Match journal file CLI usage message to the executable/interpretter (:issue:`421`, :merge:`514`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
