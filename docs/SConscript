@@ -76,7 +76,6 @@ documentation_file_list = [
     'tutorial_07_cartesian_product_waves.rst',
     'tutorial_07_latin_hypercube_waves.rst',
     'tutorial_07_sobol_sequence_waves.rst',
-    'scipy_warning.txt',
     'tutorial_extend_study_waves.rst',
     'tutorial_08_data_extraction_waves.rst',
     'tutorial_09_post_processing_waves.rst',
