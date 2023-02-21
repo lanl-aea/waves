@@ -103,7 +103,7 @@ dictionaries will be combined later in the ``SConscript`` file.
       :lineno-match:
       :start-after: marker-3
       :end-before: marker-4
-      :emphasize-lines: 5-6, 14-15, 20-21, 26
+      :emphasize-lines: 5, 15, 21-22, 27
 
 The code above is largely copy and paste from :ref:`tutorial_regression_testing_waves`, with a few significant
 differences:
@@ -129,16 +129,15 @@ differences:
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
-      :emphasize-lines: 4-5, 11
+      :emphasize-lines: 3, 9, 12-13
 
-The first two highlighted lines above demonstrate the usage of ``--input-file`` and ``--output--file`` command line
-arguments for the ``single_element_mesh.py`` file. In previous tutorials, we have accepted the default values for input
-and output files. In this case, however, we must specify that a common input file is used, as we want to re-use the
-target from the Partition workflow as a source. If we would have accepted the default input file name, the
-``single_element_mesh.py`` script would try to open a ``single_element_partition.cae`` file in every parameter study
-build directory. The script would fail to do so, because ``single_element_partition.cae`` resides a directory upward in
-the main build directory. We avoid this issue by providing the absolute path to ``single_element_partition.cae`` as
-the ``--input-file``.
+The highlighted lines above demonstrate the usage of ``--input-file`` and ``--output--file`` command line arguments for
+the ``single_element_mesh.py`` file. In previous tutorials, we have accepted the default values for input and output
+files. In this case, however, we must specify that a common input file is used, as we want to re-use the target from the
+Partition workflow as a source. If we would have accepted the default input file name, the ``single_element_mesh.py``
+script would try to open a ``single_element_partition.cae`` file in every parameter study build directory. The script
+would fail to do so, because ``single_element_partition.cae`` resides a directory upward in the main build directory. We
+avoid this issue by providing the absolute path to ``single_element_partition.cae`` as the ``--input-file``.
 
 The ``--output-file`` command line argument is specified in this case only for demonstration (the default value would
 actually work just fine). It is important to note that the ``--output-file`` name is **not** given as ``set_name /
@@ -146,9 +145,9 @@ journal_file``. This is because the :meth:`waves.builders.abaqus_journal` builde
 directory to the parent directory of the first specified target, then the journal file is executed. This behavior is
 explained further in the :meth:`waves.builders.abaqus_journal` API.
 
-The final highlighted line in the code above demonstrates the usage of an ``SCons`` file object as a source. Rather
-than pointing to the ``single_element_partition.cae`` file via absolute path, we can let ``SCons`` find the file for us
-in the build directory. This is achieved by simply pointing to the ``SCons`` file object that was created when we
+The highlighted line containing ``partition_cae_object`` demonstrates the usage of an ``SCons`` file object as a source.
+Rather than pointing to the ``single_element_partition.cae`` file via absolute path, we can let ``SCons`` find the file
+for us in the build directory. This is achieved by simply pointing to the ``SCons`` file object that was created when we
 specified ``single_element_partition.cae`` as a target in the ``# Partition`` workflow.
 
 .. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
@@ -157,7 +156,7 @@ specified ``single_element_partition.cae`` as a target in the ``# Partition`` wo
       :language: Python
       :lineno-match:
       :start-after: marker-6
-      :emphasize-lines: 12-21
+      :emphasize-lines: 13-22
 
 The highlighted code above demonstrated the usage of the ``post_processing.py`` script to generate a second plot. The first
 plot, as demonstrated in :ref:`tutorial_post_processing_waves`, is a simple stress-strain comparison for each parameter

@@ -9,6 +9,49 @@ References
 **********
 
 * `SCons Substfile`_ :cite:`scons-user`
+* `SCons`_ Variable Substitution :cite:`scons-man`
+
+
+The relevant portion of the `SCons`_ documentation can't be hyperlinked directly. Instead, the relevant portion of the
+"Substitution Variables" and "Substitution: Special Variables" sections of the man page is quoted below :cite:`scons-man`.
+
+   Before executing a command, scons performs parameter expansion (substitution) on the string that makes up the action
+   part of the builder. The format of a substitutable parameter is ``${expression}``. If ``expression`` refers to a
+   variable, the braces in ``${expression}`` can be omitted unless the variable name is immediately followed by a
+   character that could either be interpreted as part of the name, or is Python syntax such as ``[`` (for
+   indexing/slicing) or ``.`` (for attribute access - see Special Attributes below).
+
+   If ``expression`` refers to a construction variable, it is replaced with the value of that variable in the
+   construction environment at the time of execution. If ``expression`` looks like a variable name but is not defined in
+   the construction environment it is replaced with an empty string. If ``expression`` refers to one of the Special
+   Variables (see below) the corresponding value of the variable is substituted. ``expression`` may also be a Python
+   expression to be evaluated. See Python Code Substitution below for a description.
+
+   ...
+
+   Besides regular construction variables, scons provides the following Special Variables for use in expanding commands:
+
+   ...
+
+   ``$SOURCE``
+
+      The file name of the source of the build command, or the file name of the first source if multiple sources are being built.
+
+   ``$SOURCES``
+
+      The file names of the sources of the build command.
+
+   ``$TARGET``
+
+      The file name of the target being built, or the file name of the first target if multiple targets are being built.
+
+   ``$TARGETS``
+
+      The file names of all targets being built.
+
+   These names are reserved and may not be assigned to or used as construction variables. SCons computes them in a
+   context-dependent manner and they and are not retrieved from a construction environment.
+
 
 ***********
 Environment
@@ -45,8 +88,8 @@ Solver Input Files
 In this tutorial, we will be modifying several files from :ref:`tutorial_simulation_waves`, the first of which is
 ``single_element_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
 the ``.in`` extension for the purposes of *parameter substitution*. This change is made so it is easy for the
-:meth:`waves.builders.copy_substitute` builder to identify which files should be searched for parameters. Any files with
-the ``.in`` extension that are passed to the :meth:`waves.builders.copy_substitute` builder will be parsed for
+:meth:`waves.builders.copy_substitute` method to identify which files should be searched for parameters. Any files with
+the ``.in`` extension that are passed to the :meth:`waves.builders.copy_substitute` method will be parsed for
 characters matching the parameter definitions using substitution with `SCons Substfile`_. This is discussed in
 more detail later in this tutorial.
 
@@ -100,7 +143,7 @@ used in a slightly different way than the others, as the script that utilizes th
 command line interface. Recall from earlier in this tutorial, we created a new file called
 ``single_element_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
 the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
-this is implemented with the :meth:`waves.builders.copy_substitute` builder will come later in this tutorial.
+this is implemented with the :meth:`waves.builders.copy_substitute` method will come later in this tutorial.
 
 7. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
@@ -112,16 +155,22 @@ this is implemented with the :meth:`waves.builders.copy_substitute` builder will
       :lineno-match:
       :start-after: marker-1
       :end-before: marker-3
-      :emphasize-lines: 7, 17, 25
+      :emphasize-lines: 7, 11-13, 19, 23-25, 29, 33-34
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
-pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using a formatted string as
-shown in the first highlighted section, we will end up passing a string that looks like the following to the
-``single_element_geometry.py`` CLI:
+pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using SCons variable
+substitution as shown in the first highlighted section, we will end up passing a string that looks like the following to
+the ``single_element_geometry.py`` CLI:
 
 .. code-block:: python
 
-   journal_options = "--width 1.0 --height 1.0"
+   --width 1.0 --height 1.0
+
+Note that the keyword arguments ``journal_options``, ``width``, ``height``, and ``global_options`` are not part of the
+normal builder interface. `SCons`_ will accept these keyword arguments and use them as substitution variables as part of
+the task definition. We can use this feature to pass arbitrary variables to the builder task construction on a per-task
+basis without affecting other tasks which use the same builder. For instance, the ``# Mesh`` task will not have access
+to the ``width`` and ``height`` substitutions because we have not specified those keyword arguments.
 
 This behavior is repeated for the code pertaining to ``# Partition`` and ``# Mesh``. `SCons`_ will save a signature of
 the completed action string as part of the task definition. If the substituted parameter values change, `SCons`_ will
@@ -144,10 +193,10 @@ Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` mu
 of ``single_element_compression.inp`` with the parameterized ``single_element_compression.inp.in`` file.
 
 The final change to be made in the ``tutorial_05_parameter_substitution`` file is to utilize the
-``substitution_dictionary`` parameter in the usage of the :meth:`waves.builders.copy_substitute` builder.
+``substitution_dictionary`` parameter in the usage of the :meth:`waves.builders.copy_substitute` method.
 
 In this tutorial, we leverage two different builder behaviors when defining sources and targets for the
-:meth:`waves.builders.copy_substitute` builder. We are already familiar with one behavior, where the builder simply
+:meth:`waves.builders.copy_substitute` method. We are already familiar with one behavior, where the builder simply
 copies the source file to the build directory.
 
 This builder uses template substitution with files named with the ``*.in`` extension, and looks to match and replace
@@ -321,7 +370,7 @@ the file we created earlier in this tutorial. There is also a file named ``singl
    TOP_BC,2,2,-1.0
    **
 
-With the use of the :meth:`waves.builders.copy_substitute` builder, we used the ``single_element_compression.inp.in``
+With the use of the :meth:`waves.builders.copy_substitute` method, we used the ``single_element_compression.inp.in``
 file as the source and the ``single_element_compression.inp`` file was the target. The builder acted by substituting the
 parameter key ``@displacement@`` with the parameter value ``-1.0``, and then generated the target with this information
 in the text, as shown above.

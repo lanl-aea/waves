@@ -159,7 +159,7 @@ def add_program(names, env):
     :rtype: str
 
     .. code-block::
-       :caption: Example Cubit environment modification
+       :caption: Example search for an executable named "program"
 
        import waves
 

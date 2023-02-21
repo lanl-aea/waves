@@ -27,6 +27,10 @@ def main():
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
         return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
+    elif args.subcommand == 'visualize':
+        return_code = visualization(target=args.TARGET, output_file=args.output_file,
+                                    sconstruct=args.sconstruct, print_graphml=args.print_graphml,
+                                    exclude_list=args.exclude_list, height=args.height, width=args.width)
     else:
         parser.print_help()
 
@@ -86,7 +90,7 @@ def get_parser():
                                   help="Perform a full local git clone operation to the specified directory before " \
                                        "executing the scons command, " \
                                        "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
-                                       "(default: %(default)s).")
+                                       "(default: %(default)s)")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
@@ -97,15 +101,34 @@ def get_parser():
     quickstart_parser.add_argument("PROJECT_DIRECTORY",
         nargs="?",
         help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not " \
-             "contain conflicting filenames. (default: PWD).",
+             "contain conflicting filenames. (default: PWD)",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
     quickstart_parser.add_argument("--overwrite",
         action="store_true",
-        help="Overwrite any existing files (default: %(default)s).")
+        help="Overwrite any existing files (default: %(default)s)")
     quickstart_parser.add_argument("--dry-run",
         action="store_true",
-        help="Print the files that would be created and exit (default: %(default)s).")
+        help="Print the files that would be created and exit (default: %(default)s)")
+
+    visualize_parser = argparse.ArgumentParser(add_help=False)
+    visualize_parser = subparsers.add_parser("visualize",
+        help="Create an SCons project visualization",
+        description="Create a visual representation of the directed acyclic graph used by your SCons project ",
+        parents=[visualize_parser])
+    visualize_parser.add_argument("TARGET", help=f"SCons target")
+    visualize_parser.add_argument("--sconstruct", type=str, default="SConstruct",
+        help="Path to SConstruct file (default: %(default)s)")
+    visualize_parser.add_argument("-o", "--output-file", type=str,
+        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' (default: %(default)s)")
+    visualize_parser.add_argument("--height", type=int, default=12,
+        help="Height of visualization in inches if being saved to a file (default: %(default)s)")
+    visualize_parser.add_argument("--width", type=int, default=36,
+        help="Width of visualization in inches if being saved to a file (default: %(default)s)")
+    visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
+        help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
+    visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
+        help="Print the visualization in graphml format (default: %(default)s)")
 
     return main_parser
 
@@ -147,7 +170,7 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
         git_clone_stdout = subprocess.check_output(command)
     stop_trigger = "is up to date."
-    scons_command = ["scons"]
+    scons_command = [_settings._scons_command]
     scons_command.extend(scons_args)
     for target in targets:
         scons_stdout = b"Go boat"
@@ -216,6 +239,41 @@ def quickstart(directory, overwrite=False, dry_run=False):
         path.mkdir(parents=True, exist_ok=True)
     for source, destination in zip(quickstart_files, directory_files):
         shutil.copyfile(source, destination)
+    return 0
+
+
+def visualization(target, sconstruct, exclude_list, output_file=None, print_graphml=False,
+                  height=_settings._visualize_default_height, width=_settings._visualize_default_width):
+    """Visualize the directed acyclic graph created by a SCons build
+
+    Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
+    dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
+    as well.
+
+    :param str target: String specifying an SCons target
+    :param str sconstruct: Path to an SConstruct file or parent directory
+    :param list exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
+    :param str output_file: File for saving the visualization
+    :param bool print_graphml: Whether to print the graph in graphml format
+    :param int height: Height of visualization if being saved to a file
+    :param int width: Width of visualization if being saved to a file
+    """
+    from waves import visualize
+    sconstruct = pathlib.Path(sconstruct).resolve()
+    if not sconstruct.is_file():
+        sconstruct = sconstruct / "SConstruct"
+    if not sconstruct.exists():
+        print(f"\t{sconstruct} does not exist.", file=sys.stderr)
+        return 1
+    scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
+    scons_command.extend(_settings._scons_visualize_arguments)
+    scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
+    tree_output = scons_stdout.decode("utf-8").split('\n')
+    tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list)
+
+    if print_graphml:
+        print(tree_dict['graphml'], file=sys.stdout)
+    visualize.visualize(tree_dict, output_file, height, width)
     return 0
 
 

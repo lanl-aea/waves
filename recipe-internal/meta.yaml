@@ -50,14 +50,13 @@ requirements:
     - python >=3.8
     - h5netcdf
     - h5py
+    - matplotlib
+    - networkx
     - numpy
     - pyyaml
     - salib >=1
-    - scipy >=1
+    - scipy >=1.7
     - scons
-    # TODO: Remove after updating minimum scipy requirement
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
-    - setuptools
     - xarray
 
 test:
@@ -72,7 +71,7 @@ test:
     - pytest-xdist
     - pyyaml
     - salib >=1
-    - scipy >=1
+    - scipy >=1.7
     - scons
     - sed
     - setuptools_scm
@@ -107,6 +106,7 @@ test:
     - cd ${quickstart_regression_directory}
     - scons . --jobs=4 --ignore-documentation
     - cd ${test_root}
+    - waves visualize nominal --sconstruct ${quickstart_regression_directory}/SConstruct --output-file ${quickstart_regression_directory}/nominal.svg
     # Regression test the files used in the tutorial documentation
     - cd ${test_root}/tutorials/
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going

@@ -63,14 +63,12 @@ model = "single_element"
 
 # Mesh
 journal_file = f"{model}_mesh"
-journal_options = f"--global-seed {simulation_variables['global_seed']}"
+journal_options = "--global-seed ${global_seed}"
 workflow.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.inp",
-            f"{journal_file}.cae",
-            f"{journal_file}.jnl"],
-    source=[f"{abaqus_source_abspath / journal_file}.py",
-            f"{model}_partition.cae"],
-    journal_options=journal_options))
+    target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
+    source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
+    journal_options=journal_options,
+    global_seed=simulation_variables['global_seed']))
 
 # SolverPrep
 abaqus_source_list = [
@@ -88,7 +86,7 @@ workflow.extend(waves.builders.copy_substitute(
     substitution_dictionary=waves.builders.substitution_syntax(simulation_variables)))
 
 # Abaqus Solve
-solve_source_list = [f"{source_file.name.rstrip('.in')}" for source_file in abaqus_source_list]
+solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"

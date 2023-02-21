@@ -4,9 +4,9 @@ External API
 
 .. _waves_builders_api:
 
-**************
-SCons Builders
-**************
+****************
+SCons Extensions
+****************
 
 .. automodule:: waves.builders
     :members:

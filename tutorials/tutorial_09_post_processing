@@ -63,33 +63,38 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
     # Geometry
     journal_file = f"{model}_geometry"
-    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+    journal_options = "--width ${width} --height ${height}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        width=simulation_variables['width'],
+        height=simulation_variables['height']))
 
     # Partition
     journal_file = f"{model}_partition"
-    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+    journal_options = "--width ${width} --height ${height}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{set_name / model}_geometry.cae"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        width=simulation_variables['width'],
+        height=simulation_variables['height']))
 
     # Mesh
     journal_file = f"{model}_mesh"
-    journal_options = f"--global-seed {simulation_variables['global_seed']}"
+    journal_options = "--global-seed ${global_seed}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.inp",
                 f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{set_name / model}_partition.cae"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        global_seed=simulation_variables['global_seed']))
 
     # SolverPrep
     abaqus_source_list = [
@@ -140,9 +145,9 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 plot_name = "stress_strain_comparison"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
-script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options = "--input-file ${SOURCES[2:].abspath}"
 script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
-script_options += f" --parameter-study-file {parameter_study_file.name}"
+script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[f"{python_source_abspath}/post_processing.py", parameter_study_file.name] + post_processing_source,

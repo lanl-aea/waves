@@ -834,15 +834,6 @@ class CustomStudy(_ParameterGenerator):
 class SobolSequence(_ScipyGenerator):
     """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
 
-    .. TODO: Remove the warning when the scipy runtime requirement minimum is implemented
-    .. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
-
-    .. warning::
-
-       WAVES does not currently enforce a minimum version of scipy, but this class requires scipy >=1.7.0. Conda may
-       install WAVES even if the minimum version of scipy required by this class can't be met during environment
-       dependency resolution. If the minimum scipy version is not met, this class will raise a runtime error.
-
     The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
 
     .. warning::
@@ -911,19 +902,6 @@ class SobolSequence(_ScipyGenerator):
     def __init__(self, *args, **kwargs):
         self.sampler_class = "Sobol"
         super().__init__(*args, **kwargs)
-
-    def _validate(self):
-        """Validate the Sobol sequence parameter schema. Executed by class initiation."""
-        # TODO: Add ``scipy>=1.7.0`` runtime requirement to recipe/meta.yaml and remove this conditional when
-        # aea-beta supports this minimum version of scipy. May also be possible to remove the setuptools runtime
-        # requirement if there are no other uses of pkg_resources in WAVES.
-        # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
-        import pkg_resources
-        current_scipy = pkg_resources.parse_version(pkg_resources.get_distribution('scipy').version)
-        minimum_scipy = pkg_resources.parse_version('1.7.0')
-        if current_scipy < minimum_scipy:
-            raise RuntimeError(f"The SobolSequence class requires scipy >={minimum_scipy}. Found {current_scipy}.")
-        super()._validate()
 
     def _generate(self, **kwargs):
         """Generate the parameter study dataset from the user provided parameter array"""

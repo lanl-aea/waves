@@ -5,7 +5,43 @@ Changelog
 #########
 
 *******************
-0.6.11 (unreleased)
+0.6.13 (unreleased)
+*******************
+
+*******************
+0.6.12 (2023-02-21)
+*******************
+
+New Features
+============
+- Add alpha release of new visualization feature (:issue:`408`, :merge:`500`). By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Update highlighted, non-boilerplate code in the Geometry tutorial (:issue:`410`, :merge:`503`). By `Kyle Brindley`_.
+- Clarify the difference between a builder and the ``copy_substitute`` method (:issue:`411`, :merge:`504`). By `Kyle
+  Brindley`_.
+- Prefer SCons variable substitution over f-strings where possible (:merge:`502`). By `Kyle Brindley`_.
+- Miscellaneous clarifications and updates to the tutorials (:issue:`409`, :merge:`505`). By `Kyle Brindley`_.
+- Add additional author ORCIDs to the citation file (:issue:`407`, :merge:`512`). By `Kyle Brindley`_.
+- Match journal file CLI usage message to the executable/interpretter (:issue:`421`, :merge:`514`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Add networkx to WAVES environment for new visualization feature (:issue:`412`, :merge:`501`). By `Prabhu Khalsa`_.
+- Fall back to system anaconda shared environment when project CI environment doesn't exist (:issue:`417`,
+  :merge:`511`). By `Kyle Brindley`_.
+- Update the minimum scipy version runtime requirement to support the scipy Sobol generator. This change was already
+  implemented for the conda-forge and GitHub packages. Change affects AEA Conda channel. (:issue:`278`, :merge:`506`).
+  By `Kyle Brindley`_.
+
+Enhancements
+============
+- Check beginning and end of strings in ``visualize --exclude-list`` to enable excluding by file extension
+  (:issue:`418`, :merge:`510`). By `Kyle Brindley`_.
+
+*******************
+0.6.11 (2023-01-26)
 *******************
 
 Documentation

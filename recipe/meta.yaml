@@ -50,14 +50,13 @@ requirements:
     - python >=3.8
     - h5netcdf
     - h5py
+    - matplotlib
+    - networkx
     - numpy
     - pyyaml
     - salib >=1
     - scipy >=1.7
     - scons
-    # TODO: Remove after updating minimum scipy requirement
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/278
-    - setuptools
     - xarray
 
 test:
