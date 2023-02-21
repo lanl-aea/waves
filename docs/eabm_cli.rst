@@ -20,8 +20,8 @@ single_element_geometry.py
 
 .. _abaqus_single_element_partition_cli:
 
-single_element_parition.py
-==========================
+single_element_partition.py
+===========================
 
 .. argparse::
     :ref: eabm_package.abaqus.single_element_partition.get_parser
