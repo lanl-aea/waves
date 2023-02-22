@@ -8,6 +8,10 @@ Changelog
 0.6.13 (unreleased)
 *******************
 
+Internal Changes
+================
+- Added ``sphinx-copybutton`` package to environment (:issue:`414`, :merge:`516`). By `Sergio Cordova`_.
+
 *******************
 0.6.12 (2023-02-21)
 *******************
