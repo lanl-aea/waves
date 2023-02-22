@@ -8,6 +8,10 @@ Changelog
 0.6.13 (unreleased)
 *******************
 
+Documentation
+=============
+- Added ORCiD (:issue:`424`, :merge:`517`). By `Scott Ouellette`_
+
 Internal Changes
 ================
 - Added ``sphinx-copybutton`` package to environment (:issue:`414`, :merge:`516`). By `Sergio Cordova`_.
