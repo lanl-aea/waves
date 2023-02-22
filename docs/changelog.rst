@@ -14,6 +14,10 @@ Internal Changes
 - Fix test for sta_parse.py to achieve 100 percent coverage (:issue:`435`, :merge:`533`). By `Prabhu Khalsa`_.
 - Added ``sphinx-copybutton`` package to environment via pip (:issue:`436`, :merge:`532`). By `Sergio Cordova`_.
 
+Enhancements
+============
+- Added ``sphinx-copybutton`` to HTML documentation code blocks (:issue:`415`, :merge:`515`). By `Sergio Cordova`_.
+
 *******************
 0.6.13 (2023-03-07)
 *******************
