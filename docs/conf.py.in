@@ -60,6 +60,7 @@ def setup(app):
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.extlinks',
+              'sphinx_copybutton',
               'sphinxcontrib.bibtex',
               'sphinxarg.ext']
 bibtex_bibfiles = ['references.bib', 'CITATION.bib']
