@@ -25,10 +25,13 @@
 WAVES
 #####
 
-.. image:: https://github.com/lanl/waves/actions/workflows/pages.yml/badge.svg?branch=main&label=GitHub-Pages
-   :target: https://anaconda.org/conda-forge/waves
+.. image:: https://img.shields.io/github/actions/workflow/status/lanl/waves/pages.yml?branch=main&label=GitHub-Pages
+   :target: https://lanl.github.io/waves/
 
-.. image:: https://anaconda.org/conda-forge/waves/badges/version.svg
+.. image:: https://img.shields.io/github/v/release/lanl/waves?label=GitHub-Release
+   :target: https://github.com/lanl/waves/releases
+
+.. image:: https://img.shields.io/conda/vn/conda-forge/waves
    :target: https://anaconda.org/conda-forge/waves
 
 .. image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
