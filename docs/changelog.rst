@@ -11,6 +11,8 @@ Changelog
 Documentation
 =============
 - Added ORCiD (:issue:`424`, :merge:`517`). By `Scott Ouellette`_
+- Add GitHub Pages and Release badges and update conda-forge badge to use shield.io style (:issue:`425`, :merge:`518`).
+  By `Kyle Brindley`_.
 
 Internal Changes
 ================
