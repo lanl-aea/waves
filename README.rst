@@ -25,6 +25,9 @@
 WAVES
 #####
 
+.. image:: https://github.com/lanl/waves/actions/workflows/pages.yml/badge.svg?branch=main&label=GitHub-Pages
+   :target: https://anaconda.org/conda-forge/waves
+
 .. image:: https://anaconda.org/conda-forge/waves/badges/version.svg
    :target: https://anaconda.org/conda-forge/waves
 
