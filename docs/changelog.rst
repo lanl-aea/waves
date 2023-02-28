@@ -8,6 +8,10 @@ Changelog
 0.6.13 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Fix issue in excluding nodes of waves visualization (:issue:`426`, :merge:`519`). By `Prabhu Khalsa`_.
+
 Documentation
 =============
 - Added ORCiD (:issue:`424`, :merge:`517`). By `Scott Ouellette`_
