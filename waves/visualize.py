@@ -20,14 +20,13 @@ def parse_output(tree_lines, exclude_list):
     """
     edges = list()  # List of tuples for storing all connections
     node_info = dict()
-    depth = dict()
-    last_indent = 0
-    parent_indent = 0
     node_number = 0
     nodes = list()
     higher_nodes = dict()
     graphml_nodes = ''
     graphml_edges = ''
+    exclude_node = False
+    exclude_indent = 0
     for line in tree_lines:
         line_match = re.match(r'^\[(.*)\](.*)\+-(.*)', line)
         if line_match:
@@ -35,11 +34,14 @@ def parse_output(tree_lines, exclude_list):
             placement = line_match.group(2)
             node_name = line_match.group(3)
             current_indent = int(len(placement) / 2) + 1
-            exclude_node = False
+            if current_indent <= exclude_indent and exclude_node:
+                exclude_node = False
+            if exclude_node:
+                continue
             for exclude in exclude_list:
                 if node_name.startswith(exclude) or node_name.endswith(exclude):
-                    last_indent = current_indent
                     exclude_node = True
+                    exclude_indent = current_indent
             if exclude_node:
                 continue
             node_number += 1  # Increment the node_number
@@ -49,23 +51,11 @@ def parse_output(tree_lines, exclude_list):
                 node_info[node_name] = dict()
             higher_nodes[current_indent] = node_name
 
-            if current_indent == 1:  # Case for top level indentation
-                depth[current_indent] = f"['{node_name}']"
-            elif current_indent == last_indent:  # At same level
-                depth[current_indent] = f"{depth[parent_indent]}['{node_name}']"
-            elif current_indent > last_indent:  # Gone down a level
-                parent_indent = last_indent
-                depth[current_indent] = f"{depth[parent_indent]}['{node_name}']"
-            elif current_indent < last_indent:  # Gone up a level
-                parent_indent = current_indent - 1
-                depth[current_indent] = f"{depth[parent_indent]}['{node_name}']"
-
             if current_indent != 1:  # If it's not the first node which is the top level node
                 higher_node = higher_nodes[current_indent - 1]
                 edges.append((higher_node, node_name))
                 graphml_edges += f'    <edge source="{higher_node}" target="{node_name}"/>\n'
             node_info[node_name]['status'] = status
-            last_indent = current_indent
 
     tree_dict = dict()
     tree_dict['nodes'] = nodes
@@ -131,7 +121,7 @@ def visualize(tree, output_file, height, width):
         for node in nodes:
             graph.nodes[node]["layer"] = layer
     pos = networkx.multipartite_layout(graph, subset_key="layer")
-    networkx.draw_networkx_nodes(graph, pos=pos, node_size=1)  # The nodes are drawn tiny so that labels can go on top
+    networkx.draw_networkx_nodes(graph, pos=pos, node_size=0)  # The nodes are drawn tiny so that labels can go on top
 
     box_color = '#5AC7CB'  # Light blue from Waves Logo
     arrow_color = '#B7DEBE'  # Light green from Waves Logo
