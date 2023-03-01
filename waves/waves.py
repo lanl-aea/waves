@@ -184,7 +184,7 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart(directory, overwrite=False, dry_run=False):
+def quickstart(destination, overwrite=False, dry_run=False):
     """Copy project quickstart template files into directory
 
     Copies from the project quickstart tree to the directory. If files exist, report conflicting files and exit with a
@@ -195,7 +195,7 @@ def quickstart(directory, overwrite=False, dry_run=False):
     :param bool dry_run: Print the template destination tree and exit
     """
     from waves import fetch
-    fetch.recursive_copy(directory, overwrite=overwrite, dry_run=dry_run)
+    fetch.recursive_copy(_settings._installed_quickstart_directory, destination, overwrite=overwrite, dry_run=dry_run)
 
 
 def visualization(target, sconstruct, exclude_list, output_file=None, print_graphml=False,
