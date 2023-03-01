@@ -27,18 +27,15 @@ def recursive_copy(source, destination, overwrite=False, dry_run=False,
         # assumptions are correct.
         print(f"Could not find '{source}' source directory", file=sys.stderr)
         return 1
-    quickstart_contents = [path for path in source.rglob("*") if not
+    source_contents = [path for path in source.rglob("*") if not
                            any(map(str(path).__contains__, exclude_patterns))]
-    quickstart_dirs = [path for path in quickstart_contents if path.is_dir()]
-    quickstart_files = list(set(quickstart_contents) - set(quickstart_dirs))
-    if not quickstart_files:
-        print(f"Did not find any quickstart files or directories in {source}",
-              file=sys.stderr)
+    source_dirs = [path for path in source_contents if path.is_dir()]
+    source_files = list(set(source_contents) - set(source_dirs))
+    if not source_files:
+        print(f"Did not find any files in {source}", file=sys.stderr)
         return 1
-    destination_dirs = [destination / path.relative_to(source)
-                      for path in quickstart_dirs]
-    destination_files = [destination / path.relative_to(source)
-                       for path in quickstart_files]
+    destination_dirs = [destination / path.relative_to(source) for path in source_dirs]
+    destination_files = [destination / path.relative_to(source) for path in source_files]
     existing_files = [path for path in destination_files if path.exists()]
 
     # User I/O
@@ -58,6 +55,6 @@ def recursive_copy(source, destination, overwrite=False, dry_run=False,
     # Do the work
     for path in destination_dirs:
         path.mkdir(parents=True, exist_ok=True)
-    for source, destination in zip(quickstart_files, destination_files):
+    for source, destination in zip(source_files, destination_files):
         shutil.copyfile(source, destination)
     return 0
