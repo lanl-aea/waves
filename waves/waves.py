@@ -22,7 +22,7 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
-        quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run):
+        quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
