@@ -22,9 +22,7 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
-        from waves import fetch
-        return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, args.PROJECT_DIRECTORY,
-                                           overwrite=args.overwrite, dry_run=args.dry_run)
+        quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run):
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
@@ -184,6 +182,20 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
             scons_stdout = subprocess.check_output(command, cwd=working_directory)
 
     return 0
+
+
+def quickstart(destination, overwrite=False, dry_run=False):
+    """Recursively copy quickstart template directory into destination directory
+
+    :param str destination: String or pathlike object for the destination directory
+    :param bool overwrite: Boolean to overwrite any existing files in destination directory
+    :param bool dry_run: Print the template destination tree and exit
+    """
+    from waves import fetch
+    print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
+    print(f"Project root path: '{destination}'", file=sys.stdout)
+    return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, destination,
+                                       overwrite=overwrite, dry_run=dry_run)
 
 
 def visualization(target, sconstruct, exclude_list, output_file=None, print_graphml=False,

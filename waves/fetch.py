@@ -39,8 +39,6 @@ def recursive_copy(source, destination, overwrite=False, dry_run=False,
     existing_files = [path for path in destination_files if path.exists()]
 
     # User I/O
-    print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
-    print(f"Project root path: '{destination}'", file=sys.stdout)
     if not overwrite and existing_files:
         print(f"Found conflicting files in destination '{destination}':", file=sys.stderr)
         for path in existing_files:
