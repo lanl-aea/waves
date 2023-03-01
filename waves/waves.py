@@ -96,8 +96,8 @@ def get_parser():
         parents=[quickstart_parser])
     quickstart_parser.add_argument("PROJECT_DIRECTORY",
         nargs="?",
-        help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not " \
-             "contain conflicting filenames. (default: PWD)",
+        help="Directory for new project template. Unless ``--overwrite`` is specified, conflicting file paths in the " \
+             "PROJECT_DIRECTORY will not be copied. (default: PWD)",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
     quickstart_parser.add_argument("--overwrite",
