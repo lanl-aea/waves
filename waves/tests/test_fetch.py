@@ -39,7 +39,7 @@ def test_quickstart():
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()
 
-    # Files in destination tree do exist. Don't copy the quickstart file tree.
+    # All files in destination tree do exist. Don't copy the quickstart file tree.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("pathlib.Path.rglob", return_value=quickstart_tree), \
@@ -51,7 +51,7 @@ def test_quickstart():
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()
 
-    # File in destination tree does exist, we want to overwrite contents, and the files differ. Copy the quickstart file tree.
+    # File in destination tree does exist, we want to overwrite contents, and the files differ. Copy the source file.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("pathlib.Path.rglob", return_value=quickstart_tree), \
