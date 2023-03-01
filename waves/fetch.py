@@ -5,7 +5,8 @@ import pathlib
 from waves import _settings
 
 
-def recursive_copy(source, destination, overwrite=False, dry_run=False):
+def recursive_copy(source, destination, overwrite=False, dry_run=False,
+                   exclude_patterns=_settings._fetch_exclude_patterns):
     """Recursively copy source directory into destination directory
 
     If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
@@ -14,6 +15,8 @@ def recursive_copy(source, destination, overwrite=False, dry_run=False):
     :param str destination: String or pathlike object for the destination directory
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
     :param bool dry_run: Print the template destination tree and exit
+    :param list exclude_patterns: list of strings to exclude from the source directory tree if the path contains a
+        matching string.
     """
     # Gather source and destination lists
     source = pathlib.Path(source).resolve()
@@ -24,9 +27,8 @@ def recursive_copy(source, destination, overwrite=False, dry_run=False):
         # assumptions are correct.
         print(f"Could not find '{source}' source directory", file=sys.stderr)
         return 1
-    exclude_strings = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
     quickstart_contents = [path for path in source.rglob("*") if not
-                           any(map(str(path).__contains__, exclude_strings))]
+                           any(map(str(path).__contains__, exclude_patterns))]
     quickstart_dirs = [path for path in quickstart_contents if path.is_dir()]
     quickstart_files = list(set(quickstart_contents) - set(quickstart_dirs))
     if not quickstart_files:
