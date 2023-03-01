@@ -19,8 +19,9 @@ def recursive_copy(source, destination, overwrite=False, dry_run=False):
     source = pathlib.Path(source).resolve()
     destination = pathlib.Path(destination).resolve()
     if not source.exists():
-        # This should only be reached if the package installation structure doesn't match the assumptions in
-        # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
+        # During "waves quickstart" commands, this should only be reached if the package installation structure doesn't
+        # match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the
+        # assumptions are correct.
         print(f"Could not find '{source}' source directory", file=sys.stderr)
         return 1
     exclude_strings = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
