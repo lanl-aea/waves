@@ -26,10 +26,10 @@ def test_main():
 
     project_directory = 'project_directory'
     with patch('sys.argv', ['waves.py', 'quickstart', project_directory]), \
-         patch("waves.waves.quickstart") as mock_quickstart:
+         patch("waves.fetch.recursive_copy") as mock_recursive_copy:
         waves.main()
-        mock_quickstart.assert_called_once()
-        mock_quickstart.call_args[0] == [project_directory]
+        mock_recursive_copy.assert_called_once()
+        mock_recursive_copy.call_args[0] == [project_directory]
 
 
 @pytest.mark.unittest
