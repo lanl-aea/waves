@@ -22,7 +22,7 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
-        return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
+        return_code = quickstart(args.destination, overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
@@ -94,10 +94,10 @@ def get_parser():
         description="Create an SCons-WAVES project template from the single element compression simulation found in " \
                     "the WAVES tutorials.",
         parents=[quickstart_parser])
-    quickstart_parser.add_argument("PROJECT_DIRECTORY",
+    quickstart_parser.add_argument("destination",
         nargs="?",
-        help="Directory for new project template. Unless ``--overwrite`` is specified, conflicting file paths in the " \
-             "PROJECT_DIRECTORY will not be copied. (default: PWD)",
+        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
+             "destination will not be copied. (default: PWD)",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
     quickstart_parser.add_argument("--overwrite",
@@ -184,12 +184,13 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart(destination, overwrite=False, dry_run=False):
+def quickstart(destination, overwrite=False, dry_run=False, print_available=False):
     """Recursively copy quickstart template directory into destination directory
 
     :param str destination: String or pathlike object for the destination directory
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
-    :param bool dry_run: Print the template destination tree and exit
+    :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
+    :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
     root_directory = _settings._installed_quickstart_directory.parent
     relative_paths = [_settings._installed_quickstart_directory.name]
@@ -201,9 +202,9 @@ def quickstart(destination, overwrite=False, dry_run=False):
         return 1
     from waves import fetch
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
-    print(f"Project root path: '{destination}'", file=sys.stdout)
+    print(f"Destination directory: '{destination}'", file=sys.stdout)
     return_code = fetch.recursive_copy(root_directory, relative_paths, destination,
-                                       overwrite=overwrite, dry_run=dry_run)
+                                       overwrite=overwrite, dry_run=dry_run, print_available=print_available)
     return return_code
 
 
