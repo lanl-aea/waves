@@ -4,7 +4,6 @@ import pathlib
 _project_root_abspath = pathlib.Path(__file__).parent.resolve()
 _project_name_short = _project_root_abspath.name.upper()
 _project_name = f"{_project_name_short} Analysis for Verified Engineering Simulations"
-_project_bin_dir = _project_root_abspath / "bin"
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
 _abaqus_solver_common_suffixes = [".odb", ".dat", ".msg", ".com", ".prt"]
@@ -24,6 +23,7 @@ _installed_docs_index = _project_root_abspath / "docs/index.html"
 _installed_quickstart_directory = _project_root_abspath / "quickstart"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
 _supported_salib_samplers = ["latin", "fast_sampler", "sobol", "finite_diff", "morris"]
+_fetch_exclude_patterns = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
 _visualize_exclude = ["/usr/bin"]
 _visualize_default_height = 12
 _visualize_default_width = 36

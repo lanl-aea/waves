@@ -22,6 +22,13 @@ Internal Changes
 ================
 - Added ``sphinx-copybutton`` package to environment (:issue:`414`, :merge:`516`). By `Sergio Cordova`_.
 
+Enhancements
+============
+- ``quickstart`` subcommand will create all non-conflicting destination files instead of exiting with an error when
+  ``overwrite`` is ``False`` (:issue:`413`, :merge:`520`). By `Kyle Brindley`_.
+- ``quickstart`` subcommand will avoid unnecessary file I/O when source and destination file contents match and
+  ``overwrite`` is ``True`` (:issue:`413`, :merge:`520`). By `Kyle Brindley`_.
+
 *******************
 0.6.12 (2023-02-21)
 *******************

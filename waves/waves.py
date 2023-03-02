@@ -1,11 +1,7 @@
-import os
-import stat
 import argparse
-import webbrowser
 import pathlib
 import sys
 import subprocess
-import shutil
 
 from waves import _settings
 from waves import __version__
@@ -26,7 +22,7 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'quickstart':
-        return_code = quickstart(args.PROJECT_DIRECTORY, overwrite=args.overwrite, dry_run=args.dry_run)
+        return_code = quickstart(args.destination, overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
@@ -98,10 +94,10 @@ def get_parser():
         description="Create an SCons-WAVES project template from the single element compression simulation found in " \
                     "the WAVES tutorials.",
         parents=[quickstart_parser])
-    quickstart_parser.add_argument("PROJECT_DIRECTORY",
+    quickstart_parser.add_argument("destination",
         nargs="?",
-        help="Directory for new project template. Unless ``--overwrite`` is specified, the directory must not " \
-             "contain conflicting filenames. (default: PWD)",
+        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
+             "destination will not be copied. (default: PWD)",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
     quickstart_parser.add_argument("--overwrite",
@@ -109,7 +105,7 @@ def get_parser():
         help="Overwrite any existing files (default: %(default)s)")
     quickstart_parser.add_argument("--dry-run",
         action="store_true",
-        help="Print the files that would be created and exit (default: %(default)s)")
+        help="Print the destination tree and exit (default: %(default)s)")
 
     visualize_parser = argparse.ArgumentParser(add_help=False)
     visualize_parser = subparsers.add_parser("visualize",
@@ -144,6 +140,7 @@ def docs(print_local_path=False):
             print('Could not find package documentation HTML index file', file=sys.stderr)
             return 1
     else:
+        import webbrowser
         webbrowser.open(str(_settings._installed_docs_index))
     return 0
 
@@ -187,59 +184,27 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart(directory, overwrite=False, dry_run=False):
-    """Copy project quickstart template files into directory
+def quickstart(destination, overwrite=False, dry_run=False):
+    """Recursively copy quickstart template directory into destination directory
 
-    Copies from the project quickstart tree to the directory. If files exist, report conflicting files and exit with a
-    non-zero return code unless overwrite is specified.
-
-    :param str directory: String or pathlike object for the new template directory destination
-    :param bool overwrite: Boolean to overwrite any existing files in directory destination
-    :param bool dry_run: Print the template destination tree and exit
+    :param str destination: String or pathlike object for the destination directory
+    :param bool overwrite: Boolean to overwrite any existing files in destination directory
+    :param bool dry_run: Print the destination tree and exit
     """
-
-    # Gather source and destination lists
-    directory = pathlib.Path(directory).resolve()
-    if not _settings._installed_quickstart_directory.exists():
-        # This should only be reached if the package installation structure doesn't match the assumptions in
-        # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
-        print(f"Could not find {_settings._project_name_short} quickstart directory", file=sys.stderr)
+    root_directory = _settings._installed_quickstart_directory.parent
+    relative_paths = [_settings._installed_quickstart_directory.name]
+    if not root_directory.is_dir():
+        # During "waves quickstart" sub-command, this should only be reached if the package installation structure doesn't
+        # match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the
+        # assumptions are correct.
+        print(f"Could not find '{root_directory}' directory", file=sys.stderr)
         return 1
-    exclude_strings = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
-    quickstart_contents = [path for path in _settings._installed_quickstart_directory.rglob("*") if not
-                           any(map(str(path).__contains__, exclude_strings))]
-    quickstart_dirs = [path for path in quickstart_contents if path.is_dir()]
-    quickstart_files = list(set(quickstart_contents) - set(quickstart_dirs))
-    if not quickstart_files:
-        print(f"Did not find any quickstart files or directories in {_settings._installed_quickstart_directory}",
-              file=sys.stderr)
-        return 1
-    directory_dirs = [directory / path.relative_to(_settings._installed_quickstart_directory)
-                      for path in quickstart_dirs]
-    directory_files = [directory / path.relative_to(_settings._installed_quickstart_directory)
-                       for path in quickstart_files]
-    existing_files = [path for path in directory_files if path.exists()]
-
-    # User I/O
+    from waves import fetch
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
-    print(f"Project root path: '{directory}'", file=sys.stdout)
-    if not overwrite and existing_files:
-        print(f"Found conflicting files in destination '{directory}':", file=sys.stderr)
-        for path in existing_files:
-            print(f"\t{path}", file=sys.stderr)
-        return 2
-    if dry_run:
-        print("Files to create:")
-        for path in directory_files:
-            print(f"\t{path}", file=sys.stdout)
-        return 0
-
-    # Do the work
-    for path in directory_dirs:
-        path.mkdir(parents=True, exist_ok=True)
-    for source, destination in zip(quickstart_files, directory_files):
-        shutil.copyfile(source, destination)
-    return 0
+    print(f"Destination directory: '{destination}'", file=sys.stdout)
+    return_code = fetch.recursive_copy(root_directory, relative_paths, destination,
+                                       overwrite=overwrite, dry_run=dry_run)
+    return return_code
 
 
 def visualization(target, sconstruct, exclude_list, output_file=None, print_graphml=False,
