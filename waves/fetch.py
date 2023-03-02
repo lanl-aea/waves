@@ -55,12 +55,10 @@ def recursive_copy(source, destination, overwrite=False, dry_run=False,
         return 0
 
     # Do the work if there are any files left to copy
-    if copy_tuples:
-        for path in destination_dirs:
-            path.mkdir(parents=True, exist_ok=True)
-        for source_file, destination_file in copy_tuples:
-            # If the source and destination files are the same, don't perform file I/O
-            if not destination_file.exists() or not filecmp.cmp(source_file, destination_file, shallow=False):
-                shutil.copyfile(source_file, destination_file)
+    for source_file, destination_file in copy_tuples:
+        # If the source and destination file contents are the same, don't perform unnecessary file I/O
+        if not destination_file.exists() or not filecmp.cmp(source_file, destination_file, shallow=False):
+            source_file.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source_file, destination_file)
 
     return 0

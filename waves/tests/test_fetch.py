@@ -24,7 +24,7 @@ def test_quickstart():
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path")
         assert return_code == 0
-        mock_mkdir.assert_not_called()
+        mock_mkdir.assert_called_once()
         mock_copyfile.assert_called_once()
 
     # Files in destination tree do not exist, but dry run. Print quickstart file tree.
@@ -60,7 +60,7 @@ def test_quickstart():
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path", overwrite=True)
         assert return_code == 0
-        mock_mkdir.assert_not_called()
+        mock_mkdir.assert_called_once()
         mock_copyfile.assert_called_once()
 
     # File in destination tree does exist, we want to overwrite contents, but the files are the same. Don't copy the
