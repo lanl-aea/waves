@@ -37,7 +37,7 @@ def available_files(root_directory, relative_paths):
     return available_files, not_found
 
 
-def exclude_source_files(root_directory, relative_paths, exclude_patterns=_settings._fetch_exclude_patterns):
+def build_source_files(root_directory, relative_paths, exclude_patterns=_settings._fetch_exclude_patterns):
     """Wrap :meth:`available_files` and trim list based on exclude patterns
 
     If no source files are found, an empty list is returned.
@@ -79,6 +79,18 @@ def longest_common_path_prefix(file_list):
     return longest_common_path
 
 
+def build_destination_files(destination, requested_paths):
+    """Build destination file paths from the requested paths, truncating the longest possible source prefix path
+
+    :param str destination: String or pathlike object for the destination directory
+    """
+    pathlib.Path(destination).resolve()
+    longest_common_requested_path = longest_common_path_prefix(requested_paths)
+    destination_files = [destination / path.relative_to(longest_common_requested_path) for path in requested_paths]
+    existing_files = [path for path in destination_files if path.exists()]
+    return destination_files, existing_files
+
+
 def conditional_copy(copy_tuples):
     """Copy when destination file doesn't exist or doesn't match source file content
 
@@ -107,7 +119,8 @@ def print_list(things_to_print, prefix="\t", stream=sys.stdout):
 
 def recursive_copy(root_directory, relative_paths, destination, requested_paths=None,
                    overwrite=False, dry_run=False, print_available=False):
-    """Recursively copy root_directory directory into destination directory
+    """Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
+    the shortest possible shared source prefix.
 
     If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
 
@@ -115,41 +128,41 @@ def recursive_copy(root_directory, relative_paths, destination, requested_paths=
     :param list relative_paths: List of string or pathlike objects describing relative paths to search for in
         root_directory
     :param str destination: String or pathlike object for the destination directory
-    :param list requested_paths: list of path-like objects that subset the files found in the ``root_directory``
-        ``relative_paths``
+    :param list requested_paths: list of relative path-like objects that subset the files found in the
+        ``root_directory`` ``relative_paths``
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
     :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
-    destination = pathlib.Path(destination).resolve()
 
-    source_files, not_found = exclude_source_files(root_directory, relative_paths)
-    if not source_files:
-        print(f"Did not find any files in '{root_directory}'", file=sys.stderr)
-        return 1
-
+    # Build source tree
+    source_files, missing_relative_paths = build_source_files(root_directory, relative_paths)
     longest_common_source_path = longest_common_path_prefix(source_files)
     if print_available:
         print("Available source files:")
         print_list([path.relative_to(longest_common_source_path) for path in source_files])
         return 0
 
+    # Down select to requested file list
     if requested_paths:
-        requested_paths, not_found = available_files(longest_common_source_path, requested_paths)
+        requested_paths_resolved, missing_requested_paths = build_source_files(longest_common_source_path, requested_paths)
     else:
-        requested_paths = source_files
-        not_found = []
+        requested_paths_resolved = source_files
+        missing_requested_paths = []
+    if not requested_paths_resolved:
+        print(f"Did not find any requested files in '{longest_common_source_path}'", file=sys.stderr)
+        return 1
 
-    longest_common_requested_path = longest_common_path_prefix(requested_paths)
-    destination_files = [destination / path.relative_to(longest_common_requested_path) for path in requested_paths]
-    existing_files = [path for path in destination_files if path.exists()]
+    # Build destination tree
+    destination = pathlib.Path(destination).resolve()
+    destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
 
-    copy_tuples = tuple(zip(source_files, destination_files))
+    copy_tuples = tuple(zip(requested_paths_resolved, destination_files))
     if not overwrite and existing_files:
-        copy_tuples = [(source_file, destination_file) for source_file, destination_file in copy_tuples if
+        copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in copy_tuples if
                        destination_file not in existing_files]
-        print(f"Found conflicting files in destination '{destination}'. Use '--overwrite' to replace existing files " \
-              f"with files from '{root_directory}'.", file=sys.stderr)
+        print(f"Found conflicting files in destination '{destination}'. Use '--overwrite' to replace existing files.",
+              file=sys.stderr)
 
     # User I/O
     if dry_run:

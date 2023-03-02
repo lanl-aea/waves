@@ -6,7 +6,7 @@ import pytest
 from waves import fetch
 
 @pytest.mark.unittest
-def test_quickstart():
+def test_recursive_copy():
 
     # Dummy quickstart tree
     root_directory = pathlib.Path("/path/to/source")
