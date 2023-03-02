@@ -37,6 +37,25 @@ def available_files(root_directory, relative_paths):
     return available_files, not_found
 
 
+def exclude_source_files(root_directory, relative_paths, exclude_patterns=_settings._fetch_exclude_patterns):
+    """Wrap :meth:`available_files` and trim list based on exclude patterns
+
+    If no source files are found, an empty list is returned.
+
+    :param str root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths with
+        respect to the current working directory before searching.
+    :param list relative_paths: Relative paths to search for. Directories are searched recursively for files.
+    :param list exclude_patterns: list of strings to exclude from the root_directory directory tree if the path contains a
+        matching string.
+
+    :returns: source_files, not_found
+    :rtype: tuple of lists
+    """
+    source_files, not_found = available_files(root_directory, relative_paths)
+    source_files = [path for path in source_files if not any(map(str(path).__contains__, exclude_patterns))]
+    return source_files, not_found
+
+
 def conditional_copy(copy_tuples):
     """Copy when destination file doesn't exist or doesn't match source file content
 
@@ -64,8 +83,7 @@ def print_list(things_to_print, prefix="\t", stream=sys.stdout):
 
 
 def recursive_copy(root_directory, relative_paths, destination,
-                   overwrite=False, dry_run=False, print_available=False,
-                   exclude_patterns=_settings._fetch_exclude_patterns):
+                   overwrite=False, dry_run=False, print_available=False):
     """Recursively copy root_directory directory into destination directory
 
     If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
@@ -77,13 +95,10 @@ def recursive_copy(root_directory, relative_paths, destination,
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
     :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
-    :param list exclude_patterns: list of strings to exclude from the root_directory directory tree if the path contains a
-        matching string.
     """
     destination = pathlib.Path(destination).resolve()
 
-    source_files, not_found = available_files(root_directory, relative_paths)
-    source_files = [path for path in source_files if not any(map(str(path).__contains__, exclude_patterns))]
+    source_files, not_found = exclude_source_files(root_directory, relative_paths)
     if not source_files:
         print(f"Did not find any files in '{root_directory}'", file=sys.stderr)
         return 1
