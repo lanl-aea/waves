@@ -128,19 +128,20 @@ def recursive_copy(root_directory, relative_paths, destination, requested_paths=
         print(f"Did not find any files in '{root_directory}'", file=sys.stderr)
         return 1
 
-    longest_common_path = longest_common_path_prefix(source_files)
+    longest_common_source_path = longest_common_path_prefix(source_files)
     if print_available:
         print("Available source files:")
-        print_list([path.relative_to(longest_common_path) for path in source_files])
+        print_list([path.relative_to(longest_common_source_path) for path in source_files])
         return 0
 
     if requested_paths:
-        requested_paths, not_found = available_files(longest_common_path, requested_paths)
+        requested_paths, not_found = available_files(longest_common_source_path, requested_paths)
     else:
         requested_paths = source_files
         not_found = []
 
-    destination_files = [destination / path.relative_to(longest_common_path) for path in requested_paths]
+    longest_common_requested_path = longest_common_path_prefix(requested_paths)
+    destination_files = [destination / path.relative_to(longest_common_requested_path) for path in requested_paths]
     existing_files = [path for path in destination_files if path.exists()]
 
     copy_tuples = tuple(zip(source_files, destination_files))
