@@ -4,10 +4,6 @@ from unittest.mock import patch
 import pytest
 
 from waves import fetch
-from waves import _settings
-
-_settings._installed_quickstart_directory
-
 
 @pytest.mark.unittest
 def test_quickstart():
