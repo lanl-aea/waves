@@ -1,3 +1,4 @@
+import os
 import sys
 import shutil
 import filecmp
@@ -63,8 +64,9 @@ def recursive_copy(root_directory, relative_paths, destination, overwrite=False,
     if not source_files:
         print(f"Did not find any files in '{root_directory}'", file=sys.stderr)
         return 1
+    longest_common_path = os.path.commonpath(source_files)
 
-    destination_files = [destination / path.relative_to(root_directory) for path in source_files]
+    destination_files = [destination / path.relative_to(longest_common_path) for path in source_files]
 
     existing_files = [path for path in destination_files if path.exists()]
     copy_tuples = zip(source_files, destination_files)
