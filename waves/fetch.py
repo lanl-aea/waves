@@ -45,6 +45,11 @@ def conditional_copy(copy_tuples):
             shutil.copyfile(source_file, destination_file)
 
 
+def print_list(things_to_print, prefix="\t", stream=sys.stdout):
+    for item in things_to_print:
+        print(f"{prefix}{item}", file=stream)
+
+
 def recursive_copy(root_directory, relative_paths, destination, overwrite=False, dry_run=False,
                    exclude_patterns=_settings._fetch_exclude_patterns):
     """Recursively copy root_directory directory into destination directory
@@ -75,9 +80,9 @@ def recursive_copy(root_directory, relative_paths, destination, overwrite=False,
     longest_common_path = os.path.commonpath(source_files)
 
     destination_files = [destination / path.relative_to(longest_common_path) for path in source_files]
-
     existing_files = [path for path in destination_files if path.exists()]
-    copy_tuples = zip(source_files, destination_files)
+
+    copy_tuples = tuple(zip(source_files, destination_files))
     if not overwrite and existing_files:
         copy_tuples = [(source_file, destination_file) for source_file, destination_file in copy_tuples if
                        destination_file not in existing_files]
@@ -87,8 +92,7 @@ def recursive_copy(root_directory, relative_paths, destination, overwrite=False,
     # User I/O
     if dry_run:
         print("Files to create:")
-        for source_file, destination_file in copy_tuples:
-            print(f"\t{destination_file}", file=sys.stdout)
+        print_list([destination for _, destination in copy_tuples])
         return 0
 
     # Do the work if there are any files left to copy
