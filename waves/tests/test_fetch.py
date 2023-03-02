@@ -14,11 +14,13 @@ def test_quickstart():
 
     # Dummy quickstart tree
     quickstart_tree = [pathlib.Path("dummy.file")]
+    not_found = []
+    available_files_output = (quickstart_tree, not_found)
 
     # Files in destination tree do not exist. Copy the quickstart file tree.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
-         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, False, False]), \
          patch("filecmp.cmp", return_value=False):
@@ -30,7 +32,7 @@ def test_quickstart():
     # Files in destination tree do not exist, but dry run. Print quickstart file tree.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
-         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, False, False]), \
          patch("filecmp.cmp", return_value=False):
@@ -42,7 +44,7 @@ def test_quickstart():
     # All files in destination tree do exist. Don't copy the quickstart file tree.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
-         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True, True]), \
          patch("filecmp.cmp", return_value=True):
@@ -54,7 +56,7 @@ def test_quickstart():
     # File in destination tree does exist, we want to overwrite contents, and the files differ. Copy the source file.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
-         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True, True]), \
          patch("filecmp.cmp", return_value=False):
@@ -67,7 +69,7 @@ def test_quickstart():
     # source file.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
-         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True, True]), \
          patch("filecmp.cmp", return_value=True):
@@ -79,7 +81,7 @@ def test_quickstart():
     # Files in destination tree do exist, but we want to overwrite contents and dry run. Print the quickstart file tree.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
-         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True, True]), \
          patch("filecmp.cmp", return_value=True):
@@ -92,7 +94,7 @@ def test_quickstart():
     # _settings.py are correct.
     with patch("shutil.copyfile") as mock_copyfile, \
          patch("pathlib.Path.mkdir") as mock_mkdir, \
-         patch("pathlib.Path.rglob", return_value=quickstart_tree), \
+         patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[False, False, False]), \
          patch("filecmp.cmp", return_value=False):
