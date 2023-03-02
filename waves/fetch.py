@@ -37,6 +37,14 @@ def available_files(root_directory, relative_paths):
     return available_files, not_found
 
 
+def conditional_copy(copy_tuples):
+    for source_file, destination_file in copy_tuples:
+        # If the root_directory and destination file contents are the same, don't perform unnecessary file I/O
+        if not destination_file.exists() or not filecmp.cmp(source_file, destination_file, shallow=False):
+            destination_file.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(source_file, destination_file)
+
+
 def recursive_copy(root_directory, relative_paths, destination, overwrite=False, dry_run=False,
                    exclude_patterns=_settings._fetch_exclude_patterns):
     """Recursively copy root_directory directory into destination directory
@@ -84,10 +92,6 @@ def recursive_copy(root_directory, relative_paths, destination, overwrite=False,
         return 0
 
     # Do the work if there are any files left to copy
-    for source_file, destination_file in copy_tuples:
-        # If the root_directory and destination file contents are the same, don't perform unnecessary file I/O
-        if not destination_file.exists() or not filecmp.cmp(source_file, destination_file, shallow=False):
-            destination_file.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copyfile(source_file, destination_file)
+    conditional_copy(copy_tuples)
 
     return 0
