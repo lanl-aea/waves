@@ -74,7 +74,7 @@ def longest_common_path_prefix(file_list):
     elif number_of_files == 1:
         longest_common_path = file_list[0].parent
     else:
-        longest_common_path = pathlib.Path(os.path.commonpath(source_files))
+        longest_common_path = pathlib.Path(os.path.commonpath(file_list))
     return longest_common_path
 
 
