@@ -25,7 +25,7 @@ def test_quickstart():
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
-         patch("pathlib.Path.exists", side_effect=[True, False, False]), \
+         patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         assert return_code == 0
@@ -39,7 +39,7 @@ def test_quickstart():
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
-         patch("pathlib.Path.exists", side_effect=[True, False, False]), \
+         patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, dry_run=True)
         assert return_code == 0
@@ -53,7 +53,7 @@ def test_quickstart():
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
-         patch("pathlib.Path.exists", side_effect=[True, True, True]), \
+         patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         assert return_code == 0  # Don't error out, just remove destination file from the copy list
@@ -67,7 +67,7 @@ def test_quickstart():
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
-         patch("pathlib.Path.exists", side_effect=[True, True, True]), \
+         patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
         assert return_code == 0
@@ -82,7 +82,7 @@ def test_quickstart():
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
-         patch("pathlib.Path.exists", side_effect=[True, True, True]), \
+         patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
         assert return_code == 0
@@ -96,26 +96,11 @@ def test_quickstart():
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
-         patch("pathlib.Path.exists", side_effect=[True, True, True]), \
+         patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
                                            overwrite=True, dry_run=True)
         assert return_code == 0
         mock_print_list.assert_called_once()
-        mock_mkdir.assert_not_called()
-        mock_copyfile.assert_not_called()
-
-    # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
-    # _settings.py are correct.
-    with patch("shutil.copyfile") as mock_copyfile, \
-         patch("pathlib.Path.mkdir") as mock_mkdir, \
-         patch("waves.fetch.available_files", return_value=available_files_output), \
-         patch("waves.fetch.print_list") as mock_print_list, \
-         patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
-         patch("pathlib.Path.exists", side_effect=[False, False, False]), \
-         patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
-        assert return_code != 0
-        mock_print_list.assert_not_called()
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()

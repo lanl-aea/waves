@@ -64,3 +64,14 @@ def test_build():
          patch("pathlib.Path.mkdir") as mock_mkdir:
         waves.build(['dummy.target'], git_clone_directory='dummy/clone')
         assert mock_check_output.call_count == 2
+
+
+@pytest.mark.unittest
+def test_quickstart():
+    # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
+    # _settings.py are correct.
+    with patch("waves.fetch.recursive_copy") as mock_recursive_copy, \
+         patch("pathlib.Path.is_dir", return_value=False):
+        return_code = waves.quickstart("/dummy/destination")
+        assert return_code != 0
+        mock_recursive_copy.assert_not_called()

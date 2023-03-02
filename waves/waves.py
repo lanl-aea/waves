@@ -191,12 +191,18 @@ def quickstart(destination, overwrite=False, dry_run=False):
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
     :param bool dry_run: Print the template destination tree and exit
     """
+    root_directory = _settings._installed_quickstart_directory.parent
+    relative_paths = [_settings._installed_quickstart_directory.name]
+    if not root_directory.is_dir():
+        # During "waves quickstart" sub-command, this should only be reached if the package installation structure doesn't
+        # match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the
+        # assumptions are correct.
+        print(f"Could not find '{root_directory}' directory", file=sys.stderr)
+        return 1
     from waves import fetch
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     print(f"Project root path: '{destination}'", file=sys.stdout)
-    return_code = fetch.recursive_copy(_settings._installed_quickstart_directory.parent,
-                                       _settings._installed_quickstart_directory.name,
-                                       destination,
+    return_code = fetch.recursive_copy(root_directory, relative_paths, destination,
                                        overwrite=overwrite, dry_run=dry_run)
     return return_code
 

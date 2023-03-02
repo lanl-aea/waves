@@ -63,14 +63,7 @@ def recursive_copy(root_directory, relative_paths, destination, overwrite=False,
     :param list exclude_patterns: list of strings to exclude from the root_directory directory tree if the path contains a
         matching string.
     """
-    root_directory = pathlib.Path(root_directory).resolve()
     destination = pathlib.Path(destination).resolve()
-    if not root_directory.exists():
-        # During "waves quickstart" commands, this should only be reached if the package installation structure doesn't
-        # match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the
-        # assumptions are correct.
-        print(f"Could not find '{root_directory}' directory", file=sys.stderr)
-        return 1
 
     source_files, not_found = available_files(root_directory, relative_paths)
     source_files = [path for path in source_files if not any(map(str(path).__contains__, exclude_patterns))]
