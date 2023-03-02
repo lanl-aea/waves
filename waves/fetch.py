@@ -105,7 +105,7 @@ def print_list(things_to_print, prefix="\t", stream=sys.stdout):
         print(f"{prefix}{item}", file=stream)
 
 
-def recursive_copy(root_directory, relative_paths, destination,
+def recursive_copy(root_directory, relative_paths, destination, requested_paths=None,
                    overwrite=False, dry_run=False, print_available=False):
     """Recursively copy root_directory directory into destination directory
 
@@ -115,6 +115,8 @@ def recursive_copy(root_directory, relative_paths, destination,
     :param list relative_paths: List of string or pathlike objects describing relative paths to search for in
         root_directory
     :param str destination: String or pathlike object for the destination directory
+    :param list requested_paths: list of path-like objects that subset the files found in the ``root_directory``
+        ``relative_paths``
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
     :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
@@ -132,7 +134,13 @@ def recursive_copy(root_directory, relative_paths, destination,
         print_list([path.relative_to(longest_common_path) for path in source_files])
         return 0
 
-    destination_files = [destination / path.relative_to(longest_common_path) for path in source_files]
+    if requested_paths:
+        requested_paths, not_found = available_files(longest_common_path, requested_paths)
+    else:
+        requested_paths = source_files
+        not_found = []
+
+    destination_files = [destination / path.relative_to(longest_common_path) for path in requested_paths]
     existing_files = [path for path in destination_files if path.exists()]
 
     copy_tuples = tuple(zip(source_files, destination_files))
