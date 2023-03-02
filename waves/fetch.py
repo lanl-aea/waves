@@ -19,6 +19,8 @@ def available_files(root_directory, relative_paths):
     :rtype: tuple of lists
     """
     root_directory = pathlib.Path(root_directory).resolve()
+    if isinstance(relative_paths, str):
+        relative_paths = [relative_paths]
 
     available_files = []
     not_found = []
