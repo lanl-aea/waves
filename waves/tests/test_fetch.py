@@ -22,6 +22,7 @@ def test_recursive_copy():
     source_tree = [root_directory / path for path in source_files]
     destination = pathlib.Path("/path/to/destination")
     destination_tree = [destination / path.relative_to(root_directory) for path in source_tree]
+    copy_tuples = tuple(zip(source_tree, destination_tree))
     not_found = []
     available_files_output = (source_tree, not_found)
 
@@ -34,7 +35,7 @@ def test_recursive_copy():
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         assert return_code == 0
         mock_print_list.assert_not_called()
-        mock_conditional_copy.assert_called_once()
+        mock_conditional_copy.assert_called_once_with(copy_tuples)
 
     # Files in destination tree do not exist, but dry-run. Print destination file tree.
     with patch("waves.fetch.available_files", return_value=available_files_output), \
@@ -67,7 +68,7 @@ def test_recursive_copy():
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         assert return_code == 0  # Don't error out, just remove destination file from the copy list
         mock_print_list.assert_not_called()
-        mock_conditional_copy.assert_called_once_with([])
+        mock_conditional_copy.assert_called_once_with(())
 
     # Files in destination tree do exist, we want to overwrite contents, and the files differ. Copy the source file.
     with patch("waves.fetch.available_files", return_value=available_files_output), \
@@ -78,7 +79,7 @@ def test_recursive_copy():
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
         assert return_code == 0
         mock_print_list.assert_not_called()
-        mock_conditional_copy.assert_called_once()
+        mock_conditional_copy.assert_called_once_with(copy_tuples)
 
     # Files in destination tree do exist, we want to overwrite contents, but the files are the same. Don't copy the
     # source file.
@@ -90,8 +91,7 @@ def test_recursive_copy():
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
         assert return_code == 0
         mock_print_list.assert_not_called()
-        # TODO: add called with
-        mock_conditional_copy.assert_called_once()
+        mock_conditional_copy.assert_called_once_with(copy_tuples)
 
     # Files in destination tree do exist, but we want to overwrite contents and dry-run. Print the quickstart file tree.
     with patch("waves.fetch.available_files", return_value=available_files_output), \

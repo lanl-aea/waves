@@ -95,8 +95,8 @@ def build_copy_tuples(destination, requested_paths_resolved, overwrite=False):
     destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
     copy_tuples = tuple(zip(requested_paths_resolved, destination_files))
     if not overwrite and existing_files:
-        copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in copy_tuples if
-                       destination_file not in existing_files]
+        copy_tuples = tuple((requested_path, destination_file) for requested_path, destination_file in copy_tuples if
+                       destination_file not in existing_files)
     return copy_tuples
 
 
