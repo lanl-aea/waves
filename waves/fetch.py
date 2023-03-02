@@ -38,6 +38,13 @@ def available_files(root_directory, relative_paths):
 
 
 def conditional_copy(copy_tuples):
+    """Copy when destination file doesn't exist or doesn't match source file content
+
+    Uses Python ``shutil.copyfile``, so meta data isn't preserved. Creates intermediate parent directories prior to
+    copy, but doesn't raise exceptions on existing parent directories.
+
+    :param tuple copy_tuples: Tuple of source, destination pathlib.Path pairs, e.g. ``((source, destination), ...)``
+    """
     for source_file, destination_file in copy_tuples:
         # If the root_directory and destination file contents are the same, don't perform unnecessary file I/O
         if not destination_file.exists() or not filecmp.cmp(source_file, destination_file, shallow=False):
@@ -46,6 +53,12 @@ def conditional_copy(copy_tuples):
 
 
 def print_list(things_to_print, prefix="\t", stream=sys.stdout):
+    """Print a list to the specified stream, one line per item
+
+    :param list things_to_print: List of items to print
+    :param str prefix: prefix to print on each line before printing the item
+    :param file-like stream: output stream. Defaults to ``sys.stdout``.
+    """
     for item in things_to_print:
         print(f"{prefix}{item}", file=stream)
 
