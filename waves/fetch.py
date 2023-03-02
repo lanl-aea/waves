@@ -51,6 +51,7 @@ def exclude_source_files(root_directory, relative_paths, exclude_patterns=_setti
     :returns: source_files, not_found
     :rtype: tuple of lists
     """
+    # TODO: Save the list of excluded files and return
     source_files, not_found = available_files(root_directory, relative_paths)
     source_files = [path for path in source_files if not any(map(str(path).__contains__, exclude_patterns))]
     return source_files, not_found
