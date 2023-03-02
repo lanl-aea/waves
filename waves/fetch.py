@@ -34,7 +34,7 @@ def available_files(root_directory, relative_paths):
     return available_files, not_found
 
 
-def recursive_copy(root_directory, destination, overwrite=False, dry_run=False,
+def recursive_copy(root_directory, relative_paths, destination, overwrite=False, dry_run=False,
                    exclude_patterns=_settings._fetch_exclude_patterns):
     """Recursively copy root_directory directory into destination directory
 
@@ -56,7 +56,7 @@ def recursive_copy(root_directory, destination, overwrite=False, dry_run=False,
         print(f"Could not find '{root_directory}' directory", file=sys.stderr)
         return 1
 
-    source_files, not_found = available_files(root_directory.parent, [root_directory.name])
+    source_files, not_found = available_files(root_directory, relative_paths)
     source_files = [path for path in source_files if not any(map(str(path).__contains__, exclude_patterns))]
     if not source_files:
         print(f"Did not find any files in '{root_directory}'", file=sys.stderr)

@@ -13,7 +13,9 @@ _settings._installed_quickstart_directory
 def test_quickstart():
 
     # Dummy quickstart tree
-    quickstart_tree = [pathlib.Path("dummy.file")]
+    root_directory = pathlib.Path("/path/to/source")
+    destination = pathlib.Path("/path/to/destination")
+    quickstart_tree = [pathlib.Path("/path/to/source/dummy.file")]
     not_found = []
     available_files_output = (quickstart_tree, not_found)
 
@@ -24,7 +26,7 @@ def test_quickstart():
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, False, False]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path")
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         assert return_code == 0
         mock_mkdir.assert_called_once()
         mock_copyfile.assert_called_once()
@@ -36,7 +38,7 @@ def test_quickstart():
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, False, False]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path", dry_run=True)
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, dry_run=True)
         assert return_code == 0
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()
@@ -48,7 +50,7 @@ def test_quickstart():
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True, True]), \
          patch("filecmp.cmp", return_value=True):
-        return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path")
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         assert return_code == 0  # Don't error out, just remove destination file from the copy list
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()
@@ -60,7 +62,7 @@ def test_quickstart():
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True, True]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path", overwrite=True)
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
         assert return_code == 0
         mock_mkdir.assert_called_once()
         mock_copyfile.assert_called_once()
@@ -73,7 +75,7 @@ def test_quickstart():
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True, True]), \
          patch("filecmp.cmp", return_value=True):
-        return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path", overwrite=True)
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
         assert return_code == 0
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()
@@ -85,7 +87,8 @@ def test_quickstart():
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True, True]), \
          patch("filecmp.cmp", return_value=True):
-        return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path", overwrite=True, dry_run=True)
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
+                                           overwrite=True, dry_run=True)
         assert return_code == 0
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()
@@ -98,7 +101,7 @@ def test_quickstart():
          patch("pathlib.Path.relative_to", return_value=quickstart_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[False, False, False]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, "/dummy/path")
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         assert return_code != 0
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()

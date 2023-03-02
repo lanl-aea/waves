@@ -194,7 +194,9 @@ def quickstart(destination, overwrite=False, dry_run=False):
     from waves import fetch
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     print(f"Project root path: '{destination}'", file=sys.stdout)
-    return_code = fetch.recursive_copy(_settings._installed_quickstart_directory, destination,
+    return_code = fetch.recursive_copy(_settings._installed_quickstart_directory.parent,
+                                       _settings._installed_quickstart_directory.name,
+                                       destination,
                                        overwrite=overwrite, dry_run=dry_run)
     return return_code
 
