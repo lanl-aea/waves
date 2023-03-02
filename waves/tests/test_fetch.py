@@ -10,11 +10,12 @@ def test_quickstart():
 
     # Dummy quickstart tree
     root_directory = pathlib.Path("/path/to/source")
-    quickstart_tree = [root_directory / "dummy.file"]
+    source_files = [pathlib.Path("dummy.file")]
+    source_tree = [root_directory / path for path in source_files]
     destination = pathlib.Path("/path/to/destination")
-    destination_tree = [destination / path.relative_to(root_directory) for path in quickstart_tree]
+    destination_tree = [destination / path.relative_to(root_directory) for path in source_tree]
     not_found = []
-    available_files_output = (quickstart_tree, not_found)
+    available_files_output = (source_tree, not_found)
 
     # Files in destination tree do not exist. Copy the quickstart file tree.
     with patch("shutil.copyfile") as mock_copyfile, \
@@ -51,7 +52,7 @@ def test_quickstart():
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, print_available=True)
         assert return_code == 0
-        mock_print_list.assert_called_once_with(quickstart_tree)
+        mock_print_list.assert_called_once_with(source_files)
         mock_mkdir.assert_not_called()
         mock_copyfile.assert_not_called()
 

@@ -75,7 +75,7 @@ def recursive_copy(root_directory, relative_paths, destination,
         root_directory
     :param str destination: String or pathlike object for the destination directory
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
-    :param bool dry_run: Print the template destination tree and exit. Short circuited by ``print_available``
+    :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
     :param list exclude_patterns: list of strings to exclude from the root_directory directory tree if the path contains a
         matching string.
@@ -87,15 +87,17 @@ def recursive_copy(root_directory, relative_paths, destination,
     if not source_files:
         print(f"Did not find any files in '{root_directory}'", file=sys.stderr)
         return 1
-    if print_available:
-        print("Available source files:")
-        print_list(source_files)
-        return 0
 
     if len(source_files) <= 1:
         longest_common_path = source_files[0].parent
     else:
         longest_common_path = os.path.commonpath(source_files)
+
+    if print_available:
+        print("Available source files:")
+        print_list([path.relative_to(longest_common_path) for path in source_files])
+        return 0
+
     destination_files = [destination / path.relative_to(longest_common_path) for path in source_files]
     existing_files = [path for path in destination_files if path.exists()]
 

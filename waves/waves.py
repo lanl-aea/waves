@@ -105,7 +105,7 @@ def get_parser():
         help="Overwrite any existing files (default: %(default)s)")
     quickstart_parser.add_argument("--dry-run",
         action="store_true",
-        help="Print the files that would be created and exit (default: %(default)s)")
+        help="Print the destination tree and exit (default: %(default)s)")
 
     visualize_parser = argparse.ArgumentParser(add_help=False)
     visualize_parser = subparsers.add_parser("visualize",
@@ -184,13 +184,12 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart(destination, overwrite=False, dry_run=False, print_available=False):
+def quickstart(destination, overwrite=False, dry_run=False):
     """Recursively copy quickstart template directory into destination directory
 
     :param str destination: String or pathlike object for the destination directory
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
-    :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
-    :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
+    :param bool dry_run: Print the destination tree and exit
     """
     root_directory = _settings._installed_quickstart_directory.parent
     relative_paths = [_settings._installed_quickstart_directory.name]
@@ -204,7 +203,7 @@ def quickstart(destination, overwrite=False, dry_run=False, print_available=Fals
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     print(f"Destination directory: '{destination}'", file=sys.stdout)
     return_code = fetch.recursive_copy(root_directory, relative_paths, destination,
-                                       overwrite=overwrite, dry_run=dry_run, print_available=print_available)
+                                       overwrite=overwrite, dry_run=dry_run)
     return return_code
 
 
