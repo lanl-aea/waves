@@ -63,16 +63,20 @@ def print_list(things_to_print, prefix="\t", stream=sys.stdout):
         print(f"{prefix}{item}", file=stream)
 
 
-def recursive_copy(root_directory, relative_paths, destination, overwrite=False, dry_run=False,
+def recursive_copy(root_directory, relative_paths, destination,
+                   overwrite=False, dry_run=False, print_available=False,
                    exclude_patterns=_settings._fetch_exclude_patterns):
     """Recursively copy root_directory directory into destination directory
 
     If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
 
     :param str root_directory: String or pathlike object for the root_directory directory
+    :param list relative_paths: List of string or pathlike objects describing relative paths to search for in
+        root_directory
     :param str destination: String or pathlike object for the destination directory
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
-    :param bool dry_run: Print the template destination tree and exit
+    :param bool dry_run: Print the template destination tree and exit. Short circuited by ``print_available``
+    :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
     :param list exclude_patterns: list of strings to exclude from the root_directory directory tree if the path contains a
         matching string.
     """
@@ -83,8 +87,12 @@ def recursive_copy(root_directory, relative_paths, destination, overwrite=False,
     if not source_files:
         print(f"Did not find any files in '{root_directory}'", file=sys.stderr)
         return 1
-    longest_common_path = os.path.commonpath(source_files)
+    if print_available:
+        print("Available source files:")
+        print_list(source_files)
+        return 0
 
+    longest_common_path = os.path.commonpath(source_files)
     destination_files = [destination / path.relative_to(longest_common_path) for path in source_files]
     existing_files = [path for path in destination_files if path.exists()]
 
