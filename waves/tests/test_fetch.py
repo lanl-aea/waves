@@ -21,7 +21,6 @@ def test_quickstart():
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
-         patch("pathlib.Path.relative_to", return_value=destination_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
@@ -35,7 +34,6 @@ def test_quickstart():
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
-         patch("pathlib.Path.relative_to", return_value=destination_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, dry_run=True)
@@ -49,7 +47,6 @@ def test_quickstart():
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
-         patch("pathlib.Path.relative_to", return_value=destination_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, print_available=True)
@@ -63,7 +60,6 @@ def test_quickstart():
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
-         patch("pathlib.Path.relative_to", return_value=destination_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
@@ -77,7 +73,6 @@ def test_quickstart():
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
-         patch("pathlib.Path.relative_to", return_value=destination_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=False):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
@@ -92,7 +87,6 @@ def test_quickstart():
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
-         patch("pathlib.Path.relative_to", return_value=destination_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
@@ -106,7 +100,6 @@ def test_quickstart():
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
-         patch("pathlib.Path.relative_to", return_value=destination_tree[0]), \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
         return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination,

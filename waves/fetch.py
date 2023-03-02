@@ -92,7 +92,10 @@ def recursive_copy(root_directory, relative_paths, destination,
         print_list(source_files)
         return 0
 
-    longest_common_path = os.path.commonpath(source_files)
+    if len(source_files) <= 1:
+        longest_common_path = source_files[0].parent
+    else:
+        longest_common_path = os.path.commonpath(source_files)
     destination_files = [destination / path.relative_to(longest_common_path) for path in source_files]
     existing_files = [path for path in destination_files if path.exists()]
 
