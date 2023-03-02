@@ -91,6 +91,15 @@ def build_destination_files(destination, requested_paths):
     return destination_files, existing_files
 
 
+def build_copy_tuples(destination, requested_paths_resolved, overwrite=False):
+    destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
+    copy_tuples = tuple(zip(requested_paths_resolved, destination_files))
+    if not overwrite and existing_files:
+        copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in copy_tuples if
+                       destination_file not in existing_files]
+    return copy_tuples
+
+
 def conditional_copy(copy_tuples):
     """Copy when destination file doesn't exist or doesn't match source file content
 
@@ -155,12 +164,8 @@ def recursive_copy(root_directory, relative_paths, destination, requested_paths=
 
     # Build destination tree
     destination = pathlib.Path(destination).resolve()
-    destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
-
-    copy_tuples = tuple(zip(requested_paths_resolved, destination_files))
-    if not overwrite and existing_files:
-        copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in copy_tuples if
-                       destination_file not in existing_files]
+    copy_tuples = build_copy_tuples(destination, requested_paths_resolved, overwrite=overwrite)
+    if len(copy_tuples) != len(requested_paths_resolved):
         print(f"Found conflicting files in destination '{destination}'. Use '--overwrite' to replace existing files.",
               file=sys.stderr)
 
