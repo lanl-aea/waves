@@ -56,6 +56,28 @@ def exclude_source_files(root_directory, relative_paths, exclude_patterns=_setti
     return source_files, not_found
 
 
+def longest_common_path_prefix(file_list):
+    """Return the longest common file path prefix.
+
+    The edge case of a single path is handled by returning the parent directory
+
+    :param list file_list: List of path-like objects
+    :returns: longest common path prefix
+    :rtype: pathlib.Path
+    """
+    if isinstance(file_list, str):
+        file_list = [file_list]
+    file_list = [pathlib.Path(path) for path in file_list]
+    number_of_files = len(file_list)
+    if number_of_files < 1:
+        raise RuntimeError("No files in 'file_list'")
+    elif number_of_files == 1:
+        longest_common_path = file_list[0].parent
+    else:
+        longest_common_path = pathlib.Path(os.path.commonpath(source_files))
+    return longest_common_path
+
+
 def conditional_copy(copy_tuples):
     """Copy when destination file doesn't exist or doesn't match source file content
 
@@ -103,11 +125,7 @@ def recursive_copy(root_directory, relative_paths, destination,
         print(f"Did not find any files in '{root_directory}'", file=sys.stderr)
         return 1
 
-    if len(source_files) <= 1:
-        longest_common_path = source_files[0].parent
-    else:
-        longest_common_path = os.path.commonpath(source_files)
-
+    longest_common_path = longest_common_path_prefix(source_files)
     if print_available:
         print("Available source files:")
         print_list([path.relative_to(longest_common_path) for path in source_files])
