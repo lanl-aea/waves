@@ -32,7 +32,7 @@ def test_recursive_copy():
          patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
+        return_code = fetch.recursive_copy(source_tree, destination)
         assert return_code == 0
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(copy_tuples)
@@ -43,7 +43,7 @@ def test_recursive_copy():
          patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, dry_run=True)
+        return_code = fetch.recursive_copy(source_tree, destination, dry_run=True)
         assert return_code == 0
         mock_print_list.assert_called_once_with(destination_tree)
         mock_conditional_copy.assert_not_called()
@@ -54,7 +54,7 @@ def test_recursive_copy():
          patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, print_available=True)
+        return_code = fetch.recursive_copy(source_tree, destination, print_available=True)
         assert return_code == 0
         mock_print_list.assert_called_once_with(source_files)
         mock_conditional_copy.assert_not_called()
@@ -65,7 +65,7 @@ def test_recursive_copy():
          patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
+        return_code = fetch.recursive_copy(source_tree, destination)
         assert return_code == 0  # Don't error out, just remove destination file from the copy list
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(())
@@ -76,7 +76,7 @@ def test_recursive_copy():
          patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
+        return_code = fetch.recursive_copy(source_tree, destination, overwrite=True)
         assert return_code == 0
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(copy_tuples)
@@ -88,7 +88,7 @@ def test_recursive_copy():
          patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
+        return_code = fetch.recursive_copy(source_tree, destination, overwrite=True)
         assert return_code == 0
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(copy_tuples)
@@ -99,7 +99,7 @@ def test_recursive_copy():
          patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
          patch("filecmp.cmp", return_value=True):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
+        return_code = fetch.recursive_copy(source_tree, destination,
                                            overwrite=True, dry_run=True)
         assert return_code == 0
         mock_print_list.assert_called_once_with(destination_tree)
