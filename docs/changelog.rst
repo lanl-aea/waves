@@ -8,6 +8,11 @@ Changelog
 0.6.13 (unreleased)
 *******************
 
+New Features
+============
+- Add a ``waves fetch`` subcommand to fetch bundled modsim template files (:issue:`428`, :merge:`522`). By `Kyle
+  Brindley`_.
+
 Bug fixes
 =========
 - Fix issue in excluding nodes of waves visualization (:issue:`426`, :merge:`519`). By `Prabhu Khalsa`_.
