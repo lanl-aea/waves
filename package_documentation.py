@@ -29,7 +29,8 @@ new_paths = [
 for destination, source in new_paths:
     assert source.exists()
     print(f"Copying '{source}' to '{destination}'...")
-    if destination.is_file():
+    if source.is_file():
+        destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, destination, follow_symlinks=True)
     else:
         destination.mkdir(parents=True, exist_ok=True)
