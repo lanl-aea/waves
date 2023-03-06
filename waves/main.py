@@ -117,11 +117,11 @@ def get_parser():
 
     fetch_parser = argparse.ArgumentParser(add_help=False)
     fetch_parser = subparsers.add_parser('fetch',
-        help="Fetch and copy SCons-WAVES modsim template files",
+        help="Fetch and copy SCons-WAVES modsim template files and directories",
         description="Fetch and copy SCons-WAVES modsim template files.",
         parents=[fetch_parser])
     fetch_parser.add_argument("FILE", nargs="?",
-                              help=f"modsim template file")
+                              help=f"modsim template file or directory")
     fetch_parser.add_argument("--destination",
         help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
              "destination will not be copied. (default: PWD)",
