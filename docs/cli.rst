@@ -24,6 +24,16 @@ docs
    :nodefault:
    :path: docs
 
+.. _waves_fetch_cli:
+
+fetch
+-----
+
+.. argparse::
+   :ref: waves.main.get_parser
+   :nodefault:
+   :path: fetch
+
 .. _waves_quickstart_cli:
 
 quickstart
