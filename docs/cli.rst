@@ -9,7 +9,7 @@ Command Line Utilities
 ******************************
 
 .. argparse::
-   :ref: waves.waves.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
    :nosubcommands:
 
@@ -20,9 +20,19 @@ docs
 ----
 
 .. argparse::
-   :ref: waves.waves.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
    :path: docs
+
+.. _waves_fetch_cli:
+
+fetch
+-----
+
+.. argparse::
+   :ref: waves.main.get_parser
+   :nodefault:
+   :path: fetch
 
 .. _waves_quickstart_cli:
 
@@ -30,7 +40,7 @@ quickstart
 ----------
 
 .. argparse::
-   :ref: waves.waves.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
    :path: quickstart
 
@@ -40,7 +50,7 @@ build
 -----
 
 .. argparse::
-   :ref: waves.waves.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
    :path: build
 

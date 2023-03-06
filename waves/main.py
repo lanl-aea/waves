@@ -21,8 +21,16 @@ def main():
     elif args.subcommand == 'build':
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
+    elif args.subcommand == 'fetch':
+        root_directory = _settings._installed_quickstart_directory.parent
+        relative_paths = _settings._fetch_subdirectories
+        return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination, requested_paths=args.FILE,
+                            overwrite=args.overwrite, dry_run=args.dry_run, print_available=args.print_available)
     elif args.subcommand == 'quickstart':
-        return_code = quickstart(args.destination, overwrite=args.overwrite, dry_run=args.dry_run)
+        root_directory = _settings._installed_quickstart_directory.parent
+        relative_paths = [_settings._installed_quickstart_directory.name]
+        return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
+                            overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
@@ -107,6 +115,32 @@ def get_parser():
         action="store_true",
         help="Print the destination tree and exit (default: %(default)s)")
 
+    fetch_parser = argparse.ArgumentParser(add_help=False)
+    fetch_parser = subparsers.add_parser('fetch',
+        help="Fetch and copy SCons-WAVES modsim template files and directories",
+        description="Fetch and copy SCons-WAVES modsim template files and directories. If no ``FILE`` is specified, " \
+            "all available files will be created. Directories are recursively copied. The source path is " \
+            "truncated to use the shortest common file prefix, e.g. requesting two files ``common/source/file.1`` " \
+            "and ``common/source/file.2`` will create ``/destination/file.1`` and ``/destination/file.2``, " \
+            "respectively.",
+        parents=[fetch_parser])
+    fetch_parser.add_argument("FILE", nargs="*",
+                              help=f"modsim template file or directory")
+    fetch_parser.add_argument("--destination",
+        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
+             "destination will not be copied. (default: PWD)",
+        type=pathlib.Path,
+        default=pathlib.Path().cwd())
+    fetch_parser.add_argument("--overwrite",
+        action="store_true",
+        help="Overwrite any existing files (default: %(default)s)")
+    fetch_parser.add_argument("--dry-run",
+        action="store_true",
+        help="Print the destination tree and exit (default: %(default)s)")
+    fetch_parser.add_argument("--print-available",
+        action="store_true",
+        help="Print available modsim template files and exit (default: %(default)s)")
+
     visualize_parser = argparse.ArgumentParser(add_help=False)
     visualize_parser = subparsers.add_parser("visualize",
         help="Create an SCons project visualization",
@@ -184,26 +218,37 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def quickstart(destination, overwrite=False, dry_run=False):
-    """Recursively copy quickstart template directory into destination directory
+def fetch(subcommand, root_directory, relative_paths, destination, requested_paths=[],
+          overwrite=False, dry_run=False, print_available=False):
+    """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
 
+    Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
+    the shortest possible shared source prefix.
+
+    If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
+
+    :param str subcommand: name of the subcommand to report in STDOUT
+    :param str root_directory: String or pathlike object for the root_directory directory
+    :param list relative_paths: List of string or pathlike objects describing relative paths to search for in
+        root_directory
     :param str destination: String or pathlike object for the destination directory
+    :param list requested_paths: list of relative path-like objects that subset the files found in the
+        ``root_directory`` ``relative_paths``
     :param bool overwrite: Boolean to overwrite any existing files in destination directory
-    :param bool dry_run: Print the destination tree and exit
+    :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
+    :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
-    root_directory = _settings._installed_quickstart_directory.parent
-    relative_paths = [_settings._installed_quickstart_directory.name]
     if not root_directory.is_dir():
-        # During "waves quickstart" sub-command, this should only be reached if the package installation structure doesn't
-        # match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the
-        # assumptions are correct.
+        # During "waves quickstart/fetch" sub-command(s), this should only be reached if the package installation structure
+        # doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the
+        # installed directory assumptions are correct.
         print(f"Could not find '{root_directory}' directory", file=sys.stderr)
         return 1
     from waves import fetch
-    print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
+    print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
     print(f"Destination directory: '{destination}'", file=sys.stdout)
-    return_code = fetch.recursive_copy(root_directory, relative_paths, destination,
-                                       overwrite=overwrite, dry_run=dry_run)
+    return_code = fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
+                                       overwrite=overwrite, dry_run=dry_run, print_available=print_available)
     return return_code
 
 

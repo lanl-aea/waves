@@ -24,12 +24,13 @@ _installed_quickstart_directory = _project_root_abspath / "quickstart"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
 _supported_salib_samplers = ["latin", "fast_sampler", "sobol", "finite_diff", "morris"]
 _fetch_exclude_patterns = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
+_fetch_subdirectories = ["quickstart", "tutorials"]
 _visualize_exclude = ["/usr/bin"]
 _visualize_default_height = 12
 _visualize_default_width = 36
 
 # For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
-# Enables ``python -m waves.waves quickstart ...`` execution from repository root directory
-_repository_quickstart_directory = _project_root_abspath.parent / "quickstart"
+# Enables ``python -m waves.main quickstart ...`` execution from repository root directory
+_repository_quickstart_directory = _project_root_abspath.parent / _fetch_subdirectories[0] 
 if not _installed_quickstart_directory.exists() and _repository_quickstart_directory.exists():
     _installed_quickstart_directory = _repository_quickstart_directory

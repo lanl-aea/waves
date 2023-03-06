@@ -8,6 +8,11 @@ Changelog
 0.6.13 (unreleased)
 *******************
 
+New Features
+============
+- Add a ``waves fetch`` subcommand to fetch bundled modsim template files (:issue:`428`, :merge:`522`). By `Kyle
+  Brindley`_.
+
 Bug fixes
 =========
 - Fix issue in excluding nodes of waves visualization (:issue:`426`, :merge:`519`). By `Prabhu Khalsa`_.
@@ -21,6 +26,9 @@ Documentation
 Internal Changes
 ================
 - Added ``sphinx-copybutton`` package to environment (:issue:`414`, :merge:`516`). By `Sergio Cordova`_.
+- Split quickstart copy operations into smaller functions for unit testing (:issue:`428`, :merge:`522`). By `Kyle
+  Brindley`_.
+- Rename command line utility module to avoid namespace confusion (:issue:`428`, :merge:`522`). By `Kyle Brindley`_.
 
 Enhancements
 ============
