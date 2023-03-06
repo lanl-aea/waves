@@ -37,6 +37,17 @@ def test_recursive_copy():
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(copy_tuples)
 
+    # Files in destination tree do not exist. Only want the first file. Copy the first file..
+    with patch("waves.fetch.available_files", return_value=([source_tree[0]], [])), \
+         patch("waves.fetch.print_list") as mock_print_list, \
+         patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
+         patch("pathlib.Path.exists", side_effect=[False, False]), \
+         patch("filecmp.cmp", return_value=False):
+        return_code = fetch.recursive_copy(source_tree, destination, requested_paths=[source_files[0]])
+        assert return_code == 0
+        mock_print_list.assert_not_called()
+        mock_conditional_copy.assert_called_once_with((copy_tuples[0], ))
+
     # Files in destination tree do not exist, but dry-run. Print destination file tree.
     with patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
