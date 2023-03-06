@@ -119,6 +119,40 @@ def test_available_files(root_directory, relative_paths,
         assert not_found == expected_missing
 
 
+build_source_files_input = {
+    "one file not matched": (
+        "/path/to/source", ["dummy.file1"], ["notamatch"],
+        (one_file_source_tree, []),
+        one_file_source_tree
+    ),
+    "one file matched": (
+        "/path/to/source", ["dummy.file1"], ["dummy"],
+        (one_file_source_tree, []),
+        []
+    ),
+    "two files, one matched": (
+        "/path/to/source", ["dummy.file1", "matched"], ["matched"],
+        ([one_file_source_tree[0], pathlib.Path("/path/to/source/matched")], []),
+        one_file_source_tree
+    )
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("root_directory, relative_paths, exclude_patterns, " \
+                         "available_files_side_effect, " \
+                         "expected_source_files",
+                         build_source_files_input.values(),
+                         ids=build_source_files_input.keys())
+def test_build_source_files(root_directory, relative_paths, exclude_patterns,
+                            available_files_side_effect,
+                            expected_source_files):
+    with patch("waves.fetch.available_files", return_value=available_files_side_effect):
+        source_files, not_found = fetch.build_source_files(root_directory, relative_paths,
+                                                           exclude_patterns=exclude_patterns)
+        assert source_files == expected_source_files
+
+
 @pytest.mark.unittest
 def test_recursive_copy():
 
