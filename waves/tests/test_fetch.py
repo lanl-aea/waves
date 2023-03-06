@@ -201,9 +201,32 @@ def test_build_destination_files(destination, requested_paths,
         assert existing_files == expected_existing_files
 
 
+build_copy_tuples_input = {
+    "two files, one exists, overwrite": (
+        "/path/to/destination", two_file_source_tree, True,
+        (two_file_destination_tree, [two_file_destination_tree[1]]),
+        tuple(zip(two_file_source_tree, two_file_destination_tree))
+    ),
+    "two files, one exists, no overwrite": (
+        "/path/to/destination", two_file_source_tree, False,
+        (two_file_destination_tree, [two_file_destination_tree[1]]),
+        tuple(zip([two_file_source_tree[0]], [two_file_destination_tree[0]]))
+    )
+}
+
+
 @pytest.mark.unittest
-def test_build_copy_tuples():
-    pass
+@pytest.mark.parametrize("destination, requested_paths_resolved, overwrite, " \
+                         "build_destination_files_side_effect, " \
+                         "expected_copy_tuples",
+                         build_copy_tuples_input.values(),
+                         ids=build_copy_tuples_input.keys())
+def test_build_copy_tuples(destination, requested_paths_resolved, overwrite,
+                           build_destination_files_side_effect,
+                           expected_copy_tuples):
+    with patch("waves.fetch.build_destination_files", return_value=build_destination_files_side_effect):
+        copy_tuples = fetch.build_copy_tuples(destination, requested_paths_resolved, overwrite=overwrite)
+        assert copy_tuples == expected_copy_tuples
 
 
 @pytest.mark.unittest
