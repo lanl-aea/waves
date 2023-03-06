@@ -30,7 +30,14 @@ def test_main():
          patch("waves.fetch.recursive_copy") as mock_recursive_copy:
         main.main()
         mock_recursive_copy.assert_called_once()
-        mock_recursive_copy.call_args[0] == [project_directory]
+        assert mock_recursive_copy.call_args[0][2] == pathlib.Path(project_directory)
+
+    requested_paths = ['dummy.file1', 'dummy.file2']
+    with patch('sys.argv', ['waves.py', 'fetch'] + requested_paths), \
+         patch("waves.fetch.recursive_copy") as mock_recursive_copy:
+        main.main()
+        mock_recursive_copy.assert_called_once()
+        assert mock_recursive_copy.call_args[1]['requested_paths'] == requested_paths
 
 
 @pytest.mark.unittest
