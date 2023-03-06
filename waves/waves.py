@@ -23,7 +23,7 @@ def main():
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'fetch':
         root_directory = _settings._installed_quickstart_directory.parent
-        relative_paths = [_settings._fetch_subdirectories]
+        relative_paths = _settings._fetch_subdirectories
         return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination, requested_paths=args.FILE,
                             overwrite=args.overwrite, dry_run=args.dry_run, print_available=args.print_available)
     elif args.subcommand == 'quickstart':
