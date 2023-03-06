@@ -76,22 +76,16 @@ test:
     - sed
     - setuptools_scm
     - xarray
-  source_files:
-    # Everything copied here will make it into the "info" directory of the Conda package
-    - SConstruct
-    - SConscript
-    - README.rst
-    - pyproject.toml
-    - waves/SConscript
-    - waves/tests/*.py
   imports:
     - waves
   commands:
     - test_root=${PWD}
     # Tests that depend on correct install path
     - waves docs --print-local-path
-    # Project unit tests
-    - scons . --keep-going --unconditional-build --ignore-documentation
+    # Test as-installed project unit tests
+    - cd $SP_DIR/$PKG_NAME
+    - pytest
+    - cd ${test_root}
     # WAVES CLI regression tests
     - quickstart_regression_directory="${test_root}/test_quickstart"
     - waves quickstart ${quickstart_regression_directory}
