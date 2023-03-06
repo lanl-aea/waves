@@ -164,7 +164,7 @@ def recursive_copy(root_directory, relative_paths, destination, requested_paths=
     # Build source/destination pairs
     destination = pathlib.Path(destination).resolve()
     copy_tuples = build_copy_tuples(destination, requested_paths_resolved, overwrite=overwrite)
-    if len(copy_tuples) != len(requested_paths_resolved):
+    if len(copy_tuples) > 0 and len(copy_tuples) != len(requested_paths_resolved):
         print(f"Found conflicting files in destination '{destination}'. Use '--overwrite' to replace existing files.",
               file=sys.stderr)
 

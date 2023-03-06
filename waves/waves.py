@@ -120,7 +120,7 @@ def get_parser():
         help="Fetch and copy SCons-WAVES modsim template files",
         description="Fetch and copy SCons-WAVES modsim template files.",
         parents=[fetch_parser])
-    fetch_parser.add_argument("FILE", nargs="+",
+    fetch_parser.add_argument("FILE", nargs="?",
                               help=f"modsim template file")
     fetch_parser.add_argument("--destination",
         help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
