@@ -231,6 +231,7 @@ def test_build_copy_tuples(destination, requested_paths_resolved, overwrite,
 
 @pytest.mark.unittest
 def test_print_list():
+    # TODO: implement stdout tests
     pass
 
 
