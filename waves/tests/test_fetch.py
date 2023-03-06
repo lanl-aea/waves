@@ -6,14 +6,68 @@ import pytest
 from waves import fetch
 
 
-@pytest.mark.unittest
-def test_conditional_copy():
-    # TODO: write conditional copy unit tests. recursive_copy relies on these tests passing.
-    pass
-
-
 one_file_source_tree = [pathlib.Path("/path/to/source/dummy.file1")]
-two_file_source_tree = [pathlib.Path("/path/to/source/dummy.file1"), pathlib.Path("/path/to/source/dummy.file2")]
+one_file_destination_tree = [pathlib.Path("/path/to/destination/dummy.file1")]
+two_file_source_tree = [pathlib.Path("/path/to/source/dummy.file1"),
+                        pathlib.Path("/path/to/source/dummy.file2")]
+two_file_destination_tree = [pathlib.Path("/path/to/destination/dummy.file1"),
+                             pathlib.Path("/path/to/destination/dummy.file2")]
+
+
+conditional_copy_input = {
+    "one new file": (  # File does not exist
+        ((one_file_source_tree[0], one_file_destination_tree[0]),),
+        [False], [False]
+    ),
+    "one different file": (  # File does exist, but it's different from the source file
+        ((one_file_source_tree[0], one_file_destination_tree[0]),),
+        [True], [False]
+    )
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("copy_tuples, " \
+                         "exists_side_effect, filecmp_side_effect",
+                         conditional_copy_input.values(),
+                         ids=conditional_copy_input.keys())
+def test_conditional_copy(copy_tuples, exists_side_effect, filecmp_side_effect):
+    with patch("pathlib.Path.exists", side_effect=exists_side_effect), \
+         patch("filecmp.cmp", side_effect=filecmp_side_effect), \
+         patch("pathlib.Path.mkdir") as mock_mkdir, \
+         patch("shutil.copyfile") as mock_copyfile:
+        fetch.conditional_copy(copy_tuples)
+        assert mock_mkdir.called_once()
+        assert mock_copyfile.called_once_with(copy_tuples[0])
+
+
+conditional_copy_input = {
+    "one identical file": (  # File exists and is identical to source file
+        ((one_file_source_tree[0], one_file_destination_tree[0]),),
+        [True], [True]
+    ),
+    "one different file": (  # File doesn't exist and is identical to source file. Should never actually occur
+        ((one_file_source_tree[0], one_file_destination_tree[0]),),
+        [False], [True]
+    )
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("copy_tuples, " \
+                         "exists_side_effect, filecmp_side_effect",
+                         conditional_copy_input.values(),
+                         ids=conditional_copy_input.keys())
+def test_conditional_copy(copy_tuples, exists_side_effect, filecmp_side_effect):
+    with patch("pathlib.Path.exists", side_effect=exists_side_effect), \
+         patch("filecmp.cmp", side_effect=filecmp_side_effect), \
+         patch("pathlib.Path.mkdir") as mock_mkdir, \
+         patch("shutil.copyfile") as mock_copyfile:
+        fetch.conditional_copy(copy_tuples)
+        assert mock_mkdir.not_called()
+        assert mock_copyfile.not_called()
+
+
 available_files_input = {
     "one file, str": (
         "/path/to/source", "dummy.file1",
