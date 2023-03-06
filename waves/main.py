@@ -121,7 +121,7 @@ def get_parser():
         description="Fetch and copy SCons-WAVES modsim template files and directories. If no ``FILE`` is specified, " \
             "all available files will be created. Directories are recursively copied. The source path is " \
             "truncated to use the shortest common file prefix, e.g. requesting two files ``common/source/file.1`` " \
-            "and ``common/source/file.2`` will create ``/destination/file.1`` and ``/destination/file.2, " \
+            "and ``common/source/file.2`` will create ``/destination/file.1`` and ``/destination/file.2``, " \
             "respectively.",
         parents=[fetch_parser])
     fetch_parser.add_argument("FILE", nargs="*",
