@@ -28,6 +28,7 @@ Internal Changes
 - Added ``sphinx-copybutton`` package to environment (:issue:`414`, :merge:`516`). By `Sergio Cordova`_.
 - Split quickstart copy operations into smaller functions for unit testing (:issue:`428`, :merge:`522`). By `Kyle
   Brindley`_.
+- Rename command line utility module to avoid namespace confusion (:issue:`428`, :merge:`522`). By `Kyle Brindley`_.
 
 Enhancements
 ============
