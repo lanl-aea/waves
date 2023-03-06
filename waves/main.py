@@ -218,7 +218,7 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def fetch(subcommand, root_directory, relative_paths, destination, requested_paths=None,
+def fetch(subcommand, root_directory, relative_paths, destination, requested_paths=[],
           overwrite=False, dry_run=False, print_available=False):
     """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
 
