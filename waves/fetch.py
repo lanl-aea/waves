@@ -147,10 +147,6 @@ def recursive_copy(root_directory, relative_paths, destination, requested_paths=
     # Build source tree
     source_files, missing_relative_paths = build_source_files(root_directory, relative_paths)
     longest_common_source_path = longest_common_path_prefix(source_files)
-    if print_available:
-        print("Available source files:")
-        print_list([path.relative_to(longest_common_source_path) for path in source_files])
-        return 0
 
     # Down select to requested file list
     if requested_paths:
@@ -170,9 +166,13 @@ def recursive_copy(root_directory, relative_paths, destination, requested_paths=
               file=sys.stderr)
 
     # User I/O
+    if print_available:
+        print("Available source files:")
+        print_list([path.relative_to(longest_common_source_path) for path in source_files])
     if dry_run:
         print("Files to create:")
         print_list([destination for _, destination in copy_tuples])
+    if print_available or dry_run:
         return 0
 
     # Do the work if there are any files left to copy
