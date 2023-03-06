@@ -151,7 +151,9 @@ fast-test:
     - cd ${project_root}
     - python -m waves.main visualize nominal --sconstruct ${quickstart_regression_directory}/SConstruct --output-file ${quickstart_regression_directory}/nominal.svg
     # Regression test the files used in the tutorial documentation
-    - cd ${project_root}/tutorials
+    - tutorials_regression_directory="${project_root}/test_tutorials"
+    - python -m waves.main fetch tutorials --destination ${tutorials_regression_directory}
+    - cd ${tutorials_regression_directory}
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
@@ -181,6 +183,7 @@ fast-test:
     - scons . --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
     - python -m waves.main build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
+    - cd ${project_root}
   tags:
     - shell-aea
 
