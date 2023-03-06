@@ -66,7 +66,7 @@ def longest_common_path_prefix(file_list):
     :returns: longest common path prefix
     :rtype: pathlib.Path
     """
-    if isinstance(file_list, str):
+    if isinstance(file_list, str) or isinstance(file_list, pathlib.Path):
         file_list = [file_list]
     file_list = [pathlib.Path(path) for path in file_list]
     number_of_files = len(file_list)

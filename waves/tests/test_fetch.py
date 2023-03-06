@@ -1,5 +1,6 @@
 import pathlib
 from unittest.mock import patch
+from contextlib import nullcontext as does_not_raise
 
 import pytest
 
@@ -151,6 +152,43 @@ def test_build_source_files(root_directory, relative_paths, exclude_patterns,
         source_files, not_found = fetch.build_source_files(root_directory, relative_paths,
                                                            exclude_patterns=exclude_patterns)
         assert source_files == expected_source_files
+
+
+expected_path = pathlib.Path("/path/to/source")
+longest_common_path_prefix_input = {
+    "no list": ([], expected_path, pytest.raises(RuntimeError)),
+    "one file, str": (str(one_file_source_tree[0]), expected_path, does_not_raise()),
+    "one file, path": (one_file_source_tree[0], expected_path, does_not_raise()),
+    "one file, list": (one_file_source_tree, expected_path, does_not_raise()),
+    "two files": (two_file_source_tree, expected_path, does_not_raise()),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("file_list, expected_path, outcome",
+                         longest_common_path_prefix_input.values(),
+                         ids=longest_common_path_prefix_input.keys())
+def test_longest_common_path_prefix(file_list, expected_path, outcome):
+    with outcome:
+        try:
+            path_prefix = fetch.longest_common_path_prefix(file_list)
+            assert path_prefix == expected_path
+        finally:
+            pass
+
+@pytest.mark.unittest
+def test_build_destination_files():
+    pass
+
+
+@pytest.mark.unittest
+def test_build_copy_tuples():
+    pass
+
+
+@pytest.mark.unittest
+def test_print_list():
+    pass
 
 
 @pytest.mark.unittest
