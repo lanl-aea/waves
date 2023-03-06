@@ -44,7 +44,8 @@ def test_recursive_copy():
          patch("waves.fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False):
-        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, requested_paths=[source_files[0]])
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
+                                           requested_paths=[source_files[0]])
         assert return_code == 0
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with((copy_tuples[0], ))
