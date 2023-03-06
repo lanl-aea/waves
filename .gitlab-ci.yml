@@ -151,7 +151,7 @@ fast-test:
     - cd ${project_root}
     - python -m waves.main visualize nominal --sconstruct ${quickstart_regression_directory}/SConstruct --output-file ${quickstart_regression_directory}/nominal.svg
     # Regression test the files used in the tutorial documentation
-    - tutorials_regression_directory="${test_root}/test_tutorials"
+    - tutorials_regression_directory="${project_root}/test_tutorials"
     - python -m waves.main fetch tutorials --destination ${tutorials_regression_directory}
     - cd ${tutorials_regression_directory}
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
