@@ -12,11 +12,13 @@ def test_conditional_copy():
     pass
 
 
+one_file_source_tree = [pathlib.Path("/path/to/source/dummy.file1")]
+two_file_source_tree = [pathlib.Path("/path/to/source/dummy.file1"), pathlib.Path("/path/to/source/dummy.file2")]
 available_files_input = {
     'one file': (
         "/path/to/source", "dummy.file1",
         [True], [False], [],
-        [pathlib.Path("/path/to/source/dummy.file1")], []
+        one_file_source_tree, []
     ),
     'one file, not found': (
         "/path/to/source", "dummy.file1",
@@ -25,8 +27,13 @@ available_files_input = {
     ),
     'one directory, one file': (
         "/path/to", "source",
-        [False, True], [True], [[pathlib.Path("/path/to/source/dummy.file1")]],
-        [pathlib.Path("/path/to/source/dummy.file1")], []
+        [False, True], [True], [one_file_source_tree],
+        one_file_source_tree, []
+    ),
+    'one directory, two files': (
+        "/path/to", "source",
+        [False, True, True], [True], [two_file_source_tree],
+        two_file_source_tree, []
     )
 }
 
