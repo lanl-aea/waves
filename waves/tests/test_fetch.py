@@ -22,6 +22,11 @@ available_files_input = {
         "/path/to/source", "dummy.file1",
         [False], [False], [],
         [], ["dummy.file1"]
+    ),
+    'one directory, one file': (
+        "/path/to", "source",
+        [False, True], [True], [[pathlib.Path("/path/to/source/dummy.file1")]],
+        [pathlib.Path("/path/to/source/dummy.file1")], []
     )
 }
 
