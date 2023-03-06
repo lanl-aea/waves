@@ -33,7 +33,7 @@ def available_files(root_directory, relative_paths):
             file_list = [path for path in absolute_path.rglob("*") if path.is_file()]
             available_files.extend(file_list)
         else:
-            not_found.extend(path)
+            not_found.append(path)
     return available_files, not_found
 
 
