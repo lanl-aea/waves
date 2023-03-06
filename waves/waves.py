@@ -200,10 +200,9 @@ def quickstart(destination, overwrite=False, dry_run=False):
         print(f"Could not find '{root_directory}' directory", file=sys.stderr)
         return 1
     from waves import fetch
-    source_files, missing_relative_paths = fetch.build_source_files(root_directory, relative_paths)
     print(f"{_settings._project_name_short} Quickstart", file=sys.stdout)
     print(f"Destination directory: '{destination}'", file=sys.stdout)
-    return_code = fetch.recursive_copy(source_files, destination,
+    return_code = fetch.recursive_copy(root_directory, relative_paths, destination,
                                        overwrite=overwrite, dry_run=dry_run)
     return return_code
 
