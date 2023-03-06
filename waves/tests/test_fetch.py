@@ -12,6 +12,22 @@ def test_conditional_copy():
     pass
 
 
+available_files_input = {
+    'one file': ("/path/to/source", "dummy.file1", [True], [pathlib.Path("/path/to/source/dummy.file1")], [])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("root_directory, relative_paths, is_file_side_effect, expected_files, expected_missing",
+                         available_files_input.values(),
+                         ids=available_files_input.keys())
+def test_available_files(root_directory, relative_paths, is_file_side_effect, expected_files, expected_missing):
+    with patch("pathlib.Path.is_file", side_effect=is_file_side_effect):
+        available_files, not_found = fetch.available_files(root_directory, relative_paths)
+        assert available_files == expected_files
+        assert not_found == expected_missing
+
+
 @pytest.mark.unittest
 def test_recursive_copy():
 

@@ -28,7 +28,7 @@ def available_files(root_directory, relative_paths):
     for path in relative_paths:
         absolute_path = root_directory / path
         if absolute_path.is_file():
-            available_files.extend(absolute_path)
+            available_files.append(absolute_path)
         elif absolute_path.is_dir():
             file_list = [path for path in absolute_path.rglob("*") if path.is_file()]
             available_files.extend(file_list)
