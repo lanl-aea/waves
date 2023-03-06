@@ -7,12 +7,15 @@ import pytest
 from waves import fetch
 
 
-one_file_source_tree = [pathlib.Path("/path/to/source/dummy.file1")]
-one_file_destination_tree = [pathlib.Path("/path/to/destination/dummy.file1")]
-two_file_source_tree = [pathlib.Path("/path/to/source/dummy.file1"),
-                        pathlib.Path("/path/to/source/dummy.file2")]
-two_file_destination_tree = [pathlib.Path("/path/to/destination/dummy.file1"),
-                             pathlib.Path("/path/to/destination/dummy.file2")]
+root_directory = pathlib.Path("/path/to/source")
+source_files = [pathlib.Path("dummy.file1"), pathlib.Path("dummy.file2")]
+destination = pathlib.Path("/path/to/destination")
+
+one_file_source_tree = [root_directory / source_files[0]]
+one_file_destination_tree = [destination / source_files[0]]
+
+two_file_source_tree = [root_directory / path for path in source_files]
+two_file_destination_tree = [destination / path for path in source_files]
 
 
 conditional_copy_input = {
@@ -235,16 +238,13 @@ def test_print_list():
     pass
 
 
+
+@pytest.mark.parametrize("root_directory, source_files, source_tree, destination_tree",
+                         [(root_directory, source_files, two_file_source_tree, two_file_destination_tree)])
 @pytest.mark.unittest
-def test_recursive_copy():
+def test_recursive_copy(root_directory, source_files, source_tree, destination_tree):
 
     # Dummy quickstart tree
-    root_directory = pathlib.Path("/path/to/source")
-    source_files = [pathlib.Path("dummy.file1"),
-                    pathlib.Path("dummy.file2")]
-    source_tree = [root_directory / path for path in source_files]
-    destination = pathlib.Path("/path/to/destination")
-    destination_tree = [destination / path.relative_to(root_directory) for path in source_tree]
     copy_tuples = tuple(zip(source_tree, destination_tree))
     not_found = []
     available_files_output = (source_tree, not_found)
