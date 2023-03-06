@@ -12,6 +12,7 @@ New Features
 ============
 - Add a ``waves fetch`` subcommand to fetch bundled modsim template files (:issue:`428`, :merge:`522`). By `Kyle
   Brindley`_.
+- Bundle the tutorial files in the conda package (:issue:`427`, :merge:`523`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
