@@ -176,9 +176,29 @@ def test_longest_common_path_prefix(file_list, expected_path, outcome):
         finally:
             pass
 
+
+build_destination_files_input = {
+    "two files, one exists": (
+        "/path/to/destination", two_file_source_tree,
+        [False, True],
+        two_file_destination_tree, [two_file_destination_tree[1]]
+    )
+}
+
+
 @pytest.mark.unittest
-def test_build_destination_files():
-    pass
+@pytest.mark.parametrize("destination, requested_paths, " \
+                         "exists_side_effect, " \
+                         "expected_destination_files, expected_existing_files",
+                         build_destination_files_input.values(),
+                         ids=build_destination_files_input.keys())
+def test_build_destination_files(destination, requested_paths,
+                                 exists_side_effect,
+                                 expected_destination_files, expected_existing_files):
+    with patch("pathlib.Path.exists", side_effect=exists_side_effect):
+        destination_files, existing_files = fetch.build_destination_files(destination, requested_paths)
+        assert destination_files == expected_destination_files
+        assert existing_files == expected_existing_files
 
 
 @pytest.mark.unittest
