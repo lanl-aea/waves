@@ -206,7 +206,7 @@ conda-build:
     - umask 0022
     - output_folder='conda-build-artifacts'
     - mkdir ${output_folder}
-    - VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+    - VERSION=$(python -m setuptools_scm) mamba build recipe-internal --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
   artifacts:
     expire_in: '2 hrs'
     paths:
