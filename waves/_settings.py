@@ -30,7 +30,7 @@ _visualize_default_height = 12
 _visualize_default_width = 36
 
 # For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
-# Enables ``python -m waves.waves quickstart ...`` execution from repository root directory
+# Enables ``python -m waves.main quickstart ...`` execution from repository root directory
 _repository_quickstart_directory = _project_root_abspath.parent / _fetch_subdirectories[0] 
 if not _installed_quickstart_directory.exists() and _repository_quickstart_directory.exists():
     _installed_quickstart_directory = _repository_quickstart_directory

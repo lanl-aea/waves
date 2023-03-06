@@ -7,7 +7,7 @@ Synopsis
 ********
 
 .. argparse::
-   :ref: waves.waves.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
    :nosubcommands:
 
@@ -25,7 +25,7 @@ docs
 ****
 
 .. argparse::
-   :ref: waves.waves.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
    :path: docs
 
@@ -39,7 +39,7 @@ quickstart
 **********
 
 .. argparse::
-   :ref: waves.waves.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
    :path: quickstart
 
@@ -53,7 +53,7 @@ build
 *****
 
 .. argparse::
-   :ref: waves.waves.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
    :path: build
 

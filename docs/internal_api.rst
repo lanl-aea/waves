@@ -28,7 +28,7 @@ Parameter Generators
 Command Line
 ************
 
-.. automodule:: waves.waves
+.. automodule:: waves.main
    :noindex:
    :members:
    :private-members:
