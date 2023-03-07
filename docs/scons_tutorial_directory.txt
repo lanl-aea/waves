@@ -15,3 +15,5 @@
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves fetch tutorials/eabm_package/abaqus --destination eabm_package/abaqus
+   WAVES fetch
+   Destination directory: 'eabm_package/abaqus'
