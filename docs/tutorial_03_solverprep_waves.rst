@@ -26,7 +26,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_02_partition_mesh tutorial_03_solverprep
 
 ******************
@@ -39,19 +39,19 @@ Solver Input Files
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
-   $ (waves-env) [kbrindley@pn2301275 waves]% python -m waves.main fetch 'tutorials/eabm_package/abaqus/*.inp' --destination waves-eabm-tutorial/eabm_package/abaqus --dry-run
+   /home/roppenheimer/waves-tutorials
+   $ (waves-env) [kbrindley@pn2301275 waves]% python -m waves.main fetch 'tutorials/eabm_package/abaqus/*.inp' --destination waves-tutorials/eabm_package/abaqus --dry-run
    WAVES fetch
    Destination directory: 'eabm_package/abaqus'
 
 This action will unzip the source files we included in the
-``tutorial_03_solverprep`` file into the ``waves-eabm-tutorial/eabm_package/abaqus/``
+``tutorial_03_solverprep`` file into the ``waves-tutorials/eabm_package/abaqus/``
 directory. Check the contents of this directory using the ``ls`` command.
 
 .. code-block::
 
     $ pwd
-    /home/roppenheimer/waves-eabm-tutorial
+    /home/roppenheimer/waves-tutorials
     $ ls eabm_package/abaqus
     abaqus_journal_utilities.py  parts.inp
     assembly.inp                 single_element_compression.inp
@@ -68,7 +68,7 @@ SConscript
 
 5. Add the highlighted import statement shown below to the ``tutorial_03_solverprep`` file.
 
-.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep
+.. admonition:: waves-tutorials/tutorial_03_solverprep
 
     .. literalinclude:: tutorials_tutorial_03_solverprep
        :language: Python
@@ -92,7 +92,7 @@ we will require a custom builder that functions differently than the previously 
 6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
    below immediately after the code pertaining to ``# Mesh`` from the previous tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep
+.. admonition:: waves-tutorials/tutorial_03_solverprep
 
     .. literalinclude:: tutorials_tutorial_03_solverprep
        :language: Python
@@ -127,7 +127,7 @@ In summary of the changes you just made to the ``tutorial_03_solverprep`` file,
 a ``diff`` against the ``SConscript`` file from :ref:`tutorial_partition_mesh_waves` is
 included below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_03_solverprep
+.. admonition:: waves-tutorials/tutorial_03_solverprep
 
    .. literalinclude:: tutorials_tutorial_03_solverprep
       :language: Python
@@ -138,12 +138,12 @@ SConstruct
 **********
 
 7. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
-   ``waves-eabm-tutorial/SConstruct`` file.
+   ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_03_solverprep_SConstruct
       :language: Python
@@ -158,7 +158,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_03_solverprep
    scons: Reading SConscript files ...
    Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
@@ -166,18 +166,18 @@ Build Targets
    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus -information environment
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus -information environment
    > single_element_geometry.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus -information environment
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus cae -noGui
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus -information environment
    > single_element_partition.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus -information environment
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus cae -noGui
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus -information environment
    > single_element_mesh.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abaqus cae -noGui
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_03_solverprep/single_element_compression.inp",
    "eabm_package/abaqus/single_element_compression.inp")
    Copy("build/tutorial_03_solverprep/assembly.inp", "eabm_package/abaqus/assembly.inp")
@@ -198,7 +198,7 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
 .. code-block:: bash
 
     $ pwd
-    /home/roppenheimer/waves-eabm-tutorial
+    /home/roppenheimer/waves-tutorials
     $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/ build/tutorial_03_solverprep/
     build/tutorial_01_geometry/
     |-- abaqus.rpy

@@ -41,7 +41,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_07_cartesian_product tutorial_08_data_extraction
 
 **********
@@ -51,7 +51,7 @@ SConscript
 A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
 below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_08_data_extraction
+.. admonition:: waves-tutorials/tutorial_08_data_extraction
 
    .. literalinclude:: tutorials_tutorial_08_data_extraction
       :language: Python
@@ -73,7 +73,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_08_data_extraction_SConstruct
       :language: Python
@@ -88,7 +88,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_08_data_extraction --jobs=4
 
 ************
@@ -101,7 +101,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ find build/tutorial_08_data_extraction/ -name "*.h5"
    build/tutorial_08_data_extraction/parameter_set2/single_element_compression.h5
    build/tutorial_08_data_extraction/parameter_set2/single_element_compression_datasets.h5

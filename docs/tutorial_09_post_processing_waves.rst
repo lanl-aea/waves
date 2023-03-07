@@ -33,7 +33,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_08_data_extraction tutorial_09_post_processing
 
 **********
@@ -43,7 +43,7 @@ SConscript
 A ``diff`` against the ``tutorial_08_data_extraction`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_09_post_processing
+.. admonition:: waves-tutorials/tutorial_09_post_processing
 
    .. literalinclude:: tutorials_tutorial_09_post_processing
       :language: Python
@@ -59,7 +59,7 @@ however.
 Post-processing script
 **********************
 
-4. In the ``waves-eabm-tutorial/eabm_package/python`` directory, create a file called ``post_processing.py`` using the
+4. In the ``waves-tutorials/eabm_package/python`` directory, create a file called ``post_processing.py`` using the
    contents below.
 
 .. note::
@@ -67,7 +67,7 @@ Post-processing script
    Depending on the memory and disk resources available and the size of the simulation workflow results, modsim projects
    may need to review the `Xarray`_ documentation for resource management specific to the projects' use case.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/post_processing.py
+.. admonition:: waves-tutorials/eabm_package/python/post_processing.py
 
    .. literalinclude:: python_post_processing.py
       :language: Python
@@ -82,7 +82,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_09_post_processing_SConstruct
       :language: Python
@@ -97,7 +97,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_09_post_processing --jobs=4
 
 ************

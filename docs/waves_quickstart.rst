@@ -36,7 +36,7 @@ SConstruct File
 
 5. Create a file named ``waves_quickstart_SConstruct`` from the contents below.
 
-.. admonition:: waves-eabm-tutorial/waves_quickstart_SConstruct
+.. admonition:: waves-tutorials/waves_quickstart_SConstruct
 
     .. literalinclude:: tutorials_waves_quickstart_SConstruct
        :language: Python
@@ -49,7 +49,7 @@ Building targets
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ scons --sconstruct=waves_quickstart_SConstruct single_element
 
 .. note::
@@ -64,7 +64,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build_waves_quickstart/
    build_waves_quickstart/
    |-- abaqus.rpy

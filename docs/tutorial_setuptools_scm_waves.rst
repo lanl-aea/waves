@@ -36,7 +36,7 @@ setuptools_scm configuration
 
 3. Create a file named ``pyproject.toml`` using the contents below.
 
-.. admonition:: waves-eabm-tutorial/pyproject.toml
+.. admonition:: waves-tutorials/pyproject.toml
 
     .. literalinclude:: tutorials_pyproject.toml
         :lineno-match:
@@ -48,7 +48,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_setuptools_scm_SConstruct
       :language: Python
@@ -63,7 +63,7 @@ Version control system
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ git init
 
 5. Put the current tutorial's files under version control
@@ -71,7 +71,7 @@ Version control system
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ git add SConstruct pyproject.toml tutorial_11_archival
    $ git commit -m "Initial commit for git tag version numbers using setuptools_scm"
    <output truncated>
@@ -81,7 +81,7 @@ Version control system
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ git tag 0.1.0
 
 7. Verify that setuptools_scm is correctly picking up the git tag for the version number
@@ -89,7 +89,7 @@ Version control system
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ python -m setuptools_scm
    0.1.0
 
@@ -102,7 +102,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_11_archival_archive --jobs=4
    <output truncated>
 
@@ -118,14 +118,14 @@ uncommitted changes to tracked files.
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ find build -name "*.tar.bz2"
-   build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.tar.bz2
+   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
 
 To explore the dynamic version number, you can add new git commits. For instance, you might add a ``.gitignore`` file
 from the contents below
 
-.. admonition:: waves-eabm-tutorial/.gitignore
+.. admonition:: waves-tutorials/.gitignore
 
    .. literalinclude:: tutorials_gitignore
         :lineno-match:
@@ -135,7 +135,7 @@ from the contents below
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ git add .gitignore
    $ git commit -m "MAINT: Ignore build artifacts"
    [main ad02fc7] MAINT: Ignore build artifacts
@@ -148,7 +148,7 @@ from the contents below
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ python -m setuptools_scm
    0.1.0.dev1+gad02fc7
 
@@ -162,9 +162,9 @@ from the contents below
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_11_archival_archive --jobs=4
    <output truncated>
    $ find build -name "*.tar.bz2"
-   build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.tar.bz2
-   build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.dev1+gad02fc7.tar.bz2
+   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
+   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.dev1+gad02fc7.tar.bz2

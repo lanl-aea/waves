@@ -25,23 +25,23 @@ Environment
 Directory Structure
 *******************
 
-3. Within the ``waves-eabm-tutorial`` directory, create a new directory called
+3. Within the ``waves-tutorials`` directory, create a new directory called
    ``eabm_package/abaqus``. For example, in a bash shell:
 
 .. code-block::
 
     $ pwd
-    /home/roppenheimer/waves-eabm-tutorial
+    /home/roppenheimer/waves-tutorials
     $ mkdir -p eabm_package/abaqus
 
 4. Create Python module initialization files to create a project specific local Python package.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/__init__.py and waves-eabm-tutorial/eabm_package/abaqus/__init__.py
+.. admonition:: waves-tutorials/eabm_package/__init__.py and waves-tutorials/eabm_package/abaqus/__init__.py
 
    .. code-block::
 
       $ pwd
-      /path/to/waves-eabm-tutorial
+      /path/to/waves-tutorials
       $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
       $ find . -name "__init__.py"
       ./eabm_package/__init__.py
@@ -62,7 +62,7 @@ In this tutorial, we will build the geometry for a single element part using the
 
 5. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry
 
     .. literalinclude:: tutorials_tutorial_01_geometry
         :language: Python
@@ -72,13 +72,13 @@ In this tutorial, we will build the geometry for a single element part using the
 
 The ``SConscript`` file begins with imports of standard Python libraries. The first
 highlighted line imports the ``env`` variable (``Import('env')``), which is a variable set
-in ``waves-eabm-tutorial/SConstruct`` file. The ``env`` variable defines project settings,
+in ``waves-tutorials/SConstruct`` file. The ``env`` variable defines project settings,
 and is imported so settings variables are not hard-coded more than once.
 
 The next set of highlighted lines sets operating system agnostic paths by utilizing
 `Python pathlib`_ objects. These Pathlib objects absolute or relative paths on any
 operating system to source files using variables defined in the
-``waves-eabm-tutorial/SConstruct`` file. This method of path definition allows for
+``waves-tutorials/SConstruct`` file. This method of path definition allows for
 path-strings to be hard-coded only once, and then used as variables everywhere else in
 the code. For example, the variable ``abaqus_source_abspath`` is used in source
 definitions to point at the absolute path to the directory where the Abaqus journal files
@@ -86,7 +86,7 @@ exist.
 
 6. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry
 
      .. literalinclude:: tutorials_tutorial_01_geometry
          :language: Python
@@ -117,7 +117,7 @@ is defined in the :ref:`waves_builders_api` API.
 
 7. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
-.. admonition:: waves-eabm-tutorial/tutorial_01_geometry
+.. admonition:: waves-tutorials/tutorial_01_geometry
 
      .. literalinclude:: tutorials_tutorial_01_geometry
          :language: Python
@@ -149,7 +149,7 @@ starting with familiar Abaqus Python code, and adding in the following:
 8. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_geometry.py``
    using the contents below which contains the ``main()`` function.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_geometry.py
 
     .. literalinclude:: abaqus_single_element_geometry.py
         :language: Python
@@ -266,7 +266,7 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
     using the contents below to create the ``if`` statement within which we will call the
     ``main()`` function. Note that missing line numbers may be ignored.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_geometry.py
 
     .. literalinclude:: abaqus_single_element_geometry.py
         :language: Python
@@ -310,7 +310,7 @@ code are required for :term:`EABM` best practice when using a build system such 
 other sections are boilerplate code that matches naming conventions used by the tutorials,
 but that may change in production EABMs.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_geometry.py
 
      .. literalinclude:: abaqus_single_element_geometry.py
          :language: Python
@@ -323,14 +323,14 @@ SConstruct File
 
 In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias
 matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to
-build specified in the ``waves-eabm-tutorial/tutorial_01_geometry`` file.
+build specified in the ``waves-tutorials/tutorial_01_geometry`` file.
 
-11. Modify the ``waves-eabm-tutorial/SConstruct`` file by adding the
+11. Modify the ``waves-tutorials/SConstruct`` file by adding the
     ``tutorial_01_geometry`` collector alias to the ``workflow_configurations`` list.
     The ``diff`` output below shows the difference between the ``SConstruct`` file created
     in :ref:`tutorialsconstruct` and what the new ``SConstruct`` file will be.
 
-    .. admonition:: waves-eabm-tutorial/SConstruct diff
+    .. admonition:: waves-tutorials/SConstruct diff
 
         .. literalinclude:: tutorials_tutorial_01_geometry_SConstruct
            :language: Python
@@ -351,7 +351,7 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
     .. code-block::
 
         $ pwd
-        /home/roppenheimer/waves-eabm-tutorial
+        /home/roppenheimer/waves-tutorials
         $ scons tutorial_01_geometry
         scons: Reading SConscript files ...
         Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
@@ -359,10 +359,10 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
         Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
         scons: done reading SConscript files.
         scons: Building targets ...
-        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus -information environment >
+        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus -information environment >
         single_element_geometry.abaqus_v6.env
-        cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus cae -noGui
-        /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus cae -noGui
+        /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
         scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as
@@ -383,7 +383,7 @@ separation if more than one simulation is built at the same time.
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_01_geometry/
    build/tutorial_01_geometry/
    |-- abaqus.rpy
