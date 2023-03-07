@@ -43,7 +43,7 @@ env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "ab
 # Comments used in tutorial code snippets: marker-4
 
 # Set project internal variables and variable substitution dictionaries
-project_name = 'WAVES-EABM-TUTORIAL'
+project_name = 'WAVES-TUTORIAL'
 version = '0.1.0'
 project_dir = pathlib.Path(Dir(".").abspath)
 abaqus_source_dir = "eabm_package/abaqus"

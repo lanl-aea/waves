@@ -39,7 +39,7 @@ SConstruct File
 
 5. Create a file named ``scons_multiactiontask_SConstruct`` from the contents below.
 
-.. admonition:: waves-eabm-tutorial/scons_multiactiontask_SConstruct
+.. admonition:: waves-tutorials/scons_multiactiontask_SConstruct
 
     .. literalinclude:: tutorials_scons_multiactiontask_SConstruct
        :language: Python
@@ -51,7 +51,7 @@ builder to the multi-action journal file execution, in general the files execute
 sufficiently similar command line interface (CLI) or naming convention to generalize a multi-task builder. Instead, the
 more flexible, general purpose `SCons Command`_ builder is used.
 
-..  admonition:: waves-eabm-tutorial/SConstruct
+..  admonition:: waves-tutorials/SConstruct
 
   .. literalinclude:: tutorials_scons_multiactiontask_SConstruct
      :language: python
@@ -64,7 +64,7 @@ Building targets
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ scons --sconstruct=scons_multiactiontask_SConstruct single_element
 
 .. note::
@@ -84,7 +84,7 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build_scons_multiactiontask/
    build_scons_multiactiontask/
    |-- abaqus.rpy

@@ -77,7 +77,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_11_archival tutorial_task_reuse
 
 **********
@@ -87,7 +87,7 @@ SConscript
 A ``diff`` against the ``tutorial_11_archival`` file from :ref:`tutorial_archival_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_task_reuse
+.. admonition:: waves-tutorials/tutorial_task_reuse
 
    .. literalinclude:: tutorials_tutorial_task_reuse
       :language: Python
@@ -95,7 +95,7 @@ changes made in this tutorial.
 
 4. Create a new file named ``single_element_geometry_partition.scons`` from the contents below
 
-.. admonition:: waves-eabm-tutorial/single_element_geometry_partition.scons
+.. admonition:: waves-tutorials/single_element_geometry_partition.scons
 
    .. literalinclude:: tutorials_single_element_geometry_partition.scons
       :language: Python
@@ -103,7 +103,7 @@ changes made in this tutorial.
 
 5. Create a new file named ``single_element_mesh_solverprep_solve_extract.scons`` from the contents below
 
-.. admonition:: waves-eabm-tutorial/single_element_mesh_solverprep_solve_extract.scons
+.. admonition:: waves-tutorials/single_element_mesh_solverprep_solve_extract.scons
 
    .. literalinclude:: tutorials_single_element_mesh_solverprep_solve_extract.scons
       :language: Python
@@ -116,7 +116,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_task_reuse_SConstruct
       :language: Python
@@ -131,7 +131,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_task_reuse --jobs=4
 
 ************
@@ -141,7 +141,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ tree build/tutorial_task_reuse/parameter_set0/
    build/tutorial_task_reuse/parameter_set0/
    |-- abaqus.rpy

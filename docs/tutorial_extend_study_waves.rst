@@ -35,7 +35,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_07_sobol_sequence tutorial_extend_study
 
 **********
@@ -45,7 +45,7 @@ SConscript
 A ``diff`` against the ``tutorial_07_sobol_sequence`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 differences between the two parameter generators.
 
-.. admonition:: waves-eabm-tutorial/tutorial_extend_study
+.. admonition:: waves-tutorials/tutorial_extend_study
 
    .. literalinclude:: tutorials_tutorial_extend_study
       :language: Python
@@ -58,7 +58,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_extend_study_SConstruct
       :language: Python
@@ -73,7 +73,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ waves build --max-iterations=4 tutorial_extend_study --jobs=4
 
 ************
@@ -83,7 +83,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ tree build/tutorial_extend_study -d
    build/tutorial_extend_study
    |-- parameter_set0

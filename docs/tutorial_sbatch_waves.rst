@@ -30,7 +30,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_04_simulation tutorial_sbatch
 
 .. _tutorials_tutorial_sbatch_waves:
@@ -42,7 +42,7 @@ SConscript
 A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_sbatch
+.. admonition:: waves-tutorials/tutorial_sbatch
 
    .. literalinclude:: tutorials_tutorial_sbatch
       :language: Python
@@ -60,7 +60,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_sbatch_SConstruct
       :language: Python
@@ -75,7 +75,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_sbatch
 
 ************
@@ -89,5 +89,5 @@ is specified by name to reduce clutter in the ouptut shown.
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_sbatch/

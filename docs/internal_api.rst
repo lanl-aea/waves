@@ -24,6 +24,39 @@ Parameter Generators
     :show-inheritance:
     :synopsis: A collection of Python based parameter study generators
 
+************
+Command Line
+************
+
+.. automodule:: waves.main
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
+   :synopsis: waves command line utility
+
+*****
+Fetch
+*****
+
+.. automodule:: waves.fetch
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
+   :synopsis: waves module supporting the fetch and quickstart subcommands
+
+*********
+Visualize
+*********
+
+.. automodule:: waves.visualize
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
+   :synopsis: waves module supporting the visualize subcommand
+
 **********************
 Odb Report File Parser
 **********************
@@ -63,15 +96,3 @@ Msg File Parser
     :private-members:
     :show-inheritance:
     :synopsis: Parses a msg file produced by Abaqus
-
-
-*****
-WAVES
-*****
-
-.. automodule:: waves.waves
-   :noindex:
-   :members:
-   :private-members:
-   :show-inheritance:
-   :synopsis: waves command line utility

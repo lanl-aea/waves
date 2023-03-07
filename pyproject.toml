@@ -19,7 +19,7 @@ parameter_study = "waves.parameter_study:main"
 odb_extract = "waves.abaqus.odb_extract:main"
 msg_parse = "waves.abaqus.msg_parse:main"
 sta_parse = "waves.abaqus.sta_parse:main"
-waves = "waves.waves:main"
+waves = "waves.main:main"
 
 [tool.setuptools_scm]
 write_to = "waves/_version.py"

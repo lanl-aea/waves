@@ -1,4 +1,0 @@
-.. note::
-
-   If you do not have access to the `WAVES repository`_ or the `WAVES tutorials`_ directory, the Abaqus source files can be
-   found in the :ref:`eabm_input_files` appendix.

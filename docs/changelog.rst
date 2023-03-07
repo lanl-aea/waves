@@ -5,8 +5,47 @@ Changelog
 #########
 
 *******************
-0.6.13 (unreleased)
+0.6.14 (unreleased)
 *******************
+
+*******************
+0.6.13 (2023-03-07)
+*******************
+
+New Features
+============
+- Add a ``waves fetch`` subcommand to fetch bundled modsim template files (:issue:`428`, :merge:`522`). By `Kyle
+  Brindley`_.
+- Bundle the tutorial files in the conda package (:issue:`427`, :merge:`523`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Fix issue in excluding nodes of waves visualization (:issue:`426`, :merge:`519`). By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Added ORCiD (:issue:`424`, :merge:`517`). By `Scott Ouellette`_
+- Add GitHub Pages and Release badges and update conda-forge badge to use shield.io style (:issue:`425`, :merge:`518`).
+  By `Kyle Brindley`_.
+- Replace ``git archive`` commands with ``waves fetch`` when retrieving source files in the tutorials (:issue:`429`,
+  :merge:`525`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Added ``sphinx-copybutton`` package to environment (:issue:`414`, :merge:`516`). By `Sergio Cordova`_.
+- Split quickstart copy operations into smaller functions for unit testing (:issue:`428`, :merge:`522`). By `Kyle
+  Brindley`_.
+- Rename command line utility module to avoid namespace confusion (:issue:`428`, :merge:`522`). By `Kyle Brindley`_.
+- Reduce fetch unit test logic duplication (:issue:`432`, :merge:`527`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- ``quickstart`` subcommand will create all non-conflicting destination files instead of exiting with an error when
+  ``overwrite`` is ``False`` (:issue:`413`, :merge:`520`). By `Kyle Brindley`_.
+- ``quickstart`` subcommand will avoid unnecessary file I/O when source and destination file contents match and
+  ``overwrite`` is ``True`` (:issue:`413`, :merge:`520`). By `Kyle Brindley`_.
+- Add a ``pathlib.Path.rglob`` recursive search to ``waves fetch`` to enable pattern matching on relative paths and
+  files (:issue:`431`, :merge:`526`). By `Kyle Brindley`_.
 
 *******************
 0.6.12 (2023-02-21)

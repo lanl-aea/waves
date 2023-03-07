@@ -48,15 +48,15 @@ SCons Project Configuration
 
 .. code-block:: bash
 
-   $ mkdir -p ~/waves-eabm-tutorial
-   $ cd ~/waves-eabm-tutorial
+   $ mkdir -p ~/waves-tutorials
+   $ cd ~/waves-tutorials
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
 
-4. Create a new file named ``SConstruct`` in the ``waves-eabm-tutorial`` directory and add the contents listed below. Note
+4. Create a new file named ``SConstruct`` in the ``waves-tutorials`` directory and add the contents listed below. Note
    that the filename is case sensitive.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
@@ -74,7 +74,7 @@ package.
 
 .. include:: line_number_jump_note.txt
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
@@ -94,7 +94,7 @@ end of this tutorial, you will see how to explore the project specific command l
 
 6. Add the content below to the ``SConstruct`` file to initialize the `SCons construction environment`_.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
@@ -117,7 +117,7 @@ environment for re-use throughout the project configuration files, SConstruct an
 7. Add the content below to the ``SConstruct`` file to add the third-party software dependency checks to the project
    configuration.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
@@ -150,7 +150,7 @@ without changes to the project configuration. If a program is found, it will als
 
 8. Add the content below to the ``SConstruct`` file to add the project meta data to the construction environment.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
@@ -166,7 +166,7 @@ introduced in :ref:`tutorial_geometry_waves`.
 
 9. Add the content below to the ``SConstruct`` file to add `WAVES`_ builders to the project configuration.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
@@ -185,7 +185,7 @@ builders`_.
 
 10. Add the content below to the ``SConstruct`` file to create a placeholder call to the hierarchical simulation configuration files.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
@@ -201,7 +201,7 @@ list in :ref:`tutorial_geometry_waves`.
 11. Add the content below to the ``SConstruct`` file to add an empty default target list and to modify the project help
     message.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_00_SConstruct
       :language: Python
@@ -247,7 +247,7 @@ must also come after all ``SConscript`` and ``Alias`` method calls. Generally, i
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ scons -h | grep "Local Options:" -A 10
    Local Options:
      --build-dir=DIR             SCons build (variant) root directory. Relative or

@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 import pathlib
-from collections.abc import Iterable
 
 import SCons.Defaults
 import SCons.Builder

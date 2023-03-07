@@ -41,7 +41,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_10_regression_testing tutorial_11_archival
 
 **********
@@ -51,7 +51,7 @@ SConscript
 A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is included
 below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_11_archival
+.. admonition:: waves-tutorials/tutorial_11_archival
 
    .. literalinclude:: tutorials_tutorial_11_archival
       :language: Python
@@ -70,7 +70,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_11_archival_SConstruct
       :language: Python
@@ -93,7 +93,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_11_archival_archive --jobs=4
 
 ************
@@ -106,9 +106,9 @@ file. You can inspect the contents of the archive as below.
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ find build -name "*.tar.bz2"
-   build/tutorial_11_archival/WAVES-EABM-TUTORIAL-0.1.0.tar.bz2
+   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
    $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_11_archival"
    build/tutorial_11_archival/parameter_set0/single_element_geometry.cae
    build/tutorial_11_archival/parameter_set0/single_element_geometry.jnl
