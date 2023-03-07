@@ -25,9 +25,9 @@ def available_files(root_directory, relative_paths):
 
     available_files = []
     not_found = []
-    for path in relative_paths:
+    for relative_path in relative_paths:
         file_list = []
-        absolute_path = root_directory / path
+        absolute_path = root_directory / relative_path
         if absolute_path.is_file():
             file_list.append(absolute_path)
         elif absolute_path.is_dir():
@@ -37,7 +37,7 @@ def available_files(root_directory, relative_paths):
         if file_list:
             available_files.extend(file_list)
         else:
-            not_found.append(path)
+            not_found.append(relative_path)
     return available_files, not_found
 
 
