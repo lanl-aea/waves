@@ -33,7 +33,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_10_regression_testing tutorial_mesh_convergence
 
 ********************
@@ -42,7 +42,7 @@ Parameter Study File
 
 4. Create a new file ``eabm_package/python/single_element_compression_mesh_convergence.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_mesh_convergence.py
+.. admonition:: waves-tutorials/eabm_package/python/single_element_compression_mesh_convergence.py
 
    .. literalinclude:: python_single_element_compression_mesh_convergence.py
       :language: Python
@@ -56,7 +56,7 @@ Mesh Convergence Selection Dictionary
 
 5. Create a new file ``eabm_package/python/mesh_convergence_stress.yaml`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/mesh_convergence_stress.yaml
+.. admonition:: waves-tutorials/eabm_package/python/mesh_convergence_stress.yaml
 
    .. literalinclude:: python_mesh_convergence_stress.yaml
 
@@ -72,13 +72,13 @@ SConscript
    ``tutorial_mesh_convergence`` file, and then review the paragraphs that follow to understand the meaning of these
    changes.
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
@@ -96,7 +96,7 @@ the ``global_seed`` and ``displacement`` parameters in :ref:`tutorial_cartesian_
 in the parameter study definition. The individual parameters from the ``parameter_schema`` and ``simulation_constants``
 dictionaries will be combined later in the ``SConscript`` file.
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
@@ -122,7 +122,7 @@ differences:
 * The final highlighted line shows how the ``simulation_variables`` dictionary is constructed by combining the
   ``simulation_constants`` and the ``global_seed`` parameters for every simulation.
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
@@ -150,7 +150,7 @@ Rather than pointing to the ``single_element_partition.cae`` file via absolute p
 for us in the build directory. This is achieved by simply pointing to the ``SCons`` file object that was created when we
 specified ``single_element_partition.cae`` as a target in the ``# Partition`` workflow.
 
-.. admonition:: waves-eabm-tutorial/tutorial_mesh_convergence
+.. admonition:: waves-tutorials/tutorial_mesh_convergence
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
@@ -179,7 +179,7 @@ SConstruct
 7. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help
    identify the changes made in this tutorial. Make these changes to your ``SConstruct`` file.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence_SConstruct
       :language: Python
@@ -194,7 +194,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_mesh_convergence --jobs=4
 
 The output from building the targets is not shown explicitly here, but look for one particular thing in your terminal

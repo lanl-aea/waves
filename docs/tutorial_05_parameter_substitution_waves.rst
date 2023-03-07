@@ -68,7 +68,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_04_simulation tutorial_05_parameter_substitution
 
 ******************
@@ -82,7 +82,7 @@ Solver Input Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp eabm_package/abaqus/single_element_compression.inp eabm_package/abaqus/single_element_compression.inp.in
 
 In this tutorial, we will be modifying several files from :ref:`tutorial_simulation_waves`, the first of which is
@@ -95,7 +95,7 @@ more detail later in this tutorial.
 
 5. Use the ``diff`` below to modify your ``single_element_compression.inp.in`` file.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_compression.inp.in
+.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_compression.inp.in
 
    .. literalinclude:: abaqus_single_element_compression.inp.in
       :language: text
@@ -116,7 +116,7 @@ SConscript
    pertaining to ``# Simulation variables``. The entire code snippet shows how your code should look after editing, and
    the highlghted portion is what needs to be added to your existing code.
 
-.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
+.. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
@@ -148,7 +148,7 @@ this is implemented with the :meth:`waves.builders.copy_substitute` method will 
 7. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
 
-.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
+.. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
@@ -180,7 +180,7 @@ source file change.
 8. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    code pertaining to ``# SolverPrep``.
 
-.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
+.. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
@@ -223,7 +223,7 @@ In summary of the changes you just made to the ``tutorial_05_parameter_substitut
 ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_05_parameter_substitution
+.. admonition:: waves-tutorials/tutorial_05_parameter_substitution
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution
       :language: Python
@@ -234,12 +234,12 @@ SConstruct
 **********
 
 9. Add ``tutorial_05_parameter_substitution`` to the ``workflow_configurations`` list in the
-    ``waves-eabm-tutorial/SConstruct`` file.
+    ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution_SConstruct
       :language: Python
@@ -260,7 +260,7 @@ Build Targets
 .. code-block:: bash
 
     $ pwd
-    /path/to/waves-eabm-tutorial
+    /path/to/waves-tutorials
     $ scons tutorial_05_parameter_substitution
     scons: Reading SConscript files ...
     Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
@@ -268,20 +268,20 @@ Build Targets
     Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 >
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 >
     single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 >
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 >
     single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 >
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 >
     single_element_mesh.stdout 2>&1
     Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in",
     "eabm_package/abaqus/single_element_compression.inp.in")
@@ -292,9 +292,9 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/materials.inp", "eabm_package/abaqus/materials.inp")
     Copy("build/tutorial_05_parameter_substitution/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_05_parameter_substitution/history_output.inp", "eabm_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
     environment > single_element_compression.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
     single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
     single_element_compression.stdout 2>&1
     scons: done building targets.
@@ -311,7 +311,7 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_05_parameter_substitution
    build/tutorial_05_parameter_substitution
    |-- abaqus.rpy

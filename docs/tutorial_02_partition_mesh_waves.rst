@@ -30,7 +30,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_01_geometry tutorial_02_partition_mesh
 
 
@@ -43,7 +43,7 @@ SConscript
 4. Modify your ``tutorial_02_partition_mesh`` file by adding the contents below immediately after the code
    pertaining to ``# Geometry`` from the previous tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh
+.. admonition:: waves-tutorials/tutorial_02_partition_mesh
 
    .. literalinclude:: tutorials_tutorial_02_partition_mesh
       :language: Python
@@ -108,7 +108,7 @@ In summary of the changes you just made to the ``tutorial_02_partition_mesh`` fi
 ``SConscript`` file from :ref:`tutorial_geometry_waves` is included below to help identify the changes made in this
 tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_02_partition_mesh
+.. admonition:: waves-tutorials/tutorial_02_partition_mesh
 
    .. literalinclude:: tutorials_tutorial_02_partition_mesh
       :language: Python
@@ -133,7 +133,7 @@ journal files:
 6. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_partition.py`` using all the contents
    below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_partition.py
 
     .. literalinclude:: abaqus_single_element_partition.py
         :language: Python
@@ -182,7 +182,7 @@ and labels are listed in a tabular format that the Abaqus file parser understand
 8. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents
    below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_mesh.py
 
     .. literalinclude:: abaqus_single_element_mesh.py
         :language: Python
@@ -234,12 +234,12 @@ SConstruct
 **********
 
 9. Add ``tutorial_02_partition_mesh`` to the ``workflow_configurations`` list in the
-    ``waves-eabm-tutorial/SConscruct`` file.
+    ``waves-tutorials/SConscruct`` file.
 
 A ``diff`` against the SConstruct file from :ref:`tutorial_geometry_waves` is included below to help identify the
 changes made in this tutorial.
 
-   ..  admonition:: waves-eabm-tutorial/SConstruct
+   ..  admonition:: waves-tutorials/SConstruct
 
      .. literalinclude:: tutorials_tutorial_02_partition_mesh_SConstruct
         :language: python
@@ -257,7 +257,7 @@ Build Targets
 .. code-block:: bash
 
     $ pwd
-    /path/to/waves-eabm-tutorial
+    /path/to/waves-tutorials
     $ scons tutorial_02_partition_mesh
     scons: Reading SConscript files ...
     Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
@@ -265,18 +265,18 @@ Build Targets
     Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
     scons: done building targets.
 
 ************
@@ -289,7 +289,7 @@ below.
 .. code-block:: bash
 
    $ pwd
-   $ /home/roppenheimer/waves-eabm-tutorial
+   $ /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/
    build/tutorial_01_geometry/
    |-- abaqus.rpy

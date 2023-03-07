@@ -63,7 +63,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_04_simulation tutorial_escape_sequences
 
 .. _tutorials_tutorial_escape_sequences_waves:
@@ -75,7 +75,7 @@ SConscript
 A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_escape_sequences
+.. admonition:: waves-tutorials/tutorial_escape_sequences
 
    .. literalinclude:: tutorials_tutorial_escape_sequences
       :language: Python
@@ -88,7 +88,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_escape_sequences_SConstruct
       :language: Python
@@ -103,7 +103,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_escape_sequences
    scons: Reading SConscript files ...
    Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
@@ -111,12 +111,12 @@ Build Targets
    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_geometry.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_partition.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_mesh.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_geometry.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_partition.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_mesh.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_escape_sequences/single_element_compression.inp", "eabm_package/abaqus/single_element_compression.inp")
    Copy("build/tutorial_escape_sequences/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_escape_sequences/boundary.inp", "eabm_package/abaqus/boundary.inp")
@@ -124,8 +124,8 @@ Build Targets
    Copy("build/tutorial_escape_sequences/materials.inp", "eabm_package/abaqus/materials.inp")
    Copy("build/tutorial_escape_sequences/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_escape_sequences/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_compression.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -job single_element_compression -input single_element_compression -double both -cpus 1 -interactive -ask_delete no > single_element_compression.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -job single_element_compression -input single_element_compression -double both -cpus 1 -interactive -ask_delete no > single_element_compression.stdout 2>&1
    scons: done building targets.
 
 5. Execute the build command again with a different number of solve cpus. Observe that the workflow is reported as
@@ -134,7 +134,7 @@ Build Targets
 .. code-block::
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_escape_sequences --solve-cpus=2
    scons: Reading SConscript files ...
    Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
@@ -155,7 +155,7 @@ is specified by name to reduce clutter in the ouptut shown.
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_escape_sequences/
    build/tutorial_escape_sequences/
    |-- abaqus.rpy

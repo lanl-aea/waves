@@ -46,7 +46,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_09_post_processing tutorial_10_regression_testing
 
 ********
@@ -55,7 +55,7 @@ CSV file
 
 4. Create a new file named ``single_element_compression_cartesian_product.csv`` from the contents below
 
-.. admonition:: waves-eabm-tutorial/python_single_element_compression_cartesian_product.csv
+.. admonition:: waves-tutorials/python_single_element_compression_cartesian_product.csv
 
    .. literalinclude:: python_single_element_compression_cartesian_product.csv
       :lineno-match:
@@ -67,7 +67,7 @@ SConscript
 A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_10_regression_testing
+.. admonition:: waves-tutorials/tutorial_10_regression_testing
 
    .. literalinclude:: tutorials_tutorial_10_regression_testing
       :language: Python
@@ -83,7 +83,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_10_regression_testing_SConstruct
       :language: Python
@@ -98,7 +98,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons datacheck --jobs=4
 
 The full simulation suite may also be executed with a single command, but will take much longer to run as the full
@@ -108,7 +108,7 @@ simulation suite against the limited datacheck workflow, perform the following s
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
 
    # Find all workflows that use the datacheck alias for one-to-one real time comparison
    datacheck_aliases=$(for file in $(grep -riIE "env\['datacheck_alias'\]" --include=SConscript -l); do echo $(dirname $file); done)
@@ -133,7 +133,7 @@ simulation suite against the limited datacheck workflow, perform the following s
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_10_regression_testing --jobs=4
    <output truncated>
    $ echo $?
@@ -146,7 +146,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ tree build/tutorial_10_regression_testing/parameter_set0/
    build/tutorial_10_regression_testing/parameter_set0/
    |-- abaqus.rpy

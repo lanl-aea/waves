@@ -25,7 +25,6 @@ documentation_file_list = [
     'tutorials_tutorial_00_SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
     'eabm_api.rst',
     'eabm_cli.rst',
-    'eabm_abaqus_files.rst',
     'api.rst',
     'internal_api.rst',
     'build.txt',
@@ -90,7 +89,6 @@ documentation_file_list = [
     'tutorial_task_reuse_waves.rst',
     'tutorial_environment_activation.txt',
     'aea_environment_activation.txt',
-    'waves_access_and_appendix.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
     'wip_warning.txt',

@@ -32,23 +32,23 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_04_simulation tutorial_cubit
 
 4. Create Python module initialization files to create a project specific local Python package.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/cubit/__init__.py
+.. admonition:: waves-tutorials/eabm_package/cubit/__init__.py
 
    .. code-block::
 
       $ pwd
-      /path/to/waves-eabm-tutorial
+      /path/to/waves-tutorials
       $ touch eabm_package/cubit/__init__.py
       $ find . -name "__init__.py"
-      ./waves-eabm-tutorial/eabm_package/abaqus/__init__.py
-      ./waves-eabm-tutorial/eabm_package/cubit/__init__.py
-      ./waves-eabm-tutorial/eabm_package/python/__init__.py
-      ./waves-eabm-tutorial/eabm_package/__init__.py
+      ./waves-tutorials/eabm_package/abaqus/__init__.py
+      ./waves-tutorials/eabm_package/cubit/__init__.py
+      ./waves-tutorials/eabm_package/python/__init__.py
+      ./waves-tutorials/eabm_package/__init__.py
 
 .. _tutorials_tutorial_cubit_waves:
 
@@ -59,7 +59,7 @@ SConscript
 A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_cubit
+.. admonition:: waves-tutorials/tutorial_cubit
 
    .. literalinclude:: tutorials_tutorial_cubit
       :language: Python
@@ -79,7 +79,7 @@ documentation for more information about virtual environment management with `Co
 Cubit Journal Files
 *******************
 
-5. Create the following journal files in the ``waves-eabm-tutorial/eabm_package/cubit`` directory.
+5. Create the following journal files in the ``waves-tutorials/eabm_package/cubit`` directory.
 
 The Cubit journal files include the same CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
@@ -88,19 +88,19 @@ installation of Python 2. The API and CLI built from the Cubit journal files' do
 :ref:`waves_eabm_api` for :ref:`cubit_journal_api` and the :ref:`waves_eabm_cli` for :ref:`cubit_journal_cli`,
 respectively.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/cubit/single_element_geometry.py
+.. admonition:: waves-tutorials/eabm_package/cubit/single_element_geometry.py
 
    .. literalinclude:: cubit_single_element_geometry.py
        :language: Python
        :lineno-match:
 
-.. admonition:: waves-eabm-tutorial/eabm_package/cubit/single_element_partition.py
+.. admonition:: waves-tutorials/eabm_package/cubit/single_element_partition.py
 
    .. literalinclude:: cubit_single_element_partition.py
        :language: Python
        :lineno-match:
 
-.. admonition:: waves-eabm-tutorial/eabm_package/cubit/single_element_mesh.py
+.. admonition:: waves-tutorials/eabm_package/cubit/single_element_mesh.py
 
    .. literalinclude:: cubit_single_element_mesh.py
        :language: Python
@@ -113,7 +113,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_cubit_SConstruct
       :language: Python
@@ -128,7 +128,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_cubit
    scons: Reading SConscript files ...
    Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
@@ -137,9 +137,9 @@ Build Targets
    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && python /home/roppenheimer/waves-eabm-tutorial/eabm_package/cubit/single_element_geometry.py > single_element_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && python /home/roppenheimer/waves-eabm-tutorial/eabm_package/cubit/single_element_partition.py > single_element_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && python /home/roppenheimer/waves-eabm-tutorial/eabm_package/cubit/single_element_mesh.py > single_element_mesh.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/single_element_geometry.py > single_element_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/single_element_partition.py > single_element_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/single_element_mesh.py > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_cubit/single_element_compression.inp", "eabm_package/abaqus/single_element_compression.inp")
    Copy("build/tutorial_cubit/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_cubit/boundary.inp", "eabm_package/abaqus/boundary.inp")
@@ -147,8 +147,8 @@ Build Targets
    Copy("build/tutorial_cubit/materials.inp", "eabm_package/abaqus/materials.inp")
    Copy("build/tutorial_cubit/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_cubit/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -information environment > single_element_compression.abaqus_v6.env
-   cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -job single_element_compression -input single_element_compression -double both -interactive -ask_delete no > single_element_compression.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -information environment > single_element_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -job single_element_compression -input single_element_compression -double both -interactive -ask_delete no > single_element_compression.stdout 2>&1
    scons: done building targets.
 
 ************
@@ -162,7 +162,7 @@ is specified by name to reduce clutter in the ouptut shown.
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_cubit/
    build/tutorial_cubit/
    |-- assembly.inp

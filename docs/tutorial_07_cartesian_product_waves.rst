@@ -29,7 +29,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_06_include_files tutorial_07_cartesian_product
 
 .. _tutorial_cartesian_product_waves_parameter_study_file:
@@ -53,7 +53,7 @@ Product`_ sampling methodology.
 
 4. Create a new file ``eabm_package/python/single_element_compression_cartesian_product.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_cartesian_product.py
+.. admonition:: waves-tutorials/eabm_package/python/single_element_compression_cartesian_product.py
 
    .. literalinclude:: python_single_element_compression_cartesian_product.py
       :language: Python
@@ -87,7 +87,7 @@ After viewing the full file contents below, continue to read the
 :ref:`tutorial_cartesian_product_waves_step_by_step_sconscript_discussion` for building the
 ``tutorial_07_cartesian_product`` file from scratch.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
@@ -97,7 +97,7 @@ After viewing the full file contents below, continue to read the
 Step-By-Step SConscript Discussion
 ==================================
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
@@ -114,7 +114,7 @@ look familiar, but is worth pointing out again. Here, we import the ``env`` vari
 environment. This will provide access to variables we added to the ``SConstruct`` file's ``project_variables``
 dictionary in previous tutorials.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
@@ -130,7 +130,7 @@ The highlighted portions of the code snippet above define some new variables tha
 this tutorial's code. The ``parameter_study_file`` and ``previous_parameter_study`` will allow the parameter generator
 to extend previously executed parameter studies without re-computing existing parameter set output files.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
@@ -156,7 +156,7 @@ in the configuration file and can't be provided by a `WAVES`_ builder because th
 the current ``SConscript`` file. The conditional re-write behavior will be important for post-processing tasks
 introduced in :ref:`tutorial_post_processing_waves`.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
@@ -181,7 +181,7 @@ is a dictionary whose keys are the names of the parameters and whose values are 
 is used again when passing the simulation variables dictionary to the :meth:`waves.builders.copy_substitute` method for
 text file parameter substitution.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
@@ -202,7 +202,7 @@ Note the following two important aspects of the code above:
   :meth:`waves.builders.substitution_syntax` method to modify the parameter name keys for parameter substitution in text
   files.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
@@ -216,7 +216,7 @@ the highlighted lines include the parameter set directory as part of target defi
 Solver`` code is still within the ``for`` loop, so the Abaqus Solver will be called as many times as we have parameter
 sets. In this case, we will solve four Abaqus simulations.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_cartesian_product
+.. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product
       :language: Python
@@ -233,12 +233,12 @@ SConstruct
 **********
 
 5. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
-   ``waves-eabm-tutorial/SConstruct`` file.
+   ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_07_cartesian_product_SConstruct
       :language: Python
@@ -253,7 +253,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_07_cartesian_product --jobs=4
    <output truncated>
 
@@ -281,7 +281,7 @@ as shown below.
 .. code-block:: bash
 
     $ pwd
-    /home/roppenheimer/waves-eabm-tutorial
+    /home/roppenheimer/waves-tutorials
     $ ls build/tutorial_07_cartesian_product/
     parameter_set0/  parameter_set1/  parameter_set2/  parameter_set3/  parameter_study.h5
 
@@ -291,7 +291,7 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_07_cartesian_product/parameter_set0/
    build/tutorial_07_cartesian_product/parameter_set0/
    |-- abaqus.rpy

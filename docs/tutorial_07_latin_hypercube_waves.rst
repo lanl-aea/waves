@@ -28,7 +28,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_07_cartesian_product tutorial_07_latin_hypercube
 
 ********************
@@ -37,7 +37,7 @@ Parameter Study File
 
 4. Create a new file ``eabm_package/python/single_element_compression_latin_hypercube.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_latin_hypercube.py
+.. admonition:: waves-tutorials/eabm_package/python/single_element_compression_latin_hypercube.py
 
    .. literalinclude:: python_single_element_compression_latin_hypercube.py
       :language: Python
@@ -49,7 +49,7 @@ SConscript
 A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
 below to help identify the differences between the two parameter generators.
 
-.. admonition:: waves-eabm-tutorial/tutorial_07_latin_hypercube
+.. admonition:: waves-tutorials/tutorial_07_latin_hypercube
 
    .. literalinclude:: tutorials_tutorial_07_latin_hypercube
       :language: Python
@@ -62,7 +62,7 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_07_latin_hypercube_SConstruct
       :language: Python
@@ -77,7 +77,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ scons tutorial_07_latin_hypercube --jobs=4
 
 ************
@@ -87,7 +87,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ tree build/tutorial_07_latin_hypercube/parameter_set0/
    build/tutorial_07_latin_hypercube/parameter_set0/
    |-- abaqus.rpy

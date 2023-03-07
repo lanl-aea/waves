@@ -26,15 +26,15 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ cp tutorial_05_parameter_substitution tutorial_06_include_files
 
-4. Create a new directory in ``eabm_package/python`` in the ``waves-eabm-tutorial`` directory.
+4. Create a new directory in ``eabm_package/python`` in the ``waves-tutorials`` directory.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-eabm-tutorial
+   /path/to/waves-tutorials
    $ mkdir -p eabm_package/python
 
 .. _tutorial_include_files_waves_python_parameter_file:
@@ -49,7 +49,7 @@ re-use between simulations.
 
 5. Create a new file ``eabm_package/python/single_element_compression_nominal.py`` from the content below.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/single_element_compression_nominal.py
+.. admonition:: waves-tutorials/eabm_package/python/single_element_compression_nominal.py
 
    .. literalinclude:: python_single_element_compression_nominal.py
       :language: Python
@@ -59,17 +59,17 @@ file that defines the parameter key-value pairs.
 
 6. Create Python module initialization files to create a project specific local Python package.
 
-.. admonition:: waves-eabm-tutorial/eabm_package/python/__init__.py
+.. admonition:: waves-tutorials/eabm_package/python/__init__.py
 
    .. code-block::
 
       $ pwd
-      /path/to/waves-eabm-tutorial
+      /path/to/waves-tutorials
       $ touch eabm_package/python/__init__.py
       $ find . -name "__init__.py"
-      ./waves-eabm-tutorial/eabm_package/abaqus/__init__.py
-      ./waves-eabm-tutorial/eabm_package/python/__init__.py
-      ./waves-eabm-tutorial/eabm_package/__init__.py
+      ./waves-tutorials/eabm_package/abaqus/__init__.py
+      ./waves-tutorials/eabm_package/python/__init__.py
+      ./waves-tutorials/eabm_package/__init__.py
 
 The ``__init__.py`` files tell Python what directories to treat as a package or module. They need to exist, but do not
 need any content. You can read more about `Python Modules`_ in the `Python documentation`_.
@@ -90,7 +90,7 @@ SConscript
 A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help
 identify the changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/tutorial_06_include_files
+.. admonition:: waves-tutorials/tutorial_06_include_files
 
    .. literalinclude:: tutorials_tutorial_06_include_files
       :language: Python
@@ -119,16 +119,16 @@ without modification to the ``SConscript`` file.
 SConstruct
 **********
 
-8. Use the ``diff`` below to modify your ``waves-eabm-tutorial/SConstruct`` file in the following ways:
+8. Use the ``diff`` below to modify your ``waves-tutorials/SConstruct`` file in the following ways:
 
-   * Add the ``waves-eabm-tutorial`` directory to your `PYTHONPATH`_ to make the ``eabm_package`` - and thus
+   * Add the ``waves-tutorials`` directory to your `PYTHONPATH`_ to make the ``eabm_package`` - and thus
      the modules within it - importable
    * Add ``tutorial_06_include_files`` to the ``workflow_configurations`` list
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-eabm-tutorial/SConstruct
+.. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_06_include_files_SConstruct
       :language: Python
@@ -149,7 +149,7 @@ Build Targets
 .. code-block:: bash
 
     $ pwd
-    /path/to/waves-eabm-tutorial
+    /path/to/waves-tutorials
     $ scons tutorial_06_include_files
     scons: Reading SConscript files ...
     Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
@@ -157,20 +157,20 @@ Build Targets
     Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 >
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 >
     single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 >
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 >
     single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui
-    /home/roppenheimer/waves-eabm-tutorial/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 >
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus cae -noGui
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 >
     single_element_mesh.stdout 2>&1
     Copy("build/tutorial_06_include_files/single_element_compression.inp.in",
     "eabm_package/abaqus/single_element_compression.inp.in")
@@ -181,9 +181,9 @@ Build Targets
     Copy("build/tutorial_06_include_files/materials.inp", "eabm_package/abaqus/materials.inp")
     Copy("build/tutorial_06_include_files/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_06_include_files/history_output.inp", "eabm_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
     environment > single_element_compression.abaqus_v6.env
-    cd /home/roppenheimer/waves-eabm-tutorial/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -job
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -job
     single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
     single_element_compression.stdout 2>&1
     scons: done building targets.
@@ -198,7 +198,7 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
 .. code-block:: bash
 
     $ pwd
-    /home/roppenheimer/waves-eabm-tutorial
+    /home/roppenheimer/waves-tutorials
     $ tree build/tutorial_06_include_files/
     build/tutorial_06_include_files/
     |-- abaqus.rpy

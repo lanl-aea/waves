@@ -28,27 +28,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create the project directory structure and change to the project root directory with the following commands.
-
-.. code-block:: bash
-
-      $ mkdir -p ~/waves-eabm-tutorial/eabm_package/abaqus
-      $ cd ~/waves-eabm-tutorial
-      $ pwd
-      /home/roppenheimer/waves-eabm-tutorial
-
-4. Download and copy the `WAVES tutorials abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory. If you're on a
-   linux system with `git`_ installed and read access on the `WAVES`_ repository, you can use `git archive`_ as below.
-
-.. code-block:: bash
-
-   $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
-   $ git archive --format=zip --remote=ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git HEAD:tutorials/eabm_package/abaqus > source_abaqus.zip
-   $ mkdir -p eabm_package/abaqus
-   $ unzip source_abaqus.zip -d eabm_package/abaqus
-
-.. include:: waves_access_and_appendix.txt
+.. include:: scons_tutorial_directory.txt
 
 ***************
 SConstruct File
@@ -56,7 +36,7 @@ SConstruct File
 
 5. Create a file named ``waves_quickstart_SConstruct`` from the contents below.
 
-.. admonition:: waves-eabm-tutorial/waves_quickstart_SConstruct
+.. admonition:: waves-tutorials/waves_quickstart_SConstruct
 
     .. literalinclude:: tutorials_waves_quickstart_SConstruct
        :language: Python
@@ -69,7 +49,7 @@ Building targets
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ scons --sconstruct=waves_quickstart_SConstruct single_element
 
 .. note::
@@ -84,7 +64,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
+   /home/roppenheimer/waves-tutorials
    $ tree build_waves_quickstart/
    build_waves_quickstart/
    |-- abaqus.rpy
