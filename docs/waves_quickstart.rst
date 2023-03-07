@@ -46,8 +46,6 @@ Directory Structure
    /home/roppenheimer/waves-eabm-tutorial
    $ waves fetch tutorials/eabm_package/abaqus --destination eabm_package/abaqus
 
-.. include:: waves_access_and_appendix.txt
-
 ***************
 SConstruct File
 ***************
