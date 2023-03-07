@@ -28,23 +28,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create the project directory structure and change to the project root directory with the following commands.
-
-.. code-block:: bash
-
-      $ mkdir -p ~/waves-eabm-tutorial/eabm_package/abaqus
-      $ cd ~/waves-eabm-tutorial
-      $ pwd
-      /home/roppenheimer/waves-eabm-tutorial
-
-4. Copy the `WAVES tutorials abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory with the `waves_cli`_
-   `waves_fetch_cli`_ subcommand.
-
-.. code-block:: bash
-
-   $ pwd
-   /home/roppenheimer/waves-eabm-tutorial
-   $ waves fetch tutorials/eabm_package/abaqus --destination eabm_package/abaqus
+.. include:: scons_tutorial_directory.txt
 
 ***************
 SConstruct File

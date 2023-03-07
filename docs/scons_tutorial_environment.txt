@@ -1,11 +1,18 @@
 `SCons`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda installation`_ and
 `Conda environment management`_ documentation for more details about using `Conda`_.
 
+.. note::
+
+   While the files in this tutorial don't use `WAVES`_, the package will still
+   be used to fetch necessary tutorial directories and files. If you don't have
+   access to `WAVES`_, the relevant `WAVES tutorials abaqus source files`_ may be
+   found in the GitHub repository
+
 1. Create the environment if it doesn't exist
 
    .. code-block::
 
-      $ conda create --name waves-eabm-env --channel conda-forge scons
+      $ conda create --name waves-eabm-env --channel conda-forge scons waves
 
 2. Activate the environment
 
