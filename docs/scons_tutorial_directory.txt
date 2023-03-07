@@ -7,8 +7,8 @@
       $ pwd
       /home/roppenheimer/waves-eabm-tutorial
 
-4. Copy the `WAVES tutorials abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory with the `waves_cli`_
-   `waves_fetch_cli`_ subcommand.
+4. Copy the `WAVES tutorials abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory with the :ref:`waves_cli`
+   :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 

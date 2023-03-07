@@ -34,7 +34,7 @@ Solver Input Files
 ******************
 
 4. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``eabm_package/abaqus`` sub-directory
-   with the `waves_cli`_ `waves_fetch_cli`_ subcommand.
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
