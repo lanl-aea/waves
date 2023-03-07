@@ -85,7 +85,7 @@ available_files_input = {
     ),
     "one file, not found": (
         "/path/to/source", ["dummy.file1"],
-        [False], [False], [],
+        [False], [False], [[]],
         [], ["dummy.file1"]
     ),
     "two files": (
