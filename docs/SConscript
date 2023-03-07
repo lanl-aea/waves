@@ -25,7 +25,6 @@ documentation_file_list = [
     'tutorials_tutorial_00_SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
     'eabm_api.rst',
     'eabm_cli.rst',
-    'eabm_abaqus_files.rst',
     'api.rst',
     'internal_api.rst',
     'build.txt',

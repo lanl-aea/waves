@@ -76,7 +76,6 @@
 
    eabm_api
    eabm_cli
-   eabm_abaqus_files
 
 .. raw:: latex
 
