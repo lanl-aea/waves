@@ -26,11 +26,15 @@ def available_files(root_directory, relative_paths):
     available_files = []
     not_found = []
     for path in relative_paths:
+        file_list = []
         absolute_path = root_directory / path
         if absolute_path.is_file():
-            available_files.append(absolute_path)
+            file_list.append(absolute_path)
         elif absolute_path.is_dir():
             file_list = [path for path in absolute_path.rglob("*") if path.is_file()]
+        else:
+            file_list = [path for path in root_directory.rglob(relative_path) if path.is_file()]
+        if file_list:
             available_files.extend(file_list)
         else:
             not_found.append(path)
