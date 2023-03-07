@@ -40,7 +40,7 @@ Solver Input Files
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
-   $ (waves-env) [kbrindley@pn2301275 waves]% python -m waves.main fetch 'eabm_package/abaqus/*.inp' --destination waves-eabm-tutorial/eabm_package/abaqus --dry-run
+   $ (waves-env) [kbrindley@pn2301275 waves]% python -m waves.main fetch 'tutorials/eabm_package/abaqus/*.inp' --destination waves-eabm-tutorial/eabm_package/abaqus --dry-run
    WAVES fetch
    Destination directory: 'eabm_package/abaqus'
 

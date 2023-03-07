@@ -37,16 +37,14 @@ Directory Structure
       $ pwd
       /home/roppenheimer/waves-eabm-tutorial
 
-4. Download and copy the `WAVES tutorials abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory. If you're on a
-   linux system with `git`_ installed and read access on the `WAVES`_ repository, you can use `git archive`_ as below.
+4. Copy the `WAVES tutorials abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory with the `waves_cli`_
+   `waves_fetch_cli`_ subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
-   $ git archive --format=zip --remote=ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git HEAD:tutorials/eabm_package/abaqus > source_abaqus.zip
-   $ mkdir -p eabm_package/abaqus
-   $ unzip source_abaqus.zip -d eabm_package/abaqus
+   $ waves fetch tutorials/eabm_package/abaqus --destination eabm_package/abaqus
 
 .. include:: waves_access_and_appendix.txt
 
