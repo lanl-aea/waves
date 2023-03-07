@@ -10,7 +10,8 @@ from waves import _settings
 def available_files(root_directory, relative_paths):
     """Build a list of files at ``relative_paths`` with respect to the root ``root_directory`` directory
 
-    Returns a list of absolute paths and a list of any relative paths that were not found.
+    Returns a list of absolute paths and a list of any relative paths that were not found. Falls back to a full
+    recursive search of ``relative_paths`` with ``pathlib.Path.rglob`` to enable pathlib style pattern matching.
 
     :param str root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths with
         respect to the current working directory before searching.

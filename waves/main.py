@@ -119,10 +119,10 @@ def get_parser():
     fetch_parser = subparsers.add_parser('fetch',
         help="Fetch and copy SCons-WAVES modsim template files and directories",
         description="Fetch and copy SCons-WAVES modsim template files and directories. If no ``FILE`` is specified, " \
-            "all available files will be created. Directories are recursively copied. The source path is " \
-            "truncated to use the shortest common file prefix, e.g. requesting two files ``common/source/file.1`` " \
-            "and ``common/source/file.2`` will create ``/destination/file.1`` and ``/destination/file.2``, " \
-            "respectively.",
+            "all available files will be created. Directories are recursively copied. ``pathlib.Path`` recursive " \
+            "pattern matching is possible. The source path is truncated to use the shortest common file prefix, " \
+            "e.g. requesting two files ``common/source/file.1`` and ``common/source/file.2`` will create " \
+            "``/destination/file.1`` and ``/destination/file.2``, respectively.",
         parents=[fetch_parser])
     fetch_parser.add_argument("FILE", nargs="*",
                               help=f"modsim template file or directory")

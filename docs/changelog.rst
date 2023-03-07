@@ -37,6 +37,8 @@ Enhancements
   ``overwrite`` is ``False`` (:issue:`413`, :merge:`520`). By `Kyle Brindley`_.
 - ``quickstart`` subcommand will avoid unnecessary file I/O when source and destination file contents match and
   ``overwrite`` is ``True`` (:issue:`413`, :merge:`520`). By `Kyle Brindley`_.
+- Add a ``pathlib.Path.rglob`` recursive search to ``waves fetch`` to enable pattern matching on relative paths and
+  files (:issue:`431`, :merge:`526`). By `Kyle Brindley`_.
 
 *******************
 0.6.12 (2023-02-21)
