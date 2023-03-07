@@ -128,6 +128,8 @@ def test_available_files(root_directory, relative_paths,
         assert not_found == expected_missing
         if mock_rglob_argument:
             assert mock_rglob.called_once_with(mock_rglob_argument)
+        else:
+            assert mock_rglob.not_called()
 
 
 build_source_files_input = {
