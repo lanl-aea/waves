@@ -33,27 +33,16 @@ Directory Structure
 Solver Input Files
 ******************
 
-4. Download and copy the `WAVES tutorials abaqus source files`_ into your existing
-   ``eabm_package/abaqus`` sub-directory. If you're on a linux system with `git`_ installed and
-   read access on the `WAVES`_ repository, you can use `git archive`_ as below.
-
-.. note::
-
-    The commands in the code block below are intended for the user to copy and paste into
-    their bash shell. These commands utilize the concepts of `Bash Variables`_, `Bash
-    Arrays`_ and `Bash Parameter Expansion`_.
+4. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``eabm_package/abaqus`` sub-directory
+   with the `waves_cli`_ `waves_fetch_cli`_ subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-eabm-tutorial
-
-   $ file_list=("single_element_compression" "assembly" "boundary" "field_output" "materials" "parts" "history_output")
-   $ file_list=("${file_list[@]/%/.inp}")
-   $ repo_ssh="ssh://git@re-git.lanl.gov:10022/aea/python-projects/waves.git"
-   $ git archive --format=zip --remote=$repo_ssh HEAD:tutorials/eabm_package/abaqus ${file_list[*]} > source_abaqus.zip
-   $ mkdir -p eabm_package/abaqus
-   $ unzip source_abaqus.zip -d eabm_package/abaqus
+   $ (waves-env) [kbrindley@pn2301275 waves]% python -m waves.main fetch 'eabm_package/abaqus/*.inp' --destination waves-eabm-tutorial/eabm_package/abaqus --dry-run
+   WAVES fetch
+   Destination directory: 'eabm_package/abaqus'
 
 This action will unzip the source files we included in the
 ``tutorial_03_solverprep`` file into the ``waves-eabm-tutorial/eabm_package/abaqus/``
