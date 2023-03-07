@@ -102,6 +102,11 @@ available_files_input = {
         "/path/to", "source",
         [False, True, True], [True], [two_file_source_tree],
         two_file_source_tree, []
+    ),
+    "two files, rglob pattern": (
+        "/path/to/source", ["dummy.file*"],
+        [False, True, True], [False], [two_file_source_tree],
+        two_file_source_tree, []
     )
 }
 
