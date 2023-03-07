@@ -44,8 +44,8 @@ Directory Structure
       /path/to/waves-eabm-tutorial
       $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
       $ find . -name "__init__.py"
-      ./waves-eabm-tutorial/eabm_package/abaqus/__init__.py
-      ./waves-eabm-tutorial/eabm_package/__init__.py
+      ./eabm_package/__init__.py
+      ./eabm_package/abaqus/__init__.py
 
 ***************
 SConscript File
