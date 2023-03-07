@@ -32,6 +32,7 @@ Internal Changes
 - Split quickstart copy operations into smaller functions for unit testing (:issue:`428`, :merge:`522`). By `Kyle
   Brindley`_.
 - Rename command line utility module to avoid namespace confusion (:issue:`428`, :merge:`522`). By `Kyle Brindley`_.
+- Reduce fetch unit test logic duplication (:issue:`432`, :merge:`527`). By `Kyle Brindley`_.
 
 Enhancements
 ============
