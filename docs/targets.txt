@@ -88,7 +88,6 @@
 .. _`conda-forge`: https://conda-forge.org/
 .. _`custom conda channel`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-channels.html
 .. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
-.. _`git archive`: https://git-scm.com/docs/git-archive
 .. _`git`: https://git-scm.com/
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
