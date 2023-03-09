@@ -27,4 +27,5 @@ dependencies:
   - sphinxcontrib-bibtex
   - xarray
   - pip:
+    # TODO: install sphinx-copybutton from conda-forge when version 0.5.1 is available. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/437
     - sphinx-copybutton
