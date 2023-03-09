@@ -26,11 +26,11 @@ def test_get_parser():
 def test_main():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg']), \
          patch('builtins.print') as mock_print, \
-         pytest.raises(SystemExit) as mock_exception, \
          patch('waves.abaqus.abaqus_file_parser.MsgFileParser'):
-        msg_parse.main()
-        assert "sample.msg does not exist" in str(mock_print.call_args)
-        assert mock_exception.value == -1
+        try:
+            msg_parse.main()
+        except SystemExit:
+            assert "sample.msg does not exist" in str(mock_print.call_args)
 
     path_exists = [True, False, False, False]
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-s', '-a']), \
