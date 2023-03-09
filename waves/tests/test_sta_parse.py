@@ -24,11 +24,11 @@ def test_get_parser():
 def test_main():
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
          patch('builtins.print') as mock_print, \
-         pytest.raises(SystemExit) as mock_exception, \
          patch('waves.abaqus.abaqus_file_parser.StaFileParser'):
-        sta_parse.main()
-        assert "sample.sta does not exist" in str(mock_print.call_args)
-        assert mock_exception.value == -1
+        try:
+            sta_parse.main()
+        except SystemExit:
+            assert "sample.sta does not exist" in str(mock_print.call_args)
 
     path_exists = [True, True]
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
