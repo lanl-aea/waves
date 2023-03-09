@@ -89,7 +89,7 @@ installation`_ and `Conda environment management`_ documentation for more detail
 
    .. code-block::
 
-      $ conda create --name waves-eabm-env --file environment.txt --channel conda-forge
+      $ conda env create --name waves-eabm-env --file environment.yml
 
 2. Activate the environment
 
