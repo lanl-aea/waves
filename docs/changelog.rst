@@ -38,6 +38,7 @@ Internal Changes
 - Rename command line utility module to avoid namespace confusion (:issue:`428`, :merge:`522`). By `Kyle Brindley`_.
 - Reduce fetch unit test logic duplication (:issue:`432`, :merge:`527`). By `Kyle Brindley`_.
 - Fix test for msg_parse.py to achieve 100 percent coverage(:issue:`433`, :merge:`531`). By `Prabhu Khalsa`_.
+- Fix test for sta_parse.py to achieve 100 percent coverage(:issue:`435`, :merge:`533`). By `Prabhu Khalsa`_.
 
 Enhancements
 ============
