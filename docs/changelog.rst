@@ -10,8 +10,8 @@ Changelog
 
 Internal Changes
 ================
-- Fix test for msg_parse.py to achieve 100 percent coverage(:issue:`433`, :merge:`531`). By `Prabhu Khalsa`_.
-- Fix test for sta_parse.py to achieve 100 percent coverage(:issue:`435`, :merge:`533`). By `Prabhu Khalsa`_.
+- Fix test for msg_parse.py to achieve 100 percent coverage (:issue:`433`, :merge:`531`). By `Prabhu Khalsa`_.
+- Fix test for sta_parse.py to achieve 100 percent coverage (:issue:`435`, :merge:`533`). By `Prabhu Khalsa`_.
 - Added ``sphinx-copybutton`` package to environment via pip (:issue:`436`, :merge:`532`). By `Sergio Cordova`_.
 
 *******************
