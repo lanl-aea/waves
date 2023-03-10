@@ -114,4 +114,3 @@ man_pages = [
 # Copy button settings
 copybutton_prompt_text = r">>> |> |\.\.\. |\$ |\+(?!\+)"
 copybutton_prompt_is_regexp = True
-copybutton_selector = "div:not(.no-copybutton) > div.highlight > pre"
