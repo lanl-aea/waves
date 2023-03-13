@@ -8,7 +8,7 @@ Activate Environment
    :start-after: env-start-do-not-remove
    :end-before: env-end-do-not-remove
 
-The Conda packages found in ``environment.yml`` are reproduced in the :ref:`eabm_dependencies` section.
+The Conda packages found in ``environment.txt`` are reproduced in the :ref:`eabm_dependencies` section.
 
 *****
 Build

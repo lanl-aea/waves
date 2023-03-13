@@ -28,7 +28,7 @@ env.Substfile(
 # Copy project root files required by the documentation
 project_dir = pathlib.Path(env["project_dir"])
 root_files = [("README.txt", str(project_dir / "README.rst")),
-              ("environment.yml", str(project_dir / "environment.yml"))]
+              ("environment.txt", str(project_dir / "environment.txt"))]
 for target, source in root_files:
     env.Command(
         target=[target],
@@ -39,7 +39,7 @@ for target, source in root_files:
 documentation_file_list = [
     "conf.py",
     "README.txt",
-    "environment.yml",
+    "environment.txt",
     "api.rst",
     "cli.rst",
     "build.txt",

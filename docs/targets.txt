@@ -100,7 +100,7 @@
 .. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
 .. _`WAVES tutorials abaqus source files`: https://github.com/lanl/waves/tree/main/tutorials/eabm_package/abaqus
 .. _`WAVES tutorials`: https://github.com/lanl/waves/tree/main/tutorials
-.. _`WAVES-EABM environment file`: https://github.com/lanl/waves/blob/main/quickstart/environment.yml
+.. _`WAVES-EABM environment file`: https://github.com/lanl/waves/blob/main/quickstart/environment.txt
 .. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves
 .. _`CITATION`: https://github.com/lanl/waves/blob/main/CITATION.bib
 

@@ -4,10 +4,10 @@
 Dependencies
 ************
 
-The development environment dependencies are found in the project's ``environment.yml`` file. For convenience, the file
+The development environment dependencies are found in the project's ``environment.txt`` file. For convenience, the file
 is reproduced here
 
-.. literalinclude:: environment.yml
+.. literalinclude:: environment.txt
    :linenos:
 
 In addition to the Conda environment managed packages, this project also requires a separately managed installation of

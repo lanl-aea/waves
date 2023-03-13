@@ -37,13 +37,13 @@ before_script:
   # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/8
   - environment_path="${aea_compute_path}/${project_environment}"
-  - conda_options='--force'
+  - conda_options='--yes --channel conda-forge'
   - |
       if [[ ! -d ${environment_path} ]]; then
           export ALL_PROXY="proxyout.lanl.gov:8080"
           export HTTP_PROXY="http://$ALL_PROXY"
           export HTTPS_PROXY=$HTTP_PROXY
-          conda env create --prefix ${environment_path} --file environment.yml ${conda_options};
+          conda create --prefix ${environment_path} --file environment.txt ${conda_options};
           chmod -R 755 ${environment_path}
           unset ALL_PROXY
           unset HTTP_PROXY
@@ -69,7 +69,7 @@ environment:
     - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
       changes:
         - "modulefiles/*"
-        - "environment.yml"
+        - "environment.txt"
   script:
     # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
@@ -79,7 +79,7 @@ environment:
     - export HTTP_PROXY="http://$ALL_PROXY"
     - export HTTPS_PROXY=$HTTP_PROXY
     # Re-build the Conda environment on changes to environment files
-    - conda env create --prefix ${environment_path} --file environment.yml ${conda_options}
+    - conda create --prefix ${environment_path} --file environment.txt ${conda_options}
     # Remove write permissions from group to avoid accidental environment changes
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
