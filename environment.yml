@@ -24,9 +24,7 @@ dependencies:
   - setuptools_scm[toml] >=6.2
   - sphinx >=5.1
   - sphinx-argparse
+  - sphinx-copybutton >=0.5.1
   - sphinx_rtd_theme >=1
   - sphinxcontrib-bibtex
   - xarray
-  - pip:
-    # TODO: install sphinx-copybutton from conda-forge when version 0.5.1 is available. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/437
-    - sphinx-copybutton
