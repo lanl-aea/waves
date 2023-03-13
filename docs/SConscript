@@ -21,7 +21,7 @@ documentation_file_list = [
     'README.txt',  # Copied from README.rst to docs build directory by root SConscript
     'CITATION.bib',  # Copied from CITATION.bib to docs build directory by root SConscript
     'LICENSE.txt',  # Copied from LICENSE.txt to docs build directory by root SConscript
-    'environment.yml',  # Copied from environment.txt to docs build directory by root SConscript
+    'environment.yml',  # Copied from environment.yml to docs build directory by root SConscript
     'tutorials_tutorial_00_SConstruct',  # Copied from the eabm directory to docs build directory by this SConscript
     'eabm_api.rst',
     'eabm_cli.rst',
