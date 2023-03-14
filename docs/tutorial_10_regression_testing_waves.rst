@@ -111,10 +111,10 @@ simulation suite against the limited datacheck workflow, perform the following s
    /path/to/waves-tutorials
 
    # Find all workflows that use the datacheck alias for one-to-one real time comparison
-   datacheck_aliases=$(for file in $(grep -riIE "env\['datacheck_alias'\]" --include=SConscript -l); do echo $(dirname $file); done)
+   $ datacheck_aliases=$(for file in $(grep -riIE "env\['datacheck_alias'\]" --include=SConscript -l); do echo $(dirname $file); done)
 
    # Verify that the list matches those files you changed for this tutorial
-   echo ${datacheck_aliases}
+   $ echo ${datacheck_aliases}
    ...
 
    # Clean all and build datacheck alias

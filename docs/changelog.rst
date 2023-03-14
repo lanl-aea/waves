@@ -15,6 +15,10 @@ Internal Changes
 - Added ``sphinx-copybutton`` package to environment via pip (:issue:`436`, :merge:`532`). By `Sergio Cordova`_.
 - Added ``sphinx-copybutton`` package to environment via conda-forge (:issue:`437`, :merge:`537`). By `Sergio Cordova`_.
 
+Enhancements
+============
+- Added ``sphinx-copybutton`` to HTML documentation code blocks (:issue:`415`, :merge:`515`). By `Sergio Cordova`_.
+
 *******************
 0.6.13 (2023-03-07)
 *******************

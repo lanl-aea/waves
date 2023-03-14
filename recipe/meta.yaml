@@ -40,6 +40,7 @@ requirements:
     - setuptools_scm[toml] >=6.2
     - sphinx >=5.1
     - sphinx-argparse
+    - sphinx-copybutton >=0.5.1
     - sphinx_rtd_theme >=1
     - sphinxcontrib-bibtex
   host:
