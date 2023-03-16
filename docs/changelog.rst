@@ -20,6 +20,8 @@ Internal Changes
 - Added ``sphinx-copybutton`` package to environment via conda-forge (:issue:`437`, :merge:`537`). By `Sergio Cordova`_.
 - Remove unecessary ``LD_LIBRARY_PATH`` operations in Gitlab-CI configuration (:issue:`438`, :merge:`538`). By `Kyle
   Brindley`_.
+- Add waves subcommand sign-of-life tests to the external/GitHub conda-build recipe tests (:issue:`430`, :merge:`539`).
+  By `Kyle Brindley`_.
 
 *******************
 0.6.13 (2023-03-07)
