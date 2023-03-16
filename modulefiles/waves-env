@@ -42,11 +42,6 @@ set environment_man "$environment_path/share/man"
 prepend-path PATH "$environment_bin:$anaconda_bin"
 prepend-path MANPATH "$environment_man"
 
-# Set some aliases similarly to W-13 compute servers
-# Reference - sstelmo.lanl.gov:/usr/share/Modules/modulefiles/python/2020.07-python-3.8
-set-alias ipy "ipython"
-set-alias nb "jupyter notebook"
-
 # Activate the Conda environment
 # Variables and functions from $anaconda_path/etc/profile.d/conda.sh initialization script that must be unset
 set conda_variables "CONDA_SHLVL CONDA_EXE _CE_CONDA CONDA_PYTHON_EXE"
@@ -94,9 +89,4 @@ proc ModulesHelp {} {
     puts stderr "\n\nModifies environment variables"
     puts stderr "PATH prepended with: $environment_bin:$anaconda_bin"
     puts stderr "MANPATH prepended with: $environment_man"
-
-    puts stderr "\n\nSets aliases:"
-    puts stderr "ipy\t\t open ipython"
-    puts stderr "nb\t\t open a jupyter notebook server"
-
 }
