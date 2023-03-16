@@ -37,6 +37,7 @@ simulation_constants = {
     'global_seed': 1,
     'displacement': -0.01
 }
+kwargs = {'seed': 42}
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -49,7 +50,8 @@ parameter_generator = waves.parameter_generators.LatinHypercube(
     parameter_schema,
     output_file=parameter_study_file,
     output_file_type=output_file_type,
-    previous_parameter_study=previous_parameter_study)
+    previous_parameter_study=previous_parameter_study,
+    **kwargs)
 
 workflow.extend(env.Command(
     target=[parameter_study_file.name],
