@@ -13,6 +13,7 @@ Documentation
 - Added ``sphinx-copybutton`` to HTML documentation code blocks (:issue:`415`, :merge:`515`). By `Sergio Cordova`_.
 - Add discussion about reproducibility and uniqueness to the LatinHypercube tutorial (:issue:`241`, :merge:`540`). By
   `Kyle Brindley`_.
+- Condense the API and CLI sections into the user manual TOC tree (:issue:`241`, :merge:`540`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
