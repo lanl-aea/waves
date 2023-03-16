@@ -37,15 +37,6 @@
    tutorial_core
    tutorial_supplemental
    tutorial_wip
-
-.. raw:: latex
-
-   \part{Build System}
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Build System
-
    api
    cli
 
