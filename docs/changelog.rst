@@ -11,6 +11,8 @@ Changelog
 Documentation
 =============
 - Added ``sphinx-copybutton`` to HTML documentation code blocks (:issue:`415`, :merge:`515`). By `Sergio Cordova`_.
+- Add discussion about reproducibility and uniqueness to the LatinHypercube tutorial (:issue:`241`, :merge:`540`). By
+  `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -22,6 +24,7 @@ Internal Changes
   Brindley`_.
 - Add waves subcommand sign-of-life tests to the external/GitHub conda-build recipe tests (:issue:`430`, :merge:`539`).
   By `Kyle Brindley`_.
+- Seed the LatinHypercube tutorial parameter study (:issue:`241`, :merge:`540`). By `Kyle Brindley`_.
 
 *******************
 0.6.13 (2023-03-07)
