@@ -37,7 +37,8 @@ def test_parameter_study(subcommand, class_name):
             parameter_study.main()
         except SystemExit as err:
             exit_code = err.code
-        assert exit_code == 0
+        finally:
+            assert exit_code == 0
 
     schema_file = 'dummy.file'
     with patch('sys.argv', ['parameter_study.py', subcommand, schema_file]), \
@@ -45,8 +46,9 @@ def test_parameter_study(subcommand, class_name):
          patch(f'waves.parameter_generators.{class_name}') as mock_generator:
         try:
             parameter_study.main()
-        except SystemExit:
-            pass
+        except SystemExit as err:
+            exit_code = err.code
         finally:
             mock_generator.assert_called_once()
             assert mock_generator.method_calls == [call.write()]
+            assert exit_code == 0
