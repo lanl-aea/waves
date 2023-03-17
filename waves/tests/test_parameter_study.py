@@ -40,14 +40,11 @@ def test_parameter_study(subcommand, class_name):
         finally:
             assert exit_code == 0
 
+    # Run main code. No SystemExit expected.
     schema_file = 'dummy.file'
     with patch('sys.argv', ['parameter_study.py', subcommand, schema_file]), \
          patch('argparse.FileType'), patch('yaml.safe_load'), \
          patch(f'waves.parameter_generators.{class_name}') as mock_generator:
-        try:
-            parameter_study.main()
-        except SystemExit as err:
-            exit_code = err.code
-        finally:
-            assert exit_code == 0
-            mock_generator.assert_called_once()
+        exit_code = parameter_study.main()
+        assert exit_code == 0
+        mock_generator.assert_called_once()
