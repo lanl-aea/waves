@@ -26,6 +26,7 @@ Internal Changes
 - Add waves subcommand sign-of-life tests to the external/GitHub conda-build recipe tests (:issue:`430`, :merge:`539`).
   By `Kyle Brindley`_.
 - Seed the LatinHypercube tutorial parameter study (:issue:`241`, :merge:`540`). By `Kyle Brindley`_.
+- Fix test execution and assertions for the parameter study command line utility (:merge:`543`). By `Kyle Brindley`_.
 
 *******************
 0.6.13 (2023-03-07)
