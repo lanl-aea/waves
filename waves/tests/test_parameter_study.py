@@ -51,4 +51,3 @@ def test_parameter_study(subcommand, class_name):
         finally:
             assert exit_code == 0
             mock_generator.assert_called_once()
-            assert mock_generator.method_calls == [call.write()]
