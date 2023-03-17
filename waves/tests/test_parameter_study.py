@@ -30,12 +30,14 @@ parameter_study_args = {
                          parameter_study_args.values(),
                          ids=list(parameter_study_args.keys()))
 def test_parameter_study(subcommand, class_name):
-    # Should not raise
+    # Help/usage. Should not raise
     with patch('sys.argv', ['parameter_study.py', subcommand, '-h']):
+        exit_code = None
         try:
             parameter_study.main()
         except SystemExit as err:
-            assert err.code == 0
+            exit_code = err.code
+        assert exit_code == 0
 
     schema_file = 'dummy.file'
     with patch('sys.argv', ['parameter_study.py', subcommand, schema_file]), \
