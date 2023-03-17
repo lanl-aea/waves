@@ -49,6 +49,6 @@ def test_parameter_study(subcommand, class_name):
         except SystemExit as err:
             exit_code = err.code
         finally:
+            assert exit_code == 0
             mock_generator.assert_called_once()
             assert mock_generator.method_calls == [call.write()]
-            assert exit_code == 0
