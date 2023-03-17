@@ -30,17 +30,21 @@ parameter_study_args = {
                          parameter_study_args.values(),
                          ids=list(parameter_study_args.keys()))
 def test_parameter_study(subcommand, class_name):
-    with patch('sys.argv', ['parameter_study.py', subcommand, '-h']), \
-         pytest.raises(SystemExit) as pytest_exit:
-        sys.exit(parameter_study.main())
-    assert pytest_exit.value.code == 0
+    # Help/usage. Should not raise
+    with patch('sys.argv', ['parameter_study.py', subcommand, '-h']):
+        exit_code = None
+        try:
+            parameter_study.main()
+        except SystemExit as err:
+            exit_code = err.code
+        finally:
+            assert exit_code == 0
 
+    # Run main code. No SystemExit expected.
     schema_file = 'dummy.file'
     with patch('sys.argv', ['parameter_study.py', subcommand, schema_file]), \
          patch('argparse.FileType'), patch('yaml.safe_load'), \
-         patch(f'waves.parameter_generators.{class_name}') as mock_generator, \
-         pytest.raises(SystemExit) as pytest_exit:
-        sys.exit(parameter_study.main())
-        assert mock_generator.assert_called_once()
-        assert mock_generator.method_calls == [call.write()]
-    assert pytest_exit.value.code == 0
+         patch(f'waves.parameter_generators.{class_name}') as mock_generator:
+        exit_code = parameter_study.main()
+        assert exit_code == 0
+        mock_generator.assert_called_once()
