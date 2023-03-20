@@ -27,6 +27,7 @@ Internal Changes
   By `Kyle Brindley`_.
 - Seed the LatinHypercube tutorial parameter study (:issue:`241`, :merge:`540`). By `Kyle Brindley`_.
 - Fix test execution and assertions for the parameter study command line utility (:merge:`543`). By `Kyle Brindley`_.
+- Fix test for test_odb_extract.py to achieve 100 percent coverage (:issue:`434`, :merge:`534`). By `Prabhu Khalsa`_.
 
 *******************
 0.6.13 (2023-03-07)
