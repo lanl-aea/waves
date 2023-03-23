@@ -49,6 +49,16 @@ SConscript
 A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
 below to help identify the differences between the two parameter generators.
 
+.. note::
+
+   Note that the ``kwargs`` variable sets a fixed seed for the random number generator. This is required to make the
+   parameter set reproducible during SCons configuration. Without this seed, *every* call of ``scons`` will produce a
+   complete and unique parameter study. This will result in the full workflow re-executing on every ``scons`` call.
+
+   If a fixed seed is not acceptable, users may protect the parameter study generation with a command line option or
+   generate the parameter study manually and use the :meth:`waves.parameter_generators.CustomStudy` to instantiate the
+   parameter study object.
+
 .. admonition:: waves-tutorials/tutorial_07_latin_hypercube
 
    .. literalinclude:: tutorials_tutorial_07_latin_hypercube

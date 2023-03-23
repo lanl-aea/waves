@@ -5,8 +5,33 @@ Changelog
 #########
 
 *******************
-0.6.14 (unreleased)
+0.6.15 (unreleased)
 *******************
+
+*******************
+0.6.14 (2023-03-23)
+*******************
+
+Documentation
+=============
+- Added ``sphinx-copybutton`` to HTML documentation code blocks (:issue:`415`, :merge:`515`). By `Sergio Cordova`_.
+- Add discussion about reproducibility and uniqueness to the LatinHypercube tutorial (:issue:`241`, :merge:`540`). By
+  `Kyle Brindley`_.
+- Condense the API and CLI sections into the user manual TOC tree (:issue:`241`, :merge:`540`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Fix test for msg_parse.py to achieve 100 percent coverage (:issue:`433`, :merge:`531`). By `Prabhu Khalsa`_.
+- Fix test for sta_parse.py to achieve 100 percent coverage (:issue:`435`, :merge:`533`). By `Prabhu Khalsa`_.
+- Added ``sphinx-copybutton`` package to environment via pip (:issue:`436`, :merge:`532`). By `Sergio Cordova`_.
+- Added ``sphinx-copybutton`` package to environment via conda-forge (:issue:`437`, :merge:`537`). By `Sergio Cordova`_.
+- Remove unecessary ``LD_LIBRARY_PATH`` operations in Gitlab-CI configuration (:issue:`438`, :merge:`538`). By `Kyle
+  Brindley`_.
+- Add waves subcommand sign-of-life tests to the external/GitHub conda-build recipe tests (:issue:`430`, :merge:`539`).
+  By `Kyle Brindley`_.
+- Seed the LatinHypercube tutorial parameter study (:issue:`241`, :merge:`540`). By `Kyle Brindley`_.
+- Fix test execution and assertions for the parameter study command line utility (:merge:`543`). By `Kyle Brindley`_.
+- Fix test for test_odb_extract.py to achieve 100 percent coverage (:issue:`434`, :merge:`534`). By `Prabhu Khalsa`_.
 
 *******************
 0.6.13 (2023-03-07)

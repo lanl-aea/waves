@@ -60,6 +60,7 @@ def setup(app):
 extensions = ['sphinx.ext.autodoc',
               'sphinx.ext.viewcode',
               'sphinx.ext.extlinks',
+              'sphinx_copybutton',
               'sphinxcontrib.bibtex',
               'sphinxarg.ext']
 bibtex_bibfiles = ['references.bib', 'CITATION.bib']
@@ -77,6 +78,7 @@ source_suffix = ['.rst']
 html_logo = 'waves_logo_brandmark_smaller.png'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
+html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
 copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
@@ -108,3 +110,7 @@ man_pages = [
     (master_doc, project.lower(), _project_name,
      [author_manpage], 1)
 ]
+
+# Copy button settings
+copybutton_prompt_text = r">>> |> |\.\.\. |\$ |\+(?!\+)"
+copybutton_prompt_is_regexp = True

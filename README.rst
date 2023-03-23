@@ -196,7 +196,7 @@ Local development environments
 
       $ pwd
       path/to/local/git/clone/waves
-      $ conda create --name waves-env --file environment.txt --channel conda-forge
+      $ conda env create --name waves-env --file environment.yml
 
 2. Activate the environment
 
@@ -255,7 +255,7 @@ knowledge.
 .. code-block::
 
    # Activate the environment
-   conda activate waves-env
+   $ conda activate waves-env
 
    # Find the scons manpage file
    $ find $CONDA_PREFIX -name scons.1
@@ -336,7 +336,7 @@ processing scripts.
 
   .. code-block::
 
-     scons . --keep-going
+     $ scons . --keep-going
 
 The full list of continuous integration test targets can be found in the Gitlab-CI file, ``.gitlab-ci.yml``.
 

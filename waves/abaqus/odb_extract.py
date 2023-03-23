@@ -233,7 +233,7 @@ def print_critical(message):
 
 
 def main():
-    args = get_parser().parse_args()
+    args = get_parser().parse_args()  # pragma: no cover
     sys.exit(odb_extract(args.input_file,
                          args.output_file,
                          args.output_type,
@@ -245,4 +245,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main())  # pragma: no cover

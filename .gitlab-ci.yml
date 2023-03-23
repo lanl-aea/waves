@@ -37,13 +37,13 @@ before_script:
   # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/8
   - environment_path="${aea_compute_path}/${project_environment}"
-  - conda_options='--yes --channel conda-forge'
+  - conda_options='--force'
   - |
       if [[ ! -d ${environment_path} ]]; then
           export ALL_PROXY="proxyout.lanl.gov:8080"
           export HTTP_PROXY="http://$ALL_PROXY"
           export HTTPS_PROXY=$HTTP_PROXY
-          conda create --prefix ${environment_path} --file environment.txt ${conda_options};
+          conda env create --prefix ${environment_path} --file environment.yml ${conda_options};
           chmod -R 755 ${environment_path}
           unset ALL_PROXY
           unset HTTP_PROXY
@@ -69,17 +69,14 @@ environment:
     - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
       changes:
         - "modulefiles/*"
-        - "environment.txt"
+        - "environment.yml"
   script:
-    # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
-    - unset LD_LIBRARY_PATH
     # Set LANL proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
     - export HTTP_PROXY="http://$ALL_PROXY"
     - export HTTPS_PROXY=$HTTP_PROXY
     # Re-build the Conda environment on changes to environment files
-    - conda create --prefix ${environment_path} --file environment.txt ${conda_options}
+    - conda env create --prefix ${environment_path} --file environment.yml ${conda_options}
     # Remove write permissions from group to avoid accidental environment changes
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
@@ -100,9 +97,6 @@ microbump:
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
   script:
-    # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
-    - unset LD_LIBRARY_PATH
     # Conditionally "bump" micro version number. setuptools_scm already bumps number, just need to strip local version.
     - old_version=$(python -m setuptools_scm)
     # First capture group is the major.minor.micro numbers
@@ -226,9 +220,6 @@ deploy:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "dev"
   script:
-    # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
-    - unset LD_LIBRARY_PATH
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     # Copy Conda package to AEA Conda Channel
@@ -255,9 +246,6 @@ pages:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH == "dev"
   script:
-    # FIXME: "cp: relocation error: ... in file libattr.so.1 ..."
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/227
-    - unset LD_LIBRARY_PATH
     # Set job-wide variables and directories
     - project_root=$PWD
     - rm -rf public && mkdir -p public
