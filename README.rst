@@ -238,7 +238,7 @@ CI configuration file. The current command may be found as
 
 .. code-block::
 
-   $ output_folder='conda-build-artifacts'
+   $ output_folder='conda-bld'
    $ mkdir ${output_folder}
    $ VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
 

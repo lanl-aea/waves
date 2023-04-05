@@ -33,11 +33,11 @@ jobs:
         run: scons latexpdf
       - name: Conda build
         shell: bash -el {0}
-        run: VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --output-folder conda-build-artifacts
+        run: VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           files: |
             build/docs/latex/waves-${{ github.ref_name }}.pdf
-            conda-build-artifacts/noarch/waves-${{ github.ref_name }}-py_0.tar.bz2
+            conda-bld/noarch/waves-${{ github.ref_name }}-py_0.tar.bz2
           body: "Changelog: https://lanl.github.io/waves/changelog.html. Installation: https://lanl.github.io/waves/installation.html"
