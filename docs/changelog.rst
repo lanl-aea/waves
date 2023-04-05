@@ -12,6 +12,7 @@ Internal Changes
 ================
 - Fix the license syntax in ``CITATION.cff`` to help Zenodo recognize the license type (:merge:`546`). By `Kyle
   Brindley`_.
+- Added ``--exclude-regex`` argument to ``visualize`` subcommand (:issue:`419`, :merge:`548`). By `Sergio Cordova`_.
 
 *******************
 0.6.14 (2023-03-23)

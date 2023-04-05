@@ -46,6 +46,9 @@ __pycache__/
 test_results.xml
 conda-bld/
 
+# NFS files
+*.nfs*
+
 # MacOSX
 .DS_Store
 

@@ -9,12 +9,13 @@ import matplotlib.pyplot as plt
 
 from waves import _settings
 
-def parse_output(tree_lines, exclude_list):
+def parse_output(tree_lines, exclude_list, exclude_regex):
     """
     Parse the string that has the tree output and store it in a dictionary
 
     :param list tree_lines: output of the scons tree command
     :param list exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
+    :param str exclude_regex: exclude nodes that match this regular expression
     :returns: dictionary of tree output
     :rtype: dict
     """
@@ -42,6 +43,9 @@ def parse_output(tree_lines, exclude_list):
                 if node_name.startswith(exclude) or node_name.endswith(exclude):
                     exclude_node = True
                     exclude_indent = current_indent
+            if exclude_regex and re.search(exclude_regex, node_name):
+                exclude_node = True
+                exclude_indent = current_indent
             if exclude_node:
                 continue
             node_number += 1  # Increment the node_number

@@ -34,7 +34,8 @@ def main():
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
-                                    exclude_list=args.exclude_list, height=args.height, width=args.width)
+                                    exclude_list=args.exclude_list, exclude_regex=args.exclude_regex, 
+                                    height=args.height, width=args.width)
     else:
         parser.print_help()
 
@@ -157,6 +158,8 @@ def get_parser():
         help="Width of visualization in inches if being saved to a file (default: %(default)s)")
     visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
         help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
+    visualize_parser.add_argument("-r", "--exclude-regex", type=str,
+        help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
 
@@ -252,7 +255,7 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
     return return_code
 
 
-def visualization(target, sconstruct, exclude_list, output_file=None, print_graphml=False,
+def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
                   height=_settings._visualize_default_height, width=_settings._visualize_default_width):
     """Visualize the directed acyclic graph created by a SCons build
 
@@ -263,6 +266,7 @@ def visualization(target, sconstruct, exclude_list, output_file=None, print_grap
     :param str target: String specifying an SCons target
     :param str sconstruct: Path to an SConstruct file or parent directory
     :param list exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
+    :param str exclude_regex: exclude nodes that match this regular expression
     :param str output_file: File for saving the visualization
     :param bool print_graphml: Whether to print the graph in graphml format
     :param int height: Height of visualization if being saved to a file
@@ -279,7 +283,7 @@ def visualization(target, sconstruct, exclude_list, output_file=None, print_grap
     scons_command.extend(_settings._scons_visualize_arguments)
     scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
     tree_output = scons_stdout.decode("utf-8").split('\n')
-    tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list)
+    tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list, exclude_regex=exclude_regex)
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
