@@ -45,6 +45,9 @@ parameter_study_meta.txt
 __pycache__/
 test_results.xml
 
+# NFS Files
+*.nfs*
+
 # MacOSX
 .DS_Store
 
