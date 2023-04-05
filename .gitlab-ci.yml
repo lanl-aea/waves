@@ -50,6 +50,7 @@ before_script:
           unset HTTPS_PROXY
       fi
   - if [[ ${project_environment} != ${environment} ]]; then module unload ${environment}; module load ${project_environment}; fi
+  - conda_artifact_directory='conda-bld'
   # FIXME: (1) Without setting this to false, Git webserver API calls to re-git.lanl.gov will throw errors about
   # self-signed certificates. Work on CI server and Gitlab webserver configurations so that this is no longer
   # necessary. There is a matching "FIXME: (1)" tag where the process is reversed that must also be removed when this
@@ -198,13 +199,12 @@ conda-build:
     - export HTTPS_PROXY=$HTTP_PROXY
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
-    - output_folder='conda-build-artifacts'
-    - mkdir ${output_folder}
-    - VERSION=$(python -m setuptools_scm) mamba build recipe-internal --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+    - mkdir ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) mamba build recipe-internal --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/${conda_artifacts_directory} --output-folder ${conda_artifacts_directory}
   artifacts:
     expire_in: '2 hrs'
     paths:
-      - conda-build-artifacts/noarch/waves-*-*.tar.bz2
+      - conda-bld/noarch/waves-*-*.tar.bz2
   tags:
     - shell-aea
 
@@ -223,7 +223,7 @@ deploy:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     # Copy Conda package to AEA Conda Channel
-    - cp conda-build-artifacts/noarch/waves-*-*.tar.bz2 ${aea_conda_channel}/noarch
+    - cp ${conda_artifacts_directory}/noarch/waves-*-*.tar.bz2 ${aea_conda_channel}/noarch
     # Change group for access by all W-13 staff and prevent accidental modification by institutional account in CI jobs
     - chgrp w13users ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
     - chmod 555 ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
