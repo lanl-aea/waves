@@ -206,8 +206,8 @@ Test Local Module
 
 .. test-local-module-start-do-not-remove
 
-When testing local changes, the waves module must be run as a script. We must also set the ``PYTHONPATH``
-in order to include the current waves module.
+When testing CLI changes locally, the waves module must be run as a script. We must also set the ``PYTHONPATH``
+in order to include the current waves module when operating on a configuration that imports waves.
 
 Below is an example of a visualization test of an SConstruct file using the local waves module.
 
