@@ -25,3 +25,12 @@ Test
 .. include:: README.txt
    :start-after: test-start-do-not-remove
    :end-before: test-end-do-not-remove
+
+*****************
+Test Local Module
+*****************
+
+.. include:: README.txt
+   :start-after: test-local-module-start-do-not-remove
+   :end-before: test-local-module-end-do-not-remove
+
