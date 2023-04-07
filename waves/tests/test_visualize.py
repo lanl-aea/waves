@@ -1,9 +1,6 @@
 """
 Test visualize.py
 """
-import pathlib
-from unittest.mock import patch
-
 import pytest
 
 from waves import visualize
