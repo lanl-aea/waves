@@ -348,6 +348,24 @@ The full list of continuous integration test targets can be found in the Gitlab-
 
 .. test-end-do-not-remove
 
+Test Local Module
+=================
+
+.. test-local-module-start-do-not-remove
+
+When testing CLI changes locally, the waves module must be run as a script. We must also set the ``PYTHONPATH``
+in order to include the current waves module when operating on a configuration that imports waves.
+
+Below is an example of a visualization test of an SConstruct file using the local waves module.
+
+.. code-block::
+
+   $ pwd
+   path/to/local/git/clone/waves/
+   $ PYTHONPATH=$PWD python -m waves.main visualize . --sconstruct /path/to/local/SConstruct
+
+.. test-local-module-end-do-not-remove
+
 Documentation
 =============
 
