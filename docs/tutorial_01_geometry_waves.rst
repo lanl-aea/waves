@@ -14,6 +14,7 @@ covered in this tutorial.
 * `Abaqus Scripting`_ :cite:`ABAQUS`
 * `Abaqus Python Environment`_ :cite:`ABAQUS`
 * Python Docstrings: `PEP-257`_, `PEP-287`_
+* Python Argparse: `Python 3 argparse`_, `Python 2.7 argparse`_
 
 ***********
 Environment
