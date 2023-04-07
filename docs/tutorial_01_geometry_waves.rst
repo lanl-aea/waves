@@ -14,6 +14,7 @@ covered in this tutorial.
 * `Abaqus Scripting`_ :cite:`ABAQUS`
 * `Abaqus Python Environment`_ :cite:`ABAQUS`
 * Python Docstrings: `PEP-257`_, `PEP-287`_
+* Python Argparse: `Python 3 argparse`_, `Python 2.7 argparse`_
 
 ***********
 Environment
@@ -222,6 +223,7 @@ next step in turning our simple Python script into a small software utility. Com
 to be executed with optional command line arguments. This allows us to change the values of input arguments to the
 ``main()`` function without any source code modification.  ``argparse`` also helps automate command line interface (CLI)
 documentation. An example of this is the :ref:`waves_eabm_cli` for :ref:`abaqus_single_element_geometry_cli`.
+See the `Argparse tutorial`_ for an introduction to the ``argparse`` module.
 
 The first highlighted portion of the ``get_parser()`` function defines variables based on
 the name of the script. While this method of determining the file name is non-standard

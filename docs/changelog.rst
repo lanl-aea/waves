@@ -8,6 +8,10 @@ Changelog
 0.6.15 (unreleased)
 *******************
 
+Documentation
+=============
+- Linked argparse tutorial in tutorial 01 (:issue:`439`, :merge:`549`). By `Sergio Cordova`_.
+
 Internal Changes
 ================
 - Fix the license syntax in ``CITATION.cff`` to help Zenodo recognize the license type (:merge:`546`). By `Kyle
