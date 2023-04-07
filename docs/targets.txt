@@ -13,6 +13,7 @@
 .. _`ASC RE Gitlab`: https://re-git.lanl.gov/
 .. _`Anaconda Documentation`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
 .. _`Argparse type`: https://docs.python.org/3.8/library/argparse.html#type
+.. _`Argparse tutorial`: https://docs.python.org/3/howto/argparse.html
 .. _`Bash Arrays`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Arrays
 .. _`Bash Exit Status`: https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
 .. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
