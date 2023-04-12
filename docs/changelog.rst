@@ -11,6 +11,7 @@ Changelog
 Documentation
 =============
 - Linked argparse tutorial in tutorial 01 (:issue:`439`, :merge:`549`). By `Sergio Cordova`_.
+- Removed datacheck from the quickstart tutorials (:issue:`446`, :merge:`551`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
