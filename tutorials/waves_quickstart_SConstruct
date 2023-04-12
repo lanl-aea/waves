@@ -79,6 +79,7 @@ workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdire
 solve_source_list = [str(variant_dir_base /source_file.name.rstrip('.in')) for source_file in abaqus_source_list]
 solve_source_list.append([str(variant_dir_base / f"{journal_file}.inp")])
 job_name = pathlib.Path(solve_source_list[0]).stem
+abaqus_options='-double both'
 
 workflow.extend(env.AbaqusSolver(
     target=[f"{variant_dir_base / job_name}.sta"],
