@@ -34,7 +34,7 @@ Directory Structure
 SConstruct File
 ***************
 
-6. Create a file named ``waves_quickstart_SConstruct`` from the contents below.
+5. Create a file named ``waves_quickstart_SConstruct`` from the contents below.
 
 .. admonition:: waves-tutorials/waves_quickstart_SConstruct
 

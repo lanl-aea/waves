@@ -37,7 +37,7 @@ Directory Structure
 SConstruct File
 ***************
 
-6. Create a file named ``scons_multiactiontask_SConstruct`` from the contents below.
+5. Create a file named ``scons_multiactiontask_SConstruct`` from the contents below.
 
 .. admonition:: waves-tutorials/scons_multiactiontask_SConstruct
 

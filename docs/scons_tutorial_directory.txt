@@ -7,19 +7,13 @@
       $ pwd
       /home/roppenheimer/waves-tutorials
 
-4. Initialize the ``eabm_package`` directory as a  python package.
-
-.. code-block:: bash
-
-      $ touch eabm_package/__init__.py
-
-5. Copy the `WAVES tutorials abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory with the :ref:`waves_cli`
+4. Copy the `WAVES tutorials abaqus source files`_ into the ``eabm_package/abaqus`` sub-directory with the :ref:`waves_cli`
    :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch tutorials/eabm_package/abaqus --destination eabm_package/abaqus
+   $ waves fetch tutorials/eabm_package/__init__.py tutorials/eabm_package/abaqus --destination eabm_package
    WAVES fetch
    Destination directory: 'eabm_package/abaqus'

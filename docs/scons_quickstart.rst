@@ -22,7 +22,7 @@ Directory Structure
 SConstruct File
 ***************
 
-6. Create a file named ``scons_quickstart_SConstruct`` from the contents below.
+5. Create a file named ``scons_quickstart_SConstruct`` from the contents below.
 
 .. admonition:: waves-tutorials/scons_quickstart_SConstruct
 
