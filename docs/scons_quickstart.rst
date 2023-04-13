@@ -55,30 +55,29 @@ Output Files
    /home/roppenheimer/waves-tutorials
    $ tree build_scons_quickstart/
    build_scons_quickstart/
-   |-- abaqus.rpy
-   |-- abaqus.rpy.10
-   |-- abaqus.rpy.7
-   |-- abaqus.rpy.8
-   |-- abaqus.rpy.9
-   |-- assembly.inp
-   |-- boundary.inp
-   |-- field_output.inp
-   |-- history_output.inp
-   |-- materials.inp
-   |-- parts.inp
-   |-- single_element_compression.com
-   |-- single_element_compression.dat
-   |-- single_element_compression.inp
-   |-- single_element_compression.msg
-   |-- single_element_compression.odb
-   |-- single_element_compression.prt
-   |-- single_element_compression.sta
-   |-- single_element_geometry.cae
-   |-- single_element_geometry.jnl
-   |-- single_element_mesh.cae
-   |-- single_element_mesh.inp
-   |-- single_element_mesh.jnl
-   |-- single_element_partition.cae
-   `-- single_element_partition.jnl
+   ├── abaqus.rpy
+   ├── abaqus.rpy.1
+   ├── abaqus.rpy.2
+   ├── assembly.inp
+   ├── boundary.inp
+   ├── field_output.inp
+   ├── history_output.inp
+   ├── materials.inp
+   ├── parts.inp
+   ├── single_element_compression.com
+   ├── single_element_compression.dat
+   ├── single_element_compression.inp
+   ├── single_element_compression.msg
+   ├── single_element_compression.odb
+   ├── single_element_compression.prt
+   ├── single_element_compression.sta
+   ├── single_element_geometry.cae
+   ├── single_element_geometry.jnl
+   ├── single_element_mesh.cae
+   ├── single_element_mesh.inp
+   ├── single_element_mesh.jnl
+   ├── single_element_partition.cae
+   └── single_element_partition.jnl
 
-   0 directories, 25 files
+   0 directories, 23 files
+
