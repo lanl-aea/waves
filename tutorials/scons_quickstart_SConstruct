@@ -11,8 +11,8 @@ env = Environment(ENV=os.environ.copy())
 env.Default()
 
 # Set project-wide paths with os-agnostic path separators
-project_dir = Dir('.').abspath
-variant_dir_base = pathlib.Path('build_scons_quickstart')
+project_dir = pathlib.Path(Dir('.').abspath)
+variant_dir_base = pathlib.Path('build_scons_quickstart').resolve()
 
 # Make the EABM package importable for Python and Abaqus Python environments
 env.PrependENVPath("PYTHONPATH", str(project_dir))
@@ -47,40 +47,40 @@ workflow = []
 # Geometry
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=["build_scons_quickstart/single_element_geometry.cae"],
-    source=[project_dir + "/eabm_package/abaqus/single_element_geometry.py"],
+    target=[str(variant_dir_base / "single_element_geometry.cae")],
+    source=[str(project_dir / "eabm_package/abaqus/single_element_geometry.py")],
     abaqus_program=env['abaqus'],
     journal_options=journal_options))
 
 # Partition
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=["build_scons_quickstart/single_element_partition.cae"],
-    source=[project_dir + "/eabm_package/abaqus/single_element_partition.py", "build_scons_quickstart/single_element_geometry.cae"],
+    target=[str(variant_dir_base / "single_element_partition.cae")],
+    source=[str(project_dir / "eabm_package/abaqus/single_element_partition.py"), str(variant_dir_base / "single_element_geometry.cae")],
     abaqus_program=env['abaqus'],
     journal_options=journal_options))
 
 # Mesh
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=["build_scons_quickstart/single_element_mesh.inp", "build_scons_quickstart/single_element_mesh.cae"],
-    source=[project_dir + "/eabm_package/abaqus/single_element_mesh.py", "build_scons_quickstart/single_element_partition.cae"],
+    target=[str(variant_dir_base / "single_element_mesh.inp"), str(variant_dir_base / "single_element_mesh.cae")],
+    source=[str(project_dir / "eabm_package/abaqus/single_element_mesh.py"), str(variant_dir_base / "single_element_partition.cae")],
     abaqus_program=env['abaqus'],
     journal_options=journal_options))
 
 # SolverPrep
 abaqus_source_list = [
-    project_dir + "/eabm_package/abaqus/single_element_compression.inp",
-    project_dir + "/eabm_package/abaqus/assembly.inp",
-    project_dir + "/eabm_package/abaqus/boundary.inp",
-    project_dir + "/eabm_package/abaqus/field_output.inp",
-    project_dir + "/eabm_package/abaqus/materials.inp",
-    project_dir + "/eabm_package/abaqus/parts.inp",
-    project_dir + "/eabm_package/abaqus/history_output.inp"
+    project_dir / "eabm_package/abaqus/single_element_compression.inp",
+    project_dir / "eabm_package/abaqus/assembly.inp",
+    project_dir / "eabm_package/abaqus/boundary.inp",
+    project_dir / "eabm_package/abaqus/field_output.inp",
+    project_dir / "eabm_package/abaqus/materials.inp",
+    project_dir / "eabm_package/abaqus/parts.inp",
+    project_dir / "eabm_package/abaqus/history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 for source_file in abaqus_source_list:
-    copy_target = "build_scons_quickstart/" + source_file.name
+    copy_target = variant_dir_base / source_file.name
     workflow.extend(env.Command(
         target=str(copy_target),
         source=str(source_file),
@@ -89,14 +89,12 @@ for source_file in abaqus_source_list:
 # Abaqus Solve
 abaqus_options='-double both'
 common_suffixes = ('odb', 'dat', 'msg', 'com', 'prt')
-solve_source_list = ["build_scons_quickstart/" + source_file.name for source_file in abaqus_source_list]
-solve_source_list.append("build_scons_quickstart/" + "single_element_mesh.inp")
+solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
+solve_source_list.append(str(variant_dir_base / "single_element_mesh.inp"))
 job_name = pathlib.Path(solve_source_list[0]).stem
-print(f"JOB NAME: {job_name}")
-print(f"JOB NAME: {job_name}")
 
 solve_suffixes = common_suffixes + ('sta',)
-solve_targets = ["build_scons_quickstart/" + str(job_name) + "." + suffix for suffix in solve_suffixes]
+solve_targets = [str(variant_dir_base / (job_name + "." + suffix)) for suffix in solve_suffixes]
 workflow.extend(env.AbaqusSolver(
     target=solve_targets,
     source=solve_source_list,
