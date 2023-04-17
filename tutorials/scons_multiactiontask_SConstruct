@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 
 import os
-import sys
 import pathlib
 
 # Inherit user's full environment
@@ -13,7 +12,6 @@ env.Default()
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'eabm_package/abaqus'
-abaqus_source_abspath = project_dir / abaqus_source_dir
 variant_dir_base = pathlib.Path('build_scons_multiactiontask')
 
 # Make the EABM package importable for Python and Abaqus Python environments
@@ -31,48 +29,45 @@ if env['abaqus']:
 
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} -- " \
-               "${journal_options}")
+    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} "
+           "-- ${journal_options}")
 
 abaqus_solver = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} " \
-                  "${abaqus_options} -interactive -ask_delete no")
+    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options}"
+           " -interactive -ask_delete no")
 
 # Add custom builders
 env.Append(BUILDERS=
-    {'AbaqusJournal': abaqus_journal,
-     'AbaqusSolver': abaqus_solver})
-
-# Simulation variables
-model = "single_element"
+           {'AbaqusJournal': abaqus_journal,
+            'AbaqusSolver': abaqus_solver})
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
 # Geometry, Partition, Mesh
 workflow.extend(env.Command(
-    target=[f"{variant_dir_base / model}_mesh.cae", f"{variant_dir_base / model}_mesh.inp"],
-    source=[f"{abaqus_source_abspath / model}_geometry.py",
-            f"{abaqus_source_abspath / model}_partition.py",
-            f"{abaqus_source_abspath / model}_mesh.py"],
-    action=[f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_geometry.py " \
-                "${abaqus_options} -- --output-file ${TARGET.filebase}",
-            f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_partition.py " \
-                "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}",
-            f"cd ${{TARGET.dir.abspath}} && ${{abaqus_program}} cae -noGui ${{SOURCE.dir.abspath}}/{model}_mesh.py " \
-                "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}"],
+    target=[str(variant_dir_base / "single_element_mesh.cae"), str(variant_dir_base / "single_element_mesh.inp")],
+    source=[str(project_dir / abaqus_source_dir / "single_element_geometry.py"),
+            str(project_dir / abaqus_source_dir / "single_element_partition.py"),
+            str(project_dir / abaqus_source_dir / "single_element_mesh.py")],
+    action=["cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_geometry.py "
+            "${abaqus_options} -- --output-file ${TARGET.filebase}",
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_partition.py"
+            " ${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}",
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_mesh.py "
+            "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}"],
     abaqus_program=env['abaqus']
 ))
 
 # SolverPrep
 abaqus_source_list = [
-    abaqus_source_abspath / f"{model}_compression.inp",
-    abaqus_source_abspath / "assembly.inp",
-    abaqus_source_abspath / "boundary.inp",
-    abaqus_source_abspath / "field_output.inp",
-    abaqus_source_abspath / "materials.inp",
-    abaqus_source_abspath / "parts.inp",
-    abaqus_source_abspath / "history_output.inp"
+    project_dir / abaqus_source_dir / "single_element_compression.inp",
+    project_dir / abaqus_source_dir / "assembly.inp",
+    project_dir / abaqus_source_dir / "boundary.inp",
+    project_dir / abaqus_source_dir / "field_output.inp",
+    project_dir / abaqus_source_dir / "materials.inp",
+    project_dir / abaqus_source_dir / "parts.inp",
+    project_dir / abaqus_source_dir / "history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 for source_file in abaqus_source_list:
@@ -83,24 +78,29 @@ for source_file in abaqus_source_list:
         action=Copy('${TARGET}', '${SOURCE}')))
 
 # Abaqus Solve
-abaqus_options='-double both'
-common_suffixes = ('odb', 'dat', 'msg', 'com', 'prt')
+abaqus_options = '-double both'
 solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
-solve_source_list.append(str(variant_dir_base / f"{model}_mesh.inp"))
-job_name = pathlib.Path(solve_source_list[0]).stem
+solve_source_list.append(str(variant_dir_base / "single_element_mesh.inp"))
 
-solve_suffixes = common_suffixes + ('sta',)
-solve_targets = [f"{variant_dir_base / job_name}.{suffix}" for suffix in solve_suffixes]
+solve_targets = [
+    str(variant_dir_base / "single_element_compression.odb"),
+    str(variant_dir_base / "single_element_compression.dat"),
+    str(variant_dir_base / "single_element_compression.msg"),
+    str(variant_dir_base / "single_element_compression.com"),
+    str(variant_dir_base / "single_element_compression.prt"),
+    str(variant_dir_base / "single_element_compression.sta")
+]
+
 workflow.extend(env.AbaqusSolver(
     target=solve_targets,
     source=solve_source_list,
     abaqus_program=env['abaqus'],
-    job_name=job_name,
+    job_name='single_element_compression',
     abaqus_options=abaqus_options))
 
 # Collector alias named after the model simulation
-env.Alias(model, workflow)
+env.Alias('single_element', workflow)
 
 if not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{model}' target(s)")
-    Ignore(['.', model], workflow)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring 'single_element' target(s)")
+    Ignore(['.', 'single_element'], workflow)
