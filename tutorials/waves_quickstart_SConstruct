@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 
 import os
-import sys
 import pathlib
-
 import waves
 
 # Inherit user's full environment
@@ -15,7 +13,6 @@ env.Default()
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'eabm_package/abaqus'
-abaqus_source_abspath = project_dir / abaqus_source_dir
 variant_dir_base = pathlib.Path('build_waves_quickstart')
 
 # Make the EABM package importable for Python and Abaqus Python environments
@@ -39,57 +36,55 @@ model = "single_element"
 workflow = []
 
 # Geometry
-journal_file = f"{model}_geometry"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py"],
+    target=[str(variant_dir_base / "single_element_geometry.cae")],
+    source=[str(project_dir / abaqus_source_dir / "single_element_geometry.py")],
     journal_options=journal_options))
 
 # Partition
-journal_file = f"{model}_partition"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_geometry.cae")],
+    target=[str(variant_dir_base / "single_element_partition.cae")],
+    source=[str(project_dir / abaqus_source_dir / "single_element_partition.py"),
+            str(variant_dir_base / "single_element_geometry.cae")],
     journal_options=journal_options))
 
 # Mesh
-journal_file = f"{model}_mesh"
 journal_options = ""
 workflow.extend(env.AbaqusJournal(
-    target=[f"{variant_dir_base / journal_file}.inp", f"{variant_dir_base / journal_file}.cae"],
-    source=[f"{abaqus_source_abspath / journal_file}.py", str(variant_dir_base / f"{model}_partition.cae")],
+    target=[str(variant_dir_base / "single_element_mesh.inp"),
+            str(variant_dir_base / "single_element_mesh.cae")],
+    source=[str(project_dir / abaqus_source_dir / "single_element_mesh.py"),
+            str(variant_dir_base / "single_element_partition.cae")],
     journal_options=journal_options))
 
 # SolverPrep
 abaqus_source_list = [
-    abaqus_source_abspath / f"{model}_compression.inp",
-    abaqus_source_abspath / "assembly.inp",
-    abaqus_source_abspath / "boundary.inp",
-    abaqus_source_abspath / "field_output.inp",
-    abaqus_source_abspath / "materials.inp",
-    abaqus_source_abspath / "parts.inp",
-    abaqus_source_abspath / "history_output.inp"
+    project_dir / abaqus_source_dir / "single_element_compression.inp",
+    project_dir / abaqus_source_dir / "assembly.inp",
+    project_dir / abaqus_source_dir / "boundary.inp",
+    project_dir / abaqus_source_dir / "field_output.inp",
+    project_dir / abaqus_source_dir / "materials.inp",
+    project_dir / abaqus_source_dir / "parts.inp",
+    project_dir / abaqus_source_dir / "history_output.inp"
 ]
-abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdirectory=variant_dir_base))
+workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdirectory=str(variant_dir_base)))
 
 # Abaqus Solve
-solve_source_list = [str(variant_dir_base /source_file.name.rstrip('.in')) for source_file in abaqus_source_list]
-solve_source_list.append([str(variant_dir_base / f"{journal_file}.inp")])
-job_name = pathlib.Path(solve_source_list[0]).stem
-abaqus_options='-double both'
+abaqus_options = '-double both'
+solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
+solve_source_list.append(str(variant_dir_base / "single_element_mesh.inp"))
 
 workflow.extend(env.AbaqusSolver(
-    target=[f"{variant_dir_base / job_name}.sta"],
+    target=[str(variant_dir_base / "single_element_compression.sta")],
     source=solve_source_list,
-    job_name=job_name,
+    job_name="single_element_compression",
     abaqus_options=abaqus_options))
 
 # Collector alias named after the model simulation
-env.Alias(model, workflow)
+env.Alias('single_element', workflow)
 
 if not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{model}' target(s)")
-    Ignore(['.', model], workflow)
+    print("Program 'abaqus' was not found in construction environment. Ignoring 'single_element' target(s)")
+    Ignore(['.', 'single_element'], workflow)
