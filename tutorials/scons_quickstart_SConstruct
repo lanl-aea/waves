@@ -29,17 +29,17 @@ if env['abaqus']:
 
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} "
-           "${abaqus_options} --${journal_options}")
+    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} " \
+    "${abaqus_options} -- ${journal_options}")
 
 abaqus_solver = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} "
-           "${abaqus_options} -interactive -ask_delete no")
+    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} " \
+    "${abaqus_options} -interactive -ask_delete no")
 
 # Add custom builders
 env.Append(BUILDERS=
-           {'AbaqusJournal': abaqus_journal,
-            'AbaqusSolver': abaqus_solver})
+    {'AbaqusJournal': abaqus_journal,
+     'AbaqusSolver': abaqus_solver})
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []

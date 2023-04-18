@@ -29,17 +29,17 @@ if env['abaqus']:
 
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} "
-           "-- ${journal_options}")
+    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} ${abaqus_options} -- " \
+    "${journal_options}")
 
 abaqus_solver = Builder(
-    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options}"
-           " -interactive -ask_delete no")
+    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} " \
+    "${abaqus_options} -interactive -ask_delete no")
 
 # Add custom builders
 env.Append(BUILDERS=
-           {'AbaqusJournal': abaqus_journal,
-            'AbaqusSolver': abaqus_solver})
+    {'AbaqusJournal': abaqus_journal,
+     'AbaqusSolver': abaqus_solver})
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -50,11 +50,11 @@ workflow.extend(env.Command(
     source=[str(project_dir / abaqus_source_dir / "single_element_geometry.py"),
             str(project_dir / abaqus_source_dir / "single_element_partition.py"),
             str(project_dir / abaqus_source_dir / "single_element_mesh.py")],
-    action=["cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_geometry.py "
+    action=["cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_geometry.py " \
             "${abaqus_options} -- --output-file ${TARGET.filebase}",
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_partition.py"
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_partition.py" \
             " ${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}",
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_mesh.py "
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_mesh.py " \
             "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}"],
     abaqus_program=env['abaqus']
 ))
