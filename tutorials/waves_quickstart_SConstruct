@@ -73,7 +73,7 @@ workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdire
 
 # Abaqus Solve
 abaqus_options = '-double both'
-solve_source_list = [str(variant_dir_base / source_file.name.rstrip('.in')) for source_file in abaqus_source_list]
+solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
 solve_source_list.append(str(variant_dir_base / "single_element_mesh.inp"))
 
 workflow.extend(env.AbaqusSolver(
