@@ -30,11 +30,11 @@ if env['abaqus']:
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
     action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} " \
-    "${abaqus_options} -- ${journal_options}")
+           "${abaqus_options} -- ${journal_options}")
 
 abaqus_solver = Builder(
     action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} " \
-    "${abaqus_options} -interactive -ask_delete no")
+           "${abaqus_options} -interactive -ask_delete no")
 
 # Add custom builders
 env.Append(BUILDERS=
