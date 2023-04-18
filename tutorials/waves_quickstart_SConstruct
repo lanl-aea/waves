@@ -69,7 +69,6 @@ abaqus_source_list = [
     project_dir / abaqus_source_dir / "parts.inp",
     project_dir / abaqus_source_dir / "history_output.inp"
 ]
-abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.builders.copy_substitute(abaqus_source_list, build_subdirectory=str(variant_dir_base)))
 
 # Abaqus Solve

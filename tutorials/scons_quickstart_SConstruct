@@ -81,7 +81,6 @@ abaqus_source_list = [
     project_dir / abaqus_source_dir / "parts.inp",
     project_dir / abaqus_source_dir / "history_output.inp"
 ]
-abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 for source_file in abaqus_source_list:
     copy_target = variant_dir_base / source_file.name
     workflow.extend(env.Command(
