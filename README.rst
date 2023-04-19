@@ -1,6 +1,5 @@
 .. target-start-do-not-remove
 
-.. _AEA Compute environment: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/
 .. _Conda: https://docs.conda.io/en/latest/
 .. _Conda installation: https://docs.conda.io/projects/conda/en/latest/user-guide/install/index.html
 .. _Conda environment management: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html
