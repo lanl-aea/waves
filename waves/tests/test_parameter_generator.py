@@ -291,7 +291,7 @@ class TestParameterDistributions:
              outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                ParameterDistributions(parameter_schema)
+                TestValidate = ParameterDistributions(parameter_schema)
                 mock_distros.assert_called_once()
             finally:
                 pass

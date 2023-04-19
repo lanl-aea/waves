@@ -49,7 +49,7 @@ class TestCustomStudy:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                CustomStudy(parameter_schema)
+                TestValidate = CustomStudy(parameter_schema)
             finally:
                 pass
 
