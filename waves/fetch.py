@@ -131,7 +131,7 @@ def print_list(things_to_print, prefix="\t", stream=sys.stdout):
         print(f"{prefix}{item}", file=stream)
 
 
-def recursive_copy(root_directory, relative_paths, destination, requested_paths=[],
+def recursive_copy(root_directory, relative_paths, destination, requested_paths=None,
                    overwrite=False, dry_run=False, print_available=False):
     """Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
     the shortest possible shared source prefix.
@@ -149,6 +149,8 @@ def recursive_copy(root_directory, relative_paths, destination, requested_paths=
     :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
 
+    if not requested_paths:
+        requested_paths = []
     # Build source tree
     source_files, missing_relative_paths = build_source_files(root_directory, relative_paths)
     longest_common_source_path = longest_common_path_prefix(source_files)
