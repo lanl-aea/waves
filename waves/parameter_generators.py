@@ -162,13 +162,15 @@ class _ParameterGenerator(ABC):
         if self.previous_parameter_study:
             self._merge_parameter_studies()
 
-    def generate(self, kwargs={}):
+    def generate(self, kwargs=None):
         """Deprecated public generate method.
 
         The parameter study is now generated as part of class instantiation. This method has been kept for backward
         compatibility. Method will overwrite the class instantiated study with a new parameter study each time it is
         called instead of duplicating or merging the parameter study.
         """
+        if not kwargs:
+            kwargs = {}
         warning_message = "Parameter studies are now generated during class instantiation. " \
                           "The generate method is deprecated and will be removed in a future release."
         warnings.warn(warning_message, DeprecationWarning)
