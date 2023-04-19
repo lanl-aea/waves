@@ -5,7 +5,6 @@ import sys
 import itertools
 import copy
 import hashlib
-import numbers
 import warnings
 
 import yaml
@@ -218,7 +217,7 @@ class _ParameterGenerator(ABC):
         self.write()
 
     def _write_dataset(self):
-        """Write Xarray Datset formatted output to STDOUT, separate set files, or a single file
+        """Write Xarray Dataset formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
         """
@@ -910,11 +909,11 @@ class SobolSequence(_ScipyGenerator):
         super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
-        # Get the ABC docstring into each paramter generator API
+        # Get the ABC docstring into each parameter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
     def write(self):
-        # Get the ABC docstring into each paramter generator API
+        # Get the ABC docstring into each parameter generator API
         super().write()
 
 
@@ -1006,11 +1005,11 @@ class ScipySampler(_ScipyGenerator):
         super()._generate(**kwargs)
 
     def parameter_study_to_dict(self, *args, **kwargs):
-        # Get the ABC docstring into each paramter generator API
+        # Get the ABC docstring into each parameter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
     def write(self):
-        # Get the ABC docstring into each paramter generator API
+        # Get the ABC docstring into each parameter generator API
         super().write()
 
 
@@ -1146,7 +1145,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         if self.sampler_class == "morris" and parameter_count < 2:
             raise ValueError("The SALib Morris sampler requires at least two parameters")
 
-    def _sampler_overrides(self, override_kwargs={}):
+    def _sampler_overrides(self, override_kwargs=None):
         """Provide sampler specific kwarg override dictionaries
 
         * sobol produces duplicate parameter sets for two parameters when ``calc_second_order`` is ``True``. Override
@@ -1156,6 +1155,8 @@ class SALibSampler(_ParameterGenerator, ABC):
         :return: override kwarg dictionary
         :rtype: dict
         """
+        if not override_kwargs:
+            override_kwargs = {}
         parameter_count = len(self._parameter_names)
         if self.sampler_class == "sobol" and parameter_count == 2:
             override_kwargs = {**override_kwargs, "calc_second_order": False}
@@ -1183,9 +1184,9 @@ class SALibSampler(_ParameterGenerator, ABC):
         super()._generate()
 
     def parameter_study_to_dict(self, *args, **kwargs):
-        # Get the ABC docstring into each paramter generator API
+        # Get the ABC docstring into each parameter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
     def write(self):
-        # Get the ABC docstring into each paramter generator API
+        # Get the ABC docstring into each parameter generator API
         super().write()
