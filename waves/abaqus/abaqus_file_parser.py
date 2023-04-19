@@ -797,7 +797,7 @@ class StaFileParser(AbaqusFileParser):
                 self.parsed["columns"].append(column)
 
             line = f.readline()
-        f.close
+        f.close()
 
 
 class OdbReportFileParser(AbaqusFileParser):
@@ -1468,7 +1468,7 @@ class OdbReportFileParser(AbaqusFileParser):
                         instance['referenceNode'] = dict()
                         instance['referenceNode']['nodes'] = list()
                         instance_names = set()
-                        while (line.startswith('      ')):
+                        while line.startswith('      '):
                             re_match = re.match(r'(\d+) from instance (.*)', line.strip(), re.IGNORECASE)
                             if re_match:
                                 if self.format == 'extract':
@@ -1962,7 +1962,6 @@ class OdbReportFileParser(AbaqusFileParser):
                             values[value_instance]['values'][self.current_step_count][time_index][index_key] \
                                 = data_value
         return line
-
 
     def get_position_index(self, position, position_type, values):
         """Get the index of the position (node or element) currently used
