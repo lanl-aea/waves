@@ -82,6 +82,7 @@ def main():
 
     return 0
 
+
 def file_exists(output_file):
     """Check if file exists and add time stamp to file name if it does
 
@@ -97,6 +98,7 @@ def file_exists(output_file):
         return str(new_output_file)
     else:
         return str(output_file)
+
 
 if __name__ == '__main__':
     sys.exit(main())  # pragma: no cover

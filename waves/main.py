@@ -182,7 +182,7 @@ def docs(print_local_path=False):
     return 0
 
 
-def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_clone_directory=None):
+def build(targets, scons_args=None, max_iterations=5, working_directory=None, git_clone_directory=None):
     """Submit an iterative SCons command
 
     SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
@@ -193,6 +193,8 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     :param int max_iterations: maximum number of iterations before the iterative loop is terminated
     :param str working_directory: Change the SCons command working directory
     """
+    if not scons_args:
+        scons_args = []
     if not targets:
         print("At least one target must be provided", file=sys.stderr)
         return 1
@@ -221,7 +223,7 @@ def build(targets, scons_args=[], max_iterations=5, working_directory=None, git_
     return 0
 
 
-def fetch(subcommand, root_directory, relative_paths, destination, requested_paths=[],
+def fetch(subcommand, root_directory, relative_paths, destination, requested_paths=None,
           overwrite=False, dry_run=False, print_available=False):
     """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
 
@@ -241,6 +243,8 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
     :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
+    if not requested_paths:
+        requested_paths = []
     if not root_directory.is_dir():
         # During "waves quickstart/fetch" sub-command(s), this should only be reached if the package installation structure
         # doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the

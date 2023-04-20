@@ -2,14 +2,13 @@
 """
 
 from unittest.mock import patch, mock_open
-import pathlib
 from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
-import xarray
 
 from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
+
 
 class TestParameterGenerator:
     """Class for testing ABC ParmeterGenerator"""
@@ -245,7 +244,7 @@ class TestParameterGenerator:
         assert numpy.all(returned_samples == DataParameterGenerator._samples)
 
 
-class TestParameterDistributions():
+class TestParameterDistributions:
     """Class for testing _ScipyGenerator ABC class common methods"""
 
     validate_input = {

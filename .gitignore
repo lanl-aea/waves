@@ -48,9 +48,6 @@ test_results.xml
 # NFS Files
 *.nfs*
 
-# NFS files
-*.nfs*
-
 # MacOSX
 .DS_Store
 

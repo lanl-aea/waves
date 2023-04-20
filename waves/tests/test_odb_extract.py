@@ -38,7 +38,8 @@ fake_odb = {
     }
 }
 
-class fake_process:
+
+class FakeProcess:
     returncode = 0
     stdout = b''
     stderr = b'valid command.'
@@ -146,7 +147,7 @@ def test_odb_extract():
          patch('select.select', return_value=['y', None, None]), \
          patch('sys.stdin', return_value='y'), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
-         patch('waves.abaqus.odb_extract.run', return_value=fake_process) as mock_run:
+         patch('waves.abaqus.odb_extract.run', return_value=FakeProcess) as mock_run:
         # Test case where yaml dump is called
         odb_extract.odb_extract(['sample.odb'], None, odb_report_args="odbreport all", output_type='yaml')
         mock_safe_dump.assert_called()
