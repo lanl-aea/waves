@@ -590,7 +590,7 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
        cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
     """
     if not post_action:
-        post_action = None
+        post_action = []
     action = [SCons.Defaults.Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}", symlink),
               f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
                   "\"[fList, pList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
