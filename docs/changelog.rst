@@ -24,6 +24,7 @@ Internal Changes
 Enhancements
 ============
 - Added ``--exclude-regex`` argument to ``visualize`` subcommand (:issue:`419`, :merge:`548`). By `Sergio Cordova`_.
+- Added abaqus explicit and standard emitters to ``AbaqusSolver`` (:issue:`443`, :merge:`554`). By `Sergio Cordova`_.
 
 *******************
 0.6.14 (2023-03-23)
