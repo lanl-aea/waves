@@ -9,6 +9,9 @@ import SCons.Node
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
+from waves._settings import _abaqus_datacheck_extensions
+from waves._settings import _abaqus_explicit_extensions
+from waves._settings import _abaqus_standard_extensions
 from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
@@ -352,10 +355,20 @@ def _abaqus_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    if not "job_name" in env or not env["job_name"]:
+    if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
     builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
     suffixes = builder_suffixes + _abaqus_solver_common_suffixes
+    try:
+        emitter = env['emitter'].lower()
+    except KeyError:
+        emitter = None
+    if emitter == 'standard':
+        suffixes.extend(_abaqus_standard_extensions)
+    elif emitter == 'explicit':
+        suffixes.extend(_abaqus_explicit_extensions)
+    elif emitter == 'datacheck':
+        suffixes.extend(_abaqus_datacheck_extensions)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
@@ -363,7 +376,7 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver(abaqus_program="abaqus", post_action=None):
+def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -412,10 +425,13 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None):
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``
+        ${TARGET.dir.abspath} && ${post_action}``.
+    :param str emitter: emit file extensions based on the value of this variable (standard/explicit/datacheck)
     """
     if not post_action:
         post_action = []
+    env = SCons.Environment.Environment()
+    env.Append(emitter=emitter)
     action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
