@@ -49,6 +49,16 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
         assert str(node.executor.action_list[0]) == expected_string
 
 
+def check_expected_output(nodes, solver):
+    """Verify the expected action string against a builder's target nodes
+
+    :param SCons.Node.NodeList nodes: Target node list returned by a builder
+    :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck).
+
+    """
+    pass  # TODO: check if the correct output file targets were generated.
+
+
 prepend_env_input = {
     "path exists": (f"{root_fs}program", True, does_not_raise()),
     "path does not exist": (f"{root_fs}notapath", False, pytest.raises(FileNotFoundError))
@@ -281,19 +291,22 @@ def test_abaqus_solver_emitter(job_name, target, source, expected, outcome):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 abaqus_solver_input = {
-    "default behavior": ("abaqus", [], 7, 1, ["input1.inp"]),
-    "different command": ("dummy", [], 7, 1, ["input2.inp"]),
-    "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"])
+    "default behavior": ("abaqus", [], 7, 1, ["input1.inp"], None),
+    "different command": ("dummy", [], 7, 1, ["input2.inp"], None),
+    "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"], None),
+    "standard solver": ("abaqus", [], 7, 1, ["input4.inp"], "standard"),
+    "explicit solver": ("abaqus", [], 7, 1, ["input5.inp"], "explicit"),
+    "datacheck solver": ("abaqus", [], 7, 1, ["input6.inp"], "datacheck"),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list",
+@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list, solver",
                          abaqus_solver_input.values(),
                          ids=abaqus_solver_input.keys())
-def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list):
+def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list, solver):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action)})
+    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action, solver)})
     nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
                        '${job_name}.abaqus_v6.env\n' \
@@ -301,6 +314,7 @@ def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, so
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
                        '> ${job_name}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_expected_targets(nodes, solver)
 
 
 copy_substitute_input = {

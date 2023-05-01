@@ -359,15 +359,12 @@ def _abaqus_solver_emitter(target, source, env):
         env["job_name"] = pathlib.Path(source[0].path).stem
     builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
     suffixes = builder_suffixes + _abaqus_solver_common_suffixes
-    try:
-        emitter = env['emitter'].lower()
-    except KeyError:
-        emitter = None
-    if emitter == 'standard':
+    solver = env['solver'].lower()
+    if solver == 'standard':
         suffixes.extend(_abaqus_standard_extensions)
-    elif emitter == 'explicit':
+    elif solver == 'explicit':
         suffixes.extend(_abaqus_explicit_extensions)
-    elif emitter == 'datacheck':
+    elif solver == 'datacheck':
         suffixes.extend(_abaqus_datacheck_extensions)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
@@ -376,7 +373,7 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
+def abaqus_solver(abaqus_program="abaqus", post_action=None, solver=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -426,12 +423,12 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``.
-    :param str emitter: emit file extensions based on the value of this variable (standard/explicit/datacheck)
+    :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck)
     """
     if not post_action:
         post_action = []
     env = SCons.Environment.Environment()
-    env.Append(emitter=emitter)
+    env.Append(solver=solver)
     action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
