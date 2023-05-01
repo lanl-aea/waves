@@ -357,15 +357,19 @@ def _abaqus_solver_emitter(target, source, env):
     """
     if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
-    builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
-    suffixes = builder_suffixes + _abaqus_solver_common_suffixes
-    solver = env['solver'].lower()
+    suffixes = [_stdout_extension, _abaqus_environment_extension]
+    try:
+        solver = env['solver'].lower()
+    except KeyError:
+        solver = None
     if solver == 'standard':
         suffixes.extend(_abaqus_standard_extensions)
     elif solver == 'explicit':
         suffixes.extend(_abaqus_explicit_extensions)
     elif solver == 'datacheck':
         suffixes.extend(_abaqus_datacheck_extensions)
+    else:
+        suffixes.extend(_abaqus_solver_common_suffixes)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"

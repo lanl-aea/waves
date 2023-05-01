@@ -12,6 +12,12 @@ import SCons.Node.FS
 
 from waves import builders
 from waves._settings import _cd_action_prefix
+from waves._settings import _abaqus_environment_extension
+from waves._settings import _abaqus_datacheck_extensions
+from waves._settings import _abaqus_explicit_extensions
+from waves._settings import _abaqus_standard_extensions
+from waves._settings import _abaqus_solver_common_suffixes
+from waves._settings import _stdout_extension
 
 
 fs = SCons.Node.FS.FS()
@@ -49,14 +55,26 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
         assert str(node.executor.action_list[0]) == expected_string
 
 
-def check_expected_output(nodes, solver):
+def check_expected_targets(nodes, solver, stem):
     """Verify the expected action string against a builder's target nodes
 
     :param SCons.Node.NodeList nodes: Target node list returned by a builder
     :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck).
+    :param str stem: stem name of file
 
     """
     pass  # TODO: check if the correct output file targets were generated.
+    expected_suffixes = [_stdout_extension, _abaqus_environment_extension]
+    if solver == 'standard':
+        expected_suffixes.extend(_abaqus_standard_extensions)
+    elif solver == 'explicit':
+        expected_suffixes.extend(_abaqus_explicit_extensions)
+    elif solver == 'datacheck':
+        expected_suffixes.extend(_abaqus_datacheck_extensions)
+    else:
+        expected_suffixes.extend(_abaqus_solver_common_suffixes)
+    suffixes = [str(node).split(stem)[-1] for node in nodes]
+    assert set(expected_suffixes) == set(suffixes)
 
 
 prepend_env_input = {
@@ -314,7 +332,7 @@ def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, so
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
                        '> ${job_name}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
-    check_expected_targets(nodes, solver)
+    check_expected_targets(nodes, solver, source_list[0].split(".")[0])
 
 
 copy_substitute_input = {
