@@ -358,18 +358,64 @@ def _abaqus_solver_emitter(target, source, env):
     if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
     suffixes = [_stdout_extension, _abaqus_environment_extension]
-    try:
-        solver = env['solver'].lower()
-    except KeyError:
-        solver = None
-    if solver == 'standard':
-        suffixes.extend(_abaqus_standard_extensions)
-    elif solver == 'explicit':
-        suffixes.extend(_abaqus_explicit_extensions)
-    elif solver == 'datacheck':
-        suffixes.extend(_abaqus_datacheck_extensions)
-    else:
-        suffixes.extend(_abaqus_solver_common_suffixes)
+    suffixes.extend(_abaqus_solver_common_suffixes)
+    build_subdirectory = _build_subdirectory(target)
+    for suffix in suffixes:
+        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
+        target.append(str(emitter_target))
+    return target, source
+
+
+def _abaqus_standard_solver_emitter(target, source, env):
+    """Appends the abaqus_solver builder target list with the builder managed targets
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the output database as a target, e.g. ``job_name.odb``
+    """
+    if "job_name" not in env or not env["job_name"]:
+        env["job_name"] = pathlib.Path(source[0].path).stem
+    suffixes = [_stdout_extension, _abaqus_environment_extension]
+    suffixes.extend(_abaqus_standard_extensions)
+    build_subdirectory = _build_subdirectory(target)
+    for suffix in suffixes:
+        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
+        target.append(str(emitter_target))
+    return target, source
+
+
+def _abaqus_explicit_solver_emitter(target, source, env):
+    """Appends the abaqus_solver builder target list with the builder managed targets
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the output database as a target, e.g. ``job_name.odb``
+    """
+    if "job_name" not in env or not env["job_name"]:
+        env["job_name"] = pathlib.Path(source[0].path).stem
+    suffixes = [_stdout_extension, _abaqus_environment_extension]
+    suffixes.extend(_abaqus_explicit_extensions)
+    build_subdirectory = _build_subdirectory(target)
+    for suffix in suffixes:
+        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
+        target.append(str(emitter_target))
+    return target, source
+
+
+def _abaqus_datacheck_solver_emitter(target, source, env):
+    """Appends the abaqus_solver builder target list with the builder managed targets
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the output database as a target, e.g. ``job_name.odb``
+    """
+    if "job_name" not in env or not env["job_name"]:
+        env["job_name"] = pathlib.Path(source[0].path).stem
+    suffixes = [_stdout_extension, _abaqus_environment_extension]
+    suffixes.extend(_abaqus_datacheck_extensions)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
@@ -431,16 +477,22 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, solver=None):
     """
     if not post_action:
         post_action = []
-    env = SCons.Environment.Environment()
-    env.Append(solver=solver)
     action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
+    if solver == 'standard':
+        emitter = _abaqus_standard_solver_emitter
+    elif solver == 'explicit':
+        emitter = _abaqus_explicit_solver_emitter
+    elif solver == 'datacheck':
+        emitter = _abaqus_datacheck_solver_emitter
+    else:
+        emitter = _abaqus_solver_emitter
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_abaqus_solver_emitter)
+        emitter=emitter)
     return abaqus_solver_builder
 
 

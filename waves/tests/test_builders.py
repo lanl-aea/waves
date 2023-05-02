@@ -63,7 +63,6 @@ def check_expected_targets(nodes, solver, stem):
     :param str stem: stem name of file
 
     """
-    pass  # TODO: check if the correct output file targets were generated.
     expected_suffixes = [_stdout_extension, _abaqus_environment_extension]
     if solver == 'standard':
         expected_suffixes.extend(_abaqus_standard_extensions)
@@ -312,9 +311,9 @@ abaqus_solver_input = {
     "default behavior": ("abaqus", [], 7, 1, ["input1.inp"], None),
     "different command": ("dummy", [], 7, 1, ["input2.inp"], None),
     "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"], None),
-    "standard solver": ("abaqus", [], 7, 1, ["input4.inp"], "standard"),
-    "explicit solver": ("abaqus", [], 7, 1, ["input5.inp"], "explicit"),
-    "datacheck solver": ("abaqus", [], 7, 1, ["input6.inp"], "datacheck"),
+    "standard solver": ("abaqus", [], 16, 1, ["input4.inp"], "standard"),
+    "explicit solver": ("abaqus", [], 15, 1, ["input5.inp"], "explicit"),
+    "datacheck solver": ("abaqus", [], 12, 1, ["input6.inp"], "datacheck"),
 }
 
 
