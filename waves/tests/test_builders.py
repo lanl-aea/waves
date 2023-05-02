@@ -331,7 +331,7 @@ def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, so
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
                        '> ${job_name}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
-    check_expected_targets(nodes, solver, source_list[0].split(".")[0])
+    check_expected_targets(nodes, solver, pathlib.Path(source_list[0]).stem)
 
 
 copy_substitute_input = {
