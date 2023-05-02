@@ -347,7 +347,7 @@ def abaqus_journal(abaqus_program="abaqus", post_action=None):
     return abaqus_journal_builder
 
 
-def _abaqus_solver_emitter(target, source, env):
+def _abaqus_solver_base_emitter(target, source, env, suffixes_to_extend):
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -358,12 +358,23 @@ def _abaqus_solver_emitter(target, source, env):
     if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
     suffixes = [_stdout_extension, _abaqus_environment_extension]
-    suffixes.extend(_abaqus_solver_common_suffixes)
+    suffixes.extend(suffixes_to_extend)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
         target.append(str(emitter_target))
     return target, source
+
+
+def _abaqus_solver_emitter(target, source, env):
+    """Appends the abaqus_solver builder target list with the builder managed targets
+
+    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
+    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
+    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
+    provide the output database as a target, e.g. ``job_name.odb``
+    """
+    return _abaqus_solver_base_emitter(target, source, env, _abaqus_solver_common_suffixes)
 
 
 def _abaqus_standard_solver_emitter(target, source, env):
@@ -374,15 +385,7 @@ def _abaqus_standard_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    if "job_name" not in env or not env["job_name"]:
-        env["job_name"] = pathlib.Path(source[0].path).stem
-    suffixes = [_stdout_extension, _abaqus_environment_extension]
-    suffixes.extend(_abaqus_standard_extensions)
-    build_subdirectory = _build_subdirectory(target)
-    for suffix in suffixes:
-        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
-        target.append(str(emitter_target))
-    return target, source
+    return _abaqus_solver_base_emitter(target, source, env, _abaqus_standard_extensions)
 
 
 def _abaqus_explicit_solver_emitter(target, source, env):
@@ -393,15 +396,7 @@ def _abaqus_explicit_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    if "job_name" not in env or not env["job_name"]:
-        env["job_name"] = pathlib.Path(source[0].path).stem
-    suffixes = [_stdout_extension, _abaqus_environment_extension]
-    suffixes.extend(_abaqus_explicit_extensions)
-    build_subdirectory = _build_subdirectory(target)
-    for suffix in suffixes:
-        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
-        target.append(str(emitter_target))
-    return target, source
+    return _abaqus_solver_base_emitter(target, source, env, _abaqus_explicit_extensions)
 
 
 def _abaqus_datacheck_solver_emitter(target, source, env):
@@ -412,15 +407,7 @@ def _abaqus_datacheck_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    if "job_name" not in env or not env["job_name"]:
-        env["job_name"] = pathlib.Path(source[0].path).stem
-    suffixes = [_stdout_extension, _abaqus_environment_extension]
-    suffixes.extend(_abaqus_datacheck_extensions)
-    build_subdirectory = _build_subdirectory(target)
-    for suffix in suffixes:
-        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
-        target.append(str(emitter_target))
-    return target, source
+    return _abaqus_solver_base_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
 def abaqus_solver(abaqus_program="abaqus", post_action=None, solver=None):
