@@ -347,7 +347,7 @@ def abaqus_journal(abaqus_program="abaqus", post_action=None):
     return abaqus_journal_builder
 
 
-def _abaqus_solver_base_emitter(target, source, env, suffixes_to_extend):
+def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -355,6 +355,8 @@ def _abaqus_solver_base_emitter(target, source, env, suffixes_to_extend):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
+    if not suffixes_to_extend:
+        suffixes_to_extend = _abaqus_solver_common_suffixes
     if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
     suffixes = [_stdout_extension, _abaqus_environment_extension]
@@ -366,17 +368,6 @@ def _abaqus_solver_base_emitter(target, source, env, suffixes_to_extend):
     return target, source
 
 
-def _abaqus_solver_emitter(target, source, env):
-    """Appends the abaqus_solver builder target list with the builder managed targets
-
-    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
-    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
-    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the output database as a target, e.g. ``job_name.odb``
-    """
-    return _abaqus_solver_base_emitter(target, source, env, _abaqus_solver_common_suffixes)
-
-
 def _abaqus_standard_solver_emitter(target, source, env):
     """Appends the abaqus_solver builder target list with the builder managed targets
 
@@ -385,7 +376,7 @@ def _abaqus_standard_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    return _abaqus_solver_base_emitter(target, source, env, _abaqus_standard_extensions)
+    return _abaqus_solver_emitter(target, source, env, _abaqus_standard_extensions)
 
 
 def _abaqus_explicit_solver_emitter(target, source, env):
@@ -396,7 +387,7 @@ def _abaqus_explicit_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    return _abaqus_solver_base_emitter(target, source, env, _abaqus_explicit_extensions)
+    return _abaqus_solver_emitter(target, source, env, _abaqus_explicit_extensions)
 
 
 def _abaqus_datacheck_solver_emitter(target, source, env):
@@ -407,7 +398,7 @@ def _abaqus_datacheck_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    return _abaqus_solver_base_emitter(target, source, env, _abaqus_datacheck_extensions)
+    return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
 def abaqus_solver(abaqus_program="abaqus", post_action=None, solver=None):
