@@ -20,7 +20,9 @@ function main(name)
     addRequired(parser, 'name', isText);
     parse(parser, name);
 
-    file_id = fopen([name '.txt'], 'w');
+    extension = '.txt';
+    fileName = append(name, extension);
+    file_id = fopen(fileName, 'w');
     fprintf(file_id, 'Hello %s!\n', name);
     fclose(file_id);
 
