@@ -438,6 +438,7 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
         * "standard": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
         * "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
         * "datacheck": [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
+        * default value: [".odb", ".dat", ".msg", ".com", ".prt"]
     """
     if not post_action:
         post_action = []
