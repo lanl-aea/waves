@@ -25,6 +25,11 @@ Enhancements
 ============
 - Added ``--exclude-regex`` argument to ``visualize`` subcommand (:issue:`419`, :merge:`548`). By `Sergio Cordova`_.
 - Added abaqus explicit and standard emitters to ``AbaqusSolver`` (:issue:`443`, :merge:`554`). By `Sergio Cordova`_.
+- Add Matlab script parent directory to Matlab path in the Matlab script builder action. No longer necessary to copy
+  Matlab script(s) to build directory prior to execution. Matlab script copy operation no longer performed by default.
+  Builder still considered "experimental" until a tutorial is released (:issue:`456`, :merge:`555`). By `Kyle
+  Brindley`_.
+- Add an example Matlab input parser to the Matlab tutorial script (:issue:`420`, :merge:`556`). By `Kyle Brindley`_.
 
 *******************
 0.6.14 (2023-03-23)
