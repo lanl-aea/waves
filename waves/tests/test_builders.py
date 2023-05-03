@@ -311,19 +311,19 @@ abaqus_solver_input = {
     "default behavior": ("abaqus", [], 7, 1, ["input1.inp"], None),
     "different command": ("dummy", [], 7, 1, ["input2.inp"], None),
     "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"], None),
-    "standard solver": ("abaqus", [], 16, 1, ["input4.inp"], "standard"),
-    "explicit solver": ("abaqus", [], 15, 1, ["input5.inp"], "explicit"),
-    "datacheck solver": ("abaqus", [], 12, 1, ["input6.inp"], "datacheck"),
+    "standard solver": ("abaqus", [], 8, 1, ["input4.inp"], "standard"),
+    "explicit solver": ("abaqus", [], 8, 1, ["input5.inp"], "explicit"),
+    "datacheck solver": ("abaqus", [], 11, 1, ["input6.inp"], "datacheck"),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list, solver",
+@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list, emitter",
                          abaqus_solver_input.values(),
                          ids=abaqus_solver_input.keys())
-def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list, solver):
+def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list, emitter):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action, solver)})
+    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action, emitter)})
     nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
                        '${job_name}.abaqus_v6.env\n' \
@@ -331,7 +331,7 @@ def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, so
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
                        '> ${job_name}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
-    check_expected_targets(nodes, solver, pathlib.Path(source_list[0]).stem)
+    check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem)
 
 
 copy_substitute_input = {

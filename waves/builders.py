@@ -401,7 +401,7 @@ def _abaqus_datacheck_solver_emitter(target, source, env):
     return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
-def abaqus_solver(abaqus_program="abaqus", post_action=None, solver=None):
+def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -451,7 +451,10 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, solver=None):
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``.
-    :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck)
+    :param str emitter: emit file extensions based on the value of this variable
+         "standard": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+         "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+         "datacheck": [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
     """
     if not post_action:
         post_action = []
@@ -460,17 +463,17 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, solver=None):
               f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
-    if solver == 'standard':
-        emitter = _abaqus_standard_solver_emitter
-    elif solver == 'explicit':
-        emitter = _abaqus_explicit_solver_emitter
-    elif solver == 'datacheck':
-        emitter = _abaqus_datacheck_solver_emitter
+    if emitter == 'standard':
+        abaqus_emitter = _abaqus_standard_solver_emitter
+    elif emitter == 'explicit':
+        abaqus_emitter = _abaqus_explicit_solver_emitter
+    elif emitter == 'datacheck':
+        abaqus_emitter = _abaqus_datacheck_solver_emitter
     else:
-        emitter = _abaqus_solver_emitter
+        abaqus_emitter = _abaqus_solver_emitter
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
-        emitter=emitter)
+        emitter=abaqus_emitter)
     return abaqus_solver_builder
 
 
