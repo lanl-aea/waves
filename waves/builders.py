@@ -591,13 +591,15 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
     """
     if not post_action:
         post_action = []
-    action = [SCons.Defaults.Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}", symlink),
-              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
-                  "\"[fList, pList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
+    action = [f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
+                  "\"path(path, '${SOURCE.dir.abspath}'); " \
+                  "[fList, pList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
                   "display(fList); display(struct2table(pList, 'AsArray', true)); exit;\" " \
                   f"> ${{TARGET.filebase}}{_matlab_environment_extension} 2>&1",
-              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch \"${{SOURCE.filebase}}(" \
-                  f"${{script_options}})\" > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
+                  "\"path(path, '${SOURCE.dir.abspath}'); " \
+                  "${SOURCE.filebase}(${script_options})\" " \
+                  f"> ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
