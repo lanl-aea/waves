@@ -22,9 +22,9 @@ function main(name)
 
     extension = '.txt';
     fileName = append(name, extension);
-    file_id = fopen(fileName, 'w');
-    fprintf(file_id, 'Hello %s!\n', name);
-    fclose(file_id);
+    fileID = fopen(fileName, 'w');
+    fprintf(fileID, 'Hello %s!\n', name);
+    fclose(fileID);
 
     exit;
 
