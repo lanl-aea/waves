@@ -379,7 +379,7 @@ def _abaqus_explicit_solver_emitter(target, source, env):
 
 
 def _abaqus_datacheck_solver_emitter(target, source, env):
-    """Passes the datacheck specific extensions to :func:`_abaqus_solver_emitter`"""
+    """Passes the datacheck specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
@@ -446,7 +446,8 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
               f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
-    emitter = emitter.lower()
+    if emitter:
+        emitter = emitter.lower()
     if emitter == 'standard':
         abaqus_emitter = _abaqus_standard_solver_emitter
     elif emitter == 'explicit':
