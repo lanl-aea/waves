@@ -417,13 +417,15 @@ def test_matlab_script(matlab_program, post_action, node_count, action_count, ta
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action, symlink=False)})
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
-    expected_string = 'Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}")\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch "[fList, pList] = ' \
-                          'matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); display(fList); ' \
-                          'display(struct2table(pList, \'AsArray\', true)); exit;" > ${TARGET.filebase}.matlab.env ' \
-                          '2>&1\n' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
+                          '"path(path, \'${SOURCE.dir.abspath}\'); ' \
+                          '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
+                          'disp(cell2table(fileList)); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
+                          '> ${TARGET.filebase}.matlab.env 2>&1\n' \
                       f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
-                          '"${SOURCE.filebase}(${script_options})\" > ${TARGET.filebase}.stdout 2>&1'
+                          '"path(path, \'${SOURCE.dir.abspath}\'); ' \
+                          '${SOURCE.filebase}(${script_options})\" ' \
+                          '> ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
