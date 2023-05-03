@@ -369,35 +369,17 @@ def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
 
 
 def _abaqus_standard_solver_emitter(target, source, env):
-    """Appends the abaqus_solver builder target list with the builder managed targets
-
-    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
-    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
-    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the output database as a target, e.g. ``job_name.odb``
-    """
+    """Passes the standard specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_standard_extensions)
 
 
 def _abaqus_explicit_solver_emitter(target, source, env):
-    """Appends the abaqus_solver builder target list with the builder managed targets
-
-    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
-    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
-    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the output database as a target, e.g. ``job_name.odb``
-    """
+    """Passes the explicit specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_explicit_extensions)
 
 
 def _abaqus_datacheck_solver_emitter(target, source, env):
-    """Appends the abaqus_solver builder target list with the builder managed targets
-
-    If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
-    directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
-    least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
-    provide the output database as a target, e.g. ``job_name.odb``
-    """
+    """Passes the datacheck specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
@@ -452,9 +434,10 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``.
     :param str emitter: emit file extensions based on the value of this variable
-         "standard": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
-         "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
-         "datacheck": [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
+
+        * "standard": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+        * "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+        * "datacheck": [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
     """
     if not post_action:
         post_action = []
@@ -463,11 +446,11 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
               f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
-    if emitter == 'standard':
+    if emitter.lower() == 'standard':
         abaqus_emitter = _abaqus_standard_solver_emitter
-    elif emitter == 'explicit':
+    elif emitter.lower() == 'explicit':
         abaqus_emitter = _abaqus_explicit_solver_emitter
-    elif emitter == 'datacheck':
+    elif emitter.lower() == 'datacheck':
         abaqus_emitter = _abaqus_datacheck_solver_emitter
     else:
         abaqus_emitter = _abaqus_solver_emitter
