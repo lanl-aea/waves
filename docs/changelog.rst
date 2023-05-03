@@ -29,6 +29,8 @@ Enhancements
   Builder still considered "experimental" until a tutorial is released (:issue:`456`, :merge:`555`). By `Kyle
   Brindley`_.
 - Add an example Matlab input parser to the Matlab tutorial script (:issue:`420`, :merge:`556`). By `Kyle Brindley`_.
+- Add an example Matlab docstring in the sphinxcontrib-matlabdomain style (:issue:`457`, :merge:`557`). By `Kyle
+  Brindley`_.
 
 *******************
 0.6.14 (2023-03-23)
