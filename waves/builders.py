@@ -564,19 +564,17 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
 
        Experimental implementation is subject to change
 
-    This builder requires that the Matlab script to execute is provided by absolute path and the first source in the
-    list. The builder returned by this function accepts all SCons Builder arguments and adds the ``script_options`` and
-    ``matlab_options`` string arguments.
-
-    First the Matlab script is copied to the first target file's build directory and then the script is executed
-    locally.
+    This builder requires that the Matlab script is the first source in the list. The builder returned by this function
+    accepts all SCons Builder arguments and adds the ``script_options`` and ``matlab_options`` string arguments. The
+    parent directory absolute path is added to the Matlab ``path`` variable prior to execution. All required Matlab
+    files should be co-located in the same source directory.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
     directory prior to executing the python script.
 
-    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout to the
-    ``target`` list.
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout and
+    ``target[0].matlab.env to the ``target`` list.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
@@ -586,8 +584,7 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
     .. code-block::
        :caption: Matlab script builder action
 
-       Copy("${TARGET.dir.abspath}", ${SOURCE.abspath}, False)
-       cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
     """
     if not post_action:
         post_action = []
