@@ -420,7 +420,7 @@ def test_matlab_script(matlab_program, post_action, node_count, action_count, ta
     expected_string = f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
-                          'disp(fileList); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
+                          'disp(cell2table(fileList)); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
                           '> ${TARGET.filebase}.matlab.env 2>&1\n' \
                       f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
