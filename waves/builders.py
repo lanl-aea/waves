@@ -590,8 +590,8 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
         post_action = []
     action = [f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
-                  "[fList, pList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
-                  "display(fList); display(struct2table(pList, 'AsArray', true)); exit;\" " \
+                  "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
+                  "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
                   f"> ${{TARGET.filebase}}{_matlab_environment_extension} 2>&1",
               f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
