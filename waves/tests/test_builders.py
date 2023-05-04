@@ -377,7 +377,7 @@ abaqus_solver_input = {
     "standard solver": ("abaqus", [], 8, 1, ["input4.inp"], "standard", None),
     "explicit solver": ("abaqus", [], 8, 1, ["input5.inp"], "explicit", None),
     "datacheck solver": ("abaqus", [], 11, 1, ["input6.inp"], "datacheck", None),
-    "standard solver, suffixes override": ("abaqus", [], 8, 1, ["input4.inp"], "standard", None),
+    "standard solver, suffixes override": ("abaqus", [], 3, 1, ["input4.inp"], "standard", [".odb"]),
 }
 
 
