@@ -2,7 +2,6 @@
 """
 
 from unittest.mock import patch
-from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy

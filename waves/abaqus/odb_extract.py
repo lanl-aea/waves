@@ -22,6 +22,7 @@ from shutil import which
 from waves.abaqus import abaqus_file_parser
 from waves.abaqus import _settings
 
+
 def get_parser():
     """Get parser object for command line options
 
@@ -215,7 +216,7 @@ def print_warning(verbose, message):
     Log a message to the screen
 
     :param bool verbose: Whether to print or not
-    :param bool message: message to print
+    :param str message: message to print
     """
     if verbose:
         print(message)
@@ -226,7 +227,7 @@ def print_critical(message):
     Log a message to the screen and exit
 
     :param bool verbose: Whether to print or not
-    :param bool message: message to print
+    :param str message: message to print
     """
     print(message)
     raise SystemExit(-1)

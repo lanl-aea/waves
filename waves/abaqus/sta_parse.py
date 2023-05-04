@@ -14,6 +14,7 @@ from pathlib import Path
 from waves.abaqus import abaqus_file_parser
 from waves.abaqus import _settings
 
+
 def get_parser():
     """Get parser object for command line options
 
@@ -63,6 +64,7 @@ def main():
     parsed_sta.write_yaml(output_file)
 
     return 0
+
 
 if __name__ == '__main__':
     sys.exit(main())  # pragma: no cover

@@ -12,6 +12,12 @@ import SCons.Node.FS
 
 from waves import builders
 from waves._settings import _cd_action_prefix
+from waves._settings import _abaqus_environment_extension
+from waves._settings import _abaqus_datacheck_extensions
+from waves._settings import _abaqus_explicit_extensions
+from waves._settings import _abaqus_standard_extensions
+from waves._settings import _abaqus_solver_common_suffixes
+from waves._settings import _stdout_extension
 
 
 fs = SCons.Node.FS.FS()
@@ -47,6 +53,29 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
         node.get_executor()
         assert len(node.executor.action_list) == action_count
         assert str(node.executor.action_list[0]) == expected_string
+
+
+def check_expected_targets(nodes, solver, stem, suffixes):
+    """Verify the expected action string against a builder's target nodes
+
+    :param SCons.Node.NodeList nodes: Target node list returned by a builder
+    :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck).
+    :param str stem: stem name of file
+    :param list suffixes: list of override suffixes provided to the task
+    """
+    expected_suffixes = [_stdout_extension, _abaqus_environment_extension]
+    if suffixes:
+        expected_suffixes.extend(suffixes)
+    elif solver == 'standard':
+        expected_suffixes.extend(_abaqus_standard_extensions)
+    elif solver == 'explicit':
+        expected_suffixes.extend(_abaqus_explicit_extensions)
+    elif solver == 'datacheck':
+        expected_suffixes.extend(_abaqus_datacheck_extensions)
+    else:
+        expected_suffixes.extend(_abaqus_solver_common_suffixes)
+    suffixes = [str(node).split(stem)[-1] for node in nodes]
+    assert set(expected_suffixes) == set(suffixes)
 
 
 prepend_env_input = {
@@ -240,37 +269,98 @@ def test_abaqus_journal(abaqus_program, post_action, node_count, action_count, t
 
 source_file = fs.File("root.inp")
 solver_emitter_input = {
-    "empty targets": ("job",
-                      [],
-                      [source_file],
-                      ["job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
-                      does_not_raise()),
-    "one targets": ("job",
-                    ["job.sta"],
-                    [source_file],
-                    ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
-                    does_not_raise()),
-    "subdirectory": ("job",
-                    ["set1/job.sta"],
-                    [source_file],
-                    ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
-                     f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt"],
-                    does_not_raise()),
-    "missing job_name": (None,
-                        [],
-                        [source_file],
-                        ["root.stdout", "root.abaqus_v6.env", "root.odb", "root.dat", "root.msg", "root.com", "root.prt"],
-                        does_not_raise())
+    "empty targets": (
+        "job",
+        None,
+        [],
+        [source_file],
+        ["job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
+        does_not_raise()
+    ),
+    "empty targets, suffixes override": (
+        "job",
+        [".odb"],
+        [],
+        [source_file],
+        ["job.stdout", "job.abaqus_v6.env", "job.odb"],
+        does_not_raise()
+    ),
+    "empty targets, suffixes override empty list": (
+        "job",
+        [],
+        [],
+        [source_file],
+        ["job.stdout", "job.abaqus_v6.env"],
+        does_not_raise()
+    ),
+    "one targets": (
+        "job",
+        None,
+        ["job.sta"],
+        [source_file],
+        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
+        does_not_raise()
+    ),
+    "one targets, override suffixes": (
+        "job",
+        [".odb"],
+        ["job.sta"],
+        [source_file],
+        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb"],
+        does_not_raise()
+    ),
+    "one targets, override suffixes string": (
+        "job",
+        ".odb",
+        ["job.sta"],
+        [source_file],
+        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb"],
+        does_not_raise()
+    ),
+    "subdirectory": (
+        "job",
+        None,
+        ["set1/job.sta"],
+        [source_file],
+        ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
+         f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt"],
+        does_not_raise()
+    ),
+    "subdirectory, override suffixes": (
+        "job",
+        [".odb"],
+        ["set1/job.sta"],
+        [source_file],
+        ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb"],
+        does_not_raise()
+    ),
+    "missing job_name": (
+        None,
+        None,
+        [],
+        [source_file],
+        ["root.stdout", "root.abaqus_v6.env", "root.odb", "root.dat", "root.msg", "root.com", "root.prt"],
+        does_not_raise()
+    ),
+    "missing job_name, override suffixes": (
+        None,
+        [".odb"],
+        [],
+        [source_file],
+        ["root.stdout", "root.abaqus_v6.env", "root.odb"],
+        does_not_raise()
+    )
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("job_name, target, source, expected, outcome",
+@pytest.mark.parametrize("job_name, suffixes, target, source, expected, outcome",
                          solver_emitter_input.values(),
                          ids=solver_emitter_input.keys())
-def test_abaqus_solver_emitter(job_name, target, source, expected, outcome):
+def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, outcome):
     env = SCons.Environment.Environment()
     env["job_name"] = job_name
+    env["suffixes"] = suffixes
     with outcome:
         try:
             builders._abaqus_solver_emitter(target, source, env)
@@ -281,26 +371,31 @@ def test_abaqus_solver_emitter(job_name, target, source, expected, outcome):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 abaqus_solver_input = {
-    "default behavior": ("abaqus", [], 7, 1, ["input1.inp"]),
-    "different command": ("dummy", [], 7, 1, ["input2.inp"]),
-    "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"])
+    "default behavior": ("abaqus", [], 7, 1, ["input1.inp"], None, None),
+    "different command": ("dummy", [], 7, 1, ["input2.inp"], None, None),
+    "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"], None, None),
+    "standard solver": ("abaqus", [], 8, 1, ["input4.inp"], "standard", None),
+    "explicit solver": ("abaqus", [], 8, 1, ["input5.inp"], "explicit", None),
+    "datacheck solver": ("abaqus", [], 11, 1, ["input6.inp"], "datacheck", None),
+    "standard solver, suffixes override": ("abaqus", [], 3, 1, ["input4.inp"], "standard", [".odb"]),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list",
+@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list, emitter, suffixes",
                          abaqus_solver_input.values(),
                          ids=abaqus_solver_input.keys())
-def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list):
+def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list, emitter, suffixes):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action)})
-    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="")
+    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action, emitter)})
+    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
     expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
                        '${job_name}.abaqus_v6.env\n' \
                       f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ' \
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
                        '> ${job_name}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
 
 copy_substitute_input = {
@@ -417,13 +512,15 @@ def test_matlab_script(matlab_program, post_action, node_count, action_count, ta
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action, symlink=False)})
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
-    expected_string = 'Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}")\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch "[fList, pList] = ' \
-                          'matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); display(fList); ' \
-                          'display(struct2table(pList, \'AsArray\', true)); exit;" > ${TARGET.filebase}.matlab.env ' \
-                          '2>&1\n' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
+                          '"path(path, \'${SOURCE.dir.abspath}\'); ' \
+                          '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
+                          'disp(cell2table(fileList)); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
+                          '> ${TARGET.filebase}.matlab.env 2>&1\n' \
                       f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
-                          '"${SOURCE.filebase}(${script_options})\" > ${TARGET.filebase}.stdout 2>&1'
+                          '"path(path, \'${SOURCE.dir.abspath}\'); ' \
+                          '${SOURCE.filebase}(${script_options})\" ' \
+                          '> ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 

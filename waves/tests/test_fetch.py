@@ -232,7 +232,6 @@ def test_print_list():
     pass
 
 
-
 @pytest.mark.parametrize("root_directory, source_files, source_tree, destination_tree",
                          [(root_directory, source_files, two_file_source_tree, two_file_destination_tree)])
 @pytest.mark.unittest

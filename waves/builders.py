@@ -9,6 +9,9 @@ import SCons.Node
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
+from waves._settings import _abaqus_datacheck_extensions
+from waves._settings import _abaqus_explicit_extensions
+from waves._settings import _abaqus_standard_extensions
 from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
@@ -127,7 +130,7 @@ def find_program(names, env):
 
     Returns the absolute path of the first program name found.
 
-    :param names list: list of string program names. May include an absolute path.
+    :param list names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
@@ -151,7 +154,7 @@ def add_program(names, env):
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
     if a program is found and the directory is not already on ``PATH``. Returns None if no program name is found.
 
-    :param names list: list of string program names. May include an absolute path.
+    :param list names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
@@ -180,7 +183,7 @@ def add_cubit(names, env):
 
     Returns None if no program name is found.
 
-    :param names list: list of string program names. May include an absolute path.
+    :param list names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
@@ -243,7 +246,7 @@ def _build_subdirectory(target):
     return build_subdirectory
 
 
-def _first_target_emitter(target, source, env, suffixes=[_stdout_extension]):
+def _first_target_emitter(target, source, env, suffixes=None):
     """Appends the target list with the builder managed targets
 
     Appends ``target[0]``.stdout to the ``target`` list. The associated Builder requires at least one target.
@@ -260,11 +263,14 @@ def _first_target_emitter(target, source, env, suffixes=[_stdout_extension]):
     :return: target, source
     :rtype: tuple with two lists
     """
+    if not suffixes:
+        suffixes = [_stdout_extension]
     build_subdirectory = _build_subdirectory(target)
     first_target = pathlib.Path(str(target[0]))
     for suffix in suffixes:
-        emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
-        target.append(str(emitter_target))
+        emitter_target = str(build_subdirectory / first_target.with_suffix(suffix).name)
+        if emitter_target not in target:
+            target.append(emitter_target)
     return target, source
 
 
@@ -290,12 +296,14 @@ def _abaqus_journal_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def abaqus_journal(abaqus_program="abaqus", post_action=[]):
+def abaqus_journal(abaqus_program="abaqus", post_action=None):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds the ``journal_options`` and ``abaqus_options`` string
-    arguments.
+    function accepts all SCons Builder arguments and adds the keyword argument(s):
+
+    * ``journal_options``: The journal file command line options provided as a string.
+    * ``abaqus_options``: The Abaqus command line options provided as a string.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
@@ -329,6 +337,8 @@ def abaqus_journal(abaqus_program="abaqus", post_action=[]):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
+    if not post_action:
+        post_action = []
     action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
                  f"${{TARGET.filebase}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
@@ -340,32 +350,62 @@ def abaqus_journal(abaqus_program="abaqus", post_action=[]):
     return abaqus_journal_builder
 
 
-def _abaqus_solver_emitter(target, source, env):
+def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
+
+    If "suffixes" is a key in the environment, ``env``, then the suffixes list will override the ``suffixes_to_extend``
+    argument.
     """
-    if not "job_name" in env or not env["job_name"]:
+    if "suffixes" in env and env["suffixes"] is not None:
+        suffixes_to_extend = env["suffixes"]
+    elif not suffixes_to_extend:
+        suffixes_to_extend = _abaqus_solver_common_suffixes
+    if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
-    builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
-    suffixes = builder_suffixes + _abaqus_solver_common_suffixes
+    suffixes = [_stdout_extension, _abaqus_environment_extension]
+    if isinstance(suffixes_to_extend, str):
+        suffixes_to_extend = [suffixes_to_extend]
+    suffixes.extend(suffixes_to_extend)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
-        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
-        target.append(str(emitter_target))
+        emitter_target = str(build_subdirectory / f"{env['job_name']}{suffix}")
+        if emitter_target not in target:
+            target.append(emitter_target)
     return target, source
 
 
-def abaqus_solver(abaqus_program="abaqus", post_action=[]):
+def _abaqus_standard_solver_emitter(target, source, env):
+    """Passes the standard specific extensions to :meth:`_abaqus_solver_emitter`"""
+    return _abaqus_solver_emitter(target, source, env, _abaqus_standard_extensions)
+
+
+def _abaqus_explicit_solver_emitter(target, source, env):
+    """Passes the explicit specific extensions to :meth:`_abaqus_solver_emitter`"""
+    return _abaqus_solver_emitter(target, source, env, _abaqus_explicit_extensions)
+
+
+def _abaqus_datacheck_solver_emitter(target, source, env):
+    """Passes the datacheck specific extensions to :meth:`_abaqus_solver_emitter`"""
+    return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
+
+
+def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds optional Builder keyword arguments ``job_name`` and
-    ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. The Builder emitter will
-    append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
+    function accepts all SCons Builder arguments and adds the keyword argument(s):
+
+    * ``job_name``: The job name string. If not specified ``job_name`` defaults to the root input file stem. The Builder
+      emitter will append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
+    * ``abaqus_options``: The Abaqus command line options provided as a string.
+    * ``suffixes``: override the emitter targets with a new list of extensions, e.g.
+      ``AbaqusSolver(target=[], source=["input.inp"], suffixes=[".odb"])`` will emit only one file named
+      ``job_name.odb``.
 
     The first target determines the working directory for the builder's action, as shown in the action code snippet
     below. The action changes the working directory to the first target's parent directory prior to executing the
@@ -392,11 +432,14 @@ def abaqus_solver(abaqus_program="abaqus", post_action=[]):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS=
-           {"AbaqusSolver": waves.builders.abaqus_solver(),
-            "AbaqusOld": waves.builders.abaqus_solver(abaqus_program="abq2019"),
-            "AbaqusPost": waves.builders.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")})
+       env.Append(BUILDERS={
+           "AbaqusSolver": waves.builders.abaqus_solver(),
+           "AbaqusStandard": waves.builders.abaqus_solver(emitter='standard'),
+           "AbaqusOld": waves.builders.abaqus_solver(abaqus_program="abq2019"),
+           "AbaqusPost": waves.builders.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")
+       })
        AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
+       AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
 
     .. code-block::
        :caption: Abaqus journal builder action
@@ -408,20 +451,39 @@ def abaqus_solver(abaqus_program="abaqus", post_action=[]):
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``
+        ${TARGET.dir.abspath} && ${post_action}``.
+    :param str emitter: emit file extensions based on the value of this variable. Overridden by the ``suffixes`` keyword
+        argument that may be provided in the Task definition.
+
+        * "standard": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+        * "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+        * "datacheck": [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
+        * default value: [".odb", ".dat", ".msg", ".com", ".prt"]
     """
+    if not post_action:
+        post_action = []
     action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
+    if emitter:
+        emitter = emitter.lower()
+    if emitter == 'standard':
+        abaqus_emitter = _abaqus_standard_solver_emitter
+    elif emitter == 'explicit':
+        abaqus_emitter = _abaqus_explicit_solver_emitter
+    elif emitter == 'datacheck':
+        abaqus_emitter = _abaqus_datacheck_solver_emitter
+    else:
+        abaqus_emitter = _abaqus_solver_emitter
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_abaqus_solver_emitter)
+        emitter=abaqus_emitter)
     return abaqus_solver_builder
 
 
-def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environment.Environment(),
+def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environment.Environment(),
                     build_subdirectory=".", symlink=False):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
@@ -462,6 +524,8 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     :return: SCons NodeList of Copy and Substfile objects
     :rtype: SCons.Node.NodeList
     """
+    if not substitution_dictionary:
+        substitution_dictionary = {}
     build_subdirectory = pathlib.Path(build_subdirectory)
     target_list = SCons.Node.NodeList()
     source_list = [pathlib.Path(source_file) for source_file in source_list]
@@ -477,12 +541,14 @@ def copy_substitute(source_list, substitution_dictionary={}, env=SCons.Environme
     return target_list
 
 
-def python_script(post_action=[]):
+def python_script(post_action=None):
     """Python script SCons builder
 
     This builder requires that the python script to execute is the first source in the list. The builder returned by
-    this function accepts all SCons Builder arguments and adds the ``script_options`` and ``python_options`` string
-    arguments.
+    this function accepts all SCons Builder arguments and adds the keyword argument(s):
+
+    * ``script_options``: The Python script command line arguments provided as a string.
+    * ``python_options``: The Python command line arguments provided as a string.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
@@ -515,6 +581,8 @@ def python_script(post_action=[]):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
+    if not post_action:
+        post_action = []
     action = [f"{_cd_action_prefix} python ${{python_options}} ${{SOURCE.abspath}} " \
                 f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
@@ -547,26 +615,28 @@ def _matlab_script_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
+def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
     """Matlab script SCons builder
 
     .. warning::
 
        Experimental implementation is subject to change
 
-    This builder requires that the Matlab script to execute is provided by absolute path and the first source in the
-    list. The builder returned by this function accepts all SCons Builder arguments and adds the ``script_options`` and
-    ``matlab_options`` string arguments.
+    This builder requires that the Matlab script is the first source in the list. The builder returned by this function
+    accepts all SCons Builder arguments and adds the keyword argument(s):
 
-    First the Matlab script is copied to the first target file's build directory and then the script is executed
-    locally.
+    * ``script_options``: The Matlab function interface options in Matlab syntax and provided as a string.
+    * ``matlab_options``: The Matlab command line options provided as a string.
+
+    The parent directory absolute path is added to the Matlab ``path`` variable prior to execution. All required Matlab
+    files should be co-located in the same source directory.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
     directory prior to executing the python script.
 
-    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout to the
-    ``target`` list.
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout and
+    ``target[0].matlab.env to the ``target`` list.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
@@ -576,16 +646,19 @@ def matlab_script(matlab_program="matlab", post_action=[], symlink=False):
     .. code-block::
        :caption: Matlab script builder action
 
-       Copy("${TARGET.dir.abspath}", ${SOURCE.abspath}, False)
-       cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
     """
-    action = [SCons.Defaults.Copy("${TARGET.dir.abspath}", "${SOURCE.abspath}", symlink),
-              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
-                  "\"[fList, pList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
-                  "display(fList); display(struct2table(pList, 'AsArray', true)); exit;\" " \
+    if not post_action:
+        post_action = []
+    action = [f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
+                  "\"path(path, '${SOURCE.dir.abspath}'); " \
+                  "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
+                  "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
                   f"> ${{TARGET.filebase}}{_matlab_environment_extension} 2>&1",
-              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch \"${{SOURCE.filebase}}(" \
-                  f"${{script_options}})\" > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
+                  "\"path(path, '${SOURCE.dir.abspath}'); " \
+                  "${SOURCE.filebase}(${script_options})\" " \
+                  f"> ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
@@ -735,7 +808,7 @@ def _build_odb_extract(target, source, env):
     return None
 
 
-def sbatch(sbatch_program="sbatch", post_action=[]):
+def sbatch(sbatch_program="sbatch", post_action=None):
     """SLURM sbatch SCons builder
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
@@ -768,6 +841,8 @@ def sbatch(sbatch_program="sbatch", post_action=[]):
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
     """
+    if not post_action:
+        post_action = []
     action = [f"{_cd_action_prefix} {sbatch_program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
                  f"${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))

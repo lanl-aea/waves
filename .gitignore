@@ -13,7 +13,7 @@ config.log
 _version.py
 *.egg-info
 dist/
-conda-build-artifacts/
+conda-bld/
 *.pyc
 
 # Temp files
@@ -44,7 +44,9 @@ parameter_study_meta.txt
 # Sphinx/Python
 __pycache__/
 test_results.xml
-conda-bld/
+
+# NFS Files
+*.nfs*
 
 # MacOSX
 .DS_Store

@@ -1,20 +1,20 @@
-import os
 import pathlib
 import sys
 import re
 
 import networkx
-import matplotlib
 import matplotlib.pyplot as plt
 
 from waves import _settings
 
-def parse_output(tree_lines, exclude_list):
+
+def parse_output(tree_lines, exclude_list, exclude_regex):
     """
     Parse the string that has the tree output and store it in a dictionary
 
     :param list tree_lines: output of the scons tree command
     :param list exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
+    :param str exclude_regex: exclude nodes that match this regular expression
     :returns: dictionary of tree output
     :rtype: dict
     """
@@ -42,6 +42,8 @@ def parse_output(tree_lines, exclude_list):
                 if node_name.startswith(exclude) or node_name.endswith(exclude):
                     exclude_node = True
                     exclude_indent = current_indent
+            exclude_node, exclude_indent = check_regex_exclude(exclude_regex, node_name, current_indent,
+                                                               exclude_indent, exclude_node)
             if exclude_node:
                 continue
             node_number += 1  # Increment the node_number
@@ -75,6 +77,25 @@ def parse_output(tree_lines, exclude_list):
 
     return tree_dict
 
+
+def check_regex_exclude(exclude_regex, node_name, current_indent, exclude_indent, exclude_node=False):
+    """
+    Excludes node names that match the regular expression
+
+    :param str exclude_regex: Regular expression
+    :param str node_name: Name of the node
+    :param int current_indent: Current indent of the parsed output
+    :param int exclude_indent: Set to current_indent if node is to be excluded
+    :param bool exclude_node: Indicated whether a node should be excluded
+    :returns: Tuple containing exclude_node and exclude_indent
+    :rtype: (bool, int)
+    """
+    if exclude_regex and re.search(exclude_regex, node_name):
+        exclude_node = True
+        exclude_indent = current_indent
+    return exclude_node, exclude_indent
+
+
 def click_arrow(event, annotations, arrows):
     """
     Create effect with arrows when mouse click
@@ -102,6 +123,7 @@ def click_arrow(event, annotations, arrows):
                     else:
                         from_arrow.set_visible(True)
                     fig.canvas.draw_idle()
+
 
 def visualize(tree, output_file, height, width):
     """

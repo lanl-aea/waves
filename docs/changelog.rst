@@ -5,8 +5,42 @@ Changelog
 #########
 
 *******************
-0.6.15 (unreleased)
+0.6.16 (unreleased)
 *******************
+
+*******************
+0.6.15 (2023-05-04)
+*******************
+
+Documentation
+=============
+- Linked argparse tutorial in tutorial 01 (:issue:`439`, :merge:`549`). By `Sergio Cordova`_.
+- Removed datacheck from the quickstart tutorials (:issue:`446`, :merge:`551`). By `Sergio Cordova`_.
+- Hardcoded the source and target lists in the quickstart tutorials (:issue:`448`, :merge:`552`). By `Sergio Cordova`_.
+- Standardize the discussion of builder specific keyword arguments (:issue:`459`, :merge:`558`). By `Kyle Brindley`_.
+- Add an option to skip Tutorial 00: SConstruct with the waves fetch command (:issue:`451`, :merge:`559`). By `Kyle
+  Brindley`_.
+
+Internal Changes
+================
+- Fix the license syntax in ``CITATION.cff`` to help Zenodo recognize the license type (:merge:`546`). By `Kyle
+  Brindley`_.
+- Cleaned up conda package CI files after ``conda build`` (:issue:`442`, :merge:`547`). By `Sergio Cordova`_.
+- Removed mutable default arguments from python scripts (:issue:`454`, :merge:`553`). By `Sergio Cordova`_.
+
+Enhancements
+============
+- Added ``--exclude-regex`` argument to ``visualize`` subcommand (:issue:`419`, :merge:`548`). By `Sergio Cordova`_.
+- Added abaqus explicit and standard emitters to ``AbaqusSolver`` (:issue:`443`, :merge:`554`). By `Sergio Cordova`_.
+- Add Matlab script parent directory to Matlab path in the Matlab script builder action. No longer necessary to copy
+  Matlab script(s) to build directory prior to execution. Matlab script copy operation no longer performed by default.
+  Builder still considered "experimental" until a tutorial is released (:issue:`456`, :merge:`555`). By `Kyle
+  Brindley`_.
+- Add an example Matlab input parser to the Matlab tutorial script (:issue:`420`, :merge:`556`). By `Kyle Brindley`_.
+- Add an example Matlab docstring in the sphinxcontrib-matlabdomain style (:issue:`457`, :merge:`557`). By `Kyle
+  Brindley`_.
+- Add an option to override the Abaqus solver builder's emitted targets (:issue:`459`, :merge:`558`). By `Kyle
+  Brindley`_.
 
 *******************
 0.6.14 (2023-03-23)

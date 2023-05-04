@@ -56,4 +56,3 @@ def test_file_exists():
         file_name = msg_parse.file_exists(fake_path)
         assert file_name.startswith('fake_file_')
         assert "already exists" in str(mock_print.call_args)
-

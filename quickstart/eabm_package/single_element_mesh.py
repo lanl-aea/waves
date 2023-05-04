@@ -3,7 +3,6 @@ import os
 import argparse
 import inspect
 import shutil
-import re
 
 import abaqus
 import abaqusConstants
