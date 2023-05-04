@@ -4,6 +4,12 @@
 Tutorial 01: Geometry
 #####################
 
+*************
+Prerequisites
+*************
+
+.. include:: tutorial_00_prerequisites.txt
+
 **********
 References
 **********
@@ -42,7 +48,7 @@ Directory Structure
    .. code-block::
 
       $ pwd
-      /path/to/waves-tutorials
+      /home/roppenheimer/waves-tutorials
       $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
       $ find . -name "__init__.py"
       ./eabm_package/__init__.py
@@ -322,6 +328,17 @@ but that may change in production EABMs.
 ***************
 SConstruct File
 ***************
+
+.. note::
+
+   If you skipped :ref:`tutorialsconstruct`, run the following commands to create a copy of the ``SConstruct`` file
+   introduced in that tutorial.
+
+   .. code-block::
+
+      $ pwd
+      /home/roppenheimer/waves-tutorials
+      $ waves fetch tutorials/tutorial_00_SConstruct && mv tutorial_00_SConstruct SConstruct
 
 In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias
 matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to

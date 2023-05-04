@@ -12,11 +12,17 @@ Users who want to jump straight to a minimally functional simulation workflow wi
 :ref:`scons_quickstart`. The :ref:`waves_quickstart` has the same features but uses the `WAVES`_ extension to `SCons`_.
 
 For a detailed discussion of recommended best practices for `SCons`_  and `WAVES-EABM`_ project setup, meta data, and
-features, start with :ref:`tutorialsconstruct`.
+features, start with :ref:`tutorialsconstruct`. Most of the ``SContruct`` file introduced in :ref:`tutorialsconstruct`
+is boilerplate code, so users may want to skip straight to the workflow task definitions in
+:ref:`tutorial_geometry_waves`. An optional ``waves fetch`` command is included in :ref:`tutorial_geometry_waves` to
+help users create the content of :ref:`tutorialsconstruct`. The :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand may
+also be used to create a local copy of any tutorial file.
 
 Finally, users who are are ready to create their own modsim repository can use the :ref:`waves_cli`
 :ref:`waves_quickstart_cli` subcommand to generate a modsim template directory structure from the single element example
 model. The template files include project documentation and two simulation configurations: nominal and mesh convergence.
+The :ref:`waves_fetch_cli` subcommand may be used to fetch individual template directories and files from both the
+quickstart template and the tutorials.
 
 *************
 Prerequisites
