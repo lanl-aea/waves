@@ -267,37 +267,82 @@ def test_abaqus_journal(abaqus_program, post_action, node_count, action_count, t
 
 source_file = fs.File("root.inp")
 solver_emitter_input = {
-    "empty targets": ("job",
-                      [],
-                      [source_file],
-                      ["job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
-                      does_not_raise()),
-    "one targets": ("job",
-                    ["job.sta"],
-                    [source_file],
-                    ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
-                    does_not_raise()),
-    "subdirectory": ("job",
-                    ["set1/job.sta"],
-                    [source_file],
-                    ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
-                     f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt"],
-                    does_not_raise()),
-    "missing job_name": (None,
-                        [],
-                        [source_file],
-                        ["root.stdout", "root.abaqus_v6.env", "root.odb", "root.dat", "root.msg", "root.com", "root.prt"],
-                        does_not_raise())
+    "empty targets": (
+        "job",
+        None,
+        [],
+        [source_file],
+        ["job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
+        does_not_raise()
+    ),
+    "empty targets, suffixes override": (
+        "job",
+        [".odb"],
+        [],
+        [source_file],
+        ["job.stdout", "job.abaqus_v6.env", "job.odb"],
+        does_not_raise()
+    ),
+    "one targets": (
+        "job",
+        None,
+        ["job.sta"],
+        [source_file],
+        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
+        does_not_raise()
+    ),
+    "one targets, override suffixes": (
+        "job",
+        [".odb"],
+        ["job.odb"],
+        [source_file],
+        ["job.odb", "job.stdout", "job.abaqus_v6.env"],
+        does_not_raise()
+    ),
+    "subdirectory": (
+        "job",
+        None,
+        ["set1/job.sta"],
+        [source_file],
+        ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
+         f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt"],
+        does_not_raise()
+    ),
+    "subdirectory, override suffixes": (
+        "job",
+        [".odb"],
+        ["set1/job.sta"],
+        [source_file],
+        ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb"],
+        does_not_raise()
+    ),
+    "missing job_name": (
+        None,
+        None,
+        [],
+        [source_file],
+        ["root.stdout", "root.abaqus_v6.env", "root.odb", "root.dat", "root.msg", "root.com", "root.prt"],
+        does_not_raise()
+    ),
+    "missing job_name, override suffixes": (
+        None,
+        [".odb"],
+        [],
+        [source_file],
+        ["root.stdout", "root.abaqus_v6.env", "root.odb"],
+        does_not_raise()
+    )
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("job_name, target, source, expected, outcome",
+@pytest.mark.parametrize("job_name, suffixes, target, source, expected, outcome",
                          solver_emitter_input.values(),
                          ids=solver_emitter_input.keys())
-def test_abaqus_solver_emitter(job_name, target, source, expected, outcome):
+def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, outcome):
     env = SCons.Environment.Environment()
     env["job_name"] = job_name
+    env["suffixes"] = suffixes
     with outcome:
         try:
             builders._abaqus_solver_emitter(target, source, env)
