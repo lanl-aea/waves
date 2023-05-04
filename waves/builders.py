@@ -354,8 +354,13 @@ def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     directory. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build, then at
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
+
+    If "suffixes" is a key in the environment, ``env``, then the suffixes list will override the ``suffixes_to_extend``
+    argument.
     """
-    if not suffixes_to_extend:
+    if "suffixes" in env and env['suffixes']:
+        suffixes_to_extend = env['suffixes']
+    elif not suffixes_to_extend:
         suffixes_to_extend = _abaqus_solver_common_suffixes
     if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
@@ -363,8 +368,9 @@ def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     suffixes.extend(suffixes_to_extend)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
-        emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
-        target.append(str(emitter_target))
+        emitter_target = str(build_subdirectory / f"{env['job_name']}{suffix}")
+        if emitter_target not in target:
+            target.append(emitter_target)
     return target, source
 
 
