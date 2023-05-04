@@ -13,6 +13,7 @@ Documentation
 - Linked argparse tutorial in tutorial 01 (:issue:`439`, :merge:`549`). By `Sergio Cordova`_.
 - Removed datacheck from the quickstart tutorials (:issue:`446`, :merge:`551`). By `Sergio Cordova`_.
 - Hardcoded the source and target lists in the quickstart tutorials (:issue:`448`, :merge:`552`). By `Sergio Cordova`_.
+- Standardize the discussion of builder specific keyword arguments (:issue:`459`, :merge:`558`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -31,6 +32,8 @@ Enhancements
   Brindley`_.
 - Add an example Matlab input parser to the Matlab tutorial script (:issue:`420`, :merge:`556`). By `Kyle Brindley`_.
 - Add an example Matlab docstring in the sphinxcontrib-matlabdomain style (:issue:`457`, :merge:`557`). By `Kyle
+  Brindley`_.
+- Add an option to override the Abaqus solver builder's emitted targets (:issue:`459`, :merge:`558`). By `Kyle
   Brindley`_.
 
 *******************
