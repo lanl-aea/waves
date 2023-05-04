@@ -14,6 +14,8 @@ Documentation
 - Removed datacheck from the quickstart tutorials (:issue:`446`, :merge:`551`). By `Sergio Cordova`_.
 - Hardcoded the source and target lists in the quickstart tutorials (:issue:`448`, :merge:`552`). By `Sergio Cordova`_.
 - Standardize the discussion of builder specific keyword arguments (:issue:`459`, :merge:`558`). By `Kyle Brindley`_.
+- Add an option to skip Tutorial 00: SConstruct with the waves fetch command (:issue:`451`, :merge:`559`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
