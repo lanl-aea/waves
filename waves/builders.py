@@ -268,8 +268,9 @@ def _first_target_emitter(target, source, env, suffixes=None):
     build_subdirectory = _build_subdirectory(target)
     first_target = pathlib.Path(str(target[0]))
     for suffix in suffixes:
-        emitter_target = build_subdirectory / first_target.with_suffix(suffix).name
-        target.append(str(emitter_target))
+        emitter_target = str(build_subdirectory / first_target.with_suffix(suffix).name)
+        if emitter_target not in target:
+            target.append(emitter_target)
     return target, source
 
 
