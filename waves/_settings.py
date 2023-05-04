@@ -7,6 +7,9 @@ _project_name = f"{_project_name_short} Analysis for Verified Engineering Simula
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
 _abaqus_solver_common_suffixes = [".odb", ".dat", ".msg", ".com", ".prt"]
+_abaqus_datacheck_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
+_abaqus_explicit_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+_abaqus_standard_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
 _matlab_environment_extension = ".matlab.env"
 _scons_command = "scons"
 _scons_visualize_arguments = ["-Q", "--tree=status", "-n"]

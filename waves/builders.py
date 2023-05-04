@@ -9,6 +9,9 @@ import SCons.Node
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
+from waves._settings import _abaqus_datacheck_extensions
+from waves._settings import _abaqus_explicit_extensions
+from waves._settings import _abaqus_standard_extensions
 from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
@@ -344,7 +347,7 @@ def abaqus_journal(abaqus_program="abaqus", post_action=None):
     return abaqus_journal_builder
 
 
-def _abaqus_solver_emitter(target, source, env):
+def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -352,10 +355,12 @@ def _abaqus_solver_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
     """
-    if not "job_name" in env or not env["job_name"]:
+    if not suffixes_to_extend:
+        suffixes_to_extend = _abaqus_solver_common_suffixes
+    if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
-    builder_suffixes = [_stdout_extension, _abaqus_environment_extension]
-    suffixes = builder_suffixes + _abaqus_solver_common_suffixes
+    suffixes = [_stdout_extension, _abaqus_environment_extension]
+    suffixes.extend(suffixes_to_extend)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:
         emitter_target = build_subdirectory / f"{env['job_name']}{suffix}"
@@ -363,7 +368,22 @@ def _abaqus_solver_emitter(target, source, env):
     return target, source
 
 
-def abaqus_solver(abaqus_program="abaqus", post_action=None):
+def _abaqus_standard_solver_emitter(target, source, env):
+    """Passes the standard specific extensions to :meth:`_abaqus_solver_emitter`"""
+    return _abaqus_solver_emitter(target, source, env, _abaqus_standard_extensions)
+
+
+def _abaqus_explicit_solver_emitter(target, source, env):
+    """Passes the explicit specific extensions to :meth:`_abaqus_solver_emitter`"""
+    return _abaqus_solver_emitter(target, source, env, _abaqus_explicit_extensions)
+
+
+def _abaqus_datacheck_solver_emitter(target, source, env):
+    """Passes the datacheck specific extensions to :meth:`_abaqus_solver_emitter`"""
+    return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
+
+
+def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -412,7 +432,13 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None):
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``
+        ${TARGET.dir.abspath} && ${post_action}``.
+    :param str emitter: emit file extensions based on the value of this variable
+
+        * "standard": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+        * "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
+        * "datacheck": [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
+        * default value: [".odb", ".dat", ".msg", ".com", ".prt"]
     """
     if not post_action:
         post_action = []
@@ -421,9 +447,19 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None):
               f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
+    if emitter:
+        emitter = emitter.lower()
+    if emitter == 'standard':
+        abaqus_emitter = _abaqus_standard_solver_emitter
+    elif emitter == 'explicit':
+        abaqus_emitter = _abaqus_explicit_solver_emitter
+    elif emitter == 'datacheck':
+        abaqus_emitter = _abaqus_datacheck_solver_emitter
+    else:
+        abaqus_emitter = _abaqus_solver_emitter
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_abaqus_solver_emitter)
+        emitter=abaqus_emitter)
     return abaqus_solver_builder
 
 
