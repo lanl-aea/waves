@@ -361,13 +361,15 @@ def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     If "suffixes" is a key in the environment, ``env``, then the suffixes list will override the ``suffixes_to_extend``
     argument.
     """
-    if "suffixes" in env and env['suffixes']:
-        suffixes_to_extend = env['suffixes']
+    if "suffixes" in env and env["suffixes"] is not None:
+        suffixes_to_extend = env["suffixes"]
     elif not suffixes_to_extend:
         suffixes_to_extend = _abaqus_solver_common_suffixes
     if "job_name" not in env or not env["job_name"]:
         env["job_name"] = pathlib.Path(source[0].path).stem
     suffixes = [_stdout_extension, _abaqus_environment_extension]
+    if isinstance(suffixes_to_extend, str):
+        suffixes_to_extend = [suffixes_to_extend]
     suffixes.extend(suffixes_to_extend)
     build_subdirectory = _build_subdirectory(target)
     for suffix in suffixes:

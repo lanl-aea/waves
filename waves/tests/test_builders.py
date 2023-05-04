@@ -285,6 +285,14 @@ solver_emitter_input = {
         ["job.stdout", "job.abaqus_v6.env", "job.odb"],
         does_not_raise()
     ),
+    "empty targets, suffixes override empty list": (
+        "job",
+        [],
+        [],
+        [source_file],
+        ["job.stdout", "job.abaqus_v6.env"],
+        does_not_raise()
+    ),
     "one targets": (
         "job",
         None,
@@ -296,9 +304,17 @@ solver_emitter_input = {
     "one targets, override suffixes": (
         "job",
         [".odb"],
-        ["job.odb"],
+        ["job.sta"],
         [source_file],
-        ["job.odb", "job.stdout", "job.abaqus_v6.env"],
+        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb"],
+        does_not_raise()
+    ),
+    "one targets, override suffixes string": (
+        "job",
+        ".odb",
+        ["job.sta"],
+        [source_file],
+        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb"],
         does_not_raise()
     ),
     "subdirectory": (
