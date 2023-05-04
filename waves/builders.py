@@ -299,8 +299,10 @@ def abaqus_journal(abaqus_program="abaqus", post_action=None):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds the ``journal_options`` and ``abaqus_options`` string
-    arguments.
+    function accepts all SCons Builder arguments and adds the keyword argument(s):
+
+    * ``journal_options``: The journal file command line options provided as a string.
+    * ``abaqus_options``: The Abaqus command line options provided as a string.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
@@ -393,15 +395,14 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments
+    function accepts all SCons Builder arguments and adds the keyword argument(s):
 
-    This builder supports the task keyword argument(s):
-
-    * ``job_name``: If not specified ``job_name`` defaults to the root input file stem. The Builder
+    * ``job_name``: The job name string. If not specified ``job_name`` defaults to the root input file stem. The Builder
       emitter will append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
     * ``abaqus_options``: The Abaqus command line options provided as a string.
     * ``suffixes``: override the emitter targets with a new list of extensions, e.g.
-      ``AbaqusSolver(target=[], source=["input.inp"], suffixes=[".odb"])`` will emit only one file named ``job_name.odb``
+      ``AbaqusSolver(target=[], source=["input.inp"], suffixes=[".odb"])`` will emit only one file named
+      ``job_name.odb``.
 
     The first target determines the working directory for the builder's action, as shown in the action code snippet
     below. The action changes the working directory to the first target's parent directory prior to executing the
@@ -541,8 +542,10 @@ def python_script(post_action=None):
     """Python script SCons builder
 
     This builder requires that the python script to execute is the first source in the list. The builder returned by
-    this function accepts all SCons Builder arguments and adds the ``script_options`` and ``python_options`` string
-    arguments.
+    this function accepts all SCons Builder arguments and adds the keyword argument(s):
+
+    * ``script_options``: The Python script command line arguments provided as a string.
+    * ``python_options``: The Python command line arguments provided as a string.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
@@ -617,8 +620,12 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
        Experimental implementation is subject to change
 
     This builder requires that the Matlab script is the first source in the list. The builder returned by this function
-    accepts all SCons Builder arguments and adds the ``script_options`` and ``matlab_options`` string arguments. The
-    parent directory absolute path is added to the Matlab ``path`` variable prior to execution. All required Matlab
+    accepts all SCons Builder arguments and adds the keyword argument(s):
+
+    * ``script_options``: The Matlab function interface options in Matlab syntax and provided as a string.
+    * ``matlab_options``: The Matlab command line options provided as a string.
+
+    The parent directory absolute path is added to the Matlab ``path`` variable prior to execution. All required Matlab
     files should be co-located in the same source directory.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
