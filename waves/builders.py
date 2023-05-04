@@ -393,9 +393,15 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds optional Builder keyword arguments ``job_name`` and
-    ``abaqus_options``. If not specified ``job_name`` defaults to the root input file stem. The Builder emitter will
-    append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
+    function accepts all SCons Builder arguments
+
+    This builder supports the task keyword argument(s):
+
+    * ``job_name``: If not specified ``job_name`` defaults to the root input file stem. The Builder
+      emitter will append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
+    * ``abaqus_options``: The Abaqus command line options provided as a string.
+    * ``suffixes``: override the emitter targets with a new list of extensions, e.g.
+      ``AbaqusSolver(target=[], source=["input.inp"], suffixes=[".odb"])`` will emit only one file named ``job_name.odb``
 
     The first target determines the working directory for the builder's action, as shown in the action code snippet
     below. The action changes the working directory to the first target's parent directory prior to executing the
@@ -412,11 +418,6 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     subdirectory, e.g. ``parameter_set1/job_name.odb``. When in doubt, provide the expected STDOUT redirected file as a
     target, e.g. ``my_target.stdout``.
 
-    This builder supports the task keyword argument(s):
-
-    * ``suffixes``: override the emitter targets with a new list of extensions, e.g.
-      ``AbaqusSolver(target=[], source=["input.inp"], suffixes=[".odb"]) will emit only one file named ``job_name.odb``
-
     The ``-interactive`` option is always appended to the builder action to avoid exiting the Abaqus task before the
     simulation is complete.  The ``-ask_delete no`` option is always appended to the builder action to overwrite
     existing files in programmatic execution, where it is assumed that the Abaqus solver target(s) should be re-built
@@ -427,11 +428,14 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS=
-           {"AbaqusSolver": waves.builders.abaqus_solver(),
-            "AbaqusOld": waves.builders.abaqus_solver(abaqus_program="abq2019"),
-            "AbaqusPost": waves.builders.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")})
+       env.Append(BUILDERS={
+           "AbaqusSolver": waves.builders.abaqus_solver(),
+           "AbaqusStandard": waves.builders.abaqus_solver(emitter='standard'),
+           "AbaqusOld": waves.builders.abaqus_solver(abaqus_program="abq2019"),
+           "AbaqusPost": waves.builders.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")
+       })
        AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
+       AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
 
     .. code-block::
        :caption: Abaqus journal builder action
