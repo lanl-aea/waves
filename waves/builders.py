@@ -412,6 +412,11 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     subdirectory, e.g. ``parameter_set1/job_name.odb``. When in doubt, provide the expected STDOUT redirected file as a
     target, e.g. ``my_target.stdout``.
 
+    This builder supports the task keyword argument(s):
+
+    * ``suffixes``: override the emitter targets with a new list of extensions, e.g.
+      ``AbaqusSolver(target=[], source=["input.inp"], suffixes=[".odb"]) will emit only one file named ``job_name.odb``
+
     The ``-interactive`` option is always appended to the builder action to avoid exiting the Abaqus task before the
     simulation is complete.  The ``-ask_delete no`` option is always appended to the builder action to overwrite
     existing files in programmatic execution, where it is assumed that the Abaqus solver target(s) should be re-built
@@ -439,7 +444,8 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``.
-    :param str emitter: emit file extensions based on the value of this variable
+    :param str emitter: emit file extensions based on the value of this variable. Overridden by the ``suffixes`` keyword
+        argument that may be provided in the Task definition.
 
         * "standard": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
         * "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
