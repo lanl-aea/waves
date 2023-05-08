@@ -8,6 +8,10 @@ Changelog
 0.6.16 (unreleased)
 *******************
 
+Documentation
+=============
+- Update citations to version 0.6.15 and associated DOI (:issue:`460`, :merge:`561`). By `Kyle Brindley`_.
+
 *******************
 0.6.15 (2023-05-04)
 *******************
