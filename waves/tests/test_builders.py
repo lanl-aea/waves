@@ -141,7 +141,12 @@ find_program_input = {
     "none found": (
         ["notfound", "dummy"],
         [None, None],
-        None)
+        None),
+    "path with spaces": (
+        ["dummy"],
+        ["/installed/executable with space/dummy"],
+        "/installed/\"executable with space\"/dummy"
+    )
 }
 
 
