@@ -130,6 +130,26 @@ quote_spaces_in_path_input = {
         "/path/with space/executable",
         pathlib.Path("/path/\"with space\"/executable")
     ),
+    "pathlib, no spaces": (
+        pathlib.Path("/path/without_space/executable"),
+        pathlib.Path("/path/without_space/executable")
+    ),
+    "pathlib, spaces": (
+        pathlib.Path("/path/with space/executable"),
+        pathlib.Path("/path/\"with space\"/executable")
+    ),
+    "space in root": (
+        pathlib.Path("/path space/with space/executable"),
+        pathlib.Path("/\"path space\"/\"with space\"/executable")
+    ),
+    "relative path": (
+        pathlib.Path("path space/without_space/executable"),
+        pathlib.Path("\"path space\"/without_space/executable")
+    ),
+    "space in executable": (
+        pathlib.Path("path/without_space/executable space"),
+        pathlib.Path("path/without_space/\"executable space\"")
+    )
 }
 
 
