@@ -12,6 +12,11 @@ Documentation
 =============
 - Update citations to version 0.6.15 and associated DOI (:issue:`460`, :merge:`561`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Return executable paths with double quotes around parts containing spaces. Should make executing commands by absolute
+  path in Windows command prompt and powershell more robust (:issue:`462`, :merge:`562`). By `Kyle Brindley`_.
+
 *******************
 0.6.15 (2023-05-04)
 *******************
