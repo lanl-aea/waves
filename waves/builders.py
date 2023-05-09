@@ -125,10 +125,34 @@ def substitution_syntax(substitution_dictionary, prefix="@", postfix="@"):
     return {f"{prefix}{key}{postfix}": value for key, value in substitution_dictionary.items()}
 
 
+def _quote_spaces_in_path(path):
+    """Traverse parts of a path and place in double quotes if there are spaces in the part
+
+    >>> import pathlib
+    >>> import waves
+    >>> path = pathlib.Path("path/directory with space/filename.ext")
+    >>> waves.builders.quote_spaces_in_path(path)
+    PosixPath('path/"directory with space"/filename.ext')
+
+    :param pathlib.Path path: path to modify as necessary
+
+    :return: Path with parts wrapped in double quotes as necessary
+    :rtype: pathlib.Path
+    """
+    path = pathlib.Path(path)
+    new_path = pathlib.Path(path.root)
+    for part in path.parts:
+        if " " in part:
+            part = f'"{part}"'
+        new_path = new_path / part
+    return new_path
+
+
 def find_program(names, env):
     """Search for a program from a list of possible program names.
 
-    Returns the absolute path of the first program name found.
+    Returns the absolute path of the first program name found. If path parts contain spaces, the part will be wrapped in
+    double quotes.
 
     :param list names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
@@ -145,6 +169,8 @@ def find_program(names, env):
     conf.Finish()
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
+    if first_found_path:
+        first_found_path = str(_quote_spaces_in_path(first_found_path))
     return first_found_path
 
 
