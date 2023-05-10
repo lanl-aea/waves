@@ -5,8 +5,8 @@ conflict aea-release
 conflict aea-beta
 
 # Set AEA standard software version and environment names
-set anaconda_version "2020.07"
-set python_version "3.8"
+set anaconda_version "2021.11"
+set python_version "3.9"
 set environment "waves-env"
 
 # Get current hostname
@@ -38,7 +38,7 @@ set environment_bin "$environment_path/bin"
 set environment_man "$environment_path/share/man"
 
 # Set the bash environment variables similarly to HPC anaconda module
-# Reference - sn-rfe.lanl.gov:/usr/projects/hpcsoft/modulefiles/toss3/snow/tools/python/3.8-anaconda-2020.07
+# Reference - sn-rfe.lanl.gov:/usr/projects/hpcsoft/modulefiles/toss3/snow/tools/python/3.9-anaconda-2021.11
 prepend-path PATH "$environment_bin:$anaconda_bin"
 prepend-path MANPATH "$environment_man"
 
