@@ -12,6 +12,10 @@ Documentation
 =============
 - Update citations to version 0.6.15 and associated DOI (:issue:`460`, :merge:`561`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Upgrade to Anaconda 2021 on Gitlab-CI environment (:issue:`463`, :merge:`563`).
+
 Enhancements
 ============
 - Return executable paths with double quotes around parts containing spaces. Should make executing commands by absolute
