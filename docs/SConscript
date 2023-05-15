@@ -9,12 +9,6 @@ project_dir = pathlib.Path(env['project_dir'])
 
 # Set empty alias return list
 alias_list = []
-docs_clean = [
-    str(project_dir / "tutorials/eabm_package/__pycache__"),
-    str(project_dir / "tutorials/eabm_package/abaqus/__pycache__"),
-    str(project_dir / "tutorials/eabm_package/cubit/__pycache__"),
-    str(project_dir / "tutorials/eabm_package/python/__pycache__")
-]
 
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
@@ -193,48 +187,48 @@ for file_path in tutorial_files_list:
 
 sphinx_options = '-W'
 html_directory = "html"
-html_target = [Dir(html_directory)]
+html_target = Dir(html_directory)
 html = env.Command(
-    target=html_target,
+    target=[html_target],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{html_directory} ${{tags}}",
     sphinx_options=sphinx_options)
-env.Clean(html, html_target + docs_clean)
+env.Clean(html, html_target)
 env.AlwaysBuild(html)
 alias_list.extend(env.Alias(html_directory, html))
 
 # TODO: Combine the two html build logic
 internal_directory = "html-internal"
-internal_target = [Dir(internal_directory)]
+internal_target = Dir(internal_directory)
 internal = env.Command(
-    target=internal_target,
+    target=[internal_target],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{internal_directory} ${{tags}}",
     sphinx_options=sphinx_options,
     tags="-t aea")
-env.Clean(internal, internal_target + docs_clean)
+env.Clean(internal, internal_target)
 env.AlwaysBuild(internal)
 alias_list.extend(env.Alias(internal_directory, internal))
 
 latex_directory = "latex"
-latex_target = [Dir(latex_directory)]
+latex_target = Dir(latex_directory)
 latexpdf = env.Command(
-    target=latex_target,
+    target=[latex_target],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}}")
-env.Clean(latexpdf, latex_target + docs_clean)
+env.Clean(latexpdf, latex_target)
 env.AlwaysBuild(latexpdf)
 alias_list.extend(env.Alias('latexpdf', latexpdf))
 
 man_directory = "man"
-man_target = [Dir(man_directory)]
+man_target = Dir(man_directory)
 man = env.Command(
-    target=man_target,
+    target=[man_target],
     source=documentation_file_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{man_directory} ${{tags}}",
     sphinx_options=sphinx_options,
     tags="-t man")
-env.Clean(man, man_target + docs_clean)
+env.Clean(man, man_target)
 env.AlwaysBuild(man)
 alias_list.extend(env.Alias(man_directory, man))
 
