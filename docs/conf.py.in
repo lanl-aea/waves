@@ -3,6 +3,10 @@ import pathlib
 import datetime
 import unittest.mock
 
+
+# Prevent creation of __pycache__ directories and *.pyc files
+sys.dont_write_bytecode = True
+
 # -- Project information -----------------------------------------------------
 project_dir = pathlib.Path(r'@project_dir@').resolve()
 tutorials_dir = project_dir / pathlib.Path(r'@tutorials_dir@')

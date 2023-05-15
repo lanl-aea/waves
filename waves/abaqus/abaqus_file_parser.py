@@ -2288,9 +2288,9 @@ class OdbReportFileParser(AbaqusFileParser):
                     current_output = self.history_extract_format[instance_name][region_name][output_name]
                     coords = {'step': step_names, 'time': current_output['time']}
                     dims = ['step', 'time']
-                    if len(step_names) != len(current_output['type']):  # If type is missing steps pad front with None
-                        current_output['type'] = [None] * (len(step_names) - len(current_output['type'])) \
-                                                 + current_output['type']
+                    if len(step_names) != len(current_output['type']):  # If type is missing steps pad back with None
+                        current_output['type'] = current_output['type'] + \
+                                                 [None] * (len(step_names) - len(current_output['type']))
                     if 'node' in current_output:
                         coords['node'] = ('step', current_output['node'])
                         coords['type'] = ('step', current_output['type'])
@@ -2301,6 +2301,11 @@ class OdbReportFileParser(AbaqusFileParser):
                         coords['type'] = ('step', current_output['type'])
                     if len(current_output['data']) != true_step_numbers:
                         current_output['data'] = current_output['data'][:true_step_numbers]
+                    for step_index in range(len(current_output['data'])):  # Pad with None if missing data
+                        if len(current_output['data'][step_index]) < len(current_output['time']):
+                            current_output['data'][step_index] = current_output['data'][step_index] + \
+                                                                 [None] * (len(current_output['time']) -
+                                                                           len(current_output['data'][step_index]))
 
                     array_length = len(coords['type'])
                     # Get the length of the previous dataset with the current instance and region names

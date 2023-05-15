@@ -12,12 +12,6 @@ stages:
   - deploy
 
 before_script:
-  # FIXME: Trace the Gitlab-Runner Git-LFS bug. Possible starting point(s):
-  #   * https://gitlab.com/gitlab-org/gitlab-runner/-/issues/4742
-  #   * https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/1599
-  - git status
-  - git lfs install
-  - git status
   # Assumes CI executes on AEA compute servers
   # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/7
@@ -51,16 +45,6 @@ before_script:
       fi
   - if [[ ${project_environment} != ${environment} ]]; then module unload ${environment}; module load ${project_environment}; fi
   - conda_artifacts_directory='conda-bld'
-  # FIXME: (1) Without setting this to false, Git webserver API calls to re-git.lanl.gov will throw errors about
-  # self-signed certificates. Work on CI server and Gitlab webserver configurations so that this is no longer
-  # necessary. There is a matching "FIXME: (1)" tag where the process is reversed that must also be removed when this
-  # is fixed.
-  - git config --local http.sslVerify false
-
-after_script:
-  # FIXME: (1) Reset the repository Git configuration to preserve ssl verifications. Remove when the server(s)
-  # configurations no longer require us to drop ssl verifications.
-  - git config --local http.sslVerify true
 
 environment:
   stage: environment

@@ -5,8 +5,33 @@ Changelog
 #########
 
 *******************
-0.6.16 (unreleased)
+0.6.17 (unreleased)
 *******************
+
+*******************
+0.6.16 (2023-05-15)
+*******************
+
+Bug fixes
+=========
+- Fix missing dimension of history output dataset when step data is missing (:issue:`468`, :merge:`565`).
+  By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Update citations to version 0.6.15 and associated DOI (:issue:`460`, :merge:`561`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Upgrade to Anaconda 2021 on Gitlab-CI environment (:issue:`463`, :merge:`563`).
+- Remove Gitlab-CI workarounds from the CI configuration (:issue:`469`, :merge:`566`). By `Kyle Brindley`_.
+- Prevent creation of pycache files during documentation and pytest tasks (:issue:`34`, :merge:`567`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- Return executable paths with double quotes around parts containing spaces. Should make executing commands by absolute
+  path in Windows command prompt and powershell more robust (:issue:`462`, :merge:`562`). By `Kyle Brindley`_.
 
 *******************
 0.6.15 (2023-05-04)
