@@ -17,9 +17,7 @@ pytest_node = env.Command(
 alias_list = env.Alias('pytest', pytest_node)
 # Always run pytests in place of a complete source list
 env.AlwaysBuild(pytest_node)
-env.Clean(pytest_node, "__pycache__/")
-env.Clean(pytest_node, "tests/__pycache__/")
-env.Clean(pytest_node, "abaqus/__pycache__/")
+env.Clean(pytest_node, ["__pycache__/", "tests/__pycache__/", "abaqus/__pycache__/"])
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')
