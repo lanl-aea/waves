@@ -15,6 +15,7 @@ Documentation
 Internal Changes
 ================
 - Upgrade to Anaconda 2021 on Gitlab-CI environment (:issue:`463`, :merge:`563`).
+- Remove Gitlab-CI workarounds from the CI configuration (:issue:`469`, :merge:`566`). By `Kyle Brindley`_.
 
 Enhancements
 ============
