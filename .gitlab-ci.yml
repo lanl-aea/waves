@@ -12,12 +12,6 @@ stages:
   - deploy
 
 before_script:
-  # FIXME: Trace the Gitlab-Runner Git-LFS bug. Possible starting point(s):
-  #   * https://gitlab.com/gitlab-org/gitlab-runner/-/issues/4742
-  #   * https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/1599
-  - git status
-  - git lfs install
-  - git status
   # Assumes CI executes on AEA compute servers
   # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/7
