@@ -13,7 +13,7 @@ pytest_node = env.Command(
     chdir='waves',
     target='test_results.xml',
     source=waves_source_list,
-    action='pytest')
+    action='PYTHONDONTWRITEBYTECODE=1 pytest')
 alias_list = env.Alias('pytest', pytest_node)
 # Always run pytests in place of a complete source list
 env.AlwaysBuild(pytest_node)
