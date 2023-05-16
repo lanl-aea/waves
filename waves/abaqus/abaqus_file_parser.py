@@ -2288,13 +2288,19 @@ class OdbReportFileParser(AbaqusFileParser):
                     current_output = self.history_extract_format[instance_name][region_name][output_name]
                     coords = {'step': step_names, 'time': current_output['time']}
                     dims = ['step', 'time']
-                    if len(step_names) != len(current_output['type']):  # If type is missing steps pad back with None
-                        current_output['type'] = current_output['type'] + \
-                                                 [None] * (len(step_names) - len(current_output['type']))
+                    if len(step_names) != len(current_output['type']):  # If type is missing steps, pad the list
+                        current_output['type'] = current_output['type'] + current_output['type'] * \
+                                                 (len(step_names) - len(current_output['type']))
                     if 'node' in current_output:
+                        if len(step_names) != len(current_output['node']):  # If node is missing steps, pad the list
+                            current_output['node'] = current_output['node'] + current_output['node'] * \
+                                                     (len(step_names) - len(current_output['node']))
                         coords['node'] = ('step', current_output['node'])
                         coords['type'] = ('step', current_output['type'])
                     elif 'element' in current_output:
+                        if len(step_names) != len(current_output['element']):  # Pad missing elements
+                            current_output['element'] = current_output['element'] + current_output['element'] * \
+                                                     (len(step_names) - len(current_output['element']))
                         coords['element'] = ('step', current_output['element'])
                         coords['type'] = ('step', current_output['type'])
                     else:
