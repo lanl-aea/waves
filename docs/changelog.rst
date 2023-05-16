@@ -8,6 +8,11 @@ Changelog
 0.6.17 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Fix other missing dimensions of history output dataset when step data is missing (:issue:`470`, :merge:`570`).
+  By `Prabhu Khalsa`_.
+
 *******************
 0.6.16 (2023-05-15)
 *******************
