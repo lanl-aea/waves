@@ -161,7 +161,7 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 # Data archival
-archive_name = f"{env['project_name']}-{env['version']}"
+archive_name = f"{env['project_name']}-{env['version']}-{workflow_name}"
 archive_target = env.Tar(
     target=archive_name,
     source=workflow + workflow_configuration)
