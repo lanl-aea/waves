@@ -70,13 +70,14 @@ modifications below. If the current workflow uses more than one ``SConscript`` f
 should be updated to include all configuration files for the archive task.
 
 Next, we define the actual archive task using the `SCons`_ Tar builder :cite:`scons-man`. The archive target is
-constructed to match the current project name and version, which will allow us to keep multiple archives simultaneously,
-provided the version number is incremented between workflow executions as the project changes. We include the current
-workflow name in the archive target for projects that may contain many unique, independent workflows which can be
-archived separately. The archive task sources are compiled from all previous workflow targets and the workflow
-configuration file(s). In principle, it may be desirable to archive the workflow's source files, as well. However, if a
-version control system is used to build the version number as in :ref:`tutorial_setuptools_scm_waves`, the source files
-may also be recoverable from the version control state which is embedded in the version number.
+constructed from a prefix including the current project name and version in the ``SConstruct`` file. Including the
+version number will allow us to keep multiple archives simultaneously, provided the version number is incremented
+between workflow executions and as the project changes. We append the current workflow name in the archive target for
+projects that may contain many unique, independent workflows which can be archived separately. The archive task sources
+are compiled from all previous workflow targets and the workflow configuration file(s). In principle, it may be
+desirable to archive the workflow's source files, as well. However, if a version control system is used to build the
+version number as in :ref:`tutorial_setuptools_scm_waves`, the source files may also be recoverable from the version
+control state which is embedded in the version number.
 
 Finally, we create a dedicated archive alias to match the workflow alias. Here we separate the aliases because workflows
 with large output files may require significant time to archive. This may be undesirable during workflow construction
