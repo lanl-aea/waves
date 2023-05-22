@@ -23,7 +23,7 @@ References
 **********
 
 * `SCons`_ Tar builder :cite:`scons-man`
-* `GNU tar` documentation :cite:`gnu-tar`
+* `GNU tar`_ documentation :cite:`gnu-tar`
 
 ***********
 Environment
