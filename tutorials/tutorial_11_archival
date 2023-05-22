@@ -9,6 +9,7 @@ Requires the following ``SConscript(..., exports=[])``
   * ``python_source_abspath`` - String absolute path to the EABM's Python 3 files
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``project_name`` - String project name
+  * ``project_configuration`` - String absolute path to the project SCons configuration file
   * ``version`` - String project version number
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
