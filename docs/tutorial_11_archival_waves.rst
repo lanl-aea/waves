@@ -4,8 +4,6 @@
 Tutorial 11: Data Archival
 ##########################
 
-.. include:: wip_warning.txt
-
 The final step of any analysis workflow should be to archive your simulation files used in reporting and documenation,
 both input and output files. The archival task is generally performed once at the end of a project and limited to the
 final, peer-reviewed simulation results. However, if the task of archiving these files is added to the automated
