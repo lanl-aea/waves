@@ -8,9 +8,8 @@ Requires the following ``SConscript(..., exports=[])``
   * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
   * ``python_source_abspath`` - String absolute path to the EABM's Python 3 files
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
-  * ``project_name`` - String project name
+  * ``archive_prefix`` - String prefix for archive target(s) containing identifying project and version information
   * ``project_configuration`` - String absolute path to the project SCons configuration file
-  * ``version`` - String project version number
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -161,7 +160,7 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 # Data archival
-archive_name = f"{env['project_name']}-{env['version']}-{workflow_name}"
+archive_name = f"{env['archive_prefix']}-{workflow_name}"
 archive_target = env.Tar(
     target=archive_name,
     source=workflow + workflow_configuration)
