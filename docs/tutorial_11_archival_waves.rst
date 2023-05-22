@@ -119,7 +119,7 @@ Build Targets
 Output Files
 ************
 
-The output should look identical to :ref:`tutorial_regression_testing_waves` with the addition of a single ``*.tar``
+The output should look identical to :ref:`tutorial_regression_testing_waves` with the addition of a single ``*.tar.bz2``
 file. You can inspect the contents of the archive as below.
 
 .. code-block:: bash
