@@ -57,11 +57,30 @@ below to help identify the changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing
 
-Note that we assume that the build directory name will match the current ``SConscript`` file name when constructing the
-``workflow_configuration`` source files for the Tar archive task. For workflows that re-use ``SConscript`` files, it may
-be necessary to recover the current ``SConscript`` with a `Python lambda expression`_ as seen in the ``SConstruct``
+First, we add the new environment keys required by the ``SConscript`` file that will be used by the archive task.
+Second, we build a list of all required SCons configuration files for the current workflow, where the
+``project_configuration`` will point to the ``SConstruct`` file and by the project's naming convention the build
+directory name will match the current ``SConscript`` file name. These SCons workflow configuration files will be
+archived with the output of the workflow for reproducibility of the workflow task definitions.
+
+For advanced workflows, e.g. :ref:`tutorial_task_reuse_waves`, that re-use ``SConscript`` files, it may
+be necessary to recover the current ``SConscript`` file name with a `Python lambda expression`_ as seen in the ``SConstruct``
 modifications below. If the current workflow uses more than one ``SConscript`` file, the ``workflow_configuration`` list
 should be updated to include all configuration files for the archive task.
+
+Next, we define the actual archive task using the `SCons`_ Tar builder :cite:`scons-man`. The archive target is
+constructed to match the current project name and version, which will allow us to keep multiple archives simultaneously,
+provided the version number is incremented between workflow executions as the project changes. We include the current
+workflow name in the archive target for projects that may contain many unique, independent workflows which can be
+archived separately. The archive task sources are compiled from all previous workflow targets and the workflow
+configuration file(s). In principle, it may be desirable to archive the workflow's source files, as well. However, if a
+version control system is used to build the version number as in :ref:`tutorial_setuptools_scm_waves`, the source files
+may also be recoverable from the version control state which is embedded in the version number.
+
+Finally, we create a dedicated archive alias to match the workflow alias. Here we separate the aliases because workflows
+with large output files may require significant time to archive. This may be undesirable during workflow construction
+and troubleshooting. It is also typical for the archival task to be performed once at reporting time when the
+post-processing plots have been finalized.
 
 **********
 SConstruct
