@@ -13,6 +13,10 @@ Bug fixes
 - Fix other missing dimensions of history output dataset when step data is missing (:issue:`470`, :merge:`570`).
   By `Prabhu Khalsa`_.
 
+Documentation
+=============
+- Complete the discussion sections in the data archival tutorial (:issue:`465`, :merge:`571`). By `Kyle Brindley`_.
+
 *******************
 0.6.16 (2023-05-15)
 *******************
