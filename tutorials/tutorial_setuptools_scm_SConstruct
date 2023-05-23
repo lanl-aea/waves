@@ -48,7 +48,7 @@ env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "ab
 
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-TUTORIAL'
-version = '0.1.0'
+version = setuptools_scm.get_version()
 archive_prefix = f"{project_name}-{version}"
 project_configuration = pathlib.Path(inspect.getfile(lambda: None))
 project_dir = project_configuration.parent
