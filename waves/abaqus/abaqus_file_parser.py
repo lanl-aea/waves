@@ -12,6 +12,7 @@ import os
 from abc import ABC, abstractmethod
 from pathlib import Path
 from datetime import datetime
+from itertools import compress
 
 import xarray
 import numpy
@@ -1728,6 +1729,8 @@ class OdbReportFileParser(AbaqusFileParser):
         node_given = False
         section_point_given = False
         integration_point_given = False
+        value_headers = list()
+        value_indices = list()
         for i, header in enumerate(headers):
             header = header.strip()
             if header == 'Element':
@@ -1742,8 +1745,9 @@ class OdbReportFileParser(AbaqusFileParser):
                 pass
             else:
                 number_of_data_values += 1
+                value_headers.append(header)  # Storing the names of the headers that have data
+                value_indices.append(i)
             headers[i] = header  # Need to store stripped header, without spaces or line breaks
-        value_headers = headers[-number_of_data_values:]  # Storing the names of the headers that have data
         line = f.readline()  # Blank line
         line = 'Ready for first line of data'
 
@@ -1773,7 +1777,8 @@ class OdbReportFileParser(AbaqusFileParser):
                     except ValueError:
                         value['integrationPoint'] = None
                 # get the values after the first 5 values of: Instance, Element, Node, SP, IP
-                for i, datum in enumerate(line_values[-number_of_data_values:]):
+                for i, value_index in enumerate(value_indices):
+                    datum = line_values[value_index]
                     try:
                         value[value_headers[i]] = float(datum)
                     except ValueError:  # The float command will fail on None
@@ -1868,7 +1873,8 @@ class OdbReportFileParser(AbaqusFileParser):
                     data_value = float(line_values[-1])
                 else:
                     data_value = list()
-                    for datum in line_values[-number_of_data_values:]:
+                    for value_index in value_indices:
+                        datum = line_values[value_index]
                         try:
                             data_value.append(float(datum))
                         except ValueError:  # Should be raised on None values
