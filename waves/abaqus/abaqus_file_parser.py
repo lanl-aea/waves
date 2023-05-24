@@ -2266,8 +2266,21 @@ class OdbReportFileParser(AbaqusFileParser):
                 del instance['elements']
 
         history_length = dict()
-        step_names = [_ for _ in self.parsed['odb']['steps'].keys()]
-        true_step_numbers = len(step_names)
+        step_field_names = list()
+        step_field_mask = list()
+        step_history_names = list()
+        step_history_mask = list()
+        for step_name in self.parsed['odb']['steps']:
+            if len(self.parsed['odb']['steps'][step_name]['frames']) != 0:      
+                step_field_names.append(step_name)
+                step_field_mask.append(True)
+            else:
+                step_field_mask.append(False)
+            if len(self.parsed['odb']['steps'][step_name]['historyRegions']) != 0:
+                step_history_names.append(step_name)
+                step_history_mask.append(True)
+            else:
+                step_history_mask.append(False)
         # Format history outputs
         # For history outputs, rather than do memory intensive xarray concatenations, the data has been already
         # formatted in such a way that it lends itself to building datasets and data arrays
@@ -2292,27 +2305,27 @@ class OdbReportFileParser(AbaqusFileParser):
                 # Loop through data meant for data arrays and create data arrays
                 for output_name in self.history_extract_format[instance_name][region_name]:
                     current_output = self.history_extract_format[instance_name][region_name][output_name]
-                    coords = {'step': step_names, 'time': current_output['time']}
+                    coords = {'step': step_history_names, 'time': current_output['time']}
                     dims = ['step', 'time']
-                    if len(step_names) != len(current_output['type']):  # If type is missing steps, pad the list
+                    if len(step_history_names) != len(current_output['type']):  # If type is missing steps, pad the list
                         current_output['type'] = current_output['type'] + current_output['type'] * \
-                                                 (len(step_names) - len(current_output['type']))
+                                                 (len(step_history_names) - len(current_output['type']))
                     if 'node' in current_output:
-                        if len(step_names) != len(current_output['node']):  # If node is missing steps, pad the list
+                        if len(step_history_names) != len(current_output['node']):  # If node is missing steps
                             current_output['node'] = current_output['node'] + current_output['node'] * \
-                                                     (len(step_names) - len(current_output['node']))
+                                                     (len(step_history_names) - len(current_output['node']))
                         coords['node'] = ('step', current_output['node'])
                         coords['type'] = ('step', current_output['type'])
                     elif 'element' in current_output:
-                        if len(step_names) != len(current_output['element']):  # Pad missing elements
+                        if len(step_history_names) != len(current_output['element']):  # Pad missing elements
                             current_output['element'] = current_output['element'] + current_output['element'] * \
-                                                     (len(step_names) - len(current_output['element']))
+                                                     (len(step_history_names) - len(current_output['element']))
                         coords['element'] = ('step', current_output['element'])
                         coords['type'] = ('step', current_output['type'])
                     else:
                         coords['type'] = ('step', current_output['type'])
-                    if len(current_output['data']) != true_step_numbers:
-                        current_output['data'] = current_output['data'][:true_step_numbers]
+                    if len(current_output['data']) != len(step_history_names):
+                        current_output['data'] = list(compress(current_output['data'], step_history_mask))
                     for step_index in range(len(current_output['data'])):  # Pad with None if missing data
                         if len(current_output['data'][step_index]) < len(current_output['time']):
                             current_output['data'][step_index] = current_output['data'][step_index] + \
@@ -2365,7 +2378,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 for instance_name in self.field_extract_format[region_name][field_name]:
                     current_output = self.field_extract_format[region_name][field_name][instance_name]
                     dims = ['step', 'time']
-                    coords = {'step': step_names,
+                    coords = {'step': step_field_names,
                               'time': current_output['time']}
                     position = 'elements'
                     if 'nodes' in current_output:
@@ -2393,8 +2406,8 @@ class OdbReportFileParser(AbaqusFileParser):
                         coords[f'{field_name} values'] = current_output['value_names']
                         dims.append(f'{field_name} values')
 
-                    if len(data) != true_step_numbers:
-                        data = data[:true_step_numbers]
+                    if len(data) != len(step_field_names):
+                        data = list(compress(data, step_field_mask))
 
                     # Get the current dataset for which to add data arrays
                     try:
