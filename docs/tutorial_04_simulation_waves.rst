@@ -45,10 +45,35 @@ SConscript
 
 .. _tutorial_simulation_waves_running_datacheck:
 
+
+4. Add the highlighted section shown below to the ``tutorial_04_simulation`` file. 
+   This will initialize the datacheck list.
+
+.. admonition:: waves-tutorials/tutorial_04_simulation
+
+    .. literalinclude:: tutorials_tutorial_04_simulation
+       :language: Python
+       :lineno-match:
+       :emphasize-lines: 3
+       :start-after: marker-1
+       :end-before: marker-2
+
+5. Add the highlighted sections shown below to the ``tutorial_04_simulation`` file. 
+   This will create the datackeck alias.
+
+.. admonition:: waves-tutorials/tutorial_04_simulation
+
+    .. literalinclude:: tutorials_tutorial_04_simulation
+       :language: Python
+       :lineno-match:
+       :emphasize-lines: 3,8
+       :start-after: marker-6
+
+
 Running a Datacheck
 ===================
 
-4. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
+6. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -116,7 +141,7 @@ default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be
 Running the Analysis
 ====================
 
-5. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
+7. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
    datacheck code that was just discussed.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -163,7 +188,7 @@ tutorial. Note the addition of a separate datacheck alias, which will be used in
 SConstruct
 **********
 
-6. Make the following additions to the ``waves-tutorials/SConstruct`` file using the ``diff`` against the
+8. Make the following additions to the ``waves-tutorials/SConstruct`` file using the ``diff`` against the
    ``SConstruct`` file from the last tutorial:
 
    * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add custom
@@ -183,7 +208,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-7. Build the new targets
+9. Build the new targets
 
 .. code-block:: bash
 
