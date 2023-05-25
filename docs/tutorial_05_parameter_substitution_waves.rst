@@ -263,9 +263,8 @@ Build Targets
     /path/to/waves-tutorials
     $ scons tutorial_05_parameter_substitution
     scons: Reading SConscript files ...
+    Checking whether /apps/abaqus/Commands/abq2022 program exists.../apps/abaqus/Commands/abq2022
     Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
-    Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
-    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
@@ -362,12 +361,12 @@ the file we created earlier in this tutorial. There is also a file named ``singl
    :linenos:
    :emphasize-lines: 6
 
-   *STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
+   *STEP, NLGEOM=NO, INC=100, AMPLITUDE=RAMP
    *STATIC
    .005, 1.00, 0.000001, 0.5
    **
-   *BOUNDARY,OP=MOD, AMPLITUDE=SINGLE_ELEMENT
-   TOP_BC,2,2,-1.0
+   *BOUNDARY,OP=MOD
+   A.single_element.top,2,2,-0.01
    **
 
 With the use of the :meth:`waves.builders.copy_substitute` method, we used the ``single_element_compression.inp.in``
