@@ -160,8 +160,7 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 # Data archival
-tar_suffix = ".tar.bz2"
-archive_name = f"{env['archive_prefix']}-{workflow_name}{tar_suffix}"
+archive_name = f"{env['archive_prefix']}-{workflow_name}.tar.bz2"
 archive_target = env.Tar(
     target=archive_name,
     source=workflow + workflow_configuration)
