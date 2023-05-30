@@ -17,7 +17,7 @@ Bug fixes
 Documentation
 =============
 - Complete the discussion sections in the data archival tutorial (:issue:`465`, :merge:`571`). By `Kyle Brindley`_.
-- Minor changes in tutorials that ensure expected behavior when unsing the copy button (:issue:`471`, :merge:`573`). 
+- Minor changes in tutorials that ensure expected behavior when using the copy button (:issue:`471`, :merge:`573`). 
   By `Sergio Cordova`_.
 
 *******************
