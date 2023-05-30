@@ -152,9 +152,8 @@ Build Targets
     /path/to/waves-tutorials
     $ scons tutorial_06_include_files
     scons: Reading SConscript files ...
+    Checking whether /apps/abaqus/Commands/abq2022 program exists.../apps/abaqus/Commands/abq2022
     Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
-    Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
-    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abaqus -information
