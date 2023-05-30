@@ -377,9 +377,9 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
         Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
         scons: done reading SConscript files.
         scons: Building targets ...
-        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2022 -information
+        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus -information
         environment > single_element_geometry.abaqus_v6.env
-        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2022 cae -noGui
+        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abaqus cae -noGui
         /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
         scons: done building targets.
 
