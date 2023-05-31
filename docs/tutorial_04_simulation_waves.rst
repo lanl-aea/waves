@@ -45,10 +45,35 @@ SConscript
 
 .. _tutorial_simulation_waves_running_datacheck:
 
+
+4. Add the highlighted section shown below to the ``tutorial_04_simulation`` file. 
+   This will initialize the datacheck list.
+
+.. admonition:: waves-tutorials/tutorial_04_simulation
+
+    .. literalinclude:: tutorials_tutorial_04_simulation
+       :language: Python
+       :lineno-match:
+       :emphasize-lines: 3
+       :start-after: marker-1
+       :end-before: marker-2
+
+5. Add the highlighted sections shown below to the ``tutorial_04_simulation`` file. 
+   This will create the datackeck alias.
+
+.. admonition:: waves-tutorials/tutorial_04_simulation
+
+    .. literalinclude:: tutorials_tutorial_04_simulation
+       :language: Python
+       :lineno-match:
+       :emphasize-lines: 3,8
+       :start-after: marker-6
+
+
 Running a Datacheck
 ===================
 
-4. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
+6. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -116,7 +141,7 @@ default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be
 Running the Analysis
 ====================
 
-5. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
+7. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
    datacheck code that was just discussed.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -163,7 +188,7 @@ tutorial. Note the addition of a separate datacheck alias, which will be used in
 SConstruct
 **********
 
-6. Make the following additions to the ``waves-tutorials/SConstruct`` file using the ``diff`` against the
+8. Make the following additions to the ``waves-tutorials/SConstruct`` file using the ``diff`` against the
    ``SConstruct`` file from the last tutorial:
 
    * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add custom
@@ -183,7 +208,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-7. Build the new targets
+9. Build the new targets
 
 .. code-block:: bash
 
@@ -191,22 +216,21 @@ Build Targets
    /path/to/waves-tutorials
    $ scons tutorial_04_simulation
    scons: Reading SConscript files ...
+   Checking whether /apps/abaqus/Commands/abq2022 program exists.../apps/abaqus/Commands/abq2022
    Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
-   Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
-   Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment
-   > single_element_geometry.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -information
+   environment > single_element_geometry.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 cae -noGui
    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -information
    environment > single_element_partition.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 cae -noGui
    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment
-   > single_element_mesh.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus cae -noGui
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -information
+   environment > single_element_mesh.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 cae -noGui
    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
    Copy("build/tutorial_04_simulation/single_element_compression.inp",
    "eabm_package/abaqus/single_element_compression.inp")
@@ -216,9 +240,9 @@ Build Targets
    Copy("build/tutorial_04_simulation/materials.inp", "eabm_package/abaqus/materials.inp")
    Copy("build/tutorial_04_simulation/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_04_simulation/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -information environment
-   > single_element_compression.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abaqus -job
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -information
+   environment > single_element_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -job
    single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
    single_element_compression.stdout 2>&1
    scons: done building targets.

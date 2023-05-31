@@ -90,6 +90,7 @@ Build Targets
    $ pwd
    /path/to/waves-tutorials
    $ scons tutorial_08_data_extraction --jobs=4
+   <output truncated>
 
 ************
 Output Files
