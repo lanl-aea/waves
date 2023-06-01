@@ -2,11 +2,11 @@
 """
 
 from unittest.mock import patch
-from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
 
+from utilities import get_salib_sampler_tuple
 from waves.parameter_generators import SALibSampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supported_salib_samplers
 
@@ -38,85 +38,25 @@ class TestSALibSampler:
         assert override_kwargs == expected
 
     validate_input = {
-        "sobol: good schema": (
-            "sobol",
-            {"N": 4,
-             "problem": {
-                 "num_vars": 3,
-                 "names": ["parameter_1", "parameter_2", "parameter_3"],
-                 "bounds": [[-1, 1], [-2, 2], [-3, 3]]
-             }
-            },
-            does_not_raise()
-        ),
-        "latin: good schema": (
-            "latin",
-            {"N": 4,
-             "problem": {
-                 "num_vars": 3,
-                 "names": ["parameter_1", "parameter_2", "parameter_3"],
-                 "bounds": [[-1, 1], [-2, 2], [-3, 3]]
-             }
-            },
-            does_not_raise()
-        ),
-        "sobol: one parameter": (
-            "sobol",
-            {"N": 4,
-             "problem": {
-                 "num_vars": 1,
-                 "names": ["parameter_1",],
-                 "bounds": [[-1, 1]]
-             }
-            },
-            pytest.raises(ValueError)
-        ),
-        "morris: one parameter": (
-            "morris",
-            {"N": 4,
-             "problem": {
-                 "num_vars": 1,
-                 "names": ["parameter_1",],
-                 "bounds": [[-1, 1]]
-             }
-            },
-            pytest.raises(ValueError)
-        ),
-        "missing N": (
-            "latin",
-            {"problem": {"num_vars": 4, "names": ["p1"], "bounds": [[-1, 1]]}},
-            pytest.raises(AttributeError)
-        ),
-        "missing problem": (
-            "latin",
-            {"N": 4},
-            pytest.raises(AttributeError)
-        ),
-        "missing names": (
-            "latin",
-            {"N": 4, "problem": {"num_vars": 4, "bounds": [[-1, 1]]}},
-            pytest.raises(AttributeError)
-        ),
-        "schema not a dict": (
-            "latin",
-            "not a dict",
-            pytest.raises(TypeError)
-        ),
-        "N not an int": (
-            "latin",
-            {"N": "not an int", "problem": {"num_vars": 4, "names": ["p1"], "bounds": [[-1, 1]]}},
-            pytest.raises(TypeError)
-        ),
-        "problem not a dict": (
-            "latin",
-            {"N": 4, "problem": "not a dict"},
-            pytest.raises(TypeError)
-        ),
-        "names not a list": (
-            "latin",
-            {"N": 4, "problem": {"num_vars": 4, "names": "not a list", "bounds": [[-1, 1]]}},
-            pytest.raises(TypeError)
-        ),
+        "sobol: good schema": get_salib_sampler_tuple("sobol", n=4, num_vars=3,
+                                                      names=["parameter_1", "parameter_2", "parameter_3"],
+                                                      bounds=[[-1, 1], [-2, 2], [-3, 3]]),
+        "latin: good schema": get_salib_sampler_tuple("latin", n=4, num_vars=3,
+                                                      names=["parameter_1", "parameter_2", "parameter_3"],
+                                                      bounds=[[-1, 1], [-2, 2], [-3, 3]]),
+        "sobol: one parameter": get_salib_sampler_tuple("sobol", n=4, num_vars=1, names=["parameter_1"], 
+                                                        bounds=[[-1, 1]], error=ValueError),
+        "morris: one parameter": get_salib_sampler_tuple("morris", n=4, num_vars=1, names=["parameter_1"], 
+                                                         bounds=[[-1, 1]], error=ValueError),
+        "missing N": get_salib_sampler_tuple("latin", num_vars=4, names=["p1"], bounds=[[-1, 1]], error=AttributeError),
+        "missing problem": get_salib_sampler_tuple("latin", n=4, missing_problem=True, error=AttributeError),
+        "missing names": get_salib_sampler_tuple("latin", n=4, num_vars=4, bounds=[[-1, 1]], error=AttributeError),
+        "schema not a dict": get_salib_sampler_tuple("latin", schema="not a dict", error=TypeError),
+        "N not an int": get_salib_sampler_tuple("latin", n="not an int", num_vars=4, names=["p1"], bounds=[[-1, 1]],
+                                                error=TypeError),
+        "problem not a dict": get_salib_sampler_tuple("latin", n=4, problem="not a dict", error=TypeError),
+        "names not a list": get_salib_sampler_tuple("latin", n=4, num_vars=4, names="not a list", bounds=[[-1, 1]],
+                                                    error=TypeError)
     }
 
     @pytest.mark.unittest
@@ -127,7 +67,7 @@ class TestSALibSampler:
         with outcome:
             try:
                 # Validate is called in __init__. Do not need to call explicitly.
-                TestValidate = SALibSampler(sampler_class, parameter_schema)
+                SALibSampler(sampler_class, parameter_schema)
             finally:
                 pass
 
