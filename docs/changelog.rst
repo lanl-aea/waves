@@ -20,6 +20,10 @@ Documentation
 - Minor changes in tutorials that ensure expected behavior when using the copy button (:issue:`471`, :merge:`573`). 
   By `Sergio Cordova`_.
 
+Enhancements
+============
+- Sort the ``fetch`` available files output (:issue:`475`, :merge:`576`). By `Kyle Brindley`_.
+
 *******************
 0.6.16 (2023-05-15)
 *******************
