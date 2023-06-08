@@ -13,6 +13,7 @@ Bug fixes
 - Fix other missing dimensions of history output dataset when step data is missing (:issue:`470`, :merge:`570`).
   By `Prabhu Khalsa`_.
 - Fix field output dimensions when step data is missing (:issue:`473`, :merge:`574`). By `Prabhu Khalsa`_.
+- Update numpy.float to numpy.float64 in abaqus_file_parser.py (:issue:`476`, :merge:`577`). By `Prabhu Khalsa`_.
 
 Documentation
 =============

@@ -2542,7 +2542,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     h5file.create_group(path)
                 except ValueError:  # pragma: no cover
                     pass  # If group is already created, just ignore the error
-                h5file[path].attrs[key] = numpy.float(item)
+                h5file[path].attrs[key] = numpy.float64(item)
             elif isinstance(item, tuple):
                 if item:
                     if isinstance(item[0], (str, bytes)):
