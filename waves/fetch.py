@@ -39,6 +39,8 @@ def available_files(root_directory, relative_paths):
             available_files.extend(file_list)
         else:
             not_found.append(relative_path)
+    available_files.sort()
+    not_found.sort()
     return available_files, not_found
 
 
