@@ -9,6 +9,18 @@ readme = "README.rst"
 license = {text = "BSD-3-Clause"}
 classifiers = ["Programming Language:: Python :: 3"]
 dynamic = ["version"]
+dependencies = [
+    "h5netcdf",
+    "h5py",
+    "matplotlib",
+    "networkx",
+    "numpy",
+    "pyyaml",
+    "salib >=1",
+    "scipy >=1.7",
+    "scons",
+    "xarray"
+]
 
 [tool.setuptools]
 packages = ["waves", "waves.abaqus", "waves.tests"]
