@@ -3,7 +3,7 @@ requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "WAVES"
+name = "waves"
 description = "WAVES Analysis for Verified Engineering Simulations"
 readme = "README.rst"
 license = {text = "BSD-3-Clause"}
