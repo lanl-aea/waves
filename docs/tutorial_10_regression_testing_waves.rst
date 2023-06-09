@@ -53,9 +53,9 @@ Directory Structure
 CSV file
 ********
 
-4. Create a new file named ``single_element_compression_cartesian_product.csv`` from the contents below
+4. In the ``waves-tutorials/eabm_package/python`` directory, Create a new file named ``single_element_compression_cartesian_product.csv`` from the contents below
 
-.. admonition:: waves-tutorials/python_single_element_compression_cartesian_product.csv
+.. admonition:: waves-tutorials/eabm_package/python/single_element_compression_cartesian_product.csv
 
    .. literalinclude:: python_single_element_compression_cartesian_product.csv
       :lineno-match:

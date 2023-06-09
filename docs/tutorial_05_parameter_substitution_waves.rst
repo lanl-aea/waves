@@ -263,24 +263,23 @@ Build Targets
     /path/to/waves-tutorials
     $ scons tutorial_05_parameter_substitution
     scons: Reading SConscript files ...
+    Checking whether /apps/abaqus/Commands/abq2022 program exists.../apps/abaqus/Commands/abq2022
     Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
-    Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
-    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -information
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 cae -noGui
     /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 >
     single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -information
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 cae -noGui
     /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 >
     single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -information
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus cae -noGui
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 cae -noGui
     /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 >
     single_element_mesh.stdout 2>&1
     Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in",
@@ -292,9 +291,9 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/materials.inp", "eabm_package/abaqus/materials.inp")
     Copy("build/tutorial_05_parameter_substitution/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_05_parameter_substitution/history_output.inp", "eabm_package/abaqus/history_output.inp")
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -information
     environment > single_element_compression.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abaqus -job
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -job
     single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
     single_element_compression.stdout 2>&1
     scons: done building targets.
@@ -362,12 +361,12 @@ the file we created earlier in this tutorial. There is also a file named ``singl
    :linenos:
    :emphasize-lines: 6
 
-   *STEP, NLGEOM=YES, INC=100, AMPLITUDE=RAMP
+   *STEP, NLGEOM=NO, INC=100, AMPLITUDE=RAMP
    *STATIC
    .005, 1.00, 0.000001, 0.5
    **
-   *BOUNDARY,OP=MOD, AMPLITUDE=SINGLE_ELEMENT
-   TOP_BC,2,2,-1.0
+   *BOUNDARY,OP=MOD
+   A.single_element.top,2,2,-0.01
    **
 
 With the use of the :meth:`waves.builders.copy_substitute` method, we used the ``single_element_compression.inp.in``

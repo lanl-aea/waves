@@ -260,22 +260,21 @@ Build Targets
     /path/to/waves-tutorials
     $ scons tutorial_02_partition_mesh
     scons: Reading SConscript files ...
+    Checking whether /apps/abaqus/Commands/abq2022 program exists.../apps/abaqus/Commands/abq2022
     Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
-    Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
-    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
     scons: done reading SConscript files.
     scons: Building targets ...
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 -information
     environment > single_element_geometry.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 cae -noGui
     /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 -information
     environment > single_element_partition.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 cae -noGui
     /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus -information
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 -information
     environment > single_element_mesh.abaqus_v6.env
-    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abaqus cae -noGui
+    cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 cae -noGui
     /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
     scons: done building targets.
 
@@ -289,7 +288,7 @@ below.
 .. code-block:: bash
 
    $ pwd
-   $ /home/roppenheimer/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/
    build/tutorial_01_geometry/
    |-- abaqus.rpy

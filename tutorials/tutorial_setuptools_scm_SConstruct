@@ -3,6 +3,7 @@
 import os
 import sys
 import pathlib
+import inspect
 
 import setuptools_scm
 import waves
@@ -47,17 +48,21 @@ env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "ab
 
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-TUTORIAL'
-version = setuptools_scm.get_version(),
-project_dir = pathlib.Path(Dir(".").abspath)
+version = setuptools_scm.get_version()
+archive_prefix = f"{project_name}-{version}"
+project_configuration = pathlib.Path(inspect.getfile(lambda: None))
+project_dir = project_configuration.parent
 abaqus_source_dir = "eabm_package/abaqus"
 python_source_dir = "eabm_package/python"
 project_variables = {
+    "project_configuration": str(project_configuration),
     'project_name': project_name,
     'project_dir': str(project_dir),
     'version': version,
     'abaqus_source_abspath': str(project_dir / abaqus_source_dir),
     'python_source_abspath': str(project_dir / python_source_dir),
-    'datacheck_alias': 'datacheck'
+    'datacheck_alias': 'datacheck',
+    'archive_prefix': archive_prefix
 }
 for key, value in project_variables.items():
     env[key] = value

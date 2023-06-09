@@ -74,7 +74,7 @@ available_files_input = {
         [], ["dummy.file1"], "dummy.file1"
     ),
     "two files": (
-        "/path/to/source", ["dummy.file1", "dummy.file2"],
+        "/path/to/source", ["dummy.file2", "dummy.file1"],
         [True, True], [], [],
         two_file_source_tree, [], None
     ),

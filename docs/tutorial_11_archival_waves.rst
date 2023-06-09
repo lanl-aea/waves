@@ -4,8 +4,6 @@
 Tutorial 11: Data Archival
 ##########################
 
-.. include:: wip_warning.txt
-
 The final step of any analysis workflow should be to archive your simulation files used in reporting and documenation,
 both input and output files. The archival task is generally performed once at the end of a project and limited to the
 final, peer-reviewed simulation results. However, if the task of archiving these files is added to the automated
@@ -25,6 +23,7 @@ References
 **********
 
 * `SCons`_ Tar builder :cite:`scons-man`
+* `GNU tar`_ documentation :cite:`gnu-tar`
 
 ***********
 Environment
@@ -57,11 +56,31 @@ below to help identify the changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing
 
-Note that we assume that the build directory name will match the current ``SConscript`` file name when constructing the
-``workflow_configuration`` source files for the Tar archive task. For workflows that re-use ``SConscript`` files, it may
-be necessary to recover the current ``SConscript`` with a `Python lambda expression`_ as seen in the ``SConstruct``
+First, we add the new environment keys required by the ``SConscript`` file that will be used by the archive task.
+Second, we build a list of all required SCons configuration files for the current workflow, where the
+``project_configuration`` will point to the ``SConstruct`` file and by the project's naming convention the build
+directory name will match the current ``SConscript`` file name. These SCons workflow configuration files will be
+archived with the output of the workflow for reproducibility of the workflow task definitions.
+
+For advanced workflows, e.g. :ref:`tutorial_task_reuse_waves`, that re-use ``SConscript`` files, it may
+be necessary to recover the current ``SConscript`` file name with a `Python lambda expression`_ as seen in the ``SConstruct``
 modifications below. If the current workflow uses more than one ``SConscript`` file, the ``workflow_configuration`` list
 should be updated to include all configuration files for the archive task.
+
+Next, we define the actual archive task using the `SCons`_ Tar builder :cite:`scons-man`. The archive target is
+constructed from a prefix including the current project name and version in the ``SConstruct`` file. Including the
+version number will allow us to keep multiple archives simultaneously, provided the version number is incremented
+between workflow executions and as the project changes. We append the current workflow name in the archive target for
+projects that may contain many unique, independent workflows which can be archived separately. The archive task sources
+are compiled from all previous workflow targets and the workflow configuration file(s). In principle, it may be
+desirable to archive the workflow's source files, as well. However, if a version control system is used to build the
+version number as in :ref:`tutorial_setuptools_scm_waves`, the source files may also be recoverable from the version
+control state which is embedded in the version number.
+
+Finally, we create a dedicated archive alias to match the workflow alias. Here we separate the aliases because workflows
+with large output files may require significant time to archive. This may be undesirable during workflow construction
+and troubleshooting. It is also typical for the archival task to be performed once at reporting time when the
+post-processing plots have been finalized.
 
 **********
 SConstruct
@@ -77,11 +96,17 @@ changes made in this tutorial.
       :diff: tutorials_tutorial_10_regression_testing_SConstruct
 
 Note that we retrieve the project configuration ``SConstruct`` file name and location with a `Python lambda expression`_
-:cite:`python`. In Python 3, you would normally use the ``__file__`` attribute; however, this attribute is not defined
-for `SCons`_ configuation files. Instead, we can recover the configuration file name and absolute path with the same
-method used in :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves` for the Abaqus Python 2
-journal files. For consistency with the configuration file path, we assume that the parent directory of the
-configuration file is the same as the project root directory.
+:cite:`python`. We do this to recover the absolute path to the current configuration file and because some projects may
+choose to use a non-default filename for the project configuration file. In Python 3, you would normally use the
+``__file__`` attribute; however, this attribute is not defined for `SCons`_ configuation files. Instead, we can recover
+the configuration file name and absolute path with the same method used in :ref:`tutorial_geometry_waves` and
+:ref:`tutorial_partition_mesh_waves` for the Abaqus Python 2 journal files. For consistency with the configuration file
+path, we assume that the parent directory of the configuration file is the same as the project root directory.
+
+The environment is also modified to provide non-default configuration options to the `SCons`_ Tar builder. Here, we
+request the ``bzip2`` compression algorithm of the archive file and a commonly used file extension to match. You can
+read more about tar archives in the `GNU tar`_ documentation :cite:`gnu-tar` and the `SCons`_ Tar builder in the `SCons
+manpage`_ :cite:`scons-man`.
 
 *************
 Build Targets
@@ -100,7 +125,7 @@ Build Targets
 Output Files
 ************
 
-The output should look identical to :ref:`tutorial_regression_testing_waves` with the addition of a single ``*.tar``
+The output should look identical to :ref:`tutorial_regression_testing_waves` with the addition of a single ``*.tar.bz2``
 file. You can inspect the contents of the archive as below.
 
 .. code-block:: bash
@@ -108,7 +133,7 @@ file. You can inspect the contents of the archive as below.
    $ pwd
    /path/to/waves-tutorials
    $ find build -name "*.tar.bz2"
-   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
+   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0-tutorial_11_archival.tar.bz2
    $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_11_archival"
    build/tutorial_11_archival/parameter_set0/single_element_geometry.cae
    build/tutorial_11_archival/parameter_set0/single_element_geometry.jnl
@@ -143,5 +168,5 @@ file. You can inspect the contents of the archive as below.
    build/tutorial_11_archival/parameter_set0/single_element_compression_datasets.h5
    build/tutorial_11_archival/parameter_set0/single_element_compression.csv
    build/tutorial_11_archival/parameter_set0/single_element_compression.h5.stdout
-   tutorial_11_archival_SConstruct
+   SConstruct
    tutorial_11_archival

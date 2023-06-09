@@ -99,6 +99,7 @@ Build Targets
    $ pwd
    /path/to/waves-tutorials
    $ scons tutorial_09_post_processing --jobs=4
+   <output truncated>
 
 ************
 Output Files
