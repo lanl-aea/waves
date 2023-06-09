@@ -5,8 +5,16 @@ Changelog
 #########
 
 *******************
-0.6.18 (unreleased)
+0.6.19 (unreleased)
 *******************
+
+*******************
+0.6.18 (2023-06-09)
+*******************
+
+Internal Changes
+================
+- Improve GitHub release workflow to match recommended practice (:merge:`580`). By `Kyle Brindley`_.
 
 *******************
 0.6.17 (2023-06-09)
