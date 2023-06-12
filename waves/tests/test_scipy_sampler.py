@@ -7,7 +7,8 @@ import pytest
 import numpy
 
 from waves.parameter_generators import ScipySampler
-from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supported_scipy_samplers
+from waves._settings import _set_coordinate_key, _supported_scipy_samplers
+from common import consistent_hash_parameter_check, self_consistency_checks, get_samplers
 
 
 class TestScipySampler:
@@ -78,14 +79,7 @@ class TestScipySampler:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_scipy_samplers:
-            TestMerge1 = ScipySampler(sampler, first_schema, **kwargs)
-            with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-                TestMerge2 = ScipySampler(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
-            samples_array = TestMerge2._samples.astype(float)
-            quantiles_array = TestMerge2._quantiles.astype(float)
-            # Check for consistent hash-parameter set relationships
-            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
-            # Self-consistency checks
-            assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
-            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+            test_merge1, test_merge2 = get_samplers(ScipySampler, sampler, first_schema, second_schema, kwargs)
+            test_merge2._quantiles.astype(float)
+            consistent_hash_parameter_check(test_merge1, test_merge2)
+            self_consistency_checks(test_merge2)

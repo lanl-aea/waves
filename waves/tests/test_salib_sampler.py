@@ -8,7 +8,8 @@ import pytest
 import numpy
 
 from waves.parameter_generators import SALibSampler
-from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supported_salib_samplers
+from waves._settings import _set_coordinate_key, _supported_salib_samplers
+from common import consistent_hash_parameter_check, self_consistency_checks, get_samplers
 
 
 class TestSALibSampler:
@@ -311,14 +312,6 @@ class TestSALibSampler:
             # TODO: find a better way to separate the sampler types and their test parameterization
             if not self._big_enough(sampler, first_schema["N"], first_schema["problem"]["num_vars"]):
                 return
-            # Unit tests
-            TestMerge1 = SALibSampler(sampler, first_schema, **kwargs)
-            with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-                TestMerge2 = SALibSampler(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
-            samples_array = TestMerge2._samples.astype(float)
-            # Check for consistent hash-parameter set relationships
-            for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-                assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
-            # Self-consistency checks
-            assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
-            assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+            test_merge1, test_merge2 = get_samplers(SALibSampler, sampler, first_schema, second_schema, kwargs)
+            consistent_hash_parameter_check(test_merge1, test_merge2)
+            self_consistency_checks(test_merge2)
