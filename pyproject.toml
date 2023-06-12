@@ -42,6 +42,12 @@ msg_parse = "waves.abaqus.msg_parse:main"
 sta_parse = "waves.abaqus.sta_parse:main"
 waves = "waves.main:main"
 
+[project.urls]
+homepage = "https://github.com/lanl/waves"
+documentation = "https://github.com/lanl/waves"
+repository = "https://github.com/lanl/waves"
+changelog = "https://lanl.github.io/waves/changelog.html"
+
 [tool.setuptools_scm]
 write_to = "waves/_version.py"
 
