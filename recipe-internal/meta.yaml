@@ -81,7 +81,6 @@ test:
   imports:
     - waves
   commands:
-    - export SETUPTOOLS_SCM_PRETEND_VERSION={{ VERSION }}
     - test_root=${PWD}
     # Tests that depend on correct install path
     - waves docs --print-local-path
