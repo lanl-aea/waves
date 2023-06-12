@@ -8,6 +8,10 @@ Changelog
 0.6.19 (unreleased)
 *******************
 
+Internal Changes
+================
+- Migrate from ``setup.py`` builds to the ``build`` package (:issue:`477`, :merge:`582`). By `Kyle Brindley`_.
+
 *******************
 0.6.18 (2023-06-09)
 *******************
