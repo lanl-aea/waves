@@ -4,10 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "waves"
+authors = [
+    {name = "Kyle Brindley", email = "kbrindley@lanl.gov"},
+    {name = "Prabhu Khalsa", email = "pkhalsa@lanl.gov"},
+    {name = "Thomas Roberts", email = "tproberts@lanl.gov"},
+    {name = "Sergio Cordova", email = "sergioc@lanl.gov"},
+    {name = "Matthew Fister", email = "mwfister@lanl.gov"},
+    {name = "Scott Ouellette", email = "souellette@lanl.gov"}
+]
 description = "WAVES Analysis for Verified Engineering Simulations"
 readme = "README.rst"
+requires-python = ">=3.8"
 license = {text = "BSD-3-Clause"}
-classifiers = ["Programming Language:: Python :: 3"]
+classifiers = ["Programming Language :: Python :: 3"]
 dynamic = ["version"]
 dependencies = [
     "h5netcdf",
