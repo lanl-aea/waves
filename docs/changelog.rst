@@ -11,7 +11,7 @@ Changelog
 Internal Changes
 ================
 - Migrate from ``setup.py`` builds to the ``build`` package (:issue:`477`, :merge:`582`). By `Kyle Brindley`_.
-- refactored ``test_merge`` functions in unit integration tests (:issue:`387`, :merge:`575`). By `Sergio Cordova`_.
+- Refactored ``test_merge`` functions in unit integration tests (:issue:`387`, :merge:`575`). By `Sergio Cordova`_.
 
 *******************
 0.6.18 (2023-06-09)
