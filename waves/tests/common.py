@@ -1,4 +1,4 @@
-from waves._settings import _hash_coordinate_key, _set_coordinate_key, _supported_salib_samplers
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from unittest.mock import patch
 
 
@@ -13,7 +13,7 @@ def self_consistency_checks(test_merge):
     assert test_merge._parameter_set_hashes == test_merge.parameter_study[_hash_coordinate_key].values.tolist()
 
 
-def get_samplers(sampler_class, sampler, first_schema, second_schema, kwargs):
+def merge_samplers(sampler_class, sampler, first_schema, second_schema, kwargs):
     test_merge1 = sampler_class(sampler, first_schema, **kwargs)
     with patch('xarray.open_dataset', return_value=test_merge1.parameter_study):
         test_merge2 = sampler_class(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)

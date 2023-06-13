@@ -1,7 +1,6 @@
 """Test SALibSampler Class
 """
 
-from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -9,7 +8,7 @@ import numpy
 
 from waves.parameter_generators import SALibSampler
 from waves._settings import _set_coordinate_key, _supported_salib_samplers
-from common import consistent_hash_parameter_check, self_consistency_checks, get_samplers
+from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
 
 
 class TestSALibSampler:
@@ -312,6 +311,6 @@ class TestSALibSampler:
             # TODO: find a better way to separate the sampler types and their test parameterization
             if not self._big_enough(sampler, first_schema["N"], first_schema["problem"]["num_vars"]):
                 return
-            test_merge1, test_merge2 = get_samplers(SALibSampler, sampler, first_schema, second_schema, kwargs)
+            test_merge1, test_merge2 = merge_samplers(SALibSampler, sampler, first_schema, second_schema, kwargs)
             consistent_hash_parameter_check(test_merge1, test_merge2)
             self_consistency_checks(test_merge2)
