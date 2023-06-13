@@ -77,7 +77,7 @@ class TestScipySampler:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_scipy_samplers:
-            test_merge1, test_merge2 = merge_samplers(ScipySampler, sampler, first_schema, second_schema, kwargs)
+            test_merge1, test_merge2 = merge_samplers(ScipySampler, first_schema, second_schema, kwargs, sampler)[:2]
             test_merge2._quantiles.astype(float)
             consistent_hash_parameter_check(test_merge1, test_merge2)
             self_consistency_checks(test_merge2)

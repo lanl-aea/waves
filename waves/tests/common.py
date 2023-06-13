@@ -13,9 +13,17 @@ def self_consistency_checks(test_merge):
     assert test_merge._parameter_set_hashes == test_merge.parameter_study[_hash_coordinate_key].values.tolist()
 
 
-def merge_samplers(sampler_class, sampler, first_schema, second_schema, kwargs):
-    test_merge1 = sampler_class(sampler, first_schema, **kwargs)
+def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=None, as_float=True):
+    if sampler:
+        test_merge1 = sampler_class(sampler, first_schema, **kwargs)
+    else:
+        test_merge1 = sampler_class(first_schema, **kwargs)
     with patch('xarray.open_dataset', return_value=test_merge1.parameter_study):
-        test_merge2 = sampler_class(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
-    test_merge2._samples.astype(float)
-    return test_merge1, test_merge2
+        if sampler:
+            test_merge2 = sampler_class(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
+        else:
+            test_merge2 = sampler_class(second_schema, previous_parameter_study='dummy_string', **kwargs)
+    samples_array = test_merge2._samples
+    if as_float:
+        samples_array = samples_array.astype(float)
+    return test_merge1, test_merge2, samples_array
