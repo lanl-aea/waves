@@ -11,6 +11,7 @@ from waves.parameter_generators import CartesianProduct
 from waves._settings import _set_coordinate_key
 from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
 
+
 class TestCartesianProduct:
     """Class for testing CartesianProduct parameter study generator class"""
 
@@ -105,11 +106,11 @@ class TestCartesianProduct:
                                  merge_test.values(),
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, expected_array):
-        test_merge1, test_merge2, generate_array = merge_samplers(CartesianProduct, first_schema, second_schema, {},
+        original_study, merged_study, generate_array = merge_samplers(CartesianProduct, first_schema, second_schema, {},
                                                                   as_float=False)
         assert numpy.all(generate_array == expected_array)
-        consistent_hash_parameter_check(test_merge1, test_merge2)
-        self_consistency_checks(test_merge2)
+        consistent_hash_parameter_check(original_study, merged_study)
+        self_consistency_checks(merged_study)
 
     generate_io = {
         'one parameter yaml':

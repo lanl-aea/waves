@@ -311,6 +311,6 @@ class TestSALibSampler:
             # TODO: find a better way to separate the sampler types and their test parameterization
             if not self._big_enough(sampler, first_schema["N"], first_schema["problem"]["num_vars"]):
                 return
-            test_merge1, test_merge2 = merge_samplers(SALibSampler, first_schema, second_schema, kwargs, sampler)[:2]
-            consistent_hash_parameter_check(test_merge1, test_merge2)
-            self_consistency_checks(test_merge2)
+            original_study, merged_study = merge_samplers(SALibSampler, first_schema, second_schema, kwargs, sampler)[:2]
+            consistent_hash_parameter_check(original_study, merged_study)
+            self_consistency_checks(merged_study)

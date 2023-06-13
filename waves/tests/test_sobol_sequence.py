@@ -122,18 +122,18 @@ class TestSobolSequence:
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
         # Sobol
-        test_merge1, test_merge2, samples_array = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
-        quantiles_array = test_merge2._quantiles.astype(float)
+        original_study, merged_study, samples_array = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
+        quantiles_array = merged_study._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)
-        consistent_hash_parameter_check(test_merge1, test_merge2)
-        self_consistency_checks(test_merge2)
+        consistent_hash_parameter_check(original_study, merged_study)
+        self_consistency_checks(merged_study)
 
         # ScipySampler
-        test_merge1, test_merge2, samples_array = merge_samplers(ScipySampler, first_schema, second_schema, kwargs,
+        original_study, merged_study, samples_array = merge_samplers(ScipySampler, first_schema, second_schema, kwargs,
                                                                  sampler="Sobol")
-        quantiles_array = test_merge2._quantiles.astype(float)
+        quantiles_array = merged_study._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)
-        consistent_hash_parameter_check(test_merge1, test_merge2)
-        self_consistency_checks(test_merge2)
+        consistent_hash_parameter_check(original_study, merged_study)
+        self_consistency_checks(merged_study)

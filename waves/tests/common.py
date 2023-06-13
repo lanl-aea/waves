@@ -15,15 +15,15 @@ def self_consistency_checks(test_merge):
 
 def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=None, as_float=True):
     if sampler:
-        test_merge1 = sampler_class(sampler, first_schema, **kwargs)
+        original_study = sampler_class(sampler, first_schema, **kwargs)
     else:
-        test_merge1 = sampler_class(first_schema, **kwargs)
-    with patch('xarray.open_dataset', return_value=test_merge1.parameter_study):
+        original_study = sampler_class(first_schema, **kwargs)
+    with patch('xarray.open_dataset', return_value=original_study.parameter_study):
         if sampler:
-            test_merge2 = sampler_class(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
+            merged_study = sampler_class(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
         else:
-            test_merge2 = sampler_class(second_schema, previous_parameter_study='dummy_string', **kwargs)
-    samples_array = test_merge2._samples
+            merged_study = sampler_class(second_schema, previous_parameter_study='dummy_string', **kwargs)
+    samples_array = merged_study._samples
     if as_float:
         samples_array = samples_array.astype(float)
-    return test_merge1, test_merge2, samples_array
+    return original_study, merged_study, samples_array
