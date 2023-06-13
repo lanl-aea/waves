@@ -72,12 +72,11 @@ class TestScipySampler:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('first_schema, second_schema, kwargs',
-                                 merge_test.values(),
-                             ids=merge_test.keys())
+    @pytest.mark.parametrize('first_schema, second_schema, kwargs', merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_scipy_samplers:
-            original_study, merged_study = merge_samplers(ScipySampler, first_schema, second_schema, kwargs, sampler)[:2]
+            original_study, merged_study = merge_samplers(ScipySampler, first_schema, second_schema, kwargs, sampler)
+            merged_study._samples.astype(float)
             merged_study._quantiles.astype(float)
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)

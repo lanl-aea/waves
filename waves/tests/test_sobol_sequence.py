@@ -118,11 +118,11 @@ class TestSobolSequence:
 
     @pytest.mark.unittest
     @pytest.mark.parametrize('first_schema, second_schema, kwargs, expected_samples, expected_quantiles',
-                                 merge_test.values(),
-                             ids=merge_test.keys())
+                             merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
         # Sobol
-        original_study, merged_study, samples_array = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
+        original_study, merged_study = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
+        samples_array = merged_study._samples.astype(float)
         quantiles_array = merged_study._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)
@@ -130,8 +130,9 @@ class TestSobolSequence:
         self_consistency_checks(merged_study)
 
         # ScipySampler
-        original_study, merged_study, samples_array = merge_samplers(ScipySampler, first_schema, second_schema, kwargs,
-                                                                 sampler="Sobol")
+        original_study, merged_study = merge_samplers(ScipySampler, first_schema, second_schema, kwargs,
+                                                      sampler="Sobol")
+        samples_array = merged_study._samples.astype(float)
         quantiles_array = merged_study._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)

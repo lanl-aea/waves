@@ -13,7 +13,7 @@ def self_consistency_checks(test_merge):
     assert test_merge._parameter_set_hashes == test_merge.parameter_study[_hash_coordinate_key].values.tolist()
 
 
-def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=None, as_float=True):
+def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=None):
     if sampler:
         original_study = sampler_class(sampler, first_schema, **kwargs)
     else:
@@ -23,7 +23,4 @@ def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=N
             merged_study = sampler_class(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
         else:
             merged_study = sampler_class(second_schema, previous_parameter_study='dummy_string', **kwargs)
-    samples_array = merged_study._samples
-    if as_float:
-        samples_array = samples_array.astype(float)
-    return original_study, merged_study, samples_array
+    return original_study, merged_study
