@@ -1,6 +1,6 @@
 package:
   name: waves
-  # TODO: Figure out how to use pyproject.toml or setup.py and a Conda build Jinja template
+  # TODO: Figure out how to use pyproject.toml and a Conda build Jinja template
   version: {{ VERSION }}
 
 about:
@@ -19,14 +19,17 @@ source:
 
 build:
   noarch: python
+  number: 0
+  script_env:
+    - SETUPTOOLS_SCM_PRETEND_VERSION={{ VERSION }}
   script:
     # Build and install Conda package
-    # TODO: figure out how to use the setuptools recommended pyproject.toml and 'build' package and stop using the
-    # deprecated setup.py solutions
-    - {{ PYTHON }} setup.py install
+    - $PYTHON -m build --no-isolation
+    - $PYTHON -m pip install dist/$PKG_NAME-$PKG_VERSION.tar.gz --no-deps --ignore-installed -v --no-build-isolation
+    - $PYTHON -m pip show $PKG_NAME
     # Build man page and HTML documentation to bundle in Conda package
     - scons man html-internal
-    - {{ PYTHON }} package_documentation.py
+    - $PYTHON package_documentation.py
   script_env:
     - VERSION
   ignore_run_exports:
@@ -34,10 +37,7 @@ build:
 
 requirements:
   build:
-    - git
     - scons >=4
-    - setuptools >=45
-    - setuptools_scm[toml] >=6.2
     - sphinx >=5.1
     - sphinx-argparse
     - sphinx-copybutton >=0.5.1
@@ -45,6 +45,8 @@ requirements:
     - sphinxcontrib-bibtex
   host:
     - python
+    - build
+    - pip
     - setuptools >=45
     - setuptools_scm[toml] >=6.2
   run:
@@ -62,7 +64,6 @@ requirements:
 
 test:
   requires:
-    - git
     - h5netcdf
     - h5py
     - matplotlib

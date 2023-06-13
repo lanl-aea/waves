@@ -3,12 +3,41 @@ requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "WAVES"
+name = "waves"
+authors = [
+    {name = "Kyle Brindley", email = "kbrindley@lanl.gov"},
+    {name = "Prabhu Khalsa", email = "pkhalsa@lanl.gov"},
+    {name = "Thomas Roberts", email = "tproberts@lanl.gov"},
+    {name = "Sergio Cordova", email = "sergioc@lanl.gov"},
+    {name = "Matthew Fister", email = "mwfister@lanl.gov"},
+    {name = "Scott Ouellette", email = "souellette@lanl.gov"}
+]
 description = "WAVES Analysis for Verified Engineering Simulations"
 readme = "README.rst"
+requires-python = ">=3.8"
 license = {text = "BSD-3-Clause"}
-classifiers = ["Programming Language:: Python :: 3"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering"
+]
 dynamic = ["version"]
+dependencies = [
+    "h5netcdf",
+    "h5py",
+    "matplotlib",
+    "networkx",
+    "numpy",
+    "pyyaml",
+    "salib >=1",
+    "scipy >=1.7",
+    "scons",
+    "xarray"
+]
 
 [tool.setuptools]
 packages = ["waves", "waves.abaqus", "waves.tests"]
@@ -20,6 +49,12 @@ odb_extract = "waves.abaqus.odb_extract:main"
 msg_parse = "waves.abaqus.msg_parse:main"
 sta_parse = "waves.abaqus.sta_parse:main"
 waves = "waves.main:main"
+
+[project.urls]
+homepage = "https://github.com/lanl/waves"
+documentation = "https://github.com/lanl/waves"
+repository = "https://github.com/lanl/waves"
+changelog = "https://lanl.github.io/waves/changelog.html"
 
 [tool.setuptools_scm]
 write_to = "waves/_version.py"

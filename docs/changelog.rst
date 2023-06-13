@@ -5,7 +5,23 @@ Changelog
 #########
 
 *******************
-0.6.17 (unreleased)
+0.6.19 (unreleased)
+*******************
+
+Internal Changes
+================
+- Migrate from ``setup.py`` builds to the ``build`` package (:issue:`477`, :merge:`582`). By `Kyle Brindley`_.
+
+*******************
+0.6.18 (2023-06-09)
+*******************
+
+Internal Changes
+================
+- Improve GitHub release workflow to match recommended practice (:merge:`580`). By `Kyle Brindley`_.
+
+*******************
+0.6.17 (2023-06-09)
 *******************
 
 Bug fixes
@@ -13,12 +29,17 @@ Bug fixes
 - Fix other missing dimensions of history output dataset when step data is missing (:issue:`470`, :merge:`570`).
   By `Prabhu Khalsa`_.
 - Fix field output dimensions when step data is missing (:issue:`473`, :merge:`574`). By `Prabhu Khalsa`_.
+- Update numpy.float to numpy.float64 in abaqus_file_parser.py (:issue:`476`, :merge:`577`). By `Prabhu Khalsa`_.
 
 Documentation
 =============
 - Complete the discussion sections in the data archival tutorial (:issue:`465`, :merge:`571`). By `Kyle Brindley`_.
 - Minor changes in tutorials that ensure expected behavior when using the copy button (:issue:`471`, :merge:`573`). 
   By `Sergio Cordova`_.
+
+Enhancements
+============
+- Sort the ``fetch`` available files output (:issue:`475`, :merge:`576`). By `Kyle Brindley`_.
 
 *******************
 0.6.16 (2023-05-15)
