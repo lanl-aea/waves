@@ -759,7 +759,6 @@ def _abaqus_extract_emitter(target, source, env):
     target.append(f"{build_subdirectory / first_target.stem}_datasets.h5")
     if not "delete_report_file" in env or not env["delete_report_file"]:
         target.append(str(build_subdirectory / first_target.with_suffix(".csv").name))
-    target.append(f"{first_target}{_stdout_extension}")
     return target, source
 
 
@@ -802,8 +801,6 @@ def abaqus_extract(abaqus_program="abaqus"):
     """
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
-            f"{_cd_action_prefix} rm ${{TARGET.filebase}}.csv ${{TARGET.filebase}}.h5 " \
-                f"${{TARGET.filebase}}_datasets.h5 > ${{TARGET.file}}{_stdout_extension} 2>&1 || true",
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
         ],
         emitter=_abaqus_extract_emitter,
@@ -825,6 +822,13 @@ def _build_odb_extract(target, source, env):
         odb_report_args = env["odb_report_args"]
     if "delete_report_file" in env:
         delete_report_file = env["delete_report_file"]
+
+    # Remove existing target files that are not overwritten by odb_extract
+    first_target = pathlib.Path(target[0].dir.abspath)
+    parent_directory = first_target.parent
+    files_to_remove = [parent_directory / f"{first_target.stem}{suffix}" for suffix in (".csv", ".h5", "_datasets.h5")]
+    for path in files_to_remove:
+        path.unlink(missing_ok=True)
 
     odb_extract.odb_extract([source[0].abspath], target[0].abspath,
                             output_type=output_type,
