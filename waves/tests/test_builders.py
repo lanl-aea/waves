@@ -664,9 +664,11 @@ build_odb_extract_input = {
                          ids=build_odb_extract_input.keys())
 @pytest.mark.unittest
 def test_build_odb_extract(target, source, env, calls):
-    with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract:
+    with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract, \
+         patch("pathlib.Path.unlink") as mock_unlink:
         builders._build_odb_extract(target, source, env)
     mock_odb_extract.assert_has_calls(calls)
+    mock_unlink.assert_has_calls([call(missing_ok=True), call(missing_ok=True), call(missing_ok=True)])
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
