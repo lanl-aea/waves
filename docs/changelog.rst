@@ -10,7 +10,8 @@ Changelog
 
 Bug fixes
 =========
-- Check if 'frames' and 'historyRegions' keys exist before using them (:issue:`479`, :merge:`584`). By `Prabhu Khalsa`_.
+- Check if 'frames' and 'historyRegions' keys exist before using them. Fixing bug from :merge:`574`
+  (:issue:`479`, :merge:`584`). By `Prabhu Khalsa`_.
 
 Internal Changes
 ================
