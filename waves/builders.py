@@ -772,8 +772,9 @@ def abaqus_extract(abaqus_program="abaqus"):
 
     This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets
     and ``odb_extract`` target name constructions automatically. The first target determines the working directory for
-    the builder's action, as shown in the action code snippet below. The action changes the working directory to the
-    first target's parent directory prior to performing other builder actions.
+    the emitter targets. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build,
+    then at least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.h5``. When in
+    doubt, provide the expected H5 file as a target, e.g. ``source[0].h5``.
 
     The target list may specify an output H5 file name that differs from the ODB file base name as ``new_name.h5``. If
     the first file in the target list does not contain the ``*.h5`` extension, or if there is no file in the target
