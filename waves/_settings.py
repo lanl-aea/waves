@@ -11,7 +11,6 @@ _abaqus_datacheck_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".023", 
 _abaqus_explicit_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
 _abaqus_standard_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
 _matlab_environment_extension = ".matlab.env"
-_odb_extract_extensions = (".csv", ".h5", "_datasets.h5")
 _scons_command = "scons"
 _scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
 _scons_tree_status = {'E': 'exists', 'R': 'exists in repository only', 'b': 'implicit builder', 'B': 'explicit builder',

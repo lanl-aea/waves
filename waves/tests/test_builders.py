@@ -18,7 +18,6 @@ from waves._settings import _abaqus_explicit_extensions
 from waves._settings import _abaqus_standard_extensions
 from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _stdout_extension
-from waves._settings import _odb_extract_extensions
 
 
 fs = SCons.Node.FS.FS()
@@ -669,8 +668,8 @@ def test_build_odb_extract(target, source, env, calls):
          patch("pathlib.Path.unlink") as mock_unlink:
         builders._build_odb_extract(target, source, env)
     mock_odb_extract.assert_has_calls(calls)
-    mock_unlink.assert_has_calls([call(missing_ok=True) for extension in _odb_extract_extensions])
-    assert mock_unlink.call_count == len(_odb_extract_extensions)
+    mock_unlink.assert_has_calls([call(missing_ok=True)])
+    assert mock_unlink.call_count == len(target)
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
