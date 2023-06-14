@@ -5,7 +5,11 @@ Changelog
 #########
 
 *******************
-0.6.19 (unreleased)
+0.6.20 (unreleased)
+*******************
+
+*******************
+0.6.19 (2023-06-14)
 *******************
 
 Bug fixes
@@ -16,8 +20,7 @@ Bug fixes
 Internal Changes
 ================
 - Migrate from ``setup.py`` builds to the ``build`` package (:issue:`477`, :merge:`582`). By `Kyle Brindley`_.
-- Perform ``odb_extract`` builder file cleanup with ``pathlib`` to make the commands more OS portable (:merge:`583`). By
-  `Kyle Brindley`_.
+- Make the ``odb_extract`` builder more OS portable (:merge:`583`). By `Kyle Brindley`_.
 - Refactored ``test_merge`` functions in unit tests (:issue:`387`, :merge:`575`). By `Sergio Cordova`_.
 
 *******************
