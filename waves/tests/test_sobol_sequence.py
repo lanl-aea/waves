@@ -1,14 +1,12 @@
 """Test Sobol Sequence Class
 """
 
-from unittest.mock import patch
-from contextlib import nullcontext as does_not_raise
-
 import pytest
 import numpy
 
 from waves.parameter_generators import SobolSequence, ScipySampler
-from waves._settings import _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _set_coordinate_key
+from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
 
 
 class TestSobolSequence:
@@ -120,35 +118,23 @@ class TestSobolSequence:
 
     @pytest.mark.unittest
     @pytest.mark.parametrize('first_schema, second_schema, kwargs, expected_samples, expected_quantiles',
-                                 merge_test.values(),
-                             ids=merge_test.keys())
+                             merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
         # Sobol
-        TestMerge1 = SobolSequence(first_schema, **kwargs)
-        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-            TestMerge2 = SobolSequence(second_schema, previous_parameter_study='dummy_string', **kwargs)
-        samples_array = TestMerge2._samples.astype(float)
-        quantiles_array = TestMerge2._quantiles.astype(float)
+        original_study, merged_study = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
+        samples_array = merged_study._samples.astype(float)
+        quantiles_array = merged_study._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)
-        # Check for consistent hash-parameter set relationships
-        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
-        # Self-consistency checks
-        assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
-        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+        consistent_hash_parameter_check(original_study, merged_study)
+        self_consistency_checks(merged_study)
 
         # ScipySampler
-        TestMerge1 = ScipySampler("Sobol", first_schema, **kwargs)
-        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-            TestMerge2 = ScipySampler("Sobol", second_schema, previous_parameter_study='dummy_string', **kwargs)
-        samples_array = TestMerge2._samples.astype(float)
-        quantiles_array = TestMerge2._quantiles.astype(float)
+        original_study, merged_study = merge_samplers(ScipySampler, first_schema, second_schema, kwargs,
+                                                      sampler="Sobol")
+        samples_array = merged_study._samples.astype(float)
+        quantiles_array = merged_study._quantiles.astype(float)
         assert numpy.allclose(samples_array, expected_samples)
         assert numpy.allclose(quantiles_array, expected_quantiles)
-        # Check for consistent hash-parameter set relationships
-        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
-        # Self-consistency checks
-        assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
-        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+        consistent_hash_parameter_check(original_study, merged_study)
+        self_consistency_checks(merged_study)
