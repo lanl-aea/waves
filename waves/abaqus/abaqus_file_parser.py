@@ -2271,14 +2271,20 @@ class OdbReportFileParser(AbaqusFileParser):
         step_history_names = list()
         step_history_mask = list()
         for step_name in self.parsed['odb']['steps']:
-            if len(self.parsed['odb']['steps'][step_name]['frames']) != 0:      
-                step_field_names.append(step_name)
-                step_field_mask.append(True)
+            if 'frames' in self.parsed['odb']['steps'][step_name]:
+                if len(self.parsed['odb']['steps'][step_name]['frames']) != 0:
+                    step_field_names.append(step_name)
+                    step_field_mask.append(True)
+                else:
+                    step_field_mask.append(False)
             else:
                 step_field_mask.append(False)
-            if len(self.parsed['odb']['steps'][step_name]['historyRegions']) != 0:
-                step_history_names.append(step_name)
-                step_history_mask.append(True)
+            if 'historyRegions' in self.parsed['odb']['steps'][step_name]:
+                if len(self.parsed['odb']['steps'][step_name]['historyRegions']) != 0:
+                    step_history_names.append(step_name)
+                    step_history_mask.append(True)
+                else:
+                    step_history_mask.append(False)
             else:
                 step_history_mask.append(False)
         # Format history outputs
