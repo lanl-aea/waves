@@ -11,6 +11,8 @@ Changelog
 Internal Changes
 ================
 - Migrate from ``setup.py`` builds to the ``build`` package (:issue:`477`, :merge:`582`). By `Kyle Brindley`_.
+- Perform ``odb_extract`` builder file cleanup with ``pathlib`` to make the commands more OS portable (:merge:`583`). By
+  `Kyle Brindley`_.
 
 *******************
 0.6.18 (2023-06-09)
@@ -34,7 +36,7 @@ Bug fixes
 Documentation
 =============
 - Complete the discussion sections in the data archival tutorial (:issue:`465`, :merge:`571`). By `Kyle Brindley`_.
-- Minor changes in tutorials that ensure expected behavior when using the copy button (:issue:`471`, :merge:`573`). 
+- Minor changes in tutorials that ensure expected behavior when using the copy button (:issue:`471`, :merge:`573`).
   By `Sergio Cordova`_.
 
 Enhancements
