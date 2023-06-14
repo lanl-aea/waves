@@ -584,43 +584,43 @@ abaqus_extract_emitter_input = {
     "empty targets": (
         [],
         [source_file],
-        ["dummy.h5", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        ["dummy.h5", "dummy_datasets.h5", "dummy.csv"],
         {}
     ),
     "one target": (
         ["new_name.h5"],
         [source_file],
-        ["new_name.h5", "new_name_datasets.h5", "new_name.csv", "new_name.h5.stdout"],
+        ["new_name.h5", "new_name_datasets.h5", "new_name.csv"],
         {}
     ),
     "bad extension": (
         ["new_name.txt"],
         [source_file],
-        ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv"],
         {}
     ),
     "subdirectory": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.csv", f"set1{os.sep}dummy.h5.stdout"],
+        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.csv"],
         {}
     ),
     "subdirectory new name": (
         ["set1/new_name.h5"],
         [source_file],
-        ["set1/new_name.h5", f"set1{os.sep}new_name_datasets.h5", f"set1{os.sep}new_name.csv", f"set1{os.sep}new_name.h5.stdout"],
+        ["set1/new_name.h5", f"set1{os.sep}new_name_datasets.h5", f"set1{os.sep}new_name.csv"],
         {}
     ),
     "one target delete report": (
         ["new_name.h5"],
         [source_file],
-        ["new_name.h5", "new_name_datasets.h5", "new_name.h5.stdout"],
+        ["new_name.h5", "new_name_datasets.h5"],
         {"delete_report_file": True}
     ),
     "subdirectory delete report": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.h5.stdout"],
+        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5"],
         {"delete_report_file": True}
     ),
 }
@@ -641,10 +641,8 @@ def test_abaqus_extract():
     env.Append(BUILDERS={"AbaqusExtract": builders.abaqus_extract()})
     nodes = env.AbaqusExtract(
         target=["abaqus_extract.h5"], source=["abaqus_extract.odb"], journal_options="")
-    expected_string = 'cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.csv ${TARGET.filebase}.h5 ' \
-                      '${TARGET.filebase}_datasets.h5 > ${TARGET.file}.stdout 2>&1 || true' \
-                      '\n_build_odb_extract(target, source, env)'
-    check_action_string(nodes, [], 4, 1, expected_string)
+    expected_string = '_build_odb_extract(target, source, env)'
+    check_action_string(nodes, [], 3, 1, expected_string)
 
 
 source_file = fs.File("/dummy.source")
@@ -666,9 +664,12 @@ build_odb_extract_input = {
                          ids=build_odb_extract_input.keys())
 @pytest.mark.unittest
 def test_build_odb_extract(target, source, env, calls):
-    with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract:
+    with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract, \
+         patch("pathlib.Path.unlink") as mock_unlink:
         builders._build_odb_extract(target, source, env)
     mock_odb_extract.assert_has_calls(calls)
+    mock_unlink.assert_has_calls([call(missing_ok=True)])
+    assert mock_unlink.call_count == len(target)
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new

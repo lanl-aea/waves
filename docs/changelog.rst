@@ -5,8 +5,23 @@ Changelog
 #########
 
 *******************
-0.6.19 (unreleased)
+0.6.20 (unreleased)
 *******************
+
+*******************
+0.6.19 (2023-06-14)
+*******************
+
+Bug fixes
+=========
+- Check if 'frames' and 'historyRegions' keys exist before using them. Fixing bug from :merge:`574`
+  (:issue:`479`, :merge:`584`). By `Prabhu Khalsa`_.
+
+Internal Changes
+================
+- Migrate from ``setup.py`` builds to the ``build`` package (:issue:`477`, :merge:`582`). By `Kyle Brindley`_.
+- Make the ``odb_extract`` builder more OS portable (:merge:`583`). By `Kyle Brindley`_.
+- Refactored ``test_merge`` functions in unit tests (:issue:`387`, :merge:`575`). By `Sergio Cordova`_.
 
 *******************
 0.6.18 (2023-06-09)
@@ -30,7 +45,7 @@ Bug fixes
 Documentation
 =============
 - Complete the discussion sections in the data archival tutorial (:issue:`465`, :merge:`571`). By `Kyle Brindley`_.
-- Minor changes in tutorials that ensure expected behavior when using the copy button (:issue:`471`, :merge:`573`). 
+- Minor changes in tutorials that ensure expected behavior when using the copy button (:issue:`471`, :merge:`573`).
   By `Sergio Cordova`_.
 
 Enhancements

@@ -8,7 +8,9 @@ import pytest
 import numpy
 
 from waves.parameter_generators import CartesianProduct
-from waves._settings import _hash_coordinate_key, _set_coordinate_key
+from waves._settings import _set_coordinate_key
+from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
+
 
 class TestCartesianProduct:
     """Class for testing CartesianProduct parameter study generator class"""
@@ -100,21 +102,13 @@ class TestCartesianProduct:
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('first_schema, second_schema, expected_array',
-                                 merge_test.values(),
-                             ids=merge_test.keys())
+    @pytest.mark.parametrize('first_schema, second_schema, expected_array', merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, expected_array):
-        TestMerge1 = CartesianProduct(first_schema)
-        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-            TestMerge2 = CartesianProduct(second_schema, previous_parameter_study='dummy_string')
-        generate_array = TestMerge2._samples
+        original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
+        generate_array = merged_study._samples
         assert numpy.all(generate_array == expected_array)
-        # Check for consistent hash-parameter set relationships
-        for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
-            assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
-        # Self-consistency checks
-        assert list(TestMerge2._parameter_set_names.values()) == TestMerge2.parameter_study[_set_coordinate_key].values.tolist()
-        assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
+        consistent_hash_parameter_check(original_study, merged_study)
+        self_consistency_checks(merged_study)
 
     generate_io = {
         'one parameter yaml':
