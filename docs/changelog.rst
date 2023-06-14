@@ -8,6 +8,10 @@ Changelog
 0.6.19 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Check if 'frames' and 'historyRegions' keys exist before using them (:issue:`479`, :merge:`584`). By `Prabhu Khalsa`_.
+
 Internal Changes
 ================
 - Migrate from ``setup.py`` builds to the ``build`` package (:issue:`477`, :merge:`582`). By `Kyle Brindley`_.
