@@ -584,43 +584,43 @@ abaqus_extract_emitter_input = {
     "empty targets": (
         [],
         [source_file],
-        ["dummy.h5", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        ["dummy.h5", "dummy_datasets.h5", "dummy.csv"],
         {}
     ),
     "one target": (
         ["new_name.h5"],
         [source_file],
-        ["new_name.h5", "new_name_datasets.h5", "new_name.csv", "new_name.h5.stdout"],
+        ["new_name.h5", "new_name_datasets.h5", "new_name.csv"],
         {}
     ),
     "bad extension": (
         ["new_name.txt"],
         [source_file],
-        ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv", "dummy.h5.stdout"],
+        ["dummy.h5", "new_name.txt", "dummy_datasets.h5", "dummy.csv"],
         {}
     ),
     "subdirectory": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.csv", f"set1{os.sep}dummy.h5.stdout"],
+        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.csv"],
         {}
     ),
     "subdirectory new name": (
         ["set1/new_name.h5"],
         [source_file],
-        ["set1/new_name.h5", f"set1{os.sep}new_name_datasets.h5", f"set1{os.sep}new_name.csv", f"set1{os.sep}new_name.h5.stdout"],
+        ["set1/new_name.h5", f"set1{os.sep}new_name_datasets.h5", f"set1{os.sep}new_name.csv"],
         {}
     ),
     "one target delete report": (
         ["new_name.h5"],
         [source_file],
-        ["new_name.h5", "new_name_datasets.h5", "new_name.h5.stdout"],
+        ["new_name.h5", "new_name_datasets.h5"],
         {"delete_report_file": True}
     ),
     "subdirectory delete report": (
         ["set1/dummy.h5"],
         [source_file],
-        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5", f"set1{os.sep}dummy.h5.stdout"],
+        ["set1/dummy.h5", f"set1{os.sep}dummy_datasets.h5"],
         {"delete_report_file": True}
     ),
 }
