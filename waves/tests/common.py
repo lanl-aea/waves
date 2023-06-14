@@ -23,7 +23,8 @@ def self_consistency_checks(merged_study):
 
 
 def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=None):
-    """Return sampler objects based on the provided schemas and sampler class.
+    """Return sampler objects based on the provided schemas and sampler class. Second sampler contains the
+    merged first sampler.
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] sampler_class: Class of the study objects
     :param dict first_schema: Dictionary containing parameter study data
