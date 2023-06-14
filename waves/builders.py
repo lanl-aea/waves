@@ -759,7 +759,6 @@ def _abaqus_extract_emitter(target, source, env):
     target.append(f"{build_subdirectory / first_target.stem}_datasets.h5")
     if not "delete_report_file" in env or not env["delete_report_file"]:
         target.append(str(build_subdirectory / first_target.with_suffix(".csv").name))
-    target.append(f"{first_target}{_stdout_extension}")
     return target, source
 
 
@@ -772,8 +771,9 @@ def abaqus_extract(abaqus_program="abaqus"):
 
     This builder is unique in that no targets are required. The Builder emitter will append the builder managed targets
     and ``odb_extract`` target name constructions automatically. The first target determines the working directory for
-    the builder's action, as shown in the action code snippet below. The action changes the working directory to the
-    first target's parent directory prior to performing other builder actions.
+    the emitter targets. If the target(s) must be built in a build subdirectory, e.g. in a parameterized target build,
+    then at least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.h5``. When in
+    doubt, provide the expected H5 file as a target, e.g. ``source[0].h5``.
 
     The target list may specify an output H5 file name that differs from the ODB file base name as ``new_name.h5``. If
     the first file in the target list does not contain the ``*.h5`` extension, or if there is no file in the target
@@ -802,8 +802,6 @@ def abaqus_extract(abaqus_program="abaqus"):
     """
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
-            f"{_cd_action_prefix} rm ${{TARGET.filebase}}.csv ${{TARGET.filebase}}.h5 " \
-                f"${{TARGET.filebase}}_datasets.h5 > ${{TARGET.file}}{_stdout_extension} 2>&1 || true",
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
         ],
         emitter=_abaqus_extract_emitter,
@@ -825,6 +823,11 @@ def _build_odb_extract(target, source, env):
         odb_report_args = env["odb_report_args"]
     if "delete_report_file" in env:
         delete_report_file = env["delete_report_file"]
+
+    # Remove existing target files that are not overwritten by odb_extract
+    files_to_remove = [pathlib.Path(path.abspath) for path in target]
+    for path in files_to_remove:
+        path.unlink(missing_ok=True)
 
     odb_extract.odb_extract([source[0].abspath], target[0].abspath,
                             output_type=output_type,
