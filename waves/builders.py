@@ -824,7 +824,7 @@ def _build_odb_extract(target, source, env):
         delete_report_file = env["delete_report_file"]
 
     # Remove existing target files that are not overwritten by odb_extract
-    first_target = pathlib.Path(target[0].dir.abspath)
+    first_target = pathlib.Path(target[0].abspath)
     parent_directory = first_target.parent
     files_to_remove = [parent_directory / f"{first_target.stem}{suffix}" for suffix in (".csv", ".h5", "_datasets.h5")]
     for path in files_to_remove:
