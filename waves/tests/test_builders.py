@@ -641,10 +641,8 @@ def test_abaqus_extract():
     env.Append(BUILDERS={"AbaqusExtract": builders.abaqus_extract()})
     nodes = env.AbaqusExtract(
         target=["abaqus_extract.h5"], source=["abaqus_extract.odb"], journal_options="")
-    expected_string = 'cd ${TARGET.dir.abspath} && rm ${TARGET.filebase}.csv ${TARGET.filebase}.h5 ' \
-                      '${TARGET.filebase}_datasets.h5 > ${TARGET.file}.stdout 2>&1 || true' \
-                      '\n_build_odb_extract(target, source, env)'
-    check_action_string(nodes, [], 4, 1, expected_string)
+    expected_string = '_build_odb_extract(target, source, env)'
+    check_action_string(nodes, [], 3, 1, expected_string)
 
 
 source_file = fs.File("/dummy.source")
