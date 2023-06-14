@@ -17,6 +17,7 @@ from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
+from waves._settings import _odb_extract_extensions
 
 
 def project_help_message(env=None, append=True):
@@ -826,7 +827,7 @@ def _build_odb_extract(target, source, env):
     # Remove existing target files that are not overwritten by odb_extract
     first_target = pathlib.Path(target[0].abspath)
     parent_directory = first_target.parent
-    files_to_remove = [parent_directory / f"{first_target.stem}{suffix}" for suffix in (".csv", ".h5", "_datasets.h5")]
+    files_to_remove = [parent_directory / f"{first_target.stem}{suffix}" for suffix in _odb_extract_extensions]
     for path in files_to_remove:
         path.unlink(missing_ok=True)
 
