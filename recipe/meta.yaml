@@ -30,8 +30,6 @@ build:
     # Build man page and HTML documentation to bundle in Conda package
     - scons man html
     - $PYTHON package_documentation.py
-  script_env:
-    - VERSION
   ignore_run_exports:
     - python_abi
 
