@@ -34,4 +34,5 @@ for destination, source in new_paths:
         shutil.copy2(source, destination, follow_symlinks=True)
     else:
         destination.mkdir(parents=True, exist_ok=True)
-        shutil.copytree(source, destination, symlinks=False, dirs_exist_ok=True)
+        shutil.copytree(source, destination, symlinks=False, dirs_exist_ok=True,
+                        ignore=shutil.ignore_patterns(".doctrees", "*.doctree", ".buildinfo"))
