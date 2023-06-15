@@ -43,7 +43,7 @@ requirements:
     - sphinxcontrib-bibtex
   host:
     - python
-    - build
+    - python-build
     - pip
     - setuptools >=45
     - setuptools_scm[toml] >=6.2
