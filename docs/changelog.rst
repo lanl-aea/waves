@@ -8,6 +8,10 @@ Changelog
 0.6.20 (unreleased)
 *******************
 
+Internal Changes
+================
+- Remove unused environment variables from Conda package recipe (:issue:`480`, :merge:`587`). By `Kyle Brindley`_.
+
 *******************
 0.6.19 (2023-06-14)
 *******************
