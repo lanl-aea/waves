@@ -13,6 +13,8 @@ Internal Changes
 - Remove unused environment variables from Conda package recipe (:issue:`480`, :merge:`587`). By `Kyle Brindley`_.
 - Avoid packaging Sphinx intermediate build files during documentation packaging (:issue:`481`, :merge:`588`). By `Kyle
   Brindley`_.
+- Use the conda-forge recommended 'python-build' package instead of 'build', which is apparently deprecated as too
+  general a name (:issue:`481`, :merge:`589`). By `Kyle Brindley`_.
 
 *******************
 0.6.19 (2023-06-14)
