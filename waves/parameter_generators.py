@@ -7,7 +7,6 @@ import copy
 import hashlib
 import warnings
 
-import os
 import yaml
 import numpy
 import xarray
@@ -32,13 +31,6 @@ allowable_output_file_types = ('h5', 'yaml')
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
-def write_netcdf(path, parameter_study):
-    if pathlib.Path(path).is_file():
-        existing_dataset = xarray.open_dataset(path, engine='h5netcdf')
-        if not existing_dataset.equals(parameter_study):
-            parameter_study.to_netcdf(path=path, mode='w', format="NETCDF4", engine='h5netcdf')
-    else:
-        parameter_study.to_netcdf(path=path, mode='w', format="NETCDF4", engine='h5netcdf')
 
 
 class _ParameterGenerator(ABC):
@@ -236,7 +228,7 @@ class _ParameterGenerator(ABC):
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
             else:
                 self.output_file.parent.mkdir(parents=True, exist_ok=True)
-                write_netcdf(self.output_file, self.parameter_study)
+                self._write_netcdf(self.output_file, self.parameter_study)
         else:
             for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
                 parameter_set_file = pathlib.Path(parameter_set_file)
@@ -251,7 +243,16 @@ class _ParameterGenerator(ABC):
                         sys.stdout.write(f"{parameter_set_file.resolve()}:\n{parameter_set}")
                         sys.stdout.write("\n")
                     else:
-                        write_netcdf(parameter_set_file, parameter_set)
+                        self._write_netcdf(parameter_set_file, parameter_set)
+
+    @staticmethod
+    def _write_netcdf(path, parameter_study):
+        if pathlib.Path(path).is_file():
+            with xarray.open_dataset(path, engine='h5netcdf') as existing_dataset:
+                if not existing_dataset.equals(parameter_study):
+                    parameter_study.to_netcdf(path=path, mode='w', format="NETCDF4", engine='h5netcdf')
+        else:
+            parameter_study.to_netcdf(path=path, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
         """Write YAML formatted output to STDOUT, separate set files, or a single file
