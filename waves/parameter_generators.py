@@ -31,8 +31,6 @@ allowable_output_file_types = ('h5', 'yaml')
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
-
-
 class _ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
@@ -249,10 +247,10 @@ class _ParameterGenerator(ABC):
     def _write_netcdf(path, parameter_study):
         if pathlib.Path(path).is_file():
             with xarray.open_dataset(path, engine='h5netcdf') as existing_dataset:
-                if not existing_dataset.equals(parameter_study):
-                    parameter_study.to_netcdf(path=path, mode='w', format="NETCDF4", engine='h5netcdf')
+                write = True if not existing_dataset.equals(parameter_study) else None
         else:
-            parameter_study.to_netcdf(path=path, mode='w', format="NETCDF4", engine='h5netcdf')
+            write = True
+        parameter_study.to_netcdf(path=path, mode='w', format="NETCDF4", engine='h5netcdf') if write else None
 
     def _write_yaml(self, parameter_set_files):
         """Write YAML formatted output to STDOUT, separate set files, or a single file
