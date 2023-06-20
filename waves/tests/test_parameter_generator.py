@@ -131,14 +131,14 @@ class TestParameterGenerator:
             xarray_to_netcdf.assert_not_called()
             assert stdout_write.call_count == stdout_calls
 
-    init_write_files = {# schema, template, overwrite, dryrun, debug,              is_file, sets, files
-        'template-1':  (      {},    'out',     False,  False, False,        [False, True],    1,     1),
-        'template-2':  (      {},    'out',     False,  False, False, [False, False, True],    1,     1),
-        'template-3':  (      {},    'out',     False,  False, False,       [ True,  True],    2,     0),
-        'template-4':  (      {},    'out',     False,  False, False, [ True, False, True],    2,     1),
-        'overwrite-2': (      {},    'out',      True,  False, False,       [False, False],    2,     2),
-        'overwrite-3': (      {},    'out',      True,  False, False,       [ True,  True],    2,     2),
-        'overwrite-4': (      {},    'out',      True,  False, False,       [ True, False],    2,     2),
+    init_write_files = {# schema, template, overwrite, dryrun, debug,                      is_file, sets, files
+        'template-1':  (      {},    'out',     False,  False, False,               [False,  True],    1,     1),
+        'template-2':  (      {},    'out',     False,  False, False, [False, False, False, False],    2,     2),
+        'template-3':  (      {},    'out',     False,  False, False,                [True,  True],    2,     0),
+        'template-4':  (      {},    'out',     False,  False, False,        [ True, False,  True],    2,     1),
+        'overwrite-2': (      {},    'out',      True,  False, False,               [False, False],    2,     2),
+        'overwrite-3': (      {},    'out',      True,  False, False,               [ True,  True],    2,     2),
+        'overwrite-4': (      {},    'out',      True,  False, False,               [ True, False],    2,     2),
     }
 
     @pytest.mark.unittest
@@ -190,17 +190,15 @@ class TestParameterGenerator:
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='h5',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug, **kwargs)
 
-        def false_function(ignore):
-            return False
-
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'), \
-             patch('xarray.open_dataset', mock_open()) as existing_dataset:
-            type(existing_dataset.return_value).equals = PropertyMock(return_value=false_function)
+             patch('xarray.open_dataset', mock_open()) as existing_dataset, \
+             patch('xarray.Dataset.equals', return_value=False) as equals_mock:
+            type(existing_dataset.return_value).equals = PropertyMock(return_value=equals_mock)
             WriteParameterGenerator.write()
             mock_file.assert_not_called()
             stdout_write.assert_not_called()
