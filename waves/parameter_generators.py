@@ -247,7 +247,7 @@ class _ParameterGenerator(ABC):
     def _write_netcdf(previous_parameter_study, parameter_study):
         """Write NetCDF file over previous study if the datasets have changed
 
-        :param str parameter_study: A relative or absolute file path to a previously created parameter study Dataset
+        :param str previous_parameter_study: A relative or absolute file path to a previously created parameter study Dataset
         :param xarray.Dataset parameter_study: Parameter study xarray data
         """
         write = True
@@ -255,8 +255,6 @@ class _ParameterGenerator(ABC):
             with xarray.open_dataset(previous_parameter_study, engine='h5netcdf') as existing_dataset:
                 if existing_dataset.equals(parameter_study):
                     write = False
-        else:
-            write = True
         if write:
             parameter_study.to_netcdf(path=previous_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
