@@ -244,13 +244,21 @@ class _ParameterGenerator(ABC):
                         self._write_netcdf(parameter_set_file, parameter_set)
 
     @staticmethod
-    def _write_netcdf(path, parameter_study):
-        if pathlib.Path(path).is_file():
-            with xarray.open_dataset(path, engine='h5netcdf') as existing_dataset:
-                write = True if not existing_dataset.equals(parameter_study) else None
+    def _write_netcdf(previous_parameter_study, parameter_study):
+        """Write NetCDF file over previous study if the datasets have changed
+
+        :param str parameter_study: A relative or absolute file path to a previously created parameter study Dataset
+        :param xarray.Dataset parameter_study: Parameter study xarray data
+        """
+        write = True
+        if pathlib.Path(previous_parameter_study).is_file():
+            with xarray.open_dataset(previous_parameter_study, engine='h5netcdf') as existing_dataset:
+                if existing_dataset.equals(parameter_study):
+                    write = False
         else:
             write = True
-        parameter_study.to_netcdf(path=path, mode='w', format="NETCDF4", engine='h5netcdf') if write else None
+        if write:
+            parameter_study.to_netcdf(path=previous_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
         """Write YAML formatted output to STDOUT, separate set files, or a single file
