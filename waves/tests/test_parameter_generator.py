@@ -207,9 +207,7 @@ class TestParameterGenerator:
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'), \
-             patch('xarray.open_dataset', mock_open()) as existing_dataset, \
-             patch('xarray.Dataset.equals', return_value=False) as equals_mock:
-            type(existing_dataset.return_value).equals = PropertyMock(return_value=equals_mock)
+             patch('xarray.open_dataset', mock_open()):
             WriteParameterGenerator.write()
             mock_file.assert_not_called()
             stdout_write.assert_not_called()
@@ -220,11 +218,10 @@ class TestParameterGenerator:
         WriteParameterGenerator = NoQuantilesGenerator({})
 
         with patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
-             patch('xarray.open_dataset', mock_open()) as existing_dataset, \
-             patch('xarray.Dataset.equals', return_value=True) as equals_mock, \
+             patch('xarray.open_dataset', mock_open()), \
+             patch('xarray.Dataset') as empty_dataset, \
              patch('pathlib.Path.is_file', side_effect=[True]):
-            type(existing_dataset.return_value).equals = PropertyMock(return_value=equals_mock)
-            WriteParameterGenerator._write_netcdf('dummy_string', xarray.Dataset())
+            WriteParameterGenerator._write_netcdf('dummy_string', empty_dataset)
             assert xarray_to_netcdf.call_count == 0
 
     set_hashes = {

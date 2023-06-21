@@ -253,7 +253,7 @@ class _ParameterGenerator(ABC):
         write = True
         if pathlib.Path(previous_parameter_study).is_file():
             with xarray.open_dataset(previous_parameter_study, engine='h5netcdf') as existing_dataset:
-                if existing_dataset.equals(parameter_study):
+                if parameter_study.equals(existing_dataset):
                     write = False
         if write:
             parameter_study.to_netcdf(path=previous_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
