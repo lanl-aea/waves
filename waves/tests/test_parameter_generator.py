@@ -1,6 +1,6 @@
 """Test ParameterGenerator Abstract Base Class
 """
-
+import unittest.mock
 from unittest.mock import patch, mock_open, PropertyMock
 from contextlib import nullcontext as does_not_raise
 
@@ -219,9 +219,9 @@ class TestParameterGenerator:
 
         with patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('xarray.open_dataset', mock_open()), \
-             patch('xarray.Dataset') as empty_dataset, \
              patch('pathlib.Path.is_file', side_effect=[True]):
-            WriteParameterGenerator._write_netcdf('dummy_string', empty_dataset)
+            mocked_dataset = unittest.mock.Mock()
+            WriteParameterGenerator._write_netcdf('dummy_string', mocked_dataset)
             assert xarray_to_netcdf.call_count == 0
 
     set_hashes = {
