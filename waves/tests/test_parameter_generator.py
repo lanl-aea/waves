@@ -6,6 +6,7 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
+import xarray
 
 from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
 
@@ -131,14 +132,14 @@ class TestParameterGenerator:
             xarray_to_netcdf.assert_not_called()
             assert stdout_write.call_count == stdout_calls
 
-    init_write_files = {# schema, template, overwrite, dryrun, debug,                      is_file, sets, files
-        'template-1':  (      {},    'out',     False,  False, False,               [False,  True],    1,     1),
-        'template-2':  (      {},    'out',     False,  False, False, [False, False, False, False],    2,     2),
-        'template-3':  (      {},    'out',     False,  False, False,                [True,  True],    2,     0),
-        'template-4':  (      {},    'out',     False,  False, False,        [ True, False,  True],    2,     1),
-        'overwrite-2': (      {},    'out',      True,  False, False,               [False, False],    2,     2),
-        'overwrite-3': (      {},    'out',      True,  False, False,               [ True,  True],    2,     2),
-        'overwrite-4': (      {},    'out',      True,  False, False,               [ True, False],    2,     2),
+    init_write_files = {# schema, template, overwrite, dryrun, debug,          is_file, sets, files
+        'template-1':  (      {},    'out',     False,  False, False,          [False],    1,     1),
+        'template-2':  (      {},    'out',     False,  False, False,   [False, False],    2,     2),
+        'template-3':  (      {},    'out',     False,  False, False,   [ True,  True],    2,     0),
+        'template-4':  (      {},    'out',     False,  False, False,   [ True, False],    2,     1),
+        'overwrite-2': (      {},    'out',      True,  False, False,   [False, False],    2,     2),
+        'overwrite-3': (      {},    'out',      True,  False, False,   [ True,  True],    2,     2),
+        'overwrite-4': (      {},    'out',      True,  False, False,   [ True, False],    2,     2),
     }
 
     @pytest.mark.unittest
@@ -169,6 +170,16 @@ class TestParameterGenerator:
             stdout_write.assert_not_called()
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == files
+
+    init_write_files = {# schema, template, overwrite, dryrun, debug,                      is_file, sets, files
+        'template-1':  (      {},    'out',     False,  False, False,               [False,  True],    1,     1),
+        'template-2':  (      {},    'out',     False,  False, False,   [False, True, False, True],    2,     2),
+        'template-3':  (      {},    'out',     False,  False, False,                [True,  True],    2,     0),
+        'template-4':  (      {},    'out',     False,  False, False,        [ True, False,  True],    2,     1),
+        'overwrite-2': (      {},    'out',      True,  False, False,               [False, False],    2,     2),
+        'overwrite-3': (      {},    'out',      True,  False, False,               [ True,  True],    2,     2),
+        'overwrite-4': (      {},    'out',      True,  False, False,               [ True, False],    2,     2),
+    }
 
     @pytest.mark.unittest
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
@@ -203,6 +214,18 @@ class TestParameterGenerator:
             mock_file.assert_not_called()
             stdout_write.assert_not_called()
             assert xarray_to_netcdf.call_count == files
+
+    def test_write_netcdf(self):
+        """Check that the `to_netcdf` function is not called when two datasets are identical"""
+        WriteParameterGenerator = NoQuantilesGenerator({})
+
+        with patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('xarray.open_dataset', mock_open()) as existing_dataset, \
+             patch('xarray.Dataset.equals', return_value=True) as equals_mock, \
+             patch('pathlib.Path.is_file', side_effect=[True]):
+            type(existing_dataset.return_value).equals = PropertyMock(return_value=equals_mock)
+            WriteParameterGenerator._write_netcdf('dummy_string', xarray.Dataset())
+            assert xarray_to_netcdf.call_count == 0
 
     set_hashes = {
         'set1':
