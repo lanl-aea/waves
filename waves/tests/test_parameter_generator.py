@@ -1,5 +1,6 @@
 """Test ParameterGenerator Abstract Base Class
 """
+import xarray
 from unittest.mock import patch, mock_open, Mock
 from contextlib import nullcontext as does_not_raise
 
@@ -169,22 +170,12 @@ class TestParameterGenerator:
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == files
 
-    init_write_files = {# schema, template, overwrite, dryrun, debug,                      is_file, sets, files
-        'template-1':  (      {},    'out',     False,  False, False,               [False,  True],    1,     1),
-        'template-2':  (      {},    'out',     False,  False, False,   [False, True, False, True],    2,     2),
-        'template-3':  (      {},    'out',     False,  False, False,                [True,  True],    2,     0),
-        'template-4':  (      {},    'out',     False,  False, False,        [ True, False,  True],    2,     1),
-        'overwrite-2': (      {},    'out',      True,  False, False,               [False, False],    2,     2),
-        'overwrite-3': (      {},    'out',      True,  False, False,               [ True,  True],    2,     2),
-        'overwrite-4': (      {},    'out',      True,  False, False,               [ True, False],    2,     2),
-    }
-
     @pytest.mark.unittest
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
                                  init_write_files.values(),
                              ids=init_write_files.keys())
     def test_write_dataset(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
-        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
+        """Check for conditions that should result in calls to _ParameterGenerator._write_netcdf
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str template: user supplied string to be used as a template for output file names
@@ -202,25 +193,40 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('waves.parameter_generators._ParameterGenerator._write_netcdf') as write_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
-             patch('pathlib.Path.mkdir'), \
-             patch('xarray.open_dataset', mock_open()):
+             patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
             mock_file.assert_not_called()
             stdout_write.assert_not_called()
-            assert xarray_to_netcdf.call_count == files
+            assert write_netcdf.call_count == files
 
-    def test_write_netcdf(self):
-        """Check that the `to_netcdf` function is not called when two datasets are identical"""
+    init_write_netcdf_files = {# equals, is_file, expected_call_count
+        'equal-datasets':     (    True,  [True],                   0),
+        'different-datasets': (   False,  [True],                   1),
+        'not-file-1':         (    True, [False],                   1),
+        'not-file-2':         (   False, [False],                   1),
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('equals, is_file, expected_call_count',
+                             init_write_netcdf_files.values(),
+                             ids=init_write_netcdf_files.keys())
+    def test_write_netcdf(self, equals, is_file, expected_call_count):
+        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
+
+        :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
+        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
+        :param int expected_call_count: amount of times that the xarray.Dataset.to_netcdf function should be called
+        """
         WriteParameterGenerator = NoQuantilesGenerator({})
 
         with patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('xarray.open_dataset', mock_open()), \
-             patch('pathlib.Path.is_file', side_effect=[True]):
-            mocked_dataset = Mock()
-            WriteParameterGenerator._write_netcdf('dummy_string', mocked_dataset)
-            assert xarray_to_netcdf.call_count == 0
+             patch('xarray.Dataset.equals', return_value=equals), \
+             patch('pathlib.Path.is_file', side_effect=is_file):
+            WriteParameterGenerator._write_netcdf('dummy_string', xarray.Dataset())
+            assert xarray_to_netcdf.call_count == expected_call_count
 
     set_hashes = {
         'set1':
