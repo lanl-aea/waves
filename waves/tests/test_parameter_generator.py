@@ -1,12 +1,11 @@
 """Test ParameterGenerator Abstract Base Class
 """
 import unittest.mock
-from unittest.mock import patch, mock_open, PropertyMock
+from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
-import xarray
 
 from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
 
