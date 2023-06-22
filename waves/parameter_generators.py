@@ -247,7 +247,8 @@ class _ParameterGenerator(ABC):
     def _write_netcdf(previous_parameter_study, parameter_study):
         """Write NetCDF file over previous study if the datasets have changed
 
-        :param str previous_parameter_study: A relative or absolute file path to a previously created parameter study Dataset
+        :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+            study Xarray Dataset
         :param xarray.Dataset parameter_study: Parameter study xarray data
         """
         write = True
