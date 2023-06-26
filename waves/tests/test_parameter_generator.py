@@ -1,11 +1,11 @@
 """Test ParameterGenerator Abstract Base Class
 """
-
 from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
 import pytest
 import numpy
+import xarray
 
 from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
 
@@ -174,8 +174,8 @@ class TestParameterGenerator:
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
                                  init_write_files.values(),
                              ids=init_write_files.keys())
-    def test_write_to_netcdf(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
-        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
+    def test_write_dataset(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
+        """Check for conditions that should result in calls to _ParameterGenerator._write_netcdf
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str template: user supplied string to be used as a template for output file names
@@ -189,16 +189,46 @@ class TestParameterGenerator:
         kwargs = {"sets": sets}
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='h5',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug, **kwargs)
+
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('waves.parameter_generators._ParameterGenerator._write_netcdf') as write_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
             mock_file.assert_not_called()
             stdout_write.assert_not_called()
-            assert xarray_to_netcdf.call_count == files
+            assert write_netcdf.call_count == files
+
+    init_write_netcdf_files = {# equals, is_file, overwrite, expected_call_count
+        'equal-datasets':     (    True,  [True],     False,                   0),
+        'equal-overwrite':    (    True,  [True],      True,                   1),
+        'different-datasets': (   False,  [True],     False,                   1),
+        'not-file-1':         (    True, [False],     False,                   1),
+        'not-file-2':         (   False, [False],     False,                   1),
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
+                             init_write_netcdf_files.values(),
+                             ids=init_write_netcdf_files.keys())
+    def test_write_netcdf(self, equals, is_file, overwrite, expected_call_count):
+        """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
+
+        :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
+        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
+        :param bool overwrite: parameter that identifies when the file should always be overwritten
+        :param int expected_call_count: amount of times that the xarray.Dataset.to_netcdf function should be called
+        """
+        WriteParameterGenerator = NoQuantilesGenerator({}, overwrite=overwrite)
+
+        with patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
+             patch('xarray.open_dataset', mock_open()), \
+             patch('xarray.Dataset.equals', return_value=equals), \
+             patch('pathlib.Path.is_file', side_effect=is_file):
+            WriteParameterGenerator._write_netcdf('dummy_string', xarray.Dataset())
+            assert xarray_to_netcdf.call_count == expected_call_count
 
     set_hashes = {
         'set1':
