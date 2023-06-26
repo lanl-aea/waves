@@ -201,25 +201,27 @@ class TestParameterGenerator:
             stdout_write.assert_not_called()
             assert write_netcdf.call_count == files
 
-    init_write_netcdf_files = {# equals, is_file, expected_call_count
-        'equal-datasets':     (    True,  [True],                   0),
-        'different-datasets': (   False,  [True],                   1),
-        'not-file-1':         (    True, [False],                   1),
-        'not-file-2':         (   False, [False],                   1),
+    init_write_netcdf_files = {# equals, is_file, overwrite, expected_call_count
+        'equal-datasets':     (    True,  [True],     False,                   0),
+        'equal-overwrite':    (    True,  [True],      True,                   1),
+        'different-datasets': (   False,  [True],     False,                   1),
+        'not-file-1':         (    True, [False],     False,                   1),
+        'not-file-2':         (   False, [False],     False,                   1),
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('equals, is_file, expected_call_count',
+    @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
                              init_write_netcdf_files.values(),
                              ids=init_write_netcdf_files.keys())
-    def test_write_netcdf(self, equals, is_file, expected_call_count):
+    def test_write_netcdf(self, equals, is_file, overwrite, expected_call_count):
         """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
 
         :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
         :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
+        :param bool overwrite: parameter that identifies when the file should always be overwritten
         :param int expected_call_count: amount of times that the xarray.Dataset.to_netcdf function should be called
         """
-        WriteParameterGenerator = NoQuantilesGenerator({})
+        WriteParameterGenerator = NoQuantilesGenerator({}, overwrite=overwrite)
 
         with patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('xarray.open_dataset', mock_open()), \
