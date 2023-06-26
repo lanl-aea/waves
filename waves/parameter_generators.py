@@ -181,9 +181,9 @@ class _ParameterGenerator(ABC):
         Writes to STDOUT by default. Requires non-default ``output_file_template`` or ``output_file`` specification to
         write to files.
 
-        If printing to STDOUT, print all parameter sets together. If printing to files, don't overwrite existing files.
-        If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
-        associations for files that would have been written.
+        If printing to STDOUT, print all parameter sets together. If printing to files, overwrite when contents of
+        existing files have changed. If overwrite is specified, overwrite all parameter set files.
+        If a dry run is requested print file-content associations for files that would have been written.
 
         Writes parameter set files in YAML syntax by default. Output formatting is controlled by
         ``output_file_type``.
@@ -243,16 +243,15 @@ class _ParameterGenerator(ABC):
                     else:
                         self._write_netcdf(parameter_set_file, parameter_set)
 
-    @staticmethod
-    def _write_netcdf(previous_parameter_study, parameter_study):
-        """Write NetCDF file over previous study if the datasets have changed
+    def _write_netcdf(self, previous_parameter_study, parameter_study):
+        """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
         :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
             study Xarray Dataset
         :param xarray.Dataset parameter_study: Parameter study xarray data
         """
         write = True
-        if pathlib.Path(previous_parameter_study).is_file():
+        if not self.overwrite and pathlib.Path(previous_parameter_study).is_file():
             with xarray.open_dataset(previous_parameter_study, engine='h5netcdf') as existing_dataset:
                 if parameter_study.equals(existing_dataset):
                     write = False
