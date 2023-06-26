@@ -42,7 +42,7 @@ class _ParameterGenerator(ABC):
         will be appended to the template string.
     :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is overwritten if the content of the file has changed.
+        is overwritten if the content of the file has changed or if ``overwrite`` is True.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
