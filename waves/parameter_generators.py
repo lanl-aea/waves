@@ -204,7 +204,7 @@ class _ParameterGenerator(ABC):
             self._write_yaml(parameter_set_files)
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
-    
+
     def scons_write(self, target, source, env):
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
