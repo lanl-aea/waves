@@ -47,6 +47,13 @@ class TestParameterGenerator:
             finally:
                 pass
 
+    @pytest.mark.unittest
+    def test_scons_write(self):
+        sconsWrite = NoQuantilesGenerator({})
+        with patch("waves.parameter_generators._ParameterGenerator.write") as mock_write:
+            sconsWrite.scons_write([], [], {})
+        mock_write.assert_called_once()
+
     templates = {      #schema, file_template, set_template,          expected
         'no template':   (    {},        None,         None, ['parameter_set0']),
         'file template': (    {},       'out',         None,           ['out0']),
