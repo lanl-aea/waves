@@ -8,6 +8,14 @@ Changelog
 0.6.20 (unreleased)
 *******************
 
+Documentation
+=============
+- Removed semaphore files in tutorials (:issue:`488`, :merge:`591`). By `Sergio Cordova`_
+
+Enhancement
+===========
+- Overwrite h5 files if content changed on parameter generators (:issue:`441`, :merge:`590`). By `Sergio Cordova`_
+
 Internal Changes
 ================
 - Remove unused environment variables from Conda package recipe (:issue:`480`, :merge:`587`). By `Kyle Brindley`_.
@@ -15,7 +23,6 @@ Internal Changes
   Brindley`_.
 - Use the conda-forge recommended 'python-build' package instead of 'build', which is apparently deprecated as too
   general a name (:issue:`481`, :merge:`589`). By `Kyle Brindley`_.
-- Overwrite h5 files if content changed on parameter generators (:issue:`441`, :merge:`590`). By `Sergio Cordova`_
 
 *******************
 0.6.19 (2023-06-14)
