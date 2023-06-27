@@ -137,7 +137,18 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
 # Comment used in tutorial code snippets: marker-6
 
-parameter_generator.write()
+set_count = len(parameter_generator.parameter_study_to_dict().items())
+if set_count < 8:
+    new_schema = copy.deepcopy(parameter_schema)
+    new_schema['num_simulations'] = set_count + 2
+    new_generator = waves.parameter_generators.SobolSequence(
+        new_schema,
+        output_file=parameter_study_file,
+        output_file_type=output_file_type,
+        **kwargs)
+    new_generator.write()
+else:
+    parameter_generator.write()
 
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
