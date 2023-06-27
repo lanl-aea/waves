@@ -150,11 +150,10 @@ API. The API contains an example that prints ``parameter_study`` and shows the o
 Note that the API's example does not use the same ``parameter_schema`` as this tutorial, but rather a general set of
 parameters using different variable types.
 
-The function and task definitions will write the parameter study file to the build directory whenever the parameter
-schema file changes. Tasks that execute Python methods require an `SCons Python build function`_, which must be defined
-in the configuration file and can't be provided by a `WAVES`_ builder because the parameter generator is instantiated in
-the current ``SConscript`` file. The conditional re-write behavior will be important for post-processing tasks
-introduced in :ref:`tutorial_post_processing_waves`.
+At configuration time, the :meth:`waves.parameter_generators.CartesianProduct.write` method will write the parameter 
+study file whenever the contents of the parameter study have changed. The contents check is performed against the 
+``previous_parameter_study`` file if it exists. The conditional re-write behavior will be important for 
+post-processing tasks introduced in Tutorial 09: Post-Processing.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
