@@ -48,6 +48,7 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     output_file=parameter_study_file,
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
+parameter_generator.write()
 
 # Geometry
 journal_file = f"{model}_geometry"
@@ -129,8 +130,6 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     workflow.extend(env.AbaqusExtract(
         target=[f"{set_name / job_name}.h5"],
         source=extract_source_list))
-
-parameter_generator.write()
 
 # Post-processing
 plot_name = "stress_strain_comparison"
