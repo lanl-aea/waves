@@ -153,7 +153,7 @@ parameters using different variable types.
 At configuration time, the :meth:`waves.parameter_generators.CartesianProduct.write` method will write the parameter 
 study file whenever the contents of the parameter study have changed. The contents check is performed against the 
 ``previous_parameter_study`` file if it exists. The conditional re-write behavior will be important for 
-post-processing tasks introduced in Tutorial 09: Post-Processing.
+post-processing tasks introduced in :ref:`tutorial_post_processing_waves`.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
