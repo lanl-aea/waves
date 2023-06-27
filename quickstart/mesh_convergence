@@ -49,9 +49,6 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
 
-semaphore_filename = "semaphore.txt"
-semaphore_file_list = []
-
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = f"--width {simulation_constants['width']} --height {simulation_constants['height']}"
@@ -79,12 +76,6 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     set_name = pathlib.Path(set_name)
     simulation_variables = {**parameters, **simulation_constants}
 
-    semaphore_file = build_directory / set_name / semaphore_filename
-    semaphore_file_list.append(semaphore_file)
-    semaphore_file.parent.mkdir(parents=True, exist_ok=True)
-    if not semaphore_file.exists():
-        with open(semaphore_file, "w") as semaphore:
-            semaphore.write(f"{set_name.name}\n")
     # Mesh
     journal_file = f"{model}_mesh"
     journal_options = f"--global-seed {simulation_variables['global_seed']} " \
@@ -139,11 +130,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
         target=[f"{set_name / job_name}.h5"],
         source=extract_source_list))
 
-workflow.extend(env.Command(
-    target=[parameter_study_file.name],
-    source=[str(semaphore) for semaphore in semaphore_file_list],
-    action=[parameter_generator.scons_write],
-    parameter_generator=parameter_generator))
+parameter_generator.write()
 
 # Post-processing
 plot_name = "stress_strain_comparison"
