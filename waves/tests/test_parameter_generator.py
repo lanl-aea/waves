@@ -193,7 +193,7 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('waves.parameter_generators._ParameterGenerator._write_netcdf') as write_netcdf, \
+             patch('waves.parameter_generators._ParameterGenerator._conditionally_write_dataset') as write_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
@@ -213,7 +213,7 @@ class TestParameterGenerator:
     @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
                              init_write_dataset_files.values(),
                              ids=init_write_dataset_files.keys())
-    def test_write_netcdf(self, equals, is_file, overwrite, expected_call_count):
+    def test_conditionally_write_dataset(self, equals, is_file, overwrite, expected_call_count):
         """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
 
         :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
@@ -227,7 +227,7 @@ class TestParameterGenerator:
              patch('xarray.open_dataset', mock_open()), \
              patch('xarray.Dataset.equals', return_value=equals), \
              patch('pathlib.Path.is_file', side_effect=is_file):
-            WriteParameterGenerator._write_netcdf('dummy_string', xarray.Dataset())
+            WriteParameterGenerator._conditionally_write_dataset('dummy_string', xarray.Dataset())
             assert xarray_to_netcdf.call_count == expected_call_count
 
     @pytest.mark.unittest

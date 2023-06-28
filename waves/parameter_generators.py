@@ -226,7 +226,7 @@ class _ParameterGenerator(ABC):
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
             else:
                 self.output_file.parent.mkdir(parents=True, exist_ok=True)
-                self._write_netcdf(self.output_file, self.parameter_study)
+                self._conditionally_write_dataset(self.output_file, self.parameter_study)
         else:
             for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
                 parameter_set_file = pathlib.Path(parameter_set_file)
@@ -241,9 +241,9 @@ class _ParameterGenerator(ABC):
                         sys.stdout.write(f"{parameter_set_file.resolve()}:\n{parameter_set}")
                         sys.stdout.write("\n")
                     else:
-                        self._write_netcdf(parameter_set_file, parameter_set)
+                        self._conditionally_write_dataset(parameter_set_file, parameter_set)
 
-    def _write_netcdf(self, previous_parameter_study, parameter_study):
+    def _conditionally_write_dataset(self, previous_parameter_study, parameter_study):
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
         :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
