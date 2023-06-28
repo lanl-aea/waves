@@ -161,7 +161,7 @@ class TestParameterGenerator:
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug, **kwargs)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('builtins.open', mock_open()) as mock_file, \
+             patch('waves.parameter_generators._ParameterGenerator._write_yaml') as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file):
