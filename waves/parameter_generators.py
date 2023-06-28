@@ -298,21 +298,21 @@ class _ParameterGenerator(ABC):
                     else:
                         self._conditionally_write_yaml(parameter_set_file, yaml.safe_load(text))
 
-    def _conditionally_write_yaml(self, output_file, new_parameter_dictionary):
+    def _conditionally_write_yaml(self, output_file, parameter_dictionary):
         """Write YAML file over previous study if the datasets have changed or self.overwrite is True
 
         :param output_file: A relative or absolute file path to the output YAML file
-        :param str text: YAML output text
+        :param dict parameter_dictionary: dictionary containing parameter set data
         """
         write = True
         if not self.overwrite and pathlib.Path(output_file).is_file():
             with open(output_file, 'r') as existing_file:
                 existing_yaml_object = yaml.safe_load(existing_file)
-                if existing_yaml_object == new_parameter_dictionary:
+                if existing_yaml_object == parameter_dictionary:
                     write = False
         if write:
             with open(output_file, 'w') as outfile:
-                outfile.write(yaml.dump(new_parameter_dictionary))
+                outfile.write(yaml.dump(parameter_dictionary))
 
     def _write_meta(self, parameter_set_files):
         """Write the parameter study meta data file.
