@@ -15,6 +15,7 @@ Documentation
 Enhancement
 ===========
 - Overwrite h5 files if content changed on parameter generators (:issue:`441`, :merge:`590`). By `Sergio Cordova`_
+- Overwrite yaml files if content changed on parameter generators (:issue:`487`, :merge:`592`). By `Sergio Cordova`_
 
 Internal Changes
 ================

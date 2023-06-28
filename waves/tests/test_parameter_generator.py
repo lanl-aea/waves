@@ -145,7 +145,7 @@ class TestParameterGenerator:
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
                                  init_write_files.values(),
                              ids=init_write_files.keys())
-    def test_write_to_files(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
+    def test_write_yaml(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
         """Check for conditions that should result in calls to builtins.open
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -161,7 +161,7 @@ class TestParameterGenerator:
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug, **kwargs)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('builtins.open', mock_open()) as mock_file, \
+             patch('waves.parameter_generators._ParameterGenerator._conditionally_write_yaml') as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -193,7 +193,7 @@ class TestParameterGenerator:
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('waves.parameter_generators._ParameterGenerator._write_netcdf') as write_netcdf, \
+             patch('waves.parameter_generators._ParameterGenerator._conditionally_write_dataset') as write_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
@@ -213,7 +213,7 @@ class TestParameterGenerator:
     @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
                              init_write_netcdf_files.values(),
                              ids=init_write_netcdf_files.keys())
-    def test_write_netcdf(self, equals, is_file, overwrite, expected_call_count):
+    def test_conditionally_write_dataset(self, equals, is_file, overwrite, expected_call_count):
         """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
 
         :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
@@ -227,8 +227,36 @@ class TestParameterGenerator:
              patch('xarray.open_dataset', mock_open()), \
              patch('xarray.Dataset.equals', return_value=equals), \
              patch('pathlib.Path.is_file', side_effect=is_file):
-            WriteParameterGenerator._write_netcdf('dummy_string', xarray.Dataset())
+            WriteParameterGenerator._conditionally_write_dataset('dummy_string', xarray.Dataset())
             assert xarray_to_netcdf.call_count == expected_call_count
+
+    init_write_yaml_files = {#     existing_dict, is_file, overwrite, expected_call_count
+        'equal-datasets':     ({'dummy': 'dict'},  [True],     False,                   0),
+        'equal-overwrite':    ({'dummy': 'dict'},  [True],      True,                   1),
+        'different-datasets': ({'smart': 'dict'},  [True],     False,                   1),
+        'not-file-1':         ({'dummy': 'dict'}, [False],     False,                   1),
+        'not-file-2':         ({'smart': 'dict'}, [False],     False,                   1),
+    }
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('existing_dict, is_file, overwrite, expected_call_count',
+                             init_write_yaml_files.values(),
+                             ids=init_write_yaml_files.keys())
+    def test_conditionally_write_yaml(self, existing_dict, is_file, overwrite, expected_call_count):
+        """Check for conditions that should result in writing out to file
+
+        :param dict existing_dict: parameter that mocks an existing parameter set dictionary
+        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
+        :param bool overwrite: parameter that identifies when the file should always be overwritten
+        :param int expected_call_count: amount of times that the open.write function should be called
+        """
+        WriteParameterGenerator = NoQuantilesGenerator({}, overwrite=overwrite)
+
+        with patch('builtins.open', mock_open()) as write_yaml_file, \
+             patch('yaml.safe_load', return_value=existing_dict), \
+             patch('pathlib.Path.is_file', side_effect=is_file):
+            WriteParameterGenerator._conditionally_write_yaml('dummy_string', {'dummy': 'dict'})
+            assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     set_hashes = {
         'set1':

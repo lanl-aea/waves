@@ -226,7 +226,7 @@ class _ParameterGenerator(ABC):
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
             else:
                 self.output_file.parent.mkdir(parents=True, exist_ok=True)
-                self._write_netcdf(self.output_file, self.parameter_study)
+                self._conditionally_write_dataset(self.output_file, self.parameter_study)
         else:
             for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
                 parameter_set_file = pathlib.Path(parameter_set_file)
@@ -241,22 +241,22 @@ class _ParameterGenerator(ABC):
                         sys.stdout.write(f"{parameter_set_file.resolve()}:\n{parameter_set}")
                         sys.stdout.write("\n")
                     else:
-                        self._write_netcdf(parameter_set_file, parameter_set)
+                        self._conditionally_write_dataset(parameter_set_file, parameter_set)
 
-    def _write_netcdf(self, previous_parameter_study, parameter_study):
+    def _conditionally_write_dataset(self, existing_parameter_study, parameter_study):
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
-        :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+        :param str existing_parameter_study: A relative or absolute file path to a previously created parameter
             study Xarray Dataset
         :param xarray.Dataset parameter_study: Parameter study xarray data
         """
         write = True
-        if not self.overwrite and pathlib.Path(previous_parameter_study).is_file():
-            with xarray.open_dataset(previous_parameter_study, engine='h5netcdf') as existing_dataset:
+        if not self.overwrite and pathlib.Path(existing_parameter_study).is_file():
+            with xarray.open_dataset(existing_parameter_study, engine='h5netcdf') as existing_dataset:
                 if parameter_study.equals(existing_dataset):
                     write = False
         if write:
-            parameter_study.to_netcdf(path=previous_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
+            parameter_study.to_netcdf(path=existing_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
         """Write YAML formatted output to STDOUT, separate set files, or a single file
@@ -283,8 +283,7 @@ class _ParameterGenerator(ABC):
                          zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
-                with open(self.output_file, 'w') as outfile:
-                    outfile.write(output_text)
+                self._conditionally_write_yaml(self.output_file, yaml.safe_load(output_text))
             elif self.output_file and self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
@@ -297,8 +296,23 @@ class _ParameterGenerator(ABC):
                     if self.dryrun:
                         sys.stdout.write(f"{parameter_set_file.resolve()}\n{text}")
                     else:
-                        with open(parameter_set_file, 'w') as outfile:
-                            outfile.write(text)
+                        self._conditionally_write_yaml(parameter_set_file, yaml.safe_load(text))
+
+    def _conditionally_write_yaml(self, output_file, parameter_dictionary):
+        """Write YAML file over previous study if the datasets have changed or self.overwrite is True
+
+        :param output_file: A relative or absolute file path to the output YAML file
+        :param dict parameter_dictionary: dictionary containing parameter set data
+        """
+        write = True
+        if not self.overwrite and pathlib.Path(output_file).is_file():
+            with open(output_file, 'r') as existing_file:
+                existing_yaml_object = yaml.safe_load(existing_file)
+                if existing_yaml_object == parameter_dictionary:
+                    write = False
+        if write:
+            with open(output_file, 'w') as outfile:
+                outfile.write(yaml.dump(parameter_dictionary))
 
     def _write_meta(self, parameter_set_files):
         """Write the parameter study meta data file.
