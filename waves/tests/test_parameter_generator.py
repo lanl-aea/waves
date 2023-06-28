@@ -248,11 +248,7 @@ class TestParameterGenerator:
              patch('yaml.safe_load', return_value=str(equals)), \
              patch('pathlib.Path.is_file', side_effect=is_file):
             WriteParameterGenerator._write_yaml('dummy_string', "True")
-            # If the file exists and the "overwrite" flag does not exist then it will be open twice.
-            # Once to get the current value and once to write out
-            if is_file[0] and not overwrite:
-                expected_call_count += 1
-            assert write_yaml_file.call_count == expected_call_count
+            assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     set_hashes = {
         'set1':
