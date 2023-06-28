@@ -201,18 +201,18 @@ class TestParameterGenerator:
             stdout_write.assert_not_called()
             assert write_netcdf.call_count == files
 
-    init_write_netcdf_files = {# equals, is_file, overwrite, expected_call_count
-        'equal-datasets':     (    True,  [True],     False,                   0),
-        'equal-overwrite':    (    True,  [True],      True,                   1),
-        'different-datasets': (   False,  [True],     False,                   1),
-        'not-file-1':         (    True, [False],     False,                   1),
-        'not-file-2':         (   False, [False],     False,                   1),
+    init_write_dataset_files = {# equals, is_file, overwrite, expected_call_count
+        'equal-datasets':      (    True,  [True],     False,                   0),
+        'equal-overwrite':     (    True,  [True],      True,                   1),
+        'different-datasets':  (   False,  [True],     False,                   1),
+        'not-file-1':          (    True, [False],     False,                   1),
+        'not-file-2':          (   False, [False],     False,                   1),
     }
 
     @pytest.mark.unittest
     @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
-                             init_write_netcdf_files.values(),
-                             ids=init_write_netcdf_files.keys())
+                             init_write_dataset_files.values(),
+                             ids=init_write_dataset_files.keys())
     def test_write_netcdf(self, equals, is_file, overwrite, expected_call_count):
         """Check for conditions that should result in calls to xarray.Dataset.to_netcdf
 
@@ -229,6 +229,30 @@ class TestParameterGenerator:
              patch('pathlib.Path.is_file', side_effect=is_file):
             WriteParameterGenerator._write_netcdf('dummy_string', xarray.Dataset())
             assert xarray_to_netcdf.call_count == expected_call_count
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
+                             init_write_dataset_files.values(),
+                             ids=init_write_dataset_files.keys())
+    def test_write_yaml(self, equals, is_file, overwrite, expected_call_count):
+        """Check for conditions that should result in writing out to file
+
+        :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
+        :param list is_file: test specific argument mocks changing output for pathlib.Path().is_file() repeat calls
+        :param bool overwrite: parameter that identifies when the file should always be overwritten
+        :param int expected_call_count: amount of times that the open.write function should be called
+        """
+        WriteParameterGenerator = NoQuantilesGenerator({}, overwrite=overwrite)
+
+        with patch('builtins.open', mock_open()) as write_yaml_file, \
+             patch('yaml.safe_load', return_value=str(equals)), \
+             patch('pathlib.Path.is_file', side_effect=is_file):
+            WriteParameterGenerator._write_yaml('dummy_string', "True")
+            # If the file exists and the "overwrite" flag does not exist then it will be open twice.
+            # Once to get the current value and once to write out
+            if is_file[0] and not overwrite:
+                expected_call_count += 1
+            assert write_yaml_file.call_count == expected_call_count
 
     set_hashes = {
         'set1':
