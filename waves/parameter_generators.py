@@ -201,7 +201,7 @@ class _ParameterGenerator(ABC):
         if self.output_file_type == 'h5':
             self._write_dataset()
         elif self.output_file_type == 'yaml':
-            self._write_yaml(parameter_set_files)
+            self._write_yaml_dataset(parameter_set_files)
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
@@ -258,7 +258,7 @@ class _ParameterGenerator(ABC):
         if write:
             parameter_study.to_netcdf(path=previous_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
-    def _write_yaml(self, parameter_set_files):
+    def _write_yaml_dataset(self, parameter_set_files):
         """Write YAML formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`

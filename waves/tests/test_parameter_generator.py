@@ -145,7 +145,7 @@ class TestParameterGenerator:
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
                                  init_write_files.values(),
                              ids=init_write_files.keys())
-    def test_write_to_files(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
+    def test_write_yaml_dataset(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
         """Check for conditions that should result in calls to builtins.open
 
         :param str schema: placeholder string standing in for the schema read from an input file
