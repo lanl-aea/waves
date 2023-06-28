@@ -145,7 +145,7 @@ class TestParameterGenerator:
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, debug, is_file, sets, files',
                                  init_write_files.values(),
                              ids=init_write_files.keys())
-    def test_write_yaml_dataset(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
+    def test_write_yaml(self, schema, template, overwrite, dryrun, debug, is_file, sets, files):
         """Check for conditions that should result in calls to builtins.open
 
         :param str schema: placeholder string standing in for the schema read from an input file
@@ -161,7 +161,7 @@ class TestParameterGenerator:
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
                                                        overwrite=overwrite, dryrun=dryrun, debug=debug, **kwargs)
         with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators._ParameterGenerator._write_yaml') as mock_file, \
+             patch('waves.parameter_generators._ParameterGenerator._conditionally_write_yaml') as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -234,7 +234,7 @@ class TestParameterGenerator:
     @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
                              init_write_dataset_files.values(),
                              ids=init_write_dataset_files.keys())
-    def test_write_yaml(self, equals, is_file, overwrite, expected_call_count):
+    def test_conditionally_write_yaml(self, equals, is_file, overwrite, expected_call_count):
         """Check for conditions that should result in writing out to file
 
         :param bool equals: parameter that identifies when the xarray.Dataset objects should be equal
@@ -247,7 +247,7 @@ class TestParameterGenerator:
         with patch('builtins.open', mock_open()) as write_yaml_file, \
              patch('yaml.safe_load', return_value=str(equals)), \
              patch('pathlib.Path.is_file', side_effect=is_file):
-            WriteParameterGenerator._write_yaml('dummy_string', "True")
+            WriteParameterGenerator._conditionally_write_yaml('dummy_string', "True")
             assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     set_hashes = {

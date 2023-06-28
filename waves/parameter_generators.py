@@ -201,7 +201,7 @@ class _ParameterGenerator(ABC):
         if self.output_file_type == 'h5':
             self._write_dataset()
         elif self.output_file_type == 'yaml':
-            self._write_yaml_dataset(parameter_set_files)
+            self._write_yaml(parameter_set_files)
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
@@ -258,7 +258,7 @@ class _ParameterGenerator(ABC):
         if write:
             parameter_study.to_netcdf(path=previous_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
-    def _write_yaml_dataset(self, parameter_set_files):
+    def _write_yaml(self, parameter_set_files):
         """Write YAML formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
@@ -283,7 +283,7 @@ class _ParameterGenerator(ABC):
                          zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
-                self._write_yaml(self.output_file, output_text)
+                self._conditionally_write_yaml(self.output_file, output_text)
             elif self.output_file and self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
@@ -296,9 +296,9 @@ class _ParameterGenerator(ABC):
                     if self.dryrun:
                         sys.stdout.write(f"{parameter_set_file.resolve()}\n{text}")
                     else:
-                        self._write_yaml(parameter_set_file, text)
+                        self._conditionally_write_yaml(parameter_set_file, text)
 
-    def _write_yaml(self, output_file, text):
+    def _conditionally_write_yaml(self, output_file, text):
         """Write YAML file over previous study if the datasets have changed or self.overwrite is True
 
         :param output_file: A relative or absolute file path to the output YAML file
