@@ -283,8 +283,7 @@ class _ParameterGenerator(ABC):
                          zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
-                with open(self.output_file, 'w') as outfile:
-                    outfile.write(output_text)
+                self._write_yaml(self.output_file, output_text)
             elif self.output_file and self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
@@ -297,8 +296,23 @@ class _ParameterGenerator(ABC):
                     if self.dryrun:
                         sys.stdout.write(f"{parameter_set_file.resolve()}\n{text}")
                     else:
-                        with open(parameter_set_file, 'w') as outfile:
-                            outfile.write(text)
+                        self._write_yaml(parameter_set_file, text)
+
+    def _write_yaml(self, output_file, text):
+        """Write YAML file over previous study if the datasets have changed or self.overwrite is True
+
+        :param output_file: A relative or absolute file path to the output YAML file
+        :param str text: YAML output text
+        """
+        write = True
+        if not self.overwrite and pathlib.Path(output_file).is_file():
+            with open(output_file, 'r') as current_file:
+                current_yaml_text = yaml.safe_load(current_file)
+                if current_yaml_text == text:
+                    write = False
+        if write:
+            with open(output_file, 'w') as outfile:
+                outfile.write(text)
 
     def _write_meta(self, parameter_set_files):
         """Write the parameter study meta data file.
