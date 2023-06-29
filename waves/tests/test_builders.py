@@ -555,7 +555,7 @@ matlab_script_input = {
 @pytest.mark.unittest
 def test_matlab_script(matlab_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action, symlink=False)})
+    env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action)})
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
