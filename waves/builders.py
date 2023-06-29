@@ -362,6 +362,9 @@ def abaqus_journal(abaqus_program="abaqus", post_action=None):
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
+
+    :return: Abaqus journal builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
@@ -485,6 +488,9 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
         * "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
         * "datacheck": [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
         * default value: [".odb", ".dat", ".msg", ".com", ".prt"]
+
+    :return: Abaqus solver builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
@@ -611,6 +617,9 @@ def python_script(post_action=None):
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
+
+    :return: Python script builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
@@ -678,6 +687,9 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
        :caption: Matlab script builder action
 
        cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
+
+    :return: Python script builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
@@ -732,6 +744,9 @@ def conda_environment():
        env.Append(BUILDERS={"CondaEnvironment": waves.builders.conda_environment()})
        environment_target = env.CondaEnvironment(target=["environment.yaml"])
        env.AlwaysBuild(environment_target)
+
+    :return: Conda environment builder
+    :rtype: SCons.Builder.Builder
     """
     conda_environment_builder = SCons.Builder.Builder(
         action=
@@ -804,6 +819,9 @@ def abaqus_extract(abaqus_program="abaqus"):
        AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
+
+    :return: Abaqus extract builder
+    :rtype: SCons.Builder.Builder
     """
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
@@ -874,6 +892,9 @@ def sbatch(sbatch_program="sbatch", post_action=None):
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
+
+    :return: SLURM sbatch builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
