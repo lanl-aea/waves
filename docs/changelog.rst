@@ -12,7 +12,7 @@ Documentation
 =============
 - Removed semaphore files in tutorials (:issue:`488`, :merge:`591`). By `Sergio Cordova`_
 - Updated parameter study CLI messages to reflect yaml file behavior changes (:issue:`490`, :merge:`593`). By `Sergio
-Cordova`_
+  Cordova`_
 
 Enhancement
 ===========
