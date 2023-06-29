@@ -50,11 +50,7 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     output_file=parameter_study_file,
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study)
-
-workflow.extend(env.Command(
-    target=[parameter_study_file.name],
-    source=[str(python_source_abspath / "single_element_compression_cartesian_product.py")],
-    action=[parameter_generator.scons_write]))
+parameter_generator.write()
 
 # Comment used in tutorial code snippets: marker-3
 

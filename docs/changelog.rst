@@ -5,8 +5,35 @@ Changelog
 #########
 
 *******************
-0.6.20 (unreleased)
+0.6.21 (unreleased)
 *******************
+
+*******************
+0.6.20 (2023-06-29)
+*******************
+
+Documentation
+=============
+- Removed semaphore files in tutorials (:issue:`488`, :merge:`591`). By `Sergio Cordova`_
+- Updated parameter study CLI messages to reflect yaml file behavior changes (:issue:`490`, :merge:`593`). By `Sergio
+  Cordova`_
+- Clarify the difference between the ``copy_substitute`` function and the WAVES-SCons builders. Update missing interface
+  descriptions and return value descriptions (:issue:`493`, :merge:`595`). By `Kyle Brindley`_.
+
+Enhancement
+===========
+- Overwrite h5 files if content changed on parameter generators (:issue:`441`, :merge:`590`). By `Sergio Cordova`_
+- Overwrite yaml files if content changed on parameter generators (:issue:`487`, :merge:`592`). By `Sergio Cordova`_
+
+Internal Changes
+================
+- Remove unused environment variables from Conda package recipe (:issue:`480`, :merge:`587`). By `Kyle Brindley`_.
+- Avoid packaging Sphinx intermediate build files during documentation packaging (:issue:`481`, :merge:`588`). By `Kyle
+  Brindley`_.
+- Use the conda-forge recommended 'python-build' package instead of 'build', which is apparently deprecated as too
+  general a name (:issue:`481`, :merge:`589`). By `Kyle Brindley`_.
+- Updated h5 and yaml parameter generator tests to use the same data input (:issue:`491`, :merge:`594`). By `Sergio
+  Cordova`_
 
 *******************
 0.6.19 (2023-06-14)

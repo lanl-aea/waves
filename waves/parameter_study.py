@@ -57,11 +57,14 @@ def get_parser(return_subparser_dictionary=False):
                                         f"path template. May contain ``{parameter_generators.template_placeholder}`` " \
                                         f"set number placeholder in the file basename but not in the path. " \
                                         f"If the placeholder is not found, it will be " \
-                                        f"appended to the template string. (default: %(default)s)")
+                                        f"appended to the template string. Output files are overwritten if the "
+                                        f"content of the file has changed or if ``overwrite`` is True "
+                                        f"(default: %(default)s)")
     output_file_group.add_argument('-f', '--output-file',
                                    default=None, dest='OUTPUT_FILE',
                                    help=f"Output file name. May contain pathseps for an absolute or relative path. " \
-                                         "Output file is always overwritten. (default: %(default)s)")
+                                         "Output file is overwritten if the content of the file has changed or if " \
+                                         "``overwrite`` is True (default: %(default)s)")
 
     # Optional keyword options
     parent_parser.add_argument('-t', '--output-file-type',

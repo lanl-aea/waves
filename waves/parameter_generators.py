@@ -42,7 +42,7 @@ class _ParameterGenerator(ABC):
         will be appended to the template string.
     :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is always overwritten.
+        is overwritten if the content of the file has changed or if ``overwrite`` is True.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
@@ -181,9 +181,9 @@ class _ParameterGenerator(ABC):
         Writes to STDOUT by default. Requires non-default ``output_file_template`` or ``output_file`` specification to
         write to files.
 
-        If printing to STDOUT, print all parameter sets together. If printing to files, don't overwrite existing files.
-        If overwrite is specified, overwrite all parameter set files. If a dry run is requested print file-content
-        associations for files that would have been written.
+        If printing to STDOUT, print all parameter sets together. If printing to files, overwrite when contents of
+        existing files have changed. If overwrite is specified, overwrite all parameter set files.
+        If a dry run is requested print file-content associations for files that would have been written.
 
         Writes parameter set files in YAML syntax by default. Output formatting is controlled by
         ``output_file_type``.
@@ -226,7 +226,7 @@ class _ParameterGenerator(ABC):
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
             else:
                 self.output_file.parent.mkdir(parents=True, exist_ok=True)
-                self.parameter_study.to_netcdf(path=self.output_file, mode='w', format="NETCDF4", engine='h5netcdf')
+                self._conditionally_write_dataset(self.output_file, self.parameter_study)
         else:
             for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
                 parameter_set_file = pathlib.Path(parameter_set_file)
@@ -241,7 +241,22 @@ class _ParameterGenerator(ABC):
                         sys.stdout.write(f"{parameter_set_file.resolve()}:\n{parameter_set}")
                         sys.stdout.write("\n")
                     else:
-                        parameter_set.to_netcdf(path=parameter_set_file, mode='w', format="NETCDF4", engine='h5netcdf')
+                        self._conditionally_write_dataset(parameter_set_file, parameter_set)
+
+    def _conditionally_write_dataset(self, existing_parameter_study, parameter_study):
+        """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
+
+        :param str existing_parameter_study: A relative or absolute file path to a previously created parameter
+            study Xarray Dataset
+        :param xarray.Dataset parameter_study: Parameter study xarray data
+        """
+        write = True
+        if not self.overwrite and pathlib.Path(existing_parameter_study).is_file():
+            with xarray.open_dataset(existing_parameter_study, engine='h5netcdf') as existing_dataset:
+                if parameter_study.equals(existing_dataset):
+                    write = False
+        if write:
+            parameter_study.to_netcdf(path=existing_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
     def _write_yaml(self, parameter_set_files):
         """Write YAML formatted output to STDOUT, separate set files, or a single file
@@ -268,8 +283,7 @@ class _ParameterGenerator(ABC):
                          zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
             if self.output_file and not self.dryrun:
-                with open(self.output_file, 'w') as outfile:
-                    outfile.write(output_text)
+                self._conditionally_write_yaml(self.output_file, yaml.safe_load(output_text))
             elif self.output_file and self.dryrun:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
@@ -282,8 +296,23 @@ class _ParameterGenerator(ABC):
                     if self.dryrun:
                         sys.stdout.write(f"{parameter_set_file.resolve()}\n{text}")
                     else:
-                        with open(parameter_set_file, 'w') as outfile:
-                            outfile.write(text)
+                        self._conditionally_write_yaml(parameter_set_file, yaml.safe_load(text))
+
+    def _conditionally_write_yaml(self, output_file, parameter_dictionary):
+        """Write YAML file over previous study if the datasets have changed or self.overwrite is True
+
+        :param output_file: A relative or absolute file path to the output YAML file
+        :param dict parameter_dictionary: dictionary containing parameter set data
+        """
+        write = True
+        if not self.overwrite and pathlib.Path(output_file).is_file():
+            with open(output_file, 'r') as existing_file:
+                existing_yaml_object = yaml.safe_load(existing_file)
+                if existing_yaml_object == parameter_dictionary:
+                    write = False
+        if write:
+            with open(output_file, 'w') as outfile:
+                outfile.write(yaml.dump(parameter_dictionary))
 
     def _write_meta(self, parameter_set_files):
         """Write the parameter study meta data file.

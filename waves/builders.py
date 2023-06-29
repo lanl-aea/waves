@@ -26,6 +26,10 @@ def project_help_message(env=None, append=True):
 
     * :meth:`waves.builders.default_targets_message`
     * :meth:`waves.builders.alias_list_message`
+
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+        overwritten if ``env.Help`` has not been previously called.
     """
     default_targets_message(env=env, append=append)
     alias_list_message(env=env, append=append)
@@ -89,9 +93,6 @@ def append_env_path(program, env):
     Raises a ``FileNotFoundError`` if the ``program`` absolute path does not exist. Uses the `SCons AppendENVPath`_
     method. If the program parent directory is already on ``PATH``, the ``PATH`` directory order is preserved.
 
-    :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
-
     .. code-block::
        :caption: Example environment modification
 
@@ -101,6 +102,9 @@ def append_env_path(program, env):
        env["program"] = waves.builders.find_program(["program"], env)
        if env["program"]:
            waves.append_env_path(env["program"], env)
+
+    :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     """
     program = pathlib.Path(program).resolve()
     if not program.exists():
@@ -180,12 +184,6 @@ def add_program(names, env):
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
     if a program is found and the directory is not already on ``PATH``. Returns None if no program name is found.
 
-    :param list names: list of string program names. May include an absolute path.
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
-
-    :return: Absolute path of the found program. None if none of the names are found.
-    :rtype: str
-
     .. code-block::
        :caption: Example search for an executable named "program"
 
@@ -193,6 +191,12 @@ def add_program(names, env):
 
        env = Environment()
        env["program"] = waves.builders.add_program(["program"], env)
+
+    :param list names: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
     """
     first_found_path = find_program(names, env)
     if first_found_path:
@@ -209,12 +213,6 @@ def add_cubit(names, env):
 
     Returns None if no program name is found.
 
-    :param list names: list of string program names. May include an absolute path.
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
-
-    :return: Absolute path of the found program. None if none of the names are found.
-    :rtype: str
-
     .. code-block::
        :caption: Example Cubit environment modification
 
@@ -222,6 +220,12 @@ def add_cubit(names, env):
 
        env = Environment()
        env["cubit"] = waves.builders.add_cubit(["cubit"], env)
+
+    :param list names: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
     """
     first_found_path = add_program(names, env)
     if first_found_path:
@@ -247,6 +251,9 @@ def _construct_post_action_list(post_action):
     character-by-character. If an empty list is passed, and empty list is returned.
 
     :param list post_action: List of post-action strings
+
+    :return: post-action list of strings
+    :rtype: list
     """
     if isinstance(post_action, str):
         post_action = [post_action]
@@ -262,6 +269,7 @@ def _build_subdirectory(target):
     """Return the build subdirectory of the first target file
 
     :param list target: The target file list of strings
+
     :return: build directory
     :rtype: pathlib.Path
     """
@@ -362,6 +370,9 @@ def abaqus_journal(abaqus_program="abaqus", post_action=None):
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
+
+    :return: Abaqus journal builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
@@ -386,6 +397,15 @@ def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
 
     If "suffixes" is a key in the environment, ``env``, then the suffixes list will override the ``suffixes_to_extend``
     argument.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param list suffixes_to_extend: List of strings to use as emitted file suffixes. Must contain the leading period,
+        e.g. ``.extension``
+
+    :return: target, source
+    :rtype: tuple with two lists
     """
     if "suffixes" in env and env["suffixes"] is not None:
         suffixes_to_extend = env["suffixes"]
@@ -485,6 +505,9 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
         * "explicit": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
         * "datacheck": [".odb", ".dat", ".msg", ".com", ".prt", ".023", ".mdl", ".sim", ".stt"]
         * default value: [".odb", ".dat", ".msg", ".com", ".prt"]
+
+    :return: Abaqus solver builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
@@ -513,7 +536,12 @@ def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environ
                     build_subdirectory=".", symlink=False):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
-    Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
+    .. warning::
+
+       This is a Python function and not an SCons builder. It cannot be added to the construction environment
+       ``BUILDERS`` list. The function returns a list of targets instead of a Builder object.
+
+    Creates an SCons Copy task for each source file. Files are copied to the current variant directory
     matching the calling SConscript parent directory. Files with the name convention ``*.in`` are also given an SCons
     Substfile Builder, which will perform template substitution with the provided dictionary in-place in the current
     variant directory and remove the ``.in`` suffix.
@@ -547,7 +575,7 @@ def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environ
     :param bool symlink: Whether symbolic links are created as new symbolic links. If true, symbolic links are shallow
         copies as a new symbolic link. If false, symbolic links are copied as a new file (dereferenced).
 
-    :return: SCons NodeList of Copy and Substfile objects
+    :return: SCons NodeList of Copy and Substfile target nodes
     :rtype: SCons.Node.NodeList
     """
     if not substitution_dictionary:
@@ -602,10 +630,13 @@ def python_script(post_action=None):
        PythonScript(target=["my_output.stdout"], source=["my_script.py"], python_options="", script_options="")
 
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
-        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
+        allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
+        non-zero exit code even if Python does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
+
+    :return: Python script builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
@@ -641,7 +672,7 @@ def _matlab_script_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
+def matlab_script(matlab_program="matlab", post_action=None):
     """Matlab script SCons builder
 
     .. warning::
@@ -673,6 +704,16 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
        :caption: Matlab script builder action
 
        cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
+
+    :param str matlab_program: An absolute path or basename string for the Matlab program.
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+        allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
+        non-zero exit code even if Matlab does not. Builder keyword variables are available for substitution in the
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
+        ${TARGET.dir.abspath} && ${post_action}``
+
+    :return: Matlab script builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []
@@ -727,6 +768,9 @@ def conda_environment():
        env.Append(BUILDERS={"CondaEnvironment": waves.builders.conda_environment()})
        environment_target = env.CondaEnvironment(target=["environment.yaml"])
        env.AlwaysBuild(environment_target)
+
+    :return: Conda environment builder
+    :rtype: SCons.Builder.Builder
     """
     conda_environment_builder = SCons.Builder.Builder(
         action=
@@ -799,6 +843,9 @@ def abaqus_extract(abaqus_program="abaqus"):
        AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
     :param str abaqus_program: An absolute path or basename string for the abaqus program
+
+    :return: Abaqus extract builder
+    :rtype: SCons.Builder.Builder
     """
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
@@ -810,7 +857,12 @@ def abaqus_extract(abaqus_program="abaqus"):
 
 
 def _build_odb_extract(target, source, env):
-    """Define the odb_extract action when used as an internal package and not a command line utility"""
+    """Define the odb_extract action when used as an internal package and not a command line utility
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    """
     # Default odb_extract arguments
     output_type = "h5"
     odb_report_args = None
@@ -869,6 +921,9 @@ def sbatch(sbatch_program="sbatch", post_action=None):
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
+
+    :return: SLURM sbatch builder
+    :rtype: SCons.Builder.Builder
     """
     if not post_action:
         post_action = []

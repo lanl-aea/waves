@@ -30,8 +30,6 @@ build:
     # Build man page and HTML documentation to bundle in Conda package
     - scons man html-internal
     - $PYTHON package_documentation.py
-  script_env:
-    - VERSION
   ignore_run_exports:
     - python_abi
 
@@ -45,7 +43,7 @@ requirements:
     - sphinxcontrib-bibtex
   host:
     - python
-    - build
+    - python-build
     - pip
     - setuptools >=45
     - setuptools_scm[toml] >=6.2
