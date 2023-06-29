@@ -672,7 +672,7 @@ def _matlab_script_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
+def matlab_script(matlab_program="matlab", post_action=None):
     """Matlab script SCons builder
 
     .. warning::
