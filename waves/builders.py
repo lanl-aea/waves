@@ -213,12 +213,6 @@ def add_cubit(names, env):
 
     Returns None if no program name is found.
 
-    :param list names: list of string program names. May include an absolute path.
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
-
-    :return: Absolute path of the found program. None if none of the names are found.
-    :rtype: str
-
     .. code-block::
        :caption: Example Cubit environment modification
 
@@ -226,6 +220,12 @@ def add_cubit(names, env):
 
        env = Environment()
        env["cubit"] = waves.builders.add_cubit(["cubit"], env)
+
+    :param list names: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
     """
     first_found_path = add_program(names, env)
     if first_found_path:
