@@ -251,6 +251,9 @@ def _construct_post_action_list(post_action):
     character-by-character. If an empty list is passed, and empty list is returned.
 
     :param list post_action: List of post-action strings
+
+    :return: post-action list of strings
+    :rtype: list
     """
     if isinstance(post_action, str):
         post_action = [post_action]
@@ -266,6 +269,7 @@ def _build_subdirectory(target):
     """Return the build subdirectory of the first target file
 
     :param list target: The target file list of strings
+
     :return: build directory
     :rtype: pathlib.Path
     """
@@ -393,6 +397,15 @@ def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
 
     If "suffixes" is a key in the environment, ``env``, then the suffixes list will override the ``suffixes_to_extend``
     argument.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param list suffixes_to_extend: List of strings to use as emitted file suffixes. Must contain the leading period,
+        e.g. ``.extension``
+
+    :return: target, source
+    :rtype: tuple with two lists
     """
     if "suffixes" in env and env["suffixes"] is not None:
         suffixes_to_extend = env["suffixes"]
@@ -617,8 +630,8 @@ def python_script(post_action=None):
        PythonScript(target=["my_output.stdout"], source=["my_script.py"], python_options="", script_options="")
 
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
-        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
+        allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
+        non-zero exit code even if Python does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
 
@@ -692,7 +705,14 @@ def matlab_script(matlab_program="matlab", post_action=None, symlink=False):
 
        cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
 
-    :return: Python script builder
+    :param str matlab_program: An absolute path or basename string for the Matlab program.
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+        allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
+        non-zero exit code even if Matlab does not. Builder keyword variables are available for substitution in the
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
+        ${TARGET.dir.abspath} && ${post_action}``
+
+    :return: Matlab script builder
     :rtype: SCons.Builder.Builder
     """
     if not post_action:
@@ -837,7 +857,12 @@ def abaqus_extract(abaqus_program="abaqus"):
 
 
 def _build_odb_extract(target, source, env):
-    """Define the odb_extract action when used as an internal package and not a command line utility"""
+    """Define the odb_extract action when used as an internal package and not a command line utility
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    """
     # Default odb_extract arguments
     output_type = "h5"
     odb_report_args = None
