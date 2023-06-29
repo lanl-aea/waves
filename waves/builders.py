@@ -513,7 +513,12 @@ def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environ
                     build_subdirectory=".", symlink=False):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
-    Creates an SCons Copy Builder for each source file. Files are copied to the current variant directory
+    .. warning::
+
+       This is a Python function and not an SCons builder. It cannot be added to the construction environment
+       ``BUILDERS`` list. The function returns a list of targets instead of a Builder object.
+
+    Creates an SCons Copy task for each source file. Files are copied to the current variant directory
     matching the calling SConscript parent directory. Files with the name convention ``*.in`` are also given an SCons
     Substfile Builder, which will perform template substitution with the provided dictionary in-place in the current
     variant directory and remove the ``.in`` suffix.
@@ -547,7 +552,7 @@ def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environ
     :param bool symlink: Whether symbolic links are created as new symbolic links. If true, symbolic links are shallow
         copies as a new symbolic link. If false, symbolic links are copied as a new file (dereferenced).
 
-    :return: SCons NodeList of Copy and Substfile objects
+    :return: SCons NodeList of Copy and Substfile target nodes
     :rtype: SCons.Node.NodeList
     """
     if not substitution_dictionary:
