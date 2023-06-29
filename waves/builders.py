@@ -26,6 +26,10 @@ def project_help_message(env=None, append=True):
 
     * :meth:`waves.builders.default_targets_message`
     * :meth:`waves.builders.alias_list_message`
+
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+        overwritten if ``env.Help`` has not been previously called.
     """
     default_targets_message(env=env, append=append)
     alias_list_message(env=env, append=append)
