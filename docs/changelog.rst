@@ -13,6 +13,8 @@ Documentation
 - Removed semaphore files in tutorials (:issue:`488`, :merge:`591`). By `Sergio Cordova`_
 - Updated parameter study CLI messages to reflect yaml file behavior changes (:issue:`490`, :merge:`593`). By `Sergio
   Cordova`_
+- Clarify the difference between the ``copy_substitute`` function and the WAVES-SCons builders. Update missing interface
+  descriptions and return value descriptions (:issue:`493`, :merge:`595`). By `Kyle Brindley`_.
 
 Enhancement
 ===========
