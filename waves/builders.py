@@ -93,9 +93,6 @@ def append_env_path(program, env):
     Raises a ``FileNotFoundError`` if the ``program`` absolute path does not exist. Uses the `SCons AppendENVPath`_
     method. If the program parent directory is already on ``PATH``, the ``PATH`` directory order is preserved.
 
-    :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
-
     .. code-block::
        :caption: Example environment modification
 
@@ -105,6 +102,9 @@ def append_env_path(program, env):
        env["program"] = waves.builders.find_program(["program"], env)
        if env["program"]:
            waves.append_env_path(env["program"], env)
+
+    :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     """
     program = pathlib.Path(program).resolve()
     if not program.exists():
