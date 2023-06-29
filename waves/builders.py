@@ -184,12 +184,6 @@ def add_program(names, env):
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
     if a program is found and the directory is not already on ``PATH``. Returns None if no program name is found.
 
-    :param list names: list of string program names. May include an absolute path.
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
-
-    :return: Absolute path of the found program. None if none of the names are found.
-    :rtype: str
-
     .. code-block::
        :caption: Example search for an executable named "program"
 
@@ -197,6 +191,12 @@ def add_program(names, env):
 
        env = Environment()
        env["program"] = waves.builders.add_program(["program"], env)
+
+    :param list names: list of string program names. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :return: Absolute path of the found program. None if none of the names are found.
+    :rtype: str
     """
     first_found_path = find_program(names, env)
     if first_found_path:
