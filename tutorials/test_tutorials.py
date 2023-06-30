@@ -7,18 +7,17 @@ import pytest
 
 
 tutorial_directory = pathlib.Path(__file__).resolve().parent
+# TODO: resolve from package? SConstruct?
+package_parent_path = tutorial_directory.parent
+
 env = os.environ.copy()
-# TODO: I think if we run from the project root directory, we can expect the package to be in PYTHONPATH
-try:
-    import waves
-except ModuleNotFoundError:
-    # TODO: resolve from package? SConstruct?
-    package_parent_path = str(pathlib.Path(".").resolve().parent)
+# If not installed, add package to PYTHONPATH
+if package_parent_path.parent.name != "site-packages":
     key = "PYTHONPATH"
     if key in env:
         env[key] = f"{package_parent_path}:{env[key]}"
     else:
-        env[key] = package_parent_path
+        env[key] = f"{package_parent_path}"
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("command", [
