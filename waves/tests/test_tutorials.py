@@ -5,14 +5,15 @@ import subprocess
 
 import pytest
 
+from waves import _settings
 
-tutorial_directory = pathlib.Path(__file__).resolve().parent
-# TODO: resolve from package? SConstruct?
-package_parent_path = tutorial_directory.parent
+
+tutorial_directory = _settings._installed_tutorials_directory
 
 env = os.environ.copy()
-# If not installed, add package to PYTHONPATH
-if package_parent_path.parent.name != "site-packages":
+# If executing in repository, add package to PYTHONPATH
+if _settings._repository_tutorials_directory == _settings._installed_tutorials_directory:
+    package_parent_path = tutorial_directory.parent
     key = "PYTHONPATH"
     if key in env:
         env[key] = f"{package_parent_path}:{env[key]}"
