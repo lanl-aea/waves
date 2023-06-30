@@ -12,7 +12,7 @@ tutorial_directory = _settings._installed_tutorials_directory
 
 env = os.environ.copy()
 # If executing in repository, add package to PYTHONPATH
-if _settings._repository_tutorials_directory == _settings._installed_tutorials_directory:
+if _settings._repository_tutorials_directory == tutorial_directory:
     package_parent_path = tutorial_directory.parent
     key = "PYTHONPATH"
     if key in env:
