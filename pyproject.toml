@@ -65,4 +65,4 @@ markers = [
     "integrationtest: marks integration tests",
     "systemtest: marks system tests, e.g. the tutorials",
 ]
-addopts = "-vvv --capture=sys --tb=long  --tb=auto -l --durations=10 --failed-first --strict-markers -r a --junitxml=test_results.xml -n 4 -m 'not systemtest'"
+addopts = "-vvv --capture=sys --tb=long  --tb=auto -l --durations=10 --failed-first --strict-markers -r a -n 4 -m 'not systemtest'"
