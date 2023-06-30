@@ -84,7 +84,6 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 if not env['ignore_documentation']:
     build_dir = variant_dir_base / documentation_source_dir
     source_dir = documentation_source_dir
-    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='source_dir', duplicate=False)
     docs_aliases = SConscript(dirs=documentation_source_dir,
                               variant_dir=str(build_dir),
                               exports=['env', 'project_substitution_dictionary'])
