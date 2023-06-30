@@ -6,7 +6,7 @@ Import("env")
 # Limit list of source files to allow Conda build test to avoid copying waves source code and test off the installed
 # waves package
 waves_source_list = [
-    "../pyproject.toml",
+    "pyproject.toml",
 ]
 
 pytest_command = "PYTHONDONTWRITEBYTECODE=1 pytest --junitxml=${TARGETS[0].name}"
@@ -15,7 +15,6 @@ if env["coverage_report"]:
     pytest_command += " --cov --cov-report term --cov-report xml:${TARGETS[1].name}"
     target.append("coverage.xml")
 pytest_node = env.Command(
-    chdir="waves",
     target=target,
     source=waves_source_list,
     action=pytest_command)

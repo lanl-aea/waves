@@ -92,7 +92,7 @@ else:
     docs_aliases = []
 
 # Add pytests
-pytest_aliases = SConscript(dirs=package_source_dir, exports='env', duplicate=False)
+pytest_aliases = SConscript(dirs=".", exports='env', duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
