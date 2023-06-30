@@ -8,6 +8,10 @@ Changelog
 0.6.21 (unreleased)
 *******************
 
+Internal Changes
+================
+- Add pytest-cov to CI environment (:merge:`599`). By `Kyle Brindley`_.
+
 *******************
 0.6.20 (2023-06-29)
 *******************
