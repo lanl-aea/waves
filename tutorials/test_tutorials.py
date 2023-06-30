@@ -35,7 +35,7 @@ if package_parent_path.parent.name != "site-packages":
     "scons . --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --keep-going --unconditional-build",
     "scons . --sconstruct=tutorial_builder_post_actions_SConstruct --keep-going --unconditional-build",
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
-    # AEA Gitlab group members".", Until then, the SSH remote execution can't be integration/regression tested".",
+    # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
     #"scons . --sconstruct=tutorial_remote_execution_SConstruct --keep-going --unconditional-build",
     "scons . --sconstruct=tutorial_sbatch_SConstruct --keep-going --unconditional-build",
     "scons . --sconstruct=tutorial_05_parameter_substitution_SConstruct --keep-going --unconditional-build",
