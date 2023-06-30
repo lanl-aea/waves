@@ -7,6 +7,7 @@ import pytest
 
 
 env = os.environ.copy()
+# TODO: I think if we run from the project root directory, we can expect the package to be in PYTHONPATH
 try:
     import waves
 except ModuleNotFoundError:
