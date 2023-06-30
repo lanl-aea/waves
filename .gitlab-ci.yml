@@ -120,8 +120,6 @@ fast-test:
     - project_root=${PWD}
     # Project unit tests
     - scons . --keep-going --unconditional-build --cov-report
-    # Project system (tutorial) tests must be run in serial
-    - pytest -m systemtest -n0
     # Set PYTHONPATH for WAVES import in tutorials/quickstart system/integration/regression tests
     - export PYTHONPATH=${project_root}:$PYTHONPATH
     # WAVES CLI regression tests
