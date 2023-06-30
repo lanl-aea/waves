@@ -167,7 +167,7 @@ fast-test:
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: coverage.xml
+        path: waves/coverage.xml
   tags:
     - shell-aea
 
