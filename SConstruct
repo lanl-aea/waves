@@ -44,13 +44,23 @@ AddOption(
     help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
             " and it would normally be ignored. (default: '%default')"
 )
+AddOption(
+    "--cov-report",
+    dest="coverage_report",
+    default=False,
+    action="store_true",
+    help="Boolean to add the coverage report options to the pytest alias (default: '%default')"
+)
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project options
-env = Environment(ENV=os.environ.copy(),
-                  variant_dir_base=GetOption("variant_dir_base"),
-                  ignore_documentation=GetOption("ignore_documentation"),
-                  unconditional_build=GetOption("unconditional_build"))
+env = Environment(
+    ENV=os.environ.copy(),
+    variant_dir_base=GetOption("variant_dir_base"),
+    ignore_documentation=GetOption("ignore_documentation"),
+    unconditional_build=GetOption("unconditional_build"),
+    coverage_report=GetOption("coverage_report")
+)
 
 # Find required programs for conditional target ignoring
 required_programs = ['sphinx-build']
