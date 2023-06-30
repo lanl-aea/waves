@@ -11,6 +11,7 @@ Changelog
 Internal Changes
 ================
 - Add pytest-cov to CI environment (:merge:`599`). By `Kyle Brindley`_.
+- Add coverage report to internal CI jobs (:issue:`496`, :merge:`600`). By `Kyle Brindley`_.
 
 *******************
 0.6.20 (2023-06-29)
