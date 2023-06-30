@@ -83,11 +83,11 @@ test:
     # Tests that depend on correct install path
     - waves docs --print-local-path
     # Test as-installed project unit tests
+    # Project system (tutorial) tests must be run in serial
     - cd $SP_DIR/$PKG_NAME
     - pytest
-    - cd ${test_root}
-    # Project system (tutorial) tests must be run in serial
     - pytest -m systemtest -n0
+    - cd ${test_root}
     # WAVES CLI regression tests
     - quickstart_regression_directory="${test_root}/test_quickstart"
     - waves quickstart ${quickstart_regression_directory}
