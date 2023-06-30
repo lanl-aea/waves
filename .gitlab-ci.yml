@@ -119,7 +119,7 @@ fast-test:
   script:
     - project_root=${PWD}
     # Project unit tests
-    - scons . --keep-going --unconditional-build
+    - scons . --keep-going --unconditional-build --cov-report
     # Set PYTHONPATH for WAVES import in tutorials/quickstart system/integration/regression tests
     - export PYTHONPATH=${project_root}:$PYTHONPATH
     # WAVES CLI regression tests
@@ -163,6 +163,11 @@ fast-test:
     - scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build
     - python -m waves.main build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
     - cd ${project_root}
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
   tags:
     - shell-aea
 
