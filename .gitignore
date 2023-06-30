@@ -44,6 +44,7 @@ parameter_study_meta.txt
 # Sphinx/Python
 __pycache__/
 test_results.xml
+coverage.xml
 
 # NFS Files
 *.nfs*

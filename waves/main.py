@@ -24,8 +24,9 @@ def main():
     elif args.subcommand == 'fetch':
         root_directory = _settings._installed_quickstart_directory.parent
         relative_paths = _settings._fetch_subdirectories
-        return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination, requested_paths=args.FILE,
-                            overwrite=args.overwrite, dry_run=args.dry_run, print_available=args.print_available)
+        return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
+                            requested_paths=args.FILE, overwrite=args.overwrite, dry_run=args.dry_run,
+                            print_available=args.print_available)
     elif args.subcommand == 'quickstart':
         root_directory = _settings._installed_quickstart_directory.parent
         relative_paths = [_settings._installed_quickstart_directory.name]
@@ -151,7 +152,8 @@ def get_parser():
     visualize_parser.add_argument("--sconstruct", type=str, default="SConstruct",
         help="Path to SConstruct file (default: %(default)s)")
     visualize_parser.add_argument("-o", "--output-file", type=str,
-        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' (default: %(default)s)")
+        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
+             "(default: %(default)s)")
     visualize_parser.add_argument("--height", type=int, default=12,
         help="Height of visualization in inches if being saved to a file (default: %(default)s)")
     visualize_parser.add_argument("--width", type=int, default=36,
@@ -215,7 +217,8 @@ def build(targets, scons_args=None, max_iterations=5, working_directory=None, gi
         while stop_trigger not in scons_stdout.decode("utf-8"):
             count += 1
             if count > max_iterations:
-                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'", file=sys.stderr)
+                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'",
+                      file=sys.stderr)
                 return 2
             print(f"iteration {count}: '{' '.join(command)}'", file=sys.stdout)
             scons_stdout = subprocess.check_output(command, cwd=working_directory)
@@ -246,9 +249,9 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
     if not requested_paths:
         requested_paths = []
     if not root_directory.is_dir():
-        # During "waves quickstart/fetch" sub-command(s), this should only be reached if the package installation structure
-        # doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the
-        # installed directory assumptions are correct.
+        # During "waves quickstart/fetch" sub-command(s), this should only be reached if the package installation
+        # structure doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a
+        # sign-of-life that the installed directory assumptions are correct.
         print(f"Could not find '{root_directory}' directory", file=sys.stderr)
         return 1
     from waves import fetch
