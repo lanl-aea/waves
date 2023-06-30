@@ -1,5 +1,7 @@
 #! /usr/bin/env python
 
+import pathlib
+
 # Inherit the parent construction environment
 Import("env")
 
@@ -21,6 +23,17 @@ pytest_node = env.Command(
 alias_list = env.Alias("pytest", pytest_node)
 # Always run pytests in place of a complete source list
 env.AlwaysBuild(pytest_node)
+
+# System tests *must* be run in serial because they all try to write to the same sconsign file
+systemtest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -n0 -m systemtest --junitxml=${TARGETS[0].name}"
+target = ["systemtest_results.xml"]
+source = waves_source_list + [str(pathlib.Path("tutorials/test_tutorials.py"))]
+systemtest_node = env.Command(
+    target=target,
+    source=source,
+    action=systemtest_command)
+alias_list = env.Alias("systemtest", systemtest_node)
+env.AlwaysBuild(systemtest_node)
 
 # Return the alias list to SConstruct for help message output
 Return("alias_list")
