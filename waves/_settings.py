@@ -24,6 +24,7 @@ _quantiles_attribute_key = "_quantiles"
 _cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _installed_quickstart_directory = _project_root_abspath / "quickstart"
+_installed_tutorials_directory = _project_root_abspath / "tutorials"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
 _supported_salib_samplers = ["latin", "fast_sampler", "sobol", "finite_diff", "morris"]
 _fetch_exclude_patterns = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
@@ -34,6 +35,9 @@ _visualize_default_width = 36
 
 # For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
 # Enables ``python -m waves.main quickstart ...`` execution from repository root directory
-_repository_quickstart_directory = _project_root_abspath.parent / _fetch_subdirectories[0] 
+_repository_quickstart_directory = _project_root_abspath.parent / _installed_quickstart_directory.name
+_repository_tutorials_directory = _project_root_abspath.parent / _installed_tutorials_directory.name
 if not _installed_quickstart_directory.exists() and _repository_quickstart_directory.exists():
     _installed_quickstart_directory = _repository_quickstart_directory
+if not _installed_tutorials_directory.exists() and _repository_tutorials_directory.exists():
+    _installed_tutorials_directory = _repository_tutorials_directory
