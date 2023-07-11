@@ -509,7 +509,6 @@ python_script_input = {
 @pytest.mark.parametrize("post_action, node_count, action_count, target_list",
                          python_script_input.values(),
                          ids=python_script_input.keys())
-@pytest.mark.unittest
 def test_python_script(post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": builders.python_script(post_action)})
@@ -552,7 +551,6 @@ matlab_script_input = {
 @pytest.mark.parametrize("matlab_program, post_action, node_count, action_count, target_list",
                          matlab_script_input.values(),
                          ids=matlab_script_input.keys())
-@pytest.mark.unittest
 def test_matlab_script(matlab_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action)})
@@ -659,10 +657,10 @@ build_odb_extract_input = {
 }
 
 
+@pytest.mark.unittest
 @pytest.mark.parametrize("target, source, env, calls",
                          build_odb_extract_input.values(),
                          ids=build_odb_extract_input.keys())
-@pytest.mark.unittest
 def test_build_odb_extract(target, source, env, calls):
     with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract, \
          patch("pathlib.Path.unlink") as mock_unlink:
@@ -685,7 +683,6 @@ sbatch_input = {
 @pytest.mark.parametrize("sbatch_program, post_action, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
-@pytest.mark.unittest
 def test_sbatch(sbatch_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(sbatch_program, post_action)})
@@ -694,3 +691,26 @@ def test_sbatch(sbatch_program, post_action, node_count, action_count, target_li
     expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
                        '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
+scanner_input = {                         # file_content,                                  source_list, expected_files
+    'has_files':         ('*\n*INCLUDE, INPUT=dummy.out',      ['node1.inp', 'node2.inp', 'node3.txt'],              1),
+    'no_files':          ('*\n*INCLUDE, INPUT=dummy.out',      ['node4.out', 'node5.txt', 'node6.prt'],              0),
+    'pattern_not_found': ( '*\n*DUMMY, STRING=dummy.out',      ['node7.inp', 'node8.inp', 'node9.txt'],              0),
+    'multiple_files':    ('*\n*INCLUDE, INPUT=dummy.out\n*'
+                          '\n*INCLUDE, INPUT=dummy2.out',                                ['node10.inp'],              2),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("file_content, source_list, expected_files",
+                         scanner_input.values(),
+                         ids=scanner_input.keys())
+def test_abaqus_implicit_scanner(file_content, source_list, expected_files):
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver()})
+    env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=['.inp'])
+    with patch('SCons.Node.FS.File.get_text_contents', return_value=file_content):
+        scanner = builders.abaqus_implicit_scanner()
+        env.Append(SCANNERS=scanner)
+        #TODO: Find a way to check if the Scanner found the expected_files
