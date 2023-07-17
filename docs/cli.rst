@@ -34,6 +34,16 @@ fetch
    :nodefault:
    :path: fetch
 
+.. _waves_visualize_cli:
+
+visualize
+---------
+
+.. argparse::
+   :ref: waves.main.get_parser
+   :nodefault:
+   :path: visualize
+
 .. _waves_quickstart_cli:
 
 quickstart
