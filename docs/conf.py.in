@@ -18,12 +18,11 @@ authors = [('Kyle Brindley', '<kbrindley@lanl.gov>'),
            ('Sergio Cordova', '<sergioc@lanl.gov>'),
            ('Matthew Fister', '<mwfister@lanl.gov>'),
            ('Scott Ouellette', '<souellette@lanl.gov>')]
-author_latex = ''
-author_manpage = ''
+author_latex = r"\and ".join(author for author, email in authors)
+epub_author = ", ".join(author for author, email in authors)
+author_manpage = ""
 for author, email in authors:
-    author_latex += f"{author} " + r'\and '
     author_manpage += f"{author} {email}, "
-author_latex = author_latex.rstrip(r'\and ')
 author_manpage = author_manpage.rstrip(', ')
 
 # Add paths to API/CLI files
