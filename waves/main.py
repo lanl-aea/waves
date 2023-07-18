@@ -35,8 +35,8 @@ def main():
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
-                                    exclude_list=args.exclude_list, exclude_regex=args.exclude_regex, 
-                                    height=args.height, width=args.width)
+                                    exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
+                                    height=args.height, width=args.width, font_size=args.font_size)
     else:
         parser.print_help()
 
@@ -158,6 +158,8 @@ def get_parser():
         help="Height of visualization in inches if being saved to a file (default: %(default)s)")
     visualize_parser.add_argument("--width", type=int, default=36,
         help="Width of visualization in inches if being saved to a file (default: %(default)s)")
+    visualize_parser.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
+        help="Font size of file names in points (default: %(default)s)")
     visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
         help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-r", "--exclude-regex", type=str,
@@ -263,7 +265,8 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 
 
 def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
-                  height=_settings._visualize_default_height, width=_settings._visualize_default_width):
+                  height=_settings._visualize_default_height, width=_settings._visualize_default_width,
+                  font_size=_settings._visualize_default_font_size):
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -294,7 +297,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
-    visualize.visualize(tree_dict, output_file, height, width)
+    visualize.visualize(tree_dict, output_file, height, width, font_size)
     return 0
 
 
