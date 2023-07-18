@@ -438,7 +438,7 @@ you to save the visualization file non-interactively. Without this option, you'l
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_01_geometry --output-file tutorial_01_geometry.png
+   $ waves visualize tutorial_01_geometry --output-file tutorial_01_geometry.png --width=16 --height=3
    $ ls tutorial_01_geometry.png
    tutorial_01_geometry.png
 
