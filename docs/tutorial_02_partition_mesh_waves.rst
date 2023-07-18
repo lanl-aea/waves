@@ -346,9 +346,9 @@ The output should look similar to the figure below.
 .. figure:: tutorial_02_partition_mesh.png
    :align: center
 
-As in :ref:`tutorial_01_geometry_waves`, the visualization of the workflow directed graph looks relatively simple to
+As in :ref:`tutorial_geometry_waves`, the visualization of the workflow directed graph looks relatively simple to
 manage. In part, this is because we've removed some of the automanaged output files with the ``--exclude-list`` option
-of the |project| :ref:`visualize_cli` subcommand. Probably you would not try to manage all of these files in a manual
+of the |project| :ref:`waves_visualize_cli` subcommand. Probably you would not try to manage all of these files in a manual
 workflow; however, files like the ``*.stdout`` are important for debugging errors and lose significant value if they
 can't be tied uniquely to the most recent execution.
 
