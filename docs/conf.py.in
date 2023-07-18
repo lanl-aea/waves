@@ -124,3 +124,4 @@ copybutton_prompt_is_regexp = True
 
 # -- Options for epub page output -----------------------------------------
 epub_basename = str(pathlib.Path(latex_basename).with_suffix(""))
+epub_title = f"{project.upper()} {version}"
