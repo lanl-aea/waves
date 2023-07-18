@@ -8,6 +8,10 @@ Changelog
 0.6.21 (unreleased)
 *******************
 
+Enhancement
+===========
+- Add option to adjust font size in ``waves visualize`` sub-command (:issue:`501`, :merge:`604`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Add pytest-cov to CI environment (:merge:`599`). By `Kyle Brindley`_.
