@@ -80,6 +80,7 @@ documentation_file_list = [
     'tutorial_01_geometry_waves.rst',
     'tutorial_01_geometry.png',
     'tutorial_02_partition_mesh_waves.rst',
+    'tutorial_02_partition_mesh.png',
     'tutorial_argparse_types_waves.rst',
     'tutorial_03_solverprep_waves.rst',
     'tutorial_04_simulation_waves.rst',

@@ -328,3 +328,16 @@ tutorial is utilizing the outputs generated from executing the same code, but fr
 
 The new output files pertain to the partitioning and meshing steps we added to the workflow. The file extensions are the
 same as when we ran the geometry workflow, but now we have an added ``single_element_mesh.inp`` orphan mesh file.
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list .stdout .jnl .env /usr/bin
+
+.. figure:: tutorial_02_partition_mesh.png
+   :align: center
