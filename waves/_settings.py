@@ -32,6 +32,7 @@ _fetch_subdirectories = ["quickstart", "tutorials"]
 _visualize_exclude = ["/usr/bin"]
 _visualize_default_height = 12
 _visualize_default_width = 36
+_visualize_default_font_size = 10
 
 # For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
 # Enables ``python -m waves.main quickstart ...`` execution from repository root directory
