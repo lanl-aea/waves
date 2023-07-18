@@ -153,9 +153,9 @@ def visualize(tree, output_file, height, width):
     ax.axis('off')
     fig = plt.gcf()
     for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
-        patchA = ax.annotate(A, xy=pos[A], xycoords='data', ha='center', va='center',
+        patchA = ax.annotate(A, xy=pos[A], xycoords='data', ha='center', va='center', size=22,
                              bbox=dict(facecolor=box_color, boxstyle='round'))
-        patchB = ax.annotate(B, xy=pos[B], xycoords='data', ha='center', va='center',
+        patchB = ax.annotate(B, xy=pos[B], xycoords='data', ha='center', va='center', size=22,
                              bbox=dict(facecolor=box_color, boxstyle='round'))
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
