@@ -938,7 +938,7 @@ def sbatch(sbatch_program="sbatch", post_action=None):
     return sbatch_builder
 
 
-def abaqus_implicit_scanner():
+def abaqus_input_scanner():
     """Abaqus implicit dependency scanner
 
     Custom Scons scanner that searches for ``INCLUDE`` keyword inside of ``.inp`` files.
@@ -946,14 +946,14 @@ def abaqus_implicit_scanner():
     :return: Abaqus implicit dependency Scanner
     :rtype: Scons.Scanner.Scanner
     """
-    return custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'])
+    return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'])
 
 
-def custom_scanner(pattern, suffixes):
+def _custom_scanner(pattern, suffixes):
     """Custom Scons scanner
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
-    suffixes provided.
+    suffixes provided. Regular expression pattern will match the beginning of each line and will be case-insensitive
 
     :param str pattern: Regular expression pattern.
     :param list suffixes: List of suffixes of files to search
@@ -961,15 +961,17 @@ def custom_scanner(pattern, suffixes):
     :return: Custom Scons scanner
     :rtype: Scons.Scanner.Scanner
     """
-    inp_pattern = re.compile(pattern, re.M | re.I)
+    expression = re.compile(pattern, re.MULTILINE | re.IGNORECASE)
 
-    def inp_scan(node, env, path):
-        contents = node.get_text_contents()
-        includes = inp_pattern.findall(contents)
-        return includes
-
-    def inp_only(node_list):
+    def suffix_only(node_list):
+        # Recursively search for files that end in the given suffixes
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    inp_scanner = SCons.Scanner.Scanner(function=inp_scan, skeys=suffixes, recursive=inp_only)
+    def regex_scan(node, env, path):
+        # Scan function for extracting dependencies from the content of a file
+        contents = node.get_text_contents()
+        includes = expression.findall(contents)
+        return includes
+
+    inp_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
     return inp_scanner
