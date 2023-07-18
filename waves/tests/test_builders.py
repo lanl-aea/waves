@@ -693,24 +693,24 @@ def test_sbatch(sbatch_program, post_action, node_count, action_count, target_li
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
-scanner_input = {                         # file_content,                                  source_list, expected_files
-    'has_files':         ('*\n*INCLUDE, INPUT=dummy.out',      ['node1.inp', 'node2.inp', 'node3.txt'],              1),
-    'no_files':          ('*\n*INCLUDE, INPUT=dummy.out',      ['node4.out', 'node5.txt', 'node6.prt'],              0),
-    'pattern_not_found': ( '*\n*DUMMY, STRING=dummy.out',      ['node7.inp', 'node8.inp', 'node9.txt'],              0),
+scanner_input = {                              # content,       expected_dependencies
+    'has_suffix':        ('*\n*INCLUDE, INPUT=dummy.inp',               ['dummy.inp']),
+    'no_suffix':         ('*\n*INCLUDE, INPUT=dummy.out',               ['dummy.out']),
+    'pattern_not_found': ( '*\n*DUMMY, STRING=dummy.out',                          []),
     'multiple_files':    ('*\n*INCLUDE, INPUT=dummy.out\n*'
-                          '\n*INCLUDE, INPUT=dummy2.out',                                ['node10.inp'],              2),
+                          '\n*INCLUDE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("file_content, source_list, expected_files",
+@pytest.mark.parametrize("content, expected_dependencies",
                          scanner_input.values(),
                          ids=scanner_input.keys())
-def test_abaqus_implicit_scanner(file_content, source_list, expected_files):
+def test_abaqus_implicit_scanner(content, expected_dependencies):
+    mock_file = unittest.mock.Mock()
+    mock_file.get_text_contents.return_value = content
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver()})
-    env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=['.inp'])
-    with patch('SCons.Node.FS.File.get_text_contents', return_value=file_content):
-        scanner = builders.abaqus_implicit_scanner()
-        env.Append(SCANNERS=scanner)
-        #TODO: Find a way to check if the Scanner found the expected_files
+    scanner = builders.abaqus_input_scanner()
+    dependencies = scanner(mock_file, env)
+    found_files = [file.name for file in dependencies]
+    assert set(found_files) == set(expected_dependencies)
