@@ -8,6 +8,10 @@ Changelog
 0.6.21 (unreleased)
 *******************
 
+Documentation
+=============
+- Add the waves visualize image to the geometry tutorial (:issue:`486`, :merge:`603`). By `Kyle Brindley`_.
+
 Enhancement
 ===========
 - Add option to adjust font size in ``waves visualize`` sub-command (:issue:`501`, :merge:`604`). By `Kyle Brindley`_.

@@ -426,3 +426,37 @@ The ``build/tutorial_01_geomtry/`` directory should contain the following files:
 * ``single_element_geometry.jnl`` and ``single_element_geometry.stdout``, the journal file
   that records all of the commands executed by Abaqaus and the log file that will contain
   any errors recorded by Abaqus.
+
+**********************
+Workflow Visualization
+**********************
+
+To visualize the workflow, you can use the |project| :ref:`waves_visualize_cli` command. The ``--output-file`` allows
+you to save the visualization file non-interactively. Without this option, you'll enter an interactive matplotlib window.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_01_geometry --output-file tutorial_01_geometry.png --width=16 --height=3
+   $ ls tutorial_01_geometry.png
+   tutorial_01_geometry.png
+
+The workflow visualization should look similar to the image below. These visualization start with the final workflow
+target on the left, in this case the tutorial target alias. Moving left to right, the files required to complete the
+workflow are shown until we reach the original source file(s) on the far right of the image. The arrows represent
+actions and are drawn from a required source to the produced target.
+
+.. figure:: tutorial_01_geometry.png
+   :align: center
+
+In this case, the single source file ``single_element_geometry.py`` is producing several output files which are required
+by the workflow. Notice that only two of these files were specified in our geometry task:
+``single_element_geometry.cae`` and ``single_element_geometry.jnl``. The ``single_element_geometry.stdout`` and
+``single_element_geometry.abaqus_v6.env`` files are generated as part of the ``AbaqusJournal`` builder and appended
+automatically during task generation. This workflow visualization will become crowded quickly in these tutorials, so
+future visualization commands will show you how to ignore specific file extensions to reduce visual clutter.
+
+This workflow graph would be relatively easy to manage manually for this simple introductory tutorial. However, as the
+core tutorials grow in file count, and especially when we start adding parameter studies, it will become more obvious
+why a build system is desirable to manage modsim workflows.

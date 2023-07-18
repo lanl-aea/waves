@@ -78,6 +78,7 @@ documentation_file_list = [
     'tutorial_00_prerequisites.txt',
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
+    'tutorial_01_geometry.png',
     'tutorial_02_partition_mesh_waves.rst',
     'tutorial_argparse_types_waves.rst',
     'tutorial_03_solverprep_waves.rst',
