@@ -367,3 +367,9 @@ there are some images produced by an intermediate step which aren't strictly req
 file. Such files may be useful for plotting geometric images used in documentation, but not necessary for the simulation
 or analysis results. The target alias can capture all relevant intermediate output which isn't captured by the
 simulation results file target and simplify the scons command to execute this workflow.
+
+As the tutorial workflow grows in size an complexity, or for workflows of mature modsim projects, it will become harder
+to view the shape of the directed graph with legible file names. Users are encouraged to build local copies and zoom in
+and out to explore the directed graph. The :ref:`waves_visualize_cli` options for ``--width``, ``--height``, and
+``--font-size`` as well as vector graphic file formats (e.g. ``*.pdf`` output in place of ``*.png``) can help make
+workflow graphs more useful beyond the general impressions of workflow shape and complexity.
