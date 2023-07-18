@@ -125,7 +125,7 @@ def click_arrow(event, annotations, arrows):
                     fig.canvas.draw_idle()
 
 
-def visualize(tree, output_file, height, width, font_size=10):
+def visualize(tree, output_file, height, width, font_size=_settings._visualize_default_font_size):
     """
     Create a visualization showing the tree
 
