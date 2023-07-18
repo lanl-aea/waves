@@ -245,6 +245,17 @@ env.Clean(man, man_target)
 env.AlwaysBuild(man)
 alias_list.extend(env.Alias(man_directory, man))
 
+epub_directory = "epub"
+epub_target = Dir(epub_directory)
+epub = env.Command(
+    target=[epub_target],
+    source=documentation_file_list,
+    action=f"{env['sphinx_build']} ${{sphinx_options}} -b epub ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{epub_directory} ${{tags}}",
+    sphinx_options=sphinx_options)
+env.Clean(epub, epub_target)
+env.AlwaysBuild(epub)
+alias_list.extend(env.Alias(epub_directory, epub))
+
 # Collector alias to build all documentation
 alias_list.extend(env.Alias('documentation', html + latexpdf + man))
 
@@ -254,6 +265,7 @@ if not env['unconditional_build'] and not env['sphinx_build']:
     Ignore(['.', internal_directory, 'html-internal'], internal)
     Ignore(['.', latex_directory, 'latexpdf'], latexpdf)
     Ignore(['.', man_directory, 'man'], man)
+    Ignore(['.', epub_directory, 'epub'], epub)
 
 # Return the alias list to SConstruct for help message output
 Return('alias_list')

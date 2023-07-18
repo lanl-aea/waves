@@ -46,6 +46,9 @@ version = release
 copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
 
 #============================================================================================== SPHINX CONFIGURATION ===
+# Suppress warnings that can't be fixed
+suppress_warnings = ["epub.unknown_project_files", "epub.duplicated_toc_entry"]
+
 # -- Project Variables -------------------------------------------------------
 rst_prolog = f'.. |project| replace:: {_project_name_short}\n.. include:: targets.txt'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
