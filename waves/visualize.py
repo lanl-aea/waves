@@ -126,7 +126,7 @@ def click_arrow(event, annotations, arrows):
 
 
 def visualize(tree, output_file,
-              height=_settings.visualize_default_height,
+              height=_settings._visualize_default_height,
               width=_settings._visualize_default_width,
               font_size=_settings._visualize_default_font_size):
     """
