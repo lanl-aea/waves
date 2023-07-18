@@ -151,6 +151,7 @@ def visualize(tree, output_file,
 
     box_color = '#5AC7CB'  # Light blue from Waves Logo
     arrow_color = '#B7DEBE'  # Light green from Waves Logo
+    # TODO: separate plot construction from output for easier unit testing
     annotations = dict()
     arrows = dict()
     ax = plt.gca()
