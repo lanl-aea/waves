@@ -941,7 +941,7 @@ def sbatch(sbatch_program="sbatch", post_action=None):
 def abaqus_input_scanner():
     """Abaqus implicit dependency scanner
 
-    Custom Scons scanner that searches for ``INCLUDE`` keyword inside of ``.inp`` files.
+    Custom Scons scanner that searches for ``INCLUDE`` keyword inside ``.inp`` files.
 
     :return: Abaqus implicit dependency Scanner
     :rtype: Scons.Scanner.Scanner
