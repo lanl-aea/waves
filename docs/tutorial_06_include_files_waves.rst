@@ -269,3 +269,10 @@ The output should look similar to the figure below.
 
         \vspace*{\fill}
     \end{landscape}
+
+Note that the directed graph has not grown larger than the one shown in :ref:`tutorial_parameter_substitution_waves`.
+While we have added a new parameter file, the dependence is implicitly captured in the simulation variable values passed
+to the subsitution dictionary. If the values in the parameter file change, the substituted
+``single_element_compression.inp`` file contents will also change. So while the parameter file is not explicitly
+included in the directed graph, the contents of the ``single_element_compression.inp`` file will still correctly prompt
+re-builds when the parameter file changes.
