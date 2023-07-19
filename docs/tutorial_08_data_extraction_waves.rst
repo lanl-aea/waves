@@ -117,14 +117,53 @@ Output Files
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+First, plot the workflow with all parameter sets.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
 
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_08_data_extraction.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+Now plot the workflow with only the first set, ``set0``.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_08_data_extraction_set0.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+This single set directed graph image should look very similar to the :ref:`tutorial_cartesian_product_waves` directed
+graph. The data extraction step has added the ``*.h5`` files which take the proprietary ``*.odb`` data format and
+provide ``h5py`` and ``xarray`` dataset files.

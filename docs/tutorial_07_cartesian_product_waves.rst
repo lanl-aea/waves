@@ -335,6 +335,7 @@ this case, the contents of the files is different, as we have inserted parameter
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 First, plot the workflow with all parameter sets.
 
 .. code-block::
@@ -343,6 +344,29 @@ First, plot the workflow with all parameter sets.
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
 
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_07_cartesian_product.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+In this figure we begin to see the value of a build system for modsim execution. Despite excluding most of the
+simulation output files, the full parameter study directed graph is much larger than the one shown in
+:ref:`tutorial_include_files_waves`. With the piecewise construction of the input deck standing in for a moderately complex
+modsim project, even a four set parameter study quickly grows unmanageable for manual state tracking and execution. With
+`SCons`_ managing the directed graph construction, state, and execution, the modsim developer can focus attention on the
+engineering analysis and benefit from partial re-execution of the parameter study when only a subset of the parameter
+study has changed.
+
 Now plot the workflow with only the first set, ``set0``.
 
 .. code-block::
@@ -350,3 +374,23 @@ Now plot the workflow with only the first set, ``set0``.
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_07_cartesian_product_set0.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+While the first image is useful for demonstrating modsim project size and scope, a more useful directed graph can be
+evaluated by limiting the output to a single set. This image should look similar to the
+:ref:`tutorial_include_files_waves` directed graph, but with fewer output files because the ``*.msg``, ``*.dat``, and
+``*.sta`` files have been excluded to make the full parameter study graph more readable.

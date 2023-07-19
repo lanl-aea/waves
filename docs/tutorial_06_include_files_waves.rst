@@ -247,8 +247,32 @@ copying files from place to place.
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_06_include_files --output-file tutorial_06_include_files.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_06_include_files.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+Note that the directed graph has not grown larger than the one shown in :ref:`tutorial_parameter_substitution_waves`.
+While we have added a new parameter file, the dependence is implicitly captured in the simulation variable values passed
+to the subsitution dictionary. If the values in the parameter file change, the substituted
+``single_element_compression.inp`` file contents will also change. So while the parameter file is not explicitly
+included in the directed graph, the contents of the ``single_element_compression.inp`` file will still correctly prompt
+re-builds when the parameter file changes.

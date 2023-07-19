@@ -149,8 +149,29 @@ Output Files
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+Plot the workflow with only the first set, ``set0``.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_09_post_processing --output-file tutorial_09_post_processing_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_09_post_processing_set0.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+As in :ref:`tutorial_data_extraction_waves`, the directed graph has not changed much. This tutorial adds the ``*.pdf`` plot
+of stress vs. strain.

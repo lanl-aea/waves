@@ -264,8 +264,39 @@ how parameters can be inserted into these solver input files.
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .env
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_03_solverprep.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+Compared to :ref:`tutorial_partition_mesh_waves`, the workflow has grown significantly. Of course, if you were managing
+this workflow manually, the source ``*.inp`` files would probably be managed as a single file. Here, the files are split
+in anticipation of larger modsim projects where a simulation may be recombined with many variations of materials, parts,
+boundary conditions, or loading steps. The piecewise nature of the input file minimizes data duplication over simulation
+combinations.
+
+For the tutorials, the piecewise input files also fill in as a surrogate to demonstrate the large number of files found
+in modsim projects of moderate to large complexity and in modsim projects with large parameter studies. In practice, the
+modsim owner should balance priorities of code duplication and repository file count for the needs of the projects and
+organization. While it's tempting to reduce duplication to a minimum, there may be good reasons to provide clean
+separation between simulation input definitions. There is also an on-boarding cost found with many separate,
+re-usable files and the associated high file count. Regardless, the modsim repository directory structure and design
+choices should be documented in a developer manual with regular updates to match the existing implementation.
