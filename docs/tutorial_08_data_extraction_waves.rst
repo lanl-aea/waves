@@ -163,3 +163,7 @@ The output should look similar to the figure below.
 
         \vspace*{\fill}
     \end{landscape}
+
+This single set directed graph image should look very similar to the :ref:`tutorial_cartesian_product_waves` directed
+graph. The data extraction step has added the ``*.h5`` files which take the proprietary ``*.odb`` data format and
+provide ``h5py`` and ``xarray`` dataset files.
