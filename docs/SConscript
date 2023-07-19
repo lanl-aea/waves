@@ -105,6 +105,7 @@ documentation_file_list = [
     'aea_environment_activation.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
+    'waves_quickstart.png',
     'wip_warning.txt',
     'zreferences.rst',
     '_static/custom.css'
