@@ -298,4 +298,5 @@ in modsim projects of moderate to large complexity and in modsim projects with l
 modsim owner should balance priorities of code duplication and repository file count for the needs of the projects and
 organization. While it's tempting to reduce duplication to a minimum, there may be good reasons to provide clean
 separation between simulation input definitions. There is also an on-boarding cost found with many separate,
-re-usable files and the associated high file count.
+re-usable files and the associated high file count. Regardless, the modsim repository directory structure and design
+choices should be documented in a developer manual with regular updates to match the existing implementation.
