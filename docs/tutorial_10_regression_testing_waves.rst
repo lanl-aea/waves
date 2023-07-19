@@ -227,6 +227,11 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
+This tutorial's ``datacheck`` directed graph should look different from the graph in
+:ref:`tutorial_post_processing_waves`. Here we have plotted the ``datacheck`` alias output, which does not execute the
+full simulation workflow. This partial directed graph may run faster than the full simulation workflow for frequent
+regression tests.
+
 **********
 Automation
 **********
