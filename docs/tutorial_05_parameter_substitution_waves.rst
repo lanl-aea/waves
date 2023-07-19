@@ -379,3 +379,13 @@ compared to the 43 files from :ref:`tutorial_simulation_waves`. Other than the a
 ``single_element_compression.inp.in`` file, the difference is the addition of the files with ``.par``, ``.pes``, and
 ``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information
 about the information that these files provide.
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=28 --height=6 --exclude-list .stdout .jnl .env .prt .com /usr/bin
