@@ -124,3 +124,19 @@ Output Files
    `-- single_element_partition.stdout
 
    0 directories, 32 files
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_07_sobol_sequence --output-file tutorial_07_sobol_sequence.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_07_sobol_sequence --output-file tutorial_07_sobol_sequence_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"

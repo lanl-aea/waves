@@ -259,3 +259,13 @@ files from the previous two tutorials. The additional files are the files from t
 method. In this case, the files were simply copied into the build directory with no
 modification to the source code. :ref:`tutorial_parameter_substitution_waves` will discuss
 how parameters can be inserted into these solver input files.
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .env

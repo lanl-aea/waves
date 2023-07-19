@@ -80,6 +80,7 @@ documentation_file_list = [
     'tutorial_01_geometry_waves.rst',
     'tutorial_01_geometry.png',
     'tutorial_02_partition_mesh_waves.rst',
+    'tutorial_02_partition_mesh.png',
     'tutorial_argparse_types_waves.rst',
     'tutorial_03_solverprep_waves.rst',
     'tutorial_04_simulation_waves.rst',
@@ -104,6 +105,7 @@ documentation_file_list = [
     'aea_environment_activation.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_quickstart.rst',
+    'waves_quickstart.png',
     'wip_warning.txt',
     'zreferences.rst',
     '_static/custom.css'

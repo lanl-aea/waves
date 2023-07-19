@@ -144,3 +144,13 @@ Output Files
        global_seed         (data_type, parameter_sets) float64 ...
        height              (data_type, parameter_sets) float64 ...
        width               (data_type, parameter_sets) float64 ...
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_09_post_processing --output-file tutorial_09_post_processing_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"

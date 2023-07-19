@@ -442,10 +442,12 @@ you to save the visualization file non-interactively. Without this option, you'l
    $ ls tutorial_01_geometry.png
    tutorial_01_geometry.png
 
-The workflow visualization should look similar to the image below. These visualization start with the final workflow
-target on the left, in this case the tutorial target alias. Moving left to right, the files required to complete the
-workflow are shown until we reach the original source file(s) on the far right of the image. The arrows represent
-actions and are drawn from a required source to the produced target.
+The workflow visualization should look similar to the image below, which is a representation of the directed graph
+constructed by `SCons`_ from the task definitions. The image starts with the final workflow target on the left, in this
+case the tutorial target alias. Moving left to right, the files required to complete the workflow are shown until we
+reach the original source file(s) on the far right of the image. The arrows represent actions and are drawn from a
+required source to the produced target. The :ref:`computational_tools` introduction discusses the relationship of a
+:ref:`build_system` task and :ref:`build_system_directed_graphs`.
 
 .. figure:: tutorial_01_geometry.png
    :align: center

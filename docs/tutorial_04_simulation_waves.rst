@@ -46,7 +46,7 @@ SConscript
 .. _tutorial_simulation_waves_running_datacheck:
 
 
-4. Add the highlighted section shown below to the ``tutorial_04_simulation`` file. 
+4. Add the highlighted section shown below to the ``tutorial_04_simulation`` file.
    This will initialize the datacheck list.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -58,7 +58,7 @@ SConscript
        :start-after: marker-1
        :end-before: marker-2
 
-5. Add the highlighted sections shown below to the ``tutorial_04_simulation`` file. 
+5. Add the highlighted sections shown below to the ``tutorial_04_simulation`` file.
    This will create the datackeck alias.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -304,3 +304,13 @@ The ``build/tutorial_04_simulation`` directory contains several different subset
   ``SConscript`` file, which was introduced in :ref:`tutorial_solverprep_waves`.
 * ``single_element_compression.*`` - output files from :ref:`tutorial_simulation_waves_running_analysis` in this
   tutorial.
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_04_simulation --output-file tutorial_04_simulation.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .env .prt .com

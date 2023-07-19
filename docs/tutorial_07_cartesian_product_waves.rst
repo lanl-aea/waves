@@ -150,9 +150,9 @@ API. The API contains an example that prints ``parameter_study`` and shows the o
 Note that the API's example does not use the same ``parameter_schema`` as this tutorial, but rather a general set of
 parameters using different variable types.
 
-At configuration time, the :meth:`waves.parameter_generators.CartesianProduct.write` method will write the parameter 
-study file whenever the contents of the parameter study have changed. The contents check is performed against the 
-``previous_parameter_study`` file if it exists. The conditional re-write behavior will be important for 
+At configuration time, the :meth:`waves.parameter_generators.CartesianProduct.write` method will write the parameter
+study file whenever the contents of the parameter study have changed. The contents check is performed against the
+``previous_parameter_study`` file if it exists. The conditional re-write behavior will be important for
 post-processing tasks introduced in :ref:`tutorial_post_processing_waves`.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
@@ -330,3 +330,23 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
 
 The contents of the ``parameter_set0`` directory will appear identical to the contents of the previous tutorials. In
 this case, the contents of the files is different, as we have inserted parameters as part of the parameter study.
+
+**********************
+Workflow Visualization
+**********************
+
+First, plot the workflow with all parameter sets.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
+
+Now plot the workflow with only the first set, ``set0``.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"

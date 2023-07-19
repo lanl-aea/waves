@@ -242,3 +242,13 @@ is also worth noting that the ``eabm_package/python/single_element_compression_n
 the build directory. Instead, we added the ``eabm_package`` directory to `PYTHONPATH`_. This way we can import the
 ``single_element_compression_nominal`` module from its source location and remove any need to duplicate source code by
 copying files from place to place.
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_06_include_files --output-file tutorial_06_include_files.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com
