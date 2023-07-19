@@ -8,6 +8,8 @@ Build System
 
    Software Carpentry: GNU Make - https://swcarpentry.github.io/make-novice/ :cite:`SoftwareCarpentry`
 
+.. _build_system_directed_graph:
+
 Directed graphs
 ---------------
 
