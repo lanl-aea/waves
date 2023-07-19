@@ -199,6 +199,13 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
+In this image of the archive target's full directed graph we see that full workflow feeds down into a single archive
+file on the left hand side. Since the archive target does not include the full workflow, there is only a single
+connection between the archive alias and the archive file itself. We could specify the archive target by relative path
+directly, but the alias saves some typing and serves as a consistent command when the project version number changes.
+This is especially helpful when using a dynamic version number built from a version control system as introduced in the
+supplemental :ref:`tutorial_setuptools_scm_waves`.
+
 Now plot the workflow with only the first set, ``set0``.
 
 .. code-block::
@@ -221,3 +228,6 @@ The output should look similar to the figure below.
 
         \vspace*{\fill}
     \end{landscape}
+
+As in previous tutorials, the full image is useful for describing simulation size and scope, but the image for a single
+parameter set is more readable and makes it easier to see individual file connections.
