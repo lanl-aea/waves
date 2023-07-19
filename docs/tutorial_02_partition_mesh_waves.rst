@@ -346,12 +346,14 @@ The output should look similar to the figure below.
 .. raw:: latex
 
     \begin{landscape}
+        \vspace*{\fill}
 
 .. figure:: tutorial_02_partition_mesh.png
    :align: center
 
 .. raw:: latex
 
+        \vspace*{\fill}
     \end{landscape}
 
 As in :ref:`tutorial_geometry_waves`, the visualization of the workflow directed graph looks relatively simple to
