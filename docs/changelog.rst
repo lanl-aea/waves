@@ -24,7 +24,6 @@ Internal Changes
 - Add pytest-cov to CI environment (:merge:`599`). By `Kyle Brindley`_.
 - Add coverage report to internal CI jobs (:issue:`496`, :merge:`600`). By `Kyle Brindley`_.
 - Drive the system tests (tutorials) from SCons and pytest (:merge:`601`). By `Kyle Brindley`_.
-- Added Abaqus input file implicit dependency scanner (:issue:`444`, :merge:`602`). By `Sergio Cordova`_.
 - Add an optional epub documentation build (:merge:`605`). By `Kyle Brindley`_.
 - Added Abaqus input file implicit dependency scanner (:issue:`444`, :merge:`602`). By `Sergio Cordova`_.
 
