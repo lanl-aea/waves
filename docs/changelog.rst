@@ -12,6 +12,8 @@ Documentation
 =============
 - Add the waves visualize image to the geometry tutorial (:issue:`486`, :merge:`603`). By `Kyle Brindley`_.
 - Add the waves visualize image to the partition and mesh tutorial (:issue:`502`, :merge:`606`). By `Kyle Brindley`_.
+- Add waves visualize image and directed graph discussion to all core tutorials (:issue:`504`, :merge:`607`). By `Kyle
+  Brindley`_.
 
 Enhancement
 ===========
