@@ -359,6 +359,14 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
+In this figure we begin to see the value of a build system for modsim execution. Despite excluding most of the
+simulation output files, the full parameter study directed graph is much larger than the one shown in
+:ref:`tutorial_include_files_waves`. With the piecewise construction of the input deck standing in for a moderately complex
+modsim project, even a four set parameter study quickly grows unmanageable for manual state tracking and execution. With
+`SCons`_ managing the directed graph construction, state, and execution, the modsim developer can focus attention on the
+engineering analysis and benefit from partial re-execution of the parameter study when only a subset of the parameter
+study has changed.
+
 Now plot the workflow with only the first set, ``set0``.
 
 .. code-block::
@@ -381,3 +389,8 @@ The output should look similar to the figure below.
 
         \vspace*{\fill}
     \end{landscape}
+
+While the first image is useful for demonstrating modsim project size and scope, a more useful directed graph can be
+evaluated by limiting the output to a single set. This image should look similar to the
+:ref:`tutorial_include_files_waves` directed graph, but with fewer output files because the ``*.msg``, ``*.dat``, and
+``*.sta`` files have been excluded to make the full parameter study graph more readable.
