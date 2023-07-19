@@ -247,8 +247,25 @@ copying files from place to place.
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_06_include_files --output-file tutorial_06_include_files.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_06_include_files.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}

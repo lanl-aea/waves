@@ -335,6 +335,7 @@ this case, the contents of the files is different, as we have inserted parameter
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
 First, plot the workflow with all parameter sets.
 
 .. code-block::
@@ -343,6 +344,21 @@ First, plot the workflow with all parameter sets.
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
 
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_07_cartesian_product.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
 Now plot the workflow with only the first set, ``set0``.
 
 .. code-block::
@@ -350,3 +366,18 @@ Now plot the workflow with only the first set, ``set0``.
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_07_cartesian_product --output-file tutorial_07_cartesian_product_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_07_cartesian_product_set0.png 
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}

@@ -384,8 +384,25 @@ about the information that these files provide.
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_05_parameter_substitution.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}

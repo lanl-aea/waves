@@ -449,8 +449,18 @@ reach the original source file(s) on the far right of the image. The arrows repr
 required source to the produced target. The :ref:`computational_tools` introduction discusses the relationship of a
 :ref:`build_system` task and :ref:`build_system_directed_graphs`.
 
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
 .. figure:: tutorial_01_geometry.png
    :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
 
 In this case, the single source file ``single_element_geometry.py`` is producing several output files which are required
 by the workflow. Notice that only two of these files were specified in our geometry task:

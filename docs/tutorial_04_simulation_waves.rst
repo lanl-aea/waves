@@ -309,8 +309,25 @@ The ``build/tutorial_04_simulation`` directory contains several different subset
 Workflow Visualization
 **********************
 
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_04_simulation --output-file tutorial_04_simulation.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .env .prt .com
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_04_simulation.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
