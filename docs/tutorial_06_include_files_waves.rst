@@ -251,4 +251,4 @@ Workflow Visualization
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_06_include_files --output-file tutorial_06_include_files.png --width=28 --height=6 --exclude-list .stdout .jnl .env .prt .com /usr/bin
+   $ waves visualize tutorial_06_include_files --output-file tutorial_06_include_files.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com
