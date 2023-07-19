@@ -343,8 +343,16 @@ View the workflow directed graph by running the following command and opening th
 
 The output should look similar to the figure below.
 
+.. raw:: latex
+
+    \begin{landscape}
+
 .. figure:: tutorial_02_partition_mesh.png
    :align: center
+
+.. raw:: latex
+
+    \end{landscape}
 
 As in :ref:`tutorial_geometry_waves`, the visualization of the workflow directed graph looks relatively simple to
 manage. In part, this is because we've removed some of the automanaged output files with the ``--exclude-list`` option
