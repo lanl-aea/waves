@@ -268,4 +268,4 @@ Workflow Visualization
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list .stdout .jnl .env /usr/bin
+   $ waves visualize tutorial_03_solverprep --output-file tutorial_03_solverprep.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .env

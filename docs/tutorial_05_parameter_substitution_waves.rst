@@ -388,4 +388,4 @@ Workflow Visualization
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=28 --height=6 --exclude-list .stdout .jnl .env .prt .com /usr/bin
+   $ waves visualize tutorial_05_parameter_substitution --output-file tutorial_05_parameter_substitution.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com

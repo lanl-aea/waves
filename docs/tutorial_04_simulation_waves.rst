@@ -313,4 +313,4 @@ Workflow Visualization
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_04_simulation --output-file tutorial_04_simulation.png --width=28 --height=5 --exclude-list .stdout .jnl .env .prt .com /usr/bin
+   $ waves visualize tutorial_04_simulation --output-file tutorial_04_simulation.png --width=28 --height=5 --exclude-list /usr/bin .stdout .jnl .env .prt .com
