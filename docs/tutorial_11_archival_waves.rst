@@ -170,3 +170,19 @@ file. You can inspect the contents of the archive as below.
    build/tutorial_11_archival/parameter_set0/single_element_compression.h5.stdout
    SConstruct
    tutorial_11_archival
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_11_archival_archive --output-file tutorial_11_archival_set0.png --width=50 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_11_archival_archive --output-file tutorial_11_archival.png --width=50 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
