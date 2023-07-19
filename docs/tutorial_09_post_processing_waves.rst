@@ -173,5 +173,5 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
-As in :ref:`tutorial_data_extraction``, the directed graph has not changed much. This tutorial adds the ``*.pdf`` plot
+As in :ref:`tutorial_data_extraction_waves`, the directed graph has not changed much. This tutorial adds the ``*.pdf`` plot
 of stress vs. strain.
