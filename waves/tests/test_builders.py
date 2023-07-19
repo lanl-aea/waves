@@ -706,7 +706,13 @@ scanner_input = {                              # content,       expected_depende
 @pytest.mark.parametrize("content, expected_dependencies",
                          scanner_input.values(),
                          ids=scanner_input.keys())
-def test_abaqus_implicit_scanner(content, expected_dependencies):
+def test_abaqus_input_scanner(content, expected_dependencies):
+    """Tests the expected dependencies based on the mocked content of the file.
+    This function does NOT test for recursion.
+
+    :param str content: Mocked content of the file
+    :param list expected_dependencies: List of the expected dependencies
+    """
     mock_file = unittest.mock.Mock()
     mock_file.get_text_contents.return_value = content
     env = SCons.Environment.Environment()
