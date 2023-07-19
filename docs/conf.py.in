@@ -98,6 +98,7 @@ information.
 """
 
 preamble = """
+\\usepackage{lscape}
 \\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}
 \\AtBeginEnvironment{sphinxVerbatim}{\\scriptsize}
 """
