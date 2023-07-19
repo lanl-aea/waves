@@ -112,3 +112,19 @@ Output Files
    build/tutorial_08_data_extraction/parameter_set3/single_element_compression_datasets.h5
    build/tutorial_08_data_extraction/parameter_set0/single_element_compression.h5
    build/tutorial_08_data_extraction/parameter_set0/single_element_compression_datasets.h5
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction.png --width=36 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_08_data_extraction --output-file tutorial_08_data_extraction_set0.png --width=28 --height=6 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
