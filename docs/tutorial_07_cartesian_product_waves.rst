@@ -374,7 +374,7 @@ The output should look similar to the figure below.
     \begin{landscape}
         \vspace*{\fill}
 
-.. figure:: tutorial_07_cartesian_product_set0.png 
+.. figure:: tutorial_07_cartesian_product_set0.png
    :align: center
 
 .. raw:: latex

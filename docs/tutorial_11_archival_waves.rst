@@ -175,14 +175,49 @@ file. You can inspect the contents of the archive as below.
 Workflow Visualization
 **********************
 
-.. code-block::
-
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_11_archival_archive --output-file tutorial_11_archival_set0.png --width=50 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+First, plot the workflow with all parameter sets.
 
 .. code-block::
 
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ waves visualize tutorial_11_archival_archive --output-file tutorial_11_archival.png --width=50 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_11_archival.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+Now plot the workflow with only the first set, ``set0``.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_11_archival_archive --output-file tutorial_11_archival_set0.png --width=50 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_11_archival_set0.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
