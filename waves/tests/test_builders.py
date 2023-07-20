@@ -717,6 +717,7 @@ scanner_input = {                                   # content,       expected_de
                          ids=scanner_input.keys())
 def test_abaqus_input_scanner(content, expected_dependencies):
     """Tests the expected dependencies based on the mocked content of the file.
+
     This function does NOT test for recursion.
 
     :param str content: Mocked content of the file

@@ -939,12 +939,12 @@ def sbatch(sbatch_program="sbatch", post_action=None):
 
 
 def abaqus_input_scanner():
-    """Abaqus implicit dependency scanner
+    """Abaqus input file dependency scanner
 
-    Custom Scons scanner that searches for ``INCLUDE`` keyword inside ``.inp`` files.
+    Custom SCons scanner that searches for ``*INCLUDE`` keyword inside Abaqus ``.inp`` files.
 
-    :return: Abaqus implicit dependency Scanner
-    :rtype: Scons.Scanner.Scanner
+    :return: Abaqus input file dependency Scanner
+    :rtype: SCons.Scanner.Scanner
     """
     return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'])
 
@@ -964,11 +964,29 @@ def _custom_scanner(pattern, suffixes):
     expression = re.compile(pattern, re.MULTILINE | re.IGNORECASE)
 
     def suffix_only(node_list):
-        # Recursively search for files that end in the given suffixes
+        """Recursively search for files that end in the given suffixes
+        
+        :param list node_list: List of SCons Node objects representing the nodes to process
+        
+        :return: List of file dependencies to include for recursive scanning
+        :rtype: list
+        """
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
     def regex_scan(node, env, path):
-        # Scan function for extracting dependencies from the content of a file
+        """Scan function for extracting dependencies from the content of a file based on the given regular expression.
+
+        The interface of the scan function is fixed by SCons. It must include ``node``, ``env`` and ``path``. It may
+        contain additional arguments if needed. For more information please read the SCons Scanner tutorial:
+        https://scons.org/doc/1.2.0/HTML/scons-user/c3755.html
+
+        :param SCons.Node.FS node: SCons Node object representing the file to scan
+        :param SCons.Environment.Environment env: SCons Environment object
+        :param str path: Path argument passed to the scan function
+
+        :return: List of file dependencies found during scanning
+        :rtype: list
+        """
         contents = node.get_text_contents()
         includes = expression.findall(contents)
         includes = [file.strip() for file in includes]
