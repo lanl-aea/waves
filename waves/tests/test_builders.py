@@ -693,12 +693,21 @@ def test_sbatch(sbatch_program, post_action, node_count, action_count, target_li
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
-scanner_input = {                              # content,       expected_dependencies
-    'has_suffix':        ('*\n*INCLUDE, INPUT=dummy.inp',               ['dummy.inp']),
-    'no_suffix':         ('*\n*INCLUDE, INPUT=dummy.out',               ['dummy.out']),
-    'pattern_not_found': ( '*\n*DUMMY, STRING=dummy.out',                          []),
-    'multiple_files':    ('*\n*INCLUDE, INPUT=dummy.out\n*'
-                          '\n*INCLUDE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),
+scanner_input = {                                   # content,       expected_dependencies
+    'has_suffix':             ('**\n*INCLUDE, INPUT=dummy.inp',               ['dummy.inp']),
+    'no_suffix':              ('**\n*INCLUDE, INPUT=dummy.out',               ['dummy.out']),
+    'pattern_not_found':      ( '**\n*DUMMY, STRING=dummy.out',                          []),
+    'multiple_files':     ('**\n*INCLUDE, INPUT=dummy.out\n**'
+                              '**\n*INCLUDE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),
+    'lower_case':              ('**\n*include, input=dummy.out',               ['dummy.out']),
+    'mixed_case':              ('**\n*inClUdE, iNpuT=dummy.out',               ['dummy.out']),
+    'no_leading':                 ('*INCLUDE, INPUT=dummy.out',               ['dummy.out']),
+    'comment':                   ('**INCLUDE, INPUT=dummy.out'
+                              '\n***INCLUDE, INPUT=dummy2.inp',                          []),
+    'mixed_keywords':     ('**\n*INCLUDE, INPUT=dummy.out\n**'
+                                  '\n*DUMMY, INPUT=dummy2.inp',               ['dummy.out']),
+    'trailing_whitespace': ('**\n*INCLUDE, INPUT=dummy.out   ',               ['dummy.out']),
+    'extra_space':         ('**\n*INCLUDE,    INPUT=dummy.out',               ['dummy.out']),
 }
 
 
