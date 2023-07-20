@@ -950,11 +950,12 @@ def abaqus_input_scanner():
     return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'], flags)
 
 
-def _custom_scanner(pattern, suffixes, flags):
+def _custom_scanner(pattern, suffixes, flags=None):
     """Custom Scons scanner
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
-    suffixes provided. Regular expression pattern will be forced to match the ``^`` symbol at the beginning of each line
+    suffixes provided. ``_custom_scanner`` will always use the ``re.MULTILINE`` flag
+    https://docs.python.org/3/library/re.html#re.MULTILINE
 
     :param str pattern: Regular expression pattern.
     :param list suffixes: List of suffixes of files to search
@@ -965,7 +966,8 @@ def _custom_scanner(pattern, suffixes, flags):
     :return: Custom Scons scanner
     :rtype: Scons.Scanner.Scanner
     """
-    expression = re.compile(pattern, re.MULTILINE | flags)
+    flags = re.MULTILINE if not flags else re.MULTILINE | flags
+    expression = re.compile(pattern, flags)
 
     def suffix_only(node_list):
         """Recursively search for files that end in the given suffixes
