@@ -971,6 +971,7 @@ def _custom_scanner(pattern, suffixes):
         # Scan function for extracting dependencies from the content of a file
         contents = node.get_text_contents()
         includes = expression.findall(contents)
+        includes = [file.strip() for file in includes]
         return includes
 
     inp_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
