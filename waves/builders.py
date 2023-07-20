@@ -959,8 +959,8 @@ def _custom_scanner(pattern, suffixes, flags):
     :param str pattern: Regular expression pattern.
     :param list suffixes: List of suffixes of files to search
     :param int flags: An integer representing the combination of re module flags to be used during compilation.
-    Additional flags can be combined using the bitwise OR (|) operator. The re.MULTILINE flag is automatically
-    added to the combination.
+                      Additional flags can be combined using the bitwise OR (|) operator. The re.MULTILINE flag is
+                      automatically added to the combination.
 
     :return: Custom Scons scanner
     :rtype: Scons.Scanner.Scanner
