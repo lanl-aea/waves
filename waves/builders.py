@@ -946,22 +946,26 @@ def abaqus_input_scanner():
     :return: Abaqus input file dependency Scanner
     :rtype: SCons.Scanner.Scanner
     """
-    return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'])
+    flags = re.IGNORECASE
+    return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'], flags)
 
 
-def _custom_scanner(pattern, suffixes):
+def _custom_scanner(pattern, suffixes, flags):
     """Custom Scons scanner
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
-    suffixes provided. Regular expression pattern will match the beginning of each line and will be case-insensitive
+    suffixes provided. Regular expression pattern will be forced to match the ``^`` symbol at the beginning of each line
 
     :param str pattern: Regular expression pattern.
     :param list suffixes: List of suffixes of files to search
+    :param int flags: An integer representing the combination of re module flags to be used during compilation.
+    Additional flags can be combined using the bitwise OR (|) operator. The re.MULTILINE flag is automatically
+    added to the combination.
 
     :return: Custom Scons scanner
     :rtype: Scons.Scanner.Scanner
     """
-    expression = re.compile(pattern, re.MULTILINE | re.IGNORECASE)
+    expression = re.compile(pattern, re.MULTILINE | flags)
 
     def suffix_only(node_list):
         """Recursively search for files that end in the given suffixes
@@ -992,5 +996,5 @@ def _custom_scanner(pattern, suffixes):
         includes = [file.strip() for file in includes]
         return includes
 
-    inp_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
-    return inp_scanner
+    custom_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
+    return custom_scanner
