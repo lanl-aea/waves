@@ -11,19 +11,19 @@ import sys
 import yaml
 
 from waves import __version__
+from waves import _settings
 from waves import parameter_generators
 
 # ========================================================================================================= SETTINGS ===
 # Variables normally found in a project's root settings.py file(s)
 _program_name = pathlib.Path(__file__).stem
-cartesian_product_subcommand = 'cartesian_product'
 custom_study_subcommand = 'custom_study'
 latin_hypercube_subcommand = 'latin_hypercube'
 sobol_sequence_subcommand = 'sobol_sequence'
 
 
 # =========================================================================================== COMMAND LINE INTERFACE ===
-def parent_parser():
+def parameter_study_parser():
     # Required positional option
     parser = ArgumentParser(add_help=False)
     parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
@@ -80,12 +80,6 @@ def get_parser(return_subparser_dictionary=False):
     :rtype: parser
     """
     main_description = "Generates parameter studies in various output formats."
-    generator_description = \
-        "Writes parameter study to STDOUT by default. If an output file template " \
-        "is specified, output one file per parameter set if and only if that parameter " \
-        "set's file doesn't already exist. The overwrite option will overwrite all " \
-        "parameter set files. The dry run option will print a list of files and contents " \
-        "that would have been  written."
     main_parser = ArgumentParser(description=main_description,
                                  prog=_program_name,
                                  epilog=f"author(s): {__author__}")
@@ -97,37 +91,35 @@ def get_parser(return_subparser_dictionary=False):
         dest='subcommand')
 
     cartesian_product_parser = subparsers.add_parser(
-        cartesian_product_subcommand,
-        description=generator_description,
+        _settings._cartesian_product_subcommand,
+        description=_settings._parameter_study_description,
         help='Cartesian product generator',
-        parents=[parent_parser()]
+        parents=[parameter_study_parser()]
     )
 
     custom_study_parser = subparsers.add_parser(
         custom_study_subcommand,
-        description=generator_description,
+        description=_settings._parameter_study_description,
         help='Custom study generator',
-        parents=[parent_parser()]
+        parents=[parameter_study_parser()]
     )
 
     latin_hypercube_parser = subparsers.add_parser(
         latin_hypercube_subcommand,
-        description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
-                    "parameter samples and quantiles.",
+        description=_settings._parameter_study_description_quantiles,
         help='Latin hypercube generator',
-        parents=[parent_parser()]
+        parents=[parameter_study_parser()]
     )
 
     sobol_sequence_parser = subparsers.add_parser(
         sobol_sequence_subcommand,
-        description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
-                    "parameter samples and quantiles.",
+        description=_settings._parameter_study_description_quantiles,
         help='Sobol sequence generator',
-        parents=[parent_parser()]
+        parents=[parameter_study_parser()]
     )
 
     subparser_dictionary = {
-        cartesian_product_subcommand: cartesian_product_parser,
+        _settings._cartesian_product_subcommand: cartesian_product_parser,
         custom_study_subcommand: custom_study_parser,
         latin_hypercube_subcommand: latin_hypercube_parser,
         sobol_sequence_subcommand: sobol_sequence_parser
@@ -191,7 +183,7 @@ def main():
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = {
-        cartesian_product_subcommand: parameter_generators.CartesianProduct,
+        _settings._cartesian_product_subcommand: parameter_generators.CartesianProduct,
         custom_study_subcommand: parameter_generators.CustomStudy,
         latin_hypercube_subcommand: parameter_generators.LatinHypercube,
         sobol_sequence_subcommand: parameter_generators.SobolSequence

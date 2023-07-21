@@ -5,6 +5,7 @@ import subprocess
 
 from waves import _settings
 from waves import __version__
+from waves.parameter_study import parameter_study_parser
 
 
 def main():
@@ -166,6 +167,13 @@ def get_parser():
         help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
+
+    cartesian_product_parser = subparsers.add_parser(
+        _settings._cartesian_product_subcommand,
+        description=_settings._parameter_study_description,
+        help='Create a cartesian product parameter study',
+        parents=[parameter_study_parser()]
+    )
 
     return main_parser
 
