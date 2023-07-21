@@ -29,7 +29,7 @@ dynamic = ["version"]
 dependencies = [
     "h5netcdf",
     "h5py",
-    "matplotlib",
+    "matplotlib-base",
     "networkx",
     "numpy",
     "pyyaml",
