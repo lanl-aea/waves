@@ -5,7 +5,7 @@ import subprocess
 
 from waves import _settings
 from waves import __version__
-from waves import parameter_study
+from waves import _parameter_study
 
 
 def main():
@@ -39,7 +39,7 @@ def main():
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
                                     height=args.height, width=args.width, font_size=args.font_size)
     elif args.subcommand in _settings._parameter_study_subcommands:
-        return_code = parameter_study.parameter_study(
+        return_code = _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
             output_file_template=args.OUTPUT_FILE_TEMPLATE,
             output_file=args.OUTPUT_FILE,
@@ -186,7 +186,7 @@ def get_parser():
             subcommand,
             description=_settings._parameter_study_description,
             help=f"Create a {subcommand.replace('_', ' ')} parameter study",
-            parents=[parameter_study.parameter_study_parser()]
+            parents=[_parameter_study.parameter_study_parser()]
         )
 
     return main_parser

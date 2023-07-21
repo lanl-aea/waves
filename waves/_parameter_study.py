@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""parameter_study - Python based generator of parameter studies"""
+"""Thin CLI wrapper around :meth:`waves.parameter_generators` classes"""
 
 import argparse
 from argparse import ArgumentParser
