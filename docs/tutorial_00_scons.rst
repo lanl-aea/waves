@@ -32,8 +32,8 @@ The command line utilities provided by `WAVES`_ are those utilities required to 
 traditional software build systems. For most engineering simulation workflows, software build systems will work
 out-of-the-box. However, it is difficult to implement engineering parameter studies in software build systems, which are
 designed to produce a single program, not many nearly identical configurations of the same program. The `WAVES`_
-parameter generator utility, :ref:`parameter_study_cli`, is designed to work with most build systems, but were
-originally developed with the requirements of `CMake`_ in mind.
+parameter generator command line interface(s) is designed to work with most build systems, but were originally developed
+with the requirements of `CMake`_ in mind.
 
 For production engineering analysis, `WAVES`_ focuses on extending the build system `SCons`_ because `SCons`_
 configuration files use `Python`_ as a fully featured scripting language. This choice is primarily driven by the

@@ -64,15 +64,45 @@ build
    :nodefault:
    :path: build
 
-.. _parameter_study_cli:
+.. _cartesian_product_cli:
 
-***************
-Parameter Study
-***************
+cartesian_product
+-----------------
 
 .. argparse::
-   :ref: waves.parameter_study.get_parser
+   :ref: waves.main.get_parser
    :nodefault:
+   :path: cartesian_product
+
+.. _custom_study_cli:
+
+custom_study
+------------
+
+.. argparse::
+   :ref: waves.main.get_parser
+   :nodefault:
+   :path: custom_study
+
+.. _latin_hypercube_cli:
+
+latin_hypercube
+---------------
+
+.. argparse::
+   :ref: waves.main.get_parser
+   :nodefault:
+   :path: latin_hypercube
+
+.. _sobol_sequence_cli:
+
+sobol_sequence
+--------------
+
+.. argparse::
+   :ref: waves.main.get_parser
+   :nodefault:
+   :path: sobol_sequence
 
 .. _odb_extract_cli:
 
