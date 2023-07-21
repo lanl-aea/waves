@@ -51,7 +51,7 @@ requirements:
     - python >=3.8
     - h5netcdf
     - h5py
-    - matplotlib
+    - matplotlib-base
     - networkx
     - numpy
     - pyyaml
@@ -64,7 +64,7 @@ test:
   requires:
     - h5netcdf
     - h5py
-    - matplotlib
+    - matplotlib-base
     - numpy
     - pandas
     - pytest
