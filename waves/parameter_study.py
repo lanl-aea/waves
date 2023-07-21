@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 """parameter_study - Python based generator of parameter studies"""
 
-__author__ = 'Kyle Brindley <kbrindley@lanl.gov>'
-
 import argparse
 from argparse import ArgumentParser
 import pathlib
@@ -12,17 +10,6 @@ import yaml
 
 from waves import _settings
 from waves import parameter_generators
-
-
-default_output_file_template = None
-default_output_file = None
-default_output_file_type = 'yaml'
-default_set_name_template = 'parameter_set@number'
-default_previous_parameter_study = None
-default_overwrite = False
-default_dryrun = False
-default_debug = False
-default_write_meta = False
 
 
 def parameter_study_parser():
@@ -35,7 +22,7 @@ def parameter_study_parser():
     # Mutually exclusive output file options
     output_file_group = parser.add_mutually_exclusive_group()
     output_file_group.add_argument('-o', '--output-file-template',
-                                   default=default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
+                                   default=parameter_generators.default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
                                    help=f"Output file template. May contain pathseps for an absolute or relative " \
                                         f"path template. May contain ``{parameter_generators.template_placeholder}`` " \
                                         f"set number placeholder in the file basename but not in the path. " \
@@ -44,22 +31,22 @@ def parameter_study_parser():
                                         f"content of the file has changed or if ``overwrite`` is True "
                                         f"(default: %(default)s)")
     output_file_group.add_argument('-f', '--output-file',
-                                   default=default_output_file, dest='OUTPUT_FILE',
+                                   default=parameter_generators.default_output_file, dest='OUTPUT_FILE',
                                    help=f"Output file name. May contain pathseps for an absolute or relative path. " \
                                          "Output file is overwritten if the content of the file has changed or if " \
                                          "``overwrite`` is True (default: %(default)s)")
 
     # Optional keyword options
     parser.add_argument('-t', '--output-file-type',
-                               default=default_output_file_type,
+                               default=parameter_generators.default_output_file_type,
                                choices=['yaml', 'h5'],
                                help="Output file type (default: %(default)s)")
     parser.add_argument('-s', '--set-name-template',
-                               default=default_set_name_template, dest='SET_NAME_TEMPLATE',
+                               default=parameter_generators.default_set_name_template, dest='SET_NAME_TEMPLATE',
                                help="Parameter set name template. Overridden by ``output_file_template``, " \
                                     "if provided (default: %(default)s)")
     parser.add_argument('-p', '--previous-parameter-study',
-                               default=default_previous_parameter_study, dest='PREVIOUS_PARAMETER_STUDY',
+                               default=parameter_generators.default_previous_parameter_study, dest='PREVIOUS_PARAMETER_STUDY',
                                help="A relative or absolute file path to a previously created parameter study Xarray " \
                                     "Dataset (default: %(default)s)")
     parser.add_argument('--overwrite', action='store_true',
@@ -76,15 +63,15 @@ def parameter_study_parser():
 
 
 def parameter_study(subcommand, input_file,
-                    output_file_template=default_output_file_template,
-                    output_file=default_output_file,
-                    output_file_type=default_output_file_type,
-                    set_name_template=default_set_name_template,
-                    previous_parameter_study=default_previous_parameter_study,
-                    overwrite=default_overwrite,
-                    dryrun=default_dryrun,
-                    debug=default_debug,
-                    write_meta=default_write_meta):
+                    output_file_template=parameter_generators.default_output_file_template,
+                    output_file=parameter_generators.default_output_file,
+                    output_file_type=parameter_generators.default_output_file_type,
+                    set_name_template=parameter_generators.default_set_name_template,
+                    previous_parameter_study=parameter_generators.default_previous_parameter_study,
+                    overwrite=parameter_generators.default_overwrite,
+                    dryrun=parameter_generators.default_dryrun,
+                    debug=parameter_generators.default_debug,
+                    write_meta=parameter_generators.default_write_meta):
     """Build parameter studies
 
     :param str subcommand: parameter study type to build

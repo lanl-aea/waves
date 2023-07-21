@@ -25,7 +25,17 @@ class _AtSignTemplate(string.Template):
 
 
 template_placeholder = f"{template_delimiter}number"
+
+default_output_file_template = None
+default_output_file = None
+default_output_file_type = 'yaml'
 default_set_name_template = f'parameter_set{template_placeholder}'
+default_previous_parameter_study = None
+default_overwrite = False
+default_dryrun = False
+default_debug = False
+default_write_meta = False
+
 parameter_study_meta_file = "parameter_study_meta.txt"
 allowable_output_file_types = ('h5', 'yaml')
 
@@ -53,9 +63,17 @@ class _ParameterGenerator(ABC):
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema, output_file_template=None, output_file=None, output_file_type='yaml',
-                 set_name_template=default_set_name_template, previous_parameter_study=None,
-                 overwrite=False, dryrun=False, debug=False, write_meta=False, **kwargs):
+    def __init__(self, parameter_schema,
+                 output_file_template=default_output_file_template,
+                 output_file=default_output_file,
+                 output_file_type=default_output_file_type,
+                 set_name_template=default_set_name_template,
+                 previous_parameter_study=default_previous_parameter_study,
+                 overwrite=default_overwrite,
+                 dryrun=default_dryrun,
+                 debug=default_debug,
+                 write_meta=default_write_meta,
+                 **kwargs):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
