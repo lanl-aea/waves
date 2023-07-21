@@ -23,6 +23,56 @@ sobol_sequence_subcommand = 'sobol_sequence'
 
 
 # =========================================================================================== COMMAND LINE INTERFACE ===
+def parent_parser():
+    # Required positional option
+    parser = ArgumentParser(add_help=False)
+    parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
+                               default=(None if sys.stdin.isatty() else sys.stdin),
+                               help=f"YAML formatted parameter study schema file (default: STDIN)")
+
+    # Mutually exclusive output file options
+    output_file_group = parser.add_mutually_exclusive_group()
+    output_file_group.add_argument('-o', '--output-file-template',
+                                   default=None, dest='OUTPUT_FILE_TEMPLATE',
+                                   help=f"Output file template. May contain pathseps for an absolute or relative " \
+                                        f"path template. May contain ``{parameter_generators.template_placeholder}`` " \
+                                        f"set number placeholder in the file basename but not in the path. " \
+                                        f"If the placeholder is not found, it will be " \
+                                        f"appended to the template string. Output files are overwritten if the "
+                                        f"content of the file has changed or if ``overwrite`` is True "
+                                        f"(default: %(default)s)")
+    output_file_group.add_argument('-f', '--output-file',
+                                   default=None, dest='OUTPUT_FILE',
+                                   help=f"Output file name. May contain pathseps for an absolute or relative path. " \
+                                         "Output file is overwritten if the content of the file has changed or if " \
+                                         "``overwrite`` is True (default: %(default)s)")
+
+    # Optional keyword options
+    parser.add_argument('-t', '--output-file-type',
+                               default='yaml',
+                               choices=['yaml', 'h5'],
+                               help="Output file type (default: %(default)s)")
+    parser.add_argument('-s', '--set-name-template',
+                               default='parameter_set@number', dest='SET_NAME_TEMPLATE',
+                               help="Parameter set name template. Overridden by ``output_file_template``, " \
+                                    "if provided (default: %(default)s)")
+    parser.add_argument('-p', '--previous-parameter-study',
+                               default=None, dest='PREVIOUS_PARAMETER_STUDY',
+                               help="A relative or absolute file path to a previously created parameter study Xarray " \
+                                    "Dataset (default: %(default)s)")
+    parser.add_argument('--overwrite', action='store_true',
+                               help=f"Overwrite existing output files (default: %(default)s)")
+    parser.add_argument('--dryrun', action='store_true',
+                               help=f"Print contents of new parameter study output files to STDOUT and exit " \
+                                    f"(default: %(default)s)")
+    parser.add_argument('--debug', action='store_true',
+                               help="Print internal variables to STDOUT and exit (default: %(default)s)")
+    parser.add_argument('--write-meta', action='store_true',
+                               help="Write a meta file named 'parameter_study_meta.txt' containing the " \
+                                    "parameter set file names (default: %(default)s)")
+    return parser
+
+
 def get_parser(return_subparser_dictionary=False):
     """Get parser object for command line options
 
@@ -43,53 +93,6 @@ def get_parser(return_subparser_dictionary=False):
                              action='version',
                              version=f"{_program_name} {__version__}")
 
-    # Required positional option
-    parent_parser = ArgumentParser(add_help=False)
-    parent_parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
-                               default=(None if sys.stdin.isatty() else sys.stdin),
-                               help=f"YAML formatted parameter study schema file (default: STDIN)")
-
-    # Mutually exclusive output file options
-    output_file_group = parent_parser.add_mutually_exclusive_group()
-    output_file_group.add_argument('-o', '--output-file-template',
-                                   default=None, dest='OUTPUT_FILE_TEMPLATE',
-                                   help=f"Output file template. May contain pathseps for an absolute or relative " \
-                                        f"path template. May contain ``{parameter_generators.template_placeholder}`` " \
-                                        f"set number placeholder in the file basename but not in the path. " \
-                                        f"If the placeholder is not found, it will be " \
-                                        f"appended to the template string. Output files are overwritten if the "
-                                        f"content of the file has changed or if ``overwrite`` is True "
-                                        f"(default: %(default)s)")
-    output_file_group.add_argument('-f', '--output-file',
-                                   default=None, dest='OUTPUT_FILE',
-                                   help=f"Output file name. May contain pathseps for an absolute or relative path. " \
-                                         "Output file is overwritten if the content of the file has changed or if " \
-                                         "``overwrite`` is True (default: %(default)s)")
-
-    # Optional keyword options
-    parent_parser.add_argument('-t', '--output-file-type',
-                               default='yaml',
-                               choices=['yaml', 'h5'],
-                               help="Output file type (default: %(default)s)")
-    parent_parser.add_argument('-s', '--set-name-template',
-                               default='parameter_set@number', dest='SET_NAME_TEMPLATE',
-                               help="Parameter set name template. Overridden by ``output_file_template``, " \
-                                    "if provided (default: %(default)s)")
-    parent_parser.add_argument('-p', '--previous-parameter-study',
-                               default=None, dest='PREVIOUS_PARAMETER_STUDY',
-                               help="A relative or absolute file path to a previously created parameter study Xarray " \
-                                    "Dataset (default: %(default)s)")
-    parent_parser.add_argument('--overwrite', action='store_true',
-                               help=f"Overwrite existing output files (default: %(default)s)")
-    parent_parser.add_argument('--dryrun', action='store_true',
-                               help=f"Print contents of new parameter study output files to STDOUT and exit " \
-                                    f"(default: %(default)s)")
-    parent_parser.add_argument('--debug', action='store_true',
-                               help="Print internal variables to STDOUT and exit (default: %(default)s)")
-    parent_parser.add_argument('--write-meta', action='store_true',
-                               help="Write a meta file named 'parameter_study_meta.txt' containing the " \
-                                    "parameter set file names (default: %(default)s)")
-
     subparsers = main_parser.add_subparsers(
         dest='subcommand')
 
@@ -97,14 +100,14 @@ def get_parser(return_subparser_dictionary=False):
         cartesian_product_subcommand,
         description=generator_description,
         help='Cartesian product generator',
-        parents=[parent_parser]
+        parents=[parent_parser()]
     )
 
     custom_study_parser = subparsers.add_parser(
         custom_study_subcommand,
         description=generator_description,
         help='Custom study generator',
-        parents=[parent_parser]
+        parents=[parent_parser()]
     )
 
     latin_hypercube_parser = subparsers.add_parser(
@@ -112,7 +115,7 @@ def get_parser(return_subparser_dictionary=False):
         description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
                     "parameter samples and quantiles.",
         help='Latin hypercube generator',
-        parents=[parent_parser]
+        parents=[parent_parser()]
     )
 
     sobol_sequence_parser = subparsers.add_parser(
@@ -120,7 +123,7 @@ def get_parser(return_subparser_dictionary=False):
         description=f"{generator_description} The 'h5' output is the only output type that contains both the " \
                     "parameter samples and quantiles.",
         help='Sobol sequence generator',
-        parents=[parent_parser]
+        parents=[parent_parser()]
     )
 
     subparser_dictionary = {
