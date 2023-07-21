@@ -5,7 +5,7 @@ import subprocess
 
 from waves import _settings
 from waves import __version__
-from waves import parameter_study 
+from waves import parameter_study
 
 
 def main():
@@ -94,43 +94,6 @@ def get_parser():
                                   "As an alternative to the docs sub-command, open index.html in a web browser " \
                                   "(default: %(default)s)")
 
-    build_parser = argparse.ArgumentParser(add_help=False)
-    build_parser = subparsers.add_parser('build',
-        help="Thin SCons wrapper",
-        description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
-        parents=[build_parser])
-    build_parser.add_argument("TARGET", nargs="+",
-                              help=f"SCons target list")
-    build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
-                              help="Maximum number of SCons command iterations (default: %(default)s)")
-    directory_group = build_parser.add_mutually_exclusive_group()
-    directory_group.add_argument("--working-directory", type=str, default=None,
-                                 help=argparse.SUPPRESS)
-    directory_group.add_argument("-g", "--git-clone-directory", type=str, default=None,
-                                  help="Perform a full local git clone operation to the specified directory before " \
-                                       "executing the scons command, " \
-                                       "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
-                                       "(default: %(default)s)")
-
-    quickstart_parser = argparse.ArgumentParser(add_help=False)
-    quickstart_parser = subparsers.add_parser('quickstart',
-        help="Create an SCons-WAVES project template",
-        description="Create an SCons-WAVES project template from the single element compression simulation found in " \
-                    "the WAVES tutorials.",
-        parents=[quickstart_parser])
-    quickstart_parser.add_argument("destination",
-        nargs="?",
-        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
-             "destination will not be copied. (default: PWD)",
-        type=pathlib.Path,
-        default=pathlib.Path().cwd())
-    quickstart_parser.add_argument("--overwrite",
-        action="store_true",
-        help="Overwrite any existing files (default: %(default)s)")
-    quickstart_parser.add_argument("--dry-run",
-        action="store_true",
-        help="Print the destination tree and exit (default: %(default)s)")
-
     fetch_parser = argparse.ArgumentParser(add_help=False)
     fetch_parser = subparsers.add_parser('fetch',
         help="Fetch and copy SCons-WAVES modsim template files and directories",
@@ -180,6 +143,43 @@ def get_parser():
         help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
+
+    quickstart_parser = argparse.ArgumentParser(add_help=False)
+    quickstart_parser = subparsers.add_parser('quickstart',
+        help="Create an SCons-WAVES project template",
+        description="Create an SCons-WAVES project template from the single element compression simulation found in " \
+                    "the WAVES tutorials.",
+        parents=[quickstart_parser])
+    quickstart_parser.add_argument("destination",
+        nargs="?",
+        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
+             "destination will not be copied. (default: PWD)",
+        type=pathlib.Path,
+        default=pathlib.Path().cwd())
+    quickstart_parser.add_argument("--overwrite",
+        action="store_true",
+        help="Overwrite any existing files (default: %(default)s)")
+    quickstart_parser.add_argument("--dry-run",
+        action="store_true",
+        help="Print the destination tree and exit (default: %(default)s)")
+
+    build_parser = argparse.ArgumentParser(add_help=False)
+    build_parser = subparsers.add_parser('build',
+        help="Thin SCons wrapper",
+        description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
+        parents=[build_parser])
+    build_parser.add_argument("TARGET", nargs="+",
+                              help=f"SCons target list")
+    build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
+                              help="Maximum number of SCons command iterations (default: %(default)s)")
+    directory_group = build_parser.add_mutually_exclusive_group()
+    directory_group.add_argument("--working-directory", type=str, default=None,
+                                 help=argparse.SUPPRESS)
+    directory_group.add_argument("-g", "--git-clone-directory", type=str, default=None,
+                                  help="Perform a full local git clone operation to the specified directory before " \
+                                       "executing the scons command, " \
+                                       "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
+                                       "(default: %(default)s)")
 
     for subcommand in _settings._parameter_study_subcommands:
         subparsers.add_parser(
