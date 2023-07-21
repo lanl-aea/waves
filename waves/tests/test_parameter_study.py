@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from waves import parameter_study
+from waves import main 
 
 parameter_study_args = {
     'cartesian product': (
@@ -30,10 +30,10 @@ parameter_study_args = {
                          ids=list(parameter_study_args.keys()))
 def test_parameter_study(subcommand, class_name):
     # Help/usage. Should not raise
-    with patch('sys.argv', ['parameter_study.py', subcommand, '-h']):
+    with patch('sys.argv', ['main.py', subcommand, '-h']):
         exit_code = None
         try:
-            parameter_study.main()
+            main.main()
         except SystemExit as err:
             exit_code = err.code
         finally:
@@ -41,9 +41,9 @@ def test_parameter_study(subcommand, class_name):
 
     # Run main code. No SystemExit expected.
     schema_file = 'dummy.file'
-    with patch('sys.argv', ['parameter_study.py', subcommand, schema_file]), \
+    with patch('sys.argv', ['main.py', subcommand, schema_file]), \
          patch('argparse.FileType'), patch('yaml.safe_load'), \
          patch(f'waves.parameter_generators.{class_name}') as mock_generator:
-        exit_code = parameter_study.main()
+        exit_code = main.main()
         assert exit_code == 0
         mock_generator.assert_called_once()

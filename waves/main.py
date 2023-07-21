@@ -5,7 +5,7 @@ import subprocess
 
 from waves import _settings
 from waves import __version__
-from waves import parameter_study
+from waves import parameter_study 
 
 
 def main():
@@ -41,15 +41,15 @@ def main():
     elif args.subcommand in _settings._parameter_study_subcommands:
         return_code = parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
-            output_file_template=OUTPUT_FILE_TEMPLATE,
-            output_file=OUTPUT_FILE,
-            output_file_type=OUTPUT_FILE_TYPE,
-            set_name_template=SET_NAME_TEMPLATE,
-            previous_parameter_study=PREVIOUS_PARAMETER_STUDY,
-            overwrite=OVERWRITE,
-            dryrun=DRYRUN,
-            debug=DEBUG
-            write_meta=WRITE_META
+            output_file_template=args.OUTPUT_FILE_TEMPLATE,
+            output_file=args.OUTPUT_FILE,
+            output_file_type=args.output_file_type,
+            set_name_template=args.SET_NAME_TEMPLATE,
+            previous_parameter_study=args.PREVIOUS_PARAMETER_STUDY,
+            overwrite=args.overwrite,
+            dryrun=args.dryrun,
+            debug=args.debug,
+            write_meta=args.write_meta
         )
     else:
         parser.print_help()

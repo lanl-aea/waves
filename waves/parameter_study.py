@@ -83,7 +83,7 @@ def parameter_study(subcommand, input_file,
                     previous_parameter_study=default_previous_parameter_study,
                     overwrite=default_overwrite,
                     dryrun=default_dryrun,
-                    debug=default_debug
+                    debug=default_debug,
                     write_meta=default_write_meta):
     """Build parameter studies
 
