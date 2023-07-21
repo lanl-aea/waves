@@ -10,19 +10,21 @@ import sys
 
 import yaml
 
-from waves import __version__
 from waves import _settings
 from waves import parameter_generators
 
-# ========================================================================================================= SETTINGS ===
-# Variables normally found in a project's root settings.py file(s)
-_program_name = pathlib.Path(__file__).stem
-custom_study_subcommand = 'custom_study'
-latin_hypercube_subcommand = 'latin_hypercube'
-sobol_sequence_subcommand = 'sobol_sequence'
+
+default_output_file_template = None
+default_output_file = None
+default_output_file_type = 'yaml'
+default_set_name_template = 'parameter_set@number'
+default_previous_parameter_study = None
+default_overwrite = False
+default_dryrun = False
+default_debug = False
+default_write_meta = False
 
 
-# =========================================================================================== COMMAND LINE INTERFACE ===
 def parameter_study_parser():
     # Required positional option
     parser = ArgumentParser(add_help=False)
@@ -33,7 +35,7 @@ def parameter_study_parser():
     # Mutually exclusive output file options
     output_file_group = parser.add_mutually_exclusive_group()
     output_file_group.add_argument('-o', '--output-file-template',
-                                   default=None, dest='OUTPUT_FILE_TEMPLATE',
+                                   default=default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
                                    help=f"Output file template. May contain pathseps for an absolute or relative " \
                                         f"path template. May contain ``{parameter_generators.template_placeholder}`` " \
                                         f"set number placeholder in the file basename but not in the path. " \
@@ -42,22 +44,22 @@ def parameter_study_parser():
                                         f"content of the file has changed or if ``overwrite`` is True "
                                         f"(default: %(default)s)")
     output_file_group.add_argument('-f', '--output-file',
-                                   default=None, dest='OUTPUT_FILE',
+                                   default=default_output_file, dest='OUTPUT_FILE',
                                    help=f"Output file name. May contain pathseps for an absolute or relative path. " \
                                          "Output file is overwritten if the content of the file has changed or if " \
                                          "``overwrite`` is True (default: %(default)s)")
 
     # Optional keyword options
     parser.add_argument('-t', '--output-file-type',
-                               default='yaml',
+                               default=default_output_file_type,
                                choices=['yaml', 'h5'],
                                help="Output file type (default: %(default)s)")
     parser.add_argument('-s', '--set-name-template',
-                               default='parameter_set@number', dest='SET_NAME_TEMPLATE',
+                               default=default_set_name_template, dest='SET_NAME_TEMPLATE',
                                help="Parameter set name template. Overridden by ``output_file_template``, " \
                                     "if provided (default: %(default)s)")
     parser.add_argument('-p', '--previous-parameter-study',
-                               default=None, dest='PREVIOUS_PARAMETER_STUDY',
+                               default=default_previous_parameter_study, dest='PREVIOUS_PARAMETER_STUDY',
                                help="A relative or absolute file path to a previously created parameter study Xarray " \
                                     "Dataset (default: %(default)s)")
     parser.add_argument('--overwrite', action='store_true',
@@ -73,95 +75,32 @@ def parameter_study_parser():
     return parser
 
 
-def get_parser(return_subparser_dictionary=False):
-    """Get parser object for command line options
+def parameter_study(subcommand, input_file,
+                    output_file_template=default_output_file_template,
+                    output_file=default_output_file,
+                    output_file_type=default_output_file_type,
+                    set_name_template=default_set_name_template,
+                    previous_parameter_study=default_previous_parameter_study,
+                    overwrite=default_overwrite,
+                    dryrun=default_dryrun,
+                    debug=default_debug
+                    write_meta=default_write_meta):
+    """Build parameter studies
 
-    :return: argument parser
-    :rtype: parser
-    """
-    main_description = "Generates parameter studies in various output formats."
-    main_parser = ArgumentParser(description=main_description,
-                                 prog=_program_name,
-                                 epilog=f"author(s): {__author__}")
-    main_parser.add_argument('-V', '--version',
-                             action='version',
-                             version=f"{_program_name} {__version__}")
-
-    subparsers = main_parser.add_subparsers(
-        dest='subcommand')
-
-    cartesian_product_parser = subparsers.add_parser(
-        _settings._cartesian_product_subcommand,
-        description=_settings._parameter_study_description,
-        help='Cartesian product generator',
-        parents=[parameter_study_parser()]
-    )
-
-    custom_study_parser = subparsers.add_parser(
-        custom_study_subcommand,
-        description=_settings._parameter_study_description,
-        help='Custom study generator',
-        parents=[parameter_study_parser()]
-    )
-
-    latin_hypercube_parser = subparsers.add_parser(
-        latin_hypercube_subcommand,
-        description=_settings._parameter_study_description,
-        help='Latin hypercube generator',
-        parents=[parameter_study_parser()]
-    )
-
-    sobol_sequence_parser = subparsers.add_parser(
-        sobol_sequence_subcommand,
-        description=_settings._parameter_study_description,
-        help='Sobol sequence generator',
-        parents=[parameter_study_parser()]
-    )
-
-    subparser_dictionary = {
-        _settings._cartesian_product_subcommand: cartesian_product_parser,
-        custom_study_subcommand: custom_study_parser,
-        latin_hypercube_subcommand: latin_hypercube_parser,
-        sobol_sequence_subcommand: sobol_sequence_parser
-    }
-
-    if return_subparser_dictionary:
-        return subparser_dictionary
-    else:
-        return main_parser
-
-
-# ============================================================================================= PARAMETER STUDY MAIN ===
-def main():
-    """
-    Build parameter studies
+    :param str subcommand: parameter study type to build
+    :param str input_file: YAML formatted parameter study schema file
+    :param str output_file_template: output file template name
+    :param str output_file: relative or absolute output file path
+    :param str output_file_type: yaml or h5
+    :param str set_name_template: parameter set name string template. May contain '@number' for the set number.
+    :param str previous_parameter_study: relative or absolute path to previous parameter study file
+    :param bool overwrite: overwrite all existing parameter set file(s)
+    :param bool dryrun: print what files would have been written, but do no work
+    :param bool debug: print internal utility variables
+    :param bool write_meta: write a meta file name 'parameter_study_meta.txt' containing the parameter set file path(s)
 
     :returns: return code
     """
-
-    # Console scripts must parse arguments outside of __main__
-    parser = get_parser()
-    subparser_dictionary = get_parser(return_subparser_dictionary=True)
-    args = parser.parse_args()
-
-    # Set variables from CLI argparse output
-    subcommand = args.subcommand
-    if not subcommand:
-        parser.print_usage()
-        return 0
-    input_file = args.INPUT_FILE
-    if not input_file:
-        subparser_dictionary[subcommand].print_usage()
-        return 0
-    output_file_template = args.OUTPUT_FILE_TEMPLATE
-    output_file = args.OUTPUT_FILE
-    output_file_type = args.output_file_type
-    set_name_template = args.SET_NAME_TEMPLATE
-    previous_parameter_study = args.PREVIOUS_PARAMETER_STUDY
-    overwrite = args.overwrite
-    dryrun = args.dryrun
-    debug = args.debug
-    write_meta = args.write_meta
 
     if debug:
         print(f"subcommand               = {subcommand}")
@@ -184,9 +123,9 @@ def main():
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = {
         _settings._cartesian_product_subcommand: parameter_generators.CartesianProduct,
-        custom_study_subcommand: parameter_generators.CustomStudy,
-        latin_hypercube_subcommand: parameter_generators.LatinHypercube,
-        sobol_sequence_subcommand: parameter_generators.SobolSequence
+        _settings._custom_study_subcommand: parameter_generators.CustomStudy,
+        _settings._latin_hypercube_subcommand: parameter_generators.LatinHypercube,
+        _settings._sobol_sequence_subcommand: parameter_generators.SobolSequence
     }
     parameter_generator = \
         available_parameter_generators[subcommand](
@@ -206,7 +145,3 @@ def main():
     parameter_generator.write()
 
     return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover

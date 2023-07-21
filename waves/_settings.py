@@ -33,7 +33,16 @@ _visualize_exclude = ["/usr/bin"]
 _visualize_default_height = 12
 _visualize_default_width = 36
 _visualize_default_font_size = 10
-_parameter_study_subcommands = ["cartesian_product", "custom_study", "latin_hypercube", "sobol_sequence"]
+_cartesian_product_subcommand = "cartesian_product"
+_custom_study_subcommand = "custom_study"
+_latin_hypercube_subcommand = "latin_hypercube"
+_sobol_sequence_subcommand = "sobol_sequence"
+_parameter_study_subcommands = [
+    _cartesian_product_subcommand,
+    _custom_study_subcommand,
+    _latin_hypercube_subcommand,
+    _sobol_sequence_subcommand
+]
 _parameter_study_description = \
     "Generates parameter studies in various output formats. Writes parameter study to STDOUT by default. If an " \
     "output file template is specified, output one file per parameter set. Output file(s) are written if the file " \
