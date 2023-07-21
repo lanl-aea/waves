@@ -1,11 +1,13 @@
 #! /usr/bin/env python
 
 import pathlib
+import re
 
 import SCons.Defaults
 import SCons.Builder
 import SCons.Environment
 import SCons.Node
+import SCons.Scanner
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
@@ -934,3 +936,67 @@ def sbatch(sbatch_program="sbatch", post_action=None):
         action=action,
         emitter=_first_target_emitter)
     return sbatch_builder
+
+
+def abaqus_input_scanner():
+    """Abaqus input file dependency scanner
+
+    Custom SCons scanner that searches for ``*INCLUDE`` keyword inside Abaqus ``.inp`` files.
+
+    :return: Abaqus input file dependency Scanner
+    :rtype: SCons.Scanner.Scanner
+    """
+    flags = re.IGNORECASE
+    return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'], flags)
+
+
+def _custom_scanner(pattern, suffixes, flags=None):
+    """Custom Scons scanner
+
+    constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
+    suffixes provided. ``_custom_scanner`` will always use the ``re.MULTILINE`` flag
+    https://docs.python.org/3/library/re.html#re.MULTILINE
+
+    :param str pattern: Regular expression pattern.
+    :param list suffixes: List of suffixes of files to search
+    :param int flags: An integer representing the combination of re module flags to be used during compilation.
+                      Additional flags can be combined using the bitwise OR (|) operator. The re.MULTILINE flag is
+                      automatically added to the combination.
+
+    :return: Custom Scons scanner
+    :rtype: Scons.Scanner.Scanner
+    """
+    flags = re.MULTILINE if not flags else re.MULTILINE | flags
+    expression = re.compile(pattern, flags)
+
+    def suffix_only(node_list):
+        """Recursively search for files that end in the given suffixes
+        
+        :param list node_list: List of SCons Node objects representing the nodes to process
+        
+        :return: List of file dependencies to include for recursive scanning
+        :rtype: list
+        """
+        return [node for node in node_list if node.path.endswith(tuple(suffixes))]
+
+    def regex_scan(node, env, path):
+        """Scan function for extracting dependencies from the content of a file based on the given regular expression.
+
+        The interface of the scan function is fixed by SCons. It must include ``node``, ``env`` and ``path``. It may
+        contain additional arguments if needed. For more information please read the SCons Scanner tutorial:
+        https://scons.org/doc/1.2.0/HTML/scons-user/c3755.html
+
+        :param SCons.Node.FS node: SCons Node object representing the file to scan
+        :param SCons.Environment.Environment env: SCons Environment object
+        :param str path: Path argument passed to the scan function
+
+        :return: List of file dependencies found during scanning
+        :rtype: list
+        """
+        contents = node.get_text_contents()
+        includes = expression.findall(contents)
+        includes = [file.strip() for file in includes]
+        return includes
+
+    custom_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
+    return custom_scanner

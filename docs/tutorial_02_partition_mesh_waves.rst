@@ -328,3 +328,58 @@ tutorial is utilizing the outputs generated from executing the same code, but fr
 
 The new output files pertain to the partitioning and meshing steps we added to the workflow. The file extensions are the
 same as when we ran the geometry workflow, but now we have an added ``single_element_mesh.inp`` orphan mesh file.
+
+**********************
+Workflow Visualization
+**********************
+
+View the workflow directed graph by running the following command and opening the image in your preferred image viewer.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize tutorial_02_partition_mesh --output-file tutorial_02_partition_mesh.png --width=28 --height=3 --exclude-list /usr/bin .stdout .jnl .env
+
+The output should look similar to the figure below.
+
+.. raw:: latex
+
+    \begin{landscape}
+        \vspace*{\fill}
+
+.. figure:: tutorial_02_partition_mesh.png
+   :align: center
+
+.. raw:: latex
+
+        \vspace*{\fill}
+    \end{landscape}
+
+As in :ref:`tutorial_geometry_waves`, the visualization of the workflow directed graph looks relatively simple to
+manage. In part, this is because we've removed some of the automanaged output files with the ``--exclude-list`` option
+of the |project| :ref:`waves_visualize_cli` subcommand. Probably you would not try to manage all of these files in a manual
+workflow; however, files like the ``*.stdout`` are important for debugging errors and lose significant value if they
+can't be tied uniquely to the most recent execution.
+
+There are two important features of the new workflow graph. First, notice that the ``single_element_partition.cae`` and
+``single_element_mesh.cae`` files have two dependencies. As defined in the task definitions, they depend on their
+respective Abaqus journal file and the previous script's output ``*.cae`` file. While we defined these tasks in the
+order they need to be executed, this was not strictly necessary and the tasks could be defined in any order within the
+``SConscript`` file. The actual directed graph is assembled automatically by `SCons`_ from the target and source lists
+that define each task. For a simple workflow, this is relatively trivial. As the workflow grows, and especially after
+adding parameter studies, assembling the task execution order will become increasingly difficult and the benefits of the
+build system will become more clear.
+
+Second, notice that all output ``*.cae`` and ``*.inp`` files are tied directly to the ``tutorial_02_partition_mesh``
+alias. This is a result of appending all targets of the workflow to the workflow alias. This is useful if, for instance,
+there are some images produced by an intermediate step which aren't strictly required by the final simulation results
+file. Such files may be useful for plotting geometric images used in documentation, but not necessary for the simulation
+or analysis results. The target alias can capture all relevant intermediate output which isn't captured by the
+simulation results file target and simplify the scons command to execute this workflow.
+
+As the tutorial workflow grows in size an complexity, or for workflows of mature modsim projects, it will become harder
+to view the shape of the directed graph with legible file names. Users are encouraged to build local copies and zoom in
+and out to explore the directed graph. The :ref:`waves_visualize_cli` options for ``--width``, ``--height``, and
+``--font-size`` as well as vector graphic file formats (e.g. ``*.pdf`` output in place of ``*.png``) can help make
+workflow graphs more useful beyond the general impressions of workflow shape and complexity.

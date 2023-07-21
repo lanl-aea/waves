@@ -509,7 +509,6 @@ python_script_input = {
 @pytest.mark.parametrize("post_action, node_count, action_count, target_list",
                          python_script_input.values(),
                          ids=python_script_input.keys())
-@pytest.mark.unittest
 def test_python_script(post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": builders.python_script(post_action)})
@@ -552,7 +551,6 @@ matlab_script_input = {
 @pytest.mark.parametrize("matlab_program, post_action, node_count, action_count, target_list",
                          matlab_script_input.values(),
                          ids=matlab_script_input.keys())
-@pytest.mark.unittest
 def test_matlab_script(matlab_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action)})
@@ -659,10 +657,10 @@ build_odb_extract_input = {
 }
 
 
+@pytest.mark.unittest
 @pytest.mark.parametrize("target, source, env, calls",
                          build_odb_extract_input.values(),
                          ids=build_odb_extract_input.keys())
-@pytest.mark.unittest
 def test_build_odb_extract(target, source, env, calls):
     with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract, \
          patch("pathlib.Path.unlink") as mock_unlink:
@@ -685,7 +683,6 @@ sbatch_input = {
 @pytest.mark.parametrize("sbatch_program, post_action, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
-@pytest.mark.unittest
 def test_sbatch(sbatch_program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(sbatch_program, post_action)})
@@ -694,3 +691,42 @@ def test_sbatch(sbatch_program, post_action, node_count, action_count, target_li
     expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
                        '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
+scanner_input = {                                   # content,       expected_dependencies
+    'has_suffix':             ('**\n*INCLUDE, INPUT=dummy.inp',               ['dummy.inp']),
+    'no_suffix':              ('**\n*INCLUDE, INPUT=dummy.out',               ['dummy.out']),
+    'pattern_not_found':      ( '**\n*DUMMY, STRING=dummy.out',                          []),
+    'multiple_files':     ('**\n*INCLUDE, INPUT=dummy.out\n**'
+                              '**\n*INCLUDE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),
+    'lower_case':             ('**\n*include, input=dummy.out',               ['dummy.out']),
+    'mixed_case':             ('**\n*inClUdE, iNpuT=dummy.out',               ['dummy.out']),
+    'no_leading':                 ('*INCLUDE, INPUT=dummy.out',               ['dummy.out']),
+    'comment':                   ('**INCLUDE, INPUT=dummy.out'
+                              '\n***INCLUDE, INPUT=dummy2.inp',                          []),
+    'mixed_keywords':     ('**\n*INCLUDE, INPUT=dummy.out\n**'
+                                  '\n*DUMMY, INPUT=dummy2.inp',               ['dummy.out']),
+    'trailing_whitespace': ('**\n*INCLUDE, INPUT=dummy.out   ',               ['dummy.out']),
+    'extra_space':         ('**\n*INCLUDE,    INPUT=dummy.out',               ['dummy.out']),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("content, expected_dependencies",
+                         scanner_input.values(),
+                         ids=scanner_input.keys())
+def test_abaqus_input_scanner(content, expected_dependencies):
+    """Tests the expected dependencies based on the mocked content of the file.
+
+    This function does NOT test for recursion.
+
+    :param str content: Mocked content of the file
+    :param list expected_dependencies: List of the expected dependencies
+    """
+    mock_file = unittest.mock.Mock()
+    mock_file.get_text_contents.return_value = content
+    env = SCons.Environment.Environment()
+    scanner = builders.abaqus_input_scanner()
+    dependencies = scanner(mock_file, env)
+    found_files = [file.name for file in dependencies]
+    assert set(found_files) == set(expected_dependencies)

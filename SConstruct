@@ -44,13 +44,23 @@ AddOption(
     help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
             " and it would normally be ignored. (default: '%default')"
 )
+AddOption(
+    "--cov-report",
+    dest="coverage_report",
+    default=False,
+    action="store_true",
+    help="Boolean to add the coverage report options to the pytest alias (default: '%default')"
+)
 
 # ========================================================================================= CONSTRUCTION ENVIRONMENT ===
 # Inherit user's full environment and set project options
-env = Environment(ENV=os.environ.copy(),
-                  variant_dir_base=GetOption("variant_dir_base"),
-                  ignore_documentation=GetOption("ignore_documentation"),
-                  unconditional_build=GetOption("unconditional_build"))
+env = Environment(
+    ENV=os.environ.copy(),
+    variant_dir_base=GetOption("variant_dir_base"),
+    ignore_documentation=GetOption("ignore_documentation"),
+    unconditional_build=GetOption("unconditional_build"),
+    coverage_report=GetOption("coverage_report")
+)
 
 # Find required programs for conditional target ignoring
 required_programs = ['sphinx-build']
@@ -74,7 +84,6 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 if not env['ignore_documentation']:
     build_dir = variant_dir_base / documentation_source_dir
     source_dir = documentation_source_dir
-    SConscript(dirs='.', variant_dir=str(variant_dir_base), exports='source_dir', duplicate=False)
     docs_aliases = SConscript(dirs=documentation_source_dir,
                               variant_dir=str(build_dir),
                               exports=['env', 'project_substitution_dictionary'])
@@ -83,7 +92,7 @@ else:
     docs_aliases = []
 
 # Add pytests
-pytest_aliases = SConscript(dirs=package_source_dir, exports='env', duplicate=False)
+pytest_aliases = SConscript(dirs=".", exports='env', duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available

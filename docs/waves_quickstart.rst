@@ -101,3 +101,15 @@ Output Files
 
    0 directories, 31 files
 
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves visualize --sconstruct waves_quickstart_SConstruct single_element --output-file waves_quickstart.png --width=28 --height=5 --exclude-list .stdout .jnl .env /usr/bin
+
+.. figure:: waves_quickstart.png
+   :align: center

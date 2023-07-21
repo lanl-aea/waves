@@ -24,8 +24,9 @@ def main():
     elif args.subcommand == 'fetch':
         root_directory = _settings._installed_quickstart_directory.parent
         relative_paths = _settings._fetch_subdirectories
-        return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination, requested_paths=args.FILE,
-                            overwrite=args.overwrite, dry_run=args.dry_run, print_available=args.print_available)
+        return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
+                            requested_paths=args.FILE, overwrite=args.overwrite, dry_run=args.dry_run,
+                            print_available=args.print_available)
     elif args.subcommand == 'quickstart':
         root_directory = _settings._installed_quickstart_directory.parent
         relative_paths = [_settings._installed_quickstart_directory.name]
@@ -34,8 +35,8 @@ def main():
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
-                                    exclude_list=args.exclude_list, exclude_regex=args.exclude_regex, 
-                                    height=args.height, width=args.width)
+                                    exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
+                                    height=args.height, width=args.width, font_size=args.font_size)
     else:
         parser.print_help()
 
@@ -151,11 +152,14 @@ def get_parser():
     visualize_parser.add_argument("--sconstruct", type=str, default="SConstruct",
         help="Path to SConstruct file (default: %(default)s)")
     visualize_parser.add_argument("-o", "--output-file", type=str,
-        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' (default: %(default)s)")
+        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
+             "(default: %(default)s)")
     visualize_parser.add_argument("--height", type=int, default=12,
         help="Height of visualization in inches if being saved to a file (default: %(default)s)")
     visualize_parser.add_argument("--width", type=int, default=36,
         help="Width of visualization in inches if being saved to a file (default: %(default)s)")
+    visualize_parser.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
+        help="Font size of file names in points (default: %(default)s)")
     visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
         help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-r", "--exclude-regex", type=str,
@@ -215,7 +219,8 @@ def build(targets, scons_args=None, max_iterations=5, working_directory=None, gi
         while stop_trigger not in scons_stdout.decode("utf-8"):
             count += 1
             if count > max_iterations:
-                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'", file=sys.stderr)
+                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'",
+                      file=sys.stderr)
                 return 2
             print(f"iteration {count}: '{' '.join(command)}'", file=sys.stdout)
             scons_stdout = subprocess.check_output(command, cwd=working_directory)
@@ -246,9 +251,9 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
     if not requested_paths:
         requested_paths = []
     if not root_directory.is_dir():
-        # During "waves quickstart/fetch" sub-command(s), this should only be reached if the package installation structure
-        # doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a sign-of-life that the
-        # installed directory assumptions are correct.
+        # During "waves quickstart/fetch" sub-command(s), this should only be reached if the package installation
+        # structure doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a
+        # sign-of-life that the installed directory assumptions are correct.
         print(f"Could not find '{root_directory}' directory", file=sys.stderr)
         return 1
     from waves import fetch
@@ -260,7 +265,8 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 
 
 def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
-                  height=_settings._visualize_default_height, width=_settings._visualize_default_width):
+                  height=_settings._visualize_default_height, width=_settings._visualize_default_width,
+                  font_size=_settings._visualize_default_font_size):
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -291,7 +297,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
-    visualize.visualize(tree_dict, output_file, height, width)
+    visualize.visualize(tree_dict, output_file, height, width, font_size)
     return 0
 
 

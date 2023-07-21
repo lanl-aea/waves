@@ -5,8 +5,34 @@ Changelog
 #########
 
 *******************
-0.6.21 (unreleased)
+0.6.22 (unreleased)
 *******************
+
+*******************
+0.6.21 (2023-07-21)
+*******************
+
+New Features
+============
+- Added Abaqus input dependency scanner (:issue:`444`, :merge:`602`). By `Sergio Cordova`_.
+
+Documentation
+=============
+- Add the waves visualize image to the geometry tutorial (:issue:`486`, :merge:`603`). By `Kyle Brindley`_.
+- Add the waves visualize image to the partition and mesh tutorial (:issue:`502`, :merge:`606`). By `Kyle Brindley`_.
+- Add waves visualize image and directed graph discussion to all core tutorials (:issue:`504`, :merge:`607`). By `Kyle
+  Brindley`_.
+
+Enhancement
+===========
+- Add option to adjust font size in ``waves visualize`` sub-command (:issue:`501`, :merge:`604`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Add pytest-cov to CI environment (:merge:`599`). By `Kyle Brindley`_.
+- Add coverage report to internal CI jobs (:issue:`496`, :merge:`600`). By `Kyle Brindley`_.
+- Drive the system tests (tutorials) from SCons and pytest (:merge:`601`). By `Kyle Brindley`_.
+- Add an optional epub documentation build (:merge:`605`). By `Kyle Brindley`_.
 
 *******************
 0.6.20 (2023-06-29)

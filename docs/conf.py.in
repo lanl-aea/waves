@@ -18,12 +18,11 @@ authors = [('Kyle Brindley', '<kbrindley@lanl.gov>'),
            ('Sergio Cordova', '<sergioc@lanl.gov>'),
            ('Matthew Fister', '<mwfister@lanl.gov>'),
            ('Scott Ouellette', '<souellette@lanl.gov>')]
-author_latex = ''
-author_manpage = ''
+author_latex = r"\and ".join(author for author, email in authors)
+epub_author = ", ".join(author for author, email in authors)
+author_manpage = ""
 for author, email in authors:
-    author_latex += f"{author} " + r'\and '
     author_manpage += f"{author} {email}, "
-author_latex = author_latex.rstrip(r'\and ')
 author_manpage = author_manpage.rstrip(', ')
 
 # Add paths to API/CLI files
@@ -46,6 +45,9 @@ version = release
 copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
 
 #============================================================================================== SPHINX CONFIGURATION ===
+# Suppress warnings that can't be fixed
+suppress_warnings = ["epub.unknown_project_files", "epub.duplicated_toc_entry"]
+
 # -- Project Variables -------------------------------------------------------
 rst_prolog = f'.. |project| replace:: {_project_name_short}\n.. include:: targets.txt'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
@@ -96,17 +98,19 @@ information.
 """
 
 preamble = """
+\\usepackage{lscape}
 \\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}
 \\AtBeginEnvironment{sphinxVerbatim}{\\scriptsize}
 """
 # Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
 latex_project = project.replace('_', '-')
+latex_basename = f"{latex_project.lower()}-{version}.tex"
 latex_elements = {
     'preamble': preamble,
     'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
 }
 latex_documents = [
-    (master_doc, f"{latex_project.lower()}-{version}.tex", latex_project.upper(), author_latex, 'manual'),
+    (master_doc, latex_basename, latex_project.upper(), author_latex, 'manual'),
 ]
 
 # -- Options for manual page output ---------------------------------------
@@ -118,3 +122,8 @@ man_pages = [
 # Copy button settings
 copybutton_prompt_text = r">>> |> |\.\.\. |\$ |\+(?!\+)"
 copybutton_prompt_is_regexp = True
+
+# -- Options for epub page output -----------------------------------------
+epub_basename = str(pathlib.Path(latex_basename).with_suffix(""))
+epub_title = f"{project.upper()} {version}"
+epub_publisher = "Triad National Security, LLC"

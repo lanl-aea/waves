@@ -125,7 +125,10 @@ def click_arrow(event, annotations, arrows):
                     fig.canvas.draw_idle()
 
 
-def visualize(tree, output_file, height, width):
+def visualize(tree, output_file,
+              height=_settings._visualize_default_height,
+              width=_settings._visualize_default_width,
+              font_size=_settings._visualize_default_font_size):
     """
     Create a visualization showing the tree
 
@@ -133,6 +136,7 @@ def visualize(tree, output_file, height, width):
     :param str output_file: Name of file to store visualization
     :param int height: Height of visualization if being saved to a file
     :param int width: Width of visualization if being saved to a file
+    :param int font_size: Font size of file names in points
     """
     graph = networkx.DiGraph()
     graph.add_nodes_from(tree['nodes'])
@@ -147,15 +151,16 @@ def visualize(tree, output_file, height, width):
 
     box_color = '#5AC7CB'  # Light blue from Waves Logo
     arrow_color = '#B7DEBE'  # Light green from Waves Logo
+    # TODO: separate plot construction from output for easier unit testing
     annotations = dict()
     arrows = dict()
     ax = plt.gca()
     ax.axis('off')
     fig = plt.gcf()
     for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
-        patchA = ax.annotate(A, xy=pos[A], xycoords='data', ha='center', va='center',
+        patchA = ax.annotate(A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
                              bbox=dict(facecolor=box_color, boxstyle='round'))
-        patchB = ax.annotate(B, xy=pos[B], xycoords='data', ha='center', va='center',
+        patchB = ax.annotate(B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
                              bbox=dict(facecolor=box_color, boxstyle='round'))
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
