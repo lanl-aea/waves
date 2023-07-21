@@ -8,6 +8,11 @@ Changelog
 0.7.1 (unreleased)
 ******************
 
+Breaking changes
+================
+- Deprecate the too-general ``parameter_study <study type>`` command line utility in favor of ``waves <study type>`` to
+  avoid utility conflicts with other packages (:issue:`494`, :merge:`612`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Reduce the runtime dependency from the full matplotlib to matplotlib-base following the conda-forge recommendation:
