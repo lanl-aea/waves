@@ -4,9 +4,15 @@
 Changelog
 #########
 
-*******************
-0.6.22 (unreleased)
-*******************
+******************
+0.7.1 (unreleased)
+******************
+
+Internal Changes
+================
+- Reduce the runtime dependency from the full matplotlib to matplotlib-base following the conda-forge recommendation:
+  https://conda-forge.org/docs/maintainer/knowledge_base.html#matplotlib (:issue:`440`, :merge:`611`). By `Kyle
+  Brindley`_.
 
 *******************
 0.6.21 (2023-07-21)
