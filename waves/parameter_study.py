@@ -106,14 +106,14 @@ def get_parser(return_subparser_dictionary=False):
 
     latin_hypercube_parser = subparsers.add_parser(
         latin_hypercube_subcommand,
-        description=_settings._parameter_study_description_quantiles,
+        description=_settings._parameter_study_description,
         help='Latin hypercube generator',
         parents=[parameter_study_parser()]
     )
 
     sobol_sequence_parser = subparsers.add_parser(
         sobol_sequence_subcommand,
-        description=_settings._parameter_study_description_quantiles,
+        description=_settings._parameter_study_description,
         help='Sobol sequence generator',
         parents=[parameter_study_parser()]
     )

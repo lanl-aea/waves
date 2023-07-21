@@ -168,12 +168,13 @@ def get_parser():
     visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
 
-    cartesian_product_parser = subparsers.add_parser(
-        _settings._cartesian_product_subcommand,
-        description=_settings._parameter_study_description,
-        help='Create a cartesian product parameter study',
-        parents=[parameter_study_parser()]
-    )
+    for subcommand in _settings._parameter_study_subcommands:
+        subparsers.add_parser(
+            subcommand,
+            description=_settings._parameter_study_description,
+            help=f"Create a {subcommand.replace('_', ' ')} parameter study",
+            parents=[parameter_study_parser()]
+        )
 
     return main_parser
 
