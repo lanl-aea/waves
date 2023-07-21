@@ -115,8 +115,8 @@ require the configuration time parameter generation tool to perform its own cond
 parameter set files that are produced.
 
 The `WAVES`_ package includes a collection of command line utilities and Python modules to aid in adopting software
-build systems for engineering workflows. The `WAVES`_ parameter generator utility, :ref:`parameter_study_cli`, is
-designed to work with most build systems, but was originally developed with the requirements of `CMake`_ in mind.
+build systems for engineering workflows. The `WAVES`_ parameter generator command line interface(s) are designed to work
+with most build systems, but was originally developed with the requirements of `CMake`_ in mind.
 
 The `WAVES`_ :ref:`user_manual` focuses on extending the build system `SCons`_ because `SCons`_ configuration files use
 `Python`_ as a fully featured scripting language. This choice is primarily driven by the familiarity of the engineering
