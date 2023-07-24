@@ -21,6 +21,27 @@ from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
 
 
+def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
+    """Return the value of an older kwarg and raise a deprecation warning pointing to the new kwarg
+
+    >>> def function_with_kwarg_change(new_kwarg="something", **kwargs):
+    >>>     old_kwarg = waves.builders._warn_kwarg_change()
+    >>>     new_kwarg = old_kwarg if old_kwarg is not None else new_kwarg
+
+    :param dict kwargs: The ``**kwargs`` dictionary from a function interface
+    :param str old_kwarg: The older kwarg key. Return the value and raise a warning if found. Return None if not found
+        or not populated.
+    """
+    program = None
+    if old_kwarg in kwargs and kwargs[old_kwarg]:
+        import warnings
+        message = f"The '{old_kwarg}' keyword argument will be deprecated in a future version. " \
+                  f"Use the '{new_kwarg}' keyword argument instead."
+        warning.warn(message, DeprecationWarning)
+        program = kwargs[old_kwarg]
+    return program
+
+
 def project_help_message(env=None, append=True):
     """Add default targets and alias lists to project help message
 
@@ -376,6 +397,9 @@ def abaqus_journal(program="abaqus", post_action=None, **kwargs):
     :return: Abaqus journal builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
+    program = abaqus_program if abaqus_program is not None else program
     if not post_action:
         post_action = []
     action = [f"{_cd_action_prefix} {program} -information environment > " \
@@ -511,6 +535,9 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
     :return: Abaqus solver builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
+    program = abaqus_program if abaqus_program is not None else program
     if not post_action:
         post_action = []
     action = [f"{_cd_action_prefix} {program} -information environment > " \
@@ -717,6 +744,9 @@ def matlab_script(program="matlab", post_action=None, **kwargs):
     :return: Matlab script builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and matlab_program check for v1.0.0 release
+    matlab_program = _warn_kwarg_change(kwargs, "matlab_program")
+    program = matlab_program if matlab_program is not None else program
     if not post_action:
         post_action = []
     action = [f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
@@ -849,6 +879,9 @@ def abaqus_extract(program="abaqus", **kwargs):
     :return: Abaqus extract builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
+    program = abaqus_program if abaqus_program is not None else program
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
@@ -927,6 +960,9 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
     :return: SLURM sbatch builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and sbatch_program check for v1.0.0 release
+    sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
+    program = sbatch_program if sbatch_program is not None else program
     if not post_action:
         post_action = []
     action = [f"{_cd_action_prefix} {program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
@@ -971,9 +1007,9 @@ def _custom_scanner(pattern, suffixes, flags=None):
 
     def suffix_only(node_list):
         """Recursively search for files that end in the given suffixes
-        
+
         :param list node_list: List of SCons Node objects representing the nodes to process
-        
+
         :return: List of file dependencies to include for recursive scanning
         :rtype: list
         """
