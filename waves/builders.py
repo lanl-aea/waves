@@ -332,7 +332,7 @@ def _abaqus_journal_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def abaqus_journal(program="abaqus", post_action=None):
+def abaqus_journal(program="abaqus", post_action=None, **kwargs):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -442,7 +442,7 @@ def _abaqus_datacheck_solver_emitter(target, source, env):
     return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
-def abaqus_solver(program="abaqus", post_action=None, emitter=None):
+def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -674,7 +674,7 @@ def _matlab_script_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def matlab_script(program="matlab", post_action=None):
+def matlab_script(program="matlab", post_action=None, **kwargs):
     """Matlab script SCons builder
 
     .. warning::
@@ -808,7 +808,7 @@ def _abaqus_extract_emitter(target, source, env):
     return target, source
 
 
-def abaqus_extract(program="abaqus"):
+def abaqus_extract(program="abaqus", **kwargs):
     """Abaqus ODB file extraction Builder
 
     This builder executes the ``odb_extract`` command line utility against an ODB file in the source list. The ODB file
@@ -891,7 +891,7 @@ def _build_odb_extract(target, source, env):
     return None
 
 
-def sbatch(program="sbatch", post_action=None):
+def sbatch(program="sbatch", post_action=None, **kwargs):
     """SLURM sbatch SCons builder
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
