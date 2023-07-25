@@ -21,6 +21,8 @@ from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
 
 
+# TODO: Remove the **kwargs check and warning for v1.0.0 release
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
 def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
     """Return the value of an old kwarg and raise a deprecation warning pointing to the new kwarg
 
@@ -403,6 +405,7 @@ def abaqus_journal(program="abaqus", post_action=None, **kwargs):
     :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
     if not post_action:
@@ -541,6 +544,7 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
     :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
     if not post_action:
@@ -750,6 +754,7 @@ def matlab_script(program="matlab", post_action=None, **kwargs):
     :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and matlab_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     matlab_program = _warn_kwarg_change(kwargs, "matlab_program")
     program = matlab_program if matlab_program is not None else program
     if not post_action:
@@ -885,6 +890,7 @@ def abaqus_extract(program="abaqus", **kwargs):
     :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
     abaqus_extract_builder = SCons.Builder.Builder(
@@ -966,6 +972,7 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
     :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and sbatch_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
     program = sbatch_program if sbatch_program is not None else program
     if not post_action:
