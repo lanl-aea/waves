@@ -19,7 +19,7 @@ Breaking changes
 Documentation
 =============
 - Update the tutorial and template modsim model name to reflect the geometry instead of the mesh (:issue:`461`,
-  :merge:`614`). By `Kyle Brindley`_.
+  :merge:`614`, :merge:`615`). By `Kyle Brindley`_.
 - Trim down the README to focus on end users. Move developer notes directly into the HTML developer manual
   (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
 
@@ -28,6 +28,7 @@ Internal Changes
 - Reduce the runtime dependency from the full matplotlib to matplotlib-base following the conda-forge recommendation:
   https://conda-forge.org/docs/maintainer/knowledge_base.html#matplotlib (:issue:`440`, :merge:`611`). By `Kyle
   Brindley`_.
+- Explore a draft correlation coefficients post-procesing tutorial (:merge:`615`). By `Kyle Brindley`_.
 
 *******************
 0.6.21 (2023-07-21)
