@@ -78,6 +78,8 @@ def check_expected_targets(nodes, solver, stem, suffixes):
     assert set(expected_suffixes) == set(suffixes)
 
 
+# TODO: Remove the **kwargs check and warning for v1.0.0 release
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
 def test_warn_kwarg_change():
     with patch("warnings.warn") as mock_warn:
         program = builders._warn_kwarg_change({'old_kwarg': True}, "old_kwarg", new_kwarg="new_kwarg")
