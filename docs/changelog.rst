@@ -20,6 +20,8 @@ Documentation
 =============
 - Update the tutorial and template modsim model name to reflect the geometry instead of the mesh (:issue:`461`,
   :merge:`614`). By `Kyle Brindley`_.
+- Trim down the README to focus on end users. Move developer notes directly into the HTML developer manual
+  (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
