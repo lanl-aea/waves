@@ -33,7 +33,7 @@ output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
 kwargs={'seed': 42, 'calc_second_order': False}
-model = "single_element"
+model = "rectangle"
 simulation_constants = {
     'global_seed': 1,
     'displacement': -0.01
