@@ -661,11 +661,11 @@ def test_abaqus_extract():
 source_file = fs.File("/dummy.source")
 target_file = fs.File("/dummy.target")
 build_odb_extract_input = {
-    "no kwargs": ([target_file], [source_file], {"abaqus_program": "NA"},
+    "no kwargs": ([target_file], [source_file], {"program": "NA"},
                   [call([f"{root_fs}dummy.source"], f"{root_fs}dummy.target", output_type="h5", odb_report_args=None,
                        abaqus_command="NA", delete_report_file=False)]),
     "all kwargs": ([target_file], [source_file],
-                   {"abaqus_program": "NA", "output_type": "different", "odb_report_args": "notnone",
+                   {"program": "NA", "output_type": "different", "odb_report_args": "notnone",
                     "delete_report_file": True},
                    [call([f"{root_fs}dummy.source"], f"{root_fs}dummy.target", output_type="different", odb_report_args="notnone",
                         abaqus_command="NA", delete_report_file=True)])
