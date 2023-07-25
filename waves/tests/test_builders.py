@@ -320,22 +320,19 @@ abaqus_journal_input = {
                          ids=abaqus_journal_input.keys())
 def test_abaqus_journal(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(program, post_action)})
-    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
                        '${TARGET.filebase}.abaqus_v6.env\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} cae -noGui ${{SOURCE.abspath}} ' \
                        '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
+
+    env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(program, post_action)})
+    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
     # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     env.Append(BUILDERS={"AbaqusJournalDeprecatedKwarg": builders.abaqus_journal(abaqus_program=program, post_action=post_action)})
-    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
-                       '${TARGET.filebase}.abaqus_v6.env\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {program} cae -noGui ${{SOURCE.abspath}} ' \
-                       '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
+    nodes = env.AbaqusJournalDeprecatedKwarg(target=target_list, source=["journal.py"], journal_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
@@ -459,25 +456,21 @@ abaqus_solver_input = {
                          ids=abaqus_solver_input.keys())
 def test_abaqus_solver(program, post_action, node_count, action_count, source_list, emitter, suffixes):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(program, post_action, emitter)})
-    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
     expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
                        '${job_name}.abaqus_v6.env\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} -job ${{job_name}} -input ' \
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
                        '> ${job_name}.stdout 2>&1'
+
+    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(program, post_action, emitter)})
+    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
     check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
     # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     env.Append(BUILDERS={"AbaqusSolverDeprecatedKwarg": builders.abaqus_solver(abaqus_program=program, post_action=post_action, emitter=emitter)})
-    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
-                       '${job_name}.abaqus_v6.env\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {program} -job ${{job_name}} -input ' \
-                       '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
-                       '> ${job_name}.stdout 2>&1'
+    nodes = env.AbaqusSolverDeprecatedKwarg(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
     check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
@@ -592,8 +585,6 @@ matlab_script_input = {
                          ids=matlab_script_input.keys())
 def test_matlab_script(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"MatlabScript": builders.matlab_script(program, post_action)})
-    nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
     expected_string = f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
@@ -603,21 +594,15 @@ def test_matlab_script(program, post_action, node_count, action_count, target_li
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '${SOURCE.filebase}(${script_options})\" ' \
                           '> ${TARGET.filebase}.stdout 2>&1'
+
+    env.Append(BUILDERS={"MatlabScript": builders.matlab_script(program, post_action)})
+    nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
     # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     env.Append(BUILDERS={"MatlabScriptDeprecatedKwarg": builders.matlab_script(matlab_program=program, post_action=post_action)})
-    nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
-                          '"path(path, \'${SOURCE.dir.abspath}\'); ' \
-                          '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
-                          'disp(cell2table(fileList)); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
-                          '> ${TARGET.filebase}.matlab.env 2>&1\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
-                          '"path(path, \'${SOURCE.dir.abspath}\'); ' \
-                          '${SOURCE.filebase}(${script_options})\" ' \
-                          '> ${TARGET.filebase}.stdout 2>&1'
+    nodes = env.MatlabScriptDeprecatedKwarg(target=target_list, source=["matlab_script.py"], script_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
@@ -739,20 +724,19 @@ sbatch_input = {
                          ids=sbatch_input.keys())
 def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait ${{slurm_options}} ' \
+                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+
     env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(program, post_action)})
     nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
                             slurm_job="echo $SOURCE > $TARGET")
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait ${{slurm_options}} ' \
-                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
     # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     env.Append(BUILDERS={"SlurmSbatchDeprecatedKwarg": builders.sbatch(sbatch_program=program, post_action=post_action)})
-    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
+    nodes = env.SlurmSbatchDeprecatedKwarg(target=target_list, source=["source.in"], slurm_options="",
                             slurm_job="echo $SOURCE > $TARGET")
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait ${{slurm_options}} ' \
-                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
