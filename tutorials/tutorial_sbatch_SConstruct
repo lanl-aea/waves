@@ -69,7 +69,7 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 def solve_builder_select():
     """Run the SLURM sbatch builder if available. Fall back to AbaqusSolver builder in not."""
     if env["sbatch"]:
-        return waves.builders.sbatch(sbatch_program=env['sbatch'])
+        return waves.builders.sbatch(program=env['sbatch'])
     else:
         return waves.builders.abaqus_solver(program=env['abaqus'])
 
