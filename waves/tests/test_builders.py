@@ -80,8 +80,17 @@ def check_expected_targets(nodes, solver, stem, suffixes):
 
 def test_warn_kwarg_change():
     with patch("warnings.warn") as mock_warn:
-        builders._warn_kwarg_change({'old_kwarg': True}, "old_kwarg", new_kwarg="new_kwarg")
+        program = builders._warn_kwarg_change({'old_kwarg': True}, "old_kwarg", new_kwarg="new_kwarg")
         mock_warn.assert_called_once()
+        assert program == True
+    with patch("warnings.warn") as mock_warn:
+        program = builders._warn_kwarg_change({'old_kwarg': False}, "old_kwarg", new_kwarg="new_kwarg")
+        mock_warn.assert_not_called()
+        assert program == None
+    with patch("warnings.warn") as mock_warn:
+        program = builders._warn_kwarg_change({}, "old_kwarg", new_kwarg="new_kwarg")
+        mock_warn.assert_not_called()
+        assert program == None
 
 
 prepend_env_input = {
