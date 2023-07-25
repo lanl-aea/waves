@@ -10,7 +10,7 @@ from eabm_package.argparse_types import positive_float
 
 
 def main(input_file, output_file, model_name, part_name, width, height):
-    """Partition the simple rectangle geometry created by ``single_element_geometry.py``
+    """Partition the simple rectangle geometry created by ``rectangle_geometry.py``
 
     This script partitions a simple Abaqus model with a single rectangle part.
 
@@ -25,7 +25,7 @@ def main(input_file, output_file, model_name, part_name, width, height):
     * ``right`` - right edge
     * ``bottom`` - bottom edge
 
-    :param str input_file: The Abaqus model file created by ``single_element_geometry.py`` without extension. Will be
+    :param str input_file: The Abaqus model file created by ``rectangle_geometry.py`` without extension. Will be
         appended with the required extension, e.g. ``input_file``.cae
     :param str output_file: The output file for the Abaqus model without extension. Will be appended with the required
         extension, e.g. ``output_file``.cae
@@ -99,12 +99,12 @@ def get_parser():
     default_height = 1.0
 
     prog = "abaqus cae -noGui {} --".format(basename)
-    cli_description = "Partition the simple rectangle geometry created by ``single_element_geometry.py`` " \
+    cli_description = "Partition the simple rectangle geometry created by ``rectangle_geometry.py`` " \
                       "and write an ``output_file``.cae Abaqus model file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
-                        help="The Abaqus model file created by ``single_element_geometry.py`` without extension. " \
+                        help="The Abaqus model file created by ``rectangle_geometry.py`` without extension. " \
                              "Will be appended with the required extension, e.g. ``input_file``.cae")
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
                         help="The output file for the Abaqus model without extension. Will be appended with the " \

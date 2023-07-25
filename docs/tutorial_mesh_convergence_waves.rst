@@ -40,11 +40,11 @@ Directory Structure
 Parameter Study File
 ********************
 
-4. Create a new file ``eabm_package/python/single_element_compression_mesh_convergence.py`` from the content below.
+4. Create a new file ``eabm_package/python/rectangle_compression_mesh_convergence.py`` from the content below.
 
-.. admonition:: waves-tutorials/eabm_package/python/single_element_compression_mesh_convergence.py
+.. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_mesh_convergence.py
 
-   .. literalinclude:: python_single_element_compression_mesh_convergence.py
+   .. literalinclude:: python_rectangle_compression_mesh_convergence.py
       :language: Python
 
 This parameter study will define a mesh convergence study where the global size of the finite elements in the model is
@@ -87,7 +87,7 @@ SConscript
       :emphasize-lines: 19, 37-41
 
 The highlighted code above points out two key changes from ``diff`` at the beginning of the file. First, we import the
-``parameter_schema`` from the ``single_element_compression_mesh_convergence.py`` file you created in the beginning of
+``parameter_schema`` from the ``rectangle_compression_mesh_convergence.py`` file you created in the beginning of
 this tutorial. The second change is the addition of a ``simulation_constants`` dictionary. This parameter study only
 changes the meshing ``global_seed`` parameter, and all other model parameters stay constant. One way to achieve this
 would be to set the remaining parameters as single-value parameter sets in the ``parameter_schema``. This was done with
@@ -110,14 +110,14 @@ differences:
 
 * The code pertainting to ``# Geometry`` and ``# Partition`` has been moved out of the parameter study's ``for`` loop.
   As this parameter study only involves a meshing parameter, the Geometry and Partition workflow steps need only happen
-  once. Then, the mesh convergence parameter study can re-use ``single_element_partition.cae`` as a common source.
+  once. Then, the mesh convergence parameter study can re-use ``rectangle_partition.cae`` as a common source.
 * Note the highlighted lines for the ``target`` definitions in the ``# Geometry`` and ``# Partition`` code. Since this
   code is no longer inside of the ``for`` loop, the ``set_name`` directory has been dropped from the ``target``
   definitions. As the first bullet alluded to, the targets for ``# Geometry`` and ``# Partition`` will be built in the
   overall build directory, ``build/tutorial_mesh_convergence``.
 * The folling two highlighted lines are necessary for the parameterized ``# Mesh`` workflow steps to re-use a common
-  target. First, the SCons file object for the ``single_element_partition.cae`` file is extracted from the target list,
-  ``partition_target`` as a source. The absolute path to the ``single_element_partition.cae`` file in the build
+  target. First, the SCons file object for the ``rectangle_partition.cae`` file is extracted from the target list,
+  ``partition_target`` as a source. The absolute path to the ``rectangle_partition.cae`` file in the build
   directory is made available as a variable in the second highlighted line.
 * The final highlighted line shows how the ``simulation_variables`` dictionary is constructed by combining the
   ``simulation_constants`` and the ``global_seed`` parameters for every simulation.
@@ -132,12 +132,12 @@ differences:
       :emphasize-lines: 3, 9, 12-13
 
 The highlighted lines above demonstrate the usage of ``--input-file`` and ``--output--file`` command line arguments for
-the ``single_element_mesh.py`` file. In previous tutorials, we have accepted the default values for input and output
+the ``rectangle_mesh.py`` file. In previous tutorials, we have accepted the default values for input and output
 files. In this case, however, we must specify that a common input file is used, as we want to re-use the target from the
-Partition workflow as a source. If we would have accepted the default input file name, the ``single_element_mesh.py``
-script would try to open a ``single_element_partition.cae`` file in every parameter study build directory. The script
-would fail to do so, because ``single_element_partition.cae`` resides a directory upward in the main build directory. We
-avoid this issue by providing the absolute path to ``single_element_partition.cae`` as the ``--input-file``.
+Partition workflow as a source. If we would have accepted the default input file name, the ``rectangle_mesh.py``
+script would try to open a ``rectangle_partition.cae`` file in every parameter study build directory. The script
+would fail to do so, because ``rectangle_partition.cae`` resides a directory upward in the main build directory. We
+avoid this issue by providing the absolute path to ``rectangle_partition.cae`` as the ``--input-file``.
 
 The ``--output-file`` command line argument is specified in this case only for demonstration (the default value would
 actually work just fine). It is important to note that the ``--output-file`` name is **not** given as ``set_name /
@@ -146,9 +146,9 @@ directory to the parent directory of the first specified target, then the journa
 explained further in the :meth:`waves.builders.abaqus_journal` API.
 
 The highlighted line containing ``partition_cae_object`` demonstrates the usage of an ``SCons`` file object as a source.
-Rather than pointing to the ``single_element_partition.cae`` file via absolute path, we can let ``SCons`` find the file
+Rather than pointing to the ``rectangle_partition.cae`` file via absolute path, we can let ``SCons`` find the file
 for us in the build directory. This is achieved by simply pointing to the ``SCons`` file object that was created when we
-specified ``single_element_partition.cae`` as a target in the ``# Partition`` workflow.
+specified ``rectangle_partition.cae`` as a target in the ``# Partition`` workflow.
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence
 
@@ -198,8 +198,8 @@ Build Targets
    $ scons tutorial_mesh_convergence --jobs=4
 
 The output from building the targets is not shown explicitly here, but look for one particular thing in your terminal
-output. You should notice the execution of the ``single_element_geometry.py`` and ``single_element_partition.py``
-scripts first, and then the parameter study is kicked off with multiple executions of the ``single_element_mesh.py``
+output. You should notice the execution of the ``rectangle_geometry.py`` and ``rectangle_partition.py``
+scripts first, and then the parameter study is kicked off with multiple executions of the ``rectangle_mesh.py``
 script.
 
 ************

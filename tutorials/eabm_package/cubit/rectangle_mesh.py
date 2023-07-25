@@ -7,7 +7,7 @@ import cubit
 
 
 def main(input_file, output_file, global_seed):
-    """Mesh the simple rectangle geometry partitioned by ``single_element_partition.py``
+    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``
 
     This script meshes a simple Cubit model with a single rectangle part.
 
@@ -26,7 +26,7 @@ def main(input_file, output_file, global_seed):
 
     * ``ELEMENTS`` - all part elements
 
-    :param str input_file: The Cubit model file created by ``single_element_geometry.py`` without extension. Will be
+    :param str input_file: The Cubit model file created by ``rectangle_geometry.py`` without extension. Will be
         appended with the required extension, e.g. ``input_file``.cub
     :param str output_file: The output file for the Cubit model without extension. Will be appended with the required
         extension, e.g. ``output_file``.cub
@@ -86,12 +86,12 @@ def get_parser():
     default_global_seed = 1.0
 
     prog = f"python {script_name.name} "
-    cli_description = "Mesh the simple rectangle geometry partitioned by ``single_element_partition.py`` " \
+    cli_description = "Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py`` " \
                       "and write an ``output_file``.cub Cubit model file and ``output_file``.inp orphan mesh file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
-                        help="The Cubit model file created by ``single_element_geometry.py`` without extension. " \
+                        help="The Cubit model file created by ``rectangle_geometry.py`` without extension. " \
                              "Will be appended with the required extension, e.g. ``input_file``.cub")
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
                         help="The output file for the Cubit model without extension. Will be appended with the " \

@@ -4,23 +4,23 @@
 |PROJECT| CLI
 #############
 
-single_element_geometry.py
+rectangle_geometry.py
 ==========================
 
 .. argparse::
-    :ref: eabm_package.single_element_geometry.get_parser
+    :ref: eabm_package.rectangle_geometry.get_parser
 
-single_element_partition.py
+rectangle_partition.py
 ===========================
 
 .. argparse::
-    :ref: eabm_package.single_element_partition.get_parser
+    :ref: eabm_package.rectangle_partition.get_parser
 
-single_element_mesh.py
+rectangle_mesh.py
 ======================
 
 .. argparse::
-    :ref: eabm_package.single_element_mesh.get_parser
+    :ref: eabm_package.rectangle_mesh.get_parser
 
 post_processing.py
 ==================

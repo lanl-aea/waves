@@ -75,33 +75,33 @@ Directory Structure
 Solver Input Files
 ******************
 
-4. Copy the ``eabm_package/abaqus/single_element_compression.inp`` file and all of its contents to a new file in the
-   same directory named ``single_element_compression.inp.in``. **Note:** the only change in the file name is the
+4. Copy the ``eabm_package/abaqus/rectangle_compression.inp`` file and all of its contents to a new file in the
+   same directory named ``rectangle_compression.inp.in``. **Note:** the only change in the file name is the
    addition of the ``.in`` suffix.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-tutorials
-   $ cp eabm_package/abaqus/single_element_compression.inp eabm_package/abaqus/single_element_compression.inp.in
+   $ cp eabm_package/abaqus/rectangle_compression.inp eabm_package/abaqus/rectangle_compression.inp.in
 
 In this tutorial, we will be modifying several files from :ref:`tutorial_simulation_waves`, the first of which is
-``single_element_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
+``rectangle_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
 the ``.in`` extension for the purposes of *parameter substitution*. This change is made so it is easy for the
 :meth:`waves.builders.copy_substitute` method to identify which files should be searched for parameters. Any files with
 the ``.in`` extension that are passed to the :meth:`waves.builders.copy_substitute` method will be parsed for
 characters matching the parameter definitions using substitution with `SCons Substfile`_. This is discussed in
 more detail later in this tutorial.
 
-5. Use the ``diff`` below to modify your ``single_element_compression.inp.in`` file.
+5. Use the ``diff`` below to modify your ``rectangle_compression.inp.in`` file.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_compression.inp.in
+.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_compression.inp.in
 
-   .. literalinclude:: abaqus_single_element_compression.inp.in
+   .. literalinclude:: abaqus_rectangle_compression.inp.in
       :language: text
-      :diff: abaqus_single_element_compression.inp
+      :diff: abaqus_rectangle_compression.inp
 
-The modification made to the ``single_element_compression.inp.in`` file is to replace the hardcoded displacement value
+The modification made to the ``rectangle_compression.inp.in`` file is to replace the hardcoded displacement value
 of ``-1.0`` with the parameter substitution key ``@displacement@``. Note that the `SCons Substfile`_ builder performs a
 literal string substitution in the target file, so it is necessary to prepare the correct syntax for the file type where
 the substitution occurs.
@@ -127,8 +127,8 @@ SConscript
 
 In the code you just added, a ``simulation_variables`` dictionary is defined.  Each key-value pair in the
 ``simulation_variables`` dictionary defines a parameter that already exists in several of the scripts we have utilized
-in the previous tutorials. The ``width`` and ``height`` parameters are used in the ``single_element_geometry.py`` and
-``single_element_partition.py`` scripts, and ``global_seed`` is used in the ``single_element_mesh.py`` script. Recall
+in the previous tutorials. The ``width`` and ``height`` parameters are used in the ``rectangle_geometry.py`` and
+``rectangle_partition.py`` scripts, and ``global_seed`` is used in the ``rectangle_mesh.py`` script. Recall
 that each of these scripts is called using a command line interface that has default parameters. See the
 :ref:`waves_eabm_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
 parser for each of these scripts will supply a default value for each command line argument that is not specified
@@ -141,7 +141,7 @@ journal files via the CLI.
 The final key-value pair defined in the ``simulation_variables`` dictionary is ``displacement``. This parameter will be
 used in a slightly different way than the others, as the script that utilizes this parameter does not function with a
 command line interface. Recall from earlier in this tutorial, we created a new file called
-``single_element_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
+``rectangle_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
 the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
 this is implemented with the :meth:`waves.builders.copy_substitute` method will come later in this tutorial.
 
@@ -158,9 +158,9 @@ this is implemented with the :meth:`waves.builders.copy_substitute` method will 
       :emphasize-lines: 7, 11-13, 19, 23-25, 29, 33-34
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
-pass to the command line interfaces for ``single_element_{geometry,partition,mesh}.py``. Using SCons variable
+pass to the command line interfaces for ``rectangle_{geometry,partition,mesh}.py``. Using SCons variable
 substitution as shown in the first highlighted section, we will end up passing a string that looks like the following to
-the ``single_element_geometry.py`` CLI:
+the ``rectangle_geometry.py`` CLI:
 
 .. code-block:: python
 
@@ -190,7 +190,7 @@ source file change.
       :emphasize-lines: 3, 13-15
 
 Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` must be updated to reflect the replacement
-of ``single_element_compression.inp`` with the parameterized ``single_element_compression.inp.in`` file.
+of ``rectangle_compression.inp`` with the parameterized ``rectangle_compression.inp.in`` file.
 
 The final change to be made in the ``tutorial_05_parameter_substitution`` file is to utilize the
 ``substitution_dictionary`` parameter in the usage of the :meth:`waves.builders.copy_substitute` method.
@@ -268,23 +268,23 @@ Build Targets
     scons: done reading SConscript files.
     scons: Building targets ...
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -information
-    environment > single_element_geometry.abaqus_v6.env
+    environment > rectangle_geometry.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- --width 1.0 --height 1.0 >
-    single_element_geometry.stdout 2>&1
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 >
+    rectangle_geometry.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -information
-    environment > single_element_partition.abaqus_v6.env
+    environment > rectangle_partition.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- --width 1.0 --height 1.0 >
-    single_element_partition.stdout 2>&1
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 >
+    rectangle_partition.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -information
-    environment > single_element_mesh.abaqus_v6.env
+    environment > rectangle_mesh.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- --global-seed 1.0 >
-    single_element_mesh.stdout 2>&1
-    Copy("build/tutorial_05_parameter_substitution/single_element_compression.inp.in",
-    "eabm_package/abaqus/single_element_compression.inp.in")
-    Creating 'build/tutorial_05_parameter_substitution/single_element_compression.inp'
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 >
+    rectangle_mesh.stdout 2>&1
+    Copy("build/tutorial_05_parameter_substitution/rectangle_compression.inp.in",
+    "eabm_package/abaqus/rectangle_compression.inp.in")
+    Creating 'build/tutorial_05_parameter_substitution/rectangle_compression.inp'
     Copy("build/tutorial_05_parameter_substitution/assembly.inp", "eabm_package/abaqus/assembly.inp")
     Copy("build/tutorial_05_parameter_substitution/boundary.inp", "eabm_package/abaqus/boundary.inp")
     Copy("build/tutorial_05_parameter_substitution/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -292,10 +292,10 @@ Build Targets
     Copy("build/tutorial_05_parameter_substitution/parts.inp", "eabm_package/abaqus/parts.inp")
     Copy("build/tutorial_05_parameter_substitution/history_output.inp", "eabm_package/abaqus/history_output.inp")
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -information
-    environment > single_element_compression.abaqus_v6.env
+    environment > rectangle_compression.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2022 -job
-    single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
-    single_element_compression.stdout 2>&1
+    rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no >
+    rectangle_compression.stdout 2>&1
     scons: done building targets.
 
 .. _tutorial_parameter_substitution_waves_output_files:
@@ -322,39 +322,39 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- single_element_compression.abaqus_v6.env
-   |-- single_element_compression.com
-   |-- single_element_compression.dat
-   |-- single_element_compression.inp
-   |-- single_element_compression.inp.in
-   |-- single_element_compression.msg
-   |-- single_element_compression.odb
-   |-- single_element_compression.prt
-   |-- single_element_compression.sta
-   |-- single_element_compression.stdout
-   |-- single_element_geometry.abaqus_v6.env
-   |-- single_element_geometry.cae
-   |-- single_element_geometry.jnl
-   |-- single_element_geometry.stdout
-   |-- single_element_mesh.abaqus_v6.env
-   |-- single_element_mesh.cae
-   |-- single_element_mesh.inp
-   |-- single_element_mesh.jnl
-   |-- single_element_mesh.stdout
-   |-- single_element_partition.abaqus_v6.env
-   |-- single_element_partition.cae
-   |-- single_element_partition.jnl
-   `-- single_element_partition.stdout
+   |-- rectangle_compression.abaqus_v6.env
+   |-- rectangle_compression.com
+   |-- rectangle_compression.dat
+   |-- rectangle_compression.inp
+   |-- rectangle_compression.inp.in
+   |-- rectangle_compression.msg
+   |-- rectangle_compression.odb
+   |-- rectangle_compression.prt
+   |-- rectangle_compression.sta
+   |-- rectangle_compression.stdout
+   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   |-- rectangle_geometry.stdout
+   |-- rectangle_mesh.abaqus_v6.env
+   |-- rectangle_mesh.cae
+   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.jnl
+   |-- rectangle_mesh.stdout
+   |-- rectangle_partition.abaqus_v6.env
+   |-- rectangle_partition.cae
+   |-- rectangle_partition.jnl
+   `-- rectangle_partition.stdout
 
    0 directories, 32 files
 
 The output files for this tutorial are very similar to those from :ref:`tutorial_simulation_waves` with a few key
 differences.
 
-Most importantly, note that the build directory contains a file named ``single_element_compression.inp.in``, which is
-the file we created earlier in this tutorial. There is also a file named ``single_element_compression.inp``.
+Most importantly, note that the build directory contains a file named ``rectangle_compression.inp.in``, which is
+the file we created earlier in this tutorial. There is also a file named ``rectangle_compression.inp``.
 
-11. Investigate the contents of ``single_element_compression.inp`` using your preferred text editor. Specifically, look
+11. Investigate the contents of ``rectangle_compression.inp`` using your preferred text editor. Specifically, look
     in the step definition where we defined the ``displacement`` parameter. You should see the following:
 
 .. code-block:: text
@@ -366,17 +366,17 @@ the file we created earlier in this tutorial. There is also a file named ``singl
    .005, 1.00, 0.000001, 0.5
    **
    *BOUNDARY,OP=MOD
-   A.single_element.top,2,2,-0.01
+   A.rectangle.top,2,2,-0.01
    **
 
-With the use of the :meth:`waves.builders.copy_substitute` method, we used the ``single_element_compression.inp.in``
-file as the source and the ``single_element_compression.inp`` file was the target. The builder acted by substituting the
+With the use of the :meth:`waves.builders.copy_substitute` method, we used the ``rectangle_compression.inp.in``
+file as the source and the ``rectangle_compression.inp`` file was the target. The builder acted by substituting the
 parameter key ``@displacement@`` with the parameter value ``-1.0``, and then generated the target with this information
 in the text, as shown above.
 
 It is also worth noting that that there are 50 files in the ``build/tutorial_05_parameter_substitution`` directory
 compared to the 43 files from :ref:`tutorial_simulation_waves`. Other than the addition of the
-``single_element_compression.inp.in`` file, the difference is the addition of the files with ``.par``, ``.pes``, and
+``rectangle_compression.inp.in`` file, the difference is the addition of the files with ``.par``, ``.pes``, and
 ``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information
 about the information that these files provide.
 

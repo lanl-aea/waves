@@ -88,21 +88,21 @@ installation of Python 2. The API and CLI built from the Cubit journal files' do
 :ref:`waves_eabm_api` for :ref:`cubit_journal_api` and the :ref:`waves_eabm_cli` for :ref:`cubit_journal_cli`,
 respectively.
 
-.. admonition:: waves-tutorials/eabm_package/cubit/single_element_geometry.py
+.. admonition:: waves-tutorials/eabm_package/cubit/rectangle_geometry.py
 
-   .. literalinclude:: cubit_single_element_geometry.py
+   .. literalinclude:: cubit_rectangle_geometry.py
        :language: Python
        :lineno-match:
 
-.. admonition:: waves-tutorials/eabm_package/cubit/single_element_partition.py
+.. admonition:: waves-tutorials/eabm_package/cubit/rectangle_partition.py
 
-   .. literalinclude:: cubit_single_element_partition.py
+   .. literalinclude:: cubit_rectangle_partition.py
        :language: Python
        :lineno-match:
 
-.. admonition:: waves-tutorials/eabm_package/cubit/single_element_mesh.py
+.. admonition:: waves-tutorials/eabm_package/cubit/rectangle_mesh.py
 
-   .. literalinclude:: cubit_single_element_mesh.py
+   .. literalinclude:: cubit_rectangle_mesh.py
        :language: Python
        :lineno-match:
 
@@ -137,18 +137,18 @@ Build Targets
    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/single_element_geometry.py > single_element_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/single_element_partition.py > single_element_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/single_element_mesh.py > single_element_mesh.stdout 2>&1
-   Copy("build/tutorial_cubit/single_element_compression.inp", "eabm_package/abaqus/single_element_compression.inp")
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/rectangle_mesh.py > rectangle_mesh.stdout 2>&1
+   Copy("build/tutorial_cubit/rectangle_compression.inp", "eabm_package/abaqus/rectangle_compression.inp")
    Copy("build/tutorial_cubit/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_cubit/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_cubit/field_output.inp", "eabm_package/abaqus/field_output.inp")
    Copy("build/tutorial_cubit/materials.inp", "eabm_package/abaqus/materials.inp")
    Copy("build/tutorial_cubit/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_cubit/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -information environment > single_element_compression.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -job single_element_compression -input single_element_compression -double both -interactive -ask_delete no > single_element_compression.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -information environment > rectangle_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && /apps/abaqus/Commands/abq2022 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.
 
 ************
@@ -171,21 +171,21 @@ is specified by name to reduce clutter in the ouptut shown.
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- single_element_compression.abaqus_v6.env
-   |-- single_element_compression.com
-   |-- single_element_compression.dat
-   |-- single_element_compression.inp
-   |-- single_element_compression.msg
-   |-- single_element_compression.odb
-   |-- single_element_compression.prt
-   |-- single_element_compression.sta
-   |-- single_element_compression.stdout
-   |-- single_element_geometry.cub
-   |-- single_element_geometry.stdout
-   |-- single_element_mesh.cub
-   |-- single_element_mesh.inp
-   |-- single_element_mesh.stdout
-   |-- single_element_partition.cub
-   `-- single_element_partition.stdout
+   |-- rectangle_compression.abaqus_v6.env
+   |-- rectangle_compression.com
+   |-- rectangle_compression.dat
+   |-- rectangle_compression.inp
+   |-- rectangle_compression.msg
+   |-- rectangle_compression.odb
+   |-- rectangle_compression.prt
+   |-- rectangle_compression.sta
+   |-- rectangle_compression.stdout
+   |-- rectangle_geometry.cub
+   |-- rectangle_geometry.stdout
+   |-- rectangle_mesh.cub
+   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.stdout
+   |-- rectangle_partition.cub
+   `-- rectangle_partition.stdout
 
    0 directories, 22 files

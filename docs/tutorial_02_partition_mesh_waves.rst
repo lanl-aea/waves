@@ -53,7 +53,7 @@ SConscript
 
 Just like building the geometry in :ref:`tutorial_geometry_waves`, the code you just added instructs SCons on how to
 build the targets for partitioning and meshing our single element part. Again, the ``journal_file`` variable exists
-solely to minimize hard-coded duplication of the strings ``'single_element_partition'`` and ``'single_element_mesh'``.
+solely to minimize hard-coded duplication of the strings ``'rectangle_partition'`` and ``'rectangle_mesh'``.
 
 In the code pertaining to ``# Partition``, we will again pass an empty string for the ``journal_options``. We will
 re-open the discussion of using the journal file's command line interface via the ``journal_options`` variable in
@@ -64,43 +64,43 @@ produce the targets.
 
 Keen readers will note that this source-target definition is slightly different
 from that in :ref:`tutorial_geometry_waves`.  Here, we still specify only one target -
-``single_element_partition.cae``. This target is geneated by *performing an action on not one, but now two sources*. The
-first source is similar to that in :ref:`tutorial_geometry_waves`, where we run the ``single_element_partition.py`` file
+``rectangle_partition.cae``. This target is geneated by *performing an action on not one, but now two sources*. The
+first source is similar to that in :ref:`tutorial_geometry_waves`, where we run the ``rectangle_partition.py`` file
 in the Abaqus kernel, but now the default behavior of the journal is different.
 
 .. TODO: figure out how to link to a specific entry in the CLI. There's gotta be some way to do this similat to :meth:
    directive. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/175
 
-5. Investigate the :ref:`waves_eabm_cli` documentation for the :ref:`abaqus_single_element_partition_cli` file. Notice that
-   a new parameter is defined here that was absent in ``single_element_geometry.py``. This parameter is defined in short
+5. Investigate the :ref:`waves_eabm_cli` documentation for the :ref:`abaqus_rectangle_partition_cli` file. Notice that
+   a new parameter is defined here that was absent in ``rectangle_geometry.py``. This parameter is defined in short
    with ``-i`` or verbosely by ``--input-file``.
 
-The ``--input-file`` command line argument defaults to the string ``'single_element_geometry'`` and does not require a
-file extension. So, we simply need to make sure that the ``single_element_geometry.cae`` file (which is an output from
+The ``--input-file`` command line argument defaults to the string ``'rectangle_geometry'`` and does not require a
+file extension. So, we simply need to make sure that the ``rectangle_geometry.cae`` file (which is an output from
 the code we wrote in :ref:`tutorial_geometry_waves`) be included in the ``source`` list. If
-``single_element_geometry.cae`` were left out of the source list, the SCons build system would not be able to determine
+``rectangle_geometry.cae`` were left out of the source list, the SCons build system would not be able to determine
 that the partition target depends on the geometry target. This would result in an indeterminate race condition in target
 execution order. Incomplete source and target lists also make it impossible for the build system to automatically
-determine when a target needs to be re-built. If not specified as a source, the ``single_element_geometry.cae`` file
-could change and the build system would not know that the ``single_element_partition.cae`` target needs to be re-built.
+determine when a target needs to be re-built. If not specified as a source, the ``rectangle_geometry.cae`` file
+could change and the build system would not know that the ``rectangle_partition.cae`` target needs to be re-built.
 
 With the two sources defined, the :meth:`waves.builders.abaqus_journal` builder has all the information it needs to
-build the ``single_element_partition.cae`` target.
+build the ``rectangle_partition.cae`` target.
 
 In the code pertaining to ``# Mesh``, the trend continues. We will re-assign the ``journal_file`` variable to the
 meshing journal file name  to reduce hard-coded duplication of strings. We define an empty string for
 ``journal_options``, as nothing other than the default is required for this task. We finally extend the workflow to
 utilize the :meth:`waves.builders.abaqus_journal` builder on the ``source`` list. Just like the code for ``#
-Partition``, we have two sources. In this tutorial, we rely on the ``single_element_mesh.py`` CLI default arguments
-which will use the ``single_element_partition.cae`` file as the input model file. Readers are encouraged to return to
+Partition``, we have two sources. In this tutorial, we rely on the ``rectangle_mesh.py`` CLI default arguments
+which will use the ``rectangle_partition.cae`` file as the input model file. Readers are encouraged to return to
 the :ref:`waves_eabm_cli` to become familiar with the command line arguments available for the journal files in this
 tutorial.
 
 The ``target`` list, however, shows another difference with the behavior we have seen previously. Now, we have two
-targets instead of one. You should now be familiar with the behavior that generates the ``single_element_mesh.cae``
-target. The new target is the ``single_element_mesh.inp`` file. This file is called an *orphan mesh* file. When the
-:meth:`waves.builders.abaqus_journal` builder acts on the ``single_element_mesh.py`` file, our two target files are
-created. The orphan mesh file is created by calling the ``export_mesh()`` function within the ``single_element_mesh.py``
+targets instead of one. You should now be familiar with the behavior that generates the ``rectangle_mesh.cae``
+target. The new target is the ``rectangle_mesh.inp`` file. This file is called an *orphan mesh* file. When the
+:meth:`waves.builders.abaqus_journal` builder acts on the ``rectangle_mesh.py`` file, our two target files are
+created. The orphan mesh file is created by calling the ``export_mesh()`` function within the ``rectangle_mesh.py``
 file. See the :ref:`waves_eabm_api` for the :ref:`sphinx_abaqus_journal_utilities_api` file for more information about
 the ``export_mesh()`` function.
 
@@ -119,7 +119,7 @@ Abaqus Journal File
 *******************
 
 Recall from :ref:`tutorial_geometry_waves` that you created an Abaqus journal file called
-``single_element_geometry.py``. You will now create two more for the partitioning and meshing workflows. The reader is
+``rectangle_geometry.py``. You will now create two more for the partitioning and meshing workflows. The reader is
 referred to the following sections in :ref:`tutorial_geometry_waves` for a reminder of different aspects of these
 journal files:
 
@@ -130,16 +130,16 @@ journal files:
 * :ref:`tutorial_geometry_waves_top_level_code_environment`
 * :ref:`tutorial_geometry_waves_retrieving_exit_codes`
 
-6. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_partition.py`` using all the contents
+6. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_partition.py`` using all the contents
    below.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_partition.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_partition.py
 
-    .. literalinclude:: abaqus_single_element_partition.py
+    .. literalinclude:: abaqus_rectangle_partition.py
         :language: Python
         :lineno-match:
 
-The ``single_element_partition.py`` file is layed out in a very similar fashion to ``single_element_geometry.py``. It
+The ``rectangle_partition.py`` file is layed out in a very similar fashion to ``rectangle_geometry.py``. It
 contains a ``main()`` function with `PEP-287`_ formatted docstrings. Within that ``main()`` function is Abaqus python
 code that does a few specific tasks:
 
@@ -155,9 +155,9 @@ code that does a few specific tasks:
 
 * Save the ``output_file`` with the changes made
 
-The :ref:`abaqus_single_element_partition_cli` script also contains an argument parser function, whose auto-generated
+The :ref:`abaqus_rectangle_partition_cli` script also contains an argument parser function, whose auto-generated
 CLI documentation can be found in the :ref:`waves_eabm_cli`. The argument parser functions in a very similar way to that
-in the ``single_element_geometry.py`` file, but a new command line argument ``--input-file`` is added. This command line
+in the ``rectangle_geometry.py`` file, but a new command line argument ``--input-file`` is added. This command line
 argument is how the script knows which file to copy and then modify in the Abaqus python code.
 
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":``
@@ -179,18 +179,18 @@ an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and ``orphan
 orphan mesh file. Orphan mesh files define the entire part's mesh in a text-based file. The node and element locations
 and labels are listed in a tabular format that the Abaqus file parser understands.
 
-8. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_mesh.py`` using all the contents
+8. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_mesh.py`` using all the contents
    below.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_mesh.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_mesh.py
 
-    .. literalinclude:: abaqus_single_element_mesh.py
+    .. literalinclude:: abaqus_rectangle_mesh.py
         :language: Python
         :lineno-match:
 
-The ``single_element_mesh.py`` file will have many similarities in code structure to the ``single_element_geometry.py``
-and ``single_element_partition.py`` files. The first significant change is within the ``import`` statements at the top
-of the file. The ``single_element_mesh.py`` file uses the ``export_mesh()`` function that is imported from the
+The ``rectangle_mesh.py`` file will have many similarities in code structure to the ``rectangle_geometry.py``
+and ``rectangle_partition.py`` files. The first significant change is within the ``import`` statements at the top
+of the file. The ``rectangle_mesh.py`` file uses the ``export_mesh()`` function that is imported from the
 ``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utilities.py`` exists in the
 ``eabm_package/abaqus`` directory, and is never copied to the build directory.
 
@@ -203,12 +203,12 @@ may exist in the active Conda environment.
 
 .. note::
 
-   The ``single_element_mesh.py`` script is also never copied to the build directory, so we can utilize the path of the
-   ``single_element_mesh.py`` file to point to the location of the ``abaqus_journal_utilities`` file as well. The journal
+   The ``rectangle_mesh.py`` script is also never copied to the build directory, so we can utilize the path of the
+   ``rectangle_mesh.py`` file to point to the location of the ``abaqus_journal_utilities`` file as well. The journal
    files are executed via absolute path from within the build directory, so the output from these scripts is placed in
    the build directory.
 
-From this point, the ``main()`` function proceeds to copy the input file just like in ``single_element_partition.py``.
+From this point, the ``main()`` function proceeds to copy the input file just like in ``rectangle_partition.py``.
 The code that follows performs the following tasks within the new ``output_file``:
 
 * Create a part instance that can be meshed. See the `Abaqus Assembly Definition`_ documentation :cite:`ABAQUS` for
@@ -223,11 +223,11 @@ The code that follows performs the following tasks within the new ``output_file`
   ``abaqus_journal_utilities.py``
 * Save the ``output_file`` with the changes made
 
-The ``single_element_mesh.py`` script also contains an argument parser function. This command line interface has yet
+The ``rectangle_mesh.py`` script also contains an argument parser function. This command line interface has yet
 another new argument ``--global-seed``. This argument defines global mesh sizing for the model and has a default value
 that is assigned to the ``global_seed`` variable if not specified when calling the script.
 
-All other aspects of the ``single_element_mesh.py`` file are the same as ``single_element_partition.py``.
+All other aspects of the ``rectangle_mesh.py`` file are the same as ``rectangle_partition.py``.
 
 **********
 SConstruct
@@ -246,7 +246,7 @@ changes made in this tutorial.
         :diff: tutorials_tutorial_01_geometry_SConstruct
 
 Note the `PYTHONPATH`_ modification by `SCons PrependENVPath`_. This modification to the project's construction
-environment will allow Abaqus Python to import the project module files used by ``single_element_mesh.py``.
+environment will allow Abaqus Python to import the project module files used by ``rectangle_mesh.py``.
 
 *************
 Build Targets
@@ -265,17 +265,17 @@ Build Targets
     scons: done reading SConscript files.
     scons: Building targets ...
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 -information
-    environment > single_element_geometry.abaqus_v6.env
+    environment > rectangle_geometry.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 -information
-    environment > single_element_partition.abaqus_v6.env
+    environment > rectangle_partition.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 -information
-    environment > single_element_mesh.abaqus_v6.env
+    environment > rectangle_mesh.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2022 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
     scons: done building targets.
 
 ************
@@ -292,27 +292,27 @@ below.
    $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/
    build/tutorial_01_geometry/
    |-- abaqus.rpy
-   |-- single_element_geometry.abaqus_v6.env
-   |-- single_element_geometry.cae
-   |-- single_element_geometry.jnl
-   `-- single_element_geometry.stdout
+   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   `-- rectangle_geometry.stdout
    build/tutorial_02_partition_mesh/
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
-   |-- single_element_geometry.abaqus_v6.env
-   |-- single_element_geometry.cae
-   |-- single_element_geometry.jnl
-   |-- single_element_geometry.stdout
-   |-- single_element_mesh.abaqus_v6.env
-   |-- single_element_mesh.cae
-   |-- single_element_mesh.inp
-   |-- single_element_mesh.jnl
-   |-- single_element_mesh.stdout
-   |-- single_element_partition.abaqus_v6.env
-   |-- single_element_partition.cae
-   |-- single_element_partition.jnl
-   `-- single_element_partition.stdout
+   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   |-- rectangle_geometry.stdout
+   |-- rectangle_mesh.abaqus_v6.env
+   |-- rectangle_mesh.cae
+   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.jnl
+   |-- rectangle_mesh.stdout
+   |-- rectangle_partition.abaqus_v6.env
+   |-- rectangle_partition.cae
+   |-- rectangle_partition.jnl
+   `-- rectangle_partition.stdout
 
    0 directories, 21 files
 
@@ -327,7 +327,7 @@ tutorial is utilizing the outputs generated from executing the same code, but fr
 :ref:`tutorial_partition_mesh_waves` output files).
 
 The new output files pertain to the partitioning and meshing steps we added to the workflow. The file extensions are the
-same as when we ran the geometry workflow, but now we have an added ``single_element_mesh.inp`` orphan mesh file.
+same as when we ran the geometry workflow, but now we have an added ``rectangle_mesh.inp`` orphan mesh file.
 
 **********************
 Workflow Visualization
@@ -362,8 +362,8 @@ of the |project| :ref:`waves_visualize_cli` subcommand. Probably you would not t
 workflow; however, files like the ``*.stdout`` are important for debugging errors and lose significant value if they
 can't be tied uniquely to the most recent execution.
 
-There are two important features of the new workflow graph. First, notice that the ``single_element_partition.cae`` and
-``single_element_mesh.cae`` files have two dependencies. As defined in the task definitions, they depend on their
+There are two important features of the new workflow graph. First, notice that the ``rectangle_partition.cae`` and
+``rectangle_mesh.cae`` files have two dependencies. As defined in the task definitions, they depend on their
 respective Abaqus journal file and the previous script's output ``*.cae`` file. While we defined these tasks in the
 order they need to be executed, this was not strictly necessary and the tasks could be defined in any order within the
 ``SConscript`` file. The actual directed graph is assembled automatically by `SCons`_ from the target and source lists

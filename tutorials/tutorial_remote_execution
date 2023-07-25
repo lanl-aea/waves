@@ -29,7 +29,7 @@ build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
 relative_build_directory = build_directory.relative_to(project_dir)
 workflow_name = build_directory.name
-model = "single_element"
+model = "rectangle"
 
 # Comment used in tutorial code snippets: marker-1
 

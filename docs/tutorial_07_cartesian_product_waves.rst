@@ -51,15 +51,15 @@ Product`_ sampling methodology.
 
    For more information, see this `Cartesian Product`_ Wiki page.
 
-4. Create a new file ``eabm_package/python/single_element_compression_cartesian_product.py`` from the content below.
+4. Create a new file ``eabm_package/python/rectangle_compression_cartesian_product.py`` from the content below.
 
-.. admonition:: waves-tutorials/eabm_package/python/single_element_compression_cartesian_product.py
+.. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_cartesian_product.py
 
-   .. literalinclude:: python_single_element_compression_cartesian_product.py
+   .. literalinclude:: python_rectangle_compression_cartesian_product.py
       :language: Python
 
-The ``single_element_compression_cartesian_product.py`` file you just created is very similar to the
-``single_element_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference
+The ``rectangle_compression_cartesian_product.py`` file you just created is very similar to the
+``rectangle_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference
 between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note
 that the ``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters
 only have a single value. The :meth:`waves.parameter_generators.CartesianProduct` API explains this requirement for the
@@ -108,7 +108,7 @@ Step-By-Step SConscript Discussion
 The beginning portion of the ``SConscript`` file consists of a series of straight forward Python package import
 statements. There are, however, two notable lines in the included code above. The first hightlighted line imports the
 ``parameter_schema`` dictionary into the ``SConscript`` file's name space from the
-``single_element_compression_cartesian_product`` module that you created in the
+``rectangle_compression_cartesian_product`` module that you created in the
 :ref:`tutorial_cartesian_product_waves_parameter_study_file` portion of this tutorial.  The second import line should
 look familiar, but is worth pointing out again. Here, we import the ``env`` variable from the parent construction
 environment. This will provide access to variables we added to the ``SConstruct`` file's ``project_variables``
@@ -302,29 +302,29 @@ Explore the contents of the ``parameter_set0`` directory using the ``tree`` comm
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- single_element_compression.abaqus_v6.env
-   |-- single_element_compression.com
-   |-- single_element_compression.dat
-   |-- single_element_compression.inp
-   |-- single_element_compression.inp.in
-   |-- single_element_compression.msg
-   |-- single_element_compression.odb
-   |-- single_element_compression.prt
-   |-- single_element_compression.sta
-   |-- single_element_compression.stdout
-   |-- single_element_geometry.abaqus_v6.env
-   |-- single_element_geometry.cae
-   |-- single_element_geometry.jnl
-   |-- single_element_geometry.stdout
-   |-- single_element_mesh.abaqus_v6.env
-   |-- single_element_mesh.cae
-   |-- single_element_mesh.inp
-   |-- single_element_mesh.jnl
-   |-- single_element_mesh.stdout
-   |-- single_element_partition.abaqus_v6.env
-   |-- single_element_partition.cae
-   |-- single_element_partition.jnl
-   `-- single_element_partition.stdout
+   |-- rectangle_compression.abaqus_v6.env
+   |-- rectangle_compression.com
+   |-- rectangle_compression.dat
+   |-- rectangle_compression.inp
+   |-- rectangle_compression.inp.in
+   |-- rectangle_compression.msg
+   |-- rectangle_compression.odb
+   |-- rectangle_compression.prt
+   |-- rectangle_compression.sta
+   |-- rectangle_compression.stdout
+   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   |-- rectangle_geometry.stdout
+   |-- rectangle_mesh.abaqus_v6.env
+   |-- rectangle_mesh.cae
+   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.jnl
+   |-- rectangle_mesh.stdout
+   |-- rectangle_partition.abaqus_v6.env
+   |-- rectangle_partition.cae
+   |-- rectangle_partition.jnl
+   `-- rectangle_partition.stdout
 
    0 directories, 32 files
 

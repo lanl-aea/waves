@@ -15,7 +15,7 @@ import pathlib
 
 import waves
 
-from eabm_package import single_element_compression
+from eabm_package import rectangle_compression
 
 # Inherit the parent construction environment
 Import("env")
@@ -27,8 +27,8 @@ eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_configuration = [env["project_configuration"], workflow_name]
-model = "single_element"
-simulation_variables = single_element_compression.nominal
+model = "rectangle"
+simulation_variables = rectangle_compression.nominal
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []

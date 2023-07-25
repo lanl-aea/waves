@@ -135,39 +135,39 @@ file. You can inspect the contents of the archive as below.
    $ find build -name "*.tar.bz2"
    build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0-tutorial_11_archival.tar.bz2
    $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_11_archival"
-   build/tutorial_11_archival/parameter_set0/single_element_geometry.cae
-   build/tutorial_11_archival/parameter_set0/single_element_geometry.jnl
-   build/tutorial_11_archival/parameter_set0/single_element_geometry.stdout
-   build/tutorial_11_archival/parameter_set0/single_element_geometry.abaqus_v6.env
-   build/tutorial_11_archival/parameter_set0/single_element_partition.cae
-   build/tutorial_11_archival/parameter_set0/single_element_partition.jnl
-   build/tutorial_11_archival/parameter_set0/single_element_partition.stdout
-   build/tutorial_11_archival/parameter_set0/single_element_partition.abaqus_v6.env
-   build/tutorial_11_archival/parameter_set0/single_element_mesh.inp
-   build/tutorial_11_archival/parameter_set0/single_element_mesh.cae
-   build/tutorial_11_archival/parameter_set0/single_element_mesh.jnl
-   build/tutorial_11_archival/parameter_set0/single_element_mesh.stdout
-   build/tutorial_11_archival/parameter_set0/single_element_mesh.abaqus_v6.env
-   build/tutorial_11_archival/parameter_set0/single_element_compression.inp.in
-   build/tutorial_11_archival/parameter_set0/single_element_compression.inp
+   build/tutorial_11_archival/parameter_set0/rectangle_geometry.cae
+   build/tutorial_11_archival/parameter_set0/rectangle_geometry.jnl
+   build/tutorial_11_archival/parameter_set0/rectangle_geometry.stdout
+   build/tutorial_11_archival/parameter_set0/rectangle_geometry.abaqus_v6.env
+   build/tutorial_11_archival/parameter_set0/rectangle_partition.cae
+   build/tutorial_11_archival/parameter_set0/rectangle_partition.jnl
+   build/tutorial_11_archival/parameter_set0/rectangle_partition.stdout
+   build/tutorial_11_archival/parameter_set0/rectangle_partition.abaqus_v6.env
+   build/tutorial_11_archival/parameter_set0/rectangle_mesh.inp
+   build/tutorial_11_archival/parameter_set0/rectangle_mesh.cae
+   build/tutorial_11_archival/parameter_set0/rectangle_mesh.jnl
+   build/tutorial_11_archival/parameter_set0/rectangle_mesh.stdout
+   build/tutorial_11_archival/parameter_set0/rectangle_mesh.abaqus_v6.env
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.inp.in
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.inp
    build/tutorial_11_archival/parameter_set0/assembly.inp
    build/tutorial_11_archival/parameter_set0/boundary.inp
    build/tutorial_11_archival/parameter_set0/field_output.inp
    build/tutorial_11_archival/parameter_set0/materials.inp
    build/tutorial_11_archival/parameter_set0/parts.inp
    build/tutorial_11_archival/parameter_set0/history_output.inp
-   build/tutorial_11_archival/parameter_set0/single_element_compression.sta
-   build/tutorial_11_archival/parameter_set0/single_element_compression.stdout
-   build/tutorial_11_archival/parameter_set0/single_element_compression.abaqus_v6.env
-   build/tutorial_11_archival/parameter_set0/single_element_compression.odb
-   build/tutorial_11_archival/parameter_set0/single_element_compression.dat
-   build/tutorial_11_archival/parameter_set0/single_element_compression.msg
-   build/tutorial_11_archival/parameter_set0/single_element_compression.com
-   build/tutorial_11_archival/parameter_set0/single_element_compression.prt
-   build/tutorial_11_archival/parameter_set0/single_element_compression.h5
-   build/tutorial_11_archival/parameter_set0/single_element_compression_datasets.h5
-   build/tutorial_11_archival/parameter_set0/single_element_compression.csv
-   build/tutorial_11_archival/parameter_set0/single_element_compression.h5.stdout
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.sta
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.stdout
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.abaqus_v6.env
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.odb
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.dat
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.msg
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.com
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.prt
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.h5
+   build/tutorial_11_archival/parameter_set0/rectangle_compression_datasets.h5
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.csv
+   build/tutorial_11_archival/parameter_set0/rectangle_compression.h5.stdout
    SConstruct
    tutorial_11_archival
 

@@ -26,7 +26,7 @@ cubit_source_abspath = pathlib.Path(env["cubit_source_abspath"])
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
-model = "single_element"
+model = "rectangle"
 
 # Comment used in tutorial code snippets: marker-1
 

@@ -46,22 +46,22 @@ workflow = []
 
 # Geometry, Partition, Mesh
 workflow.extend(env.Command(
-    target=[str(variant_dir_base / "single_element_mesh.cae"), str(variant_dir_base / "single_element_mesh.inp")],
-    source=[str(project_dir / abaqus_source_dir / "single_element_geometry.py"),
-            str(project_dir / abaqus_source_dir / "single_element_partition.py"),
-            str(project_dir / abaqus_source_dir / "single_element_mesh.py")],
-    action=["cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_geometry.py " \
+    target=[str(variant_dir_base / "rectangle_mesh.cae"), str(variant_dir_base / "rectangle_mesh.inp")],
+    source=[str(project_dir / abaqus_source_dir / "rectangle_geometry.py"),
+            str(project_dir / abaqus_source_dir / "rectangle_partition.py"),
+            str(project_dir / abaqus_source_dir / "rectangle_mesh.py")],
+    action=["cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/rectangle_geometry.py " \
             "${abaqus_options} -- --output-file ${TARGET.filebase}",
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_partition.py " \
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/rectangle_partition.py " \
             "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}",
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/single_element_mesh.py " \
+            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/rectangle_mesh.py " \
             "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}"],
     abaqus_program=env['abaqus']
 ))
 
 # SolverPrep
 abaqus_source_list = [
-    project_dir / abaqus_source_dir / "single_element_compression.inp",
+    project_dir / abaqus_source_dir / "rectangle_compression.inp",
     project_dir / abaqus_source_dir / "assembly.inp",
     project_dir / abaqus_source_dir / "boundary.inp",
     project_dir / abaqus_source_dir / "field_output.inp",
@@ -79,27 +79,27 @@ for source_file in abaqus_source_list:
 # Abaqus Solve
 abaqus_options = '-double both'
 solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
-solve_source_list.append(str(variant_dir_base / "single_element_mesh.inp"))
+solve_source_list.append(str(variant_dir_base / "rectangle_mesh.inp"))
 
 solve_targets = [
-    str(variant_dir_base / "single_element_compression.odb"),
-    str(variant_dir_base / "single_element_compression.dat"),
-    str(variant_dir_base / "single_element_compression.msg"),
-    str(variant_dir_base / "single_element_compression.com"),
-    str(variant_dir_base / "single_element_compression.prt"),
-    str(variant_dir_base / "single_element_compression.sta")
+    str(variant_dir_base / "rectangle_compression.odb"),
+    str(variant_dir_base / "rectangle_compression.dat"),
+    str(variant_dir_base / "rectangle_compression.msg"),
+    str(variant_dir_base / "rectangle_compression.com"),
+    str(variant_dir_base / "rectangle_compression.prt"),
+    str(variant_dir_base / "rectangle_compression.sta")
 ]
 
 workflow.extend(env.AbaqusSolver(
     target=solve_targets,
     source=solve_source_list,
     abaqus_program=env['abaqus'],
-    job_name='single_element_compression',
+    job_name='rectangle_compression',
     abaqus_options=abaqus_options))
 
 # Collector alias named after the model simulation
-env.Alias('single_element', workflow)
+env.Alias('rectangle', workflow)
 
 if not env['abaqus']:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring 'single_element' target(s)")
-    Ignore(['.', 'single_element'], workflow)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring 'rectangle' target(s)")
+    Ignore(['.', 'rectangle'], workflow)

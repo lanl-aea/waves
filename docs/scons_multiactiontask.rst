@@ -8,9 +8,9 @@ SCons Multi-Action Tasks
 
 Most build systems use intermediate target files to identify which tasks need to be performed again on subsequent
 execution. The :ref:`scons_quickstart` uses this behavior to allow conditional re-building of partial workflows. For
-example, if the ``single_element_mesh.py`` journal file changes, the geometry and partitioning tasks do not need to be
-re-executed because the ``single_element_geometry.cae`` and ``single_element_paritition.cae`` targets do not depend on
-the source ``single_element_mesh.py``.
+example, if the ``rectangle_mesh.py`` journal file changes, the geometry and partitioning tasks do not need to be
+re-executed because the ``rectangle_geometry.cae`` and ``rectangle_paritition.cae`` targets do not depend on
+the source ``rectangle_mesh.py``.
 
 This conditional re-build granularity comes at the cost of roughly tripling the disk space required to store the Abaqus
 CAE files. Sometimes disk space is limited, such as for large models where even a single copy of the file may consume
@@ -65,7 +65,7 @@ Building targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons --sconstruct=scons_multiactiontask_SConstruct single_element
+   $ scons --sconstruct=scons_multiactiontask_SConstruct rectangle
 
 .. note::
 
@@ -77,9 +77,9 @@ Output Files
 ************
 
 There are fewer files than in :ref:`scons_quickstart` because the intermediate targets,
-``single_element_geometry.{cae,jnl}`` and ``single_element_partition.{cae,jnl}`` are no longer created. In the case of
+``rectangle_geometry.{cae,jnl}`` and ``rectangle_partition.{cae,jnl}`` are no longer created. In the case of
 the ``*.jnl`` files, this is because Abaqus write the journal file name to match the model name, which is now
-``single_element_mesh`` in all journal files.
+``rectangle_mesh`` in all journal files.
 
 .. code-block:: bash
 
@@ -96,15 +96,15 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- single_element_compression.com
-   |-- single_element_compression.dat
-   |-- single_element_compression.inp
-   |-- single_element_compression.msg
-   |-- single_element_compression.odb
-   |-- single_element_compression.prt
-   |-- single_element_compression.sta
-   |-- single_element_mesh.cae
-   |-- single_element_mesh.inp
-   `-- single_element_mesh.jnl
+   |-- rectangle_compression.com
+   |-- rectangle_compression.dat
+   |-- rectangle_compression.inp
+   |-- rectangle_compression.msg
+   |-- rectangle_compression.odb
+   |-- rectangle_compression.prt
+   |-- rectangle_compression.sta
+   |-- rectangle_mesh.cae
+   |-- rectangle_mesh.inp
+   `-- rectangle_mesh.jnl
 
    0 directories, 19 files
