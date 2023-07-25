@@ -32,12 +32,12 @@ workflow_name = build_directory.name
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
-kwargs={'seed': 42, 'calc_second_order': False}
 model = "rectangle"
 simulation_constants = {
     'global_seed': 1,
     'displacement': -0.01
 }
+kwargs={'seed': 42, 'calc_second_order': False}
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -45,7 +45,7 @@ datacheck = []
 
 # Comment used in tutorial code snippets: marker-2
 
-# Parameter Study with Latin Hypercube
+# Parameter Study with SALib Sobol sequence sampler
 parameter_generator = waves.parameter_generators.SALibSampler(
     "sobol",
     parameter_schema,
@@ -53,10 +53,7 @@ parameter_generator = waves.parameter_generators.SALibSampler(
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study,
     **kwargs)
-parameter_study = parameter_generator.parameter_study
-
-semaphore_filename = "semaphore.txt"
-semaphore_file_list = []
+parameter_generator.write()
 
 # Comment used in tutorial code snippets: marker-3
 
@@ -65,44 +62,42 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     set_name = pathlib.Path(set_name)
     simulation_variables = {**parameters, **simulation_constants}
 
-    semaphore_file = build_directory / set_name / semaphore_filename
-    semaphore_file_list.append(semaphore_file)
-    semaphore_file.parent.mkdir(parents=True, exist_ok=True)
-    if not semaphore_file.exists():
-        with open(semaphore_file, 'w') as semaphore:
-            semaphore.write(f"{set_name.name}\n")
-
     # Comment used in tutorial code snippets: marker-4
 
     # Geometry
     journal_file = f"{model}_geometry"
-    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+    journal_options = "--width ${width} --height ${height}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        width=simulation_variables['width'],
+        height=simulation_variables['height']))
 
     # Partition
     journal_file = f"{model}_partition"
-    journal_options = f"--width {simulation_variables['width']} --height {simulation_variables['height']}"
+    journal_options = "--width ${width} --height ${height}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{set_name / model}_geometry.cae"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        width=simulation_variables['width'],
+        height=simulation_variables['height']))
 
     # Mesh
     journal_file = f"{model}_mesh"
-    journal_options = f"--global-seed {simulation_variables['global_seed']}"
+    journal_options = "--global-seed ${global_seed}"
     workflow.extend(env.AbaqusJournal(
         target=[f"{set_name / journal_file}.inp",
                 f"{set_name / journal_file}.cae",
                 f"{set_name / journal_file}.jnl"],
         source=[f"{abaqus_source_abspath / journal_file}.py",
                 f"{set_name / model}_partition.cae"],
-        journal_options=journal_options))
+        journal_options=journal_options,
+        global_seed=simulation_variables['global_seed']))
 
     # SolverPrep
     abaqus_source_list = [
@@ -150,13 +145,9 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 # Comment used in tutorial code snippets: marker-6
 
 # Post-processing
-workflow.extend(env.Command(
-    target=[parameter_study_file.name],
-    source=[str(semaphore) for semaphore in semaphore_file_list],
-    action=[parameter_generator.scons_write]))
-
 output_name = "correlation_coefficients"
-post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in parameter_study.parameter_sets.values]
+post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
+                          parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
