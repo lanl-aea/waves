@@ -11,7 +11,7 @@ rectangle_geometry.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element geometry creation script
+    :synopsis: The Abaqus rectangle geometry creation script
 
 rectangle_partition.py
 ======================
@@ -20,7 +20,7 @@ rectangle_partition.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element partition script
+    :synopsis: The Abaqus rectangle partition script
 
 rectangle_mesh.py
 =================
@@ -29,7 +29,7 @@ rectangle_mesh.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element mesh script
+    :synopsis: The Abaqus rectangle mesh script
 
 .. _sphinx_abaqus_journal_utilities_api:
 

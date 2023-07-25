@@ -52,7 +52,7 @@ SConscript
       :end-before: marker-3
 
 Just like building the geometry in :ref:`tutorial_geometry_waves`, the code you just added instructs SCons on how to
-build the targets for partitioning and meshing our single element part. Again, the ``journal_file`` variable exists
+build the targets for partitioning and meshing our rectangle part. Again, the ``journal_file`` variable exists
 solely to minimize hard-coded duplication of the strings ``'rectangle_partition'`` and ``'rectangle_mesh'``.
 
 In the code pertaining to ``# Partition``, we will again pass an empty string for the ``journal_options``. We will
@@ -149,9 +149,9 @@ code that does a few specific tasks:
   generated the ``input_file``.
 * Within the new ``output_file``, do the following:
 
-  * Create node sets at four corners of the single element part. See the `Abaqus Node Sets`_ documentation :cite:`ABAQUS` for more
+  * Create node sets at four corners of the rectangle part. See the `Abaqus Node Sets`_ documentation :cite:`ABAQUS` for more
     information about node sets.
-  * Create node sets for the four sides of the single element part.
+  * Create node sets for the four sides of the rectangle part.
 
 * Save the ``output_file`` with the changes made
 

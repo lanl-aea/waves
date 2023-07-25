@@ -729,7 +729,7 @@ Bug fixes
 =========
 - Remove the ``amplitudes.inp`` file which conflicts with the direct displacement specification change introduced in
   :merge:`272` (:issue:`320`, :merge:`346`). By `Kyle Brindley`_.
-- Fix the partially broken single element simulation schematic in the quickstart template files (:issue:`321`,
+- Fix the partially broken rectangle simulation schematic in the quickstart template files (:issue:`321`,
   :merge:`347`). By `Kyle Brindley`_.
 
 Documentation
@@ -801,7 +801,7 @@ Enhancements
 
 New Features
 ============
-- Add a ``waves quickstart`` subcommand to copy the single element compression project as a template for a new project.
+- Add a ``waves quickstart`` subcommand to copy the rectangle compression project as a template for a new project.
   Currently limited to the "SCons-WAVES quickstart" tutorial files. (:issue:`284`, :merge:`300`). By `Kyle Brindley`_.
 - Add a documentation template to the ``waves quickstart`` subcommand (:issue:`291`, :merge:`314`). By `Kyle Brindley`_.
 

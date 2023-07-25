@@ -19,7 +19,7 @@ rectangle_geometry.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element geometry creation script
+    :synopsis: The Abaqus rectangle geometry creation script
 
 .. _abaqus_rectangle_partition_api:
 
@@ -30,7 +30,7 @@ rectangle_partition.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element partition script
+    :synopsis: The Abaqus rectangle partition script
 
 .. _abaqus_rectangle_mesh_api:
 
@@ -41,7 +41,7 @@ rectangle_mesh.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element mesh script
+    :synopsis: The Abaqus rectangle mesh script
 
 .. _sphinx_abaqus_journal_utilities_api:
 
@@ -67,7 +67,7 @@ rectangle_geometry.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Cubit single element geometry creation script
+    :synopsis: The Cubit rectangle geometry creation script
 
 rectangle_partition.py
 ======================
@@ -76,7 +76,7 @@ rectangle_partition.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Cubit single element partition script
+    :synopsis: The Cubit rectangle partition script
 
 rectangle_mesh.py
 =================
@@ -85,7 +85,7 @@ rectangle_mesh.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Cubit single element mesh script
+    :synopsis: The Cubit rectangle mesh script
 
 ******
 python

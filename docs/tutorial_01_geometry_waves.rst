@@ -63,7 +63,7 @@ files that exist in the source repository, such as Abaqus journal files. Actions
 how to process source files, for example executing the Abaqus command. Targets are the
 output artifacts created by the action, such as an Abaqus model file. It is also worth
 noting that the ``SConscript`` file naming convention is case sensitive.
-In this tutorial, we will build the geometry for a single element part using the
+In this tutorial, we will build the geometry for a rectangle part using the
 :meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the
 |PROJECT| :ref:`waves_builders_api` API).
 
@@ -142,7 +142,7 @@ Abaqus Journal File
 *******************
 
 Now that you have an overview of the ``SConscript`` file and how SCons uses an Abaqus journal
-file, let's create the geometry part build file for the single element model.
+file, let's create the geometry part build file for the rectangle model.
 
 The following sections of this tutorial will introduce four software-engineering practices
 that match the build system philosophy. These concepts will be presented sequentially,
@@ -175,7 +175,7 @@ session.
 
 The top of the file imports standard library modules used by the script's functions along with Abaqus modules. The
 ``main()`` function takes in several arguments, like ``model_name``, ``part_name``, and some geometric parameters for
-the single element part. Most notable of the inputs to the ``main()`` function is the first input argument -
+the rectangle part. Most notable of the inputs to the ``main()`` function is the first input argument -
 ``output_file``. One can simplify the general concept of a build system into a series of inputs (known as sources) and
 outputs (known as targets). In this case, the ``output_file`` is the target which is created from the source - the
 ``rectangle_geometry.py`` file.
@@ -198,7 +198,7 @@ documentation for your functions. An example of this is in the :ref:`waves_eabm_
 Abaqus Python Code
 ==================
 
-The latter portion of the ``main()`` function is the code that generates the single element geometry. Here, an Abaqus
+The latter portion of the ``main()`` function is the code that generates the rectangle geometry. Here, an Abaqus
 model is opened using the ``model_name`` variable as the model's name, a rectangle is drawn with dimensions ``width``
 and ``height``, and the Abaqus CAE model is saved with the name ``output_file``. One notable difference between the
 `Abaqus Scripting`_ documentation :cite:`ABAQUS` of Abaqus journal files is the use of the `PEP-8`_ style guide for
