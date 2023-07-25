@@ -88,7 +88,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 def get_parser():
     script_name = pathlib.Path(__file__)
     default_output_file = f"{script_name.stem}.pdf"
-    default_group_path = "SINGLE_ELEMENT/FieldOutputs/ALL"
+    default_group_path = "RECTANGLE/FieldOutputs/ALL"
     default_x_var = "E"
     default_y_var = "S"
     default_parameter_study_file = None

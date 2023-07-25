@@ -35,13 +35,13 @@ Example usage:
    datacheck = []
 
    nominal_workflow, nominal_datacheck = SConscript(
-       "single_element_mesh_solverpep_solve_extract.scons",
+       "rectangle_mesh_solverpep_solve_extract.scons",
        exports=["env", "simulation_variables", "workflow", "datacheck",
        duplicate=False)
 
    for set_name in [f"parmameter_set{number}" for number in range(4)]
        parameters_workflow, parameter_datacheck = SConscript(
-           "single_element_mesh_solverpep_solve_extract.scons",
+           "rectangle_mesh_solverpep_solve_extract.scons",
            variant_dir=set_name,
            exports=["env", "simulation_variables", "workflow", "datacheck")
            duplicate=False)
@@ -59,7 +59,7 @@ abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
-model = "single_element"
+model = "rectangle"
 
 # Mesh
 journal_file = f"{model}_mesh"

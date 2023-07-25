@@ -3,17 +3,18 @@ import os
 import argparse
 import inspect
 import shutil
+import re
 
 import abaqus
 import abaqusConstants
 import mesh
 
-import eabm_package.abaqus_journal_utilities
+import eabm_package.abaqus.abaqus_journal_utilities
 from eabm_package.argparse_types import positive_float
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
-    """Mesh the simple rectangle geometry partitioned by ``single_element_partition.py``
+    """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``
 
     This script meshes a simple Abaqus model with a single rectangle part.
 
@@ -25,7 +26,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     * ``ELEMENTS`` - all part elements
 
-    :param str input_file: The Abaqus model file created by ``single_element_geometry.py`` without extension. Will be
+    :param str input_file: The Abaqus model file created by ``rectangle_geometry.py`` without extension. Will be
         appended with the required extension, e.g. ``input_file``.cae
     :param str output_file: The output file for the Abaqus model without extension. Will be appended with the required
         extension, e.g. ``output_file``.cae
@@ -66,7 +67,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     p.Set(faces=faces, name='ALLNODES')
 
     model_object = abaqus.mdb.models[model_name]
-    eabm_package.abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
+    eabm_package.abaqus.abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
 
     abaqus.mdb.save()
 
@@ -89,12 +90,12 @@ def get_parser():
     default_global_seed = 1.0
 
     prog = "abaqus cae -noGui {} --".format(basename)
-    cli_description = "Mesh the simple rectangle geometry partitioned by ``single_element_partition.py`` " \
+    cli_description = "Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py`` " \
                       "and write an ``output_file``.cae Abaqus model file and ``output_file``.inp orphan mesh file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
-                        help="The Abaqus model file created by ``single_element_geometry.py`` without extension. " \
+                        help="The Abaqus model file created by ``rectangle_geometry.py`` without extension. " \
                              "Will be appended with the required extension, e.g. ``input_file``.cae")
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
                         help="The output file for the Abaqus model without extension. Will be appended with the " \

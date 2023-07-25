@@ -22,9 +22,9 @@ Compressing a single element
 .005, 1.00, 0.000001, 0.5
 **
 *BOUNDARY, OP=MOD
-A.single_element.top,2,2,@displacement@
+A.rectangle.top,2,2,-0.01
 **
-*MONITOR, DOF=2, NODE=A.single_element.top_right
+*MONITOR, DOF=2, NODE=A.rectangle.top_right
 **
 *OUTPUT, HISTORY, FREQUENCY=1
 *INCLUDE,INPUT=history_output.inp

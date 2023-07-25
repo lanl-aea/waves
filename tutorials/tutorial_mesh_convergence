@@ -16,7 +16,7 @@ import pathlib
 
 import waves
 
-from eabm_package.python.single_element_compression_mesh_convergence import parameter_schema
+from eabm_package.python.rectangle_compression_mesh_convergence import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
@@ -33,7 +33,7 @@ workflow_name = build_directory.name
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
-model = "single_element"
+model = "rectangle"
 simulation_constants = {
     'width': 1.0,
     'height': 1.0,

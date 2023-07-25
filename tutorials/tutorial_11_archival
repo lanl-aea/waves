@@ -18,7 +18,7 @@ import pathlib
 
 import waves
 
-from eabm_package.python.single_element_compression_cartesian_product import parameter_schema
+from eabm_package.python.rectangle_compression_cartesian_product import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
@@ -36,7 +36,7 @@ workflow_configuration = [env["project_configuration"], workflow_name]
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
-model = "single_element"
+model = "rectangle"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -143,7 +143,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
 # Post-processing
 plot_name = "stress_strain_comparison"
-regression_file = python_source_abspath / "single_element_compression_cartesian_product.csv"
+regression_file = python_source_abspath / "rectangle_compression_cartesian_product.csv"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file ${SOURCES[3:].abspath}"

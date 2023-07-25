@@ -111,21 +111,21 @@ Build Targets
    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_geometry.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_partition.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_mesh.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
-   Copy("build/tutorial_escape_sequences/single_element_compression.inp", "eabm_package/abaqus/single_element_compression.inp")
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > rectangle_geometry.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > rectangle_partition.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > rectangle_mesh.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   Copy("build/tutorial_escape_sequences/rectangle_compression.inp", "eabm_package/abaqus/rectangle_compression.inp")
    Copy("build/tutorial_escape_sequences/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_escape_sequences/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_escape_sequences/field_output.inp", "eabm_package/abaqus/field_output.inp")
    Copy("build/tutorial_escape_sequences/materials.inp", "eabm_package/abaqus/materials.inp")
    Copy("build/tutorial_escape_sequences/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_escape_sequences/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > single_element_compression.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -job single_element_compression -input single_element_compression -double both -cpus 1 -interactive -ask_delete no > single_element_compression.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -information environment > rectangle_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2022 -job rectangle_compression -input rectangle_compression -double both -cpus 1 -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.
 
 5. Execute the build command again with a different number of solve cpus. Observe that the workflow is reported as
@@ -167,27 +167,27 @@ is specified by name to reduce clutter in the ouptut shown.
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- single_element_compression.abaqus_v6.env
-   |-- single_element_compression.com
-   |-- single_element_compression.dat
-   |-- single_element_compression.inp
-   |-- single_element_compression.msg
-   |-- single_element_compression.odb
-   |-- single_element_compression.prt
-   |-- single_element_compression.sta
-   |-- single_element_compression.stdout
-   |-- single_element_geometry.abaqus_v6.env
-   |-- single_element_geometry.cae
-   |-- single_element_geometry.jnl
-   |-- single_element_geometry.stdout
-   |-- single_element_mesh.abaqus_v6.env
-   |-- single_element_mesh.cae
-   |-- single_element_mesh.inp
-   |-- single_element_mesh.jnl
-   |-- single_element_mesh.stdout
-   |-- single_element_partition.abaqus_v6.env
-   |-- single_element_partition.cae
-   |-- single_element_partition.jnl
-   `-- single_element_partition.stdout
+   |-- rectangle_compression.abaqus_v6.env
+   |-- rectangle_compression.com
+   |-- rectangle_compression.dat
+   |-- rectangle_compression.inp
+   |-- rectangle_compression.msg
+   |-- rectangle_compression.odb
+   |-- rectangle_compression.prt
+   |-- rectangle_compression.sta
+   |-- rectangle_compression.stdout
+   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   |-- rectangle_geometry.stdout
+   |-- rectangle_mesh.abaqus_v6.env
+   |-- rectangle_mesh.cae
+   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.jnl
+   |-- rectangle_mesh.stdout
+   |-- rectangle_partition.abaqus_v6.env
+   |-- rectangle_partition.cae
+   |-- rectangle_partition.jnl
+   `-- rectangle_partition.stdout
 
    0 directories, 31 files

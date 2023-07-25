@@ -59,10 +59,10 @@ below to help identify the changes made in this tutorial.
 
 The only new code in this tutorial adds the :meth:`waves.builders.abaqus_extract` builder task. Note that this task
 falls within the parameterization loop and will be executed once per parameter set. :ref:`odb_extract_cli` will output
-two files: ``single_element_compression_datasets.h5``, which contains h5py paths to the `Xarray`_ datasets, and
-``single_element_compression.h5``, which contains h5py native datasets for anything that :ref:`odb_extract_cli` doesn't
+two files: ``rectangle_compression_datasets.h5``, which contains h5py paths to the `Xarray`_ datasets, and
+``rectangle_compression.h5``, which contains h5py native datasets for anything that :ref:`odb_extract_cli` doesn't
 organize into `Xarray`_ datasets and a list of group paths pointing at `Xarray`_ datasets in
-``single_element_compression_datasets.h5``. The second file also contains external links to the datasets file, so h5py
+``rectangle_compression_datasets.h5``. The second file also contains external links to the datasets file, so h5py
 can be used to access all group paths if necessary. :ref:`tutorial_post_processing_waves` will introduce an example for
 accessing and organizing the results files and concatenating the parameter study information.
 
@@ -104,14 +104,14 @@ Output Files
    $ pwd
    /path/to/waves-tutorials
    $ find build/tutorial_08_data_extraction/ -name "*.h5"
-   build/tutorial_08_data_extraction/parameter_set2/single_element_compression.h5
-   build/tutorial_08_data_extraction/parameter_set2/single_element_compression_datasets.h5
-   build/tutorial_08_data_extraction/parameter_set1/single_element_compression.h5
-   build/tutorial_08_data_extraction/parameter_set1/single_element_compression_datasets.h5
-   build/tutorial_08_data_extraction/parameter_set3/single_element_compression.h5
-   build/tutorial_08_data_extraction/parameter_set3/single_element_compression_datasets.h5
-   build/tutorial_08_data_extraction/parameter_set0/single_element_compression.h5
-   build/tutorial_08_data_extraction/parameter_set0/single_element_compression_datasets.h5
+   build/tutorial_08_data_extraction/parameter_set2/rectangle_compression.h5
+   build/tutorial_08_data_extraction/parameter_set2/rectangle_compression_datasets.h5
+   build/tutorial_08_data_extraction/parameter_set1/rectangle_compression.h5
+   build/tutorial_08_data_extraction/parameter_set1/rectangle_compression_datasets.h5
+   build/tutorial_08_data_extraction/parameter_set3/rectangle_compression.h5
+   build/tutorial_08_data_extraction/parameter_set3/rectangle_compression_datasets.h5
+   build/tutorial_08_data_extraction/parameter_set0/rectangle_compression.h5
+   build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5
 
 **********************
 Workflow Visualization

@@ -52,7 +52,7 @@ Directory Structure
 
    $ pwd
    /path/to/waves-tutorials
-   $ cp eabm_package/abaqus/single_element_{geometry,partition,mesh}.py eabm_package/argparse_types
+   $ cp eabm_package/abaqus/rectangle_{geometry,partition,mesh}.py eabm_package/argparse_types
 
 *************
 Journal Files
@@ -72,23 +72,23 @@ return the type cast argument if all checks pass.
 
 7. Make the following changes to the journal file imports and argparse option definitions.
 
-.. admonition:: waves-tutorials/argparse_types/single_element_geometry.py
+.. admonition:: waves-tutorials/argparse_types/rectangle_geometry.py
 
-   .. literalinclude:: argparse_types_single_element_geometry.py
+   .. literalinclude:: argparse_types_rectangle_geometry.py
       :language: Python
-      :diff: abaqus_single_element_geometry.py
+      :diff: abaqus_rectangle_geometry.py
 
-.. admonition:: waves-tutorials/argparse_types/single_element_partition.py
+.. admonition:: waves-tutorials/argparse_types/rectangle_partition.py
 
-   .. literalinclude:: argparse_types_single_element_partition.py
+   .. literalinclude:: argparse_types_rectangle_partition.py
       :language: Python
-      :diff: abaqus_single_element_partition.py
+      :diff: abaqus_rectangle_partition.py
 
-.. admonition:: waves-tutorials/argparse_types/single_element_mesh.py
+.. admonition:: waves-tutorials/argparse_types/rectangle_mesh.py
 
-   .. literalinclude:: argparse_types_single_element_mesh.py
+   .. literalinclude:: argparse_types_rectangle_mesh.py
       :language: Python
-      :diff: abaqus_single_element_mesh.py
+      :diff: abaqus_rectangle_mesh.py
 
 Here we import the eabm package files as introduced in :ref:`tutorial_partition_mesh_waves` for the meshing journal
 file, but for all journal files to use the ``positive_float`` type check in the ``argparse`` interface.
@@ -137,17 +137,17 @@ Build Targets
    scons: done reading SConscript files.
    scons: Building targets ...
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information environment
-   > single_element_geometry.abaqus_v6.env
+   > rectangle_geometry.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information environment
-   > single_element_partition.abaqus_v6.env
+   > rectangle_partition.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information environment
-   > single_element_mesh.abaqus_v6.env
+   > rectangle_mesh.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
    scons: done building targets.
 
 The build process, targets, and output files should be identical to that of :ref:`tutorial_partition_mesh_waves`. You
@@ -177,35 +177,35 @@ The contents of the new workflow should be identical to that of :ref:`tutorial_p
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- single_element_geometry.abaqus_v6.env
-    |-- single_element_geometry.cae
-    |-- single_element_geometry.jnl
-    |-- single_element_geometry.stdout
-    |-- single_element_mesh.abaqus_v6.env
-    |-- single_element_mesh.cae
-    |-- single_element_mesh.inp
-    |-- single_element_mesh.jnl
-    |-- single_element_mesh.stdout
-    |-- single_element_partition.abaqus_v6.env
-    |-- single_element_partition.cae
-    |-- single_element_partition.jnl
-    `-- single_element_partition.stdout
+    |-- rectangle_geometry.abaqus_v6.env
+    |-- rectangle_geometry.cae
+    |-- rectangle_geometry.jnl
+    |-- rectangle_geometry.stdout
+    |-- rectangle_mesh.abaqus_v6.env
+    |-- rectangle_mesh.cae
+    |-- rectangle_mesh.inp
+    |-- rectangle_mesh.jnl
+    |-- rectangle_mesh.stdout
+    |-- rectangle_partition.abaqus_v6.env
+    |-- rectangle_partition.cae
+    |-- rectangle_partition.jnl
+    `-- rectangle_partition.stdout
     build/tutorial_argparse_types/
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- single_element_geometry.abaqus_v6.env
-    |-- single_element_geometry.cae
-    |-- single_element_geometry.jnl
-    |-- single_element_geometry.stdout
-    |-- single_element_mesh.abaqus_v6.env
-    |-- single_element_mesh.cae
-    |-- single_element_mesh.inp
-    |-- single_element_mesh.jnl
-    |-- single_element_mesh.stdout
-    |-- single_element_partition.abaqus_v6.env
-    |-- single_element_partition.cae
-    |-- single_element_partition.jnl
-    `-- single_element_partition.stdout
+    |-- rectangle_geometry.abaqus_v6.env
+    |-- rectangle_geometry.cae
+    |-- rectangle_geometry.jnl
+    |-- rectangle_geometry.stdout
+    |-- rectangle_mesh.abaqus_v6.env
+    |-- rectangle_mesh.cae
+    |-- rectangle_mesh.inp
+    |-- rectangle_mesh.jnl
+    |-- rectangle_mesh.stdout
+    |-- rectangle_partition.abaqus_v6.env
+    |-- rectangle_partition.cae
+    |-- rectangle_partition.jnl
+    `-- rectangle_partition.stdout
 
     0 directories, 32 files

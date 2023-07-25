@@ -50,7 +50,7 @@ Building targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons --sconstruct=waves_quickstart_SConstruct single_element
+   $ scons --sconstruct=waves_quickstart_SConstruct rectangle
 
 .. note::
 
@@ -76,28 +76,28 @@ Output Files
    ├── history_output.inp
    ├── materials.inp
    ├── parts.inp
-   ├── single_element_compression.abaqus_v6.env
-   ├── single_element_compression.com
-   ├── single_element_compression.dat
-   ├── single_element_compression.inp
-   ├── single_element_compression.msg
-   ├── single_element_compression.odb
-   ├── single_element_compression.prt
-   ├── single_element_compression.sta
-   ├── single_element_compression.stdout
-   ├── single_element_geometry.abaqus_v6.env
-   ├── single_element_geometry.cae
-   ├── single_element_geometry.jnl
-   ├── single_element_geometry.stdout
-   ├── single_element_mesh.abaqus_v6.env
-   ├── single_element_mesh.cae
-   ├── single_element_mesh.inp
-   ├── single_element_mesh.jnl
-   ├── single_element_mesh.stdout
-   ├── single_element_partition.abaqus_v6.env
-   ├── single_element_partition.cae
-   ├── single_element_partition.jnl
-   └── single_element_partition.stdout
+   ├── rectangle_compression.abaqus_v6.env
+   ├── rectangle_compression.com
+   ├── rectangle_compression.dat
+   ├── rectangle_compression.inp
+   ├── rectangle_compression.msg
+   ├── rectangle_compression.odb
+   ├── rectangle_compression.prt
+   ├── rectangle_compression.sta
+   ├── rectangle_compression.stdout
+   ├── rectangle_geometry.abaqus_v6.env
+   ├── rectangle_geometry.cae
+   ├── rectangle_geometry.jnl
+   ├── rectangle_geometry.stdout
+   ├── rectangle_mesh.abaqus_v6.env
+   ├── rectangle_mesh.cae
+   ├── rectangle_mesh.inp
+   ├── rectangle_mesh.jnl
+   ├── rectangle_mesh.stdout
+   ├── rectangle_partition.abaqus_v6.env
+   ├── rectangle_partition.cae
+   ├── rectangle_partition.jnl
+   └── rectangle_partition.stdout
 
    0 directories, 31 files
 
@@ -109,7 +109,7 @@ Workflow Visualization
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize --sconstruct waves_quickstart_SConstruct single_element --output-file waves_quickstart.png --width=28 --height=5 --exclude-list .stdout .jnl .env /usr/bin
+   $ waves visualize --sconstruct waves_quickstart_SConstruct rectangle --output-file waves_quickstart.png --width=28 --height=5 --exclude-list .stdout .jnl .env /usr/bin
 
 .. figure:: waves_quickstart.png
    :align: center

@@ -119,7 +119,7 @@ of prompting `SCons`_ to always re-build the datacheck target. This task is excl
 duplicate preprocessing of the input file. It will be used later in :ref:`tutorial_regression_testing_waves`.
 
 First, the ``job_name`` is resolved from the name of the first source file listed in code pertaining to ``#
-SolverPrep``, in this case ``single_element_compression``. That name is appended with the ``_DATACHECK`` string to
+SolverPrep``, in this case ``rectangle_compression``. That name is appended with the ``_DATACHECK`` string to
 uniquely identify output files that might have a common name and extension with those from the actual analysis to come.
 The ``datacheck_suffixes`` are standard output file extensions that will form the targets of our datacheck task. See the
 `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information about each of the file
@@ -152,7 +152,7 @@ Running the Analysis
        :start-after: marker-5
        :end-before: marker-6
 
-The changes you just made will be used to define the task for running the ``single_element_compression`` analysis.
+The changes you just made will be used to define the task for running the ``rectangle_compression`` analysis.
 
 The next step should now be quite familiar - we extend the ``workflow`` list to include that task for running the
 simulation with the :meth:`waves.builders.abaqus_solver` builder. The ``target`` list includes only the
@@ -221,19 +221,19 @@ Build Targets
    scons: done reading SConscript files.
    scons: Building targets ...
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -information
-   environment > single_element_geometry.abaqus_v6.env
+   environment > rectangle_geometry.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -information
-   environment > single_element_partition.abaqus_v6.env
+   environment > rectangle_partition.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -information
-   environment > single_element_mesh.abaqus_v6.env
+   environment > rectangle_mesh.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
-   Copy("build/tutorial_04_simulation/single_element_compression.inp",
-   "eabm_package/abaqus/single_element_compression.inp")
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   Copy("build/tutorial_04_simulation/rectangle_compression.inp",
+   "eabm_package/abaqus/rectangle_compression.inp")
    Copy("build/tutorial_04_simulation/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_04_simulation/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_04_simulation/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -241,10 +241,10 @@ Build Targets
    Copy("build/tutorial_04_simulation/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_04_simulation/history_output.inp", "eabm_package/abaqus/history_output.inp")
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -information
-   environment > single_element_compression.abaqus_v6.env
+   environment > rectangle_compression.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2022 -job
-   single_element_compression -input single_element_compression -double both -interactive -ask_delete no >
-   single_element_compression.stdout 2>&1
+   rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no >
+   rectangle_compression.stdout 2>&1
    scons: done building targets.
 
 ************
@@ -269,40 +269,40 @@ below.
     |-- history_output.inp
     |-- materials.inp
     |-- parts.inp
-    |-- single_element_compression.abaqus_v6.env
-    |-- single_element_compression.com
-    |-- single_element_compression.dat
-    |-- single_element_compression.inp
-    |-- single_element_compression.msg
-    |-- single_element_compression.odb
-    |-- single_element_compression.prt
-    |-- single_element_compression.sta
-    |-- single_element_compression.stdout
-    |-- single_element_geometry.abaqus_v6.env
-    |-- single_element_geometry.cae
-    |-- single_element_geometry.jnl
-    |-- single_element_geometry.stdout
-    |-- single_element_mesh.abaqus_v6.env
-    |-- single_element_mesh.cae
-    |-- single_element_mesh.inp
-    |-- single_element_mesh.jnl
-    |-- single_element_mesh.stdout
-    |-- single_element_partition.abaqus_v6.env
-    |-- single_element_partition.cae
-    |-- single_element_partition.jnl
-    `-- single_element_partition.stdout
+    |-- rectangle_compression.abaqus_v6.env
+    |-- rectangle_compression.com
+    |-- rectangle_compression.dat
+    |-- rectangle_compression.inp
+    |-- rectangle_compression.msg
+    |-- rectangle_compression.odb
+    |-- rectangle_compression.prt
+    |-- rectangle_compression.sta
+    |-- rectangle_compression.stdout
+    |-- rectangle_geometry.abaqus_v6.env
+    |-- rectangle_geometry.cae
+    |-- rectangle_geometry.jnl
+    |-- rectangle_geometry.stdout
+    |-- rectangle_mesh.abaqus_v6.env
+    |-- rectangle_mesh.cae
+    |-- rectangle_mesh.inp
+    |-- rectangle_mesh.jnl
+    |-- rectangle_mesh.stdout
+    |-- rectangle_partition.abaqus_v6.env
+    |-- rectangle_partition.cae
+    |-- rectangle_partition.jnl
+    `-- rectangle_partition.stdout
 
     0 directories, 31 files
 
 The ``build/tutorial_04_simulation`` directory contains several different subsets of related files:
 
-* ``single_element_{geometry,partition,mesh}.*`` - output files generated from the code pertaining to ``# Geometry``,
+* ``rectangle_{geometry,partition,mesh}.*`` - output files generated from the code pertaining to ``# Geometry``,
   ``# Partition``, and ``# Mesh`` in the ``SConscript`` file. This code was first introduced in
   :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves`, but it is important to note that each
   tutorial adds and executes a full workflow.
 * ``*.inp`` - files copied to the build directory as part of the code pertaining to ``# SolverPrep`` in the
   ``SConscript`` file, which was introduced in :ref:`tutorial_solverprep_waves`.
-* ``single_element_compression.*`` - output files from :ref:`tutorial_simulation_waves_running_analysis` in this
+* ``rectangle_compression.*`` - output files from :ref:`tutorial_simulation_waves_running_analysis` in this
   tutorial.
 
 **********************

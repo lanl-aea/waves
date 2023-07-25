@@ -15,7 +15,7 @@ import pathlib
 
 import waves
 
-from eabm_package import single_element_compression
+from eabm_package import rectangle_compression
 
 # Inherit the parent construction environment
 Import("env")
@@ -27,11 +27,11 @@ eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_configuration = [env["project_configuration"], workflow_name]
-parameter_schema = single_element_compression.mesh_convergence
+parameter_schema = rectangle_compression.mesh_convergence
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
-model = "single_element"
+model = "rectangle"
 simulation_constants = {
     "width": 1.0,
     "height": 1.0,

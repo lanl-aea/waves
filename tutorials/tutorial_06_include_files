@@ -15,7 +15,7 @@ import pathlib
 
 import waves
 
-from eabm_package.python import single_element_compression_nominal
+from eabm_package.python import rectangle_compression_nominal
 
 # Inherit the parent construction environment
 Import('env')
@@ -29,8 +29,8 @@ python_source_abspath = pathlib.Path(env["python_source_abspath"])
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
-model = "single_element"
-simulation_variables = single_element_compression_nominal.simulation_variables
+model = "rectangle"
+simulation_variables = rectangle_compression_nominal.simulation_variables
 
 # Comment used in tutorial code snippets: marker-1
 
