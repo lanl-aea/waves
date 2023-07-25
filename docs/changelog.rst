@@ -16,6 +16,11 @@ Breaking changes
   builder APIs. The older keywords are preseved for backward compatibility, but they raise a deprecation warning
   (:issue:`495`, :merge:`613`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Update the tutorial and template modsim model name to reflect the geometry instead of the mesh (:issue:`461`,
+  :merge:`614`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Reduce the runtime dependency from the full matplotlib to matplotlib-base following the conda-forge recommendation:
