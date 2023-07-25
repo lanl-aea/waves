@@ -10,8 +10,11 @@ Changelog
 
 Breaking changes
 ================
-- Deprecate the too-general ``parameter_study <study type>`` command line utility in favor of ``waves <study type>`` to
-  avoid utility conflicts with other packages (:issue:`494`, :merge:`612`). By `Kyle Brindley`_.
+- Deprecate the too-general ``parameter_study <study type>`` command line utility name in favor of ``waves <study
+  type>`` to avoid utility conflicts with other packages (:issue:`494`, :merge:`612`). By `Kyle Brindley`_.
+- Standardize the builder program path keyword from ``<thing>_program`` to ``program`` for greater consistency in
+  builder APIs. The older keywords are preseved for backward compatibility, but they raise a deprecation warning
+  (:issue:`495`, :merge:`613`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
