@@ -130,6 +130,11 @@ copies to the public, perform publicly and display publicly, and to permit other
 Developer Notes
 ***************
 
+The full developer manual can be found at:
+
+* GitHub: https://lanl.github.io/waves/devops.html
+* LANL: https://aea.re-pages.lanl.gov/python-projects/waves/dev/devops.html
+
 .. clone-start-do-not-remove
 
 Clone the project
@@ -178,7 +183,7 @@ Documentation
 
 .. docs-start-do-not-remove
 
-The documentation build is also automated with SCons as the ``documentation`` target.
+The documentation build is automated with SCons as the ``documentation`` target.
 
 - Build the `WAVES`_ documentation
 
@@ -194,7 +199,7 @@ The documentation build is also automated with SCons as the ``documentation`` ta
   .. code-block::
 
      $ pwd
-     path/to/local/git/clone/waves/eabm
+     path/to/local/git/clone/waves/quickstart
      $ PYTHONPATH=/path/to/local/git/clone/waves:$PYTHONPATH scons documentation
 
 .. docs-end-do-not-remove
