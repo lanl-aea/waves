@@ -1,1 +1,1 @@
-../../tutorials/eabm_package/argparse_types/single_element_geometry.py
+../../tutorials/eabm_package/argparse_types/rectangle_geometry.py
