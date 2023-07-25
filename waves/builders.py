@@ -21,6 +21,34 @@ from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
 
 
+# TODO: Remove the **kwargs check and warning for v1.0.0 release
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
+    """Return the value of an old kwarg and raise a deprecation warning pointing to the new kwarg
+
+    Return None if the old keyword argument is not found in the keyword arguments dictionary.
+
+    >>> def function_with_kwarg_change(new_kwarg="something", **kwargs):
+    >>>     old_kwarg = waves.builders._warn_kwarg_change()
+    >>>     new_kwarg = old_kwarg if old_kwarg is not None else new_kwarg
+
+    :param dict kwargs: The ``**kwargs`` dictionary from a function interface
+    :param str old_kwarg: The older kwarg key.
+
+    :return: Value of the ``old_kwarg`` if it exists in the ``kwargs`` dictionary. ``None`` if the old keyword isn't
+        found in the dictionary.
+    """
+    program = None
+    if old_kwarg in kwargs:
+        import warnings
+        warnings.filterwarnings('always')
+        message = f"The '{old_kwarg}' keyword argument will be deprecated in a future version. " \
+                  f"Use the '{new_kwarg}' keyword argument instead."
+        warnings.warn(message, DeprecationWarning)
+        program = kwargs[old_kwarg]
+    return program
+
+
 def project_help_message(env=None, append=True):
     """Add default targets and alias lists to project help message
 
@@ -332,7 +360,7 @@ def _abaqus_journal_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def abaqus_journal(abaqus_program="abaqus", post_action=None):
+def abaqus_journal(program="abaqus", post_action=None, **kwargs):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -366,7 +394,7 @@ def abaqus_journal(abaqus_program="abaqus", post_action=None):
        env.Append(BUILDERS={"AbaqusJournal": waves.builders.abaqus_journal()})
        AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
-    :param str abaqus_program: An absolute path or basename string for the abaqus program.
+    :param str program: An absolute path or basename string for the abaqus program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
@@ -376,11 +404,15 @@ def abaqus_journal(abaqus_program="abaqus", post_action=None):
     :return: Abaqus journal builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
+    program = abaqus_program if abaqus_program is not None else program
     if not post_action:
         post_action = []
-    action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
+    action = [f"{_cd_action_prefix} {program} -information environment > " \
                  f"${{TARGET.filebase}}{_abaqus_environment_extension}",
-              f"{_cd_action_prefix} {abaqus_program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
+              f"{_cd_action_prefix} {program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
                  f"${{journal_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     abaqus_journal_builder = SCons.Builder.Builder(
@@ -442,7 +474,7 @@ def _abaqus_datacheck_solver_emitter(target, source, env):
     return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
-def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
+def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -483,7 +515,7 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
        env.Append(BUILDERS={
            "AbaqusSolver": waves.builders.abaqus_solver(),
            "AbaqusStandard": waves.builders.abaqus_solver(emitter='standard'),
-           "AbaqusOld": waves.builders.abaqus_solver(abaqus_program="abq2019"),
+           "AbaqusOld": waves.builders.abaqus_solver(program="abq2019"),
            "AbaqusPost": waves.builders.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")
        })
        AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
@@ -492,9 +524,9 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     .. code-block::
        :caption: Abaqus journal builder action
 
-       cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
-    :param str abaqus_program: An absolute path or basename string for the abaqus program
+    :param str program: An absolute path or basename string for the abaqus program
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
@@ -511,11 +543,15 @@ def abaqus_solver(abaqus_program="abaqus", post_action=None, emitter=None):
     :return: Abaqus solver builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
+    program = abaqus_program if abaqus_program is not None else program
     if not post_action:
         post_action = []
-    action = [f"{_cd_action_prefix} {abaqus_program} -information environment > " \
+    action = [f"{_cd_action_prefix} {program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
-              f"{_cd_action_prefix} {abaqus_program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
+              f"{_cd_action_prefix} {program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     if emitter:
@@ -674,7 +710,7 @@ def _matlab_script_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def matlab_script(matlab_program="matlab", post_action=None):
+def matlab_script(program="matlab", post_action=None, **kwargs):
     """Matlab script SCons builder
 
     .. warning::
@@ -705,9 +741,9 @@ def matlab_script(matlab_program="matlab", post_action=None):
     .. code-block::
        :caption: Matlab script builder action
 
-       cd ${TARGET.dir.abspath} && {matlab_program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
 
-    :param str matlab_program: An absolute path or basename string for the Matlab program.
+    :param str program: An absolute path or basename string for the Matlab program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
         non-zero exit code even if Matlab does not. Builder keyword variables are available for substitution in the
@@ -717,14 +753,18 @@ def matlab_script(matlab_program="matlab", post_action=None):
     :return: Matlab script builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and matlab_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    matlab_program = _warn_kwarg_change(kwargs, "matlab_program")
+    program = matlab_program if matlab_program is not None else program
     if not post_action:
         post_action = []
-    action = [f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
+    action = [f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
                   "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
                   "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
                   f"> ${{TARGET.filebase}}{_matlab_environment_extension} 2>&1",
-              f"{_cd_action_prefix} {matlab_program} ${{matlab_options}} -batch " \
+              f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
                   "${SOURCE.filebase}(${script_options})\" " \
                   f"> ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
@@ -808,7 +848,7 @@ def _abaqus_extract_emitter(target, source, env):
     return target, source
 
 
-def abaqus_extract(abaqus_program="abaqus"):
+def abaqus_extract(program="abaqus", **kwargs):
     """Abaqus ODB file extraction Builder
 
     This builder executes the ``odb_extract`` command line utility against an ODB file in the source list. The ODB file
@@ -844,17 +884,21 @@ def abaqus_extract(abaqus_program="abaqus"):
        env.Append(BUILDERS={"AbaqusExtract": waves.builders.abaqus_extract()})
        AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
-    :param str abaqus_program: An absolute path or basename string for the abaqus program
+    :param str program: An absolute path or basename string for the abaqus program
 
     :return: Abaqus extract builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
+    program = abaqus_program if abaqus_program is not None else program
     abaqus_extract_builder = SCons.Builder.Builder(
         action = [
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
         ],
         emitter=_abaqus_extract_emitter,
-        abaqus_program=abaqus_program)
+        program=program)
     return abaqus_extract_builder
 
 
@@ -886,12 +930,12 @@ def _build_odb_extract(target, source, env):
     odb_extract.odb_extract([source[0].abspath], target[0].abspath,
                             output_type=output_type,
                             odb_report_args=odb_report_args,
-                            abaqus_command=env["abaqus_program"],
+                            abaqus_command=env["program"],
                             delete_report_file=delete_report_file)
     return None
 
 
-def sbatch(sbatch_program="sbatch", post_action=None):
+def sbatch(program="sbatch", post_action=None, **kwargs):
     """SLURM sbatch SCons builder
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
@@ -917,7 +961,7 @@ def sbatch(sbatch_program="sbatch", post_action=None):
        env.Append(BUILDERS={"SlurmSbatch": waves.builders.sbatch()})
        SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="echo $SOURCE > $TARGET")
 
-    :param str sbatch_program: An absolute path or basename string for the sbatch program.
+    :param str program: An absolute path or basename string for the sbatch program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
@@ -927,9 +971,13 @@ def sbatch(sbatch_program="sbatch", post_action=None):
     :return: SLURM sbatch builder
     :rtype: SCons.Builder.Builder
     """
+    # TODO: Remove the **kwargs and sbatch_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
+    program = sbatch_program if sbatch_program is not None else program
     if not post_action:
         post_action = []
-    action = [f"{_cd_action_prefix} {sbatch_program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
+    action = [f"{_cd_action_prefix} {program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
                  f"${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
@@ -971,9 +1019,9 @@ def _custom_scanner(pattern, suffixes, flags=None):
 
     def suffix_only(node_list):
         """Recursively search for files that end in the given suffixes
-        
+
         :param list node_list: List of SCons Node objects representing the nodes to process
-        
+
         :return: List of file dependencies to include for recursive scanning
         :rtype: list
         """

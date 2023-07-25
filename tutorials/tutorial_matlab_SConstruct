@@ -61,7 +61,7 @@ for key, value in project_variables.items():
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
-env.Append(BUILDERS={'MatlabScript': waves.builders.matlab_script(matlab_program=env['matlab'])})
+env.Append(BUILDERS={'MatlabScript': waves.builders.matlab_script(program=env['matlab'])})
 
 # Comments used in tutorial code snippets: marker-6
 

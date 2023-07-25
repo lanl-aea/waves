@@ -88,9 +88,9 @@ variant_dir_base = pathlib.Path(env["variant_dir_base"])
 
 # Add WAVES builders
 env.Append(BUILDERS={
-    "AbaqusJournal": waves.builders.abaqus_journal(abaqus_program=env["abaqus"]),
-    "AbaqusSolver": waves.builders.abaqus_solver(abaqus_program=env["abaqus"]),
-    "AbaqusExtract": waves.builders.abaqus_extract(abaqus_program=env["abaqus"]),
+    "AbaqusJournal": waves.builders.abaqus_journal(program=env["abaqus"]),
+    "AbaqusSolver": waves.builders.abaqus_solver(program=env["abaqus"]),
+    "AbaqusExtract": waves.builders.abaqus_extract(program=env["abaqus"]),
     "PythonScript": waves.builders.python_script(),
     "CondaEnvironment": waves.builders.conda_environment()
 })

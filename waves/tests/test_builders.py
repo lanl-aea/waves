@@ -78,6 +78,23 @@ def check_expected_targets(nodes, solver, stem, suffixes):
     assert set(expected_suffixes) == set(suffixes)
 
 
+# TODO: Remove the **kwargs check and warning for v1.0.0 release
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+def test_warn_kwarg_change():
+    with patch("warnings.warn") as mock_warn:
+        program = builders._warn_kwarg_change({'old_kwarg': True}, "old_kwarg", new_kwarg="new_kwarg")
+        mock_warn.assert_called_once()
+        assert program == True
+    with patch("warnings.warn") as mock_warn:
+        program = builders._warn_kwarg_change({'old_kwarg': False}, "old_kwarg", new_kwarg="new_kwarg")
+        mock_warn.assert_called_once()
+        assert program == False
+    with patch("warnings.warn") as mock_warn:
+        program = builders._warn_kwarg_change({}, "old_kwarg", new_kwarg="new_kwarg")
+        mock_warn.assert_not_called()
+        assert program == None
+
+
 prepend_env_input = {
     "path exists": (f"{root_fs}program", True, does_not_raise()),
     "path does not exist": (f"{root_fs}notapath", False, pytest.raises(FileNotFoundError))
@@ -298,17 +315,24 @@ abaqus_journal_input = {
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("program, post_action, node_count, action_count, target_list",
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
-def test_abaqus_journal(abaqus_program, post_action, node_count, action_count, target_list):
+def test_abaqus_journal(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(abaqus_program, post_action)})
-    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
                        '${TARGET.filebase}.abaqus_v6.env\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {abaqus_program} cae -noGui ${{SOURCE.abspath}} ' \
+                      f'cd ${{TARGET.dir.abspath}} && {program} cae -noGui ${{SOURCE.abspath}} ' \
                        '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
+
+    env.Append(BUILDERS={"AbaqusJournal": builders.abaqus_journal(program, post_action)})
+    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+    # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    env.Append(BUILDERS={"AbaqusJournalDeprecatedKwarg": builders.abaqus_journal(abaqus_program=program, post_action=post_action)})
+    nodes = env.AbaqusJournalDeprecatedKwarg(target=target_list, source=["journal.py"], journal_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
@@ -427,18 +451,26 @@ abaqus_solver_input = {
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("abaqus_program, post_action, node_count, action_count, source_list, emitter, suffixes",
+@pytest.mark.parametrize("program, post_action, node_count, action_count, source_list, emitter, suffixes",
                          abaqus_solver_input.values(),
                          ids=abaqus_solver_input.keys())
-def test_abaqus_solver(abaqus_program, post_action, node_count, action_count, source_list, emitter, suffixes):
+def test_abaqus_solver(program, post_action, node_count, action_count, source_list, emitter, suffixes):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(abaqus_program, post_action, emitter)})
-    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -information environment > ' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
                        '${job_name}.abaqus_v6.env\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {abaqus_program} -job ${{job_name}} -input ' \
+                      f'cd ${{TARGET.dir.abspath}} && {program} -job ${{job_name}} -input ' \
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
                        '> ${job_name}.stdout 2>&1'
+
+    env.Append(BUILDERS={"AbaqusSolver": builders.abaqus_solver(program, post_action, emitter)})
+    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
+
+    # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    env.Append(BUILDERS={"AbaqusSolverDeprecatedKwarg": builders.abaqus_solver(abaqus_program=program, post_action=post_action, emitter=emitter)})
+    nodes = env.AbaqusSolverDeprecatedKwarg(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
     check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
@@ -548,22 +580,29 @@ matlab_script_input = {
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("matlab_program, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("program, post_action, node_count, action_count, target_list",
                          matlab_script_input.values(),
                          ids=matlab_script_input.keys())
-def test_matlab_script(matlab_program, post_action, node_count, action_count, target_list):
+def test_matlab_script(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"MatlabScript": builders.matlab_script(matlab_program, post_action)})
-    nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
                           'disp(cell2table(fileList)); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
                           '> ${TARGET.filebase}.matlab.env 2>&1\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {matlab_program} ${{matlab_options}} -batch ' \
+                      f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '${SOURCE.filebase}(${script_options})\" ' \
                           '> ${TARGET.filebase}.stdout 2>&1'
+
+    env.Append(BUILDERS={"MatlabScript": builders.matlab_script(program, post_action)})
+    nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+    # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    env.Append(BUILDERS={"MatlabScriptDeprecatedKwarg": builders.matlab_script(matlab_program=program, post_action=post_action)})
+    nodes = env.MatlabScriptDeprecatedKwarg(target=target_list, source=["matlab_script.py"], script_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
@@ -646,11 +685,11 @@ def test_abaqus_extract():
 source_file = fs.File("/dummy.source")
 target_file = fs.File("/dummy.target")
 build_odb_extract_input = {
-    "no kwargs": ([target_file], [source_file], {"abaqus_program": "NA"},
+    "no kwargs": ([target_file], [source_file], {"program": "NA"},
                   [call([f"{root_fs}dummy.source"], f"{root_fs}dummy.target", output_type="h5", odb_report_args=None,
                        abaqus_command="NA", delete_report_file=False)]),
     "all kwargs": ([target_file], [source_file],
-                   {"abaqus_program": "NA", "output_type": "different", "odb_report_args": "notnone",
+                   {"program": "NA", "output_type": "different", "odb_report_args": "notnone",
                     "delete_report_file": True},
                    [call([f"{root_fs}dummy.source"], f"{root_fs}dummy.target", output_type="different", odb_report_args="notnone",
                         abaqus_command="NA", delete_report_file=True)])
@@ -680,16 +719,24 @@ sbatch_input = {
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("sbatch_program, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("program, post_action, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
-def test_sbatch(sbatch_program, post_action, node_count, action_count, target_list):
+def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(sbatch_program, post_action)})
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait ${{slurm_options}} ' \
+                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+
+    env.Append(BUILDERS={"SlurmSbatch": builders.sbatch(program, post_action)})
     nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
                             slurm_job="echo $SOURCE > $TARGET")
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {sbatch_program} --wait ${{slurm_options}} ' \
-                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+    # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
+    env.Append(BUILDERS={"SlurmSbatchDeprecatedKwarg": builders.sbatch(sbatch_program=program, post_action=post_action)})
+    nodes = env.SlurmSbatchDeprecatedKwarg(target=target_list, source=["source.in"], slurm_options="",
+                            slurm_job="echo $SOURCE > $TARGET")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
