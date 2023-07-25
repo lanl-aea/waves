@@ -14,7 +14,7 @@ rectangle_geometry.py
     :synopsis: The Abaqus single element geometry creation script
 
 rectangle_partition.py
-===========================
+======================
 
 .. automodule:: eabm_package.rectangle_partition
     :noindex:
@@ -23,7 +23,7 @@ rectangle_partition.py
     :synopsis: The Abaqus single element partition script
 
 rectangle_mesh.py
-======================
+=================
 
 .. automodule:: eabm_package.rectangle_mesh
     :noindex:
