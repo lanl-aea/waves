@@ -13,7 +13,7 @@ abaqus
 .. _abaqus_rectangle_geometry_api:
 
 rectangle_geometry.py
-==========================
+=====================
 
 .. automodule:: eabm_package.abaqus.rectangle_geometry
     :noindex:
@@ -24,7 +24,7 @@ rectangle_geometry.py
 .. _abaqus_rectangle_partition_api:
 
 rectangle_partition.py
-===========================
+======================
 
 .. automodule:: eabm_package.abaqus.rectangle_partition
     :noindex:
@@ -35,7 +35,7 @@ rectangle_partition.py
 .. _abaqus_rectangle_mesh_api:
 
 rectangle_mesh.py
-======================
+=================
 
 .. automodule:: eabm_package.abaqus.rectangle_mesh
     :noindex:
@@ -61,7 +61,7 @@ cubit
 *****
 
 rectangle_geometry.py
-==========================
+=====================
 
 .. automodule:: eabm_package.cubit.rectangle_geometry
     :noindex:
@@ -70,7 +70,7 @@ rectangle_geometry.py
     :synopsis: The Cubit single element geometry creation script
 
 rectangle_partition.py
-===========================
+======================
 
 .. automodule:: eabm_package.cubit.rectangle_partition
     :noindex:
@@ -79,7 +79,7 @@ rectangle_partition.py
     :synopsis: The Cubit single element partition script
 
 rectangle_mesh.py
-======================
+=================
 
 .. automodule:: eabm_package.cubit.rectangle_mesh
     :noindex:
