@@ -78,6 +78,12 @@ def check_expected_targets(nodes, solver, stem, suffixes):
     assert set(expected_suffixes) == set(suffixes)
 
 
+def test_warn_kwarg_change():
+    with patch("warnings.warn") as mock_warn:
+        builders._warn_kwarg_change({'old_kwarg': True}, "old_kwarg", new_kwarg="new_kwarg")
+        mock_warn.assert_called_once()
+
+
 prepend_env_input = {
     "path exists": (f"{root_fs}program", True, does_not_raise()),
     "path does not exist": (f"{root_fs}notapath", False, pytest.raises(FileNotFoundError))
