@@ -132,10 +132,10 @@ The full developer manual can be found at:
 * GitHub: https://lanl.github.io/waves/devops.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/dev/devops.html
 
-.. clone-start-do-not-remove
-
 Clone the project
 =================
+
+.. clone-start-do-not-remove
 
 * GitHub
 
