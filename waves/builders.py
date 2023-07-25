@@ -37,7 +37,7 @@ def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
         import warnings
         message = f"The '{old_kwarg}' keyword argument will be deprecated in a future version. " \
                   f"Use the '{new_kwarg}' keyword argument instead."
-        warning.warn(message, DeprecationWarning)
+        warnings.warn(message, DeprecationWarning)
         program = kwargs[old_kwarg]
     return program
 
