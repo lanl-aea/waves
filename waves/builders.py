@@ -22,18 +22,22 @@ from waves._settings import _matlab_environment_extension
 
 
 def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
-    """Return the value of an older kwarg and raise a deprecation warning pointing to the new kwarg
+    """Return the value of an old kwarg and raise a deprecation warning pointing to the new kwarg
+
+    Return None if the old keyword argument is not found in the keyword arguments dictionary.
 
     >>> def function_with_kwarg_change(new_kwarg="something", **kwargs):
     >>>     old_kwarg = waves.builders._warn_kwarg_change()
     >>>     new_kwarg = old_kwarg if old_kwarg is not None else new_kwarg
 
     :param dict kwargs: The ``**kwargs`` dictionary from a function interface
-    :param str old_kwarg: The older kwarg key. Return the value and raise a warning if found. Return None if not found
-        or not populated.
+    :param str old_kwarg: The older kwarg key.
+
+    :return: Value of the ``old_kwarg`` if it exists in the ``kwargs`` dictionary. ``None`` if the old keyword isn't
+        found in the dictionary.
     """
     program = None
-    if old_kwarg in kwargs and kwargs[old_kwarg]:
+    if old_kwarg in kwargs:
         import warnings
         message = f"The '{old_kwarg}' keyword argument will be deprecated in a future version. " \
                   f"Use the '{new_kwarg}' keyword argument instead."
@@ -63,7 +67,7 @@ def default_targets_message(env=None, append=True):
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
 
-    .. code-block::
+    .. code-block:
 
        Default Targets:
            Default_Target_1

@@ -85,8 +85,8 @@ def test_warn_kwarg_change():
         assert program == True
     with patch("warnings.warn") as mock_warn:
         program = builders._warn_kwarg_change({'old_kwarg': False}, "old_kwarg", new_kwarg="new_kwarg")
-        mock_warn.assert_not_called()
-        assert program == None
+        mock_warn.assert_called_once()
+        assert program == False
     with patch("warnings.warn") as mock_warn:
         program = builders._warn_kwarg_change({}, "old_kwarg", new_kwarg="new_kwarg")
         mock_warn.assert_not_called()
