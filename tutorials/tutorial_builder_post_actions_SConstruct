@@ -65,9 +65,9 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={
-    'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-    'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus']),
-    'AbaqusSolverPost': waves.builders.abaqus_solver(abaqus_program=env["abaqus"],
+    'AbaqusJournal': waves.builders.abaqus_journal(program=env['abaqus']),
+    'AbaqusSolver': waves.builders.abaqus_solver(program=env['abaqus']),
+    'AbaqusSolverPost': waves.builders.abaqus_solver(program=env["abaqus"],
                                                      post_action="grep -E '\<SUCCESSFULLY' ${job_name}.sta")})
 
 # Comments used in tutorial code snippets: marker-6

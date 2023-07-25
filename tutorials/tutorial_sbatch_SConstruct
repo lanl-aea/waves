@@ -71,11 +71,11 @@ def solve_builder_select():
     if env["sbatch"]:
         return waves.builders.sbatch(sbatch_program=env['sbatch'])
     else:
-        return waves.builders.abaqus_solver(abaqus_program=env['abaqus'])
+        return waves.builders.abaqus_solver(program=env['abaqus'])
 
 
 env.Append(BUILDERS={
-    'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
+    'AbaqusJournal': waves.builders.abaqus_journal(program=env['abaqus']),
     'AbaqusSolver': solve_builder_select()})
 
 # Comments used in tutorial code snippets: marker-6

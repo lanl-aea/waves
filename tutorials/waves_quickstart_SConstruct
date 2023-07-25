@@ -26,8 +26,8 @@ env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "ab
 
 # Add WAVES builders
 env.Append(BUILDERS=
-    {'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])})
+    {'AbaqusJournal': waves.builders.abaqus_journal(program=env['abaqus']),
+     'AbaqusSolver': waves.builders.abaqus_solver(program=env['abaqus'])})
 
 # Simulation variables
 model = "single_element"
