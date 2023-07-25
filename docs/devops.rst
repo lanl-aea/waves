@@ -186,6 +186,15 @@ Documentation
    :start-after: docs-start-do-not-remove
    :end-before: docs-end-do-not-remove
 
+- Build the `WAVES-EABM`_ documentation. The WAVES package must be on ``PYTHONPATH``. For developers, the least
+  disruptive solution is a per-command modification of ``PYTHONPATH``.
+
+  .. code-block::
+
+     $ pwd
+     path/to/local/git/clone/waves/quickstart
+     $ PYTHONPATH=/path/to/local/git/clone/waves:$PYTHONPATH scons documentation
+
 *************
 Windows users
 *************

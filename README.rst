@@ -62,31 +62,9 @@ testing of the `WAVES`_ extensions to SCons. The template modsim project can be 
 
 .. project-description-end-do-not-remove
 
-Documentation
-=============
-
-The documentation is bundled with the Conda package and can be accessed locally without a network connection after
-installation from the command line as ``waves docs``. The documentation is also web-hosted:
-
-* GitHub: https://lanl.github.io/waves/index.html
-
-Los Alamos staff can also access the development documentation:
-
-* Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/
-* Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/
-
-The `WAVES-EABM documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can look
-like.
-
-* GitHub (pending): https://lanl.github.io/waves/waves-eabm/index.html
-
-Los Alamos staff can also access the development documentation:
-
-* Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
-* Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
-
+************
 Installation
-============
+************
 
 .. installation-start-do-not-remove
 
@@ -99,8 +77,27 @@ Installation
 
 .. installation-end-do-not-remove
 
+*************
+Documentation
+*************
+
+The documentation is bundled with the Conda package and can be accessed locally without a network connection after
+installation from the command line as ``waves docs``. The documentation is also web-hosted:
+
+* GitHub: https://lanl.github.io/waves/index.html
+* LANL (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/
+* LANL (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/
+
+The `WAVES-EABM documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can look
+like.
+
+* GitHub (pending): https://lanl.github.io/waves/waves-eabm/index.html
+* LANL (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
+* LANL (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
+
+**********
 Developers
-==========
+**********
 
 * `Kyle Brindley`_
 * `Prabhu Khalsa`_
@@ -193,13 +190,5 @@ The documentation build is automated with SCons as the ``documentation`` target.
      path/to/local/git/clone/waves/
      $ scons documentation
 
-- Build the `WAVES-EABM`_ documentation. The WAVES package must be on ``PYTHONPATH``. For developers, the least
-  disruptive solution is a per-command modification of ``PYTHONPATH``.
-
-  .. code-block::
-
-     $ pwd
-     path/to/local/git/clone/waves/quickstart
-     $ PYTHONPATH=/path/to/local/git/clone/waves:$PYTHONPATH scons documentation
-
 .. docs-end-do-not-remove
+
