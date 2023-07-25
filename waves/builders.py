@@ -70,7 +70,7 @@ def default_targets_message(env=None, append=True):
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
 
-    .. code-block:
+    .. code-block::
 
        Default Targets:
            Default_Target_1
