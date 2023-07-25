@@ -4,8 +4,6 @@
 Developer Manual
 ################
 
-.. include:: dependencies.txt
-
 *****
 Clone
 *****
@@ -14,43 +12,7 @@ Clone
    :start-after: clone-start-do-not-remove
    :end-before: clone-end-do-not-remove
 
-.. include:: contribution.txt
-
-*************
-Windows users
-*************
-
-This project uses symbolic links to minimize duplication of files where possible. Some files, such as the tutorial and
-quickstart eabm package files, can not be shared in common due to their applications and the necessary directory
-structure for each. However, if the file content is identical, a symbolic link is used to avoid duplicating the entire
-file.
-
-Symbolic links require special handling on Windows computers. If contributors are developing from a Windows machine,
-they are encouraged to
-
-1. Read about ``mklink`` and "developer mode" for Windows 10/11
-2. Use an up-to-date version of git
-3. Use one of the following git configurations
-
-   .. code-block::
-
-      # Global configuration. Run from anywhere.
-      > git config --global core.symlinks true
-
-      # Local configuration. Run from repository root directory after cloning.
-      > git config core.symlinks true
-
-4. Use unix line endings with one of the following git configurations
-
-   .. code-block::
-
-      # Global configuration. Run from anywhere.
-      > git config --global core.autocrlf true
-
-      # Local configuration. Run from repository root directory after cloning.
-      > git config core.autocrlf true
-
-.. _build:
+.. include:: dependencies.txt
 
 ********************
 Activate Environment
@@ -81,6 +43,10 @@ A minimal development environment for the waves project Gitlab-CI jobs is mainta
       $ module load waves-env
 
 The Conda packages found in ``environment.yml`` are reproduced in the :ref:`eabm_dependencies` section.
+
+.. include:: contribution.txt
+
+.. _build:
 
 *****
 Build
@@ -175,23 +141,20 @@ must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environmen
 Test
 ****
 
-Unlike software projects, the primary model/simulation project tests are the successful completion of some subset of the
-simulation targets. If the selected simulations run successfully, then the target passes. Secondary project tests will
-use `SCons`_ to execute unit and integration testing for project specific scripts, such as journal files and Python
-processing scripts.
+WAVES has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda environment
+and run
 
-- Build the required target(s). Test targets may not be part of the default target list. If so, each target will
-  need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
+.. code-block::
 
-  .. code-block::
+   $ scons pytest
 
-     $ scons <target_1_name> <target-2_name>
+The tutorials and quickstart are run as system tests and require third-party software not available on conda-forge. To
+run the system tests, install the third-party software and make them available in your ``PATH``, activate a conda
+environment and run
 
-- Run *all* simulation and test targets. Try to run all targets even if some fail.
+.. code-block::
 
-  .. code-block::
-
-     $ scons . --keep-going
+   $ scons systemtest
 
 The full list of continuous integration test targets can be found in the Gitlab-CI file, ``.gitlab-ci.yml``.
 
@@ -222,3 +185,37 @@ Documentation
 .. include:: README.txt
    :start-after: docs-start-do-not-remove
    :end-before: docs-end-do-not-remove
+
+*************
+Windows users
+*************
+
+This project uses symbolic links to minimize duplication of files where possible. Some files, such as the tutorial and
+quickstart eabm package files, can not be shared in common due to their applications and the necessary directory
+structure for each. However, if the file content is identical, a symbolic link is used to avoid duplicating the entire
+file.
+
+Symbolic links require special handling on Windows computers. If contributors are developing from a Windows machine,
+they are encouraged to
+
+1. Read about ``mklink`` and "developer mode" for Windows 10/11
+2. Use an up-to-date version of git
+3. Use one of the following git configurations
+
+   .. code-block::
+
+      # Global configuration. Run from anywhere.
+      > git config --global core.symlinks true
+
+      # Local configuration. Run from repository root directory after cloning.
+      > git config core.symlinks true
+
+4. Use unix line endings with one of the following git configurations
+
+   .. code-block::
+
+      # Global configuration. Run from anywhere.
+      > git config --global core.autocrlf true
+
+      # Local configuration. Run from repository root directory after cloning.
+      > git config core.autocrlf true
