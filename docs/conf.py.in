@@ -81,8 +81,8 @@ templates_path = ['_templates']
 source_suffix = ['.rst']
 
 # -- Options for HTML output -------------------------------------------------
-html_logo = 'waves_logo_brandmark_smaller.png'
 html_favicon = "favicon.ico"
+html_logo = '_static/waves_logo_brandmark_smaller.png'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_css_files = ["custom.css"]
@@ -154,3 +154,4 @@ copybutton_prompt_is_regexp = True
 epub_basename = str(pathlib.Path(latex_basename).with_suffix(""))
 epub_title = f"{project.upper()} {version}"
 epub_publisher = "Triad National Security, LLC"
+epub_cover = ("_static/waves_logo_brandmark_smaller.png", "")
