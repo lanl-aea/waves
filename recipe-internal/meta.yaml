@@ -73,6 +73,7 @@ test:
     - salib >=1
     - scipy >=1.7
     - scons
+    - seaborn
     - sed
     - setuptools_scm
     - xarray
