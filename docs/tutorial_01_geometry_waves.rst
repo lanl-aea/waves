@@ -373,13 +373,13 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
         /home/roppenheimer/waves-tutorials
         $ scons tutorial_01_geometry
         scons: Reading SConscript files ...
-        Checking whether /apps/abaqus/Commands/abq2022 program exists.../apps/abaqus/Commands/abq2022
-        Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
+        Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
+        Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
         scons: done reading SConscript files.
         scons: Building targets ...
-        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2022 -information
+        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2023 -information
         environment > rectangle_geometry.abaqus_v6.env
-        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2022 cae -noGui
+        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2023 cae -noGui
         /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
         scons: done building targets.
 
