@@ -87,7 +87,7 @@ html_static_path = ['_static']
 html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
-latex_logo = 'waves_logo_primary_large.png' 
+latex_logo = 'waves_logo_brandmark_large_wide.png'
 copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
