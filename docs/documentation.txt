@@ -1,7 +1,0 @@
-*************
-Documentation
-*************
-
-.. include:: README.txt
-   :start-after: docs-start-do-not-remove
-   :end-before: docs-end-do-not-remove
