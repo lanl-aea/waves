@@ -29,6 +29,7 @@ Internal Changes
   https://conda-forge.org/docs/maintainer/knowledge_base.html#matplotlib (:issue:`440`, :merge:`611`). By `Kyle
   Brindley`_.
 - Explore a draft correlation coefficients post-procesing tutorial (:merge:`615`). By `Kyle Brindley`_.
+- Update to use Abaqus 2023 (:issue:`509`, :merge:`617`). By `Kyle Brindley`_.
 
 *******************
 0.6.21 (2023-07-21)
