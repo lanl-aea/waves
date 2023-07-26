@@ -22,7 +22,7 @@ VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 conf = env.Configure()
-env['abaqus'] = conf.CheckProg('/apps/abaqus/Commands/abq2022')
+env['abaqus'] = conf.CheckProg('/apps/abaqus/Commands/abq2023')
 conf.Finish()
 if env['abaqus']:
     env.PrependENVPath("PATH", str(pathlib.Path(env['abaqus']).parent))

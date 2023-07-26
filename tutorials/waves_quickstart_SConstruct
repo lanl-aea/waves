@@ -22,7 +22,7 @@ env.PrependENVPath("PYTHONPATH", str(project_dir))
 VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
+env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
 
 # Add WAVES builders
 env.Append(BUILDERS=
