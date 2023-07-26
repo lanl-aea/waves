@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Single element model's Geometry and Partition task definitions
+"""Rectangle model's Geometry and Partition task definitions
 
 Requires the following ``SConscript(..., exports=[])``
 
@@ -9,8 +9,8 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``simulation_variables`` - The dictionary of simulation variables with the following required keys
 
-  * ``'width'`` - The single element model width
-  * ``'height'`` - The single element model height
+  * ``'width'`` - The rectangle model width
+  * ``'height'`` - The rectangle model height
 
 * ``workflow`` - list of targets in the main workflow
 * ``datacheck`` - list of targets in the datacheck workflow

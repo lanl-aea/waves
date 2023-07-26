@@ -28,7 +28,7 @@ testing, e.g. what arguments and values were passed to the mock object. Finally,
 code, leaving developers free to change the implementation without creating breaking changes in code behavior.
 
 Integration testing is the practice of testing interfaces between functions, methods, or classes. Where unit testing
-verifies the documented interface and behavior of a single element of code, integration testing verifies that the
+verifies the documented interface and behavior of a single unit of code, integration testing verifies that the
 various elements of a script or library work together as intended. Similar to unit testing, integration testing is
 limited to the current project's code. If the scope of integration testing covers code elements exposed to the end user,
 e.g. the simulation scripts constructing a workflow, it can be considered a verification of the intended usage. Where

@@ -15,7 +15,7 @@ import pathlib
 
 import waves
 
-from eabm_package.python.rectangle_compression_cartesian_product import parameter_schema
+from eabm_package.python.correlation_coefficients_schema import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
@@ -33,6 +33,11 @@ output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
 model = "rectangle"
+simulation_constants = {
+    'global_seed': 1,
+    'displacement': -0.01
+}
+kwargs={'seed': 42, 'calc_second_order': False}
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -40,12 +45,14 @@ datacheck = []
 
 # Comment used in tutorial code snippets: marker-2
 
-# Parameter Study with Cartesian Product
-parameter_generator = waves.parameter_generators.CartesianProduct(
+# Parameter Study with SALib Sobol sequence sampler
+parameter_generator = waves.parameter_generators.SALibSampler(
+    "sobol",
     parameter_schema,
     output_file=parameter_study_file,
     output_file_type=output_file_type,
-    previous_parameter_study=previous_parameter_study)
+    previous_parameter_study=previous_parameter_study,
+    **kwargs)
 parameter_generator.write()
 
 # Comment used in tutorial code snippets: marker-3
@@ -53,7 +60,7 @@ parameter_generator.write()
 # Parameterized targets must live inside current simulation_variables for loop
 for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
     set_name = pathlib.Path(set_name)
-    simulation_variables = parameters
+    simulation_variables = {**parameters, **simulation_constants}
 
     # Comment used in tutorial code snippets: marker-4
 
@@ -138,15 +145,15 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 # Comment used in tutorial code snippets: marker-6
 
 # Post-processing
-plot_name = "stress_strain_comparison"
+output_name = "correlation_coefficients"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
-script_options = "--input-file ${SOURCES[2:].abspath}"
-script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
-script_options += " --parameter-study-file ${SOURCES[1].abspath}"
+script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
-    target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[f"{python_source_abspath}/post_processing.py", parameter_study_file.name] + post_processing_source,
+    target=[f"{output_name}.csv", "correlation_pairplot.pdf", "sensitivity.yaml"],
+    source=[f"{python_source_abspath}/{output_name}.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 # Collector alias based on parent directory name

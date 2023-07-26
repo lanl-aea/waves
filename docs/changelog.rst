@@ -19,7 +19,7 @@ Breaking changes
 Documentation
 =============
 - Update the tutorial and template modsim model name to reflect the geometry instead of the mesh (:issue:`461`,
-  :merge:`614`). By `Kyle Brindley`_.
+  :merge:`614`, :merge:`615`). By `Kyle Brindley`_.
 - Trim down the README to focus on end users. Move developer notes directly into the HTML developer manual
   (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
 
@@ -28,6 +28,7 @@ Internal Changes
 - Reduce the runtime dependency from the full matplotlib to matplotlib-base following the conda-forge recommendation:
   https://conda-forge.org/docs/maintainer/knowledge_base.html#matplotlib (:issue:`440`, :merge:`611`). By `Kyle
   Brindley`_.
+- Explore a draft correlation coefficients post-procesing tutorial (:merge:`615`). By `Kyle Brindley`_.
 
 *******************
 0.6.21 (2023-07-21)
@@ -729,7 +730,7 @@ Bug fixes
 =========
 - Remove the ``amplitudes.inp`` file which conflicts with the direct displacement specification change introduced in
   :merge:`272` (:issue:`320`, :merge:`346`). By `Kyle Brindley`_.
-- Fix the partially broken single element simulation schematic in the quickstart template files (:issue:`321`,
+- Fix the partially broken rectangle simulation schematic in the quickstart template files (:issue:`321`,
   :merge:`347`). By `Kyle Brindley`_.
 
 Documentation
@@ -801,7 +802,7 @@ Enhancements
 
 New Features
 ============
-- Add a ``waves quickstart`` subcommand to copy the single element compression project as a template for a new project.
+- Add a ``waves quickstart`` subcommand to copy the rectangle compression project as a template for a new project.
   Currently limited to the "SCons-WAVES quickstart" tutorial files. (:issue:`284`, :merge:`300`). By `Kyle Brindley`_.
 - Add a documentation template to the ``waves quickstart`` subcommand (:issue:`291`, :merge:`314`). By `Kyle Brindley`_.
 

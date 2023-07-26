@@ -19,7 +19,7 @@ help users create the content of :ref:`tutorialsconstruct`. The :ref:`waves_cli`
 also be used to create a local copy of any tutorial file.
 
 Finally, users who are are ready to create their own modsim repository can use the :ref:`waves_cli`
-:ref:`waves_quickstart_cli` subcommand to generate a modsim template directory structure from the single element example
+:ref:`waves_quickstart_cli` subcommand to generate a modsim template directory structure from the rectangle example
 model. The template files include project documentation and two simulation configurations: nominal and mesh convergence.
 The :ref:`waves_fetch_cli` subcommand may be used to fetch individual template directories and files from both the
 quickstart template and the tutorials.

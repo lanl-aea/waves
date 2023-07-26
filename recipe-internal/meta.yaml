@@ -73,6 +73,7 @@ test:
     - salib >=1
     - scipy >=1.7
     - scons
+    - seaborn
     - sed
     - setuptools_scm
     - xarray
@@ -121,6 +122,7 @@ test:
     - scons . --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --keep-going --unconditional-build
+    - scons . --sconstruct=tutorial_correlation_coefficients_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_11_archival_SConstruct --jobs=4 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --keep-going --unconditional-build
