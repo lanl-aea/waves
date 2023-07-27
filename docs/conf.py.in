@@ -116,10 +116,7 @@ maketitle = f"""
   \\vfill
   {{\\LARGE \\textsf{{{epub_author}}} \\par}}
   \\vfill\\vfill
-  {{\\large
-   \\textsf{{\\today}} \\par
-   \\vfill
-  }}
+  {{\\large \\textsf{{\\today}} }}
   \\clearpage
   {copyright_latex}
   \\clearpage
