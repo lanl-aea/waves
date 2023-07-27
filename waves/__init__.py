@@ -36,6 +36,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 from importlib.metadata import version, PackageNotFoundError
 
 from waves import scons
+# TODO: Remove the builders module for v1.0
+from waves import builders
 from waves import parameter_generators
 
 try:
