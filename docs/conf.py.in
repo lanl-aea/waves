@@ -103,12 +103,33 @@ preamble = """
 \\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}
 \\AtBeginEnvironment{sphinxVerbatim}{\\scriptsize}
 """
+
 # Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
 latex_project = project.replace('_', '-')
 latex_basename = f"{latex_project.lower()}-{version}.tex"
+
+maketitle = f"""
+\\begin{{titlepage}}%
+  {{\\includegraphics[width=\\textwidth]{{waves_logo_brandmark_large_wide_vfill.png}} \\par}}
+  \\vfill
+  {{\\Huge {latex_project.upper()} \\par}}
+  {{\\itshape\\LARGE {version} \\par}}
+  \\vfill
+  {{\\LARGE \\author{{{author_latex}}} \\par}}
+  \\vfill\\vfill
+  {{\\large
+   \\date{{\\today}} \\par
+   \\vfill
+  }}
+  \\clearpage
+  {copyright_latex}
+  \\clearpage
+\\end{{titlepage}}
+"""
+
 latex_elements = {
     'preamble': preamble,
-    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
+    'maketitle': maketitle
 }
 latex_documents = [
     (master_doc, latex_basename, latex_project.upper(), author_latex, 'manual'),
