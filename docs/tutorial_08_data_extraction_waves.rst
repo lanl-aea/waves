@@ -23,7 +23,7 @@ Future releases of |PROJECT| may include extract utilities for other numeric sol
 References
 **********
 
-* |PROJECT| :ref:`waves_builders_api` API: :meth:`waves.scons.abaqus_extract`
+* |PROJECT| :ref:`waves_scons_api` API: :meth:`waves.scons.abaqus_extract`
 * :ref:`odb_extract_cli` CLI
 
 ***********

@@ -65,7 +65,7 @@ output artifacts created by the action, such as an Abaqus model file. It is also
 noting that the ``SConscript`` file naming convention is case sensitive.
 In this tutorial, we will build the geometry for a rectangle part using the
 :meth:`waves.scons.abaqus_journal` builder (click the builder's name to link to the
-|PROJECT| :ref:`waves_builders_api` API).
+|PROJECT| :ref:`waves_scons_api` API).
 
 5. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
 
@@ -118,9 +118,9 @@ interface with the ``journal_options`` string will be discussed in
 
 Next, the ``workflow`` list is extended to include the action to use the :meth:`waves.scons.abaqus_journal` builder,
 as discussed in :ref:`tutorialsconstruct`. For more information about the behavior of the
-:meth:`waves.scons.abaqus_journal` builder, click the builder's link or see the |PROJECT| :ref:`waves_builders_api`
+:meth:`waves.scons.abaqus_journal` builder, click the builder's link or see the |PROJECT| :ref:`waves_scons_api`
 API. The ``target`` list specifies the files created by the :meth:`waves.scons.abaqus_journal` task's action, which
-is defined in the :ref:`waves_builders_api` API.
+is defined in the :ref:`waves_scons_api` API.
 
 7. Continue editing the file ``tutorial_01_geometry`` using contents below.
 

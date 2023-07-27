@@ -2,7 +2,7 @@
 External API
 ############
 
-.. _waves_builders_api:
+.. _waves_scons_api:
 
 ****************
 SCons Extensions
