@@ -1,7 +1,7 @@
+import platform
 from unittest.mock import patch
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
-import platform
 
 
 def platform_check():
