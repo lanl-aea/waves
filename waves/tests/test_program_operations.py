@@ -1,6 +1,5 @@
 import os
 import pathlib
-import platform
 import unittest
 from unittest.mock import patch, call
 
@@ -8,13 +7,10 @@ import pytest
 import SCons
 
 from waves import scons
+from common import platform_check
 
-if platform.system().lower() == "windows":
-    root_fs = "C:\\"
-    testing_windows = True
-else:
-    root_fs = "/"
-    testing_windows = False
+
+testing_windows, root_fs = platform_check()
 
 find_program_input = {
     "string": (

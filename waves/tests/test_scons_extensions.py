@@ -5,7 +5,6 @@ import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
 from unittest.mock import patch, call
-import platform
 
 import pytest
 import SCons.Node.FS
@@ -18,16 +17,12 @@ from waves._settings import _abaqus_explicit_extensions
 from waves._settings import _abaqus_standard_extensions
 from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _stdout_extension
+from common import platform_check
 
 
 fs = SCons.Node.FS.FS()
 
-if platform.system().lower() == "windows":
-    root_fs = "C:\\"
-    testing_windows = True
-else:
-    root_fs = "/"
-    testing_windows = False
+testing_windows, root_fs = platform_check()
 
 
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
