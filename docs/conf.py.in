@@ -112,8 +112,7 @@ maketitle = f"""
 \\begin{{titlepage}}%
   {{\\includegraphics[width=\\textwidth]{{{latex_logo}}} \\par}}
   \\vfill
-  {{\\Huge {latex_project.upper()} \\par}}
-  {{\\itshape\\LARGE {version} \\par}}
+  {{\\itshape\\LARGE Release {version} \\par}}
   \\vfill
   {{\\LARGE \\author{{{author_latex}}} \\par}}
   \\vfill\\vfill
