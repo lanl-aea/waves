@@ -114,10 +114,10 @@ maketitle = f"""
   \\vfill
   {{\\itshape\\LARGE Release {version} \\par}}
   \\vfill
-  {{\\LARGE \\author{{{author_latex}}} \\par}}
+  {{\\LARGE {epub_author} \\par}}
   \\vfill\\vfill
   {{\\large
-   \\date{{\\today}} \\par
+   \\today \\par
    \\vfill
   }}
   \\clearpage
