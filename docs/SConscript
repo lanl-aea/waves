@@ -114,7 +114,7 @@ documentation_file_list = [
     'tutorial_environment_activation.txt',
     'aea_environment_activation.txt',
     'waves_logo_brandmark_smaller.png',
-    'waves_logo_brandmark_large_wide_vfill.png',
+    'waves_logo_primary_large_crop.png',
     'waves_quickstart.rst',
     'waves_quickstart.png',
     'wip_warning.txt',

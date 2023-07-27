@@ -81,13 +81,13 @@ templates_path = ['_templates']
 source_suffix = ['.rst']
 
 # -- Options for HTML output -------------------------------------------------
-html_logo = 'waves_logo_brandmark_smaller.png'
+html_logo = 'waves_logo_primary_large_crop.png'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
-latex_logo = 'waves_logo_brandmark_large_wide_vfill.png'
+latex_logo = 'waves_logo_primary_large_crop.png'
 copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
@@ -110,7 +110,7 @@ latex_basename = f"{latex_project.lower()}-{version}.tex"
 
 maketitle = f"""
 \\begin{{titlepage}}%
-  {{\\includegraphics[width=\\textwidth]{{waves_logo_brandmark_large_wide_vfill.png}} \\par}}
+  {{\\includegraphics[width=\\textwidth]{{{latex_logo}}} \\par}}
   \\vfill
   {{\\Huge {latex_project.upper()} \\par}}
   {{\\itshape\\LARGE {version} \\par}}
