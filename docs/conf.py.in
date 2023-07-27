@@ -112,11 +112,11 @@ maketitle = f"""
 \\begin{{titlepage}}%
   {{\\includegraphics[width=\\textwidth]{{{latex_logo}}} \\par}}
   \\vfill
-  {{\\itshape\\LARGE \\textsf{{Release {version}}} \\par}}
+  {{\\itshape\\LARGE \\textbf{{ \\textsf{{ Release {version} }} }} \\par}}
   \\vfill
-  {{\\LARGE \\textsf{{{epub_author}}} \\par}}
+  {{\\LARGE \\textbf{{ \\textsf{{ {epub_author} }} }} \\par}}
   \\vfill\\vfill
-  {{\\large \\textsf{{\\today}} }}
+  {{\\large \\textbf{{ \\textsf{{ \\today }} }} }}
   \\clearpage
   {copyright_latex}
   \\clearpage
