@@ -109,10 +109,19 @@ latex_project = project.replace('_', '-')
 latex_basename = f"{latex_project.lower()}-{version}.tex"
 
 maketitle = f"""
+\\DeclareRobustCommand{{\\and}}{{
+    \\end{{tabular}}\\kern-\\tabcolsep
+    \\allowbreak
+    \\hskip\\dimexpr1em+\\tabcolsep\\begin{{tabular}}[t]{{c}}
+}}
 \\begin{{titlepage}}%
   {{\\includegraphics[width=\\textwidth]{{{latex_logo}}} \\par}}
   \\vfill
-  {{\\centering \\LARGE \\textbf{{ \\textsf{{ {epub_author} }} }} \\par}}
+  {{\\centering \\LARGE \\textbf{{ \\textsf{{
+    \\begin{{tabular}}[t]{{c}}
+      {author_latex}
+    \\end{{tabular}}\\kern-\\tabcolsep
+  }} }} \\par}}
   \\vfill\\vfill
   {{\\large \\textbf{{ \\textsf{{ Release {version} }} }} \\par}}
   {{\\large \\textbf{{ \\textsf{{ \\today }} }} }}
