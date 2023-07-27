@@ -14,7 +14,7 @@ While this object and interface is good for scripting with the Abaqus kernel and
 limited to the Python 2.7 environment that is shipped with Abaqus. When post-processing requires more Python libraries
 or other third party tools, it is common to extract a portion of the Abaqus results to an intermediate file. To reduce
 duplicated effort in extracting Abaqus ODB files to a common format, the :ref:`odb_extract_cli` command line utility and
-the associated :meth:`waves.builders.abaqus_extract` builder are provided to parse the output of ``abaqus odbreport``
+the associated :meth:`waves.scons.abaqus_extract` builder are provided to parse the output of ``abaqus odbreport``
 into several `xarray dataset`_ objects in an H5 file.
 
 Future releases of |PROJECT| may include extract utilities for other numeric solvers.
@@ -23,7 +23,7 @@ Future releases of |PROJECT| may include extract utilities for other numeric sol
 References
 **********
 
-* |PROJECT| :ref:`waves_builders_api` API: :meth:`waves.builders.abaqus_extract`
+* |PROJECT| :ref:`waves_builders_api` API: :meth:`waves.scons.abaqus_extract`
 * :ref:`odb_extract_cli` CLI
 
 ***********
@@ -57,7 +57,7 @@ below to help identify the changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_07_cartesian_product
 
-The only new code in this tutorial adds the :meth:`waves.builders.abaqus_extract` builder task. Note that this task
+The only new code in this tutorial adds the :meth:`waves.scons.abaqus_extract` builder task. Note that this task
 falls within the parameterization loop and will be executed once per parameter set. :ref:`odb_extract_cli` will output
 two files: ``rectangle_compression_datasets.h5``, which contains h5py paths to the `Xarray`_ datasets, and
 ``rectangle_compression.h5``, which contains h5py native datasets for anything that :ref:`odb_extract_cli` doesn't

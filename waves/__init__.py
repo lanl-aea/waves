@@ -35,7 +35,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from importlib.metadata import version, PackageNotFoundError
 
-from waves import builders
+from waves import scons
 from waves import parameter_generators
 
 try:

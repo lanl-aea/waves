@@ -58,8 +58,8 @@ solely to minimize hard-coded duplication of the strings ``'rectangle_partition'
 In the code pertaining to ``# Partition``, we will again pass an empty string for the ``journal_options``. We will
 re-open the discussion of using the journal file's command line interface via the ``journal_options`` variable in
 :ref:`tutorial_parameter_substitution_waves`. Next, the ``workflow`` list is extended once again to include the action
-to use the :meth:`waves.builders.abaqus_journal` builder. The ``target`` list specifies the files created by the
-:meth:`waves.builders.abaqus_journal` task's action, and the ``source`` list specifies on which files to act in order to
+to use the :meth:`waves.scons.abaqus_journal` builder. The ``target`` list specifies the files created by the
+:meth:`waves.scons.abaqus_journal` task's action, and the ``source`` list specifies on which files to act in order to
 produce the targets.
 
 Keen readers will note that this source-target definition is slightly different
@@ -84,13 +84,13 @@ execution order. Incomplete source and target lists also make it impossible for 
 determine when a target needs to be re-built. If not specified as a source, the ``rectangle_geometry.cae`` file
 could change and the build system would not know that the ``rectangle_partition.cae`` target needs to be re-built.
 
-With the two sources defined, the :meth:`waves.builders.abaqus_journal` builder has all the information it needs to
+With the two sources defined, the :meth:`waves.scons.abaqus_journal` builder has all the information it needs to
 build the ``rectangle_partition.cae`` target.
 
 In the code pertaining to ``# Mesh``, the trend continues. We will re-assign the ``journal_file`` variable to the
 meshing journal file name  to reduce hard-coded duplication of strings. We define an empty string for
 ``journal_options``, as nothing other than the default is required for this task. We finally extend the workflow to
-utilize the :meth:`waves.builders.abaqus_journal` builder on the ``source`` list. Just like the code for ``#
+utilize the :meth:`waves.scons.abaqus_journal` builder on the ``source`` list. Just like the code for ``#
 Partition``, we have two sources. In this tutorial, we rely on the ``rectangle_mesh.py`` CLI default arguments
 which will use the ``rectangle_partition.cae`` file as the input model file. Readers are encouraged to return to
 the :ref:`waves_eabm_cli` to become familiar with the command line arguments available for the journal files in this
@@ -99,7 +99,7 @@ tutorial.
 The ``target`` list, however, shows another difference with the behavior we have seen previously. Now, we have two
 targets instead of one. You should now be familiar with the behavior that generates the ``rectangle_mesh.cae``
 target. The new target is the ``rectangle_mesh.inp`` file. This file is called an *orphan mesh* file. When the
-:meth:`waves.builders.abaqus_journal` builder acts on the ``rectangle_mesh.py`` file, our two target files are
+:meth:`waves.scons.abaqus_journal` builder acts on the ``rectangle_mesh.py`` file, our two target files are
 created. The orphan mesh file is created by calling the ``export_mesh()`` function within the ``rectangle_mesh.py``
 file. See the :ref:`waves_eabm_api` for the :ref:`sphinx_abaqus_journal_utilities_api` file for more information about
 the ``export_mesh()`` function.

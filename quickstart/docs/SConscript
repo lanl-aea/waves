@@ -23,7 +23,7 @@ alias_list = []
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
-    SUBST_DICT=waves.builders.substitution_syntax(project_variables))
+    SUBST_DICT=waves.scons.substitution_syntax(project_variables))
 
 # Copy project root files required by the documentation
 project_dir = pathlib.Path(env["project_dir"])

@@ -6,7 +6,7 @@ Internal API
 SCons Builders
 **************
 
-.. automodule:: waves.builders
+.. automodule:: waves.scons
     :noindex:
     :members:
     :private-members:

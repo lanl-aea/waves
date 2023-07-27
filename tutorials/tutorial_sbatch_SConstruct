@@ -37,8 +37,8 @@ env = Environment(ENV=os.environ.copy(),
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
-env['sbatch'] = waves.builders.add_program(["sbatch"], env)
+env['abaqus'] = waves.scons.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
+env['sbatch'] = waves.scons.add_program(["sbatch"], env)
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -69,13 +69,13 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 def solve_builder_select():
     """Run the SLURM sbatch builder if available. Fall back to AbaqusSolver builder in not."""
     if env["sbatch"]:
-        return waves.builders.sbatch(program=env['sbatch'])
+        return waves.scons.sbatch(program=env['sbatch'])
     else:
-        return waves.builders.abaqus_solver(program=env['abaqus'])
+        return waves.scons.abaqus_solver(program=env['abaqus'])
 
 
 env.Append(BUILDERS={
-    'AbaqusJournal': waves.builders.abaqus_journal(program=env['abaqus']),
+    'AbaqusJournal': waves.scons.abaqus_journal(program=env['abaqus']),
     'AbaqusSolver': solve_builder_select()})
 
 # Comments used in tutorial code snippets: marker-6
@@ -98,6 +98,6 @@ for workflow in workflow_configurations:
 env.Default()  # Empty defaults list to avoid building all simulation targets by default
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-waves.builders.project_help_message()
+waves.scons.project_help_message()
 
 # Comments used in tutorial code snippets: marker-8

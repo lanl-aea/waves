@@ -69,7 +69,7 @@ abaqus_source_list = [
     abaqus_source_abspath / "history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
+workflow.extend(waves.scons.copy_substitute(abaqus_source_list))
 
 # Comment used in tutorial code snippets: marker-4
 

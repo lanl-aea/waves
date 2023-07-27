@@ -29,7 +29,7 @@ def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
     Return None if the old keyword argument is not found in the keyword arguments dictionary.
 
     >>> def function_with_kwarg_change(new_kwarg="something", **kwargs):
-    >>>     old_kwarg = waves.builders._warn_kwarg_change()
+    >>>     old_kwarg = waves.scons._warn_kwarg_change()
     >>>     new_kwarg = old_kwarg if old_kwarg is not None else new_kwarg
 
     :param dict kwargs: The ``**kwargs`` dictionary from a function interface
@@ -54,8 +54,8 @@ def project_help_message(env=None, append=True):
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
 
-    * :meth:`waves.builders.default_targets_message`
-    * :meth:`waves.builders.alias_list_message`
+    * :meth:`waves.scons.default_targets_message`
+    * :meth:`waves.scons.alias_list_message`
 
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
@@ -129,7 +129,7 @@ def append_env_path(program, env):
        import waves
 
        env = Environment()
-       env["program"] = waves.builders.find_program(["program"], env)
+       env["program"] = waves.scons.find_program(["program"], env)
        if env["program"]:
            waves.append_env_path(env["program"], env)
 
@@ -165,7 +165,7 @@ def _quote_spaces_in_path(path):
     >>> import pathlib
     >>> import waves
     >>> path = pathlib.Path("path/directory with space/filename.ext")
-    >>> waves.builders.quote_spaces_in_path(path)
+    >>> waves.scons.quote_spaces_in_path(path)
     PosixPath('path/"directory with space"/filename.ext')
 
     :param pathlib.Path path: path to modify as necessary
@@ -220,7 +220,7 @@ def add_program(names, env):
        import waves
 
        env = Environment()
-       env["program"] = waves.builders.add_program(["program"], env)
+       env["program"] = waves.scons.add_program(["program"], env)
 
     :param list names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
@@ -249,7 +249,7 @@ def add_cubit(names, env):
        import waves
 
        env = Environment()
-       env["cubit"] = waves.builders.add_cubit(["cubit"], env)
+       env["cubit"] = waves.scons.add_cubit(["cubit"], env)
 
     :param list names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
@@ -391,7 +391,7 @@ def abaqus_journal(program="abaqus", post_action=None, **kwargs):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={"AbaqusJournal": waves.builders.abaqus_journal()})
+       env.Append(BUILDERS={"AbaqusJournal": waves.scons.abaqus_journal()})
        AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
     :param str program: An absolute path or basename string for the abaqus program.
@@ -513,10 +513,10 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
        import waves
        env = Environment()
        env.Append(BUILDERS={
-           "AbaqusSolver": waves.builders.abaqus_solver(),
-           "AbaqusStandard": waves.builders.abaqus_solver(emitter='standard'),
-           "AbaqusOld": waves.builders.abaqus_solver(program="abq2019"),
-           "AbaqusPost": waves.builders.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")
+           "AbaqusSolver": waves.scons.abaqus_solver(),
+           "AbaqusStandard": waves.scons.abaqus_solver(emitter='standard'),
+           "AbaqusOld": waves.scons.abaqus_solver(program="abq2019"),
+           "AbaqusPost": waves.scons.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")
        })
        AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
        AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
@@ -602,7 +602,7 @@ def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environ
        substitution_dictionary = {
            "@variable_one@": "value_one"
        }
-       waves.builders.copy_substitute(source_list, substitution_dictionary, env)
+       waves.scons.copy_substitute(source_list, substitution_dictionary, env)
 
     :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
     :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional
@@ -664,7 +664,7 @@ def python_script(post_action=None):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={"PythonScript": waves.builders.python_script()})
+       env.Append(BUILDERS={"PythonScript": waves.scons.python_script()})
        PythonScript(target=["my_output.stdout"], source=["my_script.py"], python_options="", script_options="")
 
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
@@ -793,10 +793,10 @@ def conda_environment():
 
     The modsim owner may choose to re-use this builder throughout their project configuration to provide various levels
     of granularity in the recorded Conda environment state. It's recommended to include this builder at least once for
-    any workflows that also use the :meth:`waves.builders.python_builder`. The builder may be re-used once per build
+    any workflows that also use the :meth:`waves.scons.python_builder`. The builder may be re-used once per build
     sub-directory to provide more granular build environment reproducibility in the event that sub-builds are run at
     different times with variations in the active Conda environment. For per-Python script task environment
-    reproducibility, the builder source list can be linked to the output of a :meth:`waves.builders.python_builder` task
+    reproducibility, the builder source list can be linked to the output of a :meth:`waves.scons.python_builder` task
     with a target environment file name to match.
 
     The first recommendation, always building the project wide Conda environment file, is demonstrated in the example
@@ -807,7 +807,7 @@ def conda_environment():
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={"CondaEnvironment": waves.builders.conda_environment()})
+       env.Append(BUILDERS={"CondaEnvironment": waves.scons.conda_environment()})
        environment_target = env.CondaEnvironment(target=["environment.yaml"])
        env.AlwaysBuild(environment_target)
 
@@ -881,7 +881,7 @@ def abaqus_extract(program="abaqus", **kwargs):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={"AbaqusExtract": waves.builders.abaqus_extract()})
+       env.Append(BUILDERS={"AbaqusExtract": waves.scons.abaqus_extract()})
        AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
     :param str program: An absolute path or basename string for the abaqus program
@@ -958,7 +958,7 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
 
        import waves
        env = Environment()
-       env.Append(BUILDERS={"SlurmSbatch": waves.builders.sbatch()})
+       env.Append(BUILDERS={"SlurmSbatch": waves.scons.sbatch()})
        SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="echo $SOURCE > $TARGET")
 
     :param str program: An absolute path or basename string for the sbatch program.

@@ -141,9 +141,9 @@ avoid this issue by providing the absolute path to ``rectangle_partition.cae`` a
 
 The ``--output-file`` command line argument is specified in this case only for demonstration (the default value would
 actually work just fine). It is important to note that the ``--output-file`` name is **not** given as ``set_name /
-journal_file``. This is because the :meth:`waves.builders.abaqus_journal` builder's action first changes the build
+journal_file``. This is because the :meth:`waves.scons.abaqus_journal` builder's action first changes the build
 directory to the parent directory of the first specified target, then the journal file is executed. This behavior is
-explained further in the :meth:`waves.builders.abaqus_journal` API.
+explained further in the :meth:`waves.scons.abaqus_journal` API.
 
 The highlighted line containing ``partition_cae_object`` demonstrates the usage of an ``SCons`` file object as a source.
 Rather than pointing to the ``rectangle_partition.cae`` file via absolute path, we can let ``SCons`` find the file
