@@ -52,6 +52,7 @@ except PackageNotFoundError:
         import setuptools_scm
         __version__ = setuptools_scm.get_version(root=pathlib.Path(__file__).parent.parent)
 
+
 # TODO: Remove the builders module for v1.0
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/511
 import types
@@ -61,19 +62,31 @@ from waves import builders
 
 # https://stackoverflow.com/a/39184411
 def decorate_all_functions_in_module(module, decorator):
+    """Find all module objects that look like functions and wrap them in the provided decorator
+
+    :param module: The module to search with ``dir``
+    :param decorator: The decorator function
+    """
     for name in dir(module):
         obj = getattr(module, name)
         if isinstance(obj, types.FunctionType):
             setattr(module, name, decorator(obj))
 
 
-def deprecation_warning_decorator(f):
-    @functools.wraps(f)
+def deprecation_warning_decorator(function):
+    """Decorator wrapper function
+
+    :param function: The function to wrap with the decorator
+
+    :return: Decorator wrapped function
+    :rtypte: function
+    """
+    @functools.wraps(function)
     def wrapper(*args, **kwargs):
         warnings.simplefilter('always', DeprecationWarning)
         message = "The 'waves.builders' module will be deprecated in a future version. Use the 'waves.scons' module instead"
         warnings.warn(message, DeprecationWarning)
-        return f(*args, **kwargs)
+        return function(*args, **kwargs)
     return wrapper
 
 decorate_all_functions_in_module(builders, deprecation_warning_decorator)
