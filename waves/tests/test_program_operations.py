@@ -99,5 +99,3 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
         assert str(cubit_library_path) == env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0]
     else:
         assert original_path == env["ENV"]["PATH"]
-
-
