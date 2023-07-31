@@ -137,7 +137,7 @@ local computers without cluttering their test builds with tasks that cannot succ
 :ref:`tutorial_geometry_waves` will introduce the use of these variables for build control.
 
 The `SCons`_ native solution for finding a program is the `CheckProg`_ configuration method. The
-:meth:`waves.builders.add_program` method wraps `CheckProg`_ to search for a list of possible program names. This is
+:meth:`waves.scons_extensions.add_program` method wraps `CheckProg`_ to search for a list of possible program names. This is
 most useful when multiple versions of a program can be used to build the project and the various servers where the
 project is built may have different versions available. The project will build with the first available program name
 without changes to the project configuration. If a program is found, it will also be added to the SCons environment
@@ -179,7 +179,7 @@ provided by `WAVES`_ reduce the requisite background knowledge to begin creating
 construction environment ``BUILDERS`` variable must be updated to include these custom `SCons`_ builders and make them
 available to the simulation configuration starting in :ref:`tutorial_geometry_waves`.
 
-The `WAVES`_ :ref:`waves_builders_api` API describes the available builders and their usage. As `WAVES`_ matures, more software will be
+The `WAVES`_ :ref:`waves_scons_api` API describes the available builders and their usage. As `WAVES`_ matures, more software will be
 supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own `SCons custom
 builders`_.
 
@@ -222,17 +222,17 @@ with the `SCons Alias`_ feature. By convention, the `WAVES tutorials`_ match the
 name. :ref:`tutorial_geometry_waves` will introduce the first target alias, which will then populate the project help
 message diplayed by the ``scons -h`` command option.
 
-The :meth:`waves.builders.project_help_message` wraps two common calls to the `SCons Help`_ construction environment
+The :meth:`waves.scons_extensions.project_help_message` wraps two common calls to the `SCons Help`_ construction environment
 method that will append the following to the project help message accessed by ``scons -h``:
 
 * the command line build options
 * the default target list
 * the project alias list
 
-The help messages are added to the construction environment, so the :meth:`waves.builders.project_help_message` call
+The help messages are added to the construction environment, so the :meth:`waves.scons_extensions.project_help_message` call
 must come after the construction environment instantiation. To properly capture all targets and aliases, the method call
 must also come after all ``SConscript`` and ``Alias`` method calls. Generally, it's best to simply call
-:meth:`waves.builders.project_help_message` as the final line in your project configuration.
+:meth:`waves.scons_extensions.project_help_message` as the final line in your project configuration.
 
 .. note::
 

@@ -37,7 +37,7 @@ env = Environment(ENV=os.environ.copy(),
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['matlab'] = waves.builders.add_program(["/apps/matlab/R2021b/bin/matlab", "matlab"], env)
+env['matlab'] = waves.scons_extensions.add_program(["/apps/matlab/R2021b/bin/matlab", "matlab"], env)
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -61,7 +61,7 @@ for key, value in project_variables.items():
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
-env.Append(BUILDERS={'MatlabScript': waves.builders.matlab_script(program=env['matlab'])})
+env.Append(BUILDERS={'MatlabScript': waves.scons_extensions.matlab_script(program=env['matlab'])})
 
 # Comments used in tutorial code snippets: marker-6
 
@@ -79,6 +79,6 @@ for workflow in workflow_configurations:
 env.Default()  # Empty defaults list to avoid building all simulation targets by default
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-waves.builders.project_help_message()
+waves.scons_extensions.project_help_message()
 
 # Comments used in tutorial code snippets: marker-8

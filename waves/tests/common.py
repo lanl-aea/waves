@@ -1,9 +1,26 @@
-from waves._settings import _hash_coordinate_key, _set_coordinate_key
+import platform
 from unittest.mock import patch
+
+from waves._settings import _hash_coordinate_key, _set_coordinate_key
+
+
+def platform_check():
+    """Check platform and set platform specific variables
+
+    :return: tuple (root_fs, testing_windows)
+    :rtype: (str, bool)
+    """
+    if platform.system().lower() == "windows":
+        root_fs = "C:\\"
+        testing_windows = True
+    else:
+        root_fs = "/"
+        testing_windows = False
+    return testing_windows, root_fs
 
 
 def consistent_hash_parameter_check(original_study, merged_study):
-    """Assert that the merged parameter study data matches the original parameter study. 
+    """Assert that the merged parameter study data matches the original parameter study.
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] original_study: Original sampler object
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Merged sampler object
@@ -13,7 +30,7 @@ def consistent_hash_parameter_check(original_study, merged_study):
 
 
 def self_consistency_checks(merged_study):
-    """Assert that the merged parameter set data is consistent throughout the sampler object. 
+    """Assert that the merged parameter set data is consistent throughout the sampler object.
 
     :param Union[CartesianProduct, SobolSequence, ScipySampler, SALibSampler] merged_study: Sampler object
     """

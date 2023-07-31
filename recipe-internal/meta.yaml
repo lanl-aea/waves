@@ -85,7 +85,10 @@ test:
     - waves docs --print-local-path
     # Test as-installed project unit tests
     - cd $SP_DIR/$PKG_NAME
-    - pytest
+    # FIXME: Trace the source of interference between the builder tests and the find_program tests.
+    # Use ``pytest`` when fixed
+    - pytest -m "not fixsconsusage and not systemtest"
+    - pytest -m "fixsconsusage"
     - cd ${test_root}
     # WAVES CLI regression tests
     - quickstart_regression_directory="${test_root}/test_quickstart"

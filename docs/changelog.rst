@@ -15,6 +15,9 @@ Breaking changes
 - Standardize the builder program path keyword from ``<thing>_program`` to ``program`` for greater consistency in
   builder APIs. The older keywords are preseved for backward compatibility, but they raise a deprecation warning
   (:issue:`495`, :merge:`613`). By `Kyle Brindley`_.
+- Rename the ``waves.builders`` module as ``waves.scons_extensions`` to reflect the growing scope of SCons extensions beyond a
+  collection of builders. Backward compatilibity is maintained by duplicating the module under the old name with a
+  deprecation warning (:issue:`492`, :merge:`618`). By `Kyle Brindley`_.
 
 Documentation
 =============
