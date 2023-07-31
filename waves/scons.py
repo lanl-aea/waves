@@ -165,7 +165,7 @@ def _quote_spaces_in_path(path):
     >>> import pathlib
     >>> import waves
     >>> path = pathlib.Path("path/directory with space/filename.ext")
-    >>> waves.scons.quote_spaces_in_path(path)
+    >>> waves.scons._quote_spaces_in_path(path)
     PosixPath('path/"directory with space"/filename.ext')
 
     :param pathlib.Path path: path to modify as necessary
