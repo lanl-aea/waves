@@ -1,2 +1,1 @@
-*node OUTPUT,nset=SINGLE_ELEMENT.ALLNODES
-U
+../../tutorials/eabm_package/abaqus/history_output.inp

@@ -1,5 +1,1 @@
-**
-*INSTANCE, NAME=single_element, PART=single_element
- 0.0, 0.0, 0.0
-*END INSTANCE
-**
+../../tutorials/eabm_package/abaqus/assembly.inp
