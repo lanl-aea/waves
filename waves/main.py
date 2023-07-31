@@ -35,7 +35,7 @@ def main():
                             overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
-                                    sconstruct=args.scons_extensionstruct, print_graphml=args.print_graphml,
+                                    sconstruct=args.sconstruct, print_graphml=args.print_graphml,
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
                                     height=args.height, width=args.width, font_size=args.font_size)
     elif args.subcommand in _settings._parameter_study_subcommands:
