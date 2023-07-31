@@ -6,8 +6,8 @@ Tutorial: Escape Sequences
 
 In addition to source and target file signatures, SCons saves a build signature that includes information about the
 action required to build the target. The build signature will include the substitution variables used in the task. For
-example, the contents of the ``abaqus_options`` string provided to the :meth:`waves.scons.abaqus_journal` and
-:meth:`waves.scons.abaqus_solver` builders is part of the build signature. Changes to these options will trigger a
+example, the contents of the ``abaqus_options`` string provided to the :meth:`waves.scons_extensions.abaqus_journal` and
+:meth:`waves.scons_extensions.abaqus_solver` builders is part of the build signature. Changes to these options will trigger a
 re-build of that task.
 
 Sometimes you may want to exclude elements of the task action from the build signature. For instance, the Solve step

@@ -3,7 +3,7 @@ build*/
 *.tar.bz2
 
 # SCons files
-.sconsign.dblite
+.scons_extensionsign.dblite
 config.log
 
 # Binary image files

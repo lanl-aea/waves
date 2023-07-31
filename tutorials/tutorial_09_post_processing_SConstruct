@@ -38,7 +38,7 @@ env = Environment(ENV=os.environ.copy(),
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = waves.scons.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
+env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -69,10 +69,10 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={
-    'AbaqusJournal': waves.scons.abaqus_journal(program=env['abaqus']),
-    'AbaqusSolver': waves.scons.abaqus_solver(program=env['abaqus']),
-    'AbaqusExtract': waves.scons.abaqus_extract(program=env['abaqus']),
-    'PythonScript': waves.scons.python_script()})
+    'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
+    'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
+    'AbaqusExtract': waves.scons_extensions.abaqus_extract(program=env['abaqus']),
+    'PythonScript': waves.scons_extensions.python_script()})
 
 # Comments used in tutorial code snippets: marker-6
 
@@ -98,6 +98,6 @@ for workflow in workflow_configurations:
 env.Default()  # Empty defaults list to avoid building all simulation targets by default
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-waves.scons.project_help_message()
+waves.scons_extensions.project_help_message()
 
 # Comments used in tutorial code snippets: marker-8

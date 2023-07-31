@@ -88,8 +88,8 @@ Solver Input Files
 In this tutorial, we will be modifying several files from :ref:`tutorial_simulation_waves`, the first of which is
 ``rectangle_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
 the ``.in`` extension for the purposes of *parameter substitution*. This change is made so it is easy for the
-:meth:`waves.scons.copy_substitute` method to identify which files should be searched for parameters. Any files with
-the ``.in`` extension that are passed to the :meth:`waves.scons.copy_substitute` method will be parsed for
+:meth:`waves.scons_extensions.copy_substitute` method to identify which files should be searched for parameters. Any files with
+the ``.in`` extension that are passed to the :meth:`waves.scons_extensions.copy_substitute` method will be parsed for
 characters matching the parameter definitions using substitution with `SCons Substfile`_. This is discussed in
 more detail later in this tutorial.
 
@@ -133,7 +133,7 @@ that each of these scripts is called using a command line interface that has def
 :ref:`waves_eabm_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
 parser for each of these scripts will supply a default value for each command line argument that is not specified
 (assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
-passed to the :meth:`waves.scons.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that
+passed to the :meth:`waves.scons_extensions.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that
 we get parameter substitution into our journal files when we need it. The ``width``, ``height``, and ``global_seed``
 keys of the ``simulation_variables`` dictionary will be used later in this tutorial to specify the values passed to the
 journal files via the CLI.
@@ -143,7 +143,7 @@ used in a slightly different way than the others, as the script that utilizes th
 command line interface. Recall from earlier in this tutorial, we created a new file called
 ``rectangle_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
 the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
-this is implemented with the :meth:`waves.scons.copy_substitute` method will come later in this tutorial.
+this is implemented with the :meth:`waves.scons_extensions.copy_substitute` method will come later in this tutorial.
 
 7. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
@@ -193,10 +193,10 @@ Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` mu
 of ``rectangle_compression.inp`` with the parameterized ``rectangle_compression.inp.in`` file.
 
 The final change to be made in the ``tutorial_05_parameter_substitution`` file is to utilize the
-``substitution_dictionary`` parameter in the usage of the :meth:`waves.scons.copy_substitute` method.
+``substitution_dictionary`` parameter in the usage of the :meth:`waves.scons_extensions.copy_substitute` method.
 
 In this tutorial, we leverage two different builder behaviors when defining sources and targets for the
-:meth:`waves.scons.copy_substitute` method. We are already familiar with one behavior, where the builder simply
+:meth:`waves.scons_extensions.copy_substitute` method. We are already familiar with one behavior, where the builder simply
 copies the source file to the build directory.
 
 This builder uses template substitution with files named with the ``*.in`` extension, and looks to match and replace
@@ -204,7 +204,7 @@ This builder uses template substitution with files named with the ``*.in`` exten
 parameter names uniquely identifiable (e.g. ``@variable@``). The surrounding ``@`` character is used during template
 subsitution of text files and helps uniquely identify text for parameter substitution without accidentally changing text
 that is not a parameter. The matching simulation parameter dictionary key modification is made by the
-:meth:`waves.scons.substitution_syntax` method only when necesssary for the ``substitution_dictionary`` behavior to
+:meth:`waves.scons_extensions.substitution_syntax` method only when necesssary for the ``substitution_dictionary`` behavior to
 avoid carrying around the special character for other uses of the simulation variables dictionary.
 
 The second behavior is utilized when we specify a file with ``*.in`` extension in the ``abaqus_source_list`` and we
@@ -369,7 +369,7 @@ the file we created earlier in this tutorial. There is also a file named ``recta
    A.rectangle.top,2,2,-0.01
    **
 
-With the use of the :meth:`waves.scons.copy_substitute` method, we used the ``rectangle_compression.inp.in``
+With the use of the :meth:`waves.scons_extensions.copy_substitute` method, we used the ``rectangle_compression.inp.in``
 file as the source and the ``rectangle_compression.inp`` file was the target. The builder acted by substituting the
 parameter key ``@displacement@`` with the parameter value ``-1.0``, and then generated the target with this information
 in the text, as shown above.

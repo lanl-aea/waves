@@ -22,12 +22,12 @@ env.PrependENVPath("PYTHONPATH", str(project_dir))
 VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = waves.scons.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
+env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
 
 # Add WAVES builders
 env.Append(BUILDERS=
-    {'AbaqusJournal': waves.scons.abaqus_journal(program=env['abaqus']),
-     'AbaqusSolver': waves.scons.abaqus_solver(program=env['abaqus'])})
+    {'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
+     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])})
 
 # Simulation variables
 model = "rectangle"
@@ -69,7 +69,7 @@ abaqus_source_list = [
     project_dir / abaqus_source_dir / "parts.inp",
     project_dir / abaqus_source_dir / "history_output.inp"
 ]
-workflow.extend(waves.scons.copy_substitute(abaqus_source_list, build_subdirectory=str(variant_dir_base)))
+workflow.extend(waves.scons_extensions.copy_substitute(abaqus_source_list, build_subdirectory=str(variant_dir_base)))
 
 # Abaqus Solve
 abaqus_options = '-double both'

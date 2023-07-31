@@ -81,9 +81,9 @@ abaqus_source_list = [
     abaqus_source_abspath / "history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.scons.copy_substitute(
+workflow.extend(waves.scons_extensions.copy_substitute(
     abaqus_source_list,
-    substitution_dictionary=waves.scons.substitution_syntax(simulation_variables)))
+    substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)))
 
 # Abaqus Solve
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]

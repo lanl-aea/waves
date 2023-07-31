@@ -50,7 +50,7 @@ changes made in this tutorial.
 
 Note that the new ``AbaqusSolver`` builder will be conditionally defined in the ``SConstruct`` file according to the
 availability of the ``sbatch`` command. If ``sbatch`` is not available, the ``slurm_job`` variable will go unused by the
-:meth:`waves.scons.abaqus_solver`` builder. Since `SCons`_ builders don't throw errors for unused keyword arguments,
+:meth:`waves.scons_extensions.abaqus_solver`` builder. Since `SCons`_ builders don't throw errors for unused keyword arguments,
 we do not need to define the task twice in the ``SConscript`` file.
 
 **********

@@ -35,7 +35,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from importlib.metadata import version, PackageNotFoundError
 
-from waves import scons
+from waves import scons_extensions
 from waves import parameter_generators
 
 try:
@@ -84,7 +84,7 @@ def deprecation_warning_decorator(function):
     @functools.wraps(function)
     def wrapper(*args, **kwargs):
         warnings.simplefilter('always', DeprecationWarning)
-        message = "The 'waves.builders' module will be deprecated in a future version. Use the 'waves.scons' module instead"
+        message = "The 'waves.builders' module will be deprecated in a future version. Use the 'waves.scons_extensions' module instead"
         warnings.warn(message, DeprecationWarning)
         return function(*args, **kwargs)
     return wrapper

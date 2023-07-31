@@ -6,7 +6,7 @@ test_quickstart/
 *.zip
 
 # SCons files
-.sconsign.dblite
+.scons_extensionsign.dblite
 config.log
 
 # Python distribution/packaging files

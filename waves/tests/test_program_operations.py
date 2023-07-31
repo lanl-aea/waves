@@ -6,7 +6,7 @@ from unittest.mock import patch, call
 import pytest
 import SCons
 
-from waves import scons
+from waves import scons_extensions
 from common import platform_check
 
 
@@ -54,7 +54,7 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf):
-        program = scons.find_program(names, env)
+        program = scons_extensions.find_program(names, env)
     assert program == first_found_path
 
 
@@ -73,7 +73,7 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
          patch("pathlib.Path.exists", return_value=True):
-        program = scons.add_program(names, env)
+        program = scons_extensions.add_program(names, env)
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = str(pathlib.Path(first_found_path).parent)
@@ -97,7 +97,7 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
          patch("pathlib.Path.exists", return_value=True):
-        program = scons.add_cubit(names, env)
+        program = scons_extensions.add_cubit(names, env)
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent

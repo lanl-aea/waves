@@ -8,7 +8,7 @@ External API
 SCons Extensions
 ****************
 
-.. automodule:: waves.scons
+.. automodule:: waves.scons_extensions
     :members:
     :show-inheritance:
     :synopsis: WAVES Analysis for Verified Engineering Simulations SCons builder extensions

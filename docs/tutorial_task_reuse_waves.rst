@@ -93,17 +93,17 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_11_archival
 
-4. Create a new file named ``rectangle_geometry_partition.scons`` from the contents below
+4. Create a new file named ``rectangle_geometry_partition.scons_extensions`` from the contents below
 
-.. admonition:: waves-tutorials/rectangle_geometry_partition.scons
+.. admonition:: waves-tutorials/rectangle_geometry_partition.scons_extensions
 
    .. literalinclude:: tutorials_rectangle_geometry_partition.scons
       :language: Python
       :lineno-match:
 
-5. Create a new file named ``rectangle_mesh_solverprep_solve_extract.scons`` from the contents below
+5. Create a new file named ``rectangle_mesh_solverprep_solve_extract.scons_extensions`` from the contents below
 
-.. admonition:: waves-tutorials/rectangle_mesh_solverprep_solve_extract.scons
+.. admonition:: waves-tutorials/rectangle_mesh_solverprep_solve_extract.scons_extensions
 
    .. literalinclude:: tutorials_rectangle_mesh_solverprep_solve_extract.scons
       :language: Python
