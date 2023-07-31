@@ -4,14 +4,13 @@ import re
 def export_mesh(model_object, part_name, orphan_mesh_file):
     """Export an orphan mesh for the specified part instance in an Abaqus model
 
-    Using an abaqus model object (``model_object = abaqus.mdb.models[model_name]``) with part(s) 
-    that are meshed and instanced in an assembly, get the ``*.inp`` keyword blocks and save an 
-    orphan mesh file, ``orphan_mesh_file``.inp, for the specific ``part_name``.
+    Using an abaqus model object (``model_object = abaqus.mdb.models[model_name]``) with part(s) that are meshed and
+    instanced in an assembly, get the ``*.inp`` keyword blocks and save an orphan mesh file, ``orphan_mesh_file``.inp,
+    for the specific ``part_name``.
 
     :param abaqus.mdb.models[model_name] model_object: Abaqus model object
     :param str part_name: Part name to export as an orphan mesh
-    :param str orphan_mesh_file: 
-        File name to write for the orphan mesh without extension, e.g. ``orphan_mesh_file``.inp
+    :param str orphan_mesh_file: File name to write for the orphan mesh without extension, e.g. ``orphan_mesh_file``.inp
 
     :returns: writes ``orphan_mesh_file``.inp
     """
