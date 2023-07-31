@@ -1,0 +1,4 @@
+*element OUTPUT, elset=SINGLE_ELEMENT.ELEMENTS, directions=YES
+E, S
+*node OUTPUT, nset=SINGLE_ELEMENT.ALLNODES
+U

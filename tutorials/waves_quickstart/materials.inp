@@ -1,0 +1,38 @@
+***************************************************************************
+**
+**
+**
+**  Primary units are as follows:
+**
+**  Mass:         Mg (mega-gram)
+**  Length:       mm
+**  Time:         sec
+**  Temperature:  deg Kelvin
+**
+**  This gives secondary units of:
+**
+**  Force:             Mg/mm*s^2 (same as N)
+**  Stress/Stiffness:  MPa
+**  Density:           Mg/mm^3
+**  Energy:            N-mm, or mJ
+**  Conductivity:      mW/mm*K (same as W/m*K)
+**  Specific heat:     mJ/Mg*K
+**
+**************************************************************************
+*MATERIAL, NAME=mock
+**
+*ELASTIC
+100, .3
+**
+*DENSITY
+.27000E-08,
+**
+*SPECIFIC HEAT
+8.96E+08
+**
+*CONDUCTIVITY
+132, 200
+**
+*EXPANSION,ZERO=293.15
+23.58E-06
+**************************************************************************

@@ -1,0 +1,61 @@
+#! /usr/bin/env python                                                                                                   
+import os                                                                                                                
+import waves                                                                                                             
+import pathlib                                                                                                           
+import re                                                                                                                
+                                                                                                                         
+# Add build directory CLI arg                                                                                            
+AddOption(                                                                                                               
+    "--build-dir",                                                                                                       
+    dest="build_dir",                                                                                                    
+    default="build",                                                                                                     
+    nargs=1,                                                                                                             
+    type="string",                                                                                                       
+    action="store",                                                                                                      
+    metavar="DIR",                                                                                                       
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')")                       
+                                                                                                                         
+# Inherit user's full environment                                                                                        
+env = Environment(                                                                                                       
+        ENV=os.environ.copy(),                                                                                           
+        build_dir=GetOption('build_dir'))                                                                                
+                                                                                                                         
+# Always copy (no sym-links) when duplicating
+env.SetOption('duplicate', 'copy')
+
+# Empty defaults list to avoid building all simulation targets by default                                                
+env.Default()                                                                                                            
+                                                                                                                         
+# Make the EABM package importable for Python and Abaqus Python environments                                             
+env.PrependENVPath("PYTHONPATH", str(pathlib.Path('.').resolve()))                                                       
+                                                                                                                         
+# Find required programs for conditional target ignoring and absolute path for use in target actions                     
+env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)                            
+                                                                                                                         
+# Add WAVES builders                                                                                                     
+env.Append(BUILDERS=                                                                                                     
+    {'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),                                       
+     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])})                                        
+                                                                                                                         
+# Abaqus input file implicit dependency scanner                                                                          
+inp_pattern = re.compile(r'^\*INCLUDE,\s*input=(.+)$', re.M|re.I)                                                        
+                                                                                                                         
+def inp_scan(node, env, path):                                                                                           
+    contents = node.get_text_contents()                                                                                  
+    includes = inp_pattern.findall(contents)                                                                             
+    return includes                                                                                                      
+                                                                                                                         
+def inp_only(node_list):                                                                                                 
+    return [node for node in node_list if node.path.endswith('.inp')]                                                    
+                                                                                                                         
+inp_scanner = Scanner(function=inp_scan, skeys=['.inp'], recursive=inp_only)                                             
+env.Append(SCANNERS=inp_scanner)                                                                                         
+                                                                                                                         
+build_dir = pathlib.Path(env['build_dir'])                                                                               
+                                                                                                                         
+# Call SConscript file                                                                                                   
+SConscript('SConscript', variant_dir=build_dir, exports='env', duplicate=True)                                           
+                                                                                                                         
+# List all aliases in help message. This must come *after* all expected Alias definitions and SConscript files.
+waves.builders.project_help_message()                                                                                    
+
