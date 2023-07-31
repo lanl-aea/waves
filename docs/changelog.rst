@@ -25,6 +25,7 @@ Documentation
   :merge:`614`, :merge:`615`). By `Kyle Brindley`_.
 - Trim down the README to focus on end users. Move developer notes directly into the HTML developer manual
   (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
+- Add the WAVES primarymark image to the PDF title page (:merge:`620`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
