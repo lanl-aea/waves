@@ -63,6 +63,8 @@ markers = [
     "unittest: marks codebase unit tests",
     "integrationtest: marks integration tests",
     "systemtest: marks system tests, e.g. the tutorials",
+    # FIXME: Trace the source of interference between the builder tests and the find_program tests
+    # Remove tag and use of tag when fixed.
     "fixsconsusage: marks tests that don't play nicely with SCons internal API usage"
 ]
 addopts = "-vvv --capture=sys --tb=long  --tb=auto -l --durations=10 --failed-first --strict-markers -r a -n 4 -m 'not systemtest'"
