@@ -23,6 +23,10 @@ Documentation
 - Trim down the README to focus on end users. Move developer notes directly into the HTML developer manual
   (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
 
+Enhancement
+===========
+- Simplified quickstart ``SConscript`` file (:issue:`453`, :merge:`619`). By `Sergio Cordova`_.
+
 Internal Changes
 ================
 - Reduce the runtime dependency from the full matplotlib to matplotlib-base following the conda-forge recommendation:
