@@ -30,6 +30,8 @@ Documentation
 - Trim down the README to focus on end users. Move developer notes directly into the HTML developer manual
   (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
 - Add the WAVES primarymark image to the PDF title page (:merge:`620`). By `Kyle Brindley`_.
+- Update the Cubit tutorial to demonstrate a side-by-side comparison of Abaqus and Sierra, where the Cubit tasks are
+  re-used for both solver workflows (:issue:`513`, :merge:`623`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
