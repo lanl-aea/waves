@@ -25,7 +25,7 @@ alias_list = env.Alias("pytest", pytest_node)
 env.AlwaysBuild(pytest_node)
 
 # System tests *must* be run in serial because they all try to write to the same sconsign file
-systemtest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -n0 -m systemtest --junitxml=${TARGETS[0].name}"
+systemtest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -n0 -m systemtest --junitxml=${TARGETS[0].name} --cache-clear"
 target = ["systemtest_results.xml"]
 source = waves_source_list + [str(pathlib.Path("waves/tests/test_tutorials.py"))]
 systemtest_node = env.Command(
