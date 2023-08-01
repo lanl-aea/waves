@@ -1,0 +1,16 @@
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+changes made in this tutorial.
+
+.. admonition:: waves-tutorials/tutorial_cubit/SConstruct
+
+   .. literalinclude:: tutorial_cubit_SConstruct
+      :language: Python
+      :diff: tutorials_tutorial_04_simulation_SConstruct
+
+Note that the Cubit Python files don't perform any imports from the current modsim project package, so the
+``PYTHONPATH`` modification is no longer required. This tutorial is created in a new, stand-alone subdirectory, so the
+previous tutorial workflow configurations are no longer available. Only the ``sierra`` and ``abaqus`` workflow
+configurations will be found by SCons at execution time. Finally, note that the ``cubit`` SConscript file is not called
+by the ``SConstruct`` file. Instead, the ``cubit`` configuration is re-used by the ``sierra`` and ``abaqus`` workflows,
+so the Cubit tasks only need to be defined once. To handle this task re-use some additional variable import and export
+statements are required by the ``cubit`` configuration file.

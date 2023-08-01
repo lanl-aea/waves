@@ -107,6 +107,8 @@ documentation_file_list = [
     'tutorial_setuptools_scm_waves.rst',
     'tutorial_cubit_abaqus.rst',
     'tutorial_cubit_sierra.rst',
+    'tutorial_cubit_SConstruct.txt',
+    'tutorial_cubit_journal_files.txt',
     'tutorial_mesh_convergence_waves.rst',
     'tutorial_escape_sequences_waves.rst',
     'tutorial_remote_execution_waves.rst',

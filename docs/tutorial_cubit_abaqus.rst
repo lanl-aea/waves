@@ -61,7 +61,7 @@ are relevant to the current tutorial. The ``sierra`` workflow is described in th
 
 5. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation_waves` files.
 
-The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files is
+The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.
 
 .. admonition:: waves-tutorials/tutorial_cubit/cubit
@@ -90,59 +90,19 @@ documentation for more information about virtual environment management with `Co
 Cubit Journal Files
 *******************
 
-5. Review the following journal files in the ``waves-tutorials/eabm_package/cubit`` directory.
-
-The Cubit journal files include the same CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
-files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
-files is the opportunity to use Python 3 with Cubit, where Abaqus journal files must use the Abaqus controlled
-installation of Python 2. The API and CLI built from the Cubit journal files' docstrings may be found in the
-:ref:`waves_eabm_api` for :ref:`cubit_journal_api` and the :ref:`waves_eabm_cli` for :ref:`cubit_journal_cli`,
-respectively.
-
-.. admonition:: waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py
-
-   .. literalinclude:: cubit_rectangle_geometry.py
-       :language: Python
-       :lineno-match:
-
-.. admonition:: waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_partition.py
-
-   .. literalinclude:: cubit_rectangle_partition.py
-       :language: Python
-       :lineno-match:
-
-.. admonition:: waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_mesh.py
-
-   .. literalinclude:: cubit_rectangle_mesh.py
-       :language: Python
-       :lineno-match:
+.. include:: tutorial_cubit_journal_files.txt
 
 **********
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
-changes made in this tutorial.
-
-.. admonition:: waves-tutorials/tutorial_cubit/SConstruct
-
-   .. literalinclude:: tutorial_cubit_SConstruct
-      :language: Python
-      :diff: tutorials_tutorial_04_simulation_SConstruct
-
-Note that the Cubit Python files don't perform any imports from the current modsim project package, so the
-``PYTHONPATH`` modification is no longer required. This tutorial is created in a new, stand-alone subdirectory, so the
-previous tutorial workflow configurations are no longer available. Only the ``sierra`` and ``abaqus`` workflow
-configurations will be found by SCons at execution time. Finally, note that the ``cubit`` SConscript file is not called
-by the ``SConstruct`` file. Instead, the ``cubit`` configuration is re-used by the ``sierra`` and ``abaqus`` workflows,
-so the Cubit tasks only need to be defined once. To handle this task re-use some additional variable import and export
-statements are required by the ``cubit`` configuration file.
+.. include:: tutorial_cubit_SConstruct.txt
 
 *************
 Build Targets
 *************
 
-6. Build the new targets
+7. Build the new targets
 
 .. code-block:: bash
 
