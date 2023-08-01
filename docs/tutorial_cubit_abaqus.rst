@@ -110,8 +110,11 @@ Build Targets
    /path/to/waves-tutorials/tutorial_cubit
    $ scons abaqus
    scons: Reading SConscript files ...
-   Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
-   Checking whether cubit program exists.../apps/Cubit-15.8/cubit
+   Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
+   Checking whether abq2023 program exists...no
+   Checking whether /apps/Cubit-16.04/cubit program exists.../apps/Cubit-16.04/cubit
+   Checking whether cubit program exists...no
+   Checking whether sierra program exists...no
    scons: done reading SConscript files.
    scons: Building targets ...
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
