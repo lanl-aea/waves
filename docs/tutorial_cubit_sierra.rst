@@ -116,10 +116,20 @@ Build Targets
    /path/to/waves-tutorials/tutorial_cubit
    $ scons sierra
    scons: Reading SConscript files ...
-   Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
-   Checking whether cubit program exists.../apps/Cubit-15.8/cubit
+   Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
+   Checking whether abq2023 program exists...no
+   Checking whether /apps/Cubit-16.04/cubit program exists.../apps/Cubit-16.04/cubit
+   Checking whether cubit program exists...no
+   Checking whether sierra program exists.../projects/sierra/sierra5121/install/tools/sntools/engine/sierra
    scons: done reading SConscript files.
    scons: Building targets ...
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_mesh.py --element-type SHELL --solver sierra > rectangle_mesh.stdout 2>&1
+   Copy("build/sierra/rectangle_compression.i", "eabm_package/sierra/rectangle_compression.i")
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && /projects/sierra/sierra5121/install/tools/sntools/engine/sierra adagio --version > rectangle_compression.env
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && /projects/sierra/sierra5121/install/tools/sntools/engine/sierra adagio -i rectangle_compression.i > rectangle_compression.stdout 2>&1
+   scons: done building targets.
 
 ************
 Output Files
@@ -132,29 +142,19 @@ below.
 
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_cubit
-   $ tree build/sierra
-   build/sierra
-   |-- assembly.inp
-   |-- boundary.inp
-   |-- field_output.inp
-   |-- history_output.inp
-   |-- materials.inp
-   |-- parts.inp
-   |-- rectangle_compression.abaqus_v6.env
-   |-- rectangle_compression.com
-   |-- rectangle_compression.dat
-   |-- rectangle_compression.inp
-   |-- rectangle_compression.msg
-   |-- rectangle_compression.odb
-   |-- rectangle_compression.prt
-   |-- rectangle_compression.sta
+   $ tree build/sierra/
+   build/sierra/
+   |-- rectangle_compression.e
+   |-- rectangle_compression.env
+   |-- rectangle_compression.i
+   |-- rectangle_compression.log
    |-- rectangle_compression.stdout
    |-- rectangle_geometry.cub
    |-- rectangle_geometry.stdout
    |-- rectangle_mesh.cub
-   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.g
    |-- rectangle_mesh.stdout
    |-- rectangle_partition.cub
    `-- rectangle_partition.stdout
 
-   0 directories, 22 files
+   0 directories, 12 files
