@@ -389,6 +389,26 @@ copy_substitute_input = {
 }
 
 
+source_file = fs.File("dummy.i")
+sierra_emitter_input = {
+    "one target": (["target.sierra"],
+                   [source_file],
+                   ["target.sierra", "target.stdout", "target.env"]),
+    "subdirectory": (["set1/dummy.sierra"],
+                    [source_file],
+                    ["set1/dummy.sierra", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.env"])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("target, source, expected",
+                         sierra_emitter_input.values(),
+                         ids=sierra_emitter_input.keys())
+def test_sierra_emitter(target, source, expected):
+    target, source = scons_extensions._sierra_emitter(target, source, None)
+    assert target == expected
+
+
 @pytest.mark.unittest
 @pytest.mark.parametrize("source_list, expected_list",
                          copy_substitute_input.values(),
