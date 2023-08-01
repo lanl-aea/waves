@@ -19,6 +19,10 @@ Breaking changes
   collection of builders. Backward compatilibity is maintained by duplicating the module under the old name with a
   deprecation warning (:issue:`492`, :merge:`618`, :issue:`512`, :merge:`621`). By `Kyle Brindley`_.
 
+New Features
+============
+- Add experimental builder support for Sierra (:issue:`500`, :merge:`622`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Update the tutorial and template modsim model name to reflect the geometry instead of the mesh (:issue:`461`,
