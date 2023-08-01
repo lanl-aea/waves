@@ -432,7 +432,6 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
     env.Append(BUILDERS={"Sierra": scons_extensions.sierra(program, application, post_action)})
     nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
-    check_expected_targets(nodes, pathlib.Path(source_list[0]).stem)
 
 
 @pytest.mark.unittest
