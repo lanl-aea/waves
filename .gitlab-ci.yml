@@ -20,6 +20,7 @@ before_script:
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
+  - module load sierra
   - module use ${PWD}/modulefiles
   # Prefer the CI environment and fall back to AEA environment(s)
   - project_environment='waves-env'
