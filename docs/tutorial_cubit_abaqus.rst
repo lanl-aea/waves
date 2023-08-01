@@ -15,7 +15,7 @@ References
 * `Cubit`_: Python Interface :cite:`cubit`
 * `Cubit`_: Importing Cubit into Python :cite:`cubit`
 * `SCons Appendix D`_: ``AddPostAction`` :cite:`scons-user`
-* `GNU sed`_ and `conda-forge sed` :cite:`gnu-sed`
+* `GNU sed`_ and `conda-forge sed`_ :cite:`gnu-sed`
 
 ***********
 Environment
@@ -154,27 +154,26 @@ Build Targets
    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_mesh.py > rectangle_mesh.stdout 2>&1
-   Copy("build/tutorial_cubit/rectangle_compression.inp", "eabm_package/abaqus/rectangle_compression.inp")
-   Copy("build/tutorial_cubit/assembly.inp", "eabm_package/abaqus/assembly.inp")
-   Copy("build/tutorial_cubit/boundary.inp", "eabm_package/abaqus/boundary.inp")
-   Copy("build/tutorial_cubit/field_output.inp", "eabm_package/abaqus/field_output.inp")
-   Copy("build/tutorial_cubit/materials.inp", "eabm_package/abaqus/materials.inp")
-   Copy("build/tutorial_cubit/parts.inp", "eabm_package/abaqus/parts.inp")
-   Copy("build/tutorial_cubit/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && /apps/abaqus/Commands/abq2023 -information environment > rectangle_compression.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && /apps/abaqus/Commands/abq2023 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_mesh.py > rectangle_mesh.stdout 2>&1
+   Copy("build/abaqus/rectangle_compression.inp", "eabm_package/abaqus/rectangle_compression.inp")
+   Copy("build/abaqus/assembly.inp", "eabm_package/abaqus/assembly.inp")
+   Copy("build/abaqus/boundary.inp", "eabm_package/abaqus/boundary.inp")
+   Copy("build/abaqus/field_output.inp", "eabm_package/abaqus/field_output.inp")
+   Copy("build/abaqus/materials.inp", "eabm_package/abaqus/materials.inp")
+   Copy("build/abaqus/parts.inp", "eabm_package/abaqus/parts.inp")
+   Copy("build/abaqus/history_output.inp", "eabm_package/abaqus/history_output.inp")
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && /apps/abaqus/Commands/abq2023 -information environment > rectangle_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && /apps/abaqus/Commands/abq2023 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.
 
 ************
 Output Files
 ************
 
-Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
-below. Note that the output files from the previous tutorials also exist in the ``build`` directory, but the directory
-is specified by name to reduce clutter in the ouptut shown.
+Explore the contents of the ``build`` directory using the ``tree`` command against the ``build/abaqus`` directory, as shown
+below.
 
 .. code-block:: bash
 

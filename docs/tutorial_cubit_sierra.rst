@@ -10,7 +10,7 @@ References
 
 * `Cubit`_: Python Interface :cite:`cubit`
 * `Cubit`_: Importing Cubit into Python :cite:`cubit`
-* `Sierra`_: Sierra/SolidMechanics User's Guide :cite:`sierra`
+* `Sierra`_: Sierra/SolidMechanics User's Guide :cite:`sierra-user`
 
 ***********
 Environment
