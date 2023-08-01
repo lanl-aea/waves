@@ -39,6 +39,7 @@ env = Environment(ENV=os.environ.copy(),
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
 env["cubit"] = waves.scons_extensions.add_cubit(["/apps/Cubit-16.04/cubit", "cubit"], env)
+env["sierra"] = waves.scons_extensions.add_program(["sierra"], env)
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -48,12 +49,14 @@ version = '0.1.0'
 project_dir = pathlib.Path(Dir(".").abspath)
 abaqus_source_dir = "eabm_package/abaqus"
 cubit_source_dir = "eabm_package/cubit"
+sierra_source_dir = "eabm_package/sierra"
 project_variables = {
     'project_name': project_name,
     'project_dir': str(project_dir),
     'version': version,
     'abaqus_source_abspath': str(project_dir / abaqus_source_dir),
-    'cubit_source_abspath': str(project_dir / cubit_source_dir)
+    'cubit_source_abspath': str(project_dir / cubit_source_dir),
+    'sierra_source_abspath': str(project_dir / sierra_source_dir)
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -73,11 +76,8 @@ env.Append(BUILDERS={
 
 # Add simulation targets
 workflow_configurations = [
-    'tutorial_01_geometry',
-    'tutorial_02_partition_mesh',
-    'tutorial_03_solverprep',
-    'tutorial_04_simulation',
-    'tutorial_cubit',
+    'abaqus',
+    'sierra'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
