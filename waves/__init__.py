@@ -55,8 +55,11 @@ except PackageNotFoundError:
 
 # TODO: Remove the builders module for v1.0
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/511
+# VVVVV
 import types
 import functools
+import warnings
+
 from waves import builders
 
 
@@ -90,3 +93,6 @@ def deprecation_warning_decorator(function):
     return wrapper
 
 decorate_all_functions_in_module(builders, deprecation_warning_decorator)
+# ^^^^^
+# TODO: Remove the builders module for v1.0
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/511
