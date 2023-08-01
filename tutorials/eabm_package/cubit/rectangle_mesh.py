@@ -6,7 +6,7 @@ import shutil
 import cubit
 
 
-def main(input_file, output_file, global_seed):
+def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaqus"):
     """Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py``
 
     This script meshes a simple Cubit model with a single rectangle part.
@@ -31,6 +31,8 @@ def main(input_file, output_file, global_seed):
     :param str output_file: The output file for the Cubit model without extension. Will be appended with the required
         extension, e.g. ``output_file``.cub
     :param float global_seed: The global mesh seed size
+    :param str element_type: The model element type. Must be a supported Cubit 4 node element type.
+    :param str solver: The solver type to use when exporting the mesh
 
     :returns: writes ``output_file``.cub and ``output_file``.inp
     """
@@ -72,10 +74,19 @@ def main(input_file, output_file, global_seed):
     cubit.cmd("nodeset 8 name 'right'")
 
     cubit.cmd("block 1 add surface 1")
-    cubit.cmd("block 1 name 'ELEMENTS' Element type QUAD")
+
+    cubit.cmd(f"block 1 name 'ELEMENTS' Element type {element_type}")
 
     cubit.cmd(f"save as '{output_with_extension}' overwrite")
-    cubit.cmd(f"export abaqus '{output_file}.inp' partial dimension 2 block 1 overwrite everything")
+
+    if solver.lower() == "abaqus":
+        # Export Abaqus orphan mesh for Abaqus workflow
+        cubit.cmd(f"export abaqus '{output_file}.inp' partial dimension 2 block 1 overwrite everything")
+    elif solver.lower() in ["sierra", "adagio"]:
+        # Export Genesis file for Sierra workflow
+        cubit.cmd(f"export mesh '{output_file}.g' overwrite")
+    else:
+        raise RuntimeError(f"Uknown solver '{solver}'")
 
 
 def get_parser():
@@ -84,6 +95,8 @@ def get_parser():
     default_input_file = script_name.stem.replace('_mesh', '_partition')
     default_output_file = script_name.stem
     default_global_seed = 1.0
+    default_element_type = "QUAD"
+    default_solver = "abaqus"
 
     prog = f"python {script_name.name} "
     cli_description = "Mesh the simple rectangle geometry partitioned by ``rectangle_partition.py`` " \
@@ -92,18 +105,29 @@ def get_parser():
                                      prog=prog)
     parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
                         help="The Cubit model file created by ``rectangle_geometry.py`` without extension. " \
-                             "Will be appended with the required extension, e.g. ``input_file``.cub")
+                             "Will be appended with the required extension, e.g. ``input_file``.cub " \
+                             "(default: %(default)s)")
     parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
                         help="The output file for the Cubit model without extension. Will be appended with the " \
-                             "required extension, e.g. ``output_file``.cub")
+                             "required extension, e.g. ``output_file``.cub (default: %(default)s)")
     parser.add_argument('-g', '--global-seed', type=float, default=default_global_seed,
-                        help="The global mesh seed size")
+                        help="The global mesh seed size (default: %(default)s)")
+    parser.add_argument('-e', '--element-type', type=str, default=default_element_type,
+                        help="The model element type. Must be a supported Cubit 4 node element type. " \
+                             "(default: %(default)s)")
+    parser.add_argument('-s', '--solver', type=str, default=default_solver, choices=["abaqus", "sierra", "adagio"],
+                        help="The target solver for the mesh file. (default: %(default)s)")
+
     return parser
 
 
 if __name__ == '__main__':
     parser = get_parser()
     args, unknown = parser.parse_known_args()
-    sys.exit(main(input_file=args.input_file,
-                  output_file=args.output_file,
-                  global_seed=args.global_seed))
+    sys.exit(main(
+        input_file=args.input_file,
+        output_file=args.output_file,
+        global_seed=args.global_seed,
+        element_type=args.element_type,
+        solver=args.solver
+    ))

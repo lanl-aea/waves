@@ -43,13 +43,13 @@ def main(input_file, output_file, width, height):
     cubit.cmd(f"open '{output_with_extension}'")
 
     cubit.cmd("sideset 1 add curve 3")
-    cubit.cmd("sideset 1 name 'top'")
+    cubit.cmd("sideset 1 name 'elset_top'")
     cubit.cmd("sideset 2 add curve 1")
-    cubit.cmd("sideset 2 name 'bottom'")
+    cubit.cmd("sideset 2 name 'elset_bottom'")
     cubit.cmd("sideset 3 add curve 4")
-    cubit.cmd("sideset 3 name 'left'")
+    cubit.cmd("sideset 3 name 'elset_left'")
     cubit.cmd("sideset 4 add curve 2")
-    cubit.cmd("sideset 4 name 'right'")
+    cubit.cmd("sideset 4 name 'elset_right'")
 
     cubit.cmd(f"save as '{output_with_extension}' overwrite")
 
