@@ -87,6 +87,17 @@ Cubit Journal Files
 
 .. include:: tutorial_cubit_journal_files.txt
 
+********************
+Sierra Input File(s)
+********************
+
+7. Create or review the Sierra input file from the contents below
+
+.. admonition:: waves-tutorials/tutorial_cubit/eabm_package/sierra/rectangle_compression.i
+
+   .. literalinclude:: sierra_rectangle_compression.i
+      :lineno-match:
+
 **********
 SConstruct
 **********
@@ -97,7 +108,7 @@ SConstruct
 Build Targets
 *************
 
-7. Build the new targets
+8. Build the new targets
 
 .. code-block:: bash
 
