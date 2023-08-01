@@ -44,10 +44,9 @@ workflow.extend(waves.scons_extensions.copy_substitute(sierra_source_list))
 # Sierra Solve
 solve_source_list = [source_file.name for source_file in sierra_source_list]
 solve_source_list.append(mesh_files[0])
-workflow.extend(env.Command(
+workflow.extend(env.Sierra(
     target=["rectangle_compression.e"],
-    source=solve_source_list,
-    action=[f"cd ${{TARGET.dir.abspath}} && {env['sierra']} adagio -i ${{SOURCE.name}}"]
+    source=solve_source_list
 ))
 
 # Collector alias based on parent directory name

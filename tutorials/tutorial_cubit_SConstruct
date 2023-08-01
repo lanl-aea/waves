@@ -70,7 +70,9 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 env.Append(BUILDERS={
     'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
-    'PythonScript': waves.scons_extensions.python_script()})
+    'PythonScript': waves.scons_extensions.python_script(),
+    'Sierra': waves.scons_extensions.sierra(program=env['sierra'])
+})
 
 # Comments used in tutorial code snippets: marker-6
 
