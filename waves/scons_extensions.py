@@ -617,6 +617,29 @@ def sierra(program="sierra", application="adagio", post_action=None):
        ``TARGET[0].env`` and the ``TARGET[0].stdout`` redirected STDOUT and STDERR file. All relevant application output
        files, e.g. ``genesis_output.e`` must be specified in the target list.
 
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={
+           "Sierra": waves.scons_extensions.sierra(),
+       })
+       Sierra(target=["output.e"], source=["input.i"])
+
+    .. code-block::
+       :caption: Sierra builder action
+
+       cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1
+
+    :param str program: An absolute path or basename string for the Sierra program
+    :param str application: The string name for the Sierra application
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+        allow post target modification or introspection, e.g. inspect the Sierra log for error keywords and throw a
+        non-zero exit code even if Sierra does not. Builder keyword variables are available for substitution in the
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
+        ${TARGET.dir.abspath} && ${post_action}``.
+
     :return: Sierra builder
     :rtype: SCons.Builder.Builder
     """
