@@ -38,7 +38,7 @@ def main():
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
                                     height=args.height, width=args.width, font_size=args.font_size,
-                                    layout=args.vertical)
+                                    vertical=args.vertical)
     elif args.subcommand in _settings._parameter_study_subcommands:
         return_code = _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,

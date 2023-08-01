@@ -149,6 +149,8 @@ def visualize(tree, output_file,
             graph.nodes[node]["layer"] = layer
     if vertical:
         pos = networkx.multipartite_layout(graph, subset_key="layer", align="horizontal")
+        for k in pos:  # Flip the layout so the root node is on top
+            pos[k][-1] *= -1
     else:
         pos = networkx.multipartite_layout(graph, subset_key="layer")
     networkx.draw_networkx_nodes(graph, pos=pos, node_size=0)  # The nodes are drawn tiny so that labels can go on top
