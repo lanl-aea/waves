@@ -1,8 +1,8 @@
-.. _tutorial_cubit_waves:
+.. _tutorial_cubit_abaqus:
 
-##########################
-Tutorial Cubit: Simulation
-##########################
+######################
+Tutorial: Cubit+Abaqus
+######################
 
 This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but uses `Cubit`_
 :cite:`cubit` for the geometry, partition, and meshing tasks. It is included as an example for how to use `Cubit`_ with
@@ -27,28 +27,27 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_cubit``
+3. Create a new ``tutorial_cubit`` directory with the ``waves fetch`` command below
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-tutorials
-   $ cp tutorial_04_simulation tutorial_cubit
+   $ waves fetch tutorials/tutorial_cubit --destination tutorial_cubit
+   $ ls tutorial_cubit
+   eabm_package/  abaqus  cubit  SConstruct  sierra
 
-4. Create Python module initialization files to create a project specific local Python package.
+4. Make the new ``tutorial_cubit`` directory the current working directory
 
-.. admonition:: waves-tutorials/eabm_package/cubit/__init__.py
+.. code-block:: bash
 
-   .. code-block::
-
-      $ pwd
-      /path/to/waves-tutorials
-      $ touch eabm_package/cubit/__init__.py
-      $ find . -name "__init__.py"
-      ./waves-tutorials/eabm_package/abaqus/__init__.py
-      ./waves-tutorials/eabm_package/cubit/__init__.py
-      ./waves-tutorials/eabm_package/python/__init__.py
-      ./waves-tutorials/eabm_package/__init__.py
+   $ pwd
+   /path/to/waves-tutorials
+   $ cd tutorial_cubit
+   $ pwd
+   /path/to/waves-tutorials/tutorial_cubit
+   $ ls
+   eabm_package/  abaqus  cubit  SConstruct  sierra
 
 .. _tutorials_tutorial_cubit_waves:
 
@@ -56,12 +55,21 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
-changes made in this tutorial.
+Note that the ``tutorial_cubit`` directory has three SConscript files: ``cubit``, ``abaqus``, ``sierra``. The first two
+are relevant to the current tutorial. The ``sierra`` workflow is described in the complementary
+:ref:`tutorial_cubit_sierra`.
 
-.. admonition:: waves-tutorials/tutorial_cubit
+5. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation_waves` files
 
-   .. literalinclude:: tutorials_tutorial_cubit
+.. admonition:: waves-tutorials/tutorial_cubit/cubit
+
+   .. literalinclude:: tutorial_cubit_cubit
+      :language: Python
+      :diff: tutorials_tutorial_04_simulation
+
+.. admonition:: waves-tutorials/tutorial_cubit/abaqus
+
+   .. literalinclude:: tutorial_cubit_abaqus
       :language: Python
       :diff: tutorials_tutorial_04_simulation
 
@@ -79,7 +87,7 @@ documentation for more information about virtual environment management with `Co
 Cubit Journal Files
 *******************
 
-5. Create the following journal files in the ``waves-tutorials/eabm_package/cubit`` directory.
+5. Create or review the following journal files in the ``waves-tutorials/eabm_package/cubit`` directory.
 
 The Cubit journal files include the same CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
@@ -88,19 +96,19 @@ installation of Python 2. The API and CLI built from the Cubit journal files' do
 :ref:`waves_eabm_api` for :ref:`cubit_journal_api` and the :ref:`waves_eabm_cli` for :ref:`cubit_journal_cli`,
 respectively.
 
-.. admonition:: waves-tutorials/eabm_package/cubit/rectangle_geometry.py
+.. admonition:: waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py
 
    .. literalinclude:: cubit_rectangle_geometry.py
        :language: Python
        :lineno-match:
 
-.. admonition:: waves-tutorials/eabm_package/cubit/rectangle_partition.py
+.. admonition:: waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_partition.py
 
    .. literalinclude:: cubit_rectangle_partition.py
        :language: Python
        :lineno-match:
 
-.. admonition:: waves-tutorials/eabm_package/cubit/rectangle_mesh.py
+.. admonition:: waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_mesh.py
 
    .. literalinclude:: cubit_rectangle_mesh.py
        :language: Python
@@ -113,9 +121,9 @@ SConstruct
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/SConstruct
+.. admonition:: waves-tutorials/tutorial_cubit/SConstruct
 
-   .. literalinclude:: tutorials_tutorial_cubit_SConstruct
+   .. literalinclude:: tutorial_cubit_SConstruct
       :language: Python
       :diff: tutorials_tutorial_04_simulation_SConstruct
 
@@ -128,18 +136,16 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ scons tutorial_cubit
+   /path/to/waves-tutorials/tutorial_cubit
+   $ scons abaqus
    scons: Reading SConscript files ...
    Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
-   Checking whether abq2021 program exists.../apps/abaqus/Commands/abq2021
-   Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    Checking whether cubit program exists.../apps/Cubit-15.8/cubit
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/eabm_package/cubit/rectangle_mesh.py > rectangle_mesh.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_mesh.py > rectangle_mesh.stdout 2>&1
    Copy("build/tutorial_cubit/rectangle_compression.inp", "eabm_package/abaqus/rectangle_compression.inp")
    Copy("build/tutorial_cubit/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_cubit/boundary.inp", "eabm_package/abaqus/boundary.inp")
@@ -147,8 +153,8 @@ Build Targets
    Copy("build/tutorial_cubit/materials.inp", "eabm_package/abaqus/materials.inp")
    Copy("build/tutorial_cubit/parts.inp", "eabm_package/abaqus/parts.inp")
    Copy("build/tutorial_cubit/history_output.inp", "eabm_package/abaqus/history_output.inp")
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && /apps/abaqus/Commands/abq2023 -information environment > rectangle_compression.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_cubit && /apps/abaqus/Commands/abq2023 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && /apps/abaqus/Commands/abq2023 -information environment > rectangle_compression.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/tutorial_cubit && /apps/abaqus/Commands/abq2023 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.
 
 ************
@@ -162,9 +168,9 @@ is specified by name to reduce clutter in the ouptut shown.
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_cubit/
-   build/tutorial_cubit/
+   /home/roppenheimer/waves-tutorials/tutorial_cubit
+   $ tree build/abaqus
+   build/abaqus
    |-- assembly.inp
    |-- boundary.inp
    |-- field_output.inp

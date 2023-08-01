@@ -105,7 +105,8 @@ documentation_file_list = [
     'tutorial_11_archival.png',
     'tutorial_11_archival_set0.png',
     'tutorial_setuptools_scm_waves.rst',
-    'tutorial_cubit.rst',
+    'tutorial_cubit_abaqus.rst',
+    'tutorial_cubit_sierra.rst',
     'tutorial_mesh_convergence_waves.rst',
     'tutorial_escape_sequences_waves.rst',
     'tutorial_remote_execution_waves.rst',
@@ -158,8 +159,6 @@ tutorial_files_list = [
     tutorials_dir / 'tutorial_11_archival',
     tutorials_dir / 'tutorial_11_archival_SConstruct',
     tutorials_dir / 'tutorial_setuptools_scm_SConstruct',
-    tutorials_dir / 'tutorial_cubit',
-    tutorials_dir / 'tutorial_cubit_SConstruct',
     tutorials_dir / 'tutorial_escape_sequences',
     tutorials_dir / 'tutorial_escape_sequences_SConstruct',
     tutorials_dir / 'tutorial_extend_study',
@@ -202,7 +201,11 @@ tutorial_files_list = [
     tutorials_dir / env['python_dir'] / 'rectangle_compression_sobol_sequence.py',
     tutorials_dir / env['python_dir'] / 'rectangle_compression_mesh_convergence.py',
     tutorials_dir / env['python_dir'] / 'mesh_convergence_stress.yaml',
-    tutorials_dir / env['python_dir'] / 'post_processing.py'
+    tutorials_dir / env['python_dir'] / 'post_processing.py',
+    tutorials_dir / "tutorial_cubit" / "cubit",
+    tutorials_dir / "tutorial_cubit" / "abaqus",
+    tutorials_dir / "tutorial_cubit" / "sierra",
+    tutorials_dir / "tutorial_cubit" / "SConstruct"
 ]
 for file_path in tutorial_files_list:
     target = f'{file_path.parts[-2]}_{file_path.name}'
