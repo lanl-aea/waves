@@ -4,6 +4,14 @@
 Tutorial: Cubit+Sierra
 ######################
 
+.. warning::
+
+   This tutorial should work fine on AEA servers or any server with Sierra installed from the Sierra team's
+   instructions; however, the continuous integration (CI) tests show errors when both Abaqus and Sierra are available
+   on ``PATH``. This behavior has not been replicated in direct user testing, but it means that this tutorial is not
+   regression tested with the rest of the tutorials. If you run into problems running this tutorial, please contact the
+   `WAVES`_ development team.
+
 **********
 References
 **********
