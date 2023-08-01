@@ -1,0 +1,59 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow: Sierra solve
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``sierra_source_abspath`` - String absolute path to the EABM's Sierra journal files
+  * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
+  * ``cubit`` - String path for the Cubit executable
+"""
+
+import pathlib
+
+import waves
+
+# Inherit the parent construction environment
+Import('env')
+
+# Set project-wide paths with os-agnostic path separators
+sierra_source_abspath = pathlib.Path(env["sierra_source_abspath"])
+
+# Simulation variables
+build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
+model = "rectangle"
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+datacheck = []
+mesh_files = []
+
+element_type = "SHELL"
+solver = "sierra"
+workflow, mesh_files = SConscript("cubit", exports=["env", "element_type", "solver"], duplicate=False)
+
+# SolverPrep
+sierra_source_list = [
+    sierra_source_abspath / "rectangle_compression.i"
+]
+sierra_source_list = [pathlib.Path(source_file) for source_file in sierra_source_list]
+workflow.extend(waves.scons_extensions.copy_substitute(sierra_source_list))
+
+# Sierra Solve
+solve_source_list = [source_file.name for source_file in sierra_source_list]
+solve_source_list.append(mesh_files[0])
+workflow.extend(env.Command(
+    target=["rectangle_compression.e"],
+    source=solve_source_list,
+    action=[f"cd ${{TARGET.dir.abspath}} && {env['sierra']} adagio -i ${{SOURCE.name}}"]
+))
+
+# Collector alias based on parent directory name
+env.Alias(workflow_name, workflow)
+env.Alias(f"{workflow_name}_datacheck", datacheck)
+
+if not env['unconditional_build'] and not env['sierra']:
+    print(f"Program 'sierra' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore(['.', workflow_name], workflow)
