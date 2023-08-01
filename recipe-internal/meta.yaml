@@ -111,7 +111,7 @@ test:
     - scons . --sconstruct=tutorial_argparse_types_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build
-    - scons . --sconstruct=tutorial_cubit_SConstruct --keep-going --unconditional-build
+    - cd tutorial_cubit && scons . --keep-going --unconditional-build && cd ..
     - scons . --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_builder_post_actions_SConstruct --keep-going --unconditional-build
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure.
