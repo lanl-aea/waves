@@ -32,7 +32,9 @@ if _settings._repository_tutorials_directory == tutorial_directory:
     ("scons . --sconstruct=tutorial_argparse_types_SConstruct --keep-going --unconditional-build", tutorial_directory),
     ("scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build", tutorial_directory),
     ("scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build", tutorial_directory),
-    ("scons . --keep-going --unconditional-build", tutorial_directory / "tutorial_cubit"),
+    # TODO: Figure out how to load the sierra module without breaking the CI tests. Change ``scons abaqus`` to ``scons .``
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/515
+    ("scons abaqus --keep-going --unconditional-build", tutorial_directory / "tutorial_cubit"),
     ("scons . --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --keep-going --unconditional-build", tutorial_directory),
     ("scons . --sconstruct=tutorial_builder_post_actions_SConstruct --keep-going --unconditional-build", tutorial_directory),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
