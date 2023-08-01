@@ -409,6 +409,32 @@ def test_sierra_emitter(target, source, expected):
     assert target == expected
 
 
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+sierra_input = {
+    "default behavior": ("sierra", "adagio", [], 3, 1, ["input1.i"], ['inptu1.g']),
+    "different command": ("dummy", "application", [], 3, 1, ["input2.i"], ['inptu2.g']),
+    "post action": ("sierra", "adagio", ["post action"], 3, 1, ["input3.i"], ['inptu3.g']),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("program, application, post_action, node_count, action_count, source_list, target_list",
+                         sierra_input.values(),
+                         ids=sierra_input.keys())
+def test_sierra(program, application, post_action, node_count, action_count, source_list, target_list):
+    env = SCons.Environment.Environment()
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} {application} --version > ' \
+                       '${TARGET.filebase}.env\n' \
+                      f'cd ${{TARGET.dir.abspath}} && {program} ${{sierra_options}} {application} ${{application_options}} -i ' \
+                       '${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1'
+
+    env.Append(BUILDERS={"Sierra": scons_extensions.sierra(program, application, post_action)})
+    nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_expected_targets(nodes, pathlib.Path(source_list[0]).stem)
+
+
 @pytest.mark.unittest
 @pytest.mark.parametrize("source_list, expected_list",
                          copy_substitute_input.values(),

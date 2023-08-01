@@ -614,8 +614,8 @@ def sierra(program="sierra", application="adagio", post_action=None):
     .. warning::
 
        This is an experimental builder for Sierra support. The only emitted file is the application's version report in
-       ``TARGET[0].env``. All relevant application output files, e.g. ``genesis_output.e`` must be specified in the
-       target list.
+       ``TARGET[0].env`` and the ``TARGET[0].stdout`` redirected STDOUT and STDERR file. All relevant application output
+       files, e.g. ``genesis_output.e`` must be specified in the target list.
 
     :return: Sierra builder
     :rtype: SCons.Builder.Builder
@@ -625,7 +625,7 @@ def sierra(program="sierra", application="adagio", post_action=None):
     action = [f"{_cd_action_prefix} {program} {application} --version > " \
                   f"${{TARGET.filebase}}{_sierra_environment_extension}",
               f"{_cd_action_prefix} {program} ${{sierra_options}} {application} ${{application_options}} " \
-                  f"-i ${{SOURCE.file}}  > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                  f"-i ${{SOURCE.file}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
     sierra_builder = SCons.Builder.Builder(
         action=action,
