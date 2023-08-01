@@ -59,19 +59,22 @@ Note that the ``tutorial_cubit`` directory has three SConscript files: ``cubit``
 are relevant to the current tutorial. The ``sierra`` workflow is described in the complementary
 :ref:`tutorial_cubit_sierra`.
 
-5. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation_waves` files
+5. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation_waves` files.
+
+The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files is
+duplicated below.
 
 .. admonition:: waves-tutorials/tutorial_cubit/cubit
 
    .. literalinclude:: tutorial_cubit_cubit
       :language: Python
-      :diff: tutorials_tutorial_04_simulation
+      :lineno-match:
 
 .. admonition:: waves-tutorials/tutorial_cubit/abaqus
 
    .. literalinclude:: tutorial_cubit_abaqus
       :language: Python
-      :diff: tutorials_tutorial_04_simulation
+      :lineno-match:
 
 Note that Cubit does not support the Abaqus plane stress element ``CPS4``, so we must add a post-action to the orphan
 mesh target to change the element type. A post-action is used to avoid generating intermediate target files, which would
@@ -87,7 +90,7 @@ documentation for more information about virtual environment management with `Co
 Cubit Journal Files
 *******************
 
-5. Create or review the following journal files in the ``waves-tutorials/eabm_package/cubit`` directory.
+5. Review the following journal files in the ``waves-tutorials/eabm_package/cubit`` directory.
 
 The Cubit journal files include the same CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
@@ -126,6 +129,14 @@ changes made in this tutorial.
    .. literalinclude:: tutorial_cubit_SConstruct
       :language: Python
       :diff: tutorials_tutorial_04_simulation_SConstruct
+
+Note that the Cubit Python files don't perform any imports from the current modsim project package, so the
+``PYTHONPATH`` modification is no longer required. This tutorial is created in a new, stand-alone subdirectory, so the
+previous tutorial workflow configurations are no longer available. Only the ``sierra`` and ``abaqus`` workflow
+configurations will be found by SCons at execution time. Finally, note that the ``cubit`` SConscript file is not called
+by the ``SConstruct`` file. Instead, the ``cubit`` configuration is re-used by the ``sierra`` and ``abaqus`` workflows,
+so the Cubit tasks only need to be defined once. To handle this task re-use some additional variable import and export
+statements are required by the ``cubit`` configuration file.
 
 *************
 Build Targets
