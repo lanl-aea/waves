@@ -210,22 +210,24 @@ tutorial_files_list = [
     tutorials_dir / "tutorial_cubit/SConstruct",
     tutorials_dir / "tutorial_cubit/eabm_package/sierra/rectangle_compression.i"
 ]
+copied_file_list = []
 for file_path in tutorial_files_list:
     target = f'{file_path.parts[-2]}_{file_path.name}'
     Command(target=target,
             source=str(file_path),
             action=Copy("$TARGET", "$SOURCE"))
-    documentation_file_list.append(target)
+    copied_file_list.append(target)
+source_files = documentation_file_list + copied_file_list
 
 sphinx_options = '-W'
 html_directory = "html"
 html_target = Dir(html_directory)
 html = env.Command(
     target=[html_target],
-    source=documentation_file_list,
+    source=source_files,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{html_directory} ${{tags}}",
     sphinx_options=sphinx_options)
-env.Clean(html, html_target)
+env.Clean(html, [html_target] + documentation_file_list)
 env.AlwaysBuild(html)
 alias_list.extend(env.Alias(html_directory, html))
 
@@ -234,11 +236,11 @@ internal_directory = "html-internal"
 internal_target = Dir(internal_directory)
 internal = env.Command(
     target=[internal_target],
-    source=documentation_file_list,
+    source=source_files,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{internal_directory} ${{tags}}",
     sphinx_options=sphinx_options,
     tags="-t aea")
-env.Clean(internal, internal_target)
+env.Clean(internal, [internal_target] + documentation_file_list)
 env.AlwaysBuild(internal)
 alias_list.extend(env.Alias(internal_directory, internal))
 
@@ -246,9 +248,9 @@ latex_directory = "latex"
 latex_target = Dir(latex_directory)
 latexpdf = env.Command(
     target=[latex_target],
-    source=documentation_file_list,
+    source=source_files,
     action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}}")
-env.Clean(latexpdf, latex_target)
+env.Clean(latexpdf, [latex_target] + documentation_file_list)
 env.AlwaysBuild(latexpdf)
 alias_list.extend(env.Alias('latexpdf', latexpdf))
 
@@ -256,11 +258,11 @@ man_directory = "man"
 man_target = Dir(man_directory)
 man = env.Command(
     target=[man_target],
-    source=documentation_file_list,
+    source=source_files,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{man_directory} ${{tags}}",
     sphinx_options=sphinx_options,
     tags="-t man")
-env.Clean(man, man_target)
+env.Clean(man, [man_target] + documentation_file_list)
 env.AlwaysBuild(man)
 alias_list.extend(env.Alias(man_directory, man))
 
@@ -268,10 +270,10 @@ epub_directory = "epub"
 epub_target = Dir(epub_directory)
 epub = env.Command(
     target=[epub_target],
-    source=documentation_file_list,
+    source=source_files,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b epub ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{epub_directory} ${{tags}}",
     sphinx_options=sphinx_options)
-env.Clean(epub, epub_target)
+env.Clean(epub, [epub_target] + documentation_file_list)
 env.AlwaysBuild(epub)
 alias_list.extend(env.Alias(epub_directory, epub))
 
