@@ -16,3 +16,7 @@ installation`_ and `Conda environment management`_ documentation for more detail
    .. code-block::
 
       $ conda activate waves-eabm-env
+
+Some tutorials require additional third-party software that is not available for the `Conda`_ package manager. This
+software must be installed separately and either made available to SConstruct by modifying your system's ``PATH`` or by
+modifying the SConstruct search paths provided to the :meth:`waves.scons_extensions.add_program` method.

@@ -1,12 +1,11 @@
 #! /usr/bin/env python
-"""Rectangle compression workflow
+"""Rectangle compression workflow: Abaqus solve
 
 Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
-  * ``cubit_source_abspath`` - String absolute path to the EABM's Cubit journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
   * ``cubit`` - String path for the Cubit executable
@@ -21,53 +20,24 @@ Import('env')
 
 # Set project-wide paths with os-agnostic path separators
 abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
-cubit_source_abspath = pathlib.Path(env["cubit_source_abspath"])
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
 model = "rectangle"
 
-# Comment used in tutorial code snippets: marker-1
-
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
 mesh_files = []
 
-# Geometry
-journal_file = f"{model}_geometry"
-journal_options = ""
-workflow.extend(env.PythonScript(
-    target=[f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py"],
-    script_options=journal_options))
-
-# Comment used in tutorial code snippets: marker-2
-
-# Partition
-journal_file = f"{model}_partition"
-journal_options = ""
-workflow.extend(env.PythonScript(
-    target=[f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
-    script_options=journal_options))
-
-# Mesh
-journal_file = f"{model}_mesh"
-journal_options = ""
-mesh_targets = env.PythonScript(
-    target=[f"{journal_file}.inp", f"{journal_file}.cub"],
-    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
-    script_options=journal_options)
-workflow.extend(mesh_targets)
-mesh_files.append(mesh_targets[0])
+element_type = "QUAD"
+solver = "abaqus"
+workflow, mesh_files = SConscript("cubit", exports=["env", "element_type", "solver"], duplicate=False)
 
 # Modify mesh target(s) element type.
 # Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
-env.AddPostAction(mesh_files, "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
-
-# Comment used in tutorial code snippets: marker-3
+env.AddPostAction(mesh_files[0], "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
 
 # SolverPrep
 abaqus_source_list = [
@@ -82,11 +52,9 @@ abaqus_source_list = [
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.scons_extensions.copy_substitute(abaqus_source_list))
 
-# Comment used in tutorial code snippets: marker-4
-
 # Abaqus Solve
-solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
-solve_source_list.append([f"{journal_file}.inp"])
+solve_source_list = [source_file.name for source_file in abaqus_source_list]
+solve_source_list.append(mesh_files[0])
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')
@@ -97,21 +65,17 @@ datacheck.extend(env.AbaqusSolver(
     job_name=datacheck_name,
     abaqus_options=f'{abaqus_options} -datacheck'))
 
-# Comment used in tutorial code snippets: marker-5
-
 workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options))
 
-# Comment used in tutorial code snippets: marker-6
-
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 
-if not env['unconditional_build'] and (not env['cubit'] or not env['abaqus']):
-    print(f"Program 'cubit' or 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+if not env['unconditional_build'] and not env['abaqus']:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore(['.', workflow_name], workflow)
     Ignore(['.', workflow_name], datacheck)
