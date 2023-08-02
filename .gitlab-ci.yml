@@ -241,7 +241,7 @@ pages:
             cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
             PYTHONPATH=${project_root} scons . --clean
             cd ${project_root}
-            # TODO: Remove ``rm -r`` when 0.7.1 is released and main has the more complete docs clean behavior 
+            # TODO: Remove ``rm -r`` when 0.7.1 is released and main has the more complete docs clean behavior
             rm -r build quickstart/build
         done
   artifacts:
