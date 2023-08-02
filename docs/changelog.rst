@@ -22,6 +22,7 @@ Breaking changes
 New Features
 ============
 - Add experimental builder support for Sierra (:issue:`500`, :merge:`622`). By `Kyle Brindley`_.
+- Add vertical option to waves visualize (:issue:`514`, :merge:`624`). By `Prabhu Khalsa`_.
 
 Documentation
 =============
