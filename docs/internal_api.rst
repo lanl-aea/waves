@@ -2,9 +2,9 @@
 Internal API
 ############
 
-**************
-SCons Builders
-**************
+****************
+SCons Extensions 
+****************
 
 .. automodule:: waves.scons_extensions
     :noindex:
