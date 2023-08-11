@@ -2,11 +2,11 @@
 Internal API
 ############
 
-**************
-SCons Builders
-**************
+****************
+SCons Extensions 
+****************
 
-.. automodule:: waves.builders
+.. automodule:: waves.scons_extensions
     :noindex:
     :members:
     :private-members:

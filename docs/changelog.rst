@@ -15,6 +15,15 @@ Breaking changes
 - Standardize the builder program path keyword from ``<thing>_program`` to ``program`` for greater consistency in
   builder APIs. The older keywords are preseved for backward compatibility, but they raise a deprecation warning
   (:issue:`495`, :merge:`613`). By `Kyle Brindley`_.
+- Rename the ``waves.builders`` module as ``waves.scons_extensions`` to reflect the growing scope of SCons extensions
+  beyond a collection of builders. Backward compatilibity is maintained by duplicating the module under the old name
+  with a deprecation warning (:issue:`492`, :merge:`618`, :issue:`512`, :merge:`621`, :merge:`627`, :merge:`628`). By
+  `Kyle Brindley`_.
+
+New Features
+============
+- Add experimental builder support for Sierra (:issue:`500`, :merge:`622`). By `Kyle Brindley`_.
+- Add vertical option to waves visualize (:issue:`514`, :merge:`624`). By `Prabhu Khalsa`_.
 
 Documentation
 =============
@@ -22,6 +31,9 @@ Documentation
   :merge:`614`, :merge:`615`). By `Kyle Brindley`_.
 - Trim down the README to focus on end users. Move developer notes directly into the HTML developer manual
   (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
+- Add the WAVES primarymark image to the PDF title page (:merge:`620`). By `Kyle Brindley`_.
+- Update the Cubit tutorial to demonstrate a side-by-side comparison of Abaqus and Sierra, where the Cubit tasks are
+  re-used for both solver workflows (:issue:`513`, :merge:`623`). By `Kyle Brindley`_.
 
 Enhancement
 ===========
@@ -34,6 +46,8 @@ Internal Changes
   Brindley`_.
 - Explore a draft correlation coefficients post-procesing tutorial (:merge:`615`). By `Kyle Brindley`_.
 - Update to use Abaqus 2023 (:issue:`509`, :merge:`617`). By `Kyle Brindley`_.
+- More complete clean behavior for the documentation targets to reduce dev/main source conflicts during Gitlab-Pages
+  builds (:issue:`516`, :merge:`625`, :merge:`626`). By `Kyle Brindley`_.
 
 *******************
 0.6.21 (2023-07-21)

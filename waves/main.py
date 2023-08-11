@@ -37,7 +37,8 @@ def main():
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
-                                    height=args.height, width=args.width, font_size=args.font_size)
+                                    height=args.height, width=args.width, font_size=args.font_size,
+                                    vertical=args.vertical)
     elif args.subcommand in _settings._parameter_study_subcommands:
         return_code = _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
@@ -143,6 +144,8 @@ def get_parser():
         help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
+    visualize_parser.add_argument("--vertical", action="store_true",
+                                  help="Display the graph in a vertical layout (default: %(default)s)")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
@@ -288,7 +291,7 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 
 def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
                   height=_settings._visualize_default_height, width=_settings._visualize_default_width,
-                  font_size=_settings._visualize_default_font_size):
+                  font_size=_settings._visualize_default_font_size, vertical=False):
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -303,6 +306,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     :param bool print_graphml: Whether to print the graph in graphml format
     :param int height: Height of visualization if being saved to a file
     :param int width: Width of visualization if being saved to a file
+    :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     """
     from waves import visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
@@ -319,7 +323,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
-    visualize.visualize(tree_dict, output_file, height, width, font_size)
+    visualize.visualize(tree_dict, output_file, height, width, font_size, vertical)
     return 0
 
 

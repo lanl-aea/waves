@@ -128,7 +128,7 @@ def click_arrow(event, annotations, arrows):
 def visualize(tree, output_file,
               height=_settings._visualize_default_height,
               width=_settings._visualize_default_width,
-              font_size=_settings._visualize_default_font_size):
+              font_size=_settings._visualize_default_font_size, vertical=False):
     """
     Create a visualization showing the tree
 
@@ -137,6 +137,7 @@ def visualize(tree, output_file,
     :param int height: Height of visualization if being saved to a file
     :param int width: Width of visualization if being saved to a file
     :param int font_size: Font size of file names in points
+    :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     """
     graph = networkx.DiGraph()
     graph.add_nodes_from(tree['nodes'])
@@ -146,7 +147,12 @@ def visualize(tree, output_file,
         # `multipartite_layout` expects the layer as a node attribute, so it's added here
         for node in nodes:
             graph.nodes[node]["layer"] = layer
-    pos = networkx.multipartite_layout(graph, subset_key="layer")
+    if vertical:
+        pos = networkx.multipartite_layout(graph, subset_key="layer", align="horizontal")
+        for k in pos:  # Flip the layout so the root node is on top
+            pos[k][-1] *= -1
+    else:
+        pos = networkx.multipartite_layout(graph, subset_key="layer")
     networkx.draw_networkx_nodes(graph, pos=pos, node_size=0)  # The nodes are drawn tiny so that labels can go on top
 
     box_color = '#5AC7CB'  # Light blue from Waves Logo

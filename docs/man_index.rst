@@ -144,14 +144,14 @@ sobol_sequence
 ******************
 Python Package API
 ******************
-**************
-SCons Builders
-**************
+****************
+SCons Extensions
+****************
 
-.. automodule:: waves.builders
+.. automodule:: waves.scons_extensions
     :members:
     :show-inheritance:
-    :synopsis: WAVES Analysis for Verified Engineering Simulations SCons builder extensions
+    :synopsis: WAVES Analysis for Verified Engineering Simulations SCons extensions
 
 ******************
 Python Package API
