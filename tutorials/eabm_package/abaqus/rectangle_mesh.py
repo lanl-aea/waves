@@ -3,13 +3,18 @@ import os
 import argparse
 import inspect
 import shutil
-import re
 
 import abaqus
 import abaqusConstants
 import mesh
 
-import eabm_package.abaqus.abaqus_journal_utilities
+try:
+    import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
+except ModuleNotFoundError:
+    try:
+        import abaqus.abaqus_journal_utilities as abaqus_journal_utilities
+    except ModuleNotFoundError:
+        import abaqus_journal_utilities
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
@@ -66,7 +71,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     p.Set(faces=faces, name='ALLNODES')
 
     model_object = abaqus.mdb.models[model_name]
-    eabm_package.abaqus.abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
+    abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
 
     abaqus.mdb.save()
 
