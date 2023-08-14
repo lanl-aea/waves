@@ -36,8 +36,8 @@ env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq20
 
 # Add WAVES builders
 env.Append(BUILDERS=
-    {'AbaqusJournal': waves.scons_extensions.abaqus_journal(abaqus_program=env['abaqus']),
-     'AbaqusSolver': waves.scons_extensions.abaqus_solver(abaqus_program=env['abaqus'])})
+    {'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
+     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])})
 
 # Abaqus input file implicit dependency scanner
 env.Append(SCANNERS=waves.scons_extensions.abaqus_input_scanner())
