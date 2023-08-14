@@ -32,15 +32,15 @@ env.Default()
 env.PrependENVPath("PYTHONPATH", str(pathlib.Path('.').resolve()))
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = waves.builders.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
+env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
 
 # Add WAVES builders
 env.Append(BUILDERS=
-    {'AbaqusJournal': waves.builders.abaqus_journal(abaqus_program=env['abaqus']),
-     'AbaqusSolver': waves.builders.abaqus_solver(abaqus_program=env['abaqus'])})
+    {'AbaqusJournal': waves.scons_extensions.abaqus_journal(abaqus_program=env['abaqus']),
+     'AbaqusSolver': waves.scons_extensions.abaqus_solver(abaqus_program=env['abaqus'])})
 
 # Abaqus input file implicit dependency scanner
-env.Append(SCANNERS=waves.builders.abaqus_input_scanner())
+env.Append(SCANNERS=waves.scons_extensions.abaqus_input_scanner())
 build_dir = pathlib.Path(env['build_dir'])
 
 # Call SConscript file
@@ -48,5 +48,4 @@ SConscript('SConscript', variant_dir=build_dir, exports='env', duplicate=True)
 
 # List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.
-waves.builders.project_help_message()
-
+waves.scons_extensions.project_help_message()

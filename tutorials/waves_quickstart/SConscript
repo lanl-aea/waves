@@ -2,26 +2,25 @@ Import('env')
                                                                                                                          
 # Geometry                                                                                                               
 env.AbaqusJournal(                                                                                                       
-    target="single_element_geometry.cae",                                                                                
-    source="single_element_geometry.py")                                                                                 
+    target="rectangle_geometry.cae",
+    source="rectangle_geometry.py")
                                                                                                                          
 # Partition                                                                                                              
 env.AbaqusJournal(                                                                                                       
-    target="single_element_partition.cae",                                                                               
-    source=["single_element_partition.py", "single_element_geometry.cae"])                                               
+    target="rectangle_partition.cae",
+    source=["rectangle_partition.py", "rectangle_geometry.cae"])
                                                                                                                          
 # Mesh                                                                                                                   
 env.AbaqusJournal(                                                                                                       
-    target=["single_element_mesh.inp", "single_element_mesh.cae"],                                                       
-    source=["single_element_mesh.py", "single_element_partition.cae", "abaqus_journal_utilities.py"])                                                   
+    target=["rectangle_mesh.inp", "rectangle_mesh.cae"],
+    source=["rectangle_mesh.py", "rectangle_partition.cae", "abaqus_journal_utilities.py"])
                                                                                                                          
 # Abaqus Solve                                                                                                           
 target = env.AbaqusSolver(                                                                                               
-    target="single_element_compression.odb",                                                                             
-    source="single_element_compression.inp",                                                                             
-    job_name="single_element_compression",                                                                               
+    target="rectangle_compression.odb",
+    source="rectangle_compression.inp",
+    job_name="rectangle_compression",
     abaqus_options="-double both")                                                                                       
                                                                                                                          
 # Collector alias named after the model simulation                                                                       
-env.Alias('single_element', target)                                                                                      
-
+env.Alias('rectangle', target)

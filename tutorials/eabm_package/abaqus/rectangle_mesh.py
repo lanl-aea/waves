@@ -10,10 +10,10 @@ import mesh
 
 try:
     import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
-except ModuleNotFoundError:
+except ImportError:
     try:
         import abaqus.abaqus_journal_utilities as abaqus_journal_utilities
-    except ModuleNotFoundError:
+    except ImportError:
         import abaqus_journal_utilities
 
 
