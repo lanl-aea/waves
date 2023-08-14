@@ -104,7 +104,6 @@ test:
     - scons . --sconstruct=scons_quickstart_SConstruct --keep-going
     - scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going
     - cd waves_quickstart && scons rectangle --keep-going --unconditional-build && cd ..
-    - scons . --sconstruct=waves_quickstart_SConstruct --keep-going
     - scons . --sconstruct=tutorial_00_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going --unconditional-build
     - scons . --sconstruct=tutorial_matlab_SConstruct --keep-going --unconditional-build
