@@ -105,7 +105,7 @@ Workflow Visualization
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves_tutorials
+   /home/roppenheimer/waves_quickstart
    $ waves visualize rectangle --output-file waves_quickstart.png --width=28 --height=5 --exclude-list .stdout .jnl .env /usr/bin
 
 .. figure:: waves_quickstart.png
