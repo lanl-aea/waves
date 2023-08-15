@@ -8,6 +8,11 @@ Changelog
 0.7.1 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Fix odb_extract to ensure 'mode=csv' when odbreport is called. (:issue:`517`, :merge:`630`). By `Prabhu Khalsa`_.
+
+
 Breaking changes
 ================
 - Deprecate the too-general ``parameter_study <study type>`` command line utility name in favor of ``waves <study

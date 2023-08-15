@@ -142,7 +142,7 @@ def odb_extract(input_file,
         odb_report_args = f'{odb_report_args.strip()} blocked'
     if 'invariants' in odb_report_args:
         odb_report_args = odb_report_args.replace('invariants', '')
-    if 'mode' not in odb_report_args:
+    if 'mode=' not in odb_report_args:
         odb_report_args = f'{odb_report_args.strip()} mode=CSV'
     # use regex that ignores case to replace 'html' or 'HTML' with 'CSV'
     odb_report_args = re.sub('(?i)' + re.escape('html'), lambda m: 'CSV', odb_report_args)
