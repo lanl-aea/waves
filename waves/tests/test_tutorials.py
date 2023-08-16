@@ -22,7 +22,7 @@ if _settings._repository_tutorials_directory == tutorial_directory:
 @pytest.mark.parametrize("command, directory", [
     ("scons . --sconstruct=scons_quickstart_SConstruct --keep-going", tutorial_directory),
     ("scons . --sconstruct=scons_multiactiontask_SConstruct --keep-going", tutorial_directory),
-    ("scons rectangle --keep-going", tutorial_directory / "waves_quickstart"),
+    ("scons . --keep-going", tutorial_directory / "waves_quickstart"),
     ("scons . --sconstruct=tutorial_00_SConstruct --keep-going --unconditional-build", tutorial_directory),
     ("scons . --sconstruct=tutorial_01_geometry_SConstruct --keep-going --unconditional-build", tutorial_directory),
     ("scons . --sconstruct=tutorial_matlab_SConstruct --keep-going", tutorial_directory),
