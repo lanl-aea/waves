@@ -27,14 +27,17 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh``.
+
+4. Download and copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh`` 
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_01_geometry tutorial_02_partition_mesh
-
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_01_geometry && mv tutorial_01_geometry tutorial_02_partition_mesh
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 .. _tutorials_tutorial_partition_mesh_waves:
 
@@ -247,6 +250,17 @@ changes made in this tutorial.
         :language: python
         :diff: tutorials_tutorial_01_geometry_SConstruct
 
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary 
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+    
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_01_geometry_SConstruct && mv tutorial_01_geometry_SConstruct SConstruct 
+
 Note the `PYTHONPATH`_ modification by `SCons PrependENVPath`_. This modification to the project's construction
 environment will allow Abaqus Python to import the project module files used by ``rectangle_mesh.py``.
 
@@ -259,7 +273,7 @@ Build Targets
 .. code-block:: bash
 
     $ pwd
-    /path/to/waves-tutorials
+    /home/roppenheimer/waves-tutorials
     $ scons tutorial_02_partition_mesh
     scons: Reading SConscript files ...
     Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
