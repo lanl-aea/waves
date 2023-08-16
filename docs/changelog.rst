@@ -39,6 +39,8 @@ Documentation
 - Add the WAVES primarymark image to the PDF title page (:merge:`620`). By `Kyle Brindley`_.
 - Update the Cubit tutorial to demonstrate a side-by-side comparison of Abaqus and Sierra, where the Cubit tasks are
   re-used for both solver workflows (:issue:`513`, :merge:`623`). By `Kyle Brindley`_.
+- Updated tutorials to use ``waves fetch`` to facilitate starting in an arbritraty location 
+  (:issue:`466`, :merge:`631`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
