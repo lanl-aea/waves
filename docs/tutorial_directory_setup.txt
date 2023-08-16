@@ -1,0 +1,9 @@
+3. Create and change to a new project root directory to house the tutorial files if you have not already done so. For example
+
+.. code-block:: bash
+
+   $ mkdir -p ~/waves-tutorials
+   $ cd ~/waves-tutorials
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+

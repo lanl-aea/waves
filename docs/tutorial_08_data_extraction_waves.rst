@@ -36,7 +36,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
 
 .. code-block:: bash
 
@@ -83,7 +85,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-4. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 
@@ -96,7 +98,7 @@ Build Targets
 Output Files
 ************
 
-5. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
+6. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
    the addition of the :ref:`odb_extract_cli` output files.
 
 .. code-block:: bash

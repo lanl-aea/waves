@@ -24,7 +24,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
 
 .. code-block:: bash
 
@@ -51,7 +53,7 @@ Product`_ sampling methodology.
 
    For more information, see this `Cartesian Product`_ Wiki page.
 
-4. Create a new file ``eabm_package/python/rectangle_compression_cartesian_product.py`` from the content below.
+5. Create a new file ``eabm_package/python/rectangle_compression_cartesian_product.py`` from the content below.
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_cartesian_product.py
 
@@ -231,7 +233,7 @@ to include the *tasks for all parameter sets* in the convenience alias, ``tutori
 SConstruct
 **********
 
-5. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
+6. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
    ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
@@ -247,7 +249,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+7. Build the new targets
 
 .. code-block:: bash
 

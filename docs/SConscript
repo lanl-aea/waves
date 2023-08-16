@@ -115,6 +115,7 @@ documentation_file_list = [
     'tutorial_sbatch_waves.rst',
     'tutorial_task_reuse_waves.rst',
     'tutorial_environment_activation.txt',
+    'tutorial_directory_setup.txt',
     'aea_environment_activation.txt',
     'waves_logo_brandmark_smaller.png',
     'waves_logo_primary_large_crop.png',

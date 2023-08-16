@@ -23,7 +23,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_sobol_sequence``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_sobol_sequence``
 
 .. code-block:: bash
 
@@ -35,7 +37,7 @@ Directory Structure
 Parameter Study File
 ********************
 
-4. Create a new file ``eabm_package/python/rectangle_compression_sobol_sequence.py`` from the content below.
+5. Create a new file ``eabm_package/python/rectangle_compression_sobol_sequence.py`` from the content below.
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_sobol_sequence.py
 
@@ -72,7 +74,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 

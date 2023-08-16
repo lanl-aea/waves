@@ -28,7 +28,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_08_data_extraction`` file to a new file named ``tutorial_09_post_processing``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_08_data_extraction`` file to a new file named ``tutorial_09_post_processing``
 
 .. code-block:: bash
 
@@ -59,7 +61,7 @@ however.
 Post-processing script
 **********************
 
-4. In the ``waves-tutorials/eabm_package/python`` directory, create a file called ``post_processing.py`` using the
+5. In the ``waves-tutorials/eabm_package/python`` directory, create a file called ``post_processing.py`` using the
    contents below.
 
 .. note::
@@ -92,7 +94,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 
@@ -105,7 +107,7 @@ Build Targets
 Output Files
 ************
 
-6. Observe the catenated parameter results and paramter study dataset in the post-processing task's STDOUT file
+7. Observe the catenated parameter results and paramter study dataset in the post-processing task's STDOUT file
 
 .. code-block::
 

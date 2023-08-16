@@ -41,7 +41,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_10_regression_testing``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_10_regression_testing``
 
 .. code-block:: bash
 
@@ -53,7 +55,7 @@ Directory Structure
 CSV file
 ********
 
-4. In the ``waves-tutorials/eabm_package/python`` directory, Create a new file named ``rectangle_compression_cartesian_product.csv`` from the contents below
+5. In the ``waves-tutorials/eabm_package/python`` directory, Create a new file named ``rectangle_compression_cartesian_product.csv`` from the contents below
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv
 
@@ -93,7 +95,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the datacheck targets without executing the full simulation workflow
+6. Build the datacheck targets without executing the full simulation workflow
 
 .. code-block:: bash
 
@@ -128,7 +130,7 @@ simulation suite against the limited datacheck workflow, perform the following s
    # Compare times
    $ grep "real" time_{datacheck,full}_workflow.txt
 
-6. Run the full workflow and verify that the CSV regression test passes
+7. Run the full workflow and verify that the CSV regression test passes
 
 .. code-block:: bash
 

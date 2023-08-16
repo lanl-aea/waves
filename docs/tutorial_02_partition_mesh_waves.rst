@@ -25,7 +25,9 @@ Directory Structure
 
 .. include:: directory_structure_purpose.txt
 
-3. Copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh``.
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh``.
 
 .. code-block:: bash
 
@@ -40,7 +42,7 @@ Directory Structure
 SConscript
 **********
 
-4. Modify your ``tutorial_02_partition_mesh`` file by adding the contents below immediately after the code
+5. Modify your ``tutorial_02_partition_mesh`` file by adding the contents below immediately after the code
    pertaining to ``# Geometry`` from the previous tutorial.
 
 .. admonition:: waves-tutorials/tutorial_02_partition_mesh
@@ -71,7 +73,7 @@ in the Abaqus kernel, but now the default behavior of the journal is different.
 .. TODO: figure out how to link to a specific entry in the CLI. There's gotta be some way to do this similat to :meth:
    directive. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/175
 
-5. Investigate the :ref:`waves_eabm_cli` documentation for the :ref:`abaqus_rectangle_partition_cli` file. Notice that
+6. Investigate the :ref:`waves_eabm_cli` documentation for the :ref:`abaqus_rectangle_partition_cli` file. Notice that
    a new parameter is defined here that was absent in ``rectangle_geometry.py``. This parameter is defined in short
    with ``-i`` or verbosely by ``--input-file``.
 
@@ -130,7 +132,7 @@ journal files:
 * :ref:`tutorial_geometry_waves_top_level_code_environment`
 * :ref:`tutorial_geometry_waves_retrieving_exit_codes`
 
-6. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_partition.py`` using all the contents
+7. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_partition.py`` using all the contents
    below.
 
 .. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_partition.py
@@ -163,7 +165,7 @@ argument is how the script knows which file to copy and then modify in the Abaqu
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":``
 statement, and the ``main()`` function is called within ``sys.exit()`` for exit code retrieval.
 
-7. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_journal_utilities.py`` using the contents
+8. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_journal_utilities.py`` using the contents
    below.
 
 .. admonition:: waves-eabm-tutoria/eabm_package/abaqus/abaqus_journal_utilities.py
@@ -179,7 +181,7 @@ an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and ``orphan
 orphan mesh file. Orphan mesh files define the entire part's mesh in a text-based file. The node and element locations
 and labels are listed in a tabular format that the Abaqus file parser understands.
 
-8. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_mesh.py`` using all the contents
+9. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_mesh.py`` using all the contents
    below.
 
 .. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_mesh.py
@@ -233,7 +235,7 @@ All other aspects of the ``rectangle_mesh.py`` file are the same as ``rectangle_
 SConstruct
 **********
 
-9. Add ``tutorial_02_partition_mesh`` to the ``workflow_configurations`` list in the
+10. Add ``tutorial_02_partition_mesh`` to the ``workflow_configurations`` list in the
     ``waves-tutorials/SConscruct`` file.
 
 A ``diff`` against the SConstruct file from :ref:`tutorial_geometry_waves` is included below to help identify the
@@ -252,7 +254,7 @@ environment will allow Abaqus Python to import the project module files used by 
 Build Targets
 *************
 
-10. Build the new targets
+11. Build the new targets
 
 .. code-block:: bash
 

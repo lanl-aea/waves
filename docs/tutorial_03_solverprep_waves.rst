@@ -21,7 +21,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
 
 .. code-block:: bash
 
@@ -33,7 +35,7 @@ Directory Structure
 Solver Input Files
 ******************
 
-4. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``eabm_package/abaqus`` sub-directory
+5. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``eabm_package/abaqus`` sub-directory
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
@@ -66,7 +68,7 @@ directory. Check the contents of this directory using the ``ls`` command.
 SConscript
 **********
 
-5. Add the highlighted import statement shown below to the ``tutorial_03_solverprep`` file.
+6. Add the highlighted import statement shown below to the ``tutorial_03_solverprep`` file.
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
 
@@ -89,7 +91,7 @@ we will require a custom builder that functions differently than the previously 
     end of the :ref:`tutorials_tutorial_solverprep_waves` section will demonstrate this
     more clearly.
 
-6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
+7. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
    below immediately after the code pertaining to ``# Mesh`` from the previous tutorial.
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
@@ -137,7 +139,7 @@ included below to help identify the changes made in this tutorial.
 SConstruct
 **********
 
-7. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
+8. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
    ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
@@ -153,7 +155,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-8. Build the new targets
+9. Build the new targets
 
 .. code-block:: bash
 

@@ -21,7 +21,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_05_parameter_substitution`` file to a new file named ``tutorial_06_include_files``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_05_parameter_substitution`` file to a new file named ``tutorial_06_include_files``
 
 .. code-block:: bash
 
@@ -29,7 +31,7 @@ Directory Structure
    /path/to/waves-tutorials
    $ cp tutorial_05_parameter_substitution tutorial_06_include_files
 
-4. Create a new directory in ``eabm_package/python`` in the ``waves-tutorials`` directory.
+5. Create a new directory in ``eabm_package/python`` in the ``waves-tutorials`` directory.
 
 .. code-block:: bash
 
@@ -47,7 +49,7 @@ In this tutorial, we will update the code from :ref:`tutorial_parameter_substitu
 file instead of hardcoding the parameter definitions in the ``SConscript`` file. This technique will allow parameter
 re-use between simulations.
 
-5. Create a new file ``eabm_package/python/rectangle_compression_nominal.py`` from the content below.
+6. Create a new file ``eabm_package/python/rectangle_compression_nominal.py`` from the content below.
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_nominal.py
 
@@ -57,7 +59,7 @@ re-use between simulations.
 The file you just created is an exact copy of the code snippet in your ``tutorial_05_parameter_substitution``
 file that defines the parameter key-value pairs.
 
-6. Create Python module initialization files to create a project specific local Python package.
+7. Create Python module initialization files to create a project specific local Python package.
 
 .. admonition:: waves-tutorials/eabm_package/python/__init__.py
 
@@ -80,7 +82,7 @@ need any content. You can read more about `Python Modules`_ in the `Python docum
 SConscript
 **********
 
-7. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files`` file:
+8. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files`` file:
 
    * Import ``rectangle_compression_nominal`` from the ``eabm_package.python`` module
    * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution_waves`'s
@@ -119,7 +121,7 @@ without modification to the ``SConscript`` file.
 SConstruct
 **********
 
-8. Use the ``diff`` below to modify your ``waves-tutorials/SConstruct`` file in the following ways:
+9. Use the ``diff`` below to modify your ``waves-tutorials/SConstruct`` file in the following ways:
 
    * Add the ``waves-tutorials`` directory to your `PYTHONPATH`_ to make the ``eabm_package`` - and thus
      the modules within it - importable
@@ -144,7 +146,7 @@ process should be quite familiar by now.
 Build Targets
 *************
 
-9. Build the new targets
+10. Build the new targets
 
 .. code-block:: bash
 

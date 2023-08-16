@@ -23,7 +23,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_latin_hypercube``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_latin_hypercube``
 
 .. code-block:: bash
 
@@ -35,7 +37,7 @@ Directory Structure
 Parameter Study File
 ********************
 
-4. Create a new file ``eabm_package/python/rectangle_compression_latin_hypercube.py`` from the content below.
+5. Create a new file ``eabm_package/python/rectangle_compression_latin_hypercube.py`` from the content below.
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_latin_hypercube.py
 
@@ -82,7 +84,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 

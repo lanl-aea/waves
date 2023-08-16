@@ -35,7 +35,9 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_11_archival``
+.. include:: tutorial_directory_setup.txt
+
+4. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_11_archival``
 
 .. code-block:: bash
 
@@ -112,7 +114,7 @@ manpage`_ :cite:`scons-man`.
 Build Targets
 *************
 
-4. Build the archive target. Note that the usual workflow target does not include the archive task because it is not
+5. Build the archive target. Note that the usual workflow target does not include the archive task because it is not
    required until the project developer is ready to begin final reporting.
 
 .. code-block:: bash
