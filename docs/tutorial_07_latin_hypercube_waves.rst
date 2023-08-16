@@ -103,7 +103,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_07_latin_hypercube --jobs=4
 
 ************
@@ -113,7 +113,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_07_latin_hypercube/parameter_set0/
    build/tutorial_07_latin_hypercube/parameter_set0/
    |-- abaqus.rpy

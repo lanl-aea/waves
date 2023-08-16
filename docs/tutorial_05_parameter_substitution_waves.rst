@@ -87,7 +87,7 @@ Solver Input Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ cp eabm_package/abaqus/rectangle_compression.inp eabm_package/abaqus/rectangle_compression.inp.in
 
 In this tutorial, we will be modifying several files from :ref:`tutorial_simulation_waves`, the first of which is
@@ -276,7 +276,7 @@ Build Targets
 .. code-block:: bash
 
     $ pwd
-    /path/to/waves-tutorials
+    /home/roppenheimer/waves-tutorials
     $ scons tutorial_05_parameter_substitution
     scons: Reading SConscript files ...
     Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023

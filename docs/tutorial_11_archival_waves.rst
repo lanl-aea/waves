@@ -134,7 +134,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_11_archival_archive --jobs=4
 
 ************
@@ -147,7 +147,7 @@ file. You can inspect the contents of the archive as below.
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ find build -name "*.tar.bz2"
    build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0-tutorial_11_archival.tar.bz2
    $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_11_archival"

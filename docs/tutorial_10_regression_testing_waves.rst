@@ -114,7 +114,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons datacheck --jobs=4
 
 The full simulation suite may also be executed with a single command, but will take much longer to run as the full
@@ -124,7 +124,7 @@ simulation suite against the limited datacheck workflow, perform the following s
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
 
    # Find all workflows that use the datacheck alias for one-to-one real time comparison
    $ datacheck_aliases=$(for file in $(grep -riIE "env\['datacheck_alias'\]" --include=SConscript -l); do echo $(dirname $file); done)
@@ -149,7 +149,7 @@ simulation suite against the limited datacheck workflow, perform the following s
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_10_regression_testing --jobs=4
    <output truncated>
    $ echo $?
@@ -162,7 +162,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_10_regression_testing/parameter_set0/
    build/tutorial_10_regression_testing/parameter_set0/
    |-- abaqus.rpy

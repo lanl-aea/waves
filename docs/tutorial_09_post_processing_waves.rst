@@ -113,7 +113,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_09_post_processing --jobs=4
    <output truncated>
 

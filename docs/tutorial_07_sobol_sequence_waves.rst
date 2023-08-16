@@ -93,7 +93,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_07_sobol_sequence --jobs=4
 
 ************
@@ -103,7 +103,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_07_sobol_sequence/parameter_set0/
    build/tutorial_07_sobol_sequence/parameter_set0/
    |-- abaqus.rpy

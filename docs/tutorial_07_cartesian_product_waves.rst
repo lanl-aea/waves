@@ -269,7 +269,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_07_cartesian_product --jobs=4
    <output truncated>
 

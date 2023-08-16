@@ -39,7 +39,7 @@ Directory Structure
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ mkdir -p eabm_package/python
 
 .. _tutorial_include_files_waves_python_parameter_file:
@@ -69,7 +69,7 @@ file that defines the parameter key-value pairs.
    .. code-block::
 
       $ pwd
-      /path/to/waves-tutorials
+      /home/roppenheimer/waves-tutorials
       $ touch eabm_package/python/__init__.py
       $ find . -name "__init__.py"
       ./waves-tutorials/eabm_package/abaqus/__init__.py
@@ -165,7 +165,7 @@ Build Targets
 .. code-block:: bash
 
     $ pwd
-    /path/to/waves-tutorials
+    /home/roppenheimer/waves-tutorials
     $ scons tutorial_06_include_files
     scons: Reading SConscript files ...
     Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023

@@ -104,7 +104,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_08_data_extraction --jobs=4
    <output truncated>
 
@@ -118,7 +118,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ find build/tutorial_08_data_extraction/ -name "*.h5"
    build/tutorial_08_data_extraction/parameter_set2/rectangle_compression.h5
    build/tutorial_08_data_extraction/parameter_set2/rectangle_compression_datasets.h5
