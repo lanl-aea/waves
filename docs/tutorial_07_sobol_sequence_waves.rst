@@ -25,13 +25,16 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_sobol_sequence``
+4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_sobol_sequence``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_07_cartesian_product tutorial_07_sobol_sequence
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_07_cartesian_product && mv tutorial_07_cartesian_product tutorial_07_sobol_sequence
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ********************
 Parameter Study File
@@ -69,6 +72,17 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_07_sobol_sequence_SConstruct
       :language: Python
       :diff: tutorials_tutorial_07_cartesian_product_SConstruct
+
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_07_sobol_sequence_SConstruct && mv tutorial_07_sobol_sequence_SConstruct SConstruct
 
 *************
 Build Targets

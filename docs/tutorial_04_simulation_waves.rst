@@ -24,14 +24,16 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
+4. Download and copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_03_solverprep tutorial_04_simulation
-
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_03_solverprep && mv tutorial_03_solverprep tutorial_04_simulation
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 .. _tutorials_tutorial_simulation_waves:
 
@@ -127,7 +129,7 @@ The ``datacheck_suffixes`` are standard output file extensions that will form th
 `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information about each of the file
 extensions listed.
 
-One new section of code that we have not utilized yet in the previous tutotorials is the passing of command line options
+One new section of code that we have not utilized yet in the previous tutorials is the passing of command line options
 to the builder. This is done using the ``abaqus_options`` variable. Here, we instruct the Abaqus solver to use double
 precision for both the packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation
 :cite:`ABAQUS` for more information about the use of single or double precision in an Abaqus analysis.
@@ -205,6 +207,17 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_04_simulation_SConstruct
       :language: Python
       :diff: tutorials_tutorial_03_solverprep_SConstruct
+
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_04_simulation_SConstruct && mv tutorial_04_simulation_SConstruct SConstruct
 
 *************
 Build Targets

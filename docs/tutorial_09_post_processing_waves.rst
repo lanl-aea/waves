@@ -30,13 +30,16 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_08_data_extraction`` file to a new file named ``tutorial_09_post_processing``
+4. Download and copy the ``tutorial_08_data_extraction`` file to a new file named ``tutorial_09_post_processing``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_08_data_extraction tutorial_09_post_processing
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_08_data_extraction && mv tutorial_08_data_extraction tutorial_09_post_processing
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 **********
 SConscript
@@ -89,6 +92,17 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_09_post_processing_SConstruct
       :language: Python
       :diff: tutorials_tutorial_08_data_extraction_SConstruct
+
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_09_post_processing_SConstruct && mv tutorial_09_post_processing_SConstruct SConstruct
 
 *************
 Build Targets

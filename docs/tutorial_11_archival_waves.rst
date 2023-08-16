@@ -37,13 +37,16 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_11_archival``
+4. Download and copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_11_archival``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_10_regression_testing tutorial_11_archival
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_10_regression_testing && mv tutorial_10_regression_testing tutorial_11_archival
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 **********
 SConscript
@@ -96,6 +99,17 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_11_archival_SConstruct
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing_SConstruct
+
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_11_archival_SConstruct && mv tutorial_11_archival_SConstruct SConstruct
 
 Note that we retrieve the project configuration ``SConstruct`` file name and location with a `Python lambda expression`_
 :cite:`python`. We do this to recover the absolute path to the current configuration file and because some projects may

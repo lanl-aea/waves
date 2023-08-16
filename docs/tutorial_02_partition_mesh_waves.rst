@@ -27,7 +27,6 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-
 4. Download and copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh`` 
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 

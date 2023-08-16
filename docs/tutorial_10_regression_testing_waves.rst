@@ -43,13 +43,16 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_10_regression_testing``
+4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_10_regression_testing``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_09_post_processing tutorial_10_regression_testing
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_09_post_processing && mv tutorial_09_post_processing tutorial_10_regression_testing
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ********
 CSV file
@@ -90,6 +93,17 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_10_regression_testing_SConstruct
       :language: Python
       :diff: tutorials_tutorial_09_post_processing_SConstruct
+
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_10_regression_testing_SConstruct && mv tutorial_10_regression_testing_SConstruct SConstruct
 
 *************
 Build Targets

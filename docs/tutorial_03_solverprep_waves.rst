@@ -23,13 +23,16 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
+4. Download and copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_02_partition_mesh tutorial_03_solverprep
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_02_partition_mesh && mv tutorial_02_partition_mesh tutorial_03_solverprep
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ******************
 Solver Input Files
@@ -150,6 +153,17 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_03_solverprep_SConstruct
       :language: Python
       :diff: tutorials_tutorial_02_partition_mesh_SConstruct
+
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_03_solverprep_SConstruct && mv tutorial_03_solverprep_SConstruct SConstruct
 
 *************
 Build Targets

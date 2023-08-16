@@ -23,13 +23,16 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_05_parameter_substitution`` file to a new file named ``tutorial_06_include_files``
+4. Download and copy the ``tutorial_05_parameter_substitution`` file to a new file named ``tutorial_06_include_files``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_05_parameter_substitution tutorial_06_include_files
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_05_parameter_substitution && mv tutorial_05_parameter_substitution tutorial_06_include_files
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 5. Create a new directory in ``eabm_package/python`` in the ``waves-tutorials`` directory.
 
@@ -135,6 +138,17 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_06_include_files_SConstruct
       :language: Python
       :diff: tutorials_tutorial_05_parameter_substitution_SConstruct
+
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_06_include_files_SConstruct && mv tutorial_06_include_files_SConstruct SConstruct
 
 The first change you made allows for us to import modules from the ``eabm_package`` package. This step is neccessary to
 be able to import the ``eabm_package.python`` module in the ``tutorial_06_include_files`` file.

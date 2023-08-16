@@ -65,13 +65,16 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_05_parameter_substitution``
+4. Download and copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_05_parameter_substitution``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_04_simulation tutorial_05_parameter_substitution
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_04_simulation && mv tutorial_04_simulation tutorial_05_parameter_substitution
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ******************
 Solver Input Files
@@ -246,6 +249,17 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_05_parameter_substitution_SConstruct
       :language: Python
       :diff: tutorials_tutorial_04_simulation_SConstruct
+
+.. note::
+
+    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
+    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_05_parameter_substitution_SConstruct && mv tutorial_05_parameter_substitution_SConstruct SConstruct
 
 A previous tutorial constructed the ``simulation_variables`` and the ``substitution_dictionary`` variables. The
 ``simulation_variables`` dictionary is used to define simulation parameters for SCons project configuration and script
