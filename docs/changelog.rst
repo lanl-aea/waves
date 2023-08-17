@@ -49,6 +49,7 @@ Internal Changes
 - Update to use Abaqus 2023 (:issue:`509`, :merge:`617`). By `Kyle Brindley`_.
 - More complete clean behavior for the documentation targets to reduce dev/main source conflicts during Gitlab-Pages
   builds (:issue:`516`, :merge:`625`, :merge:`626`). By `Kyle Brindley`_.
+- Handle parameter study script input outside of argparse (:issue:`72`, :merge:`633`). By `Sergio Cordova`_.
 
 *******************
 0.6.21 (2023-07-21)
