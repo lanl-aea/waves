@@ -3,7 +3,6 @@
 
 import argparse
 from argparse import ArgumentParser
-import pathlib
 import sys
 
 import yaml
@@ -54,8 +53,6 @@ def parameter_study_parser():
     parser.add_argument('--dryrun', action='store_true',
                                help=f"Print contents of new parameter study output files to STDOUT and exit " \
                                     f"(default: %(default)s)")
-    parser.add_argument('--debug', action='store_true',
-                               help="Print internal variables to STDOUT and exit (default: %(default)s)")
     parser.add_argument('--write-meta', action='store_true',
                                help="Write a meta file named 'parameter_study_meta.txt' containing the " \
                                     "parameter set file names (default: %(default)s)")
@@ -70,7 +67,6 @@ def parameter_study(subcommand, input_file,
                     previous_parameter_study=parameter_generators.default_previous_parameter_study,
                     overwrite=parameter_generators.default_overwrite,
                     dryrun=parameter_generators.default_dryrun,
-                    debug=parameter_generators.default_debug,
                     write_meta=parameter_generators.default_write_meta):
     """Build parameter studies
 
@@ -83,23 +79,10 @@ def parameter_study(subcommand, input_file,
     :param str previous_parameter_study: relative or absolute path to previous parameter study file
     :param bool overwrite: overwrite all existing parameter set file(s)
     :param bool dryrun: print what files would have been written, but do no work
-    :param bool debug: print internal utility variables
     :param bool write_meta: write a meta file name 'parameter_study_meta.txt' containing the parameter set file path(s)
 
     :returns: return code
     """
-
-    if debug:
-        print(f"subcommand               = {subcommand}")
-        print(f"input_file               = {input_file}")
-        print(f"output_file_template     = {output_file_template}")
-        print(f"output_file              = {output_file}")
-        print(f"output_file_type         = {output_file_type}")
-        print(f"set_name_template        = {set_name_template}")
-        print(f"previous_parameter_study = {previous_parameter_study}")
-        print(f"overwrite                = {overwrite}")
-        print(f"write_meta               = {write_meta}")
-        return 0
 
     # Read the input stream
     # TODO: Handle input file outside of argparse
@@ -124,7 +107,6 @@ def parameter_study(subcommand, input_file,
             previous_parameter_study=previous_parameter_study,
             overwrite=overwrite,
             dryrun=dryrun,
-            debug=debug,
             write_meta=write_meta
         )
 

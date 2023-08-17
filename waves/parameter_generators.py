@@ -33,7 +33,6 @@ default_set_name_template = f'parameter_set{template_placeholder}'
 default_previous_parameter_study = None
 default_overwrite = False
 default_dryrun = False
-default_debug = False
 default_write_meta = False
 
 parameter_study_meta_file = "parameter_study_meta.txt"
@@ -59,7 +58,6 @@ class _ParameterGenerator(ABC):
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
@@ -71,7 +69,6 @@ class _ParameterGenerator(ABC):
                  previous_parameter_study=default_previous_parameter_study,
                  overwrite=default_overwrite,
                  dryrun=default_dryrun,
-                 debug=default_debug,
                  write_meta=default_write_meta,
                  **kwargs):
         self.parameter_schema = parameter_schema
@@ -82,7 +79,6 @@ class _ParameterGenerator(ABC):
         self.previous_parameter_study = previous_parameter_study
         self.overwrite = overwrite
         self.dryrun = dryrun
-        self.debug = debug
         self.write_meta = write_meta
 
         if self.output_file_template is not None and self.output_file is not None:
@@ -653,7 +649,6 @@ class CartesianProduct(_ParameterGenerator):
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
@@ -733,7 +728,6 @@ class LatinHypercube(_ScipyGenerator):
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -816,7 +810,6 @@ class CustomStudy(_ParameterGenerator):
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
@@ -906,7 +899,6 @@ class SobolSequence(_ScipyGenerator):
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -1000,7 +992,6 @@ class ScipySampler(_ScipyGenerator):
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -1101,7 +1092,6 @@ class SALibSampler(_ParameterGenerator, ABC):
         study Xarray Dataset
     :param bool overwrite: Overwrite existing output files
     :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool debug: Print internal variables to STDOUT and exit
     :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
