@@ -1,6 +1,7 @@
 import os
 import sys
 import pathlib
+import tempfile
 import subprocess
 
 import pytest
@@ -31,7 +32,7 @@ if _settings._repository_tutorials_directory == tutorial_directory:
     ("scons . --sconstruct=tutorial_02_partition_mesh_SConstruct --keep-going --unconditional-build", tutorial_directory),
     ("scons . --sconstruct=tutorial_argparse_types_SConstruct --keep-going --unconditional-build", tutorial_directory),
     ("scons . --sconstruct=tutorial_03_solverprep_SConstruct --keep-going --unconditional-build", tutorial_directory),
-    ("scons . --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build", tutorial_directory),
+    ("scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --keep-going --unconditional-build", tutorial_directory),
     # TODO: Figure out how to load the sierra module without breaking the CI tests. Change ``scons abaqus`` to ``scons .``
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/515
     ("scons abaqus --keep-going --unconditional-build", tutorial_directory / "tutorial_cubit"),
@@ -55,5 +56,11 @@ if _settings._repository_tutorials_directory == tutorial_directory:
     ("scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build", tutorial_directory),
 ])
 def test_run_tutorial(command, directory):
-    command = command.split(" ")
-    result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
+    if "tutorial_04" in command:
+        with tempfile.TemporaryDirectory() as temp_directory:
+            command = command + f" --build-dir {temp_directory}"
+            command = command.split(" ")
+            result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
+    else:
+        command = command.split(" ")
+        result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
