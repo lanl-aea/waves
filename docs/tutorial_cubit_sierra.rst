@@ -125,7 +125,7 @@ Build Targets
    scons: Reading SConscript files ...
    Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
    Checking whether abq2023 program exists...no
-   Checking whether /apps/Cubit-16.04/cubit program exists.../apps/Cubit-16.04/cubit
+   Checking whether /apps/Cubit-16.12/cubit program exists.../apps/Cubit-16.12/cubit
    Checking whether cubit program exists...no
    Checking whether sierra program exists.../projects/sierra/sierra5121/install/tools/sntools/engine/sierra
    scons: done reading SConscript files.
