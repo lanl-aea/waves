@@ -79,7 +79,8 @@ def test_quickstart():
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
     with patch("waves.fetch.recursive_copy") as mock_recursive_copy:
-        return_code = main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"), ["dummy/relative/path"], "/dummy/destination")
+        return_code = main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
+                                 ["dummy/relative/path"], "/dummy/destination")
         assert return_code != 0
         mock_recursive_copy.assert_not_called()
 
