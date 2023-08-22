@@ -65,6 +65,6 @@ def test_run_tutorial(command, directory):
     :param pathlib.Path directory: the working directory where the command should be executed
     """
     with tempfile.TemporaryDirectory() as temp_directory:
-        command = command + f" --build-dir {temp_directory}"
+        command = command + f" --build-dir={temp_directory}"
         command = command.split(" ")
         result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
