@@ -3,8 +3,24 @@
 import os
 import pathlib
 
+
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build_scons_quickstart",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+
 # Inherit user's full environment
-env = Environment(ENV=os.environ.copy())
+env = Environment(
+    ENV=os.environ.copy(),
+    variant_dir_base=GetOption("variant_dir_base"),
+)
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
@@ -12,12 +28,12 @@ env.Default()
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'eabm_package/abaqus'
-variant_dir_base = pathlib.Path('build_scons_quickstart')
 
 # Make the EABM package importable for Python and Abaqus Python environments
 env.PrependENVPath("PYTHONPATH", str(project_dir))
 
 # Separate target output from source files
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
 VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
@@ -37,9 +53,10 @@ abaqus_solver = Builder(
            "${abaqus_options} -interactive -ask_delete no")
 
 # Add custom builders
-env.Append(BUILDERS=
-    {'AbaqusJournal': abaqus_journal,
-     'AbaqusSolver': abaqus_solver})
+env.Append(BUILDERS={
+    'AbaqusJournal': abaqus_journal,
+    'AbaqusSolver': abaqus_solver
+})
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
