@@ -12,7 +12,6 @@ Bug fixes
 =========
 - Fix odb_extract to ensure 'mode=csv' when odbreport is called. (:issue:`517`, :merge:`630`). By `Prabhu Khalsa`_.
 
-
 Breaking changes
 ================
 - Deprecate the too-general ``parameter_study <study type>`` command line utility name in favor of ``waves <study
@@ -50,6 +49,8 @@ Internal Changes
 - More complete clean behavior for the documentation targets to reduce dev/main source conflicts during Gitlab-Pages
   builds (:issue:`516`, :merge:`625`, :merge:`626`). By `Kyle Brindley`_.
 - Update the expected Cubit version from 16.04 to 16.12 (:issue:`510`, :merge:`634`). By `Sergio Cordova`_.
+- Add the ``--build-dir`` command line option to the quickstart tutorials to enable the system tests to run in
+  non-default, temporary build directories (:issue:`518`, :merge:`635`). By `Kyle Brindley`_.
 
 *******************
 0.6.21 (2023-07-21)
