@@ -64,11 +64,7 @@ def test_run_tutorial(command, directory):
     :param str command: the full command string for the system test
     :param pathlib.Path directory: the working directory where the command should be executed
     """
-    if "tutorial_04" in command:
-        with tempfile.TemporaryDirectory() as temp_directory:
-            command = command + f" --build-dir {temp_directory}"
-            command = command.split(" ")
-            result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
-    else:
+    with tempfile.TemporaryDirectory() as temp_directory:
+        command = command + f" --build-dir {temp_directory}"
         command = command.split(" ")
         result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
