@@ -104,6 +104,20 @@ parameter_study_args = {
     ),
 }
 
+parameter_study_args = {     #            subcommand, class_name, output_file_template, output_file, output_file_type, set_name_template, previous_parameter_study, overwrite, dryrun, write_meta
+    'cartesian product':        ('cartesian_product',    'CartesianProduct', None, None, None, None, None, None, None, None),
+    'custom study':             ('custom_study',    'CustomStudy', None, None, None, None, None, None, None, None),
+    'latin hypercube':          ('latin_hypercube',    'LatinHypercube', None, None, None, None, None, None, None, None),
+    'sobol sequence':           ('sobol_sequence',    'SobolSequence', None, None, None, None, None, None, None, None),
+    'output file template':     ('cartesian_product',    'CartesianProduct', '', None, None, None, None, None, None, None),
+    'output file':              (      {},    'out',      True,  False,   [ True,  True],    2,     2),
+    'output file type':         (      {},    'out',      True,  False,   [ True, False],    2,     2),
+    'set name template':        ({}, 'out', True, False, [True, False], 2, 2),
+    'previous parameter study': ({}, 'out', True, False, [True, False], 2, 2),
+    'overwrite':                ({}, 'out', True, False, [True, False], 2, 2),
+    'dry run':                  ({}, 'out', True, False, [True, False], 2, 2),
+    'write meta':               ({}, 'out', True, False, [True, False], 2, 2),
+}
 
 @pytest.mark.integrationtest
 @pytest.mark.parametrize('subcommand, class_name',
