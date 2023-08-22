@@ -89,7 +89,7 @@ test:
     # Use ``pytest`` when fixed
     - pytest -m "not fixsconsusage and not systemtest"
     - pytest -m "fixsconsusage"
-    - pytest -n0 -m "systemtest"
+    - pytest -n0 -m "systemtest" --tb=short
     - cd ${test_root}
     # WAVES CLI regression tests
     - quickstart_regression_directory="${test_root}/test_quickstart"
