@@ -56,6 +56,14 @@ if _settings._repository_tutorials_directory == tutorial_directory:
     ("scons . --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --keep-going --unconditional-build", tutorial_directory),
 ])
 def test_run_tutorial(command, directory):
+    """Run the tutorial configuration files as system tests.
+
+    Executes with a ``--build-dir`` temporary directory that is cleaned up after each test execution. The
+    ``--build-dir`` command line option must exist for every tutorial configuration.
+
+    :param str command: the full command string for the system test
+    :param pathlib.Path directory: the working directory where the command should be executed
+    """
     if "tutorial_04" in command:
         with tempfile.TemporaryDirectory() as temp_directory:
             command = command + f" --build-dir {temp_directory}"
