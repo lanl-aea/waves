@@ -2,10 +2,27 @@
 
 import os
 import pathlib
+
 import waves
 
+
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build_waves_quickstart",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+
 # Inherit user's full environment
-env = Environment(ENV=os.environ.copy())
+env = Environment(
+    ENV=os.environ.copy(),
+    variant_dir_base=GetOption("variant_dir_base"),
+)
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
@@ -13,21 +30,22 @@ env.Default()
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(Dir('.').abspath)
 abaqus_source_dir = 'eabm_package/abaqus'
-variant_dir_base = pathlib.Path('build_waves_quickstart')
 
 # Make the EABM package importable for Python and Abaqus Python environments
 env.PrependENVPath("PYTHONPATH", str(project_dir))
 
 # Separate target output from source files
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
 VariantDir(variant_dir_base.name, '.', duplicate=False)
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
 
 # Add WAVES builders
-env.Append(BUILDERS=
-    {'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
-     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])})
+env.Append(BUILDERS={
+    'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
+    'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])
+})
 
 # Simulation variables
 model = "rectangle"
