@@ -20,8 +20,8 @@ AddOption(
 
 # Inherit user's full environment
 env = Environment(
-        ENV=os.environ.copy(),
-        build_dir=GetOption('build_dir')
+    ENV=os.environ.copy(),
+    build_dir=GetOption('build_dir')
 )
 
 # Always copy (no sym-links) when duplicating
