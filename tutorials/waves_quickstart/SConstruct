@@ -15,7 +15,8 @@ AddOption(
     type="string",
     action="store",
     metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')")
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
 
 # Inherit user's full environment
 env = Environment(
