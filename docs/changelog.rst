@@ -12,7 +12,6 @@ Bug fixes
 =========
 - Fix odb_extract to ensure 'mode=csv' when odbreport is called. (:issue:`517`, :merge:`630`). By `Prabhu Khalsa`_.
 
-
 Breaking changes
 ================
 - Deprecate the too-general ``parameter_study <study type>`` command line utility name in favor of ``waves <study
@@ -49,6 +48,12 @@ Internal Changes
 - Update to use Abaqus 2023 (:issue:`509`, :merge:`617`). By `Kyle Brindley`_.
 - More complete clean behavior for the documentation targets to reduce dev/main source conflicts during Gitlab-Pages
   builds (:issue:`516`, :merge:`625`, :merge:`626`). By `Kyle Brindley`_.
+- Update the expected Cubit version from 16.04 to 16.12 (:issue:`510`, :merge:`634`). By `Sergio Cordova`_.
+- Add the ``--build-dir`` command line option to the quickstart tutorials to enable the system tests to run in
+  non-default, temporary build directories (:issue:`518`, :merge:`635`). By `Kyle Brindley`_.
+- Drive the system tests (tutorials) from pytest during conda builds (:merge:`629`). By `Kyle Brindley`_.
+- Upgrade to Anaocnda 2023 on Gitlab-CI environment (:issue:`520`, :merge:`636`). By `Sergio Cordova`_.
+- Return to the conda build command (:merge:`637`). By `Kyle Brindley`_.
 - Handle parameter study script input outside of argparse (:issue:`72`, :merge:`633`). By `Sergio Cordova`_.
 
 *******************
