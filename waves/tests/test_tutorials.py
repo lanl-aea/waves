@@ -1,10 +1,6 @@
 import os
-<<<<<<< HEAD
-=======
-import sys
 import pathlib
 import tempfile
->>>>>>> dev
 import subprocess
 
 import pytest
