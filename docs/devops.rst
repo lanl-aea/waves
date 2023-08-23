@@ -52,7 +52,7 @@ The Conda packages found in ``environment.yml`` are reproduced in the :ref:`eabm
 Build
 *****
 
-To build the Conda package activate the development environment and run the conda (or mamba) build command found in the
+To build the Conda package activate the development environment and run the conda build command found in the
 CI configuration file. The current command may be found as
 
 .. code-block::
@@ -64,7 +64,7 @@ CI configuration file. The current command may be found as
 
    $ output_folder='conda-bld'
    $ mkdir ${output_folder}
-   $ VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+   $ VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
 
 A second recipe that bundles the LANL internally linked documentation is found in ``waves/recipe-internal`` and can be
 built similarly by replacing ``recipe`` with ``recipe-internal`` in the above command.
@@ -156,13 +156,22 @@ environment and run
 
    $ scons systemtest
 
-The full list of continuous integration test targets can be found in the Gitlab-CI file, ``.gitlab-ci.yml``.
+The full list of continuous integration test commands can be found in the Gitlab-CI file, ``.gitlab-ci.yml``.
 
 .. code-block::
 
    $ pwd
    path/to/local/git/clone/waves/
    $ sed -n '/fast-test/,/tags/p' .gitlab-ci.yml
+
+The WAVES unit and system tests may also be executed from the installation directory. These tests use pytest directly
+and may require non-default pytest options and markers to execute the system tests serially. The full list of CI
+commands may be found in the internal recipe file, ``recipe-internal/meta.yaml``, under the ``test`` keyword. The
+following grep command will show the pytest commands and options.
+
+.. code-block::
+
+   $ grep "pytest " recipe-internal/meta.yaml
 
 Test Local Module
 =================
