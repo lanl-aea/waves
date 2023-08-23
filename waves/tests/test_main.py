@@ -3,7 +3,7 @@
 Test waves.py
 """
 import pathlib
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
 
 import pytest
 
@@ -122,7 +122,7 @@ def test_parameter_study(subcommand, class_name):
     # Run main code. No SystemExit expected.
     schema_file = 'dummy.file'
     with patch('sys.argv', ['main.py', subcommand, schema_file]), \
-         patch('argparse.FileType'), patch('yaml.safe_load'), \
+         patch('builtins.open', mock_open()), patch('yaml.safe_load'), \
          patch(f'waves.parameter_generators.{class_name}') as mock_generator:
         exit_code = main.main()
         assert exit_code == 0
