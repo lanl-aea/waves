@@ -85,7 +85,7 @@ def test_quickstart():
         mock_recursive_copy.assert_not_called()
 
 
-parameter_study_args = {  #               subcommand,         class_name,      argument,    argument_value
+parameter_study_args = {  #               subcommand,         class_name,       argument,   argument_value
     'cartesian product':        ('cartesian_product', 'CartesianProduct',           None,             None),
     'custom study':             (     'custom_study',      'CustomStudy',           None,             None),
     'latin hypercube':          (  'latin_hypercube',   'LatinHypercube',           None,             None),
