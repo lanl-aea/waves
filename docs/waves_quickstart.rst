@@ -106,7 +106,8 @@ Workflow Visualization
 
    $ pwd
    /home/roppenheimer/waves_quickstart
-   $ waves visualize rectangle --output-file waves_quickstart.png --width=28 --height=5 --exclude-list .stdout .jnl .env /usr/bin
+   $ waves visualize rectangle --output-file waves_quickstart.png
 
 .. figure:: waves_quickstart.png
    :align: center
+
