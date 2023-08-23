@@ -156,13 +156,22 @@ environment and run
 
    $ scons systemtest
 
-The full list of continuous integration test targets can be found in the Gitlab-CI file, ``.gitlab-ci.yml``.
+The full list of continuous integration test commands can be found in the Gitlab-CI file, ``.gitlab-ci.yml``.
 
 .. code-block::
 
    $ pwd
    path/to/local/git/clone/waves/
    $ sed -n '/fast-test/,/tags/p' .gitlab-ci.yml
+
+The WAVES unit and system tests may also be executed from the installation directory. These tests use pytest directly
+and may require non-default pytest options and markers to execute the system tests serially. The full list of CI
+commands may be found in the internal recipe file, ``recipe-internal/meta.yaml``, under the ``test`` keyword. The
+following grep command will show the pytest commands and options.
+
+.. code-block::
+
+   $ grep "pytest " recipe-internal/meta.yaml
 
 Test Local Module
 =================
