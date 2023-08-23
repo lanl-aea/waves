@@ -14,27 +14,27 @@ from waves import _settings
 @pytest.mark.unittest
 def test_main():
     with patch('sys.argv', ['waves.py', 'docs']), \
-         patch("waves.main.docs") as mock_docs:
+            patch("waves.main.docs") as mock_docs:
         main.main()
         mock_docs.assert_called()
 
     target_string = 'dummy.target'
     with patch('sys.argv', ['waves.py', 'build', target_string]), \
-         patch("waves.main.build") as mock_build:
+            patch("waves.main.build") as mock_build:
         main.main()
         mock_build.assert_called_once()
         mock_build.call_args[0] == [target_string]
 
     project_directory = 'project_directory'
     with patch('sys.argv', ['waves.py', 'quickstart', project_directory]), \
-         patch("waves.fetch.recursive_copy") as mock_recursive_copy:
+            patch("waves.fetch.recursive_copy") as mock_recursive_copy:
         main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[0][2] == pathlib.Path(project_directory)
 
     requested_paths = ['dummy.file1', 'dummy.file2']
     with patch('sys.argv', ['waves.py', 'fetch'] + requested_paths), \
-         patch("waves.fetch.recursive_copy") as mock_recursive_copy:
+            patch("waves.fetch.recursive_copy") as mock_recursive_copy:
         main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[1]['requested_paths'] == requested_paths
@@ -48,7 +48,7 @@ def test_docs():
         mock_webbrowser_open.assert_called_with(str(_settings._installed_docs_index))
 
     with patch('webbrowser.open') as mock_webbrowser_open, \
-         patch('pathlib.Path.exists', return_value=True):
+            patch('pathlib.Path.exists', return_value=True):
         return_code = main.docs(print_local_path=True)
         assert return_code == 0
         mock_webbrowser_open.not_called()
@@ -56,7 +56,7 @@ def test_docs():
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
     with patch('webbrowser.open') as mock_webbrowser_open, \
-         patch('pathlib.Path.exists', return_value=False):
+            patch('pathlib.Path.exists', return_value=False):
         return_code = main.docs(print_local_path=True)
         assert return_code != 0
         mock_webbrowser_open.not_called()
@@ -69,7 +69,7 @@ def test_build():
         mock_check_output.assert_called_once()
 
     with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output, \
-         patch("pathlib.Path.mkdir") as mock_mkdir:
+            patch("pathlib.Path.mkdir") as mock_mkdir:
         main.build(['dummy.target'], git_clone_directory='dummy/clone')
         assert mock_check_output.call_count == 2
 
@@ -85,45 +85,27 @@ def test_quickstart():
         mock_recursive_copy.assert_not_called()
 
 
-parameter_study_args = {
-    'cartesian product': (
-        'cartesian_product',
-        'CartesianProduct'
-    ),
-    'custom study': (
-        'custom_study',
-        'CustomStudy'
-    ),
-    'latin hypercube': (
-        'latin_hypercube',
-        'LatinHypercube'
-    ),
-    'sobol sequence': (
-        'sobol_sequence',
-        'SobolSequence'
-    ),
+parameter_study_args = {  #               subcommand,         class_name,      argument,    argument_value
+    'cartesian product':        ('cartesian_product', 'CartesianProduct',           None,             None),
+    'custom study':             (     'custom_study',      'CustomStudy',           None,             None),
+    'latin hypercube':          (  'latin_hypercube',   'LatinHypercube',           None,             None),
+    'sobol sequence':           (   'sobol_sequence',    'SobolSequence',           None,             None),
+    'output file template':     ('cartesian_product', 'CartesianProduct',           '-o', 'dummy_template'),
+    'output file':              (     'custom_study',      'CustomStudy',           '-f', 'dummy_file.txt'),
+    'output file type':         (  'latin_hypercube',   'LatinHypercube',           '-t',             'h5'),
+    'set name template':        (   'sobol_sequence',    'SobolSequence',           '-s',        '@number'),
+    'previous parameter study': ('cartesian_product', 'CartesianProduct',           '-p', 'dummy_file.txt'),
+    'overwrite':                (     'custom_study',      'CustomStudy',  '--overwrite',             None),
+    'dry run':                  (  'latin_hypercube',   'LatinHypercube',     '--dryrun',             None),
+    'write meta':               (   'sobol_sequence',    'SobolSequence', '--write-meta',             None)
 }
 
-parameter_study_args = {     #            subcommand, class_name, output_file_template, output_file, output_file_type, set_name_template, previous_parameter_study, overwrite, dryrun, write_meta
-    'cartesian product':        ('cartesian_product',    'CartesianProduct', None, None, None, None, None, None, None, None),
-    'custom study':             ('custom_study',    'CustomStudy', None, None, None, None, None, None, None, None),
-    'latin hypercube':          ('latin_hypercube',    'LatinHypercube', None, None, None, None, None, None, None, None),
-    'sobol sequence':           ('sobol_sequence',    'SobolSequence', None, None, None, None, None, None, None, None),
-    'output file template':     ('cartesian_product',    'CartesianProduct', '', None, None, None, None, None, None, None),
-    'output file':              (      {},    'out',      True,  False,   [ True,  True],    2,     2),
-    'output file type':         (      {},    'out',      True,  False,   [ True, False],    2,     2),
-    'set name template':        ({}, 'out', True, False, [True, False], 2, 2),
-    'previous parameter study': ({}, 'out', True, False, [True, False], 2, 2),
-    'overwrite':                ({}, 'out', True, False, [True, False], 2, 2),
-    'dry run':                  ({}, 'out', True, False, [True, False], 2, 2),
-    'write meta':               ({}, 'out', True, False, [True, False], 2, 2),
-}
 
 @pytest.mark.integrationtest
-@pytest.mark.parametrize('subcommand, class_name',
+@pytest.mark.parametrize('subcommand, class_name, argument, argument_value',
                          parameter_study_args.values(),
                          ids=list(parameter_study_args.keys()))
-def test_parameter_study(subcommand, class_name):
+def test_parameter_study(subcommand, class_name, argument, argument_value):
     # Help/usage. Should not raise
     with patch('sys.argv', ['main.py', subcommand, '-h']):
         exit_code = None
@@ -135,10 +117,14 @@ def test_parameter_study(subcommand, class_name):
             assert exit_code == 0
 
     # Run main code. No SystemExit expected.
-    schema_file = 'dummy.file'
-    with patch('sys.argv', ['main.py', subcommand, schema_file]), \
-         patch('argparse.FileType'), patch('yaml.safe_load'), \
-         patch(f'waves.parameter_generators.{class_name}') as mock_generator:
+    arg_list = ['main.py', subcommand, 'dummy.file']
+    if argument:
+        arg_list.append(argument)
+    if argument_value:
+        arg_list.append(argument_value)
+    with patch('sys.argv', arg_list), \
+            patch('argparse.FileType'), patch('yaml.safe_load'), \
+            patch(f'waves.parameter_generators.{class_name}') as mock_generator:
         exit_code = main.main()
         assert exit_code == 0
         mock_generator.assert_called_once()
