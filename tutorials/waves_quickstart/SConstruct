@@ -20,7 +20,8 @@ AddOption(
 # Inherit user's full environment
 env = Environment(
         ENV=os.environ.copy(),
-        build_dir=GetOption('build_dir'))
+        build_dir=GetOption('build_dir')
+)
 
 # Always copy (no sym-links) when duplicating
 env.SetOption('duplicate', 'copy')
@@ -37,7 +38,8 @@ env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq20
 # Add WAVES builders
 env.Append(BUILDERS=
     {'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
-     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])})
+     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])
+})
 
 # Abaqus input file implicit dependency scanner
 env.Append(SCANNERS=waves.scons_extensions.abaqus_input_scanner())
