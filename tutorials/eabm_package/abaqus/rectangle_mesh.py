@@ -8,6 +8,9 @@ import abaqus
 import abaqusConstants
 import mesh
 
+# Import the shared abaqus utilities, trying each of the several tutorial directory structures.
+# Most end-users will implement only one of these structures and should replace
+# the try:except structure with a single import line.
 try:
     import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
 except ImportError:
