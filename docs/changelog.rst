@@ -52,6 +52,8 @@ Internal Changes
 - Add the ``--build-dir`` command line option to the quickstart tutorials to enable the system tests to run in
   non-default, temporary build directories (:issue:`518`, :merge:`635`). By `Kyle Brindley`_.
 - Drive the system tests (tutorials) from pytest during conda builds (:merge:`629`). By `Kyle Brindley`_.
+- Upgrade to Anaocnda 2023 on Gitlab-CI environment (:issue:`520`, :merge:`636`). By `Sergio Cordova`_.
+- Return to the conda build command (:merge:`637`). By `Kyle Brindley`_.
 - Removed debug argument from CLI (:issue:`76`, :merge:`632`). By `Sergio Cordova`_.
 
 *******************

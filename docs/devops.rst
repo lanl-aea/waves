@@ -52,7 +52,7 @@ The Conda packages found in ``environment.yml`` are reproduced in the :ref:`eabm
 Build
 *****
 
-To build the Conda package activate the development environment and run the conda (or mamba) build command found in the
+To build the Conda package activate the development environment and run the conda build command found in the
 CI configuration file. The current command may be found as
 
 .. code-block::
@@ -64,7 +64,7 @@ CI configuration file. The current command may be found as
 
    $ output_folder='conda-bld'
    $ mkdir ${output_folder}
-   $ VERSION=$(python -m setuptools_scm) mamba build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
+   $ VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --croot /scratch/${USER}/conda-build --output-folder ${output_folder}
 
 A second recipe that bundles the LANL internally linked documentation is found in ``waves/recipe-internal`` and can be
 built similarly by replacing ``recipe`` with ``recipe-internal`` in the above command.
