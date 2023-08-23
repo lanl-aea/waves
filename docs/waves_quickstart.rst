@@ -12,9 +12,9 @@ This quickstart will create a minimal, single file project configuration matchin
 * :ref:`tutorial_solverprep_waves`
 * :ref:`tutorial_simulation_waves`
 
-These tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using
-a single project configuration file requires `SCons`_ techniques that differ between the quickstart ``SConstruct`` file
-and the project configuration files, ``SConstruct`` and ``SConscript``, found in the full tutorials.
+These tutorials and this quickstart describe the computational engineering workflow through simulation execution. This 
+tutorial will use a different working directory than the rest of the core tutorials as both sets of tutorials contain files 
+with identical names.
 
 ***********
 Environment
