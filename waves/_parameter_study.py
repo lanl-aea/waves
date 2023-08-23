@@ -15,9 +15,8 @@ from waves import parameter_generators
 def parameter_study_parser():
     # Required positional option
     parser = ArgumentParser(add_help=False)
-    parser.add_argument('INPUT_FILE', nargs='?', type=argparse.FileType('r'),
-                               default=(None if sys.stdin.isatty() else sys.stdin),
-                               help=f"YAML formatted parameter study schema file (default: STDIN)")
+    parser.add_argument('INPUT_FILE', nargs='?', default=(None if sys.stdin.isatty() else sys.stdin),
+                        help=f"YAML formatted parameter study schema file (default: STDIN)")
 
     # Mutually exclusive output file options
     output_file_group = parser.add_mutually_exclusive_group()
@@ -62,7 +61,7 @@ def parameter_study_parser():
     return parser
 
 
-def parameter_study(subcommand, input_file,
+def parameter_study(subcommand, input_file_path,
                     output_file_template=parameter_generators.default_output_file_template,
                     output_file=parameter_generators.default_output_file,
                     output_file_type=parameter_generators.default_output_file_type,
@@ -75,7 +74,7 @@ def parameter_study(subcommand, input_file,
     """Build parameter studies
 
     :param str subcommand: parameter study type to build
-    :param str input_file: YAML formatted parameter study schema file
+    :param str input_file_path: path to YAML formatted parameter study schema file
     :param str output_file_template: output file template name
     :param str output_file: relative or absolute output file path
     :param str output_file_type: yaml or h5
@@ -91,7 +90,7 @@ def parameter_study(subcommand, input_file,
 
     if debug:
         print(f"subcommand               = {subcommand}")
-        print(f"input_file               = {input_file}")
+        print(f"input_file               = {input_file_path}")
         print(f"output_file_template     = {output_file_template}")
         print(f"output_file              = {output_file}")
         print(f"output_file_type         = {output_file_type}")
@@ -102,10 +101,8 @@ def parameter_study(subcommand, input_file,
         return 0
 
     # Read the input stream
-    # TODO: Handle input file outside of argparse
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/72
-    parameter_schema = yaml.safe_load(input_file)
-    input_file.close()
+    with open(input_file_path, 'r') as input_file:
+        parameter_schema = yaml.safe_load(input_file)
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = {
