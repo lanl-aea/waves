@@ -29,9 +29,6 @@ env.SetOption('duplicate', 'copy')
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
 
-# Make the EABM package importable for Python and Abaqus Python environments
-env.PrependENVPath("PYTHONPATH", str(pathlib.Path('.').resolve()))
-
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
 
