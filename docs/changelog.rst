@@ -53,7 +53,7 @@ Internal Changes
   non-default, temporary build directories (:issue:`518`, :merge:`635`). By `Kyle Brindley`_.
 - Drive the system tests (tutorials) from pytest during conda builds (:merge:`629`). By `Kyle Brindley`_.
 - Upgrade to Anaocnda 2023 on Gitlab-CI environment (:issue:`520`, :merge:`636`). By `Sergio Cordova`_.
-- Return to the conda build command. By `Kyle Brindley`_.
+- Return to the conda build command (:merge:`637`). By `Kyle Brindley`_.
 
 *******************
 0.6.21 (2023-07-21)
