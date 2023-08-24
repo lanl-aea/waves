@@ -11,13 +11,16 @@ import mesh
 # Import the shared abaqus utilities, trying each of the several tutorial directory structures.
 # Most end-users will implement only one of these structures and should replace
 # the try:except structure with a single import line.
-try:
-    import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
-except ImportError:
+abaqus_journal_utilities = None
+for import_path in ['eabm_package.abaqus.abaqus_journal_utilities', 'abaqus.abaqus_journal_utilities', 'abaqus_journal_utilities']:
     try:
-        import abaqus.abaqus_journal_utilities as abaqus_journal_utilities
+        abaqus_journal_utilities = __import__(import_path, fromlist=[''])
+        break
     except ImportError:
-        import abaqus_journal_utilities
+        pass
+
+if not abaqus_journal_utilities:
+    raise ImportError('Could not import abaqus_journal_utilities')
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
