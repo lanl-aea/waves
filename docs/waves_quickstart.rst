@@ -38,6 +38,26 @@ Directory Structure
       $ pwd
       /home/roppenheimer/waves_quickstart
 
+***************
+SConscript File
+***************
+
+.. admonition:: waves_quickstart/SConscript
+
+    .. literalinclude:: waves_quickstart_SConscript
+        :language: Python
+        :lineno-match:
+
+***************
+SConstruct File
+***************
+
+.. admonition:: waves_quickstart/SConstruct
+
+    .. literalinclude:: waves_quickstart_SConstruct
+        :language: Python
+        :lineno-match:
+
 ****************
 Building targets
 ****************
