@@ -34,9 +34,9 @@ env.Default()
 env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2022", "abq2022"], env)
 
 # Add WAVES builders
-env.Append(BUILDERS=
-    {'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
-     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])
+env.Append(BUILDERS={
+    'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
+    'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])
 })
 
 # Abaqus input file implicit dependency scanner
