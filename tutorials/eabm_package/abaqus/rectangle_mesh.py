@@ -15,16 +15,16 @@ import mesh
 # import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
 
 abaqus_journal_utilities = None
-import_paths = ['eabm_package', 'abaqus', 'abaqus_journal_utilities']
-for namespace_element in import_paths:
+possible_import_paths = ['eabm_package.abaqus.abaqus_journal_utilities', 'abaqus_journal_utilities']
+for import_path in possible_import_paths:
     try:
-        abaqus_journal_utilities = __import__('.'.join(import_paths[import_paths.index(namespace_element):]))
+        abaqus_journal_utilities = __import__(import_path, fromlist=[''])
         break
     except ImportError:
         pass
 
 if not abaqus_journal_utilities:
-    raise ImportError('Could not import {}'.format(import_paths[-1]))
+    raise ImportError('Could not import {}'.format(possible_import_paths[-1]))
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
