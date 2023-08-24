@@ -8,23 +8,16 @@ import abaqus
 import abaqusConstants
 import mesh
 
-# Import the shared abaqus utilities, trying each of the several tutorial directory structures.
+# Import the shared abaqus utilities, trying both tutorial directory structures.
 # Most end-users will implement only one of these structures and should replace
-# the for-loop structure with a single import line, e.g.
+# the try/except structure with a single import line, e.g.
 #
 # import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
 
-abaqus_journal_utilities = None
-possible_import_paths = ['eabm_package.abaqus.abaqus_journal_utilities', 'abaqus_journal_utilities']
-for import_path in possible_import_paths:
-    try:
-        abaqus_journal_utilities = __import__(import_path, fromlist=[''])
-        break
-    except ImportError:
-        pass
-
-if not abaqus_journal_utilities:
-    raise ImportError('Could not import {}'.format(possible_import_paths[-1]))
+try:
+    import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
+except ImportError:
+    import abaqus_journal_utilities
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
