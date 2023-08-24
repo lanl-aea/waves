@@ -24,7 +24,7 @@ for i in range(len(import_paths)):
         pass
 
 if not abaqus_journal_utilities:
-    raise ImportError('Could not import abaqus_journal_utilities')
+    raise ImportError(f'Could not import {import_paths[-1]}')
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
