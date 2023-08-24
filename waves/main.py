@@ -49,7 +49,6 @@ def main():
             previous_parameter_study=args.PREVIOUS_PARAMETER_STUDY,
             overwrite=args.overwrite,
             dryrun=args.dryrun,
-            debug=args.debug,
             write_meta=args.write_meta
         )
     else:
