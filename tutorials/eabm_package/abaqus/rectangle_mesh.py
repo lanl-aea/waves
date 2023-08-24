@@ -13,7 +13,6 @@ import mesh
 # the try/except structure with a single import line, e.g.
 #
 # import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
-
 try:
     import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
 except ImportError:
