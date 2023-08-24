@@ -3,7 +3,7 @@
 Test waves.py
 """
 import pathlib
-from unittest.mock import patch
+from unittest.mock import patch, mock_open
 
 import pytest
 
@@ -91,7 +91,7 @@ parameter_study_args = {  #               subcommand,         class_name,       
     'latin hypercube':          (  'latin_hypercube',   'LatinHypercube',                       None,           None,             None),
     'sobol sequence':           (   'sobol_sequence',    'SobolSequence',                       None,           None,             None),
     'output file template':     ('cartesian_product', 'CartesianProduct',     'output_file_template',           '-o', 'dummy_template'),
-    'output file':              (     'custom_study',      'CustomStudy',              'output_file',           '-f', 'dummy_file.txt'),
+    'output file path':         (     'custom_study',      'CustomStudy',         'output_file_path',           '-f', 'dummy_file.txt'),
     'output file type':         (  'latin_hypercube',   'LatinHypercube',         'output_file_type',           '-t',             'h5'),
     'set name template':        (   'sobol_sequence',    'SobolSequence',        'set_name_template',           '-s',        '@number'),
     'previous parameter study': ('cartesian_product', 'CartesianProduct', 'previous_parameter_study',           '-p', 'dummy_file.txt'),

@@ -54,6 +54,7 @@ Internal Changes
 - Drive the system tests (tutorials) from pytest during conda builds (:merge:`629`). By `Kyle Brindley`_.
 - Upgrade to Anaocnda 2023 on Gitlab-CI environment (:issue:`520`, :merge:`636`). By `Sergio Cordova`_.
 - Return to the conda build command (:merge:`637`). By `Kyle Brindley`_.
+- Handle parameter study script input outside of argparse (:issue:`72`, :merge:`633`). By `Sergio Cordova`_.
 - Removed debug argument from CLI (:issue:`76`, :merge:`632`). By `Sergio Cordova`_.
 
 *******************
