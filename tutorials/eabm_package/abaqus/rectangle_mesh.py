@@ -10,9 +10,9 @@ import mesh
 
 # Import the shared abaqus utilities, trying each of the several tutorial directory structures.
 # Most end-users will implement only one of these structures and should replace
-# the try:except structure with a single import line, e.g.
+# the for-loop structure with a single import line, e.g.
 #
-# import eabm_package.abaqus.abaqus_journal_utilities
+# import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
 
 abaqus_journal_utilities = None
 import_paths = ['eabm_package', 'abaqus', 'abaqus_journal_utilities']
