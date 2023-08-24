@@ -12,9 +12,10 @@ import mesh
 # Most end-users will implement only one of these structures and should replace
 # the try:except structure with a single import line.
 abaqus_journal_utilities = None
-for import_path in ['eabm_package.abaqus.abaqus_journal_utilities', 'abaqus.abaqus_journal_utilities', 'abaqus_journal_utilities']:
+import_paths = ['eabm_package', 'abaqus', 'abaqus_journal_utilities']
+for i in range(len(import_paths)):
     try:
-        abaqus_journal_utilities = __import__(import_path, fromlist=[''])
+        abaqus_journal_utilities = __import__('.'.join(import_paths[i:]), fromlist=[''])
         break
     except ImportError:
         pass
