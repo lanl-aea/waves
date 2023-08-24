@@ -24,6 +24,7 @@ if _settings._repository_tutorials_directory == tutorial_directory:
 @pytest.mark.parametrize("command, directory", [
     ("scons rectangle --sconstruct=scons_quickstart_SConstruct", tutorial_directory),
     ("scons rectangle --sconstruct=scons_multiactiontask_SConstruct", tutorial_directory),
+    ("scons rectangle --keep-going", tutorial_directory / "waves_quickstart"),
     ("scons . --sconstruct=tutorial_00_SConstruct --unconditional-build", tutorial_directory),
     ("scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct --unconditional-build", tutorial_directory),
     ("scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct", tutorial_directory),
@@ -31,7 +32,6 @@ if _settings._repository_tutorials_directory == tutorial_directory:
     ("scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct --unconditional-build", tutorial_directory),
     ("scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build", tutorial_directory),
     ("scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build", tutorial_directory),
-    ("scons rectangle --keep-going", tutorial_directory / "waves_quickstart"),
     # TODO: Figure out how to load the sierra module without breaking the CI tests. Change ``scons abaqus`` to ``scons .``
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/515
     ("scons abaqus --unconditional-build", tutorial_directory / "tutorial_cubit"),
