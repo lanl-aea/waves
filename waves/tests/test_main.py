@@ -91,7 +91,7 @@ parameter_study_args = {  #               subcommand,         class_name,       
     'latin hypercube':          (  'latin_hypercube',   'LatinHypercube',                       None,           None,             None),
     'sobol sequence':           (   'sobol_sequence',    'SobolSequence',                       None,           None,             None),
     'output file template':     ('cartesian_product', 'CartesianProduct',     'output_file_template',           '-o', 'dummy_template'),
-    'output file path':         (     'custom_study',      'CustomStudy',         'output_file_path',           '-f', 'dummy_file.txt'),
+    'output file':              (     'custom_study',      'CustomStudy',              'output_file',           '-f', 'dummy_file.txt'),
     'output file type':         (  'latin_hypercube',   'LatinHypercube',         'output_file_type',           '-t',             'h5'),
     'set name template':        (   'sobol_sequence',    'SobolSequence',        'set_name_template',           '-s',        '@number'),
     'previous parameter study': ('cartesian_product', 'CartesianProduct', 'previous_parameter_study',           '-p', 'dummy_file.txt'),
@@ -125,7 +125,7 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
         if not type(argument_value) == bool:
             arg_list.append(argument_value)
     with patch('sys.argv', arg_list), \
-            patch('argparse.FileType'), patch('yaml.safe_load'), \
+            patch('builtins.open', mock_open()), patch('yaml.safe_load'), \
             patch(f'waves.parameter_generators.{class_name}') as mock_generator:
         exit_code = main.main()
         assert exit_code == 0
