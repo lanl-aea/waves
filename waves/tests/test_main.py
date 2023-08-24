@@ -79,36 +79,33 @@ def test_quickstart():
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
     with patch("waves.fetch.recursive_copy") as mock_recursive_copy:
-        return_code = main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"), ["dummy/relative/path"], "/dummy/destination")
+        return_code = main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
+                                 ["dummy/relative/path"], "/dummy/destination")
         assert return_code != 0
         mock_recursive_copy.assert_not_called()
 
 
-parameter_study_args = {
-    'cartesian product': (
-        'cartesian_product',
-        'CartesianProduct'
-    ),
-    'custom study': (
-        'custom_study',
-        'CustomStudy'
-    ),
-    'latin hypercube': (
-        'latin_hypercube',
-        'LatinHypercube'
-    ),
-    'sobol sequence': (
-        'sobol_sequence',
-        'SobolSequence'
-    ),
+parameter_study_args = {  #               subcommand,         class_name,                   argument,         option,   argument_value
+    'cartesian product':        ('cartesian_product', 'CartesianProduct',                       None,           None,             None),
+    'custom study':             (     'custom_study',      'CustomStudy',                       None,           None,             None),
+    'latin hypercube':          (  'latin_hypercube',   'LatinHypercube',                       None,           None,             None),
+    'sobol sequence':           (   'sobol_sequence',    'SobolSequence',                       None,           None,             None),
+    'output file template':     ('cartesian_product', 'CartesianProduct',     'output_file_template',           '-o', 'dummy_template'),
+    'output file':              (     'custom_study',      'CustomStudy',              'output_file',           '-f', 'dummy_file.txt'),
+    'output file type':         (  'latin_hypercube',   'LatinHypercube',         'output_file_type',           '-t',             'h5'),
+    'set name template':        (   'sobol_sequence',    'SobolSequence',        'set_name_template',           '-s',        '@number'),
+    'previous parameter study': ('cartesian_product', 'CartesianProduct', 'previous_parameter_study',           '-p', 'dummy_file.txt'),
+    'overwrite':                (     'custom_study',      'CustomStudy',                'overwrite',  '--overwrite',             True),
+    'dry run':                  (  'latin_hypercube',   'LatinHypercube',                   'dryrun',     '--dryrun',             True),
+    'write meta':               (   'sobol_sequence',    'SobolSequence',               'write_meta', '--write-meta',             True)
 }
 
 
 @pytest.mark.integrationtest
-@pytest.mark.parametrize('subcommand, class_name',
+@pytest.mark.parametrize('subcommand, class_name, argument, option, argument_value',
                          parameter_study_args.values(),
                          ids=list(parameter_study_args.keys()))
-def test_parameter_study(subcommand, class_name):
+def test_parameter_study(subcommand, class_name, argument, option, argument_value):
     # Help/usage. Should not raise
     with patch('sys.argv', ['main.py', subcommand, '-h']):
         exit_code = None
@@ -120,10 +117,18 @@ def test_parameter_study(subcommand, class_name):
             assert exit_code == 0
 
     # Run main code. No SystemExit expected.
-    schema_file = 'dummy.file'
-    with patch('sys.argv', ['main.py', subcommand, schema_file]), \
-         patch('builtins.open', mock_open()), patch('yaml.safe_load'), \
-         patch(f'waves.parameter_generators.{class_name}') as mock_generator:
+    arg_list = ['main.py', subcommand, 'dummy.file']
+    if option:
+        arg_list.append(option)
+    if argument_value:
+        # Don't pass boolean values
+        if not type(argument_value) == bool:
+            arg_list.append(argument_value)
+    with patch('sys.argv', arg_list), \
+            patch('builtins.open', mock_open()), patch('yaml.safe_load'), \
+            patch(f'waves.parameter_generators.{class_name}') as mock_generator:
         exit_code = main.main()
         assert exit_code == 0
         mock_generator.assert_called_once()
+        if argument:
+            assert mock_generator.call_args.kwargs[argument] == argument_value
