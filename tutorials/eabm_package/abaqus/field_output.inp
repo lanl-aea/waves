@@ -1,4 +1,4 @@
-*element OUTPUT, elset=SINGLE_ELEMENT.ELEMENTS, directions=YES
+*element OUTPUT, elset=RECTANGLE.ELEMENTS, directions=YES
 E, S
-*node OUTPUT, nset=SINGLE_ELEMENT.ALLNODES
+*node OUTPUT, nset=RECTANGLE.ALLNODES
 U

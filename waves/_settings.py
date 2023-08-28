@@ -11,6 +11,7 @@ _abaqus_datacheck_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".023", 
 _abaqus_explicit_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
 _abaqus_standard_extensions = [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
 _matlab_environment_extension = ".matlab.env"
+_sierra_environment_extension = ".env"
 _scons_command = "scons"
 _scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
 _scons_tree_status = {'E': 'exists', 'R': 'exists in repository only', 'b': 'implicit builder', 'B': 'explicit builder',
@@ -33,6 +34,23 @@ _visualize_exclude = ["/usr/bin"]
 _visualize_default_height = 12
 _visualize_default_width = 36
 _visualize_default_font_size = 10
+_cartesian_product_subcommand = "cartesian_product"
+_custom_study_subcommand = "custom_study"
+_latin_hypercube_subcommand = "latin_hypercube"
+_sobol_sequence_subcommand = "sobol_sequence"
+_parameter_study_subcommands = [
+    _cartesian_product_subcommand,
+    _custom_study_subcommand,
+    _latin_hypercube_subcommand,
+    _sobol_sequence_subcommand
+]
+_parameter_study_description = \
+    "Generates parameter studies in various output formats. Writes parameter study to STDOUT by default. If an " \
+    "output file template is specified, output one file per parameter set. Output file(s) are written if the file " \
+    "doesn't exist and overwritten when the file contents have changed. The overwrite option will always overwrite " \
+    "all files. The dry run option will print a list of files and contents that would have been  written. " \
+    "The 'h5' output is the only output type that contains both the parameter " \
+    "samples and quantiles."
 
 # For lazy devs who want to test the ``waves quickstart`` CLI without an editable install...
 # Enables ``python -m waves.main quickstart ...`` execution from repository root directory

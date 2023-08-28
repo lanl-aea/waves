@@ -23,6 +23,7 @@
 .. _`CheckProg`: https://scons.org/doc/production/HTML/scons-user/ch21s07.html
 .. _`Confluence`: https://www.atlassian.com/software/confluence
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
+.. _`Sierra`: https://www.osti.gov/biblio/1886996 
 .. _`Environment modules`: https://modules.readthedocs.io/en/stable/modulefile.html
 .. _`GNU Make`: https://www.gnu.org/software/make/
 .. _`GNU sed`: https://www.gnu.org/software/sed/
@@ -102,6 +103,7 @@
 .. Project specific links
 .. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
 .. _`WAVES tutorials abaqus source files`: https://github.com/lanl/waves/tree/main/tutorials/eabm_package/abaqus
+.. _`WAVES quickstart source files`: https://github.com/lanl/waves/tree/main/tutorials/waves_quickstart
 .. _`WAVES tutorials`: https://github.com/lanl/waves/tree/main/tutorials
 .. _`WAVES-EABM environment file`: https://github.com/lanl/waves/blob/main/quickstart/environment.yml
 .. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves

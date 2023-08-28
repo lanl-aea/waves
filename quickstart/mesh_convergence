@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Single element mesh convergence workflow
+"""Rectangle mesh convergence workflow
 
 Requires the following ``SConscript(..., exports=[])``
 
@@ -15,7 +15,7 @@ import pathlib
 
 import waves
 
-from eabm_package import single_element_compression
+from eabm_package import rectangle_compression
 
 # Inherit the parent construction environment
 Import("env")
@@ -27,11 +27,11 @@ eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_configuration = [env["project_configuration"], workflow_name]
-parameter_schema = single_element_compression.mesh_convergence
+parameter_schema = rectangle_compression.mesh_convergence
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
 previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
-model = "single_element"
+model = "rectangle"
 simulation_constants = {
     "width": 1.0,
     "height": 1.0,
@@ -101,9 +101,9 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
         eabm_package_abspath / "history_output.inp"
     ]
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-    workflow.extend(waves.builders.copy_substitute(
+    workflow.extend(waves.scons_extensions.copy_substitute(
         abaqus_source_list,
-        substitution_dictionary=waves.builders.substitution_syntax(simulation_variables),
+        substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables),
         build_subdirectory=set_name))
 
     # Abaqus Solve

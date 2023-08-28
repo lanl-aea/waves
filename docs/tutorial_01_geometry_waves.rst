@@ -63,9 +63,9 @@ files that exist in the source repository, such as Abaqus journal files. Actions
 how to process source files, for example executing the Abaqus command. Targets are the
 output artifacts created by the action, such as an Abaqus model file. It is also worth
 noting that the ``SConscript`` file naming convention is case sensitive.
-In this tutorial, we will build the geometry for a single element part using the
-:meth:`waves.builders.abaqus_journal` builder (click the builder's name to link to the
-|PROJECT| :ref:`waves_builders_api` API).
+In this tutorial, we will build the geometry for a rectangle part using the
+:meth:`waves.scons_extensions.abaqus_journal` builder (click the builder's name to link to the
+|PROJECT| :ref:`waves_scons_api` API).
 
 5. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
 
@@ -111,16 +111,16 @@ directory name. The alias thus represents the list of targets specified in the
 The highlighted lines of code instruct SCons on how to build the target, an Abaqus CAE
 file whose name is constructed using the ``journal_file`` variable. The ``journal_file``
 variable exists solely to minimize hard-coded duplication of the string
-``'single_element_geometry'``. ``journal_options`` allows for parameters to be passed as
+``'rectangle_geometry'``. ``journal_options`` allows for parameters to be passed as
 command line arguments to the journal file. Using the journal file's command line
 interface with the ``journal_options`` string will be discussed in
 :ref:`tutorial_parameter_substitution_waves`.
 
-Next, the ``workflow`` list is extended to include the action to use the :meth:`waves.builders.abaqus_journal` builder,
+Next, the ``workflow`` list is extended to include the action to use the :meth:`waves.scons_extensions.abaqus_journal` builder,
 as discussed in :ref:`tutorialsconstruct`. For more information about the behavior of the
-:meth:`waves.builders.abaqus_journal` builder, click the builder's link or see the |PROJECT| :ref:`waves_builders_api`
-API. The ``target`` list specifies the files created by the :meth:`waves.builders.abaqus_journal` task's action, which
-is defined in the :ref:`waves_builders_api` API.
+:meth:`waves.scons_extensions.abaqus_journal` builder, click the builder's link or see the |PROJECT| :ref:`waves_scons_api`
+API. The ``target`` list specifies the files created by the :meth:`waves.scons_extensions.abaqus_journal` task's action, which
+is defined in the :ref:`waves_scons_api` API.
 
 7. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
@@ -142,7 +142,7 @@ Abaqus Journal File
 *******************
 
 Now that you have an overview of the ``SConscript`` file and how SCons uses an Abaqus journal
-file, let's create the geometry part build file for the single element model.
+file, let's create the geometry part build file for the rectangle model.
 
 The following sections of this tutorial will introduce four software-engineering practices
 that match the build system philosophy. These concepts will be presented sequentially,
@@ -153,18 +153,18 @@ starting with familiar Abaqus Python code, and adding in the following:
 * Adding a command line interface to your Python code
 * Protecting ``main()`` function execution and returning exit codes
 
-8. In the ``eabm_package/abaqus`` directory, create a file called ``single_element_geometry.py``
+8. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_geometry.py``
    using the contents below which contains the ``main()`` function.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_geometry.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
 
-    .. literalinclude:: abaqus_single_element_geometry.py
+    .. literalinclude:: abaqus_rectangle_geometry.py
         :language: Python
         :lineno-match:
         :end-before: marker-1
         :emphasize-lines: 11-23
 
-It is important to note that ``single_element_geometry.py`` is, indeed, an Abaqus journal
+It is important to note that ``rectangle_geometry.py`` is, indeed, an Abaqus journal
 file - even though it does not look like a journal file produced by an Abaqus CAE GUI
 session.
 
@@ -175,10 +175,10 @@ session.
 
 The top of the file imports standard library modules used by the script's functions along with Abaqus modules. The
 ``main()`` function takes in several arguments, like ``model_name``, ``part_name``, and some geometric parameters for
-the single element part. Most notable of the inputs to the ``main()`` function is the first input argument -
+the rectangle part. Most notable of the inputs to the ``main()`` function is the first input argument -
 ``output_file``. One can simplify the general concept of a build system into a series of inputs (known as sources) and
 outputs (known as targets). In this case, the ``output_file`` is the target which is created from the source - the
-``single_element_geometry.py`` file.
+``rectangle_geometry.py`` file.
 
 .. _tutorial_geometry_waves_python_docstrings:
 
@@ -191,14 +191,14 @@ the `Sphinx automodule`_ directive can interpret the comments as ReStructured Te
 behavior and its interface. See the `PEP-257`_ conventions for docstring formatting along with `PEP-287`_ for syntax
 specific to reStructured Text. Using the `Sphinx automodule`_ directive, the docstring can be used to autobuild
 documentation for your functions. An example of this is in the :ref:`waves_eabm_api` for
-:ref:`abaqus_single_element_geometry_api`.
+:ref:`abaqus_rectangle_geometry_api`.
 
 .. _tutorial_geometry_waves_abaqus_python_code:
 
 Abaqus Python Code
 ==================
 
-The latter portion of the ``main()`` function is the code that generates the single element geometry. Here, an Abaqus
+The latter portion of the ``main()`` function is the code that generates the rectangle geometry. Here, an Abaqus
 model is opened using the ``model_name`` variable as the model's name, a rectangle is drawn with dimensions ``width``
 and ``height``, and the Abaqus CAE model is saved with the name ``output_file``. One notable difference between the
 `Abaqus Scripting`_ documentation :cite:`ABAQUS` of Abaqus journal files is the use of the `PEP-8`_ style guide for
@@ -211,24 +211,24 @@ environment *not* the SCons/EABM Python 3 environment. See the `Abaqus Python En
 
 Command Line Interfaces
 =======================
-9. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
+9. In the ``eabm_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
    using the contents below which contains the ``get_parser()`` function. Note that
    missing line numbers may be ignored.
 
-.. admonition:: wabes-eabm-tutorial/eabm_package/abaqus/single_element_geometry.py
+.. admonition:: wabes-eabm-tutorial/eabm_package/abaqus/rectangle_geometry.py
 
-    .. literalinclude:: abaqus_single_element_geometry.py
+    .. literalinclude:: abaqus_rectangle_geometry.py
         :language: Python
         :lineno-match:
         :start-after: marker-1
         :end-before: marker-2
         :emphasize-lines: 3-5, 12-14, 16-31
 
-This portion of ``single_element_geometry.py`` defines the argument parsing function, ``get_parser()``, which is the
+This portion of ``rectangle_geometry.py`` defines the argument parsing function, ``get_parser()``, which is the
 next step in turning our simple Python script into a small software utility. Command line interfaces allow for scripts
 to be executed with optional command line arguments. This allows us to change the values of input arguments to the
 ``main()`` function without any source code modification.  ``argparse`` also helps automate command line interface (CLI)
-documentation. An example of this is the :ref:`waves_eabm_cli` for :ref:`abaqus_single_element_geometry_cli`.
+documentation. An example of this is the :ref:`waves_eabm_cli` for :ref:`abaqus_rectangle_geometry_cli`.
 See the `Argparse tutorial`_ for an introduction to the ``argparse`` module.
 
 The first highlighted portion of the ``get_parser()`` function defines variables based on
@@ -254,7 +254,7 @@ some model developers may prefer to require all command line arguments every tim
 file is used to build a target. ``output_file`` is the name of the file that is created
 at the end of the ``main()`` function, which assumes ``output_file`` does not include a
 file extension. ``default_width`` and ``default_height`` define the size of the
-``single_element`` part.
+``rectangle`` part.
 
 The final highlighted portion of the code is where the ``argparse`` package is used to
 define the argument parser rules. First, an argument parser is defined using the
@@ -270,13 +270,13 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 2.7. See the `Python 2.7 argparse`_ documentation for more information about how
 ``argparse`` will behave in an Abaqus journal file.
 
-10. In the ``eabm_package/abaqus`` directory, continue editing the file called ``single_element_geometry.py``
+10. In the ``eabm_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
     using the contents below to create the ``if`` statement within which we will call the
     ``main()`` function. Note that missing line numbers may be ignored.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_geometry.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
 
-    .. literalinclude:: abaqus_single_element_geometry.py
+    .. literalinclude:: abaqus_rectangle_geometry.py
         :language: Python
         :lineno-match:
         :start-after: marker-2
@@ -311,16 +311,16 @@ downstream sequence of target actions which can no longer succeed.
 
 Entire Abaqus Journal File
 ==========================
-Shown below is ``single_element_geometry.py`` in its entirety. The highlighted lines show
+Shown below is ``rectangle_geometry.py`` in its entirety. The highlighted lines show
 the non-boilerplate code that will change between journal files in this WAVES-EABM
 tutorial project. As discussed in preceding sections, some portions of the boilerplate
 code are required for :term:`EABM` best practice when using a build system such as SCons_ and
 other sections are boilerplate code that matches naming conventions used by the tutorials,
 but that may change in production EABMs.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/single_element_geometry.py
+.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
 
-     .. literalinclude:: abaqus_single_element_geometry.py
+     .. literalinclude:: abaqus_rectangle_geometry.py
          :language: Python
          :linenos:
          :emphasize-lines: 11-23, 27-38, 54, 57-60, 63, 66-77, 86-90
@@ -373,14 +373,14 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
         /home/roppenheimer/waves-tutorials
         $ scons tutorial_01_geometry
         scons: Reading SConscript files ...
-        Checking whether /apps/abaqus/Commands/abq2022 program exists.../apps/abaqus/Commands/abq2022
-        Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
+        Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
+        Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
         scons: done reading SConscript files.
         scons: Building targets ...
-        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2022 -information
-        environment > single_element_geometry.abaqus_v6.env
-        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2022 cae -noGui
-        /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
+        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2023 -information
+        environment > rectangle_geometry.abaqus_v6.env
+        cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2023 cae -noGui
+        /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
         scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as
@@ -405,10 +405,10 @@ separation if more than one simulation is built at the same time.
    $ tree build/tutorial_01_geometry/
    build/tutorial_01_geometry/
    |-- abaqus.rpy
-   |-- single_element_geometry.abaqus_v6.env
-   |-- single_element_geometry.cae
-   |-- single_element_geometry.jnl
-   `-- single_element_geometry.stdout
+   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   `-- rectangle_geometry.stdout
 
    0 directories, 5 files
 
@@ -419,11 +419,11 @@ specific target that was specified to be built. In this case, that is
 The ``build/tutorial_01_geomtry/`` directory should contain the following files:
 
 * ``abaqus.rpy``, the replay file from the ``abaqus cae -nogui`` command
-* ``single_element_geometry.abaqus_v6.env``, the environment file that allows for
+* ``rectangle_geometry.abaqus_v6.env``, the environment file that allows for
   reproduction of the Abaqus environment used to build the ``tutorial_01_geometry`` targets
-* ``single_element_geomtry.cae``, an Abaqus CAE file that contains a model named
+* ``rectangle_geomtry.cae``, an Abaqus CAE file that contains a model named
   ``model_name`` within which is a part named ``part_name``.
-* ``single_element_geometry.jnl`` and ``single_element_geometry.stdout``, the journal file
+* ``rectangle_geometry.jnl`` and ``rectangle_geometry.stdout``, the journal file
   that records all of the commands executed by Abaqaus and the log file that will contain
   any errors recorded by Abaqus.
 
@@ -462,10 +462,10 @@ required source to the produced target. The :ref:`computational_tools` introduct
         \vspace*{\fill}
     \end{landscape}
 
-In this case, the single source file ``single_element_geometry.py`` is producing several output files which are required
+In this case, the single source file ``rectangle_geometry.py`` is producing several output files which are required
 by the workflow. Notice that only two of these files were specified in our geometry task:
-``single_element_geometry.cae`` and ``single_element_geometry.jnl``. The ``single_element_geometry.stdout`` and
-``single_element_geometry.abaqus_v6.env`` files are generated as part of the ``AbaqusJournal`` builder and appended
+``rectangle_geometry.cae`` and ``rectangle_geometry.jnl``. The ``rectangle_geometry.stdout`` and
+``rectangle_geometry.abaqus_v6.env`` files are generated as part of the ``AbaqusJournal`` builder and appended
 automatically during task generation. This workflow visualization will become crowded quickly in these tutorials, so
 future visualization commands will show you how to ignore specific file extensions to reduce visual clutter.
 

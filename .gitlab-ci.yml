@@ -20,6 +20,9 @@ before_script:
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
+  # TODO: Figure out how to load the sierra module without breaking the CI tests. Load sierra when fixed.
+  # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/515
+  #- module load sierra
   - module use ${PWD}/modulefiles
   # Prefer the CI environment and fall back to AEA environment(s)
   - project_environment='waves-env'
@@ -163,8 +166,8 @@ conda-build:
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - croot="/scratch/$USER/$(basename $PWD)/${conda_artifacts_directory}"
-    - VERSION=$(python -m setuptools_scm) mamba build recipe-internal --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
-    - mamba build purge --croot ${croot}
+    - VERSION=$(python -m setuptools_scm) conda build recipe-internal --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
+    - conda build purge --croot ${croot}
   artifacts:
     expire_in: '2 hrs'
     paths:
@@ -238,6 +241,8 @@ pages:
             cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
             PYTHONPATH=${project_root} scons . --clean
             cd ${project_root}
+            # TODO: Remove ``rm -r`` when 0.7.1 is released and main has the more complete docs clean behavior
+            rm -r build quickstart/build
         done
   artifacts:
     paths:

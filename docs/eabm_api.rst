@@ -10,38 +10,38 @@ WAVES-EABM API
 abaqus
 ******
 
-.. _abaqus_single_element_geometry_api:
+.. _abaqus_rectangle_geometry_api:
 
-single_element_geometry.py
-==========================
+rectangle_geometry.py
+=====================
 
-.. automodule:: eabm_package.abaqus.single_element_geometry
+.. automodule:: eabm_package.abaqus.rectangle_geometry
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element geometry creation script
+    :synopsis: The Abaqus rectangle geometry creation script
 
-.. _abaqus_single_element_partition_api:
+.. _abaqus_rectangle_partition_api:
 
-single_element_partition.py
-===========================
-
-.. automodule:: eabm_package.abaqus.single_element_partition
-    :noindex:
-    :members:
-    :show-inheritance:
-    :synopsis: The Abaqus single element partition script
-
-.. _abaqus_single_element_mesh_api:
-
-single_element_mesh.py
+rectangle_partition.py
 ======================
 
-.. automodule:: eabm_package.abaqus.single_element_mesh
+.. automodule:: eabm_package.abaqus.rectangle_partition
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element mesh script
+    :synopsis: The Abaqus rectangle partition script
+
+.. _abaqus_rectangle_mesh_api:
+
+rectangle_mesh.py
+=================
+
+.. automodule:: eabm_package.abaqus.rectangle_mesh
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: The Abaqus rectangle mesh script
 
 .. _sphinx_abaqus_journal_utilities_api:
 
@@ -60,32 +60,32 @@ abaqus_journal_utilities.py
 cubit
 *****
 
-single_element_geometry.py
-==========================
+rectangle_geometry.py
+=====================
 
-.. automodule:: eabm_package.cubit.single_element_geometry
+.. automodule:: eabm_package.cubit.rectangle_geometry
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Cubit single element geometry creation script
+    :synopsis: The Cubit rectangle geometry creation script
 
-single_element_partition.py
-===========================
-
-.. automodule:: eabm_package.cubit.single_element_partition
-    :noindex:
-    :members:
-    :show-inheritance:
-    :synopsis: The Cubit single element partition script
-
-single_element_mesh.py
+rectangle_partition.py
 ======================
 
-.. automodule:: eabm_package.cubit.single_element_mesh
+.. automodule:: eabm_package.cubit.rectangle_partition
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Cubit single element mesh script
+    :synopsis: The Cubit rectangle partition script
+
+rectangle_mesh.py
+=================
+
+.. automodule:: eabm_package.cubit.rectangle_mesh
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: The Cubit rectangle mesh script
 
 ******
 python

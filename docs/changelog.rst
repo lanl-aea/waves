@@ -4,9 +4,63 @@
 Changelog
 #########
 
-*******************
-0.6.22 (unreleased)
-*******************
+******************
+0.7.2 (unreleased)
+******************
+
+******************
+0.7.1 (2023-08-28)
+******************
+
+Bug fixes
+=========
+- Fix odb_extract to ensure 'mode=csv' when odbreport is called. (:issue:`517`, :merge:`630`). By `Prabhu Khalsa`_.
+
+Breaking changes
+================
+- Deprecate the too-general ``parameter_study <study type>`` command line utility name in favor of ``waves <study
+  type>`` to avoid utility conflicts with other packages (:issue:`494`, :merge:`612`). By `Kyle Brindley`_.
+- Standardize the builder program path keyword from ``<thing>_program`` to ``program`` for greater consistency in
+  builder APIs. The older keywords are preseved for backward compatibility, but they raise a deprecation warning
+  (:issue:`495`, :merge:`613`). By `Kyle Brindley`_.
+- Rename the ``waves.builders`` module as ``waves.scons_extensions`` to reflect the growing scope of SCons extensions
+  beyond a collection of builders. Backward compatilibity is maintained by duplicating the module under the old name
+  with a deprecation warning (:issue:`492`, :merge:`618`, :issue:`512`, :merge:`621`, :merge:`627`, :merge:`628`). By
+  `Kyle Brindley`_.
+
+New Features
+============
+- Add experimental builder support for Sierra (:issue:`500`, :merge:`622`). By `Kyle Brindley`_.
+- Add vertical option to waves visualize (:issue:`514`, :merge:`624`). By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Update the tutorial and template modsim model name to reflect the geometry instead of the mesh (:issue:`461`,
+  :merge:`614`, :merge:`615`). By `Kyle Brindley`_.
+- Trim down the README to focus on end users. Move developer notes directly into the HTML developer manual
+  (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
+- Add the WAVES primarymark image to the PDF title page (:merge:`620`). By `Kyle Brindley`_.
+- Update the Cubit tutorial to demonstrate a side-by-side comparison of Abaqus and Sierra, where the Cubit tasks are
+  re-used for both solver workflows (:issue:`513`, :merge:`623`). By `Kyle Brindley`_.
+- Simplified quickstart ``SConscript`` file (:issue:`453`, :merge:`619`). By `Sergio Cordova`_.
+
+Internal Changes
+================
+- Reduce the runtime dependency from the full matplotlib to matplotlib-base following the conda-forge recommendation:
+  https://conda-forge.org/docs/maintainer/knowledge_base.html#matplotlib (:issue:`440`, :merge:`611`). By `Kyle
+  Brindley`_.
+- Explore a draft correlation coefficients post-procesing tutorial (:merge:`615`). By `Kyle Brindley`_.
+- Update to use Abaqus 2023 (:issue:`509`, :merge:`617`). By `Kyle Brindley`_.
+- More complete clean behavior for the documentation targets to reduce dev/main source conflicts during Gitlab-Pages
+  builds (:issue:`516`, :merge:`625`, :merge:`626`). By `Kyle Brindley`_.
+- Update the expected Cubit version from 16.04 to 16.12 (:issue:`510`, :merge:`634`). By `Sergio Cordova`_.
+- Add the ``--build-dir`` command line option to the quickstart tutorials to enable the system tests to run in
+  non-default, temporary build directories (:issue:`518`, :merge:`635`). By `Kyle Brindley`_.
+- Drive the system tests (tutorials) from pytest during conda builds (:merge:`629`). By `Kyle Brindley`_.
+- Upgrade to Anaocnda 2023 on Gitlab-CI environment (:issue:`520`, :merge:`636`). By `Sergio Cordova`_.
+- Return to the conda build command (:merge:`637`). By `Kyle Brindley`_.
+- Handle parameter study script input outside of argparse (:issue:`72`, :merge:`633`). By `Sergio Cordova`_.
+- Removed debug argument from CLI (:issue:`76`, :merge:`632`). By `Sergio Cordova`_.
 
 *******************
 0.6.21 (2023-07-21)
@@ -708,7 +762,7 @@ Bug fixes
 =========
 - Remove the ``amplitudes.inp`` file which conflicts with the direct displacement specification change introduced in
   :merge:`272` (:issue:`320`, :merge:`346`). By `Kyle Brindley`_.
-- Fix the partially broken single element simulation schematic in the quickstart template files (:issue:`321`,
+- Fix the partially broken rectangle simulation schematic in the quickstart template files (:issue:`321`,
   :merge:`347`). By `Kyle Brindley`_.
 
 Documentation
@@ -780,7 +834,7 @@ Enhancements
 
 New Features
 ============
-- Add a ``waves quickstart`` subcommand to copy the single element compression project as a template for a new project.
+- Add a ``waves quickstart`` subcommand to copy the rectangle compression project as a template for a new project.
   Currently limited to the "SCons-WAVES quickstart" tutorial files. (:issue:`284`, :merge:`300`). By `Kyle Brindley`_.
 - Add a documentation template to the ``waves quickstart`` subcommand (:issue:`291`, :merge:`314`). By `Kyle Brindley`_.
 

@@ -2,13 +2,13 @@
 External API
 ############
 
-.. _waves_builders_api:
+.. _waves_scons_api:
 
 ****************
 SCons Extensions
 ****************
 
-.. automodule:: waves.builders
+.. automodule:: waves.scons_extensions
     :members:
     :show-inheritance:
     :synopsis: WAVES Analysis for Verified Engineering Simulations SCons builder extensions

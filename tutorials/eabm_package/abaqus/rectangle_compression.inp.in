@@ -1,0 +1,36 @@
+**
+*HEADING
+Compressing a rectangle
+**
+*INCLUDE, INPUT=parts.inp
+**
+*ASSEMBLY,NAME=A
+*INCLUDE, INPUT=assembly.inp
+*END ASSEMBLY
+**
+*INCLUDE, INPUT=materials.inp
+**
+*BOUNDARY,OP=NEW
+*INCLUDE,INPUT=boundary.inp
+**
+*CONSTRAINT CONTROLS, PRINT=YES
+*************************************************************************
+**  STEP-1 LOAD STEP
+*************************************************************************
+*STEP, NLGEOM=NO, INC=100, AMPLITUDE=RAMP
+*STATIC
+.005, 1.00, 0.000001, 0.5
+**
+*BOUNDARY, OP=MOD
+A.rectangle.top,2,2,@displacement@
+**
+*MONITOR, DOF=2, NODE=A.rectangle.top_right
+**
+*OUTPUT, HISTORY, FREQUENCY=1
+*INCLUDE,INPUT=history_output.inp
+**
+*OUTPUT, FIELD, FREQUENCY=3
+*INCLUDE,INPUT=field_output.inp
+**
+*END STEP
+**

@@ -5,6 +5,7 @@ import subprocess
 
 from waves import _settings
 from waves import __version__
+from waves import _parameter_study
 
 
 def main():
@@ -36,7 +37,20 @@ def main():
         return_code = visualization(target=args.TARGET, output_file=args.output_file,
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
-                                    height=args.height, width=args.width, font_size=args.font_size)
+                                    height=args.height, width=args.width, font_size=args.font_size,
+                                    vertical=args.vertical)
+    elif args.subcommand in _settings._parameter_study_subcommands:
+        return_code = _parameter_study.parameter_study(
+            args.subcommand, args.INPUT_FILE,
+            output_file_template=args.OUTPUT_FILE_TEMPLATE,
+            output_file=args.OUTPUT_FILE,
+            output_file_type=args.output_file_type,
+            set_name_template=args.SET_NAME_TEMPLATE,
+            previous_parameter_study=args.PREVIOUS_PARAMETER_STUDY,
+            overwrite=args.overwrite,
+            dryrun=args.dryrun,
+            write_meta=args.write_meta
+        )
     else:
         parser.print_help()
 
@@ -79,43 +93,6 @@ def get_parser():
                              help="Print the path to the locally installed documentation index file. " \
                                   "As an alternative to the docs sub-command, open index.html in a web browser " \
                                   "(default: %(default)s)")
-
-    build_parser = argparse.ArgumentParser(add_help=False)
-    build_parser = subparsers.add_parser('build',
-        help="Thin SCons wrapper",
-        description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
-        parents=[build_parser])
-    build_parser.add_argument("TARGET", nargs="+",
-                              help=f"SCons target list")
-    build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
-                              help="Maximum number of SCons command iterations (default: %(default)s)")
-    directory_group = build_parser.add_mutually_exclusive_group()
-    directory_group.add_argument("--working-directory", type=str, default=None,
-                                 help=argparse.SUPPRESS)
-    directory_group.add_argument("-g", "--git-clone-directory", type=str, default=None,
-                                  help="Perform a full local git clone operation to the specified directory before " \
-                                       "executing the scons command, " \
-                                       "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
-                                       "(default: %(default)s)")
-
-    quickstart_parser = argparse.ArgumentParser(add_help=False)
-    quickstart_parser = subparsers.add_parser('quickstart',
-        help="Create an SCons-WAVES project template",
-        description="Create an SCons-WAVES project template from the single element compression simulation found in " \
-                    "the WAVES tutorials.",
-        parents=[quickstart_parser])
-    quickstart_parser.add_argument("destination",
-        nargs="?",
-        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
-             "destination will not be copied. (default: PWD)",
-        type=pathlib.Path,
-        default=pathlib.Path().cwd())
-    quickstart_parser.add_argument("--overwrite",
-        action="store_true",
-        help="Overwrite any existing files (default: %(default)s)")
-    quickstart_parser.add_argument("--dry-run",
-        action="store_true",
-        help="Print the destination tree and exit (default: %(default)s)")
 
     fetch_parser = argparse.ArgumentParser(add_help=False)
     fetch_parser = subparsers.add_parser('fetch',
@@ -166,6 +143,53 @@ def get_parser():
         help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
+    visualize_parser.add_argument("--vertical", action="store_true",
+                                  help="Display the graph in a vertical layout (default: %(default)s)")
+
+    quickstart_parser = argparse.ArgumentParser(add_help=False)
+    quickstart_parser = subparsers.add_parser('quickstart',
+        help="Create an SCons-WAVES project template",
+        description="Create an SCons-WAVES project template from the rectangle compression simulation found in " \
+                    "the WAVES tutorials.",
+        parents=[quickstart_parser])
+    quickstart_parser.add_argument("destination",
+        nargs="?",
+        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
+             "destination will not be copied. (default: PWD)",
+        type=pathlib.Path,
+        default=pathlib.Path().cwd())
+    quickstart_parser.add_argument("--overwrite",
+        action="store_true",
+        help="Overwrite any existing files (default: %(default)s)")
+    quickstart_parser.add_argument("--dry-run",
+        action="store_true",
+        help="Print the destination tree and exit (default: %(default)s)")
+
+    build_parser = argparse.ArgumentParser(add_help=False)
+    build_parser = subparsers.add_parser('build',
+        help="Thin SCons wrapper",
+        description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
+        parents=[build_parser])
+    build_parser.add_argument("TARGET", nargs="+",
+                              help=f"SCons target list")
+    build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
+                              help="Maximum number of SCons command iterations (default: %(default)s)")
+    directory_group = build_parser.add_mutually_exclusive_group()
+    directory_group.add_argument("--working-directory", type=str, default=None,
+                                 help=argparse.SUPPRESS)
+    directory_group.add_argument("-g", "--git-clone-directory", type=str, default=None,
+                                  help="Perform a full local git clone operation to the specified directory before " \
+                                       "executing the scons command, " \
+                                       "``git clone --no-hardlinks ${PWD} ${GIT_CLONE_DIRECTORY}`` " \
+                                       "(default: %(default)s)")
+
+    for subcommand in _settings._parameter_study_subcommands:
+        subparsers.add_parser(
+            subcommand,
+            description=_settings._parameter_study_description,
+            help=f"Create a {subcommand.replace('_', ' ')} parameter study",
+            parents=[_parameter_study.parameter_study_parser()]
+        )
 
     return main_parser
 
@@ -266,7 +290,7 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 
 def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
                   height=_settings._visualize_default_height, width=_settings._visualize_default_width,
-                  font_size=_settings._visualize_default_font_size):
+                  font_size=_settings._visualize_default_font_size, vertical=False):
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -281,6 +305,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     :param bool print_graphml: Whether to print the graph in graphml format
     :param int height: Height of visualization if being saved to a file
     :param int width: Width of visualization if being saved to a file
+    :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     """
     from waves import visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
@@ -297,7 +322,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
-    visualize.visualize(tree_dict, output_file, height, width, font_size)
+    visualize.visualize(tree_dict, output_file, height, width, font_size, vertical)
     return 0
 
 

@@ -54,10 +54,10 @@ directory. Check the contents of this directory using the ``ls`` command.
     /home/roppenheimer/waves-tutorials
     $ ls eabm_package/abaqus
     abaqus_journal_utilities.py  parts.inp
-    assembly.inp                 single_element_compression.inp
-    boundary.inp                 single_element_geometry.py
-    field_output.inp             single_element_mesh.py
-    history_output.inp           single_element_partition.py
+    assembly.inp                 rectangle_compression.inp
+    boundary.inp                 rectangle_geometry.py
+    field_output.inp             rectangle_mesh.py
+    history_output.inp           rectangle_partition.py
     materials.inp
 
 .. _tutorials_tutorial_solverprep_waves:
@@ -79,7 +79,7 @@ SConscript
 The first few lines of the ``SConscript`` file should look very familiar with exception to
 the single highlighted line. In this tutorial, we need to import the ``waves`` module, as
 we will require a custom builder that functions differently than the previously used
-:meth:`waves.builders.abaqus_journal` builder.
+:meth:`waves.scons_extensions.abaqus_journal` builder.
 
 .. note::
 
@@ -108,19 +108,19 @@ this is implemented.
 Each file in the ``abaqus_source_list`` is specified with its absolute path with ``pathlib`` and the
 ``abaqus_source_abspath`` variable constructed in the project configuration ``SConstruct`` file.  After constructing the
 ``abaqus_source_list``, we must first convert each string (which represent the absolute paths of each file in the list)
-to a `Python pathlib`_ object.  While not strictly neccessary for the :meth:`waves.builders.copy_substitute` method, the
+to a `Python pathlib`_ object.  While not strictly neccessary for the :meth:`waves.scons_extensions.copy_substitute` method, the
 `Python pathlib`_ objects are used elsewhere in the `SConscript` file.
 
 Just as in the previous tutorials, we now need to extend the ``workflow`` list. Recall that we have already extended the
 workflow three times - once each for the Geometry, Partition, and Mesh processes. Note that the syntax in this case is
-different from before, as we now need to call the :meth:`waves.builders.copy_substitute` method as a function from the
+different from before, as we now need to call the :meth:`waves.scons_extensions.copy_substitute` method as a function from the
 ``waves`` module.
 
-Unlike the ``AbaqusJournal`` builder, the :meth:`waves.builders.copy_substitute` is not a builder, but a Python method
+Unlike the ``AbaqusJournal`` builder, the :meth:`waves.scons_extensions.copy_substitute` is not a builder, but a Python method
 which only requires the source file name(s). This is possible because the target file can be inferred from the copy
 operation and build directory. With this simplified method interface, it's also possible to pass a list of source files
 instead of defining a unique task for each item in the ``abaqus_source_list``. The
-:meth:`waves.builders.copy_substitute` method will construct the per-file tasks automatically and return the complete
+:meth:`waves.scons_extensions.copy_substitute` method will construct the per-file tasks automatically and return the complete
 list of targets.
 
 In summary of the changes you just made to the ``tutorial_03_solverprep`` file,
@@ -161,24 +161,24 @@ Build Targets
    /path/to/waves-tutorials
    $ scons tutorial_03_solverprep
    scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2022 program exists.../apps/abaqus/Commands/abq2022
-   Checking whether abq2022 program exists.../apps/abaqus/Commands/abq2022
+   Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
+   Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2022 -information
-   environment > single_element_geometry.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2022 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_geometry.py -- > single_element_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2022 -information
-   environment > single_element_partition.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2022 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_partition.py -- > single_element_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2022 -information
-   environment > single_element_mesh.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2022 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/single_element_mesh.py -- > single_element_mesh.stdout 2>&1
-   Copy("build/tutorial_03_solverprep/single_element_compression.inp",
-   "eabm_package/abaqus/single_element_compression.inp")
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
+   environment > rectangle_geometry.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
+   environment > rectangle_partition.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
+   environment > rectangle_mesh.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
+   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   Copy("build/tutorial_03_solverprep/rectangle_compression.inp",
+   "eabm_package/abaqus/rectangle_compression.inp")
    Copy("build/tutorial_03_solverprep/assembly.inp", "eabm_package/abaqus/assembly.inp")
    Copy("build/tutorial_03_solverprep/boundary.inp", "eabm_package/abaqus/boundary.inp")
    Copy("build/tutorial_03_solverprep/field_output.inp", "eabm_package/abaqus/field_output.inp")
@@ -201,27 +201,27 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     $ tree build/tutorial_01_geometry/ build/tutorial_02_partition_mesh/ build/tutorial_03_solverprep/
     build/tutorial_01_geometry/
     |-- abaqus.rpy
-    |-- single_element_geometry.abaqus_v6.env
-    |-- single_element_geometry.cae
-    |-- single_element_geometry.jnl
-    `-- single_element_geometry.stdout
+    |-- rectangle_geometry.abaqus_v6.env
+    |-- rectangle_geometry.cae
+    |-- rectangle_geometry.jnl
+    `-- rectangle_geometry.stdout
     build/tutorial_02_partition_mesh/
     |-- abaqus.rpy
     |-- abaqus.rpy.1
     |-- abaqus.rpy.2
-    |-- single_element_geometry.abaqus_v6.env
-    |-- single_element_geometry.cae
-    |-- single_element_geometry.jnl
-    |-- single_element_geometry.stdout
-    |-- single_element_mesh.abaqus_v6.env
-    |-- single_element_mesh.cae
-    |-- single_element_mesh.inp
-    |-- single_element_mesh.jnl
-    |-- single_element_mesh.stdout
-    |-- single_element_partition.abaqus_v6.env
-    |-- single_element_partition.cae
-    |-- single_element_partition.jnl
-    `-- single_element_partition.stdout
+    |-- rectangle_geometry.abaqus_v6.env
+    |-- rectangle_geometry.cae
+    |-- rectangle_geometry.jnl
+    |-- rectangle_geometry.stdout
+    |-- rectangle_mesh.abaqus_v6.env
+    |-- rectangle_mesh.cae
+    |-- rectangle_mesh.inp
+    |-- rectangle_mesh.jnl
+    |-- rectangle_mesh.stdout
+    |-- rectangle_partition.abaqus_v6.env
+    |-- rectangle_partition.cae
+    |-- rectangle_partition.jnl
+    `-- rectangle_partition.stdout
     build/tutorial_03_solverprep/
     |-- abaqus.rpy
     |-- abaqus.rpy.1
@@ -232,20 +232,20 @@ Explore the contents of the ``build`` directory using the ``tree`` command again
     |-- history_output.inp
     |-- materials.inp
     |-- parts.inp
-    |-- single_element_compression.inp
-    |-- single_element_geometry.abaqus_v6.env
-    |-- single_element_geometry.cae
-    |-- single_element_geometry.jnl
-    |-- single_element_geometry.stdout
-    |-- single_element_mesh.abaqus_v6.env
-    |-- single_element_mesh.cae
-    |-- single_element_mesh.inp
-    |-- single_element_mesh.jnl
-    |-- single_element_mesh.stdout
-    |-- single_element_partition.abaqus_v6.env
-    |-- single_element_partition.cae
-    |-- single_element_partition.jnl
-    `-- single_element_partition.stdout
+    |-- rectangle_compression.inp
+    |-- rectangle_geometry.abaqus_v6.env
+    |-- rectangle_geometry.cae
+    |-- rectangle_geometry.jnl
+    |-- rectangle_geometry.stdout
+    |-- rectangle_mesh.abaqus_v6.env
+    |-- rectangle_mesh.cae
+    |-- rectangle_mesh.inp
+    |-- rectangle_mesh.jnl
+    |-- rectangle_mesh.stdout
+    |-- rectangle_partition.abaqus_v6.env
+    |-- rectangle_partition.cae
+    |-- rectangle_partition.jnl
+    `-- rectangle_partition.stdout
 
     0 directories, 44 files
 
@@ -255,7 +255,7 @@ directory, ``tutorial_03_solverprep``, pertains to the targets we just built.
 
 It is worth noting that the ``tutorial_03_solverprep`` build directory contains all the
 files from the previous two tutorials. The additional files are the files from the
-``abaqus_source_list`` that were acted on with the :meth:`waves.builders.copy_substitute`
+``abaqus_source_list`` that were acted on with the :meth:`waves.scons_extensions.copy_substitute`
 method. In this case, the files were simply copied into the build directory with no
 modification to the source code. :ref:`tutorial_parameter_substitution_waves` will discuss
 how parameters can be inserted into these solver input files.

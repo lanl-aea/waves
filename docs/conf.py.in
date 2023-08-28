@@ -87,6 +87,7 @@ html_static_path = ['_static']
 html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
+latex_logo = 'waves_logo_primary_large_crop.png'
 copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
@@ -102,12 +103,37 @@ preamble = """
 \\addto\\captionsenglish{\\renewcommand{\\contentsname}{Table of Contents}}
 \\AtBeginEnvironment{sphinxVerbatim}{\\scriptsize}
 """
+
 # Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
 latex_project = project.replace('_', '-')
 latex_basename = f"{latex_project.lower()}-{version}.tex"
+
+maketitle = f"""
+\\DeclareRobustCommand{{\\and}}{{
+    \\end{{tabular}}\\kern-\\tabcolsep
+    \\allowbreak
+    \\hskip\\dimexpr1em+\\tabcolsep\\begin{{tabular}}[t]{{c}}
+}}
+\\begin{{titlepage}}%
+  {{\\includegraphics[width=\\textwidth]{{{latex_logo}}} \\par}}
+  \\vfill
+  {{\\centering \\LARGE \\textbf{{ \\textsf{{
+    \\begin{{tabular}}[t]{{c}}
+      {author_latex}
+    \\end{{tabular}}\\kern-\\tabcolsep
+  }} }} \\par}}
+  \\vfill\\vfill
+  {{\\large \\textbf{{ \\textsf{{ Release {version} }} }} \\par}}
+  {{\\large \\textbf{{ \\textsf{{ \\today }} }} }}
+  \\clearpage
+  {copyright_latex}
+  \\clearpage
+\\end{{titlepage}}
+"""
+
 latex_elements = {
     'preamble': preamble,
-    'maketitle': f'\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle',
+    'maketitle': maketitle
 }
 latex_documents = [
     (master_doc, latex_basename, latex_project.upper(), author_latex, 'manual'),

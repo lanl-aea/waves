@@ -93,19 +93,19 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_11_archival
 
-4. Create a new file named ``single_element_geometry_partition.scons`` from the contents below
+4. Create a new file named ``rectangle_geometry_partition.scons`` from the contents below
 
-.. admonition:: waves-tutorials/single_element_geometry_partition.scons
+.. admonition:: waves-tutorials/rectangle_geometry_partition.scons
 
-   .. literalinclude:: tutorials_single_element_geometry_partition.scons
+   .. literalinclude:: tutorials_rectangle_geometry_partition.scons
       :language: Python
       :lineno-match:
 
-5. Create a new file named ``single_element_mesh_solverprep_solve_extract.scons`` from the contents below
+5. Create a new file named ``rectangle_mesh_solverprep_solve_extract.scons`` from the contents below
 
-.. admonition:: waves-tutorials/single_element_mesh_solverprep_solve_extract.scons
+.. admonition:: waves-tutorials/rectangle_mesh_solverprep_solve_extract.scons
 
-   .. literalinclude:: tutorials_single_element_mesh_solverprep_solve_extract.scons
+   .. literalinclude:: tutorials_rectangle_mesh_solverprep_solve_extract.scons
       :language: Python
       :lineno-match:
 
@@ -153,31 +153,31 @@ Output Files
    |-- history_output.inp
    |-- materials.inp
    |-- parts.inp
-   |-- single_element_compression.inp
-   |-- single_element_compression.inp.in
-   |-- single_element_compression_DATACHECK.023
-   |-- single_element_compression_DATACHECK.abaqus_v6.env
-   |-- single_element_compression_DATACHECK.com
-   |-- single_element_compression_DATACHECK.dat
-   |-- single_element_compression_DATACHECK.mdl
-   |-- single_element_compression_DATACHECK.msg
-   |-- single_element_compression_DATACHECK.odb
-   |-- single_element_compression_DATACHECK.prt
-   |-- single_element_compression_DATACHECK.sim
-   |-- single_element_compression_DATACHECK.stdout
-   |-- single_element_compression_DATACHECK.stt
-   |-- single_element_geometry.abaqus_v6.env
-   |-- single_element_geometry.cae
-   |-- single_element_geometry.jnl
-   |-- single_element_geometry.stdout
-   |-- single_element_mesh.abaqus_v6.env
-   |-- single_element_mesh.cae
-   |-- single_element_mesh.inp
-   |-- single_element_mesh.jnl
-   |-- single_element_mesh.stdout
-   |-- single_element_partition.abaqus_v6.env
-   |-- single_element_partition.cae
-   |-- single_element_partition.jnl
-   `-- single_element_partition.stdout
+   |-- rectangle_compression.inp
+   |-- rectangle_compression.inp.in
+   |-- rectangle_compression_DATACHECK.023
+   |-- rectangle_compression_DATACHECK.abaqus_v6.env
+   |-- rectangle_compression_DATACHECK.com
+   |-- rectangle_compression_DATACHECK.dat
+   |-- rectangle_compression_DATACHECK.mdl
+   |-- rectangle_compression_DATACHECK.msg
+   |-- rectangle_compression_DATACHECK.odb
+   |-- rectangle_compression_DATACHECK.prt
+   |-- rectangle_compression_DATACHECK.sim
+   |-- rectangle_compression_DATACHECK.stdout
+   |-- rectangle_compression_DATACHECK.stt
+   |-- rectangle_geometry.abaqus_v6.env
+   |-- rectangle_geometry.cae
+   |-- rectangle_geometry.jnl
+   |-- rectangle_geometry.stdout
+   |-- rectangle_mesh.abaqus_v6.env
+   |-- rectangle_mesh.cae
+   |-- rectangle_mesh.inp
+   |-- rectangle_mesh.jnl
+   |-- rectangle_mesh.stdout
+   |-- rectangle_partition.abaqus_v6.env
+   |-- rectangle_partition.cae
+   |-- rectangle_partition.jnl
+   `-- rectangle_partition.stdout
 
    0 directories, 35 files

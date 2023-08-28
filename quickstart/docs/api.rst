@@ -4,32 +4,32 @@
 |PROJECT| API
 #############
 
-single_element_geometry.py
+rectangle_geometry.py
 ==========================
 
-.. automodule:: eabm_package.single_element_geometry
+.. automodule:: eabm_package.rectangle_geometry
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element geometry creation script
+    :synopsis: The Abaqus rectangle geometry creation script
 
-single_element_partition.py
-===========================
-
-.. automodule:: eabm_package.single_element_partition
-    :noindex:
-    :members:
-    :show-inheritance:
-    :synopsis: The Abaqus single element partition script
-
-single_element_mesh.py
+rectangle_partition.py
 ======================
 
-.. automodule:: eabm_package.single_element_mesh
+.. automodule:: eabm_package.rectangle_partition
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus single element mesh script
+    :synopsis: The Abaqus rectangle partition script
+
+rectangle_mesh.py
+=================
+
+.. automodule:: eabm_package.rectangle_mesh
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: The Abaqus rectangle mesh script
 
 .. _sphinx_abaqus_journal_utilities_api:
 

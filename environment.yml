@@ -6,8 +6,7 @@ dependencies:
   - h5netcdf
   - h5py
   - ipython
-  - mamba
-  - matplotlib
+  - matplotlib-base
   - networkx
   - numpy
   - pandas

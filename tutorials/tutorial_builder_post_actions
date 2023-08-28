@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""Single element compression workflow
+"""Rectangle compression workflow
 
 Requires the following ``SConscript(..., exports=[])``
 
@@ -23,7 +23,7 @@ abaqus_source_abspath = pathlib.Path(env["abaqus_source_abspath"])
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
-model = "single_element"
+model = "rectangle"
 
 # Comment used in tutorial code snippets: marker-1
 
@@ -70,7 +70,7 @@ abaqus_source_list = [
     abaqus_source_abspath / "history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.builders.copy_substitute(abaqus_source_list))
+workflow.extend(waves.scons_extensions.copy_substitute(abaqus_source_list))
 
 # Comment used in tutorial code snippets: marker-4
 

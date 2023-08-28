@@ -19,7 +19,7 @@ help users create the content of :ref:`tutorialsconstruct`. The :ref:`waves_cli`
 also be used to create a local copy of any tutorial file.
 
 Finally, users who are are ready to create their own modsim repository can use the :ref:`waves_cli`
-:ref:`waves_quickstart_cli` subcommand to generate a modsim template directory structure from the single element example
+:ref:`waves_quickstart_cli` subcommand to generate a modsim template directory structure from the rectangle example
 model. The template files include project documentation and two simulation configurations: nominal and mesh convergence.
 The :ref:`waves_fetch_cli` subcommand may be used to fetch individual template directories and files from both the
 quickstart template and the tutorials.
@@ -80,8 +80,10 @@ Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
                    00:10 :ref:`scons_multiactiontask`                 Execute multiple actions on the same target file
                    00:20 :ref:`tutorial_argparse_types_waves`         Add input verification to workflow parameters
-                   00:20 :ref:`tutorial_cubit_waves`                  Geometry, partition, and mesh examples with Cubit
+                   00:20 :ref:`tutorial_cubit_abaqus`                 Geometry, partition, and mesh examples with Cubit
                                                                       replicating :ref:`tutorial_simulation_waves`
+                   00:20 :ref:`tutorial_cubit_sierra`                 Side-by-side Abaqus and Sierra workflows
+                                                                      complementing :ref:`tutorial_cubit_abaqus`
                    00:10 :ref:`tutorial_escape_sequences_waves`       Changing task actions without re-building the task
                    00:30 :ref:`tutorial_latin_hypercube_waves`        Parameter study introduction using a latin
                                                                       hypercube

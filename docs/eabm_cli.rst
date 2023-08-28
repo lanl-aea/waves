@@ -10,29 +10,29 @@ WAVES-EABM CLI
 abaqus
 ******
 
-.. _abaqus_single_element_geometry_cli:
+.. _abaqus_rectangle_geometry_cli:
 
-single_element_geometry.py
-==========================
-
-.. argparse::
-    :ref: eabm_package.abaqus.single_element_geometry.get_parser
-
-.. _abaqus_single_element_partition_cli:
-
-single_element_partition.py
-===========================
+rectangle_geometry.py
+=====================
 
 .. argparse::
-    :ref: eabm_package.abaqus.single_element_partition.get_parser
+    :ref: eabm_package.abaqus.rectangle_geometry.get_parser
 
-.. _abaqus_single_element_mesh_cli:
+.. _abaqus_rectangle_partition_cli:
 
-single_element_mesh.py
-==========================
+rectangle_partition.py
+======================
 
 .. argparse::
-    :ref: eabm_package.abaqus.single_element_mesh.get_parser
+    :ref: eabm_package.abaqus.rectangle_partition.get_parser
+
+.. _abaqus_rectangle_mesh_cli:
+
+rectangle_mesh.py
+=================
+
+.. argparse::
+    :ref: eabm_package.abaqus.rectangle_mesh.get_parser
 
 .. _cubit_journal_cli:
 
@@ -40,23 +40,23 @@ single_element_mesh.py
 cubit
 *****
 
-single_element_geometry.py
-==========================
+rectangle_geometry.py
+=====================
 
 .. argparse::
-    :ref: eabm_package.cubit.single_element_geometry.get_parser
+    :ref: eabm_package.cubit.rectangle_geometry.get_parser
 
-single_element_partition.py
-===========================
-
-.. argparse::
-    :ref: eabm_package.cubit.single_element_partition.get_parser
-
-single_element_mesh.py
+rectangle_partition.py
 ======================
 
 .. argparse::
-    :ref: eabm_package.cubit.single_element_mesh.get_parser
+    :ref: eabm_package.cubit.rectangle_partition.get_parser
+
+rectangle_mesh.py
+=================
+
+.. argparse::
+    :ref: eabm_package.cubit.rectangle_mesh.get_parser
 
 ******
 python

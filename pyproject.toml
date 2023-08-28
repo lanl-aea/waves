@@ -29,7 +29,7 @@ dynamic = ["version"]
 dependencies = [
     "h5netcdf",
     "h5py",
-    "matplotlib",
+    "matplotlib-base",
     "networkx",
     "numpy",
     "pyyaml",
@@ -44,7 +44,6 @@ packages = ["waves", "waves.abaqus", "waves.tests"]
 zip-safe = false
 
 [project.scripts]
-parameter_study = "waves.parameter_study:main"
 odb_extract = "waves.abaqus.odb_extract:main"
 msg_parse = "waves.abaqus.msg_parse:main"
 sta_parse = "waves.abaqus.sta_parse:main"
@@ -64,5 +63,8 @@ markers = [
     "unittest: marks codebase unit tests",
     "integrationtest: marks integration tests",
     "systemtest: marks system tests, e.g. the tutorials",
+    # FIXME: Trace the source of interference between the builder tests and the find_program tests
+    # Remove tag and use of tag when fixed.
+    "fixsconsusage: marks tests that don't play nicely with SCons internal API usage"
 ]
 addopts = "-vvv --capture=sys --tb=long  --tb=auto -l --durations=10 --failed-first --strict-markers -r a -n 4 -m 'not systemtest'"
