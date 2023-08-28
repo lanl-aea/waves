@@ -130,7 +130,6 @@ tutorials_dir = project_dir / pathlib.Path(env['tutorials_dir'])
 tutorial_files_list = [
     tutorials_dir / 'scons_quickstart_SConstruct',
     tutorials_dir / 'scons_multiactiontask_SConstruct',
-    tutorials_dir / 'waves_quickstart_SConstruct',
     tutorials_dir / 'tutorial_00_SConstruct',
     tutorials_dir / 'tutorial_01_geometry',
     tutorials_dir / 'tutorial_01_geometry_SConstruct',
@@ -208,7 +207,9 @@ tutorial_files_list = [
     tutorials_dir / "tutorial_cubit/abaqus",
     tutorials_dir / "tutorial_cubit/sierra",
     tutorials_dir / "tutorial_cubit/SConstruct",
-    tutorials_dir / "tutorial_cubit/eabm_package/sierra/rectangle_compression.i"
+    tutorials_dir / "tutorial_cubit/eabm_package/sierra/rectangle_compression.i",
+    tutorials_dir / "waves_quickstart/SConstruct",
+    tutorials_dir / "waves_quickstart/SConscript",
 ]
 copied_file_list = []
 for file_path in tutorial_files_list:

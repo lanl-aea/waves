@@ -38,6 +38,7 @@ Documentation
 - Add the WAVES primarymark image to the PDF title page (:merge:`620`). By `Kyle Brindley`_.
 - Update the Cubit tutorial to demonstrate a side-by-side comparison of Abaqus and Sierra, where the Cubit tasks are
   re-used for both solver workflows (:issue:`513`, :merge:`623`). By `Kyle Brindley`_.
+- Simplified quickstart ``SConscript`` file (:issue:`453`, :merge:`619`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
