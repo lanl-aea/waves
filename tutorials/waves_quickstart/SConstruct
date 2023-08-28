@@ -41,10 +41,9 @@ env.Append(BUILDERS={
 
 # Abaqus input file implicit dependency scanner
 env.Append(SCANNERS=waves.scons_extensions.abaqus_input_scanner())
-build_dir = pathlib.Path(env['build_dir'])
 
 # Call SConscript file
-SConscript('SConscript', variant_dir=build_dir, exports='env', duplicate=True)
+SConscript('SConscript', variant_dir=env['build_dir'], exports='env', duplicate=True)
 
 # List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.
