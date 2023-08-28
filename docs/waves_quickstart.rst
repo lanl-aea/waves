@@ -55,8 +55,8 @@ complete descriptions of the builder actions.
 .. admonition:: waves_quickstart/SConscript
 
     .. literalinclude:: waves_quickstart_SConscript
-        :language: Python
-        :lineno-match:
+       :language: Python
+       :lineno-match:
 
 ****************
 Building targets
