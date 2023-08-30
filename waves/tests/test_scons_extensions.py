@@ -728,3 +728,32 @@ def test_abaqus_input_scanner(content, expected_dependencies):
     dependencies = scanner(mock_file, env)
     found_files = [file.name for file in dependencies]
     assert set(found_files) == set(expected_dependencies)
+
+
+sphinx_scanner_input = {
+     # Test name, content, expected_dependencies
+    'include directive': ('.. include:: dummy.txt', ['dummy.txt']),
+    'literalinclude directive': ('.. literalinclude:: dummy.txt', ['dummy.txt']),
+    'image directive': ( '.. image:: dummy.png',  ['dummy.png']),
+    'figure directive': ( '.. figure:: dummy.png',  ['dummy.png']),
+    'bibliography directive': ( '.. figure:: dummy.bib', ['dummy.bib']),
+    'no match': ('.. notsuppored:: notsupported.txt', []),
+    'indented': ('.. only:: html\n\n   .. include:: dummy.txt', ['dummy.txt']),
+    'one match multiline': ('.. include:: dummy.txt\n.. notsuppored:: notsupported.txt', ['dummy.txt']),
+    'three match multiline': ('.. include:: dummy.txt\n.. figure:: dummy.png\n.. bibliography:: dummy.bib',
+                              ['dummy.txt', 'dummy.png', 'dummy.bib'])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("content, expected_dependencies",
+                         sphinx_scanner_input.values(),
+                         ids=sphinx_scanner_input.keys())
+def test_sphinx_scanner(content, expected_dependencies):
+    mock_file = unittest.mock.Mock()
+    mock_file.get_text_contents.return_value = content
+    env = SCons.Environment.Environment()
+    scanner = scons_extensions.sphinx_scanner()
+    dependencies = scanner(mock_file, env)
+    found_files = [file.name for file in dependencies]
+    assert set(found_files) == set(expected_dependencies)
