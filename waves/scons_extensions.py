@@ -1089,6 +1089,7 @@ def sphinx_scanner():
     """SCons scanner that searches for directives
 
     * ``.. include::``
+    * ``.. literalinclude::``
     * ``.. figure::``
     * ``.. bibliography::``
 
