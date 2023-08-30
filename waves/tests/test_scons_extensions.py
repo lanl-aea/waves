@@ -733,6 +733,7 @@ def test_abaqus_input_scanner(content, expected_dependencies):
 sphinx_scanner_input = {
      # Test name, content, expected_dependencies
     'include directive': ('.. include:: dummy.txt', ['dummy.txt']),
+    'literalinclude directive': ('.. literalinclude:: dummy.txt', ['dummy.txt']),
     'figure directive': ( '.. figure:: dummy.png',  ['dummy.png']),
     'bibliography directive': ( '.. figure:: dummy.bib', ['dummy.bib']),
     'no match': ('.. notsuppored:: notsupported.txt', []),
