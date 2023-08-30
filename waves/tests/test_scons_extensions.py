@@ -734,6 +734,7 @@ sphinx_scanner_input = {
      # Test name, content, expected_dependencies
     'include directive': ('.. include:: dummy.txt', ['dummy.txt']),
     'literalinclude directive': ('.. literalinclude:: dummy.txt', ['dummy.txt']),
+    'image directive': ( '.. image:: dummy.png',  ['dummy.png']),
     'figure directive': ( '.. figure:: dummy.png',  ['dummy.png']),
     'bibliography directive': ( '.. figure:: dummy.bib', ['dummy.bib']),
     'no match': ('.. notsuppored:: notsupported.txt', []),
