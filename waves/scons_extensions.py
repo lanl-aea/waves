@@ -1086,7 +1086,13 @@ def abaqus_input_scanner():
 
 
 def sphinx_scanner():
-    """SCons scanner that searches for ``.. include::`` directives inside ``.rst`` and ``.txt`` files
+    """SCons scanner that searches for directives
+
+    * ``.. include::``
+    * ``.. figure::``
+    * ``.. bibliography::``
+
+    inside ``.rst`` and ``.txt`` files
 
     :return: Abaqus input file dependency Scanner
     :rtype: SCons.Scanner.Scanner
