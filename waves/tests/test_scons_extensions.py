@@ -728,3 +728,23 @@ def test_abaqus_input_scanner(content, expected_dependencies):
     dependencies = scanner(mock_file, env)
     found_files = [file.name for file in dependencies]
     assert set(found_files) == set(expected_dependencies)
+
+
+sphinx_scanner_input = {
+     # Test name,              file content, expected_dependencies
+    'has_suffix': ('.. include:: dummy.txt',         ['dummy.txt']),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("content, expected_dependencies",
+                         sphinx_scanner_input.values(),
+                         ids=sphinx_scanner_input.keys())
+def test_sphinx_scanner(content, expected_dependencies):
+    mock_file = unittest.mock.Mock()
+    mock_file.get_text_contents.return_value = content
+    env = SCons.Environment.Environment()
+    scanner = scons_extensions.sphinx_scanner()
+    dependencies = scanner(mock_file, env)
+    found_files = [file.name for file in dependencies]
+    assert set(found_files) == set(expected_dependencies)
