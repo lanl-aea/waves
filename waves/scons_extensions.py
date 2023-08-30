@@ -1097,7 +1097,7 @@ def sphinx_scanner():
     :return: Abaqus input file dependency Scanner
     :rtype: SCons.Scanner.Scanner
     """
-    return _custom_scanner(r'\.\. (?:include|literalinclude|figure|bibliography)::\s*(.+)$', ['.rst', '.txt'])
+    return _custom_scanner(r'^\s*\.\. (?:include|literalinclude|figure|bibliography)::\s*(.+)$', ['.rst', '.txt'])
 
 
 def _custom_scanner(pattern, suffixes, flags=None):

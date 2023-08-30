@@ -15,7 +15,7 @@ import SCons.Scanner
 def sphinx_scanner():
     suffixes = ['.rst', '.txt']
     flags = re.MULTILINE
-    expression = re.compile(r'\.\. (?:include|literalinclude|figure|bibliography)::\s*(.+)$', flags)
+    expression = re.compile(r'^\s*\.\. (?:include|literalinclude|figure|bibliography)::\s*(.+)$', flags)
     def suffix_only(node_list):
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
     def regex_scan(node, env, path):
