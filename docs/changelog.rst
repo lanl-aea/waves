@@ -8,6 +8,10 @@ Changelog
 0.7.2 (unreleased)
 ******************
 
+New Features
+============
+- Added draft Sphinx dependency scanner (:merge:`640`). By `Kyle Brindley`_.
+
 ******************
 0.7.1 (2023-08-28)
 ******************
