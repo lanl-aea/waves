@@ -1085,6 +1085,15 @@ def abaqus_input_scanner():
     return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'], flags)
 
 
+def sphinx_scanner():
+    """SCons scanner that searches for ``.. include::`` directives inside ``.rst`` and ``.txt`` files
+
+    :return: Abaqus input file dependency Scanner
+    :rtype: SCons.Scanner.Scanner
+    """
+    return _custom_scanner(r'\.\. include::\s*(.+)$', ['.rst', '.txt'])
+
+
 def _custom_scanner(pattern, suffixes, flags=None):
     """Custom Scons scanner
 
