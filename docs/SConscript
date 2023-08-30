@@ -7,6 +7,27 @@ import pathlib
 Import(['env', 'project_substitution_dictionary'])
 project_dir = pathlib.Path(env['project_dir'])
 
+# VVV Sphinx Scanner prototype
+# TODO: boostrap from waves.scons_extensions.sphinx_scanner *after* the function is deployed on conda-forge
+# DO NOT 'bootstrap' by importing the current/repository version of WAVES. That's not bootstrapping, it's a bug factory
+import re
+import SCons.Scanner
+def sphinx_scanner():
+    suffixes = ['.rst']
+    flags = re.MULTILINE
+    expression = re.compile(r'\.\. include::\s*(.+)$', flags)
+    def suffix_only(node_list):
+        return [node for node in node_list if node.path.endswith(tuple(suffixes))]
+    def regex_scan(node, env, path):
+        contents = node.get_text_contents()
+        includes = expression.findall(contents)
+        includes = [file.strip() for file in includes]
+        return includes
+    custom_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
+    return custom_scanner
+env.Append(SCANNERS=sphinx_scanner())
+# ^^^ Sphinx Scanner prototype
+
 # Set empty alias return list
 alias_list = []
 
