@@ -54,7 +54,6 @@ documentation_file_list = [
     # Not strictly required for all Sphinx build types, so not always found by the scanner.
     # It is required for Sphinx configuration, so it needs to be explicitly included in the deps list.
     'CITATION.bib',  # Copied from CITATION.bib to docs build directory by root SConscript
-    'LICENSE.txt',  # Copied from LICENSE.txt to docs build directory by root SConscript
     'environment.yml',  # Copied from environment.yml to docs build directory by root SConscript
     'targets.txt',  # Found in conf.py, which is not currently scanned
     'waves_logo_brandmark_smaller.png',  # Found in conf.py, which is not currently scanned
