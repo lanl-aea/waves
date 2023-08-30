@@ -735,6 +735,9 @@ sphinx_scanner_input = {
     'include directive': ('.. include:: dummy.txt', ['dummy.txt']),
     'figure directive': ( '.. figure:: dummy.png',  ['dummy.png']),
     'bibliography directive': ( '.. figure:: dummy.bib', ['dummy.bib']),
+    'no match': ('.. notsuppored:: notsupported.txt', []),
+    'one match multiline': ('.. include:: dummy.txt\n.. notsuppored:: notsupported.txt', ['dummy.txt']),
+    'no match': ('.. include:: dummy.txt\n.. notsuppored:: notsupported.txt', ['dummy.txt']),
 }
 
 
