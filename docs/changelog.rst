@@ -12,6 +12,13 @@ New Features
 ============
 - Added draft Sphinx dependency scanner (:merge:`640`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Trial update to run the system test suite in parallel. It's possible the system tests are not yet thread safe (using a
+  common ``.sconsign.dblite`` file but separate build directories), but this wasn't observed in local testing. It's also
+  possible that Abaqus token availability will periodically timeout job submissions. If this produces many false negative
+  tests requiring manual intervention, revert commit ``d2e3c9d1``  (:issue:`519`, :merge:`641`). By `Kyle Brindley`_.
+
 ******************
 0.7.1 (2023-08-28)
 ******************
