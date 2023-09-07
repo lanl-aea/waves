@@ -18,6 +18,8 @@ Internal Changes
   common ``.sconsign.dblite`` file but separate build directories), but this wasn't observed in local testing. It's also
   possible that Abaqus token availability will periodically timeout job submissions. If this produces many false negative
   tests requiring manual intervention, revert commit ``d2e3c9d1``  (:issue:`519`, :merge:`641`). By `Kyle Brindley`_.
+- Elevate PDF documentation build warnings to errors to match other sphinx build behaviors (:merge:`642`). By `Kyle
+  Brindley`_.
 
 ******************
 0.7.1 (2023-08-28)
