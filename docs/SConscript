@@ -242,7 +242,9 @@ latex_target = Dir(latex_directory)
 latexpdf = env.Command(
     target=[latex_target],
     source=source_files,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}}")
+    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}} ${{sphinx_options}}",
+    sphinx_options=sphinx_options
+)
 env.Clean(latexpdf, [latex_target] + documentation_file_list)
 env.AlwaysBuild(latexpdf)
 alias_list.extend(env.Alias('latexpdf', latexpdf))
