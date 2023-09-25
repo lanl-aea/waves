@@ -12,6 +12,10 @@ New Features
 ============
 - Added draft Sphinx dependency scanner (:merge:`640`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Fixed broken AEA Compute Environment documentation links (:issue:`527`, :merge:`643`). By `Sergio Cordova`_.
+
 Internal Changes
 ================
 - Trial update to run the system test suite in parallel. It's possible the system tests are not yet thread safe (using a

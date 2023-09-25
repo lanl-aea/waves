@@ -4,8 +4,8 @@
    :end-before: target-end-do-not-remove
 
 .. General references
-.. _`AEA Compute environment`: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/release/aea_compute_environment.html
-.. _`AEA Conda channel`: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea-release/aea_compute_environment.html#aea-conda-channel
+.. _`AEA Compute environment`: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea_compute_environment.html
+.. _`AEA Conda channel`: https://aea.re-pages.lanl.gov/developer-operations/aea_compute_environment/aea_compute_environment.html#aea-conda-channel
 .. _`AEA Gitlab group members`: https://re-git.lanl.gov/groups/aea/-/group_members
 .. _`AEA Gitlab group`: https://re-git.lanl.gov/aea
 .. _`ASC RE Gitlab HPC Accounts`: https://hpcaccounts.lanl.gov/projects/request/asc-re-gitlab
