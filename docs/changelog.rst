@@ -14,8 +14,7 @@ New Features
 
 Documentation
 =============
-- Fixed broken AEA Compute Environment documentation links (:issue:`526`, :issue:`527`, :merge:`643`). 
-  By `Sergio Cordova`_.
+- Fixed broken AEA Compute Environment documentation links (:issue:`527`, :merge:`643`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
