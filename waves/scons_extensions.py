@@ -1038,7 +1038,7 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
     .. code-block::
        :caption: SLURM sbatch builder action
 
-       cd ${TARGET.dir.abspath} && sbatch --wait ${slurm_options} --wrap ${slurm_job} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGET.filebase}.stdout ${slurm_options} --wrap ${slurm_job}
 
     .. code-block::
        :caption: SConstruct
