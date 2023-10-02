@@ -86,7 +86,7 @@ env.PrependENVPath("PYTHONPATH", str(project_dir))
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env["variant_dir_base"])
 
-# Add WAVES builders
+# Add WAVES builders and scanners
 env.Append(BUILDERS={
     "AbaqusJournal": waves.scons_extensions.abaqus_journal(program=env["abaqus"]),
     "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["abaqus"]),
@@ -94,6 +94,7 @@ env.Append(BUILDERS={
     "PythonScript": waves.scons_extensions.python_script(),
     "CondaEnvironment": waves.scons_extensions.conda_environment()
 })
+env.Append(SCANNERS=waves.scons_extensions.sphinx_scanner())
 
 # Dump the Conda environment as documentation of as-built target environment
 environment_target = env.CondaEnvironment(

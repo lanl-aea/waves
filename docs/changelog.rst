@@ -29,6 +29,8 @@ Enhancements
 ============
 - In the SLURM ``sbatch`` builder, use the ``sbatch`` native output redirection to capture the executing job's output
   instead of the minimal ``sbatch`` output (:issue:`528`, :merge:`644`). By `Kyle Brindley`_.
+- Use the draft Sphinx dependency scanner in the quickstart template modsim project (:issue:`529`, :merge:`645`). By
+  `Kyle Brindley`_.
 
 ******************
 0.7.1 (2023-08-28)

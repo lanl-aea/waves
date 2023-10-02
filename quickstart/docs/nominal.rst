@@ -25,7 +25,7 @@ Theory
 Results
 *******
 
-.. figure:: stress_strain_comparison.*
+.. figure:: stress_strain_comparison.png
    :align: center
 
    Stress-strain

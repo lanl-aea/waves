@@ -4,5 +4,5 @@
    References
    ##########
 
-.. bibliography:: references.bib waves.bib
+.. bibliography:: references.bib
    :style: unsrt

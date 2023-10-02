@@ -36,7 +36,7 @@ Theory
 Results
 *******
 
-.. figure:: mesh_convergence_stress.*
+.. figure:: mesh_convergence_stress.png
    :align: center
 
    Stress mesh convergence
