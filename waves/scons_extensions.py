@@ -1064,8 +1064,8 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
     program = sbatch_program if sbatch_program is not None else program
     if not post_action:
         post_action = []
-    action = [f"{_cd_action_prefix} {program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
-                 f"${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+    action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGET.filebase}}{_stdout_extension} " \
+              f"${{slurm_options}} --wrap \"${{slurm_job}}\""]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
