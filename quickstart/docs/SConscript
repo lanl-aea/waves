@@ -38,7 +38,6 @@ for target, source in root_files:
 # Explicit Sphinx documentation dependency list
 documentation_file_list = [
     "conf.py",
-    "environment.yml",
     "api.rst",
     "cli.rst",
     "changelog.rst",
