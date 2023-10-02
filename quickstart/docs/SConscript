@@ -47,12 +47,10 @@ documentation_file_list = [
     "index.rst",
     "mesh_convergence.rst",
     "nominal.rst",
-    "references.bib",
     "release_philosophy.rst",
     "simulation_summary.rst",
     "targets.txt",
     "user.rst",
-    "waves.bib",
     "waves_logo_brandmark_smaller.png",
     "zreferences.rst",
     "_static/custom.css"
