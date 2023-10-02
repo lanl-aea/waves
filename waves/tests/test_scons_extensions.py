@@ -675,8 +675,8 @@ sbatch_input = {
                          ids=sbatch_input.keys())
 def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait ${{slurm_options}} ' \
-                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGET.filebase}}.stdout ' \
+                       '${slurm_options} --wrap "${slurm_job}"'
 
     env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(program, post_action)})
     nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",

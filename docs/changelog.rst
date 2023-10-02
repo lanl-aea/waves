@@ -25,6 +25,11 @@ Internal Changes
 - Elevate PDF documentation build warnings to errors to match other sphinx build behaviors (:merge:`642`). By `Kyle
   Brindley`_.
 
+Enhancements
+============
+- In the SLURM ``sbatch`` builder, use the ``sbatch`` native output redirection to capture the executing job's output
+  instead of the minimal ``sbatch`` output (:issue:`528`, :merge:`644`). By `Kyle Brindley`_.
+
 ******************
 0.7.1 (2023-08-28)
 ******************
