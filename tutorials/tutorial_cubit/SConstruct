@@ -41,7 +41,7 @@ env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq20
 env["cubit"] = waves.scons_extensions.add_cubit(["/apps/Cubit-16.12/cubit", "cubit"], env)
 
 # Sierra requires a separate construction environment
-envSierra = waves.scons_extensions.shell_environment("module load sierra")
+envSierra = waves.scons_extensions.shell_environment("module use /projects/aea_compute/modulefiles && module load sierra")
 envSierra["sierra"] = waves.scons_extensions.add_program(["sierra"], envSierra)
 
 # Comments used in tutorial code snippets: marker-4
