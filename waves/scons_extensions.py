@@ -300,7 +300,8 @@ def _return_environment(command):
 def _cache_environment(command, cache=None, overwrite_cache=False, verbose=False):
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 
-    Function always writes to the cache file when provided _and_ the environment is successfully created.
+    If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
+    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
 
     .. warning::
 
@@ -338,7 +339,8 @@ def _cache_environment(command, cache=None, overwrite_cache=False, verbose=False
 def shell_environment(command, cache=None, overwrite_cache=False):
     """Return an SCons shell environment from a cached file or by running a shell command
 
-    Function always writes to the cache file when provided _and_ the environment is successfully created.
+    If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
+    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
 
     .. warning::
 
