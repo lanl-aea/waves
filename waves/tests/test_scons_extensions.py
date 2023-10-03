@@ -5,6 +5,7 @@ import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
 from unittest.mock import patch, call
+import subprocess
 
 import pytest
 import SCons.Node.FS
@@ -171,6 +172,13 @@ quote_spaces_in_path_input = {
                          ids=quote_spaces_in_path_input.keys())
 def test_quote_spaces_in_path(path, expected):
     assert scons_extensions._quote_spaces_in_path(path) == expected
+
+
+def test_return_environment():
+    mock_run_return = subprocess.CompletedProcess(args="dummy", returncode=0, stdout=b"thing1=a\x00thing2=b")
+    with patch("subprocess.run", return_value=mock_run_return):
+        environment_dictionary = scons_extensions._return_environment("dummy")
+    assert environment_dictionary == {"thing1": "a", "thing2": "b"}
 
 
 prepended_string = f"{_cd_action_prefix} "
