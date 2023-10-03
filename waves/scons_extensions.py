@@ -270,7 +270,7 @@ def add_cubit(names, env):
     return first_found_path
 
 
-def return_environment(command):
+def _return_environment(command):
     """Run a shell command and return the shell environment as a dictionary
 
     .. warning::
@@ -299,7 +299,7 @@ def return_environment(command):
     return environment
 
 
-def cache_environment(command, cache=None, overwrite_cache=False):
+def _cache_environment(command, cache=None, overwrite_cache=False):
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 
     Function always writes to the cache file when provided _and_ the environment is successfully created.
@@ -325,7 +325,7 @@ def cache_environment(command, cache=None, overwrite_cache=False):
             environment = yaml.safe_load(cache_file)
     else:
         print(f"Sourcing the shell environment with command '{command}' ...")
-        environment = return_environment(command)
+        environment = _return_environment(command)
 
     if cache:
         with open(cache, "w") as cache_file:
@@ -357,7 +357,7 @@ def shell_environment(command, cache=None, overwrite_cache=False):
     :returns: SCons shell environment
     :rtype: SCons.Environment.Environment
     """
-    shell_environment = cache_environment(command, cache=cache, overwrite_cache=overwrite_cache)
+    shell_environment = _cache_environment(command, cache=cache, overwrite_cache=overwrite_cache)
     return SCons.Environment.Environment(ENV=shell_environment)
 
 
