@@ -234,20 +234,22 @@ def test_cache_environment(cache, overwrite_cache, expected, file_exists):
 
 
 shell_environment = {
-    "no cache": (None, False),
-    "cache": ("dummy.yaml", False),
-    "cache overwrite": ("dummy.yaml", True),
+    "no cache": (None, False, {"thing1": "a"}),
+    "cache": ("dummy.yaml", False, {"thing1": "a"}),
+    "cache overwrite": ("dummy.yaml", True, {"thing1": "a"}),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("cache, overwrite_cache",
+@pytest.mark.parametrize("cache, overwrite_cache, expected",
                          shell_environment.values(),
                          ids=shell_environment.keys())
-def test_shell_environment(cache, overwrite_cache):
-    with patch("waves.scons_extensions._cache_environment") as cache_environment:
+def test_shell_environment(cache, overwrite_cache, expected):
+    with patch("waves.scons_extensions._cache_environment", return_value=expected) as cache_environment:
         env = scons_extensions.shell_environment("dummy")
         assert cache_environment.called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache)
+    # Check that the expected dictionary is a subset of the SCons construction environment
+    assert all(env["ENV"].get(key, None) == value for key, value in expected.items())
 
 prepended_string = f"{_cd_action_prefix} "
 post_action_list = {
