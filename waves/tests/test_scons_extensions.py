@@ -196,7 +196,17 @@ def test_return_environment(stdout, expected):
 
 
 cache_environment = {
-    "no cache": (None, False, {"thing1": "a"}, False)
+        # cache,       overwrite_cache, expected,        file_exists
+    "no cache":
+        (None,         False,           {"thing1": "a"}, False),
+    "cache exists":
+        ("dummy.yaml", False,           {"thing1": "a"}, True),
+    "cache doesn't exist":
+        ("dummy.yaml", False,           {"thing1": "a"}, False),
+    "overwrite cache":
+        ("dummy.yaml", True,            {"thing1": "a"}, True),
+    "don't overwrite cache":
+        ("dummy.yaml", False,           {"thing1": "a"}, False)
 }
 
 
@@ -210,7 +220,8 @@ def test_cache_environment(cache, overwrite_cache, expected, file_exists):
          patch("pathlib.Path.exists", return_value=file_exists), \
          patch("yaml.safe_dump") as yaml_dump, \
          patch("builtins.open"):
-        environment_dictionary = scons_extensions._cache_environment("dummy")
+        environment_dictionary = scons_extensions._cache_environment("dummy command", cache=cache,
+                                                                     overwrite_cache=overwrite_cache)
         if cache and file_exists and not overwrite_cache:
             yaml_load.assert_called_once()
             return_environment.assert_not_called()
