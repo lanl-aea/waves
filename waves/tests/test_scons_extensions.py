@@ -233,6 +233,22 @@ def test_cache_environment(cache, overwrite_cache, expected, file_exists):
     assert environment_dictionary == expected
 
 
+shell_environment = {
+    "no cache": (None, False),
+    "cache": ("dummy.yaml", False),
+    "cache overwrite": ("dummy.yaml", True),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("cache, overwrite_cache",
+                         shell_environment.values(),
+                         ids=shell_environment.keys())
+def test_shell_environment(cache, overwrite_cache):
+    with patch("waves.scons_extensions._cache_environment") as cache_environment:
+        env = scons_extensions.shell_environment("dummy")
+        assert cache_environment.called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache)
+
 prepended_string = f"{_cd_action_prefix} "
 post_action_list = {
     "list1": (["thing1"], [prepended_string + "thing1"]),
