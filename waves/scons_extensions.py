@@ -299,7 +299,7 @@ def _return_environment(command):
     return environment
 
 
-def _cache_environment(command, cache=None, overwrite_cache=False):
+def _cache_environment(command, cache=None, overwrite_cache=False, verbose=False):
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 
     Function always writes to the cache file when provided _and_ the environment is successfully created.
@@ -312,6 +312,7 @@ def _cache_environment(command, cache=None, overwrite_cache=False):
     :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
         formatted file regardless of extension.
     :param bool overwrite_cache: Ignore previously cached files if they exist.
+    :param bool verbose: Print SCons configuration-like action messages when True
 
     :returns: shell environment dictionary
     :rtype: dict
@@ -320,11 +321,13 @@ def _cache_environment(command, cache=None, overwrite_cache=False):
         cache = pathlib.Path(cache).resolve()
 
     if cache and cache.exists() and not overwrite_cache:
-        print(f"Sourcing the shell environment from cached file '{cache}' ...")
+        if verbose:
+            print(f"Sourcing the shell environment from cached file '{cache}' ...")
         with open(cache, "r") as cache_file:
             environment = yaml.safe_load(cache_file)
     else:
-        print(f"Sourcing the shell environment with command '{command}' ...")
+        if verbose:
+            print(f"Sourcing the shell environment with command '{command}' ...")
         environment = _return_environment(command)
 
     if cache:
@@ -357,7 +360,7 @@ def shell_environment(command, cache=None, overwrite_cache=False):
     :returns: SCons shell environment
     :rtype: SCons.Environment.Environment
     """
-    shell_environment = _cache_environment(command, cache=cache, overwrite_cache=overwrite_cache)
+    shell_environment = _cache_environment(command, cache=cache, overwrite_cache=overwrite_cache, verbose=True)
     return SCons.Environment.Environment(ENV=shell_environment)
 
 
