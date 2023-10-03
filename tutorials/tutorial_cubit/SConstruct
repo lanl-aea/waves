@@ -39,7 +39,10 @@ env = Environment(ENV=os.environ.copy(),
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
 env["cubit"] = waves.scons_extensions.add_cubit(["/apps/Cubit-16.12/cubit", "cubit"], env)
-env["sierra"] = waves.scons_extensions.add_program(["sierra"], env)
+
+# Sierra requires a separate construction environment
+envSierra = waves.scons_extensions.shell_environment("module load sierra")
+envSierra["sierra"] = waves.scons_extensions.add_program(["sierra"], envSierra)
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -70,8 +73,10 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 env.Append(BUILDERS={
     'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
-    'PythonScript': waves.scons_extensions.python_script(),
-    'Sierra': waves.scons_extensions.sierra(program=env['sierra'])
+    'PythonScript': waves.scons_extensions.python_script()
+})
+envSierra.Append(BUILDERS={
+    'Sierra': waves.scons_extensions.sierra(program=envSierra['sierra'])
 })
 
 # Comments used in tutorial code snippets: marker-6
@@ -83,7 +88,7 @@ workflow_configurations = [
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
-    SConscript(workflow, variant_dir=build_dir, exports='env', duplicate=False)
+    SConscript(workflow, variant_dir=build_dir, exports=["env", "envSierra"], duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
 
