@@ -23,18 +23,6 @@ References
 Environment
 ***********
 
-.. only:: aea
-
-   .. note::
-
-      This tutorial requires Sierra to be installed and available on ``PATH``. On AEA servers, you can make Sierra
-      available with the following command.
-
-      .. code-block::
-
-         module use /projects/aea_compute/modulefiles
-         module load sierra
-
 .. include:: tutorial_environment_activation.txt
 
 *******************
@@ -108,6 +96,10 @@ Sierra Input File(s)
 **********
 SConstruct
 **********
+
+Note that Sierra requires a separate construction environment from the launching Conda environment. This is because
+Sierra ships with a version of Python that conflicts with the launching Conda environment. You may need to update the
+Sierra activation shell command according to the instructions on your local system.
 
 .. include:: tutorial_cubit_SConstruct.txt
 
