@@ -195,6 +195,33 @@ def test_return_environment(stdout, expected):
     assert environment_dictionary == expected
 
 
+cache_environment = {
+    "no cache": (None, False, {"thing1": "a"}, False)
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("cache, overwrite_cache, expected, file_exists",
+                         cache_environment.values(),
+                         ids=cache_environment.keys())
+def test_cache_environment(cache, overwrite_cache, expected, file_exists):
+    with patch("waves.scons_extensions._return_environment", return_value=expected) as return_environment, \
+         patch("yaml.safe_load", return_value=expected) as yaml_load, \
+         patch("pathlib.Path.exists", return_value=file_exists), \
+         patch("yaml.safe_dump") as yaml_dump, \
+         patch("builtins.open"):
+        environment_dictionary = scons_extensions._cache_environment("dummy")
+        if cache and file_exists and not overwrite_cache:
+            yaml_load.assert_called_once()
+            return_environment.assert_not_called()
+        else:
+            yaml_load.assert_not_called()
+            return_environment.assert_called_once()
+        if cache:
+            yaml_dump.assert_called_once()
+    assert environment_dictionary == expected
+
+
 prepended_string = f"{_cd_action_prefix} "
 post_action_list = {
     "list1": (["thing1"], [prepended_string + "thing1"]),
