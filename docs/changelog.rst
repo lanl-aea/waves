@@ -11,6 +11,7 @@ Changelog
 New Features
 ============
 - Added draft Sphinx dependency scanner (:merge:`640`). By `Kyle Brindley`_.
+- Add an SCons environment constructor from shell commands (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -31,6 +32,7 @@ Enhancements
   instead of the minimal ``sbatch`` output (:issue:`528`, :merge:`644`). By `Kyle Brindley`_.
 - Use the draft Sphinx dependency scanner in the quickstart template modsim project (:issue:`529`, :merge:`645`). By
   `Kyle Brindley`_.
+- Update the Sierra execution environment solution (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
 
 ******************
 0.7.1 (2023-08-28)
