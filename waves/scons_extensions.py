@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
-import pathlib
 import re
+import yaml
+import pathlib
+import subprocess
 
 import SCons.Defaults
 import SCons.Builder
@@ -266,6 +268,97 @@ def add_cubit(names, env):
         env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
     return first_found_path
+
+
+def return_environment(command):
+    """Run a shell command and return the shell environment as a dictionary
+
+    .. warning::
+
+       Currently only supports bash shells
+
+    :param str command: the shell command to execute
+
+    :returns: shell environment dictionary
+    :rtype: dict
+    """
+    variables = subprocess.run(
+        ["bash", "-c", f"trap 'env -0' exit; {command} > /dev/null 2>&1"],
+        check=True,
+        capture_output=True
+    ).stdout.decode().split("\x00")
+
+    environment = dict()
+    for line in variables:
+        if line != "":
+            split = line.split("=", 1)
+            key = split[0]
+            value = split[1]
+            environment[key] = value
+
+    return environment
+
+
+def cache_environment(command, cache=None, overwrite_cache=False):
+    """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
+
+    Function always writes to the cache file when provided _and_ the environment is successfully created.
+
+    .. warning::
+
+       Currently only supports bash shells
+
+    :param str command: the shell command to execute
+    :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+        formatted file regardless of extension.
+    :param bool overwrite_cache: Ignore previously cached files if they exist.
+
+    :returns: shell environment dictionary
+    :rtype: dict
+    """
+    if cache:
+        cache = pathlib.Path(cache).resolve()
+
+    if cache and cache.exists() and not overwrite_cache:
+        print(f"Sourcing the shell environment from cached file '{cache}' ...")
+        with open(cache, "r") as cache_file:
+            environment = yaml.safe_load(cache_file)
+    else:
+        print(f"Sourcing the shell environment with command '{command}' ...")
+        environment = return_environment(command)
+
+    if cache:
+        with open(cache, "w") as cache_file:
+            yaml.safe_dump(environment, cache_file)
+
+    return environment
+
+
+def shell_environment(command, cache=None, overwrite_cache=False):
+    """Return an SCons shell environment from a cached file or by running a shell command
+
+    Function always writes to the cache file when provided _and_ the environment is successfully created.
+
+    .. warning::
+
+       Currently only supports bash shells
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves_asc
+       env = waves_asc.shell_environment("source my_script.sh")
+
+    :param str command: the shell command to execute
+    :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+        formatted file regardless of extension.
+    :param bool overwrite_cache: Ignore previously cached files if they exist.
+
+    :returns: SCons shell environment
+    :rtype: SCons.Environment.Environment
+    """
+    shell_environment = cache_environment(command, cache=cache, overwrite_cache=overwrite_cache)
+    return SCons.Environment.Environment(ENV=shell_environment)
 
 
 def _construct_post_action_list(post_action):
