@@ -291,9 +291,7 @@ def _return_environment(command):
     environment = dict()
     for line in variables:
         if line != "":
-            split = line.split("=", 1)
-            key = split[0]
-            value = split[1]
+            key, value = line.split("=", 1)
             environment[key] = value
 
     return environment
