@@ -27,6 +27,21 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ mkdir -p eabm_package/abaqus
+        $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
+        $ waves fetch tutorials/tutorial_01_geometry_SConstruct && mv tutorial_01_geometry_SConstruct SConstruct
+        $ waves fetch tutorials/eabm_package/abaqus/rectangle_geometry.py && mv rectangle_geometry.py eabm_package/abaqus/
+
+
 4. Download and copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh`` 
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
@@ -248,17 +263,6 @@ changes made in this tutorial.
      .. literalinclude:: tutorials_tutorial_02_partition_mesh_SConstruct
         :language: python
         :diff: tutorials_tutorial_01_geometry_SConstruct
-
-.. note::
-
-    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary 
-    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
-    
-    .. code-block:: bash
-
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch tutorials/tutorial_01_geometry_SConstruct && mv tutorial_01_geometry_SConstruct SConstruct 
 
 Note the `PYTHONPATH`_ modification by `SCons PrependENVPath`_. This modification to the project's construction
 environment will allow Abaqus Python to import the project module files used by ``rectangle_mesh.py``.

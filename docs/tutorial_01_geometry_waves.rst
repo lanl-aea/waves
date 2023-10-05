@@ -36,14 +36,14 @@ Directory Structure
 
 .. note::
 
-   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
-   files.
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
 
-   .. code-block::
+    .. code-block::
 
-      $ pwd
-      /home/roppenheimer/waves-tutorials
-      $ waves fetch tutorials/tutorial_00_SConstruct && mv tutorial_00_SConstruct SConstruct
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_00_SConstruct && mv tutorial_00_SConstruct SConstruct
 
 
 4. Within the ``waves-tutorials`` directory, create a new directory called
