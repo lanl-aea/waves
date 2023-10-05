@@ -30,7 +30,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch tutorials/tutorial_05_parameter_substitution && mv tutorial_05_parameter_substitution tutorial_06_include_files
+   $ waves fetch tutorials/tutorial_05_parameter_substitution && cp tutorial_05_parameter_substitution tutorial_06_include_files
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

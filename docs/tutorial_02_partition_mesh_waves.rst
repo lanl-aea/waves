@@ -49,7 +49,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch tutorials/tutorial_01_geometry && mv tutorial_01_geometry tutorial_02_partition_mesh
+   $ waves fetch tutorials/tutorial_01_geometry && cp tutorial_01_geometry tutorial_02_partition_mesh
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

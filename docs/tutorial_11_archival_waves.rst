@@ -44,7 +44,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch tutorials/tutorial_10_regression_testing && mv tutorial_10_regression_testing tutorial_11_archival
+   $ waves fetch tutorials/tutorial_10_regression_testing && cp tutorial_10_regression_testing tutorial_11_archival
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

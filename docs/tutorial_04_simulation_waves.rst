@@ -31,7 +31,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch tutorials/tutorial_03_solverprep && mv tutorial_03_solverprep tutorial_04_simulation
+   $ waves fetch tutorials/tutorial_03_solverprep && cp tutorial_03_solverprep tutorial_04_simulation
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
