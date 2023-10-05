@@ -20,9 +20,6 @@ before_script:
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
-  # TODO: Figure out how to load the sierra module without breaking the CI tests. Load sierra when fixed.
-  # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/515
-  #- module load sierra
   - module use ${PWD}/modulefiles
   # Prefer the CI environment and fall back to AEA environment(s)
   - project_environment='waves-env'
@@ -145,7 +142,8 @@ fast-test:
         coverage_format: cobertura
         path: coverage.xml
   tags:
-    - shell-aea
+    # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
+    - sstbigbird-shell-aea
 
 conda-build:
   stage: build
@@ -166,14 +164,15 @@ conda-build:
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - croot="/scratch/$USER/$(basename $PWD)/${conda_artifacts_directory}"
-    - VERSION=$(python -m setuptools_scm) mamba build recipe-internal --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
-    - mamba build purge --croot ${croot}
+    - VERSION=$(python -m setuptools_scm) conda build recipe-internal --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
+    - conda build purge --croot ${croot}
   artifacts:
     expire_in: '2 hrs'
     paths:
       - conda-bld/noarch/waves-*-*.tar.bz2
   tags:
-    - shell-aea
+    # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
+    - sstbigbird-shell-aea
 
 deploy:
   stage: deploy

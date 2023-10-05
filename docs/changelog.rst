@@ -5,13 +5,44 @@ Changelog
 #########
 
 ******************
-0.7.1 (unreleased)
+0.7.2 (unreleased)
+******************
+
+New Features
+============
+- Added draft Sphinx dependency scanner (:merge:`640`). By `Kyle Brindley`_.
+- Add an SCons environment constructor from shell commands (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Fixed broken AEA Compute Environment documentation links (:issue:`527`, :merge:`643`). By `Sergio Cordova`_.
+- Updated tutorials to use ``waves fetch`` to facilitate starting from any tutorial (:issue:`466`, :merge:`631`).
+  By `Sergio Cordova`_.
+
+Internal Changes
+================
+- Trial update to run the system test suite in parallel. It's possible the system tests are not yet thread safe (using a
+  common ``.sconsign.dblite`` file but separate build directories), but this wasn't observed in local testing. It's also
+  possible that Abaqus token availability will periodically timeout job submissions. If this produces many false negative
+  tests requiring manual intervention, revert commit ``d2e3c9d1``  (:issue:`519`, :merge:`641`). By `Kyle Brindley`_.
+- Elevate PDF documentation build warnings to errors to match other sphinx build behaviors (:merge:`642`). By `Kyle
+  Brindley`_.
+
+Enhancements
+============
+- In the SLURM ``sbatch`` builder, use the ``sbatch`` native output redirection to capture the executing job's output
+  instead of the minimal ``sbatch`` output (:issue:`528`, :merge:`644`). By `Kyle Brindley`_.
+- Use the draft Sphinx dependency scanner in the quickstart template modsim project (:issue:`529`, :merge:`645`). By
+  `Kyle Brindley`_.
+- Update the Sierra execution environment solution (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
+
+******************
+0.7.1 (2023-08-28)
 ******************
 
 Bug fixes
 =========
 - Fix odb_extract to ensure 'mode=csv' when odbreport is called. (:issue:`517`, :merge:`630`). By `Prabhu Khalsa`_.
-
 
 Breaking changes
 ================
@@ -39,8 +70,7 @@ Documentation
 - Add the WAVES primarymark image to the PDF title page (:merge:`620`). By `Kyle Brindley`_.
 - Update the Cubit tutorial to demonstrate a side-by-side comparison of Abaqus and Sierra, where the Cubit tasks are
   re-used for both solver workflows (:issue:`513`, :merge:`623`). By `Kyle Brindley`_.
-- Updated tutorials to use ``waves fetch`` to facilitate starting in an arbritraty location 
-  (:issue:`466`, :merge:`631`). By `Sergio Cordova`_.
+- Simplified quickstart ``SConscript`` file (:issue:`453`, :merge:`619`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
@@ -51,6 +81,14 @@ Internal Changes
 - Update to use Abaqus 2023 (:issue:`509`, :merge:`617`). By `Kyle Brindley`_.
 - More complete clean behavior for the documentation targets to reduce dev/main source conflicts during Gitlab-Pages
   builds (:issue:`516`, :merge:`625`, :merge:`626`). By `Kyle Brindley`_.
+- Update the expected Cubit version from 16.04 to 16.12 (:issue:`510`, :merge:`634`). By `Sergio Cordova`_.
+- Add the ``--build-dir`` command line option to the quickstart tutorials to enable the system tests to run in
+  non-default, temporary build directories (:issue:`518`, :merge:`635`). By `Kyle Brindley`_.
+- Drive the system tests (tutorials) from pytest during conda builds (:merge:`629`). By `Kyle Brindley`_.
+- Upgrade to Anaocnda 2023 on Gitlab-CI environment (:issue:`520`, :merge:`636`). By `Sergio Cordova`_.
+- Return to the conda build command (:merge:`637`). By `Kyle Brindley`_.
+- Handle parameter study script input outside of argparse (:issue:`72`, :merge:`633`). By `Sergio Cordova`_.
+- Removed debug argument from CLI (:issue:`76`, :merge:`632`). By `Sergio Cordova`_.
 
 *******************
 0.6.21 (2023-07-21)

@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
-import pathlib
 import re
+import yaml
+import pathlib
+import subprocess
 
 import SCons.Defaults
 import SCons.Builder
@@ -266,6 +268,100 @@ def add_cubit(names, env):
         env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
     return first_found_path
+
+
+def _return_environment(command):
+    """Run a shell command and return the shell environment as a dictionary
+
+    .. warning::
+
+       Currently only supports bash shells
+
+    :param str command: the shell command to execute
+
+    :returns: shell environment dictionary
+    :rtype: dict
+    """
+    variables = subprocess.run(
+        ["bash", "-c", f"trap 'env -0' exit; {command} > /dev/null 2>&1"],
+        check=True,
+        capture_output=True
+    ).stdout.decode().split("\x00")
+
+    environment = dict()
+    for line in variables:
+        if line != "":
+            key, value = line.split("=", 1)
+            environment[key] = value
+
+    return environment
+
+
+def _cache_environment(command, cache=None, overwrite_cache=False, verbose=False):
+    """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
+
+    If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
+    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
+
+    .. warning::
+
+       Currently only supports bash shells
+
+    :param str command: the shell command to execute
+    :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+        formatted file regardless of extension.
+    :param bool overwrite_cache: Ignore previously cached files if they exist.
+    :param bool verbose: Print SCons configuration-like action messages when True
+
+    :returns: shell environment dictionary
+    :rtype: dict
+    """
+    if cache:
+        cache = pathlib.Path(cache).resolve()
+
+    if cache and cache.exists() and not overwrite_cache:
+        if verbose:
+            print(f"Sourcing the shell environment from cached file '{cache}' ...")
+        with open(cache, "r") as cache_file:
+            environment = yaml.safe_load(cache_file)
+    else:
+        if verbose:
+            print(f"Sourcing the shell environment with command '{command}' ...")
+        environment = _return_environment(command)
+
+    if cache:
+        with open(cache, "w") as cache_file:
+            yaml.safe_dump(environment, cache_file)
+
+    return environment
+
+
+def shell_environment(command, cache=None, overwrite_cache=False):
+    """Return an SCons shell environment from a cached file or by running a shell command
+
+    If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
+    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
+
+    .. warning::
+
+       Currently only supports bash shells
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves_asc
+       env = waves_asc.shell_environment("source my_script.sh")
+
+    :param str command: the shell command to execute
+    :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+        formatted file regardless of extension.
+    :param bool overwrite_cache: Ignore previously cached files if they exist.
+
+    :returns: SCons shell environment
+    :rtype: SCons.Environment.Environment
+    """
+    shell_environment = _cache_environment(command, cache=cache, overwrite_cache=overwrite_cache, verbose=True)
+    return SCons.Environment.Environment(ENV=shell_environment)
 
 
 def _construct_post_action_list(post_action):
@@ -1038,7 +1134,7 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
     .. code-block::
        :caption: SLURM sbatch builder action
 
-       cd ${TARGET.dir.abspath} && sbatch --wait ${slurm_options} --wrap ${slurm_job} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGET.filebase}.stdout ${slurm_options} --wrap ${slurm_job}
 
     .. code-block::
        :caption: SConstruct
@@ -1064,8 +1160,8 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
     program = sbatch_program if sbatch_program is not None else program
     if not post_action:
         post_action = []
-    action = [f"{_cd_action_prefix} {program} --wait ${{slurm_options}} --wrap \"${{slurm_job}}\" > " \
-                 f"${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+    action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGET.filebase}}{_stdout_extension} " \
+              f"${{slurm_options}} --wrap \"${{slurm_job}}\""]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
@@ -1083,6 +1179,23 @@ def abaqus_input_scanner():
     """
     flags = re.IGNORECASE
     return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'], flags)
+
+
+def sphinx_scanner():
+    """SCons scanner that searches for directives
+
+    * ``.. include::``
+    * ``.. literalinclude::``
+    * ``.. image::``
+    * ``.. figure::``
+    * ``.. bibliography::``
+
+    inside ``.rst`` and ``.txt`` files
+
+    :return: Abaqus input file dependency Scanner
+    :rtype: SCons.Scanner.Scanner
+    """
+    return _custom_scanner(r'^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$', ['.rst', '.txt'])
 
 
 def _custom_scanner(pattern, suffixes, flags=None):

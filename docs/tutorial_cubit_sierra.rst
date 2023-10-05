@@ -25,15 +25,10 @@ Environment
 
 .. only:: aea
 
-   .. note::
+   .. warning::
 
-      This tutorial requires Sierra to be installed and available on ``PATH``. On AEA servers, you can make Sierra
-      available with the following command.
-
-      .. code-block::
-
-         module use /projects/aea_compute/modulefiles
-         module load sierra
+      On AEA servers, this tutorial only works with RHEL8. At the time of this writing, that means ``sstbigbird`` and
+      not ``sstelmo``.
 
 .. include:: tutorial_environment_activation.txt
 
@@ -109,6 +104,10 @@ Sierra Input File(s)
 SConstruct
 **********
 
+Note that Sierra requires a separate construction environment from the launching Conda environment. This is because
+Sierra ships with a version of Python that conflicts with the launching Conda environment. You may need to update the
+Sierra activation shell command according to the instructions on your local system.
+
 .. include:: tutorial_cubit_SConstruct.txt
 
 *************
@@ -125,7 +124,7 @@ Build Targets
    scons: Reading SConscript files ...
    Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
    Checking whether abq2023 program exists...no
-   Checking whether /apps/Cubit-16.04/cubit program exists.../apps/Cubit-16.04/cubit
+   Checking whether /apps/Cubit-16.12/cubit program exists.../apps/Cubit-16.12/cubit
    Checking whether cubit program exists...no
    Checking whether sierra program exists.../projects/sierra/sierra5121/install/tools/sntools/engine/sierra
    scons: done reading SConscript files.

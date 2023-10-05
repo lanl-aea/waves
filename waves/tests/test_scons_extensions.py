@@ -5,6 +5,7 @@ import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
 from unittest.mock import patch, call
+import subprocess
 
 import pytest
 import SCons.Node.FS
@@ -172,6 +173,83 @@ quote_spaces_in_path_input = {
 def test_quote_spaces_in_path(path, expected):
     assert scons_extensions._quote_spaces_in_path(path) == expected
 
+
+return_environment = {
+    "no newlines": (b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}),
+    "newlines": (b"thing1=a\nnewline\x00thing2=b", {"thing1": "a\nnewline", "thing2": "b"})
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("stdout, expected",
+                         return_environment.values(),
+                         ids=return_environment.keys())
+def test_return_environment(stdout, expected):
+    """
+    :param bytes stdout: byte string with null delimited shell environment variables
+    :param dict expected: expected dictionary output containing string key:value pairs and preserving newlines
+    """
+    mock_run_return = subprocess.CompletedProcess(args="dummy", returncode=0, stdout=stdout)
+    with patch("subprocess.run", return_value=mock_run_return):
+        environment_dictionary = scons_extensions._return_environment("dummy")
+    assert environment_dictionary == expected
+
+
+cache_environment = {
+        # cache,       overwrite_cache, expected,        file_exists
+    "no cache":
+        (None,         False,           {"thing1": "a"}, False),
+    "cache exists":
+        ("dummy.yaml", False,           {"thing1": "a"}, True),
+    "cache doesn't exist":
+        ("dummy.yaml", False,           {"thing1": "a"}, False),
+    "overwrite cache":
+        ("dummy.yaml", True,            {"thing1": "a"}, True),
+    "don't overwrite cache":
+        ("dummy.yaml", False,           {"thing1": "a"}, False)
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("cache, overwrite_cache, expected, file_exists",
+                         cache_environment.values(),
+                         ids=cache_environment.keys())
+def test_cache_environment(cache, overwrite_cache, expected, file_exists):
+    with patch("waves.scons_extensions._return_environment", return_value=expected) as return_environment, \
+         patch("yaml.safe_load", return_value=expected) as yaml_load, \
+         patch("pathlib.Path.exists", return_value=file_exists), \
+         patch("yaml.safe_dump") as yaml_dump, \
+         patch("builtins.open"):
+        environment_dictionary = scons_extensions._cache_environment("dummy command", cache=cache,
+                                                                     overwrite_cache=overwrite_cache)
+        if cache and file_exists and not overwrite_cache:
+            yaml_load.assert_called_once()
+            return_environment.assert_not_called()
+        else:
+            yaml_load.assert_not_called()
+            return_environment.assert_called_once()
+        if cache:
+            yaml_dump.assert_called_once()
+    assert environment_dictionary == expected
+
+
+shell_environment = {
+    "no cache": (None, False, {"thing1": "a"}),
+    "cache": ("dummy.yaml", False, {"thing1": "a"}),
+    "cache overwrite": ("dummy.yaml", True, {"thing1": "a"}),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("cache, overwrite_cache, expected",
+                         shell_environment.values(),
+                         ids=shell_environment.keys())
+def test_shell_environment(cache, overwrite_cache, expected):
+    with patch("waves.scons_extensions._cache_environment", return_value=expected) as cache_environment:
+        env = scons_extensions.shell_environment("dummy")
+        assert cache_environment.called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache)
+    # Check that the expected dictionary is a subset of the SCons construction environment
+    assert all(env["ENV"].get(key, None) == value for key, value in expected.items())
 
 prepended_string = f"{_cd_action_prefix} "
 post_action_list = {
@@ -675,8 +753,8 @@ sbatch_input = {
                          ids=sbatch_input.keys())
 def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait ${{slurm_options}} ' \
-                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGET.filebase}}.stdout ' \
+                       '${slurm_options} --wrap "${slurm_job}"'
 
     env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(program, post_action)})
     nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
@@ -725,6 +803,35 @@ def test_abaqus_input_scanner(content, expected_dependencies):
     mock_file.get_text_contents.return_value = content
     env = SCons.Environment.Environment()
     scanner = scons_extensions.abaqus_input_scanner()
+    dependencies = scanner(mock_file, env)
+    found_files = [file.name for file in dependencies]
+    assert set(found_files) == set(expected_dependencies)
+
+
+sphinx_scanner_input = {
+     # Test name, content, expected_dependencies
+    'include directive': ('.. include:: dummy.txt', ['dummy.txt']),
+    'literalinclude directive': ('.. literalinclude:: dummy.txt', ['dummy.txt']),
+    'image directive': ( '.. image:: dummy.png',  ['dummy.png']),
+    'figure directive': ( '.. figure:: dummy.png',  ['dummy.png']),
+    'bibliography directive': ( '.. figure:: dummy.bib', ['dummy.bib']),
+    'no match': ('.. notsuppored:: notsupported.txt', []),
+    'indented': ('.. only:: html\n\n   .. include:: dummy.txt', ['dummy.txt']),
+    'one match multiline': ('.. include:: dummy.txt\n.. notsuppored:: notsupported.txt', ['dummy.txt']),
+    'three match multiline': ('.. include:: dummy.txt\n.. figure:: dummy.png\n.. bibliography:: dummy.bib',
+                              ['dummy.txt', 'dummy.png', 'dummy.bib'])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("content, expected_dependencies",
+                         sphinx_scanner_input.values(),
+                         ids=sphinx_scanner_input.keys())
+def test_sphinx_scanner(content, expected_dependencies):
+    mock_file = unittest.mock.Mock()
+    mock_file.get_text_contents.return_value = content
+    env = SCons.Environment.Environment()
+    scanner = scons_extensions.sphinx_scanner()
     dependencies = scanner(mock_file, env)
     found_files = [file.name for file in dependencies]
     assert set(found_files) == set(expected_dependencies)
