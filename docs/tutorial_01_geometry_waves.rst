@@ -34,6 +34,18 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
+.. note::
+
+   If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+   files.
+
+   .. code-block::
+
+      $ pwd
+      /home/roppenheimer/waves-tutorials
+      $ waves fetch tutorials/tutorial_00_SConstruct && mv tutorial_00_SConstruct SConstruct
+
+
 4. Within the ``waves-tutorials`` directory, create a new directory called
    ``eabm_package/abaqus``. For example, in a bash shell:
 
@@ -330,17 +342,6 @@ but that may change in production EABMs.
 ***************
 SConstruct File
 ***************
-
-.. note::
-
-   If you skipped :ref:`tutorialsconstruct`, run the following commands to create a copy of the ``SConstruct`` file
-   introduced in that tutorial.
-
-   .. code-block::
-
-      $ pwd
-      /home/roppenheimer/waves-tutorials
-      $ waves fetch tutorials/tutorial_00_SConstruct && mv tutorial_00_SConstruct SConstruct
 
 In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias
 matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to
