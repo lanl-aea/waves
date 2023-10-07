@@ -86,6 +86,39 @@ def ssh_builder_actions(builder, server, remote_directory):
     * Returns the entire ``remote_directory`` to the original builder ``${TARGET.dir.abspath}`` with ``rysnc``.
           ``rsync`` must exist on the local system.
 
+    .. code-block::
+       :caption: my_package.py
+
+       import waves
+
+       def print_builder_actions(builder):
+           for action in builder.action.list:
+               print(action.cmd_list)
+
+       def cat(program="cat"):
+           return SCons.Builder.Builder(action=
+               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo 'Hello World!'"]
+           )
+
+       build_cat = cat()
+
+       ssh_build_cat = ssh_builder_actions(
+           cat(), server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
+       )
+
+    .. code-block::
+
+       >>> import my_package
+       >>> my_package.print_builder_actions(my_package.build_cat)
+       cat ${SOURCES.abspath} | tee ${TARGETS.file}
+       Hello World!
+       >>> my_package.print_builder_actions(my_package.ssh_build_cat)
+       ssh myserver.mydomain.com "mkdir -p /scratch/roppeheimer/ssh_wrapper"
+       rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppeheimer/ssh_wrapper
+       ssh myserver.mydomain.com "cd /scratch/roppeheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}"
+       ssh myserver.mydomain.com "cd /scratch/roppeheimer/ssh_wrapper && echo 'Hello World!'"
+       rsync -rltpv myserver.mydomain.com:/scratch/roppeheimer/ssh_wrapper/ ${TARGET.dir.abspath}
+
     :param SCons.Builder.Builder builder: The SCons builder to modify
     :param str server: remote server where the original builder's actions should be executed
     :param str remote_directory: absolute or relative path where the original builder's actions should be executed
