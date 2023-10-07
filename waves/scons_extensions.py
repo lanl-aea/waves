@@ -101,7 +101,7 @@ def ssh_builder_actions(builder, server, remote_directory):
 
        def cat(program="cat"):
            return SCons.Builder.Builder(action=
-               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\"]
+               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\""]
            )
 
        build_cat = cat()
