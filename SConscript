@@ -29,8 +29,8 @@ pytest_node = env.Command(
     source=waves_source_list,
     # TODO: Revert to a single, simple "pytest_command" when the race conditions on test_program_operations are fixed
     action=[
-        "${pytest_command} -m 'not systemtest and not programoperations' ${coverage}",
-        "${pytest_command} -m 'not systemtest and programoperations' ${program_operations_coverage}",
+        "${pytest_command} -m 'not programoperations and not systemtest' ${coverage}",
+        "${pytest_command} -m 'programoperations' ${program_operations_coverage}",
         "${coverage_command}"
     ],
     pytest_command=pytest_command,
