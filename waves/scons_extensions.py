@@ -75,7 +75,7 @@ def ssh_builder_actions(builder, server, remote_directory):
         action_list = [action.cmd_list]
     else:
         action_list = [command.cmd_list for command in action.list]
-    action_list = [action.replace("cd ${TARGET.dir.abspath}", "cd {remote_directory}") for action in action_list]
+    action_list = [action.replace("cd ${TARGET.dir.abspath}", f"cd {remote_directory}") for action in action_list]
     action_list = [f"ssh {server} \"{action}\"" for action in action_list]
 
     ssh_actions = [
