@@ -75,7 +75,6 @@ workflow.extend(waves.scons_extensions.copy_substitute(abaqus_source_list))
 # Comment used in tutorial code snippets: marker-4
 
 # Abaqus Solve
-slurm_job=f"{env['abaqus']} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no"
 solve_source_list = [source_file.name.rstrip('.in') for source_file in abaqus_source_list]
 solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).stem
@@ -87,8 +86,8 @@ datacheck.extend(env.AbaqusSolver(
     target=[f"{datacheck_name}.{suffix}" for suffix in common_suffixes + datacheck_suffixes],
     source=solve_source_list,
     job_name=datacheck_name,
-    abaqus_options=f'{abaqus_options} -datacheck',
-    slurm_job=slurm_job))
+    abaqus_options=f'{abaqus_options} -datacheck'
+))
 
 # Comment used in tutorial code snippets: marker-5
 
@@ -97,8 +96,8 @@ workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.{suffix}" for suffix in common_suffixes + abaqus_implicit_extensions],
     source=solve_source_list,
     job_name=job_name,
-    abaqus_options=abaqus_options,
-    slurm_job=slurm_job))
+    abaqus_options=abaqus_options
+))
 
 # Comment used in tutorial code snippets: marker-6
 
