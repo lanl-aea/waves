@@ -68,7 +68,13 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 # Add custom builders
 env.Append(BUILDERS={
     'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
-    'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus'])})
+    'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
+    'SSHAbaqusSolver': waves.scons_extensions.ssh_builder_actions(
+        waves.scons_extensions.abaqus_solver(program=env['abaqus']),
+        server="sstbigbird.lanl.gov",
+        remote_directory="/scratch/$${USER}/WAVES-TUTORIAL/tutorial_remote_execution"
+    )
+})
 
 # Comments used in tutorial code snippets: marker-6
 
