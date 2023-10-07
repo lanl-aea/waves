@@ -59,6 +59,34 @@ def test_catenate_actions():
     assert builder.action.cmd_list == "bash -c \"dog $SOURCE > $TARGET\""
 
 
+def test_ssh_builder_actions():
+    def cat(program="cat"):
+        return SCons.Builder.Builder(action=
+            [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\""]
+        )
+
+    build_cat = cat()
+    build_cat_action_list = [action.cmd_list for action in build_cat.action.list]
+    expected = [
+       "cat ${SOURCES.abspath} | tee ${TARGETS.file}",
+       'echo "Hello World!"'
+    ]
+    assert build_cat_action_list == expected
+
+    ssh_build_cat = scons_extensions.ssh_builder_actions(
+        cat(), remote_server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
+    )
+    ssh_build_cat_action_list = [action.cmd_list for action in ssh_build_cat.action.list]
+    expected = [
+       'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
+       "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
+       "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'",
+       "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo \"Hello World!\"'",
+       "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}",
+    ]
+    assert ssh_build_cat_action_list == expected
+
+
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
     """Verify the expected action string against a builder's target nodes
 

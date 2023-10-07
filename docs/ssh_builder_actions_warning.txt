@@ -1,0 +1,6 @@
+.. warning::
+
+   The :meth:`waves.scons_extensions.ssh_builder_actions` is a work-in-progress solution with some assumptions specific
+   to the action construction used by |PROJECT|. It _should_ work for most basic builders, but adapting this function to
+   users' custom builders will probably require some advanced SCons knowledge and inspection of the
+   :meth:`waves.scons_extensions_ssh_builder_actions` implementation.

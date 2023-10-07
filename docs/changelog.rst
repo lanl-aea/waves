@@ -15,11 +15,13 @@ New Features
 - Add wrapper function and decorator to catenate builder actions and wrap with an outer program (:merge:`647`,
   :merge:`648`). By `Kyle Brindley`_.
 - Abaqus solver, Abaqus journal, and Sierra SLURM Sbatch builders (:merge:`647`, :merge:`648`). By `Kyle Brindley`_.
+- Draft SSH builder wrapper (:merge:`649`). By `Kyle Brindley`_.
 
 Documentation
 =============
 - Fixed broken AEA Compute Environment documentation links (:issue:`527`, :merge:`643`). By `Sergio Cordova`_.
 - Use the Abaqus solver SLURM Sbatch builder in the associated tutorial (:merge:`647`). By `Kyle Brindley`_.
+- Use the draft SSH builder wrapper in the remote execution tutorial (:merge:`649`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

@@ -48,7 +48,7 @@ def catenate_builder_actions(builder, program="", options=""):
 
 
 def catenate_actions(**outer_kwargs):
-    """Decorator factor to apply the ``catenate_builder_actions`` to a function that returns an SCons Builder.
+    """Decorator factory to apply the ``catenate_builder_actions`` to a function that returns an SCons Builder.
 
     Accepts the same keyword arguments as the :meth:`waves.scons_extensions.catenate_builder_actions`
 
@@ -67,6 +67,103 @@ def catenate_actions(**outer_kwargs):
             return catenate_builder_actions(function(*args, **kwargs), **outer_kwargs)
         return wrapper
     return intermediate_decorator
+
+
+def ssh_builder_actions(builder, remote_server, remote_directory):
+    """Wrap a builder's action list with remote copy operations and ssh commands
+
+    .. include:: ssh_builder_actions_warning.txt
+
+    Design assumptions
+
+    * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``remote_server``.
+    * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
+      system.
+    * Replaces instances of ``cd ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
+      actions.
+    * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
+      actions.
+    * Prefixes all original builder actions with ``cd ${remote_directory} &&``.
+    * All original builder actions are wrapped in single quotes as ``'{original action}'`` to preserve the ``&&`` as
+      part of the ``remote_server`` command. Shell variables, e.g. ``$USER``, will not be expanded on the
+      ``remote_server``. If quotes are included in the original builder actions, they should be double quotes.
+    * Returns the entire ``remote_directory`` to the original builder ``${TARGET.dir.abspath}`` with ``rysnc``.
+      ``rsync`` must exist on the local system.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={
+           'SSHAbaqusSolver': waves.scons_extensions.ssh_builder_actions(
+               waves.scons_extensions.abaqus_solver(program=env['abaqus']),
+               remote_server="sstbigbird.lanl.gov",
+               remote_directory="/scratch/$${USER}/WAVES-TUTORIAL/tutorial_remote_execution"
+           )
+       })
+       env.SSHAbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
+
+    .. code-block::
+       :caption: my_package.py
+
+       import SCons.Builder
+       import waves
+
+       def print_builder_actions(builder):
+           for action in builder.action.list:
+               print(action.cmd_list)
+
+       def cat(program="cat"):
+           return SCons.Builder.Builder(action=
+               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \\"Hello World!\\""]
+           )
+
+       build_cat = cat()
+
+       ssh_build_cat = waves.scons_extensions.ssh_builder_actions(
+           cat(), remote_server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
+       )
+
+    .. code-block::
+
+       >>> import my_package
+       >>> my_package.print_builder_actions(my_package.build_cat)
+       cat ${SOURCES.abspath} | tee ${TARGETS.file}
+       echo "Hello World!"
+       >>> my_package.print_builder_actions(my_package.ssh_build_cat)
+       ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"
+       rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper
+       ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'
+       ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo "Hello World!"'
+       rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}
+
+    :param SCons.Builder.Builder builder: The SCons builder to modify
+    :param str remote_server: remote server where the original builder's actions should be executed
+    :param str remote_directory: absolute or relative path where the original builder's actions should be executed
+    """
+    action = builder.action
+    if isinstance(action, SCons.Action.CommandAction):
+        action_list = [action.cmd_list]
+    else:
+        action_list = [command.cmd_list for command in action.list]
+    cd_prefix = f"cd {remote_directory} &&"
+    action_list = [action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix) for action in action_list]
+    action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
+    action_list = [action.replace("SOURCES.abspath", "SOURCES.file") for action in action_list]
+    action_list = [f"{cd_prefix} {action}" if not action.startswith(cd_prefix) else action for action in action_list]
+    action_list = [f"ssh {remote_server} '{action}'" for action in action_list]
+
+    ssh_actions = [
+        f"ssh {remote_server} \"mkdir -p {remote_directory}\"",
+        f"rsync -rlptv ${{SOURCES.abspath}} {remote_server}:{remote_directory}"
+    ]
+    ssh_actions.extend(action_list)
+    ssh_actions.append(f"rsync -rltpv {remote_server}:{remote_directory}/ ${{TARGET.dir.abspath}}")
+    ssh_actions = [SCons.Action.CommandAction(action) for action in ssh_actions]
+
+    builder.action = SCons.Action.ListAction(ssh_actions)
+    return builder
 
 
 # TODO: Remove the **kwargs check and warning for v1.0.0 release
@@ -394,8 +491,8 @@ def shell_environment(command, cache=None, overwrite_cache=False):
     .. code-block::
        :caption: SConstruct
 
-       import waves_asc
-       env = waves_asc.shell_environment("source my_script.sh")
+       import waves
+       env = waves.shell_environment("source my_script.sh")
 
     :param str command: the shell command to execute
     :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
@@ -534,7 +631,7 @@ def abaqus_journal(program="abaqus", post_action=None, **kwargs):
        import waves
        env = Environment()
        env.Append(BUILDERS={"AbaqusJournal": waves.scons_extensions.abaqus_journal()})
-       AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
+       env.AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
     :param str program: An absolute path or basename string for the abaqus program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
@@ -669,8 +766,8 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
            "AbaqusOld": waves.scons_extensions.abaqus_solver(program="abq2019"),
            "AbaqusPost": waves.scons_extensions.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")
        })
-       AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
-       AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
+       env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
+       env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
 
     .. code-block::
        :caption: Abaqus journal builder action
@@ -784,7 +881,7 @@ def sierra(program="sierra", application="adagio", post_action=None):
        env.Append(BUILDERS={
            "Sierra": waves.scons_extensions.sierra(),
        })
-       Sierra(target=["output.e"], source=["input.i"])
+       env.Sierra(target=["output.e"], source=["input.i"])
 
     .. code-block::
        :caption: Sierra builder action
@@ -920,7 +1017,7 @@ def python_script(post_action=None):
        import waves
        env = Environment()
        env.Append(BUILDERS={"PythonScript": waves.scons_extensions.python_script()})
-       PythonScript(target=["my_output.stdout"], source=["my_script.py"], python_options="", script_options="")
+       env.PythonScript(target=["my_output.stdout"], source=["my_script.py"], python_options="", script_options="")
 
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
@@ -1137,7 +1234,7 @@ def abaqus_extract(program="abaqus", **kwargs):
        import waves
        env = Environment()
        env.Append(BUILDERS={"AbaqusExtract": waves.scons_extensions.abaqus_extract()})
-       AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
+       env.AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
     :param str program: An absolute path or basename string for the abaqus program
 
@@ -1214,7 +1311,7 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
        import waves
        env = Environment()
        env.Append(BUILDERS={"SlurmSbatch": waves.scons_extensions.sbatch()})
-       SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="echo $SOURCE > $TARGET")
+       env.SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="echo $SOURCE > $TARGET")
 
     :param str program: An absolute path or basename string for the sbatch program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
