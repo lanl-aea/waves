@@ -15,13 +15,14 @@ pytest_command = "PYTHONDONTWRITEBYTECODE=1 pytest --junitxml=${TARGETS[0].name}
 target = ["test_results.xml"]
 
 # TODO: Remove the "program_operations" logic when the race conditions on test_program_operations are fixed
-coverate = ""
+coverage = ""
 program_operations_coverage = ""
+coverage_command = ""
 if env["coverage_report"]:
-    coverage = " --cov --cov-report term --cov-report xml:${TARGETS[1].name}"
+    coverage = "--cov"
+    program_operations_coverage = "--cov --cov-append"
     target.append("coverage.xml")
-    program_operations_coverage = " --cov --cov-report term --cov-report xml:${TARGETS[2].name}"
-    target.append("coverage_program_operations.xml")
+    coverage_command = "coverage xml"
 
 pytest_node = env.Command(
     target=target,
@@ -29,7 +30,8 @@ pytest_node = env.Command(
     # TODO: Revert to a single, simple "pytest_command" when the race conditions on test_program_operations are fixed
     action=[
         "${pytest_command} -m 'not systemtest and not programoperations' ${coverage}",
-        "${pytest_command} -m 'not systemtest and programoperations' ${program_operations_coverage}"
+        "${pytest_command} -m 'not systemtest and programoperations' ${program_operations_coverage}",
+        "${coverage_command}"
     ],
     pytest_command=pytest_command,
     coverage=coverage,
