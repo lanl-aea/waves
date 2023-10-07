@@ -528,6 +528,14 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
+def test_sbatch_sierra():
+    expected = 'sbatch --wait --wrap "cd ${TARGET.dir.abspath} && sierra adagio --version > ${TARGET.filebase}.env ' \
+        '&& cd ${TARGET.dir.abspath} && sierra ${sierra_options} adagio ${application_options} -i ${SOURCE.file} > ' \
+        '${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_sierra()
+    assert builder.action.cmd_list == expected
+
+
 @pytest.mark.unittest
 @pytest.mark.parametrize("source_list, expected_list",
                          copy_substitute_input.values(),

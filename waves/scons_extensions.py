@@ -815,6 +815,15 @@ def sierra(program="sierra", application="adagio", post_action=None):
     return sierra_builder
 
 
+@catenate_actions(program="sbatch", options="--wait --wrap")
+def sbatch_sierra(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
+
+    Catenate the actions and submit with SLURM sbatch
+    """
+    return sierra(*args, **kwargs)
+
+
 def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environment.Environment(),
                     build_subdirectory=".", symlink=False):
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
