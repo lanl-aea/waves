@@ -562,6 +562,15 @@ def abaqus_journal(program="abaqus", post_action=None, **kwargs):
     return abaqus_journal_builder
 
 
+@catenate_actions(program="sbatch", options="--wait --wrap")
+def sbatch_abaqus_journal(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
+
+    Catenate the actions and submit with SLURM sbatch
+    """
+    return abaqus_journal(*args, **kwargs)
+
+
 def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     """Appends the abaqus_solver builder target list with the builder managed targets
 

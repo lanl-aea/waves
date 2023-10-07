@@ -320,6 +320,14 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
+def test_sbatch_abaqus_journal():
+    expected = 'sbatch --wait --wrap "cd ${TARGET.dir.abspath} && abaqus -information environment > ' \
+        '${TARGET.filebase}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ' \
+        '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_abaqus_journal()
+    assert builder.action.cmd_list == expected
+
+
 source_file = fs.File("root.inp")
 solver_emitter_input = {
     "empty targets": (
