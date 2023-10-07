@@ -67,6 +67,10 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
+def sbatch_wrapper():
+    return catenate_actions(program="sbatch", options="--wait --wrap")
+
+
 # TODO: Remove the **kwargs check and warning for v1.0.0 release
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
 def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
@@ -708,6 +712,11 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
         action=action,
         emitter=abaqus_emitter)
     return abaqus_solver_builder
+
+
+@sbatch_wrapper
+def sbatch_abaqus_solver(*args, **kwargs):
+    return abaqus_solver(*args, **kwargs)
 
 
 def _sierra_emitter(target, source, env):
