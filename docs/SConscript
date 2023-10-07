@@ -251,9 +251,13 @@ alias_list.extend(env.Alias('latexpdf', latexpdf))
 
 man_directory = "man"
 man_target = Dir(man_directory)
+man_source = [
+    "man_index.rst",
+    "ssh_builder_actions_warning.txt"  # Required by ``ssh_builder_actions`` docstring and not found in man_index.rst
+]
 man = env.Command(
     target=[man_target],
-    source=["man_index.rst"] + sphinx_configuration_source_list,
+    source=man_source + sphinx_configuration_source_list,
     action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{man_directory} ${{tags}}",
     sphinx_options=sphinx_options,
     tags="-t man")
