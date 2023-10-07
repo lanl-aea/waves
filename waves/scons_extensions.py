@@ -713,6 +713,10 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
 
 @catenate_actions(program="sbatch", options="--wait --wrap")
 def sbatch_abaqus_solver(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
+
+    Catenate the actions and submit with SLURM sbatch
+    """
     return abaqus_solver(*args, **kwargs)
 
 
