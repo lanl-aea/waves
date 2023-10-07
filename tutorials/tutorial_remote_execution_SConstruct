@@ -71,7 +71,7 @@ env.Append(BUILDERS={
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
     'SSHAbaqusSolver': waves.scons_extensions.ssh_builder_actions(
         waves.scons_extensions.abaqus_solver(program=env['abaqus']),
-        server="sstbigbird.lanl.gov",
+        remote_server="sstbigbird.lanl.gov",
         remote_directory="/scratch/$${USER}/WAVES-TUTORIAL/tutorial_remote_execution"
     )
 })

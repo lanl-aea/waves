@@ -69,14 +69,14 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
-def ssh_builder_actions(builder, server, remote_directory):
+def ssh_builder_actions(builder, remote_server, remote_directory):
     """Wrap a builder's action list with remote copy operations and ssh commands
 
     .. include:: ssh_builder_actions_warning.txt
 
     Design assumptions
 
-    * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``server``.
+    * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``remote_server``.
     * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
       system.
     * Replaces instances of ``cd ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
@@ -85,8 +85,8 @@ def ssh_builder_actions(builder, server, remote_directory):
       actions.
     * Prefixes all original builder actions with ``cd ${remote_directory} &&``.
     * All original builder actions are wrapped in single quotes as ``'{original action}'`` to preserve the ``&&`` as
-      part of the remote server command. Shell variables, e.g. ``$USER``, will not be expanded on the remote server. If
-      quotes are included in the original builder actions, they should be double quotes.
+      part of the ``remote_server`` command. Shell variables, e.g. ``$USER``, will not be expanded on the
+      ``remote_server``. If quotes are included in the original builder actions, they should be double quotes.
     * Returns the entire ``remote_directory`` to the original builder ``${TARGET.dir.abspath}`` with ``rysnc``.
       ``rsync`` must exist on the local system.
 
@@ -108,7 +108,7 @@ def ssh_builder_actions(builder, server, remote_directory):
        build_cat = cat()
 
        ssh_build_cat = waves.scons_extensions.ssh_builder_actions(
-           cat(), server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
+           cat(), remote_server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
        )
 
     .. code-block::
@@ -125,7 +125,7 @@ def ssh_builder_actions(builder, server, remote_directory):
        rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}
 
     :param SCons.Builder.Builder builder: The SCons builder to modify
-    :param str server: remote server where the original builder's actions should be executed
+    :param str remote_server: remote server where the original builder's actions should be executed
     :param str remote_directory: absolute or relative path where the original builder's actions should be executed
     """
     action = builder.action
@@ -136,14 +136,14 @@ def ssh_builder_actions(builder, server, remote_directory):
     action_list = [action.replace("cd ${TARGET.dir.abspath} &&", f"cd {remote_directory} &&") for action in action_list]
     action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
     action_list = [action.replace("SOURCES.abspath", "SOURCES.file") for action in action_list]
-    action_list = [f"ssh {server} 'cd {remote_directory} && {action}'" for action in action_list]
+    action_list = [f"ssh {remote_server} 'cd {remote_directory} && {action}'" for action in action_list]
 
     ssh_actions = [
-        f"ssh {server} \"mkdir -p {remote_directory}\"",
-        f"rsync -rlptv ${{SOURCES.abspath}} {server}:{remote_directory}"
+        f"ssh {remote_server} \"mkdir -p {remote_directory}\"",
+        f"rsync -rlptv ${{SOURCES.abspath}} {remote_server}:{remote_directory}"
     ]
     ssh_actions.extend(action_list)
-    ssh_actions.append(f"rsync -rltpv {server}:{remote_directory}/ ${{TARGET.dir.abspath}}")
+    ssh_actions.append(f"rsync -rltpv {remote_server}:{remote_directory}/ ${{TARGET.dir.abspath}}")
     ssh_actions = [SCons.Action.CommandAction(action) for action in ssh_actions]
 
     builder.action = SCons.Action.ListAction(ssh_actions)
