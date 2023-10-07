@@ -48,7 +48,7 @@ def catenate_builder_actions(builder, program="", options=""):
 
 
 def catenate_actions(**outer_kwargs):
-    """Decorator factor to apply the ``catenate_builder_actions`` to a function that returns an SCons Builder.
+    """Decorator factory to apply the ``catenate_builder_actions`` to a function that returns an SCons Builder.
 
     Accepts the same keyword arguments as the :meth:`waves.scons_extensions.catenate_builder_actions`
 
