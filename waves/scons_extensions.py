@@ -93,6 +93,7 @@ def ssh_builder_actions(builder, server, remote_directory):
     .. code-block::
        :caption: my_package.py
 
+       import SCons.Builder
        import waves
 
        def print_builder_actions(builder):
@@ -101,12 +102,12 @@ def ssh_builder_actions(builder, server, remote_directory):
 
        def cat(program="cat"):
            return SCons.Builder.Builder(action=
-               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\""]
+               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \\"Hello World!\\""]
            )
 
        build_cat = cat()
 
-       ssh_build_cat = ssh_builder_actions(
+       ssh_build_cat = waves.scons_extensions.ssh_builder_actions(
            cat(), server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
        )
 
@@ -115,13 +116,13 @@ def ssh_builder_actions(builder, server, remote_directory):
        >>> import my_package
        >>> my_package.print_builder_actions(my_package.build_cat)
        cat ${SOURCES.abspath} | tee ${TARGETS.file}
-       Hello World!
+       echo "Hello World!"
        >>> my_package.print_builder_actions(my_package.ssh_build_cat)
-       ssh myserver.mydomain.com "mkdir -p /scratch/roppeheimer/ssh_wrapper"
-       rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppeheimer/ssh_wrapper
-       ssh myserver.mydomain.com 'cd /scratch/roppeheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'
-       ssh myserver.mydomain.com 'cd /scratch/roppeheimer/ssh_wrapper && echo "Hello World!"'
-       rsync -rltpv myserver.mydomain.com:/scratch/roppeheimer/ssh_wrapper/ ${TARGET.dir.abspath}
+       ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"
+       rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper
+       ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'
+       ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo "Hello World!"'
+       rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}
 
     :param SCons.Builder.Builder builder: The SCons builder to modify
     :param str server: remote server where the original builder's actions should be executed
