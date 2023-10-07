@@ -562,7 +562,7 @@ def abaqus_journal(program="abaqus", post_action=None, **kwargs):
     return abaqus_journal_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --wrap")
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
 def sbatch_abaqus_journal(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
 
@@ -720,7 +720,7 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
     return abaqus_solver_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --wrap")
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
 def sbatch_abaqus_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
 
@@ -815,7 +815,7 @@ def sierra(program="sierra", application="adagio", post_action=None):
     return sierra_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --wrap")
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
 def sbatch_sierra(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
 
