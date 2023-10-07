@@ -339,7 +339,7 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
 
 
 def test_sbatch_abaqus_journal():
-    expected = 'sbatch --wait --wrap "cd ${TARGET.dir.abspath} && abaqus -information environment > ' \
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && abaqus -information environment > ' \
         '${TARGET.filebase}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ' \
         '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"'
     builder = scons_extensions.sbatch_abaqus_journal()
@@ -486,7 +486,7 @@ def test_abaqus_solver(program, post_action, node_count, action_count, source_li
 
 
 def test_sbatch_abaqus_solver():
-    expected = 'sbatch --wait --wrap "cd ${TARGET.dir.abspath} && abaqus -information environment > ' \
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && abaqus -information environment > ' \
                '${job_name}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus -job ${job_name} -input ' \
                '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"'
     builder = scons_extensions.sbatch_abaqus_solver()
@@ -547,7 +547,7 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
 
 
 def test_sbatch_sierra():
-    expected = 'sbatch --wait --wrap "cd ${TARGET.dir.abspath} && sierra adagio --version > ${TARGET.filebase}.env ' \
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && sierra adagio --version > ${TARGET.filebase}.env ' \
         '&& cd ${TARGET.dir.abspath} && sierra ${sierra_options} adagio ${application_options} -i ${SOURCE.file} > ' \
         '${TARGET.filebase}.stdout 2>&1"'
     builder = scons_extensions.sbatch_sierra()
