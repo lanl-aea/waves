@@ -43,7 +43,7 @@ find_program_input = {
 
 # FIXME: Trace the source of interference between the builder tests and the find_program tests
 # Remove tag and use of tag when fixed.
-@pytest.mark.fixsconsusage
+@pytest.mark.programoperations
 @pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
 @pytest.mark.unittest
 @pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",
@@ -60,7 +60,7 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
 
 # FIXME: Trace the source of interference between the builder tests and the find_program tests
 # Remove tag and use of tag when fixed.
-@pytest.mark.fixsconsusage
+@pytest.mark.programoperations
 @pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
 @pytest.mark.unittest
 @pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",
@@ -84,7 +84,7 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
 
 # FIXME: Trace the source of interference between the builder tests and the find_program tests
 # Remove tag and use of tag when fixed.
-@pytest.mark.fixsconsusage
+@pytest.mark.programoperations
 @pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
 @pytest.mark.unittest
 @pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",

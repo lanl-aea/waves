@@ -21,8 +21,8 @@ pytest_node = env.Command(
     source=waves_source_list,
     # TODO: Revert to a single, simple "pytest_command" when the race conditions on test_program_operations are fixed
     action=[
-        f"{pytest_command} -m 'not systemtest and not fixsconsusage'",
-        f"{pytest_command} -m 'not systemtest and fixsconsusage'",
+        f"{pytest_command} -m 'not systemtest and programoperations'",
+        f"{pytest_command} -m 'not systemtest and not programoperations'",
     ]
 )
 alias_list = env.Alias("pytest", pytest_node)
