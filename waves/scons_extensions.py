@@ -69,13 +69,13 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
-def ssh_actions(builder, server="", remote_directory=""):
+def ssh_builder_actions(builder, server="", remote_directory=""):
     action_list = builder.action
     if isinstance(action, SCons.Action.CommandAction):
         action_list = [action.cmd_list]
     else:
         action_list = [command.cmd_list for command in action.list]
-    action_list = [f"ssh {server} \"{action}\"" for action in action_list]
+    action_list = [f"ssh {server} \"cd {remote_directory} && {action}\"" for action in action_list]
 
     ssh_actions = [
         f"ssh {server} \"mkdir -p {remote_directory}\"",
