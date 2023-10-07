@@ -26,6 +26,39 @@ fs = SCons.Node.FS.FS()
 testing_windows, root_fs = platform_check()
 
 
+catenate_builder_actions = {
+    "one action - string": ("action one", "action one"),
+    "one action - list": (["action one"], "action one"),
+    "two action": (["action one", "action two"], "action one && action two")
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("action_list, catenated_actions",
+                         catenate_builder_actions.values(),
+                         ids=catenate_builder_actions.keys())
+def test_catenate_builder_actions(action_list, catenated_actions):
+    builder = scons_extensions.catenate_builder_actions(
+        SCons.Builder.Builder(action=action_list), program="bash", options="-c"
+    )
+    assert builder.action.cmd_list == f"bash -c \"{catenated_actions}\""
+
+
+def test_catenate_actions():
+    def cat(program="cat"):
+        return SCons.Builder.Builder(action=f"{program} $SOURCE > $TARGET")
+    builder = cat()
+    assert builder.action.cmd_list == "cat $SOURCE > $TARGET"
+
+    @scons_extensions.catenate_actions(program="bash", options="-c")
+    def bash_cat(**kwargs):
+        return cat(**kwargs)
+    builder = bash_cat()
+    assert builder.action.cmd_list == "bash -c \"cat $SOURCE > $TARGET\""
+    builder = bash_cat(program="dog")
+    assert builder.action.cmd_list == "bash -c \"dog $SOURCE > $TARGET\""
+
+
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
     """Verify the expected action string against a builder's target nodes
 
@@ -320,6 +353,14 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
+def test_sbatch_abaqus_journal():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
+        '-information environment > ${TARGET.filebase}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus cae ' \
+        '-noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_abaqus_journal()
+    assert builder.action.cmd_list == expected
+
+
 source_file = fs.File("root.inp")
 solver_emitter_input = {
     "empty targets": (
@@ -459,6 +500,14 @@ def test_abaqus_solver(program, post_action, node_count, action_count, source_li
     check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
 
+def test_sbatch_abaqus_solver():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
+        '-information environment > ${job_name}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus -job ${job_name} ' \
+        '-input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_abaqus_solver()
+    assert builder.action.cmd_list == expected
+
+
 copy_substitute_input = {
     "strings": (["dummy", "dummy2.in", "root.inp.in", "conf.py.in"],
                 ["dummy", "dummy2.in", "dummy2", "root.inp.in", "root.inp", "conf.py.in", "conf.py"]),
@@ -510,6 +559,14 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
     env.Append(BUILDERS={"Sierra": scons_extensions.sierra(program, application, post_action)})
     nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
+def test_sbatch_sierra():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && sierra adagio ' \
+        '--version > ${TARGET.filebase}.env && cd ${TARGET.dir.abspath} && sierra ${sierra_options} adagio ' \
+        '${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_sierra()
+    assert builder.action.cmd_list == expected
 
 
 @pytest.mark.unittest

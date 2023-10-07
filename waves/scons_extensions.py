@@ -3,6 +3,7 @@
 import re
 import yaml
 import pathlib
+import functools
 import subprocess
 
 import SCons.Defaults
@@ -22,6 +23,49 @@ from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
 from waves._settings import _sierra_environment_extension
+
+
+def catenate_builder_actions(builder, program="", options=""):
+    """Catenate a builder's arguments and prepend the program and options
+
+    .. code-block::
+
+       ${program} ${options} "action one && action two"
+
+    :param SCons.Builder.Builder builder: The SCons builder to modify
+    :param str program: wrapping executable
+    :param str options: options for the wrapping executable
+    """
+    action = builder.action
+    if isinstance(action, SCons.Action.CommandAction):
+        action = [action.cmd_list]
+    else:
+        action = [command.cmd_list for command in action.list]
+    action = " && ".join(action)
+    action = f"{program} {options} \"{action}\""
+    return SCons.Builder.Builder(action=action)
+
+
+def catenate_actions(**outer_kwargs):
+    """Decorator factor to apply the ``catenate_builder_actions`` to a function that returns an SCons Builder.
+
+    Accepts the same keyword arguments as the :meth:`waves.scons_extensions.catenate_builder_actions`
+
+    .. code-block::
+
+       import SCons.Builder
+       import waves
+
+       @waves.scons_extensions.catenate_actions
+       def my_builder():
+           return SCons.Builder.Builder(action=["echo $SOURCE > $TARGET", "echo $SOURCE >> $TARGET"])
+    """
+    def intermediate_decorator(function):
+        @functools.wraps(function)
+        def wrapper(*args, **kwargs):
+            return catenate_builder_actions(function(*args, **kwargs), **outer_kwargs)
+        return wrapper
+    return intermediate_decorator
 
 
 # TODO: Remove the **kwargs check and warning for v1.0.0 release
@@ -518,6 +562,15 @@ def abaqus_journal(program="abaqus", post_action=None, **kwargs):
     return abaqus_journal_builder
 
 
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+def sbatch_abaqus_journal(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
+
+    Catenate the actions and submit with SLURM sbatch
+    """
+    return abaqus_journal(*args, **kwargs)
+
+
 def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     """Appends the abaqus_solver builder target list with the builder managed targets
 
@@ -667,6 +720,15 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
     return abaqus_solver_builder
 
 
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+def sbatch_abaqus_solver(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
+
+    Catenate the actions and submit with SLURM sbatch
+    """
+    return abaqus_solver(*args, **kwargs)
+
+
 def _sierra_emitter(target, source, env):
     """Appends the sierra builder target list with the builder managed targets
 
@@ -751,6 +813,15 @@ def sierra(program="sierra", application="adagio", post_action=None):
         emitter=_sierra_emitter
     )
     return sierra_builder
+
+
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+def sbatch_sierra(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
+
+    Catenate the actions and submit with SLURM sbatch
+    """
+    return sierra(*args, **kwargs)
 
 
 def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environment.Environment(),
