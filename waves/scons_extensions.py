@@ -78,13 +78,15 @@ def ssh_builder_actions(builder, server, remote_directory):
 
     * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``server``.
     * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
-          system.
+      system.
     * Removes instances of ``cd ${TARGET.dir.abspath} &&`` from the original builder actions.
     * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
-          actions.
+      actions.
     * Prefixes all original builder actions with ``cd ${remote_directory} &&``.
+    * All original builder actions are wrapped in single quotes as ``'{original action}'`` to preserve the ``&&`` as
+      part of the remote server command. Shell variables, e.g. ``$USER``, will not be expanded on the remote server.
     * Returns the entire ``remote_directory`` to the original builder ``${TARGET.dir.abspath}`` with ``rysnc``.
-          ``rsync`` must exist on the local system.
+      ``rsync`` must exist on the local system.
 
     .. code-block::
        :caption: my_package.py
@@ -131,7 +133,7 @@ def ssh_builder_actions(builder, server, remote_directory):
     action_list = [action.replace("cd ${TARGET.dir.abspath} &&", "") for action in action_list]
     action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
     action_list = [action.replace("SOURCES.abspath", "SOURCES.file") for action in action_list]
-    action_list = [f"ssh {server} \"cd {remote_directory} && {action}\"" for action in action_list]
+    action_list = [f"ssh {server} 'cd {remote_directory} && {action}'" for action in action_list]
 
     ssh_actions = [
         f"ssh {server} \"mkdir -p {remote_directory}\"",
