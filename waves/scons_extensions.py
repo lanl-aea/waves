@@ -43,7 +43,8 @@ def catenate_builder_actions(builder, program="", options=""):
         action = [command.cmd_list for command in action.list]
     action = " && ".join(action)
     action = f"{program} {options} \"{action}\""
-    return SCons.Builder.Builder(action=action)
+    builder.action = SCons.Action.CommandAction(action)
+    return builder
 
 
 def catenate_actions(**outer_kwargs):
