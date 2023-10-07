@@ -70,6 +70,26 @@ def catenate_actions(**outer_kwargs):
 
 
 def ssh_builder_actions(builder, server, remote_directory):
+    """Wrap a builder's action list with remote copy operations and ssh commands
+
+    .. include:: ssh_builder_actions_warning.txt
+
+    Design assumptions
+
+    * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``server``.
+    * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
+          system.
+    * Removes instances of ``cd ${TARGET.dir.abspath} &&`` from the original builder actions.
+    * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
+          actions.
+    * Prefixes all original builder actions with ``cd ${remote_directory} &&``.
+    * Returns the entire ``remote_directory`` to the original builder ``${TARGET.dir.abspath}`` with ``rysnc``.
+          ``rsync`` must exist on the local system.
+
+    :param SCons.Builder.Builder builder: The SCons builder to modify
+    :param str server: remote server where the original builder's actions should be executed
+    :param str remote_directory: absolute or relative path where the original builder's actions should be executed
+    """
     action = builder.action
     if isinstance(action, SCons.Action.CommandAction):
         action_list = [action.cmd_list]
