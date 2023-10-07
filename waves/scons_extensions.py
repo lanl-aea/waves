@@ -83,7 +83,7 @@ def ssh_builder_actions(builder, server, remote_directory):
         f"rsync -rlptv ${{SOURCES}} {server}:{remote_directory}"
     ]
     ssh_actions.extend(action_list)
-    ssh_actions.append(f"rsync -rltpv {server}:{remote_directory}/${{TARGETS}} ${{SOURCE.dir.abspath}}")
+    ssh_actions.append(f"rsync -rltpv {server}:{remote_directory}/${{TARGETS}} ${{TARGET.dir.abspath}}")
     ssh_actions = [SCons.Action.CommandAction(action) for action in ssh_actions]
 
     builder.action = ssh_actions
