@@ -44,6 +44,21 @@ def test_catenate_builder_actions(action_list, catenated_actions):
     assert builder.action.cmd_list == f"bash -c \"{catenated_actions}\""
 
 
+def test_catenate_actions():
+    def cat(program="cat"):
+        return SCons.Builder.Builder(action=f"{program} $SOURCE > $TARGET")
+    builder = cat()
+    assert builder.action.cmd_list == "cat $SOURCE > $TARGET"
+
+    @scons_extensions.catenate_actions(program="bash", options="-c")
+    def bash_cat(**kwargs):
+        return cat(**kwargs)
+    builder = bash_cat()
+    assert builder.action.cmd_list == "bash -c \"cat $SOURCE > $TARGET\""
+    builder = bash_cat(program="dog")
+    assert builder.action.cmd_list == "bash -c \"dog $SOURCE > $TARGET\""
+
+
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
     """Verify the expected action string against a builder's target nodes
 
