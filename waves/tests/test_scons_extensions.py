@@ -26,6 +26,24 @@ fs = SCons.Node.FS.FS()
 testing_windows, root_fs = platform_check()
 
 
+catenate_builder_actions = {
+    "one action - string": ("action one", "action one"),
+    "one action - list": (["action one"], "action one"),
+    "two action": (["action one", "action two"], "action one && action two")
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("action_list, catenated_actions",
+                         catenate_builder_actions.values(),
+                         ids=catenate_builder_actions.keys())
+def test_catenate_builder_actions(action_list, catenated_actions):
+    builder = scons_extensions.catenate_builder_actions(
+        SCons.Builder.Builder(action=action_list), program="bash", options="-c"
+    )
+    assert builder.action.cmd_list == f"bash -c \"{catenated_actions}\""
+
+
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
     """Verify the expected action string against a builder's target nodes
 
