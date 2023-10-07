@@ -13,17 +13,27 @@ waves_source_list = [
 
 pytest_command = "PYTHONDONTWRITEBYTECODE=1 pytest --junitxml=${TARGETS[0].name}"
 target = ["test_results.xml"]
+
+# TODO: Remove the "program_operations" logic when the race conditions on test_program_operations are fixed
+coverate = ""
+program_operations_coverage = ""
 if env["coverage_report"]:
-    pytest_command += " --cov --cov-report term --cov-report xml:${TARGETS[1].name}"
+    coverage = " --cov --cov-report term --cov-report xml:${TARGETS[1].name}"
     target.append("coverage.xml")
+    program_operations_coverage = " --cov --cov-report term --cov-report xml:${TARGETS[2].name}"
+    target.append("coverage_program_operations.xml")
+
 pytest_node = env.Command(
     target=target,
     source=waves_source_list,
     # TODO: Revert to a single, simple "pytest_command" when the race conditions on test_program_operations are fixed
     action=[
-        f"{pytest_command} -m 'not systemtest and programoperations'",
-        f"{pytest_command} -m 'not systemtest and not programoperations'",
-    ]
+        "${pytest_command} -m 'not systemtest and not programoperations' ${coverage}",
+        "${pytest_command} -m 'not systemtest and programoperations' ${program_operations_coverage}"
+    ],
+    pytest_command=pytest_command,
+    coverage=coverage,
+    program_operations_coverage=program_operations_coverage
 )
 alias_list = env.Alias("pytest", pytest_node)
 # Always run pytests in place of a complete source list

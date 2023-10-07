@@ -45,7 +45,7 @@ parameter_study_meta.txt
 __pycache__/
 test_results.xml
 systemtest_results.xml
-coverage.xml
+coverage*.xml
 
 # NFS Files
 *.nfs*
