@@ -79,12 +79,14 @@ def ssh_builder_actions(builder, server, remote_directory):
     * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``server``.
     * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
       system.
-    * Removes instances of ``cd ${TARGET.dir.abspath} &&`` from the original builder actions.
+    * Replaces instances of ``cd ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
+      actions.
     * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
       actions.
     * Prefixes all original builder actions with ``cd ${remote_directory} &&``.
     * All original builder actions are wrapped in single quotes as ``'{original action}'`` to preserve the ``&&`` as
-      part of the remote server command. Shell variables, e.g. ``$USER``, will not be expanded on the remote server.
+      part of the remote server command. Shell variables, e.g. ``$USER``, will not be expanded on the remote server. If
+      quotes are included in the original builder actions, they should be double quotes.
     * Returns the entire ``remote_directory`` to the original builder ``${TARGET.dir.abspath}`` with ``rysnc``.
       ``rsync`` must exist on the local system.
 
@@ -99,7 +101,7 @@ def ssh_builder_actions(builder, server, remote_directory):
 
        def cat(program="cat"):
            return SCons.Builder.Builder(action=
-               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo 'Hello World!'"]
+               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\"]
            )
 
        build_cat = cat()
@@ -117,8 +119,8 @@ def ssh_builder_actions(builder, server, remote_directory):
        >>> my_package.print_builder_actions(my_package.ssh_build_cat)
        ssh myserver.mydomain.com "mkdir -p /scratch/roppeheimer/ssh_wrapper"
        rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppeheimer/ssh_wrapper
-       ssh myserver.mydomain.com "cd /scratch/roppeheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}"
-       ssh myserver.mydomain.com "cd /scratch/roppeheimer/ssh_wrapper && echo 'Hello World!'"
+       ssh myserver.mydomain.com 'cd /scratch/roppeheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'
+       ssh myserver.mydomain.com 'cd /scratch/roppeheimer/ssh_wrapper && echo "Hello World!"'
        rsync -rltpv myserver.mydomain.com:/scratch/roppeheimer/ssh_wrapper/ ${TARGET.dir.abspath}
 
     :param SCons.Builder.Builder builder: The SCons builder to modify
@@ -130,7 +132,7 @@ def ssh_builder_actions(builder, server, remote_directory):
         action_list = [action.cmd_list]
     else:
         action_list = [command.cmd_list for command in action.list]
-    action_list = [action.replace("cd ${TARGET.dir.abspath} &&", "") for action in action_list]
+    action_list = [action.replace("cd ${TARGET.dir.abspath} &&", f"cd {remote_directory} &&") for action in action_list]
     action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
     action_list = [action.replace("SOURCES.abspath", "SOURCES.file") for action in action_list]
     action_list = [f"ssh {server} 'cd {remote_directory} && {action}'" for action in action_list]
