@@ -35,7 +35,8 @@ pytest_node = env.Command(
     ],
     pytest_command=pytest_command,
     coverage=coverage,
-    program_operations_coverage=program_operations_coverage
+    program_operations_coverage=program_operations_coverage,
+    coverage_command=coverage_command
 )
 alias_list = env.Alias("pytest", pytest_node)
 # Always run pytests in place of a complete source list
