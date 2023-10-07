@@ -75,15 +75,18 @@ def ssh_actions(builder, server="", remote_directory=""):
         action_list = [action.cmd_list]
     else:
         action_list = [command.cmd_list for command in action.list]
+    action_list = [f"ssh {server} \"{action}\"" for action in action_list]
+
     ssh_actions = [
         f"ssh {server} \"mkdir -p {remote_directory}\"",
         f"rsync -rlptv ${{SOURCES}} {server}:{remote_directory}"
     ]
-    for action in action_list:
-        action = f"ssh {server} \"{action}\""
     ssh_actions.extend(action_list)
-    ssh_actions.extend(f"rsync -rltpv {server}:{remote_directory}/${TARGETS} ${SOURCE.dir.abspath}")
-    return SCons.Builder.Builder(action=ssh_actions)
+    ssh_actions.append(f"rsync -rltpv {server}:{remote_directory}/${TARGETS} ${SOURCE.dir.abspath}")
+    ssh_actions = [SCons.Action.CommandAction(action) for action in ssh_actions]
+
+    builder.action = ssh_actions
+    return builder
 
 
 # TODO: Remove the **kwargs check and warning for v1.0.0 release
