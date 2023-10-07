@@ -12,10 +12,14 @@ New Features
 ============
 - Added draft Sphinx dependency scanner (:merge:`640`). By `Kyle Brindley`_.
 - Add an SCons environment constructor from shell commands (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
+- Add wrapper function and decorator to catenate builder actions and wrap with an outer program (:merge:`647`). By `Kyle
+  Brindley`_.
+- Abaqus solver, Abaqus journal, and Sierra SLURM Sbatch builders (:merge:`647`). By `Kyle Brindley`_.
 
 Documentation
 =============
 - Fixed broken AEA Compute Environment documentation links (:issue:`527`, :merge:`643`). By `Sergio Cordova`_.
+- Use the Abaqus solver SLURM Sbatch builder in the associated tutorial (:merge:`647`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
