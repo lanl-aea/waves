@@ -12,9 +12,9 @@ New Features
 ============
 - Added draft Sphinx dependency scanner (:merge:`640`). By `Kyle Brindley`_.
 - Add an SCons environment constructor from shell commands (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
-- Add wrapper function and decorator to catenate builder actions and wrap with an outer program (:merge:`647`). By `Kyle
-  Brindley`_.
-- Abaqus solver, Abaqus journal, and Sierra SLURM Sbatch builders (:merge:`647`). By `Kyle Brindley`_.
+- Add wrapper function and decorator to catenate builder actions and wrap with an outer program (:merge:`647`,
+  :merge:`648`). By `Kyle Brindley`_.
+- Abaqus solver, Abaqus journal, and Sierra SLURM Sbatch builders (:merge:`647`, :merge:`648`). By `Kyle Brindley`_.
 
 Documentation
 =============

@@ -359,6 +359,7 @@ def test_sbatch_abaqus_journal():
         '-noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"'
     builder = scons_extensions.sbatch_abaqus_journal()
     assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._abaqus_journal_emitter
 
 
 source_file = fs.File("root.inp")
@@ -506,6 +507,7 @@ def test_sbatch_abaqus_solver():
         '-input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"'
     builder = scons_extensions.sbatch_abaqus_solver()
     assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._abaqus_solver_emitter
 
 
 copy_substitute_input = {
@@ -567,6 +569,7 @@ def test_sbatch_sierra():
         '${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"'
     builder = scons_extensions.sbatch_sierra()
     assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._sierra_emitter
 
 
 @pytest.mark.unittest
