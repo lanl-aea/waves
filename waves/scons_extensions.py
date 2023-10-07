@@ -69,7 +69,7 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
-def ssh_builder_actions(builder, server="", remote_directory=""):
+def ssh_builder_actions(builder, server, remote_directory):
     action_list = builder.action
     if isinstance(action, SCons.Action.CommandAction):
         action_list = [action.cmd_list]
