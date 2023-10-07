@@ -3,6 +3,7 @@
 import re
 import yaml
 import pathlib
+import functools
 import subprocess
 
 import SCons.Defaults
@@ -65,10 +66,6 @@ def catenate_actions(**outer_kwargs):
             return catenate_builder_actions(function(*args, **kwargs), **outer_kwargs)
         return wrapper
     return intermediate_decorator
-
-
-def sbatch_wrapper():
-    return catenate_actions(program="sbatch", options="--wait --wrap")
 
 
 # TODO: Remove the **kwargs check and warning for v1.0.0 release
@@ -714,7 +711,7 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
     return abaqus_solver_builder
 
 
-@sbatch_wrapper
+@catenate_actions(program="sbatch", options="--wait --wrap")
 def sbatch_abaqus_solver(*args, **kwargs):
     return abaqus_solver(*args, **kwargs)
 

@@ -459,6 +459,14 @@ def test_abaqus_solver(program, post_action, node_count, action_count, source_li
     check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
 
+def test_sbatch_abaqus_solver():
+    expected = 'sbatch --wait --wrap "cd ${TARGET.dir.abspath} && abaqus -information environment > ' \
+               '${job_name}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus -job ${job_name} -input ' \
+               '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_abaqus_solver()
+    assert builder.action.cmd_list == expected
+
+
 copy_substitute_input = {
     "strings": (["dummy", "dummy2.in", "root.inp.in", "conf.py.in"],
                 ["dummy", "dummy2.in", "dummy2", "root.inp.in", "root.inp", "conf.py.in", "conf.py"]),
