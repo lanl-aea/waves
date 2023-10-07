@@ -24,6 +24,49 @@ from waves._settings import _matlab_environment_extension
 from waves._settings import _sierra_environment_extension
 
 
+def catenate_builder_actions(builder, program="", options=""):
+    """Catenate a builder's arguments and prepend the program and options
+
+    .. code-block::
+
+       ${program} ${options} "action one && action two"
+
+    :param SCons.Builder.Builder builder: The SCons builder to modify
+    :param str program: wrapping executable
+    :param str options: options for the wrapping executable
+    """
+    action = builder.action
+    if isinstance(action, SCons.Action.CommandAction):
+        action = [action.cmd_list]
+    else:
+        action = [command.cmd_list for command in action.list]
+    action = " && ".join(action)
+    action = f"{program} {options} \"{action}\""
+    return SCons.Builder.Builder(action=action)
+
+
+def catenate_actions(**outer_kwargs):
+    """Decorator factor to apply the ``catenate_builder_actions`` to a function that returns an SCons Builder.
+
+    Accepts the same keyword arguments as the :meth:`waves.scons_extensions.catenate_builder_actions`
+
+    .. code-block::
+
+       import SCons.Builder
+       import waves
+
+       @waves.scons_extensions.catenate_actions
+       def my_builder():
+           return SCons.Builder.Builder(action=["echo $SOURCE > $TARGET", "echo $SOURCE >> $TARGET"])
+    """
+    def intermediate_decorator(function):
+        @functools.wraps(function)
+        def wrapper(*args, **kwargs):
+            return catenate_builder_actions(function(*args, **kwargs), **outer_kwargs)
+        return wrapper
+    return intermediate_decorator
+
+
 # TODO: Remove the **kwargs check and warning for v1.0.0 release
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
 def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
