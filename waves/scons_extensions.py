@@ -69,6 +69,23 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
+def ssh_actions(builder, server="", remote_directory=""):
+    action_list = builder.action
+    if isinstance(action, SCons.Action.CommandAction):
+        action_list = [action.cmd_list]
+    else:
+        action_list = [command.cmd_list for command in action.list]
+    ssh_actions = [
+        f"ssh {server} \"mkdir -p {remote_directory}\"",
+        f"rsync -rlptv ${{SOURCES}} {server}:{remote_directory}"
+    ]
+    for action in action_list:
+        action = f"ssh {server} \"{action}\""
+    ssh_actions.extend(action_list)
+    ssh_actions.extend(f"rsync -rltpv {server}:{remote_directory}/${TARGETS} ${SOURCE.dir.abspath}")
+    return SCons.Builder.Builder(action=ssh_actions)
+
+
 # TODO: Remove the **kwargs check and warning for v1.0.0 release
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
 def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
