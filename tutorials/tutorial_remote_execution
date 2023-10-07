@@ -97,7 +97,7 @@ datacheck.extend(env.AbaqusSolver(
 
 # Remote Abaqus Solve with SSH
 workflow.extend(env.SSHAbaqusSolver(
-    target=[f"{job_name}.odb"],
+    target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options,
