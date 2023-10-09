@@ -28,6 +28,7 @@ testing_windows, root_fs = platform_check()
 
 string_action_list = {
     "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
+    "two actions": (SCons.Builder.Builder(action=["first action", "second action"]), ["first action", "second action"]),
 }
 
 
