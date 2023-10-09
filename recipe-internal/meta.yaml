@@ -45,8 +45,8 @@ requirements:
     - python
     - python-build
     - pip
-    - setuptools >=45
-    - setuptools_scm[toml] >=6.2
+    - setuptools >=62
+    - setuptools_scm[toml] >=6.2,<8
   run:
     - python >=3.8
     - h5netcdf
