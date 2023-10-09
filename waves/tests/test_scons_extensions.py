@@ -26,6 +26,21 @@ fs = SCons.Node.FS.FS()
 testing_windows, root_fs = platform_check()
 
 
+string_action_list = {
+    "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
+    "two actions": (SCons.Builder.Builder(action=["first action", "second action"]), ["first action", "second action"]),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("builder, expected",
+                         string_action_list.values(),
+                         ids=string_action_list.keys())
+def test_string_action_list(builder, expected):
+    action_list = scons_extensions._string_action_list(builder)
+    assert action_list == expected
+
+
 catenate_builder_actions = {
     "one action - string": ("action one", "action one"),
     "one action - list": (["action one"], "action one"),
