@@ -33,6 +33,8 @@ Internal Changes
   Brindley`_.
 - Reduce operations required to set the builder post actions (:issue:`535`, :merge:`650`). By `Kyle Brindley`_.
 - More complete tests for the ssh builder action wrapper function (:issue:`533`, :merge:`651`). By `Kyle Brindley`_.
+- Common function for returning a builder's actions as a list of string (:issue:`537`, :merge:`652`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
