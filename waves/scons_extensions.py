@@ -599,7 +599,7 @@ def _abaqus_journal_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def abaqus_journal(program="abaqus", post_action=None, **kwargs):
+def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -647,8 +647,6 @@ def abaqus_journal(program="abaqus", post_action=None, **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    if not post_action:
-        post_action = []
     action = [f"{_cd_action_prefix} {program} -information environment > " \
                  f"${{TARGET.filebase}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
@@ -722,7 +720,7 @@ def _abaqus_datacheck_solver_emitter(target, source, env):
     return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
-def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
+def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -795,8 +793,6 @@ def abaqus_solver(program="abaqus", post_action=None, emitter=None, **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    if not post_action:
-        post_action = []
     action = [f"{_cd_action_prefix} {program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
@@ -849,7 +845,7 @@ def _sierra_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def sierra(program="sierra", application="adagio", post_action=None):
+def sierra(program="sierra", application="adagio", post_action=[]):
     """Sierra SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -899,8 +895,6 @@ def sierra(program="sierra", application="adagio", post_action=None):
     :return: Sierra builder
     :rtype: SCons.Builder.Builder
     """
-    if not post_action:
-        post_action = []
     action = [f"{_cd_action_prefix} {program} {application} --version > " \
                   f"${{TARGET.filebase}}{_sierra_environment_extension}",
               f"{_cd_action_prefix} {program} ${{sierra_options}} {application} ${{application_options}} " \
@@ -985,7 +979,7 @@ def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environ
     return target_list
 
 
-def python_script(post_action=None):
+def python_script(post_action=[]):
     """Python script SCons builder
 
     This builder requires that the python script to execute is the first source in the list. The builder returned by
@@ -1028,8 +1022,6 @@ def python_script(post_action=None):
     :return: Python script builder
     :rtype: SCons.Builder.Builder
     """
-    if not post_action:
-        post_action = []
     action = [f"{_cd_action_prefix} python ${{python_options}} ${{SOURCE.abspath}} " \
                 f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
     action.extend(_construct_post_action_list(post_action))
@@ -1062,7 +1054,7 @@ def _matlab_script_emitter(target, source, env):
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
-def matlab_script(program="matlab", post_action=None, **kwargs):
+def matlab_script(program="matlab", post_action=[], **kwargs):
     """Matlab script SCons builder
 
     .. warning::
@@ -1109,8 +1101,6 @@ def matlab_script(program="matlab", post_action=None, **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     matlab_program = _warn_kwarg_change(kwargs, "matlab_program")
     program = matlab_program if matlab_program is not None else program
-    if not post_action:
-        post_action = []
     action = [f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
                   "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
@@ -1287,7 +1277,7 @@ def _build_odb_extract(target, source, env):
     return None
 
 
-def sbatch(program="sbatch", post_action=None, **kwargs):
+def sbatch(program="sbatch", post_action=[], **kwargs):
     """SLURM sbatch SCons builder
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
@@ -1327,8 +1317,6 @@ def sbatch(program="sbatch", post_action=None, **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
     program = sbatch_program if sbatch_program is not None else program
-    if not post_action:
-        post_action = []
     action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGET.filebase}}{_stdout_extension} " \
               f"${{slurm_options}} --wrap \"${{slurm_job}}\""]
     action.extend(_construct_post_action_list(post_action))

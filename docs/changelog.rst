@@ -31,6 +31,7 @@ Internal Changes
   tests requiring manual intervention, revert commit ``d2e3c9d1``  (:issue:`519`, :merge:`641`). By `Kyle Brindley`_.
 - Elevate PDF documentation build warnings to errors to match other sphinx build behaviors (:merge:`642`). By `Kyle
   Brindley`_.
+- Reduce operations required to set the builder post actions (:issue:`535`, :merge:`650`). By `Kyle Brindley`_.
 
 Enhancements
 ============
