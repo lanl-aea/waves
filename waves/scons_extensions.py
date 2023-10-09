@@ -25,6 +25,22 @@ from waves._settings import _matlab_environment_extension
 from waves._settings import _sierra_environment_extension
 
 
+def _string_action_list(builder):
+    """Return a builders action list as a list of str
+
+    :param SCons.Builder.Builder builder: The builder to extract the action list from
+
+    :returns: list of actions as str
+    :rtype: list
+    """
+    action = builder.action
+    if isinstance(action, SCons.Action.CommandAction):
+        action_list = [action.cmd_list]
+    else:
+        action_list = [command.cmd_list for command in action.list]
+    return action_list
+
+
 def catenate_builder_actions(builder, program="", options=""):
     """Catenate a builder's arguments and prepend the program and options
 
@@ -36,12 +52,8 @@ def catenate_builder_actions(builder, program="", options=""):
     :param str program: wrapping executable
     :param str options: options for the wrapping executable
     """
-    action = builder.action
-    if isinstance(action, SCons.Action.CommandAction):
-        action = [action.cmd_list]
-    else:
-        action = [command.cmd_list for command in action.list]
-    action = " && ".join(action)
+    action_list = _string_action_list(builder)
+    action = " && ".join(action_list)
     action = f"{program} {options} \"{action}\""
     builder.action = SCons.Action.CommandAction(action)
     return builder
@@ -142,11 +154,7 @@ def ssh_builder_actions(builder, remote_server, remote_directory):
     :param str remote_server: remote server where the original builder's actions should be executed
     :param str remote_directory: absolute or relative path where the original builder's actions should be executed
     """
-    action = builder.action
-    if isinstance(action, SCons.Action.CommandAction):
-        action_list = [action.cmd_list]
-    else:
-        action_list = [command.cmd_list for command in action.list]
+    action_list = _string_action_list(builder)
     cd_prefix = f"cd {remote_directory} &&"
     action_list = [action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix) for action in action_list]
     action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
