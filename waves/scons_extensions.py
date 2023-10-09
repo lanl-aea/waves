@@ -96,13 +96,13 @@ def ssh_builder_actions(builder, remote_server, remote_directory):
        import waves
        env = Environment()
        env.Append(BUILDERS={
-           'SSHAbaqusSolver': waves.scons_extensions.ssh_builder_actions(
-               waves.scons_extensions.abaqus_solver(program=env['abaqus']),
-               remote_server="sstbigbird.lanl.gov",
-               remote_directory="/scratch/$${USER}/WAVES-TUTORIAL/tutorial_remote_execution"
+           "SSHAbaqusSolver": waves.scons_extensions.ssh_builder_actions(
+               waves.scons_extensions.abaqus_solver(program="/remote/server/installation/path/of/abaqus"),
+               remote_server="myserver.mydomain.com",
+               remote_directory="/scratch/$${USER}/myproject/myworkflow"
            )
        })
-       env.SSHAbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
+       env.SSHAbaqusSolver(target=["myjob.sta"], source=["input.inp"], job_name="myjob", abaqus_options="-cpus 4")
 
     .. code-block::
        :caption: my_package.py
@@ -492,7 +492,7 @@ def shell_environment(command, cache=None, overwrite_cache=False):
        :caption: SConstruct
 
        import waves
-       env = waves.shell_environment("source my_script.sh")
+       env = waves.scons_extensions.shell_environment("source my_script.sh")
 
     :param str command: the shell command to execute
     :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
@@ -630,6 +630,7 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
 
        import waves
        env = Environment()
+       env["abaqus"] = waves.scons_extensions.add_program(["abaqus"], env)
        env.Append(BUILDERS={"AbaqusJournal": waves.scons_extensions.abaqus_journal()})
        env.AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
@@ -758,6 +759,7 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
 
        import waves
        env = Environment()
+       env["abaqus"] = waves.scons_extensions.add_program(["abaqus"], env)
        env.Append(BUILDERS={
            "AbaqusSolver": waves.scons_extensions.abaqus_solver(),
            "AbaqusStandard": waves.scons_extensions.abaqus_solver(emitter='standard'),
@@ -873,7 +875,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
        :caption: SConstruct
 
        import waves
-       env = Environment()
+       env = waves.scons_extensions.shell_environment("module load sierra")
        env.Append(BUILDERS={
            "Sierra": waves.scons_extensions.sierra(),
        })
@@ -1223,6 +1225,7 @@ def abaqus_extract(program="abaqus", **kwargs):
 
        import waves
        env = Environment()
+       env["abaqus"] = waves.scons_extensions.add_program(["abaqus"], env)
        env.Append(BUILDERS={"AbaqusExtract": waves.scons_extensions.abaqus_extract()})
        env.AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
@@ -1301,7 +1304,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
        import waves
        env = Environment()
        env.Append(BUILDERS={"SlurmSbatch": waves.scons_extensions.sbatch()})
-       env.SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="echo $SOURCE > $TARGET")
+       env.SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="cat $SOURCE > $TARGET")
 
     :param str program: An absolute path or basename string for the sbatch program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
