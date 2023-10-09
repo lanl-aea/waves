@@ -32,6 +32,7 @@ Internal Changes
 - Elevate PDF documentation build warnings to errors to match other sphinx build behaviors (:merge:`642`). By `Kyle
   Brindley`_.
 - Reduce operations required to set the builder post actions (:issue:`535`, :merge:`650`). By `Kyle Brindley`_.
+- More complete tests for the ssh builder action wrapper function (:issue:`533`, :merge:`651`). By `Kyle Brindley`_.
 
 Enhancements
 ============
