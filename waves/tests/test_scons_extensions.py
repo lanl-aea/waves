@@ -27,18 +27,16 @@ testing_windows, root_fs = platform_check()
 
 
 string_action_list = {
-    "one action": (SCons.Action.CommandAction("one action"), ["one action"]),
+    "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("builder_action, expected",
+@pytest.mark.parametrize("builder, expected",
                          string_action_list.values(),
                          ids=string_action_list.keys())
-def test_string_action_list(builder_action, expected):
-    with patch("SCons.Builder.Builder") as mock_builder:
-        mock_builder.action = builder_action
-        action_list = scons_extensions._string_action_list(mock_builder)
+def test_string_action_list(builder, expected):
+    action_list = scons_extensions._string_action_list(builder)
     assert action_list == expected
 
 
