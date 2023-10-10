@@ -27,25 +27,27 @@ Environment
 Directory Structure
 *******************
 
-3. Create a new ``tutorial_cubit`` directory with the ``waves fetch`` command below
+.. include:: tutorial_directory_setup.txt
+
+4. Create a new ``tutorial_cubit`` directory with the ``waves fetch`` command below
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ waves fetch tutorials/tutorial_cubit --destination tutorial_cubit
    $ ls tutorial_cubit
    eabm_package/  abaqus  cubit  SConstruct  sierra
 
-4. Make the new ``tutorial_cubit`` directory the current working directory
+5. Make the new ``tutorial_cubit`` directory the current working directory
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ cd tutorial_cubit
    $ pwd
-   /path/to/waves-tutorials/tutorial_cubit
+   /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ ls
    eabm_package/  abaqus  cubit  SConstruct  sierra
 
@@ -59,7 +61,7 @@ Note that the ``tutorial_cubit`` directory has three SConscript files: ``cubit``
 are relevant to the current tutorial. The ``sierra`` workflow is described in the complementary
 :ref:`tutorial_cubit_sierra`.
 
-5. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation_waves` files.
+6. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation_waves` files.
 
 The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.
@@ -102,12 +104,12 @@ SConstruct
 Build Targets
 *************
 
-7. Build the new targets
+8. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials/tutorial_cubit
+   /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ scons abaqus
    scons: Reading SConscript files ...
    Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
