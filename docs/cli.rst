@@ -16,6 +16,8 @@ Command Line Utilities
 Sub-commands:
 =============
 
+.. _waves_docs_cli:
+
 docs
 ----
 

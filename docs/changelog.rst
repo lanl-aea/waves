@@ -23,6 +23,8 @@ Documentation
 - Use the Abaqus solver SLURM Sbatch builder in the associated tutorial (:merge:`647`). By `Kyle Brindley`_.
 - Use the draft SSH builder wrapper in the remote execution tutorial (:merge:`649`). By `Kyle Brindley`_.
 - Update the builder SConstruct examples (:issue:`534`, :merge:`653`). By `Kyle Brindley`_.
+- Add a version check warning and instructions to the quickstart and core tutorials (:issue:`540`, :merge:`656`). By
+  `Kyle Brindley`_.
 
 Internal Changes
 ================
