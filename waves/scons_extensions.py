@@ -1041,7 +1041,7 @@ def python_script(post_action=[]):
     return python_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap")
 def sbatch_python_script(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.python_script`
 
