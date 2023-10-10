@@ -1041,6 +1041,15 @@ def python_script(post_action=[]):
     return python_builder
 
 
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+def sbatch_python_script(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.python_script`
+
+    Catenate the actions and submit with SLURM sbatch
+    """
+    return python_script(*args, **kwargs)
+
+
 def _matlab_script_emitter(target, source, env):
     """Appends the matlab_script builder target list with the builder managed targets
 
