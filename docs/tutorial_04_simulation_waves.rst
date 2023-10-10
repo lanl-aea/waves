@@ -48,7 +48,6 @@ Directory Structure
         WAVES fetch
         Destination directory: 'eabm_package/abaqus'
 
-
 4. Download and copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
