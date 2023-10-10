@@ -56,7 +56,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_07_latin_hypercube
+   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_07_latin_hypercube
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 

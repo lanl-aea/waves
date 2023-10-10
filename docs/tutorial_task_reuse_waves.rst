@@ -111,7 +111,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch tutorials/tutorial_11_archival && cp tutorial_11_archival tutorial_task_reuse
+   $ waves fetch --overwrite tutorials/tutorial_11_archival && cp tutorial_11_archival tutorial_task_reuse
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
