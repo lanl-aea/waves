@@ -26,6 +26,95 @@ fs = SCons.Node.FS.FS()
 testing_windows, root_fs = platform_check()
 
 
+string_action_list = {
+    "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
+    "two actions": (SCons.Builder.Builder(action=["first action", "second action"]), ["first action", "second action"]),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("builder, expected",
+                         string_action_list.values(),
+                         ids=string_action_list.keys())
+def test_string_action_list(builder, expected):
+    action_list = scons_extensions._string_action_list(builder)
+    assert action_list == expected
+
+
+catenate_builder_actions = {
+    "one action - string": ("action one", "action one"),
+    "one action - list": (["action one"], "action one"),
+    "two action": (["action one", "action two"], "action one && action two")
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("action_list, catenated_actions",
+                         catenate_builder_actions.values(),
+                         ids=catenate_builder_actions.keys())
+def test_catenate_builder_actions(action_list, catenated_actions):
+    builder = scons_extensions.catenate_builder_actions(
+        SCons.Builder.Builder(action=action_list), program="bash", options="-c"
+    )
+    assert builder.action.cmd_list == f"bash -c \"{catenated_actions}\""
+
+
+def test_catenate_actions():
+    def cat(program="cat"):
+        return SCons.Builder.Builder(action=f"{program} $SOURCE > $TARGET")
+    builder = cat()
+    assert builder.action.cmd_list == "cat $SOURCE > $TARGET"
+
+    @scons_extensions.catenate_actions(program="bash", options="-c")
+    def bash_cat(**kwargs):
+        return cat(**kwargs)
+    builder = bash_cat()
+    assert builder.action.cmd_list == "bash -c \"cat $SOURCE > $TARGET\""
+    builder = bash_cat(program="dog")
+    assert builder.action.cmd_list == "bash -c \"dog $SOURCE > $TARGET\""
+
+
+def test_ssh_builder_actions():
+    def cat(program="cat"):
+        return SCons.Builder.Builder(action=
+            [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\""]
+        )
+
+    build_cat = cat()
+    build_cat_action_list = [action.cmd_list for action in build_cat.action.list]
+    expected = [
+        "cat ${SOURCES.abspath} | tee ${TARGETS.file}",
+        'echo "Hello World!"'
+    ]
+    assert build_cat_action_list == expected
+
+    ssh_build_cat = scons_extensions.ssh_builder_actions(
+        cat(), remote_server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
+    )
+    ssh_build_cat_action_list = [action.cmd_list for action in ssh_build_cat.action.list]
+    expected = [
+        'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
+        "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo \"Hello World!\"'",
+        "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}"
+    ]
+    assert ssh_build_cat_action_list == expected
+
+    ssh_python_builder = scons_extensions.ssh_builder_actions(
+        scons_extensions.python_script(), remote_server="myserver.mydomain.com",
+        remote_directory="/scratch/roppenheimer/ssh_wrapper"
+    )
+    ssh_python_script_action_list = [action.cmd_list for action in ssh_python_builder.action.list]
+    expected = [
+        'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
+        "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && python ${python_options} ${SOURCE.file} " \
+            "${script_options} > ${TARGET.filebase}.stdout 2>&1'",
+        "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}"
+    ]
+
+
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
     """Verify the expected action string against a builder's target nodes
 
@@ -320,6 +409,15 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
+def test_sbatch_abaqus_journal():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
+        '-information environment > ${TARGET.filebase}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus cae ' \
+        '-noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_abaqus_journal()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._abaqus_journal_emitter
+
+
 source_file = fs.File("root.inp")
 solver_emitter_input = {
     "empty targets": (
@@ -459,6 +557,15 @@ def test_abaqus_solver(program, post_action, node_count, action_count, source_li
     check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
 
+def test_sbatch_abaqus_solver():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
+        '-information environment > ${job_name}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus -job ${job_name} ' \
+        '-input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_abaqus_solver()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._abaqus_solver_emitter
+
+
 copy_substitute_input = {
     "strings": (["dummy", "dummy2.in", "root.inp.in", "conf.py.in"],
                 ["dummy", "dummy2.in", "dummy2", "root.inp.in", "root.inp", "conf.py.in", "conf.py"]),
@@ -510,6 +617,15 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
     env.Append(BUILDERS={"Sierra": scons_extensions.sierra(program, application, post_action)})
     nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
+def test_sbatch_sierra():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && sierra adagio ' \
+        '--version > ${TARGET.filebase}.env && cd ${TARGET.dir.abspath} && sierra ${sierra_options} adagio ' \
+        '${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_sierra()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._sierra_emitter
 
 
 @pytest.mark.unittest
@@ -588,6 +704,14 @@ matlab_emitter_input = {
                     [source_file],
                     ["set1/dummy.matlab", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.matlab.env"])
 }
+
+
+def test_sbatch_python_script():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ' \
+        '${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_python_script()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._first_target_emitter
 
 
 @pytest.mark.unittest
@@ -754,17 +878,17 @@ sbatch_input = {
 def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGET.filebase}}.stdout ' \
-                       '${slurm_options} --wrap "${slurm_job}"'
+                       '${sbatch_options} --wrap "${slurm_job}"'
 
     env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(program, post_action)})
-    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
+    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
     # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     env.Append(BUILDERS={"SlurmSbatchDeprecatedKwarg": scons_extensions.sbatch(sbatch_program=program, post_action=post_action)})
-    nodes = env.SlurmSbatchDeprecatedKwarg(target=target_list, source=["source.in"], slurm_options="",
+    nodes = env.SlurmSbatchDeprecatedKwarg(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 

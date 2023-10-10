@@ -6,17 +6,21 @@ Tutorial: Simulation via SSH
 
 .. include:: wip_warning.txt
 
+.. include:: ssh_builder_actions_warning.txt
+
 This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but executes the simulation
-on a remote server via SSH.
+on a remote server via SSH. You may need to update the server name to match your local system or local remote server.
+
+This tutorial assumes that the local system has an installation of Abaqus and that the Abaqus installation on the local
+system is indentical to the installation on the remote server. You may need to update both Abaqus paths to match the
+respective systems.
 
 **********
 References
 **********
 
-* SCons Tar builder
 * ``ssh``
 * ``rsync``
-* ``tar``
 
 ***********
 Environment
