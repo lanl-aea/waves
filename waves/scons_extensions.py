@@ -22,6 +22,7 @@ from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
+from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
 
 
@@ -667,7 +668,7 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     return abaqus_journal_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap")
+@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
 def sbatch_abaqus_journal(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
 
@@ -824,7 +825,7 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
     return abaqus_solver_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap")
+@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
 def sbatch_abaqus_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
 
@@ -917,7 +918,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     return sierra_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap")
+@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
 def sbatch_sierra(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
 
@@ -1041,7 +1042,7 @@ def python_script(post_action=[]):
     return python_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap")
+@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
 def sbatch_python_script(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.python_script`
 
