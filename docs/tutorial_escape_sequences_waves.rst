@@ -71,13 +71,13 @@ Directory Structure
         /home/roppenheimer/waves-tutorials
         $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
         WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
-        $ waves fetch tutorials/tutorial_04_simulation_SConstruct && mv tutorial_04_simulation_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+        Destination directory: 'eabm_package'
         $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py' 'tutorials/eabm_package/abaqus/*.inp'
         WAVES fetch
         Destination directory: 'eabm_package/abaqus'
+        $ waves fetch tutorials/tutorial_04_simulation_SConstruct && mv tutorial_04_simulation_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
 
 4. Download and copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_escape_sequences``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
