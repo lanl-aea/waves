@@ -410,7 +410,7 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
 
 
 def test_sbatch_abaqus_journal():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
         '-information environment > ${TARGET.filebase}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus cae ' \
         '-noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"'
     builder = scons_extensions.sbatch_abaqus_journal()
@@ -558,7 +558,7 @@ def test_abaqus_solver(program, post_action, node_count, action_count, source_li
 
 
 def test_sbatch_abaqus_solver():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
         '-information environment > ${job_name}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus -job ${job_name} ' \
         '-input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"'
     builder = scons_extensions.sbatch_abaqus_solver()
@@ -620,7 +620,7 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
 
 
 def test_sbatch_sierra():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && sierra adagio ' \
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && sierra adagio ' \
         '--version > ${TARGET.filebase}.env && cd ${TARGET.dir.abspath} && sierra ${sierra_options} adagio ' \
         '${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"'
     builder = scons_extensions.sbatch_sierra()
@@ -707,7 +707,7 @@ matlab_emitter_input = {
 
 
 def test_sbatch_python_script():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && python ' \
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ' \
         '${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"'
     builder = scons_extensions.sbatch_python_script()
     assert builder.action.cmd_list == expected
@@ -878,17 +878,17 @@ sbatch_input = {
 def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGET.filebase}}.stdout ' \
-                       '${slurm_options} --wrap "${slurm_job}"'
+                       '${sbatch_options} --wrap "${slurm_job}"'
 
     env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(program, post_action)})
-    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
+    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
     # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     env.Append(BUILDERS={"SlurmSbatchDeprecatedKwarg": scons_extensions.sbatch(sbatch_program=program, post_action=post_action)})
-    nodes = env.SlurmSbatchDeprecatedKwarg(target=target_list, source=["source.in"], slurm_options="",
+    nodes = env.SlurmSbatchDeprecatedKwarg(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
