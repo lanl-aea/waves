@@ -16,6 +16,7 @@ New Features
   :merge:`648`). By `Kyle Brindley`_.
 - Abaqus solver, Abaqus journal, and Sierra SLURM Sbatch builders (:merge:`647`, :merge:`648`). By `Kyle Brindley`_.
 - Draft SSH builder wrapper (:merge:`649`). By `Kyle Brindley`_.
+- Python SLURM Sbatch builder (:issue:`539`, :merge:`657`). By `Kyle Brindley`_.
 
 Documentation
 =============

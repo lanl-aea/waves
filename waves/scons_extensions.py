@@ -671,7 +671,7 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
 def sbatch_abaqus_journal(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
 
-    Catenate the actions and submit with SLURM sbatch
+    Catenate the actions and submit with `SLURM`_ `sbatch`_
     """
     return abaqus_journal(*args, **kwargs)
 
@@ -828,7 +828,7 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
 def sbatch_abaqus_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
 
-    Catenate the actions and submit with SLURM sbatch
+    Catenate the actions and submit with `SLURM`_ `sbatch`_
     """
     return abaqus_solver(*args, **kwargs)
 
@@ -921,7 +921,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
 def sbatch_sierra(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
 
-    Catenate the actions and submit with SLURM sbatch
+    Catenate the actions and submit with `SLURM`_ `sbatch`_
     """
     return sierra(*args, **kwargs)
 
@@ -1039,6 +1039,15 @@ def python_script(post_action=[]):
         action=action,
         emitter=_first_target_emitter)
     return python_builder
+
+
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+def sbatch_python_script(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.python_script`
+
+    Catenate the actions and submit with `SLURM`_ `sbatch`_
+    """
+    return python_script(*args, **kwargs)
 
 
 def _matlab_script_emitter(target, source, env):
@@ -1289,7 +1298,7 @@ def _build_odb_extract(target, source, env):
 
 
 def sbatch(program="sbatch", post_action=[], **kwargs):
-    """SLURM sbatch SCons builder
+    """`SLURM`_ `sbatch`_ SCons builder
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
     the command string to execute.

@@ -706,6 +706,14 @@ matlab_emitter_input = {
 }
 
 
+def test_sbatch_python_script():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out --wrap "cd ${TARGET.dir.abspath} && python ' \
+        '${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_python_script()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._first_target_emitter
+
+
 @pytest.mark.unittest
 @pytest.mark.parametrize("target, source, expected",
                          matlab_emitter_input.values(),
