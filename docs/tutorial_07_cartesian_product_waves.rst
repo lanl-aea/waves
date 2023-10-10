@@ -37,10 +37,10 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite tutorials/eabm_package/__init__.py --destination eabm_package
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        $ waves fetch --overwrite tutorials/eabm_package/python/__init__.py --destination eabm_package/python
+        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py'
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
         $ waves fetch tutorials/tutorial_06_include_files_SConstruct && mv tutorial_06_include_files_SConstruct SConstruct
@@ -49,9 +49,6 @@ Directory Structure
         $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*' --destination eabm_package/abaqus
         WAVES fetch
         Destination directory: 'eabm_package/abaqus'
-        $ waves fetch tutorials/eabm_package/python/rectangle_compression_nominal.py && mv rectangle_compression_nominal.py eabm_package/python/
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
 
 4. Download and copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.

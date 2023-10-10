@@ -35,7 +35,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch tutorials/tutorial_cubit --destination tutorial_cubit
+   $ waves fetch --destination tutorial_cubit tutorials/tutorial_cubit
    $ ls tutorial_cubit
    eabm_package/  abaqus  cubit  SConstruct  sierra
 
