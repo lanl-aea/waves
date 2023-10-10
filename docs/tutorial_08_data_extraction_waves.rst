@@ -77,9 +77,8 @@ Directory Structure
 SConscript
 **********
 
-Modify your ``tutorial_08_data_extraction`` file by adding the contents below immediately after the code
-pertaining to ``# Abaqus Solve``. A ``diff`` against the ``tutorial_07_cartesian_product`` file from
-:ref:`tutorial_cartesian_product_waves` is included below to help identify the changes made in this tutorial.
+A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
+below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_08_data_extraction
 
