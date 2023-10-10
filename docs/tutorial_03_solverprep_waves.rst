@@ -70,7 +70,7 @@ Solver Input Files
    WAVES fetch
    Destination directory: 'eabm_package/abaqus'
 
-This action will unzip the source files we included in the
+This action will fetch the source files we included in the
 ``tutorial_03_solverprep`` file into the ``waves-tutorials/eabm_package/abaqus/``
 directory. Check the contents of this directory using the ``ls`` command.
 
