@@ -672,7 +672,13 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
 def sbatch_abaqus_journal(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
 
-    Catenate the actions and submit with `SLURM`_ `sbatch`_
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: Sbatch Abaqus journal builder action
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"
     """
     return abaqus_journal(*args, **kwargs)
 
@@ -779,7 +785,7 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
        env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
 
     .. code-block::
-       :caption: Abaqus journal builder action
+       :caption: Abaqus solver builder action
 
        cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
 
@@ -829,7 +835,13 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
 def sbatch_abaqus_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
 
-    Catenate the actions and submit with `SLURM`_ `sbatch`_
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: Sbatch Abaqus solver builder action
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"
     """
     return abaqus_solver(*args, **kwargs)
 
@@ -922,7 +934,13 @@ def sierra(program="sierra", application="adagio", post_action=[]):
 def sbatch_sierra(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
 
-    Catenate the actions and submit with `SLURM`_ `sbatch`_
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: sbatch Sierra builder action
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"
     """
     return sierra(*args, **kwargs)
 
@@ -1046,7 +1064,13 @@ def python_script(post_action=[]):
 def sbatch_python_script(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.python_script`
 
-    Catenate the actions and submit with `SLURM`_ `sbatch`_
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: Sbatch Python script builder action
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"
     """
     return python_script(*args, **kwargs)
 
