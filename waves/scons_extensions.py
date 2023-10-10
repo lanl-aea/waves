@@ -667,7 +667,7 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     return abaqus_journal_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap")
 def sbatch_abaqus_journal(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
 
@@ -824,7 +824,7 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
     return abaqus_solver_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap")
 def sbatch_abaqus_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
 
@@ -917,7 +917,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     return sierra_builder
 
 
-@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out --wrap")
+@catenate_actions(program="sbatch", options="--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap")
 def sbatch_sierra(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
 
@@ -1313,7 +1313,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     .. code-block::
        :caption: SLURM sbatch builder action
 
-       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGET.filebase}.stdout ${slurm_options} --wrap ${slurm_job}
+       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGET.filebase}.stdout ${sbatch_options} --wrap ${slurm_job}
 
     .. code-block::
        :caption: SConstruct
@@ -1338,7 +1338,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
     program = sbatch_program if sbatch_program is not None else program
     action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGET.filebase}}{_stdout_extension} " \
-              f"${{slurm_options}} --wrap \"${{slurm_job}}\""]
+              f"${{sbatch_options}} ${{slurm_options}} --wrap \"${{slurm_job}}\""]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
