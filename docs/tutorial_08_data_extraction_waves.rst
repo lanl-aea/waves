@@ -38,6 +38,30 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ mkdir -p eabm_package/abaqus eabm_package/python
+        $ touch eabm_package/__init__.py eabm_package/python/__init__.py
+        $ waves fetch tutorials/tutorial_07_cartesian_product_SConstruct && mv tutorial_07_cartesian_product_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_nominal.py && mv rectangle_compression_nominal.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_cartesian_product.py && mv rectangle_compression_cartesian_product.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
 4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
@@ -53,8 +77,9 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
-below to help identify the changes made in this tutorial.
+Modify your ``tutorial_08_data_extraction`` file by adding the contents below immediately after the code
+pertaining to ``# Abaqus Solve``. A ``diff`` against the ``tutorial_07_cartesian_product`` file from
+:ref:`tutorial_cartesian_product_waves` is included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_08_data_extraction
 
@@ -83,17 +108,6 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_08_data_extraction_SConstruct
       :language: Python
       :diff: tutorials_tutorial_07_cartesian_product_SConstruct
-
-.. note::
-
-    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
-    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
-
-    .. code-block:: bash
-
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch tutorials/tutorial_08_data_extraction_SConstruct && mv tutorial_08_data_extraction_SConstruct SConstruct
 
 *************
 Build Targets
