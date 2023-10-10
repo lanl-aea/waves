@@ -37,6 +37,36 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ mkdir -p eabm_package/abaqus eabm_package/python
+        $ touch eabm_package/__init__.py eabm_package/python/__init__.py
+        $ waves fetch tutorials/tutorial_10_regression_testing_SConstruct && mv tutorial_10_regression_testing_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_nominal.py && mv rectangle_compression_nominal.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_cartesian_product.py && mv rectangle_compression_cartesian_product.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/post_processing.py && mv post_processing.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv && mv rectangle_compression_cartesian_product.csv eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
 4. Download and copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_11_archival``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
@@ -99,17 +129,6 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_11_archival_SConstruct
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing_SConstruct
-
-.. note::
-
-    If you did not create an ``SConstruct`` file in the previous tutorials, you can download and copy the necessary
-    file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
-
-    .. code-block:: bash
-
-        $ pwd
-        /home/roppenheimer/waves-tutorials
-        $ waves fetch tutorials/tutorial_11_archival_SConstruct && mv tutorial_11_archival_SConstruct SConstruct
 
 Note that we retrieve the project configuration ``SConstruct`` file name and location with a `Python lambda expression`_
 :cite:`python`. We do this to recover the absolute path to the current configuration file and because some projects may
