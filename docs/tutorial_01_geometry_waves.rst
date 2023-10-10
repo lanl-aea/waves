@@ -44,6 +44,8 @@ Directory Structure
         $ pwd
         /home/roppenheimer/waves-tutorials
         $ waves fetch tutorials/tutorial_00_SConstruct && mv tutorial_00_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
 
 
 4. Within the ``waves-tutorials`` directory, create a new directory called

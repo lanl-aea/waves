@@ -39,7 +39,11 @@ Directory Structure
         $ mkdir -p eabm_package/abaqus
         $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
         $ waves fetch tutorials/tutorial_01_geometry_SConstruct && mv tutorial_01_geometry_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
         $ waves fetch tutorials/eabm_package/abaqus/rectangle_geometry.py && mv rectangle_geometry.py eabm_package/abaqus/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
 
 
 4. Download and copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh`` 

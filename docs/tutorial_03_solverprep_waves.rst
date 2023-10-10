@@ -35,10 +35,11 @@ Directory Structure
         $ mkdir -p eabm_package/abaqus
         $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
         $ waves fetch tutorials/tutorial_02_partition_mesh_SConstruct && mv tutorial_02_partition_mesh_SConstruct SConstruct
-        $ waves fetch tutorials/eabm_package/abaqus/rectangle_geometry.py && mv rectangle_geometry.py eabm_package/abaqus/
-        $ waves fetch tutorials/eabm_package/abaqus/rectangle_partition.py && mv rectangle_partition.py eabm_package/abaqus/
-        $ waves fetch tutorials/eabm_package/abaqus/rectangle_mesh.py && mv rectangle_mesh.py eabm_package/abaqus/
-        $ waves fetch tutorials/eabm_package/abaqus/abaqus_journal_utilities.py && mv abaqus_journal_utilities.py eabm_package/abaqus/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*.py' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
 
 
 

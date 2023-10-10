@@ -36,11 +36,14 @@ Directory Structure
         $ mkdir -p eabm_package/abaqus
         $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
         $ waves fetch tutorials/tutorial_03_solverprep_SConstruct && mv tutorial_03_solverprep_SConstruct SConstruct
-        $ waves fetch tutorials/eabm_package/abaqus/rectangle_geometry.py && mv rectangle_geometry.py eabm_package/abaqus/
-        $ waves fetch tutorials/eabm_package/abaqus/rectangle_partition.py && mv rectangle_partition.py eabm_package/abaqus/
-        $ waves fetch tutorials/eabm_package/abaqus/rectangle_mesh.py && mv rectangle_mesh.py eabm_package/abaqus/
-        $ waves fetch tutorials/eabm_package/abaqus/abaqus_journal_utilities.py && mv abaqus_journal_utilities.py eabm_package/abaqus/
-        $ waves fetch 'tutorials/eabm_package/abaqus/*.inp' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*.py' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*.inp' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
 
 
 4. Download and copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
