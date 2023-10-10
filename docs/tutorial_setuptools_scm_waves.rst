@@ -27,14 +27,55 @@ Environment
 Directory Structure
 *******************
 
-The ``SConscript`` file ``tutorial_11_archival`` does not need to change because we are already using the project
-configuration ``env["version"]`` in the archive file name.
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ mkdir -p eabm_package/abaqus eabm_package/python
+        $ touch eabm_package/__init__.py eabm_package/python/__init__.py
+        $ waves fetch tutorials/tutorial_11_archival_SConstruct && mv tutorial_11_archival_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_nominal.py && mv rectangle_compression_nominal.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_cartesian_product.py && mv rectangle_compression_cartesian_product.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/post_processing.py && mv post_processing.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv && mv rectangle_compression_cartesian_product.csv eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download the ``tutorial_11_archival`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
+   ``SConscript`` file ``tutorial_11_archival`` does not need to change because we are already using the project
+   configuration ``env["version"]`` in the archive file name.
+
+.. code-block:: bash
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_11_archival
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ****************************
 setuptools_scm configuration
 ****************************
 
-3. Create a file named ``pyproject.toml`` using the contents below.
+5. Create a file named ``pyproject.toml`` using the contents below.
 
 .. admonition:: waves-tutorials/pyproject.toml
 
@@ -58,38 +99,38 @@ changes made in this tutorial.
 Version control system
 **********************
 
-4. Initialize a git repository in the tutorial directory
+6. Initialize a git repository in the tutorial directory
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ git init
 
-5. Put the current tutorial's files under version control
+7. Put the current tutorial's files under version control
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ git add SConstruct pyproject.toml tutorial_11_archival
    $ git commit -m "Initial commit for git tag version numbers using setuptools_scm"
    <output truncated>
 
-6. Create a git tag version number
+8. Create a git tag version number
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ git tag 0.1.0
 
-7. Verify that setuptools_scm is correctly picking up the git tag for the version number
+9. Verify that setuptools_scm is correctly picking up the git tag for the version number
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ python -m setuptools_scm
    0.1.0
 
@@ -97,12 +138,12 @@ Version control system
 Build Targets
 *************
 
-8. Build (or re-build) the archive target from :ref:`tutorial_archival_waves`.
+10. Build (or re-build) the archive target from :ref:`tutorial_archival_waves`.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_11_archival_archive --jobs=4
    <output truncated>
 
@@ -118,7 +159,7 @@ uncommitted changes to tracked files.
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ find build -name "*.tar.bz2"
    build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
 
@@ -130,25 +171,25 @@ from the contents below
    .. literalinclude:: tutorials_gitignore
         :lineno-match:
 
-9. Place the ``.gitignore`` file under version control
+11. Place the ``.gitignore`` file under version control
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ git add .gitignore
    $ git commit -m "MAINT: Ignore build artifacts"
    [main ad02fc7] MAINT: Ignore build artifacts
     1 file changed, 33 insertions(+)
     create mode 100644 .gitignore
 
-10. Observe the dynamic version number change. The git short hash, ``ad02fc7``, will differ for every user and is
+12. Observe the dynamic version number change. The git short hash, ``ad02fc7``, will differ for every user and is
     specific to your git repository.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ python -m setuptools_scm
    0.1.0.dev1+gad02fc7
 
@@ -157,12 +198,12 @@ from the contents below
    The leading ``g`` before the short hash ``ad02fc7`` is not part of the hash. `setuptools_scm`_ can work with several
    version control systems and uses the leading ``g`` to indicate that this is a git repository.
 
-11. Re-build the archive target and note the archive file name change to match the version number from the previous step
+13. Re-build the archive target and note the archive file name change to match the version number from the previous step
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_11_archival_archive --jobs=4
    <output truncated>
    $ find build -name "*.tar.bz2"
