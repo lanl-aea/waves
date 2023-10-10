@@ -30,15 +30,38 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_argparse_types``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ mkdir -p eabm_package/abaqus
+        $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
+        $ waves fetch tutorials/tutorial_02_partition_mesh_SConstruct && mv tutorial_02_partition_mesh_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*.py' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+
+4. Download and copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_argparse_types``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_02_partition_mesh tutorial_argparse_types
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_02_partition_mesh && cp tutorial_02_partition_mesh tutorial_argparse_types
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Create a new directory ``eabm_package/argparse_types``.
+5. Create a new directory ``eabm_package/argparse_types``.
 
 .. code-block:: bash
 
@@ -46,7 +69,7 @@ Directory Structure
    /path/to/waves-tutorials
    $ mkdir -p eabm_package/argparse_types
 
-5. Copy the Abaqus journal files into the new directory ``eabm_package/argparse_types``
+6. Copy the Abaqus journal files into the new directory ``eabm_package/argparse_types``
 
 .. code-block:: bash
 
@@ -58,7 +81,7 @@ Directory Structure
 Journal Files
 *************
 
-6. In the ``eabm_package`` directory, create a new file called ``argparse_types.py`` using the contents below
+7. In the ``eabm_package`` directory, create a new file called ``argparse_types.py`` using the contents below
 
 .. admonition:: waves-tutorials/eabm_package/argparse_types.py
 
@@ -70,7 +93,7 @@ The user-defined `Argparse type`_ function must take exactly one positional argu
 string that will be parsed by the argparse interface. The function may perform any arbitrary verification checks and
 return the type cast argument if all checks pass.
 
-7. Make the following changes to the journal file imports and argparse option definitions.
+8. Make the following changes to the journal file imports and argparse option definitions.
 
 .. admonition:: waves-tutorials/argparse_types/rectangle_geometry.py
 
@@ -104,7 +127,7 @@ No change is required to the ``SConscript`` configuration file. The new journal 
 SConstruct
 **********
 
-7. Add ``tutorial_argparse_types`` to the ``workflow_configurations`` list in the ``waves-tutorials/SConstruct``
+9. Add ``tutorial_argparse_types`` to the ``workflow_configurations`` list in the ``waves-tutorials/SConstruct``
    file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
@@ -123,7 +146,7 @@ In addition to the new target workflow ``tutorial_argparse_types``, the changes 
 Build Targets
 *************
 
-8. Build the new targets
+10. Build the new targets
 
 .. code-block:: bash
 
@@ -136,16 +159,16 @@ Build Targets
    Checking whether abq2020 program exists.../apps/abaqus/Commands/abq2020
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information environment
-   > rectangle_geometry.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
+   environment > rectangle_geometry.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information environment
-   > rectangle_partition.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
+   environment > rectangle_partition.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information environment
-   > rectangle_mesh.abaqus_v6.env
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
+   environment > rectangle_mesh.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
    scons: done building targets.
