@@ -38,8 +38,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ mkdir -p eabm_package/abaqus
-        $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
+        $ waves fetch --overwrite tutorials/eabm_package/__init__.py --destination eabm_package
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite tutorials/eabm_package/abaqus/__init__.py --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
         $ waves fetch tutorials/tutorial_01_geometry_SConstruct && mv tutorial_01_geometry_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
