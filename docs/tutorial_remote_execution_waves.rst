@@ -28,13 +28,39 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_remote_execution``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ mkdir -p eabm_package/abaqus
+        $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
+        $ waves fetch tutorials/tutorial_04_simulation_SConstruct && mv tutorial_04_simulation_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*.py' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*.inp' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+
+4. Download and copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_remote_execution``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_04_simulation tutorial_remote_execution
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_04_simulation && cp tutorial_04_simulation tutorial_remote_execution
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 .. _tutorials_tutorial_remote_execution_waves:
 
@@ -68,12 +94,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-4. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_remote_execution
 
 ************

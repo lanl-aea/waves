@@ -129,7 +129,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_escape_sequences
    scons: Reading SConscript files ...
    Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023

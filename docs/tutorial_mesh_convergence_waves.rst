@@ -226,7 +226,7 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_mesh_convergence --jobs=4
 
 The output from building the targets is not shown explicitly here, but look for one particular thing in your terminal
