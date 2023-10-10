@@ -28,19 +28,51 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_mesh_convergence``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ mkdir -p eabm_package/abaqus eabm_package/python
+        $ touch eabm_package/__init__.py eabm_package/python/__init__.py
+        $ waves fetch tutorials/tutorial_10_regression_testing_SConstruct && mv tutorial_10_regression_testing_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_nominal.py && mv rectangle_compression_nominal.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/rectangle_compression_cartesian_product.py && mv rectangle_compression_cartesian_product.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+        $ waves fetch tutorials/eabm_package/python/post_processing.py && mv post_processing.py eabm_package/python/
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_mesh_convergence``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_10_regression_testing tutorial_mesh_convergence
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch tutorials/tutorial_10_regression_testing && cp tutorial_10_regression_testing tutorial_mesh_convergence
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ********************
 Parameter Study File
 ********************
 
-4. Create a new file ``eabm_package/python/rectangle_compression_mesh_convergence.py`` from the content below.
+5. Create a new file ``eabm_package/python/rectangle_compression_mesh_convergence.py`` from the content below.
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_mesh_convergence.py
 
@@ -54,7 +86,7 @@ decreased several times by a factor of two.
 Mesh Convergence Selection Dictionary
 *************************************
 
-5. Create a new file ``eabm_package/python/mesh_convergence_stress.yaml`` from the content below.
+6. Create a new file ``eabm_package/python/mesh_convergence_stress.yaml`` from the content below.
 
 .. admonition:: waves-tutorials/eabm_package/python/mesh_convergence_stress.yaml
 
@@ -67,7 +99,7 @@ This file defines a YAML formatted dictionary that will be used to change the de
 SConscript
 **********
 
-6. A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is
+7. A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is
    included below to help identify the changes made in this tutorial. Use the diff to update your
    ``tutorial_mesh_convergence`` file, and then review the paragraphs that follow to understand the meaning of these
    changes.
@@ -176,7 +208,7 @@ the usage of the ``global_seed`` parameter as the independent variable.
 SConstruct
 **********
 
-7. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help
+8. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help
    identify the changes made in this tutorial. Make these changes to your ``SConstruct`` file.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -189,7 +221,7 @@ SConstruct
 Build Targets
 *************
 
-8. Build the new targets
+9. Build the new targets
 
 .. code-block:: bash
 
@@ -206,7 +238,7 @@ script.
 Output Files
 ************
 
-9. Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
+10. Observe the catenated parameter results and parameter study dataset in the post-processing task's STDOUT file.
 
 .. code-block::
 
