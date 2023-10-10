@@ -15,7 +15,7 @@ import pathlib
 import waves
 
 # Inherit the parent construction environment
-Import('env')
+Import("env", "envSierra")
 
 # Set project-wide paths with os-agnostic path separators
 sierra_source_abspath = pathlib.Path(env["sierra_source_abspath"])
@@ -44,7 +44,7 @@ workflow.extend(waves.scons_extensions.copy_substitute(sierra_source_list))
 # Sierra Solve
 solve_source_list = [source_file.name for source_file in sierra_source_list]
 solve_source_list.append(mesh_files[0])
-workflow.extend(env.Sierra(
+workflow.extend(envSierra.Sierra(
     target=["rectangle_compression.e"],
     source=solve_source_list
 ))
@@ -53,6 +53,6 @@ workflow.extend(env.Sierra(
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 
-if not env['unconditional_build'] and not env['sierra']:
+if not env['unconditional_build'] and not envSierra['sierra']:
     print(f"Program 'sierra' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore(['.', workflow_name], workflow)

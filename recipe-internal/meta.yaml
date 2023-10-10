@@ -45,8 +45,8 @@ requirements:
     - python
     - python-build
     - pip
-    - setuptools >=45
-    - setuptools_scm[toml] >=6.2
+    - setuptools >=62
+    - setuptools_scm[toml] >=6.2,<8
   run:
     - python >=3.8
     - h5netcdf
@@ -87,9 +87,9 @@ test:
     - cd $SP_DIR/$PKG_NAME
     # FIXME: Trace the source of interference between the builder tests and the find_program tests.
     # Use ``pytest`` when fixed
-    - pytest -m "not fixsconsusage and not systemtest"
-    - pytest -m "fixsconsusage"
-    - pytest -n0 -m "systemtest" --tb=short
+    - pytest -m "not programoperations and not systemtest"
+    - pytest -m "programoperations"
+    - pytest -n 4 -m "systemtest" --tb=short
     - cd ${test_root}
     # WAVES CLI regression tests
     - quickstart_regression_directory="${test_root}/test_quickstart"

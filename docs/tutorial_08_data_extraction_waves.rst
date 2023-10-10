@@ -32,6 +32,8 @@ Environment
 
 .. include:: tutorial_environment_activation.txt
 
+.. include:: version_check_warning.txt
+
 *******************
 Directory Structure
 *******************

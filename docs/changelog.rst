@@ -5,8 +5,55 @@ Changelog
 #########
 
 ******************
-0.7.2 (unreleased)
+0.7.3 (unreleased)
 ******************
+
+******************
+0.7.2 (2023-10-10)
+******************
+
+New Features
+============
+- Added draft Sphinx dependency scanner (:merge:`640`). By `Kyle Brindley`_.
+- Add an SCons environment constructor from shell commands (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
+- Add wrapper function and decorator to catenate builder actions and wrap with an outer program (:merge:`647`,
+  :merge:`648`). By `Kyle Brindley`_.
+- Abaqus solver, Abaqus journal, and Sierra SLURM Sbatch builders (:merge:`647`, :merge:`648`). By `Kyle Brindley`_.
+- Draft SSH builder wrapper (:merge:`649`). By `Kyle Brindley`_.
+- Python SLURM Sbatch builder (:issue:`539`, :merge:`657`). By `Kyle Brindley`_.
+- Accept Sbatch command line options in the Sbatch wrapper builders (:issue:`539`, :merge:`657`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Fixed broken AEA Compute Environment documentation links (:issue:`527`, :merge:`643`). By `Sergio Cordova`_.
+- Use the Abaqus solver SLURM Sbatch builder in the associated tutorial (:merge:`647`). By `Kyle Brindley`_.
+- Use the draft SSH builder wrapper in the remote execution tutorial (:merge:`649`). By `Kyle Brindley`_.
+- Update the builder SConstruct examples (:issue:`534`, :merge:`653`). By `Kyle Brindley`_.
+- Add a version check warning and instructions to the quickstart and core tutorials (:issue:`540`, :merge:`656`). By
+  `Kyle Brindley`_.
+
+Internal Changes
+================
+- Trial update to run the system test suite in parallel. It's possible the system tests are not yet thread safe (using a
+  common ``.sconsign.dblite`` file but separate build directories), but this wasn't observed in local testing. It's also
+  possible that Abaqus token availability will periodically timeout job submissions. If this produces many false negative
+  tests requiring manual intervention, revert commit ``d2e3c9d1``  (:issue:`519`, :merge:`641`). By `Kyle Brindley`_.
+- Elevate PDF documentation build warnings to errors to match other sphinx build behaviors (:merge:`642`). By `Kyle
+  Brindley`_.
+- Reduce operations required to set the builder post actions (:issue:`535`, :merge:`650`). By `Kyle Brindley`_.
+- More complete tests for the ssh builder action wrapper function (:issue:`533`, :merge:`651`). By `Kyle Brindley`_.
+- Common function for returning a builder's actions as a list of string (:issue:`537`, :merge:`652`). By `Kyle
+  Brindley`_.
+- Update package build requirements to reflect current working package combinations. Eventually we will need to solve
+  the ``setuptools_scm>=8`` error messages (:issue:`538`, :merge:`655`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- In the SLURM ``sbatch`` builder, use the ``sbatch`` native output redirection to capture the executing job's output
+  instead of the minimal ``sbatch`` output (:issue:`528`, :merge:`644`). By `Kyle Brindley`_.
+- Use the draft Sphinx dependency scanner in the quickstart template modsim project (:issue:`529`, :merge:`645`). By
+  `Kyle Brindley`_.
+- Update the Sierra execution environment solution (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
 
 ******************
 0.7.1 (2023-08-28)

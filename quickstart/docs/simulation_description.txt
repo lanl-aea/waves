@@ -1,6 +1,6 @@
 .. include:: simulation_description_short.txt
 
-.. figure:: rectangle_schematic.*
+.. figure:: rectangle_schematic.png
    :align: center
    :scale: 25%
 

@@ -5,6 +5,7 @@ import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
 from unittest.mock import patch, call
+import subprocess
 
 import pytest
 import SCons.Node.FS
@@ -23,6 +24,95 @@ from common import platform_check
 fs = SCons.Node.FS.FS()
 
 testing_windows, root_fs = platform_check()
+
+
+string_action_list = {
+    "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
+    "two actions": (SCons.Builder.Builder(action=["first action", "second action"]), ["first action", "second action"]),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("builder, expected",
+                         string_action_list.values(),
+                         ids=string_action_list.keys())
+def test_string_action_list(builder, expected):
+    action_list = scons_extensions._string_action_list(builder)
+    assert action_list == expected
+
+
+catenate_builder_actions = {
+    "one action - string": ("action one", "action one"),
+    "one action - list": (["action one"], "action one"),
+    "two action": (["action one", "action two"], "action one && action two")
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("action_list, catenated_actions",
+                         catenate_builder_actions.values(),
+                         ids=catenate_builder_actions.keys())
+def test_catenate_builder_actions(action_list, catenated_actions):
+    builder = scons_extensions.catenate_builder_actions(
+        SCons.Builder.Builder(action=action_list), program="bash", options="-c"
+    )
+    assert builder.action.cmd_list == f"bash -c \"{catenated_actions}\""
+
+
+def test_catenate_actions():
+    def cat(program="cat"):
+        return SCons.Builder.Builder(action=f"{program} $SOURCE > $TARGET")
+    builder = cat()
+    assert builder.action.cmd_list == "cat $SOURCE > $TARGET"
+
+    @scons_extensions.catenate_actions(program="bash", options="-c")
+    def bash_cat(**kwargs):
+        return cat(**kwargs)
+    builder = bash_cat()
+    assert builder.action.cmd_list == "bash -c \"cat $SOURCE > $TARGET\""
+    builder = bash_cat(program="dog")
+    assert builder.action.cmd_list == "bash -c \"dog $SOURCE > $TARGET\""
+
+
+def test_ssh_builder_actions():
+    def cat(program="cat"):
+        return SCons.Builder.Builder(action=
+            [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\""]
+        )
+
+    build_cat = cat()
+    build_cat_action_list = [action.cmd_list for action in build_cat.action.list]
+    expected = [
+        "cat ${SOURCES.abspath} | tee ${TARGETS.file}",
+        'echo "Hello World!"'
+    ]
+    assert build_cat_action_list == expected
+
+    ssh_build_cat = scons_extensions.ssh_builder_actions(
+        cat(), remote_server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
+    )
+    ssh_build_cat_action_list = [action.cmd_list for action in ssh_build_cat.action.list]
+    expected = [
+        'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
+        "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo \"Hello World!\"'",
+        "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}"
+    ]
+    assert ssh_build_cat_action_list == expected
+
+    ssh_python_builder = scons_extensions.ssh_builder_actions(
+        scons_extensions.python_script(), remote_server="myserver.mydomain.com",
+        remote_directory="/scratch/roppenheimer/ssh_wrapper"
+    )
+    ssh_python_script_action_list = [action.cmd_list for action in ssh_python_builder.action.list]
+    expected = [
+        'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
+        "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && python ${python_options} ${SOURCE.file} " \
+            "${script_options} > ${TARGET.filebase}.stdout 2>&1'",
+        "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}"
+    ]
 
 
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):
@@ -173,6 +263,83 @@ def test_quote_spaces_in_path(path, expected):
     assert scons_extensions._quote_spaces_in_path(path) == expected
 
 
+return_environment = {
+    "no newlines": (b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}),
+    "newlines": (b"thing1=a\nnewline\x00thing2=b", {"thing1": "a\nnewline", "thing2": "b"})
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("stdout, expected",
+                         return_environment.values(),
+                         ids=return_environment.keys())
+def test_return_environment(stdout, expected):
+    """
+    :param bytes stdout: byte string with null delimited shell environment variables
+    :param dict expected: expected dictionary output containing string key:value pairs and preserving newlines
+    """
+    mock_run_return = subprocess.CompletedProcess(args="dummy", returncode=0, stdout=stdout)
+    with patch("subprocess.run", return_value=mock_run_return):
+        environment_dictionary = scons_extensions._return_environment("dummy")
+    assert environment_dictionary == expected
+
+
+cache_environment = {
+        # cache,       overwrite_cache, expected,        file_exists
+    "no cache":
+        (None,         False,           {"thing1": "a"}, False),
+    "cache exists":
+        ("dummy.yaml", False,           {"thing1": "a"}, True),
+    "cache doesn't exist":
+        ("dummy.yaml", False,           {"thing1": "a"}, False),
+    "overwrite cache":
+        ("dummy.yaml", True,            {"thing1": "a"}, True),
+    "don't overwrite cache":
+        ("dummy.yaml", False,           {"thing1": "a"}, False)
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("cache, overwrite_cache, expected, file_exists",
+                         cache_environment.values(),
+                         ids=cache_environment.keys())
+def test_cache_environment(cache, overwrite_cache, expected, file_exists):
+    with patch("waves.scons_extensions._return_environment", return_value=expected) as return_environment, \
+         patch("yaml.safe_load", return_value=expected) as yaml_load, \
+         patch("pathlib.Path.exists", return_value=file_exists), \
+         patch("yaml.safe_dump") as yaml_dump, \
+         patch("builtins.open"):
+        environment_dictionary = scons_extensions._cache_environment("dummy command", cache=cache,
+                                                                     overwrite_cache=overwrite_cache)
+        if cache and file_exists and not overwrite_cache:
+            yaml_load.assert_called_once()
+            return_environment.assert_not_called()
+        else:
+            yaml_load.assert_not_called()
+            return_environment.assert_called_once()
+        if cache:
+            yaml_dump.assert_called_once()
+    assert environment_dictionary == expected
+
+
+shell_environment = {
+    "no cache": (None, False, {"thing1": "a"}),
+    "cache": ("dummy.yaml", False, {"thing1": "a"}),
+    "cache overwrite": ("dummy.yaml", True, {"thing1": "a"}),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("cache, overwrite_cache, expected",
+                         shell_environment.values(),
+                         ids=shell_environment.keys())
+def test_shell_environment(cache, overwrite_cache, expected):
+    with patch("waves.scons_extensions._cache_environment", return_value=expected) as cache_environment:
+        env = scons_extensions.shell_environment("dummy")
+        assert cache_environment.called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache)
+    # Check that the expected dictionary is a subset of the SCons construction environment
+    assert all(env["ENV"].get(key, None) == value for key, value in expected.items())
+
 prepended_string = f"{_cd_action_prefix} "
 post_action_list = {
     "list1": (["thing1"], [prepended_string + "thing1"]),
@@ -240,6 +407,15 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
     env.Append(BUILDERS={"AbaqusJournalDeprecatedKwarg": scons_extensions.abaqus_journal(abaqus_program=program, post_action=post_action)})
     nodes = env.AbaqusJournalDeprecatedKwarg(target=target_list, source=["journal.py"], journal_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
+def test_sbatch_abaqus_journal():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
+        '-information environment > ${TARGET.filebase}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus cae ' \
+        '-noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_abaqus_journal()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._abaqus_journal_emitter
 
 
 source_file = fs.File("root.inp")
@@ -381,6 +557,15 @@ def test_abaqus_solver(program, post_action, node_count, action_count, source_li
     check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
 
+def test_sbatch_abaqus_solver():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
+        '-information environment > ${job_name}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus -job ${job_name} ' \
+        '-input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_abaqus_solver()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._abaqus_solver_emitter
+
+
 copy_substitute_input = {
     "strings": (["dummy", "dummy2.in", "root.inp.in", "conf.py.in"],
                 ["dummy", "dummy2.in", "dummy2", "root.inp.in", "root.inp", "conf.py.in", "conf.py"]),
@@ -432,6 +617,15 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
     env.Append(BUILDERS={"Sierra": scons_extensions.sierra(program, application, post_action)})
     nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
+def test_sbatch_sierra():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && sierra adagio ' \
+        '--version > ${TARGET.filebase}.env && cd ${TARGET.dir.abspath} && sierra ${sierra_options} adagio ' \
+        '${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_sierra()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._sierra_emitter
 
 
 @pytest.mark.unittest
@@ -510,6 +704,14 @@ matlab_emitter_input = {
                     [source_file],
                     ["set1/dummy.matlab", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.matlab.env"])
 }
+
+
+def test_sbatch_python_script():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ' \
+        '${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"'
+    builder = scons_extensions.sbatch_python_script()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._first_target_emitter
 
 
 @pytest.mark.unittest
@@ -675,18 +877,18 @@ sbatch_input = {
                          ids=sbatch_input.keys())
 def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait ${{slurm_options}} ' \
-                       '--wrap "${slurm_job}" > ${TARGET.filebase}.stdout 2>&1'
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGET.filebase}}.stdout ' \
+                       '${sbatch_options} --wrap "${slurm_job}"'
 
     env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(program, post_action)})
-    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], slurm_options="",
+    nodes = env.SlurmSbatch(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
     # TODO: Remove the **kwargs and <name>_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     env.Append(BUILDERS={"SlurmSbatchDeprecatedKwarg": scons_extensions.sbatch(sbatch_program=program, post_action=post_action)})
-    nodes = env.SlurmSbatchDeprecatedKwarg(target=target_list, source=["source.in"], slurm_options="",
+    nodes = env.SlurmSbatchDeprecatedKwarg(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET")
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
@@ -725,6 +927,35 @@ def test_abaqus_input_scanner(content, expected_dependencies):
     mock_file.get_text_contents.return_value = content
     env = SCons.Environment.Environment()
     scanner = scons_extensions.abaqus_input_scanner()
+    dependencies = scanner(mock_file, env)
+    found_files = [file.name for file in dependencies]
+    assert set(found_files) == set(expected_dependencies)
+
+
+sphinx_scanner_input = {
+     # Test name, content, expected_dependencies
+    'include directive': ('.. include:: dummy.txt', ['dummy.txt']),
+    'literalinclude directive': ('.. literalinclude:: dummy.txt', ['dummy.txt']),
+    'image directive': ( '.. image:: dummy.png',  ['dummy.png']),
+    'figure directive': ( '.. figure:: dummy.png',  ['dummy.png']),
+    'bibliography directive': ( '.. figure:: dummy.bib', ['dummy.bib']),
+    'no match': ('.. notsuppored:: notsupported.txt', []),
+    'indented': ('.. only:: html\n\n   .. include:: dummy.txt', ['dummy.txt']),
+    'one match multiline': ('.. include:: dummy.txt\n.. notsuppored:: notsupported.txt', ['dummy.txt']),
+    'three match multiline': ('.. include:: dummy.txt\n.. figure:: dummy.png\n.. bibliography:: dummy.bib',
+                              ['dummy.txt', 'dummy.png', 'dummy.bib'])
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("content, expected_dependencies",
+                         sphinx_scanner_input.values(),
+                         ids=sphinx_scanner_input.keys())
+def test_sphinx_scanner(content, expected_dependencies):
+    mock_file = unittest.mock.Mock()
+    mock_file.get_text_contents.return_value = content
+    env = SCons.Environment.Environment()
+    scanner = scons_extensions.sphinx_scanner()
     dependencies = scanner(mock_file, env)
     found_files = [file.name for file in dependencies]
     assert set(found_files) == set(expected_dependencies)
