@@ -103,19 +103,19 @@ def get_parser():
                       "and write an ``output_file``.cub Cubit model file and ``output_file``.inp orphan mesh file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
-    parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
+    parser.add_argument('--input-file', type=str, default=default_input_file,
                         help="The Cubit model file created by ``rectangle_geometry.py`` without extension. " \
                              "Will be appended with the required extension, e.g. ``input_file``.cub " \
                              "(default: %(default)s)")
-    parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
+    parser.add_argument('--output-file', type=str, default=default_output_file,
                         help="The output file for the Cubit model without extension. Will be appended with the " \
                              "required extension, e.g. ``output_file``.cub (default: %(default)s)")
-    parser.add_argument('-g', '--global-seed', type=float, default=default_global_seed,
+    parser.add_argument('--global-seed', type=float, default=default_global_seed,
                         help="The global mesh seed size (default: %(default)s)")
-    parser.add_argument('-e', '--element-type', type=str, default=default_element_type,
+    parser.add_argument('--element-type', type=str, default=default_element_type,
                         help="The model element type. Must be a supported Cubit 4 node element type. " \
                              "(default: %(default)s)")
-    parser.add_argument('-s', '--solver', type=str, default=default_solver, choices=["abaqus", "sierra", "adagio"],
+    parser.add_argument('--solver', type=str, default=default_solver, choices=["abaqus", "sierra", "adagio"],
                         help="The target solver for the mesh file. (default: %(default)s)")
 
     return parser
