@@ -8,6 +8,12 @@ Changelog
 0.7.3 (unreleased)
 ******************
 
+Internal Changes
+================
+- Remove the tutorials' journal file short options. In practice, they frequently conflict with the Abaqus command
+  options and cause difficult to debug error message. Long options are less likely to produce this behavior
+  (:issue:`542`, :merge:`661`). By `Kyle Brindley`_.
+
 ******************
 0.7.2 (2023-10-10)
 ******************
