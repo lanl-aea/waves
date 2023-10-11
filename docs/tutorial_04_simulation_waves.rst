@@ -24,14 +24,37 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py' 'tutorials/eabm_package/abaqus/*.inp'
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch tutorials/tutorial_03_solverprep_SConstruct && mv tutorial_03_solverprep_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_03_solverprep tutorial_04_simulation
-
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_03_solverprep && cp tutorial_03_solverprep tutorial_04_simulation
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 .. _tutorials_tutorial_simulation_waves:
 
@@ -48,7 +71,7 @@ SConscript
 .. _tutorial_simulation_waves_running_datacheck:
 
 
-4. Add the highlighted section shown below to the ``tutorial_04_simulation`` file.
+5. Add the highlighted section shown below to the ``tutorial_04_simulation`` file.
    This will initialize the datacheck list.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -60,7 +83,7 @@ SConscript
        :start-after: marker-1
        :end-before: marker-2
 
-5. Add the highlighted sections shown below to the ``tutorial_04_simulation`` file.
+6. Add the highlighted sections shown below to the ``tutorial_04_simulation`` file.
    This will create the datackeck alias.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -75,7 +98,7 @@ SConscript
 Running a Datacheck
 ===================
 
-6. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
+7. Modify your ``tutorial_04_simulation`` file by adding the contents shown below immediately after the code
    pertaining to ``# SolverPrep`` from the previous tutorial.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -127,7 +150,7 @@ The ``datacheck_suffixes`` are standard output file extensions that will form th
 `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information about each of the file
 extensions listed.
 
-One new section of code that we have not utilized yet in the previous tutotorials is the passing of command line options
+One new section of code that we have not utilized yet in the previous tutorials is the passing of command line options
 to the builder. This is done using the ``abaqus_options`` variable. Here, we instruct the Abaqus solver to use double
 precision for both the packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation
 :cite:`ABAQUS` for more information about the use of single or double precision in an Abaqus analysis.
@@ -143,7 +166,7 @@ default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be
 Running the Analysis
 ====================
 
-7. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
+8. Modify your ``tutorial_04_simulation`` file by adding the contents below immediately after the Abaqus
    datacheck code that was just discussed.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
@@ -190,7 +213,7 @@ tutorial. Note the addition of a separate datacheck alias, which will be used in
 SConstruct
 **********
 
-8. Make the following additions to the ``waves-tutorials/SConstruct`` file using the ``diff`` against the
+9. Make the following additions to the ``waves-tutorials/SConstruct`` file using the ``diff`` against the
    ``SConstruct`` file from the last tutorial:
 
    * Add the ``AbaqusSolver`` key-value pair to the ``BUILDERS`` dictionary in the code beneath ``# Add custom
@@ -210,12 +233,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-9. Build the new targets
+10. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_04_simulation
    scons: Reading SConscript files ...
    Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023

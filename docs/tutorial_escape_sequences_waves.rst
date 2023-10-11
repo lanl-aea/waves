@@ -58,13 +58,37 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_escape_sequences``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py' 'tutorials/eabm_package/abaqus/*.inp'
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch tutorials/tutorial_04_simulation_SConstruct && mv tutorial_04_simulation_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_04_simulation`` file to a new file named ``tutorial_escape_sequences``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_04_simulation tutorial_escape_sequences
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_04_simulation && cp tutorial_04_simulation tutorial_escape_sequences
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 .. _tutorials_tutorial_escape_sequences_waves:
 
@@ -98,12 +122,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-4. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_escape_sequences
    scons: Reading SConscript files ...
    Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
@@ -128,7 +152,7 @@ Build Targets
    cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 -job rectangle_compression -input rectangle_compression -double both -cpus 1 -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.
 
-5. Execute the build command again with a different number of solve cpus. Observe that the workflow is reported as
+6. Execute the build command again with a different number of solve cpus. Observe that the workflow is reported as
    up-to-date.
 
 .. code-block::

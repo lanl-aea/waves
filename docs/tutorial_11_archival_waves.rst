@@ -37,13 +37,40 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_11_archival``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*'
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv'
+        WAVES fetch
+        Destination directory: 'eabm_package/python'
+        $ waves fetch tutorials/tutorial_10_regression_testing_SConstruct && mv tutorial_10_regression_testing_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_11_archival``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_10_regression_testing tutorial_11_archival
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_10_regression_testing && cp tutorial_10_regression_testing tutorial_11_archival
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 **********
 SConscript
@@ -114,13 +141,13 @@ manpage`_ :cite:`scons-man`.
 Build Targets
 *************
 
-4. Build the archive target. Note that the usual workflow target does not include the archive task because it is not
+5. Build the archive target. Note that the usual workflow target does not include the archive task because it is not
    required until the project developer is ready to begin final reporting.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_11_archival_archive --jobs=4
 
 ************
@@ -133,7 +160,7 @@ file. You can inspect the contents of the archive as below.
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ find build -name "*.tar.bz2"
    build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0-tutorial_11_archival.tar.bz2
    $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_11_archival"

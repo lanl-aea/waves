@@ -38,13 +38,40 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*'
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py'
+        WAVES fetch
+        Destination directory: 'eabm_package/python'
+        $ waves fetch tutorials/tutorial_07_cartesian_product_SConstruct && mv tutorial_07_cartesian_product_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_08_data_extraction``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_07_cartesian_product tutorial_08_data_extraction
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_08_data_extraction
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 **********
 SConscript
@@ -85,12 +112,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-4. Build the new targets
+5. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_08_data_extraction --jobs=4
    <output truncated>
 
@@ -98,13 +125,13 @@ Build Targets
 Output Files
 ************
 
-5. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
+6. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
    the addition of the :ref:`odb_extract_cli` output files.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ find build/tutorial_08_data_extraction/ -name "*.h5"
    build/tutorial_08_data_extraction/parameter_set2/rectangle_compression.h5
    build/tutorial_08_data_extraction/parameter_set2/rectangle_compression_datasets.h5

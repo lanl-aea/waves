@@ -25,19 +25,46 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_sobol_sequence``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*'
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py'
+        WAVES fetch
+        Destination directory: 'eabm_package/python'
+        $ waves fetch tutorials/tutorial_07_cartesian_product_SConstruct && mv tutorial_07_cartesian_product_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_07_cartesian_product`` file to a new file named ``tutorial_07_sobol_sequence``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_07_cartesian_product tutorial_07_sobol_sequence
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_07_cartesian_product && cp tutorial_07_cartesian_product tutorial_07_sobol_sequence
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ********************
 Parameter Study File
 ********************
 
-4. Create a new file ``eabm_package/python/rectangle_compression_sobol_sequence.py`` from the content below.
+5. Create a new file ``eabm_package/python/rectangle_compression_sobol_sequence.py`` from the content below.
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_sobol_sequence.py
 
@@ -74,12 +101,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+6. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_07_sobol_sequence --jobs=4
 
 ************
@@ -89,7 +116,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_07_sobol_sequence/parameter_set0/
    build/tutorial_07_sobol_sequence/parameter_set0/
    |-- abaqus.rpy

@@ -46,14 +46,7 @@ generation utility can be integrated more closely with the build system, :ref:`p
 SCons Project Configuration
 ***************************
 
-3. Create and change to a new project root directory to house the tutorial files. For example
-
-.. code-block:: bash
-
-   $ mkdir -p ~/waves-tutorials
-   $ cd ~/waves-tutorials
-   $ pwd
-   /home/roppenheimer/waves-tutorials
+.. include:: tutorial_directory_setup.txt
 
 4. Create a new file named ``SConstruct`` in the ``waves-tutorials`` directory and add the contents listed below. Note
    that the filename is case sensitive.

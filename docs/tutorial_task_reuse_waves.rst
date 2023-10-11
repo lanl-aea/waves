@@ -72,13 +72,40 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_11_archival`` file to a new file named ``tutorial_task_reuse``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*'
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv'
+        WAVES fetch
+        Destination directory: 'eabm_package/python'
+        $ waves fetch tutorials/tutorial_11_archival_SConstruct && mv tutorial_11_archival_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_11_archival`` file to a new file named ``tutorial_task_reuse``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_11_archival tutorial_task_reuse
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_11_archival && cp tutorial_11_archival tutorial_task_reuse
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 **********
 SConscript
@@ -93,7 +120,7 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_11_archival
 
-4. Create a new file named ``rectangle_geometry_partition.scons`` from the contents below
+5. Create a new file named ``rectangle_geometry_partition.scons`` from the contents below
 
 .. admonition:: waves-tutorials/rectangle_geometry_partition.scons
 
@@ -101,7 +128,7 @@ changes made in this tutorial.
       :language: Python
       :lineno-match:
 
-5. Create a new file named ``rectangle_mesh_solverprep_solve_extract.scons`` from the contents below
+6. Create a new file named ``rectangle_mesh_solverprep_solve_extract.scons`` from the contents below
 
 .. admonition:: waves-tutorials/rectangle_mesh_solverprep_solve_extract.scons
 
@@ -126,12 +153,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+7. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_task_reuse --jobs=4
 
 ************
@@ -141,7 +168,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_task_reuse/parameter_set0/
    build/tutorial_task_reuse/parameter_set0/
    |-- abaqus.rpy
