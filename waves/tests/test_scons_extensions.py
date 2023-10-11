@@ -337,7 +337,7 @@ def test_shell_environment(cache, overwrite_cache, expected, verbose):
     with patch("waves.scons_extensions._cache_environment", return_value=expected) as cache_environment:
         env = scons_extensions.shell_environment("dummy", cache=cache, overwrite_cache=overwrite_cache)
         cache_environment.assert_called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache,
-                                                         verbose=verbose)
+                                                  verbose=verbose)
     # Check that the expected dictionary is a subset of the SCons construction environment
     assert all(env["ENV"].get(key, None) == value for key, value in expected.items())
 
