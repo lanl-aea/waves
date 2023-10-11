@@ -34,14 +34,13 @@ conditional_copy_input = {
     ),
     "one missing (different) file": (  # File doesn't exist and is identical to source file. Should never actually occur
         one_file_copy_tuples,
-        [False], [True], None
+        [False], [True], one_file_copy_tuples[0]
     )
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("copy_tuples, " \
-                         "exists_side_effect, filecmp_side_effect, copyfile_call",
+@pytest.mark.parametrize("copy_tuples, exists_side_effect, filecmp_side_effect, copyfile_call",
                          conditional_copy_input.values(),
                          ids=conditional_copy_input.keys())
 def test_conditional_copy(copy_tuples, exists_side_effect, filecmp_side_effect, copyfile_call):
@@ -50,11 +49,11 @@ def test_conditional_copy(copy_tuples, exists_side_effect, filecmp_side_effect, 
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("shutil.copyfile") as mock_copyfile:
         fetch.conditional_copy(copy_tuples)
-        assert mock_mkdir.called_once()
         if copyfile_call:
-            assert mock_copyfile.called_once_with(copyfile_call)
+            mock_mkdir.assert_called_once()
+            mock_copyfile.assert_called_once_with(copyfile_call[0], copyfile_call[1])
         else:
-            assert mock_copyfile.not_called()
+            mock_copyfile.assert_not_called()
 
 
 available_files_input = {
@@ -112,9 +111,9 @@ def test_available_files(root_directory, relative_paths,
         assert available_files == expected_files
         assert not_found == expected_missing
         if mock_rglob_argument:
-            assert mock_rglob.called_once_with(mock_rglob_argument)
+            mock_rglob.assert_called_once_with(mock_rglob_argument)
         else:
-            assert mock_rglob.not_called()
+            mock_rglob.assert_not_called()
 
 
 build_source_files_input = {
