@@ -8,6 +8,11 @@ Changelog
 0.7.3 (unreleased)
 ******************
 
+Documentation
+=============
+- Updated tutorials to use ``waves fetch`` to facilitate starting from any tutorial (:issue:`466`, :merge:`631`).
+  By `Sergio Cordova`_.
+
 ******************
 0.7.2 (2023-10-10)
 ******************
@@ -26,8 +31,6 @@ New Features
 Documentation
 =============
 - Fixed broken AEA Compute Environment documentation links (:issue:`527`, :merge:`643`). By `Sergio Cordova`_.
-- Updated tutorials to use ``waves fetch`` to facilitate starting from any tutorial (:issue:`466`, :merge:`631`).
-  By `Sergio Cordova`_.
 - Use the Abaqus solver SLURM Sbatch builder in the associated tutorial (:merge:`647`). By `Kyle Brindley`_.
 - Use the draft SSH builder wrapper in the remote execution tutorial (:merge:`649`). By `Kyle Brindley`_.
 - Update the builder SConstruct examples (:issue:`534`, :merge:`653`). By `Kyle Brindley`_.
