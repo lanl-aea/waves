@@ -50,11 +50,11 @@ def test_conditional_copy(copy_tuples, exists_side_effect, filecmp_side_effect, 
          patch("pathlib.Path.mkdir") as mock_mkdir, \
          patch("shutil.copyfile") as mock_copyfile:
         fetch.conditional_copy(copy_tuples)
-        assert mock_mkdir.called_once()
+        assert mock_mkdir.assert_called_once()
         if copyfile_call:
-            assert mock_copyfile.called_once_with(copyfile_call)
+            assert mock_copyfile.assert_called_once_with(copyfile_call)
         else:
-            assert mock_copyfile.not_called()
+            assert mock_copyfile.assert_not_called()
 
 
 available_files_input = {
@@ -112,9 +112,9 @@ def test_available_files(root_directory, relative_paths,
         assert available_files == expected_files
         assert not_found == expected_missing
         if mock_rglob_argument:
-            assert mock_rglob.called_once_with(mock_rglob_argument)
+            assert mock_rglob.assert_called_once_with(mock_rglob_argument)
         else:
-            assert mock_rglob.not_called()
+            assert mock_rglob.assert_not_called()
 
 
 build_source_files_input = {
