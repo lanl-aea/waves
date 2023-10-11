@@ -51,7 +51,7 @@ def test_conditional_copy(copy_tuples, exists_side_effect, filecmp_side_effect, 
         fetch.conditional_copy(copy_tuples)
         if copyfile_call:
             mock_mkdir.assert_called_once()
-            mock_copyfile.assert_called_once_with(copyfile_call[0], copyfile_call[1])
+            mock_copyfile.assert_called_once_with(*copyfile_call)
         else:
             mock_copyfile.assert_not_called()
 
