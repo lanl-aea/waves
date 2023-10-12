@@ -18,7 +18,7 @@ Internal Changes
 - Remove the tutorials' journal file short options. In practice, they frequently conflict with the Abaqus command
   options and cause difficult to debug error message. Long options are less likely to produce this behavior
   (:issue:`542`, :merge:`661`). By `Kyle Brindley`_.
-- Fixed failing tests (:issue:`544`, :merge:`663`). By `Sergio Cordova`_.
+- Fixed failing tests (:issue:`544`, :merge:`663`, :issue:`545`, :merge:`664`). By `Sergio Cordova`_.
 
 ******************
 0.7.2 (2023-10-10)
