@@ -84,8 +84,20 @@ command line without modifying the ``SConstruct`` file source code. For example,
 the default build directory named ``build`` and the second ``scons`` call will create a build directory named
 ``non_default_build``.
 
-The ``--unconditional-build`` option is mostly useful for :ref:`testing` and continuous integration. At the
-end of this tutorial, you will see how to explore the project specific command line options help and usage.
+.. code-block::
+
+   $ scons
+   $ scons --build-dir non_default_build
+
+The ``--unconditional-build`` option is mostly useful for :ref:`testing` and continuous integration. It is used in the
+tutorial workflow definitions to force a workflow to execute, even if the required programs are not found. This is
+useful for system testing software availability in the construction environment itself.
+
+By default, |PROJECT| builders redirect task STDOUT and STDERR to a ``*.stdout`` file to avoid cluttering the task
+execution reported by SCons.  The ``--print-build-failures`` will print the associated ``*.stdout`` file of all failed
+tasks at the end of SCons execution.
+
+At the end of this tutorial, you will see how to explore the project specific command line options help and usage.
 
 6. Add the content below to the ``SConstruct`` file to initialize the `SCons construction environment`_.
 
