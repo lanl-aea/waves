@@ -90,8 +90,8 @@ the default build directory named ``build`` and the second ``scons`` call will c
    $ scons --build-dir non_default_build
 
 The ``--unconditional-build`` option is mostly useful for :ref:`testing` and continuous integration. It is used in the
-tutorial workflow definitions to force a workflow to execute, even if the required programs are not found. This is
-useful for system testing software availability in the construction environment itself.
+tutorial workflows to force a workflow to execute, even if the required programs are not found. This is useful for
+system testing software availability in the construction environment itself.
 
 By default, |PROJECT| builders redirect task STDOUT and STDERR to a ``*.stdout`` file to avoid cluttering the task
 execution reported by SCons.  The ``--print-build-failures`` will print the associated ``*.stdout`` file of all failed
