@@ -30,6 +30,7 @@ from waves._settings import _sierra_environment_extension
 
 
 def _print_failed_nodes_stdout():
+    """Query the SCons reported build failures and print the associated node's STDOUT file, if it exists"""
     build_failures = SCons.Script.GetBuildFailures()
     for failure in build_failures:
         stdout_path = pathlib.Path(failure.node.abspath).with_suffix(_stdout_extension).resolve()
@@ -42,6 +43,10 @@ def _print_failed_nodes_stdout():
 
 
 def print_build_failures(print_stdout=True):
+    """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
+
+    :param bool print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
+    """
     if print_stdout:
         atexit.register(_print_failed_nodes_stdout)
 
