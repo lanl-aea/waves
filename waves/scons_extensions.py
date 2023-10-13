@@ -13,7 +13,6 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 import SCons.Scanner
-import SCons.Script
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
@@ -30,6 +29,9 @@ from waves._settings import _sierra_environment_extension
 
 
 def _print_failed_nodes_stdout():
+    # FIXME: The program_operations throw their usual fit when this is a module-wide import
+    # ``SCons.Errors.UserError: Calling Configure from Builders is not supported``
+    import SCons.Script
     """Query the SCons reported build failures and print the associated node's STDOUT file, if it exists"""
     build_failures = SCons.Script.GetBuildFailures()
     for failure in build_failures:
