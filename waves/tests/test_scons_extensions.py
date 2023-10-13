@@ -32,6 +32,15 @@ string_action_list = {
 }
 
 
+def test_print_build_failures():
+    with patch("atexit.register") as mock_atexit:
+        scons_extensions.print_build_failures(True)
+        mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
+    with patch("atexit.register") as mock_atexit:
+        scons_extensions.print_build_failures(False)
+        mock_atexit.assert_not_called()
+
+
 @pytest.mark.unittest
 @pytest.mark.parametrize("builder, expected",
                          string_action_list.values(),
