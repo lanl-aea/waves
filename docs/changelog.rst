@@ -8,6 +8,12 @@ Changelog
 0.7.3 (unreleased)
 ******************
 
+New Features
+============
+- Add a function for printing build failure STDOUT files. Aids in project system testing the tutorials, but can also be
+  useful for end users to print the failed task's STDOUT live during workflow execution (:issue:`546`, :merge:`665`). By
+  `Kyle Brindley`_ and `Matthew Fister`_.
+
 Documentation
 =============
 - Updated tutorials to use ``waves fetch`` to facilitate starting from any tutorial (:issue:`466`, :merge:`631`).
