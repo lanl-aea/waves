@@ -29,8 +29,8 @@ pytest_node = env.Command(
     source=waves_source_list,
     # TODO: Revert to a single, simple "pytest_command" when the race conditions on test_program_operations are fixed
     action=[
-        "${pytest_command} -m 'not programoperations and not systemtest' ${coverage}",
-        "${pytest_command} -m 'programoperations' ${program_operations_coverage}",
+        "${pytest_command} -vvv -m 'not programoperations and not systemtest' ${coverage}",
+        "${pytest_command} -vvv -m 'programoperations' ${program_operations_coverage}",
         "${coverage_command}"
     ],
     pytest_command=pytest_command,
@@ -42,7 +42,7 @@ alias_list = env.Alias("pytest", pytest_node)
 # Always run pytests in place of a complete source list
 env.AlwaysBuild(pytest_node)
 
-systemtest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -n 4 -m systemtest --tb=short --junitxml=${TARGETS[0].name} --cache-clear"
+systemtest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -v --no-showlocals -n 4 -m systemtest --tb=short --junitxml=${TARGETS[0].name} --cache-clear"
 target = ["systemtest_results.xml"]
 source = waves_source_list + [str(pathlib.Path("waves/tests/test_tutorials.py"))]
 systemtest_node = env.Command(
