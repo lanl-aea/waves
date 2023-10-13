@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
 import re
+import sys
 import yaml
+import atexit
 import pathlib
 import functools
 import subprocess
@@ -11,6 +13,7 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 import SCons.Scanner
+import SCons.Script
 
 from waves.abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
@@ -24,6 +27,23 @@ from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
+
+
+def _print_failed_nodes_stdout():
+    build_failures = SCons.Script.GetBuildFailures()
+    for failure in build_failures:
+        stdout_path = pathlib.Path(failure.node.abspath).with_suffix(_stdout_extension).resolve()
+        if stdout_path.exists():
+            with open(stdout_path, "r") as stdout_file:
+                print(f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n", file=sys.stderr)
+                print(stdout_file.read(), file=sys.stderr)
+        else:
+            print(f"\n{failure.node} failed\n", file=sys.stderr)
+
+
+def print_build_failures(print_stdout=True):
+    if print_stdout:
+        atexit.register(_print_failed_nodes_stdout)
 
 
 def _string_action_list(builder):
