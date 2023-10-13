@@ -1,7 +1,9 @@
 #! /usr/bin/env python
 
 import re
+import sys
 import yaml
+import atexit
 import pathlib
 import functools
 import subprocess
@@ -24,6 +26,31 @@ from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
+
+
+def _print_failed_nodes_stdout():
+    # FIXME: The program_operations throw their usual fit when this is a module-wide import
+    # ``SCons.Errors.UserError: Calling Configure from Builders is not supported``
+    import SCons.Script
+    """Query the SCons reported build failures and print the associated node's STDOUT file, if it exists"""
+    build_failures = SCons.Script.GetBuildFailures()
+    for failure in build_failures:
+        stdout_path = pathlib.Path(failure.node.abspath).with_suffix(_stdout_extension).resolve()
+        if stdout_path.exists():
+            with open(stdout_path, "r") as stdout_file:
+                print(f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n", file=sys.stderr)
+                print(stdout_file.read(), file=sys.stderr)
+        else:
+            print(f"\n{failure.node} failed\n", file=sys.stderr)
+
+
+def print_build_failures(print_stdout=True):
+    """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
+
+    :param bool print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
+    """
+    if print_stdout:
+        atexit.register(_print_failed_nodes_stdout)
 
 
 def _string_action_list(builder):

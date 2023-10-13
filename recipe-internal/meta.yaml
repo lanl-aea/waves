@@ -87,9 +87,9 @@ test:
     - cd $SP_DIR/$PKG_NAME
     # FIXME: Trace the source of interference between the builder tests and the find_program tests.
     # Use ``pytest`` when fixed
-    - pytest -m "not programoperations and not systemtest"
-    - pytest -m "programoperations"
-    - pytest -n 4 -m "systemtest" --tb=short
+    - pytest -vvv -m "not programoperations and not systemtest"
+    - pytest -vvv -m "programoperations"
+    - pytest -v -n 4 -m "systemtest" --tb=short
     - cd ${test_root}
     # WAVES CLI regression tests
     - quickstart_regression_directory="${test_root}/test_quickstart"

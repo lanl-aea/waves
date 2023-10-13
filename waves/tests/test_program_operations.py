@@ -42,6 +42,7 @@ find_program_input = {
 
 
 # FIXME: Trace the source of interference between the builder tests and the find_program tests
+# ``SCons.Errors.UserError: Calling Configure from Builders is not supported.``
 # Remove tag and use of tag when fixed.
 @pytest.mark.programoperations
 @pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
@@ -59,6 +60,7 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
 
 
 # FIXME: Trace the source of interference between the builder tests and the find_program tests
+# ``SCons.Errors.UserError: Calling Configure from Builders is not supported.``
 # Remove tag and use of tag when fixed.
 @pytest.mark.programoperations
 @pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
@@ -83,6 +85,7 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
 
 
 # FIXME: Trace the source of interference between the builder tests and the find_program tests
+# ``SCons.Errors.UserError: Calling Configure from Builders is not supported.``
 # Remove tag and use of tag when fixed.
 @pytest.mark.programoperations
 @pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
