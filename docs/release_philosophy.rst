@@ -95,6 +95,7 @@ Steps needed for a release include:
 
        $ git push origin <release branch name>
        $ git push --tags
+
 7. Submit a merge request to the ``dev`` branch of the `upstream repository`_.
 8. Immediately submit a ``dev->main`` PR after merging the release branch to ``dev``.
 9. Review tests and notes, receive approval, and merge to ``main``.
