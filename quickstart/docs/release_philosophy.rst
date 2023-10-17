@@ -74,10 +74,8 @@ Steps needed for a release include:
 1. Create a release branch.
 2. Modify ``docs/changelog.rst`` to move version number for release PR commit,
    add a description as relevant, and update any missing entries in the changelog.
-3. Check and update the ``CITATION.bib``, ``CITATION.cff``, and ``quickstart/docs/references.bib`` file to use the new
-   version number and release date.
-4. Commit changes and submit a pull request to the ``dev`` branch at the `upstream repository`_.
-5. **Major and Minor bumps ONLY**: Create a new developer version tag, e.g. ``?.?.0+dev``, on the new commit.
+3. Commit changes and submit a pull request to the ``dev`` branch at the `upstream repository`_.
+4. **Major and Minor bumps ONLY**: Create a new developer version tag, e.g. ``?.?.0+dev``, on the new commit.
    Reset all numbers to the right of the bump to ``0``, e.g. ``1.2.3`` becomes ``2.0.0+dev`` for a Major version
    bump or ``1.3.0+dev`` for a Minor version bump.
 
@@ -85,13 +83,13 @@ Steps needed for a release include:
 
        $ git tag 1.7.0+dev
 
-6. Push release branch with the new tag
+5. Push release branch with the new tag
 
    .. code-block:: bash
 
        $ git push origin <release branch name>
        $ git push --tags
 
-7. Submit a merge request to the ``dev`` branch of the `upstream repository`_.
-8. Immediately submit a ``dev->main`` PR after merging the release branch to ``dev``.
-9. Review tests and notes, receive approval, and merge to ``main``.
+6. Submit a merge request to the ``dev`` branch of the `upstream repository`_.
+7. Immediately submit a ``dev->main`` PR after merging the release branch to ``dev``.
+8. Review tests and notes, receive approval, and merge to ``main``.
