@@ -51,7 +51,7 @@ def test_docs():
          patch('pathlib.Path.exists', return_value=True):
         return_code = main.docs(print_local_path=True)
         assert return_code == 0
-        mock_webbrowser_open.not_called()
+        mock_webbrowser_open.assert_not_called()
 
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
@@ -59,7 +59,7 @@ def test_docs():
          patch('pathlib.Path.exists', return_value=False):
         return_code = main.docs(print_local_path=True)
         assert return_code != 0
-        mock_webbrowser_open.not_called()
+        mock_webbrowser_open.assert_not_called()
 
 
 @pytest.mark.unittest

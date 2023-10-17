@@ -94,17 +94,17 @@ def get_parser():
                       "and write an ``output_file``.cae Abaqus model file and ``output_file``.inp orphan mesh file."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
-    parser.add_argument('-i', '--input-file', type=str, default=default_input_file,
+    parser.add_argument('--input-file', type=str, default=default_input_file,
                         help="The Abaqus model file created by ``rectangle_geometry.py`` without extension. " \
                              "Will be appended with the required extension, e.g. ``input_file``.cae")
-    parser.add_argument('-o', '--output-file', type=str, default=default_output_file,
+    parser.add_argument('--output-file', type=str, default=default_output_file,
                         help="The output file for the Abaqus model without extension. Will be appended with the " \
                              "required extension, e.g. ``output_file``.cae")
-    parser.add_argument('-m', '--model-name', type=str, default=default_part_name,
+    parser.add_argument('--model-name', type=str, default=default_part_name,
                         help="The name of the Abaqus model")
-    parser.add_argument('-p', '--part-name', type=str, default=default_part_name,
+    parser.add_argument('--part-name', type=str, default=default_part_name,
                         help="The name of the Abaqus part")
-    parser.add_argument('-g', '--global-seed', type=positive_float, default=default_global_seed,
+    parser.add_argument('--global-seed', type=positive_float, default=default_global_seed,
                         help="The global mesh seed size. Positive float.")
     return parser
 

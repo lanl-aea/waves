@@ -43,19 +43,46 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_10_regression_testing``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*'
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py'
+        WAVES fetch
+        Destination directory: 'eabm_package/python'
+        $ waves fetch tutorials/tutorial_09_post_processing_SConstruct && mv tutorial_09_post_processing_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_10_regression_testing``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_09_post_processing tutorial_10_regression_testing
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_10_regression_testing
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ********
 CSV file
 ********
 
-4. In the ``waves-tutorials/eabm_package/python`` directory, Create a new file named ``rectangle_compression_cartesian_product.csv`` from the contents below
+5. In the ``waves-tutorials/eabm_package/python`` directory, Create a new file named ``rectangle_compression_cartesian_product.csv`` from the contents below
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv
 
@@ -95,12 +122,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the datacheck targets without executing the full simulation workflow
+6. Build the datacheck targets without executing the full simulation workflow
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons datacheck --jobs=4
 
 The full simulation suite may also be executed with a single command, but will take much longer to run as the full
@@ -110,7 +137,7 @@ simulation suite against the limited datacheck workflow, perform the following s
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
 
    # Find all workflows that use the datacheck alias for one-to-one real time comparison
    $ datacheck_aliases=$(for file in $(grep -riIE "env\['datacheck_alias'\]" --include=SConscript -l); do echo $(dirname $file); done)
@@ -130,12 +157,12 @@ simulation suite against the limited datacheck workflow, perform the following s
    # Compare times
    $ grep "real" time_{datacheck,full}_workflow.txt
 
-6. Run the full workflow and verify that the CSV regression test passes
+7. Run the full workflow and verify that the CSV regression test passes
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_10_regression_testing --jobs=4
    <output truncated>
    $ echo $?
@@ -148,7 +175,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_10_regression_testing/parameter_set0/
    build/tutorial_10_regression_testing/parameter_set0/
    |-- abaqus.rpy

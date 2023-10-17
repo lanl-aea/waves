@@ -5,8 +5,32 @@ Changelog
 #########
 
 ******************
-0.7.3 (unreleased)
+0.7.4 (unreleased)
 ******************
+
+******************
+0.7.3 (2023-10-17)
+******************
+
+New Features
+============
+- Add a function for printing build failure STDOUT files. Aids in project system testing the tutorials, but can also be
+  useful for end users to print the failed task's STDOUT live during workflow execution (:issue:`546`, :merge:`665`). By
+  `Kyle Brindley`_ and `Matthew Fister`_.
+
+Documentation
+=============
+- Updated tutorials to use ``waves fetch`` to facilitate starting from any tutorial (:issue:`466`, :merge:`631`).
+  By `Sergio Cordova`_.
+- Add favicon image for HTML documentation build (:issue:`547`, :merge:`666`). By `Kyle Brindley`_.
+- Updated release instructions to use git tag (:issue:`532`, :merge:`667`). By `Sergio Cordova`_.
+
+Internal Changes
+================
+- Remove the tutorials' journal file short options. In practice, they frequently conflict with the Abaqus command
+  options and cause difficult to debug error message. Long options are less likely to produce this behavior
+  (:issue:`542`, :merge:`661`). By `Kyle Brindley`_.
+- Fixed failing tests (:issue:`544`, :merge:`663`, :issue:`545`, :merge:`664`). By `Sergio Cordova`_.
 
 ******************
 0.7.2 (2023-10-10)

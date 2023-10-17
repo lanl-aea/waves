@@ -36,6 +36,13 @@ AddOption(
     metavar="N",
     help="Run the Abaqus Solve task using N CPUs. (default: '%default')"
 )
+AddOption(
+    "--print-build-failures",
+    dest="print_build_failures",
+    default=False,
+    action="store_true",
+    help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+)
 
 # Comments used in tutorial code snippets: marker-2
 
@@ -43,7 +50,11 @@ AddOption(
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
                   unconditional_build=GetOption("unconditional_build"),
+                  print_build_failures=GetOption("print_build_failures"),
                   solve_cpus=GetOption("solve_cpus"))
+
+# Conditionally print failed task *.stdout files
+waves.scons_extensions.print_build_failures(env["print_build_failures"])
 
 # Comments used in tutorial code snippets: marker-3
 

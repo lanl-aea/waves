@@ -26,13 +26,40 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*' --destination eabm_package/abaqus
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py'
+        WAVES fetch
+        Destination directory: 'eabm_package/python'
+        $ waves fetch tutorials/tutorial_06_include_files_SConstruct && mv tutorial_06_include_files_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_06_include_files tutorial_07_cartesian_product
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_06_include_files && cp tutorial_06_include_files tutorial_07_cartesian_product
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 .. _tutorial_cartesian_product_waves_parameter_study_file:
 
@@ -53,7 +80,7 @@ Product`_ sampling methodology.
 
    For more information, see this `Cartesian Product`_ Wiki page.
 
-4. Create a new file ``eabm_package/python/rectangle_compression_cartesian_product.py`` from the content below.
+5. Create a new file ``eabm_package/python/rectangle_compression_cartesian_product.py`` from the content below.
 
 .. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_cartesian_product.py
 
@@ -233,7 +260,7 @@ to include the *tasks for all parameter sets* in the convenience alias, ``tutori
 SConstruct
 **********
 
-5. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
+6. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
    ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
@@ -249,12 +276,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the new targets
+7. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_07_cartesian_product --jobs=4
    <output truncated>
 

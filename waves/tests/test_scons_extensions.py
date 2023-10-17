@@ -32,6 +32,33 @@ string_action_list = {
 }
 
 
+def test_print_failed_nodes_stdout():
+    mock_failure_file = unittest.mock.Mock()
+    mock_failure_file.node = unittest.mock.Mock()
+    mock_failure_file.node.abspath = "/failed_node_stdout.ext"
+    with patch("SCons.Script.GetBuildFailures", return_value=[mock_failure_file]), \
+         patch("pathlib.Path.exists", return_value=True), \
+         patch("builtins.open"), \
+         patch("builtins.print") as mock_print:
+        scons_extensions._print_failed_nodes_stdout()
+        assert mock_print.call_count == 2
+    with patch("SCons.Script.GetBuildFailures", return_value=[mock_failure_file]), \
+         patch("pathlib.Path.exists", return_value=False), \
+         patch("builtins.open"), \
+         patch("builtins.print") as mock_print:
+        scons_extensions._print_failed_nodes_stdout()
+        mock_print.assert_called_once()
+
+
+def test_print_build_failures():
+    with patch("atexit.register") as mock_atexit:
+        scons_extensions.print_build_failures(True)
+        mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
+    with patch("atexit.register") as mock_atexit:
+        scons_extensions.print_build_failures(False)
+        mock_atexit.assert_not_called()
+
+
 @pytest.mark.unittest
 @pytest.mark.parametrize("builder, expected",
                          string_action_list.values(),
@@ -323,22 +350,24 @@ def test_cache_environment(cache, overwrite_cache, expected, file_exists):
 
 
 shell_environment = {
-    "no cache": (None, False, {"thing1": "a"}),
-    "cache": ("dummy.yaml", False, {"thing1": "a"}),
-    "cache overwrite": ("dummy.yaml", True, {"thing1": "a"}),
+    "no cache": (None, False, {"thing1": "a"}, True),
+    "cache": ("dummy.yaml", False, {"thing1": "a"}, True),
+    "cache overwrite": ("dummy.yaml", True, {"thing1": "a"}, True),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("cache, overwrite_cache, expected",
+@pytest.mark.parametrize("cache, overwrite_cache, expected, verbose",
                          shell_environment.values(),
                          ids=shell_environment.keys())
-def test_shell_environment(cache, overwrite_cache, expected):
+def test_shell_environment(cache, overwrite_cache, expected, verbose):
     with patch("waves.scons_extensions._cache_environment", return_value=expected) as cache_environment:
-        env = scons_extensions.shell_environment("dummy")
-        assert cache_environment.called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache)
+        env = scons_extensions.shell_environment("dummy", cache=cache, overwrite_cache=overwrite_cache)
+        cache_environment.assert_called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache,
+                                                  verbose=verbose)
     # Check that the expected dictionary is a subset of the SCons construction environment
     assert all(env["ENV"].get(key, None) == value for key, value in expected.items())
+
 
 prepended_string = f"{_cd_action_prefix} "
 post_action_list = {

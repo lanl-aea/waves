@@ -34,7 +34,23 @@ Environment
 Directory Structure
 *******************
 
-3. Within the ``waves-tutorials`` directory, create a new directory called
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block::
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch tutorials/tutorial_00_SConstruct && mv tutorial_00_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+
+4. Within the ``waves-tutorials`` directory, create a new directory called
    ``eabm_package/abaqus``. For example, in a bash shell:
 
 .. code-block::
@@ -43,7 +59,7 @@ Directory Structure
     /home/roppenheimer/waves-tutorials
     $ mkdir -p eabm_package/abaqus
 
-4. Create Python module initialization files to create a project specific local Python package.
+5. Create Python module initialization files to create a project specific local Python package.
 
 .. admonition:: waves-tutorials/eabm_package/__init__.py and waves-tutorials/eabm_package/abaqus/__init__.py
 
@@ -69,7 +85,7 @@ In this tutorial, we will build the geometry for a rectangle part using the
 :meth:`waves.scons_extensions.abaqus_journal` builder (click the builder's name to link to the
 |PROJECT| :ref:`waves_scons_api` API).
 
-5. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
+6. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
 
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
@@ -93,7 +109,7 @@ the code. For example, the variable ``abaqus_source_abspath`` is used in source
 definitions to point at the absolute path to the directory where the Abaqus journal files
 exist.
 
-6. Continue editing the file ``tutorial_01_geometry`` using contents below.
+7. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
@@ -124,7 +140,7 @@ as discussed in :ref:`tutorialsconstruct`. For more information about the behavi
 API. The ``target`` list specifies the files created by the :meth:`waves.scons_extensions.abaqus_journal` task's action, which
 is defined in the :ref:`waves_scons_api` API.
 
-7. Continue editing the file ``tutorial_01_geometry`` using contents below.
+8. Continue editing the file ``tutorial_01_geometry`` using contents below.
 
 .. admonition:: waves-tutorials/tutorial_01_geometry
 
@@ -155,7 +171,7 @@ starting with familiar Abaqus Python code, and adding in the following:
 * Adding a command line interface to your Python code
 * Protecting ``main()`` function execution and returning exit codes
 
-8. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_geometry.py``
+9. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_geometry.py``
    using the contents below which contains the ``main()`` function.
 
 .. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
@@ -213,9 +229,9 @@ environment *not* the SCons/EABM Python 3 environment. See the `Abaqus Python En
 
 Command Line Interfaces
 =======================
-9. In the ``eabm_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
-   using the contents below which contains the ``get_parser()`` function. Note that
-   missing line numbers may be ignored.
+10. In the ``eabm_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
+    using the contents below which contains the ``get_parser()`` function. Note that
+    missing line numbers may be ignored.
 
 .. admonition:: wabes-eabm-tutorial/eabm_package/abaqus/rectangle_geometry.py
 
@@ -272,7 +288,7 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 2.7. See the `Python 2.7 argparse`_ documentation for more information about how
 ``argparse`` will behave in an Abaqus journal file.
 
-10. In the ``eabm_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
+11. In the ``eabm_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
     using the contents below to create the ``if`` statement within which we will call the
     ``main()`` function. Note that missing line numbers may be ignored.
 
@@ -325,28 +341,17 @@ but that may change in production EABMs.
      .. literalinclude:: abaqus_rectangle_geometry.py
          :language: Python
          :linenos:
-         :emphasize-lines: 11-23, 27-38, 54, 57-60, 63, 66-77, 86-90
+         :emphasize-lines: 11-23, 27-38, 54, 57-60, 63, 66-76, 85-89
 
 ***************
 SConstruct File
 ***************
 
-.. note::
-
-   If you skipped :ref:`tutorialsconstruct`, run the following commands to create a copy of the ``SConstruct`` file
-   introduced in that tutorial.
-
-   .. code-block::
-
-      $ pwd
-      /home/roppenheimer/waves-tutorials
-      $ waves fetch tutorials/tutorial_00_SConstruct && mv tutorial_00_SConstruct SConstruct
-
 In :ref:`tutorialsconstruct`, we created the ``SConstruct`` file. For convenience, we will add a collector alias
 matching the tutorial directory name in the SContruct file. This collector alias will point to the list of targets to
 build specified in the ``waves-tutorials/tutorial_01_geometry`` file.
 
-11. Modify the ``waves-tutorials/SConstruct`` file by adding the
+12. Modify the ``waves-tutorials/SConstruct`` file by adding the
     ``tutorial_01_geometry`` collector alias to the ``workflow_configurations`` list.
     The ``diff`` output below shows the difference between the ``SConstruct`` file created
     in :ref:`tutorialsconstruct` and what the new ``SConstruct`` file will be.
@@ -366,7 +371,7 @@ Building Targets
 Now that you've created the geometry task in ``tutorial_01_geometry``, this section will walk through building the
 ``tutorial_01_geometry`` targets using Scons.
 
-12. To build the targets only for the ``tutorial_01_geometry`` workflow, execute the following
+13. To build the targets only for the ``tutorial_01_geometry`` workflow, execute the following
     command:
 
     .. code-block::

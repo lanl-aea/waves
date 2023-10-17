@@ -23,19 +23,43 @@ Environment
 Directory Structure
 *******************
 
-3. Copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
+.. include:: tutorial_directory_setup.txt
+
+.. note::
+
+    If you skipped any of the previous tutorials, run the following commands to create a copy of the necessary tutorial
+    files.
+
+    .. code-block:: bash
+
+        $ pwd
+        /home/roppenheimer/waves-tutorials
+        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        WAVES fetch
+        Destination directory: 'eabm_package'
+        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py'
+        WAVES fetch
+        Destination directory: 'eabm_package/abaqus'
+        $ waves fetch tutorials/tutorial_02_partition_mesh_SConstruct && mv tutorial_02_partition_mesh_SConstruct SConstruct
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
+
+4. Download and copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
+   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
-   $ cp tutorial_02_partition_mesh tutorial_03_solverprep
+   /home/roppenheimer/waves-tutorials
+   $ waves fetch --overwrite tutorials/tutorial_02_partition_mesh && cp tutorial_02_partition_mesh tutorial_03_solverprep
+   WAVES fetch
+   Destination directory: '/home/roppenheimer/waves-tutorials'
 
 ******************
 Solver Input Files
 ******************
 
-4. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``eabm_package/abaqus`` sub-directory
+5. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``eabm_package/abaqus`` sub-directory
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
@@ -46,7 +70,7 @@ Solver Input Files
    WAVES fetch
    Destination directory: 'eabm_package/abaqus'
 
-This action will unzip the source files we included in the
+This action will fetch the source files we included in the
 ``tutorial_03_solverprep`` file into the ``waves-tutorials/eabm_package/abaqus/``
 directory. Check the contents of this directory using the ``ls`` command.
 
@@ -68,7 +92,7 @@ directory. Check the contents of this directory using the ``ls`` command.
 SConscript
 **********
 
-5. Add the highlighted import statement shown below to the ``tutorial_03_solverprep`` file.
+6. Add the highlighted import statement shown below to the ``tutorial_03_solverprep`` file.
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
 
@@ -91,7 +115,7 @@ we will require a custom builder that functions differently than the previously 
     end of the :ref:`tutorials_tutorial_solverprep_waves` section will demonstrate this
     more clearly.
 
-6. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
+7. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
    below immediately after the code pertaining to ``# Mesh`` from the previous tutorial.
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
@@ -139,7 +163,7 @@ included below to help identify the changes made in this tutorial.
 SConstruct
 **********
 
-7. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
+8. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
    ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
@@ -155,12 +179,12 @@ changes made in this tutorial.
 Build Targets
 *************
 
-8. Build the new targets
+9. Build the new targets
 
 .. code-block:: bash
 
    $ pwd
-   /path/to/waves-tutorials
+   /home/roppenheimer/waves-tutorials
    $ scons tutorial_03_solverprep
    scons: Reading SConscript files ...
    Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
