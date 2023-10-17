@@ -19,6 +19,7 @@ Documentation
 - Updated tutorials to use ``waves fetch`` to facilitate starting from any tutorial (:issue:`466`, :merge:`631`).
   By `Sergio Cordova`_.
 - Add favicon image for HTML documentation build (:issue:`547`, :merge:`666`). By `Kyle Brindley`_.
+- Updated release instructions to use git tag (:issue:`532`, :merge:`667`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
