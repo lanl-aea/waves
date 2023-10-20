@@ -8,6 +8,10 @@ Changelog
 0.7.4 (unreleased)
 ******************
 
+Internal Changes
+================
+- Reduce code duplication in documenation build configuration (:merge:`671`). By `Kyle Brindley`_.
+
 ******************
 0.7.3 (2023-10-17)
 ******************
