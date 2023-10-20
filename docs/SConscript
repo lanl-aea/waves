@@ -28,6 +28,15 @@ def sphinx_scanner():
 env.Append(SCANNERS=sphinx_scanner())
 # ^^^ Sphinx Scanner prototype
 
+
+# VVV Sphinx Builder prototype
+def sphinx_build():
+    return Builder(action="${sphinx_program} ${sphinx_options} -b ${builder} ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}")
+
+
+env.Append(BUILDERS={"SphinxBuild": sphinx_build()})
+# ^^^ Sphinx Builder prototype
+
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
@@ -213,12 +222,12 @@ source_files = sphinx_configuration_source_list + documentation_file_list + copi
 sphinx_options = '-W'
 html_directory = "html"
 html_target = [Dir(html_directory)]
-html = env.Command(
+html = env.SphinxBuild(
     target=html_target,
     source=source_files,
-    action="${sphinx_program} ${sphinx_options} -b html ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}",
     sphinx_program=env["sphinx_build"],
-    sphinx_options=sphinx_options
+    sphinx_options=sphinx_options,
+    builder="html"
 )
 env.Clean(html, html_target + documentation_file_list)
 env.AlwaysBuild(html)
@@ -227,12 +236,12 @@ env.Alias(html_directory, html)
 # TODO: Combine the two html build logic
 internal_directory = "html-internal"
 internal_target = [Dir(internal_directory)]
-internal = env.Command(
+internal = env.SphinxBuild(
     target=internal_target,
     source=source_files,
-    action="${sphinx_program} ${sphinx_options} -b html ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}",
     sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options,
+    builder="html",
     tags="-t aea"
 )
 env.Clean(internal, internal_target + documentation_file_list)
@@ -258,12 +267,12 @@ man_source = [
     "man_index.rst",
     "ssh_builder_actions_warning.txt"  # Required by ``ssh_builder_actions`` docstring and not found in man_index.rst
 ]
-man = env.Command(
+man = env.SphinxBuild(
     target=man_target,
     source=man_source + sphinx_configuration_source_list,
-    action="${sphinx_program} ${sphinx_options} -b man ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}",
     sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options,
+    builder="man",
     tags="-t man"
 )
 env.Clean(man, man_target + documentation_file_list)
