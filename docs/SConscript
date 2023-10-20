@@ -281,12 +281,13 @@ env.Alias(man_directory, man)
 
 epub_directory = "epub"
 epub_target = [Dir(epub_directory)]
-epub = env.Command(
+epub = env.SphinxBuild(
     target=epub_target,
     source=source_files,
-    action="${sphinx_program} ${sphinx_options} -b epub ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}",
     sphinx_program=env["sphinx_build"],
-    sphinx_options=sphinx_options)
+    sphinx_options=sphinx_options,
+    builder="epub"
+)
 env.Clean(epub, epub_target + documentation_file_list)
 env.AlwaysBuild(epub)
 env.Alias(epub_directory, epub)
