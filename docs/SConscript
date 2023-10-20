@@ -212,65 +212,73 @@ source_files = sphinx_configuration_source_list + documentation_file_list + copi
 
 sphinx_options = '-W'
 html_directory = "html"
-html_target = Dir(html_directory)
+html_target = [Dir(html_directory)]
 html = env.Command(
-    target=[html_target],
+    target=html_target,
     source=source_files,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{html_directory} ${{tags}}",
-    sphinx_options=sphinx_options)
-env.Clean(html, [html_target] + documentation_file_list)
+    action="${sphinx_program} ${sphinx_options} -b html ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}",
+    sphinx_program=env["sphinx_build"],
+    sphinx_options=sphinx_options
+)
+env.Clean(html, html_target + documentation_file_list)
 env.AlwaysBuild(html)
 env.Alias(html_directory, html)
 
 # TODO: Combine the two html build logic
 internal_directory = "html-internal"
-internal_target = Dir(internal_directory)
+internal_target = [Dir(internal_directory)]
 internal = env.Command(
-    target=[internal_target],
+    target=internal_target,
     source=source_files,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{internal_directory} ${{tags}}",
+    action="${sphinx_program} ${sphinx_options} -b html ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}",
+    sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options,
-    tags="-t aea")
-env.Clean(internal, [internal_target] + documentation_file_list)
+    tags="-t aea"
+)
+env.Clean(internal, internal_target + documentation_file_list)
 env.AlwaysBuild(internal)
 env.Alias(internal_directory, internal)
 
 latex_directory = "latex"
-latex_target = Dir(latex_directory)
+latex_target = [Dir(latex_directory)]
 latexpdf = env.Command(
-    target=[latex_target],
+    target=latex_target,
     source=source_files,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}} ${{sphinx_options}}",
+    action="${sphinx_program} -M latexpdf ${TARGET.dir.abspath} ${TARGET.dir.abspath} ${tags} ${sphinx_options}",
+    sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options
 )
-env.Clean(latexpdf, [latex_target] + documentation_file_list)
+env.Clean(latexpdf, latex_target + documentation_file_list)
 env.AlwaysBuild(latexpdf)
 env.Alias('latexpdf', latexpdf)
 
 man_directory = "man"
-man_target = Dir(man_directory)
+man_target = [Dir(man_directory)]
 man_source = [
     "man_index.rst",
     "ssh_builder_actions_warning.txt"  # Required by ``ssh_builder_actions`` docstring and not found in man_index.rst
 ]
 man = env.Command(
-    target=[man_target],
+    target=man_target,
     source=man_source + sphinx_configuration_source_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{man_directory} ${{tags}}",
+    action="${sphinx_program} ${sphinx_options} -b man ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}",
+    sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options,
-    tags="-t man")
-env.Clean(man, [man_target] + documentation_file_list)
+    tags="-t man"
+)
+env.Clean(man, man_target + documentation_file_list)
 env.AlwaysBuild(man)
 env.Alias(man_directory, man)
 
 epub_directory = "epub"
-epub_target = Dir(epub_directory)
+epub_target = [Dir(epub_directory)]
 epub = env.Command(
-    target=[epub_target],
+    target=epub_target,
     source=source_files,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b epub ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{epub_directory} ${{tags}}",
+    action="${sphinx_program} ${sphinx_options} -b epub ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}",
+    sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options)
-env.Clean(epub, [epub_target] + documentation_file_list)
+env.Clean(epub, epub_target + documentation_file_list)
 env.AlwaysBuild(epub)
 env.Alias(epub_directory, epub)
 
