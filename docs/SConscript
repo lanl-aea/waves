@@ -30,11 +30,15 @@ env.Append(SCANNERS=sphinx_scanner())
 
 
 # VVV Sphinx Builder prototype
-def sphinx_build():
-    return Builder(action="${sphinx_program} ${sphinx_options} -b ${builder} ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}")
+def sphinx_build(program="sphinx-build"):
+    sphinx_builder = Builder(
+        action=["${sphinx_program} ${sphinx_options} -b ${builder} ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}"],
+        sphinx_program=program
+    )
+    return sphinx_builder
 
 
-env.Append(BUILDERS={"SphinxBuild": sphinx_build()})
+env.Append(BUILDERS={"SphinxBuild": sphinx_build(program=env["sphinx_build"])})
 # ^^^ Sphinx Builder prototype
 
 # Perform variable substitution on Sphinx configuration file
@@ -225,7 +229,6 @@ html_target = [Dir(html_directory)]
 html = env.SphinxBuild(
     target=html_target,
     source=source_files,
-    sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options,
     builder="html"
 )
@@ -239,7 +242,6 @@ internal_target = [Dir(internal_directory)]
 internal = env.SphinxBuild(
     target=internal_target,
     source=source_files,
-    sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options,
     builder="html",
     tags="-t aea"
@@ -270,7 +272,6 @@ man_source = [
 man = env.SphinxBuild(
     target=man_target,
     source=man_source + sphinx_configuration_source_list,
-    sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options,
     builder="man",
     tags="-t man"
@@ -284,7 +285,6 @@ epub_target = [Dir(epub_directory)]
 epub = env.SphinxBuild(
     target=epub_target,
     source=source_files,
-    sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options,
     builder="epub"
 )
