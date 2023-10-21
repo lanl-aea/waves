@@ -118,8 +118,8 @@ fast-test:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
     - project_root=${PWD}
-    # Project unit tests
-    - scons . --keep-going --unconditional-build --cov-report
+    # Project regression tests
+    - scons regression --keep-going --unconditional-build --cov-report
     # Set PYTHONPATH for WAVES import in tutorials/quickstart system/integration/regression tests
     - export PYTHONPATH=${project_root}:$PYTHONPATH
     # WAVES CLI regression tests
