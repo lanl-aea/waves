@@ -254,7 +254,7 @@ env.Alias(internal_directory, internal)
 
 waves_pdf = pathlib.Path(f"latex/waves-{env['version']}.pdf")
 latex_directory = "latex"
-latex_target = [str(waves_pdf), str(waves_pdf.with_suffix(".tex"))]
+latex_target = [str(waves_pdf)]
 latexpdf = env.Command(
     target=latex_target,
     source=source_files,
