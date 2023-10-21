@@ -223,9 +223,10 @@ for file_path in tutorial_files_list:
     copied_file_list.append(target)
 source_files = sphinx_configuration_source_list + documentation_file_list + copied_file_list
 
+html_targets = [f"{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if ".rst" in source]
 sphinx_options = '-W'
 html_directory = "html"
-html_target = [f"{html_directory}/{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if ".rst" in source]
+html_target = [f"{html_directory}/{target}" for target in html_targets]
 html = env.SphinxBuild(
     target=html_target,
     source=source_files,
@@ -237,7 +238,7 @@ env.Alias(html_directory, html)
 
 # TODO: Combine the two html build logic
 internal_directory = "html-internal"
-internal_target = [f"{internal_directory}/{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if ".rst" in source]
+internal_target = [f"{internal_directory}/{target}" for target in html_targets]
 internal = env.SphinxBuild(
     target=internal_target,
     source=source_files,
