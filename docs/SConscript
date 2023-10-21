@@ -305,7 +305,7 @@ env.Alias(epub_directory, epub)
 
 # Collector alias to build all documentation and regression
 env.Alias('documentation', html + latexpdf + man)
-env.Alias('regression', html + latexpdf + man)
+env.Alias('regression', html + latexpdf + man + internal)
 
 if not env['unconditional_build'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
