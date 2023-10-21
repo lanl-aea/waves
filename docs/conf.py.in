@@ -42,7 +42,7 @@ from waves._settings import _project_name, _project_name_short
 project = _project_name_short
 release = "@version@"
 version = release
-copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
+copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved"
 
 #============================================================================================== SPHINX CONFIGURATION ===
 # Suppress warnings that can't be fixed
@@ -89,7 +89,7 @@ html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
 latex_logo = 'waves_logo_primary_large_crop.png'
-copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
+copyright_latex = f"""\\textcopyright\\ Copyright {copyright}.
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
 Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government
