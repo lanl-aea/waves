@@ -233,7 +233,7 @@ html = env.SphinxBuild(
     sphinx_options=sphinx_options,
     builder="html"
 )
-env.Clean(html, [Dir(html_directory)] + html_target + documentation_file_list)
+env.Clean(html, [Dir(html_directory)] + documentation_file_list)
 env.Alias(html_directory, html)
 
 # TODO: Combine the two html build logic
@@ -246,7 +246,7 @@ internal = env.SphinxBuild(
     builder="html",
     tags="-t aea"
 )
-env.Clean(internal, [Dir(internal_directory)] + internal_target + documentation_file_list)
+env.Clean(internal, [Dir(internal_directory)] + documentation_file_list)
 env.Alias(internal_directory, internal)
 
 waves_pdf = pathlib.Path(f"latex/waves-{env['version']}.pdf")
@@ -275,7 +275,7 @@ man = env.SphinxBuild(
     builder="man",
     tags="-t man"
 )
-env.Clean(man, [Dir(man_directory)] + man_target + documentation_file_list)
+env.Clean(man, [Dir(man_directory)] + documentation_file_list)
 env.Alias(man_directory, man)
 
 # TODO: Depends on ``imagemagick`` package, which isn't part of the CI environment yet
@@ -295,7 +295,7 @@ epub = env.SphinxBuild(
     sphinx_options=sphinx_options,
     builder="epub"
 )
-env.Clean(epub, [Dir(epub_directory)] + epub_target + documentation_file_list)
+env.Clean(epub, [Dir(epub_directory)] + documentation_file_list)
 env.Alias(epub_directory, epub)
 
 # Collector alias to build all documentation and regression
