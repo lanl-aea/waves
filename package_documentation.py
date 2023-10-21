@@ -27,7 +27,7 @@ new_paths = [
     (sp_dir / pkg_name / "pyproject.toml", pyproject),
 ]
 for destination, source in new_paths:
-    if not source.exists()
+    if not source.exists():
         raise FileNotFoundError(f"'{source}' does not exist")
     print(f"Copying '{source}' to '{destination}'...")
     if source.is_file():
