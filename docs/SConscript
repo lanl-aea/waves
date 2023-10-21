@@ -32,7 +32,7 @@ env.Append(SCANNERS=sphinx_scanner())
 # VVV Sphinx Builder prototype
 def sphinx_build(program="sphinx-build"):
     sphinx_builder = Builder(
-        action=["${sphinx_program} ${sphinx_options} -b ${builder} ${TARGET.dir.abspath} ${TARGET.abspath} ${tags}"],
+        action=["${sphinx_program} ${sphinx_options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
         sphinx_program=program
     )
     return sphinx_builder
@@ -124,8 +124,6 @@ documentation_file_list = [
     'tutorial_remote_execution_waves.rst',
     'tutorial_sbatch_waves.rst',
     'tutorial_task_reuse_waves.rst',
-    'tutorial_environment_activation.txt',
-    'aea_environment_activation.txt',
     'waves_quickstart.rst',
     'zreferences.rst',
 ]
@@ -227,20 +225,19 @@ source_files = sphinx_configuration_source_list + documentation_file_list + copi
 
 sphinx_options = '-W'
 html_directory = "html"
-html_target = [Dir(html_directory)]
+html_target = [f"{html_directory}/{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if ".rst" in source]
 html = env.SphinxBuild(
     target=html_target,
     source=source_files,
     sphinx_options=sphinx_options,
     builder="html"
 )
-env.Clean(html, html_target + documentation_file_list)
-env.AlwaysBuild(html)
+env.Clean(html, [Dir(html_directory)] + html_target + documentation_file_list)
 env.Alias(html_directory, html)
 
 # TODO: Combine the two html build logic
 internal_directory = "html-internal"
-internal_target = [Dir(internal_directory)]
+internal_target = [f"{internal_directory}/{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if ".rst" in source]
 internal = env.SphinxBuild(
     target=internal_target,
     source=source_files,
@@ -248,8 +245,7 @@ internal = env.SphinxBuild(
     builder="html",
     tags="-t aea"
 )
-env.Clean(internal, internal_target + documentation_file_list)
-env.AlwaysBuild(internal)
+env.Clean(internal, [Dir(internal_directory)] + internal_target + documentation_file_list)
 env.Alias(internal_directory, internal)
 
 waves_pdf = pathlib.Path(f"latex/waves-{env['version']}.pdf")
@@ -266,7 +262,7 @@ env.Clean(latexpdf, [Dir(latex_directory)] + documentation_file_list)
 env.Alias('latexpdf', latexpdf)
 
 man_directory = "man"
-man_target = [Dir(man_directory)]
+man_target = [f"{man_directory}/waves.1"]
 man_source = [
     "man_index.rst",
     "ssh_builder_actions_warning.txt"  # Required by ``ssh_builder_actions`` docstring and not found in man_index.rst
@@ -278,8 +274,7 @@ man = env.SphinxBuild(
     builder="man",
     tags="-t man"
 )
-env.Clean(man, man_target + documentation_file_list)
-env.AlwaysBuild(man)
+env.Clean(man, [Dir(man_directory)] + man_target + documentation_file_list)
 env.Alias(man_directory, man)
 
 # TODO: Depends on ``imagemagick`` package, which isn't part of the CI environment yet
@@ -292,15 +287,14 @@ env.Command(
 
 waves_epub = waves_pdf.with_suffix(".epub").name
 epub_directory = "epub"
-epub_target = [Dir(epub_directory)]
+epub_target = [f"{epub_directory}/{waves_epub}"]
 epub = env.SphinxBuild(
     target=epub_target,
     source=source_files + [f"epub/_static/{epub_cover}"],
     sphinx_options=sphinx_options,
     builder="epub"
 )
-env.Clean(epub, epub_target + documentation_file_list)
-env.AlwaysBuild(epub)
+env.Clean(epub, [Dir(epub_directory)] + epub_target + documentation_file_list)
 env.Alias(epub_directory, epub)
 
 # Collector alias to build all documentation and regression
