@@ -41,6 +41,7 @@ requirements:
     - sphinx-copybutton >=0.5.1
     - sphinx_rtd_theme >=1
     - sphinxcontrib-bibtex
+    - setuptools_scm[toml] >=6.2,<8
   host:
     - python
     - python-build
