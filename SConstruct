@@ -3,12 +3,16 @@
 import os
 import pathlib
 
+from waves import __version__
+print(__version__)
+
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
 documentation_source_dir = 'docs'
 package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
+    'version': __version__,
     'tutorials_dir': 'tutorials',
     'eabm_dir': 'eabm_package',
     'abaqus_dir': 'eabm_package/abaqus',
