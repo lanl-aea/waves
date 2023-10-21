@@ -255,15 +255,15 @@ env.Alias(internal_directory, internal)
 
 waves_pdf = pathlib.Path(f"latex/waves-{env['version']}.pdf")
 latex_directory = "latex"
-latex_target = [Dir(latex_directory), str(waves_pdf)]
+latex_target = [str(waves_pdf)]
 latexpdf = env.Command(
     target=latex_target,
     source=source_files,
-    action="${sphinx_program} -M latexpdf ${TARGET.dir.abspath} ${TARGET.dir.abspath} ${tags} ${sphinx_options}",
+    action="${sphinx_program} -M latexpdf ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${sphinx_options}",
     sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options
 )
-env.Clean(latexpdf, latex_target + documentation_file_list)
+env.Clean(latexpdf, [] + latex_target + documentation_file_list)
 env.AlwaysBuild(latexpdf)
 env.Alias('latexpdf', latexpdf)
 
@@ -289,7 +289,7 @@ epub_cover = "waves_epub_cover.png"
 env.Command(
     target=[f"epub/_static/{epub_cover}"],
     source=[str(waves_pdf)],
-    action=["convert -density 300 ${SOURCE.abspath} ${TARGET.abspath}"]
+    action=["convert -density 300 ${SOURCE.abspath}[0] ${TARGET.abspath}"]
 )
 
 waves_epub = waves_pdf.with_suffix(".epub").name
@@ -297,7 +297,7 @@ epub_directory = "epub"
 epub_target = [Dir(epub_directory)]
 epub = env.SphinxBuild(
     target=epub_target,
-    source=source_files + [epub_cover],
+    source=source_files + [f"epub/_static/{epub_cover}"],
     sphinx_options=sphinx_options,
     builder="epub"
 )

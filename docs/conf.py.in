@@ -155,4 +155,4 @@ epub_basename = str(pathlib.Path(latex_basename).with_suffix(""))
 epub_title = f"{project.upper()} {version}"
 epub_publisher = "Triad National Security, LLC"
 epub_show_urls = "no"
-epub_cover = ("_static/waves-epub.png", "epub-cover.html")
+epub_cover = ("_static/waves_epub_cover.png", "epub-cover.html")
