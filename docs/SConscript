@@ -128,7 +128,6 @@ documentation_file_list = [
     'aea_environment_activation.txt',
     'waves_quickstart.rst',
     'zreferences.rst',
-    '_static/epub-cover.html',
 ]
 
 # Copy tutorial files to the build/docs directory
@@ -255,7 +254,7 @@ env.Alias(internal_directory, internal)
 
 waves_pdf = pathlib.Path(f"latex/waves-{env['version']}.pdf")
 latex_directory = "latex"
-latex_target = [str(waves_pdf)]
+latex_target = [str(waves_pdf), str(waves_pdf.with_suffix(".tex"))]
 latexpdf = env.Command(
     target=latex_target,
     source=source_files,
@@ -263,8 +262,7 @@ latexpdf = env.Command(
     sphinx_program=env["sphinx_build"],
     sphinx_options=sphinx_options
 )
-env.Clean(latexpdf, [] + latex_target + documentation_file_list)
-env.AlwaysBuild(latexpdf)
+env.Clean(latexpdf, [Dir(latex_directory)] + documentation_file_list)
 env.Alias('latexpdf', latexpdf)
 
 man_directory = "man"
