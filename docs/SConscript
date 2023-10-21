@@ -287,7 +287,7 @@ epub_directory = "epub"
 epub_target = [Dir(epub_directory)]
 epub = env.SphinxBuild(
     target=epub_target,
-    source=source_files,
+    source=source_files + ["_static/waves_logo_primary_large_crop.png"],
     sphinx_options=sphinx_options,
     builder="epub"
 )
