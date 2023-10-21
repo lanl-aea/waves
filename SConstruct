@@ -24,8 +24,6 @@ project_variables = {
     'python_dir': 'eabm_package/python'
 }
 
-print(project_variables['version'])
-
 # ============================================================================================= COMMAND LINE OPTIONS ===
 AddOption(
     "--build-dir",
