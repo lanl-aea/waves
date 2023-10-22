@@ -2,6 +2,12 @@
 
 import os
 import pathlib
+import warnings
+
+import setuptools_scm
+
+
+warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, module="setuptools_scm")
 
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
@@ -9,6 +15,7 @@ documentation_source_dir = 'docs'
 package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
+    'version': setuptools_scm.get_version(),
     'tutorials_dir': 'tutorials',
     'eabm_dir': 'eabm_package',
     'abaqus_dir': 'eabm_package/abaqus',

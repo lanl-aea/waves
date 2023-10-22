@@ -1,3 +1,7 @@
+.. only:: epub
+
+   .. include:: epub_copyright.txt
+
 #########
 |project|
 #########

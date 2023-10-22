@@ -52,3 +52,6 @@ systemtest_node = env.Command(
 )
 env.Alias("systemtest", systemtest_node)
 env.AlwaysBuild(systemtest_node)
+
+# Collector alias to build all regression tasks
+env.Alias('regression', pytest_node + systemtest_node)
