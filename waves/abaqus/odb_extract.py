@@ -13,6 +13,7 @@ import select
 import re
 import shlex
 import os
+import pathlib
 from subprocess import run
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
@@ -122,11 +123,11 @@ def odb_extract(input_file,
     job_name = path_output_file.with_suffix('.csv')
     time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
     if not odb_report_args:
-        odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
+        odb_report_args = f"job={_quote_spaces_in_path(job_name.with_suffix(''))} odb={_quote_spaces_in_path(input_file)} all mode=CSV blocked"
     else:
         if 'odb=' in odb_report_args or 'job=' in odb_report_args:
             print_warning(verbose, f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
-            odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
+            odb_report_args = f"job={_quote_spaces_in_path(job_name.with_suffix(''))} odb={_quote_spaces_in_path(input_file)} all mode=CSV blocked"
     if path_output_file.exists():
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
         print_warning(verbose, f'{output_file} already exists. Will use {new_output_file} instead.')
@@ -135,9 +136,9 @@ def odb_extract(input_file,
     if 'odbreport' in odb_report_args:
         odb_report_args = odb_report_args.replace('odbreport', '')
     if 'odb=' not in odb_report_args:
-        odb_report_args = f'odb={input_file} {odb_report_args.strip()}'
+        odb_report_args = f'odb={_quote_spaces_in_path(input_file)} {odb_report_args.strip()}'
     if 'job=' not in odb_report_args:
-        odb_report_args = f"job={job_name.with_suffix('')} {odb_report_args.strip()}"
+        odb_report_args = f"job={_quote_spaces_in_path(job_name.with_suffix(''))} {odb_report_args.strip()}"
     if 'blocked' not in odb_report_args:
         odb_report_args = f'{odb_report_args.strip()} blocked'
     if 'invariants' in odb_report_args:
@@ -197,6 +198,29 @@ def odb_extract(input_file,
     if delete_report_file:
         Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
     return 0
+
+
+def _quote_spaces_in_path(path):
+    """Traverse parts of a path and place in double quotes if there are spaces in the part
+
+    >>> import pathlib
+    >>> import waves
+    >>> path = pathlib.Path("path/directory with space/filename.ext")
+    >>> waves.scons_extensions._quote_spaces_in_path(path)
+    PosixPath('path/"directory with space"/filename.ext')
+
+    :param pathlib.Path path: path to modify as necessary
+
+    :return: Path with parts wrapped in double quotes as necessary
+    :rtype: pathlib.Path
+    """
+    path = pathlib.Path(path)
+    new_path = pathlib.Path(path.root)
+    for part in path.parts:
+        if " " in part:
+            part = f'"{part}"'
+        new_path = new_path / part
+    return new_path
 
 
 def run_external(cmd):
