@@ -11,8 +11,8 @@ import re
 import sys
 import json
 import yaml
-import select
 import shlex
+import select
 from shutil import which
 from pathlib import Path
 from subprocess import run
