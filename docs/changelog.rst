@@ -18,6 +18,7 @@ Internal Changes
 - The EPUB cover handling requires the imagemagick package, so use a ``regression`` alias to exclude the EPUB build from
   the regression suite until we decide how to handle the unavailability of imagemagick for Windows or accept linux/macos
   only CI builds (:merge:`672`). By `Kyle Brindley`_.
+- Refine a sphinx build prototype builder and interface. By `Kyle Brindley`_.
 
 ******************
 0.7.3 (2023-10-17)
