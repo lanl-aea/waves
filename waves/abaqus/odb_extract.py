@@ -6,22 +6,22 @@ Calls odbreport feature of Abaqus, parses resultant file, and creates output fil
 .. moduleauthor:: Prabhu Khalsa <pkhalsa@lanl.gov>
 """
 
+import os
+import re
 import sys
 import json
 import yaml
 import select
-import re
 import shlex
-import os
-import pathlib
+from shutil import which
+from pathlib import Path
 from subprocess import run
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-from pathlib import Path
-from shutil import which
 
-from waves.abaqus import abaqus_file_parser
 from waves.abaqus import _settings
+from waves.abaqus import abaqus_file_parser
+from waves.utilities import _quote_spaces_in_path
 
 
 def get_parser():
@@ -198,29 +198,6 @@ def odb_extract(input_file,
     if delete_report_file:
         Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
     return 0
-
-
-def _quote_spaces_in_path(path):
-    """Traverse parts of a path and place in double quotes if there are spaces in the part
-
-    >>> import pathlib
-    >>> import waves
-    >>> path = pathlib.Path("path/directory with space/filename.ext")
-    >>> waves.scons_extensions._quote_spaces_in_path(path)
-    PosixPath('path/"directory with space"/filename.ext')
-
-    :param pathlib.Path path: path to modify as necessary
-
-    :return: Path with parts wrapped in double quotes as necessary
-    :rtype: pathlib.Path
-    """
-    path = pathlib.Path(path)
-    new_path = pathlib.Path(path.root)
-    for part in path.parts:
-        if " " in part:
-            part = f'"{part}"'
-        new_path = new_path / part
-    return new_path
 
 
 def run_external(cmd):
