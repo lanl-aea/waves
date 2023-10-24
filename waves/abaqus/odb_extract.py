@@ -6,21 +6,22 @@ Calls odbreport feature of Abaqus, parses resultant file, and creates output fil
 .. moduleauthor:: Prabhu Khalsa <pkhalsa@lanl.gov>
 """
 
+import os
+import re
 import sys
 import json
 import yaml
-import select
-import re
 import shlex
-import os
+import select
+from shutil import which
+from pathlib import Path
 from subprocess import run
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
-from pathlib import Path
-from shutil import which
 
-from waves.abaqus import abaqus_file_parser
 from waves.abaqus import _settings
+from waves.abaqus import abaqus_file_parser
+from waves._utilities import _quote_spaces_in_path
 
 
 def get_parser():
@@ -118,34 +119,15 @@ def odb_extract(input_file,
         print_warning(verbose, f'Output specified as {output_type}, but output file extension is {file_suffix}. '
                        f'Changing output file extension. Output file name {output_file}')
         file_suffix = output_type
-    odb_report_args = odb_report_args
-    job_name = path_output_file.with_suffix('.csv')
+
     time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
-    if not odb_report_args:
-        odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
-    else:
-        if 'odb=' in odb_report_args or 'job=' in odb_report_args:
-            print_warning(verbose, f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
-            odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
+    job_name = path_output_file.with_suffix('.csv')
     if path_output_file.exists():
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
         print_warning(verbose, f'{output_file} already exists. Will use {new_output_file} instead.')
         output_file = new_output_file
-
-    if 'odbreport' in odb_report_args:
-        odb_report_args = odb_report_args.replace('odbreport', '')
-    if 'odb=' not in odb_report_args:
-        odb_report_args = f'odb={input_file} {odb_report_args.strip()}'
-    if 'job=' not in odb_report_args:
-        odb_report_args = f"job={job_name.with_suffix('')} {odb_report_args.strip()}"
-    if 'blocked' not in odb_report_args:
-        odb_report_args = f'{odb_report_args.strip()} blocked'
-    if 'invariants' in odb_report_args:
-        odb_report_args = odb_report_args.replace('invariants', '')
-    if 'mode=' not in odb_report_args:
-        odb_report_args = f'{odb_report_args.strip()} mode=CSV'
-    # use regex that ignores case to replace 'html' or 'HTML' with 'CSV'
-    odb_report_args = re.sub('(?i)' + re.escape('html'), lambda m: 'CSV', odb_report_args)
+    
+    odb_report_args = get_odb_report_args(odb_report_args, input_file, job_name, verbose)
 
     abaqus_base_command = which(abaqus_command)
     if not abaqus_base_command:
@@ -197,6 +179,43 @@ def odb_extract(input_file,
     if delete_report_file:
         Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
     return 0
+
+
+def get_odb_report_args(odb_report_args, input_file, job_name, verbose):
+    """
+    Generates odb_report arguments
+    
+    :param str odb_report_args: String of command line options to pass to ``abaqus odbreport``.
+    :param Path input_file: ``.odb`` file.
+    :param Path job_name: Report file.
+    :param bool verbose: Boolean to print more verbose messages
+    """
+    input_file = _quote_spaces_in_path(input_file)
+    job_name = _quote_spaces_in_path(job_name)
+    odb_report_args = odb_report_args
+    if not odb_report_args:
+        odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
+    else:
+        if 'odb=' in odb_report_args or 'job=' in odb_report_args:
+            print_warning(verbose,
+                          f'Argument to odbreport cannot include odb or job. Will use default odbreport arguments.')
+            odb_report_args = f"job={job_name.with_suffix('')} odb={input_file} all mode=CSV blocked"
+
+    if 'odbreport' in odb_report_args:
+        odb_report_args = odb_report_args.replace('odbreport', '')
+    if 'odb=' not in odb_report_args:
+        odb_report_args = f'odb={input_file} {odb_report_args.strip()}'
+    if 'job=' not in odb_report_args:
+        odb_report_args = f"job={job_name.with_suffix('')} {odb_report_args.strip()}"
+    if 'blocked' not in odb_report_args:
+        odb_report_args = f'{odb_report_args.strip()} blocked'
+    if 'invariants' in odb_report_args:
+        odb_report_args = odb_report_args.replace('invariants', '')
+    if 'mode=' not in odb_report_args:
+        odb_report_args = f'{odb_report_args.strip()} mode=CSV'
+    # use regex that ignores case to replace 'html' or 'HTML' with 'CSV'
+    odb_report_args = re.sub('(?i)' + re.escape('html'), lambda m: 'CSV', odb_report_args)
+    return odb_report_args
 
 
 def run_external(cmd):
