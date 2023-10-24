@@ -39,4 +39,4 @@ quote_spaces_in_path_input = {
                          quote_spaces_in_path_input.values(),
                          ids=quote_spaces_in_path_input.keys())
 def test_quote_spaces_in_path(path, expected):
-    assert utilities._quote_spaces_in_path(path) == expected
+    assert _utilities._quote_spaces_in_path(path) == expected
