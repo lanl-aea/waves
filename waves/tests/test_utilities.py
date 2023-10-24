@@ -1,5 +1,7 @@
-import pytest
 import pathlib
+
+import pytest
+
 from waves import _utilities
 
 quote_spaces_in_path_input = {
