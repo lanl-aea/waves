@@ -22,4 +22,3 @@ def _quote_spaces_in_path(path):
             part = f'"{part}"'
         new_path = new_path / part
     return new_path
-
