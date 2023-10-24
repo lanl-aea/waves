@@ -1,6 +1,6 @@
 import pytest
 import pathlib
-from waves import utilities
+from waves import _utilities
 
 quote_spaces_in_path_input = {
     "string, no spaces": (

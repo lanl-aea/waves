@@ -21,7 +21,7 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
 from waves.abaqus import _settings
 from waves.abaqus import abaqus_file_parser
-from waves.utilities import _quote_spaces_in_path
+from waves._utilities import _quote_spaces_in_path
 
 
 def get_parser():
