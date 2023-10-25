@@ -1,3 +1,5 @@
+Import('env')
+
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
