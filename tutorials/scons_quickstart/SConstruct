@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import os
+import pathlib
 
 # Add build directory CLI arg
 AddOption(
@@ -47,9 +48,6 @@ env.Append(BUILDERS={
     'AbaqusJournal': abaqus_journal,
     'AbaqusSolver': abaqus_solver
 })
-
-# Abaqus input file implicit dependency scanner
-env.Append(SCANNERS=waves.scons_extensions.abaqus_input_scanner())
 
 # Call SConscript file
 SConscript('SConscript', variant_dir=env['build_dir'], exports='env', duplicate=True)
