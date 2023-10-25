@@ -1,0 +1,70 @@
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
+# Geometry
+journal_options = ""
+workflow.extend(env.AbaqusJournal(
+    target=[str(variant_dir_base / "rectangle_geometry.cae")],
+    source=[str(project_dir / abaqus_source_dir / "rectangle_geometry.py")],
+    abaqus_program=env['abaqus'],
+    journal_options=journal_options))
+
+# Partition
+journal_options = ""
+workflow.extend(env.AbaqusJournal(
+    target=[str(variant_dir_base / "rectangle_partition.cae")],
+    source=[str(project_dir / abaqus_source_dir / "rectangle_partition.py"),
+            str(variant_dir_base / "rectangle_geometry.cae")],
+    abaqus_program=env['abaqus'],
+    journal_options=journal_options))
+
+# Mesh
+journal_options = ""
+workflow.extend(env.AbaqusJournal(
+    target=[str(variant_dir_base / "rectangle_mesh.inp"),
+            str(variant_dir_base / "rectangle_mesh.cae")],
+    source=[str(project_dir / abaqus_source_dir / "rectangle_mesh.py"),
+            str(variant_dir_base / "rectangle_partition.cae")],
+    abaqus_program=env['abaqus'],
+    journal_options=journal_options))
+
+# SolverPrep
+abaqus_source_list = [
+    project_dir / abaqus_source_dir / "rectangle_compression.inp",
+    project_dir / abaqus_source_dir / "assembly.inp",
+    project_dir / abaqus_source_dir / "boundary.inp",
+    project_dir / abaqus_source_dir / "field_output.inp",
+    project_dir / abaqus_source_dir / "materials.inp",
+    project_dir / abaqus_source_dir / "parts.inp",
+    project_dir / abaqus_source_dir / "history_output.inp"
+]
+for source_file in abaqus_source_list:
+    copy_target = variant_dir_base / source_file.name
+    workflow.extend(env.Command(
+        target=str(copy_target),
+        source=str(source_file),
+        action=Copy('${TARGET}', '${SOURCE}')))
+
+# Abaqus Solve
+abaqus_options = '-double both'
+solve_source_list = [str(variant_dir_base / source_file.name) for source_file in abaqus_source_list]
+solve_source_list.append(str(variant_dir_base / "rectangle_mesh.inp"))
+
+solve_targets = [
+    str(variant_dir_base / "rectangle_compression.odb"),
+    str(variant_dir_base / "rectangle_compression.dat"),
+    str(variant_dir_base / "rectangle_compression.msg"),
+    str(variant_dir_base / "rectangle_compression.com"),
+    str(variant_dir_base / "rectangle_compression.prt"),
+    str(variant_dir_base / "rectangle_compression.sta")
+]
+
+workflow.extend(env.AbaqusSolver(
+    target=solve_targets,
+    source=solve_source_list,
+    abaqus_program=env['abaqus'],
+    job_name="rectangle_compression",
+    abaqus_options=abaqus_options))
+
+# Collector alias named after the model simulation
+env.Alias("rectangle", workflow)
