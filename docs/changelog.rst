@@ -11,7 +11,7 @@ Changelog
 Documentation
 =============
 - Add the PDF documentation cover as the EPUB cover (:merge:`672`). By `Kyle Brindley`_.
-- Simplified scons quickstart ``SConscript`` files (:issue:`521`, :merge:`675`). By `Sergio Cordova`_.
+- Simplified scons quickstart ``SConscript`` file (:issue:`521`, :merge:`675`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
