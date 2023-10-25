@@ -92,3 +92,16 @@ Output Files
 
    0 directories, 23 files
 
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/scons_quickstart
+   $ waves visualize rectangle --output-file scons_quickstart.png
+
+.. figure:: scons_quickstart.png
+   :align: center
+
