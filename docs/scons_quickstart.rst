@@ -16,19 +16,35 @@ Environment
 Directory Structure
 *******************
 
-.. include:: scons_tutorial_directory.txt
+3. Create the project directory structure and copy the `SCons quickstart source files`_ into the ``~/scons_quickstart``
+   sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+.. code-block:: bash
+
+      $ waves fetch tutorials/scons_quickstart --destination ~/scons_quickstart
+      WAVES fetch
+      Destination directory: '/home/roppenheimer/scons_quickstart'
+      $ cd ~/scons_quickstart
+      $ pwd
+      /home/roppenheimer/scons_quickstart
 
 ***************
-SConstruct File
+SConscript File
 ***************
 
-5. Create a file named ``scons_quickstart_SConstruct`` from the contents below.
+For this quickstart, we will not discuss the main SCons configuration file named SConstruct, which contains project
+setup boilerplate. :ref:`tutorialsconstruct` has a more complete discussion about the contents of the
+``SConstruct`` file.
 
-.. admonition:: waves-tutorials/scons_quickstart_SConstruct
+The ``SConscript`` file below contains the workflow task definitions. Review the source and target
+files defining the workflow tasks. As discussed in :ref:`build_system`, a task definition also requires an action.
 
-    .. literalinclude:: tutorials_scons_quickstart_SConstruct
+.. admonition:: scons_quickstart/SConscript
+
+    .. literalinclude:: scons_quickstart_SConscript
        :language: Python
        :lineno-match:
+
 
 ****************
 Building targets
@@ -37,13 +53,8 @@ Building targets
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ scons --sconstruct=scons_quickstart_SConstruct rectangle
-
-.. note::
-
-   The ``--sconstruct`` option is required because the quickstart project configuration file name doesn't follow the
-   `SCons`_ naming convention, ``SConstruct``.
+   /home/roppenheimer/scons_quickstart
+   $ scons rectangle
 
 ************
 Output Files
@@ -52,7 +63,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-tutorials
+   /home/roppenheimer/scons_quickstart
    $ tree build_scons_quickstart/
    build_scons_quickstart/
    ├── abaqus.rpy
