@@ -64,8 +64,10 @@ Output Files
 
    $ pwd
    /home/roppenheimer/scons_quickstart
-   $ tree build_scons_quickstart/
-   build_scons_quickstart/
+   $ tree build/
+   build/
+   ├── abaqus_journal_utilities.py
+   ├── abaqus_journal_utilities.pyc
    ├── abaqus.rpy
    ├── abaqus.rpy.1
    ├── abaqus.rpy.2
@@ -84,11 +86,29 @@ Output Files
    ├── rectangle_compression.sta
    ├── rectangle_geometry.cae
    ├── rectangle_geometry.jnl
+   ├── rectangle_geometry.py
    ├── rectangle_mesh.cae
    ├── rectangle_mesh.inp
    ├── rectangle_mesh.jnl
+   ├── rectangle_mesh.py
    ├── rectangle_partition.cae
-   └── rectangle_partition.jnl
+   ├── rectangle_partition.jnl
+   ├── rectangle_partition.py
+   └── SConscript
 
-   0 directories, 23 files
+   0 directories, 29 files
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves_quickstart
+   $ waves visualize rectangle --output-file scons_quickstart.png
+
+.. figure:: scons_quickstart.png
+   :align: center
+
 
