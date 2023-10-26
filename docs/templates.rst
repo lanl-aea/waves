@@ -18,6 +18,13 @@ documentation also contains a useful reference in the `reStructuredText Primer`_
 
 4. `Sphinx`_ tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html :cite:`sphinx,sphinx-tutorial`
 
+There is one significant difference between the Sphinx tutorial and the modsim template project. The Sphinx tutorial and
+Sphinx documentation assumes that users are building documentation with `GNU Make`_ :cite:`gnu-make`. Since the modsim
+template and WAVES already use the `SCons`_ :cite:`SCons` build system for running workflows, the documentation template
+files also use SCons as the build system. Users can find the available documentation commands with ``scons -h`` and the
+documentation configuration is found in the ``modsim_template/docs/SConscript`` file, which should look familiar to
+SCons users but may require some translation from the Sphinx manual build commands.
+
 ********************
 Fetch Template Files
 ********************
