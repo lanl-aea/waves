@@ -8,7 +8,7 @@
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://lanl.github.io/waves/index.html
-.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/quickstart
+.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/modsim_template
 .. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
@@ -33,7 +33,7 @@ Description
 .. project-description-start-do-not-remove
 
 This `WAVES-EABM`_ based modsim repository contains an engineering analysis baseline model (EABM) that uses the `WAVES`_
-collection of parametric study and simulation helper utilities. This EABM was generated from the `WAVES`_ ``quickstart``
+collection of parametric study and simulation helper utilities. This EABM was generated from the `WAVES`_ ``fetch``
 subcommand template.
 
 .. project-description-end-do-not-remove

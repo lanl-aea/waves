@@ -2,6 +2,8 @@
 build*/
 quickstart_test/
 test_quickstart/
+modsim_template_test/
+test_modsim_template/
 *.tar.bz2
 *.zip
 
