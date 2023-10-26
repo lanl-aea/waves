@@ -15,7 +15,10 @@ def main():
     """
     return_code = None
     parser = get_parser()
-    args, unknown = parser.parse_known_args()
+    try:
+        args, unknown = parser.parse_known_args()
+    except SystemExit as err:
+        sys.exit(err.code)
 
     if args.subcommand == 'docs':
         return_code = docs(print_local_path=args.print_local_path)
