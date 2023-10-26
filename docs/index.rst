@@ -41,6 +41,7 @@
    tutorial_core
    tutorial_supplemental
    tutorial_wip
+   templates
    api
    cli
 

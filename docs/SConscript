@@ -103,6 +103,7 @@ documentation_file_list = [
     'tutorial_core.rst',
     'tutorial_supplemental.rst',
     'tutorial_wip.rst',
+    'templates.rst',
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
     'tutorial_02_partition_mesh_waves.rst',
