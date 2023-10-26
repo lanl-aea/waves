@@ -25,6 +25,7 @@ def test_main():
         mock_build.assert_called_once()
         mock_build.call_args[0] == [target_string]
 
+    # TODO: deprecate the quickstart subcommand in v1
     project_directory = 'project_directory'
     with patch('sys.argv', ['waves.py', 'quickstart', project_directory]), \
          patch("waves.fetch.recursive_copy") as mock_recursive_copy:
@@ -75,7 +76,7 @@ def test_build():
 
 
 @pytest.mark.unittest
-def test_quickstart():
+def test_fetch():
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
     with patch("waves.fetch.recursive_copy") as mock_recursive_copy:

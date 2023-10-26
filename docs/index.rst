@@ -41,6 +41,7 @@
    tutorial_core
    tutorial_supplemental
    tutorial_wip
+   templates
    api
    cli
 
@@ -78,9 +79,9 @@
 
 .. only:: html
 
-   ##################
+   ******************
    Indices and tables
-   ##################
+   ******************
 
    * :ref:`genindex`
    * :ref:`modindex`

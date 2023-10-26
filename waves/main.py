@@ -23,14 +23,14 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'fetch':
-        root_directory = _settings._installed_quickstart_directory.parent
+        root_directory = _settings._installed_modsim_template_directory.parent
         relative_paths = _settings._fetch_subdirectories
         return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
                             requested_paths=args.FILE, overwrite=args.overwrite, dry_run=args.dry_run,
                             print_available=args.print_available)
     elif args.subcommand == 'quickstart':
-        root_directory = _settings._installed_quickstart_directory.parent
-        relative_paths = [_settings._installed_quickstart_directory.name]
+        root_directory = _settings._installed_modsim_template_directory.parent
+        relative_paths = [_settings._installed_modsim_template_directory.name]
         return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
                             overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
@@ -80,7 +80,9 @@ def get_parser():
 
     subparsers = main_parser.add_subparsers(
         # So args.subcommand will contain the name of the subcommand called
-        dest='subcommand')
+        title="subcommands",
+        metavar="{subcommand}",
+        dest="subcommand")
 
     docs_parser = argparse.ArgumentParser(add_help=False)
     docs_parser = subparsers.add_parser('docs',
@@ -96,8 +98,8 @@ def get_parser():
 
     fetch_parser = argparse.ArgumentParser(add_help=False)
     fetch_parser = subparsers.add_parser('fetch',
-        help="Fetch and copy SCons-WAVES modsim template files and directories",
-        description="Fetch and copy SCons-WAVES modsim template files and directories. If no ``FILE`` is specified, " \
+        help="Fetch and copy WAVES modsim template files and directories",
+        description="Fetch and copy WAVES modsim template files and directories. If no ``FILE`` is specified, " \
             "all available files will be created. Directories are recursively copied. ``pathlib.Path`` recursive " \
             "pattern matching is possible. The source path is truncated to use the shortest common file prefix, " \
             "e.g. requesting two files ``common/source/file.1`` and ``common/source/file.2`` will create " \
@@ -148,8 +150,7 @@ def get_parser():
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
-        help="Create an SCons-WAVES project template",
-        description="Create an SCons-WAVES project template from the rectangle compression simulation found in " \
+        description="Create an WAVES project template from the rectangle compression simulation found in " \
                     "the WAVES tutorials.",
         parents=[quickstart_parser])
     quickstart_parser.add_argument("destination",

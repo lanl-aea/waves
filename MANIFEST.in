@@ -1,2 +1,2 @@
 recursive-exclude docs *
-recursive-exclude quickstart/docs *
+recursive-exclude modsim_template/docs *

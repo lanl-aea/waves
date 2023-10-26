@@ -120,15 +120,15 @@ fast-test:
     - project_root=${PWD}
     # Project regression tests
     - scons regression --keep-going --unconditional-build --cov-report
-    # Set PYTHONPATH for WAVES import in tutorials/quickstart system/integration/regression tests
+    # Set PYTHONPATH for WAVES import in tutorials/modsim_template system/integration/regression tests
     - export PYTHONPATH=${project_root}:$PYTHONPATH
     # WAVES CLI regression tests
-    - quickstart_regression_directory="${project_root}/test_quickstart"
-    - python -m waves.main quickstart ${quickstart_regression_directory}
-    - cd ${quickstart_regression_directory}
+    - modsim_template_regression_directory="${project_root}/test_modsim_template"
+    - python -m waves.main fetch modsim_template --destination ${modsim_template_regression_directory}
+    - cd ${modsim_template_regression_directory}
     - scons . --jobs=4
     - cd ${project_root}
-    - python -m waves.main visualize nominal --sconstruct ${quickstart_regression_directory}/SConstruct --output-file ${quickstart_regression_directory}/nominal.svg
+    - python -m waves.main visualize nominal --sconstruct ${modsim_template_regression_directory}/SConstruct --output-file ${modsim_template_regression_directory}/nominal.svg
     # Regression test the files used in the tutorial documentation
     - tutorials_regression_directory="${project_root}/test_tutorials"
     - python -m waves.main fetch tutorials --destination ${tutorials_regression_directory}
@@ -234,14 +234,14 @@ pages:
             cp -r build/docs/html-internal/* ${project_root}/public/$ref
             scons . --clean --unconditional-build
             # Build WAVES-EABM HTML documentation
-            cd quickstart
+            cd modsim_template
             PYTHONPATH=${project_root} scons . --clean
             PYTHONPATH=${project_root} scons html
             cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
             PYTHONPATH=${project_root} scons . --clean
             cd ${project_root}
             # TODO: Remove ``rm -r`` when 0.7.1 is released and main has the more complete docs clean behavior
-            rm -r build quickstart/build
+            rm -r build modsim_template/build
         done
   artifacts:
     paths:

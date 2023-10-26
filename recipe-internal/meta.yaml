@@ -93,12 +93,12 @@ test:
     - pytest -v -n 4 -m "systemtest" --tb=short
     - cd ${test_root}
     # WAVES CLI regression tests
-    - quickstart_regression_directory="${test_root}/test_quickstart"
-    - waves quickstart ${quickstart_regression_directory}
-    - cd ${quickstart_regression_directory}
+    - modsim_template_regression_directory="${test_root}/test_modsim_template"
+    - waves fetch modsim_template --destination ${modsim_template_regression_directory}
+    - cd ${modsim_template_regression_directory}
     - scons . --jobs=4 --ignore-documentation
     - cd ${test_root}
-    - waves visualize nominal --sconstruct ${quickstart_regression_directory}/SConstruct --output-file ${quickstart_regression_directory}/nominal.svg
+    - waves visualize nominal --sconstruct ${modsim_template_regression_directory}/SConstruct --output-file ${modsim_template_regression_directory}/nominal.svg
     # Regression test the files used in the tutorial documentation
     - tutorials_regression_directory="${test_root}/test_tutorials"
     - waves fetch tutorials --destination ${tutorials_regression_directory}
