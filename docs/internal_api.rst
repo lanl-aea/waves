@@ -44,7 +44,7 @@ Fetch
    :members:
    :private-members:
    :show-inheritance:
-   :synopsis: waves module supporting the fetch and quickstart subcommands
+   :synopsis: waves module supporting the fetch subcommands
 
 *********
 Visualize
