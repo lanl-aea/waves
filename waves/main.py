@@ -150,7 +150,6 @@ def get_parser():
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
-        help="Create an SCons-WAVES project template",
         description="Create an SCons-WAVES project template from the rectangle compression simulation found in " \
                     "the WAVES tutorials.",
         parents=[quickstart_parser])
