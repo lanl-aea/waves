@@ -23,6 +23,10 @@ Internal Changes
 - Handle spaces in paths for ``odb_extract`` (:issue:`549`, :merge:`674`). By `Sergio Cordova`_.
 - Use dictionary unpacking to place parameter sets in task definitions (:merge:`677`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Add loud failures to Abaqus Python CLI errors (:issue:`551`, :merge:`679`). By `Sergio Cordova`_.
+
 ******************
 0.7.3 (2023-10-17)
 ******************
