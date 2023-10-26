@@ -109,7 +109,7 @@ command can be used.
 
    $ pwd
    /home/roppenheimer/waves_quickstart
-   $ waves visualize rectangle --output-file scons_quickstart.png
+   $ waves visualize rectangle --output-file scons_quickstart.png --width=28 --height=6
 
 .. figure:: scons_quickstart.png
    :align: center
