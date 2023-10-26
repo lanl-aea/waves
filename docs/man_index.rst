@@ -57,20 +57,6 @@ visualize
    :nodefault:
    :path: visualize
 
-.. _waves_quickstart_cli:
-
-*********************
-|PROJECT| Subcommands
-*********************
-**********
-quickstart
-**********
-
-.. argparse::
-   :ref: waves.main.get_parser
-   :nodefault:
-   :path: quickstart
-
 .. _waves_build_cli:
 
 *********************
