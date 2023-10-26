@@ -45,7 +45,6 @@ files defining the workflow tasks. As discussed in :ref:`build_system`, a task d
        :language: Python
        :lineno-match:
 
-
 ****************
 Building targets
 ****************
