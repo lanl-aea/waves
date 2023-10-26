@@ -23,14 +23,14 @@ def main():
         return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
                             working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'fetch':
-        root_directory = _settings._installed_quickstart_directory.parent
+        root_directory = _settings._installed_modsim_template_directory.parent
         relative_paths = _settings._fetch_subdirectories
         return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
                             requested_paths=args.FILE, overwrite=args.overwrite, dry_run=args.dry_run,
                             print_available=args.print_available)
     elif args.subcommand == 'quickstart':
-        root_directory = _settings._installed_quickstart_directory.parent
-        relative_paths = [_settings._installed_quickstart_directory.name]
+        root_directory = _settings._installed_modsim_template_directory.parent
+        relative_paths = [_settings._installed_modsim_template_directory.name]
         return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
                             overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
