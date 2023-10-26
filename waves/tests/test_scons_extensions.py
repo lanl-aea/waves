@@ -103,14 +103,21 @@ def test_catenate_actions():
 
 def test_ssh_builder_actions():
     def cat(program="cat"):
-        return SCons.Builder.Builder(action=
-            [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\""]
-        )
+        return SCons.Builder.Builder(action=[
+                f"{program} ${{SOURCE.abspath}} | tee ${{TARGETS.file}}",
+                f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}",
+                f"{program} ${{SOURCES[99].abspath}} | tee ${{TARGETS.file}}",
+                f"{program} ${{SOURCES[-1].abspath}} | tee ${{TARGETS.file}}",
+                "echo \"Hello World!\""
+        ])
 
     build_cat = cat()
     build_cat_action_list = [action.cmd_list for action in build_cat.action.list]
     expected = [
+        "cat ${SOURCE.abspath} | tee ${TARGETS.file}",
         "cat ${SOURCES.abspath} | tee ${TARGETS.file}",
+        "cat ${SOURCES[99].abspath} | tee ${TARGETS.file}",
+        "cat ${SOURCES[-1].abspath} | tee ${TARGETS.file}",
         'echo "Hello World!"'
     ]
     assert build_cat_action_list == expected
@@ -122,7 +129,10 @@ def test_ssh_builder_actions():
     expected = [
         'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
         "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCE.file} | tee ${TARGETS.file}'",
         "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES[99].file} | tee ${TARGETS.file}'",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES[-1].file} | tee ${TARGETS.file}'",
         "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo \"Hello World!\"'",
         "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}"
     ]

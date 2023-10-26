@@ -8,6 +8,10 @@ Changelog
 0.7.4 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Handle indexed SCons source strings in the SSH build wrapper (:merge:`679`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add the PDF documentation cover as the EPUB cover (:merge:`672`). By `Kyle Brindley`_.

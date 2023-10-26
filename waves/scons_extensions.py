@@ -188,6 +188,7 @@ def ssh_builder_actions(builder, remote_server, remote_directory):
     action_list = [action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix) for action in action_list]
     action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
     action_list = [action.replace("SOURCES.abspath", "SOURCES.file") for action in action_list]
+    action_list = [re.sub(r"(SOURCES\[[-0-9]+\])\.abspath", r"\1.file", action) for action in action_list]
     action_list = [f"{cd_prefix} {action}" if not action.startswith(cd_prefix) else action for action in action_list]
     action_list = [f"ssh {remote_server} '{action}'" for action in action_list]
 
