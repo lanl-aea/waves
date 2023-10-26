@@ -123,7 +123,10 @@ def get_parser():
 if __name__ == '__main__':
     parser = get_parser()
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
-    args, unknown = parser.parse_known_args()
+    try:
+        args, unknown = parser.parse_known_args()
+    except SystemExit as err:
+        sys.exit(err.code)
     sys.exit(main(input_file=args.input_file,
                   output_file=args.output_file,
                   model_name=args.model_name,
