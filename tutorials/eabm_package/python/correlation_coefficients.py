@@ -117,10 +117,7 @@ def get_parser():
 
 if __name__ == "__main__":
     parser = get_parser()
-    try:
-        args, unknown = parser.parse_known_args()
-    except SystemExit as err:
-        sys.exit(err.code)
+    args, unknown = parser.parse_known_args()
     if not args.selection_dict:
         selection_dict = default_selection_dict
     else:
