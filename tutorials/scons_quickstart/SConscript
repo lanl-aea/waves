@@ -5,6 +5,21 @@ Import('env')
 # Set project-wide paths with os-agnostic path separators
 project_dir = pathlib.Path(Dir('.').abspath)
 
+# Write project builders for re-use in task definitions
+abaqus_journal = Builder(
+    action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} " \
+           "${abaqus_options} -- ${journal_options}")
+
+abaqus_solver = Builder(
+    action="cd ${TARGET.dir.abspath} && ${abaqus_program} -job ${job_name} -input ${SOURCE.filebase} " \
+           "${abaqus_options} -interactive -ask_delete no")
+
+# Add custom builders
+env.Append(BUILDERS={
+    'AbaqusJournal': abaqus_journal,
+    'AbaqusSolver': abaqus_solver
+})
+
 # Geometry
 env.AbaqusJournal(
     target="rectangle_geometry.cae",
