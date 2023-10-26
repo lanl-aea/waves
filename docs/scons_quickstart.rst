@@ -101,6 +101,10 @@ Output Files
 Workflow Visualization
 **********************
 
+While SCons is a powerful build automation tool, it does not come with a built-in visualization 
+feature for displaying your build workflow. To address this limitation, the WAVES visualize 
+command can be used.
+
 .. code-block::
 
    $ pwd
