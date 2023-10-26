@@ -55,10 +55,7 @@ def get_parser():
 
 if __name__ == '__main__':
     parser = get_parser()
-    try:
-        args, unknown = parser.parse_known_args()
-    except SystemExit as err:
-        sys.exit(err.code)
+    args, unknown = parser.parse_known_args()
     sys.exit(main(output_file=args.output_file,
                   width=args.width,
                   height=args.height))
