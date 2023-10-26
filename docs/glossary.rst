@@ -22,6 +22,9 @@ Glossary
      repositories with longterm schedules and support. EABMs serve as the canonical modsim repository for addressing
      engineering questions related to a specific engineering product.
 
+   git
+     A version control software released in 2005 :cite:`git`
+
    HPC
      High performance computing
 
