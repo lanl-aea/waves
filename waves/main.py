@@ -98,8 +98,8 @@ def get_parser():
 
     fetch_parser = argparse.ArgumentParser(add_help=False)
     fetch_parser = subparsers.add_parser('fetch',
-        help="Fetch and copy SCons-WAVES modsim template files and directories",
-        description="Fetch and copy SCons-WAVES modsim template files and directories. If no ``FILE`` is specified, " \
+        help="Fetch and copy WAVES modsim template files and directories",
+        description="Fetch and copy WAVES modsim template files and directories. If no ``FILE`` is specified, " \
             "all available files will be created. Directories are recursively copied. ``pathlib.Path`` recursive " \
             "pattern matching is possible. The source path is truncated to use the shortest common file prefix, " \
             "e.g. requesting two files ``common/source/file.1`` and ``common/source/file.2`` will create " \
@@ -150,7 +150,7 @@ def get_parser():
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
-        description="Create an SCons-WAVES project template from the rectangle compression simulation found in " \
+        description="Create an WAVES project template from the rectangle compression simulation found in " \
                     "the WAVES tutorials.",
         parents=[quickstart_parser])
     quickstart_parser.add_argument("destination",
