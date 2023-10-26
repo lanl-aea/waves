@@ -95,7 +95,7 @@
 .. _`git`: https://git-scm.com/
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
-.. _`reStructuredText Primer`_: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+.. _`reStructuredText Primer`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
 .. _`shebang`: https://en.wikipedia.org/wiki/Shebang_(Unix)
 .. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
 .. _`Sphinx`: https://www.sphinx-doc.org/en/master/
