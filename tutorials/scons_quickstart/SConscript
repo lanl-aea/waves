@@ -2,9 +2,6 @@ import pathlib
 
 Import('env')
 
-# Set project-wide paths with os-agnostic path separators
-project_dir = pathlib.Path(Dir('.').abspath)
-
 # Write project builders for re-use in task definitions
 abaqus_journal = Builder(
     action="cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.abspath} " \
@@ -43,14 +40,14 @@ env.AbaqusJournal(
 
 # SolverPrep
 abaqus_source_list = [
-    str(project_dir / "rectangle_compression.inp"),
-    str(project_dir / "assembly.inp"),
-    str(project_dir / "boundary.inp"),
-    str(project_dir / "field_output.inp"),
-    str(project_dir / "materials.inp"),
-    str(project_dir / "parts.inp"),
-    str(project_dir / "rectangle_mesh.inp"),
-    str(project_dir / "history_output.inp")
+    "rectangle_compression.inp",
+    "assembly.inp",
+    "boundary.inp",
+    "field_output.inp",
+    "materials.inp",
+    "parts.inp",
+    "rectangle_mesh.inp",
+    "history_output.inp"
 ]
 
 solve_targets = [
