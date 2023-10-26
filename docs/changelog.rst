@@ -12,6 +12,9 @@ Documentation
 =============
 - Add the PDF documentation cover as the EPUB cover (:merge:`672`). By `Kyle Brindley`_.
 - Simplified scons quickstart ``SConscript`` file (:issue:`521`, :merge:`675`). By `Sergio Cordova`_.
+- Change the modsim template name from ``quickstart`` to ``modsim_template`` to avoid confusion with the quickstart
+  tutorials. Add a short discussion about retrieving the modsim template files (:issue:`552`, :merge:`678`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
