@@ -21,6 +21,7 @@ Internal Changes
   only CI builds (:merge:`672`). By `Kyle Brindley`_.
 - Refine a sphinx build prototype builder and interface. By `Kyle Brindley`_.
 - Handle spaces in paths for ``odb_extract`` (:issue:`549`, :merge:`674`). By `Sergio Cordova`_.
+- Use dictionary unpacking to place parameter sets in task definitions (:merge:`677`). By `Kyle Brindley`_.
 
 ******************
 0.7.3 (2023-10-17)
