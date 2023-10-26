@@ -80,7 +80,9 @@ def get_parser():
 
     subparsers = main_parser.add_subparsers(
         # So args.subcommand will contain the name of the subcommand called
-        dest='subcommand')
+        title="subcommands",
+        metavar="{subcommand}",
+        dest="subcommand")
 
     docs_parser = argparse.ArgumentParser(add_help=False)
     docs_parser = subparsers.add_parser('docs',
