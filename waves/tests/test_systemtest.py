@@ -82,7 +82,7 @@ def test_modsim_template():
     with tempfile.TemporaryDirectory() as temp_directory:
         command = f"{waves_command} fetch modsim_template --destination {temp_directory}"
         command = command.split(" ")
-        subprocess.check_output(command).decode("utf-8")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
 
         command = "scons . --jobs=4"
         command = command.split(" ")
@@ -99,7 +99,7 @@ def test_main_build():
     with tempfile.TemporaryDirectory() as temp_directory:
         command = f"{waves_command} fetch tutorials --destination {temp_directory}"
         command = command.split(" ")
-        subprocess.check_output(command).decode("utf-8")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
 
         command = f"{waves_command} build tutorial_extend_study --max-iterations=4 " \
                   f"--sconstruct={temp_directory}/tutorial_extend_study_SConstruct --jobs=4"
