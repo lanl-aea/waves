@@ -222,28 +222,25 @@ The final change to be made in the ``tutorial_05_parameter_substitution`` file i
 ``substitution_dictionary`` parameter in the usage of the :meth:`waves.scons_extensions.copy_substitute` method.
 
 In this tutorial, we leverage two different builder behaviors when defining sources and targets for the
-:meth:`waves.scons_extensions.copy_substitute` method. We are already familiar with one behavior, where the builder simply
-copies the source file to the build directory.
+:meth:`waves.scons_extensions.copy_substitute` method. We are already familiar with one behavior, where the builder
+simply copies the source file to the build directory.
 
-This builder uses template substitution with files named with the ``*.in`` extension, and looks to match and replace
-*any characters* that match the keys in the provided ``substitution_dictionary``. For this reason, we must make our
-parameter names uniquely identifiable (e.g. ``@variable@``). The surrounding ``@`` character is used during template
-subsitution of text files and helps uniquely identify text for parameter substitution without accidentally changing text
-that is not a parameter. The matching simulation parameter dictionary key modification is made by the
-:meth:`waves.scons_extensions.substitution_syntax` method only when necesssary for the ``substitution_dictionary`` behavior to
-avoid carrying around the special character for other uses of the simulation variables dictionary.
+The second behavior is to apply template substitution on files with the ``*.in`` extension in the ``abaqus_source_list``
+using a ``substitution_dictionary`` provided in the builder's options. The builder will search any file with the ``.in``
+extension for strings matching ``substitution_dictionary`` parameter keys. Any key found in the file's text will be
+replaced with the corresponding ``substitution_dictionary`` value. To avoid spurious text replacements on text unrelated
+to our parameters, we must make our parameter names uniquely identifiable with a templating character (e.g.
+``@variable@``). To avoid carrying around two copies of the simulation variables dictionary, one with the special
+characters and one without, the :meth:`waves.scons_extensions.substitution_syntax` method can be used to modify the
+simulation variable dictionary keys as needed.
 
-The second behavior is utilized when we specify a file with ``*.in`` extension in the ``abaqus_source_list`` and we
-specify a ``substitution_dictionary`` in the builder's options. This behavior will act on any file in the source list
-with ``.in`` extension and attempts to match the parameter keys in the ``substitution_dictionary`` with the text in the
-file. For this reason, we must make our parameter names identifiable with a templating character (e.g. ``@variable@``).
-In this process, the files with ``.in`` extension are not modified, but are first copied to a file of the same name in
-the build directory. The contents of the newly copied file are modified to reflect the parameter substitution and the
-``.in`` extension is removed as a default behavior of the `SCons Substfile`_ method. The two step copy/substitute
-behavior is required to allow SCons to unambiguously resolve the source-target file locations. We will see this behavior
-more clearly when we investigate the :ref:`tutorial_parameter_substitution_waves_output_files` for this tutorial. The
-``substitution`` dictionary becomes part of the task signature for all ``*.in`` files. When the dictionary changes,
-the copy and substitute operations will be re-executed.
+In this template substitution process, the files with ``.in`` are first copied to a file of the same name in the build
+directory. The contents of the newly copied file are modified to reflect the parameter substitution and the ``.in``
+extension is removed as a default behavior of the `SCons Substfile`_ method. The two step copy/substitute behavior is
+required to allow SCons to unambiguously resolve the source-target file locations. We will see this behavior more
+clearly when we investigate the :ref:`tutorial_parameter_substitution_waves_output_files` for this tutorial. The
+``substitution`` dictionary becomes part of the task signature for all ``*.in`` files. When the dictionary changes, the
+copy and substitute operations will be re-executed.
 
 In summary of the changes you just made to the ``tutorial_05_parameter_substitution`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
