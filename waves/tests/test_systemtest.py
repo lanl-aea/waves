@@ -2,18 +2,27 @@ import os
 import pathlib
 import tempfile
 import subprocess
+from importlib.metadata import version, PackageNotFoundError
 
 import pytest
 
 from waves import _settings
 
 
-tutorial_directory = _settings._installed_tutorials_directory
-
+tutorial_directory = _settings._tutorials_directory
 env = os.environ.copy()
+waves_command = "waves"
+
 # If executing in repository, add package to PYTHONPATH
-if _settings._repository_tutorials_directory == tutorial_directory:
-    package_parent_path = tutorial_directory.parent
+try:
+    version("waves")
+    installed = True
+except PackageNotFoundError:
+    installed = False
+
+if not installed:
+    waves_command = "python -m waves.main"
+    package_parent_path = _settings._project_root_abspath.parent
     key = "PYTHONPATH"
     if key in env:
         env[key] = f"{package_parent_path}:{env[key]}"
@@ -66,3 +75,33 @@ def test_run_tutorial(command, directory):
         command = command + f" --build-dir={temp_directory}"
         command = command.split(" ")
         result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
+
+
+@pytest.mark.systemtest
+def test_modsim_template():
+    with tempfile.TemporaryDirectory() as temp_directory:
+        command = f"{waves_command} fetch modsim_template --destination {temp_directory}"
+        command = command.split(" ")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
+
+        command = "scons . --jobs=4"
+        command = command.split(" ")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
+
+        command = f"{waves_command} visualize nominal --sconstruct={temp_directory}/SConstruct --output-file " \
+                  f"{temp_directory}/nominal.svg"
+        command = command.split(" ")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
+
+
+@pytest.mark.systemtest
+def test_main_build():
+    with tempfile.TemporaryDirectory() as temp_directory:
+        command = f"{waves_command} fetch tutorials --destination {temp_directory}"
+        command = command.split(" ")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
+
+        command = f"{waves_command} build tutorial_extend_study --max-iterations=4 " \
+                  f"--sconstruct={temp_directory}/tutorial_extend_study_SConstruct --jobs=4"
+        command = command.split(" ")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")

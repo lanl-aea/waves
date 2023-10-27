@@ -21,6 +21,9 @@ Internal Changes
 ================
 - Add quinoa tutorial's local AEA server build to the regression suite (:issue:`554`, :merge:`683`). By `Kyle
   Brindley`_.
+- Move tutorial and modsim template files into the package repository for reduced special handling during packaging
+  (:merge:`684`). By `Kyle Brindley`_.
+- Merge remaining shell system tests to pytest managed execution (:merge:`684`). By `Kyle Brindley`_.
 
 ******************
 0.7.4 (2023-10-26)
