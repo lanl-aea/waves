@@ -74,7 +74,7 @@ def test_run_tutorial(command, directory):
     with tempfile.TemporaryDirectory() as temp_directory:
         command = command + f" --build-dir={temp_directory}"
         command = command.split(" ")
-        result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
+        result = subprocess.check_output(command, env=env).decode('utf-8')
 
 
 @pytest.mark.systemtest
@@ -91,7 +91,7 @@ def test_modsim_template():
         command = f"{waves_command} visualize nominal --sconstruct={temp_directory}/SConstruct --output-file " \
                   f"{temp_directory}/nominal.svg"
         command = command.split(" ")
-        subprocess.check_output(command, env=env).decode("utf-8")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
 
 
 @pytest.mark.systemtest
@@ -104,4 +104,4 @@ def test_main_build():
         command = f"{waves_command} build tutorial_extend_study --max-iterations=4 " \
                   f"--sconstruct={temp_directory}/tutorial_extend_study_SConstruct --jobs=4"
         command = command.split(" ")
-        subprocess.check_output(command, env=env,).decode("utf-8")
+        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
