@@ -1501,9 +1501,8 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
 
     .. warning::
 
-       This is an experimental builder for Quinoa support. The only emitted file is the application's version report in
-       ``TARGET[0].env`` and the ``TARGET[0].stdout`` redirected STDOUT and STDERR file. All relevant application output
-       files, e.g. ``out.e`` must be specified in the target list.
+       This is an experimental builder for Quinoa support. The only emitted file is the ``TARGET[0].stdout`` redirected
+       STDOUT and STDERR file. All relevant application output files, e.g. ``out.*`` must be specified in the target list.
 
     .. code-block::
        :caption: SConstruct
