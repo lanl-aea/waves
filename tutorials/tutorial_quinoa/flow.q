@@ -1,7 +1,3 @@
-# vim: filetype=sh:
-# This is a comment
-# Keywords are case-sensitive
-
 title "Flow in a simple box"
 inciter
 

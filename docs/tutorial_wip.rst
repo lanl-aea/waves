@@ -10,3 +10,4 @@ Work-in-progress Lessons
    tutorial_extend_study_waves
    tutorial_task_reuse_waves
    tutorial_setuptools_scm_waves
+   tutorial_quinoa
