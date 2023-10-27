@@ -52,7 +52,7 @@ quinoa_aea_environment = "source /projects/cclong/quinoa/loadenv.sh"
 env.Append(BUILDERS={
     'PythonScript': waves.scons_extensions.python_script(),
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
-        waves.scons_extensions.sbatch_quinoa_solver(environment_command=f"{quinoa_snow_environment} &&"),
+        waves.scons_extensions.sbatch_quinoa_solver(prefix_command=f"{quinoa_snow_environment} &&"),
         remote_server="sn-rfe.lanl.gov",
         remote_directory="/users/${user}/WAVES-TUTORIAL/tutorial_quinoa",
     )

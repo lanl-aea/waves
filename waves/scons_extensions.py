@@ -1537,7 +1537,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     :return: Quinoa builder
     :rtype: SCons.Builder.Builder
     """
-    if prefix_command and not prefix_command.strip().endswith(" &&")
+    if prefix_command and not prefix_command.strip().endswith(" &&"):
         prefix_command = prefix_command.strip()
         prefix_command += " &&"
     action=[
@@ -1546,7 +1546,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
             "> ${TARGET.filebase}.stdout 2>&1"
     ]
     action.extend(_construct_post_action_list(post_action))
-    quinoa_builder = Builder(
+    quinoa_builder = SCons.Builder.Builder(
         action=action,
         emitter=_quinoa_emitter,
         prefix_command=prefix_command,
@@ -1559,7 +1559,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     return quinoa_builder
 
 
-@waves.scons_extensions.catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
 def sbatch_quinoa_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_solver`
 
