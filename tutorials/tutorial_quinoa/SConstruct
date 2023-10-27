@@ -43,13 +43,14 @@ env["quinoa_installation"] = "/users/cclong/QUINOA/quinoa/buildOS/Main"
 # now, but explore shell initiation in HPC docs.
 # FIXME: The remote ssh command launches a non-interactive shell. Sourcing the module shell script is not sufficient, we
 # also have to add the appropriate modulefile path(s). Probably these problems are related.
-quinoa_modules  = "source /etc/profile.d/modules.sh && "
-quinoa_modules += "module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler /usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && "
-quinoa_modules += "module load gcc/9.3.0 openmpi/2.1.2"
+quinoa_modules  = "source /etc/profile.d/modules.sh && " \
+                  "module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler " \
+                             "/usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && " \
+                  "module load gcc/9.3.0 openmpi/2.1.2"
 env.Append(BUILDERS={
     'PythonScript': waves.scons_extensions.python_script(),
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
-        sbatch_quinoa_solver(environment_command=f"{quinoa_modules} &&"),
+        waves.scons_extensions.sbatch_quinoa_solver(environment_command=f"{quinoa_modules} &&"),
         remote_server="sn-rfe.lanl.gov",
         remote_directory="/users/${user}/WAVES-TUTORIAL/tutorial_quinoa",
     )
@@ -66,9 +67,9 @@ envQuinoa["charmrun"] = waves.scons_extensions.add_program(["charmrun", quinoa_i
 
 # Add WAVES builders. If sbatch is found, use it.
 # Should allow the same scons alias to run directly on sstbigbird, but submit as an sbatch job on HPC
-quinoa_builder = quinoa_solver
+quinoa_builder = waves.scons_extensions.quinoa_solver
 if env["sbatch"] is not None:
-    quinoa_builder = sbatch_quinoa_solver
+    quinoa_builder = waves.scons_extensions.sbatch_quinoa_solver
 envQuinoa.Append(BUILDERS={
     "QuinoaSolver": quinoa_builder(charmrun=envQuinoa["charmrun"], inciter=envQuinoa["inciter"])
 })

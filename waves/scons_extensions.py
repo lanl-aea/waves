@@ -27,7 +27,6 @@ from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
-from waves._settings import _quinoa_environment_extension
 
 
 def _print_failed_nodes_stdout():
@@ -1461,8 +1460,7 @@ def _custom_scanner(pattern, suffixes, flags=None):
 def _quinoa_emitter(target, source, env):
     """Appends the quinoa builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout and ``target[0]``.env to the ``target`` list. The Quinoa Builder requires
-    at least one target.
+    Appends ``target[0]``.stdout to the ``target`` list. The Quinoa Builder requires at least one target.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
@@ -1476,7 +1474,7 @@ def _quinoa_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    suffixes = [_stdout_extension, _quinoa_environment_extension]
+    suffixes = [_stdout_extension]
     return _first_target_emitter(target, source, env, suffixes=suffixes)
 
 
@@ -1524,7 +1522,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     .. code-block::
        :caption: Quinoa builder action
 
-       ${prefix_command} && ${cd_action_prefix} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
+       ${prefix_command} ${cd_action_prefix} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
 
     :param str charmrun: The relative or absolute path to the charmrun executable
     :param str charmrun_options: The charmrun command line interface options
@@ -1533,14 +1531,16 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     :param str prefix_command: Optional prefix command intended for environment preparation. Primarily intended for use
         with :meth:`waves.scons_extensions.sbatch_quinoa_solver` or when wrapping the builder with
         :meth:`waves.scons_extensions.ssh_builder_actions`. For local, direct execution, user's should prefer to create
-        an SCons construction environment with :meth:`waves.scons_extensions.shell_environment`
+        an SCons construction environment with :meth:`waves.scons_extensions.shell_environment`. When overriding in a
+        task definition, the prefix command *must* end with ``' &&'``.
 
     :return: Quinoa builder
     :rtype: SCons.Builder.Builder
     """
+    if prefix_command and not prefix_command.strip().endswith(" &&")
+        prefix_command = prefix_command.strip()
+        prefix_command += " &&"
     action=[
-        "${prefix_command} ${charmrun} ${inciter} --version " \
-            f"${{TARGET.filebase}}{_quinoa_environment_extension}",
         "${prefix_command} ${cd_action_prefix} && ${charmrun} ${charmrun_options} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             "> ${TARGET.filebase}.stdout 2>&1"
