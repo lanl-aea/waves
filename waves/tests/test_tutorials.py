@@ -33,6 +33,7 @@ if _settings._repository_tutorials_directory == tutorial_directory:
     ("scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons . --unconditional-build --print-build-failures", tutorial_directory / "tutorial_cubit"),
+    ("scons quinoa-local --unconditional-build --print-build-failures", tutorial_directory / "tutorial_quinoa"),
     ("scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_builder_post_actions --sconstruct=tutorial_builder_post_actions_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
