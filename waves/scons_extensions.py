@@ -27,6 +27,7 @@ from waves._settings import _cd_action_prefix
 from waves._settings import _matlab_environment_extension
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
+from waves._settings import _quinoa_environment_extension
 
 
 def _print_failed_nodes_stdout():
@@ -884,8 +885,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     * ``application_options``: The application (e.g. adagio) command line options provided as a string.
 
     The first target determines the working directory for the builder's action, as shown in the action code snippet
-    below. The action changes the working directory to the first target's parent directory prior to executing the
-    journal file.
+    below. The action changes the working directory to the first target's parent directory prior to executing sierra.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
@@ -1456,3 +1456,119 @@ def _custom_scanner(pattern, suffixes, flags=None):
 
     custom_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
     return custom_scanner
+
+
+def _quinoa_emitter(target, source, env):
+    """Appends the quinoa builder target list with the builder managed targets
+
+    Appends ``target[0]``.stdout and ``target[0]``.env to the ``target`` list. The Quinoa Builder requires
+    at least one target.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``target[0].stdout``.
+
+    :param list target: The target file list of strings
+    :param list source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+
+    :return: target, source
+    :rtype: tuple with two lists
+    """
+    suffixes = [_stdout_extension, _quinoa_environment_extension]
+    return _first_target_emitter(target, source, env, suffixes=suffixes)
+
+
+def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1", inciter_options="",
+                  prefix_command="", post_action=[]):
+    """Quinoa solver SCons builder
+
+    This builder requires at least two source files provided in the order
+
+    1. Quinoa control file: ``*.q``
+    2. Exodus mesh file: ``*.exo``
+
+    The builder returned by this function accepts all SCons Builder arguments and adds the keyword argument(s) below.
+
+    * ``cd_action_prefix``: The directory change operation prior to executing charmrun. Users change this behavior only
+      change this behavior if they are experienced SCons users and have fully explored alternate solutions.
+
+    Except for the ``post_action``, the arguments of this function are also available as keyword arguments of the
+    builder. When provided during task definition, the keyword arguments override the builder returned by this function.
+
+    The first target determines the working directory for the builder's action, as shown in the action code snippet
+    below. The action changes the working directory to the first target's parent directory prior to executing quinoa.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
+    target, e.g. ``target[0].stdout``.
+
+    .. warning::
+
+       This is an experimental builder for Quinoa support. The only emitted file is the application's version report in
+       ``TARGET[0].env`` and the ``TARGET[0].stdout`` redirected STDOUT and STDERR file. All relevant application output
+       files, e.g. ``out.e`` must be specified in the target list.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = waves.scons_extensions.shell_environment("module load quinoa")
+       env.Append(BUILDERS={
+           "QuinoaSolver": waves.scons_extensions.quinoa_solver(),
+       })
+       env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"])
+
+    .. code-block::
+       :caption: Quinoa builder action
+
+       ${prefix_command} && ${cd_action_prefix} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
+
+    :param str charmrun: The relative or absolute path to the charmrun executable
+    :param str charmrun_options: The charmrun command line interface options
+    :param str inciter: The relative or absolute path to the inciter (quinoa) executable
+    :param str inciter_options: The inciter (quinoa executable) command line interface options
+    :param str prefix_command: Optional prefix command intended for environment preparation. Primarily intended for use
+        with :meth:`waves.scons_extensions.sbatch_quinoa_solver` or when wrapping the builder with
+        :meth:`waves.scons_extensions.ssh_builder_actions`. For local, direct execution, user's should prefer to create
+        an SCons construction environment with :meth:`waves.scons_extensions.shell_environment`
+
+    :return: Quinoa builder
+    :rtype: SCons.Builder.Builder
+    """
+    action=[
+        "${prefix_command} ${charmrun} ${inciter} --version " \
+            f"${{TARGET.filebase}}{_quinoa_environment_extension}",
+        "${prefix_command} ${cd_action_prefix} && ${charmrun} ${charmrun_options} " \
+            "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
+            "> ${TARGET.filebase}.stdout 2>&1"
+    ]
+    action.extend(_construct_post_action_list(post_action))
+    quinoa_builder = Builder(
+        action=action,
+        emitter=_quinoa_emitter,
+        prefix_command=prefix_command,
+        cd_action_prefix=_cd_action_prefix,
+        charmrun=charmrun,
+        charmrun_options=charmrun_options,
+        inciter=inciter,
+        inciter_options=inciter_options
+    )
+    return quinoa_builder
+
+
+@waves.scons_extensions.catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+def sbatch_quinoa_solver(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_solver`
+
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: Sbatch Quinoa solver builder action
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap ""
+    """
+    return quinoa_solver(*args, **kwargs)

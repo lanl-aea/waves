@@ -7,31 +7,6 @@ import subprocess
 
 import waves
 
-# VVV Builders that will be put in WAVES
-# Quinoa Solver
-def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p4", inciter_options="--verbose",
-                  environment_command=""):
-    quinoa_builder = Builder(
-        action=[
-            "${environment_command} cd ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
-                "> ${TARGET.filebase}.stdout 2>&1"
-        ],
-        charmrun=charmrun,
-        charmrun_options=charmrun_options,
-        inciter=inciter,
-        inciter_options=inciter_options,
-        environment_command=environment_command
-    )
-    return quinoa_builder
-
-
-# Sbatch submission version of Quinoa Solver
-_sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
-@waves.scons_extensions.catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
-def sbatch_quinoa_solver(*args, **kwargs):
-    return quinoa_solver(*args, **kwargs)
-# ^^^ Builders that will be put in WAVES
-
 
 # Add build directory CLI arg
 AddOption(
