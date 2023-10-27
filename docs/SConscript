@@ -25,11 +25,24 @@ def sphinx_scanner():
         return includes
     custom_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
     return custom_scanner
-env.Append(SCANNERS=sphinx_scanner())
 # ^^^ Sphinx Scanner prototype
 
-# Set empty alias return list
-alias_list = []
+
+# VVV Sphinx Builder prototype
+def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
+    sphinx_builder = Builder(
+        action=["${program} ${sphinx_options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
+        program=program,
+        sphinx_options=options,
+        builder=builder,
+        tags=tags
+    )
+    return sphinx_builder
+# ^^^ Sphinx Builder prototype
+
+
+env.Append(SCANNERS=sphinx_scanner())
+env.Append(BUILDERS={"SphinxBuild": sphinx_build(program=env["sphinx_build"], options="-W")})
 
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
@@ -57,7 +70,7 @@ sphinx_configuration_source_list = [
     'references.bib',
     'environment.yml',  # Copied from environment.yml to docs build directory by root SConscript
     'targets.txt',  # Found in conf.py, which is not currently scanned
-    'waves_logo_brandmark_smaller.png',  # Found in conf.py, which is not currently scanned
+    '_static/waves_logo_brandmark_smaller.png',  # Found in conf.py, which is not currently scanned
     'waves_logo_primary_large_crop.png',  # Found in conf.py, which is not currently scanned
     "favicon.ico",  # Found in conf.py, which is not currently scanned
     '_static/custom.css'
@@ -90,6 +103,7 @@ documentation_file_list = [
     'tutorial_core.rst',
     'tutorial_supplemental.rst',
     'tutorial_wip.rst',
+    'templates.rst',
     'tutorial_00_scons.rst',
     'tutorial_01_geometry_waves.rst',
     'tutorial_02_partition_mesh_waves.rst',
@@ -121,7 +135,6 @@ documentation_file_list = [
 # Copy tutorial files to the build/docs directory
 tutorials_dir = project_dir / pathlib.Path(env['tutorials_dir'])
 tutorial_files_list = [
-    tutorials_dir / 'scons_quickstart_SConstruct',
     tutorials_dir / 'scons_multiactiontask_SConstruct',
     tutorials_dir / 'tutorial_00_SConstruct',
     tutorials_dir / 'tutorial_01_geometry',
@@ -201,8 +214,9 @@ tutorial_files_list = [
     tutorials_dir / "tutorial_cubit/sierra",
     tutorials_dir / "tutorial_cubit/SConstruct",
     tutorials_dir / "tutorial_cubit/eabm_package/sierra/rectangle_compression.i",
-    tutorials_dir / "waves_quickstart/SConstruct",
     tutorials_dir / "waves_quickstart/SConscript",
+    tutorials_dir / 'scons_quickstart/SConscript',
+    tutorials_dir / 'scons_quickstart/SConstruct',
 ]
 copied_file_list = []
 for file_path in tutorial_files_list:
@@ -213,72 +227,79 @@ for file_path in tutorial_files_list:
     copied_file_list.append(target)
 source_files = sphinx_configuration_source_list + documentation_file_list + copied_file_list
 
-sphinx_options = '-W'
+html_targets = [f"{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if ".rst" in source]
 html_directory = "html"
-html_target = Dir(html_directory)
-html = env.Command(
-    target=[html_target],
+html_target = [f"{html_directory}/{target}" for target in html_targets]
+html = env.SphinxBuild(
+    target=html_target,
     source=source_files,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{html_directory} ${{tags}}",
-    sphinx_options=sphinx_options)
-env.Clean(html, [html_target] + documentation_file_list)
-env.AlwaysBuild(html)
-alias_list.extend(env.Alias(html_directory, html))
+    builder="html"
+)
+env.Clean(html, [Dir(html_directory)] + documentation_file_list)
+env.Alias(html_directory, html)
 
 # TODO: Combine the two html build logic
 internal_directory = "html-internal"
-internal_target = Dir(internal_directory)
-internal = env.Command(
-    target=[internal_target],
+internal_target = [f"{internal_directory}/{target}" for target in html_targets]
+internal = env.SphinxBuild(
+    target=internal_target,
     source=source_files,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{internal_directory} ${{tags}}",
-    sphinx_options=sphinx_options,
-    tags="-t aea")
-env.Clean(internal, [internal_target] + documentation_file_list)
-env.AlwaysBuild(internal)
-alias_list.extend(env.Alias(internal_directory, internal))
-
-latex_directory = "latex"
-latex_target = Dir(latex_directory)
-latexpdf = env.Command(
-    target=[latex_target],
-    source=source_files,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{tags}} ${{sphinx_options}}",
-    sphinx_options=sphinx_options
+    builder="html",
+    tags="-t aea"
 )
-env.Clean(latexpdf, [latex_target] + documentation_file_list)
-env.AlwaysBuild(latexpdf)
-alias_list.extend(env.Alias('latexpdf', latexpdf))
+env.Clean(internal, [Dir(internal_directory)] + documentation_file_list)
+env.Alias(internal_directory, internal)
+
+waves_pdf = pathlib.Path(f"latex/waves-{env['version']}.pdf")
+latex_directory = "latex"
+latex_target = [str(waves_pdf)]
+latexpdf = env.Command(
+    target=latex_target,
+    source=source_files,
+    action="${sphinx_program} -M latexpdf ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${sphinx_options}",
+    sphinx_program=env["sphinx_build"],
+    sphinx_options="-W"
+)
+env.Clean(latexpdf, [Dir(latex_directory)] + documentation_file_list)
+env.Alias('latexpdf', latexpdf)
 
 man_directory = "man"
-man_target = Dir(man_directory)
+man_target = [f"{man_directory}/waves.1"]
 man_source = [
     "man_index.rst",
     "ssh_builder_actions_warning.txt"  # Required by ``ssh_builder_actions`` docstring and not found in man_index.rst
 ]
-man = env.Command(
-    target=[man_target],
+man = env.SphinxBuild(
+    target=man_target,
     source=man_source + sphinx_configuration_source_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b man ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{man_directory} ${{tags}}",
-    sphinx_options=sphinx_options,
-    tags="-t man")
-env.Clean(man, [man_target] + documentation_file_list)
-env.AlwaysBuild(man)
-alias_list.extend(env.Alias(man_directory, man))
+    builder="man",
+    tags="-t man"
+)
+env.Clean(man, [Dir(man_directory)] + documentation_file_list)
+env.Alias(man_directory, man)
 
+# TODO: Depends on ``imagemagick`` package, which isn't part of the CI environment yet
+epub_cover = "waves_epub_cover.png"
+env.Command(
+    target=[f"epub/_static/{epub_cover}"],
+    source=[str(waves_pdf)],
+    action=["convert -density 300 ${SOURCE.abspath}[0] ${TARGET.abspath}"]
+)
+
+waves_epub = waves_pdf.with_suffix(".epub").name
 epub_directory = "epub"
-epub_target = Dir(epub_directory)
-epub = env.Command(
-    target=[epub_target],
-    source=source_files,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b epub ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}{epub_directory} ${{tags}}",
-    sphinx_options=sphinx_options)
-env.Clean(epub, [epub_target] + documentation_file_list)
-env.AlwaysBuild(epub)
-alias_list.extend(env.Alias(epub_directory, epub))
+epub_target = [f"{epub_directory}/{waves_epub}"]
+epub = env.SphinxBuild(
+    target=epub_target,
+    source=source_files + [f"epub/_static/{epub_cover}"],
+    builder="epub"
+)
+env.Clean(epub, [Dir(epub_directory)] + documentation_file_list)
+env.Alias(epub_directory, epub)
 
-# Collector alias to build all documentation
-alias_list.extend(env.Alias('documentation', html + latexpdf + man))
+# Collector alias to build all documentation and regression
+env.Alias('documentation', html + latexpdf + man)
+env.Alias('regression', html + latexpdf + man + internal)
 
 if not env['unconditional_build'] and not env['sphinx_build']:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
@@ -287,6 +308,3 @@ if not env['unconditional_build'] and not env['sphinx_build']:
     Ignore(['.', latex_directory, 'latexpdf'], latexpdf)
     Ignore(['.', man_directory, 'man'], man)
     Ignore(['.', epub_directory, 'epub'], epub)
-
-# Return the alias list to SConstruct for help message output
-Return('alias_list')

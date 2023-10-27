@@ -5,8 +5,38 @@ Changelog
 #########
 
 ******************
-0.7.4 (unreleased)
+0.7.5 (unreleased)
 ******************
+
+******************
+0.7.4 (2023-10-26)
+******************
+
+Bug fixes
+=========
+- Handle indexed SCons source strings in the SSH build wrapper (:merge:`679`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add the PDF documentation cover as the EPUB cover (:merge:`672`). By `Kyle Brindley`_.
+- Simplified scons quickstart ``SConscript`` file (:issue:`521`, :merge:`675`). By `Sergio Cordova`_.
+- Change the modsim template name from ``quickstart`` to ``modsim_template`` to avoid confusion with the quickstart
+  tutorials. Add a short discussion about retrieving the modsim template files (:issue:`552`, :merge:`678`). By `Kyle
+  Brindley`_.
+
+Internal Changes
+================
+- Reduce code duplication in documentation build configuration (:merge:`671`). By `Kyle Brindley`_.
+- The EPUB cover handling requires the imagemagick package, so use a ``regression`` alias to exclude the EPUB build from
+  the regression suite until we decide how to handle the unavailability of imagemagick for Windows or accept linux/macos
+  only CI builds (:merge:`672`). By `Kyle Brindley`_.
+- Refine a sphinx build prototype builder and interface. By `Kyle Brindley`_.
+- Handle spaces in paths for ``odb_extract`` (:issue:`549`, :merge:`674`). By `Sergio Cordova`_.
+- Use dictionary unpacking to place parameter sets in task definitions (:merge:`677`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Add loud failures to Abaqus Python CLI errors (:issue:`551`, :merge:`679`). By `Sergio Cordova`_.
 
 ******************
 0.7.3 (2023-10-17)

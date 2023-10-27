@@ -5,11 +5,13 @@ Test odb_extract.py
 
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
+from pathlib import Path
 
 import pytest
 from unittest.mock import patch, mock_open
 
 from waves.abaqus import odb_extract
+from waves._utilities import _quote_spaces_in_path
 
 
 fake_odb = {
@@ -188,3 +190,28 @@ def test_odb_extract():
             odb_extract.odb_extract(['sample.odb'], None, output_type='h5')
         except SystemExit:
             assert "could not be parsed." in str(mock_print.call_args)
+
+
+odb_report_arguments = { #odb_report_args,                      input_file,        job_name
+    "1 spaces":             (        None,    "/some/path with/spaces.txt", "/no/spaces.csv"),
+    "2 spaces":             (        None,    "/some/path with/spaces.txt", "/some more/spaces.csv"),
+    "no spaces":            (        None, "/some/path/without/spaces.txt", "/no/spaces.csv"),
+    "Exists 1 spaces":      ( "arg1=val1",    "/some/path with/spaces.txt", "/no/spaces.csv"),
+    "Exists 2 spaces":      ( "arg1=val1",    "/some/path with/spaces.txt", "/some more/spaces.csv"),
+    "Exists no spaces":     ( "arg1=val1", "/some/path/without/spaces.txt", "/no/spaces.csv"),
+    "Exists 1 spaces odb":  (  "odb=val1",    "/some/path with/spaces.txt", "/no/spaces.csv"),
+    "Exists 2 spaces odb":  (  "odb=val1",    "/some/path with/spaces.txt", "/some more/spaces.csv"),
+    "Exists no spaces odb": (  "odb=val1", "/some/path/without/spaces.txt", "/no/spaces.csv"),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("odb_report_args, input_file, job_name",
+                         odb_report_arguments.values(),
+                         ids=odb_report_arguments.keys())
+def test_abaqus_journal(odb_report_args, input_file, job_name):
+    new_odb_report_args = odb_extract.get_odb_report_args(odb_report_args, Path(input_file), Path(job_name), True)
+    expected_odb = new_odb_report_args.split('odb=')[-1].split('arg1=')[0].split('all')[0].strip()
+    assert Path(expected_odb) == _quote_spaces_in_path(input_file)
+    expected_job_name = new_odb_report_args.split('job=')[-1].split('odb=')[0].strip()
+    assert Path(expected_job_name) == _quote_spaces_in_path(Path(job_name).with_suffix(''))

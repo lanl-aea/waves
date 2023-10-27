@@ -103,14 +103,21 @@ def test_catenate_actions():
 
 def test_ssh_builder_actions():
     def cat(program="cat"):
-        return SCons.Builder.Builder(action=
-            [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \"Hello World!\""]
-        )
+        return SCons.Builder.Builder(action=[
+                f"{program} ${{SOURCE.abspath}} | tee ${{TARGETS.file}}",
+                f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}",
+                f"{program} ${{SOURCES[99].abspath}} | tee ${{TARGETS.file}}",
+                f"{program} ${{SOURCES[-1].abspath}} | tee ${{TARGETS.file}}",
+                "echo \"Hello World!\""
+        ])
 
     build_cat = cat()
     build_cat_action_list = [action.cmd_list for action in build_cat.action.list]
     expected = [
+        "cat ${SOURCE.abspath} | tee ${TARGETS.file}",
         "cat ${SOURCES.abspath} | tee ${TARGETS.file}",
+        "cat ${SOURCES[99].abspath} | tee ${TARGETS.file}",
+        "cat ${SOURCES[-1].abspath} | tee ${TARGETS.file}",
         'echo "Hello World!"'
     ]
     assert build_cat_action_list == expected
@@ -122,7 +129,10 @@ def test_ssh_builder_actions():
     expected = [
         'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
         "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCE.file} | tee ${TARGETS.file}'",
         "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES[99].file} | tee ${TARGETS.file}'",
+        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES[-1].file} | tee ${TARGETS.file}'",
         "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo \"Hello World!\"'",
         "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}"
     ]
@@ -248,46 +258,6 @@ substitution_syntax_input = {
 def test_substitution_syntax(substitution_dictionary, keyword_arguments, expected_dictionary):
     output_dictionary = scons_extensions.substitution_syntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
-
-
-quote_spaces_in_path_input = {
-    "string, no spaces": (
-        "/path/without_space/executable",
-        pathlib.Path("/path/without_space/executable")
-    ),
-    "string, spaces": (
-        "/path/with space/executable",
-        pathlib.Path("/path/\"with space\"/executable")
-    ),
-    "pathlib, no spaces": (
-        pathlib.Path("/path/without_space/executable"),
-        pathlib.Path("/path/without_space/executable")
-    ),
-    "pathlib, spaces": (
-        pathlib.Path("/path/with space/executable"),
-        pathlib.Path("/path/\"with space\"/executable")
-    ),
-    "space in root": (
-        pathlib.Path("/path space/with space/executable"),
-        pathlib.Path("/\"path space\"/\"with space\"/executable")
-    ),
-    "relative path": (
-        pathlib.Path("path space/without_space/executable"),
-        pathlib.Path("\"path space\"/without_space/executable")
-    ),
-    "space in executable": (
-        pathlib.Path("path/without_space/executable space"),
-        pathlib.Path("path/without_space/\"executable space\"")
-    )
-}
-
-
-@pytest.mark.unittest
-@pytest.mark.parametrize("path, expected",
-                         quote_spaces_in_path_input.values(),
-                         ids=quote_spaces_in_path_input.keys())
-def test_quote_spaces_in_path(path, expected):
-    assert scons_extensions._quote_spaces_in_path(path) == expected
 
 
 return_environment = {

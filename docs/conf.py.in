@@ -40,16 +40,19 @@ from waves import __version__
 from waves._settings import _project_name, _project_name_short
 
 project = _project_name_short
-release = __version__
+release = "@version@"
 version = release
-copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved."
+copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rights Reserved"
 
 #============================================================================================== SPHINX CONFIGURATION ===
 # Suppress warnings that can't be fixed
 suppress_warnings = ["epub.unknown_project_files", "epub.duplicated_toc_entry"]
 
 # -- Project Variables -------------------------------------------------------
-rst_prolog = f'.. |project| replace:: {_project_name_short}\n.. include:: targets.txt'
+rst_prolog = f'.. |copyright| replace:: © Copyright {copyright}.\n' \
+             f'.. |project| replace:: {_project_name_short}\n' \
+             f'.. |version| replace:: {version}\n' \
+              '.. include:: targets.txt'
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 if tags.has('man'):
     master_doc='man_index'
@@ -81,15 +84,15 @@ templates_path = ['_templates']
 source_suffix = ['.rst']
 
 # -- Options for HTML output -------------------------------------------------
-html_logo = 'waves_logo_brandmark_smaller.png'
 html_favicon = "favicon.ico"
+html_logo = '_static/waves_logo_brandmark_smaller.png'
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
 latex_logo = 'waves_logo_primary_large_crop.png'
-copyright_latex = f"""\\textcopyright\\ Copyright {copyright}
+copyright_latex = f"""\\textcopyright\\ Copyright {copyright}.
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
 Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government
@@ -154,3 +157,5 @@ copybutton_prompt_is_regexp = True
 epub_basename = str(pathlib.Path(latex_basename).with_suffix(""))
 epub_title = f"{project.upper()} {version}"
 epub_publisher = "Triad National Security, LLC"
+epub_show_urls = "no"
+epub_cover = ("_static/waves_epub_cover.png", "epub-cover.html")

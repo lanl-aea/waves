@@ -55,7 +55,7 @@ more flexible, general purpose `SCons Command`_ builder is used.
 
   .. literalinclude:: tutorials_scons_multiactiontask_SConstruct
      :language: python
-     :diff: tutorials_scons_quickstart_SConstruct
+     :diff: scons_quickstart_SConstruct
 
 ****************
 Building targets

@@ -9,7 +9,7 @@
 .. _WAVES: https://lanl.github.io/waves/index.html
 .. _WAVES repository: https://github.com/lanl/waves
 .. _WAVES releases: https://github.com/lanl/waves/releases/
-.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/quickstart
+.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/modsim_template
 .. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
@@ -58,7 +58,7 @@ concepts, command line options, and project configuration.
 
 This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
 testing of the `WAVES`_ extensions to SCons. The template modsim project can be duplicated from the command line as
-``waves quickstart`` after installation.
+``waves fetch modsim_template`` after installation.
 
 .. project-description-end-do-not-remove
 

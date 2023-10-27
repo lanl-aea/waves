@@ -11,7 +11,7 @@ html_path_external = pathlib.Path("build/docs/html").resolve()
 html_path_internal = pathlib.Path("build/docs/html-internal").resolve()
 html_path = html_path_external if html_path_external.exists() else html_path_internal
 # TODO: figure out the setuptools and setuptools_scm solution for including data files
-quickstart_path = pathlib.Path("quickstart").resolve()
+modsim_template_path = pathlib.Path("modsim_template").resolve()
 tutorials_path = pathlib.Path("tutorials").resolve()
 # FIXME: setuptools claims that these should be included by default, but they aren't
 readme_path = pathlib.Path("README.rst").resolve()
@@ -21,13 +21,14 @@ new_paths = [
     (prefix / "share/man/man1", man_path),
     (prefix / "man/man1", man_path),
     (sp_dir / pkg_name / "docs", html_path),
-    (sp_dir / pkg_name / "quickstart", quickstart_path),
+    (sp_dir / pkg_name / "modsim_template", modsim_template_path),
     (sp_dir / pkg_name / "tutorials", tutorials_path),
     (sp_dir / pkg_name / "README.rst", readme_path),
     (sp_dir / pkg_name / "pyproject.toml", pyproject),
 ]
 for destination, source in new_paths:
-    assert source.exists()
+    if not source.exists():
+        raise FileNotFoundError(f"'{source}' does not exist")
     print(f"Copying '{source}' to '{destination}'...")
     if source.is_file():
         destination.parent.mkdir(parents=True, exist_ok=True)

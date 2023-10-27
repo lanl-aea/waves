@@ -38,7 +38,7 @@ pytest_node = env.Command(
     program_operations_coverage=program_operations_coverage,
     coverage_command=coverage_command
 )
-alias_list = env.Alias("pytest", pytest_node)
+env.Alias("pytest", pytest_node)
 # Always run pytests in place of a complete source list
 env.AlwaysBuild(pytest_node)
 
@@ -50,8 +50,8 @@ systemtest_node = env.Command(
     source=source,
     action=systemtest_command
 )
-alias_list = env.Alias("systemtest", systemtest_node)
+env.Alias("systemtest", systemtest_node)
 env.AlwaysBuild(systemtest_node)
 
-# Return the alias list to SConstruct for help message output
-Return("alias_list")
+# Collector alias to build all regression tasks
+env.Alias('regression', pytest_node + systemtest_node)

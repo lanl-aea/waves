@@ -2,6 +2,12 @@
 
 import os
 import pathlib
+import warnings
+
+import setuptools_scm
+
+
+warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, module="setuptools_scm")
 
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
@@ -9,6 +15,7 @@ documentation_source_dir = 'docs'
 package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
+    'version': setuptools_scm.get_version(),
     'tutorials_dir': 'tutorials',
     'eabm_dir': 'eabm_package',
     'abaqus_dir': 'eabm_package/abaqus',
@@ -84,27 +91,20 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 if not env['ignore_documentation']:
     build_dir = variant_dir_base / documentation_source_dir
     source_dir = documentation_source_dir
-    docs_aliases = SConscript(dirs=documentation_source_dir,
-                              variant_dir=str(build_dir),
-                              exports=['env', 'project_substitution_dictionary'])
+    SConscript(dirs=documentation_source_dir,
+               variant_dir=str(build_dir),
+               exports=['env', 'project_substitution_dictionary'])
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
-    docs_aliases = []
 
 # Add pytests
-pytest_aliases = SConscript(dirs=".", exports='env', duplicate=False)
+SConscript(dirs=".", exports='env', duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-try:
-    # Recover from SCons configuration
-    from SCons.Node.Alias import default_ans
-    alias_list = default_ans
-except ImportError:
-    # Fall back to manually constructed alias list(s)
-    alias_list = docs_aliases + pytest_aliases
+from SCons.Node.Alias import default_ans
 alias_help = "\nTarget Aliases:\n"
-for alias in alias_list:
+for alias in default_ans:
     alias_help += f"    {alias}\n"
 Help(alias_help, append=True)

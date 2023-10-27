@@ -1,0 +1,5 @@
+Users who are are ready to create their own modsim repository can use the :ref:`waves_cli` :ref:`waves_fetch_cli`
+subcommand to access the project :ref:`modsim_templates`. The template files include project documentation built with
+`SCons`_ and `Sphinx`_ and two simulation configurations for the rectangle project developed in the tutorials: nominal
+and mesh convergence. The :ref:`waves_fetch_cli` subcommand may be used to recursively fetch directories or to fetch
+individual files from both the :ref:`modsim_templates` and the tutorials.
