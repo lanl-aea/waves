@@ -1479,7 +1479,7 @@ def _quinoa_emitter(target, source, env):
 
 
 def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1", inciter_options="",
-                  prefix_command="", post_action=[]):
+                  prefix_command="", post_action=[], cd_action_prefix=_cd_action_prefix):
     """Quinoa solver SCons builder
 
     This builder requires at least two source files provided in the order
@@ -1487,13 +1487,9 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     1. Quinoa control file: ``*.q``
     2. Exodus mesh file: ``*.exo``
 
-    The builder returned by this function accepts all SCons Builder arguments and adds the keyword argument(s) below.
-
-    * ``cd_action_prefix``: The directory change operation prior to executing charmrun. Users change this behavior only
-      change this behavior if they are experienced SCons users and have fully explored alternate solutions.
-
-    Except for the ``post_action``, the arguments of this function are also available as keyword arguments of the
-    builder. When provided during task definition, the keyword arguments override the builder returned by this function.
+    The builder returned by this function accepts all SCons Builder arguments.  Except for the ``post_action``, the
+    arguments of this function are also available as keyword arguments of the builder. When provided during task
+    definition, the keyword arguments override the builder returned by this function.
 
     The first target determines the working directory for the builder's action, as shown in the action code snippet
     below. The action changes the working directory to the first target's parent directory prior to executing quinoa.
@@ -1515,14 +1511,17 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
        import waves
        env = waves.scons_extensions.shell_environment("module load quinoa")
        env.Append(BUILDERS={
-           "QuinoaSolver": waves.scons_extensions.quinoa_solver(),
+           "QuinoaSolver": waves.scons_extensions.quinoa_solver(charmrun_options="+p1"),
        })
+       # Serial execution with "+p1"
        env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"])
+       # Parallel execution with "+p4"
+       env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"], charmrun_options="+p4")
 
     .. code-block::
        :caption: Quinoa builder action
 
-       ${prefix_command} ${cd_action_prefix} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
+       ${prefix_command} ${cd_action_prefix} ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
 
     :param str charmrun: The relative or absolute path to the charmrun executable
     :param str charmrun_options: The charmrun command line interface options
@@ -1533,6 +1532,14 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
         :meth:`waves.scons_extensions.ssh_builder_actions`. For local, direct execution, user's should prefer to create
         an SCons construction environment with :meth:`waves.scons_extensions.shell_environment`. When overriding in a
         task definition, the prefix command *must* end with ``' &&'``.
+    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
+        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
+        ${TARGET.dir.abspath} && ${post_action}``
+    :param str cd_action_prefix: The directory change operation prior to executing charmrun. Users should only change
+      this behavior if they are experienced SCons users and have fully explored alternate solutions. The prefix
+      *must* end with ``' &&'``.
 
     :return: Quinoa builder
     :rtype: SCons.Builder.Builder
@@ -1541,7 +1548,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
         prefix_command = prefix_command.strip()
         prefix_command += " &&"
     action=[
-        "${prefix_command} ${cd_action_prefix} && ${charmrun} ${charmrun_options} " \
+        "${prefix_command} ${cd_action_prefix} ${charmrun} ${charmrun_options} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             "> ${TARGET.filebase}.stdout 2>&1"
     ]
@@ -1550,7 +1557,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
         action=action,
         emitter=_quinoa_emitter,
         prefix_command=prefix_command,
-        cd_action_prefix=_cd_action_prefix,
+        cd_action_prefix=cd_action_prefix,
         charmrun=charmrun,
         charmrun_options=charmrun_options,
         inciter=inciter,
