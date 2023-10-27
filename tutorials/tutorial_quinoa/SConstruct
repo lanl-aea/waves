@@ -34,33 +34,35 @@ env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["cubit"] = waves.scons_extensions.add_cubit(["/apps/Cubit-16.12/cubit", "cubit"], env)
-env["sbatch"] = waves.scons_extensions.add_cubit(["sbatch"], env)
+env["sbatch"] = waves.scons_extensions.add_program(["sbatch"], env)
 env["user"] = os.getlogin()
+# TODO: Ask Quinoa devs to provide a shell script or module file on HPC snow, then remove this variable
 env["quinoa_installation"] = "/users/cclong/QUINOA/quinoa/buildOS/Main"
-
-# Add WAVES builders
 # FIXME: Not sure why snow doesn't provide the module function to *all* shells. Sourcing the modules.sh script works for
 # now, but explore shell initiation in HPC docs.
 # FIXME: The remote ssh command launches a non-interactive shell. Sourcing the module shell script is not sufficient, we
 # also have to add the appropriate modulefile path(s). Probably these problems are related.
-quinoa_modules  = "source /etc/profile.d/modules.sh && " \
-                  "module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler " \
-                             "/usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && " \
-                  "module load gcc/9.3.0 openmpi/2.1.2"
+quinoa_snow_environment  = "source /etc/profile.d/modules.sh && " \
+                           "module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler " \
+                                      "/usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && " \
+                           "module load gcc/9.3.0 openmpi/2.1.2"
+quinoa_aea_environment = "source /projects/cclong/quinoa/loadenv.sh"
+
+# Add WAVES builders
 env.Append(BUILDERS={
     'PythonScript': waves.scons_extensions.python_script(),
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
-        waves.scons_extensions.sbatch_quinoa_solver(environment_command=f"{quinoa_modules} &&"),
+        waves.scons_extensions.sbatch_quinoa_solver(environment_command=f"{quinoa_snow_environment} &&"),
         remote_server="sn-rfe.lanl.gov",
         remote_directory="/users/${user}/WAVES-TUTORIAL/tutorial_quinoa",
     )
 })
 
-# Source the Quinoa environment and store it separately from the Conda environment to avoid PATH interference
+# Source the Quinoa environment and store it separately from the Conda/Cubit environment to avoid PATH interference
 try:  # sstelmo/sstbigbird
-    envQuinoa = waves.scons_extensions.shell_environment("source /projects/cclong/quinoa/loadenv.sh")
+    envQuinoa = waves.scons_extensions.shell_environment(quinoa_aea_environment)
 except subprocess.CalledProcessError:  # HPC snow
-    envQuinoa = waves.scons_extensions.shell_environment(quinoa_modules)
+    envQuinoa = waves.scons_extensions.shell_environment(quinoa_snow_environment)
 quinoa_installation = pathlib.Path(env["quinoa_installation"])
 envQuinoa["inciter"] = waves.scons_extensions.add_program(["inciter", quinoa_installation / "inciter"], envQuinoa)
 envQuinoa["charmrun"] = waves.scons_extensions.add_program(["charmrun", quinoa_installation / "charmrun"], envQuinoa)
