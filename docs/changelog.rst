@@ -14,7 +14,8 @@ New Features
 
 Documentation
 =============
-- Add work-in-progress tutorial for Quinoa (:issue:`550`, :merge:`676`). By `Kyle Brindley`_.
+- Add work-in-progress tutorial for Quinoa with example problem provided by `Christopher Long`_ (:issue:`550`,
+  :merge:`676`). By `Kyle Brindley`_.
 
 ******************
 0.7.4 (2023-10-26)
