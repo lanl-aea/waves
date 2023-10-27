@@ -16,6 +16,8 @@ simulation_variables = {
 workflow = []
 
 # Geometry/partition/mesh
+# TODO: separate the local and remote workflows into dedicated SConscript files that re-use the cubit workflow as in the
+# Cubit+Abaqus and Cubit+Sierra tutorials
 mesh = env.PythonScript(
     target=["box.cub", "box.exo"],
     source=["box.py"],
