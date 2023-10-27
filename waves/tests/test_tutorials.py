@@ -2,6 +2,7 @@ import os
 import pathlib
 import tempfile
 import subprocess
+from importlib.metadata import version, PackageNotFoundError
 
 import pytest
 
@@ -11,9 +12,16 @@ from waves import _settings
 tutorial_directory = _settings._installed_tutorials_directory
 
 env = os.environ.copy()
+
 # If executing in repository, add package to PYTHONPATH
-if _settings._repository_tutorials_directory == tutorial_directory:
-    package_parent_path = tutorial_directory.parent
+try:
+    version("waves")
+    installed = True
+except PackageNotFoundError:
+    installed = False
+
+if not installed:
+    package_parent_path = _settings._project_root_abspath.parent
     key = "PYTHONPATH"
     if key in env:
         env[key] = f"{package_parent_path}:{env[key]}"
