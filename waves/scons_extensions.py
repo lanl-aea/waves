@@ -1479,7 +1479,7 @@ def _quinoa_emitter(target, source, env):
 
 
 def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1", inciter_options="",
-                  prefix_command="", post_action=[], cd_action_prefix=_cd_action_prefix):
+                  prefix_command="", post_action=[]):
     """Quinoa solver SCons builder
 
     This builder requires at least two source files provided in the order
@@ -1521,7 +1521,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     .. code-block::
        :caption: Quinoa builder action
 
-       ${prefix_command} ${cd_action_prefix} ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
+       ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
 
     :param str charmrun: The relative or absolute path to the charmrun executable
     :param str charmrun_options: The charmrun command line interface options
@@ -1537,9 +1537,6 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
-    :param str cd_action_prefix: The directory change operation prior to executing charmrun. Users should only change
-      this behavior if they are experienced SCons users and have fully explored alternate solutions. The prefix
-      *must* end with ``' &&'``.
 
     :return: Quinoa builder
     :rtype: SCons.Builder.Builder
@@ -1548,7 +1545,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
         prefix_command = prefix_command.strip()
         prefix_command += " &&"
     action=[
-        "${prefix_command} ${cd_action_prefix} ${charmrun} ${charmrun_options} " \
+        f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             "> ${TARGET.filebase}.stdout 2>&1"
     ]
@@ -1557,7 +1554,6 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
         action=action,
         emitter=_quinoa_emitter,
         prefix_command=prefix_command,
-        cd_action_prefix=cd_action_prefix,
         charmrun=charmrun,
         charmrun_options=charmrun_options,
         inciter=inciter,
