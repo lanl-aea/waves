@@ -17,6 +17,11 @@ Documentation
 - Add work-in-progress tutorial for Quinoa with example problem provided by `Christopher Long`_ (:issue:`550`,
   :merge:`676`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Add quinoa tutorial's local AEA server build to the regression suite (:issue:`554`, :merge:`683`). By `Kyle
+  Brindley`_.
+
 ******************
 0.7.4 (2023-10-26)
 ******************
