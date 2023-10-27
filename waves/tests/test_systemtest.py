@@ -74,7 +74,7 @@ def test_run_tutorial(command, directory):
     with tempfile.TemporaryDirectory() as temp_directory:
         command = command + f" --build-dir={temp_directory}"
         command = command.split(" ")
-        result = subprocess.check_output(command, env=env).decode('utf-8')
+        result = subprocess.check_output(command, env=env, cwd=directory).decode('utf-8')
 
 
 @pytest.mark.systemtest
