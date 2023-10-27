@@ -1,1 +1,1 @@
-../../docs/dependencies.txt
+../../../docs/dependencies.txt

@@ -1,1 +1,1 @@
-../../docs/targets.txt
+../../../docs/targets.txt

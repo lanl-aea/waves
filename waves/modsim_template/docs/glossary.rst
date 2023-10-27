@@ -1,1 +1,1 @@
-../../docs/glossary.rst
+../../../docs/glossary.rst
