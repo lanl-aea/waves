@@ -1,0 +1,130 @@
+#! /usr/bin/env python
+
+import os
+import pathlib
+import subprocess
+
+import waves
+
+# Comments used in tutorial code snippets: marker-1
+
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+AddOption(
+    "--unconditional-build",
+    dest="unconditional_build",
+    default=False,
+    action="store_true",
+    help="Boolean flag to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+            " and it would normally be ignored. (default: '%default')"
+)
+AddOption(
+    "--print-build-failures",
+    dest="print_build_failures",
+    default=False,
+    action="store_true",
+    help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+)
+
+# Comments used in tutorial code snippets: marker-2
+
+# Inherit user's full environment and set project variables
+env = Environment(ENV=os.environ.copy(),
+                  variant_dir_base=GetOption("variant_dir_base"),
+                  unconditional_build=GetOption("unconditional_build"),
+                  print_build_failures=GetOption("print_build_failures"))
+
+# Conditionally print failed task *.stdout files
+waves.scons_extensions.print_build_failures(env["print_build_failures"])
+
+# Always copy (no sym-links) when duplicating
+env.SetOption("duplicate", "copy")
+
+# Comments used in tutorial code snippets: marker-3
+
+# Find required programs for conditional target ignoring and absolute path for use in target actions
+env["cubit"] = waves.scons_extensions.add_cubit(["/apps/Cubit-16.12/cubit", "cubit"], env)
+env["sbatch"] = waves.scons_extensions.add_program(["sbatch"], env)
+env["user"] = os.getlogin()
+# TODO: Ask Quinoa devs to provide a shell script or module file on HPC snow, then remove this variable
+env["quinoa_installation"] = "/users/cclong/QUINOA/quinoa/buildOS/Main"
+# FIXME: Not sure why snow doesn't provide the module function to *all* shells. Sourcing the modules.sh script works for
+# now, but explore shell initiation in HPC docs.
+# FIXME: The remote ssh command launches a non-interactive shell. Sourcing the module shell script is not sufficient, we
+# also have to add the appropriate modulefile path(s). Probably these problems are related.
+quinoa_snow_environment  = "source /etc/profile.d/modules.sh && " \
+                           "module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler " \
+                                      "/usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && " \
+                           "module load gcc/9.3.0 openmpi/2.1.2"
+quinoa_aea_environment = "source /projects/cclong/quinoa/loadenv.sh"
+
+# Comments used in tutorial code snippets: marker-4
+
+# Set project internal variables and variable substitution dictionaries
+project_name = 'WAVES-TUTORIAL'
+version = '0.1.0'
+project_dir = pathlib.Path(Dir(".").abspath)
+project_variables = {
+    'project_name': project_name,
+    'project_dir': str(project_dir),
+    'version': version,
+}
+for key, value in project_variables.items():
+    env[key] = value
+
+# Comments used in tutorial code snippets: marker-5
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
+
+# Add custom builders
+env.Append(BUILDERS={
+    'PythonScript': waves.scons_extensions.python_script(),
+    "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
+        waves.scons_extensions.sbatch_quinoa_solver(prefix_command=f"{quinoa_snow_environment} &&"),
+        remote_server="sn-rfe.lanl.gov",
+        remote_directory="/users/${user}/WAVES-TUTORIAL/tutorial_quinoa",
+    )
+})
+
+# Source the Quinoa environment and store it separately from the Conda/Cubit environment to avoid PATH interference
+try:  # sstelmo/sstbigbird
+    envQuinoa = waves.scons_extensions.shell_environment(quinoa_aea_environment)
+except subprocess.CalledProcessError:  # HPC snow
+    envQuinoa = waves.scons_extensions.shell_environment(quinoa_snow_environment)
+quinoa_installation = pathlib.Path(env["quinoa_installation"])
+envQuinoa["inciter"] = waves.scons_extensions.add_program(["inciter", quinoa_installation / "inciter"], envQuinoa)
+envQuinoa["charmrun"] = waves.scons_extensions.add_program(["charmrun", quinoa_installation / "charmrun"], envQuinoa)
+
+# Add WAVES builders. If sbatch is found, use it.
+# Should allow the same scons alias to run directly on sstbigbird, but submit as an sbatch job on HPC
+quinoa_builder = waves.scons_extensions.quinoa_solver
+if env["sbatch"] is not None:
+    quinoa_builder = waves.scons_extensions.sbatch_quinoa_solver
+envQuinoa.Append(BUILDERS={
+    "QuinoaSolver": quinoa_builder(charmrun=envQuinoa["charmrun"], inciter=envQuinoa["inciter"])
+})
+
+# Comments used in tutorial code snippets: marker-6
+
+# Add simulation targets
+SConscript("SConscript", variant_dir=variant_dir_base, exports=["env", "envQuinoa"], duplicate=True)
+
+# Comments used in tutorial code snippets: marker-7
+
+# Add default target list to help message
+env.Default()  # Empty defaults list to avoid building all simulation targets by default
+# Add aliases to help message so users know what build target options are available
+# This must come *after* all expected Alias definitions and SConscript files.
+waves.scons_extensions.project_help_message()
+
+# Comments used in tutorial code snippets: marker-8
