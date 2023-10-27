@@ -9,7 +9,7 @@ import pytest
 from waves import _settings
 
 
-tutorial_directory = _settings._installed_tutorials_directory
+tutorial_directory = _settings._tutorials_directory
 
 env = os.environ.copy()
 
