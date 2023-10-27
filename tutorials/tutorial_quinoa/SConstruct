@@ -1,0 +1,106 @@
+#! /usr/bin/env python
+
+import os
+import re
+import pathlib
+import subprocess
+
+import waves
+
+# VVV Builders that will be put in WAVES
+# Quinoa Solver
+def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p4", inciter_options="--verbose",
+                  environment_command=""):
+    quinoa_builder = Builder(
+        action=[
+            "${environment_command} cd ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
+                "> ${TARGET.filebase}.stdout 2>&1"
+        ],
+        charmrun=charmrun,
+        charmrun_options=charmrun_options,
+        inciter=inciter,
+        inciter_options=inciter_options,
+        environment_command=environment_command
+    )
+    return quinoa_builder
+
+
+# Sbatch submission version of Quinoa Solver
+_sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap"
+@waves.scons_extensions.catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+def sbatch_quinoa_solver(*args, **kwargs):
+    return quinoa_solver(*args, **kwargs)
+# ^^^ Builders that will be put in WAVES
+
+
+# Add build directory CLI arg
+AddOption(
+    "--build-dir",
+    dest="build_dir",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+
+# Inherit user's full environment
+env = Environment(
+    ENV=os.environ.copy(),
+    build_dir=GetOption("build_dir")
+)
+
+# Always copy (no sym-links) when duplicating
+env.SetOption("duplicate", "copy")
+
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
+
+# Find required programs for conditional target ignoring and absolute path for use in target actions
+env["cubit"] = waves.scons_extensions.add_cubit(["/apps/Cubit-16.12/cubit", "cubit"], env)
+env["sbatch"] = waves.scons_extensions.add_cubit(["sbatch"], env)
+env["user"] = os.getlogin()
+env["quinoa_installation"] = "/users/cclong/QUINOA/quinoa/buildOS/Main"
+
+# Add WAVES builders
+# FIXME: Not sure why snow doesn't provide the module function to *all* shells. Sourcing the modules.sh script works for
+# now, but explore shell initiation in HPC docs.
+# FIXME: The remote ssh command launches a non-interactive shell. Sourcing the module shell script is not sufficient, we
+# also have to add the appropriate modulefile path(s). Probably these problems are related.
+quinoa_modules  = "source /etc/profile.d/modules.sh && "
+quinoa_modules += "module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler /usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && "
+quinoa_modules += "module load gcc/9.3.0 openmpi/2.1.2"
+env.Append(BUILDERS={
+    'PythonScript': waves.scons_extensions.python_script(),
+    "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
+        sbatch_quinoa_solver(environment_command=f"{quinoa_modules} &&"),
+        remote_server="sn-rfe.lanl.gov",
+        remote_directory="/users/${user}/WAVES-TUTORIAL/tutorial_quinoa",
+    )
+})
+
+# Source the Quinoa environment and store it separately from the Conda environment to avoid PATH interference
+try:  # sstelmo/sstbigbird
+    envQuinoa = waves.scons_extensions.shell_environment("source /projects/cclong/quinoa/loadenv.sh")
+except subprocess.CalledProcessError:  # HPC snow
+    envQuinoa = waves.scons_extensions.shell_environment(quinoa_modules)
+quinoa_installation = pathlib.Path(env["quinoa_installation"])
+envQuinoa["inciter"] = waves.scons_extensions.add_program(["inciter", quinoa_installation / "inciter"], envQuinoa)
+envQuinoa["charmrun"] = waves.scons_extensions.add_program(["charmrun", quinoa_installation / "charmrun"], envQuinoa)
+
+# Add WAVES builders. If sbatch is found, use it.
+# Should allow the same scons alias to run directly on sstbigbird, but submit as an sbatch job on HPC
+quinoa_builder = quinoa_solver
+if env["sbatch"] is not None:
+    quinoa_builder = sbatch_quinoa_solver
+envQuinoa.Append(BUILDERS={
+    "QuinoaSolver": quinoa_builder(charmrun=envQuinoa["charmrun"], inciter=envQuinoa["inciter"])
+})
+
+# Call SConscript file
+SConscript("SConscript", variant_dir=env["build_dir"], exports=["env", "envQuinoa"], duplicate=True)
+
+# List all aliases in help message.
+# This must come *after* all expected Alias definitions and SConscript files.
+waves.scons_extensions.project_help_message()

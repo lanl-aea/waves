@@ -1,0 +1,46 @@
+#! /usr/bin/env python
+import pathlib
+
+import waves
+
+
+Import("env", "envQuinoa")
+
+# TODO: move parameters to a dedicated dictionary file read
+simulation_variables = {
+    "xlength": 1.0,
+    "ylength": 0.5,
+    "zlength": 0.5,
+}
+
+workflow = []
+
+# Geometry/partition/mesh
+mesh = env.PythonScript(
+    target=["box.cub", "box.exo"],
+    source=["box.py"],
+    script_options="--output-file ${TARGET.abspath} --xlength ${xlength} --ylength ${ylength} --zlength ${zlength}",
+    **simulation_variables
+)
+workflow.extend(mesh)
+env.Alias("mesh", mesh)
+
+# SSH remote build on snow
+quinoa_installation = pathlib.Path(env["quinoa_installation"])
+target = env.SSHQuinoaSolver(
+    target=["remote.stdout"],
+    source=["flow.q", "box.exo"],
+    user=env["user"],
+    charmrun=str(quinoa_installation / "charmrun"),
+    inciter=str(quinoa_installation / "inciter")
+)
+env.Alias("quinoa-remote", target)
+
+# Local build on local server
+target = envQuinoa.QuinoaSolver(
+    target=["local.stdout"],
+    source=["flow.q", "box.exo"],
+    charmrun=envQuinoa["charmrun"],
+    inciter=envQuinoa["inciter"]
+)
+envQuinoa.Alias("quinoa-local", target)
