@@ -16,7 +16,7 @@ package_source_dir = 'waves'
 project_variables = {
     'project_dir': Dir('.').abspath,
     'version': setuptools_scm.get_version(),
-    'tutorials_dir': 'tutorials',
+    'tutorials_dir': 'waves/tutorials',
     'eabm_dir': 'eabm_package',
     'abaqus_dir': 'eabm_package/abaqus',
     'argparse_types_dir': 'eabm_package/argparse_types',

@@ -5,8 +5,29 @@ Changelog
 #########
 
 ******************
-0.7.5 (unreleased)
+0.7.6 (unreleased)
 ******************
+
+******************
+0.7.5 (2023-10-27)
+******************
+
+New Features
+============
+- Add experimental builder support for Quinoa (:issue:`550`, :merge:`676`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Add work-in-progress tutorial for Quinoa with example problem provided by `Christopher Long`_ (:issue:`550`,
+  :merge:`676`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Add quinoa tutorial's local AEA server build to the regression suite (:issue:`554`, :merge:`683`). By `Kyle
+  Brindley`_.
+- Move tutorial and modsim template files into the package repository for reduced special handling during packaging
+  (:merge:`684`). By `Kyle Brindley`_.
+- Merge remaining shell system tests to pytest managed execution (:merge:`684`). By `Kyle Brindley`_.
 
 ******************
 0.7.4 (2023-10-26)

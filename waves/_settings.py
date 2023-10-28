@@ -25,8 +25,8 @@ _set_coordinate_key = "parameter_sets"
 _quantiles_attribute_key = "_quantiles"
 _cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
 _installed_docs_index = _project_root_abspath / "docs/index.html"
-_installed_modsim_template_directory = _project_root_abspath / "modsim_template"
-_installed_tutorials_directory = _project_root_abspath / "tutorials"
+_modsim_template_directory = _project_root_abspath / "modsim_template"
+_tutorials_directory = _project_root_abspath / "tutorials"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
 _supported_salib_samplers = ["latin", "fast_sampler", "sobol", "finite_diff", "morris"]
 _fetch_exclude_patterns = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
@@ -52,12 +52,3 @@ _parameter_study_description = \
     "all files. The dry run option will print a list of files and contents that would have been  written. " \
     "The 'h5' output is the only output type that contains both the parameter " \
     "samples and quantiles."
-
-# For lazy devs who want to test the ``waves fetch`` CLI without an editable install...
-# Enables ``python -m waves.fetch ...`` execution from repository root directory
-_repository_modsim_template_directory = _project_root_abspath.parent / _installed_modsim_template_directory.name
-_repository_tutorials_directory = _project_root_abspath.parent / _installed_tutorials_directory.name
-if not _installed_modsim_template_directory.exists() and _repository_modsim_template_directory.exists():
-    _installed_modsim_template_directory = _repository_modsim_template_directory
-if not _installed_tutorials_directory.exists() and _repository_tutorials_directory.exists():
-    _installed_tutorials_directory = _repository_tutorials_directory

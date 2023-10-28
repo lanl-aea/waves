@@ -7,9 +7,10 @@ Tutorial: Cubit+Sierra
 .. warning::
 
    Most WAVES tutorials are used as system tests in the regression test suite to ensure that the tutorial files are
-   up-to-date and functional. This tutorial is not part of the regression suite yet. The behavior was tested when the
-   tutorial was written and is expected to run correctly. If you run into problems running this tutorial, please contact
-   the WAVES development team.
+   up-to-date and functional. The sierra local submission *without* sbatch is part of the regression suite, but the
+   sbatch submission behavior is not. If you run into problems running this tutorial, please contact the WAVES
+   development team.
+
 
 **********
 References

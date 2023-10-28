@@ -44,7 +44,7 @@ env.AlwaysBuild(pytest_node)
 
 systemtest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -v --no-showlocals -n 4 -m systemtest --tb=short --junitxml=${TARGETS[0].name} --cache-clear"
 target = ["systemtest_results.xml"]
-source = waves_source_list + [str(pathlib.Path("waves/tests/test_tutorials.py"))]
+source = waves_source_list + [str(pathlib.Path("waves/tests/test_systemtest.py"))]
 systemtest_node = env.Command(
     target=target,
     source=source,

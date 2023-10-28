@@ -117,24 +117,7 @@ fast-test:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
-    - project_root=${PWD}
-    # Project regression tests
     - scons regression --keep-going --unconditional-build --cov-report
-    # Set PYTHONPATH for WAVES import in tutorials/modsim_template system/integration/regression tests
-    - export PYTHONPATH=${project_root}:$PYTHONPATH
-    # WAVES CLI regression tests
-    - modsim_template_regression_directory="${project_root}/test_modsim_template"
-    - python -m waves.main fetch modsim_template --destination ${modsim_template_regression_directory}
-    - cd ${modsim_template_regression_directory}
-    - scons . --jobs=4
-    - cd ${project_root}
-    - python -m waves.main visualize nominal --sconstruct ${modsim_template_regression_directory}/SConstruct --output-file ${modsim_template_regression_directory}/nominal.svg
-    # Regression test the files used in the tutorial documentation
-    - tutorials_regression_directory="${project_root}/test_tutorials"
-    - python -m waves.main fetch tutorials --destination ${tutorials_regression_directory}
-    - cd ${tutorials_regression_directory}
-    - python -m waves.main build --max-iterations=4 tutorial_extend_study --sconstruct=tutorial_extend_study_SConstruct --jobs=4
-    - cd ${project_root}
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
