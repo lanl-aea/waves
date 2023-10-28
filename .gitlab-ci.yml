@@ -217,14 +217,12 @@ pages:
             cp -r build/docs/html-internal/* ${project_root}/public/$ref
             scons . --clean --unconditional-build
             # Build WAVES-EABM HTML documentation
-            cd modsim_template
+            cd waves/modsim_template
             PYTHONPATH=${project_root} scons . --clean
             PYTHONPATH=${project_root} scons html
             cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
             PYTHONPATH=${project_root} scons . --clean
             cd ${project_root}
-            # TODO: Remove ``rm -r`` when 0.7.1 is released and main has the more complete docs clean behavior
-            rm -r build modsim_template/build
         done
   artifacts:
     paths:
