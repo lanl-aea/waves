@@ -10,6 +10,12 @@ Prerequisites
 
 .. include:: tutorial_00_prerequisites.txt
 
+**********
+References
+**********
+
+* Python style guide: `PEP-8`_ :cite:`pep-8`
+
 .. _sconstruct_environment:
 
 ***********
