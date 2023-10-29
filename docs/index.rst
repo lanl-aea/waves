@@ -8,6 +8,23 @@
 
 .. include:: project_brief.txt
 
+.. only:: html
+
+   .. image:: https://img.shields.io/github/actions/workflow/status/lanl/waves/pages.yml?branch=main&label=GitHub-Pages
+      :target: https://lanl.github.io/waves/
+
+   .. image:: https://img.shields.io/github/v/release/lanl/waves?label=GitHub-Release
+      :target: https://github.com/lanl/waves/releases
+
+   .. image:: https://img.shields.io/conda/vn/conda-forge/waves
+      :target: https://anaconda.org/conda-forge/waves
+
+   .. image:: https://img.shields.io/conda/dn/conda-forge/waves.svg?label=Conda%20downloads
+      :target: https://anaconda.org/conda-forge/waves
+
+   .. image:: https://zenodo.org/badge/591388602.svg
+      :target: https://zenodo.org/badge/latestdoi/591388602
+
 .. raw:: latex
 
    \part{Computational Practices}
