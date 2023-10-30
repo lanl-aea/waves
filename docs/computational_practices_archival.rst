@@ -10,7 +10,7 @@ computational engineering workflow that must be parameterized or can be stored a
 history, collaboration, and conflict resolution are powerful tools. However, except in the case of files used in the
 documentation, it is generally inappropropriate to put the output artifacts of the workflow under version control. The
 VCS and :ref:`build_system` together preserve the source files and workflow to produce those output artifacts. Instead,
-output artifacts are should be archived in a suitable database.
+output artifacts should be archived in a suitable database.
 
 Most organizations will already have policies related to data management, access, and archival. At the very least,
 computational engineers and scientists will be familiar with project reporting. Those reports are archived in a library
@@ -42,4 +42,4 @@ the current work, but may support answers to future questions. When considering 
 should be weighed against the cost of re-producing the same results. Computational workflows frequently produce very
 large files on disk, which may prohibit archiving active data which is subject to change as the project refines the
 simulation and analysis. In this case it may be desirable to postpone data archival activities until final reporting,
-when the datasets supporting the report are should be made read-only and preserved.
+when the datasets supporting the report should be made read-only and preserved.
