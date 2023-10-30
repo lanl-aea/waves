@@ -26,7 +26,7 @@ system `git`_ :cite:`git`, which was released in 2005 :cite:`pro-git`.
 
 Git tracks changes to collections of files in a project. The user creates incremental "commits" which form a directed
 graph of project history, called "branches". As the commits are created and added to history, the user can supply a
-commit message to describe the changes. Good messages answer questions about the purpose and design intent about the
+commit message to describe the changes. Good messages answer questions about the purpose and design intent of the
 changes; the "why" of a laboratory notebook. Included with the commit is meta data identifying the commit author, "who",
 the files and the granular changes themselves, "what", and a timestamp, "when". The commit is assigned a unique
 identifier called the commit "hash".
@@ -39,6 +39,13 @@ tracks the association between specific lines in a text file and the commit hash
 that line, so questions about the purpose of a specific portion of a file may be recovered quickly. With more advanced
 filtering, the Git log can display all commit entries that touched a specific file, set of files, edits by a specific
 author, etc.
+
+On its own, git may be difficult to use in collaboration between large teams, across file systems, and between networks.
+Collaborative web-based software, such as `GitHub`_ :cite:`github`, `Gitlab` :cite:`gitlab`, and `Bitbucket`_
+:cite:`bitbucket`, provide solutions for tracking work, parallel project development, discussions, and continuous
+testing and integration. These are not the only software for collaborative git projects, just like git is not the only
+version control software. Probably your organization already has access to a version control software and an associated
+collaboration tool, making that the best set of tools to start with.
 
 There is an abundance of documentation, tutorials, and recommended practices in the use of `git`_ and other version
 control software systems and practices. Instead of re-creating a tutorial here, this section will end with a few
