@@ -1,8 +1,8 @@
 .. _waves_quickstart:
 
-######################
-SCons-WAVES Quickstart
-######################
+################
+WAVES Quickstart
+################
 
 This quickstart will create a minimal, two file project configuration matching the tutorial listed below.
 

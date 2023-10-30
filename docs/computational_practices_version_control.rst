@@ -21,7 +21,7 @@ resolve content conflicts from contributors working in parallel.
 
 A related type of software that many engineers may be familiar with is product data management (PDM) or product
 lifecycle management (PLM) software. Some examples include `Windchill`_ :cite:`windchill`, `TeamCenter`_
-:cite:`teamcenter`, `SOLIDWORKS PDM`: cite:`solidworks_pdm`, `Minerva`_ :cite:`minerva`, and `ENOVIA`_ :cite:`enovia`.
+:cite:`teamcenter`, `SOLIDWORKS PDM`_ :cite:`solidworks_pdm`, `Minerva`_ :cite:`minerva`, and `ENOVIA`_ :cite:`enovia`.
 This type of software typically targets centralized, versioned, and configured product definitions. Typically the
 product definition means geometric definions with computer aided design (CAD); however, this type of software is often
 integrated with tools for managing project timeline, status, requirements, modeling, and workflow execution. While tight
@@ -37,7 +37,7 @@ revision control, source control, or source code management. There have been a v
 software dating back to the early 1970s. Today, there are many version control software to choose from, with a range of
 implemented concepts. This section will focus on the distributed version control system `git`_ :cite:`git`, which was
 released in 2005 :cite:`pro-git`. Depending on the needs of the project, similar check-in/check-out version control can
-be added to most VCS. In the case of git, `Git-LFS` provides improved handling of binary files :cite:`git-lfs`.
+be added to most VCS. In the case of git, `Git-LFS`_ provides improved handling of binary files :cite:`git-lfs`.
 
 Git tracks per-line changes to collections of files in a project. The user creates incremental "commits" which form a
 directed graph of project history, called "branches". As the commits are created and added to history, the user can
@@ -56,7 +56,7 @@ filtering, the Git log can display all commit entries that touched a specific fi
 author, etc.
 
 On its own, git may be difficult to use in collaboration between large teams, across file systems, and between networks.
-Collaborative web-based software, such as `GitHub`_ :cite:`github`, `Gitlab` :cite:`gitlab`, and `Bitbucket`_
+Collaborative web-based software, such as `GitHub`_ :cite:`github`, `Gitlab`_ :cite:`gitlab`, and `Bitbucket`_
 :cite:`bitbucket`, provide solutions for tracking work, parallel project development, discussions, and continuous
 testing and integration. These are not the only software for collaborative git projects, just like git is not the only
 version control software. Probably your organization already has access to a version control software and an associated
