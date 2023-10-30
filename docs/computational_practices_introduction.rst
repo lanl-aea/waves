@@ -48,7 +48,7 @@ strict practice of detailed and regular entries are equally important.
 * :ref:`build_system`
 * :ref:`compute_environment`
 * :ref:`testing`
-* :ref:`archival`
+* :ref:`data_archival`
 
 Those practices at the end of the list are more costly to implement and therefore more valuable for mature or long-lived
 projects. However, an engineer familiar with the computational tools implementing these practices will find that even
