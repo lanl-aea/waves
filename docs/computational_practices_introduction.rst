@@ -72,6 +72,6 @@ tutorials are considered prerequisites.
 #. Conda environments - https://docs.conda.io/projects/conda/en/latest/user-guide/getting-started.html
    :cite:`conda,conda-gettingstarted`
 #. Sphinx tutorial - https://www.sphinx-doc.org/en/master/tutorial/index.html :cite:`sphinx,sphinx-tutorial`
-#. :ref:`SCons-WAVES-EABM tutorials<tutorial_introduction>`
+#. :ref:`WAVES tutorials<tutorial_introduction>`
 #. Library Carpentry: Regular Expressions - https://librarycarpentry.org/lc-data-intro/index.html
    :cite:`lbc-re,LibraryCarpentry`
