@@ -23,7 +23,7 @@
 .. _`CheckProg`: https://scons.org/doc/production/HTML/scons-user/ch21s07.html
 .. _`Confluence`: https://www.atlassian.com/software/confluence
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
-.. _`Sierra`: https://www.osti.gov/biblio/1886996 
+.. _`Sierra`: https://www.osti.gov/biblio/1886996
 .. _`Quinoa`: https://quinoacomputing.github.io/index.html
 .. _`Environment modules`: https://modules.readthedocs.io/en/stable/modulefile.html
 .. _`GNU Make`: https://www.gnu.org/software/make/
@@ -33,6 +33,8 @@
 .. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
 .. _`Gitlab`: https://about.gitlab.com/
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
+.. _`GitHub`: https://github.com/
+.. _`Bitbucket`: https://www.atlassian.com/software/bitbucket
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
 .. _`Granta/MIMS`: http://grantami.lanl.gov/mi
 .. _`LaTeX`: https://www.latex-project.org/
