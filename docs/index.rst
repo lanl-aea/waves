@@ -41,6 +41,7 @@
    computational_practices_build_system
    computational_practices_compute_environment
    computational_practices_regression_testing
+   computational_practices_archival
 
 .. raw:: latex
 

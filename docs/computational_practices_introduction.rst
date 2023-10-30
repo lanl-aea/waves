@@ -38,22 +38,24 @@ Core Concepts
 
 The core concepts of computational engineering practice are listed below in the rough order of project maturity. That
 is, those things listed near the beginning of the list should be implemented early in the life-cycle of all projects,
-regardless of expected project growth, re-use, or impact. Particularly, version control should be implemented at the
-very beginning of a computational project, even with the earliest project brainstorming session. As the foundational
-practice of computational engineering, version control fills the role of a laboratory notebook and the strict practice
-of detailed and regular entries are equally important.
+regardless of expected project growth, re-use, or impact. Particularly, version control and documentation should be
+implemented at the very beginning of a computational project, even with the earliest project brainstorming session. As
+the foundational practice of computational engineering, version control fills the role of a laboratory notebook and the
+strict practice of detailed and regular entries are equally important.
 
 * :ref:`version_control`
 * :ref:`documentation`
 * :ref:`build_system`
 * :ref:`compute_environment`
 * :ref:`testing`
+* :ref:`archival`
 
 Those practices at the end of the list are more costly to implement and therefore more valuable for mature or long-lived
 projects. However, an engineer familiar with the computational tools implementing these practices will find that even
 small, short-term projects benefit from implementing all of these concepts. In production engineering environments, it
 is beneficial to implement the full range of computational engineering concepts in a "stub" repository as a starting
-template for every project.
+template for every project. For this purpose, |PROJECT| provides :ref:`modsim_templates` following the tutorials as a
+starting point, but it is expected that users will want to tailor a template specific to their application.
 
 Recommended Practical Curriculum
 --------------------------------
