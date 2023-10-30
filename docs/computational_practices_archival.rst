@@ -27,8 +27,9 @@ In the context of engineering organizations and businesses, the open-source or p
 apply, but the internal data storage, accessibility, and security requirements may be more strict in practice. The
 business has invested significant effort in producing both the source files and simulation outputs. Starting a project
 from scratch may waste significant staff time when relatively small investements in version control, build automation,
-and data archival could allow identical reproduction of past effort. In safety based applications, all files related to
-the final reporting and decision making may be required for future audits by internal policy and legal statute.
+and data archival could allow re-use and identical reproduction of past effort. In safety based applications, all files
+related to the final reporting and decision making may be required for future audits by internal policy and legal
+statute.
 
 Regardless of motive, the workflow output artifacts are frequently large, as in the case of simulation output, or binary
 files, as in the case of images for visualization. Some of these files will make it into reporting requirements, and are
