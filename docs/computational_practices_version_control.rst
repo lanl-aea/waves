@@ -19,16 +19,31 @@ similar record of who, what, when, how, and why. Additionally, version control s
 version control such as the ability to uniquely reproduce the state of previous work and the ability to manage and
 resolve content conflicts from contributors working in parallel.
 
-Version control software is also referred to as revision control, source control, or source code management. There have
-been a variety of popular version control software dating back to the early 1970s. Today, there are many version control
-software to choose from, with a range of implemented concepts. This section will focus on the distributed version control
-system `git`_ :cite:`git`, which was released in 2005 :cite:`pro-git`.
+A related type of software that many engineers may be familiar with is product data management (PDM) or product
+lifecycle management (PLM) software. Some examples include `Windchill`_ :cite:`windchill`, `TeamCenter`_
+:cite:`teamcenter`, `SOLIDWORKS PDM`: cite:`solidworks_pdm`, `Minerva`_ :cite:`minerva`, and `ENOVIA`_ :cite:`enovia`.
+This type of software typically targets centralized, versioned, and configured product definitions. Typically the
+product definition means geometric definions with computer aided design (CAD); however, this type of software is often
+integrated with tools for managing project timeline, status, requirements, modeling, and workflow execution. While tight
+integration of requirements, product configuration, and modeling are valuable tools for engineering organizations, the
+version control is typically limited to whole-sale file changes with a check-in/check-out lock on changes. This works
+well for CAD files, which are typically binary formats where even small changes result in a completely new file.
+Granular change tracking of binary formats, and especially proprietary formats, rely on the owning software vendor to
+provide an change tracker and interpretter where such change tracking is practical or meaningful.
 
-Git tracks changes to collections of files in a project. The user creates incremental "commits" which form a directed
-graph of project history, called "branches". As the commits are created and added to history, the user can supply a
-commit message to describe the changes. Good messages answer questions about the purpose and design intent about the
-changes; the "why" of a laboratory notebook. Included with the commit is meta data identifying the commit author, "who",
-the files and the granular changes themselves, "what", and a timestamp, "when". The commit is assigned a unique
+For text files, such as modeling and simulation input files and scripted post-processing files, greater change control
+and collaboration can be provided by version control software (VCS). Version control software is also referred to as
+revision control, source control, or source code management. There have been a variety of popular version control
+software dating back to the early 1970s. Today, there are many version control software to choose from, with a range of
+implemented concepts. This section will focus on the distributed version control system `git`_ :cite:`git`, which was
+released in 2005 :cite:`pro-git`. Depending on the needs of the project, similar check-in/check-out version control can
+be added to most VCS. In the case of git, `Git-LFS` provides improved handling of binary files :cite:`git-lfs`.
+
+Git tracks per-line changes to collections of files in a project. The user creates incremental "commits" which form a
+directed graph of project history, called "branches". As the commits are created and added to history, the user can
+supply a commit message to describe the changes. Good messages answer questions about the purpose and design intent of
+the changes; the "why" of a laboratory notebook. Included with the commit is meta data identifying the commit author,
+"who", the files and the granular changes themselves, "what", and a timestamp, "when". The commit is assigned a unique
 identifier called the commit "hash".
 
 When users limit commits to small units of work and write quality messages describing the purpose of the changes, the
@@ -39,6 +54,13 @@ tracks the association between specific lines in a text file and the commit hash
 that line, so questions about the purpose of a specific portion of a file may be recovered quickly. With more advanced
 filtering, the Git log can display all commit entries that touched a specific file, set of files, edits by a specific
 author, etc.
+
+On its own, git may be difficult to use in collaboration between large teams, across file systems, and between networks.
+Collaborative web-based software, such as `GitHub`_ :cite:`github`, `Gitlab` :cite:`gitlab`, and `Bitbucket`_
+:cite:`bitbucket`, provide solutions for tracking work, parallel project development, discussions, and continuous
+testing and integration. These are not the only software for collaborative git projects, just like git is not the only
+version control software. Probably your organization already has access to a version control software and an associated
+collaboration tool, making that the best set of tools to start with.
 
 There is an abundance of documentation, tutorials, and recommended practices in the use of `git`_ and other version
 control software systems and practices. Instead of re-creating a tutorial here, this section will end with a few

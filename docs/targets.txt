@@ -23,7 +23,7 @@
 .. _`CheckProg`: https://scons.org/doc/production/HTML/scons-user/ch21s07.html
 .. _`Confluence`: https://www.atlassian.com/software/confluence
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
-.. _`Sierra`: https://www.osti.gov/biblio/1886996 
+.. _`Sierra`: https://www.osti.gov/biblio/1886996
 .. _`Quinoa`: https://quinoacomputing.github.io/index.html
 .. _`Environment modules`: https://modules.readthedocs.io/en/stable/modulefile.html
 .. _`GNU Make`: https://www.gnu.org/software/make/
@@ -33,6 +33,8 @@
 .. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
 .. _`Gitlab`: https://about.gitlab.com/
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
+.. _`GitHub`: https://github.com/
+.. _`Bitbucket`: https://www.atlassian.com/software/bitbucket
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
 .. _`Granta/MIMS`: http://grantami.lanl.gov/mi
 .. _`LaTeX`: https://www.latex-project.org/
@@ -94,6 +96,7 @@
 .. _`custom conda channel`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-channels.html
 .. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
 .. _`git`: https://git-scm.com/
+.. _`Git-LFS`: https://git-lfs.com/
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
 .. _`reStructuredText Primer`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
@@ -101,6 +104,13 @@
 .. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
 .. _`Sphinx`: https://www.sphinx-doc.org/en/master/
 .. _`xarray dataset`: https://xarray.pydata.org/en/v2022.03.0/generated/xarray.Dataset.html
+
+.. PDM/PLM
+.. _`Windchill`: https://www.ptc.com/en/products/windchill
+.. _`Teamcenter`: https://plm.sw.siemens.com/en-US/teamcenter/
+.. _`SOLIDWORKS PDM`: https://www.solidworks.com/product/solidworks-pdm
+.. _`Minerva`: https://www.ansys.com/products/connect/ansys-minerva
+.. _`ENOVIA`: https://www.3ds.com/products/enovia
 
 .. Project specific links
 .. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
