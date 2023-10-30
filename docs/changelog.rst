@@ -16,6 +16,7 @@ Documentation
   :merge:`690`). By `Kyle Brindley`_.
 - Add SCons construction environment discussion to the compute environment management section (:issue:`522`,
   :merge:`691`). By `Kyle Brindley`_.
+- Draft discussion about data archival (:issue:`467`, :merge:`692`). By `Kyle Brindley`_.
 
 ******************
 0.7.5 (2023-10-27)
