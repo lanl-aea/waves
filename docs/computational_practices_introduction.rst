@@ -16,13 +16,14 @@ skills to researchers in 1998 :cite:`SoftwareCarpentry`. As the intention for th
 practices of engineering computing, it will not attempt to fully teach the underlying concepts and will instead
 reference the well designed lesson plans of the `Software Carpentry`_.
 
-This manual also does not intend to replace the modeling and simulations standards documents of fields related to
+This manual also does not intend to replace the modeling and simulations standards documents in fields related to
 computational engineering. The American Society of Mechanical Engineers (ASME) standards for computational solid
 mechanics :cite:`asme-vv10` and computational fluid dynamics :cite:`asme-vv20`  and the National Aeronautics and Space
 Administration (NASA) standard for models and simulations :cite:`nasa-std-7009a` with associated handbook
 :cite:`nasa-hdbk-7009a` are excellent resources for practicing computational engineers. Where topics in such standards
-overlap with the discussion in this manual, this manual should be taken as one possible solution to the standards'
-requirements but not as a replacement text.
+overlap with the discussion in this manual, this manual should be taken as one possible solution to a subset of the
+standards' requirements but not as a replacement text. Readers are encouraged to seek out the standard adopted by their
+immediate organization or professional society for adoption in their work.
 
 Where possible, this manual will explain to general computing practices and concepts and limit discussion of specific
 software implementations to examples or vehicles for practice in concrete application. The specific software taught by
