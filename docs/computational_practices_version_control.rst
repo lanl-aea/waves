@@ -21,15 +21,15 @@ resolve content conflicts from contributors working in parallel.
 
 A related type of software that many engineers may be familiar with is product data management (PDM) or product
 lifecycle management (PLM) software. Some examples include `Windchill`_ :cite:`windchill`, `TeamCenter`_
-:cite:`teamcenter`, `SOLIDWORKS PDM`: cite:`solidworks_pdm`, `Minerva`_ :cite:`minerva`, and `ENOVIA`_ :cite:`enovia`. This type of software
-typically targets centralized, versioned, and configured product definitions. Typically the product definition means
-geometric definions with computer aided design (CAD); however, this type of software is often integrated with tools for
-managing project timeline, status, requirements, modeling, and workflow execution. While tight integration of
-requirements, product configuration, and modeling are valuable tools for engineering organizations, the version control
-is typically limited to whole-sale file changes with a check-in/check-out lock on changes. This works well for CAD
-files, which are typically binary formats where even small changes result in a completely new file. Granular change
-tracking of binary formats, and especially proprietary formats, rely on the owning software vendor to provide an change
-tracker and interpretter where such change tracking is practical or meaningful.
+:cite:`teamcenter`, `SOLIDWORKS PDM`: cite:`solidworks_pdm`, `Minerva`_ :cite:`minerva`, and `ENOVIA`_ :cite:`enovia`.
+This type of software typically targets centralized, versioned, and configured product definitions. Typically the
+product definition means geometric definions with computer aided design (CAD); however, this type of software is often
+integrated with tools for managing project timeline, status, requirements, modeling, and workflow execution. While tight
+integration of requirements, product configuration, and modeling are valuable tools for engineering organizations, the
+version control is typically limited to whole-sale file changes with a check-in/check-out lock on changes. This works
+well for CAD files, which are typically binary formats where even small changes result in a completely new file.
+Granular change tracking of binary formats, and especially proprietary formats, rely on the owning software vendor to
+provide an change tracker and interpretter where such change tracking is practical or meaningful.
 
 For text files, such as modeling and simulation input files and scripted post-processing files, greater change control
 and collaboration can be provided by version control software (VCS). Version control software is also referred to as
