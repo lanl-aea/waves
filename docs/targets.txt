@@ -96,6 +96,7 @@
 .. _`custom conda channel`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-channels.html
 .. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
 .. _`git`: https://git-scm.com/
+.. _`Git-LFS`: https://git-lfs.com/
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
 .. _`reStructuredText Primer`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
@@ -103,6 +104,13 @@
 .. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
 .. _`Sphinx`: https://www.sphinx-doc.org/en/master/
 .. _`xarray dataset`: https://xarray.pydata.org/en/v2022.03.0/generated/xarray.Dataset.html
+
+.. PDM/PLM
+.. _`Windchill`: https://www.ptc.com/en/products/windchill
+.. _`Teamcenter`: https://plm.sw.siemens.com/en-US/teamcenter/
+.. _`SOLIDWORKS PDM`: https://www.solidworks.com/product/solidworks-pdm
+.. _`Minerva`: https://www.ansys.com/products/connect/ansys-minerva
+.. _`ENOVIA`: https://www.3ds.com/products/enovia
 
 .. Project specific links
 .. _`Gitlab project issues`: https://re-git.lanl.gov/aea/python-projects/waves/-/issues
