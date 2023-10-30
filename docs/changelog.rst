@@ -14,6 +14,8 @@ Documentation
 - Add the project badges to the HTML docs landing page (:issue:`422`, :merge:`689`). By `Kyle Brindley`_.
 - Update version control discussion to compare with product data management and add VCS references (:issue:`484`,
   :merge:`690`). By `Kyle Brindley`_.
+- Add SCons construction environment discussion to the compute environment management section (:issue:`522`,
+  :merge:`691`). By `Kyle Brindley`_.
 
 ******************
 0.7.5 (2023-10-27)
