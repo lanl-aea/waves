@@ -23,9 +23,9 @@ Administration (NASA) standard for models and simulations :cite:`nasa-std-7009a`
 :cite:`nasa-hdbk-7009a` are excellent resources for practicing computational engineers. Where topics in such standards
 overlap with the discussion in this manual, this manual should be taken as one possible solution to a subset of the
 standards' requirements but not as a replacement text. Readers are encouraged to seek out the standard adopted by their
-immediate organization or professional society for adoption in their work. Regardless of the chosen standard of your
-field, the NASA standard is recommended by the authors for the discussion about model documentation, development,
-testing, verification, and release requirements.
+organization or professional society for adoption in their work. Regardless of the chosen standard of your field, the
+NASA standard is recommended by the authors for the discussion about model documentation, development, testing,
+verification, and release requirements.
 
 Where possible, this manual will explain to general computing practices and concepts and limit discussion of specific
 software implementations to examples or vehicles for practice in concrete application. The specific software taught by
