@@ -17,6 +17,8 @@ Documentation
 - Add SCons construction environment discussion to the compute environment management section (:issue:`522`,
   :merge:`691`). By `Kyle Brindley`_.
 - Draft discussion about data archival (:issue:`467`, :merge:`692`). By `Kyle Brindley`_.
+- Cite and briefly discuss the role of standards documents from ASME and NASA (:issue:`483`, :merge:`693`). By `Kyle
+  Brindley`_.
 
 ******************
 0.7.5 (2023-10-27)
