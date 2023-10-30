@@ -12,6 +12,8 @@ Documentation
 =============
 - Add PEP-8 reference and citation to the first two tutorials (:issue:`524`, :merge:`688`). By `Kyle Brindley`_.
 - Add the project badges to the HTML docs landing page (:issue:`422`, :merge:`689`). By `Kyle Brindley`_.
+- Update version control discussion to compare with product data management and add VCS references (:issue:`484`,
+  :merge:`690`). By `Kyle Brindley`_.
 
 ******************
 0.7.5 (2023-10-27)
