@@ -100,6 +100,7 @@ workflow.extend(env.SSHAbaqusSolver(
     source=solve_source_list,
     job_name=job_name,
     abaqus_options=abaqus_options,
+    remote_server="hello world"
 ))
 
 # Comment used in tutorial code snippets: marker-6
