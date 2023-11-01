@@ -184,23 +184,24 @@ def ssh_builder_actions(builder, remote_server, remote_directory):
     :param str remote_directory: absolute or relative path where the original builder's actions should be executed
     """
     action_list = _string_action_list(builder)
-    cd_prefix = f"cd {remote_directory} &&"
+    cd_prefix = "cd ${remote_directory} &&"
     action_list = [action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix) for action in action_list]
     action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
     action_list = [action.replace("SOURCES.abspath", "SOURCES.file") for action in action_list]
     action_list = [re.sub(r"(SOURCES\[[-0-9]+\])\.abspath", r"\1.file", action) for action in action_list]
     action_list = [f"{cd_prefix} {action}" if not action.startswith(cd_prefix) else action for action in action_list]
-    action_list = [f"ssh {remote_server} '{action}'" for action in action_list]
+    action_list = [f"ssh ${{remote_server}} '{action}'" for action in action_list]
 
     ssh_actions = [
-        f"ssh {remote_server} \"mkdir -p {remote_directory}\"",
-        f"rsync -rlptv ${{SOURCES.abspath}} {remote_server}:{remote_directory}"
+        "ssh ${remote_server} \"mkdir -p ${remote_directory}\"",
+        "rsync -rlptv ${SOURCES.abspath} ${remote_server}:${remote_directory}"
     ]
     ssh_actions.extend(action_list)
-    ssh_actions.append(f"rsync -rltpv {remote_server}:{remote_directory}/ ${{TARGET.dir.abspath}}")
+    ssh_actions.append("rsync -rltpv ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}")
     ssh_actions = [SCons.Action.CommandAction(action) for action in ssh_actions]
 
     builder.action = SCons.Action.ListAction(ssh_actions)
+    builder.executor_kw.update({"remote_server": remote_server, "remote_directory": remote_directory})
     return builder
 
 
