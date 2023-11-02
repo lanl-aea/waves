@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import os
+import getpass
 import pathlib
 
 import waves
@@ -75,13 +76,14 @@ env.PrependENVPath("PYTHONPATH", str(project_dir))
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
+user = getpass.getuser()
 env.Append(BUILDERS={
     'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
     'SSHAbaqusSolver': waves.scons_extensions.ssh_builder_actions(
         waves.scons_extensions.abaqus_solver(program=env['abaqus']),
         remote_server="sstbigbird.lanl.gov",
-        remote_directory="/scratch/$${USER}/WAVES-TUTORIAL/tutorial_remote_execution"
+        remote_directory=f"/scratch/{user}/WAVES-TUTORIAL/tutorial_remote_execution"
     )
 })
 

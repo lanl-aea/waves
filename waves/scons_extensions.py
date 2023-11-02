@@ -110,8 +110,14 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
-def ssh_builder_actions(builder, remote_server, remote_directory):
+def ssh_builder_actions(builder, remote_server="${remote_server}", remote_directory="${remote_directory}"):
     """Wrap a builder's action list with remote copy operations and ssh commands
+
+    By default, the remote server and remote directory strings are written to accept (and *require*) task-by-task
+    overrides via task keyword arguments. Any SCons replacement string patterns, ``${variable}``, will make that
+    ``variable`` a *required* task keyword argument. Only if the remote server and/or remote directory are known to be
+    constant across all possible tasks should those variables be overridden with a string literal containing no
+    ``${variable}`` SCons keyword replacement patterns.
 
     .. include:: ssh_builder_actions_warning.txt
 
@@ -134,16 +140,18 @@ def ssh_builder_actions(builder, remote_server, remote_directory):
     .. code-block::
        :caption: SConstruct
 
+       import getpass
        import waves
+       user = getpass.getuser()
        env = Environment()
        env.Append(BUILDERS={
            "SSHAbaqusSolver": waves.scons_extensions.ssh_builder_actions(
                waves.scons_extensions.abaqus_solver(program="/remote/server/installation/path/of/abaqus"),
-               remote_server="myserver.mydomain.com",
-               remote_directory="/scratch/$${USER}/myproject/myworkflow"
+               remote_server="myserver.mydomain.com"
            )
        })
-       env.SSHAbaqusSolver(target=["myjob.sta"], source=["input.inp"], job_name="myjob", abaqus_options="-cpus 4")
+       env.SSHAbaqusSolver(target=["myjob.sta"], source=["input.inp"], job_name="myjob", abaqus_options="-cpus 4",
+                           remote_directory="/scratch/${user}/myproject/myworkflow", user=user)
 
     .. code-block::
        :caption: my_package.py
@@ -180,8 +188,10 @@ def ssh_builder_actions(builder, remote_server, remote_directory):
        rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}
 
     :param SCons.Builder.Builder builder: The SCons builder to modify
-    :param str remote_server: remote server where the original builder's actions should be executed
-    :param str remote_directory: absolute or relative path where the original builder's actions should be executed
+    :param str remote_server: remote server where the original builder's actions should be executed. The default string
+        *requires* every task to specify a matching keyword argument string.
+    :param str remote_directory: absolute or relative path where the original builder's actions should be executed. The
+        default string *requires* every task to specify a matching keyword argument string.
     """
     action_list = _string_action_list(builder)
     cd_prefix = f"cd {remote_directory} &&"

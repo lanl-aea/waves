@@ -78,6 +78,7 @@ project_variables = {
     'project_name': project_name,
     'project_dir': str(project_dir),
     'version': version,
+    'remote_directory': f"/users/{env['user']}/WAVES-TUTORIAL/tutorial_quinoa"
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -92,8 +93,7 @@ env.Append(BUILDERS={
     'PythonScript': waves.scons_extensions.python_script(),
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
         waves.scons_extensions.sbatch_quinoa_solver(prefix_command=f"{quinoa_snow_environment} &&"),
-        remote_server="sn-rfe.lanl.gov",
-        remote_directory="/users/${user}/WAVES-TUTORIAL/tutorial_quinoa",
+        remote_server="sn-rfe.lanl.gov"
     )
 })
 

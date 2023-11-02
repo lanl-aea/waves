@@ -102,6 +102,9 @@ def test_catenate_actions():
 
 
 def test_ssh_builder_actions():
+    remote_server = "myserver.mydomain.com"
+    remote_directory = "/scratch/roppenheimer/ssh_wrapper"
+
     def cat(program="cat"):
         return SCons.Builder.Builder(action=[
                 f"{program} ${{SOURCE.abspath}} | tee ${{TARGETS.file}}",
@@ -123,33 +126,33 @@ def test_ssh_builder_actions():
     assert build_cat_action_list == expected
 
     ssh_build_cat = scons_extensions.ssh_builder_actions(
-        cat(), remote_server="myserver.mydomain.com", remote_directory="/scratch/roppenheimer/ssh_wrapper"
+        cat(), remote_server=remote_server
     )
     ssh_build_cat_action_list = [action.cmd_list for action in ssh_build_cat.action.list]
     expected = [
-        'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
-        "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
-        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCE.file} | tee ${TARGETS.file}'",
-        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'",
-        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES[99].file} | tee ${TARGETS.file}'",
-        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES[-1].file} | tee ${TARGETS.file}'",
-        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo \"Hello World!\"'",
-        "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}"
+        f'ssh {remote_server} "mkdir -p ${{remote_directory}}"',
+        f"rsync -rlptv ${{SOURCES.abspath}} {remote_server}:${{remote_directory}}",
+        f"ssh {remote_server} 'cd ${{remote_directory}} && cat ${{SOURCE.file}} | tee ${{TARGETS.file}}'",
+        f"ssh {remote_server} 'cd ${{remote_directory}} && cat ${{SOURCES.file}} | tee ${{TARGETS.file}}'",
+        f"ssh {remote_server} 'cd ${{remote_directory}} && cat ${{SOURCES[99].file}} | tee ${{TARGETS.file}}'",
+        f"ssh {remote_server} 'cd ${{remote_directory}} && cat ${{SOURCES[-1].file}} | tee ${{TARGETS.file}}'",
+        f"ssh {remote_server} 'cd ${{remote_directory}} && echo \"Hello World!\"'",
+        f"rsync -rltpv {remote_server}:${{remote_directory}}/ ${{TARGET.dir.abspath}}"
     ]
     assert ssh_build_cat_action_list == expected
 
     ssh_python_builder = scons_extensions.ssh_builder_actions(
-        scons_extensions.python_script(), remote_server="myserver.mydomain.com",
-        remote_directory="/scratch/roppenheimer/ssh_wrapper"
+        scons_extensions.python_script()
     )
-    ssh_python_script_action_list = [action.cmd_list for action in ssh_python_builder.action.list]
+    ssh_python_builder_action_list = [action.cmd_list for action in ssh_python_builder.action.list]
     expected = [
-        'ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"',
-        "rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper",
-        "ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && python ${python_options} ${SOURCE.file} " \
+        'ssh ${remote_server} "mkdir -p ${remote_directory}"',
+        "rsync -rlptv ${SOURCES.abspath} ${remote_server}:${remote_directory}",
+        "ssh ${remote_server} 'cd ${remote_directory} && python ${python_options} ${SOURCE.file} " \
             "${script_options} > ${TARGET.filebase}.stdout 2>&1'",
-        "rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}"
+        "rsync -rltpv ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}"
     ]
+    assert ssh_python_builder_action_list == expected
 
 
 def check_action_string(nodes, post_action, node_count, action_count, expected_string):

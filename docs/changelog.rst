@@ -20,6 +20,11 @@ Documentation
 - Cite and briefly discuss the role of standards documents from ASME and NASA (:issue:`483`, :merge:`693`). By `Kyle
   Brindley`_.
 
+Enhancements
+============
+- Default to required task-by-task keyword arguments in the SSH builder to allow tasks to use unique remote directories,
+  e.g. during parameter studies (:issue:`560`, :merge:`694`). By `Kyle Brindley`_.
+
 ******************
 0.7.5 (2023-10-27)
 ******************
