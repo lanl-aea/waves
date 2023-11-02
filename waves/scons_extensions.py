@@ -570,7 +570,7 @@ def _build_subdirectory(target):
     :rtype: pathlib.Path
     """
     try:
-        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+        build_subdirectory = pathlib.Path(str(target[0])).parent
     except IndexError as err:
         build_subdirectory = pathlib.Path(".")
     return build_subdirectory
@@ -624,13 +624,13 @@ def _first_target_emitter(target, source, env, suffixes=[], appending_suffixes=[
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout and ``target[0]``.abaqus_v6.env to the ``target`` list. The abaqus_journal Builder
+    Appends ``target[0]``.abaqus_v6.env and ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder
     requires at least one target.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -656,18 +656,18 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
     directory prior to executing the journal file.
 
-    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout and
-    ``target[0]``.abaqus_v6.env to the ``target`` list.
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.abaqus_v6.env and
+    ``target[0]``.stdout to the ``target`` list.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``my_target.stdout``.
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. code-block::
        :caption: Abaqus journal builder action
 
-       cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.file}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -713,7 +713,7 @@ def sbatch_abaqus_journal(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Abaqus journal builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.file}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1"
     """
     return abaqus_journal(*args, **kwargs)
 
@@ -807,8 +807,8 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/job_name.odb``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``my_target.stdout``.
+    subdirectory, e.g. ``parameter_set1/job_name.odb``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     The ``-interactive`` option is always appended to the builder action to avoid exiting the Abaqus task before the
     simulation is complete.  The ``-ask_delete no`` option is always appended to the builder action to overwrite
@@ -833,7 +833,7 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
     .. code-block::
        :caption: Abaqus solver builder action
 
-       cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1
 
     :param str program: An absolute path or basename string for the abaqus program
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
@@ -887,7 +887,7 @@ def sbatch_abaqus_solver(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Abaqus solver builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1"
     """
     return abaqus_solver(*args, **kwargs)
 
@@ -895,13 +895,13 @@ def sbatch_abaqus_solver(*args, **kwargs):
 def _sierra_emitter(target, source, env):
     """Appends the sierra builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout and ``target[0]``.env to the ``target`` list. The Sierra Builder requires
+    Appends ``target[0]``.env and ``target[0]``.stdout  to the ``target`` list. The Sierra Builder requires
     at least one target.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -928,13 +928,13 @@ def sierra(program="sierra", application="adagio", post_action=[]):
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. warning::
 
        This is an experimental builder for Sierra support. The only emitted file is the application's version report in
-       ``TARGET[0].env`` and the ``TARGET[0].stdout`` redirected STDOUT and STDERR file. All relevant application output
+       ``target[0].env`` and the ``target[0].stdout`` redirected STDOUT and STDERR file. All relevant application output
        files, e.g. ``genesis_output.e`` must be specified in the target list.
 
     .. code-block::
@@ -950,7 +950,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     .. code-block::
        :caption: Sierra builder action
 
-       cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.file}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGETS[-1].abspath} 2>&1
 
     :param str program: An absolute path or basename string for the Sierra program
     :param str application: The string name for the Sierra application
@@ -985,7 +985,7 @@ def sbatch_sierra(*args, **kwargs):
     .. code-block::
        :caption: sbatch Sierra builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.file}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGETS[-1].abspath} 2>&1"
     """
     return sierra(*args, **kwargs)
 
@@ -1071,13 +1071,13 @@ def python_script(post_action=[]):
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``my_target.stdout``.
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. code-block::
        :caption: Python script builder action
 
-       cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.file}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -1116,7 +1116,7 @@ def sbatch_python_script(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Python script builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.file}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGETS[-1].abspath} 2>&1"
     """
     return python_script(*args, **kwargs)
 
@@ -1124,14 +1124,14 @@ def sbatch_python_script(*args, **kwargs):
 def _matlab_script_emitter(target, source, env):
     """Appends the matlab_script builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout and ``target[0]``.matlab.env to the ``target`` list. The matlab_script Builder requires
+    Appends ``target[0]``.matlab.env and ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires
     at least one target. The build tree copy of the Matlab script is not added to the target list to avoid multiply
     defined targets when the script is used more than once in the same build directory.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -1164,18 +1164,18 @@ def matlab_script(program="matlab", post_action=[], **kwargs):
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
     directory prior to executing the python script.
 
-    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout and
-    ``target[0].matlab.env to the ``target`` list.
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0].matlab.env and
+    ``target[0]``.stdout to the ``target`` list.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``my_target.stdout``.
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. code-block::
        :caption: Matlab script builder action
 
-       cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.file}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGETS[-1].abspath} 2>&1
 
     :param str program: An absolute path or basename string for the Matlab program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
@@ -1384,7 +1384,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     .. code-block::
        :caption: SLURM sbatch builder action
 
-       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGET.file}.stdout ${sbatch_options} --wrap ${slurm_job}
+       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGETS[-1].abspath} ${sbatch_options} --wrap ${slurm_job}
 
     .. code-block::
        :caption: SConstruct
@@ -1517,12 +1517,12 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. warning::
 
-       This is an experimental builder for Quinoa support. The only emitted file is the ``TARGET[0].stdout`` redirected
+       This is an experimental builder for Quinoa support. The only emitted file is the ``target[0].stdout`` redirected
        STDOUT and STDERR file. All relevant application output files, e.g. ``out.*`` must be specified in the target list.
 
     .. code-block::
@@ -1541,7 +1541,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     .. code-block::
        :caption: Quinoa builder action
 
-       ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.file}.stdout 2>&1
+       ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGETS[-1].abspath} 2>&1
 
     :param str charmrun: The relative or absolute path to the charmrun executable
     :param str charmrun_options: The charmrun command line interface options
