@@ -24,6 +24,7 @@ _hash_coordinate_key = "parameter_set_hash"
 _set_coordinate_key = "parameter_sets"
 _quantiles_attribute_key = "_quantiles"
 _cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
+_redirect_action_postfix = "> ${TARGET[-1].abspath} 2>&1"
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _modsim_template_directory = _project_root_abspath / "modsim_template"
 _tutorials_directory = _project_root_abspath / "tutorials"

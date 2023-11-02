@@ -24,6 +24,7 @@ from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
+from waves._settings import _redirect_action_postfix
 from waves._settings import _matlab_environment_extension
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
@@ -693,7 +694,7 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     action = [f"{_cd_action_prefix} {program} -information environment > " \
                  f"${{TARGET.filebase}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
-                 f"${{journal_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                 f"${{journal_options}} {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
@@ -857,7 +858,7 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
     action = [f"{_cd_action_prefix} {program} -information environment > " \
                   f"${{job_name}}{_abaqus_environment_extension}",
               f"{_cd_action_prefix} {program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
-                  f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
+                  f"${{abaqus_options}} -interactive -ask_delete no {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     if emitter:
         emitter = emitter.lower()
@@ -964,7 +965,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     action = [f"{_cd_action_prefix} {program} {application} --version > " \
                   f"${{TARGET.filebase}}{_sierra_environment_extension}",
               f"{_cd_action_prefix} {program} ${{sierra_options}} {application} ${{application_options}} " \
-                  f"-i ${{SOURCE.file}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                  f"-i ${{SOURCE.file}} {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     sierra_builder = SCons.Builder.Builder(
         action=action,
@@ -1095,7 +1096,7 @@ def python_script(post_action=[]):
     :rtype: SCons.Builder.Builder
     """
     action = [f"{_cd_action_prefix} python ${{python_options}} ${{SOURCE.abspath}} " \
-                f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                f"${{script_options}} {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     python_builder = SCons.Builder.Builder(
         action=action,
@@ -1197,7 +1198,7 @@ def matlab_script(program="matlab", post_action=[], **kwargs):
               f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
                   "${SOURCE.filebase}(${script_options})\" " \
-                  f"> ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                  f"{_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
@@ -1406,7 +1407,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
     program = sbatch_program if sbatch_program is not None else program
-    action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGET.filebase}}{_stdout_extension} " \
+    action = [f"{_cd_action_prefix} {program} --wait --output=${TARGET[-1].abspath} " \
               f"${{sbatch_options}} --wrap \"${{slurm_job}}\""]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
