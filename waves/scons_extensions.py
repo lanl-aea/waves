@@ -1088,7 +1088,8 @@ def python_script(post_action=[]):
     action.extend(_construct_post_action_list(post_action))
     python_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter)
+        emitter=_first_target_emitter
+    )
     return python_builder
 
 
@@ -1399,7 +1400,8 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter)
+        emitter=_first_target_emitter
+    )
     return sbatch_builder
 
 
@@ -1484,27 +1486,6 @@ def _custom_scanner(pattern, suffixes, flags=None):
     return custom_scanner
 
 
-def _quinoa_emitter(target, source, env):
-    """Appends the quinoa builder target list with the builder managed targets
-
-    Appends ``target[0]``.stdout to the ``target`` list. The Quinoa Builder requires at least one target.
-
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
-
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-
-    :return: target, source
-    :rtype: tuple with two lists
-    """
-    suffixes = [_stdout_extension]
-    return _first_target_emitter(target, source, env, suffixes=suffixes)
-
-
 def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1", inciter_options="",
                   prefix_command="", post_action=[]):
     """Quinoa solver SCons builder
@@ -1578,7 +1559,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     action.extend(_construct_post_action_list(post_action))
     quinoa_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_quinoa_emitter,
+        emitter=_first_target_emitter,
         prefix_command=prefix_command,
         charmrun=charmrun,
         charmrun_options=charmrun_options,
