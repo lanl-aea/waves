@@ -716,7 +716,7 @@ def sbatch_abaqus_journal(*args, **kwargs):
     return abaqus_journal(*args, **kwargs)
 
 
-def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
+def _abaqus_solver_emitter(target, source, env, suffixes=_abaqus_solver_common_suffixes, stdout_extension=_stdout_extension):
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -737,21 +737,32 @@ def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     :rtype: tuple with two lists
     """
     if "suffixes" in env and env["suffixes"] is not None:
-        suffixes_to_extend = env["suffixes"]
-    elif not suffixes_to_extend:
-        suffixes_to_extend = _abaqus_solver_common_suffixes
+        suffixes = env["suffixes"]
+    primary_input_file = pathlib.Path(source[0].path)
     if "job_name" not in env or not env["job_name"]:
-        env["job_name"] = pathlib.Path(source[0].path).stem
-    suffixes = [_stdout_extension, _abaqus_environment_extension]
-    if isinstance(suffixes_to_extend, str):
-        suffixes_to_extend = [suffixes_to_extend]
-    suffixes.extend(suffixes_to_extend)
+        env["job_name"] = primary_input_file.stem
+    if isinstance(suffixes, str):
+        suffixes = [suffixes]
+    suffixes.append(_abaqus_environment_extension)
     build_subdirectory = _build_subdirectory(target)
-    for suffix in suffixes:
-        emitter_target = str(build_subdirectory / f"{env['job_name']}{suffix}")
-        if emitter_target not in target:
-            target.append(emitter_target)
-    return target, source
+
+    # Search for a user specified stdout file. Fall back to job name with appended stdout extension
+    string_targets = [str(target_file) for target_file in target]
+    constructed_stdout_target = str(build_subdirectory / f"{env['job_name']}{stdout_extension}")
+    stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
+                         constructed_stdout_target)
+
+    job_targets = [str(build_subdirectory / f"{env['job_name']}{suffix}") for suffix in suffixes]
+
+    # Get a list of unique targets,  less the stdout target. Preserve the target list order.
+    string_targets = string_targets + job_targets
+    string_targets = [target_file for target_file in string_targets if target_file != stdout_target]
+    string_targets = list(dict.fromkeys(string_targets))
+
+    # Always append the stdout target for easier use in the action string
+    string_targets.append(stdout_target)
+
+    return string_targets, source
 
 
 def _abaqus_standard_solver_emitter(target, source, env):

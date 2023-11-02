@@ -427,7 +427,7 @@ solver_emitter_input = {
         None,
         [],
         [source_file],
-        ["job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
+        ["job.odb", "job.dat", "job.msg", "job.com", "job.prt", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "empty targets, suffixes override": (
@@ -435,7 +435,7 @@ solver_emitter_input = {
         [".odb"],
         [],
         [source_file],
-        ["job.stdout", "job.abaqus_v6.env", "job.odb"],
+        ["job.odb", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "empty targets, suffixes override empty list": (
@@ -443,7 +443,7 @@ solver_emitter_input = {
         [],
         [],
         [source_file],
-        ["job.stdout", "job.abaqus_v6.env"],
+        ["job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "one targets": (
@@ -451,7 +451,7 @@ solver_emitter_input = {
         None,
         ["job.sta"],
         [source_file],
-        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
+        ["job.sta", "job.odb", "job.dat", "job.msg", "job.com", "job.prt", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "one targets, override suffixes": (
@@ -459,7 +459,7 @@ solver_emitter_input = {
         [".odb"],
         ["job.sta"],
         [source_file],
-        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb"],
+        ["job.sta", "job.odb", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "one targets, override suffixes string": (
@@ -467,7 +467,7 @@ solver_emitter_input = {
         ".odb",
         ["job.sta"],
         [source_file],
-        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb"],
+        ["job.sta", "job.odb", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "subdirectory": (
@@ -475,8 +475,9 @@ solver_emitter_input = {
         None,
         ["set1/job.sta"],
         [source_file],
-        ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
-         f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt"],
+        ["set1/job.sta", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
+         f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt",
+         f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.stdout"],
         does_not_raise()
     ),
     "subdirectory, override suffixes": (
@@ -484,7 +485,7 @@ solver_emitter_input = {
         [".odb"],
         ["set1/job.sta"],
         [source_file],
-        ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb"],
+        ["set1/job.sta", f"set1{os.sep}job.odb", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.stdout"],
         does_not_raise()
     ),
     "missing job_name": (
@@ -492,7 +493,7 @@ solver_emitter_input = {
         None,
         [],
         [source_file],
-        ["root.stdout", "root.abaqus_v6.env", "root.odb", "root.dat", "root.msg", "root.com", "root.prt"],
+        ["root.odb", "root.dat", "root.msg", "root.com", "root.prt", "root.abaqus_v6.env", "root.stdout"],
         does_not_raise()
     ),
     "missing job_name, override suffixes": (
@@ -500,7 +501,7 @@ solver_emitter_input = {
         [".odb"],
         [],
         [source_file],
-        ["root.stdout", "root.abaqus_v6.env", "root.odb"],
+        ["root.odb", "root.abaqus_v6.env", "root.stdout"],
         does_not_raise()
     )
 }
@@ -516,7 +517,7 @@ def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, out
     env["suffixes"] = suffixes
     with outcome:
         try:
-            scons_extensions._abaqus_solver_emitter(target, source, env)
+            target, source = scons_extensions._abaqus_solver_emitter(target, source, env)
         finally:
             assert target == expected
 
