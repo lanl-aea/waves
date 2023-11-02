@@ -31,17 +31,32 @@ Environment
 Directory Structure
 *******************
 
-.. include:: scons_tutorial_directory.txt
+3. Create the project directory structure and copy the `SCons Multi-Action Task source files`_ into the
+   ``~/multi-action_task`` sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+
+.. code-block:: bash
+
+      $ waves fetch tutorials/multi-action_task --destination ~/multi-action_task
+      WAVES fetch
+      Destination directory: '/home/roppenheimer/multi-action_task'
+      $ cd ~/multi-action_task
+      $ pwd
+      /home/roppenheimer/multi-action_task
 
 ***************
-SConstruct File
+SConscript File
 ***************
 
-5. Create a file named ``scons_multiactiontask_SConstruct`` from the contents below.
+For this tutorial, we will not discuss the main SCons configuration file named SConstruct, which contains project
+setup boilerplate. :ref:`tutorialsconstruct` has a more complete discussion about the contents of the
+``SConstruct`` file.
 
-.. admonition:: waves-tutorials/scons_multiactiontask_SConstruct
+The ``SConscript`` file below contains the workflow task definitions. Review the source and target
+files defining the workflow tasks. As discussed in :ref:`build_system`, a task definition also requires an action.
 
-    .. literalinclude:: tutorials_scons_multiactiontask_SConstruct
+.. admonition:: multi-action_task/SConscript
+
+    .. literalinclude:: multi-action_task_SConscript
        :language: Python
        :lineno-match:
 
@@ -53,9 +68,9 @@ more flexible, general purpose `SCons Command`_ builder is used.
 
 ..  admonition:: waves-tutorials/SConstruct
 
-  .. literalinclude:: tutorials_scons_multiactiontask_SConstruct
+  .. literalinclude:: multi-action_task_SConscript
      :language: python
-     :diff: scons_quickstart_SConstruct
+     :diff: scons_quickstart_SConscript
 
 ****************
 Building targets
@@ -65,12 +80,7 @@ Building targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons --sconstruct=scons_multiactiontask_SConstruct rectangle
-
-.. note::
-
-   The ``--sconstruct`` option is required because the quickstart project configuration file name doesn't follow the
-   `SCons`_ naming convention, ``SConstruct``.
+   $ scons rectangle
 
 ************
 Output Files
@@ -84,9 +94,9 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-tutorials
-   $ tree build_scons_multiactiontask/
-   build_scons_multiactiontask/
+   /home/roppenheimer/multi-action_task
+   $ tree build/
+   build/
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
@@ -108,3 +118,16 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    `-- rectangle_mesh.jnl
 
    0 directories, 19 files
+
+**********************
+Workflow Visualization
+**********************
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/multi-action_task
+   $ waves visualize rectangle --output-file multi-action_task.png --width=28 --height=6
+
+.. figure:: multi-action_task.png
+   :align: center
