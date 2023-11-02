@@ -19,10 +19,8 @@ env.Append(BUILDERS={
 
 # Geometry, Partition, Mesh
 env.Command(
-    target=[str(variant_dir_base / "rectangle_mesh.cae"), str(variant_dir_base / "rectangle_mesh.inp")],
-    source=[str(project_dir / abaqus_source_dir / "rectangle_geometry.py"),
-            str(project_dir / abaqus_source_dir / "rectangle_partition.py"),
-            str(project_dir / abaqus_source_dir / "rectangle_mesh.py")],
+    target=["rectangle_mesh.cae", "rectangle_mesh.inp"],
+    source=["rectangle_geometry.py", "rectangle_partition.py", "rectangle_mesh.py", "abaqus_journal_utilities.py"],
     action=["cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/rectangle_geometry.py " \
             "${abaqus_options} -- --output-file ${TARGET.filebase}",
             "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/rectangle_partition.py " \

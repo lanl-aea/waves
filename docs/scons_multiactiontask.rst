@@ -97,27 +97,33 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    /home/roppenheimer/multi-action_task
    $ tree build/
    build/
-   |-- abaqus.rpy
-   |-- abaqus.rpy.1
-   |-- abaqus.rpy.2
-   |-- assembly.inp
-   |-- boundary.inp
-   |-- field_output.inp
-   |-- history_output.inp
-   |-- materials.inp
-   |-- parts.inp
-   |-- rectangle_compression.com
-   |-- rectangle_compression.dat
-   |-- rectangle_compression.inp
-   |-- rectangle_compression.msg
-   |-- rectangle_compression.odb
-   |-- rectangle_compression.prt
-   |-- rectangle_compression.sta
-   |-- rectangle_mesh.cae
-   |-- rectangle_mesh.inp
-   `-- rectangle_mesh.jnl
+   ├── abaqus_journal_utilities.py
+   ├── abaqus_journal_utilities.pyc
+   ├── abaqus.rpy
+   ├── abaqus.rpy.1
+   ├── abaqus.rpy.2
+   ├── assembly.inp
+   ├── boundary.inp
+   ├── field_output.inp
+   ├── history_output.inp
+   ├── materials.inp
+   ├── parts.inp
+   ├── rectangle_compression.com
+   ├── rectangle_compression.dat
+   ├── rectangle_compression.inp
+   ├── rectangle_compression.msg
+   ├── rectangle_compression.odb
+   ├── rectangle_compression.prt
+   ├── rectangle_compression.sta
+   ├── rectangle_geometry.py
+   ├── rectangle_mesh.cae
+   ├── rectangle_mesh.inp
+   ├── rectangle_mesh.jnl
+   ├── rectangle_mesh.py
+   ├── rectangle_partition.py
+   └── SConscript
 
-   0 directories, 19 files
+   0 directories, 25 files
 
 **********************
 Workflow Visualization
