@@ -578,12 +578,16 @@ copy_substitute_input = {
 
 source_file = fs.File("dummy.i")
 sierra_emitter_input = {
-    "one target": (["target.sierra"],
-                   [source_file],
-                   ["target.sierra", "target.stdout", "target.env"]),
-    "subdirectory": (["set1/dummy.sierra"],
-                    [source_file],
-                    ["set1/dummy.sierra", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.env"])
+    "one target": (
+        ["target.sierra"],
+        [source_file],
+        ["target.sierra", "target.sierra.env", "target.sierra.stdout"]
+    ),
+    "subdirectory": (
+        ["set1/dummy.sierra"],
+        [source_file],
+        ["set1/dummy.sierra", f"set1{os.sep}dummy.sierra.env", f"set1{os.sep}dummy.sierra.stdout"]
+    )
 }
 
 

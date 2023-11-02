@@ -609,9 +609,9 @@ def _first_target_emitter(target, source, env, suffixes=[], appending_suffixes=[
     appending_targets = [f"{first_target}{suffix}" for suffix in appending_suffixes]
     string_targets = string_targets + replacing_targets + appending_targets
 
-    # Get a list of unique targets, less the stdout target
+    # Get a list of unique targets,  less the stdout target. Preserve the target list order.
     string_targets = [target_file for target_file in string_targets if target_file != stdout_target]
-    string_targets = list(set(string_targets))
+    string_targets = list(dict.fromkeys(string_targets))
 
     # Always append the stdout target for easier use in the action string
     string_targets.append(stdout_target)
@@ -897,8 +897,8 @@ def _sierra_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    suffixes = [_stdout_extension, _sierra_environment_extension]
-    return _first_target_emitter(target, source, env, suffixes=suffixes)
+    appending_suffixes = [_sierra_environment_extension]
+    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def sierra(program="sierra", application="adagio", post_action=[]):
