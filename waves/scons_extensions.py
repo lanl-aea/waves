@@ -574,10 +574,14 @@ def _build_subdirectory(target):
     return build_subdirectory
 
 
-def _first_target_emitter(target, source, env, suffixes=None):
+def _first_target_emitter(target, source, env, suffixes=[], appending_suffixes=[], stdout_extension=_stdout_extension):
     """Appends the target list with the builder managed targets
 
-    Appends ``target[0]``.stdout to the ``target`` list. The associated Builder requires at least one target.
+    Searches for a file ending in the stdout extension. If none is found, appends the stdout extension to the first
+    target in the ``target`` list. The associated Builder requires at least one target for this reason.
+
+    The suffixes list are replacement operations on the first target's suffix. The appending suffixes list are appending
+    operations on the first target's suffix.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
@@ -587,18 +591,29 @@ def _first_target_emitter(target, source, env, suffixes=None):
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param list suffixes: Suffixes which should replace the first target's extension
+    :param list appending_suffixes: Suffixes which should append the first target's extension
 
     :return: target, source
     :rtype: tuple with two lists
     """
-    if not suffixes:
-        suffixes = [_stdout_extension]
-    build_subdirectory = _build_subdirectory(target)
-    first_target = pathlib.Path(str(target[0]))
-    for suffix in suffixes:
-        emitter_target = str(build_subdirectory / first_target.with_suffix(suffix).name)
-        if emitter_target not in target:
-            target.append(emitter_target)
+    string_targets = [str(target_file) for target_file in target]
+    first_target = pathlib.Path(string_targets[0])
+
+    # Search for a user specified stdout file. Fall back to first target with appended stdout extension
+    stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
+                         f"{first_target}{stdout_extension}")
+
+    replacing_targets = [str(first_target.with_suffix(suffix)) for suffix in suffixes]
+    appending_targets = [f"{first_target}{suffix}" for suffix in appending_suffixes]
+    string_targets = string_targets + replacing_targets + appending_targets
+
+    # Get a list of unique targets, less the stdout target
+    string_targets = list(set(string_targets) - set(stdout_target))
+
+    # Always append the stdout target for easier use in the action string
+    target.append(stdout_target)
+
     return target, source
 
 
