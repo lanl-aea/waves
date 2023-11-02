@@ -577,16 +577,17 @@ def _build_subdirectory(target):
 def _first_target_emitter(target, source, env, suffixes=[], appending_suffixes=[], stdout_extension=_stdout_extension):
     """Appends the target list with the builder managed targets
 
-    Searches for a file ending in the stdout extension. If none is found, appends the stdout extension to the first
-    target in the ``target`` list. The associated Builder requires at least one target for this reason.
+    Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
+    extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
+    reason. The stdout file is always placed at the end of the returned target list.
 
     The suffixes list are replacement operations on the first target's suffix. The appending suffixes list are appending
     operations on the first target's suffix.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
+    extension as a target, e.g. ``target.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -636,8 +637,8 @@ def _abaqus_journal_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    suffixes = [_stdout_extension, _abaqus_environment_extension]
-    return _first_target_emitter(target, source, env, suffixes=suffixes)
+    appending_suffixes = [_abaqus_environment_extension]
+    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def abaqus_journal(program="abaqus", post_action=[], **kwargs):

@@ -364,10 +364,10 @@ source_file = fs.File("dummy.py")
 journal_emitter_input = {
     "one target": (["target.cae"],
                    [source_file],
-                   ["target.cae", "target.stdout", "target.abaqus_v6.env"]),
+                   ["target.cae", "target.cae.abaqus_v6.env", "target.cae.stdout"]),
     "subdirectory": (["set1/dummy.cae"],
                     [source_file],
-                    ["set1/dummy.cae", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.abaqus_v6.env"])
+                    ["set1/dummy.cae", f"set1{os.sep}dummy.cae.abaqus_v6.env", f"set1{os.sep}dummy.cae.stdout"])
 }
 
 
