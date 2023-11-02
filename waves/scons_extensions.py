@@ -609,12 +609,13 @@ def _first_target_emitter(target, source, env, suffixes=[], appending_suffixes=[
     string_targets = string_targets + replacing_targets + appending_targets
 
     # Get a list of unique targets, less the stdout target
-    string_targets = list(set(string_targets) - set(stdout_target))
+    string_targets = [target_file for target_file in string_targets if target_file != stdout_target]
+    string_targets = list(set(string_targets))
 
     # Always append the stdout target for easier use in the action string
-    target.append(stdout_target)
+    string_targets.append(stdout_target)
 
-    return target, source
+    return string_targets, source
 
 
 def _abaqus_journal_emitter(target, source, env):

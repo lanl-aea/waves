@@ -657,12 +657,46 @@ def test_build_subdirectory(target, expected):
 
 source_file = fs.File("dummy.py")
 first_target_emitter_input = {
-    "one target": (["target.cub"],
-                   [source_file],
-                   ["target.cub", "target.stdout"]),
-    "subdirectory": (["set1/dummy.cub"],
-                    [source_file],
-                    ["set1/dummy.cub", f"set1{os.sep}dummy.stdout"])
+    "one target": (
+        ["target.cub"],
+        [source_file],
+        ["target.cub", "target.cub.stdout"]
+    ),
+    "only stdout": (
+        ["only.stdout"],
+        [source_file],
+        ["only.stdout"]
+    ),
+    "first stdout": (
+        ["first.stdout", "first.cub"],
+        [source_file],
+        ["first.cub", "first.stdout"]
+    ),
+    "second stdout": (
+        ["second.cub", "second.stdout"],
+        [source_file],
+        ["second.cub", "second.stdout"]
+    ),
+    "subdirectory": (
+        ["set1/dummy.cub"],
+        [source_file],
+        ["set1/dummy.cub", f"set1{os.sep}dummy.cub.stdout"]
+    ),
+    "subdirectory only stdout": (
+        ["set1/subdir1.stdout"],
+        [source_file],
+        [f"set1{os.sep}subdir1.stdout"]
+    ),
+    "subdirectory first stdout": (
+        ["set1/subdir2.stdout", "set1/subdir2.cub"],
+        [source_file],
+        [f"set1{os.sep}subdir2.cub", f"set1{os.sep}subdir2.stdout"]
+    ),
+    "subdirectory second stdout": (
+        [ "set1/subdir3.cub", "set1/subdir3.stdout"],
+        [source_file],
+        [f"set1{os.sep}subdir3.cub", f"set1{os.sep}subdir3.stdout"]
+    )
 }
 
 
