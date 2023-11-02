@@ -739,7 +739,7 @@ def test_python_script(post_action, node_count, action_count, target_list):
 
 def test_sbatch_python_script():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ' \
-        f'${python_options} ${SOURCE.abspath} ${script_options} {_redirect_action_postfix}"'
+        f'${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_redirect_action_postfix}"'
     builder = scons_extensions.sbatch_python_script()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._first_target_emitter
