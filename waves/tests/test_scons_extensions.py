@@ -12,6 +12,8 @@ import SCons.Node.FS
 
 from waves import scons_extensions
 from waves._settings import _cd_action_prefix
+from waves._settings import _redirect_action_postfix
+from waves._settings import _redirect_environment_postfix
 from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions
@@ -149,7 +151,7 @@ def test_ssh_builder_actions():
         'ssh ${remote_server} "mkdir -p ${remote_directory}"',
         "rsync -rlptv ${SOURCES.abspath} ${remote_server}:${remote_directory}",
         "ssh ${remote_server} 'cd ${remote_directory} && python ${python_options} ${SOURCE.file} " \
-            "${script_options} > ${TARGET.filebase}.stdout 2>&1'",
+            f"${{script_options}} {_redirect_action_postfix}'",
         "rsync -rltpv ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}"
     ]
     assert ssh_python_builder_action_list == expected
@@ -364,10 +366,10 @@ source_file = fs.File("dummy.py")
 journal_emitter_input = {
     "one target": (["target.cae"],
                    [source_file],
-                   ["target.cae", "target.stdout", "target.abaqus_v6.env"]),
+                   ["target.cae", "target.cae.abaqus_v6.env", "target.cae.stdout"]),
     "subdirectory": (["set1/dummy.cae"],
                     [source_file],
-                    ["set1/dummy.cae", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.abaqus_v6.env"])
+                    ["set1/dummy.cae", f"set1{os.sep}dummy.cae.abaqus_v6.env", f"set1{os.sep}dummy.cae.stdout"])
 }
 
 
@@ -395,10 +397,10 @@ abaqus_journal_input = {
                          ids=abaqus_journal_input.keys())
 def test_abaqus_journal(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
-                       '${TARGET.filebase}.abaqus_v6.env\n' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment ' \
+                      f'{_redirect_environment_postfix}\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} cae -noGui ${{SOURCE.abspath}} ' \
-                       '${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1'
+                      f'${{abaqus_options}} -- ${{journal_options}} {_redirect_action_postfix}'
 
     env.Append(BUILDERS={"AbaqusJournal": scons_extensions.abaqus_journal(program, post_action)})
     nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
@@ -413,8 +415,8 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
 
 def test_sbatch_abaqus_journal():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
-        '-information environment > ${TARGET.filebase}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus cae ' \
-        '-noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"'
+        f'-information environment {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && abaqus cae ' \
+        f'-noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} {_redirect_action_postfix}"'
     builder = scons_extensions.sbatch_abaqus_journal()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._abaqus_journal_emitter
@@ -427,7 +429,7 @@ solver_emitter_input = {
         None,
         [],
         [source_file],
-        ["job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
+        ["job.odb", "job.dat", "job.msg", "job.com", "job.prt", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "empty targets, suffixes override": (
@@ -435,7 +437,7 @@ solver_emitter_input = {
         [".odb"],
         [],
         [source_file],
-        ["job.stdout", "job.abaqus_v6.env", "job.odb"],
+        ["job.odb", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "empty targets, suffixes override empty list": (
@@ -443,7 +445,7 @@ solver_emitter_input = {
         [],
         [],
         [source_file],
-        ["job.stdout", "job.abaqus_v6.env"],
+        ["job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "one targets": (
@@ -451,7 +453,7 @@ solver_emitter_input = {
         None,
         ["job.sta"],
         [source_file],
-        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb", "job.dat", "job.msg", "job.com", "job.prt"],
+        ["job.sta", "job.odb", "job.dat", "job.msg", "job.com", "job.prt", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "one targets, override suffixes": (
@@ -459,7 +461,7 @@ solver_emitter_input = {
         [".odb"],
         ["job.sta"],
         [source_file],
-        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb"],
+        ["job.sta", "job.odb", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "one targets, override suffixes string": (
@@ -467,7 +469,7 @@ solver_emitter_input = {
         ".odb",
         ["job.sta"],
         [source_file],
-        ["job.sta", "job.stdout", "job.abaqus_v6.env", "job.odb"],
+        ["job.sta", "job.odb", "job.abaqus_v6.env", "job.stdout"],
         does_not_raise()
     ),
     "subdirectory": (
@@ -475,8 +477,9 @@ solver_emitter_input = {
         None,
         ["set1/job.sta"],
         [source_file],
-        ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
-         f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt"],
+        ["set1/job.sta", f"set1{os.sep}job.odb", f"set1{os.sep}job.dat",
+         f"set1{os.sep}job.msg", f"set1{os.sep}job.com", f"set1{os.sep}job.prt",
+         f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.stdout"],
         does_not_raise()
     ),
     "subdirectory, override suffixes": (
@@ -484,7 +487,7 @@ solver_emitter_input = {
         [".odb"],
         ["set1/job.sta"],
         [source_file],
-        ["set1/job.sta", f"set1{os.sep}job.stdout", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.odb"],
+        ["set1/job.sta", f"set1{os.sep}job.odb", f"set1{os.sep}job.abaqus_v6.env", f"set1{os.sep}job.stdout"],
         does_not_raise()
     ),
     "missing job_name": (
@@ -492,7 +495,7 @@ solver_emitter_input = {
         None,
         [],
         [source_file],
-        ["root.stdout", "root.abaqus_v6.env", "root.odb", "root.dat", "root.msg", "root.com", "root.prt"],
+        ["root.odb", "root.dat", "root.msg", "root.com", "root.prt", "root.abaqus_v6.env", "root.stdout"],
         does_not_raise()
     ),
     "missing job_name, override suffixes": (
@@ -500,7 +503,7 @@ solver_emitter_input = {
         [".odb"],
         [],
         [source_file],
-        ["root.stdout", "root.abaqus_v6.env", "root.odb"],
+        ["root.odb", "root.abaqus_v6.env", "root.stdout"],
         does_not_raise()
     )
 }
@@ -516,7 +519,7 @@ def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, out
     env["suffixes"] = suffixes
     with outcome:
         try:
-            scons_extensions._abaqus_solver_emitter(target, source, env)
+            target, source = scons_extensions._abaqus_solver_emitter(target, source, env)
         finally:
             assert target == expected
 
@@ -540,11 +543,11 @@ abaqus_solver_input = {
                          ids=abaqus_solver_input.keys())
 def test_abaqus_solver(program, post_action, node_count, action_count, source_list, emitter, suffixes):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
-                       '${job_name}.abaqus_v6.env\n' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment ' \
+                      f'{_redirect_environment_postfix}\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} -job ${{job_name}} -input ' \
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
-                       '> ${job_name}.stdout 2>&1'
+                      f'{_redirect_action_postfix}'
 
     env.Append(BUILDERS={"AbaqusSolver": scons_extensions.abaqus_solver(program, post_action, emitter)})
     nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
@@ -561,8 +564,8 @@ def test_abaqus_solver(program, post_action, node_count, action_count, source_li
 
 def test_sbatch_abaqus_solver():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
-        '-information environment > ${job_name}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus -job ${job_name} ' \
-        '-input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"'
+        f'-information environment {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && abaqus -job ${{job_name}} ' \
+        f'-input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no {_redirect_action_postfix}"'
     builder = scons_extensions.sbatch_abaqus_solver()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._abaqus_solver_emitter
@@ -578,12 +581,16 @@ copy_substitute_input = {
 
 source_file = fs.File("dummy.i")
 sierra_emitter_input = {
-    "one target": (["target.sierra"],
-                   [source_file],
-                   ["target.sierra", "target.stdout", "target.env"]),
-    "subdirectory": (["set1/dummy.sierra"],
-                    [source_file],
-                    ["set1/dummy.sierra", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.env"])
+    "one target": (
+        ["target.sierra"],
+        [source_file],
+        ["target.sierra", "target.sierra.env", "target.sierra.stdout"]
+    ),
+    "subdirectory": (
+        ["set1/dummy.sierra"],
+        [source_file],
+        ["set1/dummy.sierra", f"set1{os.sep}dummy.sierra.env", f"set1{os.sep}dummy.sierra.stdout"]
+    )
 }
 
 
@@ -611,10 +618,10 @@ sierra_input = {
                          ids=sierra_input.keys())
 def test_sierra(program, application, post_action, node_count, action_count, source_list, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} {application} --version > ' \
-                       '${TARGET.filebase}.env\n' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} {application} --version ' \
+                      f'{_redirect_environment_postfix}\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} ${{sierra_options}} {application} ${{application_options}} -i ' \
-                       '${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1'
+                      f'${{SOURCE.file}} {_redirect_action_postfix}'
 
     env.Append(BUILDERS={"Sierra": scons_extensions.sierra(program, application, post_action)})
     nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
@@ -623,8 +630,8 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
 
 def test_sbatch_sierra():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && sierra adagio ' \
-        '--version > ${TARGET.filebase}.env && cd ${TARGET.dir.abspath} && sierra ${sierra_options} adagio ' \
-        '${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"'
+        f'--version {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && sierra ${{sierra_options}} adagio ' \
+        f'${{application_options}} -i ${{SOURCE.file}} {_redirect_action_postfix}"'
     builder = scons_extensions.sbatch_sierra()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._sierra_emitter
@@ -657,12 +664,46 @@ def test_build_subdirectory(target, expected):
 
 source_file = fs.File("dummy.py")
 first_target_emitter_input = {
-    "one target": (["target.cub"],
-                   [source_file],
-                   ["target.cub", "target.stdout"]),
-    "subdirectory": (["set1/dummy.cub"],
-                    [source_file],
-                    ["set1/dummy.cub", f"set1{os.sep}dummy.stdout"])
+    "one target": (
+        ["target.cub"],
+        [source_file],
+        ["target.cub", "target.cub.stdout"]
+    ),
+    "only stdout": (
+        ["only.stdout"],
+        [source_file],
+        ["only.stdout"]
+    ),
+    "first stdout": (
+        ["first.stdout", "first.cub"],
+        [source_file],
+        ["first.cub", "first.stdout"]
+    ),
+    "second stdout": (
+        ["second.cub", "second.stdout"],
+        [source_file],
+        ["second.cub", "second.stdout"]
+    ),
+    "subdirectory": (
+        ["set1/dummy.cub"],
+        [source_file],
+        ["set1/dummy.cub", f"set1{os.sep}dummy.cub.stdout"]
+    ),
+    "subdirectory only stdout": (
+        ["set1/subdir1.stdout"],
+        [source_file],
+        [f"set1{os.sep}subdir1.stdout"]
+    ),
+    "subdirectory first stdout": (
+        ["set1/subdir2.stdout", "set1/subdir2.cub"],
+        [source_file],
+        [f"set1{os.sep}subdir2.cub", f"set1{os.sep}subdir2.stdout"]
+    ),
+    "subdirectory second stdout": (
+        [ "set1/subdir3.cub", "set1/subdir3.stdout"],
+        [source_file],
+        [f"set1{os.sep}subdir3.cub", f"set1{os.sep}subdir3.stdout"]
+    )
 }
 
 
@@ -693,27 +734,27 @@ def test_python_script(post_action, node_count, action_count, target_list):
     env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(post_action)})
     nodes = env.PythonScript(target=target_list, source=["python_script.py"], script_options="")
     expected_string = 'cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} ' \
-                      '> ${TARGET.filebase}.stdout 2>&1'
+                      f'{_redirect_action_postfix}'
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
+def test_sbatch_python_script():
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ' \
+        f'${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_redirect_action_postfix}"'
+    builder = scons_extensions.sbatch_python_script()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions._first_target_emitter
 
 
 source_file = fs.File("dummy.m")
 matlab_emitter_input = {
     "one target": (["target.matlab"],
                    [source_file],
-                   ["target.matlab", "target.stdout", "target.matlab.env"]),
+                   ["target.matlab", "target.matlab.matlab.env", "target.matlab.stdout"]),
     "subdirectory": (["set1/dummy.matlab"],
                     [source_file],
-                    ["set1/dummy.matlab", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.matlab.env"])
+                    ["set1/dummy.matlab", f"set1{os.sep}dummy.matlab.matlab.env", f"set1{os.sep}dummy.matlab.stdout"])
 }
-
-
-def test_sbatch_python_script():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ' \
-        '${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"'
-    builder = scons_extensions.sbatch_python_script()
-    assert builder.action.cmd_list == expected
-    assert builder.emitter == scons_extensions._first_target_emitter
 
 
 @pytest.mark.unittest
@@ -744,11 +785,11 @@ def test_matlab_script(program, post_action, node_count, action_count, target_li
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
                           'disp(cell2table(fileList)); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
-                          '> ${TARGET.filebase}.matlab.env 2>&1\n' \
+                          f'{_redirect_environment_postfix}\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '${SOURCE.filebase}(${script_options})\" ' \
-                          '> ${TARGET.filebase}.stdout 2>&1'
+                          f'{_redirect_action_postfix}'
 
     env.Append(BUILDERS={"MatlabScript": scons_extensions.matlab_script(program, post_action)})
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
@@ -879,7 +920,7 @@ sbatch_input = {
                          ids=sbatch_input.keys())
 def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGET.filebase}}.stdout ' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGETS[-1].abspath}} ' \
                        '${sbatch_options} --wrap "${slurm_job}"'
 
     env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(program, post_action)})
