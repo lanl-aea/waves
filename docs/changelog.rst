@@ -19,6 +19,7 @@ Documentation
 - Draft discussion about data archival (:issue:`467`, :merge:`692`). By `Kyle Brindley`_.
 - Cite and briefly discuss the role of standards documents from ASME and NASA (:issue:`483`, :merge:`693`). By `Kyle
   Brindley`_.
+- Remove out-of-date AEA Quinoa tutorial warning. By `Kyle Brindley`_.
 
 Enhancements
 ============
