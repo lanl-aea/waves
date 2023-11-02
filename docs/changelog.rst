@@ -24,6 +24,8 @@ Enhancements
 ============
 - Default to required task-by-task keyword arguments in the SSH builder to allow tasks to use unique remote directories,
   e.g. during parameter studies (:issue:`560`, :merge:`694`). By `Kyle Brindley`_.
+- More robust user provided stdout file handling and allow multiple targets with the same file stem (:issue:`556`,
+  :merge:`696`). By `Kyle Brindley`_.
 
 ******************
 0.7.5 (2023-10-27)
