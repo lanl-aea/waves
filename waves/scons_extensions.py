@@ -1407,7 +1407,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
     program = sbatch_program if sbatch_program is not None else program
-    action = [f"{_cd_action_prefix} {program} --wait --output=${TARGET[-1].abspath} " \
+    action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGETS[-1].abspath}} " \
               f"${{sbatch_options}} --wrap \"${{slurm_job}}\""]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(

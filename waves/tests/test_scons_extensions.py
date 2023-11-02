@@ -919,7 +919,7 @@ sbatch_input = {
                          ids=sbatch_input.keys())
 def test_sbatch(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGET[-1].abspath}} ' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGETS[-1].abspath}} ' \
                        '${sbatch_options} --wrap "${slurm_job}"'
 
     env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(program, post_action)})
