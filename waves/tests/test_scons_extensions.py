@@ -13,6 +13,7 @@ import SCons.Node.FS
 from waves import scons_extensions
 from waves._settings import _cd_action_prefix
 from waves._settings import _redirect_action_postfix
+from waves._settings import _redirect_environment_postfix
 from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions
@@ -397,7 +398,7 @@ abaqus_journal_input = {
 def test_abaqus_journal(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
     expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment ' \
-                      '> ${TARGET.filebase}.abaqus_v6.env\n' \
+                      f'{_redirect_environment_postfix}\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} cae -noGui ${{SOURCE.abspath}} ' \
                       f'${{abaqus_options}} -- ${{journal_options}} {_redirect_action_postfix}'
 
@@ -414,7 +415,7 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
 
 def test_sbatch_abaqus_journal():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
-        '-information environment > ${TARGET.filebase}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus cae ' \
+        f'-information environment {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && abaqus cae ' \
         f'-noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} {_redirect_action_postfix}"'
     builder = scons_extensions.sbatch_abaqus_journal()
     assert builder.action.cmd_list == expected
@@ -542,8 +543,8 @@ abaqus_solver_input = {
                          ids=abaqus_solver_input.keys())
 def test_abaqus_solver(program, post_action, node_count, action_count, source_list, emitter, suffixes):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment > ' \
-                       '${job_name}.abaqus_v6.env\n' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment ' \
+                      f'{_redirect_environment_postfix}\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} -job ${{job_name}} -input ' \
                        '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
                       f'{_redirect_action_postfix}'
@@ -563,7 +564,7 @@ def test_abaqus_solver(program, post_action, node_count, action_count, source_li
 
 def test_sbatch_abaqus_solver():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
-        '-information environment > ${job_name}.abaqus_v6.env && cd ${TARGET.dir.abspath} && abaqus -job ${job_name} ' \
+        f'-information environment {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && abaqus -job ${{job_name}} ' \
         f'-input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no {_redirect_action_postfix}"'
     builder = scons_extensions.sbatch_abaqus_solver()
     assert builder.action.cmd_list == expected
@@ -617,8 +618,8 @@ sierra_input = {
                          ids=sierra_input.keys())
 def test_sierra(program, application, post_action, node_count, action_count, source_list, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} {application} --version > ' \
-                       '${TARGET.filebase}.env\n' \
+    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} {application} --version ' \
+                      f'{_redirect_environment_postfix}\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} ${{sierra_options}} {application} ${{application_options}} -i ' \
                       f'${{SOURCE.file}} {_redirect_action_postfix}'
 
@@ -629,7 +630,7 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
 
 def test_sbatch_sierra():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && sierra adagio ' \
-        '--version > ${TARGET.filebase}.env && cd ${TARGET.dir.abspath} && sierra ${sierra_options} adagio ' \
+        f'--version {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && sierra ${{sierra_options}} adagio ' \
         f'${{application_options}} -i ${{SOURCE.file}} {_redirect_action_postfix}"'
     builder = scons_extensions.sbatch_sierra()
     assert builder.action.cmd_list == expected
@@ -784,7 +785,7 @@ def test_matlab_script(program, post_action, node_count, action_count, target_li
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
                           'disp(cell2table(fileList)); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
-                          '> ${TARGET.filebase}.matlab.env 2>&1\n' \
+                          f'{_redirect_environment_postfix}\n' \
                       f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '${SOURCE.filebase}(${script_options})\" ' \

@@ -25,6 +25,7 @@ from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
 from waves._settings import _redirect_action_postfix
+from waves._settings import _redirect_environment_postfix
 from waves._settings import _matlab_environment_extension
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
@@ -666,7 +667,7 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     .. code-block::
        :caption: Abaqus journal builder action
 
-       cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.file}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -691,8 +692,8 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    action = [f"{_cd_action_prefix} {program} -information environment > " \
-                 f"${{TARGET.filebase}}{_abaqus_environment_extension}",
+    action = [f"{_cd_action_prefix} {program} -information environment " \
+                 f"{_redirect_environment_postfix}",
               f"{_cd_action_prefix} {program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
                  f"${{journal_options}} {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
@@ -712,7 +713,7 @@ def sbatch_abaqus_journal(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Abaqus journal builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.file}.stdout 2>&1"
     """
     return abaqus_journal(*args, **kwargs)
 
@@ -855,8 +856,8 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    action = [f"{_cd_action_prefix} {program} -information environment > " \
-                  f"${{job_name}}{_abaqus_environment_extension}",
+    action = [f"{_cd_action_prefix} {program} -information environment " \
+                  f"{_redirect_environment_postfix}",
               f"{_cd_action_prefix} {program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
                   f"${{abaqus_options}} -interactive -ask_delete no {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
@@ -949,7 +950,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     .. code-block::
        :caption: Sierra builder action
 
-       cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.file}.stdout 2>&1
 
     :param str program: An absolute path or basename string for the Sierra program
     :param str application: The string name for the Sierra application
@@ -962,8 +963,8 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     :return: Sierra builder
     :rtype: SCons.Builder.Builder
     """
-    action = [f"{_cd_action_prefix} {program} {application} --version > " \
-                  f"${{TARGET.filebase}}{_sierra_environment_extension}",
+    action = [f"{_cd_action_prefix} {program} {application} --version " \
+                  f"{_redirect_environment_postfix}",
               f"{_cd_action_prefix} {program} ${{sierra_options}} {application} ${{application_options}} " \
                   f"-i ${{SOURCE.file}} {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
@@ -984,7 +985,7 @@ def sbatch_sierra(*args, **kwargs):
     .. code-block::
        :caption: sbatch Sierra builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.file}.stdout 2>&1"
     """
     return sierra(*args, **kwargs)
 
@@ -1076,7 +1077,7 @@ def python_script(post_action=[]):
     .. code-block::
        :caption: Python script builder action
 
-       cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.file}.stdout 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -1115,7 +1116,7 @@ def sbatch_python_script(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Python script builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.file}.stdout 2>&1"
     """
     return python_script(*args, **kwargs)
 
@@ -1174,7 +1175,7 @@ def matlab_script(program="matlab", post_action=[], **kwargs):
     .. code-block::
        :caption: Matlab script builder action
 
-       cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.file}.stdout 2>&1
 
     :param str program: An absolute path or basename string for the Matlab program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
@@ -1194,7 +1195,7 @@ def matlab_script(program="matlab", post_action=[], **kwargs):
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
                   "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
                   "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
-                  f"> ${{TARGET.filebase}}{_matlab_environment_extension} 2>&1",
+                  f"{_redirect_environment_postfix}",
               f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
                   "${SOURCE.filebase}(${script_options})\" " \
@@ -1383,7 +1384,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     .. code-block::
        :caption: SLURM sbatch builder action
 
-       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGET.filebase}.stdout ${sbatch_options} --wrap ${slurm_job}
+       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGET.file}.stdout ${sbatch_options} --wrap ${slurm_job}
 
     .. code-block::
        :caption: SConstruct
@@ -1540,7 +1541,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     .. code-block::
        :caption: Quinoa builder action
 
-       ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
+       ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.file}.stdout 2>&1
 
     :param str charmrun: The relative or absolute path to the charmrun executable
     :param str charmrun_options: The charmrun command line interface options
@@ -1566,7 +1567,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     action=[
         f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
-            "> ${TARGET.filebase}.stdout 2>&1"
+            f"{_redirect_action_postfix}"
     ]
     action.extend(_construct_post_action_list(post_action))
     quinoa_builder = SCons.Builder.Builder(
