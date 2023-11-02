@@ -1,5 +1,3 @@
-import pathlib
-
 Import('env')
 
 # Write project builders for re-use in task definitions
