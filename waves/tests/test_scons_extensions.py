@@ -735,23 +735,23 @@ def test_python_script(post_action, node_count, action_count, target_list):
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
-source_file = fs.File("dummy.m")
-matlab_emitter_input = {
-    "one target": (["target.matlab"],
-                   [source_file],
-                   ["target.matlab", "target.stdout", "target.matlab.env"]),
-    "subdirectory": (["set1/dummy.matlab"],
-                    [source_file],
-                    ["set1/dummy.matlab", f"set1{os.sep}dummy.stdout", f"set1{os.sep}dummy.matlab.env"])
-}
-
-
 def test_sbatch_python_script():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ' \
         '${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"'
     builder = scons_extensions.sbatch_python_script()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._first_target_emitter
+
+
+source_file = fs.File("dummy.m")
+matlab_emitter_input = {
+    "one target": (["target.matlab"],
+                   [source_file],
+                   ["target.matlab", "target.matlab.matlab.env", "target.matlab.stdout"]),
+    "subdirectory": (["set1/dummy.matlab"],
+                    [source_file],
+                    ["set1/dummy.matlab", f"set1{os.sep}dummy.matlab.matlab.env", f"set1{os.sep}dummy.matlab.stdout"])
+}
 
 
 @pytest.mark.unittest

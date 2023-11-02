@@ -1126,8 +1126,8 @@ def _matlab_script_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    suffixes = [_stdout_extension, _matlab_environment_extension]
-    return _first_target_emitter(target, source, env, suffixes=suffixes)
+    appending_suffixes = [_matlab_environment_extension]
+    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def matlab_script(program="matlab", post_action=[], **kwargs):
