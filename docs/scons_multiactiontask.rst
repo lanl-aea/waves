@@ -32,16 +32,16 @@ Directory Structure
 *******************
 
 3. Create the project directory structure and copy the Multi-Action Task source files into the
-   ``~/multi_action_task`` sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+   ``~/waves-tutorials/multi_action_task`` sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
-      $ waves fetch tutorials/multi_action_task --destination ~/multi_action_task
+      $ waves fetch tutorials/multi_action_task --destination ~/waves-tutorials/multi_action_task
       WAVES fetch
-      Destination directory: '/home/roppenheimer/multi_action_task'
-      $ cd ~/multi_action_task
+      Destination directory: '/home/roppenheimer/waves-tutorials/multi_action_task'
+      $ cd ~/waves-tutorials/multi_action_task
       $ pwd
-      /home/roppenheimer/multi_action_task
+      /home/roppenheimer/waves-tutorials/multi_action_task
 
 ***************
 SConscript File
@@ -76,7 +76,7 @@ Building targets
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/multi_action_task
+   /home/roppenheimer/waves-tutorials/multi_action_task
    $ scons rectangle
 
 ************
@@ -91,7 +91,7 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/multi_action_task
+   /home/roppenheimer/waves-tutorials/multi_action_task
    $ tree build/
    build/
    ├── abaqus_journal_utilities.py
@@ -129,7 +129,7 @@ Workflow Visualization
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/multi_action_task
+   /home/roppenheimer/waves-tutorials/multi_action_task
    $ waves visualize rectangle --output-file multi_action_task.png --width=28 --height=6
 
 .. figure:: multi_action_task.png
