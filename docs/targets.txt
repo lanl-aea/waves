@@ -117,7 +117,6 @@
 .. _`WAVES tutorials abaqus source files`: https://github.com/lanl/waves/tree/main/tutorials/eabm_package/abaqus
 .. _`WAVES quickstart source files`: https://github.com/lanl/waves/tree/main/tutorials/waves_quickstart
 .. _`SCons quickstart source files`: https://github.com/lanl/waves/tree/main/tutorials/scons_quickstart
-.. _`Multi-Action Task source files`: https://github.com/lanl/waves/tree/main/tutorials/multi-action_task
 .. _`WAVES tutorials`: https://github.com/lanl/waves/tree/main/tutorials
 .. _`WAVES-EABM environment file`: https://github.com/lanl/waves/blob/main/quickstart/environment.yml
 .. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves

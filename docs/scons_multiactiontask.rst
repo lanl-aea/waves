@@ -31,7 +31,7 @@ Environment
 Directory Structure
 *******************
 
-3. Create the project directory structure and copy the `Multi-Action Task source files`_ into the
+3. Create the project directory structure and copy the Multi-Action Task source files into the
    ``~/multi-action_task`` sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
