@@ -32,16 +32,16 @@ Directory Structure
 *******************
 
 3. Create the project directory structure and copy the Multi-Action Task source files into the
-   ``~/multi-action_task`` sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+   ``~/multi_action_task`` sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
-      $ waves fetch tutorials/multi-action_task --destination ~/multi-action_task
+      $ waves fetch tutorials/multi_action_task --destination ~/multi_action_task
       WAVES fetch
-      Destination directory: '/home/roppenheimer/multi-action_task'
-      $ cd ~/multi-action_task
+      Destination directory: '/home/roppenheimer/multi_action_task'
+      $ cd ~/multi_action_task
       $ pwd
-      /home/roppenheimer/multi-action_task
+      /home/roppenheimer/multi_action_task
 
 ***************
 SConscript File
@@ -51,9 +51,9 @@ The SConscript file below contains the workflow task definitions, where a task i
 operate on those sources, and the targets that the action produces. The :ref:`build_system` discussion includes a more
 detailed review of build systems.
 
-.. admonition:: multi-action_task/SConscript
+.. admonition:: multi_action_task/SConscript
 
-    .. literalinclude:: multi-action_task_SConscript
+    .. literalinclude:: multi_action_task_SConscript
        :language: Python
        :lineno-match:
 
@@ -65,7 +65,7 @@ more flexible, general purpose `SCons Command`_ builder is used.
 
 ..  admonition:: waves-tutorials/SConstruct
 
-  .. literalinclude:: multi-action_task_SConscript
+  .. literalinclude:: multi_action_task_SConscript
      :language: python
      :diff: scons_quickstart_SConscript
 
@@ -91,7 +91,7 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/multi-action_task
+   /home/roppenheimer/multi_action_task
    $ tree build/
    build/
    ├── abaqus_journal_utilities.py
@@ -129,8 +129,8 @@ Workflow Visualization
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/multi-action_task
-   $ waves visualize rectangle --output-file multi-action_task.png --width=28 --height=6
+   /home/roppenheimer/multi_action_task
+   $ waves visualize rectangle --output-file multi_action_task.png --width=28 --height=6
 
-.. figure:: multi-action_task.png
+.. figure:: multi_action_task.png
    :align: center

@@ -32,7 +32,7 @@ if not installed:
 @pytest.mark.systemtest
 @pytest.mark.parametrize("command, directory", [
     ("scons rectangle --keep-going", tutorial_directory / "scons_quickstart"),
-    ("scons rectangle --keep-going", tutorial_directory / "multi-action_task"),
+    ("scons rectangle --keep-going", tutorial_directory / "multi_action_task"),
     ("scons rectangle --keep-going", tutorial_directory / "waves_quickstart"),
     ("scons . --sconstruct=tutorial_00_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct --unconditional-build --print-build-failures", tutorial_directory),

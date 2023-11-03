@@ -221,7 +221,7 @@ tutorial_files_list = [
     tutorials_dir / "tutorial_quinoa/flow.q",
     tutorials_dir / "waves_quickstart/SConscript",
     tutorials_dir / 'scons_quickstart/SConscript',
-    tutorials_dir / 'multi-action_task/SConscript',
+    tutorials_dir / 'multi_action_task/SConscript',
 ]
 copied_file_list = []
 for file_path in tutorial_files_list:
