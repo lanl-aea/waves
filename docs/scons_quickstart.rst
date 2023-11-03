@@ -21,7 +21,7 @@ Directory Structure
 
 .. code-block:: bash
 
-      $ waves fetch tutorials/waves-tutorials/scons_quickstart --destination ~/waves-tutorials/scons_quickstart
+      $ waves fetch tutorials/scons_quickstart --destination ~/waves-tutorials/scons_quickstart
       WAVES fetch
       Destination directory: '/home/roppenheimer/waves-tutorials/scons_quickstart'
       $ cd ~/waves-tutorials/scons_quickstart
