@@ -20,6 +20,7 @@ Documentation
 - Cite and briefly discuss the role of standards documents from ASME and NASA (:issue:`483`, :merge:`693`). By `Kyle
   Brindley`_.
 - Remove out-of-date AEA Quinoa tutorial warning. By `Kyle Brindley`_.
+- Simplified multi-action task tutorial (:issue:`553`, :merge:`695`). By `Sergio Cordova`_.
 
 Enhancements
 ============

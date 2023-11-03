@@ -113,5 +113,3 @@ command can be used.
 
 .. figure:: scons_quickstart.png
    :align: center
-
-
