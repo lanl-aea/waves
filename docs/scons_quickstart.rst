@@ -16,17 +16,17 @@ Environment
 Directory Structure
 *******************
 
-3. Create the project directory structure and copy the `SCons quickstart source files`_ into the ``~/scons_quickstart``
+3. Create the project directory structure and copy the `SCons quickstart source files`_ into the ``~/waves-tutorials/scons_quickstart``
    sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
-      $ waves fetch tutorials/scons_quickstart --destination ~/scons_quickstart
+      $ waves fetch tutorials/waves-tutorials/scons_quickstart --destination ~/waves-tutorials/scons_quickstart
       WAVES fetch
-      Destination directory: '/home/roppenheimer/scons_quickstart'
-      $ cd ~/scons_quickstart
+      Destination directory: '/home/roppenheimer/waves-tutorials/scons_quickstart'
+      $ cd ~/waves-tutorials/scons_quickstart
       $ pwd
-      /home/roppenheimer/scons_quickstart
+      /home/roppenheimer/waves-tutorials/scons_quickstart
 
 ***************
 SConscript File
@@ -52,7 +52,7 @@ Building targets
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/scons_quickstart
+   /home/roppenheimer/waves-tutorials/scons_quickstart
    $ scons rectangle
 
 ************
@@ -62,7 +62,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/scons_quickstart
+   /home/roppenheimer/waves-tutorials/scons_quickstart
    $ tree build/
    build/
    ├── abaqus_journal_utilities.py
@@ -108,7 +108,7 @@ command can be used.
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves_quickstart
+   /home/roppenheimer/waves-tutorials/scons_quickstart
    $ waves visualize rectangle --output-file scons_quickstart.png --width=28 --height=6
 
 .. figure:: scons_quickstart.png
