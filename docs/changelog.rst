@@ -19,12 +19,15 @@ Documentation
 - Draft discussion about data archival (:issue:`467`, :merge:`692`). By `Kyle Brindley`_.
 - Cite and briefly discuss the role of standards documents from ASME and NASA (:issue:`483`, :merge:`693`). By `Kyle
   Brindley`_.
+- Remove out-of-date AEA Quinoa tutorial warning. By `Kyle Brindley`_.
 - Simplified multi-action task tutorial (:issue:`553`, :merge:`695`). By `Sergio Cordova`_.
 
 Enhancements
 ============
 - Default to required task-by-task keyword arguments in the SSH builder to allow tasks to use unique remote directories,
   e.g. during parameter studies (:issue:`560`, :merge:`694`). By `Kyle Brindley`_.
+- More robust user provided stdout file handling and allow multiple targets with the same file stem (:issue:`556`,
+  :merge:`696`). By `Kyle Brindley`_.
 
 ******************
 0.7.5 (2023-10-27)
