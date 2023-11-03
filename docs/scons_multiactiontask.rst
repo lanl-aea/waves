@@ -76,7 +76,7 @@ Building targets
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves-tutorials
+   /home/roppenheimer/multi_action_task
    $ scons rectangle
 
 ************
