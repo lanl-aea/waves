@@ -33,7 +33,7 @@ Directory Structure
 
 .. code-block:: bash
 
-      $ waves fetch tutorials/waves-tutorials --destination ~/waves-tutorials/waves_quickstart
+      $ waves fetch tutorials/waves_quickstart --destination ~/waves-tutorials/waves_quickstart
       WAVES fetch
       Destination directory: '/home/roppenheimer/waves-tutorials/waves_quickstart'
       $ cd ~/waves-tutorials/waves_quickstart
