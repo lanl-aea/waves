@@ -28,17 +28,17 @@ Environment
 Directory Structure
 *******************
 
-3. Create the project directory structure and copy the `WAVES quickstart source files`_ into the ``~/waves_quickstart``
+3. Create the project directory structure and copy the `WAVES quickstart source files`_ into the ``~/waves-tutorials/waves_quickstart``
    sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
-      $ waves fetch tutorials/waves_quickstart --destination ~/waves_quickstart
+      $ waves fetch tutorials/waves-tutorials --destination ~/waves-tutorials/waves_quickstart
       WAVES fetch
-      Destination directory: '/home/roppenheimer/waves_quickstart'
-      $ cd ~/waves_quickstart
+      Destination directory: '/home/roppenheimer/waves-tutorials/waves_quickstart'
+      $ cd ~/waves-tutorials/waves_quickstart
       $ pwd
-      /home/roppenheimer/waves_quickstart
+      /home/roppenheimer/waves-tutorials/waves_quickstart
 
 ***************
 SConscript File
@@ -67,7 +67,7 @@ Building targets
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves_quickstart
+   /home/roppenheimer/waves-tutorials/waves_quickstart
    $ scons rectangle
 
 ************
@@ -77,7 +77,7 @@ Output Files
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves_quickstart
+   /home/roppenheimer/waves-tutorials/waves_quickstart
    $ tree build/
    build
    ├── abaqus_journal_utilities.py
@@ -127,7 +127,7 @@ Workflow Visualization
 .. code-block::
 
    $ pwd
-   /home/roppenheimer/waves_quickstart
+   /home/roppenheimer/waves-tutorials/waves_quickstart
    $ waves visualize rectangle --output-file waves_quickstart.png
 
 .. figure:: waves_quickstart.png
