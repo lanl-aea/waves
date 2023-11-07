@@ -21,6 +21,7 @@ Documentation
   Brindley`_.
 - Remove out-of-date AEA Quinoa tutorial warning. By `Kyle Brindley`_.
 - Simplified multi-action task tutorial (:issue:`553`, :merge:`695`). By `Sergio Cordova`_.
+- Added consistent tutorial directories (:issue:`562`, :merge:`699`). By `Sergio Cordova`_.
 
 Enhancements
 ============
