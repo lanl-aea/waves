@@ -59,7 +59,7 @@ report.extend(waves.scons_extensions.copy_substitute(
     substitution_dictionary=waves.scons_extensions.substitution_syntax(project_variables)))
 
 # PDF Report build task
-targets = ["latex/modsim-template.pdf"]
+targets = [f"latex/{project_variables['report_pdf']}"]
 sources = ["index.rst"] + [source_file.name.rstrip(".in") for source_file in report_copy_list]
 report.extend(env.SphinxPDF(
     target=targets,

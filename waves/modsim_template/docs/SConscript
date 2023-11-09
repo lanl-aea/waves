@@ -66,7 +66,7 @@ html = env.SphinxBuild(
 env.Clean(html, [Dir("html")] + sources)
 env.Alias("html", html)
 
-targets = ["latex/modsim-template.pdf"]
+targets = [f"latex/{project_variables['documentation_pdf']}"]
 sources = documentation_files
 latexpdf = env.SphinxPDF(
     target=targets,

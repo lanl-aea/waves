@@ -56,6 +56,7 @@ env["abaqus"] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq20
 project_configuration = pathlib.Path(inspect.getfile(lambda: None))
 project_dir = project_configuration.parent
 project_name = project_dir.name
+version = "0.1.0"
 author_list = ["Kyle Brindley",
                "Prabhu S. Khalsa",
                "Thomas Roberts",
@@ -63,15 +64,18 @@ author_list = ["Kyle Brindley",
                "Matthew Fister",
                "Scott Ouellette"]
 author_latex = r" \and ".join(author_list)
+latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 eabm_package_dir = "eabm_package"
 project_variables = {
     "project_configuration": str(project_configuration),
     "project_dir": str(project_dir),
     "project_name": project_name,
-    "version": "0.1.0",
+    "version": version,
     "author_list": author_list,
     "author_latex": author_latex,
+    "documentation_pdf": f"{latex_project_name}-{version}.pdf",
+    "report_pdf": f"{latex_project_name}-{version}-report.pdf",
     "documentation_abspath": str(project_dir / documentation_source_dir),
     "eabm_package_abspath": str(project_dir / eabm_package_dir),
     "datacheck_alias": "datacheck"
