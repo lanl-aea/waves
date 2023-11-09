@@ -1489,6 +1489,48 @@ def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
     return sphinx_builder
 
 
+def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags="")
+    """Sphinx builder using the ``-M`` specifier. Intended for ``latexpdf`` builds.
+
+    This builder does not have an emitter. It requires at least one target.
+
+    .. code-block::
+       :caption: action
+
+       ${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={
+           "SphinxPDF": waves.scons_extensions.sphinx_latexpdf(options="-W"),
+       })
+       sources = ["conf.py", "index.rst"]
+       targets = ["latex/project.pdf"]
+       latexpdf = env.SphinxBuild(
+           target=targets,
+           source=sources,
+       )
+       env.Clean(latexpdf, [Dir("latex")] + sources)
+       env.Alias("latexpdf", latexpdf)
+
+    :param str program: sphinx-build executable
+    :param str options: sphinx-build options
+    :param str builder: builder name. See the `Sphinx`_ documentation for options
+    :param str tags: sphinx-build tags
+    """
+    sphinx_builder = Builder(
+        action=["${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"],
+        program=program,
+        options=options,
+        builder=builder,
+        tags=tags
+    )
+    return sphinx_latex
+
+
 def _custom_scanner(pattern, suffixes, flags=None):
     """Custom Scons scanner
 
