@@ -1447,6 +1447,48 @@ def sphinx_scanner():
     return _custom_scanner(r'^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$', ['.rst', '.txt'])
 
 
+def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
+    """Sphinx builder using the ``-b`` specifier
+
+    This builder does not have an emitter. It requires at least one target.
+
+    .. code-block::
+       :caption: action
+
+       ${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={
+           "SphinxBuild": waves.scons_extensions.sphinx_build(options="-W"),
+       })
+       sources = ["conf.py", "index.rst"]
+       targets = ["html/index.html"]
+       html = env.SphinxBuild(
+           target=targets,
+           source=sources,
+       )
+       env.Clean(html, [Dir("html")] + sources)
+       env.Alias("html", html)
+
+    :param str program: sphinx-build executable
+    :param str options: sphinx-build options
+    :param str builder: builder name. See the `Sphinx`_ documentation for options
+    :param str tags: sphinx-build tags
+    """
+    sphinx_builder = Builder(
+        action=["${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
+        program=program,
+        options=options,
+        builder=builder,
+        tags=tags
+    )
+    return sphinx_builder
+
+
 def _custom_scanner(pattern, suffixes, flags=None):
     """Custom Scons scanner
 
