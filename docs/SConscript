@@ -267,7 +267,7 @@ internal = env.SphinxBuild(
 env.Clean(internal, [Dir(internal_directory)] + documentation_file_list)
 env.Alias(internal_directory, internal)
 
-waves_pdf = pathlib.Path(f"latex/{project_substitution_dictionary['@documentation_pdf@']}.pdf")
+waves_pdf = pathlib.Path(f"latex/{project_substitution_dictionary['@documentation_pdf@']}")
 latex_directory = "latex"
 latex_target = [str(waves_pdf)]
 latexpdf = env.SphinxPDF(
