@@ -8,6 +8,10 @@ Changelog
 0.7.6 (unreleased)
 ******************
 
+New Features
+============
+- Prototype Sphinx builders (:issue:`564`, :merge:`701`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add PEP-8 reference and citation to the first two tutorials (:issue:`524`, :merge:`688`). By `Kyle Brindley`_.
