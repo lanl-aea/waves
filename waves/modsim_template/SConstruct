@@ -109,7 +109,7 @@ Default(environment_target)
 if not env["ignore_documentation"]:
     # Project documentation
     build_dir = variant_dir_base / documentation_source_dir
-    docs_aliases = SConscript(str(documentation_source_dir / "SConscript"), variant_dir=str(build_dir), exports=["env", "project_variables"])
+    SConscript(str(documentation_source_dir / "SConscript"), variant_dir=str(build_dir), exports=["env", "project_variables"])
 
     # Analysis report
     report_dir = pathlib.Path("report")
@@ -120,7 +120,6 @@ if not env["ignore_documentation"]:
                duplicate=True)
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
-    docs_aliases = []
 
 # Add simulation targets
 workflow_configurations = [
