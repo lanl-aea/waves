@@ -36,7 +36,7 @@ for target, source in root_files:
         action=Copy("$TARGET", "$SOURCE"))
 
 # Explicit Sphinx documentation dependency list
-documentation_file_list = [
+documentation_files = [
     "conf.py",
     "api.rst",
     "cli.rst",
@@ -56,30 +56,27 @@ documentation_file_list = [
     "_static/custom.css"
 ]
 
-html_directory = Dir("html")
+targets = [f"html/{pathlib.Path(source).with_suffix('.html')}" for source in documentation_files if source.endswith(".rst")]
+sources = documentation_files
 sphinx_options = "-W"
-html = env.Command(
-    target=[html_directory],
-    source=documentation_file_list,
-    action=f"{env['sphinx_build']} ${{sphinx_options}} -b html ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}}{os.sep}html",
-    sphinx_options=sphinx_options)
-env.Clean(html, html_directory)
-env.AlwaysBuild(html)
-alias_list.extend(env.Alias("html", html))
-
-latex_directory = Dir("latex")
-latexpdf = env.Command(
-    target=[latex_directory],
-    source=documentation_file_list,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{sphinx_options}}",
-    sphinx_options=sphinx_options
+html = env.SphinxBuild(
+    target=targets,
+    source=sources
 )
-env.Clean(latexpdf, latex_directory)
-env.AlwaysBuild(latexpdf)
-alias_list.extend(env.Alias("latexpdf", latexpdf))
+env.Clean(html, [Dir("html")] + sources)
+env.Alias("html", html)
+
+targets = [f"latex/{project_variables['documentation_pdf']}"]
+sources = documentation_files
+latexpdf = env.SphinxPDF(
+    target=targets,
+    source=sources
+)
+env.Clean(latexpdf, [Dir("latex")] + sources)
+env.Alias("latexpdf", latexpdf)
 
 # Collector alias to build all documentation
-alias_list.extend(env.Alias("documentation", html + latexpdf))
+env.Alias("documentation", html + latexpdf)
 
 if not env["sphinx_build"]:
     print(f"Program 'sphinx-build' was not found in construction environment. Ignoring Sphinx target(s)")
@@ -87,6 +84,3 @@ if not env["sphinx_build"]:
     Ignore([".", "latex", "latexpdf"], latexpdf)
 else:
     env.Default(html)
-
-# Return the alias list to SConstruct for help message output
-Return("alias_list")
