@@ -1002,3 +1002,19 @@ def test_sphinx_scanner(content, expected_dependencies):
     dependencies = scanner(mock_file, env)
     found_files = [file.name for file in dependencies]
     assert set(found_files) == set(expected_dependencies)
+
+
+def test_sphinx_build():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"SphinxBuild": scons_extensions.sphinx_build()})
+    nodes = env.SphinxBuild(target=["html/index.html"], source=["conf.py", "index.rst"])
+    expected_string = "${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"
+    check_action_string(nodes, [], 1, 1, expected_string)
+
+
+def test_sphinx_latexpdf():
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"SphinxPDF": scons_extensions.sphinx_latexpdf()})
+    nodes = env.SphinxPDF(target=["latex/project.pdf"], source=["conf.py", "index.rst"])
+    expected_string = "${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"
+    check_action_string(nodes, [], 1, 1, expected_string)

@@ -1479,7 +1479,7 @@ def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
     :param str builder: builder name. See the `Sphinx`_ documentation for options
     :param str tags: sphinx-build tags
     """
-    sphinx_builder = Builder(
+    sphinx_builder = SCons.Builder.Builder(
         action=["${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
         program=program,
         options=options,
@@ -1489,7 +1489,7 @@ def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
     return sphinx_builder
 
 
-def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags="")
+def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags=""):
     """Sphinx builder using the ``-M`` specifier. Intended for ``latexpdf`` builds.
 
     This builder does not have an emitter. It requires at least one target.
@@ -1521,7 +1521,7 @@ def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags
     :param str builder: builder name. See the `Sphinx`_ documentation for options
     :param str tags: sphinx-build tags
     """
-    sphinx_builder = Builder(
+    sphinx_latex = SCons.Builder.Builder(
         action=["${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"],
         program=program,
         options=options,
