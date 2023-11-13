@@ -1,1 +1,0 @@
-../../tutorials/eabm_package/abaqus/export_abaqus_image.py
