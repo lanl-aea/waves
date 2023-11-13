@@ -70,16 +70,6 @@ Building targets
    /home/roppenheimer/waves-tutorials/waves_quickstart
    $ scons rectangle
 
-*******************
-Building part image
-*******************
-
-.. code-block::
-
-   $ pwd
-   /home/roppenheimer/waves-tutorials/waves_quickstart
-   $ scons image
-
 ************
 Output Files
 ************
@@ -95,10 +85,8 @@ Output Files
    ├── abaqus.rpy
    ├── abaqus.rpy.1
    ├── abaqus.rpy.2
-   ├── abaqus.rpy.3
    ├── assembly.inp
    ├── boundary.inp
-   ├── export_abaqus_image.py
    ├── field_output.inp
    ├── history_output.inp
    ├── materials.inp
@@ -112,28 +100,25 @@ Output Files
    ├── rectangle_compression.prt
    ├── rectangle_compression.sta
    ├── rectangle_compression.stdout
+   ├── rectangle_geometry.abaqus_v6.env
    ├── rectangle_geometry.cae
-   ├── rectangle_geometry.cae.abaqus_v6.env
-   ├── rectangle_geometry.cae.stdout
    ├── rectangle_geometry.jnl
    ├── rectangle_geometry.py
-   ├── rectangle_image.png
-   ├── rectangle_image.png.abaqus_v6.env
-   ├── rectangle_image.png.stdout
+   ├── rectangle_geometry.stdout
+   ├── rectangle_mesh.abaqus_v6.env
    ├── rectangle_mesh.cae
    ├── rectangle_mesh.inp
-   ├── rectangle_mesh.inp.abaqus_v6.env
-   ├── rectangle_mesh.inp.stdout
    ├── rectangle_mesh.jnl
    ├── rectangle_mesh.py
+   ├── rectangle_mesh.stdout
+   ├── rectangle_partition.abaqus_v6.env
    ├── rectangle_partition.cae
-   ├── rectangle_partition.cae.abaqus_v6.env
-   ├── rectangle_partition.cae.stdout
    ├── rectangle_partition.jnl
    ├── rectangle_partition.py
+   ├── rectangle_partition.stdout
    └── SConscript
 
-   0 directories, 42 files
+   0 directories, 37 files
 
 **********************
 Workflow Visualization
