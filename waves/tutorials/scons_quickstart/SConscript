@@ -70,7 +70,7 @@ images = []
 # Part Image
 images.extend(env.AbaqusJournal(
     target=["rectangle_image.png"],
-    source=["export_abaqus_image.py", "rectangle_compression.inp"],
+    source=["export_abaqus_image.py"] + abaqus_source_list,
     abaqus_program=env['abaqus'],
     journal_options="--input-file rectangle_compression.inp --output-file ${TARGET.file}"
 ))
