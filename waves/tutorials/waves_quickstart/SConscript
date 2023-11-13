@@ -33,6 +33,6 @@ image = env.AbaqusJournal(
     journal_options="--input-file rectangle_compression.inp --output-file ${TARGET.file}"
 )
 
-# Collector alias named after the model simulation                                                                       
+# Collector alias named after the model simulation
 env.Alias('rectangle', target)
 env.Alias("image", image)
