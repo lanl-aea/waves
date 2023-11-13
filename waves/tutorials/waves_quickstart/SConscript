@@ -28,4 +28,3 @@ target = env.AbaqusSolver(
 
 # Collector alias named after the model simulation
 env.Alias('rectangle', target)
-
