@@ -79,16 +79,6 @@ Building targets
    /home/roppenheimer/waves-tutorials/multi_action_task
    $ scons rectangle
 
-*******************
-Building part image
-*******************
-
-.. code-block::
-
-   $ pwd
-   /home/roppenheimer/waves-tutorials/multi_action_task
-   $ scons image
-
 ************
 Output Files
 ************
@@ -109,10 +99,8 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    ├── abaqus.rpy
    ├── abaqus.rpy.1
    ├── abaqus.rpy.2
-   ├── abaqus.rpy.3
    ├── assembly.inp
    ├── boundary.inp
-   ├── export_abaqus_image.py
    ├── field_output.inp
    ├── history_output.inp
    ├── materials.inp
@@ -125,7 +113,6 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    ├── rectangle_compression.prt
    ├── rectangle_compression.sta
    ├── rectangle_geometry.py
-   ├── rectangle_image.png
    ├── rectangle_mesh.cae
    ├── rectangle_mesh.inp
    ├── rectangle_mesh.jnl
@@ -133,7 +120,7 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    ├── rectangle_partition.py
    └── SConscript
 
-   0 directories, 28 files
+   0 directories, 25 files
 
 **********************
 Workflow Visualization
