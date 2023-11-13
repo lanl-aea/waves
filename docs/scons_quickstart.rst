@@ -55,16 +55,6 @@ Building targets
    /home/roppenheimer/waves-tutorials/scons_quickstart
    $ scons rectangle
 
-*******************
-Building part image
-*******************
-
-.. code-block::
-
-   $ pwd
-   /home/roppenheimer/waves-tutorials/scons_quickstart
-   $ scons image
-
 ************
 Output Files
 ************
@@ -80,10 +70,8 @@ Output Files
    ├── abaqus.rpy
    ├── abaqus.rpy.1
    ├── abaqus.rpy.2
-   ├── abaqus.rpy.3
    ├── assembly.inp
    ├── boundary.inp
-   ├── export_abaqus_image.py
    ├── field_output.inp
    ├── history_output.inp
    ├── materials.inp
@@ -98,7 +86,6 @@ Output Files
    ├── rectangle_geometry.cae
    ├── rectangle_geometry.jnl
    ├── rectangle_geometry.py
-   ├── rectangle_image.png
    ├── rectangle_mesh.cae
    ├── rectangle_mesh.inp
    ├── rectangle_mesh.jnl
@@ -108,7 +95,7 @@ Output Files
    ├── rectangle_partition.py
    └── SConscript
 
-   0 directories, 32 files
+   0 directories, 29 files
 
 **********************
 Workflow Visualization
