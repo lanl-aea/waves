@@ -25,6 +25,14 @@ target = env.AbaqusSolver(
     job_name="rectangle_compression",
     abaqus_options="-double both"
 )
-                                                                                                                         
+
+# Part Image
+image = env.AbaqusJournal(
+    target=["rectangle_image.png"],
+    source=["export_abaqus_image.py", "rectangle_compression.inp"],
+    journal_options="--input-file rectangle_compression.inp --output-file ${TARGET.file}"
+)
+
 # Collector alias named after the model simulation                                                                       
 env.Alias('rectangle', target)
+env.Alias("image", image)
