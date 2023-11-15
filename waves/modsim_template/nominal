@@ -87,7 +87,7 @@ images.extend(env.AbaqusJournal(
     target=[f"{model}_compression.png"],
     source=[str(eabm_package_abspath / "export_abaqus_image.py"), f"{journal_file}.inp"] +
            [str(source_file) for source_file in solve_source_list],
-    journal_options=f"--input-file {f'{model}_compression.inp'} --output-file ${{TARGET.file}} "
+    journal_options=f"--input-file ${{SOURCES[1].abspath}} --output-file ${{TARGET.file}} "
                     f"--model-name {model} --part-name {model}"
 ))
 
