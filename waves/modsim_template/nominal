@@ -85,9 +85,10 @@ solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_so
 # Part images
 images.extend(env.AbaqusJournal(
     target=[f"{model}_compression.png"],
-    source=[str(eabm_package_abspath / "export_abaqus_image.py")] + [str(source_file) for source_file in
-                                                                     solve_source_list],
-    journal_options=f"--input-file {eabm_package_abspath / f'{model}_compression.inp'} --output-file ${{TARGET.file}} --part-name {model}"
+    source=[str(eabm_package_abspath / "export_abaqus_image.py"), f"{journal_file}.inp"] +
+           [str(source_file) for source_file in solve_source_list],
+    journal_options=f"--input-file {f'{model}_compression.inp'} --output-file ${{TARGET.file}} "
+                    f"--model-name {model} --part-name {model}"
 ))
 
 # Abaqus Solve
