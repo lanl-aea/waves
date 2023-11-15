@@ -4,6 +4,7 @@ import shutil
 import inspect
 import argparse
 import tempfile
+import functools
 
 
 image_default_x_angle = 0.
@@ -94,26 +95,73 @@ def image(output_file,
     import abaqusConstants
 
     output_file_stem, output_file_extension = os.path.splitext(output_file)
+    output_file_extension = output_file_extension.lstrip(".")
     assembly = abaqus.mdb.models[model_name].rootAssembly
     if len(assembly.instances.keys()) == 0:
         part = abaqus.mdb.models[model_name].parts[part_name]
         assembly.Instance(name=part_name, part=part, dependent=abaqusConstants.ON)
-    session.viewports['Viewport: 1'].assemblyDisplay.setValues(optimizationTasks=abaqusConstants.OFF,
-                                                               geometricRestrictions=abaqusConstants.OFF,
-                                                               stopConditions=abaqusConstants.OFF)
+    session.viewports['Viewport: 1'].assemblyDisplay.setValues(
+        optimizationTasks=abaqusConstants.OFF, geometricRestrictions=abaqusConstants.OFF,
+        stopConditions=abaqusConstants.OFF)
     session.viewports['Viewport: 1'].setValues(displayedObject=assembly)
     session.viewports['Viewport: 1'].view.rotate(xAngle=x_angle, yAngle=y_angle, zAngle=z_angle,
                                                  mode=abaqusConstants.MODEL)
     session.viewports['Viewport: 1'].view.fitView()
     session.viewports['Viewport: 1'].enableMultipleColors()
     session.viewports['Viewport: 1'].setColor(initialColor='#BDBDBD')
-    cmap=session.viewports['Viewport: 1'].colorMappings[color_map]
+    cmap = session.viewports['Viewport: 1'].colorMappings[color_map]
     session.viewports['Viewport: 1'].setColor(colorMapping=cmap)
     session.viewports['Viewport: 1'].disableMultipleColors()
     session.printOptions.setValues(vpDecorations=abaqusConstants.OFF)
     session.pngOptions.setValues(imageSize=image_size)
-    session.printToFile(fileName=output_file_stem, format=get_abaqus_image_constant(output_file_extension),
-                        canvasObjects=(session.viewports['Viewport: 1'], ))
+
+    output_format = return_abaqus_constant_or_exit(output_file_extension)
+    if output_format is None:
+        print >> sys.__stderr__, "{}".format("Abaqus does not recognize the output extension '{}'".format(output_file_extension))
+
+    session.printToFile(fileName=output_file_stem, format=output_format,
+                        canvasObjects=(session.viewports['Viewport: 1'],))
+
+
+def print_exception_message(function):
+    """Decorate a function to catch bare exception and instead call sys.exit with the message
+
+    :param function: function to decorate
+    """
+    @functools.wraps(function)
+    def wrapper(*args, **kwargs):
+        output = None
+        try:
+            output = function(*args, **kwargs)
+        except Exception as err:
+            print >> sys.__stderr__, "{}".format(err)
+        return output
+    return wrapper
+
+
+def return_abaqus_constant(search):
+    """If search is found in the abaqusConstants module, return the abaqusConstants object.
+
+    Raise a ValueError if the search string is not found.
+
+    :param str search: string to search in the abaqusConstants module attributes
+
+    :return value: abaqusConstants attribute
+    :rtype: abaqusConstants.<search>
+    """
+    import abaqusConstants
+
+    search = search.upper()
+    if hasattr(abaqusConstants, search):
+        attribute = getattr(abaqusConstants, search)
+    else:
+        raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
+    return attribute
+
+
+@print_exception_message
+def return_abaqus_constant_or_exit(*args, **kwargs):
+    return return_abaqus_constant(*args, **kwargs)
 
 
 def get_abaqus_image_constant(file_extension):
