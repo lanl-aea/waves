@@ -13,7 +13,8 @@ image_default_image_size = (1920, 1080)
 image_default_model_name = "Model-1"
 image_default_part_name = "Part-1"
 image_cli_help = "Save an image of an Abaqus model"
-image_cli_description = "Save an assembly view image (colored by material) for a given Abaqus input file"
+image_cli_description = "Save an assembly view image of an Abaqus model from an input or CAE file"
+
 # One time dump from session.viewports['Viewport: 1'].colorMappings.keys()) to stay Python 3 compatible
 image_color_map_choices = [
     'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance',
