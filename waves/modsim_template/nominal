@@ -81,18 +81,17 @@ workflow.extend(waves.scons_extensions.copy_substitute(
     substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)))
 
 solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
+solve_source_list.append([f"{journal_file}.inp"])
 
 # Part images
 images.extend(env.AbaqusJournal(
     target=[f"{model}_compression.png"],
-    source=[str(eabm_package_abspath / "export_abaqus_image.py"), f"{journal_file}.inp"] +
-           [str(source_file) for source_file in solve_source_list],
+    source=[str(eabm_package_abspath / "export_abaqus_image.py")] + solve_source_list,
     journal_options=f"--input-file ${{SOURCES[1].abspath}} --output-file ${{TARGET.file}} "
                     f"--model-name {model} --part-name {model}"
 ))
 
 # Abaqus Solve
-solve_source_list.append([f"{journal_file}.inp"])
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ("023", "mdl", "sim", "stt")
