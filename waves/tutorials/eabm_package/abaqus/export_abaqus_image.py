@@ -6,6 +6,9 @@ import argparse
 import tempfile
 import functools
 
+import abaqus
+import abaqusConstants
+
 
 image_default_x_angle = 0.
 image_default_y_angle = 0.
@@ -47,8 +50,6 @@ def main(input_file, output_file,
 
     :returns: writes image to ``{output_file}``
     """
-    import abaqus
-
     input_file_extension = os.path.splitext(input_file)[1]
     if input_file_extension.lower() == ".cae":
         with tempfile.NamedTemporaryFile(suffix=".cae", dir=".") as copy_file:
@@ -91,9 +92,6 @@ def image(output_file,
 
     :returns: writes image to ``{output_file}``
     """
-    import abaqus
-    import abaqusConstants
-
     output_file_stem, output_file_extension = os.path.splitext(output_file)
     output_file_extension = output_file_extension.lstrip(".")
     assembly = abaqus.mdb.models[model_name].rootAssembly
@@ -149,8 +147,6 @@ def return_abaqus_constant(search):
     :return value: abaqusConstants attribute
     :rtype: abaqusConstants.<search>
     """
-    import abaqusConstants
-
     search = search.upper()
     if hasattr(abaqusConstants, search):
         attribute = getattr(abaqusConstants, search)
@@ -162,21 +158,6 @@ def return_abaqus_constant(search):
 @print_exception_message
 def return_abaqus_constant_or_exit(*args, **kwargs):
     return return_abaqus_constant(*args, **kwargs)
-
-
-def get_abaqus_image_constant(file_extension):
-    """
-    Function for converting a string for an image file extension (e.g. ``.png``) to the corresponding
-    ``abaqusConstants`` value.
-    """
-    import abaqusConstants
-
-    switcher = {
-        '.PNG': abaqusConstants.PNG,
-        '.SVG': abaqusConstants.SVG
-    }
-
-    return switcher.get(file_extension.upper(), "")
 
 
 def get_parser():
