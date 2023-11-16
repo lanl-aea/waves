@@ -4,10 +4,10 @@ import shutil
 import inspect
 import argparse
 import tempfile
-import functools
 
 import abaqus
 import abaqusConstants
+import abaqus_journal_utilities
 
 
 image_default_x_angle = 0.
@@ -113,33 +113,12 @@ def image(output_file,
     session.printOptions.setValues(vpDecorations=abaqusConstants.OFF)
     session.pngOptions.setValues(imageSize=image_size)
 
-    output_format = return_abaqus_constant(output_file_extension)
+    output_format = abaqus_journal_utilities.return_abaqus_constant(output_file_extension)
     if output_format is None:
         print >> sys.__stderr__, "{}".format("Abaqus does not recognize the output extension '{}'".format(output_file_extension))
 
     session.printToFile(fileName=output_file_stem, format=output_format,
                         canvasObjects=(session.viewports['Viewport: 1'],))
-
-
-def return_abaqus_constant(search):
-    """If search is found in the abaqusConstants module, return the abaqusConstants object.
-
-    Raise a ValueError if the search string is not found.
-
-    :param str search: string to search in the abaqusConstants module attributes
-
-    :return value: abaqusConstants attribute
-    :rtype: abaqusConstants.<search>
-    """
-    try:
-        search = search.upper()
-        if hasattr(abaqusConstants, search):
-            attribute = getattr(abaqusConstants, search)
-        else:
-            raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
-        return attribute
-    except Exception as err:
-        print >> sys.__stderr__, "{}".format(err)
 
 
 def get_parser():

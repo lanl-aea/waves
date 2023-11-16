@@ -96,6 +96,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # SolverPrep
     abaqus_source_list = [
         eabm_package_abspath / f"{model}_compression.inp.in",
+        eabm_package_abspath / "abaqus_journal_utilities.py",
         eabm_package_abspath / "assembly.inp",
         eabm_package_abspath / "boundary.inp",
         eabm_package_abspath / "field_output.inp",
