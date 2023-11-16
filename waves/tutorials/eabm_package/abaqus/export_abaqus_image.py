@@ -114,9 +114,6 @@ def image(output_file,
     session.pngOptions.setValues(imageSize=image_size)
 
     output_format = abaqus_journal_utilities.return_abaqus_constant(output_file_extension)
-    if output_format is None:
-        print >> sys.__stderr__, "{}".format("Abaqus does not recognize the output extension '{}'".format(output_file_extension))
-
     session.printToFile(fileName=output_file_stem, format=output_format,
                         canvasObjects=(session.viewports['Viewport: 1'],))
 
