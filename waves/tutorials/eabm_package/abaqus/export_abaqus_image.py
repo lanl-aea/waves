@@ -113,28 +113,12 @@ def image(output_file,
     session.printOptions.setValues(vpDecorations=abaqusConstants.OFF)
     session.pngOptions.setValues(imageSize=image_size)
 
-    output_format = return_abaqus_constant_or_exit(output_file_extension)
+    output_format = return_abaqus_constant(output_file_extension)
     if output_format is None:
         print >> sys.__stderr__, "{}".format("Abaqus does not recognize the output extension '{}'".format(output_file_extension))
 
     session.printToFile(fileName=output_file_stem, format=output_format,
                         canvasObjects=(session.viewports['Viewport: 1'],))
-
-
-def print_exception_message(function):
-    """Decorate a function to catch bare exception and instead call sys.exit with the message
-
-    :param function: function to decorate
-    """
-    @functools.wraps(function)
-    def wrapper(*args, **kwargs):
-        output = None
-        try:
-            output = function(*args, **kwargs)
-        except Exception as err:
-            print >> sys.__stderr__, "{}".format(err)
-        return output
-    return wrapper
 
 
 def return_abaqus_constant(search):
@@ -147,17 +131,15 @@ def return_abaqus_constant(search):
     :return value: abaqusConstants attribute
     :rtype: abaqusConstants.<search>
     """
-    search = search.upper()
-    if hasattr(abaqusConstants, search):
-        attribute = getattr(abaqusConstants, search)
-    else:
-        raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
-    return attribute
-
-
-@print_exception_message
-def return_abaqus_constant_or_exit(*args, **kwargs):
-    return return_abaqus_constant(*args, **kwargs)
+    try:
+        search = search.upper()
+        if hasattr(abaqusConstants, search):
+            attribute = getattr(abaqusConstants, search)
+        else:
+            raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
+        return attribute
+    except Exception as err:
+        print >> sys.__stderr__, "{}".format(err)
 
 
 def get_parser():
