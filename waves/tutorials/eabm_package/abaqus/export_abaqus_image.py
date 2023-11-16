@@ -10,17 +10,17 @@ import abaqusConstants
 import abaqus_journal_utilities
 
 
-image_default_x_angle = 0.
-image_default_y_angle = 0.
-image_default_z_angle = 0.
-image_default_image_size = (1920, 1080)
-image_default_model_name = "Model-1"
-image_default_part_name = "Part-1"
-image_cli_help = "Save an image of an Abaqus model"
-image_cli_description = "Save an assembly view image of an Abaqus model from an input or CAE file"
+default_x_angle = 0.
+default_y_angle = 0.
+default_z_angle = 0.
+default_image_size = (1920, 1080)
+default_model_name = "Model-1"
+default_part_name = "Part-1"
+cli_help = "Save an image of an Abaqus model"
+cli_description = "Save an assembly view image of an Abaqus model from an input or CAE file"
 
 # One time dump from session.viewports['Viewport: 1'].colorMappings.keys()) to stay Python 3 compatible
-image_color_map_choices = [
+color_map_choices = [
     'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance',
     'Element set', 'Averaging region', 'Element type', 'Default', 'Assembly', 'Part geometry', 'Load', 'Boundary condition',
     'Interaction', 'Constraint', 'Property', 'Meshability', 'Instance type', 'Set', 'Surface', 'Internal set',
@@ -29,13 +29,13 @@ image_color_map_choices = [
 
 
 def main(input_file, output_file,
-         x_angle=image_default_x_angle,
-         y_angle=image_default_y_angle,
-         z_angle=image_default_z_angle,
-         image_size=image_default_image_size,
-         model_name=image_default_model_name,
-         part_name=image_default_part_name,
-         color_map=image_color_map_choices[0]):
+         x_angle=default_x_angle,
+         y_angle=default_y_angle,
+         z_angle=default_z_angle,
+         image_size=default_image_size,
+         model_name=default_model_name,
+         part_name=default_part_name,
+         color_map=color_map_choices[0]):
     """Wrap image with file input handling
 
     :param str input_file: Abaqus input file. Suports ``*.inp`` and ``*.cae``.
@@ -67,13 +67,13 @@ def main(input_file, output_file,
 
 
 def image(output_file,
-          x_angle=image_default_x_angle,
-          y_angle=image_default_y_angle,
-          z_angle=image_default_z_angle,
-          image_size=image_default_image_size,
-          model_name=image_default_model_name,
-          part_name=image_default_part_name,
-          color_map=image_color_map_choices[0]):
+          x_angle=default_x_angle,
+          y_angle=default_y_angle,
+          z_angle=default_z_angle,
+          image_size=default_image_size,
+          model_name=default_model_name,
+          part_name=default_part_name,
+          color_map=color_map_choices[0]):
     """Script for saving an assembly view image (colored by material) for a given Abaqus input file.
 
     The color map is set to color by material. Finally, viewport is set to fit the view to the viewport screen.
@@ -128,19 +128,19 @@ def get_parser():
                         help='Abaqus input file. Supports ``*.inp`` and ``*.cae``.')
     parser.add_argument('--output-file', type=str, required=True,
                         help='Output image from the Abaqus viewport. Supports ``*.png`` and ``*.svg``.')
-    parser.add_argument('--x-angle', type=float, default=image_default_x_angle,
+    parser.add_argument('--x-angle', type=float, default=default_x_angle,
                         help='Viewer rotation about X-axis in degrees (default: %(default)s)')
-    parser.add_argument('--y-angle', type=float, default=image_default_y_angle,
+    parser.add_argument('--y-angle', type=float, default=default_y_angle,
                         help='Viewer rotation about Y-axis in degrees (default: %(default)s)')
-    parser.add_argument('--z-angle', type=float, default=image_default_z_angle,
+    parser.add_argument('--z-angle', type=float, default=default_z_angle,
                         help='Viewer rotation about Z-axis in degrees (default: %(default)s)')
-    parser.add_argument('--image-size', nargs=2, type=int, default=image_default_image_size,
+    parser.add_argument('--image-size', nargs=2, type=int, default=default_image_size,
                         help="Image size in pixels (X, Y) (default: %(default)s)")
-    parser.add_argument('--model-name', type=str, default=image_default_model_name,
+    parser.add_argument('--model-name', type=str, default=default_model_name,
                         help="Abaqus model name (default: %(default)s)")
-    parser.add_argument('--part-name', type=str, default=image_default_part_name,
+    parser.add_argument('--part-name', type=str, default=default_part_name,
                         help="Abaqus part name (default: %(default)s)")
-    parser.add_argument('--color-map', type=str, choices=image_color_map_choices, default=image_color_map_choices[0],
+    parser.add_argument('--color-map', type=str, choices=color_map_choices, default=color_map_choices[0],
                         help="Color map (default: %(default)s)")
     return parser
 
