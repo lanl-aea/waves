@@ -1,5 +1,4 @@
 import re
-import sys
 
 import abaqusConstants
 
@@ -25,24 +24,6 @@ def export_mesh(model_object, part_name, orphan_mesh_file):
     part_definition = orphan_mesh[0]
     with open('{}.inp'.format(orphan_mesh_file), 'w') as output:
         output.write(part_definition[1].strip())
-
-
-def return_abaqus_constant(search):
-    """If search is found in the abaqusConstants module, return the abaqusConstants object.
-
-    Raise a ValueError if the search string is not found.
-
-    :param str search: string to search in the abaqusConstants module attributes
-
-    :return value: abaqusConstants attribute
-    :rtype: abaqusConstants.<search>
-    """
-    search = search.upper()
-    if hasattr(abaqusConstants, search):
-        attribute = getattr(abaqusConstants, search)
-    else:
-        raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
-    return attribute
 
 
 # Comment used in tutorial code snippets: marker-1
