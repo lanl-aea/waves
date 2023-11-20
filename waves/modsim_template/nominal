@@ -88,7 +88,8 @@ images.extend(env.AbaqusJournal(
     target=[f"{model}_compression.png"],
     source=[str(eabm_package_abspath / "export_abaqus_image.py")] + solve_source_list,
     journal_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
-                    f"--model-name {model} --part-name {model}"
+                    "--model-name ${model} --part-name ${model}",
+    model=model
 ))
 
 # Abaqus Solve
