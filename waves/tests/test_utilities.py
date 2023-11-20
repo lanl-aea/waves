@@ -1,4 +1,6 @@
 import pathlib
+from unittest.mock import patch
+from contextlib import nullcontext as does_not_raise
 
 import pytest
 
@@ -45,7 +47,7 @@ def test_quote_spaces_in_path(path, expected):
 
 
 def test_search_commands():
-    """Test :meth:`turbo_turtle._utilities.search_command`"""
+    """Test :meth:`waves._utilities.search_command`"""
     with patch("shutil.which", return_value=None) as shutil_which:
         command_abspath = _utilities.search_commands(["notfound"])
         assert command_abspath is None
@@ -72,8 +74,8 @@ find_command = {
                          find_command.values(),
                          ids=find_command.keys())
 def test_find_command(options, found, outcome):
-    """Test :meth:`turbo_turtle._utilities.find_command`"""
-    with patch("turbo_turtle._utilities.search_commands", return_value=found), outcome:
+    """Test :meth:`waves._utilities.find_command`"""
+    with patch("waves._utilities.search_commands", return_value=found), outcome:
         try:
             command_abspath = _utilities.find_command(options)
             assert command_abspath == found

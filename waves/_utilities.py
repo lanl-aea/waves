@@ -1,4 +1,6 @@
+import shutil
 import pathlib
+import platform
 
 
 def _quote_spaces_in_path(path):
