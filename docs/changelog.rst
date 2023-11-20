@@ -33,6 +33,8 @@ Enhancements
   e.g. during parameter studies (:issue:`560`, :merge:`694`). By `Kyle Brindley`_.
 - More robust user provided stdout file handling and allow multiple targets with the same file stem (:issue:`556`,
   :merge:`696`). By `Kyle Brindley`_.
+- More robust search for Cubit bin for variations on the executable relationship to bin and MacOS installation directory
+  names (:issue:`569`, :merge:`702`). By `Kyle Brindley`_.
 
 ******************
 0.7.5 (2023-10-27)
