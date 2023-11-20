@@ -37,15 +37,12 @@ def return_abaqus_constant(search):
     :return value: abaqusConstants attribute
     :rtype: abaqusConstants.<search>
     """
-    try:
-        search = search.upper()
-        if hasattr(abaqusConstants, search):
-            attribute = getattr(abaqusConstants, search)
-        else:
-            raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
-        return attribute
-    except Exception as err:
-        print >> sys.__stderr__, "{}".format(err)
+    search = search.upper()
+    if hasattr(abaqusConstants, search):
+        attribute = getattr(abaqusConstants, search)
+    else:
+        raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
+    return attribute
 
 
 # Comment used in tutorial code snippets: marker-1
