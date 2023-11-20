@@ -14,8 +14,8 @@ import SCons.Environment
 import SCons.Node
 import SCons.Scanner
 
+from waves import _utilities
 from waves.abaqus import odb_extract
-from waves._utilities import _quote_spaces_in_path
 from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions
@@ -376,7 +376,7 @@ def find_program(names, env):
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
     if first_found_path:
-        first_found_path = str(_quote_spaces_in_path(first_found_path))
+        first_found_path = str(_utilities._quote_spaces_in_path(first_found_path))
     return first_found_path
 
 
@@ -431,7 +431,7 @@ def add_cubit(names, env):
     """
     first_found_path = add_program(names, env)
     if first_found_path:
-        cubit_bin = _utilities.find_cubit_bin([cubit_program])
+        cubit_bin = _utilities.find_cubit_bin([first_found_path])
         cubit_python_library_dir = cubit_bin / "python3"
         env.PrependENVPath("PYTHONPATH", str(cubit_bin))
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
