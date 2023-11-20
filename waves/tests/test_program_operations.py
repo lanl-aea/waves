@@ -98,16 +98,21 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
     original_path = env["ENV"]["PATH"]
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+    if first_found_path is not None:
+        find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
+    else:
+        find_cubit_bin_return = None
+    with patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return), \
+         patch("SCons.SConf.SConfBase", return_value=mock_conf), \
          patch("pathlib.Path.exists", return_value=True):
         program = scons_extensions.add_cubit(names, env)
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent
-        cubit_pythonpath = parent_path / "bin"
-        cubit_library_path = cubit_pythonpath / "python3"
+        cubit_bin = parent_path / "bin"
+        cubit_library_path = cubit_bin / "python3"
         assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
-        assert str(cubit_pythonpath) == env["ENV"]["PYTHONPATH"].split(os.pathsep)[0]
+        assert str(cubit_bin) == env["ENV"]["PYTHONPATH"].split(os.pathsep)[0]
         assert str(cubit_library_path) == env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0]
     else:
         assert original_path == env["ENV"]["PATH"]
