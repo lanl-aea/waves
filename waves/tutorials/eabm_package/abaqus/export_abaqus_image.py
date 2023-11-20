@@ -132,7 +132,6 @@ def get_parser():
     file_name = inspect.getfile(lambda: None)
     base_name = os.path.basename(file_name)
     prog = "abaqus cae -noGui {} --".format(base_name)
-    cli_description = "Export an image of an Abaqus model"
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument('--input-file', type=str, required=True,
                         help='Abaqus input file. Supports ``*.inp`` and ``*.cae``.')
