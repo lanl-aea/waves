@@ -164,3 +164,4 @@ if __name__ == "__main__":
         part_name=args.part_name,
         color_map=args.color_map
     ))
+
