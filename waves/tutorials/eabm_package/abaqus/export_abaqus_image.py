@@ -83,9 +83,10 @@ def image(output_file,
           model_name=default_model_name,
           part_name=default_part_name,
           color_map=color_map_choices[0]):
-    """Script for saving an assembly view image (colored by material) for a given Abaqus input file.
+    """Save an assembly view image of an Abaqus model from an input or CAE file.
 
-    The color map is set to color by material. Finally, viewport is set to fit the view to the viewport screen.
+    The viewer window is adjusted by the provided x, y, and z angles and the viewport is set to fit the assembly prior
+    to saving an image of the viewport screen.
 
     If the model assembly has no instances, use ``part_name`` to generate one. The ``input_file`` is not modified to
     include this generated instance.
