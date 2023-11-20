@@ -25,7 +25,6 @@ default_z_angle = 0.
 default_image_size = (1920, 1080)
 default_model_name = "Model-1"
 default_part_name = "Part-1"
-cli_help = "Save an image of an Abaqus model"
 cli_description = "Save an assembly view image of an Abaqus model from an input or CAE file"
 
 # One time dump from session.viewports['Viewport: 1'].colorMappings.keys()) to stay Python 3 compatible
