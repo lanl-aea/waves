@@ -126,7 +126,7 @@ def get_parser():
     parser.add_argument('--input-file', type=str, required=True,
                         help='Abaqus input file. Supports ``*.inp`` and ``*.cae``.')
     parser.add_argument('--output-file', type=str, required=True,
-                        help='Output image from the Abaqus viewport. Supports ``*.png`` and ``*.svg``.')
+                        help='Output image from the Abaqus viewport. Supports ``*.png``, ``*.svg`` and ``*.eps``.')
     parser.add_argument('--x-angle', type=float, default=default_x_angle,
                         help='Viewer rotation about X-axis in degrees (default: %(default)s)')
     parser.add_argument('--y-angle', type=float, default=default_y_angle,
