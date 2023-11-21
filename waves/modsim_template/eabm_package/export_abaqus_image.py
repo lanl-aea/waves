@@ -32,7 +32,11 @@ def main(input_file, output_file,
          model_name=default_model_name,
          part_name=default_part_name,
          color_map=color_map_choices[0]):
-    """Wrap image with file input handling
+    """Save an assembly view image of an Abaqus model from an input or CAE file.
+
+    Open an Abaqus CAE ``*.cae`` or input ``*.inp`` file and save an assembly view image.
+    Abaqus CAE files are copied to a temporary file before opening to avoid file modification, which is necessary for
+    compatibility with build systems such as SCons.
 
     :param str input_file: Abaqus input file. Suports ``*.inp`` and ``*.cae``.
     :param str output_file: Output image file. Supports ``*.png`` and ``*.svg``.
