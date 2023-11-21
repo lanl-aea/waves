@@ -31,6 +31,15 @@ rectangle_mesh.py
     :show-inheritance:
     :synopsis: The Abaqus rectangle mesh script
 
+export_abaqus_image.py
+======================
+
+.. automodule:: eabm_package.export_abaqus_image
+    :noindex:
+    :members:
+    :show-inheritance:
+    :synopsis: The Abaqus image export script
+
 .. _sphinx_abaqus_journal_utilities_api:
 
 abaqus_journal_utilities.py

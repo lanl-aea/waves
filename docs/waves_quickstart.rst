@@ -79,7 +79,7 @@ Output Files
    $ pwd
    /home/roppenheimer/waves-tutorials/waves_quickstart
    $ tree build/
-   build
+   build/
    ├── abaqus_journal_utilities.py
    ├── abaqus_journal_utilities.pyc
    ├── abaqus.rpy
