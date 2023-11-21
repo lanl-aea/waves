@@ -23,7 +23,7 @@ rectangle_mesh.py
     :ref: eabm_package.rectangle_mesh.get_parser
 
 export_abaqus_image.py
-=================
+======================
 
 .. argparse::
     :ref: eabm_package.export_abaqus_image.get_parser

@@ -32,7 +32,7 @@ rectangle_mesh.py
     :synopsis: The Abaqus rectangle mesh script
 
 export_abaqus_image.py
-=================
+======================
 
 .. automodule:: eabm_package.export_abaqus_image
     :noindex:
