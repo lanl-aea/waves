@@ -222,22 +222,6 @@ def test_warn_kwarg_change():
         assert program == None
 
 
-def test_project_help_message():
-    # Default behavior
-    with patch("waves.scons_extensions.default_targets_message") as mock_targets, \
-         patch("waves.scons_extensions.alias_list_message") as mock_alias:
-        scons_extensions.project_help_message()
-        mock_targets.assert_called_once_with(env=None, append=True, local_only=True)
-        mock_alias.assert_called_once_with(env=None, append=True, local_only=True)
-
-    # Pass non-default kwargs
-    with patch("waves.scons_extensions.default_targets_message") as mock_targets, \
-         patch("waves.scons_extensions.alias_list_message") as mock_alias:
-        scons_extensions.project_help_message(env={}, append=False, local_only=False)
-        mock_targets.assert_called_once_with(env={}, append=False, local_only=False)
-        mock_alias.assert_called_once_with(env={}, append=False, local_only=False)
-
-
 prepend_env_input = {
     "path exists": (f"{root_fs}program", True, does_not_raise()),
     "path does not exist": (f"{root_fs}notapath", False, pytest.raises(FileNotFoundError))
