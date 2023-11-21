@@ -35,6 +35,9 @@ Enhancements
   :merge:`696`). By `Kyle Brindley`_.
 - More robust search for Cubit bin for variations on the executable relationship to bin and MacOS installation directory
   names (:issue:`569`, :merge:`702`). By `Kyle Brindley`_.
+- Default to local project help message and an override option in ``waves.scons_extensions.project_help_message`` taking
+  advantage of an SCons 4.6.0 ``env.Help()`` keyword argument update. Backward compatibility with older versions of
+  SCons is preserved (:issue:`571`, :merge:`703`). By `Kyle Brindley`_.
 
 ******************
 0.7.5 (2023-10-27)
