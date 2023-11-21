@@ -99,24 +99,23 @@ def image(output_file,
     if len(assembly.instances.keys()) == 0:
         part = abaqus.mdb.models[model_name].parts[part_name]
         assembly.Instance(name=part_name, part=part, dependent=abaqusConstants.ON)
-    session.viewports['Viewport: 1'].assemblyDisplay.setValues(
+    viewport = session.viewports['Viewport: 1']
+    viewport.assemblyDisplay.setValues(
         optimizationTasks=abaqusConstants.OFF, geometricRestrictions=abaqusConstants.OFF,
         stopConditions=abaqusConstants.OFF)
-    session.viewports['Viewport: 1'].setValues(displayedObject=assembly)
-    session.viewports['Viewport: 1'].view.rotate(xAngle=x_angle, yAngle=y_angle, zAngle=z_angle,
-                                                 mode=abaqusConstants.MODEL)
-    session.viewports['Viewport: 1'].view.fitView()
-    session.viewports['Viewport: 1'].enableMultipleColors()
-    session.viewports['Viewport: 1'].setColor(initialColor='#BDBDBD')
-    cmap = session.viewports['Viewport: 1'].colorMappings[color_map]
-    session.viewports['Viewport: 1'].setColor(colorMapping=cmap)
-    session.viewports['Viewport: 1'].disableMultipleColors()
+    viewport.setValues(displayedObject=assembly)
+    viewport.view.rotate(xAngle=x_angle, yAngle=y_angle, zAngle=z_angle, mode=abaqusConstants.MODEL)
+    viewport.view.fitView()
+    viewport.enableMultipleColors()
+    viewport.setColor(initialColor='#BDBDBD')
+    cmap = viewport.colorMappings[color_map]
+    viewport.setColor(colorMapping=cmap)
+    viewport.disableMultipleColors()
     session.printOptions.setValues(vpDecorations=abaqusConstants.OFF)
     session.pngOptions.setValues(imageSize=image_size)
 
     output_format = eabm_package.abaqus_journal_utilities.return_abaqus_constant(output_file_extension)
-    session.printToFile(fileName=output_file_stem, format=output_format,
-                        canvasObjects=(session.viewports['Viewport: 1'],))
+    session.printToFile(fileName=output_file_stem, format=output_format, canvasObjects=(viewport,))
 
 
 def get_parser():
