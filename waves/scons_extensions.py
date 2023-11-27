@@ -244,7 +244,7 @@ def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
     return program
 
 
-def project_help_message(env=None, append=True, local_only=True):
+def project_help_message(env=None, append=True, keep_local=True):
     """Add default targets and alias lists to project help message
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
@@ -255,13 +255,13 @@ def project_help_message(env=None, append=True, local_only=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
-    :param bool local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    default_targets_message(env=env, append=append, local_only=local_only)
-    alias_list_message(env=env, append=append, local_only=local_only)
+    default_targets_message(env=env, append=append, keep_local=keep_local)
+    alias_list_message(env=env, append=append, keep_local=keep_local)
 
 
-def default_targets_message(env=None, append=True, local_only=True):
+def default_targets_message(env=None, append=True, keep_local=True):
     """Add a default targets list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -277,7 +277,7 @@ def default_targets_message(env=None, append=True, local_only=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
-    :param bool local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
     import SCons.Script  # Required to get a full construction environment
     if not env:
@@ -286,12 +286,12 @@ def default_targets_message(env=None, append=True, local_only=True):
     for target in SCons.Script.DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
     try:
-        env.Help(default_targets_help, append=append, local_only=local_only)
+        env.Help(default_targets_help, append=append, keep_local=keep_local)
     except TypeError as err:
         env.Help(default_targets_help, append=append)
 
 
-def alias_list_message(env=None, append=True, local_only=True):
+def alias_list_message(env=None, append=True, keep_local=True):
     """Add the alias list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -307,7 +307,7 @@ def alias_list_message(env=None, append=True, local_only=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
-    :param bool local_only: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
     import SCons.Script  # Required to get a full construction environment
     if not env:
@@ -316,7 +316,7 @@ def alias_list_message(env=None, append=True, local_only=True):
     for alias in SCons.Node.Alias.default_ans:
         alias_help += f"    {alias}\n"
     try:
-        env.Help(alias_help, append=append, local_only=local_only)
+        env.Help(alias_help, append=append, keep_local=keep_local)
     except TypeError:
         env.Help(alias_help, append=append)
 
