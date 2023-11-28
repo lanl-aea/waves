@@ -244,7 +244,7 @@ def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
     return program
 
 
-def project_help_message(env=None, append=True):
+def project_help_message(env=None, append=True, keep_local=True):
     """Add default targets and alias lists to project help message
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
@@ -255,12 +255,13 @@ def project_help_message(env=None, append=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    default_targets_message(env=env, append=append)
-    alias_list_message(env=env, append=append)
+    default_targets_message(env=env, append=append, keep_local=keep_local)
+    alias_list_message(env=env, append=append, keep_local=keep_local)
 
 
-def default_targets_message(env=None, append=True):
+def default_targets_message(env=None, append=True, keep_local=True):
     """Add a default targets list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -276,6 +277,7 @@ def default_targets_message(env=None, append=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
     import SCons.Script  # Required to get a full construction environment
     if not env:
@@ -283,10 +285,13 @@ def default_targets_message(env=None, append=True):
     default_targets_help = "\nDefault Targets:\n"
     for target in SCons.Script.DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
-    env.Help(default_targets_help, append=append)
+    try:
+        env.Help(default_targets_help, append=append, keep_local=keep_local)
+    except TypeError as err:
+        env.Help(default_targets_help, append=append)
 
 
-def alias_list_message(env=None, append=True):
+def alias_list_message(env=None, append=True, keep_local=True):
     """Add the alias list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -302,6 +307,7 @@ def alias_list_message(env=None, append=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
     import SCons.Script  # Required to get a full construction environment
     if not env:
@@ -309,7 +315,10 @@ def alias_list_message(env=None, append=True):
     alias_help = "\nTarget Aliases:\n"
     for alias in SCons.Node.Alias.default_ans:
         alias_help += f"    {alias}\n"
-    env.Help(alias_help, append=append)
+    try:
+        env.Help(alias_help, append=append, keep_local=keep_local)
+    except TypeError:
+        env.Help(alias_help, append=append)
 
 
 def append_env_path(program, env):
