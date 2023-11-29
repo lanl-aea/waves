@@ -53,6 +53,7 @@
    :maxdepth: 1
    :caption: User Manual
 
+   abstract
    installation
    tutorial_introduction
    tutorial_quickstart

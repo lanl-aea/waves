@@ -110,4 +110,7 @@ from SCons.Node.Alias import default_ans
 alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
     alias_help += f"    {alias}\n"
-Help(alias_help, append=True)
+try:
+    Help(alias_help, append=True, keep_local=True)
+except TypeError as err:
+    Help(alias_help, append=True)
