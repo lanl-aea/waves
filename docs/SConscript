@@ -110,6 +110,7 @@ documentation_file_list = [
     'release_philosophy.rst',
     'scons_quickstart.rst',
     'scons_multiactiontask.rst',
+    'abstract.rst',
     'installation.rst',
     'tutorial_introduction.rst',
     'tutorial_quickstart.rst',
