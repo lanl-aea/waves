@@ -12,6 +12,11 @@ New Features
 ============
 - Prototype Sphinx builders (:issue:`564`, :merge:`701`). By `Kyle Brindley`_.
 
+Bug fixes
+=========
+- Fix abaqus_file_parser to handle case where history region data appears immediately after step
+  metadata (:issue:`576`, :merge:`705`). By `Prabhu Khalsa`_.
+
 Documentation
 =============
 - Add PEP-8 reference and citation to the first two tutorials (:issue:`524`, :merge:`688`). By `Kyle Brindley`_.

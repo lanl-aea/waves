@@ -1519,7 +1519,8 @@ class OdbReportFileParser(AbaqusFileParser):
                 if self.format == 'extract':
                     self.current_step_name = step['name']
                 while not line.strip().startswith('Total number of frames') and \
-                        not line.strip().startswith('Number of history regions') and line != "":
+                        not line.strip().startswith('Number of history regions') and \
+                        not line.strip().startswith('History Region') and line != "":
                     line = f.readline()
                     if ',' in line:
                         key, value = line.split(',', 1)
@@ -1534,7 +1535,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 if line.strip().startswith('Number of history regions'):
                     number_of_history_regions = int(line.split('=')[1].strip())
                 step['historyRegions'] = dict()
-                line = self.parse_history_regions(f, step['historyRegions'], number_of_history_regions)
+                line = self.parse_history_regions(f, line, step['historyRegions'], number_of_history_regions)
                 steps[step['name']] = step
                 self.current_step_count += 1
             else:
@@ -2018,16 +2019,18 @@ class OdbReportFileParser(AbaqusFileParser):
                 values[step_number][frame_number] = [[None for _ in range(data_length)] for _ in range(position_length)]
         return
 
-    def parse_history_regions(self, f, regions, number_of_history_regions):
+    def parse_history_regions(self, f, line, regions, number_of_history_regions):
         """Parse the section that contains history regions
 
         :param file object f: open file
+        :param str line: current line of file
         :param dict regions: dict for storing the history region data
         :param int number_of_history_regions: number of history regions to parse
         :return: current line of file
         :rtype: str
         """
-        line = f.readline()
+        if not line.strip().startswith('History Region'):
+            line = f.readline()
         history_region_summary = False
         while not line.startswith('-----------------------------------------------------------') and line != "":
             if line.strip().startswith('History Region'):
