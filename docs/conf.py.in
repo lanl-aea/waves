@@ -109,7 +109,7 @@ preamble = """
 """
 
 # Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
-latex_basename = f"@documentation_pdf@"
+latex_basename = str(pathlib.Path("@documentation_pdf@").with_suffix(".tex"))
 
 maketitle = f"""
 \\DeclareRobustCommand{{\\and}}{{
