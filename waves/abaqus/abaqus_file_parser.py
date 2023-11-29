@@ -2023,7 +2023,7 @@ class OdbReportFileParser(AbaqusFileParser):
         """Parse the section that contains history regions
 
         :param file object f: open file
-        :param str line: current line
+        :param str line: current line of file
         :param dict regions: dict for storing the history region data
         :param int number_of_history_regions: number of history regions to parse
         :return: current line of file
