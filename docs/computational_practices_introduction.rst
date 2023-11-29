@@ -6,8 +6,8 @@ Introduction
 
 This manual will attempt to motivate the use of an `automated build system`_ for the purposes of computational science
 and engineering. As part of this motivation, the surrounding computational practices of version control, documentation,
-compute environment management, and regression testing will also be addressed as applied to the practice of
-computational engineering. Specifically, this manual intends to motivate the adoption of these traditional software
+compute environment management, regression testing, and data archival will also be addressed as applied to the practice
+of computational engineering. Specifically, this manual intends to motivate the adoption of these traditional software
 engineering practices for use in research and production engineering simulation projects.
 
 This manual is not the first such effort in the greater scientific computing community. In fact, the authors relied
