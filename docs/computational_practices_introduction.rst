@@ -12,7 +12,7 @@ engineering practices for use in research and production engineering simulation 
 
 This manual is not the first such effort in the greater scientific computing community. In fact, the authors relied
 heavily on the lesson plans of the `Software Carpentry`_, established to teach computing skills to researchers in 1998
-:cite:`SoftwareCarpentry`. As the intention for this manual is to lay out fundamental practices of engineering
+:cite:`SoftwareCarpentry`. As the intention for this manual is to motivate the fundamental practices of engineering
 computing, it will not attempt to fully teach the underlying concepts and will instead reference the well designed
 lesson plans of the `Software Carpentry`_.
 
