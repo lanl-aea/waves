@@ -108,14 +108,10 @@ parameter_study_args = {  #               subcommand,         class_name,       
                          ids=list(parameter_study_args.keys()))
 def test_parameter_study(subcommand, class_name, argument, option, argument_value):
     # Help/usage. Should not raise
-    with patch('sys.argv', ['main.py', subcommand, '-h']):
-        exit_code = None
-        try:
-            main.main()
-        except SystemExit as err:
-            exit_code = err.code
-        finally:
-            assert exit_code == 0
+    with patch('sys.argv', ['main.py', subcommand, '-h']), \
+         pytest.raises(SystemExit) as err:
+        main.main()
+        assert err.value.code == 0
 
     # Run main code. No SystemExit expected.
     arg_list = ['main.py', subcommand, 'dummy.file']
