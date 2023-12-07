@@ -86,13 +86,13 @@ class AbaqusFileParser(ABC):
         if self.verbose:
             print(message)
 
-    def print_critical(self, message):
+    @staticmethod
+    def print_critical(message):
         """Print a critical message and exit with an exception
 
         :param str message: string with a message to print
         """
-        print(message)
-        raise SystemExit(-1)
+        raise SystemExit(message)
 
 
 class MsgFileParser(AbaqusFileParser):

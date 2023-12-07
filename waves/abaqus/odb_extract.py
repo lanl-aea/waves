@@ -245,11 +245,9 @@ def print_critical(message):
     """
     Log a message to the screen and exit
 
-    :param bool verbose: Whether to print or not
     :param str message: message to print
     """
-    print(message)
-    raise SystemExit(-1)
+    raise SystemExit(message)
 
 
 def main():
