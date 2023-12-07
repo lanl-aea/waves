@@ -26,7 +26,7 @@ def test_main():
          patch('waves.abaqus.abaqus_file_parser.StaFileParser'), \
          pytest.raises(SystemExit) as err:
         sta_parse.main()
-        assert "sample.sta does not exist" in str(err.value.args)
+    assert err.value.code == -1
 
     path_exists = [True, True]
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
