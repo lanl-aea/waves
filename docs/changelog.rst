@@ -37,7 +37,7 @@ Documentation
 
 Internal Changes
 ================
-- Replaced all mocks of sys exit with ``pytest.raises(SystemExit)`` (:issue:`568`, :merge:`706`). By `Sergio Cordova`_.
+- Require exact exceptions during unit testing of error handling (:issue:`568`, :merge:`706`). By `Sergio Cordova`_.
 
 Enhancements
 ============
