@@ -1435,7 +1435,7 @@ def abaqus_input_scanner():
     :rtype: SCons.Scanner.Scanner
     """
     flags = re.IGNORECASE
-    return _custom_scanner(r'input=(.+)$', ['.inp'], flags)
+    return _custom_scanner(r'^\*[^*]*input=(.+)$', ['.inp'], flags)
 
 
 def sphinx_scanner():
