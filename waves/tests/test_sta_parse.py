@@ -23,12 +23,10 @@ def test_get_parser():
 @pytest.mark.unittest
 def test_main():
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \
-         patch('builtins.print') as mock_print, \
-         patch('waves.abaqus.abaqus_file_parser.StaFileParser'):
-        try:
-            sta_parse.main()
-        except SystemExit:
-            assert "sample.sta does not exist" in str(mock_print.call_args)
+         patch('waves.abaqus.abaqus_file_parser.StaFileParser'), \
+         pytest.raises(SystemExit) as err:
+        sta_parse.main()
+    assert err.value.code == -1
 
     path_exists = [True, True]
     with patch('sys.argv', ['sta_parse.py', 'sample.sta']), \

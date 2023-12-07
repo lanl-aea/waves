@@ -33,7 +33,11 @@ Documentation
 - Added consistent tutorial directories (:issue:`562`, :merge:`699`). By `Sergio Cordova`_.
 - Added Abaqus part image script and images to the modsim_template (:issue:`423`, :merge:`700`). By `Sergio Cordova`_.
 - Add a brief abstract/'Why WAVES?' purpose statement to the documentation (:issue:`548`, :merge:`704`). By `Kyle
-  Brindley`
+  Brindley`.
+
+Internal Changes
+================
+- Require exact exceptions during unit testing of error handling (:issue:`568`, :merge:`706`). By `Sergio Cordova`_.
 
 Enhancements
 ============
