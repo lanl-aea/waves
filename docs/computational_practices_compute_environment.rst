@@ -51,9 +51,20 @@ self-hosted `custom conda channel`_.
 There are several engineering numeric solvers developed by the open-source community and some are even distributed by
 package managers, including `Conda`_. However, most commercial engineering analysis software is not packaged for a
 package manager and instead provides licenced installation media. In this case, it may be difficult to include the
-commercial software in a virtual environment. For collaborative efforts and version controlled consistency, system
-``PATH`` management with `Environment modules`_ and the ``module`` software can augment the virtual environnment. The
-`WAVES`_ project implements a version controlled modulefile for the ``module`` command to manage the Abaqus and Cubit
-software versions in a consistent manner between systems. When deployed with a shared compute environment, the
-``module`` and `Conda`_ solutions provide an easy-to-use entry point for new developers unfamiliar with compute
-environment management.
+commercial software in a virtual environment.
+
+Most :ref:`build_system` software offer solutions to executable path management separately from the activated virtual
+environment and allow mixed use of software discovered on ``PATH`` and specified by absolute path. In the `SCons`_
+builder system, users are encouraged to explicitly specify software without relying on ``PATH`` to avoid ambiguous
+system configuration requirements. Another benefit of the explicit `SCons construction environment`_ is the ability to
+define tasks with mutually incompatible execution environments. For instance, if one portion of the workflow requires a
+numeric solver with dependencies that are incompatible with the post-processing task, `SCons`_ can configure both tasks
+with a unique construction environment :cite:`scons-user`. This allows the project to maintain a single, uninterrupted
+workflow, despite the conflicting software requirements. This approach is demonstrated in several |PROJECT|
+:ref:`supplemental_lessons` using the :meth:`waves.scons_extensions.shell_environment` function.
+
+A more generalized solution has been adopted by high performance computing, which often requires the system
+administrators to provide multiple, conflicting versions of software side-by-side. `Environment modules`_ and
+the ``module`` software help users manage a project-specific environment on a multi-user compute server. For
+collaborative efforts and version controlled consistency, system ``PATH`` management with a project specific module file
+can help tie together system resources and a virtual environment in a common way for all contributors.

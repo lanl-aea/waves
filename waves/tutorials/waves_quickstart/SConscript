@@ -25,6 +25,6 @@ target = env.AbaqusSolver(
     job_name="rectangle_compression",
     abaqus_options="-double both"
 )
-                                                                                                                         
-# Collector alias named after the model simulation                                                                       
+
+# Collector alias named after the model simulation
 env.Alias('rectangle', target)

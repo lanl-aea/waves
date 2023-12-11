@@ -29,7 +29,11 @@ References
 
 * :ref:`testing`
 * `SCons Alias`_ :cite:`scons-user`
-* Gitlab CI: https://docs.gitlab.com/ee/ci/ :cite:`gitlab-ci`
+* Continuous Integration software
+
+  * GitHub Actions: https://docs.github.com/en/actions :cite:`github-actions`
+  * Gitlab CI: https://docs.gitlab.com/ee/ci/ :cite:`gitlab-ci`
+  * Bitbucket Pipelines: https://bitbucket.org/product/features/pipelines :cite:`bitbucket-pipelines`
 
 ***********
 Environment
@@ -268,8 +272,9 @@ Automation
 There are many tools that can help automate the execution of the modsim project regression tests. With the collector
 alias, those tools need only execute a single `SCons`_ command to perform the selected, lower cost tasks for simulation
 workflow verification, ``scons datacheck``. If `git`_ :cite:`git` is used as the version control system, developer
-operations software such as `Gitlab`_ :cite:`gitlab` provide continuous integration software that can automate
-verification tests on triggers, such as merge requests, or on a regular schedule.
+operations software such as `GitHub`_ :cite:`github`, `Gitlab`_ :cite:`gitlab`, and Atlassian's `Bitbucket`_
+:cite:`bitbucket` provide continuous integration software that can automate verification tests on triggers, such as
+merge requests, or on a regular schedule.
 
 .. TODO: template .gitlab-ci.yml file
 .. TODO: add references to alternative to gitlab

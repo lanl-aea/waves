@@ -14,6 +14,7 @@ simulation_variables = {
 }
 
 workflow = []
+remote_directory_prefix = pathlib.Path(env["remote_directory"])
 
 # Geometry/partition/mesh
 # TODO: separate the local and remote workflows into dedicated SConscript files that re-use the cubit workflow as in the
@@ -29,12 +30,13 @@ env.Alias("mesh", mesh)
 
 # SSH remote build on snow
 quinoa_installation = pathlib.Path(env["quinoa_installation"])
+remote_directory = remote_directory_prefix / "remote"
 target = env.SSHQuinoaSolver(
     target=["remote.stdout"],
     source=["flow.q", "box.exo"],
-    user=env["user"],
     charmrun=str(quinoa_installation / "charmrun"),
-    inciter=str(quinoa_installation / "inciter")
+    inciter=str(quinoa_installation / "inciter"),
+    remote_directory=str(remote_directory)
 )
 env.Alias("quinoa-remote", target)
 

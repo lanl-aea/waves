@@ -60,12 +60,11 @@ def test_odb_extract():
          patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
-         patch('builtins.print') as mock_print, \
-         patch('builtins.open', mock_open(read_data="data")):  # Test first critical error
-        try:
-            odb_extract.odb_extract(['sample.odb'], None)
-        except SystemExit:
-            assert "sample.odb does not exist" in str(mock_print.call_args)
+         patch('builtins.open', mock_open(read_data="data")), \
+         pytest.raises(SystemExit) as err:  # Test first critical error
+        odb_extract.odb_extract(['sample.odb'], None)
+    assert err.value.code != 0
+    assert "sample.odb does not exist" in str(err.value.args)
 
     with patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
          patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
@@ -74,19 +73,19 @@ def test_odb_extract():
          patch('waves.abaqus.odb_extract.print_warning') as mock_print, \
          patch('pathlib.Path.exists', return_value=True):  # Test warning after second critical error
         odb_extract.odb_extract(['sample'], None)
-        assert "sample is not an odb file" in str(mock_print.call_args_list[0])
+    assert err.value.code != 0
+    assert "sample.odb does not exist." in str(err.value.args)
 
     with patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
          patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
-         patch('builtins.print') as mock_print, \
-         patch('pathlib.Path.exists', return_value=True):  # Test second critical error
-        try:
-            odb_extract.odb_extract(['sample.odb'], None, odb_report_args='odbreport all invariants',
-                                    output_type='yaml', verbose=True)
-        except SystemExit:
-            assert "could not be parsed." in str(mock_print.call_args)
+         patch('pathlib.Path.exists', return_value=True), \
+         pytest.raises(SystemExit) as err:  # Test second critical error
+        odb_extract.odb_extract(['sample.odb'], None, odb_report_args='odbreport all invariants',
+                                output_type='yaml', verbose=True)
+    assert err.value.code != 0
+    assert "could not be parsed." in str(err.value.args)
 
     with patch('pathlib.Path.exists', return_value=True), \
          patch('builtins.open', mock_open(read_data="data")), \
@@ -94,12 +93,11 @@ def test_odb_extract():
          patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=['y', None, None]), \
          patch('sys.stdin', return_value='y'), \
-         patch('builtins.print') as mock_print, \
-         patch('waves.abaqus.odb_extract.run_external', return_value=[-1, b'', b'invalid command.']):
-        try:
-            odb_extract.odb_extract(['sample.odb'], None, odb_report_args="job=job_name odb=odb_filea ll")
-        except SystemExit:
-            assert "Abaqus odbreport command failed to execute" in str(mock_print.call_args)
+         patch('waves.abaqus.odb_extract.run_external', return_value=[-1, b'', b'invalid command.']), \
+         pytest.raises(SystemExit) as err:
+        odb_extract.odb_extract(['sample.odb'], None, odb_report_args="job=job_name odb=odb_filea ll")
+    assert err.value.code != 0
+    assert "Abaqus odbreport command failed to execute" in str(err.value.args)
 
     with patch('pathlib.Path.exists', side_effect=[True, True, True, False]), \
             patch('builtins.open', mock_open(read_data="data")), \
@@ -107,13 +105,12 @@ def test_odb_extract():
             patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
             patch('select.select', return_value=['y', None, None]), \
             patch('sys.stdin', return_value='y'), \
-            patch('builtins.print') as mock_print, \
             patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser') as mock_abaqus_file_parser, \
-            patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']):
-        try:
-            odb_extract.odb_extract(['sample.odb'], None, odb_report_args='odbreport all', output_type='yaml')
-        except SystemExit:
-            assert "does not exist" in str(mock_print.call_args)
+            patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']), \
+            pytest.raises(SystemExit) as err:
+        odb_extract.odb_extract(['sample.odb'], None, odb_report_args='odbreport all', output_type='yaml')
+    assert err.value.code != 0
+    assert "does not exist" in str(err.value.args)
 
     with patch('pathlib.Path.exists', return_value=True), \
             patch('builtins.open', mock_open(read_data="data")), \
@@ -183,13 +180,12 @@ def test_odb_extract():
          patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
          patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
-         patch('builtins.print') as mock_print, \
-         patch('pathlib.Path.exists', return_value=True):  # Test second critical error
+         patch('pathlib.Path.exists', return_value=True), \
+         pytest.raises(SystemExit) as err:  # Test second critical error
         # Test case where h5 file is requested, but error is raised
-        try:
-            odb_extract.odb_extract(['sample.odb'], None, output_type='h5')
-        except SystemExit:
-            assert "could not be parsed." in str(mock_print.call_args)
+        odb_extract.odb_extract(['sample.odb'], None, output_type='h5')
+    assert err.value.code != 0
+    assert "could not be parsed." in str(err.value.args)
 
 
 odb_report_arguments = { #odb_report_args,                      input_file,        job_name

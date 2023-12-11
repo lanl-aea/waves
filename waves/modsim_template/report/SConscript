@@ -59,17 +59,14 @@ report.extend(waves.scons_extensions.copy_substitute(
     substitution_dictionary=waves.scons_extensions.substitution_syntax(project_variables)))
 
 # PDF Report build task
-report_source_list = ["index.rst"] + [source_file.name.rstrip(".in") for source_file in report_copy_list]
-report_directory = Dir("latex")
-sphinx_options = "-W"
-report.extend(env.Command(
-    target=[report_directory],
-    source=report_source_list,
-    action=f"{env['sphinx_build']} -M latexpdf ${{TARGET.dir.abspath}} ${{TARGET.dir.abspath}} ${{sphinx_options}}",
-    sphinx_options=sphinx_options
+targets = [f"latex/{project_variables['report_pdf']}"]
+sources = ["index.rst"] + [source_file.name.rstrip(".in") for source_file in report_copy_list]
+report.extend(env.SphinxPDF(
+    target=targets,
+    source=sources,
 ))
-env.AlwaysBuild(report)
-env.Clean(report, report_directory)
+env.Clean(report, [Dir("latex")] + sources)
+env.Alias("report", report)
 
 # Collector alias to build the PDF report
 parent_directory = Dir(".").srcnode().name

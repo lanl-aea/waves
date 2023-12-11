@@ -13,9 +13,12 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 # Set project meta variables
 documentation_source_dir = 'docs'
 package_source_dir = 'waves'
+project_name = 'waves'
+version = setuptools_scm.get_version()
 project_variables = {
     'project_dir': Dir('.').abspath,
-    'version': setuptools_scm.get_version(),
+    'version': version,
+    'documentation_pdf': f"{project_name}-{version}.pdf",
     'tutorials_dir': 'waves/tutorials',
     'eabm_dir': 'eabm_package',
     'abaqus_dir': 'eabm_package/abaqus',
@@ -107,4 +110,7 @@ from SCons.Node.Alias import default_ans
 alias_help = "\nTarget Aliases:\n"
 for alias in default_ans:
     alias_help += f"    {alias}\n"
-Help(alias_help, append=True)
+try:
+    Help(alias_help, append=True, keep_local=True)
+except TypeError as err:
+    Help(alias_help, append=True)

@@ -7,7 +7,7 @@ import pathlib
 Import(['env', 'project_substitution_dictionary'])
 project_dir = pathlib.Path(env['project_dir'])
 
-# VVV Sphinx Scanner prototype
+# VVV Sphinx prototypes
 # TODO: boostrap from waves.scons_extensions.sphinx_scanner *after* the function is deployed on conda-forge
 # DO NOT 'bootstrap' by importing the current/repository version of WAVES. That's not bootstrapping, it's a bug factory
 import re
@@ -25,24 +25,36 @@ def sphinx_scanner():
         return includes
     custom_scanner = SCons.Scanner.Scanner(function=regex_scan, skeys=suffixes, recursive=suffix_only)
     return custom_scanner
-# ^^^ Sphinx Scanner prototype
 
 
-# VVV Sphinx Builder prototype
 def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
     sphinx_builder = Builder(
-        action=["${program} ${sphinx_options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
+        action=["${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
         program=program,
-        sphinx_options=options,
+        options=options,
         builder=builder,
         tags=tags
     )
     return sphinx_builder
-# ^^^ Sphinx Builder prototype
+
+
+def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags=""):
+    sphinx_latex = SCons.Builder.Builder(
+        action=["${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"],
+        program=program,
+        options=options,
+        builder=builder,
+        tags=tags
+    )
+    return sphinx_latex
+# ^^^ Sphinx prototypes
 
 
 env.Append(SCANNERS=sphinx_scanner())
-env.Append(BUILDERS={"SphinxBuild": sphinx_build(program=env["sphinx_build"], options="-W")})
+env.Append(BUILDERS={
+    "SphinxBuild": sphinx_build(program=env["sphinx_build"], options="-W"),
+    "SphinxPDF": sphinx_latexpdf(program=env["sphinx_build"], options="-W")
+})
 
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
@@ -91,12 +103,14 @@ documentation_file_list = [
     'computational_practices_build_system.rst',
     'computational_practices_compute_environment.rst',
     'computational_practices_regression_testing.rst',
+    'computational_practices_archival.rst',
     'devops.rst',
     'glossary.rst',
     'index.rst',
     'release_philosophy.rst',
     'scons_quickstart.rst',
     'scons_multiactiontask.rst',
+    'abstract.rst',
     'installation.rst',
     'tutorial_introduction.rst',
     'tutorial_quickstart.rst',
@@ -136,7 +150,6 @@ documentation_file_list = [
 # Copy tutorial files to the build/docs directory
 tutorials_dir = project_dir / pathlib.Path(env['tutorials_dir'])
 tutorial_files_list = [
-    tutorials_dir / 'scons_multiactiontask_SConstruct',
     tutorials_dir / 'tutorial_00_SConstruct',
     tutorials_dir / 'tutorial_01_geometry',
     tutorials_dir / 'tutorial_01_geometry_SConstruct',
@@ -221,7 +234,7 @@ tutorial_files_list = [
     tutorials_dir / "tutorial_quinoa/flow.q",
     tutorials_dir / "waves_quickstart/SConscript",
     tutorials_dir / 'scons_quickstart/SConscript',
-    tutorials_dir / 'scons_quickstart/SConstruct',
+    tutorials_dir / 'multi_action_task/SConscript',
 ]
 copied_file_list = []
 for file_path in tutorial_files_list:
@@ -232,7 +245,7 @@ for file_path in tutorial_files_list:
     copied_file_list.append(target)
 source_files = sphinx_configuration_source_list + documentation_file_list + copied_file_list
 
-html_targets = [f"{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if ".rst" in source]
+html_targets = [f"{pathlib.Path(source).with_suffix('.html')}" for source in documentation_file_list if source.endswith(".rst")]
 html_directory = "html"
 html_target = [f"{html_directory}/{target}" for target in html_targets]
 html = env.SphinxBuild(
@@ -255,15 +268,12 @@ internal = env.SphinxBuild(
 env.Clean(internal, [Dir(internal_directory)] + documentation_file_list)
 env.Alias(internal_directory, internal)
 
-waves_pdf = pathlib.Path(f"latex/waves-{env['version']}.pdf")
+waves_pdf = pathlib.Path(f"latex/{project_substitution_dictionary['@documentation_pdf@']}")
 latex_directory = "latex"
 latex_target = [str(waves_pdf)]
-latexpdf = env.Command(
+latexpdf = env.SphinxPDF(
     target=latex_target,
-    source=source_files,
-    action="${sphinx_program} -M latexpdf ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${sphinx_options}",
-    sphinx_program=env["sphinx_build"],
-    sphinx_options="-W"
+    source=source_files
 )
 env.Clean(latexpdf, [Dir(latex_directory)] + documentation_file_list)
 env.Alias('latexpdf', latexpdf)

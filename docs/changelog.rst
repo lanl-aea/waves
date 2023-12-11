@@ -5,8 +5,59 @@ Changelog
 #########
 
 ******************
-0.7.6 (unreleased)
+0.7.7 (unreleased)
 ******************
+
+******************
+0.7.6 (2023-12-11)
+******************
+
+New Features
+============
+- Prototype Sphinx builders (:issue:`564`, :merge:`701`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Fix abaqus_file_parser to handle case where history region data appears immediately after step
+  metadata (:issue:`576`, :merge:`705`). By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Add PEP-8 reference and citation to the first two tutorials (:issue:`524`, :merge:`688`). By `Kyle Brindley`_.
+- Add the project badges to the HTML docs landing page (:issue:`422`, :merge:`689`). By `Kyle Brindley`_.
+- Update version control discussion to compare with product data management and add VCS references (:issue:`484`,
+  :merge:`690`). By `Kyle Brindley`_.
+- Add SCons construction environment discussion to the compute environment management section (:issue:`522`,
+  :merge:`691`). By `Kyle Brindley`_.
+- Draft discussion about data archival (:issue:`467`, :merge:`692`). By `Kyle Brindley`_.
+- Cite and briefly discuss the role of standards documents from ASME and NASA (:issue:`483`, :merge:`693`). By `Kyle
+  Brindley`_.
+- Remove out-of-date AEA Quinoa tutorial warning. By `Kyle Brindley`_.
+- Simplified multi-action task tutorial (:issue:`553`, :merge:`695`). By `Sergio Cordova`_.
+- Added consistent tutorial directories (:issue:`562`, :merge:`699`). By `Sergio Cordova`_.
+- Added Abaqus part image script and images to the modsim_template (:issue:`423`, :merge:`700`). By `Sergio Cordova`_.
+- Add a brief abstract/'Why WAVES?' purpose statement to the documentation (:issue:`548`, :merge:`704`). By `Kyle
+  Brindley`.
+
+Internal Changes
+================
+- Require exact exceptions during unit testing of error handling (:issue:`568`, :merge:`706`). By `Sergio Cordova`_.
+- Call system exit and associated error message more directly (:issue:`566`, :merge:`708`). By `Sergio Cordova`_.
+- Reduce permissions of micro version bumping automation (:issue:`578`, :merge:`709`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Default to required task-by-task keyword arguments in the SSH builder to allow tasks to use unique remote directories,
+  e.g. during parameter studies (:issue:`560`, :merge:`694`). By `Kyle Brindley`_.
+- More robust user provided stdout file handling and allow multiple targets with the same file stem (:issue:`556`,
+  :merge:`696`). By `Kyle Brindley`_.
+- More robust search for Cubit bin for variations on the executable relationship to bin and MacOS installation directory
+  names (:issue:`569`, :merge:`702`). By `Kyle Brindley`_.
+- Default to local project help message and an override option in ``waves.scons_extensions.project_help_message`` taking
+  advantage of an SCons 4.6.0 ``env.Help()`` keyword argument update. Backward compatibility with older versions of
+  SCons is preserved (:issue:`571`, :merge:`703`). By `Kyle Brindley`_.
+- Find all ``INPUT=`` parameter file dependencies in the Abaqus implicit DEPEndency scanner (:issue:`577`,
+  :merge:`707`). By `Matthew Fister`_.
 
 ******************
 0.7.5 (2023-10-27)

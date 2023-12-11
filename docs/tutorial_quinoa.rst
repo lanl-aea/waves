@@ -24,13 +24,6 @@ References
 Environment
 ***********
 
-.. only:: aea
-
-   .. warning::
-
-      This tutorial does not yet work with local execution of ``quinoa-local`` on AEA servers, but the SSH remote task
-      of ``quinoa-remote`` should work. Contact Chris Long for the current state of Quinoa deployment on AEA servers.
-
 .. include:: tutorial_environment_activation.txt
 
 *******************

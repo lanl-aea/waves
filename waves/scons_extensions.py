@@ -14,8 +14,8 @@ import SCons.Environment
 import SCons.Node
 import SCons.Scanner
 
+from waves import _utilities
 from waves.abaqus import odb_extract
-from waves._utilities import _quote_spaces_in_path
 from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions
@@ -24,6 +24,8 @@ from waves._settings import _abaqus_solver_common_suffixes
 from waves._settings import _scons_substfile_suffix
 from waves._settings import _stdout_extension
 from waves._settings import _cd_action_prefix
+from waves._settings import _redirect_action_postfix
+from waves._settings import _redirect_environment_postfix
 from waves._settings import _matlab_environment_extension
 from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
@@ -110,8 +112,14 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
-def ssh_builder_actions(builder, remote_server, remote_directory):
+def ssh_builder_actions(builder, remote_server="${remote_server}", remote_directory="${remote_directory}"):
     """Wrap a builder's action list with remote copy operations and ssh commands
+
+    By default, the remote server and remote directory strings are written to accept (and *require*) task-by-task
+    overrides via task keyword arguments. Any SCons replacement string patterns, ``${variable}``, will make that
+    ``variable`` a *required* task keyword argument. Only if the remote server and/or remote directory are known to be
+    constant across all possible tasks should those variables be overridden with a string literal containing no
+    ``${variable}`` SCons keyword replacement patterns.
 
     .. include:: ssh_builder_actions_warning.txt
 
@@ -134,16 +142,18 @@ def ssh_builder_actions(builder, remote_server, remote_directory):
     .. code-block::
        :caption: SConstruct
 
+       import getpass
        import waves
+       user = getpass.getuser()
        env = Environment()
        env.Append(BUILDERS={
            "SSHAbaqusSolver": waves.scons_extensions.ssh_builder_actions(
                waves.scons_extensions.abaqus_solver(program="/remote/server/installation/path/of/abaqus"),
-               remote_server="myserver.mydomain.com",
-               remote_directory="/scratch/$${USER}/myproject/myworkflow"
+               remote_server="myserver.mydomain.com"
            )
        })
-       env.SSHAbaqusSolver(target=["myjob.sta"], source=["input.inp"], job_name="myjob", abaqus_options="-cpus 4")
+       env.SSHAbaqusSolver(target=["myjob.sta"], source=["input.inp"], job_name="myjob", abaqus_options="-cpus 4",
+                           remote_directory="/scratch/${user}/myproject/myworkflow", user=user)
 
     .. code-block::
        :caption: my_package.py
@@ -180,8 +190,10 @@ def ssh_builder_actions(builder, remote_server, remote_directory):
        rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}
 
     :param SCons.Builder.Builder builder: The SCons builder to modify
-    :param str remote_server: remote server where the original builder's actions should be executed
-    :param str remote_directory: absolute or relative path where the original builder's actions should be executed
+    :param str remote_server: remote server where the original builder's actions should be executed. The default string
+        *requires* every task to specify a matching keyword argument string.
+    :param str remote_directory: absolute or relative path where the original builder's actions should be executed. The
+        default string *requires* every task to specify a matching keyword argument string.
     """
     action_list = _string_action_list(builder)
     cd_prefix = f"cd {remote_directory} &&"
@@ -232,7 +244,7 @@ def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
     return program
 
 
-def project_help_message(env=None, append=True):
+def project_help_message(env=None, append=True, keep_local=True):
     """Add default targets and alias lists to project help message
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
@@ -243,12 +255,13 @@ def project_help_message(env=None, append=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    default_targets_message(env=env, append=append)
-    alias_list_message(env=env, append=append)
+    default_targets_message(env=env, append=append, keep_local=keep_local)
+    alias_list_message(env=env, append=append, keep_local=keep_local)
 
 
-def default_targets_message(env=None, append=True):
+def default_targets_message(env=None, append=True, keep_local=True):
     """Add a default targets list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -264,6 +277,7 @@ def default_targets_message(env=None, append=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
     import SCons.Script  # Required to get a full construction environment
     if not env:
@@ -271,10 +285,13 @@ def default_targets_message(env=None, append=True):
     default_targets_help = "\nDefault Targets:\n"
     for target in SCons.Script.DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
-    env.Help(default_targets_help, append=append)
+    try:
+        env.Help(default_targets_help, append=append, keep_local=keep_local)
+    except TypeError as err:
+        env.Help(default_targets_help, append=append)
 
 
-def alias_list_message(env=None, append=True):
+def alias_list_message(env=None, append=True, keep_local=True):
     """Add the alias list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -290,6 +307,7 @@ def alias_list_message(env=None, append=True):
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
+    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
     import SCons.Script  # Required to get a full construction environment
     if not env:
@@ -297,7 +315,10 @@ def alias_list_message(env=None, append=True):
     alias_help = "\nTarget Aliases:\n"
     for alias in SCons.Node.Alias.default_ans:
         alias_help += f"    {alias}\n"
-    env.Help(alias_help, append=append)
+    try:
+        env.Help(alias_help, append=append, keep_local=keep_local)
+    except TypeError:
+        env.Help(alias_help, append=append)
 
 
 def append_env_path(program, env):
@@ -364,7 +385,7 @@ def find_program(names, env):
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
     if first_found_path:
-        first_found_path = str(_quote_spaces_in_path(first_found_path))
+        first_found_path = str(_utilities._quote_spaces_in_path(first_found_path))
     return first_found_path
 
 
@@ -419,10 +440,9 @@ def add_cubit(names, env):
     """
     first_found_path = add_program(names, env)
     if first_found_path:
-        cubit_program = pathlib.Path(first_found_path)
-        cubit_python_dir = cubit_program.parent / "bin"
-        cubit_python_library_dir = cubit_python_dir / "python3"
-        env.PrependENVPath("PYTHONPATH", str(cubit_python_dir))
+        cubit_bin = _utilities.find_cubit_bin([first_found_path])
+        cubit_python_library_dir = cubit_bin / "python3"
+        env.PrependENVPath("PYTHONPATH", str(cubit_bin))
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
     return first_found_path
 
@@ -558,50 +578,67 @@ def _build_subdirectory(target):
     :rtype: pathlib.Path
     """
     try:
-        build_subdirectory = pathlib.Path(str(target[0])).parents[0]
+        build_subdirectory = pathlib.Path(str(target[0])).parent
     except IndexError as err:
         build_subdirectory = pathlib.Path(".")
     return build_subdirectory
 
 
-def _first_target_emitter(target, source, env, suffixes=None):
+def _first_target_emitter(target, source, env, suffixes=[], appending_suffixes=[], stdout_extension=_stdout_extension):
     """Appends the target list with the builder managed targets
 
-    Appends ``target[0]``.stdout to the ``target`` list. The associated Builder requires at least one target.
+    Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
+    extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
+    reason. The stdout file is always placed at the end of the returned target list.
+
+    The suffixes list are replacement operations on the first target's suffix. The appending suffixes list are appending
+    operations on the first target's suffix.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
+    extension as a target, e.g. ``target.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param list suffixes: Suffixes which should replace the first target's extension
+    :param list appending_suffixes: Suffixes which should append the first target's extension
 
     :return: target, source
     :rtype: tuple with two lists
     """
-    if not suffixes:
-        suffixes = [_stdout_extension]
-    build_subdirectory = _build_subdirectory(target)
-    first_target = pathlib.Path(str(target[0]))
-    for suffix in suffixes:
-        emitter_target = str(build_subdirectory / first_target.with_suffix(suffix).name)
-        if emitter_target not in target:
-            target.append(emitter_target)
-    return target, source
+    string_targets = [str(target_file) for target_file in target]
+    first_target = pathlib.Path(string_targets[0])
+
+    # Search for a user specified stdout file. Fall back to first target with appended stdout extension
+    stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
+                         f"{first_target}{stdout_extension}")
+
+    replacing_targets = [str(first_target.with_suffix(suffix)) for suffix in suffixes]
+    appending_targets = [f"{first_target}{suffix}" for suffix in appending_suffixes]
+    string_targets = string_targets + replacing_targets + appending_targets
+
+    # Get a list of unique targets,  less the stdout target. Preserve the target list order.
+    string_targets = [target_file for target_file in string_targets if target_file != stdout_target]
+    string_targets = list(dict.fromkeys(string_targets))
+
+    # Always append the stdout target for easier use in the action string
+    string_targets.append(stdout_target)
+
+    return string_targets, source
 
 
 def _abaqus_journal_emitter(target, source, env):
     """Appends the abaqus_journal builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout and ``target[0]``.abaqus_v6.env to the ``target`` list. The abaqus_journal Builder
+    Appends ``target[0]``.abaqus_v6.env and ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder
     requires at least one target.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -610,8 +647,8 @@ def _abaqus_journal_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    suffixes = [_stdout_extension, _abaqus_environment_extension]
-    return _first_target_emitter(target, source, env, suffixes=suffixes)
+    appending_suffixes = [_abaqus_environment_extension]
+    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def abaqus_journal(program="abaqus", post_action=[], **kwargs):
@@ -627,18 +664,18 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
     directory prior to executing the journal file.
 
-    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout and
-    ``target[0]``.abaqus_v6.env to the ``target`` list.
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.abaqus_v6.env and
+    ``target[0]``.stdout to the ``target`` list.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``my_target.stdout``.
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. code-block::
        :caption: Abaqus journal builder action
 
-       cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -663,10 +700,10 @@ def abaqus_journal(program="abaqus", post_action=[], **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    action = [f"{_cd_action_prefix} {program} -information environment > " \
-                 f"${{TARGET.filebase}}{_abaqus_environment_extension}",
+    action = [f"{_cd_action_prefix} {program} -information environment " \
+                 f"{_redirect_environment_postfix}",
               f"{_cd_action_prefix} {program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
-                 f"${{journal_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                 f"${{journal_options}} {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
@@ -684,12 +721,12 @@ def sbatch_abaqus_journal(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Abaqus journal builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGET.filebase}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1"
     """
     return abaqus_journal(*args, **kwargs)
 
 
-def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
+def _abaqus_solver_emitter(target, source, env, suffixes=_abaqus_solver_common_suffixes, stdout_extension=_stdout_extension):
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -710,21 +747,32 @@ def _abaqus_solver_emitter(target, source, env, suffixes_to_extend=None):
     :rtype: tuple with two lists
     """
     if "suffixes" in env and env["suffixes"] is not None:
-        suffixes_to_extend = env["suffixes"]
-    elif not suffixes_to_extend:
-        suffixes_to_extend = _abaqus_solver_common_suffixes
+        suffixes = env["suffixes"]
+    primary_input_file = pathlib.Path(source[0].path)
     if "job_name" not in env or not env["job_name"]:
-        env["job_name"] = pathlib.Path(source[0].path).stem
-    suffixes = [_stdout_extension, _abaqus_environment_extension]
-    if isinstance(suffixes_to_extend, str):
-        suffixes_to_extend = [suffixes_to_extend]
-    suffixes.extend(suffixes_to_extend)
+        env["job_name"] = primary_input_file.stem
+    if isinstance(suffixes, str):
+        suffixes = [suffixes]
+    suffixes.append(_abaqus_environment_extension)
     build_subdirectory = _build_subdirectory(target)
-    for suffix in suffixes:
-        emitter_target = str(build_subdirectory / f"{env['job_name']}{suffix}")
-        if emitter_target not in target:
-            target.append(emitter_target)
-    return target, source
+
+    # Search for a user specified stdout file. Fall back to job name with appended stdout extension
+    string_targets = [str(target_file) for target_file in target]
+    constructed_stdout_target = str(build_subdirectory / f"{env['job_name']}{stdout_extension}")
+    stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
+                         constructed_stdout_target)
+
+    job_targets = [str(build_subdirectory / f"{env['job_name']}{suffix}") for suffix in suffixes]
+
+    # Get a list of unique targets,  less the stdout target. Preserve the target list order.
+    string_targets = string_targets + job_targets
+    string_targets = [target_file for target_file in string_targets if target_file != stdout_target]
+    string_targets = list(dict.fromkeys(string_targets))
+
+    # Always append the stdout target for easier use in the action string
+    string_targets.append(stdout_target)
+
+    return string_targets, source
 
 
 def _abaqus_standard_solver_emitter(target, source, env):
@@ -767,8 +815,8 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/job_name.odb``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``my_target.stdout``.
+    subdirectory, e.g. ``parameter_set1/job_name.odb``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     The ``-interactive`` option is always appended to the builder action to avoid exiting the Abaqus task before the
     simulation is complete.  The ``-ask_delete no`` option is always appended to the builder action to overwrite
@@ -793,7 +841,7 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
     .. code-block::
        :caption: Abaqus solver builder action
 
-       cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1
 
     :param str program: An absolute path or basename string for the abaqus program
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
@@ -816,10 +864,10 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    action = [f"{_cd_action_prefix} {program} -information environment > " \
-                  f"${{job_name}}{_abaqus_environment_extension}",
+    action = [f"{_cd_action_prefix} {program} -information environment " \
+                  f"{_redirect_environment_postfix}",
               f"{_cd_action_prefix} {program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
-                  f"${{abaqus_options}} -interactive -ask_delete no > ${{job_name}}{_stdout_extension} 2>&1"]
+                  f"${{abaqus_options}} -interactive -ask_delete no {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     if emitter:
         emitter = emitter.lower()
@@ -847,7 +895,7 @@ def sbatch_abaqus_solver(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Abaqus solver builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${job_name}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1"
     """
     return abaqus_solver(*args, **kwargs)
 
@@ -855,13 +903,13 @@ def sbatch_abaqus_solver(*args, **kwargs):
 def _sierra_emitter(target, source, env):
     """Appends the sierra builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout and ``target[0]``.env to the ``target`` list. The Sierra Builder requires
+    Appends ``target[0]``.env and ``target[0]``.stdout  to the ``target`` list. The Sierra Builder requires
     at least one target.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -870,8 +918,8 @@ def _sierra_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    suffixes = [_stdout_extension, _sierra_environment_extension]
-    return _first_target_emitter(target, source, env, suffixes=suffixes)
+    appending_suffixes = [_sierra_environment_extension]
+    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def sierra(program="sierra", application="adagio", post_action=[]):
@@ -888,13 +936,13 @@ def sierra(program="sierra", application="adagio", post_action=[]):
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. warning::
 
        This is an experimental builder for Sierra support. The only emitted file is the application's version report in
-       ``TARGET[0].env`` and the ``TARGET[0].stdout`` redirected STDOUT and STDERR file. All relevant application output
+       ``target[0].env`` and the ``target[0].stdout`` redirected STDOUT and STDERR file. All relevant application output
        files, e.g. ``genesis_output.e`` must be specified in the target list.
 
     .. code-block::
@@ -910,7 +958,7 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     .. code-block::
        :caption: Sierra builder action
 
-       cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGETS[-1].abspath} 2>&1
 
     :param str program: An absolute path or basename string for the Sierra program
     :param str application: The string name for the Sierra application
@@ -923,10 +971,10 @@ def sierra(program="sierra", application="adagio", post_action=[]):
     :return: Sierra builder
     :rtype: SCons.Builder.Builder
     """
-    action = [f"{_cd_action_prefix} {program} {application} --version > " \
-                  f"${{TARGET.filebase}}{_sierra_environment_extension}",
+    action = [f"{_cd_action_prefix} {program} {application} --version " \
+                  f"{_redirect_environment_postfix}",
               f"{_cd_action_prefix} {program} ${{sierra_options}} {application} ${{application_options}} " \
-                  f"-i ${{SOURCE.file}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                  f"-i ${{SOURCE.file}} {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     sierra_builder = SCons.Builder.Builder(
         action=action,
@@ -945,7 +993,7 @@ def sbatch_sierra(*args, **kwargs):
     .. code-block::
        :caption: sbatch Sierra builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGET.filebase}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGETS[-1].abspath} 2>&1"
     """
     return sierra(*args, **kwargs)
 
@@ -1031,13 +1079,13 @@ def python_script(post_action=[]):
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``my_target.stdout``.
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. code-block::
        :caption: Python script builder action
 
-       cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -1057,11 +1105,12 @@ def python_script(post_action=[]):
     :rtype: SCons.Builder.Builder
     """
     action = [f"{_cd_action_prefix} python ${{python_options}} ${{SOURCE.abspath}} " \
-                f"${{script_options}} > ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                f"${{script_options}} {_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     python_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter)
+        emitter=_first_target_emitter
+    )
     return python_builder
 
 
@@ -1075,7 +1124,7 @@ def sbatch_python_script(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Python script builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGET.filebase}.stdout 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGETS[-1].abspath} 2>&1"
     """
     return python_script(*args, **kwargs)
 
@@ -1083,14 +1132,14 @@ def sbatch_python_script(*args, **kwargs):
 def _matlab_script_emitter(target, source, env):
     """Appends the matlab_script builder target list with the builder managed targets
 
-    Appends ``target[0]``.stdout and ``target[0]``.matlab.env to the ``target`` list. The matlab_script Builder requires
+    Appends ``target[0]``.matlab.env and ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires
     at least one target. The build tree copy of the Matlab script is not added to the target list to avoid multiply
     defined targets when the script is used more than once in the same build directory.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     :param list target: The target file list of strings
     :param list source: The source file list of SCons.Node.FS.File objects
@@ -1099,8 +1148,8 @@ def _matlab_script_emitter(target, source, env):
     :return: target, source
     :rtype: tuple with two lists
     """
-    suffixes = [_stdout_extension, _matlab_environment_extension]
-    return _first_target_emitter(target, source, env, suffixes=suffixes)
+    appending_suffixes = [_matlab_environment_extension]
+    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def matlab_script(program="matlab", post_action=[], **kwargs):
@@ -1123,18 +1172,18 @@ def matlab_script(program="matlab", post_action=[], **kwargs):
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
     directory prior to executing the python script.
 
-    The Builder emitter will append the builder managed targets automatically. Appends ``target[0]``.stdout and
-    ``target[0].matlab.env to the ``target`` list.
+    The Builder emitter will append the builder managed targets automatically. Appends ``target[0].matlab.env and
+    ``target[0]``.stdout to the ``target`` list.
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``my_target.stdout``.
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. code-block::
        :caption: Matlab script builder action
 
-       cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGET.filebase}.stdout 2>&1
+       cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGETS[-1].abspath} 2>&1
 
     :param str program: An absolute path or basename string for the Matlab program.
     :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
@@ -1154,11 +1203,11 @@ def matlab_script(program="matlab", post_action=[], **kwargs):
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
                   "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
                   "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
-                  f"> ${{TARGET.filebase}}{_matlab_environment_extension} 2>&1",
+                  f"{_redirect_environment_postfix}",
               f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
                   "\"path(path, '${SOURCE.dir.abspath}'); " \
                   "${SOURCE.filebase}(${script_options})\" " \
-                  f"> ${{TARGET.filebase}}{_stdout_extension} 2>&1"]
+                  f"{_redirect_action_postfix}"]
     action.extend(_construct_post_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
@@ -1343,7 +1392,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     .. code-block::
        :caption: SLURM sbatch builder action
 
-       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGET.filebase}.stdout ${sbatch_options} --wrap ${slurm_job}
+       cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGETS[-1].abspath} ${sbatch_options} --wrap ${slurm_job}
 
     .. code-block::
        :caption: SConstruct
@@ -1367,25 +1416,27 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
     program = sbatch_program if sbatch_program is not None else program
-    action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGET.filebase}}{_stdout_extension} " \
+    action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGETS[-1].abspath}} " \
               f"${{sbatch_options}} --wrap \"${{slurm_job}}\""]
     action.extend(_construct_post_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter)
+        emitter=_first_target_emitter
+    )
     return sbatch_builder
 
 
 def abaqus_input_scanner():
     """Abaqus input file dependency scanner
 
-    Custom SCons scanner that searches for ``*INCLUDE`` keyword inside Abaqus ``.inp`` files.
+    Custom SCons scanner that searches for the ``INPUT=`` parameter and associated file dependencies inside Abaqus
+    ``*.inp`` files.
 
     :return: Abaqus input file dependency Scanner
     :rtype: SCons.Scanner.Scanner
     """
     flags = re.IGNORECASE
-    return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'], flags)
+    return _custom_scanner(r'^\*[^*]*,\s*input=(.+)$', ['.inp'], flags)
 
 
 def sphinx_scanner():
@@ -1403,6 +1454,90 @@ def sphinx_scanner():
     :rtype: SCons.Scanner.Scanner
     """
     return _custom_scanner(r'^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$', ['.rst', '.txt'])
+
+
+def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
+    """Sphinx builder using the ``-b`` specifier
+
+    This builder does not have an emitter. It requires at least one target.
+
+    .. code-block::
+       :caption: action
+
+       ${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={
+           "SphinxBuild": waves.scons_extensions.sphinx_build(options="-W"),
+       })
+       sources = ["conf.py", "index.rst"]
+       targets = ["html/index.html"]
+       html = env.SphinxBuild(
+           target=targets,
+           source=sources,
+       )
+       env.Clean(html, [Dir("html")] + sources)
+       env.Alias("html", html)
+
+    :param str program: sphinx-build executable
+    :param str options: sphinx-build options
+    :param str builder: builder name. See the `Sphinx`_ documentation for options
+    :param str tags: sphinx-build tags
+    """
+    sphinx_builder = SCons.Builder.Builder(
+        action=["${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
+        program=program,
+        options=options,
+        builder=builder,
+        tags=tags
+    )
+    return sphinx_builder
+
+
+def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags=""):
+    """Sphinx builder using the ``-M`` specifier. Intended for ``latexpdf`` builds.
+
+    This builder does not have an emitter. It requires at least one target.
+
+    .. code-block::
+       :caption: action
+
+       ${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env.Append(BUILDERS={
+           "SphinxPDF": waves.scons_extensions.sphinx_latexpdf(options="-W"),
+       })
+       sources = ["conf.py", "index.rst"]
+       targets = ["latex/project.pdf"]
+       latexpdf = env.SphinxBuild(
+           target=targets,
+           source=sources,
+       )
+       env.Clean(latexpdf, [Dir("latex")] + sources)
+       env.Alias("latexpdf", latexpdf)
+
+    :param str program: sphinx-build executable
+    :param str options: sphinx-build options
+    :param str builder: builder name. See the `Sphinx`_ documentation for options
+    :param str tags: sphinx-build tags
+    """
+    sphinx_latex = SCons.Builder.Builder(
+        action=["${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"],
+        program=program,
+        options=options,
+        builder=builder,
+        tags=tags
+    )
+    return sphinx_latex
 
 
 def _custom_scanner(pattern, suffixes, flags=None):
@@ -1457,27 +1592,6 @@ def _custom_scanner(pattern, suffixes, flags=None):
     return custom_scanner
 
 
-def _quinoa_emitter(target, source, env):
-    """Appends the quinoa builder target list with the builder managed targets
-
-    Appends ``target[0]``.stdout to the ``target`` list. The Quinoa Builder requires at least one target.
-
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
-
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-
-    :return: target, source
-    :rtype: tuple with two lists
-    """
-    suffixes = [_stdout_extension]
-    return _first_target_emitter(target, source, env, suffixes=suffixes)
-
-
 def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1", inciter_options="",
                   prefix_command="", post_action=[]):
     """Quinoa solver SCons builder
@@ -1496,12 +1610,12 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
 
     The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide the expected STDOUT redirected file as a
-    target, e.g. ``target[0].stdout``.
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
 
     .. warning::
 
-       This is an experimental builder for Quinoa support. The only emitted file is the ``TARGET[0].stdout`` redirected
+       This is an experimental builder for Quinoa support. The only emitted file is the ``target[0].stdout`` redirected
        STDOUT and STDERR file. All relevant application output files, e.g. ``out.*`` must be specified in the target list.
 
     .. code-block::
@@ -1520,7 +1634,7 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     .. code-block::
        :caption: Quinoa builder action
 
-       ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGET.filebase}.stdout 2>&1
+       ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGETS[-1].abspath} 2>&1
 
     :param str charmrun: The relative or absolute path to the charmrun executable
     :param str charmrun_options: The charmrun command line interface options
@@ -1546,12 +1660,12 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
     action=[
         f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
-            "> ${TARGET.filebase}.stdout 2>&1"
+            f"{_redirect_action_postfix}"
     ]
     action.extend(_construct_post_action_list(post_action))
     quinoa_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_quinoa_emitter,
+        emitter=_first_target_emitter,
         prefix_command=prefix_command,
         charmrun=charmrun,
         charmrun_options=charmrun_options,

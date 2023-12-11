@@ -17,10 +17,11 @@ References
 Below is a list of references for more information about topics that are not explicitly
 covered in this tutorial.
 
-* `Abaqus Scripting`_ :cite:`ABAQUS`
-* `Abaqus Python Environment`_ :cite:`ABAQUS`
+* Python style guide: `PEP-8`_ :cite:`pep-8`
 * Python Docstrings: `PEP-257`_, `PEP-287`_
 * Python Argparse: `Python 3 argparse`_, `Python 2.7 argparse`_
+* `Abaqus Scripting`_ :cite:`ABAQUS`
+* `Abaqus Python Environment`_ :cite:`ABAQUS`
 
 ***********
 Environment

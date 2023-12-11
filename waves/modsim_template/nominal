@@ -33,6 +33,7 @@ simulation_variables = rectangle_compression.nominal
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
+images = []
 
 # Geometry
 journal_file = f"{model}_geometry"
@@ -79,9 +80,19 @@ workflow.extend(waves.scons_extensions.copy_substitute(
     abaqus_source_list,
     substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)))
 
-# Abaqus Solve
 solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
-solve_source_list.append([f"{journal_file}.inp"])
+solve_source_list.append(f"{journal_file}.inp")
+
+# Part images
+images.extend(env.AbaqusJournal(
+    target=[f"{model}_compression.png"],
+    source=[str(eabm_package_abspath / "export_abaqus_image.py")] + solve_source_list,
+    journal_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
+                    "--model-name ${model} --part-name ${model}",
+    model=model
+))
+
+# Abaqus Solve
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ("023", "mdl", "sim", "stt")
@@ -127,6 +138,7 @@ env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
 env.Alias(f"{workflow_name}_archive", archive_target)
+env.Alias("images", images)
 
 if not env["abaqus"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
