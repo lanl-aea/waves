@@ -46,6 +46,8 @@ Enhancements
 - Default to local project help message and an override option in ``waves.scons_extensions.project_help_message`` taking
   advantage of an SCons 4.6.0 ``env.Help()`` keyword argument update. Backward compatibility with older versions of
   SCons is preserved (:issue:`571`, :merge:`703`). By `Kyle Brindley`_.
+- Find all ``INPUT=`` parameter file dependencies in the Abaqus implicit DEPEndency scanner (:issue:`577`,
+  :merge:`707`). By `Matthew Fister`_.
 
 ******************
 0.7.5 (2023-10-27)
