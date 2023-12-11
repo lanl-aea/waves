@@ -7,6 +7,8 @@ Parse various file types created via Abaqus
 """
 
 import re
+import sys
+
 import yaml
 import os
 from abc import ABC, abstractmethod
@@ -92,7 +94,7 @@ class AbaqusFileParser(ABC):
 
         :param str message: string with a message to print
         """
-        raise SystemExit(message)
+        raise sys.exit(message)
 
 
 class MsgFileParser(AbaqusFileParser):

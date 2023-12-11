@@ -247,7 +247,7 @@ def print_critical(message):
 
     :param str message: message to print
     """
-    raise SystemExit(message)
+    raise sys.exit(message)
 
 
 def main():

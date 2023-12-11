@@ -60,7 +60,7 @@ def main():
     msg_file = args.msg_file[0]
     path_msg_file = Path(msg_file)
     if not path_msg_file.exists():
-        raise SystemExit(f'{msg_file} does not exist.')
+        raise sys.exit(f'{msg_file} does not exist.')
     output_file = args.output_file
     if not output_file:
         output_file = path_msg_file.with_suffix('')
