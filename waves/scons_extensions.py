@@ -1429,13 +1429,14 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
 def abaqus_input_scanner():
     """Abaqus input file dependency scanner
 
-    Custom SCons scanner that searches for ``*INCLUDE`` keyword inside Abaqus ``.inp`` files.
+    Custom SCons scanner that searches for the ``INPUT=`` parameter and associated file dependencies inside Abaqus *.inp
+    files.
 
     :return: Abaqus input file dependency Scanner
     :rtype: SCons.Scanner.Scanner
     """
     flags = re.IGNORECASE
-    return _custom_scanner(r'^\*INCLUDE,\s*input=(.+)$', ['.inp'], flags)
+    return _custom_scanner(r'^\*[^*]*,\s*input=(.+)$', ['.inp'], flags)
 
 
 def sphinx_scanner():

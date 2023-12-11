@@ -948,8 +948,9 @@ scanner_input = {                                   # content,       expected_de
     'comment':                   ('**INCLUDE, INPUT=dummy.out'
                               '\n***INCLUDE, INPUT=dummy2.inp',                          []),
     'mixed_keywords':     ('**\n*INCLUDE, INPUT=dummy.out\n**'
-                                  '\n*DUMMY, INPUT=dummy2.inp',               ['dummy.out']),
+                            '\n*TEMPERATURE, INPUT=dummy2.inp', ['dummy.out', 'dummy2.inp']),
     'trailing_whitespace': ('**\n*INCLUDE, INPUT=dummy.out   ',               ['dummy.out']),
+    'partial match':     ('**\n*DUMMY, MATRIX INPUT=dummy.out',                          []),
     'extra_space':         ('**\n*INCLUDE,    INPUT=dummy.out',               ['dummy.out']),
 }
 
