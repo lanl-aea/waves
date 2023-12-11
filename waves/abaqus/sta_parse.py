@@ -45,7 +45,7 @@ def main():
     sta_file = args.sta_file[0]
     path_sta_file = Path(sta_file)
     if not path_sta_file.exists():
-        raise sys.exit(f'{sta_file} does not exist.')
+        sys.exit(f'{sta_file} does not exist.')
     output_file = args.output_file
     if not output_file:
         output_file = path_sta_file.with_suffix(_settings._default_yaml_extension)
