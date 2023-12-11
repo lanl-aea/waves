@@ -28,7 +28,8 @@ def test_main():
          patch('waves.abaqus.abaqus_file_parser.MsgFileParser'), \
          pytest.raises(SystemExit) as err:
         msg_parse.main()
-    assert err.value.code == -1
+    assert err.value.code != 0
+    assert "sample.msg does not exist" in str(err.value.args)
 
     path_exists = [True, False, False, False]
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-s', '-a']), \

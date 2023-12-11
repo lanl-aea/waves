@@ -7,6 +7,8 @@ Parse various file types created via Abaqus
 """
 
 import re
+import sys
+
 import yaml
 import os
 from abc import ABC, abstractmethod
@@ -66,7 +68,7 @@ class AbaqusFileParser(ABC):
         try:
             f = open(self.output_file, 'w')
         except EnvironmentError as e:
-            self.print_critical(f"Couldn't write file {self.output_file}: {e}")
+            sys.exit(f"Couldn't write file {self.output_file}: {e}")
             return
         yaml.safe_dump(self.parsed, f)
 
@@ -86,14 +88,6 @@ class AbaqusFileParser(ABC):
         if self.verbose:
             print(message)
 
-    def print_critical(self, message):
-        """Print a critical message and exit with an exception
-
-        :param str message: string with a message to print
-        """
-        print(message)
-        raise SystemExit(-1)
-
 
 class MsgFileParser(AbaqusFileParser):
     """Class for parsing Abaqus msg files.
@@ -110,8 +104,7 @@ class MsgFileParser(AbaqusFileParser):
         try:
             f = open(input_file, 'r')
         except EnvironmentError as e:
-            self.print_critical(f"Couldn't read file {input_file}: {e}")
-            return
+            sys.exit(f"Couldn't read file {input_file}: {e}")
 
         self.parsed["steps"] = dict()
         step_number = 0
@@ -756,8 +749,7 @@ class StaFileParser(AbaqusFileParser):
         try:
             f = open(input_file, 'r')
         except EnvironmentError as e:
-            self.print_critical(f"Couldn't read file {input_file}: {e}")
-            return
+            sys.exit(f"Couldn't read file {input_file}: {e}")
 
         self.parsed["columns"] = list()
         line = f.readline()
@@ -853,8 +845,7 @@ class OdbReportFileParser(AbaqusFileParser):
         try:
             f = open(input_file, 'r')
         except EnvironmentError as e:
-            self.print_critical(f"Couldn't read file {input_file}: {e}")
-            return
+            sys.exit(f"Couldn't read file {input_file}: {e}")
 
         if not time_stamp:
             time_stamp = datetime.now().strftime(_settings._default_timestamp_format)
@@ -865,8 +856,7 @@ class OdbReportFileParser(AbaqusFileParser):
         while not line.startswith("General ODB information") and line != "":
             if line.startswith('ODB Report'):
                 if not re.search('csv', line, re.IGNORECASE):
-                    self.print_critical(f"ODB report file must be in CSV format")
-                    return
+                    sys.exit(f"ODB report file must be in CSV format")
             line = f.readline()
 
         while not line.startswith("Job Data") and line != "" and not line.startswith('---'):
@@ -910,9 +900,9 @@ class OdbReportFileParser(AbaqusFileParser):
             try:
                 self.parse_instances(f, self.parsed['odb']['rootAssembly']['instances'], number_of_instances)
             except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
-                self.print_critical(f"Unknown error occurred parsing odbreport file: {e}. Please report error "
-                                f"to {_settings._parsing_error_contact} and send odb or "
-                                f"odbreport ({_settings._default_odbreport_extension}) file.")
+                sys.exit(f"Unknown error occurred parsing odbreport file: {e}. Please report error "
+                         f"to {_settings._parsing_error_contact} and send odb or "
+                         f"odbreport ({_settings._default_odbreport_extension}) file.")
         # The following members of the root assembly object in the odb don't appear to be listed in the odbreport
         # nodeSets, elementSets, surfaces, nodes, elements, datumCsyses, sectionAssignments, rigidBodies,
         # pretensionSections, connectorOrientations
@@ -930,9 +920,9 @@ class OdbReportFileParser(AbaqusFileParser):
             try:
                 self.parse_steps(f, self.parsed['odb']['steps'], number_of_steps)
             except Exception as e:  # TODO: Remove the generic try/except block and error message after alpha release
-                self.print_critical(f"Unknown error occurred parsing odbreport file: {e}. Please report error "
-                                f"to {_settings._parsing_error_contact} and send odb or "
-                                f"odbreport ({_settings._default_odbreport_extension}) file.")
+                sys.exit(f"Unknown error occurred parsing odbreport file: {e}. Please report error "
+                         f"to {_settings._parsing_error_contact} and send odb or "
+                         f"odbreport ({_settings._default_odbreport_extension}) file.")
         # TODO: Find out if any of the following members of the odb appear in odbreport output: amplitudes, filters,
         #  jobData, parts, materials, sections, sectorDefinition, userData, customData, profiles
 
@@ -2221,7 +2211,7 @@ class OdbReportFileParser(AbaqusFileParser):
         try:
             extract_h5 = h5py.File(h5_file, 'a')
         except EnvironmentError as e:
-            self.print_critical(f"Couldn't open file {h5_file}: {e}")
+            sys.exit(f"Couldn't open file {h5_file}: {e}")
 
         # Format Mesh information
         for instance_key in odb_dict['odb']['rootAssembly']['instances']:
