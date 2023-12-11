@@ -105,7 +105,7 @@ def odb_extract(input_file,
     path_input_file = Path(input_file)
     odbreport_file = False
     if not path_input_file.exists():
-        print_critical(f'{input_file} does not exist.')
+        sys.exit(f'{input_file} does not exist.')
     if path_input_file.suffix != '.odb':
         print_warning(verbose, f'{input_file} is not an odb file. File will be assumed to be an odbreport file.')
         odbreport_file = True
@@ -151,22 +151,22 @@ def odb_extract(input_file,
     if call_odbreport:
         return_code, output, error_code = run_external(abaqus_command)
         if return_code != 0:
-            print_critical(f"Abaqus odbreport command failed to execute. Abaqus output: '{output}'")
+            sys.exit(f"Abaqus odbreport command failed to execute. Abaqus output: '{output}'")
         if not Path(job_name).exists():
-            print_critical(f'{job_name} does not exist.')
+            sys.exit(f'{job_name} does not exist.')
 
     if output_type == 'h5':  # If the dataset isn't empty
         try:
             abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp).parse(h5_file=output_file)
         except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if a string is found where an integer is expected
-            print_critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
+            sys.exit(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
     else:
         parsed_odb = None
         # Parse output of odbreport
         try:
             parsed_odb = abaqus_file_parser.OdbReportFileParser(job_name, 'odb').parsed
         except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty)
-            print_critical(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
+            sys.exit(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
 
         # Write parsed output
         if output_type == 'json':
@@ -239,15 +239,6 @@ def print_warning(verbose, message):
     """
     if verbose:
         print(message)
-
-
-def print_critical(message):
-    """
-    Log a message to the screen and exit
-
-    :param str message: message to print
-    """
-    raise sys.exit(message)
 
 
 def main():
