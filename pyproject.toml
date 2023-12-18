@@ -40,33 +40,10 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = [
-    "waves",
-    "waves.abaqus",
-    "waves.tests",
-    "waves.modsim_template",
-    "waves.modsim_template.docs",
-    "waves.modsim_template.docs._static",
-    "waves.modsim_template.eabm_package",
-    "waves.modsim_template.report",
-    "waves.tutorials",
-    "waves.tutorials.eabm_package",
-    "waves.tutorials.eabm_package.abaqus",
-    "waves.tutorials.eabm_package.argparse_types",
-    "waves.tutorials.eabm_package.cubit",
-    "waves.tutorials.eabm_package.matlab",
-    "waves.tutorials.eabm_package.python",
-    "waves.tutorials.multi_action_task",
-    "waves.tutorials.scons_quickstart",
-    "waves.tutorials.tutorial_cubit",
-    "waves.tutorials.tutorial_cubit.eabm_package",
-    "waves.tutorials.tutorial_cubit.eabm_package.abaqus",
-    "waves.tutorials.tutorial_cubit.eabm_package.cubit",
-    "waves.tutorials.tutorial_cubit.eabm_package.sierra",
-    "waves.tutorials.tutorial_quinoa",
-    "waves.tutorials.waves_quickstart",
-]
 zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["."]
 
 [project.scripts]
 odb_extract = "waves.abaqus.odb_extract:main"
