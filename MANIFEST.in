@@ -1,3 +1,5 @@
 recursive-exclude docs *
 recursive-exclude recipe* *
 recursive-exclude modulefiles *
+recursive-exclude .github *
+exclude .gitlab-ci.yml
