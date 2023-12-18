@@ -5,8 +5,16 @@ Changelog
 #########
 
 ******************
-0.7.7 (unreleased)
+0.7.8 (unreleased)
 ******************
+
+******************
+0.7.7 (2023-12-18)
+******************
+
+Internal Changes
+================
+- Update package structure discovery during the conda-build (:merge:`712`). By `Kyle Brindley`_.
 
 ******************
 0.7.6 (2023-12-11)

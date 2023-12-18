@@ -40,8 +40,10 @@ dependencies = [
 ]
 
 [tool.setuptools]
-packages = ["waves", "waves.abaqus", "waves.tests"]
 zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["waves"]
 
 [project.scripts]
 odb_extract = "waves.abaqus.odb_extract:main"
