@@ -1,2 +1,5 @@
 recursive-exclude docs *
-recursive-exclude modsim_template/docs *
+recursive-exclude recipe* *
+recursive-exclude modulefiles *
+recursive-exclude .github *
+exclude .gitlab-ci.yml
