@@ -37,6 +37,7 @@ simulation_constants = {
     "height": 1.0,
     "displacement": -0.01
 }
+simulation_variables = simulation_constants
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -53,22 +54,24 @@ parameter_generator.write()
 
 # Geometry
 journal_file = f"{model}_geometry"
-journal_options = f"--width {simulation_constants['width']} --height {simulation_constants['height']}"
+journal_options = "--width ${width} --height ${height}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae",
             f"{journal_file}.jnl"],
     source=[f"{eabm_package_abspath / journal_file}.py"],
-    journal_options=journal_options))
+    journal_options=journal_options,
+    **simulation_variables))
 
 # Partition
 journal_file = f"{model}_partition"
-journal_options = f"--width {simulation_constants['width']} --height {simulation_constants['height']}"
+journal_options = "--width ${width} --height ${height}"
 partition_targets = env.AbaqusJournal(
     target=[f"{journal_file}.cae",
             f"{journal_file}.jnl"],
     source=[f"{eabm_package_abspath / journal_file}.py",
             f"{model}_geometry.cae"],
-    journal_options=journal_options)
+    journal_options=journal_options,
+    **simulation_variables)
 workflow.extend(partition_targets)
 partition_cae_object = partition_targets[0]
 partition_cae_file = pathlib.Path(partition_cae_object.abspath)
