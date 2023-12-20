@@ -45,7 +45,8 @@ Documentation
 - Added consistent tutorial directories (:issue:`562`, :merge:`699`). By `Sergio Cordova`_.
 - Added Abaqus part image script and images to the modsim_template (:issue:`423`, :merge:`700`). By `Sergio Cordova`_.
 - Add a brief abstract/'Why WAVES?' purpose statement to the documentation (:issue:`548`, :merge:`704`). By `Kyle
-  Brindley`.
+  Brindley`_.
+- Update modsim template to use SCons variable substitution (:issue:`579`, :merge:`714`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
