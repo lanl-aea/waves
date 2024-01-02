@@ -12,6 +12,11 @@ Changelog
 0.7.7 (2023-12-18)
 ******************
 
+Bug fixes
+=========
+- Handle redirected output target file substitution during ssh wrapped builders (:issue:`580`, :merge:`715`).
+  By `Sergio Cordova`_.
+
 Internal Changes
 ================
 - Update package structure discovery during the conda-build (:merge:`712`). By `Kyle Brindley`_.
