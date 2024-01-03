@@ -13,7 +13,6 @@ import SCons.Node.FS
 from waves import scons_extensions
 from waves._settings import _cd_action_prefix
 from waves._settings import _redirect_action_postfix
-from waves._settings import _ssh_redirect_action_postfix
 from waves._settings import _redirect_environment_postfix
 from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
@@ -155,7 +154,7 @@ def test_ssh_builder_actions():
         'ssh ${remote_server} "mkdir -p ${remote_directory}"',
         "rsync -rlptv ${SOURCES.abspath} ${remote_server}:${remote_directory}",
         "ssh ${remote_server} 'cd ${remote_directory} && python ${python_options} ${SOURCE.file} " \
-            f"${{script_options}} {_ssh_redirect_action_postfix}'",
+        "${script_options} > ${TARGETS[-1].file} 2>&1'",
         "rsync -rltpv ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}"
     ]
     assert ssh_python_builder_action_list == expected
