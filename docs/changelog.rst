@@ -8,6 +8,11 @@ Changelog
 0.7.8 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Handle redirected output target file substitution during ssh wrapped builders (:issue:`580`, :merge:`715`).
+  By `Sergio Cordova`_.
+
 ******************
 0.7.7 (2023-12-18)
 ******************
