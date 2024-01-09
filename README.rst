@@ -9,7 +9,7 @@
 .. _WAVES: https://lanl.github.io/waves/index.html
 .. _WAVES repository: https://github.com/lanl/waves
 .. _WAVES releases: https://github.com/lanl/waves/releases/
-.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/modsim_template
+.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/waves/modsim_template
 .. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
