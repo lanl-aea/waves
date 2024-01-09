@@ -38,7 +38,7 @@ def main():
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
                                     height=args.height, width=args.width, font_size=args.font_size,
-                                    vertical=args.vertical, no_labels=args.no_labels)
+                                    vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree)
     elif args.subcommand in _settings._parameter_study_subcommands:
         return_code = _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
@@ -149,6 +149,8 @@ def get_parser():
                                   help="Display the graph in a vertical layout (default: %(default)s)")
     visualize_parser.add_argument("-n", "--no-labels", action="store_true",
                                   help="Create visualization without labels on the nodes (default: %(default)s)")
+    visualize_parser.add_argument("--print-tree", action="store_true",
+        help="Print the output of the scons tree command to the screen (default: %(default)s)")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
@@ -293,7 +295,7 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 
 def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
                   height=_settings._visualize_default_height, width=_settings._visualize_default_width,
-                  font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False):
+                  font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False, print_tree=False):
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -310,6 +312,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     :param int width: Width of visualization if being saved to a file
     :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param bool no_labels: Don't print labels on the nodes of the visualization
+    :param bool print_tree: Print the text output of the scons --tree command to the screen
     """
     from waves import visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
@@ -322,6 +325,10 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     scons_command.extend(_settings._scons_visualize_arguments)
     scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
     tree_output = scons_stdout.decode("utf-8").split('\n')
+    if print_tree:
+        print_output = '\n'.join(tree_output)
+        print(print_output)
+        return 0
     tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list, exclude_regex=exclude_regex)
 
     if print_graphml:
