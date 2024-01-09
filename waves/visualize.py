@@ -128,7 +128,7 @@ def click_arrow(event, annotations, arrows):
 def visualize(tree, output_file,
               height=_settings._visualize_default_height,
               width=_settings._visualize_default_width,
-              font_size=_settings._visualize_default_font_size, vertical=False):
+              font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False):
     """
     Create a visualization showing the tree
 
@@ -138,6 +138,7 @@ def visualize(tree, output_file,
     :param int width: Width of visualization if being saved to a file
     :param int font_size: Font size of file names in points
     :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
+    :param bool no_labels: Don't print labels on the nodes of the visualization
     """
     graph = networkx.DiGraph()
     graph.add_nodes_from(tree['nodes'])
@@ -164,10 +165,16 @@ def visualize(tree, output_file,
     ax.axis('off')
     fig = plt.gcf()
     for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
-        patchA = ax.annotate(A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
-                             bbox=dict(facecolor=box_color, boxstyle='round'))
-        patchB = ax.annotate(B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
-                             bbox=dict(facecolor=box_color, boxstyle='round'))
+        if no_labels:
+            patchA = ax.annotate(" ", xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
+                                 bbox=dict(facecolor=box_color, boxstyle='round'))
+            patchB = ax.annotate(" ", xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
+                                 bbox=dict(facecolor=box_color, boxstyle='round'))
+        else:
+            patchA = ax.annotate(A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
+                                 bbox=dict(facecolor=box_color, boxstyle='round'))
+            patchB = ax.annotate(B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
+                                 bbox=dict(facecolor=box_color, boxstyle='round'))
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
         ax.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=arrowprops)
