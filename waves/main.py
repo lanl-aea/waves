@@ -147,6 +147,8 @@ def get_parser():
         help="Print the visualization in graphml format (default: %(default)s)")
     visualize_parser.add_argument("--vertical", action="store_true",
                                   help="Display the graph in a vertical layout (default: %(default)s)")
+    visualize_parser.add_argument("-n", "--no-labels", action="store_true",
+                                  help="Create visualization without labels on the nodes (default: %(default)s)")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
