@@ -8,6 +8,10 @@ Changelog
 0.7.8 (unreleased)
 ******************
 
+New Features
+============
+- Add no_labels option to waves visualize (:issue:`583`, :merge:`717`). By `Prabhu Khalsa`_.
+
 Bug fixes
 =========
 - Handle redirected output target file substitution during ssh wrapped builders (:issue:`580`, :merge:`715`).
