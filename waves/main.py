@@ -38,7 +38,7 @@ def main():
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
                                     height=args.height, width=args.width, font_size=args.font_size,
-                                    vertical=args.vertical)
+                                    vertical=args.vertical, no_labels=args.no_labels)
     elif args.subcommand in _settings._parameter_study_subcommands:
         return_code = _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
@@ -293,7 +293,7 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 
 def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
                   height=_settings._visualize_default_height, width=_settings._visualize_default_width,
-                  font_size=_settings._visualize_default_font_size, vertical=False):
+                  font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False):
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -309,6 +309,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     :param int height: Height of visualization if being saved to a file
     :param int width: Width of visualization if being saved to a file
     :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
+    :param bool no_labels: Don't print labels on the nodes of the visualization
     """
     from waves import visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
@@ -325,7 +326,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
-    visualize.visualize(tree_dict, output_file, height, width, font_size, vertical)
+    visualize.visualize(tree_dict, output_file, height, width, font_size, vertical, no_labels)
     return 0
 
 
