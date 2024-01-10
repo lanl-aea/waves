@@ -13,6 +13,11 @@ Bug fixes
 - Handle redirected output target file substitution during ssh wrapped builders (:issue:`580`, :merge:`715`).
   By `Sergio Cordova`_.
 
+Documentation
+=============
+- Remove waves module testing instructions from waves-eamb documentation (:issue:`581`, :merge:`716`). 
+  By `Sergio Cordova`_.
+
 ******************
 0.7.7 (2023-12-18)
 ******************
