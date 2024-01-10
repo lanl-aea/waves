@@ -143,13 +143,14 @@ def get_parser():
         help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
     visualize_parser.add_argument("-r", "--exclude-regex", type=str,
         help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
-    visualize_parser.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
+    print_group = visualize_parser.add_mutually_exclusive_group()
+    print_group.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
     visualize_parser.add_argument("--vertical", action="store_true",
                                   help="Display the graph in a vertical layout (default: %(default)s)")
     visualize_parser.add_argument("-n", "--no-labels", action="store_true",
                                   help="Create visualization without labels on the nodes (default: %(default)s)")
-    visualize_parser.add_argument("--print-tree", action="store_true",
+    print_group.add_argument("--print-tree", action="store_true",
         help="Print the output of the scons tree command to the screen (default: %(default)s)")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
