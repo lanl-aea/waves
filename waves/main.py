@@ -324,12 +324,11 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
     scons_command.extend(_settings._scons_visualize_arguments)
     scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
-    tree_output = scons_stdout.decode("utf-8").split('\n')
+    tree_output = scons_stdout.decode("utf-8")
     if print_tree:
-        print_output = '\n'.join(tree_output)
-        print(print_output)
+        print(tree_output)
         return 0
-    tree_dict = visualize.parse_output(tree_output, exclude_list=exclude_list, exclude_regex=exclude_regex)
+    tree_dict = visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
