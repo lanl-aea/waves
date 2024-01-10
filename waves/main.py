@@ -332,8 +332,8 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
+        return 0
     visualize.visualize(tree_dict, output_file, height, width, font_size, vertical, no_labels)
-    return 0
 
 
 if __name__ == "__main__":
