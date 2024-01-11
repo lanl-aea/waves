@@ -53,7 +53,7 @@ construct the build order becomes more important.
 Task definitions go by different names in different build systems, such as "rule" in `GNU Make`_ :cite:`gnu-make` or
 "task" in `SCons`_ :cite:`SCons`. Task definitions may be simplified for common actions by "pattern rules" in GNU Make
 or "Builders" in SCons, which may associate a particular file extension with a predefined action or auto-generate a
-target file name that matches the source file name. Build systems usually provide a set of common rules for compiling
+target file name that matches the source file name. Build systems usually provide a set of common patterns for compiling
 different programming languages.
 
 For the purpose of executing simulations, it is important to use a build system that allows developers to write custom
