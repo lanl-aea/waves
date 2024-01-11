@@ -50,8 +50,9 @@ target files. In pseudocode, this might look like a dictionary
 As the number of discrete tasks increases, and as cross-dependencies grow, the importance of an automated tool to
 construct the build order becomes more important.
 
-Task definitions go by different names in different build systems, such as "recipe" in `GNU Make`_ :cite:`gnu-make` or
-"builder" in `SCons`_ :cite:`SCons`. For software projects, the task definition may be simplified by "rules" for common
+Task definitions go by different names in different build systems, such as "rule" in `GNU Make`_ :cite:`gnu-make` or
+"task" in `SCons`_ :cite:`SCons`. Commonly re-used task definitions may be written as re-usable "pattern rules" in
+GNU Make or "Builders" in SCons. For software projects, the task definition may be simplified by "rules" for common
 actions, such as associating a particular file extension with a predefined action or auto-generating a target file name
 that matches the source file name. Build systems usually provide a set of common rules for compiling different
 programming languages.
