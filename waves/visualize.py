@@ -165,16 +165,15 @@ def visualize(tree, output_file,
     ax.axis('off')
     fig = plt.gcf()
     for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
+        label_A = A
+        label_B = B
         if no_labels:
-            patchA = ax.annotate(" ", xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
-                                 bbox=dict(facecolor=box_color, boxstyle='round'))
-            patchB = ax.annotate(" ", xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
-                                 bbox=dict(facecolor=box_color, boxstyle='round'))
-        else:
-            patchA = ax.annotate(A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
-                                 bbox=dict(facecolor=box_color, boxstyle='round'))
-            patchB = ax.annotate(B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
-                                 bbox=dict(facecolor=box_color, boxstyle='round'))
+            label_A = " "
+            label_B = " "
+        patchA = ax.annotate(label_A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
+                             bbox=dict(facecolor=box_color, boxstyle='round'))
+        patchB = ax.annotate(label_B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
+                             bbox=dict(facecolor=box_color, boxstyle='round'))
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
         ax.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=arrowprops)
