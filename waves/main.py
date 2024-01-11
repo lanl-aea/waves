@@ -154,7 +154,8 @@ def get_parser():
     visualize_parser.add_argument("-n", "--no-labels", action="store_true",
         help="Create visualization without labels on the nodes (default: %(default)s)")
     visualize_parser.add_argument("--input-file", type=str,
-        help="Path to text file with output from scons tree command (default: %(default)s)")
+        help="Path to text file with output from scons tree command (default: %(default)s). Scons target must "
+             "still be specified and must be present in the input file.")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
@@ -345,7 +346,8 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
         return 0
     tree_dict = visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
     if not tree_dict['nodes']:  # If scons tree or input_file is not in the expected format the nodes will be empty
-        print(f"Unexpected SCons tree format. Use SCons options '{' '.join(_settings._scons_visualize_arguments)}' or "
+        print(f"Unexpected SCons tree format or missing target. Use SCons "
+              f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
               f"the ``visualize --print-tree`` option to generate the input file.", file=sys.stderr)
         return 1
 
