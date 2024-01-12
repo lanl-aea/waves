@@ -39,7 +39,7 @@ def main():
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
                                     height=args.height, width=args.width, font_size=args.font_size,
                                     vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
-                                    file_input=args.file_input)
+                                    file_input=args.input_file)
     elif args.subcommand in _settings._parameter_study_subcommands:
         return_code = _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
@@ -153,7 +153,7 @@ def get_parser():
         help="Display the graph in a vertical layout (default: %(default)s)")
     visualize_parser.add_argument("-n", "--no-labels", action="store_true",
         help="Create visualization without labels on the nodes (default: %(default)s)")
-    visualize_parser.add_argument("--file-input", type=str,
+    visualize_parser.add_argument("--input-file", type=str,
         help="Path to text file with output from scons tree command (default: %(default)s)")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
@@ -300,7 +300,7 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
                   height=_settings._visualize_default_height, width=_settings._visualize_default_width,
                   font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False, print_tree=False,
-                  file_input=None):
+                  input_file=None):
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -318,7 +318,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param bool no_labels: Don't print labels on the nodes of the visualization
     :param bool print_tree: Print the text output of the scons --tree command to the screen
-    :param str file_input: Path to text file storing output from scons tree command
+    :param str input_file: Path to text file storing output from scons tree command
     """
     from waves import visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
@@ -328,13 +328,13 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
         print(f"\t{sconstruct} does not exist.", file=sys.stderr)
         return 1
     tree_output = ""
-    if file_input:
-        input_file = pathlib.Path(file_input)
-        if not input_file.exists():
-            print(f"\t{file_input} does not exist.", file=sys.stderr)
+    if input_file:
+        file_input = pathlib.Path(input_file)
+        if not file_input.exists():
+            print(f"\t{input_file} does not exist.", file=sys.stderr)
             return 1
         else:
-            tree_output = input_file.read_text().split('\n')
+            tree_output = file_input.read_text().split('\n')
     else:
         scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
         scons_command.extend(_settings._scons_visualize_arguments)
@@ -344,7 +344,9 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
         print(tree_output)
         return 0
     tree_dict = visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
-    if not tree_dict['nodes']:  # If scons tree or file_input is not in the expected format the nodes will be empty
+    if not tree_dict['nodes']:  # If scons tree or input_file is not in the expected format the nodes will be empty
+        print(f"Unexpected SCons tree format. Use SCons options '{' '.join(_settings._scons_visualize_arguments)}' or "
+              f"the ``visualize --print-tree`` option to generate the input file.", file=sys.stderr)
         return 1
 
     if print_graphml:

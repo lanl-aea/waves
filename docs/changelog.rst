@@ -10,9 +10,13 @@ Changelog
 
 New Features
 ============
+<<<<<<< HEAD
 - Add no_labels option to waves visualize (:issue:`583`, :merge:`717`). By `Prabhu Khalsa`_.
 - New print-tree feature in waves visualize (:issue:`582`, :merge:`718`). By `Prabhu Khalsa`_.
 - Add file-input option to waves visualize to graph provided input (:issue:`584`, :merge:`719`). By `Prabhu Khalsa`_.
+=======
+- Add input-file option to waves visualize to graph provided input (:issue:`584`, :merge:`719`). By `Prabhu Khalsa`_.
+>>>>>>> 9d5c8c9d (FEAT: Changed the name of the command line option and added error message if incorrect format is used)
 
 Bug fixes
 =========
