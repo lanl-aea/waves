@@ -39,7 +39,7 @@ def main():
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
                                     height=args.height, width=args.width, font_size=args.font_size,
                                     vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
-                                    file_input=args.input_file)
+                                    input_file=args.input_file)
     elif args.subcommand in _settings._parameter_study_subcommands:
         return_code = _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
@@ -335,7 +335,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
             print(f"\t{input_file} does not exist.", file=sys.stderr)
             return 1
         else:
-            tree_output = file_input.read_text().split('\n')
+            tree_output = file_input.read_text()
     else:
         scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
         scons_command.extend(_settings._scons_visualize_arguments)
