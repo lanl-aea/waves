@@ -38,7 +38,8 @@ def main():
                                     sconstruct=args.sconstruct, print_graphml=args.print_graphml,
                                     exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
                                     height=args.height, width=args.width, font_size=args.font_size,
-                                    vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree)
+                                    vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
+                                    file_input=args.file_input)
     elif args.subcommand in _settings._parameter_study_subcommands:
         return_code = _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
@@ -146,12 +147,14 @@ def get_parser():
     print_group = visualize_parser.add_mutually_exclusive_group()
     print_group.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format (default: %(default)s)")
-    visualize_parser.add_argument("--vertical", action="store_true",
-                                  help="Display the graph in a vertical layout (default: %(default)s)")
-    visualize_parser.add_argument("-n", "--no-labels", action="store_true",
-                                  help="Create visualization without labels on the nodes (default: %(default)s)")
     print_group.add_argument("--print-tree", action="store_true",
         help="Print the output of the scons tree command to the screen (default: %(default)s)")
+    visualize_parser.add_argument("--vertical", action="store_true",
+        help="Display the graph in a vertical layout (default: %(default)s)")
+    visualize_parser.add_argument("-n", "--no-labels", action="store_true",
+        help="Create visualization without labels on the nodes (default: %(default)s)")
+    visualize_parser.add_argument("--file-input", type=str,
+        help="Path to text file with output from scons tree command (default: %(default)s)")
 
     quickstart_parser = argparse.ArgumentParser(add_help=False)
     quickstart_parser = subparsers.add_parser('quickstart',
@@ -296,7 +299,8 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 
 def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
                   height=_settings._visualize_default_height, width=_settings._visualize_default_width,
-                  font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False, print_tree=False):
+                  font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False, print_tree=False,
+                  file_input=None):
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -314,6 +318,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param bool no_labels: Don't print labels on the nodes of the visualization
     :param bool print_tree: Print the text output of the scons --tree command to the screen
+    :param str file_input: Path to text file storing output from scons tree command
     """
     from waves import visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
@@ -322,10 +327,19 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     if not sconstruct.exists():
         print(f"\t{sconstruct} does not exist.", file=sys.stderr)
         return 1
-    scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
-    scons_command.extend(_settings._scons_visualize_arguments)
-    scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
-    tree_output = scons_stdout.decode("utf-8")
+    tree_output = ""
+    if file_input:
+        input_file = pathlib.Path(file_input)
+        if not input_file.exists():
+            print(f"\t{file_input} does not exist.", file=sys.stderr)
+            return 1
+        else:
+            tree_output = input_file.read_text().split('\n')
+    else:
+        scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
+        scons_command.extend(_settings._scons_visualize_arguments)
+        scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
+        tree_output = scons_stdout.decode("utf-8")
     if print_tree:
         print(tree_output)
         return 0
