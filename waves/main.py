@@ -344,6 +344,8 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
         print(tree_output)
         return 0
     tree_dict = visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
+    if not tree_dict['nodes']:  # If scons tree or file_input is not in the expected format the nodes will be empty
+        return 1
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
