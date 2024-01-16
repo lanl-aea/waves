@@ -49,6 +49,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     if parameter_study_file:
         parameter_study = xarray.open_dataset(parameter_study_file)
         combined_data = combined_data.merge(parameter_study)
+        parameter_study.close()
 
     # Add units
     combined_data[x_var].attrs["units"] = x_units

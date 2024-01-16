@@ -46,6 +46,7 @@ def plot(input_files, output_file, group_path, selection_dict,
     if parameter_study_file:
         parameter_study = xarray.open_dataset(parameter_study_file)
         combined_data = combined_data.merge(parameter_study)
+        parameter_study.close()
 
     # Correlation coefficients
     correlation_data = combined_data.sel(selection_dict).to_array().to_pandas().transpose()
