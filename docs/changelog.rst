@@ -5,7 +5,11 @@ Changelog
 #########
 
 ******************
-0.7.8 (unreleased)
+0.7.9 (unreleased)
+******************
+
+******************
+0.7.8 (2024-01-16)
 ******************
 
 New Features
@@ -21,7 +25,7 @@ Bug fixes
 
 Documentation
 =============
-- Remove waves module testing instructions from waves-eamb documentation (:issue:`581`, :merge:`716`). 
+- Remove waves module testing instructions from waves-eamb documentation (:issue:`581`, :merge:`716`).
   By `Sergio Cordova`_.
 - Updated keywords in build system discussion for make (:issue:`585`, :merge:`720`). By `Sergio Cordova`_.
 
