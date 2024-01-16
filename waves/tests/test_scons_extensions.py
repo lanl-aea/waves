@@ -113,6 +113,7 @@ def test_ssh_builder_actions():
                 f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}",
                 f"{program} ${{SOURCES[99].abspath}} | tee ${{TARGETS.file}}",
                 f"{program} ${{SOURCES[-1].abspath}} | tee ${{TARGETS.file}}",
+                "cat ${SOURCES[-1].abspath} > ${TARGETS[-1].abspath}",
                 "echo \"Hello World!\""
         ])
 
@@ -123,6 +124,7 @@ def test_ssh_builder_actions():
         "cat ${SOURCES.abspath} | tee ${TARGETS.file}",
         "cat ${SOURCES[99].abspath} | tee ${TARGETS.file}",
         "cat ${SOURCES[-1].abspath} | tee ${TARGETS.file}",
+        "cat ${SOURCES[-1].abspath} > ${TARGETS[-1].abspath}",
         'echo "Hello World!"'
     ]
     assert build_cat_action_list == expected
@@ -138,6 +140,7 @@ def test_ssh_builder_actions():
         f"ssh {remote_server} 'cd ${{remote_directory}} && cat ${{SOURCES.file}} | tee ${{TARGETS.file}}'",
         f"ssh {remote_server} 'cd ${{remote_directory}} && cat ${{SOURCES[99].file}} | tee ${{TARGETS.file}}'",
         f"ssh {remote_server} 'cd ${{remote_directory}} && cat ${{SOURCES[-1].file}} | tee ${{TARGETS.file}}'",
+        f"ssh {remote_server} 'cd ${{remote_directory}} && cat ${{SOURCES[-1].file}} > ${{TARGETS[-1].file}}'",
         f"ssh {remote_server} 'cd ${{remote_directory}} && echo \"Hello World!\"'",
         f"rsync -rltpv {remote_server}:${{remote_directory}}/ ${{TARGET.dir.abspath}}"
     ]
@@ -151,7 +154,7 @@ def test_ssh_builder_actions():
         'ssh ${remote_server} "mkdir -p ${remote_directory}"',
         "rsync -rlptv ${SOURCES.abspath} ${remote_server}:${remote_directory}",
         "ssh ${remote_server} 'cd ${remote_directory} && python ${python_options} ${SOURCE.file} " \
-            f"${{script_options}} {_redirect_action_postfix}'",
+        "${script_options} > ${TARGETS[-1].file} 2>&1'",
         "rsync -rltpv ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}"
     ]
     assert ssh_python_builder_action_list == expected

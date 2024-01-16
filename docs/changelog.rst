@@ -5,8 +5,29 @@ Changelog
 #########
 
 ******************
-0.7.8 (unreleased)
+0.7.9 (unreleased)
 ******************
+
+******************
+0.7.8 (2024-01-16)
+******************
+
+New Features
+============
+- Add no_labels option to waves visualize (:issue:`583`, :merge:`717`). By `Prabhu Khalsa`_.
+- New print-tree feature in waves visualize (:issue:`582`, :merge:`718`). By `Prabhu Khalsa`_.
+- Add input-file option to waves visualize to graph provided input (:issue:`584`, :merge:`719`). By `Prabhu Khalsa`_.
+
+Bug fixes
+=========
+- Handle redirected output target file substitution during ssh wrapped builders (:issue:`580`, :merge:`715`).
+  By `Sergio Cordova`_.
+
+Documentation
+=============
+- Remove waves module testing instructions from waves-eamb documentation (:issue:`581`, :merge:`716`).
+  By `Sergio Cordova`_.
+- Updated keywords in build system discussion for make (:issue:`585`, :merge:`720`). By `Sergio Cordova`_.
 
 ******************
 0.7.7 (2023-12-18)
@@ -45,7 +66,8 @@ Documentation
 - Added consistent tutorial directories (:issue:`562`, :merge:`699`). By `Sergio Cordova`_.
 - Added Abaqus part image script and images to the modsim_template (:issue:`423`, :merge:`700`). By `Sergio Cordova`_.
 - Add a brief abstract/'Why WAVES?' purpose statement to the documentation (:issue:`548`, :merge:`704`). By `Kyle
-  Brindley`.
+  Brindley`_.
+- Update modsim template to use SCons variable substitution (:issue:`579`, :merge:`714`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
