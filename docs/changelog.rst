@@ -8,6 +8,11 @@ Changelog
 0.7.9 (unreleased)
 ******************
 
+Bug fixes
+=========
+- waves visualize now works with an input file even if an SConstruct file does not exist (:issue:`586`, :merge:`725`).
+  By `Prabhu Khalsa`_.
+
 ******************
 0.7.8 (2024-01-16)
 ******************
