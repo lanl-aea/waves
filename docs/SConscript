@@ -193,6 +193,8 @@ tutorial_files_list = [
     tutorials_dir / 'tutorial_sbatch_SConstruct',
     tutorials_dir / 'tutorial_task_reuse',
     tutorials_dir / 'tutorial_task_reuse_SConstruct',
+    tutorials_dir / 'tutorial_plot_scatter',
+    tutorials_dir / 'tutorial_plot_scatter_SConstruct',
     tutorials_dir / 'rectangle_geometry_partition.scons',
     tutorials_dir / 'rectangle_mesh_solverprep_solve_extract.scons',
     tutorials_dir / 'gitignore',
