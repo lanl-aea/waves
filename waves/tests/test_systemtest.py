@@ -48,6 +48,7 @@ if not installed:
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
     #("scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
+    ("scons tutorial_plot_scatter --sconstruct=tutorial_plot_scatter_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
