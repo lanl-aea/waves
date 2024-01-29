@@ -10,6 +10,9 @@ import pandas
 import xarray
 import matplotlib.pyplot
 
+default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1',
+                          'integration point': 0}
+
 
 def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
          parameter_study_file=None, csv_regression_file=None):
@@ -132,8 +135,6 @@ def get_parser():
 
 
 if __name__ == "__main__":
-    default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1',
-                              'integration point': 0}
     parser = get_parser()
     args, unknown = parser.parse_known_args()
     if not args.selection_dict:
