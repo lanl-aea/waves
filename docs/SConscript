@@ -138,6 +138,7 @@ documentation_file_list = [
     'tutorial_cubit_abaqus.rst',
     'tutorial_cubit_sierra.rst',
     'tutorial_quinoa.rst',
+    'tutorial_plot_scatter_waves.rst',
     'tutorial_mesh_convergence_waves.rst',
     'tutorial_escape_sequences_waves.rst',
     'tutorial_remote_execution_waves.rst',
