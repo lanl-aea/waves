@@ -15,9 +15,11 @@ import SALib.analyze.delta
 
 from eabm_package.python.correlation_coefficients_schema import parameter_schema
 
+default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'time': 1.0,
+                          'integration point': 0, 'data_type': 'samples'}
 
-def plot(input_files, output_file, group_path, selection_dict,
-         parameter_study_file=None):
+
+def plot(input_files, output_file, group_path, selection_dict, parameter_study_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
@@ -84,7 +86,7 @@ def plot(input_files, output_file, group_path, selection_dict,
 def get_parser():
     script_name = pathlib.Path(__file__)
     default_output_file = f"{script_name.stem}.pdf"
-    default_group_path = pathlib.Path("RECTANGLE") / "FieldOutputs" / "ALL"
+    default_group_path = "RECTANGLE/FieldOutputs/ALL"
     default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
@@ -115,8 +117,6 @@ def get_parser():
 
 
 if __name__ == "__main__":
-    default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'time': 1.0,
-                              'integration point': 0, 'data_type': 'samples'}
     parser = get_parser()
     args, unknown = parser.parse_known_args()
     if not args.selection_dict:
