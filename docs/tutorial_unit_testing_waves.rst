@@ -1,7 +1,7 @@
-.. _tutorial_plot_scatter_waves:
+.. _tutorial_unit_testing_waves:
 
 ######################
-Tutorial: Plot Scatter
+Tutorial: Unit Testing
 ######################
 
 .. include:: wip_warning.txt
@@ -44,18 +44,18 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_plot_scatter``
+4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_unit_testing``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_plot_scatter
+   $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_unit_testing
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-.. _tutorials_tutorial_plot_scatter_waves:
+.. _tutorials_tutorial_unit_testing_waves:
 
 **********
 SConscript
@@ -64,9 +64,9 @@ SConscript
 A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_plot_scatter
+.. admonition:: waves-tutorials/tutorial_unit_testing
 
-   .. literalinclude:: tutorials_tutorial_plot_scatter
+   .. literalinclude:: tutorials_tutorial_unit_testing
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 
@@ -79,7 +79,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
 
-   .. literalinclude:: tutorials_tutorial_plot_scatter_SConstruct
+   .. literalinclude:: tutorials_tutorial_unit_testing_SConstruct
       :language: Python
       :diff: tutorials_tutorial_09_post_processing_SConstruct
 
@@ -93,7 +93,7 @@ Build Targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons tutorial_plot_scatter
+   $ scons tutorial_unit_testing
 
 ************
 Output Files
@@ -107,4 +107,4 @@ is specified by name to reduce clutter in the output shown.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_plot_scatter/
+   $ tree build/tutorial_unit_testing/

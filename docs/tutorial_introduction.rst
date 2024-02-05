@@ -107,5 +107,5 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       parameter study
                    00:30 :ref:`tutorial_task_reuse_waves`             Re-use task definitions
                    00:10 :ref:`tutorial_setuptools_scm_waves`         Dynamic version number from git tags
-                   00:20 :ref:`tutorial_plot_scatter_waves`           Post-processing scatter plot
+                   00:20 :ref:`tutorial_unit_testing_waves`           Unit testing
 ======================== ============================================ ==================================================
