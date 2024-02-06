@@ -267,7 +267,7 @@ default behavior depending on the design of the :term:`EABM`.
 
 The second highlighted portion defines default values for some of the command
 line arguments. Default values are assigned if no command line argument is detected for any of
-the expected command line arguments. This provides the utility of having a use-able file
+the expected command line arguments. This provides to the utility a use-able file
 even when command line arguments are not specified. It should be noted, however, that
 some model developers may prefer to require all command line arguments every time the
 file is used to build a target. ``output_file`` is the name of the file that is created
