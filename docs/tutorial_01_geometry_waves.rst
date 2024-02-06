@@ -265,15 +265,12 @@ The default values and naming conventions in this journal file are eabm design d
 made for this :term:`EABM` stub repository. In practice, it may be beneficial to choose different
 default behavior depending on the design of the :term:`EABM`.
 
-The second highlighted portion defines default values for some of the command
-line arguments. Default values are assigned if no command line argument is detected for any of
-the expected command line arguments. This provides to the utility a use-able file
-even when command line arguments are not specified. It should be noted, however, that
-some model developers may prefer to require all command line arguments every time the
-file is used to build a target. ``output_file`` is the name of the file that is created
-at the end of the ``main()`` function, which assumes ``output_file`` does not include a
-file extension. ``default_width`` and ``default_height`` define the size of the
-``rectangle`` part.
+The second highlighted portion defines default values for some of the command line arguments. Default values are
+assigned if no command line argument is detected for any of the expected command line arguments. This provides sensible
+defaults even when no command line arguments are specified. It should be noted, however, that some model developers may
+prefer to require all command line arguments every time the file is used to build a target. ``output_file`` is the name
+of the file that is created at the end of the ``main()`` function, which assumes ``output_file`` does not include a file
+extension. ``default_width`` and ``default_height`` define the size of the ``rectangle`` part.
 
 The final highlighted portion of the code is where the ``argparse`` package is used to
 define the argument parser rules. First, an argument parser is defined using the
