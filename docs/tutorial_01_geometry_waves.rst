@@ -252,7 +252,7 @@ See the `Argparse tutorial`_ for an introduction to the ``argparse`` module.
 
 The first highlighted portion of the ``get_parser()`` function defines variables based on
 the name of the script. While this method of determining the file name is non-standard
-for Python 3, the Abaqus Python environment neccessitates this syntax. This code will
+for Python 3, the Abaqus Python environment necessitates this syntax. This code will
 become common boilerplate code included in every Abaqus journal file created in the
 WAVES-EABM tutorials. It is valuable to the behavior of these example journal files, but
 may not be required for all journal files depending on their designed behavior.
@@ -277,7 +277,7 @@ file extension. ``default_width`` and ``default_height`` define the size of the
 
 The final highlighted portion of the code is where the ``argparse`` package is used to
 define the argument parser rules. First, an argument parser is defined using the
-``ArgumentParser`` class. This recieves a brief description ``cli_description`` and
+``ArgumentParser`` class. This receives a brief description ``cli_description`` and
 direction ``prog`` on how to execute the program. Each subsequent call of the
 ``add_argument`` method adds a command line argument to the parser's rules. Command line
 arguments defined using ``argparse`` have options, like ``-o`` or ``--output-file``, and
@@ -324,7 +324,7 @@ Retrieving Exit Codes
 The ``main()`` function is called from within the ``sys.exit()`` method. This provides
 the operating system with a non-zero exit code if the script throws an error. By
 convention, non-zero exit codes indicate an error in the executing program. See the `Bash
-Exit Status`_ documentation for more infomation about specific exit codes. This is used
+Exit Status`_ documentation for more information about specific exit codes. This is used
 by build systems to understand when a target has not been produced correctly and to exit the
 downstream sequence of target actions which can no longer succeed.
 
@@ -424,12 +424,12 @@ At this point, the only directory in the ``build`` directory is that pertaining 
 specific target that was specified to be built. In this case, that is
 ``tutorial_01_geometry``.
 
-The ``build/tutorial_01_geomtry/`` directory should contain the following files:
+The ``build/tutorial_01_geometry/`` directory should contain the following files:
 
 * ``abaqus.rpy``, the replay file from the ``abaqus cae -nogui`` command
 * ``rectangle_geometry.abaqus_v6.env``, the environment file that allows for
   reproduction of the Abaqus environment used to build the ``tutorial_01_geometry`` targets
-* ``rectangle_geomtry.cae``, an Abaqus CAE file that contains a model named
+* ``rectangle_geometry.cae``, an Abaqus CAE file that contains a model named
   ``model_name`` within which is a part named ``part_name``.
 * ``rectangle_geometry.jnl`` and ``rectangle_geometry.stdout``, the journal file
   that records all of the commands executed by Abaqaus and the log file that will contain
