@@ -16,6 +16,7 @@ Bug fixes
 Documentation
 =============
 - Update the hardcoded copyright dates in the README and LICENSE files. By `Kyle Brindley`_.
+- Fix some typos in tutorial 01 and edit sentence for clarity (:issue:`592`, :merge:`730`). By `Prabhu Khalsa`_.
 
 Internal Changes
 ================
