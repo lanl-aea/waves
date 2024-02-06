@@ -33,10 +33,18 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWIS
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
+import warnings
 from importlib.metadata import version, PackageNotFoundError
 
 from waves import scons_extensions
 from waves import parameter_generators
+
+
+warnings.filterwarnings(
+    action="ignore",
+    message="The `squeeze` kwarg to GroupBy is being removed",
+    category=UserWarning,
+)
 
 try:
     __version__ = version("waves")
@@ -47,7 +55,6 @@ except PackageNotFoundError:
     except ImportError:
         # Should only hit this when running as an un-installed package in the local repository
         import pathlib
-        import warnings
         warnings.filterwarnings(action='ignore', message='tag', category=UserWarning, module='setuptools_scm')
         import setuptools_scm
         __version__ = setuptools_scm.get_version(root=pathlib.Path(__file__).parent.parent)
@@ -58,7 +65,6 @@ except PackageNotFoundError:
 # VVVVV
 import types
 import functools
-import warnings
 
 from waves import builders
 
