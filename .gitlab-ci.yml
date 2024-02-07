@@ -8,7 +8,6 @@ stages:
   - environment
   - version
   - test
-  - build
   - deploy
 
 before_script:
@@ -128,7 +127,7 @@ fast-test:
     - sstbigbird-shell-aea
 
 conda-build:
-  stage: build
+  stage: test
   variables:
     GIT_STRATEGY: clone
   dependencies: []
