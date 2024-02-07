@@ -2,7 +2,9 @@ channels:
   - conda-forge
 
 dependencies:
-  - git
+  - boa
+  # TODO: Remove when conda-build 24.? no longer breaks boa/mambabuild
+  - conda-build ==3.28
   - h5netcdf
   - h5py
   - ipython
@@ -20,7 +22,6 @@ dependencies:
   - scipy >=1
   - scons >=4
   - seaborn
-  - sed
   - setuptools >=62
   - setuptools_scm[toml] >=6.2,<8
   - sphinx >=5.1
