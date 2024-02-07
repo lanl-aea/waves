@@ -23,6 +23,7 @@ Internal Changes
 - Explicit include of the tutorial and modsim template directories to help the conda-forge build find the non-Python
   files (:issue:`589`, :merge:`728`). By `Kyle Brindley`_.
 - Silence irrelevant warning thrown by XArray (:issue:`590`, :merge:`729`). By `Kyle Brindley`_.
+- Add boa to the CI environment for faster packaging (:issue:`593`, :merge:`731`). By `Kyle Brindley`_.
 
 ******************
 0.7.8 (2024-01-16)
