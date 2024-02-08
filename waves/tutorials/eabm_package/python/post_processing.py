@@ -14,6 +14,80 @@ default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, '
                           'integration point': 0}
 
 
+def combine_data(input_files, group_path, concat_coord):
+    """Combine input data files into one dataset
+    
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
+        containing Xarray Datasets
+    :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
+    :param str concat_coord: Name of dimension
+    
+    :returns: Combined data
+    :rtype: xarray.DataArray
+    """
+    paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
+    data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord: path.parent.name}) 
+                      for path in paths)
+    combined_data = xarray.concat(data_generator, concat_coord)
+    return combined_data
+
+
+def merge_parameter_study(parameter_study_file, combined_data):
+    """Merge parameter study to existing dataset
+    
+    :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
+        h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
+    :param xarray.DataArray combined_data: XArray Dataset that will be merged. 
+    
+    :returns: Combined data
+    :rtype: xarray.DataArray
+    """
+    parameter_study = xarray.open_dataset(parameter_study_file)
+    combined_data = combined_data.merge(parameter_study)
+    parameter_study.close()
+    return combined_data
+
+
+def regression_test(csv_regression_file, output_file):
+    """Run Regression test
+    
+    :param str csv_regression_file: path-like or file-like object containing the CSV dataset to compare with the current
+        plot data. If the data sets do not match a non-zero exit code is returned.
+    :param Path output_file: The plot file name. Relative or absolute path.
+    """
+    output_csv = output_file.with_suffix(".csv")
+    current_csv = pandas.read_csv(output_csv)
+    regression_csv = pandas.read_csv(csv_regression_file)
+    equal = regression_csv.equals(current_csv)
+    if not equal:
+        print(f"The CSV regression test failed. Data in '{csv_regression_file.resolve()}' and " \
+              f"'{output_csv.resolve()}' do not match.", file=sys.stderr)
+        return 1
+
+
+def save_plots(combined_data, x_var, y_var, concat_coord, output_file):
+    """Save scatter plots with given x and y labels
+    
+    :param xarray.DataArray combined_data: XArray Dataset that will be plotted.
+    :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
+    :param str y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
+    :param str concat_coord: Name of dimension for which you want multiple lines plotted.
+    :param str output_file: The plot file name. Relative or absolute path.
+    """
+    output_csv = output_file.with_suffix(".csv")
+    
+    # Plot
+    combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
+    matplotlib.pyplot.title(None)
+    matplotlib.pyplot.savefig(output_file)
+
+    # Table
+    combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
+
+    # Clean up open files
+    combined_data.close()
+
+
 def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
          parameter_study_file=None, csv_regression_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
@@ -37,22 +111,16 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
         plot data. If the data sets do not match a non-zero exit code is returned.
     """
     output_file = pathlib.Path(output_file)
-    output_csv = output_file.with_suffix(".csv")
     if csv_regression_file:
         csv_regression_file = pathlib.Path(csv_regression_file)
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
-    paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord:
-                          path.parent.name}) for path in paths)
-    combined_data = xarray.concat(data_generator, concat_coord)
+    combined_data = combine_data(input_files, group_path, concat_coord)
 
     # Open and merge WAVES parameter study if provided
     if parameter_study_file:
-        parameter_study = xarray.open_dataset(parameter_study_file)
-        combined_data = combined_data.merge(parameter_study)
-        parameter_study.close()
+        combined_data = merge_parameter_study(parameter_study_file, combined_data)
 
     # Add units
     combined_data[x_var].attrs["units"] = x_units
@@ -61,29 +129,11 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     # Tutorial 09: post processing print statement to view data structure
     print(combined_data)
 
-    # Plot
-    combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
-    matplotlib.pyplot.title(None)
-    matplotlib.pyplot.savefig(output_file)
-
-    # Table
-    combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
-
-    # Clean up open files
-    combined_data.close()
-    if parameter_study_file:
-        parameter_study.close()
+    save_plots(combined_data, x_var, y_var, concat_coord, output_file)
 
     # Regression test
     if csv_regression_file:
-        current_csv = pandas.read_csv(output_csv)
-        regression_csv = pandas.read_csv(csv_regression_file)
-        equal = regression_csv.equals(current_csv)
-        if not equal:
-            print(f"The CSV regression test failed. Data in '{csv_regression_file.resolve()}' and " \
-                  f"'{output_csv.resolve()}' do not match.", file=sys.stderr)
-            return 1
-
+        regression_test(csv_regression_file, output_file)
     return 0
 
 
