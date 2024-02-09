@@ -17,6 +17,8 @@ Documentation
 =============
 - Update the hardcoded copyright dates in the README and LICENSE files. By `Kyle Brindley`_.
 - Fix some typos in tutorial 01 and edit sentence for clarity (:issue:`592`, :merge:`730`). By `Prabhu Khalsa`_.
+- Fixed issue where class level api documentation were not being populated correctly (:issue:`595`, :merge:`733`). 
+  By `Sergio Cordova`_.
 
 Internal Changes
 ================
