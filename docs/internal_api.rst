@@ -61,11 +61,10 @@ Visualize
 Odb Report File Parser
 **********************
 
-.. automodule:: waves.abaqus.abaqus_file_parser.OdbReportFileParser
+.. autoclass:: waves.abaqus.abaqus_file_parser.OdbReportFileParser
     :members:
     :private-members:
     :show-inheritance:
-    :synopsis: Parses an odbreport file produced by Abaqus
 
 ***********
 Odb extract
@@ -81,18 +80,16 @@ Odb extract
 Sta File Parser
 ***************
 
-.. automodule:: waves.abaqus.abaqus_file_parser.StaFileParser
+.. autoclass:: waves.abaqus.abaqus_file_parser.StaFileParser
     :members:
     :private-members:
     :show-inheritance:
-    :synopsis: Parses an sta file produced by Abaqus
 
 ***************
 Msg File Parser
 ***************
 
-.. automodule:: waves.abaqus.abaqus_file_parser.MsgFileParser
+.. autoclass:: waves.abaqus.abaqus_file_parser.MsgFileParser
     :members:
     :private-members:
     :show-inheritance:
-    :synopsis: Parses a msg file produced by Abaqus
