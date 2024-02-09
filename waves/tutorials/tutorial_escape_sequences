@@ -94,7 +94,8 @@ workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
-    abaqus_options=f"{abaqus_options} -cpus $(${{solve_cpus}}$)",
+    abaqus_options="${global_abaqus_options} -cpus $(${{solve_cpus}}$)",
+    global_abaqus_options=abaqus_options,
     solve_cpus=env["solve_cpus"]))
 
 # Comment used in tutorial code snippets: marker-6
