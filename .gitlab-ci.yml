@@ -19,42 +19,33 @@ before_script:
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
-  - module use ${PWD}/modulefiles
-  # Prefer the CI environment and fall back to AEA environment(s)
-  - project_environment='waves-env'
-  - environment_choices="${project_environment} aea-beta aea-release"
+  # Start with an AEA environment to put Conda on PATH
+  - environment_choices="aea-beta aea-quarterly aea-release"
   - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then environment=${env}; break; fi; done
   - echo ${environment}
   - module load ${environment}
-  - conda info
-  # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
-  # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/8
+  # Activate CI environment if available. If not, rely on environment job running before other jobs.
+  - module use ${PWD}/modulefiles
+  - project_environment='waves-env'
   - environment_path="${aea_compute_path}/${project_environment}"
-  - conda_options='--force'
-  - |
-      if [[ ! -d ${environment_path} ]]; then
-          export ALL_PROXY="proxyout.lanl.gov:8080"
-          export HTTP_PROXY="http://$ALL_PROXY"
-          export HTTPS_PROXY=$HTTP_PROXY
-          conda env create --prefix ${environment_path} --file environment.yml ${conda_options};
-          chmod -R 755 ${environment_path}
-          unset ALL_PROXY
-          unset HTTP_PROXY
-          unset HTTPS_PROXY
-      fi
-  - if [[ ${project_environment} != ${environment} ]]; then module unload ${environment}; module load ${project_environment}; fi
+  - echo ${environment_path}
+  - if [[ -d ${environment_path} ]]; then module load ${project_environment}; fi
+  - conda info
   - conda_artifacts_directory='conda-bld'
 
 environment:
   stage: environment
   variables:
     GIT_STRATEGY: clone
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
-      changes:
-        - "modulefiles/*"
-        - "environment.yml"
   script:
+    # Don't rebuild environment for merge request pipelines unless the environment is missing
+    - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
+    - if [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]] && ${exists}; then exit 0; fi
+    # Don't rebuild environment for main/dev unless the environment file has changed or the environment doesn't exist
+    - files=$(git diff --name-only ${CI_COMMIT_SHA} ${CI_COMMIT_BEFORE_SHA}) || true
+    - if [[ $CI_COMMIT_BRANCH == "main" ]] || [[ $CI_COMMIT_BRANCH == "dev" ]]; then production=true; else production=false; fi
+    - if [[ "${files}" == *"environment.yml"* ]]; then modified=true; else modified=false; fi
+    - if ${production} && ${exists} && ! ${modified}; then exit 0; fi
     # Set LANL proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
     - export HTTP_PROXY="http://$ALL_PROXY"
