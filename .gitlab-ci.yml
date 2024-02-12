@@ -51,7 +51,7 @@ environment:
     - export HTTP_PROXY="http://$ALL_PROXY"
     - export HTTPS_PROXY=$HTTP_PROXY
     # Re-build the Conda environment on changes to environment files
-    - conda env create --prefix ${environment_path} --file environment.yml ${conda_options}
+    - conda env create --prefix ${environment_path} --file environment.yml --force 
     # Remove write permissions from group to avoid accidental environment changes
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
