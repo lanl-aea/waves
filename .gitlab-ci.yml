@@ -149,11 +149,16 @@ pages:
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
   script:
-    - rm -rf public && mkdir -p public
+    - project_root=$PWD
+    - rm -rf public && mkdir -p public/waves-eabm
     # Ensure the ``_version.py`` file is created
     - python -m setuptools_scm
     - scons html --clean && scons html
     - cp -r build/docs/html/* public/
+    # Build modsim template documentation
+    - cd waves/modsim_template
+    - PYTHONPATH=${project_root} scons html
+    - cp -r build/docs/html/* ${project_root}/public/waves-eabm
   artifacts:
     paths:
       # It MUST be called public
