@@ -29,7 +29,7 @@ before_script:
   - project_environment='waves-env'
   - environment_path="${aea_compute_path}/${project_environment}"
   - echo ${environment_path}
-  - if [[ -d ${environment_path} ]]; then module load ${project_environment}; fi
+  - if [[ -d ${environment_path} ]]; then module unload ${environment}; module load ${project_environment}; fi
   - conda info
   - conda_artifacts_directory='conda-bld'
 
