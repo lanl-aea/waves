@@ -9,7 +9,7 @@
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://lanl.github.io/waves/index.html
 .. _WAVES-EABM: https://github.com/lanl/waves/tree/main/modsim_template
-.. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
+.. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
@@ -42,8 +42,7 @@ Documentation
 =============
 
 * GitHub (pending): https://lanl.github.io/waves/waves-eabm/index.html
-* Production version (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
-* Development version (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
+* LANL: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
 
 Developers
 ==========

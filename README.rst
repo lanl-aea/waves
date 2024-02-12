@@ -10,7 +10,7 @@
 .. _WAVES repository: https://github.com/lanl/waves
 .. _WAVES releases: https://github.com/lanl/waves/releases/
 .. _WAVES-EABM: https://github.com/lanl/waves/tree/main/waves/modsim_template
-.. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
+.. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
@@ -85,15 +85,13 @@ The documentation is bundled with the Conda package and can be accessed locally 
 installation from the command line as ``waves docs``. The documentation is also web-hosted:
 
 * GitHub: https://lanl.github.io/waves/index.html
-* LANL (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/
-* LANL (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/
+* LANL: https://aea.re-pages.lanl.gov/python-projects/waves/
 
 The `WAVES-EABM documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can look
 like.
 
 * GitHub (pending): https://lanl.github.io/waves/waves-eabm/index.html
-* LANL (``main`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/main/waves-eabm/
-* LANL (``dev`` branch): https://aea.re-pages.lanl.gov/python-projects/waves/dev/waves-eabm/
+* LANL: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
 
 **********
 Developers
@@ -112,7 +110,7 @@ Copyright Notice
 
 .. copyright-start-do-not-remove
 
-Copyright (c) 2023, Triad National Security, LLC. All rights reserved.
+Copyright (c) 2024, Triad National Security, LLC. All rights reserved.
 
 This program was produced under U.S. Government contract 89233218CNA000001 for Los Alamos National Laboratory (LANL),
 which is operated by Triad National Security, LLC for the U.S.  Department of Energy/National Nuclear Security
@@ -130,7 +128,7 @@ Developer Notes
 The full developer manual can be found at:
 
 * GitHub: https://lanl.github.io/waves/devops.html
-* LANL: https://aea.re-pages.lanl.gov/python-projects/waves/dev/devops.html
+* LANL: https://aea.re-pages.lanl.gov/python-projects/waves/devops.html
 
 Clone the project
 =================

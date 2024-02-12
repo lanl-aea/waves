@@ -325,7 +325,7 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
     sconstruct = pathlib.Path(sconstruct).resolve()
     if not sconstruct.is_file():
         sconstruct = sconstruct / "SConstruct"
-    if not sconstruct.exists():
+    if not sconstruct.exists() and not input_file:
         print(f"\t{sconstruct} does not exist.", file=sys.stderr)
         return 1
     tree_output = ""

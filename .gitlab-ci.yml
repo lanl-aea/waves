@@ -6,9 +6,7 @@ workflow:
 
 stages:
   - environment
-  - version
   - test
-  - build
   - deploy
 
 before_script:
@@ -20,30 +18,18 @@ before_script:
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
-  - module use ${PWD}/modulefiles
-  # Prefer the CI environment and fall back to AEA environment(s)
-  - project_environment='waves-env'
-  - environment_choices="${project_environment} aea-beta aea-release"
+  # Start with an AEA environment to put Conda on PATH
+  - environment_choices="aea-beta aea-quarterly aea-release"
   - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then environment=${env}; break; fi; done
   - echo ${environment}
   - module load ${environment}
-  - conda info
-  # TODO: kick off 'environment' job for missing environments instead of re-creating the environment build logic here
-  # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/8
+  # Activate CI environment if available. If not, rely on environment job running before other jobs.
+  - module use ${PWD}/modulefiles
+  - project_environment='waves-env'
   - environment_path="${aea_compute_path}/${project_environment}"
-  - conda_options='--force'
-  - |
-      if [[ ! -d ${environment_path} ]]; then
-          export ALL_PROXY="proxyout.lanl.gov:8080"
-          export HTTP_PROXY="http://$ALL_PROXY"
-          export HTTPS_PROXY=$HTTP_PROXY
-          conda env create --prefix ${environment_path} --file environment.yml ${conda_options};
-          chmod -R 755 ${environment_path}
-          unset ALL_PROXY
-          unset HTTP_PROXY
-          unset HTTPS_PROXY
-      fi
-  - if [[ ${project_environment} != ${environment} ]]; then module unload ${environment}; module load ${project_environment}; fi
+  - echo ${environment_path}
+  - if [[ -d ${environment_path} ]]; then module unload ${environment}; module load ${project_environment}; fi
+  - conda info
   - conda_artifacts_directory='conda-bld'
 
 environment:
@@ -51,17 +37,24 @@ environment:
   variables:
     GIT_STRATEGY: clone
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule" || $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "dev"
-      changes:
-        - "modulefiles/*"
-        - "environment.yml"
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
   script:
+    # Don't rebuild environment for merge request pipelines unless the environment is missing
+    - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
+    - if [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]] && ${exists}; then exit 0; fi
+    # Don't rebuild environment for main unless the environment file has changed or the environment doesn't exist
+    - files=$(git diff --name-only ${CI_COMMIT_SHA} ${CI_COMMIT_BEFORE_SHA}) || true
+    - if [[ $CI_COMMIT_BRANCH == "main" ]]; then production=true; else production=false; fi
+    - if [[ "${files}" == *"environment.yml"* ]]; then modified=true; else modified=false; fi
+    - if ${production} && ${exists} && ! ${modified}; then exit 0; fi
     # Set LANL proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
     - export HTTP_PROXY="http://$ALL_PROXY"
     - export HTTPS_PROXY=$HTTP_PROXY
     # Re-build the Conda environment on changes to environment files
-    - conda env create --prefix ${environment_path} --file environment.yml ${conda_options}
+    - conda env create --prefix ${environment_path} --file environment.yml --force 
     # Remove write permissions from group to avoid accidental environment changes
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
@@ -70,41 +63,6 @@ environment:
     - ln ${environment_path}/scons.1 ${environment_path}/man/man1/scons.1
     - ln ${environment_path}/sconsign.1 ${environment_path}/man/man1/sconsign.1
     - ln ${environment_path}/scons-time.1 ${environment_path}/man/man1/scons-time.1
-  tags:
-    - shell-aea
-
-microbump:
-  stage: version
-  variables:
-    GIT_STRATEGY: clone
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-  script:
-    # Conditionally "bump" micro version number. setuptools_scm already bumps number, just need to strip local version.
-    - old_version=$(python -m setuptools_scm)
-    # First capture group is the major.minor.micro numbers
-    # Second capture group is everything following micro
-    - version_regex='\([0-9]\+\.[0-9]\+\.[0-9]\+\)\(.*\)'
-    # Returns clean production tag regardless if tagged already
-    - production_version=$(echo ${old_version} | sed "s/${version_regex}/\1/g")
-    # Catch unexpected production version regex and exit with error if suffix is found
-    - suffix=$(echo ${production_version} | sed "s/${version_regex}/\2/g")
-    - |
-        if [ -n "${suffix}" ]; then
-            echo "Could not resolve the production version from ${old_version}. Left with ${production_version} and ${suffix}."
-            exit 1
-        fi
-    - developer_version=${production_version}+dev
-    # Tag production commit and previous developer commit. Continue if already tagged.
-    - git config user.name "${GITLAB_USER_NAME}"
-    - git config user.email "${GITLAB_USER_EMAIL}"
-    - git tag -a ${production_version} -m "production release ${production_version}" || true
-    # Assume last merge was dev->main. Pick previous.
-    - last_merge_hash=$(git log --pretty=format:"%H" --merges -n 2 | tail -n 1)
-    - git tag -a ${developer_version} -m "developer pre-release ${developer_version}" ${last_merge_hash} || true
-    - git push https://gitlab-ci-token:${GITLAB_ACCESS_TOKEN}@re-git.lanl.gov/${CI_PROJECT_PATH}.git --tags
   tags:
     - shell-aea
 
@@ -128,7 +86,7 @@ fast-test:
     - sstbigbird-shell-aea
 
 conda-build:
-  stage: build
+  stage: test
   variables:
     GIT_STRATEGY: clone
   dependencies: []
@@ -136,7 +94,6 @@ conda-build:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "dev"
   script:
     # Set the LANL internal proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
@@ -146,7 +103,7 @@ conda-build:
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - croot="/scratch/$USER/$(basename $PWD)/${conda_artifacts_directory}"
-    - VERSION=$(python -m setuptools_scm) conda build recipe-internal --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe-internal --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
     - conda build purge --croot ${croot}
   artifacts:
     expire_in: '2 hrs'
@@ -166,7 +123,6 @@ deploy:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "dev"
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
@@ -192,37 +148,17 @@ pages:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "dev"
   script:
-    # Set job-wide variables and directories
     - project_root=$PWD
-    - rm -rf public && mkdir -p public
-    - cp docs/_static/index.html public
-    # Every documentation version must be re-built for *every* gitlab-pages job execution
-    # Reference: https://gitlab.com/gitlab-org/gitlab/-/issues/33822
-    - git fetch origin
-    - git branch -a
-    - documentation_branches="main dev"
-    - |
-        for ref in ${documentation_branches}; do
-            cd ${project_root}
-            git checkout $ref
-            git reset --hard origin/$ref
-            mkdir -p public/$ref/waves-eabm
-            # Build WAVES HTML documentation. Clean up after to avoid leftover targets from main/dev filename differences.
-            # Clean instead of "rm" to help catch incomplete target clean operations.
-            scons . --clean --unconditional-build
-            scons html-internal --unconditional-build
-            cp -r build/docs/html-internal/* ${project_root}/public/$ref
-            scons . --clean --unconditional-build
-            # Build WAVES-EABM HTML documentation
-            cd waves/modsim_template
-            PYTHONPATH=${project_root} scons . --clean
-            PYTHONPATH=${project_root} scons html
-            cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
-            PYTHONPATH=${project_root} scons . --clean
-            cd ${project_root}
-        done
+    - rm -rf public && mkdir -p public/waves-eabm
+    # Ensure the ``_version.py`` file is created
+    - python -m setuptools_scm
+    - scons html --clean && scons html
+    - cp -r build/docs/html/* public/
+    # Build modsim template documentation
+    - cd waves/modsim_template
+    - PYTHONPATH=${project_root} scons html
+    - cp -r build/docs/html/* ${project_root}/public/waves-eabm
   artifacts:
     paths:
       # It MUST be called public

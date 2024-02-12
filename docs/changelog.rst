@@ -8,6 +8,30 @@ Changelog
 0.7.9 (unreleased)
 ******************
 
+Bug fixes
+=========
+- waves visualize now works with an input file even if an SConstruct file does not exist (:issue:`586`, :merge:`725`).
+  By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Update the hardcoded copyright dates in the README and LICENSE files. By `Kyle Brindley`_.
+- Fix some typos in tutorial 01 and edit sentence for clarity (:issue:`592`, :merge:`730`). By `Prabhu Khalsa`_.
+- Fixed issue where class level api documentation were not being populated correctly (:issue:`595`, :merge:`733`).
+  By `Sergio Cordova`_.
+
+Internal Changes
+================
+- Explicit include of the tutorial and modsim template directories to help the conda-forge build find the non-Python
+  files (:issue:`589`, :merge:`728`). By `Kyle Brindley`_.
+- Silence irrelevant warning thrown by XArray (:issue:`590`, :merge:`729`). By `Kyle Brindley`_.
+- Add boa to the CI environment for faster packaging (:issue:`593`, :merge:`731`). By `Kyle Brindley`_.
+- Build with boa/mambabuild for faster packaging and run CI test jobs in parallel (:issue:`594`, :merge:`732`). By `Kyle
+  Brindley`_.
+- Remove duplicate logic in CI environment creation (:issue:`8`, :merge:`734`). By `Kyle Brindley`_.
+- Remove ``dev`` branch and begin using a single production ``main`` branch (:issue:`597`, :merge:`737`). By `Kyle
+  Brindley`_.
+
 ******************
 0.7.8 (2024-01-16)
 ******************
