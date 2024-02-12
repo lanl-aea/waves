@@ -40,14 +40,13 @@ environment:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "dev"
   script:
     # Don't rebuild environment for merge request pipelines unless the environment is missing
     - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
     - if [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]] && ${exists}; then exit 0; fi
-    # Don't rebuild environment for main/dev unless the environment file has changed or the environment doesn't exist
+    # Don't rebuild environment for main unless the environment file has changed or the environment doesn't exist
     - files=$(git diff --name-only ${CI_COMMIT_SHA} ${CI_COMMIT_BEFORE_SHA}) || true
-    - if [[ $CI_COMMIT_BRANCH == "main" ]] || [[ $CI_COMMIT_BRANCH == "dev" ]]; then production=true; else production=false; fi
+    - if [[ $CI_COMMIT_BRANCH == "main" ]]; then production=true; else production=false; fi
     - if [[ "${files}" == *"environment.yml"* ]]; then modified=true; else modified=false; fi
     - if ${production} && ${exists} && ! ${modified}; then exit 0; fi
     # Set LANL proxies
@@ -95,7 +94,6 @@ conda-build:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "dev"
   script:
     # Set the LANL internal proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
@@ -125,7 +123,6 @@ deploy:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "dev"
   script:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
@@ -151,37 +148,12 @@ pages:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH == "dev"
   script:
-    # Set job-wide variables and directories
-    - project_root=$PWD
     - rm -rf public && mkdir -p public
-    - cp docs/_static/index.html public
-    # Every documentation version must be re-built for *every* gitlab-pages job execution
-    # Reference: https://gitlab.com/gitlab-org/gitlab/-/issues/33822
-    - git fetch origin
-    - git branch -a
-    - documentation_branches="main dev"
-    - |
-        for ref in ${documentation_branches}; do
-            cd ${project_root}
-            git checkout $ref
-            git reset --hard origin/$ref
-            mkdir -p public/$ref/waves-eabm
-            # Build WAVES HTML documentation. Clean up after to avoid leftover targets from main/dev filename differences.
-            # Clean instead of "rm" to help catch incomplete target clean operations.
-            scons . --clean --unconditional-build
-            scons html-internal --unconditional-build
-            cp -r build/docs/html-internal/* ${project_root}/public/$ref
-            scons . --clean --unconditional-build
-            # Build WAVES-EABM HTML documentation
-            cd waves/modsim_template
-            PYTHONPATH=${project_root} scons . --clean
-            PYTHONPATH=${project_root} scons html
-            cp -r build/docs/html/* ${project_root}/public/$ref/waves-eabm
-            PYTHONPATH=${project_root} scons . --clean
-            cd ${project_root}
-        done
+    # Ensure the ``_version.py`` file is created
+    - python -m setuptools_scm
+    - scons html --clean && scons html
+    - cp -r build/docs/html/* public/
   artifacts:
     paths:
       # It MUST be called public
