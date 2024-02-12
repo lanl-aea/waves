@@ -16,7 +16,7 @@ Version Numbers
 
 The |project| project follows the `PEP-440`_ standard for version numbering. The
 production release version number uses the three component ("major.minor.micro")
-scheme. The developer (a.k.a. dev) version number follows the production
+scheme. The development version number follows the production
 release number with an appended ".dev" local version number. The version numbers
 correspond to git tags in the `upstream repository`_ which point to a static
 release of the |project| project.
@@ -25,7 +25,7 @@ Because the deployed release of the developer version is constantly updated
 against development work, the version number found in the developer version
 contains additional information. During deployment, the developer version number
 is appended with the git information from the most recent build. This
-information contains the most recent git tag ("major.minor.micro+dev") followed
+information contains the most recent git tag ("major.minor.micro.dev") followed
 by the number of commits since the last production release and a short hash.
 
 Major Number
@@ -50,9 +50,7 @@ recommended that all minor version changes are announced to the user community p
 Micro Number
 ============
 
-The micro number is automatically incremented after any merge from the
-development (dev) branch into the production (main) branch. The micro version
-number indicates the following changes:
+The micro version number indicates the following changes:
 
 * Bug fixes
 * Minor internal implementation changes
@@ -67,35 +65,24 @@ with the user community.
 Release Branch Requirements
 ***************************
 
-All production releases require a release branch. Releases correspond to a variety of bug fixes and features that
-characterize the release, as documented in :ref:`changelog`.
-
-The following steps will trigger a micro bump. Major and minor version bumps require a manual Git tag update for the
-otherwise automated ``setuptools_scm`` SCM version.
+All version requires a manual update to the release number on a dedicated release commit. Versions are built from Git
+tags for the otherwise automated `setuptools_scm`_ version number tool. Tags may be added directly to a commit on the
+``main`` branch, but a release branch is encouraged.
 
 Steps needed for a release include:
 
-1. Create a release branch.
-2. Modify ``docs/changelog.rst`` to move version number for release MR commit,
-   add a description as relevant, and update any missing entries in the changelog.
+1. Create a release branch, e.g. ``release-0-4-1``.
+2. Modify ``docs/changelog.rst`` to move version number for release MR commit and add description as relevant.
 3. Check and update the ``CITATION.bib``, ``CITATION.cff``, and ``waves/modsim_template/docs/references.bib`` file to
    use the new version number and release date.
-4. Commit changes and submit a merge request to the ``dev`` branch at the `upstream repository`_.
-5. **Major and Minor bumps ONLY**: Create a new developer version tag, e.g. ``?.?.0+dev``, on the new commit.
-   Reset all numbers to the right of the bump to ``0``, e.g. ``1.2.3`` becomes ``2.0.0+dev`` for a Major version
-   bump or ``1.3.0+dev`` for a Minor version bump.
+4. Commit changes and submit a merge request to the ``main`` branch at the `upstream repository`_.
+5. Solicit feedback and make any required changes.
+6. Immediately prior to merge, add the new version tag to the most recent commit.
 
-   .. code-block:: bash
+   .. code-block::
 
-       $ git tag 1.7.0+dev
+      $ git tag 0.4.1
+      $ git push origin release-0-4-1 --tags
 
-6. Push release branch with the new tag
-
-   .. code-block:: bash
-
-       $ git push origin <release branch name>
-       $ git push --tags
-
-7. Submit a merge request to the ``dev`` branch of the `upstream repository`_.
-8. Immediately submit a ``dev->main`` MR after merging the release branch to ``dev``.
-9. Review tests and notes, receive approval, and merge to ``main``.
+7. Merge the release branch to ``main``
+8. Create a new release for the new tag: https://re-git.lanl.gov/aea/python-projects/waves/-/releases

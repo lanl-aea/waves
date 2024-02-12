@@ -29,6 +29,8 @@ Internal Changes
 - Build with boa/mambabuild for faster packaging and run CI test jobs in parallel (:issue:`594`, :merge:`732`). By `Kyle
   Brindley`_.
 - Remove duplicate logic in CI environment creation (:issue:`8`, :merge:`734`). By `Kyle Brindley`_.
+- Remove ``dev`` branch and begin using a single production ``main`` branch (:issue:`597`, :merge:`737`). By `Kyle
+  Brindley`_.
 
 ******************
 0.7.8 (2024-01-16)
