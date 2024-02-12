@@ -17,7 +17,7 @@ Documentation
 =============
 - Update the hardcoded copyright dates in the README and LICENSE files. By `Kyle Brindley`_.
 - Fix some typos in tutorial 01 and edit sentence for clarity (:issue:`592`, :merge:`730`). By `Prabhu Khalsa`_.
-- Fixed issue where class level api documentation were not being populated correctly (:issue:`595`, :merge:`733`). 
+- Fixed issue where class level api documentation were not being populated correctly (:issue:`595`, :merge:`733`).
   By `Sergio Cordova`_.
 
 Internal Changes
@@ -28,6 +28,7 @@ Internal Changes
 - Add boa to the CI environment for faster packaging (:issue:`593`, :merge:`731`). By `Kyle Brindley`_.
 - Build with boa/mambabuild for faster packaging and run CI test jobs in parallel (:issue:`594`, :merge:`732`). By `Kyle
   Brindley`_.
+- Remove duplicate logic in CI environment creation (:issue:`8`, :merge:`734`). By `Kyle Brindley`_.
 
 ******************
 0.7.8 (2024-01-16)
