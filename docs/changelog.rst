@@ -12,6 +12,8 @@ Bug fixes
 =========
 - waves visualize now works with an input file even if an SConstruct file does not exist (:issue:`586`, :merge:`725`).
   By `Prabhu Khalsa`_.
+- Fix bug in abaqus_file_parser that manifests when there is just one line of data in the field output section of the
+  csv file (:issue:`599`, :merge:`740`). By `Prabhu Khalsa`_.
 
 Documentation
 =============
