@@ -29,6 +29,8 @@ def combine_data(input_files, group_path, concat_coord):
     data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord: path.parent.name}) 
                       for path in paths)
     combined_data = xarray.concat(data_generator, concat_coord)
+    combined_data.close()
+
     return combined_data
 
 
@@ -83,9 +85,6 @@ def save_plots(combined_data, x_var, y_var, concat_coord, output_file):
 
     # Table
     combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
-
-    # Clean up open files
-    combined_data.close()
 
 
 def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
