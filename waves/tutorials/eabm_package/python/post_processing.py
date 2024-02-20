@@ -55,7 +55,7 @@ def regression_test(csv_regression_file, output_file):
     
     :param str csv_regression_file: path-like or file-like object containing the CSV dataset to compare with the current
         plot data. If the data sets do not match a non-zero exit code is returned.
-    :param Path output_file: The plot file name. Relative or absolute path.
+    :param Path output_file: Output file name. Relative or absolute path.
     """
     output_csv = output_file.with_suffix(".csv")
     current_csv = pandas.read_csv(output_csv)
