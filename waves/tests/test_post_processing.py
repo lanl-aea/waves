@@ -35,6 +35,7 @@ def test_plot(group_path, x_var, x_units, y_var, y_units, parameter_study_file, 
           patch('waves.tutorials.eabm_package.python.post_processing.regression_test') as regression_test,
           patch('waves.tutorials.eabm_package.python.post_processing.save_plots') as save_plots,
           patch('matplotlib.pyplot.savefig'),
+          patch('pandas.read_csv'),
           patch('builtins.print')):
         post_processing.plot(input_files=input_path, output_file=output_path, group_path=group_path, x_var=x_var,
                              x_units=x_units, y_var=y_var, y_units=y_units, selection_dict=selection_dict,
