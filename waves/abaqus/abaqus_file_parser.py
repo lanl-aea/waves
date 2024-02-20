@@ -1740,7 +1740,7 @@ class OdbReportFileParser(AbaqusFileParser):
                 value_indices.append(i)
             headers[i] = header  # Need to store stripped header, without spaces or line breaks
         line = f.readline()  # Blank line
-        if not line:
+        if not line.strip():
             line = 'Ready for first line of data'
 
         previous_element = None
