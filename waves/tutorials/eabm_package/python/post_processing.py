@@ -50,20 +50,16 @@ def merge_parameter_study(parameter_study_file, combined_data):
     return combined_data
 
 
-def regression_test(csv_regression_file, output_file):
+def regression_test(current_csv, expected_csv):
     """Run Regression test
     
-    :param str csv_regression_file: path-like or file-like object containing the CSV dataset to compare with the current
-        plot data. If the data sets do not match a non-zero exit code is returned.
-    :param Path output_file: Output file name. Relative or absolute path.
+    :param pandas.DataFrame current_csv: Current CSV data of generated plot.
+    :param pandas.DataFrame expected_csv: Expected CSV data.
     """
-    output_csv = output_file.with_suffix(".csv")
-    current_csv = pandas.read_csv(output_csv)
-    regression_csv = pandas.read_csv(csv_regression_file)
-    equal = regression_csv.equals(current_csv)
+    equal = expected_csv.equals(current_csv)
     if not equal:
-        print(f"The CSV regression test failed. Data in '{csv_regression_file.resolve()}' and " \
-              f"'{output_csv.resolve()}' do not match.", file=sys.stderr)
+        print("The CSV regression test failed. Data in expected CSV file and current CSV file do not match.",
+              file=sys.stderr)
         return 1
 
 
@@ -132,7 +128,10 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 
     # Regression test
     if csv_regression_file:
-        regression_test(csv_regression_file, output_file)
+        output_csv = output_file.with_suffix(".csv")
+        current_csv = pandas.read_csv(output_csv)
+        regression_csv = pandas.read_csv(csv_regression_file)
+        regression_test(current_csv, regression_csv)
     return 0
 
 
