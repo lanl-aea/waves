@@ -2,16 +2,17 @@
 """Example of catenating WAVES parameter study results and definition"""
 
 import sys
-import yaml
-import pathlib
 import argparse
+import pathlib
+import yaml
 
 import numpy
-import pandas
-import xarray
 import seaborn
+import xarray
+import pandas
 import matplotlib.pyplot
 import SALib.analyze.delta
+
 
 from eabm_package.python.correlation_coefficients_schema import parameter_schema
 
@@ -19,14 +20,14 @@ default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, '
                           'integration point': 0, 'data_type': 'samples'}
 
 
-def plot(input_files, output_file, group_path, selection_dict, parameter_study_file=None):
+def plot(input_files, output_file, group_path, selection_dict,
+         parameter_study_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
     parameter study dataset file is assumed to be written by a WAVES parameter generator.
 
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
-        containing Xarray Datasets
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray Datasets
     :param str output_file: The plot file name. Relative or absolute path.
     :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
     :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
@@ -48,7 +49,6 @@ def plot(input_files, output_file, group_path, selection_dict, parameter_study_f
     if parameter_study_file:
         parameter_study = xarray.open_dataset(parameter_study_file)
         combined_data = combined_data.merge(parameter_study)
-        parameter_study.close()
 
     # Correlation coefficients
     correlation_data = combined_data.sel(selection_dict).to_array().to_pandas().transpose()
@@ -106,8 +106,7 @@ def get_parser():
                         help="The h5py group path to the dataset object (default: %(default)s)")
     parser.add_argument("-s", "--selection-dict", type=str, default=None,
                         help="The YAML formatted dictionary file to define the down selection of data to be plotted. " \
-                             "Dictionary key: value pairs must match the data variables and coordinates of the " \
-                             "expected Xarray Dataset object. " \
+                             "Dictionary key: value pairs must match the data variables and coordinates of the expected Xarray Dataset object. " \
                              "If no file is provided, the a default selection dict will be used " \
                              f"(default: {default_selection_dict})")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
