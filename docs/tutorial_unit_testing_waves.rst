@@ -4,8 +4,6 @@
 Tutorial: Unit Testing
 ######################
 
-.. include:: wip_warning.txt
-
 **********
 References
 **********
@@ -93,7 +91,7 @@ Build Targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons tutorial_unit_testing
+   $ scons unittest
 
 ************
 Output Files
@@ -108,3 +106,8 @@ is specified by name to reduce clutter in the output shown.
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ tree build/tutorial_unit_testing/
+   build/tutorial_unit_testing/
+   ├── parameter_study.h5
+   └── test_results.xml
+
+   0 directories, 2 files
