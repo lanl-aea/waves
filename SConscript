@@ -21,7 +21,7 @@ if env["coverage_report"]:
     coverage = "--cov"
     program_operations_coverage = "--cov --cov-append"
     target.append("coverage.xml")
-    coverage_command = "coverage xml"
+    coverage_command = "coverage xml -o ${TARGETS[1].abspath}"
 
 pytest_node = env.Command(
     target=target,
