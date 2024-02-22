@@ -23,6 +23,8 @@ Environment
 
 .. include:: tutorial_environment_activation.txt
 
+.. include:: version_check_warning.txt
+
 *******************
 Directory Structure
 *******************
@@ -62,7 +64,33 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-.. _tutorials_tutorial_unit_testing_waves:
+5. Create testing initialization files for the testing directory.
+
+.. admonition:: waves-tutorials/eabm_package/python/tests/__init__.py
+
+   .. code-block::
+
+      $ pwd
+      /home/roppenheimer/waves-tutorials
+      $ mkdir eabm_package/python/tests
+      $ touch eabm_package/python/tests/__init__.py
+
+**************
+Unit test file
+**************
+
+5. In the ``waves-tutorials/eabm_package/python/tests`` directory, Create a new file named ``test_post_processing.py`` from the contents below
+
+.. admonition:: waves-tutorials/eabm_package/python/tests/test_post_processing.py
+
+    .. literalinclude:: tests_test_post_processing.py
+        :language: Python
+        :lineno-match:
+
+In the ``test_post_processing.py`` file, you'll find a test implementation of a simple function within the
+``post_processing.py`` module. However, the remaining functions delve into more complex territory which need advanced
+techniques such as ``mocking``. These aspects are intentionally left as exercises for you, the reader, to explore and
+master. For a deeper understanding of how mocking operates in Python, refer to `Unittest Mock`_.
 
 **********
 SConscript

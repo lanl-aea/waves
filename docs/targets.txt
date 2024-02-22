@@ -104,6 +104,7 @@
 .. _`shebang`: https://en.wikipedia.org/wiki/Shebang_(Unix)
 .. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
 .. _`Sphinx`: https://www.sphinx-doc.org/en/master/
+.. _`Unittest Mock`: https://docs.python.org/3/library/unittest.mock.html
 .. _`xarray dataset`: https://xarray.pydata.org/en/v2022.03.0/generated/xarray.Dataset.html
 
 .. PDM/PLM

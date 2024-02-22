@@ -226,6 +226,7 @@ tutorial_files_list = [
     tutorials_dir / env['python_dir'] / 'rectangle_compression_mesh_convergence.py',
     tutorials_dir / env['python_dir'] / 'mesh_convergence_stress.yaml',
     tutorials_dir / env['python_dir'] / 'post_processing.py',
+    tutorials_dir / env['tests_dir'] / 'test_post_processing.py',
     tutorials_dir / "tutorial_cubit/cubit",
     tutorials_dir / "tutorial_cubit/abaqus",
     tutorials_dir / "tutorial_cubit/sierra",

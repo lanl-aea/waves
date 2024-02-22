@@ -24,7 +24,8 @@ project_variables = {
     'abaqus_dir': 'eabm_package/abaqus',
     'argparse_types_dir': 'eabm_package/argparse_types',
     'cubit_dir': 'eabm_package/cubit',
-    'python_dir': 'eabm_package/python'
+    'python_dir': 'eabm_package/python',
+    'tests_dir': 'eabm_package/python/tests'
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===
