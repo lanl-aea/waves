@@ -105,6 +105,18 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 
+Pytest employs a process called test discovery, where it recursively searches through the project directory and its
+subdirectories for files matching certain naming conventions, such as ``test_*.py`` or ``*_test.py``. This automated
+discovery mechanism enables pytest to identify and execute all relevant test files within the project structure without
+requiring manual configuration.
+
+The ``unittest_command`` sets the environment variable ``PYTHONDONTWRITEBYTECODE`` to ``1``, instructing Python not to
+generate bytecode files, thereby preventing the creation of ``.pyc`` files. It executes the pytest command with various
+options: ``-v`` for verbose mode, ``--tb=short`` to display shorter traceback output, ``--cache-clear`` to clear any
+cached test results, and ``--junitxml=${TARGETS[0]}`` to generate JUnit XML reports. JUnit XML reports are valuable as
+they provide a standardized and machine-readable format for test results. Since the ``pytest`` command is being invoked
+from our project directory, we must specify the build directory path when setting the ``test_results.xml`` target.
+
 **********
 SConstruct
 **********
