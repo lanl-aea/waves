@@ -4,8 +4,6 @@
 Tutorial: Unit Testing
 ######################
 
-.. include:: wip_warning.txt
-
 Unit testing is a software development practice that allows developers to verify the functionality of individual units
 or components of their codebase. In modsim repositories, unit tests play a vital role in validating custom scripting
 libraries tailored to the project. This tutorial introduces a project-wide alias, streamlining the execution of unit
