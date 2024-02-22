@@ -20,7 +20,7 @@ def test_regression_test():
 
     # Different DataFrame
     different = control.copy()
-    different['DummyLine'][0] = 'Different Value'
+    different.loc[0, 'DummyLine'] = 999
 
     # Assert that the function returns "1" when expected
     assert post_processing.regression_test(control, different) == 1

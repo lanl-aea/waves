@@ -152,19 +152,18 @@ workflow.extend(env.PythonScript(
     script_options=script_options))
 
 # Unit test
-unittest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -v -n 4 -m unittest --tb=short --cache-clear"
-target = []
-source = [test_source_abspath / "test_post_processing.py"]
+unittest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -v --tb=short --cache-clear --junitxml=${TARGETS[0]}"
+target = [build_directory / "test_results.xml"]
 unittest_node = env.Command(
     target=target,
-    source=source,
+    source=[],
     action=unittest_command
 )
 
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
-env.Alias(f"{workflow_name}_unittest", unittest_node)
+env.Alias("unittest", unittest_node)
 
 if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
