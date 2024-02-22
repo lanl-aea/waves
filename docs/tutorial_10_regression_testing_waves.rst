@@ -27,7 +27,7 @@ tutorials to include the full suite of datacheck tasks in the project wide datac
 References
 **********
 
-* :ref:`testing`
+* :ref:`regression_testing`
 * `SCons Alias`_ :cite:`scons-user`
 * Continuous Integration software
 
