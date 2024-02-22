@@ -134,7 +134,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the new targets
+5. Build the test results
 
 .. code-block:: bash
 
