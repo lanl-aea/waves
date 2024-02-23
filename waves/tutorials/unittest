@@ -1,0 +1,21 @@
+#! /usr/bin/env python
+"""Rectangle compression workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+"""
+
+# Inherit the parent construction environment
+Import(['env', 'test_files'])
+
+# Unit test
+unittest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -v --tb=short --cache-clear --junitxml=${TARGETS[0]} ${SOURCES.abspath}"
+target = ["test_results.xml"]
+unittest_node = env.Command(
+    target=target,
+    source=[test_files],
+    action=unittest_command
+)
+
+env.Alias("unittest", unittest_node)
