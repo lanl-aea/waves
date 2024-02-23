@@ -3,7 +3,8 @@
 
 Requires the following ``SConscript(..., exports=[])``
 
-* ``env`` - The SCons construction environment with the following required keys
+* ``env`` - The SCons construction environment
+* ``test_files`` - List of test file paths
 """
 
 # Inherit the parent construction environment
