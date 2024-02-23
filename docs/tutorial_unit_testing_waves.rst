@@ -14,6 +14,7 @@ References
 **********
 
 * `pytest`_
+* :ref:`testing`
 
 ***********
 Environment

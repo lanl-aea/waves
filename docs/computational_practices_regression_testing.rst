@@ -1,8 +1,8 @@
 .. _testing:
 
-****************
-Software Testing
-****************
+******************
+Regression Testing
+******************
 
 There are several types of testing performed in software development. The three most relevant to :term:`modsim
 repositories` are unit, integration, and system testing. Executing the test suite at regular intervals or after making
@@ -13,12 +13,6 @@ Since :term:`modsim repositories` will inevitably involve some amount of scripti
 specific re-usable libraries, it is important to learn the practices of software testing. However, these testing
 concepts can also be applied to a simulation workflow to verify that changes to the simulation files and simulation
 construction tools have not broken the workflow.
-
-.. _unit_testing:
-
-------------
-Unit Testing
-------------
 
 Unit testing is directed at the interface and behavior of an individual function, method, or class. Unit testing in a
 modsim repository serves the same purposes as in software development, and should be implemented to verify the behavior
@@ -33,12 +27,6 @@ external library calls to avoid file I/O, while still allowing aspects of the li
 testing, e.g. what arguments and values were passed to the mock object. Finally, unit testing verifies the interfaces of
 code, leaving developers free to change the implementation without creating breaking changes in code behavior.
 
-.. _integration_testing:
-
--------------------
-Integration Testing
--------------------
-
 Integration testing is the practice of testing interfaces between functions, methods, or classes. Where unit testing
 verifies the documented interface and behavior of a single unit of code, integration testing verifies that the
 various elements of a script or library work together as intended. Similar to unit testing, integration testing is
@@ -46,12 +34,6 @@ limited to the current project's code. If the scope of integration testing cover
 e.g. the simulation scripts constructing a workflow, it can be considered a verification of the intended usage. Where
 unit testing verifies a single code element's interface, integration testing verifies the intended usage of the script
 or library.
-
-.. _system_testing:
-
---------------
-System Testing
---------------
 
 When testing includes file I/O or external executables and programs, it is often called system testing. In a modsim
 repository, integration testing may require execution of several stand-alone scripts, such as those introduced in
@@ -62,12 +44,6 @@ a simulation workflow will actually be system testing. One important aspect of s
 regression test suite that will verify expected behavior when external libraries, programs, and software change versions
 or when executing the simulation on a new server. Regular execution of the modsim integration and system tests helps
 catch breaking changes in external dependencies early after changes in the system software and architecture.
-
-.. _regression_testing:
-
-------------------
-Regression Testing
-------------------
 
 Finally, regression testing may take several forms depending on the cost of test suite execution. In modsim
 repositories, it is good to perform unit and integration testing on any project specific code prior to every proposed
