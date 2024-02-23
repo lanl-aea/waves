@@ -156,6 +156,6 @@ is specified by name to reduce clutter in the output shown.
    $ tree build/tutorial_unit_testing/
    build/tutorial_unit_testing/
    ├── parameter_study.h5
-   └── test_results.xml
+   └── unittest_results.xml
 
    0 directories, 2 files

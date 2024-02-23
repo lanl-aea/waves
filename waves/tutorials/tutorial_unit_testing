@@ -155,7 +155,8 @@ workflow.extend(env.PythonScript(
 # Call unittest SConscript file
 test_files = [str(test_file) for test_file in pathlib.Path(test_source_abspath).iterdir()
               if test_file.is_file() and test_file.suffix == '.py' and 'test' in test_file.name]
-SConscript('unittest', exports=['env', 'test_files'], duplicate=False)
+test_alias = 'unittest'
+SConscript('unittest_template', exports=['env', 'test_files', 'test_alias'], duplicate=False)
 
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)

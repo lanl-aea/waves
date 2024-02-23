@@ -5,18 +5,19 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment
 * ``test_files`` - List of test file paths
+* ``test_alias`` - Alias name representing the test targets
 """
 
 # Inherit the parent construction environment
-Import(['env', 'test_files'])
+Import(['env', 'test_files', 'test_alias'])
 
-# Unit test
+# Unit test target
 unittest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -v --tb=short --cache-clear --junitxml=${TARGETS[0]} ${SOURCES.abspath}"
-target = ["test_results.xml"]
+target = [f"{test_alias}_results.xml"]
 unittest_node = env.Command(
     target=target,
     source=[test_files],
     action=unittest_command
 )
 
-env.Alias("unittest", unittest_node)
+env.Alias(test_alias, unittest_node)
