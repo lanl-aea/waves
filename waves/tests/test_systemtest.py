@@ -49,6 +49,7 @@ if not installed:
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
     #("scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_unit_testing --sconstruct=tutorial_unit_testing_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
+    ("scons unittest --sconstruct=tutorial_unit_testing_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
