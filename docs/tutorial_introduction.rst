@@ -87,6 +87,7 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       sequence
                    00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that uses
                                                                       common Geometry and Partition tasks.
+                   00:20 :ref:`tutorial_unit_testing_waves`           Unit testing
 ======================== ============================================ ==================================================
 
 ************************
@@ -107,5 +108,4 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       parameter study
                    00:30 :ref:`tutorial_task_reuse_waves`             Re-use task definitions
                    00:10 :ref:`tutorial_setuptools_scm_waves`         Dynamic version number from git tags
-                   00:20 :ref:`tutorial_unit_testing_waves`           Unit testing
 ======================== ============================================ ==================================================
