@@ -91,18 +91,18 @@ In the ``test_post_processing.py`` file, you'll find a test implementation of a 
 techniques such as ``mocking``. These aspects are intentionally left as exercises for you, the reader, to explore and
 master. For a deeper understanding of how mocking operates in Python, refer to `Unittest Mock`_ :cite:`unittest-mock`.
 
-**********
-SConscript
-**********
 
-A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
-changes made in this tutorial.
+***********************
+Unit test template file
+***********************
 
-.. admonition:: waves-tutorials/tutorial_unit_testing
+6. In the ``waves-tutorials`` directory, Create a new file named ``unittest_template`` from the contents below
 
-   .. literalinclude:: tutorials_tutorial_unit_testing
-      :language: Python
-      :diff: tutorials_tutorial_09_post_processing
+.. admonition:: waves-tutorials/unittest_template
+
+    .. literalinclude:: unittest_template
+        :language: Python
+        :lineno-match:
 
 Pytest employs a process called test discovery, where it recursively searches through the project directory and its
 subdirectories for files matching certain naming conventions, such as ``test_*.py`` or ``*_test.py``. This automated
@@ -112,16 +112,36 @@ requiring manual configuration.
 The ``unittest_command`` sets the environment variable ``PYTHONDONTWRITEBYTECODE`` to ``1``, instructing Python not to
 generate bytecode files, thereby preventing the creation of ``.pyc`` files. It executes the pytest command with various
 options: ``-v`` for verbose mode, ``--tb=short`` to display shorter traceback output, ``--cache-clear`` to clear any
-cached test results, and ``--junitxml=${TARGETS[0]}`` to generate JUnit XML reports. JUnit XML reports are valuable as
-they provide a standardized and machine-readable format for test results. Since the ``pytest`` command is being invoked
-from our project directory, we must specify the build directory path when setting the ``test_results.xml`` target.
+cached test results, and ``--junitxml`` to generate JUnit XML reports. JUnit XML reports are valuable as
+they provide a standardized and machine-readable format for test results.
+
+**********
+SConscript
+**********
+
+7. Update the ``tutorial_unit_testing`` file. A ``diff`` against the ``tutorial_09_post_processing`` file from
+:ref:`tutorial_post_processing_waves` is included below to help identify the changes made in this tutorial.
+
+.. admonition:: waves-tutorials/tutorial_unit_testing
+
+   .. literalinclude:: tutorials_tutorial_unit_testing
+      :language: Python
+      :diff: tutorials_tutorial_09_post_processing
+
+The ``unittest_template`` file can be invoked multiple times within a single workflow execution. Its flexibility allows
+for the creation of separate XML results files. This is advantageous in scenarios where various workflows require the
+execution of unit tests, as the tests themselves are not tied to any specific workflow file.
+
+in the ``tutorial_unit_testing`` file we have mapped the alias ``unittest`` to all python files in our test directory
+that include ``test`` in their name. Feel free to update the ``tests`` dictionary to include multiple aliases within
+this workflow.
 
 **********
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
-changes made in this tutorial.
+8. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves`
+is included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
 
@@ -133,7 +153,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-5. Build the test results
+9. Build the test results
 
 .. code-block:: bash
 
