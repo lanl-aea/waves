@@ -89,7 +89,7 @@ Unit test file
 In the ``test_post_processing.py`` file, you'll find a test implementation of a simple function within the
 ``post_processing.py`` module. However, the remaining functions delve into more complex territory which need advanced
 techniques such as ``mocking``. These aspects are intentionally left as exercises for you, the reader, to explore and
-master. For a deeper understanding of how mocking operates in Python, refer to `Unittest Mock`_.
+master. For a deeper understanding of how mocking operates in Python, refer to `Unittest Mock`_ :cite:`unittest-mock`.
 
 **********
 SConscript
