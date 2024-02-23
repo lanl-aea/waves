@@ -100,20 +100,16 @@ Unit test template file
 
 .. admonition:: waves-tutorials/unittest_template
 
-    .. literalinclude:: unittest_template
+    .. literalinclude:: tutorials_unittest_template
         :language: Python
         :lineno-match:
 
-Pytest employs a process called test discovery, where it recursively searches through the project directory and its
-subdirectories for files matching certain naming conventions, such as ``test_*.py`` or ``*_test.py``. This automated
-discovery mechanism enables pytest to identify and execute all relevant test files within the project structure without
-requiring manual configuration.
-
-The ``unittest_command`` sets the environment variable ``PYTHONDONTWRITEBYTECODE`` to ``1``, instructing Python not to
-generate bytecode files, thereby preventing the creation of ``.pyc`` files. It executes the pytest command with various
-options: ``-v`` for verbose mode, ``--tb=short`` to display shorter traceback output, ``--cache-clear`` to clear any
-cached test results, and ``--junitxml`` to generate JUnit XML reports. JUnit XML reports are valuable as
-they provide a standardized and machine-readable format for test results.
+This ``SConscript`` file will run all tests found in the imported ``test_files``. The ``unittest_command`` sets the
+environment variable ``PYTHONDONTWRITEBYTECODE`` to ``1``, instructing Python not to generate bytecode files, thereby
+preventing the creation of ``.pyc`` files. It executes the pytest command with various options: ``-v`` for verbose
+mode, ``--tb=short`` to display shorter traceback output, ``--cache-clear`` to clear any cached test results,
+and ``--junitxml`` to generate JUnit XML reports. JUnit XML reports are valuable as they provide a standardized and
+machine-readable format for test results.
 
 **********
 SConscript
@@ -132,7 +128,7 @@ The ``unittest_template`` file can be invoked multiple times within a single wor
 for the creation of separate XML results files. This is advantageous in scenarios where various workflows require the
 execution of unit tests, as the tests themselves are not tied to any specific workflow file.
 
-in the ``tutorial_unit_testing`` file we have mapped the alias ``unittest`` to all python files in our test directory
+In the ``tutorial_unit_testing`` file we have mapped the alias ``unittest`` to all python files in our test directory
 that include ``test`` in their name. Feel free to update the ``tests`` dictionary to include multiple aliases within
 this workflow.
 

@@ -195,7 +195,7 @@ tutorial_files_list = [
     tutorials_dir / 'tutorial_task_reuse_SConstruct',
     tutorials_dir / 'tutorial_unit_testing',
     tutorials_dir / 'tutorial_unit_testing_SConstruct',
-    tutorials_dir / 'unittest',
+    tutorials_dir / 'unittest_template',
     tutorials_dir / 'rectangle_geometry_partition.scons',
     tutorials_dir / 'rectangle_mesh_solverprep_solve_extract.scons',
     tutorials_dir / 'gitignore',
