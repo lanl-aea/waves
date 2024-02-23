@@ -1,12 +1,10 @@
 #! /usr/bin/env python
 
-import pytest
 import pandas as pd
 
 from waves.tutorials.eabm_package.python import post_processing
 
 
-@pytest.mark.unittest
 def test_regression_test():
     data = {
         'DummyLine': [1, 2, 3],
