@@ -48,7 +48,6 @@ if not installed:
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
     #("scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
-    ("scons unit_testing --sconstruct=tutorial_unit_testing_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
@@ -57,6 +56,7 @@ if not installed:
     ("scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
+    ("scons unit_testing --sconstruct=tutorial_unit_testing_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_correlation_coefficients --sconstruct=tutorial_correlation_coefficients_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_11_archival --sconstruct=tutorial_11_archival_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
