@@ -99,7 +99,7 @@ workflow_configurations = [
     'tutorial_06_include_files',
     'tutorial_07_cartesian_product',
     'tutorial_08_data_extraction',
-    'tutorial_09_post_processing',
+    'tutorial_09_post_processing'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow

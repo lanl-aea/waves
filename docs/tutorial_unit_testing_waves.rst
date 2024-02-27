@@ -110,6 +110,10 @@ is included below to help identify the changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_09_post_processing_SConstruct
 
+Our test alias is initialized similarly to that of the workflow aliases. In order to show that the tests
+themselves are not a modsim workflow and not tied to any specific workflow file, we have moved the ``unit_testing``
+call to a separate section.
+
 *************
 Build Targets
 *************
@@ -136,6 +140,6 @@ is specified by name to reduce clutter in the output shown.
    /home/roppenheimer/waves-tutorials
    $ tree build/unit_testing/
    build/unit_testing/
-   └── test_results.xml
+   └── unit_testing_results.xml
 
-   0 directories, 2 files
+   0 directories, 1 file
