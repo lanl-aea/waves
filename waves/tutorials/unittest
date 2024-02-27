@@ -3,21 +3,29 @@
 
 Requires the following ``SConscript(..., exports=[])``
 
-* ``env`` - The SCons construction environment
-* ``test_files`` - List of test file paths
-* ``test_alias`` - Alias name representing the test targets
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``test_source_abspath`` - String absolute path to the EABM's Python 3 test files
 """
 
 # Inherit the parent construction environment
-Import(['env', 'test_files', 'test_alias'])
+Import('env')
+
+# Set project-wide paths with os-agnostic path separators
+test_source_abspath = pathlib.Path(env["test_source_abspath"])
+
+# Set test files
+test_files = [
+    test_source_abspath / "test_post_processing.py"
+]
 
 # Unit test target
 unittest_command = "pytest --junitxml=${TARGETS[0]} ${SOURCES.abspath}"
-target = [f"{test_alias}_results.xml"]
+target = ["test_results.xml"]
 unittest_node = env.Command(
     target=target,
-    source=[test_files],
+    source=test_files,
     action=unittest_command
 )
 
-env.Alias(test_alias, unittest_node)
+env.Alias('unittest', unittest_node)
