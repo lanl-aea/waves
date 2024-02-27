@@ -1591,7 +1591,6 @@ class OdbReportFileParser(AbaqusFileParser):
         while 'history' not in line.lower() \
                 and not line.startswith('-----------------------------------------------------------') \
                 and not line.startswith('  -------------------------------------') and line != "":
-            nodal = False
             if line.strip().startswith('Field name'):
                 self.current_field_number += 1
                 field = dict()
@@ -1615,26 +1614,23 @@ class OdbReportFileParser(AbaqusFileParser):
                         line = f.readline()
                         if 'position' in line:
                             location['position'] = line.split(':', 1)[1].strip()
-                            if location['position'] == 'NODAL':
-                                nodal = True
                         field['locations'].append(location)
                 if line.strip().startswith('Components of field ') or line.strip().startswith('Invariants of field'):
-                    line = self.parse_components_of_field(f, line, field, nodal)
+                    line = self.parse_components_of_field(f, line, field)
             if line.strip().startswith('Components of field ') or line.strip().startswith('Invariants of field'):
-                line = self.parse_components_of_field(f, line, field, nodal)
+                line = self.parse_components_of_field(f, line, field)
             if 'name' in field:
                 fields[field['name']] = field  # This may get called more than once, but there is no problem in doing so
             # if line != '\n':
             line = f.readline()
         return line
 
-    def parse_components_of_field(self, f, line, field, nodal):
+    def parse_components_of_field(self, f, line, field):
         """Parse the section that contains the data for field outputs found after the 'Components of field' heading
 
         :param file object f: open file
         :param str line: current line of file
         :param dict field: dictionary for storing field output
-        :param bool nodal: says whether data is nodal
         :return: current line of file
         :rtype: str
         """
@@ -1651,33 +1647,36 @@ class OdbReportFileParser(AbaqusFileParser):
                 self.new_step = True
             else:
                 self.new_step = False
-            field_values = self.setup_extract_field_format(field, nodal)
+            field_values = self.setup_extract_field_format(field, line)
             line = self.parse_field_values(f, line, field_values)
         else:
             field['values'] = list()
             line = self.parse_field_values(f, line, field['values'])
         return line
 
-    def setup_extract_field_format(self, field, nodal):
+    def setup_extract_field_format(self, field, line):
         """Do setup of field output formatting for extract format
 
         :param dict field: dictionary with field data
-        :param bool nodal: indicates whether field data includes nodal data
+        :return: current line of file
         :return: dictionary for which to store field values
         :rtype: dict
         """
         try:
             field_name, region_name = field['name'].split('  ', 1)  # Two spaces are usually used to separate the values
         except ValueError:  # If field name doesn't have a space (e.g. 'NT11') or only a single space
-            if nodal:  # Have not yet seen an INTEGRATION_POINT or WHOLE_ELEMENT with a region name, just NODAL
-                try:  # TODO: adjust if different case is discovered
-                    field_name, region_name = field['name'].rsplit(' ', 1)
-                except ValueError:  # If field name doesn't have a space (e.g. 'U')
-                    region_name = 'ALL'
-                    field_name = field['name']
-            else:
+            # Have not yet seen an INTEGRATION_POINT or WHOLE_ELEMENT with a region name, just NODAL
+            try:  # TODO: adjust if different case is discovered
+                field_name, region_name = field['name'].rsplit(' ', 1)
+            except ValueError:  # If field name doesn't have a space (e.g. 'U')
                 region_name = 'ALL'
                 field_name = field['name']
+        if region_name == 'ALL':
+            element_match = re.match(r".*element type '.*?(\d+)\D*'", line, re.IGNORECASE)
+            if element_match:
+                region_name = 'ALL_ELEMENTS'
+            else:
+                region_name = 'ALL_NODES'
 
         field_name = field_name.replace('/', '|').strip()
         region_name = region_name.replace('/', '|').strip()
