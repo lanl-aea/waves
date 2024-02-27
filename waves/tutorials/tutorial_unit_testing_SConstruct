@@ -100,11 +100,13 @@ workflow_configurations = [
     'tutorial_07_cartesian_product',
     'tutorial_08_data_extraction',
     'tutorial_09_post_processing',
-    'unittest'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
     SConscript(workflow, variant_dir=build_dir, exports='env', duplicate=False)
+
+# Add unit test target
+SConscript('unittest', variant_dir=variant_dir_base, exports='env', duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
 
