@@ -8,6 +8,9 @@ Requires the following ``SConscript(..., exports=[])``
   * ``test_source_abspath`` - String absolute path to the EABM's Python 3 test files
 """
 
+
+import pathlib
+
 # Inherit the parent construction environment
 Import('env')
 

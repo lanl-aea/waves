@@ -100,7 +100,7 @@ workflow_configurations = [
     'tutorial_07_cartesian_product',
     'tutorial_08_data_extraction',
     'tutorial_09_post_processing',
-    'tutorial_unit_testing'
+    'unittest'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
