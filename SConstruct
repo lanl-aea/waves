@@ -102,7 +102,8 @@ else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
 
 # Add pytests
-SConscript(dirs=".", exports='env', duplicate=False)
+build_dir = variant_dir_base / "pytest"
+SConscript(dirs=".", variant_dir=build_dir, exports='env', duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available

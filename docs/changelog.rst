@@ -4,14 +4,20 @@
 Changelog
 #########
 
+*******************
+0.7.10 (unreleased)
+*******************
+
 ******************
-0.7.9 (unreleased)
+0.7.9 (2024-02-22)
 ******************
 
 Bug fixes
 =========
 - waves visualize now works with an input file even if an SConstruct file does not exist (:issue:`586`, :merge:`725`).
   By `Prabhu Khalsa`_.
+- Fix bug in abaqus_file_parser that manifests when there is just one line of data in the field output section of the
+  csv file (:issue:`599`, :merge:`740`). By `Prabhu Khalsa`_.
 
 Documentation
 =============
@@ -31,6 +37,8 @@ Internal Changes
 - Remove duplicate logic in CI environment creation (:issue:`8`, :merge:`734`). By `Kyle Brindley`_.
 - Remove ``dev`` branch and begin using a single production ``main`` branch (:issue:`597`, :merge:`737`). By `Kyle
   Brindley`_.
+- Place pytest results in a build directory to avoid cluttering the source directory (:issue:`598`, :merge:`741`). By
+  `Kyle Brindley`_.
 
 ******************
 0.7.8 (2024-01-16)
