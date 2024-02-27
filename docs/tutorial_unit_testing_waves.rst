@@ -80,7 +80,6 @@ In the ``test_post_processing.py`` file, you'll find a test implementation of a 
 techniques such as ``mocking``. These aspects are intentionally left as exercises for you, the reader, to explore and
 master. For a deeper understanding of how mocking operates in Python, refer to `Unittest Mock`_ :cite:`unittest-mock`.
 
-
 **********
 SConscript
 **********
