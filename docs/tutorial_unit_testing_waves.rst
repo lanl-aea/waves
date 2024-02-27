@@ -96,11 +96,11 @@ master. For a deeper understanding of how mocking operates in Python, refer to `
 Unit test template file
 ***********************
 
-6. In the ``waves-tutorials`` directory, Create a new file named ``unittest_template`` from the contents below
+6. In the ``waves-tutorials`` directory, Create a new file named ``unittest`` from the contents below
 
-.. admonition:: waves-tutorials/unittest_template
+.. admonition:: waves-tutorials/unittest
 
-    .. literalinclude:: tutorials_unittest_template
+    .. literalinclude:: tutorials_unittest
         :language: Python
         :lineno-match:
 
@@ -124,7 +124,7 @@ SConscript
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 
-The ``unittest_template`` file can be invoked multiple times within a single workflow execution. Its flexibility allows
+The ``unittest`` file can be invoked multiple times within a single workflow execution. Its flexibility allows
 for the creation of separate XML results files. This is advantageous in scenarios where various workflows require the
 execution of unit tests, as the tests themselves are not tied to any specific workflow file.
 

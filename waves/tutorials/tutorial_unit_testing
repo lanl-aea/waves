@@ -160,7 +160,7 @@ tests = {
 }
 
 for test_alias, test_files in tests.items():
-    SConscript('unittest_template', exports=['env', 'test_files', 'test_alias'], duplicate=False)
+    SConscript('unittest', exports=['env', 'test_files', 'test_alias'], duplicate=False)
 
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
