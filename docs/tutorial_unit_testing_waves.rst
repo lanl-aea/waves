@@ -104,12 +104,9 @@ Unit test template file
         :language: Python
         :lineno-match:
 
-This ``SConscript`` file will run all tests found in the imported ``test_files``. The ``unittest_command`` sets the
-environment variable ``PYTHONDONTWRITEBYTECODE`` to ``1``, instructing Python not to generate bytecode files, thereby
-preventing the creation of ``.pyc`` files. It executes the pytest command with various options: ``-v`` for verbose
-mode, ``--tb=short`` to display shorter traceback output, ``--cache-clear`` to clear any cached test results,
-and ``--junitxml`` to generate JUnit XML reports. JUnit XML reports are valuable as they provide a standardized and
-machine-readable format for test results.
+This ``SConscript`` file will run all tests found in the imported ``test_files``. The ``unittest_command`` uses the
+``--junitxml`` argument to generate JUnit XML reports. The purpose of JUnit XML reports are to provide ``SCons`` with a
+build target that we can track.
 
 **********
 SConscript

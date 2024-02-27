@@ -12,7 +12,7 @@ Requires the following ``SConscript(..., exports=[])``
 Import(['env', 'test_files', 'test_alias'])
 
 # Unit test target
-unittest_command = "PYTHONDONTWRITEBYTECODE=1 pytest -v --tb=short --cache-clear --junitxml=${TARGETS[0]} ${SOURCES.abspath}"
+unittest_command = "pytest --junitxml=${TARGETS[0]} ${SOURCES.abspath}"
 target = [f"{test_alias}_results.xml"]
 unittest_node = env.Command(
     target=target,
