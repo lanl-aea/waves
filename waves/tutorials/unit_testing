@@ -31,4 +31,4 @@ unittest_node = env.Command(
     action=unittest_command
 )
 
-env.Alias('unittest', unittest_node)
+env.Alias('unit_testing', unittest_node)

@@ -85,11 +85,11 @@ master. For a deeper understanding of how mocking operates in Python, refer to `
 SConscript
 **********
 
-6. In the ``waves-tutorials`` directory, Create a new file named ``unittest`` from the contents below
+6. In the ``waves-tutorials`` directory, Create a new file named ``unit_testing`` from the contents below
 
-.. admonition:: waves-tutorials/unittest
+.. admonition:: waves-tutorials/unit_testing
 
-    .. literalinclude:: tutorials_unittest
+    .. literalinclude:: tutorials_unit_testing
         :language: Python
         :lineno-match:
 
@@ -120,7 +120,7 @@ Build Targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons unittest
+   $ scons unit_testing
 
 ************
 Output Files
@@ -134,9 +134,8 @@ is specified by name to reduce clutter in the output shown.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_unit_testing/
-   build/tutorial_unit_testing/
-   ├── parameter_study.h5
-   └── unittest_results.xml
+   $ tree build/unit_testing/
+   build/unit_testing/
+   └── test_results.xml
 
    0 directories, 2 files

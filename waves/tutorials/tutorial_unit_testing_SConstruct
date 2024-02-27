@@ -106,7 +106,7 @@ for workflow in workflow_configurations:
     SConscript(workflow, variant_dir=build_dir, exports='env', duplicate=False)
 
 # Add unit test target
-test_workflow = 'unittest'
+test_workflow = 'unit_testing'
 test_build_dir = variant_dir_base / test_workflow
 SConscript(test_workflow, variant_dir=test_build_dir, exports='env', duplicate=False)
 
