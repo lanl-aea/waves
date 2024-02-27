@@ -25,6 +25,7 @@ Documentation
 - Fix some typos in tutorial 01 and edit sentence for clarity (:issue:`592`, :merge:`730`). By `Prabhu Khalsa`_.
 - Fixed issue where class level api documentation were not being populated correctly (:issue:`595`, :merge:`733`).
   By `Sergio Cordova`_.
+- Added unit test tutorial. (:issue:`302`, :merge:`724`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
