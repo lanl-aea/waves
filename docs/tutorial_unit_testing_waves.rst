@@ -101,7 +101,7 @@ build target that we can track.
 SConstruct
 **********
 
-8. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves`
+7. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves`
 is included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -118,7 +118,7 @@ call to a separate section.
 Build Targets
 *************
 
-9. Build the test results
+8. Build the test results
 
 .. code-block:: bash
 
