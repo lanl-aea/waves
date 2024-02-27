@@ -1658,21 +1658,24 @@ class OdbReportFileParser(AbaqusFileParser):
         """Do setup of field output formatting for extract format
 
         :param dict field: dictionary with field data
-        :return: current line of file
+        :param str line: current line of file
         :return: dictionary for which to store field values
         :rtype: dict
         """
+        element_match = re.match(r".*element type '.*?(\d+)\D*'", line, re.IGNORECASE)
         try:
             field_name, region_name = field['name'].split('  ', 1)  # Two spaces are usually used to separate the values
         except ValueError:  # If field name doesn't have a space (e.g. 'NT11') or only a single space
-            # Have not yet seen an INTEGRATION_POINT or WHOLE_ELEMENT with a region name, just NODAL
-            try:  # TODO: adjust if different case is discovered
-                field_name, region_name = field['name'].rsplit(' ', 1)
-            except ValueError:  # If field name doesn't have a space (e.g. 'U')
+            if not element_match:  # Have not yet seen INTEGRATION_POINT or WHOLE_ELEMENT with a region name, just NODAL
+                try:  # TODO: adjust if different case is discovered
+                    field_name, region_name = field['name'].rsplit(' ', 1)
+                except ValueError:  # If field name doesn't have a space (e.g. 'U')
+                    region_name = 'ALL'
+                    field_name = field['name']
+            else:
                 region_name = 'ALL'
                 field_name = field['name']
         if region_name == 'ALL':
-            element_match = re.match(r".*element type '.*?(\d+)\D*'", line, re.IGNORECASE)
             if element_match:
                 region_name = 'ALL_ELEMENTS'
             else:
