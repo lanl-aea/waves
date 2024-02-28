@@ -20,18 +20,15 @@ test_source_abspath = pathlib.Path(env["test_source_abspath"])
 build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
 
-# Set test files
+# Unit test target
 test_files = [
     test_source_abspath / "test_post_processing.py"
 ]
-
-# Unit test target
-unittest_command = "pytest --junitxml=${TARGETS[0]} ${SOURCES.abspath}"
 target = [f"{workflow_name}_results.xml"]
 unittest_node = env.Command(
     target=target,
     source=test_files,
-    action=unittest_command
+    action="pytest --junitxml=${TARGETS[0]}"
 )
 
 env.Alias(workflow_name, unittest_node)
