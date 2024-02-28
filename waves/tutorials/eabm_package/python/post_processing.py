@@ -63,24 +63,21 @@ def regression_test(current_csv, expected_csv):
         return 1
 
 
-def save_plots(combined_data, x_var, y_var, concat_coord, output_file):
+def save_plots(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
     """Save scatter plots with given x and y labels
     
     :param xarray.DataArray combined_data: XArray Dataset that will be plotted.
     :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
     :param str y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
+    :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
+        pairs must match the data variables and coordinates of the expected Xarray Dataset object.
     :param str concat_coord: Name of dimension for which you want multiple lines plotted.
     :param str output_file: The plot file name. Relative or absolute path.
     """
-    output_csv = output_file.with_suffix(".csv")
-    
     # Plot
     combined_data.sel(selection_dict).plot.scatter(x=x_var, y=y_var, hue=concat_coord)
     matplotlib.pyplot.title(None)
     matplotlib.pyplot.savefig(output_file)
-
-    # Table
-    combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
 
 
 def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
@@ -124,11 +121,14 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     # Tutorial 09: post processing print statement to view data structure
     print(combined_data)
 
-    save_plots(combined_data, x_var, y_var, concat_coord, output_file)
+    save_plots(combined_data, x_var, y_var, selection_dict, concat_coord, output_file)
+
+    # Table
+    output_csv = output_file.with_suffix(".csv")
+    combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
 
     # Regression test
     if csv_regression_file:
-        output_csv = output_file.with_suffix(".csv")
         current_csv = pandas.read_csv(output_csv)
         regression_csv = pandas.read_csv(csv_regression_file)
         regression_test(current_csv, regression_csv)
@@ -169,9 +169,8 @@ def get_parser():
     parser.add_argument("-s", "--selection-dict", type=str, default=None,
                         help="The YAML formatted dictionary file to define the down selection of data to be plotted. " \
                              "Dictionary key: value pairs must match the data variables and coordinates of the " \
-                             "expected Xarray Dataset object. " \
-                             "If no file is provided, the a default selection dict will be used " \
-                             f"(default: {default_selection_dict})")
+                             "expected Xarray Dataset object. If no file is provided, the a default selection dict "
+                             f"will be used (default: {default_selection_dict})")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
                         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)")
     parser.add_argument("--csv-regression-file", type=str, default=None,
