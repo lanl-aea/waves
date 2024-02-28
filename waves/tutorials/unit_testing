@@ -20,15 +20,17 @@ test_source_abspath = pathlib.Path(env["test_source_abspath"])
 build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
 
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
 # Unit test target
 test_files = [
     test_source_abspath / "test_post_processing.py"
 ]
 target = [f"{workflow_name}_results.xml"]
-unittest_node = env.Command(
+workflow.extend(env.Command(
     target=target,
     source=test_files,
-    action="pytest --junitxml=${TARGETS[0]}"
-)
+    action="pytest --junitxml=${TARGETS[0]}"))
 
-env.Alias(workflow_name, unittest_node)
+env.Alias(workflow_name, workflow)
