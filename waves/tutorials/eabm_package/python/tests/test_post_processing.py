@@ -13,8 +13,8 @@ def test_regression_test():
     # Control DataFrame
     control = pd.DataFrame(data)
 
-    # Similar DataFrame
-    similar = control.copy()
+    # Identical DataFrame
+    identical_copy = control.copy()
 
     # Different DataFrame
     different = control.copy()
@@ -24,4 +24,4 @@ def test_regression_test():
     assert post_processing.regression_test(control, different) == 1
 
     # Assert that the function returns None when the DataFrames are identical
-    assert post_processing.regression_test(control, similar) is None
+    assert post_processing.regression_test(control, identical_copy) is None
