@@ -16,8 +16,9 @@ Import('env')
 # Set project-wide paths with os-agnostic path separators
 test_source_abspath = pathlib.Path(env["test_source_abspath"])
 
-# Set alias
-test_alias = pathlib.Path(Dir('.').abspath).name
+# Set unit test workflow variables
+build_directory = pathlib.Path(Dir('.').abspath)
+workflow_name = build_directory.name
 
 # Set test files
 test_files = [
@@ -26,11 +27,11 @@ test_files = [
 
 # Unit test target
 unittest_command = "pytest --junitxml=${TARGETS[0]} ${SOURCES.abspath}"
-target = [f"{test_alias}_results.xml"]
+target = [f"{workflow_name}_results.xml"]
 unittest_node = env.Command(
     target=target,
     source=test_files,
     action=unittest_command
 )
 
-env.Alias(test_alias, unittest_node)
+env.Alias(workflow_name, unittest_node)
