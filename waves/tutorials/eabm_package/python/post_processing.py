@@ -63,8 +63,8 @@ def regression_test(current_csv, expected_csv):
         return 1
 
 
-def save_plots(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
-    """Save scatter plots with given x and y labels
+def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
+    """Save scatter plot with given x and y labels
     
     :param xarray.DataArray combined_data: XArray Dataset that will be plotted.
     :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
@@ -121,7 +121,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     # Tutorial 09: post processing print statement to view data structure
     print(combined_data)
 
-    save_plots(combined_data, x_var, y_var, selection_dict, concat_coord, output_file)
+    save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file)
 
     # Table
     output_csv = output_file.with_suffix(".csv")
