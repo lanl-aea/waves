@@ -108,9 +108,8 @@ SConstruct
       :language: Python
       :diff: tutorials_tutorial_09_post_processing_SConstruct
 
-Our test alias is initialized similarly to that of the workflow aliases. In order to show that the tests
-themselves are not a modsim workflow and not tied to any specific workflow file, we have moved the ``unit_testing``
-call to a separate section.
+Our test alias is initialized similarly to that of the workflow aliases. In order to clarify that the tests are not
+part of a modsim workflow, the ``unit_testing`` call is made separately from the workflow loop.
 
 *************
 Build Targets
