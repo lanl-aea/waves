@@ -37,6 +37,7 @@
 .. _`Bitbucket`: https://www.atlassian.com/software/bitbucket
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
 .. _`Granta/MIMS`: http://grantami.lanl.gov/mi
+.. _`JUnit XML`: https://docs.pytest.org/en/7.1.x/how-to/output.html#creating-junitxml-format-files
 .. _`LaTeX`: https://www.latex-project.org/
 .. _`Markdown`: https://daringfireball.net/projects/markdown/
 .. _`Material Database`: https://ddw-confluence.lanl.gov/display/MD/Material+Database
