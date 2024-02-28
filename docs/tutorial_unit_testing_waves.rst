@@ -92,9 +92,8 @@ SConscript
         :language: Python
         :lineno-match:
 
-This ``SConscript`` file will run all tests found in the ``test_files`` list. The ``unittest_command`` uses the
-``--junitxml`` argument to generate JUnit XML reports. The purpose of JUnit XML reports are to provide ``SCons`` with a
-build target that we can track.
+For this SCons task, the primary purpose of the `JUnit XML`_ report is to provide SCons with a build target to track. If
+the project uses a continuous integration server, the output may be used for automated test reporting :cite:`junitxml`.
 
 **********
 SConstruct
