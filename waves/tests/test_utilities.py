@@ -101,4 +101,4 @@ def test_cubit_os_bin():
 def test_tee_subprocess():
     with patch("subprocess.Popen") as mock_popen:
         _utilities.tee_subprocess(['dummy'])
-    assert mock_popen.called_once()
+    mock_popen.assert_called_once()
