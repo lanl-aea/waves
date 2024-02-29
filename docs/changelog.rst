@@ -19,6 +19,8 @@ Documentation
   Khalsa`_.
 - Add the post-processing tutorial image example and discuss the purpose of catenating the simulation results with the
   parameter study object (:issue:`574`, :merge:`747`). By `Kyle Brindley`_.
+- Add odb extract structure and relationship to Xarray, h5py, HDF Group tools to tutorial 08 about data extraction
+  (:issue:`572`, :merge:`748`). By `Kyle Brindley`_.
 
 Enhancements
 ============
