@@ -65,14 +65,14 @@ def test_docs():
 
 @pytest.mark.unittest
 def test_build():
-    with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output:
+    with patch('waves._utilities.tee_subprocess', return_value=(0, "is up to date.")) as mock_tee_subprocess:
         main.build(['dummy.target'])
-        mock_check_output.assert_called_once()
+        mock_tee_subprocess.assert_called_once()
 
-    with patch('subprocess.check_output', return_value=b"is up to date.") as mock_check_output, \
+    with patch('waves._utilities.tee_subprocess', return_value=(0, "is up to date.")) as mock_tee_subprocess, \
          patch("pathlib.Path.mkdir") as mock_mkdir:
         main.build(['dummy.target'], git_clone_directory='dummy/clone')
-        assert mock_check_output.call_count == 2
+        assert mock_tee_subprocess.call_count == 2
 
 
 @pytest.mark.unittest
