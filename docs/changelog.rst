@@ -17,6 +17,8 @@ Documentation
 =============
 - Add the odb extract HDF5 file structure discussion to the CLI and builder (:issue:`563`, :merge:`744`). By `Prabhu
   Khalsa`_.
+- Add the post-processing tutorial image example and discuss the purpose of catenating the simulation results with the
+  parameter study object (:issue:`574`, :merge:`747`). By `Kyle Brindley`_.
 
 Enhancements
 ============
