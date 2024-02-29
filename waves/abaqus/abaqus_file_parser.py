@@ -808,7 +808,8 @@ class OdbReportFileParser(AbaqusFileParser):
            /<instance name>/ # Groups containing data of each instance found in an odb
                FieldOutputs/      # Group with multiple xarray datasets for each field output
                    <field name>/  # Group with datasets containing field output data for a specified set or surface
-                                  # If no set or surface is specified, the <field name> will be 'ALL'
+                                  # If no set or surface is specified, the <field name> will be
+                                  # 'ALL_NODES' or 'ALL_ELEMENTS'
                HistoryOutputs/    # Group with multiple xarray datasets for each history output
                    <region name>/ # Group with datasets containing history output data for specified history region name
                                   # If no history region name is specified, the <region name> will be 'ALL NODES'
