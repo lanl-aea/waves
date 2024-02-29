@@ -174,6 +174,23 @@ Output Files
        height              (data_type, parameter_sets) float64 ...
        width               (data_type, parameter_sets) float64 ...
 
+The purpose of catenating the parameter set simulations with the parameter study definition is to examine the
+connections between output quantities of interest as a function of the parameter study inputs. Working from a single
+Xarray dataset makes sensitivity studies easier to conduct. In this tutorial, a qualitative comparison is provided in
+the stress-strain comparison plot, where each parameter set is plotted as a separate series and identified in the
+legend.
+
+.. figure:: tutorial_09_post_processing_stress_strain_comparison.png
+   :align: center
+
+Note that in this example, most of the parameter sets are expected to overlap with differences as a function of the
+geometric parameters. Review the parameter study introduced in :ref:`tutorial_cartesian_product_waves` and the contents
+of the `parameter_study.h5` file to identify the expected differences in the stress-strain response.
+
+The :ref:`modsim_templates` provided by WAVES contain a similar parameter study for mesh convergence as a template for
+new projects. The :ref:`waves_fetch_cli` subcommand may be used to recursively fetch directories or to fetch individual
+files from both the :ref:`modsim_templates` and the tutorials.
+
 **********************
 Workflow Visualization
 **********************
