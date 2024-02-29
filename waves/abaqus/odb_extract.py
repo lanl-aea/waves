@@ -2,6 +2,11 @@
 
 """Extracts data from an Abaqus odb file.
 Calls odbreport feature of Abaqus, parses resultant file, and creates output file.
+Most simulation data lives in a group path following the instance and set name, e.g.
+/INSTANCE/FieldOutputs/ELEMENT_SET, and can be accessed with xarray as
+xarray.open_dataset("sample.h5", group="/INSTANCE/FieldOutputs/ELEMENT_SET"). You can view all group paths with
+h5ls -r sample.h5. Additional ODB information is available in the /odb group path. The /xarray/Dataset group path
+contains a list of group paths that contain an xarray dataset.
 
 :Format of HDF5 file:
 
@@ -24,7 +29,6 @@ Calls odbreport feature of Abaqus, parses resultant file, and creates output fil
        rootAssembly/      # Group with datasets that match odb file organization per Abaqus documentation
        sectionCategories/ # Group with datasets that match odb file organization per Abaqus documentation
    /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
-
 
 .. moduleauthor:: Prabhu Khalsa <pkhalsa@lanl.gov>
 """
