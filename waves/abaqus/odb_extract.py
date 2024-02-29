@@ -29,7 +29,6 @@ contains a list of group paths that contain an xarray dataset.
        sectionCategories/ # Group with datasets that match odb file organization per Abaqus documentation
    /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
 
-.. moduleauthor:: Prabhu Khalsa <pkhalsa@lanl.gov>
 """
 
 import os
@@ -58,8 +57,8 @@ def get_parser():
     """
     _program_name = Path(__file__).stem
     example = f''' Example: >> {_program_name} sample.odb\n '''
-    parser = ArgumentParser(description=__doc__.split('..')[0],  # Don't include module author part of doc string
-                            formatter_class=ArgumentDefaultsHelpFormatter, epilog=example, prog=_program_name)
+    parser = ArgumentParser(description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter, epilog=example,
+                            prog=_program_name)
     parser.add_argument(nargs=1,
                         dest='input_file',
                         type=str,
