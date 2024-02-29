@@ -244,7 +244,7 @@ def build(targets, scons_args=None, max_iterations=5, working_directory=None, gi
         git_clone_directory.mkdir(parents=True, exist_ok=True)
         working_directory = str(git_clone_directory)
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
-        git_clone_stdout = tee_subprocess(command)
+        git_clone_return_code, git_clone_stdout = tee_subprocess(command)
     stop_trigger = "is up to date."
     scons_command = [_settings._scons_command]
     scons_command.extend(scons_args)
@@ -260,7 +260,7 @@ def build(targets, scons_args=None, max_iterations=5, working_directory=None, gi
                 return 2
             print(f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",
                   file=sys.stdout)
-            scons_stdout = tee_subprocess(command, cwd=working_directory)
+            scons_return_code, scons_stdout = tee_subprocess(command, cwd=working_directory)
 
     return 0
 
