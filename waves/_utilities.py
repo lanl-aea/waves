@@ -106,3 +106,25 @@ def find_cubit_bin(options, bin_directory=None):
     if cubit_bin is None:
         raise FileNotFoundError(message)
     return cubit_bin
+
+
+def tee_subprocess(command, **kwargs):
+    """Stream STDOUT to terminal while saving buffer to variable
+
+    :param list command: Command to execute provided a list of strings
+    :param dict kwargs: Any additional keyword arguments are passed through to subprocess.Popen
+
+    :returns: integer return code, string STDOUT
+    :rtype: (int, str)
+    """
+    from io import StringIO
+    import subprocess
+
+    with subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process, \
+         StringIO() as stdout_buffer:
+        if process.stdout:
+            for line in process.stdout:
+                print(line, end="")
+                stdout_buffer.write(line)
+        output = stdout_buffer.getvalue()
+    return process.returncode, output
