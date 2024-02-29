@@ -13,6 +13,11 @@ Bug fixes
 - Fix issue in odb_extract to handle case where elemental and nodal data is present in the same field output
   (:issue:`601`, :merge:`742`). By `Prabhu Khalsa`_.
 
+Documentation
+=============
+- Add the odb extract HDF5 file structure discussion to the CLI and builder (:issue:`563`, :merge:`744`). By `Prabhu
+  Khalsa`_.
+
 Enhancements
 ============
 - Stream the wrapped scons command STDOUT from the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
