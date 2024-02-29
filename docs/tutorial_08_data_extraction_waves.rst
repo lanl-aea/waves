@@ -142,6 +142,95 @@ Output Files
    build/tutorial_08_data_extraction/parameter_set0/rectangle_compression.h5
    build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5
 
+See the :ref:`odb_extract_cli` and :meth:`waves.scons_extensions.abaqus_extract` documentation for an overview of the H5
+file structure. You will notice that there are two H5 files per parameter set. The data is organized into a root file,
+e.g. ``rectangle_compression.h5``, that contains the overall file structure, some unsorted meta data, and an xarray
+object with a list of H5 group paths containing Xarray datasets. The second file, ``rectangle_compression_datasets.h5``
+contains the actual Xarray dataset objects.
+
+You can explore the structure of each file with `The HDF5 Group command-line-tools`_ below (the ``grep`` command
+excludes the large, unsorted data in the ``odb`` group path).
+
+.. code-block::
+   :caption: rectangle_compression.h5
+
+   $ h5ls -r build/tutorial_08_data_extraction/parameter_set0/rectangle_compression.h5 | grep -v odb
+   /                        Group
+   /RECTANGLE               Group
+   /RECTANGLE/FieldOutputs  Group
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_ELEMENTS}
+   /RECTANGLE/FieldOutputs/ALL_NODES External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_NODES}
+   /RECTANGLE/HistoryOutputs Group
+   /RECTANGLE/HistoryOutputs/ALLNODES External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/HistoryOutputs/ALLNODES}
+   /RECTANGLE/Mesh          External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/Mesh}
+   /xarray                  Group
+   /xarray/Dataset          Dataset {4}
+
+.. code-block::
+   :caption: rectangle_compression_datasets.h5
+
+   $ h5ls -r waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5
+   /                        Group
+   /RECTANGLE               Group
+   /RECTANGLE/FieldOutputs  Group
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS Group
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/E Dataset {1, 5, 1, 4, 4}
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/E\ values Dataset {4}
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/S Dataset {1, 5, 1, 4, 4}
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/S\ values Dataset {4}
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/elements Dataset {1}
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/integration\ point Dataset {4}
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/integrationPoint Dataset {1, 4}
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/step Dataset {1}
+   /RECTANGLE/FieldOutputs/ALL_ELEMENTS/time Dataset {5}
+   /RECTANGLE/FieldOutputs/ALL_NODES Group
+   /RECTANGLE/FieldOutputs/ALL_NODES/U Dataset {1, 5, 4, 2}
+   /RECTANGLE/FieldOutputs/ALL_NODES/U\ values Dataset {2}
+   /RECTANGLE/FieldOutputs/ALL_NODES/nodes Dataset {4}
+   /RECTANGLE/FieldOutputs/ALL_NODES/step Dataset {1}
+   /RECTANGLE/FieldOutputs/ALL_NODES/time Dataset {5}
+   /RECTANGLE/HistoryOutputs Group
+   /RECTANGLE/HistoryOutputs/ALLNODES Group
+   /RECTANGLE/HistoryOutputs/ALLNODES/U1 Dataset {1, 14}
+   /RECTANGLE/HistoryOutputs/ALLNODES/U2 Dataset {1, 14}
+   /RECTANGLE/HistoryOutputs/ALLNODES/node Dataset {1}
+   /RECTANGLE/HistoryOutputs/ALLNODES/step Dataset {1}
+   /RECTANGLE/HistoryOutputs/ALLNODES/time Dataset {14}
+   /RECTANGLE/HistoryOutputs/ALLNODES/type Dataset {1}
+   /RECTANGLE/Mesh          Group
+   /RECTANGLE/Mesh/CPS4R    Dataset {1}
+   /RECTANGLE/Mesh/CPS4R_mesh Dataset {1, 4}
+   /RECTANGLE/Mesh/CPS4R_node Dataset {4}
+   /RECTANGLE/Mesh/node     Dataset {4}
+   /RECTANGLE/Mesh/node_location Dataset {4, 3}
+   /RECTANGLE/Mesh/section_category Dataset {1}
+   /RECTANGLE/Mesh/vector   Dataset {3}
+
+Each group path directly above a ``Dataset`` entry can be opened with `Xarray`_, e.g.
+``/RECTANGLE/FieldOutputs/ALL_ELEMENTS`` as
+
+.. code-block::
+
+   import xarray
+   extracted_file = "build/tutorial_08_data_extraction/parameter_set0/rectangle_compression.h5"
+   group_path = "/RECTANGLE/FieldOutputs/ALL_ELEMENTS"
+   field_outputs = xarray.open_dataset(extracted_file, group=group_path)
+
+The structure is separated this way to aid automated exploration of the data structure. The root file,
+``rectangle_compression.h5`` may be opened with `h5py`_ to obtain the Xarray datasets list in the ``/xarray/Dataset``
+group path. Then the datasets file ``rectangle_compression_datasets.h5`` file may be opened separately with `Xarray`_.
+
+In practice when you know the Xarray dataset path(s) relevant to your workflow, you may also go directly to the datasets
+file. :ref:`tutorial_post_processing_waves` will introduce post-processing with the :ref:`odb_extract_cli` and
+:meth:`waves.scons_extensions.abaqus_extract` H5 files.
+
+.. code-block::
+
+   import xarray
+   extracted_file = "build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5"
+   group_path = "/RECTANGLE/FieldOutputs/ALL_ELEMENTS"
+   field_outputs = xarray.open_dataset(extracted_file, group=group_path)
+
 **********************
 Workflow Visualization
 **********************
