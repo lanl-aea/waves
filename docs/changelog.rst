@@ -13,6 +13,10 @@ Bug fixes
 - Fix issue in odb_extract to handle case where elemental and nodal data is present in the same field output
   (:issue:`601`, :merge:`742`). By `Prabhu Khalsa`_.
 
+Enhancements
+============
+- Stream the wrapped scons command STDOUT from the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
+
 ******************
 0.7.9 (2024-02-22)
 ******************
