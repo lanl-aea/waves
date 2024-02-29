@@ -25,6 +25,9 @@ References
 
 * |PROJECT| :ref:`waves_scons_api` API: :meth:`waves.scons_extensions.abaqus_extract`
 * :ref:`odb_extract_cli` CLI
+* `Xarray`_ :cite:`xarray`
+* `h5py`_ :cite:`h5py`
+* `The HDF5 Group command-line-tools`_ :cite:`hdf5group`
 
 ***********
 Environment
