@@ -16,6 +16,7 @@ Bug fixes
 Enhancements
 ============
 - Stream the wrapped scons command STDOUT from the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
+- Submit all targets simultaneously in the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
 
 ******************
 0.7.9 (2024-02-22)
