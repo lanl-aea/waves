@@ -231,6 +231,8 @@ def build(targets, scons_args=None, max_iterations=5, working_directory=None, gi
     :param int max_iterations: maximum number of iterations before the iterative loop is terminated
     :param str working_directory: Change the SCons command working directory
     """
+    from waves._utilities import tee_subprocess
+
     if not scons_args:
         scons_args = []
     if not targets:
@@ -242,22 +244,23 @@ def build(targets, scons_args=None, max_iterations=5, working_directory=None, gi
         git_clone_directory.mkdir(parents=True, exist_ok=True)
         working_directory = str(git_clone_directory)
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
-        git_clone_stdout = subprocess.check_output(command)
+        git_clone_stdout = tee_subprocess(command)
     stop_trigger = "is up to date."
     scons_command = [_settings._scons_command]
     scons_command.extend(scons_args)
     for target in targets:
-        scons_stdout = b"Go boat"
+        scons_stdout = "Go boat"
         count = 0
         command = scons_command + [target]
-        while stop_trigger not in scons_stdout.decode("utf-8"):
+        while stop_trigger not in scons_stdout:
             count += 1
             if count > max_iterations:
                 print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'",
                       file=sys.stderr)
                 return 2
-            print(f"iteration {count}: '{' '.join(command)}'", file=sys.stdout)
-            scons_stdout = subprocess.check_output(command, cwd=working_directory)
+            print(f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",
+                  file=sys.stdout)
+            scons_stdout = tee_subprocess(command, cwd=working_directory)
 
     return 0
 
@@ -290,7 +293,9 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
         # sign-of-life that the installed directory assumptions are correct.
         print(f"Could not find '{root_directory}' directory", file=sys.stderr)
         return 1
+
     from waves import fetch
+
     print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
     print(f"Destination directory: '{destination}'", file=sys.stdout)
     return_code = fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
