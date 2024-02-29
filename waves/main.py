@@ -245,22 +245,30 @@ def build(targets, scons_args=None, max_iterations=5, working_directory=None, gi
         working_directory = str(git_clone_directory)
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
         git_clone_return_code, git_clone_stdout = tee_subprocess(command)
+        if git_clone_return_code != 0:
+            print(f"command '{' '.join(command)}' failed", file=sys.stderr)
+            return 3
     stop_trigger = "is up to date."
     scons_command = [_settings._scons_command]
     scons_command.extend(scons_args)
-    for target in targets:
-        scons_stdout = "Go boat"
-        count = 0
-        command = scons_command + [target]
-        while stop_trigger not in scons_stdout:
-            count += 1
-            if count > max_iterations:
-                print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}'",
-                      file=sys.stderr)
-                return 2
-            print(f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",
-                  file=sys.stdout)
-            scons_return_code, scons_stdout = tee_subprocess(command, cwd=working_directory)
+    command = scons_command + targets
+
+    scons_stdout = "Go boat"
+    trigger_count = 0
+    count = 0
+    while trigger_count < len(targets):
+        count += 1
+        if count > max_iterations:
+            print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' for every target",
+                  file=sys.stderr)
+            return 2
+        print(f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",
+              file=sys.stdout)
+        scons_return_code, scons_stdout = tee_subprocess(command, cwd=working_directory)
+        if scons_return_code != 0:
+            print(f"command '{' '.join(command)}' failed", file=sys.stderr)
+            return 3
+        trigger_count = scons_stdout.count(stop_trigger)
 
     return 0
 
