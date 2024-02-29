@@ -83,7 +83,7 @@ def find_cubit_bin(options, bin_directory=None):
 
     :param list options: Cubit command options
     :param str bin_directory: Cubit's bin directory name. Override the bin directory returned by
-        :meth:`turbo_turtle._utilities.cubit_os_bin`.
+        :meth:`waves._utilities.cubit_os_bin`.
 
     :returns: Cubit bin directory absolute path
     :rtype: pathlib.Path
