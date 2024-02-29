@@ -147,12 +147,13 @@ Output Files
 
 See the :ref:`odb_extract_cli` and :meth:`waves.scons_extensions.abaqus_extract` documentation for an overview of the H5
 file structure. You will notice that there are two H5 files per parameter set. The data is organized into a root file,
-e.g. ``rectangle_compression.h5``, that contains the overall file structure, some unsorted meta data, and an xarray
-object with a list of H5 group paths containing Xarray datasets. The second file, ``rectangle_compression_datasets.h5``
-contains the actual Xarray dataset objects.
+``rectangle_compression.h5``, that contains the overall file structure, some unsorted meta data, and a list of H5 group
+paths containing Xarray datasets. The second file, ``rectangle_compression_datasets.h5``, contains the actual Xarray
+dataset objects. :ref:`tutorial_post_processing_waves` will introduce a post-processing task with the
+:meth:`waves.scons_extensions.abaqus_extract` H5 output files.
 
 You can explore the structure of each file with `The HDF5 Group command-line-tools`_ below (the ``grep`` command
-excludes the large, unsorted data in the ``odb`` group path).
+excludes the large, unsorted data in the ``/odb`` group path).
 
 .. code-block::
    :caption: rectangle_compression.h5
@@ -209,7 +210,7 @@ excludes the large, unsorted data in the ``odb`` group path).
    /RECTANGLE/Mesh/section_category Dataset {1}
    /RECTANGLE/Mesh/vector   Dataset {3}
 
-Each group path directly above a ``Dataset`` entry can be opened with `Xarray`_, e.g.
+Each group path directly above a ``Dataset`` path entry can be opened with `Xarray`_, e.g.
 ``/RECTANGLE/FieldOutputs/ALL_ELEMENTS`` as
 
 .. code-block::
@@ -219,13 +220,13 @@ Each group path directly above a ``Dataset`` entry can be opened with `Xarray`_,
    group_path = "/RECTANGLE/FieldOutputs/ALL_ELEMENTS"
    field_outputs = xarray.open_dataset(extracted_file, group=group_path)
 
-The structure is separated this way to aid automated exploration of the data structure. The root file,
+The structure is separated into two files to aid automated exploration of the data structure. The root file,
 ``rectangle_compression.h5`` may be opened with `h5py`_ to obtain the Xarray datasets list in the ``/xarray/Dataset``
-group path. Then the datasets file ``rectangle_compression_datasets.h5`` file may be opened separately with `Xarray`_.
+group path. Then the datasets file, ``rectangle_compression_datasets.h5``, may be opened separately with `Xarray`_ in
+the same Python script. This is required because h5py and Xarray can not access the same file at the same time.
 
 In practice when you know the Xarray dataset path(s) relevant to your workflow, you may also go directly to the datasets
-file. :ref:`tutorial_post_processing_waves` will introduce post-processing with the :ref:`odb_extract_cli` and
-:meth:`waves.scons_extensions.abaqus_extract` H5 files.
+file.
 
 .. code-block::
 
