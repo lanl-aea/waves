@@ -122,9 +122,8 @@ def tee_subprocess(command, **kwargs):
 
     with subprocess.Popen(command, stdout=subprocess.PIPE, bufsize=1, text=True, **kwargs) as process, \
          StringIO() as stdout_buffer:
-        if process.stdout:
-            for line in process.stdout:
-                print(line, end="")
-                stdout_buffer.write(line)
+        for line in process.stdout:
+            print(line, end="")
+            stdout_buffer.write(line)
         output = stdout_buffer.getvalue()
     return process.returncode, output
