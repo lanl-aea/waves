@@ -1318,6 +1318,7 @@ def abaqus_extract(program="abaqus", **kwargs):
        ``step=step_name``.
 
     .. code-block::
+       :caption: Format of HDF5 file
 
        /                 # Top level group required in all hdf5 files
        /<instance name>/ # Groups containing data of each instance found in an odb
@@ -1346,8 +1347,6 @@ def abaqus_extract(program="abaqus", **kwargs):
        env["abaqus"] = waves.scons_extensions.add_program(["abaqus"], env)
        env.Append(BUILDERS={"AbaqusExtract": waves.scons_extensions.abaqus_extract()})
        env.AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
-
-    :Format of HDF5 file:
 
     :param str program: An absolute path or basename string for the abaqus program
 

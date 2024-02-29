@@ -8,9 +8,8 @@ xarray.open_dataset("sample.h5", group="/INSTANCE/FieldOutputs/ELEMENT_SET"). Yo
 h5ls -r sample.h5. Additional ODB information is available in the /odb group path. The /xarray/Dataset group path
 contains a list of group paths that contain an xarray dataset.
 
-:Format of HDF5 file:
-
 .. code-block::
+   :caption: Format of HDF5 file
 
    /                 # Top level group required in all hdf5 files
    /<instance name>/ # Groups containing data of each instance found in an odb

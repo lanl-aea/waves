@@ -800,9 +800,8 @@ class OdbReportFileParser(AbaqusFileParser):
        Results are stored either in a dictionary which mimics the format of the odb file (see Abaqus documentation),
        or stored in a specialized 'extract' format written to an hdf5 file.
 
-       :Format of HDF5 file:
-
        .. code-block::
+          :caption: Format of HDF5 file
 
            /                 # Top level group required in all hdf5 files
            /<instance name>/ # Groups containing data of each instance found in an odb
