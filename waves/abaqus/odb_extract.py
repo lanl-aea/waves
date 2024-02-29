@@ -3,6 +3,29 @@
 """Extracts data from an Abaqus odb file.
 Calls odbreport feature of Abaqus, parses resultant file, and creates output file.
 
+:Format of HDF5 file:
+
+.. code-block::
+
+   /                 # Top level group required in all hdf5 files
+   /<instance name>/ # Groups containing data of each instance found in an odb
+       FieldOutputs/      # Group with multiple xarray datasets for each field output
+           <field name>/  # Group with datasets containing field output data for a specified set or surface
+                          # If no set or surface is specified, the <field name> will be 'ALL_NODES' or 'ALL_ELEMENTS'
+       HistoryOutputs/    # Group with multiple xarray datasets for each history output
+           <region name>/ # Group with datasets containing history output data for specified history region name
+                          # If no history region name is specified, the <region name> will be 'ALL NODES'
+       Mesh/              # Group written from an xarray dataset with all mesh information for this instance
+   /<instance name>_Assembly/ # Group containing data of assembly instance found in an odb
+       Mesh/              # Group written from an xarray dataset with all mesh information for this instance
+   /odb/             # Catch all group for data found in the odbreport file not already organized by instance
+       info/              # Group with datasets that mostly give odb meta-data like name, path, etc.
+       jobData/           # Group with datasets that contain additional odb meta-data
+       rootAssembly/      # Group with datasets that match odb file organization per Abaqus documentation
+       sectionCategories/ # Group with datasets that match odb file organization per Abaqus documentation
+   /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
+
+
 .. moduleauthor:: Prabhu Khalsa <pkhalsa@lanl.gov>
 """
 
