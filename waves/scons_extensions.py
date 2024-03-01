@@ -1617,8 +1617,9 @@ def _custom_scanner(pattern: str, suffixes: list[str], flags: int | None = None)
     return custom_scanner
 
 
-def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1", inciter_options="",
-                  prefix_command="", post_action=[]):
+def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun_options: str = "+p1",
+                  inciter_options: str = "", prefix_command: str = "",
+                  post_action: list[str] = []) -> SCons.Builder.Builder:
     """Quinoa solver SCons builder
 
     This builder requires at least two source files provided in the order
@@ -1661,23 +1662,22 @@ def quinoa_solver(charmrun="charmrun", inciter="inciter", charmrun_options="+p1"
 
        ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGETS[-1].abspath} 2>&1
 
-    :param str charmrun: The relative or absolute path to the charmrun executable
-    :param str charmrun_options: The charmrun command line interface options
-    :param str inciter: The relative or absolute path to the inciter (quinoa) executable
-    :param str inciter_options: The inciter (quinoa executable) command line interface options
-    :param str prefix_command: Optional prefix command intended for environment preparation. Primarily intended for use
+    :param charmrun: The relative or absolute path to the charmrun executable
+    :param charmrun_options: The charmrun command line interface options
+    :param inciter: The relative or absolute path to the inciter (quinoa) executable
+    :param inciter_options: The inciter (quinoa executable) command line interface options
+    :param prefix_command: Optional prefix command intended for environment preparation. Primarily intended for use
         with :meth:`waves.scons_extensions.sbatch_quinoa_solver` or when wrapping the builder with
         :meth:`waves.scons_extensions.ssh_builder_actions`. For local, direct execution, user's should prefer to create
         an SCons construction environment with :meth:`waves.scons_extensions.shell_environment`. When overriding in a
         task definition, the prefix command *must* end with ``' &&'``.
-    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
 
     :return: Quinoa builder
-    :rtype: SCons.Builder.Builder
     """
     if prefix_command and not prefix_command.strip().endswith(" &&"):
         prefix_command = prefix_command.strip()
