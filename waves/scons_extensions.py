@@ -225,7 +225,7 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
 
 # TODO: Remove the **kwargs check and warning for v1.0.0 release
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
-def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
+def _warn_kwarg_change(kwargs: dict, old_kwarg: str, new_kwarg: str = "program"):
     """Return the value of an old kwarg and raise a deprecation warning pointing to the new kwarg
 
     Return None if the old keyword argument is not found in the keyword arguments dictionary.
@@ -234,8 +234,8 @@ def _warn_kwarg_change(kwargs, old_kwarg, new_kwarg="program"):
     >>>     old_kwarg = waves.scons_extensions._warn_kwarg_change()
     >>>     new_kwarg = old_kwarg if old_kwarg is not None else new_kwarg
 
-    :param dict kwargs: The ``**kwargs`` dictionary from a function interface
-    :param str old_kwarg: The older kwarg key.
+    :param kwargs: The ``**kwargs`` dictionary from a function interface
+    :param old_kwarg: The older kwarg key.
 
     :return: Value of the ``old_kwarg`` if it exists in the ``kwargs`` dictionary. ``None`` if the old keyword isn't
         found in the dictionary.
