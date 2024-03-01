@@ -140,6 +140,9 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file)
     save_table(combined_data, selection_dict, output_csv)
 
+    # Clean up open files
+    combined_data.close()
+
     # Regression test
     if csv_regression_file:
         current_csv = pandas.read_csv(output_csv)
