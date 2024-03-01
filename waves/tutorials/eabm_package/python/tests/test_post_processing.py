@@ -5,7 +5,7 @@ import pandas as pd
 from waves.tutorials.eabm_package.python import post_processing
 
 
-def test_regression_test():
+def test_csv_files_match():
     data = {
         'DummyLine': [1, 2, 3],
         'SecondDummyLine': [4, 5, 6]
