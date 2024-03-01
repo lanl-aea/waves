@@ -138,7 +138,6 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
         regression_results.append(csv_files_match(current_csv, regression_csv))
         if not all(regression_results):
             sys.exit()
-    return 0
 
 
 def get_parser():
