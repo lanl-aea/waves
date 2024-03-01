@@ -302,7 +302,9 @@ def default_targets_message(env=None,
         env.Help(default_targets_help, append=append)
 
 
-def alias_list_message(env=None, append=True, keep_local=True):
+def alias_list_message(env=None,
+                       append: bool = True,
+                       keep_local: bool = True) -> None:
     """Add the alias list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -316,9 +318,9 @@ def alias_list_message(env=None, append=True, keep_local=True):
     where the aliases are recovered from ``SCons.Node.Alias.default_ans``.
 
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
-    :param bool append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
+    :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
-    :param bool keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
+    :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
     import SCons.Script  # Required to get a full construction environment
     if not env:
@@ -332,7 +334,7 @@ def alias_list_message(env=None, append=True, keep_local=True):
         env.Help(alias_help, append=append)
 
 
-def append_env_path(program, env):
+def append_env_path(program: str, env) -> None:
     """Append SCons contruction environment ``PATH`` with the program's parent directory
 
     Raises a ``FileNotFoundError`` if the ``program`` absolute path does not exist. Uses the `SCons AppendENVPath`_
@@ -348,7 +350,7 @@ def append_env_path(program, env):
        if env["program"]:
            waves.append_env_path(env["program"], env)
 
-    :param str program: An absolute path for the program to add to SCons construction environment ``PATH``
+    :param program: An absolute path for the program to add to SCons construction environment ``PATH``
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
     """
     program = pathlib.Path(program).resolve()
@@ -357,7 +359,7 @@ def append_env_path(program, env):
     env.AppendENVPath("PATH", str(program.parent), delete_existing=False)
 
 
-def substitution_syntax(substitution_dictionary, prefix="@", postfix="@"):
+def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", postfix: str = "@") -> dict:
     """Return a dictionary copy with the pre/postfix added to the key strings
 
     Assumes a flat dictionary with keys of type str. Keys that aren't strings will be converted to their string
@@ -369,22 +371,20 @@ def substitution_syntax(substitution_dictionary, prefix="@", postfix="@"):
     :param string postfix: String to append to all dictionary keys
 
     :return: Copy of the dictionary with key strings modified by the pre/posfix
-    :rtype: dict
     """
     return {f"{prefix}{key}{postfix}": value for key, value in substitution_dictionary.items()}
 
 
-def find_program(names, env):
+def find_program(names: list[str], env) -> str:
     """Search for a program from a list of possible program names.
 
     Returns the absolute path of the first program name found. If path parts contain spaces, the part will be wrapped in
     double quotes.
 
-    :param list names: list of string program names. May include an absolute path.
+    :param names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
-    :rtype: str
     """
     if isinstance(names, str):
         names = [names]
@@ -400,7 +400,7 @@ def find_program(names, env):
     return first_found_path
 
 
-def add_program(names, env):
+def add_program(names: list[str], env) -> str:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
@@ -414,11 +414,10 @@ def add_program(names, env):
        env = Environment()
        env["program"] = waves.scons_extensions.add_program(["program"], env)
 
-    :param list names: list of string program names. May include an absolute path.
+    :param names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
-    :rtype: str
     """
     first_found_path = find_program(names, env)
     if first_found_path:
@@ -426,7 +425,7 @@ def add_program(names, env):
     return first_found_path
 
 
-def add_cubit(names, env):
+def add_cubit(names: list[str], env) -> str:
     """Modifies environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
@@ -443,11 +442,10 @@ def add_cubit(names, env):
        env = Environment()
        env["cubit"] = waves.scons_extensions.add_cubit(["cubit"], env)
 
-    :param list names: list of string program names. May include an absolute path.
+    :param names: list of string program names. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
-    :rtype: str
     """
     first_found_path = add_program(names, env)
     if first_found_path:
@@ -458,17 +456,16 @@ def add_cubit(names, env):
     return first_found_path
 
 
-def _return_environment(command):
+def _return_environment(command: str) -> dict:
     """Run a shell command and return the shell environment as a dictionary
 
     .. warning::
 
        Currently only supports bash shells
 
-    :param str command: the shell command to execute
+    :param command: the shell command to execute
 
     :returns: shell environment dictionary
-    :rtype: dict
     """
     variables = subprocess.run(
         ["bash", "-c", f"trap 'env -0' exit; {command} > /dev/null 2>&1"],
@@ -485,7 +482,8 @@ def _return_environment(command):
     return environment
 
 
-def _cache_environment(command, cache=None, overwrite_cache=False, verbose=False):
+def _cache_environment(command: str, cache: str | None = None,
+                       overwrite_cache: bool = False, verbose: bool = False) -> dict:
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
@@ -495,14 +493,13 @@ def _cache_environment(command, cache=None, overwrite_cache=False, verbose=False
 
        Currently only supports bash shells
 
-    :param str command: the shell command to execute
-    :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+    :param command: the shell command to execute
+    :param cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
         formatted file regardless of extension.
-    :param bool overwrite_cache: Ignore previously cached files if they exist.
-    :param bool verbose: Print SCons configuration-like action messages when True
+    :param overwrite_cache: Ignore previously cached files if they exist.
+    :param verbose: Print SCons configuration-like action messages when True
 
     :returns: shell environment dictionary
-    :rtype: dict
     """
     if cache:
         cache = pathlib.Path(cache).resolve()
