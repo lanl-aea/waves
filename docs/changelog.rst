@@ -21,6 +21,7 @@ Documentation
   parameter study object (:issue:`574`, :merge:`747`). By `Kyle Brindley`_.
 - Add odb extract structure and relationship to Xarray, h5py, HDF Group tools to tutorial 08 about data extraction
   (:issue:`572`, :merge:`748`). By `Kyle Brindley`_.
+- Replace docstring types with type annotations for future static type checking (:merge:`749`). By `Kyle Brindley`_.
 
 Enhancements
 ============
