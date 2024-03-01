@@ -7,18 +7,18 @@ import pathlib
 from waves import _settings
 
 
-def available_files(root_directory, relative_paths):
+def available_files(root_directory: pathlib.Path | str,
+                    relative_paths: list[str]) -> tuple[list[pathlib.Path], list[str]]:
     """Build a list of files at ``relative_paths`` with respect to the root ``root_directory`` directory
 
     Returns a list of absolute paths and a list of any relative paths that were not found. Falls back to a full
     recursive search of ``relative_paths`` with ``pathlib.Path.rglob`` to enable pathlib style pattern matching.
 
-    :param str root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths with
+    :param root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths with
         respect to the current working directory before searching.
-    :param list relative_paths: Relative paths to search for. Directories are searched recursively for files.
+    :param relative_paths: Relative paths to search for. Directories are searched recursively for files.
 
     :returns: available_files, not_found
-    :rtype: tuple of lists
     """
     root_directory = pathlib.Path(root_directory).resolve()
     if isinstance(relative_paths, str):
@@ -44,7 +44,11 @@ def available_files(root_directory, relative_paths):
     return available_files, not_found
 
 
-def build_source_files(root_directory, relative_paths, exclude_patterns=_settings._fetch_exclude_patterns):
+def build_source_files(
+    root_directory: str,
+    relative_paths: list[str],
+    exclude_patterns: list[str] = _settings._fetch_exclude_patterns
+) -> tuple[list[pathlib.Path], list[str]]:
     """Wrap :meth:`available_files` and trim list based on exclude patterns
 
     If no source files are found, an empty list is returned.
