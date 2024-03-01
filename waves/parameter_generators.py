@@ -43,33 +43,33 @@ allowable_output_file_types = ('h5', 'yaml')
 class _ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
+    :param parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
         ``{parameter_name: schema_value}``.  Validated on class instantiation.
-    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+    :param output_file_template: Output file name template. Required if parameter sets will be written to files
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
-    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+    :param output_file: Output file name for a single file output of the parameter study. May contain pathseps for
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
-    :param bool overwrite: Overwrite existing output files
-    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+    :param overwrite: Overwrite existing output files
+    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema,
-                 output_file_template=default_output_file_template,
-                 output_file=default_output_file,
-                 output_file_type=default_output_file_type,
-                 set_name_template=default_set_name_template,
-                 previous_parameter_study=default_previous_parameter_study,
-                 overwrite=default_overwrite,
-                 dryrun=default_dryrun,
-                 write_meta=default_write_meta,
+    def __init__(self, parameter_schema: dict,
+                 output_file_template: str = default_output_file_template,
+                 output_file: str = default_output_file,
+                 output_file_type: str = default_output_file_type,
+                 set_name_template: str = default_set_name_template,
+                 previous_parameter_study: str = default_previous_parameter_study,
+                 overwrite: bool = default_overwrite,
+                 dryrun: bool = default_dryrun,
+                 write_meta: bool = default_write_meta,
                  **kwargs):
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
@@ -116,7 +116,7 @@ class _ParameterGenerator(ABC):
         self._generate(**kwargs)
 
     @abstractmethod
-    def _validate(self):
+    def _validate(self) -> None:
         """Process parameter study input to verify schema
 
         Must set the class attributes:
@@ -133,7 +133,7 @@ class _ParameterGenerator(ABC):
         pass
 
     @abstractmethod
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         """Generate the parameter study definition
 
         All implemented class method should accept kwargs as ``_generate(self, **kwargs)``. The ABC class accepts, but
@@ -175,7 +175,7 @@ class _ParameterGenerator(ABC):
         if self.previous_parameter_study:
             self._merge_parameter_studies()
 
-    def generate(self, kwargs=None):
+    def generate(self, kwargs=None) -> None:
         """Deprecated public generate method.
 
         The parameter study is now generated as part of class instantiation. This method has been kept for backward
@@ -189,7 +189,7 @@ class _ParameterGenerator(ABC):
         warnings.warn(warning_message, DeprecationWarning)
         self._generate(**kwargs)
 
-    def write(self):
+    def write(self) -> None:
         """Write the parameter study to STDOUT or an output file.
 
         Writes to STDOUT by default. Requires non-default ``output_file_template`` or ``output_file`` specification to
@@ -219,18 +219,18 @@ class _ParameterGenerator(ABC):
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
-    def scons_write(self, target, source, env):
+    def scons_write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
         Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
 
-        :param list target: The target file list of strings
-        :param list source: The source file list of SCons.Node.FS.File objects
+        :param target: The target file list of strings
+        :param source: The source file list of SCons.Node.FS.File objects
         :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
         """
         self.write()
 
-    def _write_dataset(self):
+    def _write_dataset(self) -> None:
         """Write Xarray Dataset formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
@@ -257,10 +257,10 @@ class _ParameterGenerator(ABC):
                     else:
                         self._conditionally_write_dataset(parameter_set_file, parameter_set)
 
-    def _conditionally_write_dataset(self, existing_parameter_study, parameter_study):
+    def _conditionally_write_dataset(self, existing_parameter_study: str, parameter_study) -> None:
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
-        :param str existing_parameter_study: A relative or absolute file path to a previously created parameter
+        :param existing_parameter_study: A relative or absolute file path to a previously created parameter
             study Xarray Dataset
         :param xarray.Dataset parameter_study: Parameter study xarray data
         """
@@ -536,7 +536,7 @@ class _ParameterGenerator(ABC):
 
 class _ScipyGenerator(_ParameterGenerator, ABC):
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate the parameter distribution schema. Executed by class initiation.
 
         .. code-block::
@@ -676,7 +676,7 @@ class CartesianProduct(_ParameterGenerator):
     :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
@@ -838,7 +838,7 @@ class CustomStudy(_ParameterGenerator):
     :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
@@ -1145,7 +1145,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         self.sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
-    def _validate(self):
+    def _validate(self) -> None:
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
