@@ -90,34 +90,45 @@ def longest_common_path_prefix(file_list: str | pathlib.Path | list[str | pathli
     return longest_common_path
 
 
-def build_destination_files(destination, requested_paths):
+def build_destination_files(destination: str | pathlib.Path,
+                            requested_paths: list[str | pathlib.Path]) -> tuple[list, list]:
     """Build destination file paths from the requested paths, truncating the longest possible source prefix path
 
-    :param str destination: String or pathlike object for the destination directory
+    :param destination: String or pathlike object for the destination directory
+    :param requested_paths: List of requested file paths
+
+    :returns: destination files, existing files
     """
-    pathlib.Path(destination).resolve()
+    destination = pathlib.Path(destination).resolve()
     longest_common_requested_path = longest_common_path_prefix(requested_paths)
     destination_files = [destination / path.relative_to(longest_common_requested_path) for path in requested_paths]
     existing_files = [path for path in destination_files if path.exists()]
     return destination_files, existing_files
 
 
-def build_copy_tuples(destination, requested_paths_resolved, overwrite=False):
+def build_copy_tuples(destination: str | pathlib.Path, requested_paths_resolved: list,
+                      overwrite: bool = False) -> tuple[tuple]:
+    """
+    :param destination: String or pathlike object for the destination directory
+    :param requested_paths_resolved: List of absolute requested file paths
+
+    :returns: requested and destination file path pairs
+    """
     destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
     copy_tuples = tuple(zip(requested_paths_resolved, destination_files))
     if not overwrite and existing_files:
         copy_tuples = tuple((requested_path, destination_file) for requested_path, destination_file in copy_tuples if
-                       destination_file not in existing_files)
+                            destination_file not in existing_files)
     return copy_tuples
 
 
-def conditional_copy(copy_tuples):
+def conditional_copy(copy_tuples: tuple[tuple]) -> None:
     """Copy when destination file doesn't exist or doesn't match source file content
 
     Uses Python ``shutil.copyfile``, so meta data isn't preserved. Creates intermediate parent directories prior to
     copy, but doesn't raise exceptions on existing parent directories.
 
-    :param tuple copy_tuples: Tuple of source, destination pathlib.Path pairs, e.g. ``((source, destination), ...)``
+    :param copy_tuples: Tuple of source, destination pathlib.Path pairs, e.g. ``((source, destination), ...)``
     """
     for source_file, destination_file in copy_tuples:
         # If the root_directory and destination file contents are the same, don't perform unnecessary file I/O
@@ -126,7 +137,7 @@ def conditional_copy(copy_tuples):
             shutil.copyfile(source_file, destination_file)
 
 
-def print_list(things_to_print, prefix="\t", stream=sys.stdout):
+def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> None:
     """Print a list to the specified stream, one line per item
 
     :param list things_to_print: List of items to print
