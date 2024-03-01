@@ -589,7 +589,8 @@ def _build_subdirectory(target: list) -> pathlib.Path:
     return build_subdirectory
 
 
-def _first_target_emitter(target, source, env, suffixes=[], appending_suffixes=[], stdout_extension=_stdout_extension):
+def _first_target_emitter(target: list, source: list, env, suffixes: list[str] = [], appending_suffixes: list[str] = [],
+                          stdout_extension: str = _stdout_extension) -> tuple[list, list]:
     """Appends the target list with the builder managed targets
 
     Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
@@ -604,14 +605,13 @@ def _first_target_emitter(target, source, env, suffixes=[], appending_suffixes=[
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
     extension as a target, e.g. ``target.stdout``.
 
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-    :param list suffixes: Suffixes which should replace the first target's extension
-    :param list appending_suffixes: Suffixes which should append the first target's extension
+    :param suffixes: Suffixes which should replace the first target's extension
+    :param appending_suffixes: Suffixes which should append the first target's extension
 
     :return: target, source
-    :rtype: tuple with two lists
     """
     string_targets = [str(target_file) for target_file in target]
     first_target = pathlib.Path(string_targets[0])
