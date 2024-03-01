@@ -61,7 +61,7 @@ def main():
         return 0
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     """Get parser object for command line options
 
     :return: parser
@@ -204,7 +204,7 @@ def get_parser():
     return main_parser
 
 
-def docs(print_local_path=False):
+def docs(print_local_path: bool = False) -> int:
 
     if print_local_path:
         if _settings._installed_docs_index.exists():

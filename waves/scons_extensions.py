@@ -47,7 +47,7 @@ def _print_failed_nodes_stdout():
             print(f"\n{failure.node} failed\n", file=sys.stderr)
 
 
-def print_build_failures(print_stdout=True):
+def print_build_failures(print_stdout: bool = True) -> None:
     """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
 
     :param bool print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
