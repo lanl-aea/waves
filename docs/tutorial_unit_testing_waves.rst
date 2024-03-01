@@ -92,8 +92,9 @@ SConscript
         :language: Python
         :lineno-match:
 
-For this SCons task, the primary purpose of the `pytest JUnit XML output`_ report is to provide SCons with a build target to track. If
-the project uses a continuous integration server, the output may be used for automated test reporting :cite:`junitxml`.
+For this SCons task, the primary purpose of the `pytest JUnit XML output`_ report is to provide SCons with a build
+target to track. If the project uses a continuous integration server, the output may be used for automated test
+reporting :cite:`pytest-junitxml`.
 
 **********
 SConstruct
