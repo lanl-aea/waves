@@ -31,7 +31,7 @@ from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
 
 
-def _print_failed_nodes_stdout():
+def _print_failed_nodes_stdout() -> None:
     # FIXME: The program_operations throw their usual fit when this is a module-wide import
     # ``SCons.Errors.UserError: Calling Configure from Builders is not supported``
     import SCons.Script
@@ -56,13 +56,12 @@ def print_build_failures(print_stdout: bool = True) -> None:
         atexit.register(_print_failed_nodes_stdout)
 
 
-def _string_action_list(builder):
+def _string_action_list(builder: SCons.Builder.Builder) -> list:
     """Return a builders action list as a list of str
 
-    :param SCons.Builder.Builder builder: The builder to extract the action list from
+    :param builder: The builder to extract the action list from
 
-    :returns: list of actions as str
-    :rtype: list
+    :returns: list of builder actions
     """
     action = builder.action
     if isinstance(action, SCons.Action.CommandAction):
