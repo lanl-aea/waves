@@ -31,6 +31,7 @@ target = [f"{workflow_name}_results.xml"]
 workflow.extend(env.Command(
     target=target,
     source=test_files,
-    action="pytest --junitxml=${TARGETS[0]}"))
+    action="pytest --junitxml=${TARGETS[0]}"
+))
 
 env.Alias(workflow_name, workflow)
