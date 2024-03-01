@@ -148,24 +148,24 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
         print(f"{prefix}{item}", file=stream)
 
 
-def recursive_copy(root_directory, relative_paths, destination, requested_paths=None,
-                   overwrite=False, dry_run=False, print_available=False):
+def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
+                   destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
+                   overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
     """Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
     the shortest possible shared source prefix.
 
     If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
 
-    :param str root_directory: String or pathlike object for the root_directory directory
-    :param list relative_paths: List of string or pathlike objects describing relative paths to search for in
+    :param root_directory: String or pathlike object for the root_directory directory
+    :param relative_paths: List of string or pathlike objects describing relative paths to search for in
         root_directory
-    :param str destination: String or pathlike object for the destination directory
-    :param list requested_paths: list of relative path-like objects that subset the files found in the
+    :param destination: String or pathlike object for the destination directory
+    :param requested_paths: list of relative path-like objects that subset the files found in the
         ``root_directory`` ``relative_paths``
-    :param bool overwrite: Boolean to overwrite any existing files in destination directory
-    :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
-    :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
+    :param overwrite: Boolean to overwrite any existing files in destination directory
+    :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
+    :param print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
-
     if not requested_paths:
         requested_paths = []
     # Build source tree
