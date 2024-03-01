@@ -3,7 +3,7 @@ Internal API
 ############
 
 ****************
-SCons Extensions 
+SCons Extensions
 ****************
 
 .. automodule:: waves.scons_extensions
@@ -24,9 +24,9 @@ Parameter Generators
     :show-inheritance:
     :synopsis: A collection of Python based parameter study generators
 
-************
-Command Line
-************
+*******
+main.py
+*******
 
 .. automodule:: waves.main
    :noindex:
@@ -35,9 +35,9 @@ Command Line
    :show-inheritance:
    :synopsis: waves command line utility
 
-*****
-Fetch
-*****
+********
+fetch.py
+********
 
 .. automodule:: waves.fetch
    :noindex:
@@ -46,9 +46,9 @@ Fetch
    :show-inheritance:
    :synopsis: waves module supporting the fetch subcommand
 
-*********
-Visualize
-*********
+************
+visualize.py
+************
 
 .. automodule:: waves.visualize
    :noindex:
@@ -57,9 +57,9 @@ Visualize
    :show-inheritance:
    :synopsis: waves module supporting the visualize subcommand
 
-****************
-_parameter_study
-****************
+*******************
+_parameter_study.py
+*******************
 
 .. automodule:: waves._parameter_study
    :noindex:
@@ -67,15 +67,25 @@ _parameter_study
    :private-members:
    :show-inheritance:
 
-**********
-_utilities
-**********
+*************
+_utilities.py
+*************
 
 .. automodule:: waves._utilities
    :noindex:
    :members:
    :private-members:
    :show-inheritance:
+
+**************
+odb_extract.py
+**************
+
+.. automodule:: waves.abaqus.odb_extract
+    :members:
+    :private-members:
+    :show-inheritance:
+    :synopsis: Extracts an odbreport file produced by Abaqus
 
 **********************
 Odb Report File Parser
@@ -85,16 +95,6 @@ Odb Report File Parser
     :members:
     :private-members:
     :show-inheritance:
-
-***********
-Odb extract
-***********
-
-.. automodule:: waves.abaqus.odb_extract
-    :members:
-    :private-members:
-    :show-inheritance:
-    :synopsis: Extracts an odbreport file produced by Abaqus
 
 ***************
 Sta File Parser
