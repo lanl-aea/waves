@@ -50,7 +50,7 @@ def _print_failed_nodes_stdout() -> None:
 def print_build_failures(print_stdout: bool = True) -> None:
     """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
 
-    :param bool print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
+    :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
     """
     if print_stdout:
         atexit.register(_print_failed_nodes_stdout)
@@ -71,16 +71,19 @@ def _string_action_list(builder: SCons.Builder.Builder) -> list:
     return action_list
 
 
-def catenate_builder_actions(builder, program="", options=""):
+def catenate_builder_actions(builder: SCons.Builder.Builder,
+                             program: str = "", options: str = "") -> SCons.Builder.Builder:
     """Catenate a builder's arguments and prepend the program and options
 
     .. code-block::
 
        ${program} ${options} "action one && action two"
 
-    :param SCons.Builder.Builder builder: The SCons builder to modify
-    :param str program: wrapping executable
-    :param str options: options for the wrapping executable
+    :param builder: The SCons builder to modify
+    :param program: wrapping executable
+    :param options: options for the wrapping executable
+
+    :returns: modified builder
     """
     action_list = _string_action_list(builder)
     action = " && ".join(action_list)
@@ -111,7 +114,9 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
-def ssh_builder_actions(builder, remote_server="${remote_server}", remote_directory="${remote_directory}"):
+def ssh_builder_actions(builder: SCons.Builder.Builder,
+                        remote_server: str = "${remote_server}",
+                        remote_directory: str = "${remote_directory}") -> SCons.Builder.Builder:
     """Wrap a builder's action list with remote copy operations and ssh commands
 
     By default, the remote server and remote directory strings are written to accept (and *require*) task-by-task
@@ -188,11 +193,13 @@ def ssh_builder_actions(builder, remote_server="${remote_server}", remote_direct
        ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo "Hello World!"'
        rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}
 
-    :param SCons.Builder.Builder builder: The SCons builder to modify
-    :param str remote_server: remote server where the original builder's actions should be executed. The default string
+    :param builder: The SCons builder to modify
+    :param remote_server: remote server where the original builder's actions should be executed. The default string
         *requires* every task to specify a matching keyword argument string.
-    :param str remote_directory: absolute or relative path where the original builder's actions should be executed. The
+    :param remote_directory: absolute or relative path where the original builder's actions should be executed. The
         default string *requires* every task to specify a matching keyword argument string.
+
+    :returns: modified builder
     """
     action_list = _string_action_list(builder)
     cd_prefix = f"cd {remote_directory} &&"
