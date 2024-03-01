@@ -20,8 +20,8 @@ def test_csv_files_match():
     different = control.copy()
     different.loc[0, 'DummyLine'] = 999
 
-    # Assert that the function returns True when the DataFrames differ
-    assert post_processing.csv_files_match(control, different) is True
+    # Assert that the function returns False when the DataFrames differ
+    assert post_processing.csv_files_match(control, different) is False
 
-    # Assert that the function returns False when the DataFrames are identical
-    assert post_processing.csv_files_match(control, identical_copy) is False
+    # Assert that the function returns True when the DataFrames are identical
+    assert post_processing.csv_files_match(control, identical_copy) is True
