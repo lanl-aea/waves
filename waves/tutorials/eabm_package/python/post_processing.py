@@ -144,13 +144,16 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     combined_data.close()
 
     # Regression test(s)
+    regression_results = []
     if csv_regression_file:
         current_csv = pandas.read_csv(output_csv)
         regression_csv = pandas.read_csv(csv_regression_file)
-        regression_results = []
         regression_results.append(csv_files_match(current_csv, regression_csv))
-        if not all(regression_results):
-            sys.exit()
+    if not regression_results:
+        # No regression tests made
+        pass
+    elif not all(regression_results):
+        sys.exit()
 
 
 def get_parser():
