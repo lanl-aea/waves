@@ -68,14 +68,14 @@ def build_source_files(
     return source_files, not_found
 
 
-def longest_common_path_prefix(file_list):
+def longest_common_path_prefix(file_list: str | pathlib.Path | list[str | pathlib.Path]) -> pathlib.Path:
     """Return the longest common file path prefix.
 
     The edge case of a single path is handled by returning the parent directory
 
-    :param list file_list: List of path-like objects
+    :param file_list: List of path-like objects
+
     :returns: longest common path prefix
-    :rtype: pathlib.Path
     """
     if isinstance(file_list, str) or isinstance(file_list, pathlib.Path):
         file_list = [file_list]
