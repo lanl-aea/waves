@@ -1425,15 +1425,14 @@ def sbatch(program: str = "sbatch", post_action: list[str] = [], **kwargs) -> SC
        env.Append(BUILDERS={"SlurmSbatch": waves.scons_extensions.sbatch()})
        env.SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="cat $SOURCE > $TARGET")
 
-    :param str program: An absolute path or basename string for the sbatch program.
-    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+    :param program: An absolute path or basename string for the sbatch program.
+    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
 
     :return: SLURM sbatch builder
-    :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and sbatch_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
@@ -1462,7 +1461,7 @@ def abaqus_input_scanner() -> SCons.Scanner.Scanner:
     return _custom_scanner(r'^\*[^*]*,\s*input=(.+)$', ['.inp'], flags)
 
 
-def sphinx_scanner():
+def sphinx_scanner() -> SCons.Scanner.Scanner:
     """SCons scanner that searches for directives
 
     * ``.. include::``
@@ -1479,7 +1478,8 @@ def sphinx_scanner():
     return _custom_scanner(r'^\s*\.\. (?:include|literalinclude|image|figure|bibliography)::\s*(.+)$', ['.rst', '.txt'])
 
 
-def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
+def sphinx_build(program: str = "sphinx-build", options: str = "", builder: str = "html",
+                 tags: str = "") -> SCons.Builder.Builder:
     """Sphinx builder using the ``-b`` specifier
 
     This builder does not have an emitter. It requires at least one target.
@@ -1506,10 +1506,12 @@ def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
        env.Clean(html, [Dir("html")] + sources)
        env.Alias("html", html)
 
-    :param str program: sphinx-build executable
-    :param str options: sphinx-build options
-    :param str builder: builder name. See the `Sphinx`_ documentation for options
-    :param str tags: sphinx-build tags
+    :param program: sphinx-build executable
+    :param options: sphinx-build options
+    :param builder: builder name. See the `Sphinx`_ documentation for options
+    :param tags: sphinx-build tags
+
+    :returns: Sphinx builder
     """
     sphinx_builder = SCons.Builder.Builder(
         action=["${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"],
@@ -1521,7 +1523,8 @@ def sphinx_build(program="sphinx-build", options="", builder="html", tags=""):
     return sphinx_builder
 
 
-def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags=""):
+def sphinx_latexpdf(program: str = "sphinx-build", options: str = "", builder: str = "latexpdf",
+                    tags: str = "") -> SCons.Builder.Builder:
     """Sphinx builder using the ``-M`` specifier. Intended for ``latexpdf`` builds.
 
     This builder does not have an emitter. It requires at least one target.
@@ -1552,6 +1555,8 @@ def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags
     :param str options: sphinx-build options
     :param str builder: builder name. See the `Sphinx`_ documentation for options
     :param str tags: sphinx-build tags
+
+    :returns: Sphinx latexpdf builder
     """
     sphinx_latex = SCons.Builder.Builder(
         action=["${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"],
@@ -1563,48 +1568,45 @@ def sphinx_latexpdf(program="sphinx-build", options="", builder="latexpdf", tags
     return sphinx_latex
 
 
-def _custom_scanner(pattern, suffixes, flags=None):
+def _custom_scanner(pattern: str, suffixes: list[str], flags: int | None = None) -> SCons.Scanner.Scanner:
     """Custom Scons scanner
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
     suffixes provided. ``_custom_scanner`` will always use the ``re.MULTILINE`` flag
     https://docs.python.org/3/library/re.html#re.MULTILINE
 
-    :param str pattern: Regular expression pattern.
-    :param list suffixes: List of suffixes of files to search
-    :param int flags: An integer representing the combination of re module flags to be used during compilation.
-                      Additional flags can be combined using the bitwise OR (|) operator. The re.MULTILINE flag is
-                      automatically added to the combination.
+    :param pattern: Regular expression pattern.
+    :param suffixes: List of suffixes of files to search
+    :param flags: An integer representing the combination of re module flags to be used during compilation.
+        Additional flags can be combined using the bitwise OR (|) operator. The re.MULTILINE flag is automatically added
+        to the combination.
 
     :return: Custom Scons scanner
-    :rtype: Scons.Scanner.Scanner
     """
     flags = re.MULTILINE if not flags else re.MULTILINE | flags
     expression = re.compile(pattern, flags)
 
-    def suffix_only(node_list):
+    def suffix_only(node_list: list) -> list:
         """Recursively search for files that end in the given suffixes
 
-        :param list node_list: List of SCons Node objects representing the nodes to process
+        :param node_list: List of SCons Node objects representing the nodes to process
 
         :return: List of file dependencies to include for recursive scanning
-        :rtype: list
         """
         return [node for node in node_list if node.path.endswith(tuple(suffixes))]
 
-    def regex_scan(node, env, path):
+    def regex_scan(node: SCons.Node.FS, env: SCons.Environment.Environment, path: str) -> list:
         """Scan function for extracting dependencies from the content of a file based on the given regular expression.
 
         The interface of the scan function is fixed by SCons. It must include ``node``, ``env`` and ``path``. It may
         contain additional arguments if needed. For more information please read the SCons Scanner tutorial:
         https://scons.org/doc/1.2.0/HTML/scons-user/c3755.html
 
-        :param SCons.Node.FS node: SCons Node object representing the file to scan
+        :param node: SCons Node object representing the file to scan
         :param SCons.Environment.Environment env: SCons Environment object
-        :param str path: Path argument passed to the scan function
+        :param path: Path argument passed to the scan function
 
         :return: List of file dependencies found during scanning
-        :rtype: list
         """
         contents = node.get_text_contents()
         includes = expression.findall(contents)
