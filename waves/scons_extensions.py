@@ -521,7 +521,7 @@ def _cache_environment(command: str, cache: str | None = None,
     return environment
 
 
-def shell_environment(command, cache=None, overwrite_cache=False):
+def shell_environment(command: str, cache: str | None = None, overwrite_cache: bool = False) -> SCons.Environment.Environment:
     """Return an SCons shell environment from a cached file or by running a shell command
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
@@ -537,19 +537,18 @@ def shell_environment(command, cache=None, overwrite_cache=False):
        import waves
        env = waves.scons_extensions.shell_environment("source my_script.sh")
 
-    :param str command: the shell command to execute
-    :param str cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+    :param command: the shell command to execute
+    :param cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
         formatted file regardless of extension.
-    :param bool overwrite_cache: Ignore previously cached files if they exist.
+    :param overwrite_cache: Ignore previously cached files if they exist.
 
     :returns: SCons shell environment
-    :rtype: SCons.Environment.Environment
     """
     shell_environment = _cache_environment(command, cache=cache, overwrite_cache=overwrite_cache, verbose=True)
     return SCons.Environment.Environment(ENV=shell_environment)
 
 
-def _construct_post_action_list(post_action):
+def _construct_post_action_list(post_action: list[str]) -> list[str]:
     """Return a post-action list
 
     Returns the constructed post-action list of strings with prepended directory change as
@@ -562,10 +561,9 @@ def _construct_post_action_list(post_action):
     first convert to a list. Other string-like objects, e.g. bytes, are not converted, but iterated on
     character-by-character. If an empty list is passed, and empty list is returned.
 
-    :param list post_action: List of post-action strings
+    :param post_action: List of post-action strings
 
     :return: post-action list of strings
-    :rtype: list
     """
     if isinstance(post_action, str):
         post_action = [post_action]
@@ -577,13 +575,12 @@ def _construct_post_action_list(post_action):
     return new_actions
 
 
-def _build_subdirectory(target):
+def _build_subdirectory(target: list) -> pathlib.Path:
     """Return the build subdirectory of the first target file
 
-    :param list target: The target file list of strings
+    :param target: The target file list of strings
 
     :return: build directory
-    :rtype: pathlib.Path
     """
     try:
         build_subdirectory = pathlib.Path(str(target[0])).parent
