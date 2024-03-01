@@ -143,7 +143,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     # Clean up open files
     combined_data.close()
 
-    # Regression test
+    # Regression test(s)
     if csv_regression_file:
         current_csv = pandas.read_csv(output_csv)
         regression_csv = pandas.read_csv(csv_regression_file)
