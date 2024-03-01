@@ -50,17 +50,20 @@ def merge_parameter_study(parameter_study_file, combined_data):
     return combined_data
 
 
-def regression_test(current_csv, expected_csv):
-    """Run Regression test
+def csv_files_match(current_csv, expected_csv):
+    """Compare two pandas DataFrame objects and determine if they match.
     
     :param pandas.DataFrame current_csv: Current CSV data of generated plot.
     :param pandas.DataFrame expected_csv: Expected CSV data.
+
+    :returns: True if the CSV files match, False otherwise.
+    :rtype: bool
     """
     equal = expected_csv.equals(current_csv)
     if not equal:
         print("The CSV regression test failed. Data in expected CSV file and current CSV file do not match.",
               file=sys.stderr)
-        return 1
+    return equal
 
 
 def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
@@ -131,7 +134,10 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     if csv_regression_file:
         current_csv = pandas.read_csv(output_csv)
         regression_csv = pandas.read_csv(csv_regression_file)
-        regression_test(current_csv, regression_csv)
+        regression_results = []
+        regression_results.append(csv_files_match(current_csv, regression_csv))
+        if not all(regression_results):
+            sys.exit()
     return 0
 
 

@@ -20,8 +20,8 @@ def test_regression_test():
     different = control.copy()
     different.loc[0, 'DummyLine'] = 999
 
-    # Assert that the function returns "1" when the DataFrames differ
-    assert post_processing.regression_test(control, different) == 1
+    # Assert that the function returns True when the DataFrames differ
+    assert post_processing.csv_files_match(control, different) is True
 
-    # Assert that the function returns None when the DataFrames are identical
-    assert post_processing.regression_test(control, identical_copy) is None
+    # Assert that the function returns False when the DataFrames are identical
+    assert post_processing.csv_files_match(control, identical_copy) is False
