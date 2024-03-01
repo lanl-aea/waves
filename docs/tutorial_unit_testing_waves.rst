@@ -52,22 +52,11 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Create testing initialization files for the testing directory.
-
-.. admonition:: waves-tutorials/eabm_package/python/tests/__init__.py
-
-   .. code-block::
-
-      $ pwd
-      /home/roppenheimer/waves-tutorials
-      $ mkdir eabm_package/python/tests
-      $ touch eabm_package/python/tests/__init__.py
-
 **************
 Unit test file
 **************
 
-5. In the ``waves-tutorials/eabm_package/python/tests`` directory, Create a new file named ``test_post_processing.py`` from the contents below
+4. In the ``waves-tutorials/eabm_package/python/tests`` directory, Create a new file named ``test_post_processing.py`` from the contents below
 
 .. admonition:: waves-tutorials/eabm_package/python/tests/test_post_processing.py
 
@@ -84,7 +73,7 @@ master. For a deeper understanding of how mocking operates in Python, refer to `
 SConscript
 **********
 
-6. In the ``waves-tutorials`` directory, Create a new file named ``unit_testing`` from the contents below
+5. In the ``waves-tutorials`` directory, Create a new file named ``unit_testing`` from the contents below
 
 .. admonition:: waves-tutorials/unit_testing
 
@@ -100,7 +89,7 @@ reporting :cite:`pytest-junitxml`.
 SConstruct
 **********
 
-7. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves`
+6. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves`
    is included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -116,7 +105,7 @@ part of a modsim workflow, the ``unit_testing`` call is made separately from the
 Build Targets
 *************
 
-8. Build the test results
+7. Build the test results
 
 .. code-block:: bash
 
