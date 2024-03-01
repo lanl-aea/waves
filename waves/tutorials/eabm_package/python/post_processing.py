@@ -149,10 +149,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
         current_csv = pandas.read_csv(output_csv)
         regression_csv = pandas.read_csv(csv_regression_file)
         regression_results.append(csv_files_match(current_csv, regression_csv))
-    if not regression_results:
-        # No regression tests made
-        pass
-    elif not all(regression_results):
+    if len(regression_results) > 0 and not all(regression_results):
         sys.exit()
 
 
