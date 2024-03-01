@@ -4,6 +4,7 @@ import re
 import sys
 import yaml
 import atexit
+import typing
 import pathlib
 import functools
 import subprocess
@@ -634,7 +635,7 @@ def _first_target_emitter(target: list, source: list, env, suffixes: list[str] =
     return string_targets, source
 
 
-def _abaqus_journal_emitter(target, source, env):
+def _abaqus_journal_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Appends the abaqus_journal builder target list with the builder managed targets
 
     Appends ``target[0]``.abaqus_v6.env and ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder
@@ -645,18 +646,17 @@ def _abaqus_journal_emitter(target, source, env):
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
     ``target.stdout``.
 
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
 
     :return: target, source
-    :rtype: tuple with two lists
     """
     appending_suffixes = [_abaqus_environment_extension]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def abaqus_journal(program="abaqus", post_action=[], **kwargs):
+def abaqus_journal(program: str = "abaqus", post_action: list = [], **kwargs) -> SCons.Builder.Builder:
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -731,7 +731,9 @@ def sbatch_abaqus_journal(*args, **kwargs):
     return abaqus_journal(*args, **kwargs)
 
 
-def _abaqus_solver_emitter(target, source, env, suffixes=_abaqus_solver_common_suffixes, stdout_extension=_stdout_extension):
+def _abaqus_solver_emitter(target: list, source: list , env,
+                           suffixes: list[str] = _abaqus_solver_common_suffixes,
+                           stdout_extension: str = _stdout_extension) -> tuple[list, list]:
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -742,14 +744,13 @@ def _abaqus_solver_emitter(target, source, env, suffixes=_abaqus_solver_common_s
     If "suffixes" is a key in the environment, ``env``, then the suffixes list will override the ``suffixes_to_extend``
     argument.
 
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-    :param list suffixes_to_extend: List of strings to use as emitted file suffixes. Must contain the leading period,
+    :param suffixes_to_extend: List of strings to use as emitted file suffixes. Must contain the leading period,
         e.g. ``.extension``
 
     :return: target, source
-    :rtype: tuple with two lists
     """
     if "suffixes" in env and env["suffixes"] is not None:
         suffixes = env["suffixes"]
@@ -780,22 +781,24 @@ def _abaqus_solver_emitter(target, source, env, suffixes=_abaqus_solver_common_s
     return string_targets, source
 
 
-def _abaqus_standard_solver_emitter(target, source, env):
+def _abaqus_standard_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Passes the standard specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_standard_extensions)
 
 
-def _abaqus_explicit_solver_emitter(target, source, env):
+def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Passes the explicit specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_explicit_extensions)
 
 
-def _abaqus_datacheck_solver_emitter(target, source, env):
+def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Passes the datacheck specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
-def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
+def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
+                  emitter: typing.Literal["standard", "explicit", "datacheck"] | None = None,
+                  **kwargs) -> SCons.Builder.Builder:
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -848,13 +851,13 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
 
        cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1
 
-    :param str program: An absolute path or basename string for the abaqus program
-    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+    :param program: An absolute path or basename string for the abaqus program
+    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``.
-    :param str emitter: emit file extensions based on the value of this variable. Overridden by the ``suffixes`` keyword
+    :param emitter: emit file extensions based on the value of this variable. Overridden by the ``suffixes`` keyword
         argument that may be provided in the Task definition.
 
         * "standard": [".odb", ".dat", ".msg", ".com", ".prt", ".sta"]
@@ -863,7 +866,6 @@ def abaqus_solver(program="abaqus", post_action=[], emitter=None, **kwargs):
         * default value: [".odb", ".dat", ".msg", ".com", ".prt"]
 
     :return: Abaqus solver builder
-    :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
