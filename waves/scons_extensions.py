@@ -907,7 +907,7 @@ def sbatch_abaqus_solver(*args, **kwargs):
     return abaqus_solver(*args, **kwargs)
 
 
-def _sierra_emitter(target, source, env):
+def _sierra_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Appends the sierra builder target list with the builder managed targets
 
     Appends ``target[0]``.env and ``target[0]``.stdout  to the ``target`` list. The Sierra Builder requires
@@ -918,18 +918,17 @@ def _sierra_emitter(target, source, env):
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
     ``target.stdout``.
 
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
 
     :return: target, source
-    :rtype: tuple with two lists
     """
     appending_suffixes = [_sierra_environment_extension]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def sierra(program="sierra", application="adagio", post_action=[]):
+def sierra(program: str = "sierra", application: str = "adagio", post_action: list[str] = []) -> SCons.Builder.Builder:
     """Sierra SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -967,16 +966,15 @@ def sierra(program="sierra", application="adagio", post_action=[]):
 
        cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGETS[-1].abspath} 2>&1
 
-    :param str program: An absolute path or basename string for the Sierra program
-    :param str application: The string name for the Sierra application
-    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+    :param program: An absolute path or basename string for the Sierra program
+    :param application: The string name for the Sierra application
+    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Sierra log for error keywords and throw a
         non-zero exit code even if Sierra does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``.
 
     :return: Sierra builder
-    :rtype: SCons.Builder.Builder
     """
     action = [f"{_cd_action_prefix} {program} {application} --version " \
                   f"{_redirect_environment_postfix}",
@@ -1005,8 +1003,9 @@ def sbatch_sierra(*args, **kwargs):
     return sierra(*args, **kwargs)
 
 
-def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environment.Environment(),
-                    build_subdirectory=".", symlink=False):
+def copy_substitute(source_list: list, substitution_dictionary: dict | None = None,
+                    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+                    build_subdirectory: str = ".", symlink: bool = False) -> SCons.Node.NodeList:
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
     .. warning::
@@ -1039,17 +1038,16 @@ def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environ
        }
        waves.scons_extensions.copy_substitute(source_list, substitution_dictionary, env)
 
-    :param list source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
-    :param dict substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional
+    :param source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
+    :param substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional
         template characters if present, e.g. ``@variable@``. The template character, e.g. ``@``, can be anything that
         works in the `SCons Substfile`_ builder.
-    :param SCons.Environment.Environment env: An SCons construction environment to use when defining the targets.
-    :param str build_subdirectory: build subdirectory relative path prepended to target files
-    :param bool symlink: Whether symbolic links are created as new symbolic links. If true, symbolic links are shallow
+    :param env: An SCons construction environment to use when defining the targets.
+    :param build_subdirectory: build subdirectory relative path prepended to target files
+    :param symlink: Whether symbolic links are created as new symbolic links. If true, symbolic links are shallow
         copies as a new symbolic link. If false, symbolic links are copied as a new file (dereferenced).
 
     :return: SCons NodeList of Copy and Substfile target nodes
-    :rtype: SCons.Node.NodeList
     """
     if not substitution_dictionary:
         substitution_dictionary = {}
@@ -1068,7 +1066,7 @@ def copy_substitute(source_list, substitution_dictionary=None, env=SCons.Environ
     return target_list
 
 
-def python_script(post_action=[]):
+def python_script(post_action: list[str] = []) -> SCons.Builder.Builder:
     """Python script SCons builder
 
     This builder requires that the python script to execute is the first source in the list. The builder returned by
@@ -1136,7 +1134,7 @@ def sbatch_python_script(*args, **kwargs):
     return python_script(*args, **kwargs)
 
 
-def _matlab_script_emitter(target, source, env):
+def _matlab_script_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Appends the matlab_script builder target list with the builder managed targets
 
     Appends ``target[0]``.matlab.env and ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires
@@ -1148,18 +1146,17 @@ def _matlab_script_emitter(target, source, env):
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
     ``target.stdout``.
 
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
 
     :return: target, source
-    :rtype: tuple with two lists
     """
     appending_suffixes = [_matlab_environment_extension]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def matlab_script(program="matlab", post_action=[], **kwargs):
+def matlab_script(program: str = "matlab", post_action: list[str] = [], **kwargs) -> SCons.Builder.Builder:
     """Matlab script SCons builder
 
     .. warning::
@@ -1192,15 +1189,14 @@ def matlab_script(program="matlab", post_action=[], **kwargs):
 
        cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGETS[-1].abspath} 2>&1
 
-    :param str program: An absolute path or basename string for the Matlab program.
-    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+    :param program: An absolute path or basename string for the Matlab program.
+    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
         non-zero exit code even if Matlab does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
 
     :return: Matlab script builder
-    :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and matlab_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
@@ -1222,7 +1218,7 @@ def matlab_script(program="matlab", post_action=[], **kwargs):
     return matlab_builder
 
 
-def conda_environment():
+def conda_environment() -> SCons.Builder.Builder:
     """Create a Conda environment file with ``conda env export``
 
     This builder is intended to help WAVES workflows document the Conda environment used in the current build. At least
@@ -1267,7 +1263,7 @@ def conda_environment():
     return conda_environment_builder
 
 
-def _abaqus_extract_emitter(target, source, env):
+def _abaqus_extract_emitter(target: list, source: list, env) -> tuple[list, list]:
     """Prepends the abaqus extract builder target H5 file if none is specified. Appends the source[0].csv file unless
     ``delete_report_file`` is ``True``.  Always appends the ``target[0]_datasets.h5`` file.
 
@@ -1276,12 +1272,11 @@ def _abaqus_extract_emitter(target, source, env):
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.h5``. When in doubt,
     provide the expected H5 file as a target, e.g. ``source[0].h5``.
 
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
 
     :return: target, source
-    :rtype: tuple with two lists
     """
     odb_file = pathlib.Path(source[0].path).name
     odb_file = pathlib.Path(odb_file)
@@ -1295,7 +1290,7 @@ def _abaqus_extract_emitter(target, source, env):
     return target, source
 
 
-def abaqus_extract(program="abaqus", **kwargs):
+def abaqus_extract(program: str = "abaqus", **kwargs) -> SCons.Builder.Builder:
     """Abaqus ODB file extraction Builder
 
     This builder executes the ``odb_extract`` command line utility against an ODB file in the source list. The ODB file
@@ -1354,10 +1349,9 @@ def abaqus_extract(program="abaqus", **kwargs):
        env.Append(BUILDERS={"AbaqusExtract": waves.scons_extensions.abaqus_extract()})
        env.AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
-    :param str program: An absolute path or basename string for the abaqus program
+    :param program: An absolute path or basename string for the abaqus program
 
     :return: Abaqus extract builder
-    :rtype: SCons.Builder.Builder
     """
     # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
@@ -1372,11 +1366,11 @@ def abaqus_extract(program="abaqus", **kwargs):
     return abaqus_extract_builder
 
 
-def _build_odb_extract(target, source, env):
+def _build_odb_extract(target: list, source: list, env) -> None:
     """Define the odb_extract action when used as an internal package and not a command line utility
 
-    :param list target: The target file list of strings
-    :param list source: The source file list of SCons.Node.FS.File objects
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
     """
     # Default odb_extract arguments
@@ -1405,7 +1399,7 @@ def _build_odb_extract(target, source, env):
     return None
 
 
-def sbatch(program="sbatch", post_action=[], **kwargs):
+def sbatch(program: str = "sbatch", post_action: list[str] = [], **kwargs) -> SCons.Builder.Builder:
     """`SLURM`_ `sbatch`_ SCons builder
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
@@ -1455,7 +1449,7 @@ def sbatch(program="sbatch", post_action=[], **kwargs):
     return sbatch_builder
 
 
-def abaqus_input_scanner():
+def abaqus_input_scanner() -> SCons.Scanner.Scanner:
     """Abaqus input file dependency scanner
 
     Custom SCons scanner that searches for the ``INPUT=`` parameter and associated file dependencies inside Abaqus
