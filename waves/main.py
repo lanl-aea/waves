@@ -8,7 +8,7 @@ from waves import __version__
 from waves import _parameter_study
 
 
-def main():
+def main() -> int:
     """This is the main function that performs actions based on command line arguments.
 
     :returns: return code
@@ -205,6 +205,13 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def docs(print_local_path: bool = False) -> int:
+    """Open the package HTML documentation in the system default web browser or print the path to the documentation
+    index file.
+
+    :param print_local_path: Flag to print the local path to terminal instead of calling the default web browser
+
+    :returns: return code
+    """
 
     if print_local_path:
         if _settings._installed_docs_index.exists():
@@ -220,16 +227,21 @@ def docs(print_local_path: bool = False) -> int:
     return 0
 
 
-def build(targets, scons_args=None, max_iterations=5, working_directory=None, git_clone_directory=None):
+def build(targets: list, scons_args: list | None = None, max_iterations: int = 5,
+          working_directory: str | pathlib.Path | None = None,
+          git_clone_directory: str | pathlib.Path | None = None) -> int:
     """Submit an iterative SCons command
 
     SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
     reached. If multiple targets are submitted, they are executed sequentially in the order provided.
 
-    :param list targets: list of SCons targets (positional arguments)
-    :param list scons_args: list of SCons arguments
-    :param int max_iterations: maximum number of iterations before the iterative loop is terminated
-    :param str working_directory: Change the SCons command working directory
+    :param targets: list of SCons targets (positional arguments)
+    :param scons_args: list of SCons arguments
+    :param max_iterations: Maximum number of iterations before the iterative loop is terminated
+    :param working_directory: Change the SCons command working directory
+    :param git_clone_directory: Destination directory for a Git clone operation
+
+    :returns: return code
     """
     from waves._utilities import tee_subprocess
 
@@ -273,8 +285,9 @@ def build(targets, scons_args=None, max_iterations=5, working_directory=None, gi
     return 0
 
 
-def fetch(subcommand, root_directory, relative_paths, destination, requested_paths=None,
-          overwrite=False, dry_run=False, print_available=False):
+def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
+          destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
+          overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
     """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
 
     Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
@@ -282,16 +295,18 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
 
     If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
 
-    :param str subcommand: name of the subcommand to report in STDOUT
-    :param str root_directory: String or pathlike object for the root_directory directory
-    :param list relative_paths: List of string or pathlike objects describing relative paths to search for in
+    :param subcommand: name of the subcommand to report in STDOUT
+    :param root_directory: String or pathlike object for the root_directory directory
+    :param relative_paths: List of string or pathlike objects describing relative paths to search for in
         root_directory
-    :param str destination: String or pathlike object for the destination directory
-    :param list requested_paths: list of relative path-like objects that subset the files found in the
+    :param destination: String or pathlike object for the destination directory
+    :param requested_paths: list of relative path-like objects that subset the files found in the
         ``root_directory`` ``relative_paths``
-    :param bool overwrite: Boolean to overwrite any existing files in destination directory
-    :param bool dry_run: Print the destination tree and exit. Short circuited by ``print_available``
-    :param bool print_available: Print the available source files and exit. Short circuits ``dry_run``
+    :param overwrite: Boolean to overwrite any existing files in destination directory
+    :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
+    :param print_available: Print the available source files and exit. Short circuits ``dry_run``
+
+    :returns: return code
     """
     if not requested_paths:
         requested_paths = []
@@ -311,28 +326,33 @@ def fetch(subcommand, root_directory, relative_paths, destination, requested_pat
     return return_code
 
 
-def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=None, print_graphml=False,
-                  height=_settings._visualize_default_height, width=_settings._visualize_default_width,
-                  font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False, print_tree=False,
-                  input_file=None):
+def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: list[str], exclude_regex: str,
+                  output_file: str | pathlib.Path | None = None, print_graphml: bool = False,
+                  height: int = _settings._visualize_default_height, width: int = _settings._visualize_default_width,
+                  font_size: int = _settings._visualize_default_font_size, vertical: bool = False,
+                  no_labels: bool = False, print_tree: bool = False,
+                  input_file: str | pathlib.Path | None = None) -> int:
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
     dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
     as well.
 
-    :param str target: String specifying an SCons target
-    :param str sconstruct: Path to an SConstruct file or parent directory
-    :param list exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
-    :param str exclude_regex: exclude nodes that match this regular expression
-    :param str output_file: File for saving the visualization
-    :param bool print_graphml: Whether to print the graph in graphml format
-    :param int height: Height of visualization if being saved to a file
-    :param int width: Width of visualization if being saved to a file
-    :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
-    :param bool no_labels: Don't print labels on the nodes of the visualization
-    :param bool print_tree: Print the text output of the scons --tree command to the screen
-    :param str input_file: Path to text file storing output from scons tree command
+    :param target: String specifying an SCons target
+    :param sconstruct: Path to an SConstruct file or parent directory
+    :param exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
+    :param exclude_regex: exclude nodes that match this regular expression
+    :param output_file: File for saving the visualization
+    :param print_graphml: Whether to print the graph in graphml format
+    :param height: Height of visualization if being saved to a file
+    :param width: Width of visualization if being saved to a file
+    :param font_size: Font size of node labels
+    :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
+    :param no_labels: Don't print labels on the nodes of the visualization
+    :param print_tree: Print the text output of the scons --tree command to the screen
+    :param input_file: Path to text file storing output from scons tree command
+
+    :returns: return code
     """
     from waves import visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
@@ -343,12 +363,12 @@ def visualization(target, sconstruct, exclude_list, exclude_regex, output_file=N
         return 1
     tree_output = ""
     if input_file:
-        file_input = pathlib.Path(input_file)
-        if not file_input.exists():
+        input_file = pathlib.Path(input_file)
+        if not input_file.exists():
             print(f"\t{input_file} does not exist.", file=sys.stderr)
             return 1
         else:
-            tree_output = file_input.read_text()
+            tree_output = input_file.read_text()
     else:
         scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
         scons_command.extend(_settings._scons_visualize_arguments)
