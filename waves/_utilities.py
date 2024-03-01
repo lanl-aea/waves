@@ -4,7 +4,7 @@ import pathlib
 import platform
 
 
-def _quote_spaces_in_path(path):
+def _quote_spaces_in_path(path: pathlib.Path | str) -> pathlib.Path:
     """Traverse parts of a path and place in double quotes if there are spaces in the part
 
     >>> import pathlib
@@ -13,10 +13,9 @@ def _quote_spaces_in_path(path):
     >>> waves.scons_extensions._quote_spaces_in_path(path)
     PosixPath('path/"directory with space"/filename.ext')
 
-    :param pathlib.Path path: path to modify as necessary
+    :param path: path to modify as necessary
 
     :return: Path with parts wrapped in double quotes as necessary
-    :rtype: pathlib.Path
     """
     path = pathlib.Path(path)
     new_path = pathlib.Path(path.root)
@@ -27,28 +26,26 @@ def _quote_spaces_in_path(path):
     return new_path
 
 
-def search_commands(options):
+def search_commands(options: list[str]) -> str | None:
     """Return the first found command in the list of options. Return None if none are found.
 
     :param list options: executable path(s) to test
 
     :returns: command absolute path
-    :rtype: str
     """
     command_search = (shutil.which(command) for command in options)
     command_abspath = next((command for command in command_search if command is not None), None)
     return command_abspath
 
 
-def find_command(options):
+def find_command(options: list[str]) -> str | None:
     """Return first found command in list of options.
 
     Raise a FileNotFoundError if none is found.
 
-    :param list options: alternate command options
+    :param options: alternate command options
 
     :returns: command absolute path
-    :rtype: str
     """
     command_abspath = search_commands(options)
     if command_abspath is None:
@@ -56,7 +53,7 @@ def find_command(options):
     return command_abspath
 
 
-def cubit_os_bin():
+def cubit_os_bin() -> str:
     """Return the OS specific Cubit bin directory name
 
     Making Cubit importable requires putting the Cubit bin directory on PYTHONPATH. On MacOS, the directory is "MacOS".
@@ -74,19 +71,18 @@ def cubit_os_bin():
     return bin_directory
 
 
-def find_cubit_bin(options, bin_directory=None):
+def find_cubit_bin(options: list[str], bin_directory: str | None = None) -> pathlib.Path:
     """Provided a few options for the Cubit executable, search for the bin directory.
 
     Recommend first checking to see if cubit will import.
 
     If the Cubit command or bin directory is not found, raise a FileNotFoundError.
 
-    :param list options: Cubit command options
-    :param str bin_directory: Cubit's bin directory name. Override the bin directory returned by
+    :param options: Cubit command options
+    :param bin_directory: Cubit's bin directory name. Override the bin directory returned by
         :meth:`waves._utilities.cubit_os_bin`.
 
     :returns: Cubit bin directory absolute path
-    :rtype: pathlib.Path
     """
     if bin_directory is None:
         bin_directory = cubit_os_bin()
@@ -108,14 +104,13 @@ def find_cubit_bin(options, bin_directory=None):
     return cubit_bin
 
 
-def tee_subprocess(command, **kwargs):
+def tee_subprocess(command: list[str], **kwargs) -> tuple[int, str]:
     """Stream STDOUT to terminal while saving buffer to variable
 
-    :param list command: Command to execute provided a list of strings
+    :param command: Command to execute provided a list of strings
     :param dict kwargs: Any additional keyword arguments are passed through to subprocess.Popen
 
     :returns: integer return code, string STDOUT
-    :rtype: (int, str)
     """
     from io import StringIO
     import subprocess

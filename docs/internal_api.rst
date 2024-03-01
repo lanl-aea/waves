@@ -57,6 +57,26 @@ Visualize
    :show-inheritance:
    :synopsis: waves module supporting the visualize subcommand
 
+****************
+_parameter_study
+****************
+
+.. automodule:: waves._parameter_study
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
+
+**********
+_utilities
+**********
+
+.. automodule:: waves._utilities
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
+
 **********************
 Odb Report File Parser
 **********************
