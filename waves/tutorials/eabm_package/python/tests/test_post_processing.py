@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 
-import pandas as pd
+import pandas
 
-from waves.tutorials.eabm_package.python import post_processing
+from eabm_package.python import post_processing
 
 
 def test_csv_files_match():
@@ -11,7 +11,7 @@ def test_csv_files_match():
         'SecondDummyLine': [4, 5, 6]
     }
     # Control DataFrame
-    control = pd.DataFrame(data)
+    control = pandas.DataFrame(data)
 
     # Identical DataFrame
     identical_copy = control.copy()
