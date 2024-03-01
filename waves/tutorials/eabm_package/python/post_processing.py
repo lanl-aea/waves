@@ -83,6 +83,17 @@ def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_
     matplotlib.pyplot.savefig(output_file)
 
 
+def save_table(combined_data, selection_dict, output_file):
+    """Save csv table
+    
+    :param xarray.DataArray combined_data: XArray Dataset to be written as a CSV.
+    :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
+        pairs must match the data variables and coordinates of the expected Xarray Dataset object.
+    :param str output_file: The CSV file name. Relative or absolute path.
+    """
+    combined_data.sel(selection_dict).to_dataframe().to_csv(output_file)
+
+
 def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
          parameter_study_file=None, csv_regression_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
@@ -106,6 +117,7 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
         plot data. If the data sets do not match a non-zero exit code is returned.
     """
     output_file = pathlib.Path(output_file)
+    output_csv = output_file.with_suffix(".csv")
     if csv_regression_file:
         csv_regression_file = pathlib.Path(csv_regression_file)
     concat_coord = "parameter_sets"
@@ -124,11 +136,9 @@ def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     # Tutorial 09: post processing print statement to view data structure
     print(combined_data)
 
+    # Output files
     save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file)
-
-    # Table
-    output_csv = output_file.with_suffix(".csv")
-    combined_data.sel(selection_dict).to_dataframe().to_csv(output_csv)
+    save_table(combined_data, selection_dict, output_csv)
 
     # Regression test
     if csv_regression_file:
