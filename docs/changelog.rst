@@ -22,6 +22,8 @@ Documentation
 - Add odb extract structure and relationship to Xarray, h5py, HDF Group tools to tutorial 08 about data extraction
   (:issue:`572`, :merge:`748`). By `Kyle Brindley`_.
 - Replace docstring types with type annotations for future static type checking (:merge:`749`). By `Kyle Brindley`_.
+- Replace f-strings with scons template substitution in escape sequences tutorial (:issue:`587`, :merge:`726`).
+  By `Sergio Cordova`_ and `Kyle Brindley`_.
 
 Enhancements
 ============
@@ -59,11 +61,6 @@ Internal Changes
   Brindley`_.
 - Place pytest results in a build directory to avoid cluttering the source directory (:issue:`598`, :merge:`741`). By
   `Kyle Brindley`_.
-
-Documentation
-=============
-- Replace f-strings with scons template substitution in escape sequences tutorial (:issue:`587`, :merge:`726`).
-  By `Sergio Cordova`_.
 
 ******************
 0.7.8 (2024-01-16)
