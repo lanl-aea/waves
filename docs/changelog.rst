@@ -8,6 +8,28 @@ Changelog
 0.7.10 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Fix issue in odb_extract to handle case where elemental and nodal data is present in the same field output
+  (:issue:`601`, :merge:`742`). By `Prabhu Khalsa`_.
+
+Documentation
+=============
+- Add the odb extract HDF5 file structure discussion to the CLI and builder (:issue:`563`, :merge:`744`). By `Prabhu
+  Khalsa`_.
+- Add the post-processing tutorial image example and discuss the purpose of catenating the simulation results with the
+  parameter study object (:issue:`574`, :merge:`747`). By `Kyle Brindley`_.
+- Add odb extract structure and relationship to Xarray, h5py, HDF Group tools to tutorial 08 about data extraction
+  (:issue:`572`, :merge:`748`). By `Kyle Brindley`_.
+- Replace docstring types with type annotations for future static type checking (:merge:`749`). By `Kyle Brindley`_.
+- Replace f-strings with scons template substitution in escape sequences tutorial (:issue:`587`, :merge:`726`).
+  By `Sergio Cordova`_ and `Kyle Brindley`_.
+
+Enhancements
+============
+- Stream the wrapped scons command STDOUT from the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
+- Submit all targets simultaneously in the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
+
 ******************
 0.7.9 (2024-02-22)
 ******************

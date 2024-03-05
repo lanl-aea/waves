@@ -8,15 +8,15 @@ import matplotlib.pyplot as plt
 from waves import _settings
 
 
-def parse_output(tree_lines, exclude_list, exclude_regex):
+def parse_output(tree_lines: list, exclude_list: list, exclude_regex: str) -> dict:
     """
     Parse the string that has the tree output and store it in a dictionary
 
-    :param list tree_lines: output of the scons tree command
-    :param list exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
-    :param str exclude_regex: exclude nodes that match this regular expression
+    :param tree_lines: output of the scons tree command
+    :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
+    :param exclude_regex: exclude nodes that match this regular expression
+
     :returns: dictionary of tree output
-    :rtype: dict
     """
     edges = list()  # List of tuples for storing all connections
     node_info = dict()
@@ -78,7 +78,8 @@ def parse_output(tree_lines, exclude_list, exclude_regex):
     return tree_dict
 
 
-def check_regex_exclude(exclude_regex, node_name, current_indent, exclude_indent, exclude_node=False):
+def check_regex_exclude(exclude_regex: str, node_name: str, current_indent: int, exclude_indent: int,
+                        exclude_node: bool = False) -> tuple[bool, int]:
     """
     Excludes node names that match the regular expression
 
@@ -87,8 +88,8 @@ def check_regex_exclude(exclude_regex, node_name, current_indent, exclude_indent
     :param int current_indent: Current indent of the parsed output
     :param int exclude_indent: Set to current_indent if node is to be excluded
     :param bool exclude_node: Indicated whether a node should be excluded
+
     :returns: Tuple containing exclude_node and exclude_indent
-    :rtype: (bool, int)
     """
     if exclude_regex and re.search(exclude_regex, node_name):
         exclude_node = True
@@ -96,14 +97,13 @@ def check_regex_exclude(exclude_regex, node_name, current_indent, exclude_indent
     return exclude_node, exclude_indent
 
 
-def click_arrow(event, annotations, arrows):
+def click_arrow(event, annotations: dict, arrows: dict) -> None:
     """
     Create effect with arrows when mouse click
 
     :param matplotlib.backend_bases.Event event: Event that is handled by this function
-    :param dict annotations: Dictionary linking node names to their annotations
-    :param dict arrows: Dictionary linking darker arrow annotations to node names
-    :returns: None
+    :param annotations: Dictionary linking node names to their annotations
+    :param arrows: Dictionary linking darker arrow annotations to node names
     """
     fig = plt.gcf()
     ax = plt.gca()
@@ -125,20 +125,20 @@ def click_arrow(event, annotations, arrows):
                     fig.canvas.draw_idle()
 
 
-def visualize(tree, output_file,
-              height=_settings._visualize_default_height,
-              width=_settings._visualize_default_width,
-              font_size=_settings._visualize_default_font_size, vertical=False, no_labels=False):
-    """
-    Create a visualization showing the tree
+def visualize(tree: dict, output_file: str,
+              height: int = _settings._visualize_default_height,
+              width: int = _settings._visualize_default_width,
+              font_size: int = _settings._visualize_default_font_size,
+              vertical: bool = False, no_labels: bool = False) -> None:
+    """Create a visualization showing the tree
 
-    :param dict tree: output of the scons tree command stored as dictionary
-    :param str output_file: Name of file to store visualization
-    :param int height: Height of visualization if being saved to a file
-    :param int width: Width of visualization if being saved to a file
-    :param int font_size: Font size of file names in points
-    :param bool vertical: Specifies a vertical layout of graph instead of the default horizontal layout
-    :param bool no_labels: Don't print labels on the nodes of the visualization
+    :param tree: output of the scons tree command stored as dictionary
+    :param output_file: Name of file to store visualization
+    :param height: Height of visualization if being saved to a file
+    :param width: Width of visualization if being saved to a file
+    :param font_size: Font size of file names in points
+    :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
+    :param no_labels: Don't print labels on the nodes of the visualization
     """
     graph = networkx.DiGraph()
     graph.add_nodes_from(tree['nodes'])

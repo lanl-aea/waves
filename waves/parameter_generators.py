@@ -6,6 +6,7 @@ import itertools
 import copy
 import hashlib
 import warnings
+import typing
 
 import yaml
 import numpy
@@ -43,34 +44,34 @@ allowable_output_file_types = ('h5', 'yaml')
 class _ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
+    :param parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
         ``{parameter_name: schema_value}``.  Validated on class instantiation.
-    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
+    :param output_file_template: Output file name template. Required if parameter sets will be written to files
         instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
         ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
         will be appended to the template string.
-    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
+    :param output_file: Output file name for a single file output of the parameter study. May contain pathseps for
         an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
         is overwritten if the content of the file has changed or if ``overwrite`` is True.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
-    :param bool overwrite: Overwrite existing output files
-    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+    :param overwrite: Overwrite existing output files
+    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
-    def __init__(self, parameter_schema,
-                 output_file_template=default_output_file_template,
-                 output_file=default_output_file,
-                 output_file_type=default_output_file_type,
-                 set_name_template=default_set_name_template,
-                 previous_parameter_study=default_previous_parameter_study,
-                 overwrite=default_overwrite,
-                 dryrun=default_dryrun,
-                 write_meta=default_write_meta,
-                 **kwargs):
+    def __init__(self, parameter_schema: dict,
+                 output_file_template: str = default_output_file_template,
+                 output_file: str = default_output_file,
+                 output_file_type: str = default_output_file_type,
+                 set_name_template: str = default_set_name_template,
+                 previous_parameter_study: str = default_previous_parameter_study,
+                 overwrite: bool = default_overwrite,
+                 dryrun: bool = default_dryrun,
+                 write_meta: bool = default_write_meta,
+                 **kwargs) -> None:
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
@@ -116,7 +117,7 @@ class _ParameterGenerator(ABC):
         self._generate(**kwargs)
 
     @abstractmethod
-    def _validate(self):
+    def _validate(self) -> None:
         """Process parameter study input to verify schema
 
         Must set the class attributes:
@@ -133,7 +134,7 @@ class _ParameterGenerator(ABC):
         pass
 
     @abstractmethod
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         """Generate the parameter study definition
 
         All implemented class method should accept kwargs as ``_generate(self, **kwargs)``. The ABC class accepts, but
@@ -175,7 +176,7 @@ class _ParameterGenerator(ABC):
         if self.previous_parameter_study:
             self._merge_parameter_studies()
 
-    def generate(self, kwargs=None):
+    def generate(self, kwargs=None) -> None:
         """Deprecated public generate method.
 
         The parameter study is now generated as part of class instantiation. This method has been kept for backward
@@ -189,7 +190,7 @@ class _ParameterGenerator(ABC):
         warnings.warn(warning_message, DeprecationWarning)
         self._generate(**kwargs)
 
-    def write(self):
+    def write(self) -> None:
         """Write the parameter study to STDOUT or an output file.
 
         Writes to STDOUT by default. Requires non-default ``output_file_template`` or ``output_file`` specification to
@@ -219,18 +220,18 @@ class _ParameterGenerator(ABC):
         else:
             raise ValueError(f"Unsupported output file type '{self.output_file_type}'")
 
-    def scons_write(self, target, source, env):
+    def scons_write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
 
         Reference: https://scons.org/doc/production/HTML/scons-user/ch17s04.html
 
-        :param list target: The target file list of strings
-        :param list source: The source file list of SCons.Node.FS.File objects
+        :param target: The target file list of strings
+        :param source: The source file list of SCons.Node.FS.File objects
         :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
         """
         self.write()
 
-    def _write_dataset(self):
+    def _write_dataset(self) -> None:
         """Write Xarray Dataset formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
@@ -257,10 +258,10 @@ class _ParameterGenerator(ABC):
                     else:
                         self._conditionally_write_dataset(parameter_set_file, parameter_set)
 
-    def _conditionally_write_dataset(self, existing_parameter_study, parameter_study):
+    def _conditionally_write_dataset(self, existing_parameter_study: str, parameter_study) -> None:
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
-        :param str existing_parameter_study: A relative or absolute file path to a previously created parameter
+        :param existing_parameter_study: A relative or absolute file path to a previously created parameter
             study Xarray Dataset
         :param xarray.Dataset parameter_study: Parameter study xarray data
         """
@@ -272,7 +273,7 @@ class _ParameterGenerator(ABC):
         if write:
             parameter_study.to_netcdf(path=existing_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
-    def _write_yaml(self, parameter_set_files):
+    def _write_yaml(self, parameter_set_files: list[pathlib.Path]) -> None:
         """Write YAML formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
@@ -312,11 +313,11 @@ class _ParameterGenerator(ABC):
                     else:
                         self._conditionally_write_yaml(parameter_set_file, yaml.safe_load(text))
 
-    def _conditionally_write_yaml(self, output_file, parameter_dictionary):
+    def _conditionally_write_yaml(self, output_file: str | pathlib.Path, parameter_dictionary: dict) -> None:
         """Write YAML file over previous study if the datasets have changed or self.overwrite is True
 
         :param output_file: A relative or absolute file path to the output YAML file
-        :param dict parameter_dictionary: dictionary containing parameter set data
+        :param parameter_dictionary: dictionary containing parameter set data
         """
         write = True
         if not self.overwrite and pathlib.Path(output_file).is_file():
@@ -328,13 +329,13 @@ class _ParameterGenerator(ABC):
             with open(output_file, 'w') as outfile:
                 outfile.write(yaml.dump(parameter_dictionary))
 
-    def _write_meta(self, parameter_set_files):
+    def _write_meta(self, parameter_set_files: list[pathlib.Path]) -> None:
         """Write the parameter study meta data file.
 
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
         target or dependee is out-of-date. Parameter study file paths are written as absolute paths.
 
-        :param list parameter_set_files: List of pathlib.Path parameter set file paths
+        :param parameter_set_files: List of pathlib.Path parameter set file paths
         """
         # Always overwrite the meta data file to ensure that *all* parameter file names are included.
         with open(self.parameter_study_meta_file, 'w') as meta_file:
@@ -344,7 +345,7 @@ class _ParameterGenerator(ABC):
                 for parameter_set_file in parameter_set_files:
                     meta_file.write(f"{parameter_set_file.resolve()}\n")
 
-    def _create_parameter_set_hashes(self):
+    def _create_parameter_set_hashes(self) -> None:
         """Construct unique, repeatable parameter set content hashes from ``self._samples``.
 
         Creates an md5 hash from the concatenated string representation of parameter values.
@@ -363,7 +364,7 @@ class _ParameterGenerator(ABC):
             set_hash = hashlib.md5(set_values_catenation.encode('utf-8')).hexdigest()
             self._parameter_set_hashes.append(set_hash)
 
-    def _create_parameter_set_names(self):
+    def _create_parameter_set_names(self) -> None:
         """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
 
         Creates the class attribute ``self._parameter_set_names`` required to populate the ``_generate()`` method's
@@ -382,7 +383,7 @@ class _ParameterGenerator(ABC):
             template = self.set_name_template
             self._parameter_set_names[set_hash] = (template.substitute({'number': number}))
 
-    def _update_parameter_set_names(self):
+    def _update_parameter_set_names(self) -> None:
         """Update the parameter set names after a parameter study dataset merge operation.
 
         Resets attributes:
@@ -397,7 +398,7 @@ class _ParameterGenerator(ABC):
             self.parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
         self._parameter_set_names = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
 
-    def _create_parameter_set_names_array(self):
+    def _create_parameter_set_names_array(self) -> None:
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
 
         :return: parameter_set_names_array
@@ -408,13 +409,13 @@ class _ParameterGenerator(ABC):
                dims=[_hash_coordinate_key],
                name=_set_coordinate_key)
 
-    def _merge_parameter_set_names_array(self):
+    def _merge_parameter_set_names_array(self) -> None:
         """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""
         parameter_set_names_array = self._create_parameter_set_names_array()
         self.parameter_study = xarray.merge(
             [self.parameter_study.reset_coords(), parameter_set_names_array]).set_coords(_set_coordinate_key)
 
-    def _create_parameter_array(self, data, name):
+    def _create_parameter_array(self, data, name: str):
         """Create the standard structure for a parameter_study array
 
         requires:
@@ -424,7 +425,10 @@ class _ParameterGenerator(ABC):
 
         :param numpy.array data: 2D array of parameter study samples with shape (number of parameter sets, number of
             parameters).
-        :param str name: Name of the array. Used as a data variable name when converting to parameter study dataset.
+        :param name: Name of the array. Used as a data variable name when converting to parameter study dataset.
+
+        :returns: parameter study array
+        :rtype: xarray.DataArra
         """
         array = xarray.DataArray(
             data,
@@ -434,7 +438,7 @@ class _ParameterGenerator(ABC):
         )
         return array
 
-    def _create_parameter_study(self):
+    def _create_parameter_study(self) -> None:
         """Create the standard structure for the parameter study dataset
 
         requires:
@@ -461,7 +465,7 @@ class _ParameterGenerator(ABC):
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
-    def _parameter_study_to_numpy(self, data_type):
+    def _parameter_study_to_numpy(self, data_type: typing.Literal["samples", "quantiles"]):
         """Return the parameter study data as a 2D numpy array
 
         :param str data_type: The data_type selection to return - samples or quantiles
@@ -474,7 +478,7 @@ class _ParameterGenerator(ABC):
             data.append(data_row.squeeze().to_array().to_numpy())
         return numpy.array(data, dtype=object)
 
-    def parameter_study_to_dict(self, data_type='samples'):
+    def parameter_study_to_dict(self, data_type: typing.Literal["samples", "quantiles"] = 'samples') -> dict:
         """Return parameter study as a dictionary
 
         Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
@@ -500,7 +504,7 @@ class _ParameterGenerator(ABC):
             parameter_study_dictionary[set_name] = parameter_dict
         return parameter_study_dictionary
 
-    def _merge_parameter_studies(self):
+    def _merge_parameter_studies(self) -> None:
         """Merge the current parameter study into a previous parameter study.
 
         Preserve the previous parameter study set name to set contents associations by dropping the current study's set
@@ -536,7 +540,7 @@ class _ParameterGenerator(ABC):
 
 class _ScipyGenerator(_ParameterGenerator, ABC):
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate the parameter distribution schema. Executed by class initiation.
 
         .. code-block::
@@ -581,7 +585,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         set_count = self.parameter_schema['num_simulations']
         parameter_count = len(self._parameter_names)
         override_kwargs = {'d': parameter_count}
@@ -594,11 +598,10 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         self._generate_distribution_samples(set_count, parameter_count)
         super()._generate()
 
-    def _generate_parameter_distributions(self):
+    def _generate_parameter_distributions(self) -> dict:
         """Return dictionary containing the {parameter name: scipy.stats distribution} defined by the parameter schema.
 
         :return: parameter_distributions
-        :rtype: dict
         """
         parameter_dictionary = copy.deepcopy({key: self.parameter_schema[key] for key in self._parameter_names})
         parameter_distributions = {}
@@ -607,7 +610,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
             parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
         return parameter_distributions
 
-    def _generate_distribution_samples(self, set_count, parameter_count):
+    def _generate_distribution_samples(self, set_count, parameter_count) -> None:
         """Convert quantiles to parameter distribution samples
 
         Requires attibrutes:
@@ -625,7 +628,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         for i, distribution in enumerate(self.parameter_distributions.values()):
             self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
 
-    def _create_parameter_names(self):
+    def _create_parameter_names(self) -> None:
         """Construct the parameter names from a distribution parameter schema"""
         self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
 
@@ -676,7 +679,7 @@ class CartesianProduct(_ParameterGenerator):
     :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
@@ -687,16 +690,16 @@ class CartesianProduct(_ParameterGenerator):
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
                 raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
 
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         """Generate the Cartesian Product parameter sets."""
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         super()._generate()
 
-    def parameter_study_to_dict(self, *args, **kwargs):
+    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
         # Get the ABC docstring into each paramter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
-    def write(self):
+    def write(self) -> None:
         # Get the ABC docstring into each paramter generator API
         super().write()
 
@@ -772,19 +775,19 @@ class LatinHypercube(_ScipyGenerator):
     :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.sampler_class = "LatinHypercube"
         super().__init__(*args, **kwargs)
 
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         """Generate the Latin Hypercube parameter sets"""
         super()._generate(**kwargs)
 
-    def parameter_study_to_dict(self, *args, **kwargs):
+    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
         # Get the ABC docstring into each paramter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
-    def write(self):
+    def write(self) -> None:
         # Get the ABC docstring into each paramter generator API
         super().write()
 
@@ -838,7 +841,7 @@ class CustomStudy(_ParameterGenerator):
     :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
-    def _validate(self):
+    def _validate(self) -> None:
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
@@ -857,17 +860,17 @@ class CustomStudy(_ParameterGenerator):
                              "where N is the number of parameters.")
         return
 
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         """Generate the parameter study dataset from the user provided parameter array."""
         # Converted to numpy array by _validate. Simply assign to correct attribute
         self._samples = self.parameter_schema['parameter_samples']
         super()._generate()
 
-    def parameter_study_to_dict(self, *args, **kwargs):
+    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
         # Get the ABC docstring into each paramter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
-    def write(self):
+    def write(self) -> None:
         # Get the ABC docstring into each paramter generator API
         super().write()
 
@@ -939,19 +942,19 @@ class SobolSequence(_ScipyGenerator):
            parameter_2         (data_type, parameter_sets) float64 0.0 0.5 ... 4.25
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.sampler_class = "Sobol"
         super().__init__(*args, **kwargs)
 
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         """Generate the parameter study dataset from the user provided parameter array"""
         super()._generate(**kwargs)
 
-    def parameter_study_to_dict(self, *args, **kwargs):
+    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
         # Get the ABC docstring into each parameter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
-    def write(self):
+    def write(self) -> None:
         # Get the ABC docstring into each parameter generator API
         super().write()
 
@@ -1034,19 +1037,19 @@ class ScipySampler(_ScipyGenerator):
     :var self.parameter_study: The final parameter study XArray Dataset object
     """
 
-    def __init__(self, sampler_class, *args, **kwargs):
+    def __init__(self, sampler_class, *args, **kwargs) -> None:
         self.sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets"""
         super()._generate(**kwargs)
 
-    def parameter_study_to_dict(self, *args, **kwargs):
+    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
         # Get the ABC docstring into each parameter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
-    def write(self):
+    def write(self) -> None:
         # Get the ABC docstring into each parameter generator API
         super().write()
 
@@ -1141,11 +1144,11 @@ class SALibSampler(_ParameterGenerator, ABC):
         * ``parameter_schema['problem']['names']`` is not a YAML compliant iterable (list, set, tuple)
     """
 
-    def __init__(self, sampler_class, *args, **kwargs):
+    def __init__(self, sampler_class, *args, **kwargs) -> None:
         self.sampler_class = sampler_class
         super().__init__(*args, **kwargs)
 
-    def _validate(self):
+    def _validate(self) -> None:
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
@@ -1166,7 +1169,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         # Sampler specific validation
         self._sampler_validation()
 
-    def _sampler_validation(self):
+    def _sampler_validation(self) -> None:
         """Call campler specific schema validation check methods
 
         * sobol requires at least two parameters
@@ -1182,15 +1185,15 @@ class SALibSampler(_ParameterGenerator, ABC):
         if self.sampler_class == "morris" and parameter_count < 2:
             raise ValueError("The SALib Morris sampler requires at least two parameters")
 
-    def _sampler_overrides(self, override_kwargs=None):
+    def _sampler_overrides(self, override_kwargs=None) -> dict:
         """Provide sampler specific kwarg override dictionaries
 
         * sobol produces duplicate parameter sets for two parameters when ``calc_second_order`` is ``True``. Override
           this kwarg to be ``False`` if there are only two parameters.
 
         :param dict override_kwargs: any common kwargs to include in the override dictionary
+
         :return: override kwarg dictionary
-        :rtype: dict
         """
         if not override_kwargs:
             override_kwargs = {}
@@ -1199,11 +1202,11 @@ class SALibSampler(_ParameterGenerator, ABC):
             override_kwargs = {**override_kwargs, "calc_second_order": False}
         return override_kwargs
 
-    def _create_parameter_names(self):
+    def _create_parameter_names(self) -> None:
         """Construct the parameter names from a distribution parameter schema"""
         self._parameter_names = self.parameter_schema["problem"]["names"]
 
-    def _generate(self, **kwargs):
+    def _generate(self, **kwargs) -> None:
         """Generate the `SALib.sample`_ ``sampler_class`` parameter sets"""
         N = self.parameter_schema['N']
         parameter_count = len(self._parameter_names)
@@ -1220,10 +1223,10 @@ class SALibSampler(_ParameterGenerator, ABC):
         self._samples = numpy.unique(self._samples, axis=0)
         super()._generate()
 
-    def parameter_study_to_dict(self, *args, **kwargs):
+    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
         # Get the ABC docstring into each parameter generator API
         return super().parameter_study_to_dict(*args, **kwargs)
 
-    def write(self):
+    def write(self) -> None:
         # Get the ABC docstring into each parameter generator API
         super().write()

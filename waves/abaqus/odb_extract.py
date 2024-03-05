@@ -2,8 +2,33 @@
 
 """Extracts data from an Abaqus odb file.
 Calls odbreport feature of Abaqus, parses resultant file, and creates output file.
+Most simulation data lives in a group path following the instance and set name, e.g.
+/INSTANCE/FieldOutputs/ELEMENT_SET, and can be accessed with xarray as
+xarray.open_dataset("sample.h5", group="/INSTANCE/FieldOutputs/ELEMENT_SET"). You can view all group paths with
+h5ls -r sample.h5. Additional ODB information is available in the /odb group path. The /xarray/Dataset group path
+contains a list of group paths that contain an xarray dataset.
 
-.. moduleauthor:: Prabhu Khalsa <pkhalsa@lanl.gov>
+.. code-block::
+   :caption: Format of HDF5 file
+
+   /                 # Top level group required in all hdf5 files
+   /<instance name>/ # Groups containing data of each instance found in an odb
+       FieldOutputs/      # Group with multiple xarray datasets for each field output
+           <field name>/  # Group with datasets containing field output data for a specified set or surface
+                          # If no set or surface is specified, the <field name> will be 'ALL_NODES' or 'ALL_ELEMENTS'
+       HistoryOutputs/    # Group with multiple xarray datasets for each history output
+           <region name>/ # Group with datasets containing history output data for specified history region name
+                          # If no history region name is specified, the <region name> will be 'ALL NODES'
+       Mesh/              # Group written from an xarray dataset with all mesh information for this instance
+   /<instance name>_Assembly/ # Group containing data of assembly instance found in an odb
+       Mesh/              # Group written from an xarray dataset with all mesh information for this instance
+   /odb/             # Catch all group for data found in the odbreport file not already organized by instance
+       info/              # Group with datasets that mostly give odb meta-data like name, path, etc.
+       jobData/           # Group with datasets that contain additional odb meta-data
+       rootAssembly/      # Group with datasets that match odb file organization per Abaqus documentation
+       sectionCategories/ # Group with datasets that match odb file organization per Abaqus documentation
+   /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
+
 """
 
 import os
@@ -32,8 +57,8 @@ def get_parser():
     """
     _program_name = Path(__file__).stem
     example = f''' Example: >> {_program_name} sample.odb\n '''
-    parser = ArgumentParser(description=__doc__.split('..')[0],  # Don't include module author part of doc string
-                            formatter_class=ArgumentDefaultsHelpFormatter, epilog=example, prog=_program_name)
+    parser = ArgumentParser(description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter, epilog=example,
+                            prog=_program_name)
     parser.add_argument(nargs=1,
                         dest='input_file',
                         type=str,

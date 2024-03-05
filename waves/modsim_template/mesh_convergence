@@ -139,7 +139,10 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
         target=[f"{set_name / job_name}.sta"],
         source=solve_source_list,
         job_name=job_name,
-        abaqus_options=f"{abaqus_options} -cpus $({env['solve_cpus']}$)"))
+        abaqus_options="${global_abaqus_options} -cpus $(${solve_cpus}$)",
+        global_abaqus_options=abaqus_options,
+        solve_cpus=env["solve_cpus"]
+    ))
 
     # Extract Abaqus
     extract_source_list = [f"{set_name / job_name}.odb"]

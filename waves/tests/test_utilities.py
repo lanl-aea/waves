@@ -96,3 +96,9 @@ def test_cubit_os_bin():
     with patch("platform.system", return_value="Windows"):
         bin_directory = _utilities.cubit_os_bin()
         assert bin_directory == "bin"
+
+
+def test_tee_subprocess():
+    with patch("subprocess.Popen") as mock_popen:
+        _utilities.tee_subprocess(['dummy'])
+    mock_popen.assert_called_once()
