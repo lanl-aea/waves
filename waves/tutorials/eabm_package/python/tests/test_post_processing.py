@@ -2,15 +2,7 @@
 
 import pandas
 
-# Import the post_processing script, trying both tutorial directory structures.
-# Most end-users will implement only one of these structures and should replace
-# the try/except structure with a single import line, e.g.
-#
-# from eabm_package.python import post_processing
-try:
-    from eabm_package.python import post_processing
-except ImportError:
-    from waves.tutorials.eabm_package.python import post_processing
+from waves.tutorials.eabm_package.python import post_processing
 
 
 def test_csv_files_match():
