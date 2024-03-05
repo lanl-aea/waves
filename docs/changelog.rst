@@ -24,6 +24,7 @@ Documentation
 - Replace docstring types with type annotations for future static type checking (:merge:`749`). By `Kyle Brindley`_.
 - Replace f-strings with scons template substitution in escape sequences tutorial (:issue:`587`, :merge:`726`).
   By `Sergio Cordova`_ and `Kyle Brindley`_.
+- Added unit test tutorial (:issue:`302`, :merge:`724`). By `Sergio Cordova`_.
 
 Enhancements
 ============
@@ -47,7 +48,6 @@ Documentation
 - Fix some typos in tutorial 01 and edit sentence for clarity (:issue:`592`, :merge:`730`). By `Prabhu Khalsa`_.
 - Fixed issue where class level api documentation were not being populated correctly (:issue:`595`, :merge:`733`).
   By `Sergio Cordova`_.
-- Added unit test tutorial. (:issue:`302`, :merge:`724`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
