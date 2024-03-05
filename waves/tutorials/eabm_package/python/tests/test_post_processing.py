@@ -2,7 +2,7 @@
 
 import pandas
 
-from waves.tutorials.eabm_package.python import post_processing
+from eabm_package.python import post_processing
 
 
 def test_csv_files_match():
