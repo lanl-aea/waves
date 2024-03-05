@@ -94,7 +94,7 @@ def save_table(combined_data, selection_dict, output_file):
     combined_data.sel(selection_dict).to_dataframe().to_csv(output_file)
 
 
-def plot(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
+def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, selection_dict,
          parameter_study_file=None, csv_regression_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
 
@@ -207,7 +207,7 @@ if __name__ == "__main__":
     else:
         with open(args.selection_dict, 'r') as input_yaml:
             selection_dict = yaml.safe_load(input_yaml)
-    sys.exit(plot(input_files=args.input_file,
+    sys.exit(main(input_files=args.input_file,
                   output_file=args.output_file,
                   group_path=args.group_path,
                   x_var=args.x_var,
