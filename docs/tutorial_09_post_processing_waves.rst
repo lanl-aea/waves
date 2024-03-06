@@ -79,6 +79,11 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_08_data_extraction
 
+The Python 3 post-processing script is executed with the :meth:`waves.scons_extensions.python_script` builder. This
+builder behaves similarly to the :meth:`waves.scons_extensions.abaqus_journal` builders introduced in earlier tutorials.
+Unlike the Abaqus journal builder, the Python script builder doesn't allow the user to specify an executable path. The
+builder uses the same Python interpretter as the launching `Conda`_ environment where `SCons`_ and WAVES are installed.
+
 Advanced `SCons`_ users may be tempted to write an `SCons Python function builder`_ for the post-processing task
 :cite:`SCons`. A Python function builder would have the advantage of allowing users to pass Python objects to the task
 definition directly. This would eliminate the need to read an intermediate YAML file for the plot selection dictionary,
@@ -137,11 +142,6 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_09_post_processing_SConstruct
       :language: Python
       :diff: tutorials_tutorial_08_data_extraction_SConstruct
-
-The Python 3 script is executed with the :meth:`waves.scons_extensions.python_script` builder. This builder behaves
-similarly to the :meth:`waves.scons_extensions.abaqus_journal` builders introduced in earlier tutorials. Unlike the
-Abaqus journal builder, the Python script builder doesn't allow the user to specify an executable path. The builder
-uses the same Python interpretter as the launching `Conda`_ environment where `SCons`_ and WAVES are installed.
 
 *************
 Build Targets
