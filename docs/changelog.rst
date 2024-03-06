@@ -26,7 +26,7 @@ Documentation
   By `Sergio Cordova`_ and `Kyle Brindley`_.
 - Added unit test tutorial (:issue:`302`, :merge:`724`). By `Sergio Cordova`_.
 - Add additional discussion about Python programming and the Python script builder to the post-processing tutorial
-  (:issue:`106`, :merge:`751`). By `Kyle Brindley`_.
+  (:issue:`106`, :merge:`752`). By `Kyle Brindley`_.
 
 Enhancements
 ============
