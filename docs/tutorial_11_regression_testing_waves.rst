@@ -1,7 +1,7 @@
 .. _tutorial_regression_testing_waves:
 
 ###############################
-Tutorial 10: Regression Testing
+Tutorial 11: Regression Testing
 ###############################
 
 .. include:: wip_warning.txt
@@ -71,14 +71,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_10_regression_testing``
+4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_11_regression_testing``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_10_regression_testing
+   $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_11_regression_testing
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -100,9 +100,9 @@ SConscript
 A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
 changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_10_regression_testing
+.. admonition:: waves-tutorials/tutorial_11_regression_testing
 
-   .. literalinclude:: tutorials_tutorial_10_regression_testing
+   .. literalinclude:: tutorials_tutorial_11_regression_testing
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 
@@ -118,7 +118,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
 
-   .. literalinclude:: tutorials_tutorial_10_regression_testing_SConstruct
+   .. literalinclude:: tutorials_tutorial_11_regression_testing_SConstruct
       :language: Python
       :diff: tutorials_tutorial_09_post_processing_SConstruct
 
@@ -167,7 +167,7 @@ simulation suite against the limited datacheck workflow, perform the following s
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons tutorial_10_regression_testing --jobs=4
+   $ scons tutorial_11_regression_testing --jobs=4
    <output truncated>
    $ echo $?
    0
@@ -180,8 +180,8 @@ Output Files
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_10_regression_testing/parameter_set0/
-   build/tutorial_10_regression_testing/parameter_set0/
+   $ tree build/tutorial_11_regression_testing/parameter_set0/
+   build/tutorial_11_regression_testing/parameter_set0/
    |-- abaqus.rpy
    |-- abaqus.rpy.1
    |-- abaqus.rpy.2
@@ -219,8 +219,8 @@ Output Files
    `-- rectangle_partition.stdout
 
    0 directories, 35 files
-   $ tree build/tutorial_10_regression_testing/ -L 1
-   build/tutorial_10_regression_testing/
+   $ tree build/tutorial_11_regression_testing/ -L 1
+   build/tutorial_11_regression_testing/
    |-- parameter_set0
    |-- parameter_set1
    |-- parameter_set2
@@ -243,7 +243,7 @@ Plot the workflow with only the first set, ``set0``.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize datacheck --output-file tutorial_10_datacheck_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   $ waves visualize datacheck --output-file tutorial_11_datacheck_set0.png --width=42 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 
@@ -252,7 +252,7 @@ The output should look similar to the figure below.
     \begin{landscape}
         \vspace*{\fill}
 
-.. figure:: tutorial_10_datacheck_set0.png
+.. figure:: tutorial_11_datacheck_set0.png
    :align: center
 
 .. raw:: latex

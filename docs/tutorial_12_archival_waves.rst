@@ -57,18 +57,18 @@ Directory Structure
         $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv'
         WAVES fetch
         Destination directory: 'eabm_package/python'
-        $ waves fetch tutorials/tutorial_10_regression_testing_SConstruct && mv tutorial_10_regression_testing_SConstruct SConstruct
+        $ waves fetch tutorials/tutorial_11_regression_testing_SConstruct && mv tutorial_11_regression_testing_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_12_archival``
+4. Download and copy the ``tutorial_11_regression_testing`` file to a new file named ``tutorial_12_archival``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_10_regression_testing && cp tutorial_10_regression_testing tutorial_12_archival
+   $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing tutorial_12_archival
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -76,14 +76,14 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is included
+A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is included
 below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_12_archival
 
    .. literalinclude:: tutorials_tutorial_12_archival
       :language: Python
-      :diff: tutorials_tutorial_10_regression_testing
+      :diff: tutorials_tutorial_11_regression_testing
 
 First, we add the new environment keys required by the ``SConscript`` file that will be used by the archive task.
 Second, we build a list of all required SCons configuration files for the current workflow, where the
@@ -122,7 +122,7 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_12_archival_SConstruct
       :language: Python
-      :diff: tutorials_tutorial_10_regression_testing_SConstruct
+      :diff: tutorials_tutorial_11_regression_testing_SConstruct
 
 Note that we retrieve the project configuration ``SConstruct`` file name and location with a `Python lambda expression`_
 :cite:`python`. We do this to recover the absolute path to the current configuration file and because some projects may

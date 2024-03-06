@@ -48,18 +48,18 @@ Directory Structure
         $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py'
         WAVES fetch
         Destination directory: 'eabm_package/python'
-        $ waves fetch tutorials/tutorial_10_regression_testing_SConstruct && mv tutorial_10_regression_testing_SConstruct SConstruct
+        $ waves fetch tutorials/tutorial_11_regression_testing_SConstruct && mv tutorial_11_regression_testing_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_mesh_convergence``
+4. Download and copy the ``tutorial_11_regression_testing`` file to a new file named ``tutorial_mesh_convergence``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_10_regression_testing && cp tutorial_10_regression_testing tutorial_mesh_convergence
+   $ waves fetch --overwrite tutorials/tutorial_11_regression_testing && cp tutorial_11_regression_testing tutorial_mesh_convergence
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -94,7 +94,7 @@ This file defines a YAML formatted dictionary that will be used to change the de
 SConscript
 **********
 
-7. A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is
+7. A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is
    included below to help identify the changes made in this tutorial. Use the diff to update your
    ``tutorial_mesh_convergence`` file, and then review the paragraphs that follow to understand the meaning of these
    changes.
@@ -103,7 +103,7 @@ SConscript
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence
       :language: Python
-      :diff: tutorials_tutorial_10_regression_testing
+      :diff: tutorials_tutorial_11_regression_testing
 
 .. admonition:: waves-tutorials/tutorial_mesh_convergence
 
@@ -210,7 +210,7 @@ SConstruct
 
    .. literalinclude:: tutorials_tutorial_mesh_convergence_SConstruct
       :language: Python
-      :diff: tutorials_tutorial_10_regression_testing_SConstruct
+      :diff: tutorials_tutorial_11_regression_testing_SConstruct
 
 *************
 Build Targets

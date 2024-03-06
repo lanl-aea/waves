@@ -58,7 +58,7 @@ if not installed:
     ("scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons unit_testing --sconstruct=tutorial_unit_testing_SConstruct --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_correlation_coefficients --sconstruct=tutorial_correlation_coefficients_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
-    ("scons datacheck --sconstruct=tutorial_10_regression_testing_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
+    ("scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_12_archival --sconstruct=tutorial_12_archival_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),
     ("scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures", tutorial_directory),

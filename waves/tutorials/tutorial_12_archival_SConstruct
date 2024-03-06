@@ -108,7 +108,7 @@ workflow_configurations = [
     'tutorial_07_cartesian_product',
     'tutorial_08_data_extraction',
     'tutorial_09_post_processing',
-    'tutorial_10_regression_testing',
+    'tutorial_11_regression_testing',
     'tutorial_12_archival'
 ]
 for workflow in workflow_configurations:
