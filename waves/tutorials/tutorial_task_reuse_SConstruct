@@ -110,7 +110,7 @@ workflow_configurations = [
     'tutorial_08_data_extraction',
     'tutorial_09_post_processing',
     'tutorial_10_regression_testing',
-    'tutorial_11_archival',
+    'tutorial_12_archival',
     'tutorial_task_reuse'
 ]
 for workflow in workflow_configurations:

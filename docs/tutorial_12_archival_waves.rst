@@ -61,14 +61,14 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_11_archival``
+4. Download and copy the ``tutorial_10_regression_testing`` file to a new file named ``tutorial_12_archival``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_10_regression_testing && cp tutorial_10_regression_testing tutorial_11_archival
+   $ waves fetch --overwrite tutorials/tutorial_10_regression_testing && cp tutorial_10_regression_testing tutorial_12_archival
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -79,9 +79,9 @@ SConscript
 A ``diff`` against the ``tutorial_10_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is included
 below to help identify the changes made in this tutorial.
 
-.. admonition:: waves-tutorials/tutorial_11_archival
+.. admonition:: waves-tutorials/tutorial_12_archival
 
-   .. literalinclude:: tutorials_tutorial_11_archival
+   .. literalinclude:: tutorials_tutorial_12_archival
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing
 
@@ -120,7 +120,7 @@ changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
 
-   .. literalinclude:: tutorials_tutorial_11_archival_SConstruct
+   .. literalinclude:: tutorials_tutorial_12_archival_SConstruct
       :language: Python
       :diff: tutorials_tutorial_10_regression_testing_SConstruct
 
@@ -148,7 +148,7 @@ Build Targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons tutorial_11_archival_archive --jobs=4
+   $ scons tutorial_12_archival_archive --jobs=4
 
 ************
 Output Files
@@ -162,43 +162,43 @@ file. You can inspect the contents of the archive as below.
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ find build -name "*.tar.bz2"
-   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0-tutorial_11_archival.tar.bz2
-   $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_11_archival"
-   build/tutorial_11_archival/parameter_set0/rectangle_geometry.cae
-   build/tutorial_11_archival/parameter_set0/rectangle_geometry.jnl
-   build/tutorial_11_archival/parameter_set0/rectangle_geometry.stdout
-   build/tutorial_11_archival/parameter_set0/rectangle_geometry.abaqus_v6.env
-   build/tutorial_11_archival/parameter_set0/rectangle_partition.cae
-   build/tutorial_11_archival/parameter_set0/rectangle_partition.jnl
-   build/tutorial_11_archival/parameter_set0/rectangle_partition.stdout
-   build/tutorial_11_archival/parameter_set0/rectangle_partition.abaqus_v6.env
-   build/tutorial_11_archival/parameter_set0/rectangle_mesh.inp
-   build/tutorial_11_archival/parameter_set0/rectangle_mesh.cae
-   build/tutorial_11_archival/parameter_set0/rectangle_mesh.jnl
-   build/tutorial_11_archival/parameter_set0/rectangle_mesh.stdout
-   build/tutorial_11_archival/parameter_set0/rectangle_mesh.abaqus_v6.env
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.inp.in
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.inp
-   build/tutorial_11_archival/parameter_set0/assembly.inp
-   build/tutorial_11_archival/parameter_set0/boundary.inp
-   build/tutorial_11_archival/parameter_set0/field_output.inp
-   build/tutorial_11_archival/parameter_set0/materials.inp
-   build/tutorial_11_archival/parameter_set0/parts.inp
-   build/tutorial_11_archival/parameter_set0/history_output.inp
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.sta
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.stdout
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.abaqus_v6.env
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.odb
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.dat
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.msg
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.com
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.prt
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.h5
-   build/tutorial_11_archival/parameter_set0/rectangle_compression_datasets.h5
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.csv
-   build/tutorial_11_archival/parameter_set0/rectangle_compression.h5.stdout
+   build/tutorial_12_archival/WAVES-TUTORIAL-0.1.0-tutorial_12_archival.tar.bz2
+   $ tar -tjf $(find build -name "*.tar.bz2") | grep -E "parameter_set0|SConstruct|^tutorial_12_archival"
+   build/tutorial_12_archival/parameter_set0/rectangle_geometry.cae
+   build/tutorial_12_archival/parameter_set0/rectangle_geometry.jnl
+   build/tutorial_12_archival/parameter_set0/rectangle_geometry.stdout
+   build/tutorial_12_archival/parameter_set0/rectangle_geometry.abaqus_v6.env
+   build/tutorial_12_archival/parameter_set0/rectangle_partition.cae
+   build/tutorial_12_archival/parameter_set0/rectangle_partition.jnl
+   build/tutorial_12_archival/parameter_set0/rectangle_partition.stdout
+   build/tutorial_12_archival/parameter_set0/rectangle_partition.abaqus_v6.env
+   build/tutorial_12_archival/parameter_set0/rectangle_mesh.inp
+   build/tutorial_12_archival/parameter_set0/rectangle_mesh.cae
+   build/tutorial_12_archival/parameter_set0/rectangle_mesh.jnl
+   build/tutorial_12_archival/parameter_set0/rectangle_mesh.stdout
+   build/tutorial_12_archival/parameter_set0/rectangle_mesh.abaqus_v6.env
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.inp.in
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.inp
+   build/tutorial_12_archival/parameter_set0/assembly.inp
+   build/tutorial_12_archival/parameter_set0/boundary.inp
+   build/tutorial_12_archival/parameter_set0/field_output.inp
+   build/tutorial_12_archival/parameter_set0/materials.inp
+   build/tutorial_12_archival/parameter_set0/parts.inp
+   build/tutorial_12_archival/parameter_set0/history_output.inp
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.sta
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.stdout
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.abaqus_v6.env
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.odb
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.dat
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.msg
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.com
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.prt
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.h5
+   build/tutorial_12_archival/parameter_set0/rectangle_compression_datasets.h5
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.csv
+   build/tutorial_12_archival/parameter_set0/rectangle_compression.h5.stdout
    SConstruct
-   tutorial_11_archival
+   tutorial_12_archival
 
 **********************
 Workflow Visualization
@@ -211,7 +211,7 @@ First, plot the workflow with all parameter sets.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_11_archival_archive --output-file tutorial_11_archival.png --width=50 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
+   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival.png --width=50 --height=12 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta
 
 The output should look similar to the figure below.
 
@@ -220,7 +220,7 @@ The output should look similar to the figure below.
     \begin{landscape}
         \vspace*{\fill}
 
-.. figure:: tutorial_11_archival.png
+.. figure:: tutorial_12_archival.png
    :align: center
 
 .. raw:: latex
@@ -241,7 +241,7 @@ Now plot the workflow with only the first set, ``set0``.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves visualize tutorial_11_archival_archive --output-file tutorial_11_archival_set0.png --width=50 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
+   $ waves visualize tutorial_12_archival_archive --output-file tutorial_12_archival_set0.png --width=50 --height=8 --exclude-list /usr/bin .stdout .jnl .env .prt .com .msg .dat .sta --exclude-regex "set[1-9]"
 
 The output should look similar to the figure below.
 
@@ -250,7 +250,7 @@ The output should look similar to the figure below.
     \begin{landscape}
         \vspace*{\fill}
 
-.. figure:: tutorial_11_archival_set0.png
+.. figure:: tutorial_12_archival_set0.png
    :align: center
 
 .. raw:: latex

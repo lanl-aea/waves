@@ -47,19 +47,19 @@ Directory Structure
         $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv'
         WAVES fetch
         Destination directory: 'eabm_package/python'
-        $ waves fetch tutorials/tutorial_11_archival_SConstruct && mv tutorial_11_archival_SConstruct SConstruct
+        $ waves fetch tutorials/tutorial_12_archival_SConstruct && mv tutorial_12_archival_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download the ``tutorial_11_archival`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
-   ``SConscript`` file ``tutorial_11_archival`` does not need to change because we are already using the project
+4. Download the ``tutorial_12_archival`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
+   ``SConscript`` file ``tutorial_12_archival`` does not need to change because we are already using the project
    configuration ``env["version"]`` in the archive file name.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_11_archival
+   $ waves fetch --overwrite tutorials/tutorial_12_archival
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -85,7 +85,7 @@ changes made in this tutorial.
 
    .. literalinclude:: tutorials_tutorial_setuptools_scm_SConstruct
       :language: Python
-      :diff: tutorials_tutorial_11_archival_SConstruct
+      :diff: tutorials_tutorial_12_archival_SConstruct
 
 **********************
 Version control system
@@ -105,7 +105,7 @@ Version control system
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ git add SConstruct pyproject.toml tutorial_11_archival
+   $ git add SConstruct pyproject.toml tutorial_12_archival
    $ git commit -m "Initial commit for git tag version numbers using setuptools_scm"
    <output truncated>
 
@@ -136,7 +136,7 @@ Build Targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons tutorial_11_archival_archive --jobs=4
+   $ scons tutorial_12_archival_archive --jobs=4
    <output truncated>
 
 ************
@@ -153,7 +153,7 @@ uncommitted changes to tracked files.
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ find build -name "*.tar.bz2"
-   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
+   build/tutorial_12_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
 
 To explore the dynamic version number, you can add new git commits. For instance, you might add a ``.gitignore`` file
 from the contents below
@@ -196,8 +196,8 @@ from the contents below
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons tutorial_11_archival_archive --jobs=4
+   $ scons tutorial_12_archival_archive --jobs=4
    <output truncated>
    $ find build -name "*.tar.bz2"
-   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
-   build/tutorial_11_archival/WAVES-TUTORIAL-0.1.0.dev1+gad02fc7.tar.bz2
+   build/tutorial_12_archival/WAVES-TUTORIAL-0.1.0.tar.bz2
+   build/tutorial_12_archival/WAVES-TUTORIAL-0.1.0.dev1+gad02fc7.tar.bz2

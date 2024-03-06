@@ -109,7 +109,7 @@ workflow_configurations = [
     'tutorial_08_data_extraction',
     'tutorial_09_post_processing',
     'tutorial_10_regression_testing',
-    'tutorial_11_archival'
+    'tutorial_12_archival'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
