@@ -1,7 +1,7 @@
 .. _tutorial_archival_waves:
 
 ##########################
-Tutorial 11: Data Archival
+Tutorial 12: Data Archival
 ##########################
 
 The final step of any analysis workflow should be to archive your simulation files used in reporting and documenation,
