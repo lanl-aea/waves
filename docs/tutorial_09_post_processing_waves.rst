@@ -107,6 +107,21 @@ Post-processing script
    .. literalinclude:: python_post_processing.py
       :language: Python
 
+The post-processing script is the first Python 3 script introduced in the core tutorials. It differs from the Abaqus
+journal files by executing against the Python 3 interpretter of the launching `Conda`_ environment where WAVES is
+installed. Unlike the Abaqus Python 2 environment used to execute journal files, users have direct control over this
+environment and can use the full range of Python packages available with the `Conda`_ package manager.
+
+Additionally, the full Python 3 environment allows greater flexibility in unit testing. The post-processing script has
+been broken into small units of work for ease of testing, which will be introduced in
+:ref:`tutorial_unit_testing_waves`. Testing is important to verify that data manipulation is performed correctly. As an
+added benefit, writing small, single-purpose functions makes project code more re-usable and the project can build a
+small library of common utilities.
+
+While it is possible to unit test Abaqus Python 2 scripts, most operations in the tutorial journal files require
+operations on real geometry files, which requires system tests. :ref:`tutorial_regression_testing_waves` will introduce
+an example solution to performing system tests on simulation workflows.
+
 The script API and CLI are included in the :ref:`waves_eabm_api`: :ref:`eabm_post_processing_api` and :ref:`waves_eabm_cli`:
 :ref:`eabm_post_processing_cli`, respectively.
 
