@@ -1,8 +1,8 @@
 .. _tutorial_unit_testing_waves:
 
-######################
-Tutorial: Unit Testing
-######################
+#########################
+Tutorial 10: Unit Testing
+#########################
 
 Unit testing is a software development practice that allows developers to verify the functionality of individual units
 or components of their codebase. In modsim repositories, unit tests play a vital role in verifying custom scripting
@@ -94,7 +94,7 @@ SConstruct
 
 .. admonition:: waves-tutorials/SConstruct
 
-   .. literalinclude:: tutorials_tutorial_unit_testing_SConstruct
+   .. literalinclude:: tutorials_tutorial_10_unit_testing_SConstruct
       :language: Python
       :diff: tutorials_tutorial_09_post_processing_SConstruct
 

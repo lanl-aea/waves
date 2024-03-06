@@ -15,4 +15,3 @@ Supplemental Lessons
    tutorial_07_latin_hypercube_waves
    tutorial_07_sobol_sequence_waves
    tutorial_mesh_convergence_waves
-   tutorial_unit_testing_waves

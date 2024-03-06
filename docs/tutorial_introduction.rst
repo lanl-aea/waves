@@ -61,6 +61,7 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:20 :ref:`tutorial_data_extraction_waves`        Abaqus data extraction
                    00:20 :ref:`tutorial_post_processing_waves`        Example solution to parameter study results
                                                                       concatenation with the parameter study definition
+                   00:20 :ref:`tutorial_unit_testing_waves`           Unit testing
                    00:10 :ref:`tutorial_regression_testing_waves`     Alias for partial simulation verification and
                                                                       regression testing
                    00:10 :ref:`tutorial_archival_waves`               Archive simulation files for reproducibility and
@@ -87,7 +88,6 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       sequence
                    00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that uses
                                                                       common Geometry and Partition tasks.
-                   00:20 :ref:`tutorial_unit_testing_waves`           Unit testing
 ======================== ============================================ ==================================================
 
 ************************
