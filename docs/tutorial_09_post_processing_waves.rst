@@ -127,8 +127,11 @@ While it is possible to unit test Abaqus Python 2 scripts, most operations in th
 operations on real geometry files, which requires system tests. :ref:`tutorial_regression_testing_waves` will introduce
 an example solution to performing system tests on simulation workflows.
 
-The script API and CLI are included in the :ref:`waves_eabm_api`: :ref:`eabm_post_processing_api` and :ref:`waves_eabm_cli`:
-:ref:`eabm_post_processing_cli`, respectively.
+Take some time to review the individual functions and their documentation, both in the source file and as rendered by
+the documentation. The script API and CLI are included in the :ref:`waves_eabm_api`: :ref:`eabm_post_processing_api` and
+:ref:`waves_eabm_cli`: :ref:`eabm_post_processing_cli`, respectively. Generally, this example script tries to model the
+separation of: data input, data processing, data output, and status reporting. The `Software Carpentry: Python Novice`_
+is a good introduction to Python programming practices :cite:`swc-python`.
 
 **********
 SConstruct
