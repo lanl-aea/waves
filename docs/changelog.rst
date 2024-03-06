@@ -25,6 +25,7 @@ Documentation
 - Replace f-strings with scons template substitution in escape sequences tutorial (:issue:`587`, :merge:`726`).
   By `Sergio Cordova`_ and `Kyle Brindley`_.
 - Added unit test tutorial (:issue:`302`, :merge:`724`). By `Sergio Cordova`_.
+- Moved unit test tutorial to core lessons as the new tutorial 10 (:issue:`602`, :merge:`751`). By `Sergio Cordova`_.
 
 Enhancements
 ============
