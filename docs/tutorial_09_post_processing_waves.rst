@@ -17,6 +17,7 @@ References
 * |PROJECT| :ref:`waves_scons_api` API: :meth:`waves.scons_extensions.python_script`
 * |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.CartesianProduct`
 * `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
+* `matplotlib` :cite:`matplotlib`
 
 ***********
 Environment
@@ -78,11 +79,16 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_08_data_extraction
 
+Advanced `SCons`_ users may be tempted to write an `SCons Python function builder`_ for the post-processing task
+:cite:`SCons`. A Python function builder would have the advantage of allowing users to pass Python objects to the task
+definition directly. This would eliminate the need to read an intermediate YAML file for the plot selection dictionary,
+for instance.
+
 Here we use the ``post_processing.py`` CLI instead of the module's API for the task definition because the
-post-processing will include plotting with ``matplotlib``, which is not thread-safe. When the CLI is used, multiple
-post-processing tasks from *separate* workflows can be executed in parallel because each task will be launched from a
-separate thread. Care must still be taken to ensure that the post-processing tasks do not write to the same files,
-however.
+post-processing will include plotting with `matplotlib`_ :cite:`matplotlib`, which is not thread-safe
+:cite:`matplotlib-thread-safety`. When the CLI is used, multiple post-processing tasks from *separate* workflows can be
+executed in parallel because each task will be launched from a separate Python main process. Care must still be taken to
+ensure that the post-processing tasks do not write to the same files, however.
 
 **********************
 Post-processing script
