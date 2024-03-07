@@ -41,6 +41,9 @@ Directory Structure
         $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py' 'tutorials/eabm_package/abaqus/*.inp'
         WAVES fetch
         Destination directory: 'eabm_package/abaqus'
+        $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh'
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
         $ waves fetch tutorials/tutorial_03_solverprep_SConstruct && mv tutorial_03_solverprep_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
