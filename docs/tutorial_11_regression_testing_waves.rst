@@ -64,10 +64,10 @@ Directory Structure
         $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*'
         WAVES fetch
         Destination directory: 'eabm_package/abaqus'
-        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py'
+        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py' 'tutorials/eabm_package/python/tests/test_post_processing.py'
         WAVES fetch
         Destination directory: 'eabm_package/python'
-        $ waves fetch tutorials/tutorial_09_post_processing_SConstruct && mv tutorial_09_post_processing_SConstruct SConstruct
+        $ waves fetch tutorials/tutorial_10_unit_testing_SConstruct && mv tutorial_10_unit_testing_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -113,14 +113,14 @@ simulation specific datacheck task to the new alias.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_unit_testing_waves` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_11_regression_testing_SConstruct
       :language: Python
-      :diff: tutorials_tutorial_09_post_processing_SConstruct
+      :diff: tutorials_tutorial_10_unit_testing_SConstruct
 
 *************
 Build Targets
