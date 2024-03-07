@@ -27,6 +27,8 @@ Documentation
 - Added unit test tutorial (:issue:`302`, :merge:`724`). By `Sergio Cordova`_.
 - Add additional discussion about Python programming and the Python script builder to the post-processing tutorial
   (:issue:`106`, :merge:`752`). By `Kyle Brindley`_.
+- Updated ``waves fetch`` command to facilitate starting from any tutorial (:issue:`606`, :merge:`753`).
+  By `Sergio Cordova`_.
 
 Enhancements
 ============
