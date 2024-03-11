@@ -13,6 +13,7 @@ dependencies:
   - numpy
   - pandas
   - pip
+  - pycodestyle
   - pytest
   - pytest-cov
   - pytest-xdist
