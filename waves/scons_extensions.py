@@ -731,7 +731,7 @@ def sbatch_abaqus_journal(*args, **kwargs):
     return abaqus_journal(*args, **kwargs)
 
 
-def _abaqus_solver_emitter(target: list, source: list , env,
+def _abaqus_solver_emitter(target: list, source: list, env,
                            suffixes: list[str] = _abaqus_solver_common_suffixes,
                            stdout_extension: str = _stdout_extension) -> tuple[list, list]:
     """Appends the abaqus_solver builder target list with the builder managed targets
@@ -1258,8 +1258,10 @@ def conda_environment() -> SCons.Builder.Builder:
     :rtype: SCons.Builder.Builder
     """
     conda_environment_builder = SCons.Builder.Builder(
-        action=
-            [f"{_cd_action_prefix} conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"])
+        action=[
+            f"{_cd_action_prefix} conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"
+        ]
+    )
     return conda_environment_builder
 
 
@@ -1358,7 +1360,7 @@ def abaqus_extract(program: str = "abaqus", **kwargs) -> SCons.Builder.Builder:
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
     abaqus_extract_builder = SCons.Builder.Builder(
-        action = [
+        action=[
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
         ],
         emitter=_abaqus_extract_emitter,
@@ -1682,7 +1684,7 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     if prefix_command and not prefix_command.strip().endswith(" &&"):
         prefix_command = prefix_command.strip()
         prefix_command += " &&"
-    action=[
+    action = [
         f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             f"{_redirect_action_postfix}"
