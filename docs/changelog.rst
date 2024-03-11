@@ -30,6 +30,10 @@ Documentation
 - Updated ``waves fetch`` command to facilitate starting from any tutorial (:issue:`606`, :merge:`753`).
   By `Sergio Cordova`_.
 
+Internal Changes
+================
+- Add a linting package to the CI environment (:issue:`607`, :merge:`754`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Stream the wrapped scons command STDOUT from the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
