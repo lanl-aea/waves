@@ -93,7 +93,7 @@ pycodestyle:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
-    - pycodestyle --max-line-length=120 waves/ --exclude=modsim_template,tutorials,tests --ignore=W605 --select=W1,W2,W3,E2,E3
+    - pycodestyle --max-line-length=120 waves/ --exclude=modsim_template,tutorials,tests --ignore=W605 --select=W,E2,E3
   tags:
     # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
     - sstbigbird-shell-aea
