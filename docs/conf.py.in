@@ -92,8 +92,8 @@ html_css_files = ["custom.css"]
 
 # -- Options for LaTeX output ---------------------------------------------
 latex_logo = 'waves_logo_primary_large_crop.png'
-copyright_latex = f"""\\textcopyright\\ Copyright {copyright}.
 latex_basename = str(pathlib.Path("@documentation_pdf@").with_suffix(".tex"))
+copyright_latex = f"""\\textcopyright\\ Copyright {copyright}.
 
 Unless otherwise indicated, this information has been authored by an employee or employees of the Triad National
 Security, LLC., operator of the Los Alamos National Laboratory with the U.S. Department of Energy. The U.S. Government
