@@ -38,6 +38,8 @@ Internal Changes
 - Add a linting CI job to the test suite (:issue:`608`, :merge:`755`). By `Kyle Brindley`_.
 - Use the full Abaqus Python session object namespace to clarify relationship to imports (:issue:`609`, :merge:`757`).
   By `Kyle Brindley`_.
+- Update the correlation coefficients draft script with changes from the post-processing tutorial (:issue:`610`,
+  :merge:`758`). By `Kyle Brindley`_.
 
 Enhancements
 ============
