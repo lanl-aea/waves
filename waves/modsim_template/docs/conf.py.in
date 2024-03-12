@@ -68,7 +68,7 @@ latex_project = project.replace("_", "-")
 latex_basename = str(pathlib.Path("@documentation_pdf@").with_suffix(".tex"))
 latex_elements = {
     'preamble': preamble,
-    "maketitle": f"\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle",
+    "maketitle": f"\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\\sphinxmaketitle",
 }
 latex_documents = [
     (master_doc, latex_basename, latex_project.upper(), author_latex, "manual"),
