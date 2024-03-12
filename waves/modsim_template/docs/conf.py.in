@@ -28,9 +28,11 @@ rst_prolog = f".. |PROJECT| replace:: {project.upper()}\n.. |project| replace:: 
 # -- General configuration ---------------------------------------------------
 master_doc = "index"
 
+
 # Add custom style sheet to make the html docs wider
 def setup(app):
     app.add_css_file("custom.css")
+
 
 # Add any Sphinx extension module names here, as strings.
 extensions = ["sphinx.ext.autodoc",
