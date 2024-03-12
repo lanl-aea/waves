@@ -19,7 +19,7 @@ default_model_name = "Model-1"
 default_part_name = "Part-1"
 cli_description = "Save an assembly view image of an Abaqus model from an input or CAE file"
 
-# One time dump from session.viewports['Viewport: 1'].colorMappings.keys()) to stay Python 3 compatible for
+# One time dump from abaqus.session.viewports['Viewport: 1'].colorMappings.keys()) to stay Python 3 compatible for
 # Sphinx documentation
 color_map_choices = [
     'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance',
@@ -45,9 +45,12 @@ def main(input_file, output_file,
 
     :param str input_file: Abaqus input file. Suports ``*.inp`` and ``*.cae``.
     :param str output_file: Output image file. Supports ``*.png`` and ``*.svg``.
-    :param float x_angle: Rotation about X-axis in degrees for ``session.viewports[].view.rotate`` Abaqus Python method
-    :param float y_angle: Rotation about Y-axis in degrees for ``session.viewports[].view.rotate`` Abaqus Python method
-    :param float z_angle: Rotation about Z-axis in degrees for ``session.viewports[].view.rotate`` Abaqus Python method
+    :param float x_angle: Rotation about X-axis in degrees for ``abaqus.session.viewports[].view.rotate`` Abaqus Python
+        method
+    :param float y_angle: Rotation about Y-axis in degrees for ``abaqus.session.viewports[].view.rotate`` Abaqus Python
+        method
+    :param float z_angle: Rotation about Z-axis in degrees for ``abaqus.session.viewports[].view.rotate`` Abaqus Python
+        method
     :param tuple image_size: Tuple containing height and width of the output image in pixels
     :param str model_name: model to query in the Abaqus model database
     :param str part_name: part to query in the specified Abaqus model
@@ -88,9 +91,12 @@ def image(output_file,
     include this generated instance.
 
     :param str output_file: Output image file. Supports ``*.png`` and ``*.svg``.
-    :param float x_angle: Rotation about X-axis in degrees for ``session.viewports[].view.rotate`` Abaqus Python method
-    :param float y_angle: Rotation about Y-axis in degrees for ``session.viewports[].view.rotate`` Abaqus Python method
-    :param float z_angle: Rotation about Z-axis in degrees for ``session.viewports[].view.rotate`` Abaqus Python method
+    :param float x_angle: Rotation about X-axis in degrees for ``abaqus.session.viewports[].view.rotate`` Abaqus Python
+        method
+    :param float y_angle: Rotation about Y-axis in degrees for ``abaqus.session.viewports[].view.rotate`` Abaqus Python
+        method
+    :param float z_angle: Rotation about Z-axis in degrees for ``abaqus.session.viewports[].view.rotate`` Abaqus Python
+        method
     :param tuple image_size: Tuple containing height and width of the output image in pixels
     :param str model_name: model to query in the Abaqus model database
     :param str part_name: part to query in the specified Abaqus model
@@ -104,7 +110,7 @@ def image(output_file,
     if len(assembly.instances.keys()) == 0:
         part = abaqus.mdb.models[model_name].parts[part_name]
         assembly.Instance(name=part_name, part=part, dependent=abaqusConstants.ON)
-    viewport = session.viewports['Viewport: 1']
+    viewport = abaqus.session.viewports['Viewport: 1']
     viewport.assemblyDisplay.setValues(
         optimizationTasks=abaqusConstants.OFF, geometricRestrictions=abaqusConstants.OFF,
         stopConditions=abaqusConstants.OFF)
@@ -116,11 +122,11 @@ def image(output_file,
     cmap = viewport.colorMappings[color_map]
     viewport.setColor(colorMapping=cmap)
     viewport.disableMultipleColors()
-    session.printOptions.setValues(vpDecorations=abaqusConstants.OFF)
-    session.pngOptions.setValues(imageSize=image_size)
+    abaqus.session.printOptions.setValues(vpDecorations=abaqusConstants.OFF)
+    abaqus.session.pngOptions.setValues(imageSize=image_size)
 
     output_format = eabm_package.abaqus_journal_utilities.return_abaqus_constant(output_file_extension)
-    session.printToFile(fileName=output_file_stem, format=output_format, canvasObjects=(viewport,))
+    abaqus.session.printToFile(fileName=output_file_stem, format=output_format, canvasObjects=(viewport,))
 
 
 def get_parser():
