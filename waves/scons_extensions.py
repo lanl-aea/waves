@@ -1287,7 +1287,7 @@ def _abaqus_extract_emitter(target: list, source: list, env) -> tuple[list, list
         target.insert(0, str(build_subdirectory / odb_file.with_suffix(".h5")))
     first_target = pathlib.Path(str(target[0]))
     target.append(f"{build_subdirectory / first_target.stem}_datasets.h5")
-    if not "delete_report_file" in env or not env["delete_report_file"]:
+    if "delete_report_file" not in env or not env["delete_report_file"]:
         target.append(str(build_subdirectory / first_target.with_suffix(".csv").name))
     return target, source
 
