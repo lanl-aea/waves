@@ -214,15 +214,15 @@ def test_warn_kwarg_change():
     with patch("warnings.warn") as mock_warn:
         program = scons_extensions._warn_kwarg_change({'old_kwarg': True}, "old_kwarg", new_kwarg="new_kwarg")
         mock_warn.assert_called_once()
-        assert program == True
+        assert program is True
     with patch("warnings.warn") as mock_warn:
         program = scons_extensions._warn_kwarg_change({'old_kwarg': False}, "old_kwarg", new_kwarg="new_kwarg")
         mock_warn.assert_called_once()
-        assert program == False
+        assert program is False
     with patch("warnings.warn") as mock_warn:
         program = scons_extensions._warn_kwarg_change({}, "old_kwarg", new_kwarg="new_kwarg")
         mock_warn.assert_not_called()
-        assert program == None
+        assert program is None
 
 
 prepend_env_input = {
