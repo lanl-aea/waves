@@ -841,7 +841,7 @@ def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
            "AbaqusSolver": waves.scons_extensions.abaqus_solver(),
            "AbaqusStandard": waves.scons_extensions.abaqus_solver(emitter='standard'),
            "AbaqusOld": waves.scons_extensions.abaqus_solver(program="abq2019"),
-           "AbaqusPost": waves.scons_extensions.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")
+           "AbaqusPost": waves.scons_extensions.abaqus_solver(post_action="grep -E '\\<SUCCESSFULLY' ${job_name}.sta")
        })
        env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
        env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
