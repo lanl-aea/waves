@@ -319,8 +319,8 @@ class MsgFileParser(AbaqusFileParser):
                         iteration_type][iteration_number]["data blocks"][data_type]["average"] = \
                         float(avg_match.group(2))
                 except ValueError as e:
-                    self.print_error("Couldn't convert average " + data_type +
-                                 " to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert average " + data_type + \
+                                     " to float. Storing as string:{}".format(e))
                     self.parsed["steps"][step_number]["increments"][increment_number]["attempts"][attempt_number][
                         iteration_type][iteration_number]["data blocks"][data_type]["average"] = avg_match.group(2)
                 try:
@@ -328,8 +328,8 @@ class MsgFileParser(AbaqusFileParser):
                         iteration_type][iteration_number]["data blocks"][data_type]["time average"] = \
                         float(avg_match.group(4))
                 except ValueError as e:
-                    self.print_error("Couldn't convert time average " + data_type +
-                                 "to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert time average " + data_type + \
+                                     "to float. Storing as string:{}".format(e))
                     self.parsed["steps"][step_number]["increments"][increment_number]["attempts"][attempt_number][
                         iteration_type][iteration_number]["data blocks"][data_type]["time average"] = avg_match.group(4)
 
@@ -344,8 +344,8 @@ class MsgFileParser(AbaqusFileParser):
                         iteration_type][iteration_number]["data blocks"][data_type][residual_type]["value"] = \
                         float(largest_residual_match.group(2))
                 except ValueError as e:
-                    self.print_error("Couldn't convert largest residual " + residual_type +
-                                 "to float. Storing as string:{}".format(e))
+                    self.print_error("Couldn't convert largest residual " + residual_type + \
+                                     "to float. Storing as string:{}".format(e))
                     self.parsed["steps"][step_number]["increments"][increment_number]["attempts"][attempt_number][
                         iteration_type][iteration_number]["data blocks"][data_type][residual_type]["value"] = \
                         largest_residual_match.group(2)
@@ -583,7 +583,7 @@ class MsgFileParser(AbaqusFileParser):
                                             iteration_type][iteration]["data blocks"][data_type][key]["value"]) + "\n")
                                     f.write("          At Node: " + str(
                                         self.parsed["steps"][step]["increments"][increment]["attempts"][attempt][
-                                            iteration_type][iteration]["data blocks"][data_type][key]["at node"])
+                                            iteration_type][iteration]["data blocks"][data_type][key]["at node"]) \
                                             + "\n")
                                     f.write("          Degree of Freedom: " + str(
                                         self.parsed["steps"][step]["increments"][increment]["attempts"][attempt][
@@ -591,7 +591,7 @@ class MsgFileParser(AbaqusFileParser):
                                             "degree of freedom"]) + "\n")
                                     f.write("          Instance: " + str(
                                         self.parsed["steps"][step]["increments"][increment]["attempts"][attempt][
-                                            iteration_type][iteration]["data blocks"][data_type][key]["instance"])
+                                            iteration_type][iteration]["data blocks"][data_type][key]["instance"]) \
                                             + "\n")
                                 f.write("        " + str(self.parsed["steps"][step]["increments"][increment][
                                                              "attempts"][attempt][iteration_type][iteration][
@@ -2327,7 +2327,7 @@ class OdbReportFileParser(AbaqusFileParser):
                     for step_index in range(len(current_output['data'])):  # Pad with None if missing data
                         if len(current_output['data'][step_index]) < len(current_output['time']):
                             current_output['data'][step_index] = current_output['data'][step_index] + \
-                                                                 [None] * (len(current_output['time']) -
+                                                                 [None] * (len(current_output['time']) - \
                                                                            len(current_output['data'][step_index]))
 
                     array_length = len(coords['type'])
