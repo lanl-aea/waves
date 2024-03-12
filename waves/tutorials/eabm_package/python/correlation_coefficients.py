@@ -66,11 +66,8 @@ def plot(input_files, output_file, group_path, selection_dict,
     sensitivity = SALib.analyze.delta.analyze(parameter_schema["problem"], inputs, stress)
     sensitivity_yaml = {}
     for key, value in sensitivity.items():
-        try:
+        if isinstance(value, numpy.ndarray):
             value = value.tolist()
-        # TODO: catch the actual exception expected
-        except:
-            pass
         sensitivity_yaml[key] = value
     with open("sensitivity.yaml", "w") as output:
         output.write(yaml.safe_dump(sensitivity_yaml))
