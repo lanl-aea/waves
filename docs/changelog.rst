@@ -29,6 +29,8 @@ Documentation
   (:issue:`106`, :merge:`752`). By `Kyle Brindley`_.
 - Updated ``waves fetch`` command to facilitate starting from any tutorial (:issue:`606`, :merge:`753`).
   By `Sergio Cordova`_.
+- Add SCons workflow debugging tips to the modsim template README and HTML documentation (:issue:`525`, :merge:`756`).
+  By `Kyle Brindley`_.
 
 Internal Changes
 ================
