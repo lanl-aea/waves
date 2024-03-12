@@ -101,8 +101,8 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
     parameter study dataset file is assumed to be written by a WAVES parameter generator.
 
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
-        containing Xarray Datasets
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray
+        Datasets
     :param str output_file: The plot file name. Relative or absolute path.
     :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
     :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
