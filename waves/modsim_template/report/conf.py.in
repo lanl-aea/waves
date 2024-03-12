@@ -1,3 +1,4 @@
+import pathlib
 import datetime
 
 # -- Project information -----------------------------------------------------
@@ -41,10 +42,11 @@ preamble = """
 """
 # Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
 latex_project = project.replace("_", "-")
+latex_basename = str(pathlib.Path("@report_pdf@").with_suffix(".tex"))
 latex_elements = {
     "preamble": preamble,
     "maketitle": f"\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle",
 }
 latex_documents = [
-    (master_doc, "@report_pdf@", None, author_latex, "howto"),
+    (master_doc, latex_basename, None, author_latex, "howto"),
 ]
