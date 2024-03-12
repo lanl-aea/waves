@@ -78,6 +78,7 @@ def get_parser():
 
 # Comment used in tutorial code snippets: marker-2
 
+
 if __name__ == '__main__':
     parser = get_parser()
     # Abaqus does not strip the CAE options, so we have to skip the unknown options related to the CAE CLI.
