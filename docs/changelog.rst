@@ -36,6 +36,8 @@ Internal Changes
 ================
 - Add a linting package to the CI environment (:issue:`607`, :merge:`754`). By `Kyle Brindley`_.
 - Add a linting CI job to the test suite (:issue:`608`, :merge:`755`). By `Kyle Brindley`_.
+- Use the full Abaqus Python session object namespace to clarify relationship to imports (:issue:`609`, :merge:`757`).
+  By `Kyle Brindley`_.
 
 Enhancements
 ============
