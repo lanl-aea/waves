@@ -985,10 +985,12 @@ def sierra(program: str = "sierra", application: str = "adagio", post_action: li
 
     :return: Sierra builder
     """
-    action = [f"{_cd_action_prefix} {program} {application} --version " \
-                  f"{_redirect_environment_postfix}",
-              f"{_cd_action_prefix} {program} ${{sierra_options}} {application} ${{application_options}} " \
-                  f"-i ${{SOURCE.file}} {_redirect_action_postfix}"]
+    action = [
+        f"{program} {application} --version {_redirect_environment_postfix}",
+        f"{program} ${{sierra_options}} {application} ${{application_options}} -i ${{SOURCE.file}} " \
+            f"{_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
     sierra_builder = SCons.Builder.Builder(
         action=action,
@@ -1118,8 +1120,10 @@ def python_script(post_action: list[str] = []) -> SCons.Builder.Builder:
     :return: Python script builder
     :rtype: SCons.Builder.Builder
     """
-    action = [f"{_cd_action_prefix} python ${{python_options}} ${{SOURCE.abspath}} " \
-                f"${{script_options}} {_redirect_action_postfix}"]
+    action = [
+        f"python ${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
     python_builder = SCons.Builder.Builder(
         action=action,
