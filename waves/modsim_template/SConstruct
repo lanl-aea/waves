@@ -118,7 +118,7 @@ env.Append(SCANNERS=waves.scons_extensions.sphinx_scanner())
 
 # Dump the Conda environment as documentation of as-built target environment
 environment_target = env.CondaEnvironment(
-    target=["environment.yaml"],
+    target=[variant_dir_base / "environment.yaml"],
     source=[])
 env.AlwaysBuild(environment_target)
 Default(environment_target)
