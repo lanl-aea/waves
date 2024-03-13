@@ -4,12 +4,6 @@
 Tutorial 09: Post-Processing
 ############################
 
-.. warning::
-
-   The post-processing techniques in this tutorial are a work-in-progress. They should generally work into the future,
-   but WAVES may add new behavior to make concatenating results files with the parameter study definition easier. Be sure
-   to check back in on this tutorial frequently or watch the :ref:`changelog` for updates!
-
 **********
 References
 **********
