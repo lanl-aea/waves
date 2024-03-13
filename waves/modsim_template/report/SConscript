@@ -6,8 +6,11 @@ Requires the following ``SConscript(..., exports=[])``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``project_dir`` - String absolute path to the EABM project root directory
-  * ``documentation_abspath`` - String absolute path to the EABM HTML documentation source files
   * ``sphinx_build`` - String path for the Sphinx build executable
+  * ``regression_alias`` - String for the alias collecting the regression workflow targets
+  * ``documentation_abspath`` - String absolute path to the EABM HTML documentation source files
+
+* ``project_variables`` - The project variables for use in Sphinx documentation parameters
 """
 
 import pathlib
@@ -67,6 +70,7 @@ report.extend(env.SphinxPDF(
 ))
 env.Clean(report, [Dir("latex")] + sources)
 env.Alias("report", report)
+env.Alias(env["regression_alias"], report)
 
 # Collector alias to build the PDF report
 parent_directory = Dir(".").srcnode().name

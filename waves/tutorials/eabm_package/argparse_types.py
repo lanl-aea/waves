@@ -1,3 +1,6 @@
+"""Python 2/3 compatible argparse types for input verification"""
+
+
 def positive_float(argument):
     """Type function for argparse - positive floats
 

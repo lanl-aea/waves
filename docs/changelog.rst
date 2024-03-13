@@ -12,6 +12,7 @@ New Features
 ============
 - Public API function for building WAVES-like actions that change to the build directory before running a shell command
   (:issue:`611`, :merge:`759`). By `Kyle Brindley`_.
+- Add unit and regression testing to the modsim template (:issue:`603`, :merge:`760`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
@@ -53,6 +54,7 @@ Enhancements
 ============
 - Stream the wrapped scons command STDOUT from the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
 - Submit all targets simultaneously in the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
+- Build the Conda environment artifact to the build directoy in the modsim template (:merge:`761`). By `Kyle Brindley`_.
 
 ******************
 0.7.9 (2024-02-22)
