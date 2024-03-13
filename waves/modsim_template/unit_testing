@@ -25,7 +25,7 @@ workflow = []
 
 # Unit test target
 test_files = [
-    test_source_abspath / "test_post_processing.py"
+    test_source_abspath / "test_utilities.py"
 ]
 target = [f"{workflow_name}_results.xml"]
 workflow.extend(env.Command(
