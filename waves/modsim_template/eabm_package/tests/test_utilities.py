@@ -2,7 +2,7 @@
 
 import pandas
 
-from eabm_package import post_processing
+from eabm_package import utilities 
 
 
 def test_csv_files_match():
@@ -21,7 +21,7 @@ def test_csv_files_match():
     different_copy.loc[0, 'DummyLine'] = 999
 
     # Assert that the function returns False when the DataFrames differ
-    assert post_processing.csv_files_match(control, different_copy) is False
+    assert utilities.csv_files_match(control, different_copy) is False
 
     # Assert that the function returns True when the DataFrames are identical
-    assert post_processing.csv_files_match(control, identical_copy) is True
+    assert utilities.csv_files_match(control, identical_copy) is True
