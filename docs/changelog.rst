@@ -55,6 +55,8 @@ Enhancements
 - Stream the wrapped scons command STDOUT from the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
 - Submit all targets simultaneously in the waves build subcommand (:merge:`745`). By `Kyle Brindley`_.
 - Build the Conda environment artifact to the build directoy in the modsim template (:merge:`761`). By `Kyle Brindley`_.
+- Use pathlib objects in the modsim template and reduce str conversions which are no longer necessary in SCons 4.6.0
+  (:merge:`762`). By `Kyle Brindley`_.
 
 ******************
 0.7.9 (2024-02-22)

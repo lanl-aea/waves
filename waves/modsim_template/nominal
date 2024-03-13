@@ -22,7 +22,7 @@ from eabm_package import rectangle_compression
 Import("env")
 
 # Set project-wide paths with os-agnostic path separators
-eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
+eabm_package_abspath = env["eabm_package_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
@@ -87,7 +87,7 @@ solve_source_list.append(f"{journal_file}.inp")
 # Part images
 images.extend(env.AbaqusJournal(
     target=[f"{model}_compression.png"],
-    source=[str(eabm_package_abspath / "export_abaqus_image.py")] + solve_source_list,
+    source=[eabm_package_abspath / "export_abaqus_image.py"] + solve_source_list,
     journal_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
                     "--model-name ${model} --part-name ${model}",
     model=model
@@ -128,7 +128,7 @@ script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 
 script_options += f" --csv-regression-file {regression_file}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[str(eabm_package_abspath / "post_processing.py")] + [str(regression_file)] + post_processing_source,
+    source=[eabm_package_abspath / "post_processing.py", regression_file] + post_processing_source,
     script_options=script_options))
 
 # Data archival
