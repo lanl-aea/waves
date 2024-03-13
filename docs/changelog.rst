@@ -8,6 +8,11 @@ Changelog
 0.7.10 (unreleased)
 *******************
 
+New Features
+============
+- Public API function for building WAVES-like actions that change to the build directory before running a shell command
+  (:issue:`611`, :merge:`759`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
 - Fix issue in odb_extract to handle case where elemental and nodal data is present in the same field output
@@ -40,6 +45,8 @@ Internal Changes
   By `Kyle Brindley`_.
 - Update the correlation coefficients draft script with changes from the post-processing tutorial (:issue:`610`,
   :merge:`758`). By `Kyle Brindley`_.
+- Use the public API function for builder action prefixes that change to the build directory before running a shell
+  command (:issue:`611`, :merge:`759`). By `Kyle Brindley`_.
 
 Enhancements
 ============
