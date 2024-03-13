@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Example of catenating WAVES parameter study results and definition"""
+"""Post-process with data catenation and plotting"""
 
 import sys
 import yaml

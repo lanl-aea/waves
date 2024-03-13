@@ -5,13 +5,12 @@
 #############
 
 rectangle_geometry.py
-==========================
+=====================
 
 .. automodule:: eabm_package.rectangle_geometry
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus rectangle geometry creation script
 
 rectangle_partition.py
 ======================
@@ -20,7 +19,6 @@ rectangle_partition.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus rectangle partition script
 
 rectangle_mesh.py
 =================
@@ -29,7 +27,6 @@ rectangle_mesh.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus rectangle mesh script
 
 export_abaqus_image.py
 ======================
@@ -38,7 +35,6 @@ export_abaqus_image.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus image export script
 
 .. _sphinx_abaqus_journal_utilities_api:
 
@@ -49,7 +45,22 @@ abaqus_journal_utilities.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: Abaqus utilities to be re-used in multiple places
+
+argparse_types.py
+=================
+
+.. automodule:: eabm_package.argparse_types
+    :noindex:
+    :members:
+    :show-inheritance:
+
+utilities.py
+============
+
+.. automodule:: eabm_package.utilities
+    :noindex:
+    :members:
+    :show-inheritance:
 
 .. _eabm_post_processing_api:
 
@@ -60,13 +71,3 @@ post_processing.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: Post-process with data catenation and plotting
-
-argparse_types.py
-=================
-
-.. automodule:: eabm_package.argparse_types
-    :noindex:
-    :members:
-    :show-inheritance:
-    :synopsis: Python 2/3 compatible argparse types for input verification
