@@ -1,8 +1,31 @@
 #! /usr/bin/env python
+import unittest.mock
 
+import numpy
 import pandas
+import xarray
 
-from eabm_package import utilities 
+from eabm_package import utilities
+
+
+def test_combine_data():
+    input_files = ["/mock/path1/data.h5", "/mock/path2/data.h5"]
+    dataset1 = xarray.Dataset(
+        {"variable_name": (("space", "time"), numpy.array([[1, 2, 3]]))},
+        coords={"space": [0], "time": [0, 1, 2]},
+    )
+    dataset2 = xarray.Dataset(
+        {"variable_name": (("space", "time"), numpy.array([[4, 5, 6]]))},
+        coords={"space": [0], "time": [0, 1, 2]},
+    )
+    expected = xarray.Dataset(
+        {"variable_name": (("parameter_sets", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
+        coords={"space": [0], "time": [0, 1, 2], "parameter_sets": ["path1", "path2"]},
+    )
+    xarray_side_effect = [dataset1, dataset2]
+    with unittest.mock.patch("xarray.open_dataset", side_effect=xarray_side_effect):
+        combined_data = utilities.combine_data(input_files, "/", "parameter_sets")
+    assert combined_data.equals(expected)
 
 
 def test_csv_files_match():
