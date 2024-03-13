@@ -62,6 +62,14 @@ utilities.py
     :members:
     :show-inheritance:
 
+test_utilities.py
+=================
+
+.. automodule:: eabm_package.tests.test_utilities
+    :noindex:
+    :members:
+    :show-inheritance:
+
 .. _eabm_post_processing_api:
 
 post_processing.py
@@ -71,3 +79,4 @@ post_processing.py
     :noindex:
     :members:
     :show-inheritance:
+
