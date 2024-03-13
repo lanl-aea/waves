@@ -91,7 +91,8 @@ project_variables = {
     "documentation_abspath": str(project_dir / documentation_source_dir),
     "eabm_package_abspath": str(project_dir / eabm_package_dir),
     'test_source_abspath': str(project_dir / test_source_dir),
-    "datacheck_alias": "datacheck"
+    "datacheck_alias": "datacheck",
+    "regression_alias": "regression"
 }
 for key, value in project_variables.items():
     env[key] = value
