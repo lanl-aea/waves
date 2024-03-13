@@ -31,7 +31,7 @@ workflow_configuration = [env["project_configuration"], workflow_name]
 parameter_schema = rectangle_compression.mesh_convergence
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
-previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
+previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
 model = "rectangle"
 simulation_constants = {
     "width": 1.0,
@@ -119,7 +119,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Part images
     images.extend(env.AbaqusJournal(
         target=[f"{set_name / model}_compression.png"],
-        source=[str(eabm_package_abspath / "export_abaqus_image.py")] + solve_source_list,
+        source=[eabm_package_abspath / "export_abaqus_image.py"] + solve_source_list,
         journal_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
                         "--model-name ${model} --part-name ${model}",
         model=model
@@ -160,7 +160,7 @@ script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[str(eabm_package_abspath / "post_processing.py"), parameter_study_file.name] + post_processing_source,
+    source=[eabm_package_abspath / "post_processing.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 plot_name = "mesh_convergence_stress"
@@ -171,7 +171,7 @@ script_options += f" --parameter-study-file {parameter_study_file.name}"
 script_options += f" --selection-dict {selection_dict}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[str(eabm_package_abspath / "post_processing.py"), parameter_study_file.name] + post_processing_source,
+    source=[eabm_package_abspath / "post_processing.py", parameter_study_file.name] + post_processing_source,
     script_options=script_options))
 
 # Data archival
