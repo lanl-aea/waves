@@ -28,6 +28,7 @@ class TestSALibSampler:
             {"calc_second_order": False}
         )
     }
+
     @pytest.mark.unittest
     @pytest.mark.parametrize('sampler_class, parameter_schema, original, expected',
                              sampler_overrides.values(),

@@ -12,15 +12,17 @@ from pathlib import Path
 
 from waves.abaqus import msg_parse
 
+
 @pytest.mark.unittest
 def test_get_parser():
     with patch('sys.argv', ['msg_parse.py', 'sample.msg', '-o', 'sample', '-a']):
         cmd_args = msg_parse.get_parser().parse_args()
         assert cmd_args.msg_file[0] == "sample.msg"
         assert cmd_args.output_file == "sample"
-        assert cmd_args.write_all == True
-        assert cmd_args.write_summary_table == False
-        assert cmd_args.write_yaml == True
+        assert cmd_args.write_all is True
+        assert cmd_args.write_summary_table is False
+        assert cmd_args.write_yaml is True
+
 
 @pytest.mark.unittest
 def test_main():
@@ -43,6 +45,7 @@ def test_main():
         assert write_yaml.called
         assert write_all.called
         assert write_summary.called
+
 
 @pytest.mark.unittest
 def test_file_exists():

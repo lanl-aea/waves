@@ -8,6 +8,11 @@ Changelog
 0.7.10 (unreleased)
 *******************
 
+New Features
+============
+- Public API function for building WAVES-like actions that change to the build directory before running a shell command
+  (:issue:`611`, :merge:`759`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
 - Fix issue in odb_extract to handle case where elemental and nodal data is present in the same field output
@@ -25,7 +30,24 @@ Documentation
 - Replace f-strings with scons template substitution in escape sequences tutorial (:issue:`587`, :merge:`726`).
   By `Sergio Cordova`_ and `Kyle Brindley`_.
 - Added unit test tutorial (:issue:`302`, :merge:`724`). By `Sergio Cordova`_.
+- Add additional discussion about Python programming and the Python script builder to the post-processing tutorial
+  (:issue:`106`, :merge:`752`). By `Kyle Brindley`_.
+- Updated ``waves fetch`` command to facilitate starting from any tutorial (:issue:`606`, :merge:`753`).
+  By `Sergio Cordova`_.
+- Add SCons workflow debugging tips to the modsim template README and HTML documentation (:issue:`525`, :merge:`756`).
+  By `Kyle Brindley`_.
 - Moved unit test tutorial to core lessons as the new tutorial 10 (:issue:`602`, :merge:`751`). By `Sergio Cordova`_.
+
+Internal Changes
+================
+- Add a linting package to the CI environment (:issue:`607`, :merge:`754`). By `Kyle Brindley`_.
+- Add a linting CI job to the test suite (:issue:`608`, :merge:`755`). By `Kyle Brindley`_.
+- Use the full Abaqus Python session object namespace to clarify relationship to imports (:issue:`609`, :merge:`757`).
+  By `Kyle Brindley`_.
+- Update the correlation coefficients draft script with changes from the post-processing tutorial (:issue:`610`,
+  :merge:`758`). By `Kyle Brindley`_.
+- Use the public API function for builder action prefixes that change to the build directory before running a shell
+  command (:issue:`611`, :merge:`759`). By `Kyle Brindley`_.
 
 Enhancements
 ============

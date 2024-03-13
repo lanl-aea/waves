@@ -119,7 +119,7 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
         arg_list.append(option)
     if argument_value:
         # Don't pass boolean values
-        if not type(argument_value) == bool:
+        if not isinstance(argument_value, bool):
             arg_list.append(argument_value)
     with patch('sys.argv', arg_list), \
             patch('builtins.open', mock_open()), patch('yaml.safe_load'), \

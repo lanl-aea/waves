@@ -549,30 +549,35 @@ def shell_environment(command: str, cache: str | None = None, overwrite_cache: b
     return SCons.Environment.Environment(ENV=shell_environment)
 
 
-def _construct_post_action_list(post_action: list[str]) -> list[str]:
-    """Return a post-action list
+def construct_action_list(actions: list[str], prefix: str = _cd_action_prefix, postfix: str = "") -> list[str]:
+    """Return an action list with a common pre/post-fix
 
-    Returns the constructed post-action list of strings with prepended directory change as
+    Returns the constructed action list with pre/post fix strings as
 
     .. code-block::
 
-       f"cd ${{TARGET.dir.abspath}} && {new_action}"
+       f"{prefix} {new_action} {postfix}"
 
-    where action objects are converted to their string representation. If a string is passed instead of a list, it is
-    first convert to a list. Other string-like objects, e.g. bytes, are not converted, but iterated on
-    character-by-character. If an empty list is passed, and empty list is returned.
+    where SCons action objects are converted to their string representation. If a string is passed instead of a list, it
+    is first converted to a list. If an empty list is passed, and empty list is returned.
 
-    :param post_action: List of post-action strings
+    :param actions: List of action strings
+    :param prefix: Common prefix to prepend to each action
+    :param postfix: Common postfix to append to each action
 
-    :return: post-action list of strings
+    :return: action list
     """
-    if isinstance(post_action, str):
-        post_action = [post_action]
+    if isinstance(actions, str):
+        actions = [actions]
     try:
-        iterator = iter(post_action)
+        iterator = iter(actions)
     except TypeError:
-        iterator = iter([post_action])
-    new_actions = [f"{_cd_action_prefix} {action}" for action in iterator]
+        iterator = iter([actions])
+    if prefix:
+        prefix = prefix + " "
+    if postfix:
+        postfix = " " + postfix
+    new_actions = [f"{prefix}{action}{postfix}" for action in iterator]
     return new_actions
 
 
@@ -705,11 +710,13 @@ def abaqus_journal(program: str = "abaqus", post_action: list = [], **kwargs) ->
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    action = [f"{_cd_action_prefix} {program} -information environment " \
-                 f"{_redirect_environment_postfix}",
-              f"{_cd_action_prefix} {program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
-                 f"${{journal_options}} {_redirect_action_postfix}"]
-    action.extend(_construct_post_action_list(post_action))
+    action = [
+        f"{program} -information environment {_redirect_environment_postfix}",
+        f"{program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} " \
+            f"{_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
+    action.extend(construct_action_list(post_action))
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_journal_emitter)
@@ -731,7 +738,7 @@ def sbatch_abaqus_journal(*args, **kwargs):
     return abaqus_journal(*args, **kwargs)
 
 
-def _abaqus_solver_emitter(target: list, source: list , env,
+def _abaqus_solver_emitter(target: list, source: list, env,
                            suffixes: list[str] = _abaqus_solver_common_suffixes,
                            stdout_extension: str = _stdout_extension) -> tuple[list, list]:
     """Appends the abaqus_solver builder target list with the builder managed targets
@@ -841,7 +848,7 @@ def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
            "AbaqusSolver": waves.scons_extensions.abaqus_solver(),
            "AbaqusStandard": waves.scons_extensions.abaqus_solver(emitter='standard'),
            "AbaqusOld": waves.scons_extensions.abaqus_solver(program="abq2019"),
-           "AbaqusPost": waves.scons_extensions.abaqus_solver(post_action="grep -E "\<SUCCESSFULLY" ${job_name}.sta")
+           "AbaqusPost": waves.scons_extensions.abaqus_solver(post_action="grep -E '\\<SUCCESSFULLY' ${job_name}.sta")
        })
        env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
        env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
@@ -871,11 +878,13 @@ def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    action = [f"{_cd_action_prefix} {program} -information environment " \
-                  f"{_redirect_environment_postfix}",
-              f"{_cd_action_prefix} {program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
-                  f"${{abaqus_options}} -interactive -ask_delete no {_redirect_action_postfix}"]
-    action.extend(_construct_post_action_list(post_action))
+    action = [
+        f"{program} -information environment {_redirect_environment_postfix}",
+        f"{program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no " \
+            f"{_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
+    action.extend(construct_action_list(post_action))
     if emitter:
         emitter = emitter.lower()
     if emitter == 'standard':
@@ -976,11 +985,13 @@ def sierra(program: str = "sierra", application: str = "adagio", post_action: li
 
     :return: Sierra builder
     """
-    action = [f"{_cd_action_prefix} {program} {application} --version " \
-                  f"{_redirect_environment_postfix}",
-              f"{_cd_action_prefix} {program} ${{sierra_options}} {application} ${{application_options}} " \
-                  f"-i ${{SOURCE.file}} {_redirect_action_postfix}"]
-    action.extend(_construct_post_action_list(post_action))
+    action = [
+        f"{program} {application} --version {_redirect_environment_postfix}",
+        f"{program} ${{sierra_options}} {application} ${{application_options}} -i ${{SOURCE.file}} " \
+            f"{_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
+    action.extend(construct_action_list(post_action))
     sierra_builder = SCons.Builder.Builder(
         action=action,
         emitter=_sierra_emitter
@@ -1109,9 +1120,11 @@ def python_script(post_action: list[str] = []) -> SCons.Builder.Builder:
     :return: Python script builder
     :rtype: SCons.Builder.Builder
     """
-    action = [f"{_cd_action_prefix} python ${{python_options}} ${{SOURCE.abspath}} " \
-                f"${{script_options}} {_redirect_action_postfix}"]
-    action.extend(_construct_post_action_list(post_action))
+    action = [
+        f"python ${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
+    action.extend(construct_action_list(post_action))
     python_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter
@@ -1202,16 +1215,19 @@ def matlab_script(program: str = "matlab", post_action: list[str] = [], **kwargs
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     matlab_program = _warn_kwarg_change(kwargs, "matlab_program")
     program = matlab_program if matlab_program is not None else program
-    action = [f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
-                  "\"path(path, '${SOURCE.dir.abspath}'); " \
-                  "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
-                  "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
-                  f"{_redirect_environment_postfix}",
-              f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
-                  "\"path(path, '${SOURCE.dir.abspath}'); " \
-                  "${SOURCE.filebase}(${script_options})\" " \
-                  f"{_redirect_action_postfix}"]
-    action.extend(_construct_post_action_list(post_action))
+    action = [
+        f"{program} ${{matlab_options}} -batch " \
+            "\"path(path, '${SOURCE.dir.abspath}'); " \
+            "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
+            "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
+            f"{_redirect_environment_postfix}",
+        f"{program} ${{matlab_options}} -batch " \
+            "\"path(path, '${SOURCE.dir.abspath}'); " \
+            "${SOURCE.filebase}(${script_options})\" " \
+            f"{_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
+    action.extend(construct_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
         emitter=_matlab_script_emitter)
@@ -1257,9 +1273,13 @@ def conda_environment() -> SCons.Builder.Builder:
     :return: Conda environment builder
     :rtype: SCons.Builder.Builder
     """
+    action = [
+        f"conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"
+    ]
+    action = construct_action_list(action)
     conda_environment_builder = SCons.Builder.Builder(
-        action=
-            [f"{_cd_action_prefix} conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"])
+        action=action
+    )
     return conda_environment_builder
 
 
@@ -1285,7 +1305,7 @@ def _abaqus_extract_emitter(target: list, source: list, env) -> tuple[list, list
         target.insert(0, str(build_subdirectory / odb_file.with_suffix(".h5")))
     first_target = pathlib.Path(str(target[0]))
     target.append(f"{build_subdirectory / first_target.stem}_datasets.h5")
-    if not "delete_report_file" in env or not env["delete_report_file"]:
+    if "delete_report_file" not in env or not env["delete_report_file"]:
         target.append(str(build_subdirectory / first_target.with_suffix(".csv").name))
     return target, source
 
@@ -1358,7 +1378,7 @@ def abaqus_extract(program: str = "abaqus", **kwargs) -> SCons.Builder.Builder:
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
     abaqus_extract_builder = SCons.Builder.Builder(
-        action = [
+        action=[
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
         ],
         emitter=_abaqus_extract_emitter,
@@ -1438,9 +1458,11 @@ def sbatch(program: str = "sbatch", post_action: list[str] = [], **kwargs) -> SC
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
     program = sbatch_program if sbatch_program is not None else program
-    action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGETS[-1].abspath}} " \
-              f"${{sbatch_options}} --wrap \"${{slurm_job}}\""]
-    action.extend(_construct_post_action_list(post_action))
+    action = [
+        f"{program} --wait --output=${{TARGETS[-1].abspath}} ${{sbatch_options}} --wrap \"${{slurm_job}}\""
+    ]
+    action = construct_action_list(action)
+    action.extend(construct_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter
@@ -1682,12 +1704,12 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     if prefix_command and not prefix_command.strip().endswith(" &&"):
         prefix_command = prefix_command.strip()
         prefix_command += " &&"
-    action=[
+    action = [
         f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             f"{_redirect_action_postfix}"
     ]
-    action.extend(_construct_post_action_list(post_action))
+    action.extend(construct_action_list(post_action))
     quinoa_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,

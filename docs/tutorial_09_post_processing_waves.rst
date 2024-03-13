@@ -17,6 +17,7 @@ References
 * |PROJECT| :ref:`waves_scons_api` API: :meth:`waves.scons_extensions.python_script`
 * |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.CartesianProduct`
 * `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
+* `matplotlib` :cite:`matplotlib`
 
 ***********
 Environment
@@ -50,6 +51,9 @@ Directory Structure
         $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py'
         WAVES fetch
         Destination directory: 'eabm_package/python'
+        $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep' 'tutorials/tutorial_04_simulation' 'tutorials/tutorial_05_parameter_substitution' 'tutorials/tutorial_06_include_files' 'tutorials/tutorial_07_cartesian_product'
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
         $ waves fetch tutorials/tutorial_08_data_extraction_SConstruct && mv tutorial_08_data_extraction_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -78,11 +82,21 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_08_data_extraction
 
+The Python 3 post-processing script is executed with the :meth:`waves.scons_extensions.python_script` builder. This
+builder behaves similarly to the :meth:`waves.scons_extensions.abaqus_journal` builders introduced in earlier tutorials.
+Unlike the Abaqus journal builder, the Python script builder doesn't allow the user to specify an executable path. The
+builder uses the same Python interpretter as the launching `Conda`_ environment where `SCons`_ and WAVES are installed.
+
+Advanced `SCons`_ users may be tempted to write an `SCons Python function builder`_ for the post-processing task
+:cite:`SCons`. A Python function builder would have the advantage of allowing users to pass Python objects to the task
+definition directly. This would eliminate the need to read an intermediate YAML file for the plot selection dictionary,
+for instance.
+
 Here we use the ``post_processing.py`` CLI instead of the module's API for the task definition because the
-post-processing will include plotting with ``matplotlib``, which is not thread-safe. When the CLI is used, multiple
-post-processing tasks from *separate* workflows can be executed in parallel because each task will be launched from a
-separate thread. Care must still be taken to ensure that the post-processing tasks do not write to the same files,
-however.
+post-processing will include plotting with `matplotlib`_ :cite:`matplotlib`, which is not thread-safe
+:cite:`matplotlib-thread-safety`. When the CLI is used, multiple post-processing tasks from *separate* workflows can be
+executed in parallel because each task will be launched from a separate Python main process. Care must still be taken to
+ensure that the post-processing tasks do not write to the same files, however.
 
 **********************
 Post-processing script
@@ -101,8 +115,26 @@ Post-processing script
    .. literalinclude:: python_post_processing.py
       :language: Python
 
-The script API and CLI are included in the :ref:`waves_eabm_api`: :ref:`eabm_post_processing_api` and :ref:`waves_eabm_cli`:
-:ref:`eabm_post_processing_cli`, respectively.
+The post-processing script is the first Python 3 script introduced in the core tutorials. It differs from the Abaqus
+journal files by executing against the Python 3 interpretter of the launching `Conda`_ environment where WAVES is
+installed. Unlike the Abaqus Python 2 environment used to execute journal files, users have direct control over this
+environment and can use the full range of Python packages available with the `Conda`_ package manager.
+
+Additionally, the full Python 3 environment allows greater flexibility in unit testing. The post-processing script has
+been broken into small units of work for ease of testing, which will be introduced in
+:ref:`tutorial_unit_testing_waves`. Testing is important to verify that data manipulation is performed correctly. As an
+added benefit, writing small, single-purpose functions makes project code more re-usable and the project can build a
+small library of common utilities.
+
+While it is possible to unit test Abaqus Python 2 scripts, most operations in the tutorial journal files require
+operations on real geometry files, which requires system tests. :ref:`tutorial_regression_testing_waves` will introduce
+an example solution to performing system tests on simulation workflows.
+
+Take some time to review the individual functions and their documentation, both in the source file and as rendered by
+the documentation. The script API and CLI are included in the :ref:`waves_eabm_api`: :ref:`eabm_post_processing_api` and
+:ref:`waves_eabm_cli`: :ref:`eabm_post_processing_cli`, respectively. Generally, this example script tries to model the
+separation of: data input, data processing, data output, and status reporting. The `Software Carpentry: Python Novice`_
+is a good introduction to Python programming practices :cite:`swc-python`.
 
 **********
 SConstruct

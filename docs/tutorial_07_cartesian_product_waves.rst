@@ -46,6 +46,9 @@ Directory Structure
         $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py'
         WAVES fetch
         Destination directory: 'eabm_package/python'
+        $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep' 'tutorials/tutorial_04_simulation' 'tutorials/tutorial_05_parameter_substitution'
+        WAVES fetch
+        Destination directory: '/home/roppenheimer/waves-tutorials'
         $ waves fetch tutorials/tutorial_06_include_files_SConstruct && mv tutorial_06_include_files_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'

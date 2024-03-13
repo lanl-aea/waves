@@ -98,6 +98,7 @@ def deprecation_warning_decorator(function):
         return function(*args, **kwargs)
     return wrapper
 
+
 decorate_all_functions_in_module(builders, deprecation_warning_decorator)
 # ^^^^^
 # TODO: Remove the builders module for v1.0

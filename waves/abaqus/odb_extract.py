@@ -151,7 +151,7 @@ def odb_extract(input_file,
         new_output_file = f"{str(path_output_file.with_suffix(''))}_{time_stamp}.{file_suffix}"
         print_warning(verbose, f'{output_file} already exists. Will use {new_output_file} instead.')
         output_file = new_output_file
-    
+
     odb_report_args = get_odb_report_args(odb_report_args, input_file, job_name, verbose)
 
     abaqus_base_command = which(abaqus_command)
@@ -209,7 +209,7 @@ def odb_extract(input_file,
 def get_odb_report_args(odb_report_args, input_file, job_name, verbose):
     """
     Generates odb_report arguments
-    
+
     :param str odb_report_args: String of command line options to pass to ``abaqus odbreport``.
     :param Path input_file: ``.odb`` file.
     :param Path job_name: Report file.

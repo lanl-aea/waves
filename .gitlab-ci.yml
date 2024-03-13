@@ -54,7 +54,7 @@ environment:
     - export HTTP_PROXY="http://$ALL_PROXY"
     - export HTTPS_PROXY=$HTTP_PROXY
     # Re-build the Conda environment on changes to environment files
-    - conda env create --prefix ${environment_path} --file environment.yml --force 
+    - conda env create --prefix ${environment_path} --file environment.yml --force
     # Remove write permissions from group to avoid accidental environment changes
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
@@ -81,6 +81,19 @@ fast-test:
       coverage_report:
         coverage_format: cobertura
         path: build/pytest/coverage.xml
+  tags:
+    # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
+    - sstbigbird-shell-aea
+
+pycodestyle:
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - pycodestyle --max-line-length=120 waves/ --exclude=build,tests,rectangle_geometry.py --select=W,E2,E3,E7
   tags:
     # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
     - sstbigbird-shell-aea

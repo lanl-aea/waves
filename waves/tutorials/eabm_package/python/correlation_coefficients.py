@@ -2,15 +2,15 @@
 """Example of catenating WAVES parameter study results and definition"""
 
 import sys
-import argparse
-import pathlib
 import yaml
+import pathlib
+import argparse
 
+import pandas
+import xarray
+import matplotlib.pyplot
 import numpy
 import seaborn
-import xarray
-import pandas
-import matplotlib.pyplot
 import SALib.analyze.delta
 
 from eabm_package.python.correlation_coefficients_schema import parameter_schema
@@ -20,14 +20,50 @@ default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, '
                           'integration point': 0, 'data_type': 'samples'}
 
 
-def plot(input_files, output_file, group_path, selection_dict,
-         parameter_study_file=None):
+def combine_data(input_files, group_path, concat_coord):
+    """Combine input data files into one dataset
+
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
+        containing Xarray Datasets
+    :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
+    :param str concat_coord: Name of dimension
+
+    :returns: Combined data
+    :rtype: xarray.DataArray
+    """
+    paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
+    data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord: path.parent.name})
+                      for path in paths)
+    combined_data = xarray.concat(data_generator, concat_coord)
+    combined_data.close()
+
+    return combined_data
+
+
+def merge_parameter_study(parameter_study_file, combined_data):
+    """Merge parameter study to existing dataset
+
+    :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
+        h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
+    :param xarray.DataArray combined_data: XArray Dataset that will be merged.
+
+    :returns: Combined data
+    :rtype: xarray.DataArray
+    """
+    parameter_study = xarray.open_dataset(parameter_study_file)
+    combined_data = combined_data.merge(parameter_study)
+    parameter_study.close()
+    return combined_data
+
+
+def main(input_files, output_file, group_path, selection_dict, parameter_study_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
 
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
     parameter study dataset file is assumed to be written by a WAVES parameter generator.
 
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray Datasets
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray
+        Datasets
     :param str output_file: The plot file name. Relative or absolute path.
     :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
     :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
@@ -40,15 +76,11 @@ def plot(input_files, output_file, group_path, selection_dict,
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
-    paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord:
-                          path.parent.name}) for path in paths)
-    combined_data = xarray.concat(data_generator, concat_coord)
+    combined_data = combine_data(input_files, group_path, concat_coord)
 
     # Open and merge WAVES parameter study if provided
     if parameter_study_file:
-        parameter_study = xarray.open_dataset(parameter_study_file)
-        combined_data = combined_data.merge(parameter_study)
+        combined_data = merge_parameter_study(parameter_study_file, combined_data)
 
     # Correlation coefficients
     correlation_data = combined_data.sel(selection_dict).to_array().to_pandas().transpose()
@@ -66,19 +98,14 @@ def plot(input_files, output_file, group_path, selection_dict,
     sensitivity = SALib.analyze.delta.analyze(parameter_schema["problem"], inputs, stress)
     sensitivity_yaml = {}
     for key, value in sensitivity.items():
-        try:
+        if isinstance(value, numpy.ndarray):
             value = value.tolist()
-        # TODO: catch the actual exception expected
-        except:
-            pass
         sensitivity_yaml[key] = value
     with open("sensitivity.yaml", "w") as output:
         output.write(yaml.safe_dump(sensitivity_yaml))
 
     # Clean up open files
     combined_data.close()
-    if parameter_study_file:
-        parameter_study.close()
 
     return 0
 
@@ -123,7 +150,7 @@ if __name__ == "__main__":
     else:
         with open(args.selection_dict, 'r') as input_yaml:
             selection_dict = yaml.safe_load(input_yaml)
-    sys.exit(plot(input_files=args.input_file,
+    sys.exit(main(input_files=args.input_file,
                   output_file=args.output_file,
                   group_path=args.group_path,
                   selection_dict=selection_dict,

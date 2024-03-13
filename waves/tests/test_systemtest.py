@@ -29,6 +29,7 @@ if not installed:
     else:
         env[key] = f"{package_parent_path}"
 
+
 @pytest.mark.systemtest
 @pytest.mark.parametrize("command, directory", [
     ("scons rectangle --keep-going", tutorial_directory / "scons_quickstart"),

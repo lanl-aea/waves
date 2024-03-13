@@ -214,15 +214,15 @@ def test_warn_kwarg_change():
     with patch("warnings.warn") as mock_warn:
         program = scons_extensions._warn_kwarg_change({'old_kwarg': True}, "old_kwarg", new_kwarg="new_kwarg")
         mock_warn.assert_called_once()
-        assert program == True
+        assert program is True
     with patch("warnings.warn") as mock_warn:
         program = scons_extensions._warn_kwarg_change({'old_kwarg': False}, "old_kwarg", new_kwarg="new_kwarg")
         mock_warn.assert_called_once()
-        assert program == False
+        assert program is False
     with patch("warnings.warn") as mock_warn:
         program = scons_extensions._warn_kwarg_change({}, "old_kwarg", new_kwarg="new_kwarg")
         mock_warn.assert_not_called()
-        assert program == None
+        assert program is None
 
 
 prepend_env_input = {
@@ -347,21 +347,26 @@ def test_shell_environment(cache, overwrite_cache, expected, verbose):
     assert all(env["ENV"].get(key, None) == value for key, value in expected.items())
 
 
-prepended_string = f"{_cd_action_prefix} "
-post_action_list = {
-    "list1": (["thing1"], [prepended_string + "thing1"]),
-    "list2": (["thing1", "thing2"], [prepended_string + "thing1", prepended_string + "thing2"]),
-    "tuple": (("thing1",), [prepended_string + "thing1"]),
-    "str":  ("thing1", [prepended_string + "thing1"]),
+prefix = f"{_cd_action_prefix}"
+postfix = "postfix"
+construct_action_list = {
+    "list1": (["thing1"], prefix, "", [f"{prefix} thing1"]),
+    "list2": (["thing1", "thing2"], prefix, "", [f"{prefix} thing1", f"{prefix} thing2"]),
+    "tuple": (("thing1",), prefix, "", [f"{prefix} thing1"]),
+    "str":  ("thing1", prefix, "", [f"{prefix} thing1"]),
+    "list1 postfix": (["thing1"], prefix, postfix, [f"{prefix} thing1 {postfix}"]),
+    "list2 postfix": (["thing1", "thing2"], prefix, postfix, [f"{prefix} thing1 {postfix}", f"{prefix} thing2 {postfix}"]),
+    "tuple postfix": (("thing1",), prefix, postfix, [f"{prefix} thing1 {postfix}"]),
+    "str postfix":  ("thing1", prefix, postfix, [f"{prefix} thing1 {postfix}"]),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("post_action, expected",
-                         post_action_list.values(),
-                         ids=post_action_list.keys())
-def test_construct_post_action_list(post_action, expected):
-    output = scons_extensions._construct_post_action_list(post_action)
+@pytest.mark.parametrize("actions, prefix, postfix, expected",
+                         construct_action_list.values(),
+                         ids=construct_action_list.keys())
+def test_construct_action_list(actions, prefix, postfix, expected):
+    output = scons_extensions.construct_action_list(actions, prefix=prefix, postfix=postfix)
     assert output == expected
 
 

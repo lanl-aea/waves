@@ -28,9 +28,11 @@ rst_prolog = f".. |PROJECT| replace:: {project.upper()}\n.. |project| replace:: 
 # -- General configuration ---------------------------------------------------
 master_doc = "index"
 
+
 # Add custom style sheet to make the html docs wider
 def setup(app):
     app.add_css_file("custom.css")
+
 
 # Add any Sphinx extension module names here, as strings.
 extensions = ["sphinx.ext.autodoc",
@@ -65,10 +67,11 @@ preamble = """
 """
 # Sphinx LaTeX build does not correctly escape underscores in the project name, which we use as the title.
 latex_project = project.replace("_", "-")
+latex_basename = str(pathlib.Path("@documentation_pdf@").with_suffix(".tex"))
 latex_elements = {
     'preamble': preamble,
-    "maketitle": f"\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\sphinxmaketitle",
+    "maketitle": f"\\newcommand\\sphinxbackoftitlepage{{{copyright_latex}}}\\sphinxmaketitle",
 }
 latex_documents = [
-    (master_doc, "@documentation_pdf@", latex_project.upper(), author_latex, "manual"),
+    (master_doc, latex_basename, latex_project.upper(), author_latex, "manual"),
 ]

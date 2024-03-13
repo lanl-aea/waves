@@ -16,17 +16,17 @@ default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, '
 
 def combine_data(input_files, group_path, concat_coord):
     """Combine input data files into one dataset
-    
+
     :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
         containing Xarray Datasets
     :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
     :param str concat_coord: Name of dimension
-    
+
     :returns: Combined data
     :rtype: xarray.DataArray
     """
     paths = [pathlib.Path(input_file).resolve() for input_file in input_files]
-    data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord: path.parent.name}) 
+    data_generator = (xarray.open_dataset(path, group=group_path).assign_coords({concat_coord: path.parent.name})
                       for path in paths)
     combined_data = xarray.concat(data_generator, concat_coord)
     combined_data.close()
@@ -36,11 +36,11 @@ def combine_data(input_files, group_path, concat_coord):
 
 def merge_parameter_study(parameter_study_file, combined_data):
     """Merge parameter study to existing dataset
-    
+
     :param str parameter_study_file: path-like or file-like object containing the parameter study dataset. Assumes the
         h5netcdf file contains only a single dataset at the root group path, .e.g. ``/``.
-    :param xarray.DataArray combined_data: XArray Dataset that will be merged. 
-    
+    :param xarray.DataArray combined_data: XArray Dataset that will be merged.
+
     :returns: Combined data
     :rtype: xarray.DataArray
     """
@@ -52,7 +52,7 @@ def merge_parameter_study(parameter_study_file, combined_data):
 
 def csv_files_match(current_csv, expected_csv):
     """Compare two pandas DataFrame objects and determine if they match.
-    
+
     :param pandas.DataFrame current_csv: Current CSV data of generated plot.
     :param pandas.DataFrame expected_csv: Expected CSV data.
 
@@ -68,7 +68,7 @@ def csv_files_match(current_csv, expected_csv):
 
 def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
     """Save scatter plot with given x and y labels
-    
+
     :param xarray.DataArray combined_data: XArray Dataset that will be plotted.
     :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"
     :param str y_var: The dependent (y-axis) variable key name for the Xarray Dataset "data variable"
@@ -85,7 +85,7 @@ def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_
 
 def save_table(combined_data, selection_dict, output_file):
     """Save csv table
-    
+
     :param xarray.DataArray combined_data: XArray Dataset to be written as a CSV.
     :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
         pairs must match the data variables and coordinates of the expected Xarray Dataset object.
@@ -101,8 +101,8 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
     parameter study dataset file is assumed to be written by a WAVES parameter generator.
 
-    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files
-        containing Xarray Datasets
+    :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray
+        Datasets
     :param str output_file: The plot file name. Relative or absolute path.
     :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
     :param str x_var: The independent (x-axis) variable key name for the Xarray Dataset "data variable"

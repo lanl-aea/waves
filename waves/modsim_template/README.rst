@@ -172,6 +172,15 @@ configuration, e.g. ``tutorial_01_geometry``.
 
      $ scons . --clean
 
+- For debugging workflows, use the verbose output option of SCons
+
+  .. code-block:: bash
+
+     $ scons target --debug=explain
+
+Because `SCons`_ uses Python as a scripting language, the usual Python debugging techniques may be placed directly in
+the configuration file, as well: https://docs.python.org/3/library/pdb.html.
+
 .. build-end-do-not-remove
 
 *******
