@@ -22,7 +22,7 @@ from eabm_package import rectangle_compression
 Import("env")
 
 # Set project-wide paths with os-agnostic path separators
-eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
+eabm_package_abspath = env["eabm_package_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
@@ -153,7 +153,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 
 # Post-processing
 plot_name = "stress_strain_comparison"
-post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
+post_processing_source = [pathlib.Path(set_name) / f"{job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"

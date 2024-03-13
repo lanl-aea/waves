@@ -22,7 +22,7 @@ from eabm_package import rectangle_compression
 Import("env")
 
 # Set project-wide paths with os-agnostic path separators
-eabm_package_abspath = pathlib.Path(env["eabm_package_abspath"])
+eabm_package_abspath = env["eabm_package_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
