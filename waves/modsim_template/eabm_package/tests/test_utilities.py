@@ -10,7 +10,7 @@ from eabm_package import utilities
 
 
 def test_combine_data():
-    input_files = ["/mock/path1/data.h5", "/mock/path2/data.h5"]
+    input_files = ["/mock/parameter_set0/data.h5", "/mock/parameter_set1/data.h5"]
     dataset1 = xarray.Dataset(
         {"variable_name": (("space", "time"), numpy.array([[1, 2, 3]]))},
         coords={"space": [0], "time": [0, 1, 2]},
@@ -21,7 +21,7 @@ def test_combine_data():
     )
     expected = xarray.Dataset(
         {"variable_name": (("parameter_sets", "space", "time"), numpy.array([[[1, 2, 3]], [[4, 5, 6]]]))},
-        coords={"space": [0], "time": [0, 1, 2], "parameter_sets": ["path1", "path2"]},
+        coords={"space": [0], "time": [0, 1, 2], "parameter_sets": ["parameter_set0", "parameter_set1"]},
     )
     xarray_side_effect = [dataset1, dataset2]
     with unittest.mock.patch("xarray.open_dataset", side_effect=xarray_side_effect):
