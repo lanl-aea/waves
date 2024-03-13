@@ -347,21 +347,26 @@ def test_shell_environment(cache, overwrite_cache, expected, verbose):
     assert all(env["ENV"].get(key, None) == value for key, value in expected.items())
 
 
-prepended_string = f"{_cd_action_prefix} "
+prefix = f"{_cd_action_prefix}"
+postfix = "postfix"
 construct_action_list = {
-    "list1": (["thing1"], [prepended_string + "thing1"]),
-    "list2": (["thing1", "thing2"], [prepended_string + "thing1", prepended_string + "thing2"]),
-    "tuple": (("thing1",), [prepended_string + "thing1"]),
-    "str":  ("thing1", [prepended_string + "thing1"]),
+    "list1": (["thing1"], prefix, "", [f"{prefix} thing1"]),
+    "list2": (["thing1", "thing2"], prefix, "", [f"{prefix} thing1", f"{prefix} thing2"]),
+    "tuple": (("thing1",), prefix, "", [f"{prefix} thing1"]),
+    "str":  ("thing1", prefix, "", [f"{prefix} thing1"]),
+    "list1 postfix": (["thing1"], prefix, postfix, [f"{prefix} thing1 {postfix}"]),
+    "list2 postfix": (["thing1", "thing2"], prefix, postfix, [f"{prefix} thing1 {postfix}", f"{prefix} thing2 {postfix}"]),
+    "tuple postfix": (("thing1",), prefix, postfix, [f"{prefix} thing1 {postfix}"]),
+    "str postfix":  ("thing1", prefix, postfix, [f"{prefix} thing1 {postfix}"]),
 }
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("actions, expected",
+@pytest.mark.parametrize("actions, prefix, postfix, expected",
                          construct_action_list.values(),
                          ids=construct_action_list.keys())
-def test_construct_action_list(actions, expected):
-    output = scons_extensions.construct_action_list(actions)
+def test_construct_action_list(actions, prefix, postfix, expected):
+    output = scons_extensions.construct_action_list(actions, prefix=prefix, postfix=postfix)
     assert output == expected
 
 
