@@ -713,7 +713,7 @@ def abaqus_journal(program: str = "abaqus", post_action: list = [], **kwargs) ->
     action = [
         f"{program} -information environment {_redirect_environment_postfix}",
         f"{program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} " \
-            "{_redirect_action_postfix}"
+            f"{_redirect_action_postfix}"
     ]
     action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
@@ -878,10 +878,12 @@ def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    action = [f"{_cd_action_prefix} {program} -information environment " \
-                  f"{_redirect_environment_postfix}",
-              f"{_cd_action_prefix} {program} -job ${{job_name}} -input ${{SOURCE.filebase}} " \
-                  f"${{abaqus_options}} -interactive -ask_delete no {_redirect_action_postfix}"]
+    action = [
+        f"{program} -information environment {_redirect_environment_postfix}",
+        f"{program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no " \
+            f"{_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
     if emitter:
         emitter = emitter.lower()
