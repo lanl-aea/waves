@@ -194,18 +194,20 @@ simulation targets. If the selected simulations run successfully, then the targe
 use `SCons`_ to execute unit and integration testing for project specific scripts, such as journal files and Python
 processing scripts.
 
-- Build the required target(s). Test targets may not be part of the default target list. If so, each target will
-  need to be listed explicitly or the "all targets" character, ``.``, should be used to build *all* project targets.
+In this project, the regression test suite includes simulation datachecks, documentation builds, and unit testing. For
+convenience, the regression suite workflows are collected under the ``regression`` alias.
+
+- Run the regression tests
 
   .. code-block::
 
-     $ scons <target_1_name> <target-2_name>
+     $ scons regression
 
 - Run *all* simulation and test targets. Try to run all targets even if some fail.
 
   .. code-block::
 
-     scons . --keep-going
+     scons regression --keep-going
 
 .. test-end-do-not-remove
 
