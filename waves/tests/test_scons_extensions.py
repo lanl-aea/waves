@@ -348,7 +348,7 @@ def test_shell_environment(cache, overwrite_cache, expected, verbose):
 
 
 prepended_string = f"{_cd_action_prefix} "
-post_action_list = {
+construct_action_list = {
     "list1": (["thing1"], [prepended_string + "thing1"]),
     "list2": (["thing1", "thing2"], [prepended_string + "thing1", prepended_string + "thing2"]),
     "tuple": (("thing1",), [prepended_string + "thing1"]),
@@ -357,11 +357,11 @@ post_action_list = {
 
 
 @pytest.mark.unittest
-@pytest.mark.parametrize("post_action, expected",
-                         post_action_list.values(),
-                         ids=post_action_list.keys())
-def test_construct_action_list(post_action, expected):
-    output = scons_extensions.construct_action_list(post_action)
+@pytest.mark.parametrize("actions, expected",
+                         construct_action_list.values(),
+                         ids=construct_action_list.keys())
+def test_construct_action_list(actions, expected):
+    output = scons_extensions.construct_action_list(actions)
     assert output == expected
 
 
