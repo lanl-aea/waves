@@ -558,9 +558,8 @@ def construct_action_list(actions: list[str], prefix: str = _cd_action_prefix, p
 
        f"{prefix} {new_action} {postfix}"
 
-    where action objects are converted to their string representation. If a string is passed instead of a list, it is
-    first converted to a list. Other string-like objects, e.g. bytes, are not converted, but iterated on
-    character-by-character. If an empty list is passed, and empty list is returned.
+    where SCons action objects are converted to their string representation. If a string is passed instead of a list, it
+    is first converted to a list. If an empty list is passed, and empty list is returned.
 
     :param actions: List of action strings
     :param prefix: Common prefix to prepend to each action
