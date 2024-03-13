@@ -12,6 +12,7 @@ New Features
 ============
 - Public API function for building WAVES-like actions that change to the build directory before running a shell command
   (:issue:`611`, :merge:`759`). By `Kyle Brindley`_.
+- Add unit and regression testing to the modsim template (:issue:`603`, :merge:`760`). By `Kyle Brindley`_.
 
 Bug fixes
 =========
