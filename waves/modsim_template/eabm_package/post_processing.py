@@ -8,7 +8,7 @@ import argparse
 
 import pandas
 
-import eabm_package
+import eabm_package.utilities
 
 default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1',
                           'integration point': 0}
