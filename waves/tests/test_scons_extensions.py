@@ -360,8 +360,8 @@ post_action_list = {
 @pytest.mark.parametrize("post_action, expected",
                          post_action_list.values(),
                          ids=post_action_list.keys())
-def test_construct_post_action_list(post_action, expected):
-    output = scons_extensions._construct_post_action_list(post_action)
+def test_construct_action_list(post_action, expected):
+    output = scons_extensions.construct_action_list(post_action)
     assert output == expected
 
 
