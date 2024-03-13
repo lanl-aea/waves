@@ -574,7 +574,11 @@ def construct_action_list(actions: list[str], prefix: str = _cd_action_prefix, p
         iterator = iter(actions)
     except TypeError:
         iterator = iter([actions])
-    new_actions = [f"{prefix} {action} {postfix}".strip() for action in iterator]
+    if prefix:
+        prefix = prefix + " "
+    if postfix:
+        postfix = " " + postfix
+    new_actions = [f"{prefix}{action}{postfix}" for action in iterator]
     return new_actions
 
 
