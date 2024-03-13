@@ -1215,15 +1215,18 @@ def matlab_script(program: str = "matlab", post_action: list[str] = [], **kwargs
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     matlab_program = _warn_kwarg_change(kwargs, "matlab_program")
     program = matlab_program if matlab_program is not None else program
-    action = [f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
-                  "\"path(path, '${SOURCE.dir.abspath}'); " \
-                  "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
-                  "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
-                  f"{_redirect_environment_postfix}",
-              f"{_cd_action_prefix} {program} ${{matlab_options}} -batch " \
-                  "\"path(path, '${SOURCE.dir.abspath}'); " \
-                  "${SOURCE.filebase}(${script_options})\" " \
-                  f"{_redirect_action_postfix}"]
+    action = [
+        f"{program} ${{matlab_options}} -batch " \
+            "\"path(path, '${SOURCE.dir.abspath}'); " \
+            "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
+            "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
+            f"{_redirect_environment_postfix}",
+        f"{program} ${{matlab_options}} -batch " \
+            "\"path(path, '${SOURCE.dir.abspath}'); " \
+            "${SOURCE.filebase}(${script_options})\" " \
+            f"{_redirect_action_postfix}"
+    ]
+    action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
@@ -1270,10 +1273,12 @@ def conda_environment() -> SCons.Builder.Builder:
     :return: Conda environment builder
     :rtype: SCons.Builder.Builder
     """
+    action = [
+        f"conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"
+    ]
+    action = construct_action_list(action)
     conda_environment_builder = SCons.Builder.Builder(
-        action=[
-            f"{_cd_action_prefix} conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"
-        ]
+        action=action
     )
     return conda_environment_builder
 
@@ -1453,8 +1458,10 @@ def sbatch(program: str = "sbatch", post_action: list[str] = [], **kwargs) -> SC
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
     program = sbatch_program if sbatch_program is not None else program
-    action = [f"{_cd_action_prefix} {program} --wait --output=${{TARGETS[-1].abspath}} " \
-              f"${{sbatch_options}} --wrap \"${{slurm_job}}\""]
+    action = [
+        f"{program} --wait --output=${{TARGETS[-1].abspath}} ${{sbatch_options}} --wrap \"${{slurm_job}}\""
+    ]
+    action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
