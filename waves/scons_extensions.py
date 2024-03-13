@@ -552,7 +552,7 @@ def shell_environment(command: str, cache: str | None = None, overwrite_cache: b
 def construct_action_list(actions: list[str], prefix: str = _cd_action_prefix, postfix: str = "") -> list[str]:
     """Return an action list with a common pre/post-fix
 
-    Returns the constructed post-action list of strings with pre/post fix strings as
+    Returns the constructed action list with pre/post fix strings as
 
     .. code-block::
 
