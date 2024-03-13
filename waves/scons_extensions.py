@@ -710,10 +710,11 @@ def abaqus_journal(program: str = "abaqus", post_action: list = [], **kwargs) ->
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
     abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
     program = abaqus_program if abaqus_program is not None else program
-    action = [f"{program} -information environment " \
-                 f"{_redirect_environment_postfix}",
-              f"{program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- " \
-                 f"${{journal_options}} {_redirect_action_postfix}"]
+    action = [
+        f"{program} -information environment {_redirect_environment_postfix}",
+        f"{program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} " \
+            "{_redirect_action_postfix}"
+    ]
     action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
     abaqus_journal_builder = SCons.Builder.Builder(
