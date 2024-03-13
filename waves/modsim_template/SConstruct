@@ -36,14 +36,25 @@ AddOption(
     metavar="N",
     help="Run the Abaqus Solve task using N CPUs. (default: '%default')"
 )
+AddOption(
+    "--print-build-failures",
+    dest="print_build_failures",
+    default=False,
+    action="store_true",
+    help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+)
 
 # Inherit user's full environment and set project options
 env = Environment(ENV=os.environ.copy(),
                   variant_dir_base=GetOption("variant_dir_base"),
                   ignore_documentation=GetOption("ignore_documentation"),
                   solve_cpus=GetOption("solve_cpus"),
+                  print_build_failures=GetOption("print_build_failures"),
                   TARFLAGS="-c -j",
                   TARSUFFIX=".tar.bz2")
+
+# Conditionally print failed task *.stdout files
+waves.scons_extensions.print_build_failures(env["print_build_failures"])
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
@@ -67,6 +78,7 @@ author_latex = r" \and ".join(author_list)
 latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 eabm_package_dir = "eabm_package"
+test_source_dir = "eabm_package/tests"
 project_variables = {
     "project_configuration": str(project_configuration),
     "project_dir": str(project_dir),
@@ -78,6 +90,7 @@ project_variables = {
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
     "documentation_abspath": str(project_dir / documentation_source_dir),
     "eabm_package_abspath": str(project_dir / eabm_package_dir),
+    'test_source_abspath': str(project_dir / test_source_dir),
     "datacheck_alias": "datacheck"
 }
 for key, value in project_variables.items():
@@ -133,6 +146,11 @@ workflow_configurations = [
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
     SConscript(workflow, variant_dir=build_dir, exports="env", duplicate=False)
+
+# Add unit test target
+test_workflow = 'unit_testing'
+test_build_dir = variant_dir_base / test_workflow
+SConscript(test_workflow, variant_dir=test_build_dir, exports='env', duplicate=False)
 
 # Add default target list to help message
 # Add aliases to help message so users know what build target options are available
