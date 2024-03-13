@@ -33,5 +33,5 @@ workflow.extend(env.Command(
     source=test_files,
     action="pytest -v --junitxml=${TARGETS[0]}"
 ))
-
+env.AlwaysBuild(workflow)
 env.Alias(workflow_name, workflow)
