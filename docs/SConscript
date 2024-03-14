@@ -202,7 +202,7 @@ tutorial_files_list = [
     tutorials_dir / env['abaqus_dir'] / 'rectangle_geometry.py',
     tutorials_dir / env['abaqus_dir'] / 'rectangle_partition.py',
     tutorials_dir / env['abaqus_dir'] / 'rectangle_mesh.py',
-    tutorials_dir / env['abaqus_dir'] / 'abaqus_journal_utilities.py',
+    tutorials_dir / env['abaqus_dir'] / 'abaqus_utilities.py',
     tutorials_dir / env['abaqus_dir'] / 'rectangle_compression.inp',
     tutorials_dir / env['abaqus_dir'] / 'assembly.inp',
     tutorials_dir / env['abaqus_dir'] / 'boundary.inp',

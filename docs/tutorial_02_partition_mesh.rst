@@ -127,7 +127,7 @@ targets instead of one. You should now be familiar with the behavior that genera
 target. The new target is the ``rectangle_mesh.inp`` file. This file is called an *orphan mesh* file. When the
 :meth:`waves.scons_extensions.abaqus_journal` builder acts on the ``rectangle_mesh.py`` file, our two target files are
 created. The orphan mesh file is created by calling the ``export_mesh()`` function within the ``rectangle_mesh.py``
-file. See the :ref:`waves_eabm_api` for the :ref:`sphinx_abaqus_journal_utilities_api` file for more information about
+file. See the :ref:`waves_eabm_api` for the :ref:`sphinx_abaqus_utilities_api` file for more information about
 the ``export_mesh()`` function.
 
 In summary of the changes you just made to the ``tutorial_02_partition_mesh`` file, a ``diff`` against the
@@ -189,17 +189,17 @@ argument is how the script knows which file to copy and then modify in the Abaqu
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":``
 statement, and the ``main()`` function is called within ``sys.exit()`` for exit code retrieval.
 
-8. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_journal_utilities.py`` using the contents
+8. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_utilities.py`` using the contents
    below.
 
-.. admonition:: waves-eabm-tutoria/eabm_package/abaqus/abaqus_journal_utilities.py
+.. admonition:: waves-eabm-tutoria/eabm_package/abaqus/abaqus_utilities.py
 
-   .. literalinclude:: abaqus_abaqus_journal_utilities.py
+   .. literalinclude:: abaqus_abaqus_utilities.py
       :language: Python
       :lineno-match:
       :end-before: marker-1
 
-The ``abaqus_journal_utilities.py`` script's purpose is to contain commonly used functions that we do not want to
+The ``abaqus_utilities.py`` script's purpose is to contain commonly used functions that we do not want to
 duplicate. At the moment, we have only created one function - ``export_mesh()``. The ``export_mesh`` function utilizes
 an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and ``orphan_mesh_file`` name to create an
 orphan mesh file. Orphan mesh files define the entire part's mesh in a text-based file. The node and element locations
@@ -217,7 +217,7 @@ and labels are listed in a tabular format that the Abaqus file parser understand
 The ``rectangle_mesh.py`` file will have many similarities in code structure to the ``rectangle_geometry.py``
 and ``rectangle_partition.py`` files. The first significant change is within the ``import`` statements at the top
 of the file. The ``rectangle_mesh.py`` file uses the ``export_mesh()`` function that is imported from the
-``abaqus_journal_utilities.py`` file you just created. ``abaqus_journal_utilities.py`` exists in the
+``abaqus_utilities.py`` file you just created. ``abaqus_utilities.py`` exists in the
 ``eabm_package/abaqus`` directory, and is never copied to the build directory.
 
 It is possible to use a normal looking import statement because we will modify `PYTHONPATH`_ in the project
@@ -230,7 +230,7 @@ may exist in the active Conda environment.
 .. note::
 
    The ``rectangle_mesh.py`` script is also never copied to the build directory, so we can utilize the path of the
-   ``rectangle_mesh.py`` file to point to the location of the ``abaqus_journal_utilities`` file as well. The journal
+   ``rectangle_mesh.py`` file to point to the location of the ``abaqus_utilities`` file as well. The journal
    files are executed via absolute path from within the build directory, so the output from these scripts is placed in
    the build directory.
 
@@ -246,7 +246,7 @@ The code that follows performs the following tasks within the new ``output_file`
 * Define element and node sets for elements and nodes that may require output requests in the model. See the `Abaqus
   Element Sets`_ documentation :cite:`ABAQUS` for more information about element sets.
 * Create an orphan mesh file by calling the ``export_mesh()`` function that was imported from
-  ``abaqus_journal_utilities.py``
+  ``abaqus_utilities.py``
 * Save the ``output_file`` with the changes made
 
 The ``rectangle_mesh.py`` script also contains an argument parser function. This command line interface has yet

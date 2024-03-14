@@ -94,8 +94,7 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    /home/roppenheimer/waves-tutorials/multi_action_task
    $ tree build/
    build/
-   ├── abaqus_journal_utilities.py
-   ├── abaqus_journal_utilities.pyc
+   ├── abaqus_utilities.py
    ├── abaqus.rpy
    ├── abaqus.rpy.1
    ├── abaqus.rpy.2
@@ -120,7 +119,7 @@ the ``*.jnl`` files, this is because Abaqus write the journal file name to match
    ├── rectangle_partition.py
    └── SConscript
 
-   0 directories, 25 files
+   0 directories, 24 files
 
 **********************
 Workflow Visualization

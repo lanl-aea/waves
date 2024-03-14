@@ -40,12 +40,12 @@ rectangle_mesh.py
     :members:
     :show-inheritance:
 
-.. _sphinx_abaqus_journal_utilities_api:
+.. _sphinx_abaqus_utilities_api:
 
-abaqus_journal_utilities.py
+abaqus_utilities.py
 ===========================
 
-.. automodule:: eabm_package.abaqus.abaqus_journal_utilities
+.. automodule:: eabm_package.abaqus.abaqus_utilities
     :noindex:
     :members:
     :show-inheritance:

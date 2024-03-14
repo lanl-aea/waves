@@ -15,7 +15,7 @@ env.AbaqusJournal(
 # Mesh                                                                                                                   
 env.AbaqusJournal(                                                                                                       
     target=["rectangle_mesh.inp", "rectangle_mesh.cae"],
-    source=["rectangle_mesh.py", "rectangle_partition.cae", "abaqus_journal_utilities.py"]
+    source=["rectangle_mesh.py", "rectangle_partition.cae", "abaqus_utilities.py"]
 )
                                                                                                                          
 # Abaqus Solve                                                                                                           

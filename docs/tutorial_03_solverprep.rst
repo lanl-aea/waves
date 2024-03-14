@@ -82,7 +82,7 @@ directory. Check the contents of this directory using the ``ls`` command.
     $ pwd
     /home/roppenheimer/waves-tutorials
     $ ls eabm_package/abaqus
-    abaqus_journal_utilities.py  parts.inp
+    abaqus_utilities.py  parts.inp
     assembly.inp                 rectangle_compression.inp
     boundary.inp                 rectangle_geometry.py
     field_output.inp             rectangle_mesh.py

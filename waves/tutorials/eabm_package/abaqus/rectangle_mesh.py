@@ -12,11 +12,11 @@ import mesh
 # Most end-users will implement only one of these structures and should replace
 # the try/except structure with a single import line, e.g.
 #
-# import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
+# import eabm_package.abaqus.abaqus_utilities as abaqus_utilities
 try:
-    import eabm_package.abaqus.abaqus_journal_utilities as abaqus_journal_utilities
+    import eabm_package.abaqus.abaqus_utilities as abaqus_utilities
 except ImportError:
-    import abaqus_journal_utilities
+    import abaqus_utilities
 
 
 def main(input_file, output_file, model_name, part_name, global_seed):
@@ -73,7 +73,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     p.Set(faces=faces, name='ALLNODES')
 
     model_object = abaqus.mdb.models[model_name]
-    abaqus_journal_utilities.export_mesh(model_object, part_name, output_file)
+    abaqus_utilities.export_mesh(model_object, part_name, output_file)
 
     abaqus.mdb.save()
 

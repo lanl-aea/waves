@@ -65,8 +65,7 @@ Output Files
    /home/roppenheimer/waves-tutorials/scons_quickstart
    $ tree build/
    build/
-   ├── abaqus_journal_utilities.py
-   ├── abaqus_journal_utilities.pyc
+   ├── abaqus_utilities.py
    ├── abaqus.rpy
    ├── abaqus.rpy.1
    ├── abaqus.rpy.2
@@ -95,7 +94,7 @@ Output Files
    ├── rectangle_partition.py
    └── SConscript
 
-   0 directories, 29 files
+   0 directories, 28 files
 
 **********************
 Workflow Visualization
