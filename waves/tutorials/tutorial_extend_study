@@ -48,7 +48,7 @@ datacheck = []
 
 # Parameter Study with Sobol Sequence
 parameter_generator = waves.parameter_generators.SobolSequence(
-    parameter_schema,
+    parameter_schema(),
     output_file=parameter_study_file,
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study,
@@ -146,7 +146,7 @@ def write_parameter_study(target, source, env):
     """
     set_count = len(source)
     if set_count < 8:
-        new_schema = copy.deepcopy(parameter_schema)
+        new_schema = copy.deepcopy(parameter_schema())
         new_schema['num_simulations'] = set_count + 2
         new_generator = waves.parameter_generators.SobolSequence(
             new_schema,

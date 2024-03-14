@@ -47,7 +47,7 @@ datacheck = []
 
 # Parameter Study with Latin Hypercube
 parameter_generator = waves.parameter_generators.LatinHypercube(
-    parameter_schema,
+    parameter_schema(),
     output_file=parameter_study_file,
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study,
