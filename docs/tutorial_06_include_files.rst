@@ -1,4 +1,4 @@
-.. _tutorial_include_files_waves:
+.. _tutorial_include_files:
 
 ##########################
 Tutorial 06: Include Files
@@ -72,7 +72,7 @@ Directory Structure
 Python Parameter File
 *********************
 
-In this tutorial, we will update the code from :ref:`tutorial_parameter_substitution_waves` to use an included parameter
+In this tutorial, we will update the code from :ref:`tutorial_parameter_substitution` to use an included parameter
 file instead of hardcoding the parameter definitions in the ``SConscript`` file. This technique will allow parameter
 re-use between simulations.
 
@@ -104,7 +104,7 @@ as shown in the :ref:`waves_eabm_api` for :ref:`python_rectangle_compression_nom
 The ``__init__.py`` files tell Python what directories to treat as a package or module. They need to exist, but do not
 need any content. You can read more about `Python Modules`_ in the `Python documentation`_.
 
-.. _tutorials_tutorial_include_files_waves:
+.. _tutorials_tutorial_include_files:
 
 **********
 SConscript
@@ -113,11 +113,11 @@ SConscript
 8. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files`` file:
 
    * Import ``rectangle_compression_nominal`` from the ``eabm_package.python`` module
-   * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution_waves`'s
+   * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution`'s
      code
    * Define ``simulation_variables``  using the newly imported ``rectangle_compression_nominal`` module
 
-A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help
+A ``diff`` against the ``SConscript`` file from :ref:`tutorial_parameter_substitution` is included below to help
 identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_06_include_files
@@ -137,11 +137,11 @@ information about importing modules. You can access those variables with the fol
    rectangle_compression_nominal.simulation_variables
 
 The second change removes the code that defines ``simulation_variables`` that remained from
-:ref:`tutorial_parameter_substitution_waves`'s code.
+:ref:`tutorial_parameter_substitution`'s code.
 
 The final change made in the ``tutorial_06_include_files`` file is to re-define the ``simulation_variables``
 from the ``rectangle_compression_nominal`` module. The end result at this point in the code is the same between
-this tutorial and :ref:`tutorial_parameter_substitution_waves`.  However, now we import variables from a separate file,
+this tutorial and :ref:`tutorial_parameter_substitution`.  However, now we import variables from a separate file,
 list that file as a source dependency of the parameterized targets, and allow ourselves the ability to change parameters
 without modification to the ``SConscript`` file.
 
@@ -155,7 +155,7 @@ SConstruct
      the modules within it - importable
    * Add ``tutorial_06_include_files`` to the ``workflow_configurations`` list
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_parameter_substitution_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_parameter_substitution` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -265,8 +265,8 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
 
     0 directories, 32 files
 
-The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution_waves`. As
-was mentioned when modifying the :ref:`tutorials_tutorial_include_files_waves` file, the use of an included Python file
+The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution`. As
+was mentioned when modifying the :ref:`tutorials_tutorial_include_files` file, the use of an included Python file
 to define our parameters provides the same result as when we hard-code the parameters into the ``SConscript`` file. It
 is also worth noting that the ``eabm_package/python/rectangle_compression_nominal.py`` file did not get copied to
 the build directory. Instead, we added the ``eabm_package`` directory to `PYTHONPATH`_. This way we can import the
@@ -300,7 +300,7 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
-Note that the directed graph has not grown larger than the one shown in :ref:`tutorial_parameter_substitution_waves`.
+Note that the directed graph has not grown larger than the one shown in :ref:`tutorial_parameter_substitution`.
 While we have added a new parameter file, the dependence is implicitly captured in the simulation variable values passed
 to the subsitution dictionary. If the values in the parameter file change, the substituted
 ``rectangle_compression.inp`` file contents will also change. So while the parameter file is not explicitly

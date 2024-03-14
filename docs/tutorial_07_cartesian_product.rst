@@ -1,4 +1,4 @@
-.. _tutorial_cartesian_product_waves:
+.. _tutorial_cartesian_product:
 
 ##############################
 Tutorial 07: Cartesian Product
@@ -91,7 +91,7 @@ Product`_ sampling methodology.
       :language: Python
 
 The ``rectangle_compression_cartesian_product.py`` file you just created is very similar to the
-``rectangle_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference between
+``rectangle_compression_nominal.py`` file from :ref:`tutorial_include_files`. The significant difference between
 the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note that the
 ``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters only have a
 single value. The :meth:`waves.parameter_generators.CartesianProduct` API explains this requirement for the "schema
@@ -186,7 +186,7 @@ parameters using different variable types.
 At configuration time, the :meth:`waves.parameter_generators.CartesianProduct.write` method will write the parameter
 study file whenever the contents of the parameter study have changed. The contents check is performed against the
 ``previous_parameter_study`` file if it exists. The conditional re-write behavior will be important for
-post-processing tasks introduced in :ref:`tutorial_post_processing_waves`.
+post-processing tasks introduced in :ref:`tutorial_post_processing`.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
 
@@ -209,7 +209,7 @@ build directory name from the filenames that would be written by
 
 Next, the ``parameters`` `xarray dataset`_ is converted to a dictionary. At first declaration, ``simulation_variables``
 is a dictionary whose keys are the names of the parameters and whose values are the parameter values for a particular
-``set_name``. The same substitution syntax key modification introduced by :ref:`tutorial_parameter_substitution_waves`
+``set_name``. The same substitution syntax key modification introduced by :ref:`tutorial_parameter_substitution`
 is used again when passing the simulation variables dictionary to the :meth:`waves.scons_extensions.copy_substitute` method for
 text file parameter substitution.
 
@@ -267,7 +267,7 @@ SConstruct
 6. Add ``tutorial_07_cartesian_product`` to the ``workflow_configurations`` list in the
    ``waves-tutorials/SConstruct`` file.
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_include_files` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -394,7 +394,7 @@ The output should look similar to the figure below.
 
 In this figure we begin to see the value of a build system for modsim execution. Despite excluding most of the
 simulation output files, the full parameter study directed graph is much larger than the one shown in
-:ref:`tutorial_include_files_waves`. With the piecewise construction of the input deck standing in for a moderately complex
+:ref:`tutorial_include_files`. With the piecewise construction of the input deck standing in for a moderately complex
 modsim project, even a four set parameter study quickly grows unmanageable for manual state tracking and execution. With
 `SCons`_ managing the directed graph construction, state, and execution, the modsim developer can focus attention on the
 engineering analysis and benefit from partial re-execution of the parameter study when only a subset of the parameter
@@ -425,5 +425,5 @@ The output should look similar to the figure below.
 
 While the first image is useful for demonstrating modsim project size and scope, a more useful directed graph can be
 evaluated by limiting the output to a single set. This image should look similar to the
-:ref:`tutorial_include_files_waves` directed graph, but with fewer output files because the ``*.msg``, ``*.dat``, and
+:ref:`tutorial_include_files` directed graph, but with fewer output files because the ``*.msg``, ``*.dat``, and
 ``*.sta`` files have been excluded to make the full parameter study graph more readable.

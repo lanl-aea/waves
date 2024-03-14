@@ -1061,7 +1061,7 @@ Documentation
 - Add a rough draft "build action signature escape sequence" tutorial to demonstrate escape sequence usage
   (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
 - Update the ``tree`` command usage for consistency across tutorials (:issue:`317`, :merge:`342`). By `Kyle Brindley`_.
-- Clarify the usage of `Python pathlib`_ methods to generate the ``solve_source_list`` in :ref:`tutorial_simulation_waves`
+- Clarify the usage of `Python pathlib`_ methods to generate the ``solve_source_list`` in :ref:`tutorial_simulation`
   (:issue:`314`, :merge:`343`). By `Thomas Roberts`_.
 - Add a theory section to the quickstart template analysis report(s) and fix the images to match the intended simulation
   design (:issue:`320`, :merge:`345`). By `Kyle Brindley`_.

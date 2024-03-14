@@ -1,4 +1,4 @@
-.. _tutorial_data_extraction_waves:
+.. _tutorial_data_extraction:
 
 ############################
 Tutorial 08: Data Extraction
@@ -83,7 +83,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
+A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product` is included
 below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_08_data_extraction
@@ -98,14 +98,14 @@ two files: ``rectangle_compression_datasets.h5``, which contains h5py paths to t
 ``rectangle_compression.h5``, which contains h5py native datasets for anything that :ref:`odb_extract_cli` doesn't
 organize into `Xarray`_ datasets and a list of group paths pointing at `Xarray`_ datasets in
 ``rectangle_compression_datasets.h5``. The second file also contains external links to the datasets file, so h5py
-can be used to access all group paths if necessary. :ref:`tutorial_post_processing_waves` will introduce an example for
+can be used to access all group paths if necessary. :ref:`tutorial_post_processing` will introduce an example for
 accessing and organizing the results files and concatenating the parameter study information.
 
 **********
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -131,7 +131,7 @@ Build Targets
 Output Files
 ************
 
-6. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product_waves`, with
+6. View the output files. The output files should match those introduced in :ref:`tutorial_cartesian_product`, with
    the addition of the :ref:`odb_extract_cli` output files.
 
 .. code-block:: bash
@@ -152,7 +152,7 @@ See the :ref:`odb_extract_cli` and :meth:`waves.scons_extensions.abaqus_extract`
 file structure. You will notice that there are two H5 files per parameter set. The data is organized into a root file,
 ``rectangle_compression.h5``, that contains the overall file structure, some unsorted meta data, and a list of H5 group
 paths containing Xarray datasets. The second file, ``rectangle_compression_datasets.h5``, contains the actual Xarray
-dataset objects. :ref:`tutorial_post_processing_waves` will introduce a post-processing task with the
+dataset objects. :ref:`tutorial_post_processing` will introduce a post-processing task with the
 :meth:`waves.scons_extensions.abaqus_extract` H5 output files.
 
 You can explore the structure of each file with `The HDF5 Group command-line-tools`_ below (the ``grep`` command
@@ -289,6 +289,6 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
-This single set directed graph image should look very similar to the :ref:`tutorial_cartesian_product_waves` directed
+This single set directed graph image should look very similar to the :ref:`tutorial_cartesian_product` directed
 graph. The data extraction step has added the ``*.h5`` files which take the proprietary ``*.odb`` data format and
 provide ``h5py`` and ``xarray`` dataset files.

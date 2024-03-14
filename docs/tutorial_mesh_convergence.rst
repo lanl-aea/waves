@@ -1,4 +1,4 @@
-.. _tutorial_mesh_convergence_waves:
+.. _tutorial_mesh_convergence:
 
 ##########################
 Tutorial: Mesh Convergence
@@ -97,7 +97,7 @@ This file defines a YAML formatted dictionary that will be used to change the de
 SConscript
 **********
 
-7. A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is
+7. A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing` is
    included below to help identify the changes made in this tutorial. Use the diff to update your
    ``tutorial_mesh_convergence`` file, and then review the paragraphs that follow to understand the meaning of these
    changes.
@@ -121,7 +121,7 @@ The highlighted code above points out two key changes from ``diff`` at the begin
 this tutorial. The second change is the addition of a ``simulation_constants`` dictionary. This parameter study only
 changes the meshing ``global_seed`` parameter, and all other model parameters stay constant. One way to achieve this
 would be to set the remaining parameters as single-value parameter sets in the ``parameter_schema``. This was done with
-the ``global_seed`` and ``displacement`` parameters in :ref:`tutorial_cartesian_product_waves`. Rather, we will set the
+the ``global_seed`` and ``displacement`` parameters in :ref:`tutorial_cartesian_product`. Rather, we will set the
 ``width``, ``height``, and ``displacement`` variables as constants in the ``SConscript`` file, and they will not appear
 in the parameter study definition. The individual parameters from the ``parameter_schema`` and ``simulation_constants``
 dictionaries will be combined later in the ``SConscript`` file.
@@ -135,7 +135,7 @@ dictionaries will be combined later in the ``SConscript`` file.
       :end-before: marker-4
       :emphasize-lines: 5, 15, 21-22, 27
 
-The code above is largely copy and paste from :ref:`tutorial_regression_testing_waves`, with a few significant
+The code above is largely copy and paste from :ref:`tutorial_regression_testing`, with a few significant
 differences:
 
 * The code pertainting to ``# Geometry`` and ``# Partition`` has been moved out of the parameter study's ``for`` loop.
@@ -189,7 +189,7 @@ specified ``rectangle_partition.cae`` as a target in the ``# Partition`` workflo
       :emphasize-lines: 13-22
 
 The highlighted code above demonstrated the usage of the ``post_processing.py`` script to generate a second plot. The first
-plot, as demonstrated in :ref:`tutorial_post_processing_waves`, is a simple stress-strain comparison for each parameter
+plot, as demonstrated in :ref:`tutorial_post_processing`, is a simple stress-strain comparison for each parameter
 set. The highlighted code is used to generate a plot of global mesh size versus the stress in the model at the end of
 the simulation. As the global mesh size decreases, the final stress should start to converge to a common value.
 
@@ -206,7 +206,7 @@ the usage of the ``global_seed`` parameter as the independent variable.
 SConstruct
 **********
 
-8. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help
+8. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing` is included below to help
    identify the changes made in this tutorial. Make these changes to your ``SConstruct`` file.
 
 .. admonition:: waves-tutorials/SConstruct

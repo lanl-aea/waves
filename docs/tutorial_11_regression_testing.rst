@@ -1,4 +1,4 @@
-.. _tutorial_regression_testing_waves:
+.. _tutorial_regression_testing:
 
 ###############################
 Tutorial 11: Regression Testing
@@ -18,9 +18,9 @@ still desirable to provide early warning of breaking changes in the simulation w
 can be tested should be tested as regularly as possible given compute resource constraints.
 
 This tutorial introduces a project wide alias to allow convenient execution of the simulation workflow through the
-simulation datacheck task introduced in :ref:`tutorial_simulation_waves`. From that tutorial onward, each tutorial has
+simulation datacheck task introduced in :ref:`tutorial_simulation`. From that tutorial onward, each tutorial has
 propagated a tutorial specific datacheck alias. This tutorial will add a project wide ``datacheck`` alias and apply it
-to a copy of the :ref:`tutorial_post_processing_waves` configuration files. The user may also go back to previous
+to a copy of the :ref:`tutorial_post_processing` configuration files. The user may also go back to previous
 tutorials to include the full suite of datacheck tasks in the project wide datacheck regression test alias.
 
 **********
@@ -100,7 +100,7 @@ CSV file
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_11_regression_testing
@@ -116,7 +116,7 @@ simulation specific datacheck task to the new alias.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_unit_testing_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_unit_testing` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -264,7 +264,7 @@ The output should look similar to the figure below.
     \end{landscape}
 
 This tutorial's ``datacheck`` directed graph should look different from the graph in
-:ref:`tutorial_post_processing_waves`. Here we have plotted the ``datacheck`` alias output, which does not execute the
+:ref:`tutorial_post_processing`. Here we have plotted the ``datacheck`` alias output, which does not execute the
 full simulation workflow. This partial directed graph may run faster than the full simulation workflow for frequent
 regression tests.
 

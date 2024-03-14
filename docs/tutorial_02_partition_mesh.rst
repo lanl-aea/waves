@@ -1,4 +1,4 @@
-.. _tutorial_partition_mesh_waves:
+.. _tutorial_partition_mesh:
 
 ###############################
 Tutorial 02: Partition and Mesh
@@ -60,7 +60,7 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-.. _tutorials_tutorial_partition_mesh_waves:
+.. _tutorials_tutorial_partition_mesh:
 
 **********
 SConscript
@@ -77,21 +77,21 @@ SConscript
       :start-after: marker-2
       :end-before: marker-3
 
-Just like building the geometry in :ref:`tutorial_geometry_waves`, the code you just added instructs SCons on how to
+Just like building the geometry in :ref:`tutorial_geometry`, the code you just added instructs SCons on how to
 build the targets for partitioning and meshing our rectangle part. Again, the ``journal_file`` variable exists
 solely to minimize hard-coded duplication of the strings ``'rectangle_partition'`` and ``'rectangle_mesh'``.
 
 In the code pertaining to ``# Partition``, we will again pass an empty string for the ``journal_options``. We will
 re-open the discussion of using the journal file's command line interface via the ``journal_options`` variable in
-:ref:`tutorial_parameter_substitution_waves`. Next, the ``workflow`` list is extended once again to include the action
+:ref:`tutorial_parameter_substitution`. Next, the ``workflow`` list is extended once again to include the action
 to use the :meth:`waves.scons_extensions.abaqus_journal` builder. The ``target`` list specifies the files created by the
 :meth:`waves.scons_extensions.abaqus_journal` task's action, and the ``source`` list specifies on which files to act in order to
 produce the targets.
 
 Keen readers will note that this source-target definition is slightly different
-from that in :ref:`tutorial_geometry_waves`.  Here, we still specify only one target -
+from that in :ref:`tutorial_geometry`.  Here, we still specify only one target -
 ``rectangle_partition.cae``. This target is geneated by *performing an action on not one, but now two sources*. The
-first source is similar to that in :ref:`tutorial_geometry_waves`, where we run the ``rectangle_partition.py`` file
+first source is similar to that in :ref:`tutorial_geometry`, where we run the ``rectangle_partition.py`` file
 in the Abaqus kernel, but now the default behavior of the journal is different.
 
 .. TODO: figure out how to link to a specific entry in the CLI. There's gotta be some way to do this similat to :meth:
@@ -103,7 +103,7 @@ in the Abaqus kernel, but now the default behavior of the journal is different.
 
 The ``--input-file`` command line argument defaults to the string ``'rectangle_geometry'`` and does not require a
 file extension. So, we simply need to make sure that the ``rectangle_geometry.cae`` file (which is an output from
-the code we wrote in :ref:`tutorial_geometry_waves`) be included in the ``source`` list. If
+the code we wrote in :ref:`tutorial_geometry`) be included in the ``source`` list. If
 ``rectangle_geometry.cae`` were left out of the source list, the SCons build system would not be able to determine
 that the partition target depends on the geometry target. This would result in an indeterminate race condition in target
 execution order. Incomplete source and target lists also make it impossible for the build system to automatically
@@ -131,7 +131,7 @@ file. See the :ref:`waves_eabm_api` for the :ref:`sphinx_abaqus_journal_utilitie
 the ``export_mesh()`` function.
 
 In summary of the changes you just made to the ``tutorial_02_partition_mesh`` file, a ``diff`` against the
-``SConscript`` file from :ref:`tutorial_geometry_waves` is included below to help identify the changes made in this
+``SConscript`` file from :ref:`tutorial_geometry` is included below to help identify the changes made in this
 tutorial.
 
 .. admonition:: waves-tutorials/tutorial_02_partition_mesh
@@ -144,9 +144,9 @@ tutorial.
 Abaqus Journal File
 *******************
 
-Recall from :ref:`tutorial_geometry_waves` that you created an Abaqus journal file called
+Recall from :ref:`tutorial_geometry` that you created an Abaqus journal file called
 ``rectangle_geometry.py``. You will now create two more for the partitioning and meshing workflows. The reader is
-referred to the following sections in :ref:`tutorial_geometry_waves` for a reminder of different aspects of these
+referred to the following sections in :ref:`tutorial_geometry` for a reminder of different aspects of these
 journal files:
 
 * :ref:`tutorial_geometry_waves_main_functions`
@@ -262,7 +262,7 @@ SConstruct
 10. Add ``tutorial_02_partition_mesh`` to the ``workflow_configurations`` list in the
     ``waves-tutorials/SConscruct`` file.
 
-A ``diff`` against the SConstruct file from :ref:`tutorial_geometry_waves` is included below to help identify the
+A ``diff`` against the SConstruct file from :ref:`tutorial_geometry` is included below to help identify the
 changes made in this tutorial.
 
    ..  admonition:: waves-tutorials/SConstruct
@@ -343,14 +343,14 @@ below.
    0 directories, 21 files
 
 Examine the contents of the ``build/tutorial_01_geometry`` and a ``build/tutorial_02_partition_mesh`` directories.
-Recall from the note this tutorials_tutorial's :ref:`tutorial_partition_mesh_waves` section that we require the targets
-from the code pertaining to :ref:`tutorial_geometry_waves` to build the targets for this tutorial. There is an important
-distinction to be made here. This tutorial is **NOT** utilizing the outputs from :ref:`tutorial_geometry_waves`'s
+Recall from the note this tutorials_tutorial's :ref:`tutorial_partition_mesh` section that we require the targets
+from the code pertaining to :ref:`tutorial_geometry` to build the targets for this tutorial. There is an important
+distinction to be made here. This tutorial is **NOT** utilizing the outputs from :ref:`tutorial_geometry`'s
 :ref:`tutorial_geometry_waves_build_targets` section when we executed the ``$ scons tutorial_01_geometry`` command. This
 tutorial is utilizing the outputs generated from executing the same code, but from our new
 ``tutorial_02_partition_mesh`` file. For this reason, we see the same outputs from the
 ``build/tutorial_01_geometry`` directory in the ``build/tutorial_02_partition_mesh`` directory (along with other
-:ref:`tutorial_partition_mesh_waves` output files).
+:ref:`tutorial_partition_mesh` output files).
 
 The new output files pertain to the partitioning and meshing steps we added to the workflow. The file extensions are the
 same as when we ran the geometry workflow, but now we have an added ``rectangle_mesh.inp`` orphan mesh file.
@@ -382,7 +382,7 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
-As in :ref:`tutorial_geometry_waves`, the visualization of the workflow directed graph looks relatively simple to
+As in :ref:`tutorial_geometry`, the visualization of the workflow directed graph looks relatively simple to
 manage. In part, this is because we've removed some of the automanaged output files with the ``--exclude-list`` option
 of the |project| :ref:`waves_visualize_cli` subcommand. Probably you would not try to manage all of these files in a manual
 workflow; however, files like the ``*.stdout`` are important for debugging errors and lose significant value if they

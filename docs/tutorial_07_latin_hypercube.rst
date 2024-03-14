@@ -1,4 +1,4 @@
-.. _tutorial_latin_hypercube_waves:
+.. _tutorial_latin_hypercube:
 
 ############################
 Tutorial 07: Latin Hypercube
@@ -78,7 +78,7 @@ Parameter Study File
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product_waves` is included
+A ``diff`` against the ``tutorial_07_cartesian_product`` file from :ref:`tutorial_cartesian_product` is included
 below to help identify the differences between the two parameter generators.
 
 .. note::
@@ -101,7 +101,7 @@ below to help identify the differences between the two parameter generators.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct

@@ -1,4 +1,4 @@
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_cubit/SConstruct

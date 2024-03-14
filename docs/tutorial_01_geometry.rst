@@ -1,4 +1,4 @@
-.. _tutorial_geometry_waves:
+.. _tutorial_geometry:
 
 #####################
 Tutorial 01: Geometry
@@ -133,7 +133,7 @@ variable exists solely to minimize hard-coded duplication of the string
 ``'rectangle_geometry'``. ``journal_options`` allows for parameters to be passed as
 command line arguments to the journal file. Using the journal file's command line
 interface with the ``journal_options`` string will be discussed in
-:ref:`tutorial_parameter_substitution_waves`.
+:ref:`tutorial_parameter_substitution`.
 
 Next, the ``workflow`` list is extended to include the action to use the :meth:`waves.scons_extensions.abaqus_journal` builder,
 as discussed in :ref:`tutorialsconstruct`. For more information about the behavior of the
@@ -401,7 +401,7 @@ directory *exactly* matches the directory structure of the location where the
 project-level ``SConstruct`` and ``SConscript`` files exist. This behavior will allow us
 to define multiple simulations in our :term:`modsim repository` (EABM) with build result
 separation if more than one simulation is built at the same time.
-:ref:`tutorial_partition_mesh_waves` will demonstrate the importance of this behavior more clearly.
+:ref:`tutorial_partition_mesh` will demonstrate the importance of this behavior more clearly.
 
 .. code-block:: bash
 

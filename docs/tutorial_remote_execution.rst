@@ -1,4 +1,4 @@
-.. _tutorial_remote_execution_waves:
+.. _tutorial_remote_execution:
 
 ############################
 Tutorial: Simulation via SSH
@@ -8,7 +8,7 @@ Tutorial: Simulation via SSH
 
 .. include:: ssh_builder_actions_warning.txt
 
-This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but executes the simulation
+This tutorial implements the same workflow introduced in :ref:`tutorial_simulation`, but executes the simulation
 on a remote server via SSH. You may need to update the server name to match your local system or local remote server.
 
 This tutorial assumes that the local system has an installation of Abaqus and that the Abaqus installation on the local
@@ -67,13 +67,13 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-.. _tutorials_tutorial_remote_execution_waves:
+.. _tutorials_tutorial_remote_execution:
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_remote_execution
@@ -86,7 +86,7 @@ changes made in this tutorial.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct

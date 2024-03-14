@@ -1,4 +1,4 @@
-.. _tutorial_solverprep_waves:
+.. _tutorial_solverprep:
 
 #######################
 Tutorial 03: SolverPrep
@@ -89,7 +89,7 @@ directory. Check the contents of this directory using the ``ls`` command.
     history_output.inp           rectangle_partition.py
     materials.inp
 
-.. _tutorials_tutorial_solverprep_waves:
+.. _tutorials_tutorial_solverprep:
 
 **********
 SConscript
@@ -114,8 +114,8 @@ we will require a custom builder that functions differently than the previously 
 
     There is a large section of lines in the ``SConscript`` file that are not included
     before the next section of code shown here, as they are identical to those from
-    :ref:`tutorial_partition_mesh_waves`. The ``diff`` of the ``SConscript`` file at the
-    end of the :ref:`tutorials_tutorial_solverprep_waves` section will demonstrate this
+    :ref:`tutorial_partition_mesh`. The ``diff`` of the ``SConscript`` file at the
+    end of the :ref:`tutorials_tutorial_solverprep` section will demonstrate this
     more clearly.
 
 7. Modify your ``tutorial_03_solverprep`` file by adding the contents shown
@@ -153,7 +153,7 @@ instead of defining a unique task for each item in the ``abaqus_source_list``. T
 list of targets.
 
 In summary of the changes you just made to the ``tutorial_03_solverprep`` file,
-a ``diff`` against the ``SConscript`` file from :ref:`tutorial_partition_mesh_waves` is
+a ``diff`` against the ``SConscript`` file from :ref:`tutorial_partition_mesh` is
 included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
@@ -169,7 +169,7 @@ SConstruct
 8. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
    ``waves-tutorials/SConstruct`` file.
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -286,7 +286,7 @@ It is worth noting that the ``tutorial_03_solverprep`` build directory contains 
 files from the previous two tutorials. The additional files are the files from the
 ``abaqus_source_list`` that were acted on with the :meth:`waves.scons_extensions.copy_substitute`
 method. In this case, the files were simply copied into the build directory with no
-modification to the source code. :ref:`tutorial_parameter_substitution_waves` will discuss
+modification to the source code. :ref:`tutorial_parameter_substitution` will discuss
 how parameters can be inserted into these solver input files.
 
 **********************
@@ -316,7 +316,7 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
-Compared to :ref:`tutorial_partition_mesh_waves`, the workflow has grown significantly. Of course, if you were managing
+Compared to :ref:`tutorial_partition_mesh`, the workflow has grown significantly. Of course, if you were managing
 this workflow manually, the source ``*.inp`` files would probably be managed as a single file. Here, the files are split
 in anticipation of larger modsim projects where a simulation may be recombined with many variations of materials, parts,
 boundary conditions, or loading steps. The piecewise nature of the input file minimizes data duplication over simulation

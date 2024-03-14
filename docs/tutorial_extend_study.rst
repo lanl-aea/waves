@@ -1,4 +1,4 @@
-.. _tutorial_extend_study_waves:
+.. _tutorial_extend_study:
 
 #########################################
 Automatically Extending a Parameter Study
@@ -72,7 +72,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_07_sobol_sequence`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_07_sobol_sequence`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
 differences between the two parameter generators.
 
 .. admonition:: waves-tutorials/tutorial_extend_study
@@ -85,7 +85,7 @@ differences between the two parameter generators.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct

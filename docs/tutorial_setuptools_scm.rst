@@ -1,4 +1,4 @@
-.. _tutorial_setuptools_scm_waves:
+.. _tutorial_setuptools_scm:
 
 ########################
 Tutorial: setuptools_scm
@@ -81,7 +81,7 @@ setuptools_scm configuration
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -133,7 +133,7 @@ Version control system
 Build Targets
 *************
 
-10. Build (or re-build) the archive target from :ref:`tutorial_archival_waves`.
+10. Build (or re-build) the archive target from :ref:`tutorial_archival`.
 
 .. code-block:: bash
 
@@ -146,7 +146,7 @@ Build Targets
 Output Files
 ************
 
-The output should look identical to :ref:`tutorial_archival_waves` with the exception that the archive ``*.tar.bz2``
+The output should look identical to :ref:`tutorial_archival` with the exception that the archive ``*.tar.bz2``
 file may contain version information relating to the git short commit hash. One side effect of the dynamic version
 number is that the archive task will always re-run when changes are made to the project repository, including any
 uncommitted changes to tracked files.

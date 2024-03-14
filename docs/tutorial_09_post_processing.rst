@@ -1,4 +1,4 @@
-.. _tutorial_post_processing_waves:
+.. _tutorial_post_processing:
 
 ############################
 Tutorial 09: Post-Processing
@@ -67,7 +67,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_08_data_extraction`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_08_data_extraction`` file from :ref:`tutorial_data_extraction` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_09_post_processing
@@ -116,12 +116,12 @@ environment and can use the full range of Python packages available with the `Co
 
 Additionally, the full Python 3 environment allows greater flexibility in unit testing. The post-processing script has
 been broken into small units of work for ease of testing, which will be introduced in
-:ref:`tutorial_unit_testing_waves`. Testing is important to verify that data manipulation is performed correctly. As an
+:ref:`tutorial_unit_testing`. Testing is important to verify that data manipulation is performed correctly. As an
 added benefit, writing small, single-purpose functions makes project code more re-usable and the project can build a
 small library of common utilities.
 
 While it is possible to unit test Abaqus Python 2 scripts, most operations in the tutorial journal files require
-operations on real geometry files, which requires system tests. :ref:`tutorial_regression_testing_waves` will introduce
+operations on real geometry files, which requires system tests. :ref:`tutorial_regression_testing` will introduce
 an example solution to performing system tests on simulation workflows.
 
 Take some time to review the individual functions and their documentation, both in the source file and as rendered by
@@ -134,7 +134,7 @@ is a good introduction to Python programming practices :cite:`swc-python`.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_data_extraction_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_data_extraction` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -210,7 +210,7 @@ legend.
    :align: center
 
 Note that in this example, most of the parameter sets are expected to overlap with differences as a function of the
-geometric parameters. Review the parameter study introduced in :ref:`tutorial_cartesian_product_waves` and the contents
+geometric parameters. Review the parameter study introduced in :ref:`tutorial_cartesian_product` and the contents
 of the `parameter_study.h5` file to identify the expected differences in the stress-strain response.
 
 The :ref:`modsim_templates` provided by WAVES contain a similar parameter study for mesh convergence as a template for
@@ -245,5 +245,5 @@ The output should look similar to the figure below.
         \vspace*{\fill}
     \end{landscape}
 
-As in :ref:`tutorial_data_extraction_waves`, the directed graph has not changed much. This tutorial adds the ``*.pdf`` plot
+As in :ref:`tutorial_data_extraction`, the directed graph has not changed much. This tutorial adds the ``*.pdf`` plot
 of stress vs. strain.

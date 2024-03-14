@@ -1,4 +1,4 @@
-.. _tutorial_parameter_substitution_waves:
+.. _tutorial_parameter_substitution:
 
 ###################################
 Tutorial 05: Parameter Substitution
@@ -114,7 +114,7 @@ Solver Input Files
    /home/roppenheimer/waves-tutorials
    $ cp eabm_package/abaqus/rectangle_compression.inp eabm_package/abaqus/rectangle_compression.inp.in
 
-In this tutorial, we will be modifying several files from :ref:`tutorial_simulation_waves`, the first of which is
+In this tutorial, we will be modifying several files from :ref:`tutorial_simulation`, the first of which is
 ``rectangle_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
 the ``.in`` extension for the purposes of *parameter substitution*. This change is made so it is easy for the
 :meth:`waves.scons_extensions.copy_substitute` method to identify which files should be searched for parameters. Any files with
@@ -135,7 +135,7 @@ of ``-1.0`` with the parameter substitution key ``@displacement@``. Note that th
 literal string substitution in the target file, so it is necessary to prepare the correct syntax for the file type where
 the substitution occurs.
 
-.. _tutorials_tutorial_parameter_substitution_waves:
+.. _tutorials_tutorial_parameter_substitution:
 
 **********
 SConscript
@@ -159,7 +159,7 @@ In the code you just added, a ``simulation_variables`` dictionary is defined.  E
 in the previous tutorials. The ``width`` and ``height`` parameters are used in the ``rectangle_geometry.py`` and
 ``rectangle_partition.py`` scripts, and ``global_seed`` is used in the ``rectangle_mesh.py`` script. Recall
 that each of these scripts is called using a command line interface that has default parameters. See the
-:ref:`waves_eabm_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry_waves`, the argument
+:ref:`waves_eabm_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry`, the argument
 parser for each of these scripts will supply a default value for each command line argument that is not specified
 (assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
 passed to the :meth:`waves.scons_extensions.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that
@@ -246,7 +246,7 @@ clearly when we investigate the :ref:`tutorial_parameter_substitution_waves_outp
 copy and substitute operations will be re-executed.
 
 In summary of the changes you just made to the ``tutorial_05_parameter_substitution`` file, a ``diff`` against the
-``SConscript`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+``SConscript`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_05_parameter_substitution
@@ -262,7 +262,7 @@ SConstruct
 10. Add ``tutorial_05_parameter_substitution`` to the ``workflow_configurations`` list in the
     ``waves-tutorials/SConstruct`` file.
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -374,7 +374,7 @@ below. Note the usage of the ``-I`` option to reduce clutter in the ``tree`` com
 
    0 directories, 32 files
 
-The output files for this tutorial are very similar to those from :ref:`tutorial_simulation_waves` with a few key
+The output files for this tutorial are very similar to those from :ref:`tutorial_simulation` with a few key
 differences.
 
 Most importantly, note that the build directory contains a file named ``rectangle_compression.inp.in``, which is
@@ -401,7 +401,7 @@ parameter key ``@displacement@`` with the parameter value ``-1.0``, and then gen
 in the text, as shown above.
 
 It is also worth noting that that there are 50 files in the ``build/tutorial_05_parameter_substitution`` directory
-compared to the 43 files from :ref:`tutorial_simulation_waves`. Other than the addition of the
+compared to the 43 files from :ref:`tutorial_simulation`. Other than the addition of the
 ``rectangle_compression.inp.in`` file, the difference is the addition of the files with ``.par``, ``.pes``, and
 ``.pmg`` extension. See the `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information
 about the information that these files provide.

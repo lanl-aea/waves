@@ -14,7 +14,7 @@ Users who want to jump straight to a minimally functional simulation workflow wi
 For a detailed discussion of recommended best practices for `SCons`_  and `WAVES-EABM`_ project setup, meta data, and
 features, start with :ref:`tutorialsconstruct`. Most of the ``SContruct`` file introduced in :ref:`tutorialsconstruct`
 is boilerplate code, so users may want to skip straight to the workflow task definitions in
-:ref:`tutorial_geometry_waves`. An optional ``waves fetch`` command is included in :ref:`tutorial_geometry_waves` to
+:ref:`tutorial_geometry`. An optional ``waves fetch`` command is included in :ref:`tutorial_geometry` to
 help users create the content of :ref:`tutorialsconstruct`. The :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand may
 also be used to create a local copy of any tutorial file.
 
@@ -47,24 +47,24 @@ Core Lessons
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
                    01:00 :ref:`tutorialsconstruct`                    `SCons`_ project configuration and meta data
-                   01:00 :ref:`tutorial_geometry_waves`               Hierarchical `SCons`_ builds, task creation,
+                   01:00 :ref:`tutorial_geometry`                     Hierarchical `SCons`_ builds, task creation,
                                                                       Abaqus journal files as small utility software
-                   00:45 :ref:`tutorial_partition_mesh_waves`         Dependent tasks and execution order
-                   00:20 :ref:`tutorial_solverprep_waves`             Copying files into the build directory
-                   00:20 :ref:`tutorial_simulation_waves`             Abaqus solver execution
-                   00:20 :ref:`tutorial_parameter_substitution_waves` Parameterized builds and substituting parameter
+                   00:45 :ref:`tutorial_partition_mesh`               Dependent tasks and execution order
+                   00:20 :ref:`tutorial_solverprep`                   Copying files into the build directory
+                   00:20 :ref:`tutorial_simulation`                   Abaqus solver execution
+                   00:20 :ref:`tutorial_parameter_substitution`       Parameterized builds and substituting parameter
                                                                       values into copied files
-                   00:20 :ref:`tutorial_include_files_waves`          Including files that can be re-used in more than
+                   00:20 :ref:`tutorial_include_files`                Including files that can be re-used in more than
                                                                       one workflow
-                   00:30 :ref:`tutorial_cartesian_product_waves`      Parameter study introduction using a cartesian
+                   00:30 :ref:`tutorial_cartesian_product`            Parameter study introduction using a cartesian
                                                                       product
-                   00:20 :ref:`tutorial_data_extraction_waves`        Abaqus data extraction
-                   00:30 :ref:`tutorial_post_processing_waves`        Example solution to parameter study results
+                   00:20 :ref:`tutorial_data_extraction`              Abaqus data extraction
+                   00:30 :ref:`tutorial_post_processing`              Example solution to parameter study results
                                                                       concatenation with the parameter study definition
-                   00:20 :ref:`tutorial_unit_testing_waves`           Unit testing
-                   00:10 :ref:`tutorial_regression_testing_waves`     Alias for partial simulation verification and
+                   00:20 :ref:`tutorial_unit_testing`                 Unit testing
+                   00:10 :ref:`tutorial_regression_testing`           Alias for partial simulation verification and
                                                                       regression testing
-                   00:10 :ref:`tutorial_archival_waves`               Archive simulation files for reproducibility and
+                   00:10 :ref:`tutorial_archival`                     Archive simulation files for reproducibility and
                                                                       reporting
 ======================== ============================================ ==================================================
 
@@ -76,17 +76,17 @@ Supplemental Lessons
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
                    00:10 :ref:`scons_multiactiontask`                 Execute multiple actions on the same target file
-                   00:20 :ref:`tutorial_argparse_types_waves`         Add input verification to workflow parameters
+                   00:20 :ref:`tutorial_argparse_types`               Add input verification to workflow parameters
                    00:20 :ref:`tutorial_cubit_abaqus`                 Geometry, partition, and mesh examples with Cubit
-                                                                      replicating :ref:`tutorial_simulation_waves`
+                                                                      replicating :ref:`tutorial_simulation`
                    00:20 :ref:`tutorial_cubit_sierra`                 Side-by-side Abaqus and Sierra workflows
                                                                       complementing :ref:`tutorial_cubit_abaqus`
-                   00:10 :ref:`tutorial_escape_sequences_waves`       Changing task actions without re-building the task
-                   00:30 :ref:`tutorial_latin_hypercube_waves`        Parameter study introduction using a latin
+                   00:10 :ref:`tutorial_escape_sequences`             Changing task actions without re-building the task
+                   00:30 :ref:`tutorial_latin_hypercube`              Parameter study introduction using a latin
                                                                       hypercube
-                   00:30 :ref:`tutorial_sobol_sequence_waves`         Parameter study introduction using a Sobol
+                   00:30 :ref:`tutorial_sobol_sequence`               Parameter study introduction using a Sobol
                                                                       sequence
-                   00:30 :ref:`tutorial_mesh_convergence_waves`       Mesh convergence parameter study that uses
+                   00:30 :ref:`tutorial_mesh_convergence`             Mesh convergence parameter study that uses
                                                                       common Geometry and Partition tasks.
 ======================== ============================================ ==================================================
 
@@ -102,10 +102,10 @@ Work-in-progress Lessons
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
-                   00:30 :ref:`tutorial_remote_execution_waves`       Run the simulation on a remote server via SSH
-                   00:30 :ref:`tutorial_sbatch_waves`                 Run the simulation with the SLURM workload manager
-                   00:30 :ref:`tutorial_extend_study_waves`           Automatically extending and re-executing a
+                   00:30 :ref:`tutorial_remote_execution`             Run the simulation on a remote server via SSH
+                   00:30 :ref:`tutorial_sbatch`                       Run the simulation with the SLURM workload manager
+                   00:30 :ref:`tutorial_extend_study`                 Automatically extending and re-executing a
                                                                       parameter study
-                   00:30 :ref:`tutorial_task_reuse_waves`             Re-use task definitions
-                   00:10 :ref:`tutorial_setuptools_scm_waves`         Dynamic version number from git tags
+                   00:30 :ref:`tutorial_task_reuse`                   Re-use task definitions
+                   00:10 :ref:`tutorial_setuptools_scm`               Dynamic version number from git tags
 ======================== ============================================ ==================================================

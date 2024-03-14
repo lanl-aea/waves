@@ -69,7 +69,7 @@ Note that the ``tutorial_cubit`` directory has three SConscript files: ``cubit``
 last are relevant to the current tutorial. The ``abaqus`` workflow is described in the complementary
 :ref:`tutorial_cubit_abaqus`.
 
-6. Review the ``cubit`` and ``sierra`` tutorials and compare them against the :ref:`tutorial_simulation_waves` files.
+6. Review the ``cubit`` and ``sierra`` tutorials and compare them against the :ref:`tutorial_simulation` files.
 
 The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.

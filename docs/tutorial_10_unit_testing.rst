@@ -1,4 +1,4 @@
-.. _tutorial_unit_testing_waves:
+.. _tutorial_unit_testing:
 
 #########################
 Tutorial 10: Unit Testing
@@ -92,7 +92,7 @@ reporting :cite:`pytest-junitxml`.
 SConstruct
 **********
 
-6. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing_waves`
+6. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing`
    is included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct

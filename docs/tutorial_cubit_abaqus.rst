@@ -4,7 +4,7 @@
 Tutorial: Cubit+Abaqus
 ######################
 
-This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but uses `Cubit`_
+This tutorial implements the same workflow introduced in :ref:`tutorial_simulation`, but uses `Cubit`_
 :cite:`cubit` for the geometry, partition, and meshing tasks. It is included as an example for how to use `Cubit`_ with
 a build system and include best practices, such as an API and CLI.
 
@@ -51,7 +51,7 @@ Directory Structure
    $ ls
    eabm_package/  abaqus  cubit  SConstruct  sierra
 
-.. _tutorials_tutorial_cubit_waves:
+.. _tutorials_tutorial_cubit:
 
 **********
 SConscript
@@ -61,7 +61,7 @@ Note that the ``tutorial_cubit`` directory has three SConscript files: ``cubit``
 are relevant to the current tutorial. The ``sierra`` workflow is described in the complementary
 :ref:`tutorial_cubit_sierra`.
 
-6. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation_waves` files.
+6. Review the ``cubit`` and ``abaqus`` tutorials and compare them against the :ref:`tutorial_simulation` files.
 
 The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
 duplicated below.

@@ -1,4 +1,4 @@
-.. _tutorial_sbatch_waves:
+.. _tutorial_sbatch:
 
 ##############################
 Tutorial: Simulation via SLURM
@@ -6,7 +6,7 @@ Tutorial: Simulation via SLURM
 
 .. include:: wip_warning.txt
 
-This tutorial implements the same workflow introduced in :ref:`tutorial_simulation_waves`, but executes the simulation
+This tutorial implements the same workflow introduced in :ref:`tutorial_simulation`, but executes the simulation
 with the SLURM workload manager.
 
 **********
@@ -60,13 +60,13 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-.. _tutorials_tutorial_sbatch_waves:
+.. _tutorials_tutorial_sbatch:
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_sbatch
@@ -84,7 +84,7 @@ we do not need to define the task twice in the ``SConscript`` file.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct

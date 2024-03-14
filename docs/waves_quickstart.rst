@@ -7,10 +7,10 @@ WAVES Quickstart
 This quickstart will create a minimal, two file project configuration matching the tutorial listed below.
 
 * :ref:`tutorialsconstruct`
-* :ref:`tutorial_geometry_waves`
-* :ref:`tutorial_partition_mesh_waves`
-* :ref:`tutorial_solverprep_waves`
-* :ref:`tutorial_simulation_waves`
+* :ref:`tutorial_geometry`
+* :ref:`tutorial_partition_mesh`
+* :ref:`tutorial_solverprep`
+* :ref:`tutorial_simulation`
 
 These tutorials and this quickstart describe the computational engineering workflow through simulation execution. This
 tutorial will use a different working directory than the rest of the core tutorials as both sets of tutorials contain files

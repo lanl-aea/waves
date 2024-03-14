@@ -1,4 +1,4 @@
-.. _tutorial_simulation_waves:
+.. _tutorial_simulation:
 
 #######################
 Tutorial 04: Simulation
@@ -59,7 +59,7 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-.. _tutorials_tutorial_simulation_waves:
+.. _tutorials_tutorial_simulation:
 
 **********
 SConscript
@@ -68,8 +68,8 @@ SConscript
 .. note::
 
     There is a large section of lines in the ``SConscript`` file that are not included before the next section of code
-    shown here, as they are identical to those from :ref:`tutorial_solverprep_waves`. The ``diff`` of the ``SConscript``
-    file at the end of the :ref:`tutorials_tutorial_simulation_waves` section will demonstrate this more clearly.
+    shown here, as they are identical to those from :ref:`tutorial_solverprep`. The ``diff`` of the ``SConscript``
+    file at the end of the :ref:`tutorials_tutorial_simulation` section will demonstrate this more clearly.
 
 .. _tutorial_simulation_waves_running_datacheck:
 
@@ -128,7 +128,7 @@ the file name, for example:
 
 In this tutorial, there are no files with ``.in`` extension; this is required when it comes to substituting parameters
 into files which is discussed in the next tutorial,
-:ref:`tutorial_parameter_substitution_waves`. For this tutorial, we only require that the file names be extracted from
+:ref:`tutorial_parameter_substitution`. For this tutorial, we only require that the file names be extracted from
 the ``abaqus_source_list``. This tutorial would behave identically if the ``solve_source_list`` was defined as
 
 .. code-block:: Python
@@ -136,7 +136,7 @@ the ``abaqus_source_list``. This tutorial would behave identically if the ``solv
     solve_source_list = [source_file.name for source_file in abaqus_source_list]
 
 Next, ``{journal_file}.inp`` needs to be appended to the list of simulation source files. Recall from
-:ref:`tutorial_partition_mesh_waves` that this file is one of the targets that is generated from
+:ref:`tutorial_partition_mesh` that this file is one of the targets that is generated from
 :meth:`waves.scons_extensions.abaqus_journal` builder in the code pertaining to ``# Mesh``.
 
 The first set of highlighted lines will define an optional task called a *datacheck*. You can read the `Abaqus
@@ -144,7 +144,7 @@ Standard/Explicit Execution`_ documentation :cite:`ABAQUS` for more details on r
 for running a datacheck is to verify the input file construction without running a full simulation. While Abaqus can
 continue with an analysis from the datacheck output, doing so modifies the datacheck output files, which has the affect
 of prompting `SCons`_ to always re-build the datacheck target. This task is excluded from the main workflow to avoid
-duplicate preprocessing of the input file. It will be used later in :ref:`tutorial_regression_testing_waves`.
+duplicate preprocessing of the input file. It will be used later in :ref:`tutorial_regression_testing`.
 
 First, the ``job_name`` is resolved from the name of the first source file listed in code pertaining to ``#
 SolverPrep``, in this case ``rectangle_compression``. That name is appended with the ``_DATACHECK`` string to
@@ -202,9 +202,9 @@ list by the builder. The ``source`` list once again utlizes the existing ``solve
     are required to build certain targets may not exist, which will also cause the build system to fail.
 
 In summary of the changes you just made to the ``tutorial_04_simulation`` file, a ``diff`` against the
-``SConscript`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the changes made in this
+``SConscript`` file from :ref:`tutorial_solverprep` is included below to help identify the changes made in this
 tutorial. Note the addition of a separate datacheck alias, which will be used in
-:ref:`tutorial_regression_testing_waves`.
+:ref:`tutorial_regression_testing`.
 
 .. admonition:: waves-tutorials/tutorial_04_simulation
 
@@ -223,7 +223,7 @@ SConstruct
      builders``
    * Add ``tutorial_04_simulation`` to the ``workflow_configurations`` list
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_solverprep_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_solverprep` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -326,10 +326,10 @@ The ``build/tutorial_04_simulation`` directory contains several different subset
 
 * ``rectangle_{geometry,partition,mesh}.*`` - output files generated from the code pertaining to ``# Geometry``,
   ``# Partition``, and ``# Mesh`` in the ``SConscript`` file. This code was first introduced in
-  :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves`, but it is important to note that each
+  :ref:`tutorial_geometry` and :ref:`tutorial_partition_mesh`, but it is important to note that each
   tutorial adds and executes a full workflow.
 * ``*.inp`` - files copied to the build directory as part of the code pertaining to ``# SolverPrep`` in the
-  ``SConscript`` file, which was introduced in :ref:`tutorial_solverprep_waves`.
+  ``SConscript`` file, which was introduced in :ref:`tutorial_solverprep`.
 * ``rectangle_compression.*`` - output files from :ref:`tutorial_simulation_waves_running_analysis` in this
   tutorial.
 

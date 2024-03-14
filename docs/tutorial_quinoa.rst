@@ -75,7 +75,7 @@ Cubit Journal Files
 
 7. Review the ``box.py`` Cubit journal file
 
-The Cubit journal file includes a similar CLI introduced in :ref:`tutorial_partition_mesh_waves` for the Abaqus journal
+The Cubit journal file includes a similar CLI introduced in :ref:`tutorial_partition_mesh` for the Abaqus journal
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
 files is the opportunity to use Python 3 with Cubit, where Abaqus journal files must use the Abaqus controlled
 installation of Python 2. Unlike the core tutorials, this journal file only parameterizes the geometry, so intermediate
@@ -106,7 +106,7 @@ Note that Quinoa requires a separate construction environment from the launching
 Quinoa compiler/linker and openmpi library conflict with the launching Conda environment. You may need to update the
 Quinoa activation shell command according to the instructions on your local system.
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_quinoa/SConstruct

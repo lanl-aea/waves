@@ -1,4 +1,4 @@
-.. _tutorial_escape_sequences_waves:
+.. _tutorial_escape_sequences:
 
 ##########################
 Tutorial: Escape Sequences
@@ -11,7 +11,7 @@ example, the contents of the ``abaqus_options`` string provided to the :meth:`wa
 re-build of that task.
 
 Sometimes you may want to exclude elements of the task action from the build signature. For instance, the Solve step
-introduced in :ref:`tutorial_simulation_waves` can run Abaqus with a different number of cpus, which shouldn't affect
+introduced in :ref:`tutorial_simulation` can run Abaqus with a different number of cpus, which shouldn't affect
 the simulation results. Adding a variable number of cpus to the ``abaqus_options`` would change the build signature each
 time the cpu count changed and unnecessarily re-run the simulation task. To avoid this, you can specify elements of the
 action to exclude from the build signature with the ``$( excluded string $)`` escape sequence syntax.
@@ -93,13 +93,13 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-.. _tutorials_tutorial_escape_sequences_waves:
+.. _tutorials_tutorial_escape_sequences:
 
 **********
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_04_simulation`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_escape_sequences
@@ -112,7 +112,7 @@ changes made in this tutorial.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_simulation` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct

@@ -1,4 +1,4 @@
-.. _tutorial_archival_waves:
+.. _tutorial_archival:
 
 ##########################
 Tutorial 12: Data Archival
@@ -79,7 +79,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing_waves` is included
+A ``diff`` against the ``tutorial_11_regression_testing`` file from :ref:`tutorial_regression_testing` is included
 below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_12_archival
@@ -94,7 +94,7 @@ Second, we build a list of all required SCons configuration files for the curren
 directory name will match the current ``SConscript`` file name. These SCons workflow configuration files will be
 archived with the output of the workflow for reproducibility of the workflow task definitions.
 
-For advanced workflows, e.g. :ref:`tutorial_task_reuse_waves`, that re-use ``SConscript`` files, it may
+For advanced workflows, e.g. :ref:`tutorial_task_reuse`, that re-use ``SConscript`` files, it may
 be necessary to recover the current ``SConscript`` file name with a `Python lambda expression`_ as seen in the ``SConstruct``
 modifications below. If the current workflow uses more than one ``SConscript`` file, the ``workflow_configuration`` list
 should be updated to include all configuration files for the archive task.
@@ -106,7 +106,7 @@ between workflow executions and as the project changes. We append the current wo
 projects that may contain many unique, independent workflows which can be archived separately. The archive task sources
 are compiled from all previous workflow targets and the workflow configuration file(s). In principle, it may be
 desirable to archive the workflow's source files, as well. However, if a version control system is used to build the
-version number as in :ref:`tutorial_setuptools_scm_waves`, the source files may also be recoverable from the version
+version number as in :ref:`tutorial_setuptools_scm`, the source files may also be recoverable from the version
 control state which is embedded in the version number.
 
 Finally, we create a dedicated archive alias to match the workflow alias. Here we separate the aliases because workflows
@@ -118,7 +118,7 @@ post-processing plots have been finalized.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_regression_testing` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -131,8 +131,8 @@ Note that we retrieve the project configuration ``SConstruct`` file name and loc
 :cite:`python`. We do this to recover the absolute path to the current configuration file and because some projects may
 choose to use a non-default filename for the project configuration file. In Python 3, you would normally use the
 ``__file__`` attribute; however, this attribute is not defined for `SCons`_ configuation files. Instead, we can recover
-the configuration file name and absolute path with the same method used in :ref:`tutorial_geometry_waves` and
-:ref:`tutorial_partition_mesh_waves` for the Abaqus Python 2 journal files. For consistency with the configuration file
+the configuration file name and absolute path with the same method used in :ref:`tutorial_geometry` and
+:ref:`tutorial_partition_mesh` for the Abaqus Python 2 journal files. For consistency with the configuration file
 path, we assume that the parent directory of the configuration file is the same as the project root directory.
 
 The environment is also modified to provide non-default configuration options to the `SCons`_ Tar builder. Here, we
@@ -157,7 +157,7 @@ Build Targets
 Output Files
 ************
 
-The output should look identical to :ref:`tutorial_regression_testing_waves` with the addition of a single ``*.tar.bz2``
+The output should look identical to :ref:`tutorial_regression_testing` with the addition of a single ``*.tar.bz2``
 file. You can inspect the contents of the archive as below.
 
 .. code-block:: bash
@@ -236,7 +236,7 @@ file on the left hand side. Since the archive target does not include the full w
 connection between the archive alias and the archive file itself. We could specify the archive target by relative path
 directly, but the alias saves some typing and serves as a consistent command when the project version number changes.
 This is especially helpful when using a dynamic version number built from a version control system as introduced in the
-supplemental :ref:`tutorial_setuptools_scm_waves`.
+supplemental :ref:`tutorial_setuptools_scm`.
 
 Now plot the workflow with only the first set, ``set0``.
 

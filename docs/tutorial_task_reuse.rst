@@ -1,4 +1,4 @@
-.. _tutorial_task_reuse_waves:
+.. _tutorial_task_reuse:
 
 ################################
 Tutorial: Task Definition Re-use
@@ -8,7 +8,7 @@ Tutorial: Task Definition Re-use
 
 This tutorial demonstrates one solution to re-using task definitions in multiple workflows. While the solution can be
 implemented with per-task granularity, the task definitions in this tutorial are split into blocks to suite the
-parameterization workflows of :ref:`tutorial_cartesian_product_waves` and :ref:`tutorial_mesh_convergence_waves`.
+parameterization workflows of :ref:`tutorial_cartesian_product` and :ref:`tutorial_mesh_convergence`.
 
 The presented solution comes with significant restrictions to directory organization and challenges to target node
 identification. First, due to the way `SCons`_ constructs variant (build) directory directed graphs, the re-usable
@@ -54,7 +54,7 @@ correctly when provided with the target file base name, but it may not associate
 This results in an incorrectly assembled directed graph and race conditions in the task execution. The target/source
 association may be made explicit with the `SCons FindFile`_ function. While this works, it is not as straightforward as
 simply specifying the file basename, as implemented in the core tutorials. This second restriction does not affect the
-current tutorial, but will affect workflows similar to the :ref:`tutorial_mesh_convergence_waves`.
+current tutorial, but will affect workflows similar to the :ref:`tutorial_mesh_convergence`.
 
 **********
 References
@@ -114,7 +114,7 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_12_archival`` file from :ref:`tutorial_archival_waves` is included below to help identify the
+A ``diff`` against the ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_task_reuse
@@ -143,7 +143,7 @@ changes made in this tutorial.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct

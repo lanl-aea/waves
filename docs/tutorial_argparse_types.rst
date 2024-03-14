@@ -1,10 +1,10 @@
-.. _tutorial_argparse_types_waves:
+.. _tutorial_argparse_types:
 
 ############################
 Tutorial: Input Verification
 ############################
 
-The Abaqus journal files from :ref:`tutorial_geometry_waves` and :ref:`tutorial_partition_mesh_waves` already perform
+The Abaqus journal files from :ref:`tutorial_geometry` and :ref:`tutorial_partition_mesh` already perform
 some input verification by specifying the expected variable types. This input verification can be extended by user
 specified type methods. This is useful when a journal file should limit the range of allowable float values, for
 instance. In the case of these tutorials, one might wish to limit the width, height, and global seed parameters to
@@ -17,8 +17,8 @@ References
 **********
 
 * `Argparse type`_ :cite:`python`
-* :ref:`tutorial_partition_mesh_waves`
-* :ref:`tutorial_parameter_substitution_waves`
+* :ref:`tutorial_partition_mesh`
+* :ref:`tutorial_parameter_substitution`
 
 ***********
 Environment
@@ -114,7 +114,7 @@ return the type cast argument if all checks pass.
       :language: Python
       :diff: abaqus_rectangle_mesh.py
 
-Here we import the eabm package files as introduced in :ref:`tutorial_partition_mesh_waves` for the meshing journal
+Here we import the eabm package files as introduced in :ref:`tutorial_partition_mesh` for the meshing journal
 file, but for all journal files to use the ``positive_float`` type check in the ``argparse`` interface.
 
 **********
@@ -131,7 +131,7 @@ SConstruct
 9. Add ``tutorial_argparse_types`` to the ``workflow_configurations`` list in the ``waves-tutorials/SConstruct``
    file.
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh_waves` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -174,7 +174,7 @@ Build Targets
    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
    scons: done building targets.
 
-The build process, targets, and output files should be identical to that of :ref:`tutorial_partition_mesh_waves`. You
+The build process, targets, and output files should be identical to that of :ref:`tutorial_partition_mesh`. You
 can explore changes in behavior by modifying the ``journal_options`` of both ``tutorial_02_partition_mesh`` and
 ``tutorial_argparse_types`` to include negative floats and re-running both workflows. For instance, by adding the
 following to the Geometry task definition.
@@ -183,14 +183,14 @@ following to the Geometry task definition.
 
    journal_options="--width '-1.0'"
 
-See :ref:`tutorial_parameter_substitution_waves` for more details about using the command line interface and
+See :ref:`tutorial_parameter_substitution` for more details about using the command line interface and
 ``journal_options`` task argument.
 
 ************
 Output Files
 ************
 
-The contents of the new workflow should be identical to that of :ref:`tutorial_partition_mesh_waves`.
+The contents of the new workflow should be identical to that of :ref:`tutorial_partition_mesh`.
 
 .. code-block:: bash
 
