@@ -8,10 +8,10 @@ Supplemental Lessons
    :maxdepth: 1
 
    scons_multiactiontask
-   tutorial_argparse_types_waves
+   tutorial_argparse_types
    tutorial_cubit_abaqus
    tutorial_cubit_sierra
-   tutorial_escape_sequences_waves
-   tutorial_07_latin_hypercube_waves
-   tutorial_07_sobol_sequence_waves
-   tutorial_mesh_convergence_waves
+   tutorial_escape_sequences
+   tutorial_07_latin_hypercube
+   tutorial_07_sobol_sequence
+   tutorial_mesh_convergence

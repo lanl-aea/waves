@@ -6,15 +6,15 @@ Core Lessons
    :maxdepth: 1
 
    tutorial_00_scons
-   tutorial_01_geometry_waves
-   tutorial_02_partition_mesh_waves
-   tutorial_03_solverprep_waves
-   tutorial_04_simulation_waves
-   tutorial_05_parameter_substitution_waves
-   tutorial_06_include_files_waves
-   tutorial_07_cartesian_product_waves
-   tutorial_08_data_extraction_waves
-   tutorial_09_post_processing_waves
-   tutorial_10_unit_testing_waves
-   tutorial_11_regression_testing_waves
-   tutorial_12_archival_waves
+   tutorial_01_geometry
+   tutorial_02_partition_mesh
+   tutorial_03_solverprep
+   tutorial_04_simulation
+   tutorial_05_parameter_substitution
+   tutorial_06_include_files
+   tutorial_07_cartesian_product
+   tutorial_08_data_extraction
+   tutorial_09_post_processing
+   tutorial_10_unit_testing
+   tutorial_11_regression_testing
+   tutorial_12_archival
