@@ -83,6 +83,18 @@ class TestCartesianProduct:
         assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
+        'single set unchanged':
+            ({'parameter_1': [1]},
+             {'parameter_1': [1]},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[1]], dtype=object)),
+        'single set and new set':
+            ({'parameter_1': [1]},
+             {'parameter_1': [2]},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[1], [2]], dtype=object)),
         'new set':
             ({'parameter_1': [1, 2], 'parameter_2': [3.0], 'parameter_3': ['a']},
              {'parameter_1': [1, 2], 'parameter_2': [3.0, 4.0], 'parameter_3': ['a']},
