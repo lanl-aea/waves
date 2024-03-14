@@ -35,6 +35,10 @@ class TestCustomStudy:
             {'parameter_names': ['a', 'b']},
             pytest.raises(KeyError)
         ),
+        "bad schema dimension": (
+            {'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([1, 2.0], dtype=object)},
+            pytest.raises(ValueError)
+        ),
         "bad schema shape": (
             {'parameter_names': ['a', 'b', 'c'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
             pytest.raises(ValueError)
@@ -79,6 +83,18 @@ class TestCustomStudy:
         assert numpy.all(parameter_set_names == expected_set_names)
 
     merge_test = {
+        'single set unchanged':
+            ({'parameter_names': ['ints'], 'parameter_samples': numpy.array([[1]], dtype=object)},
+             {'parameter_names': ['ints'], 'parameter_samples': numpy.array([[1]], dtype=object)},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[1]], dtype=object)),
+        'single set and new set':
+            ({'parameter_names': ['ints'], 'parameter_samples': numpy.array([[1]], dtype=object)},
+             {'parameter_names': ['ints'], 'parameter_samples': numpy.array([[2]], dtype=object)},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[1], [2]], dtype=object)),
         'new set':
             ({'parameter_names': ['ints', 'floats', 'strings'],
               'parameter_samples': numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)},
