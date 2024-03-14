@@ -405,9 +405,9 @@ class _ParameterGenerator(ABC):
         :rtype: xarray.DataArray
         """
         return xarray.DataArray(list(self._parameter_set_names.values()),
-               coords=[list(self._parameter_set_names.keys())],
-               dims=[_hash_coordinate_key],
-               name=_set_coordinate_key)
+                                coords=[list(self._parameter_set_names.keys())],
+                                dims=[_hash_coordinate_key],
+                                name=_set_coordinate_key)
 
     def _merge_parameter_set_names_array(self) -> None:
         """Merge the parameter set names array into the parameter study dataset as a non-index coordinate"""

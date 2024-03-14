@@ -11,7 +11,7 @@ from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, Lat
 
 
 class TestParameterGenerator:
-    """Class for testing ABC ParmeterGenerator"""
+    """Class for testing ABC ParameterGenerator"""
 
     # TODO: Remove when the public generate method is removed
     @pytest.mark.unittest
@@ -87,6 +87,30 @@ class TestParameterGenerator:
         else:
             TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template,
                                                      set_name_template=set_template, **kwargs)
+        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+
+    @pytest.mark.unittest
+    @pytest.mark.parametrize('schema, file_template, set_template, expected',
+                                 templates.values(),
+                             ids=templates.keys())
+    def test_update_parameter_set_names(self, schema, file_template, set_template, expected):
+        """Check the generated and updated parameter set names against template arguments
+
+        :param str schema: placeholder string standing in for the schema read from an input file
+        :param str file_template: user supplied string to be used as a template for output file names
+        :param str set_template: user supplied string to be used as a template for parameter names
+        :param list expected: list of expected parameter name strings
+        """
+        kwargs = {"sets": 1}
+        if not set_template:
+            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template, **kwargs)
+        else:
+            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template,
+                                                     set_name_template=set_template, **kwargs)
+        assert list(TemplateGenerator._parameter_set_names.values()) == expected
+
+        # Test that the update function runs with only a single set. Check that the names don't change.
+        TemplateGenerator._update_parameter_set_names()
         assert list(TemplateGenerator._parameter_set_names.values()) == expected
 
     init_write_stdout = {# schema, template, overwrite, dryrun,         is_file,  sets, stdout_calls
