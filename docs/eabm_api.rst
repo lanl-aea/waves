@@ -94,6 +94,15 @@ rectangle_compression_nominal.py
     :members:
     :show-inheritance:
 
+.. _python_rectangle_compression_cartesian_product_api:
+
+rectangle_compression_cartesian_product.py
+==========================================
+
+.. automodule:: eabm_package.python.rectangle_compression_cartesian_product
+    :noindex:
+    :members:
+    :show-inheritance:
 
 .. _eabm_post_processing_api:
 

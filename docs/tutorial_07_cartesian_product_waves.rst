@@ -91,11 +91,12 @@ Product`_ sampling methodology.
       :language: Python
 
 The ``rectangle_compression_cartesian_product.py`` file you just created is very similar to the
-``rectangle_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference
-between the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note
-that the ``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters
-only have a single value. The :meth:`waves.parameter_generators.CartesianProduct` API explains this requirement for the
-"schema values" to be an iterable.
+``rectangle_compression_nominal.py`` file from :ref:`tutorial_include_files_waves`. The significant difference between
+the two files is the new definition of multiple values for the ``width`` and ``height`` parameters. Also note that the
+``global_seed`` and ``displacement`` parameters are both defined with a ``list``, even though the parameters only have a
+single value. The :meth:`waves.parameter_generators.CartesianProduct` API explains this requirement for the "schema
+values" to be an iterable. You can view the parameter schema documentation in the :ref:`waves_eabm_api` for
+:ref:`python_rectangle_compression_cartesian_product_api`.
 
 In the ``parameter_schema``, we have defined two parameters with two samples each and two parameters with one sample
 each. This will result in four (``2x2x1x1``) total simulations.
