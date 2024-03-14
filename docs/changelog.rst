@@ -40,6 +40,8 @@ Documentation
 - Add SCons workflow debugging tips to the modsim template README and HTML documentation (:issue:`525`, :merge:`756`).
   By `Kyle Brindley`_.
 - Moved unit test tutorial to core lessons as the new tutorial 10 (:issue:`602`, :merge:`751`). By `Sergio Cordova`_.
+- Use parameter set functions for better simulation variable documentation in the tutorials and modsim template
+  (:issue:`474`, :merge:`764`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
