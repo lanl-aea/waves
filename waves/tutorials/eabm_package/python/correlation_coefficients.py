@@ -95,7 +95,7 @@ def main(input_files, output_file, group_path, selection_dict, parameter_study_f
     # Sensitivity analysis
     stress = combined_data.sel(selection_dict)['S'].to_numpy()
     inputs = combined_data.sel(selection_dict)[['width', 'height']].to_array().transpose().to_numpy()
-    sensitivity = SALib.analyze.delta.analyze(parameter_schema["problem"], inputs, stress)
+    sensitivity = SALib.analyze.delta.analyze(parameter_schema()["problem"], inputs, stress)
     sensitivity_yaml = {}
     for key, value in sensitivity.items():
         if isinstance(value, numpy.ndarray):
