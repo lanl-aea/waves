@@ -1,3 +1,4 @@
+"""Rectangle compression WAVES LatinHypercube parameter schema"""
 parameter_schema = {
     'num_simulations': 4,
     'width': {

@@ -1,3 +1,4 @@
+"""Rectangle compression correlation coefficients WAVES SALibSampler Sobol parameter schema"""
 parameter_schema = {
     'N': 5,
     'problem': {

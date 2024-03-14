@@ -1,3 +1,4 @@
+"""Rectangle compression WAVES CartesianProduct parameter schema"""
 parameter_schema = {
     'width': [1.0, 1.1],
     'height': [1.0, 1.1],

@@ -1,3 +1,4 @@
+"""Rectangle compression WAVES SALibSampler Sobol parameter schema"""
 parameter_schema = {
     'num_simulations': 4,
     'width': {
