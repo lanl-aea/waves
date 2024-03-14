@@ -18,6 +18,8 @@ Bug fixes
 =========
 - Fix issue in odb_extract to handle case where elemental and nodal data is present in the same field output
   (:issue:`601`, :merge:`742`). By `Prabhu Khalsa`_.
+- Allowing merging of previous parameter studies with a single parameter set (:issue:`565`, :merge:`763`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============
