@@ -28,6 +28,14 @@ rectangle_mesh.py
     :members:
     :show-inheritance:
 
+rectangle_compression.py
+========================
+
+.. automodule:: eabm_package.rectangle_compression
+    :noindex:
+    :members:
+    :show-inheritance:
+
 export_abaqus_image.py
 ======================
 
