@@ -19,7 +19,6 @@ rectangle_geometry.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus rectangle geometry creation script
 
 .. _abaqus_rectangle_partition_api:
 
@@ -30,7 +29,6 @@ rectangle_partition.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus rectangle partition script
 
 .. _abaqus_rectangle_mesh_api:
 
@@ -41,7 +39,6 @@ rectangle_mesh.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Abaqus rectangle mesh script
 
 .. _sphinx_abaqus_journal_utilities_api:
 
@@ -52,7 +49,6 @@ abaqus_journal_utilities.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: Abaqus utilities to be re-used in multiple places
 
 .. _cubit_journal_api:
 
@@ -67,7 +63,6 @@ rectangle_geometry.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Cubit rectangle geometry creation script
 
 rectangle_partition.py
 ======================
@@ -76,7 +71,6 @@ rectangle_partition.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Cubit rectangle partition script
 
 rectangle_mesh.py
 =================
@@ -85,11 +79,21 @@ rectangle_mesh.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: The Cubit rectangle mesh script
 
 ******
 python
 ******
+
+.. _python_rectangle_compression_nominal_api:
+
+rectangle_compression_nominal.py
+================================
+
+.. automodule:: eabm_package.python.rectangle_compression_nominal
+    :noindex:
+    :members:
+    :show-inheritance:
+
 
 .. _eabm_post_processing_api:
 
@@ -100,7 +104,6 @@ post_processing.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: Post-process with data catenation and plotting
 
 argparse_types.py
 =================
@@ -109,4 +112,3 @@ argparse_types.py
     :noindex:
     :members:
     :show-inheritance:
-    :synopsis: Python 2/3 compatible argparse types for input verification

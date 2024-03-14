@@ -83,8 +83,9 @@ re-use between simulations.
    .. literalinclude:: python_rectangle_compression_nominal.py
       :language: Python
 
-The file you just created is an exact copy of the code snippet in your ``tutorial_05_parameter_substitution``
-file that defines the parameter key-value pairs.
+The file you just created is similar to the code snippet in your ``tutorial_05_parameter_substitution`` file that
+defines the parameter key-value pairs. Here we have added function to make documentation of the default values easier,
+as shown in the :ref:`waves_eabm_api` for :ref:`python_rectangle_compression_nominal_api`.
 
 7. Create Python module initialization files to create a project specific local Python package.
 
