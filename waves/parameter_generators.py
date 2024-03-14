@@ -396,7 +396,7 @@ class _ParameterGenerator(ABC):
         null_set_names = self.parameter_study.coords[_set_coordinate_key].isnull()
         if any(null_set_names):
             self.parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
-        self._parameter_set_names = self.parameter_study[_set_coordinate_key].squeeze().to_series().to_dict()
+        self._parameter_set_names = self.parameter_study[_set_coordinate_key].to_series().to_dict()
 
     def _create_parameter_set_names_array(self) -> None:
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
