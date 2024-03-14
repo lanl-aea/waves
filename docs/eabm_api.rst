@@ -43,7 +43,7 @@ rectangle_mesh.py
 .. _sphinx_abaqus_utilities_api:
 
 abaqus_utilities.py
-===========================
+===================
 
 .. automodule:: eabm_package.abaqus.abaqus_utilities
     :noindex:
