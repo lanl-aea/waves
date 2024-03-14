@@ -855,7 +855,8 @@ class CustomStudy(_ParameterGenerator):
         else:
             self.parameter_schema['parameter_samples'] = numpy.array(self.parameter_schema['parameter_samples'],
                                                                      dtype=object)
-        if len(self._parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
+        if self.parameter_schema['parameter_samples'].ndim != 2 or \
+           len(self._parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
             raise ValueError("The parameter samples must be an array of shape MxN, "
                              "where N is the number of parameters.")
         return
