@@ -1,7 +1,7 @@
 """Parameter sets and schemas for the rectangle compression simulation"""
 
 
-def schema(width=1.0, height=1.0, global_seed=1.0, displacement=-0.01):
+def parameter_schema(width=1.0, height=1.0, global_seed=1.0, displacement=-0.01):
     """Return nominal simulation variables dictionary
 
     :param float width: The rectangle width

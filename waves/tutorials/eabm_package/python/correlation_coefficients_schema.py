@@ -1,9 +1,9 @@
 """Parameter sets and schemas for the rectangle compression simulation"""
 
 
-def schema(N=5,
-           width_distribution="norm", width_bounds=[1., 0.1],
-           height_distribution="norm", height_bounds[1., 0.1]):
+def parameter_schema(N=5,
+                     width_distribution="norm", width_bounds=[1., 0.1],
+                     height_distribution="norm", height_bounds[1., 0.1]):
     """Return WAVES SALibSampler Sobol schema
 
     :param int N: Number of samples to generate

@@ -1,9 +1,9 @@
 """Parameter sets and schemas for the rectangle compression simulation"""
 
 
-def schema(num_simulations=4,
-           width={'distribution': 'norm', 'loc': 1, 'scale': .1}
-           height={'distribution': 'norm', 'loc': 1, 'scale': .1}):
+def parameter_schema(num_simulations=4,
+                     width={'distribution': 'norm', 'loc': 1, 'scale': .1}
+                     height={'distribution': 'norm', 'loc': 1, 'scale': .1}):
     """Return WAVES Scipy LatinHypercube parameter schema
 
     :param int num_simulations: Number of samples to generate
