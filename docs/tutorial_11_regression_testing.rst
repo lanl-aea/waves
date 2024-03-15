@@ -96,6 +96,10 @@ CSV file
    .. literalinclude:: python_rectangle_compression_cartesian_product.csv
       :lineno-match:
 
+This file will be used with the :ref:`post_processing_cli` file introduced in :ref:`tutorial_post_processing`. The CLI
+option ``--csv-regression-file`` allows us to compare the expected simulation output, created above as
+``rectangle_compression_cartesian_product`` with the output of the current simulation workflow.
+
 **********
 SConscript
 **********
@@ -109,11 +113,16 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 
-The datacheck targets now have a decidated alias to allow running a partial workflow. This is useful when a full
-simulation may take a long time, but the simulation preparation is worth testing on a regular basis. We've also added
-the regression alias introduced briefly in :ref:`tutorial_unit_testing`. Previously, this alias was a duplicate of the
-``unit_testing`` workflow alias. Now this alias can be used as a collector alias for running a regression suite with a
-single command, while preserving the ability to run the unit tests as a standalone workflow.
+There are two changes made in this tutorial. The first is to compare the expected simulation results found in the CSV
+file created above. The source list is updated to include the expected results as the CSV file create above and the
+:ref:`post_processing_cli` CLI option ``--csv-regression-file`` is given the CSV file for comparison against the current
+simulation output.
+
+The second change adds a dedicated alias for the datacheck targets to allow partial workflow execution. This is useful
+when a full simulation may take a long time, but the simulation preparation is worth testing on a regular basis. We've
+also added the regression alias introduced briefly in :ref:`tutorial_unit_testing`. Previously, this alias was a
+duplicate of the ``unit_testing`` workflow alias. Now this alias can be used as a collector alias for running a
+regression suite with a single command, while preserving the ability to run the unit tests as a standalone workflow.
 
 To get approximate the time savings of the new project-wide ``datacheck`` alias for a larger modsim project, go back
 through the previous tutorials and add each simulation specific datacheck task to the new alias.
