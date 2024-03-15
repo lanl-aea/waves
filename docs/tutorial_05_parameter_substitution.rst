@@ -159,7 +159,7 @@ In the code you just added, a ``simulation_variables`` dictionary is defined.  E
 in the previous tutorials. The ``width`` and ``height`` parameters are used in the ``rectangle_geometry.py`` and
 ``rectangle_partition.py`` scripts, and ``global_seed`` is used in the ``rectangle_mesh.py`` script. Recall
 that each of these scripts is called using a command line interface that has default parameters. See the
-:ref:`waves_eabm_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry`, the argument
+:ref:`waves_tutorial_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry`, the argument
 parser for each of these scripts will supply a default value for each command line argument that is not specified
 (assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
 passed to the :meth:`waves.scons_extensions.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that

@@ -209,7 +209,7 @@ specially formatted comment blocks that help automate documentation builds. In t
 the `Sphinx automodule`_ directive can interpret the comments as ReStructured Text. Docstrings discuss the function
 behavior and its interface. See the `PEP-257`_ conventions for docstring formatting along with `PEP-287`_ for syntax
 specific to reStructured Text. Using the `Sphinx automodule`_ directive, the docstring can be used to autobuild
-documentation for your functions. An example of this is in the :ref:`waves_eabm_api` for
+documentation for your functions. An example of this is in the :ref:`waves_tutorial_api` for
 :ref:`abaqus_rectangle_geometry_api`.
 
 .. _tutorial_geometry_waves_abaqus_python_code:
@@ -247,7 +247,7 @@ This portion of ``rectangle_geometry.py`` defines the argument parsing function,
 next step in turning our simple Python script into a small software utility. Command line interfaces allow for scripts
 to be executed with optional command line arguments. This allows us to change the values of input arguments to the
 ``main()`` function without any source code modification.  ``argparse`` also helps automate command line interface (CLI)
-documentation. An example of this is the :ref:`waves_eabm_cli` for :ref:`abaqus_rectangle_geometry_cli`.
+documentation. An example of this is the :ref:`waves_tutorial_cli` for :ref:`abaqus_rectangle_geometry_cli`.
 See the `Argparse tutorial`_ for an introduction to the ``argparse`` module.
 
 The first highlighted portion of the ``get_parser()`` function defines variables based on

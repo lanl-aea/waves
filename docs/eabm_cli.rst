@@ -1,8 +1,8 @@
-.. _waves_eabm_cli:
+.. _waves_tutorial_cli:
 
-##############
-WAVES-EABM CLI
-##############
+##################
+WAVES-TUTORIAL CLI
+##################
 
 .. _abaqus_journal_cli:
 

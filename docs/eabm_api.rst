@@ -1,8 +1,8 @@
-.. _waves_eabm_api:
+.. _waves_tutorial_api:
 
-##############
-WAVES-EABM API
-##############
+##################
+WAVES-TUTORIAL API
+##################
 
 .. _abaqus_journal_api:
 
