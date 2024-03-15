@@ -395,13 +395,11 @@ the ``SConstruct`` file as described in :ref:`tutorialsconstruct`.
 Output Files
 ************
 
-Explore the contents of the ``build`` directory using the ``tree`` command against the
-``build`` directory, as shown below. Note that the directory structure of the build
-directory *exactly* matches the directory structure of the location where the
-project-level ``SConstruct`` and ``SConscript`` files exist. This behavior will allow us
-to define multiple simulations in our :term:`modsim repository` (EABM) with build result
-separation if more than one simulation is built at the same time.
-:ref:`tutorial_partition_mesh` will demonstrate the importance of this behavior more clearly.
+Explore the contents of the ``build`` directory using the ``tree`` command against the ``build`` directory, as shown
+below. Note that the directory structure of the build directory *exactly* matches the directory structure of the
+location where the project-level ``SConstruct`` and ``SConscript`` files exist. This behavior will allow us to define
+multiple simulations in our :term:`modsim repository` with build result separation if more than one simulation is built
+at the same time. :ref:`tutorial_partition_mesh` will demonstrate the importance of this behavior more clearly.
 
 .. code-block:: bash
 
