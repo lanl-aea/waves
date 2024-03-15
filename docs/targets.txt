@@ -126,7 +126,7 @@
 .. _`WAVES quickstart source files`: https://github.com/lanl/waves/tree/main/waves/tutorials/waves_quickstart
 .. _`SCons quickstart source files`: https://github.com/lanl/waves/tree/main/waves/tutorials/scons_quickstart
 .. _`WAVES tutorials`: https://github.com/lanl/waves/tree/main/waves/tutorials
-.. _`WAVES-EABM environment file`: https://github.com/lanl/waves/blob/main/waves/modsim_template/environment.yml
+.. _`MODSIM-TEMPLATE environment file`: https://github.com/lanl/waves/blob/main/waves/modsim_template/environment.yml
 .. _`upstream repository`: https://re-git.lanl.gov/aea/python-projects/waves
 .. _`CITATION`: https://github.com/lanl/waves/blob/main/CITATION.bib
 

@@ -35,11 +35,11 @@ shared environment updated automatically on changes to the environment file.
 
 In the `WAVES`_ project, a minimal `Conda`_ environment file is maintained under version control and used for
 :ref:`testing`, shared compute environment management, and packaging with a continuous integration server for automatic
-testing and deployment on every change to the project source code. A similar `WAVES-EABM environment file`_ is included
-in the tutorials as a starting point for :term:`modsim repository` environment management. The `Anaconda documentation`_
-includes good tutorials and references for `Conda environment management`_. `Conda`_ was chosen as the package manager
-and virtual environment tool due to the popularity of Python as a scripting language and the Python-centric nature of
-the scripting APIs for many engineering analysis software tools.
+testing and deployment on every change to the project source code. A similar `MODSIM-TEMPLATE environment file`_ is
+included in the tutorials as a starting point for :term:`modsim repository` environment management. The `Anaconda
+documentation`_ includes good tutorials and references for `Conda environment management`_. `Conda`_ was chosen as the
+package manager and virtual environment tool due to the popularity of Python as a scripting language and the
+Python-centric nature of the scripting APIs for many engineering analysis software tools.
 
 While `Conda`_ is known primarily for Python package management, it is a general package manager and can package,
 deploy, and manage packages of many different programming languages and mixed language packages. This makes it an

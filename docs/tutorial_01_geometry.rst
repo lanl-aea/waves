@@ -250,12 +250,11 @@ to be executed with optional command line arguments. This allows us to change th
 documentation. An example of this is the :ref:`waves_tutorial_cli` for :ref:`abaqus_rectangle_geometry_cli`.
 See the `Argparse tutorial`_ for an introduction to the ``argparse`` module.
 
-The first highlighted portion of the ``get_parser()`` function defines variables based on
-the name of the script. While this method of determining the file name is non-standard
-for Python 3, the Abaqus Python environment necessitates this syntax. This code will
-become common boilerplate code included in every Abaqus journal file created in the
-WAVES-EABM tutorials. It is valuable to the behavior of these example journal files, but
-may not be required for all journal files depending on their designed behavior.
+The first highlighted portion of the ``get_parser()`` function defines variables based on the name of the script. While
+this method of determining the file name is non-standard for Python 3, the Abaqus Python environment necessitates this
+syntax. This code will become common boilerplate code included in every Abaqus journal file created in the tutorials. It
+is valuable to the behavior of these example journal files, but may not be required for all journal files depending on
+their designed behavior.
 
 The code that follows uses the name of the script to define some variables. This code
 assumes that the ``part_name`` variable will be equal to the name of the script and will
@@ -318,6 +317,7 @@ the journal file interface.
 
 Retrieving Exit Codes
 =====================
+
 The ``main()`` function is called from within the ``sys.exit()`` method. This provides
 the operating system with a non-zero exit code if the script throws an error. By
 convention, non-zero exit codes indicate an error in the executing program. See the `Bash
@@ -327,12 +327,11 @@ downstream sequence of target actions which can no longer succeed.
 
 Entire Abaqus Journal File
 ==========================
-Shown below is ``rectangle_geometry.py`` in its entirety. The highlighted lines show
-the non-boilerplate code that will change between journal files in this WAVES-EABM
-tutorial project. As discussed in preceding sections, some portions of the boilerplate
-code are required for :term:`EABM` best practice when using a build system such as SCons_ and
-other sections are boilerplate code that matches naming conventions used by the tutorials,
-but that may change in production EABMs.
+
+Shown below is ``rectangle_geometry.py`` in its entirety. The highlighted lines show the non-boilerplate code that will
+change between journal files in the tutorials. As discussed in preceding sections, some portions of the boilerplate code
+are required for :term:`EABM` best practice when using a build system such as SCons_ and other sections are boilerplate
+code that matches naming conventions used by the tutorials, but that may change in production EABMs.
 
 .. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
 

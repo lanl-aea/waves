@@ -50,5 +50,5 @@ sync and reduces long term maintenance overhead.
 
 The practical examples in the :ref:`user_manual` use `reStructuredText`_ compiled with `Sphinx`_ :cite:`sphinx`, which
 integrates markup documentation with automated generation of API and CLI documentation from Python docstrings. An
-example of modsim documentation is included as part of the `WAVES-EABM`_ and is webhosted in the `WAVES-EABM
+example of modsim documentation is included as part of the `MODSIM-TEMPLATE`_ and is webhosted in the `MODSIM-TEMPLATE
 documentation`_.

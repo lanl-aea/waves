@@ -95,10 +95,10 @@ knowledge.
 
 This project contains several, separate `SCons`_ project configurations, where the ``SConstruct`` file name indicates an
 `SCons`_ project by convention. The WAVES package and documentation are defined in the ``waves/SConstruct`` file. The
-WAVES-EABM modsim template and regression tests are defined in a separate ``waves/quickstart/Sconstruct`` file. The
-WAVES tutorials each have a tutorial specific configuration file ``waves/tutorials/*SConstruct``. The following build
-commands apply to each, but must be run from their respective project configuration parent directories, ``waves``,
-``waves/quickstart`` and ``waves/tutorials``. The available targets and aliases differ accordingly.
+modsim template and regression tests are defined in a separate ``waves/quickstart/Sconstruct`` file. The WAVES tutorials
+each have a tutorial specific configuration file ``waves/tutorials/*SConstruct``. The following build commands apply to
+each, but must be run from their respective project configuration parent directories, ``waves``, ``waves/quickstart``
+and ``waves/tutorials``. The available targets and aliases differ accordingly.
 
 When executing the tutorials or quickstart build commands directly in the repository, the WAVES project root repository
 must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environments, the preferred method is to run
@@ -195,7 +195,7 @@ Documentation
    :start-after: docs-start-do-not-remove
    :end-before: docs-end-do-not-remove
 
-- Build the `WAVES-EABM`_ documentation. The WAVES package must be on ``PYTHONPATH``. For developers, the least
+- Build the `MODSIM-TEMPLATE`_ documentation. The WAVES package must be on ``PYTHONPATH``. For developers, the least
   disruptive solution is a per-command modification of ``PYTHONPATH``.
 
   .. code-block::

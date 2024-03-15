@@ -9,8 +9,8 @@
 .. _WAVES: https://lanl.github.io/waves/index.html
 .. _WAVES repository: https://github.com/lanl/waves
 .. _WAVES releases: https://github.com/lanl/waves/releases/
-.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/waves/modsim_template
-.. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
+.. _MODSIM-TEMPLATE: https://github.com/lanl/waves/tree/main/waves/modsim_template
+.. _MODSIM-TEMPLATE documentation: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
@@ -56,7 +56,7 @@ use `SCons`_ as the automated build system and translate software build system c
 simulation and analysis. The `SCons documentation`_ should be consulted as a reference for additional build system
 concepts, command line options, and project configuration.
 
-This project includes a template `WAVES-EABM`_ which is used for the tutorials and for integration and regression
+This project includes a template `MODSIM-TEMPLATE`_ which is used for the tutorials and for integration and regression
 testing of the `WAVES`_ extensions to SCons. The template modsim project can be duplicated from the command line as
 ``waves fetch modsim_template`` after installation.
 
@@ -87,8 +87,8 @@ installation from the command line as ``waves docs``. The documentation is also 
 * GitHub: https://lanl.github.io/waves/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/
 
-The `WAVES-EABM documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can look
-like.
+The `MODSIM-TEMPLATE documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can
+look like.
 
 * GitHub (pending): https://lanl.github.io/waves/waves-eabm/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
