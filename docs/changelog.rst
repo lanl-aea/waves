@@ -46,6 +46,7 @@ Documentation
   (:issue:`591`, :merge:`765`). By `Kyle Brindley`_.
 - Use the more generic 'modsim' term instead of the group specific 'EABM' (:issue:`615`, :merge:`766`). By `Kyle
   Brindley`_.
+- Flesh out regression testing tutorial discussion (:issue:`464`, :merge:`767`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
