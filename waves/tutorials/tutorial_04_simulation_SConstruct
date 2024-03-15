@@ -56,7 +56,7 @@ env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq20
 project_name = 'WAVES-TUTORIAL'
 version = '0.1.0'
 project_dir = pathlib.Path(Dir(".").abspath)
-abaqus_source_dir = "eabm_package/abaqus"
+abaqus_source_dir = "modsim_package/abaqus"
 project_variables = {
     'project_name': project_name,
     'project_dir': str(project_dir),

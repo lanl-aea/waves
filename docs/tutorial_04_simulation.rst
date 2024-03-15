@@ -35,12 +35,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py' 'tutorials/eabm_package/abaqus/*.inp'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*.py' 'tutorials/modsim_package/abaqus/*.inp'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
+        Destination directory: 'modsim_package/abaqus'
         $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh'
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -251,23 +251,23 @@ Build Targets
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2023 -information
    environment > rectangle_geometry.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2023 -information
    environment > rectangle_partition.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2023 -information
    environment > rectangle_mesh.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
    Copy("build/tutorial_04_simulation/rectangle_compression.inp",
-   "eabm_package/abaqus/rectangle_compression.inp")
-   Copy("build/tutorial_04_simulation/assembly.inp", "eabm_package/abaqus/assembly.inp")
-   Copy("build/tutorial_04_simulation/boundary.inp", "eabm_package/abaqus/boundary.inp")
-   Copy("build/tutorial_04_simulation/field_output.inp", "eabm_package/abaqus/field_output.inp")
-   Copy("build/tutorial_04_simulation/materials.inp", "eabm_package/abaqus/materials.inp")
-   Copy("build/tutorial_04_simulation/parts.inp", "eabm_package/abaqus/parts.inp")
-   Copy("build/tutorial_04_simulation/history_output.inp", "eabm_package/abaqus/history_output.inp")
+   "modsim_package/abaqus/rectangle_compression.inp")
+   Copy("build/tutorial_04_simulation/assembly.inp", "modsim_package/abaqus/assembly.inp")
+   Copy("build/tutorial_04_simulation/boundary.inp", "modsim_package/abaqus/boundary.inp")
+   Copy("build/tutorial_04_simulation/field_output.inp", "modsim_package/abaqus/field_output.inp")
+   Copy("build/tutorial_04_simulation/materials.inp", "modsim_package/abaqus/materials.inp")
+   Copy("build/tutorial_04_simulation/parts.inp", "modsim_package/abaqus/parts.inp")
+   Copy("build/tutorial_04_simulation/history_output.inp", "modsim_package/abaqus/history_output.inp")
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2023 -information
    environment > rectangle_compression.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_04_simulation && /apps/abaqus/Commands/abq2023 -job

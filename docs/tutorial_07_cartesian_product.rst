@@ -37,15 +37,15 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite 'tutorials/eabm_package/abaqus/*' --destination eabm_package/abaqus
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite 'tutorials/modsim_package/abaqus/*' --destination modsim_package/abaqus
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
-        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py'
+        Destination directory: 'modsim_package/abaqus'
+        $ waves fetch --overwrite --destination modsim_package/python 'tutorials/modsim_package/python/__init__.py' 'tutorials/modsim_package/python/rectangle_compression_nominal.py'
         WAVES fetch
-        Destination directory: 'eabm_package/python'
+        Destination directory: 'modsim_package/python'
         $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep' 'tutorials/tutorial_04_simulation' 'tutorials/tutorial_05_parameter_substitution'
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -83,9 +83,9 @@ Product`_ sampling methodology.
 
    For more information, see this `Cartesian Product`_ Wiki page.
 
-5. Create a new file ``eabm_package/python/rectangle_compression_cartesian_product.py`` from the content below.
+5. Create a new file ``modsim_package/python/rectangle_compression_cartesian_product.py`` from the content below.
 
-.. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_cartesian_product.py
+.. admonition:: waves-tutorials/modsim_package/python/rectangle_compression_cartesian_product.py
 
    .. literalinclude:: python_rectangle_compression_cartesian_product.py
       :language: Python

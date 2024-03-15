@@ -6,7 +6,7 @@ import pandas
 import xarray
 import waves
 
-from eabm_package import utilities
+from modsim_package import utilities
 
 
 def test_combine_data():

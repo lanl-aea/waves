@@ -76,12 +76,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py' 'tutorials/eabm_package/abaqus/*.inp'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*.py' 'tutorials/modsim_package/abaqus/*.inp'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
+        Destination directory: 'modsim_package/abaqus'
         $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep'
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -104,7 +104,7 @@ Directory Structure
 Solver Input Files
 ******************
 
-5. Copy the ``eabm_package/abaqus/rectangle_compression.inp`` file and all of its contents to a new file in the
+5. Copy the ``modsim_package/abaqus/rectangle_compression.inp`` file and all of its contents to a new file in the
    same directory named ``rectangle_compression.inp.in``. **Note:** the only change in the file name is the
    addition of the ``.in`` suffix.
 
@@ -112,7 +112,7 @@ Solver Input Files
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ cp eabm_package/abaqus/rectangle_compression.inp eabm_package/abaqus/rectangle_compression.inp.in
+   $ cp modsim_package/abaqus/rectangle_compression.inp modsim_package/abaqus/rectangle_compression.inp.in
 
 In this tutorial, we will be modifying several files from :ref:`tutorial_simulation`, the first of which is
 ``rectangle_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
@@ -124,7 +124,7 @@ more detail later in this tutorial.
 
 6. Use the ``diff`` below to modify your ``rectangle_compression.inp.in`` file.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_compression.inp.in
+.. admonition:: waves-tutorials/modsim_package/abaqus/rectangle_compression.inp.in
 
    .. literalinclude:: abaqus_rectangle_compression.inp.in
       :language: text
@@ -296,27 +296,27 @@ Build Targets
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_geometry.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 >
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 >
     rectangle_geometry.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_partition.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 >
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 >
     rectangle_partition.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_mesh.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 >
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 >
     rectangle_mesh.stdout 2>&1
     Copy("build/tutorial_05_parameter_substitution/rectangle_compression.inp.in",
-    "eabm_package/abaqus/rectangle_compression.inp.in")
+    "modsim_package/abaqus/rectangle_compression.inp.in")
     Creating 'build/tutorial_05_parameter_substitution/rectangle_compression.inp'
-    Copy("build/tutorial_05_parameter_substitution/assembly.inp", "eabm_package/abaqus/assembly.inp")
-    Copy("build/tutorial_05_parameter_substitution/boundary.inp", "eabm_package/abaqus/boundary.inp")
-    Copy("build/tutorial_05_parameter_substitution/field_output.inp", "eabm_package/abaqus/field_output.inp")
-    Copy("build/tutorial_05_parameter_substitution/materials.inp", "eabm_package/abaqus/materials.inp")
-    Copy("build/tutorial_05_parameter_substitution/parts.inp", "eabm_package/abaqus/parts.inp")
-    Copy("build/tutorial_05_parameter_substitution/history_output.inp", "eabm_package/abaqus/history_output.inp")
+    Copy("build/tutorial_05_parameter_substitution/assembly.inp", "modsim_package/abaqus/assembly.inp")
+    Copy("build/tutorial_05_parameter_substitution/boundary.inp", "modsim_package/abaqus/boundary.inp")
+    Copy("build/tutorial_05_parameter_substitution/field_output.inp", "modsim_package/abaqus/field_output.inp")
+    Copy("build/tutorial_05_parameter_substitution/materials.inp", "modsim_package/abaqus/materials.inp")
+    Copy("build/tutorial_05_parameter_substitution/parts.inp", "modsim_package/abaqus/parts.inp")
+    Copy("build/tutorial_05_parameter_substitution/history_output.inp", "modsim_package/abaqus/history_output.inp")
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_compression.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_05_parameter_substitution && /apps/abaqus/Commands/abq2023 -job

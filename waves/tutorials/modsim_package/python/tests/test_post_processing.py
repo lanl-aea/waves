@@ -2,7 +2,7 @@
 
 import pandas
 
-from eabm_package.python import post_processing
+from modsim_package.python import post_processing
 
 
 def test_csv_files_match():

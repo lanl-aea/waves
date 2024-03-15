@@ -12,9 +12,9 @@ import mesh
 # Most end-users will implement only one of these structures and should replace
 # the try/except structure with a single import line, e.g.
 #
-# import eabm_package.abaqus.abaqus_utilities as abaqus_utilities
+# import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
 try:
-    import eabm_package.abaqus.abaqus_utilities as abaqus_utilities
+    import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
 except ImportError:
     import abaqus_utilities
 

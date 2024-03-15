@@ -15,7 +15,7 @@ abaqus
 rectangle_geometry.py
 =====================
 
-.. automodule:: eabm_package.abaqus.rectangle_geometry
+.. automodule:: modsim_package.abaqus.rectangle_geometry
     :noindex:
     :members:
     :show-inheritance:
@@ -25,7 +25,7 @@ rectangle_geometry.py
 rectangle_partition.py
 ======================
 
-.. automodule:: eabm_package.abaqus.rectangle_partition
+.. automodule:: modsim_package.abaqus.rectangle_partition
     :noindex:
     :members:
     :show-inheritance:
@@ -35,7 +35,7 @@ rectangle_partition.py
 rectangle_mesh.py
 =================
 
-.. automodule:: eabm_package.abaqus.rectangle_mesh
+.. automodule:: modsim_package.abaqus.rectangle_mesh
     :noindex:
     :members:
     :show-inheritance:
@@ -45,7 +45,7 @@ rectangle_mesh.py
 abaqus_utilities.py
 ===================
 
-.. automodule:: eabm_package.abaqus.abaqus_utilities
+.. automodule:: modsim_package.abaqus.abaqus_utilities
     :noindex:
     :members:
     :show-inheritance:
@@ -59,7 +59,7 @@ cubit
 rectangle_geometry.py
 =====================
 
-.. automodule:: eabm_package.cubit.rectangle_geometry
+.. automodule:: modsim_package.cubit.rectangle_geometry
     :noindex:
     :members:
     :show-inheritance:
@@ -67,7 +67,7 @@ rectangle_geometry.py
 rectangle_partition.py
 ======================
 
-.. automodule:: eabm_package.cubit.rectangle_partition
+.. automodule:: modsim_package.cubit.rectangle_partition
     :noindex:
     :members:
     :show-inheritance:
@@ -75,7 +75,7 @@ rectangle_partition.py
 rectangle_mesh.py
 =================
 
-.. automodule:: eabm_package.cubit.rectangle_mesh
+.. automodule:: modsim_package.cubit.rectangle_mesh
     :noindex:
     :members:
     :show-inheritance:
@@ -89,7 +89,7 @@ python
 rectangle_compression_nominal.py
 ================================
 
-.. automodule:: eabm_package.python.rectangle_compression_nominal
+.. automodule:: modsim_package.python.rectangle_compression_nominal
     :noindex:
     :members:
     :show-inheritance:
@@ -99,7 +99,7 @@ rectangle_compression_nominal.py
 rectangle_compression_cartesian_product.py
 ==========================================
 
-.. automodule:: eabm_package.python.rectangle_compression_cartesian_product
+.. automodule:: modsim_package.python.rectangle_compression_cartesian_product
     :noindex:
     :members:
     :show-inheritance:
@@ -109,7 +109,7 @@ rectangle_compression_cartesian_product.py
 post_processing.py
 ==================
 
-.. automodule:: eabm_package.python.post_processing
+.. automodule:: modsim_package.python.post_processing
     :noindex:
     :members:
     :show-inheritance:
@@ -117,7 +117,7 @@ post_processing.py
 argparse_types.py
 =================
 
-.. automodule:: eabm_package.argparse_types
+.. automodule:: modsim_package.argparse_types
     :noindex:
     :members:
     :show-inheritance:

@@ -6,7 +6,7 @@ import inspect
 import abaqus
 import abaqusConstants
 
-from eabm_package.argparse_types import positive_float
+from modsim_package.argparse_types import positive_float
 
 
 def main(output_file, model_name, part_name, width, height):

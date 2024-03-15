@@ -36,12 +36,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py' 'tutorials/eabm_package/abaqus/*.inp'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*.py' 'tutorials/modsim_package/abaqus/*.inp'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
+        Destination directory: 'modsim_package/abaqus'
         $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep'
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'

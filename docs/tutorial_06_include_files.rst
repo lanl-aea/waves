@@ -34,12 +34,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
+        Destination directory: 'modsim_package/abaqus'
         $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep' 'tutorials/tutorial_04_simulation'
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -58,13 +58,13 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-5. Create a new directory in ``eabm_package/python`` in the ``waves-tutorials`` directory.
+5. Create a new directory in ``modsim_package/python`` in the ``waves-tutorials`` directory.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ mkdir -p eabm_package/python
+   $ mkdir -p modsim_package/python
 
 .. _tutorial_include_files_waves_python_parameter_file:
 
@@ -76,9 +76,9 @@ In this tutorial, we will update the code from :ref:`tutorial_parameter_substitu
 file instead of hardcoding the parameter definitions in the ``SConscript`` file. This technique will allow parameter
 re-use between simulations.
 
-6. Create a new file ``eabm_package/python/rectangle_compression_nominal.py`` from the content below.
+6. Create a new file ``modsim_package/python/rectangle_compression_nominal.py`` from the content below.
 
-.. admonition:: waves-tutorials/eabm_package/python/rectangle_compression_nominal.py
+.. admonition:: waves-tutorials/modsim_package/python/rectangle_compression_nominal.py
 
    .. literalinclude:: python_rectangle_compression_nominal.py
       :language: Python
@@ -89,17 +89,17 @@ as shown in the :ref:`waves_tutorial_api` for :ref:`python_rectangle_compression
 
 7. Create Python module initialization files to create a project specific local Python package.
 
-.. admonition:: waves-tutorials/eabm_package/python/__init__.py
+.. admonition:: waves-tutorials/modsim_package/python/__init__.py
 
    .. code-block::
 
       $ pwd
       /home/roppenheimer/waves-tutorials
-      $ touch eabm_package/python/__init__.py
+      $ touch modsim_package/python/__init__.py
       $ find . -name "__init__.py"
-      ./waves-tutorials/eabm_package/abaqus/__init__.py
-      ./waves-tutorials/eabm_package/python/__init__.py
-      ./waves-tutorials/eabm_package/__init__.py
+      ./waves-tutorials/modsim_package/abaqus/__init__.py
+      ./waves-tutorials/modsim_package/python/__init__.py
+      ./waves-tutorials/modsim_package/__init__.py
 
 The ``__init__.py`` files tell Python what directories to treat as a package or module. They need to exist, but do not
 need any content. You can read more about `Python Modules`_ in the `Python documentation`_.
@@ -112,7 +112,7 @@ SConscript
 
 8. Use the ``diff`` below to make the following modifications to your ``tutorial_06_include_files`` file:
 
-   * Import ``rectangle_compression_nominal`` from the ``eabm_package.python`` module
+   * Import ``rectangle_compression_nominal`` from the ``modsim_package.python`` module
    * Remove the ``simulation_variables`` dictionary that was created in :ref:`tutorial_parameter_substitution`'s
      code
    * Define ``simulation_variables``  using the newly imported ``rectangle_compression_nominal`` module
@@ -127,7 +127,7 @@ identify the changes made in this tutorial.
       :diff: tutorials_tutorial_05_parameter_substitution
 
 The first change to be made is importing the ``rectangle_compression_nominal`` module from the
-``eabm_package.python`` module you created in the :ref:`tutorial_include_files_waves_python_parameter_file` section of
+``modsim_package.python`` module you created in the :ref:`tutorial_include_files_waves_python_parameter_file` section of
 this tutorial. This import statement will import all variables within the ``rectangle_compression_nominal.py`` file
 and make them available in the ``SConscript`` file's name space. See the `Python Modules`_ documentation for more
 information about importing modules. You can access those variables with the following syntax:
@@ -151,7 +151,7 @@ SConstruct
 
 9. Use the ``diff`` below to modify your ``waves-tutorials/SConstruct`` file in the following ways:
 
-   * Add the ``waves-tutorials`` directory to your `PYTHONPATH`_ to make the ``eabm_package`` - and thus
+   * Add the ``waves-tutorials`` directory to your `PYTHONPATH`_ to make the ``modsim_package`` - and thus
      the modules within it - importable
    * Add ``tutorial_06_include_files`` to the ``workflow_configurations`` list
 
@@ -164,8 +164,8 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_05_parameter_substitution_SConstruct
 
-The first change you made allows for us to import modules from the ``eabm_package`` package. This step is neccessary to
-be able to import the ``eabm_package.python`` module in the ``tutorial_06_include_files`` file.
+The first change you made allows for us to import modules from the ``modsim_package`` package. This step is neccessary to
+be able to import the ``modsim_package.python`` module in the ``tutorial_06_include_files`` file.
 
 The last change to be made is adding ``tutorial_06_include_files`` to the ``workflow_configurations`` list. This
 process should be quite familiar by now.
@@ -189,27 +189,27 @@ Build Targets
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_geometry.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 >
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- --width 1.0 --height 1.0 >
     rectangle_geometry.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_partition.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 >
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- --width 1.0 --height 1.0 >
     rectangle_partition.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_mesh.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 >
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- --global-seed 1.0 >
     rectangle_mesh.stdout 2>&1
     Copy("build/tutorial_06_include_files/rectangle_compression.inp.in",
-    "eabm_package/abaqus/rectangle_compression.inp.in")
+    "modsim_package/abaqus/rectangle_compression.inp.in")
     Creating 'build/tutorial_06_include_files/rectangle_compression.inp'
-    Copy("build/tutorial_06_include_files/assembly.inp", "eabm_package/abaqus/assembly.inp")
-    Copy("build/tutorial_06_include_files/boundary.inp", "eabm_package/abaqus/boundary.inp")
-    Copy("build/tutorial_06_include_files/field_output.inp", "eabm_package/abaqus/field_output.inp")
-    Copy("build/tutorial_06_include_files/materials.inp", "eabm_package/abaqus/materials.inp")
-    Copy("build/tutorial_06_include_files/parts.inp", "eabm_package/abaqus/parts.inp")
-    Copy("build/tutorial_06_include_files/history_output.inp", "eabm_package/abaqus/history_output.inp")
+    Copy("build/tutorial_06_include_files/assembly.inp", "modsim_package/abaqus/assembly.inp")
+    Copy("build/tutorial_06_include_files/boundary.inp", "modsim_package/abaqus/boundary.inp")
+    Copy("build/tutorial_06_include_files/field_output.inp", "modsim_package/abaqus/field_output.inp")
+    Copy("build/tutorial_06_include_files/materials.inp", "modsim_package/abaqus/materials.inp")
+    Copy("build/tutorial_06_include_files/parts.inp", "modsim_package/abaqus/parts.inp")
+    Copy("build/tutorial_06_include_files/history_output.inp", "modsim_package/abaqus/history_output.inp")
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_compression.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_06_include_files && /apps/abaqus/Commands/abq2023 -job
@@ -268,8 +268,8 @@ below. Note the usage of the ``-I`` to reduce clutter in the ``tree`` command ou
 The output files for this tutorial are *exactly* the same as those from :ref:`tutorial_parameter_substitution`. As
 was mentioned when modifying the :ref:`tutorials_tutorial_include_files` file, the use of an included Python file
 to define our parameters provides the same result as when we hard-code the parameters into the ``SConscript`` file. It
-is also worth noting that the ``eabm_package/python/rectangle_compression_nominal.py`` file did not get copied to
-the build directory. Instead, we added the ``eabm_package`` directory to `PYTHONPATH`_. This way we can import the
+is also worth noting that the ``modsim_package/python/rectangle_compression_nominal.py`` file did not get copied to
+the build directory. Instead, we added the ``modsim_package`` directory to `PYTHONPATH`_. This way we can import the
 ``rectangle_compression_nominal`` module from its source location and remove any need to duplicate source code by
 copying files from place to place.
 

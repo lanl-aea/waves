@@ -69,12 +69,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py' 'tutorials/eabm_package/abaqus/*.inp'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*.py' 'tutorials/modsim_package/abaqus/*.inp'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
+        Destination directory: 'modsim_package/abaqus'
         $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep'
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -139,18 +139,18 @@ Build Targets
    scons: done reading SConscript files.
    scons: Building targets ...
    cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 -information environment > rectangle_geometry.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 -information environment > rectangle_partition.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 -information environment > rectangle_mesh.abaqus_v6.env
-   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
-   Copy("build/tutorial_escape_sequences/rectangle_compression.inp", "eabm_package/abaqus/rectangle_compression.inp")
-   Copy("build/tutorial_escape_sequences/assembly.inp", "eabm_package/abaqus/assembly.inp")
-   Copy("build/tutorial_escape_sequences/boundary.inp", "eabm_package/abaqus/boundary.inp")
-   Copy("build/tutorial_escape_sequences/field_output.inp", "eabm_package/abaqus/field_output.inp")
-   Copy("build/tutorial_escape_sequences/materials.inp", "eabm_package/abaqus/materials.inp")
-   Copy("build/tutorial_escape_sequences/parts.inp", "eabm_package/abaqus/parts.inp")
-   Copy("build/tutorial_escape_sequences/history_output.inp", "eabm_package/abaqus/history_output.inp")
+   cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   Copy("build/tutorial_escape_sequences/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
+   Copy("build/tutorial_escape_sequences/assembly.inp", "modsim_package/abaqus/assembly.inp")
+   Copy("build/tutorial_escape_sequences/boundary.inp", "modsim_package/abaqus/boundary.inp")
+   Copy("build/tutorial_escape_sequences/field_output.inp", "modsim_package/abaqus/field_output.inp")
+   Copy("build/tutorial_escape_sequences/materials.inp", "modsim_package/abaqus/materials.inp")
+   Copy("build/tutorial_escape_sequences/parts.inp", "modsim_package/abaqus/parts.inp")
+   Copy("build/tutorial_escape_sequences/history_output.inp", "modsim_package/abaqus/history_output.inp")
    cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 -information environment > rectangle_compression.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_escape_sequences && /apps/abaqus/Commands/abq2023 -job rectangle_compression -input rectangle_compression -double both -cpus 1 -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.

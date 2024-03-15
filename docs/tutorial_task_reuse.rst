@@ -83,15 +83,15 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
-        $ waves fetch --overwrite --destination eabm_package/python 'tutorials/eabm_package/python/__init__.py' 'tutorials/eabm_package/python/rectangle_compression_nominal.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.py' 'tutorials/eabm_package/python/post_processing.py' 'tutorials/eabm_package/python/tests/test_post_processing.py' 'tutorials/eabm_package/python/rectangle_compression_cartesian_product.csv'
+        Destination directory: 'modsim_package/abaqus'
+        $ waves fetch --overwrite --destination modsim_package/python 'tutorials/modsim_package/python/__init__.py' 'tutorials/modsim_package/python/rectangle_compression_nominal.py' 'tutorials/modsim_package/python/rectangle_compression_cartesian_product.py' 'tutorials/modsim_package/python/post_processing.py' 'tutorials/modsim_package/python/tests/test_post_processing.py' 'tutorials/modsim_package/python/rectangle_compression_cartesian_product.csv'
         WAVES fetch
-        Destination directory: 'eabm_package/python'
+        Destination directory: 'modsim_package/python'
         $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep' 'tutorials/tutorial_04_simulation' 'tutorials/tutorial_05_parameter_substitution' 'tutorials/tutorial_06_include_files' 'tutorials/tutorial_07_cartesian_product' 'tutorials/tutorial_08_data_extraction' 'tutorials/tutorial_09_post_processing' 'tutorials/unit_testing' 'tutorials/tutorial_11_regression_testing'
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'

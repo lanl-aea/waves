@@ -8,7 +8,7 @@ import tempfile
 import abaqus
 import abaqusConstants
 
-import eabm_package.abaqus_utilities
+import modsim_package.abaqus_utilities
 
 
 default_x_angle = 0.
@@ -125,7 +125,7 @@ def image(output_file,
     abaqus.session.printOptions.setValues(vpDecorations=abaqusConstants.OFF)
     abaqus.session.pngOptions.setValues(imageSize=image_size)
 
-    output_format = eabm_package.abaqus_utilities.return_abaqus_constant(output_file_extension)
+    output_format = modsim_package.abaqus_utilities.return_abaqus_constant(output_file_extension)
     abaqus.session.printToFile(fileName=output_file_stem, format=output_format, canvasObjects=(viewport,))
 
 

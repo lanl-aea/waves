@@ -41,12 +41,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*.py'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
+        Destination directory: 'modsim_package/abaqus'
         $ waves fetch tutorials/tutorial_02_partition_mesh_SConstruct && mv tutorial_02_partition_mesh_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -62,31 +62,31 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
-5. Create a new directory ``eabm_package/argparse_types``.
+5. Create a new directory ``modsim_package/argparse_types``.
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-tutorials
-   $ mkdir -p eabm_package/argparse_types
+   $ mkdir -p modsim_package/argparse_types
 
-6. Copy the Abaqus journal files into the new directory ``eabm_package/argparse_types``
+6. Copy the Abaqus journal files into the new directory ``modsim_package/argparse_types``
 
 .. code-block:: bash
 
    $ pwd
    /path/to/waves-tutorials
-   $ cp eabm_package/abaqus/rectangle_{geometry,partition,mesh}.py eabm_package/argparse_types
+   $ cp modsim_package/abaqus/rectangle_{geometry,partition,mesh}.py modsim_package/argparse_types
 
 *************
 Journal Files
 *************
 
-7. In the ``eabm_package`` directory, create a new file called ``argparse_types.py`` using the contents below
+7. In the ``modsim_package`` directory, create a new file called ``argparse_types.py`` using the contents below
 
-.. admonition:: waves-tutorials/eabm_package/argparse_types.py
+.. admonition:: waves-tutorials/modsim_package/argparse_types.py
 
-    .. literalinclude:: eabm_package_argparse_types.py
+    .. literalinclude:: modsim_package_argparse_types.py
         :language: Python
         :lineno-match:
 
@@ -163,15 +163,15 @@ Build Targets
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
    environment > rectangle_geometry.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
    environment > rectangle_partition.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus -information
    environment > rectangle_mesh.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_argparse_types && /apps/abaqus/Commands/abaqus cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
    scons: done building targets.
 
 The build process, targets, and output files should be identical to that of :ref:`tutorial_partition_mesh`. You

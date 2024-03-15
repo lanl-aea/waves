@@ -15,7 +15,7 @@ import pathlib
 
 import waves
 
-from eabm_package.python import rectangle_compression_nominal
+from modsim_package.python import rectangle_compression_nominal
 
 # Inherit the parent construction environment
 Import('env')

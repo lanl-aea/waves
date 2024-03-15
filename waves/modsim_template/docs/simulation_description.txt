@@ -7,7 +7,7 @@
    Simulation schematic
 
 The rectangle model is comprised of a single 2D square part with nominal dimensions 1mm x 1mm, but which can be
-parameterized by width and height by the journal file: :mod:`eabm_package.abaqus.rectangle_geometry`.
+parameterized by width and height by the journal file: :mod:`modsim_package.abaqus.rectangle_geometry`.
 
 The bottom left node of the geometry is restricted in all six translational/rotational degrees of freedom using an
 encastre boundary condition. The bottom edge uses a roller boundary condition, with no translation in the 2 direction,

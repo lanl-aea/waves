@@ -52,26 +52,26 @@ Directory Structure
 
 
 4. Within the ``waves-tutorials`` directory, create a new directory called
-   ``eabm_package/abaqus``. For example, in a bash shell:
+   ``modsim_package/abaqus``. For example, in a bash shell:
 
 .. code-block::
 
     $ pwd
     /home/roppenheimer/waves-tutorials
-    $ mkdir -p eabm_package/abaqus
+    $ mkdir -p modsim_package/abaqus
 
 5. Create Python module initialization files to create a project specific local Python package.
 
-.. admonition:: waves-tutorials/eabm_package/__init__.py and waves-tutorials/eabm_package/abaqus/__init__.py
+.. admonition:: waves-tutorials/modsim_package/__init__.py and waves-tutorials/modsim_package/abaqus/__init__.py
 
    .. code-block::
 
       $ pwd
       /home/roppenheimer/waves-tutorials
-      $ touch eabm_package/__init__.py eabm_package/abaqus/__init__.py
+      $ touch modsim_package/__init__.py modsim_package/abaqus/__init__.py
       $ find . -name "__init__.py"
-      ./eabm_package/__init__.py
-      ./eabm_package/abaqus/__init__.py
+      ./modsim_package/__init__.py
+      ./modsim_package/abaqus/__init__.py
 
 ***************
 SConscript File
@@ -172,10 +172,10 @@ starting with familiar Abaqus Python code, and adding in the following:
 * Adding a command line interface to your Python code
 * Protecting ``main()`` function execution and returning exit codes
 
-9. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_geometry.py``
+9. In the ``modsim_package/abaqus`` directory, create a file called ``rectangle_geometry.py``
    using the contents below which contains the ``main()`` function.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
+.. admonition:: waves-tutorials/modsim_package/abaqus/rectangle_geometry.py
 
     .. literalinclude:: abaqus_rectangle_geometry.py
         :language: Python
@@ -230,11 +230,11 @@ information on the Abaqus Python 2.7 environment.
 
 Command Line Interfaces
 =======================
-10. In the ``eabm_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
+10. In the ``modsim_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
     using the contents below which contains the ``get_parser()`` function. Note that
     missing line numbers may be ignored.
 
-.. admonition:: wabes-tutorial/eabm_package/abaqus/rectangle_geometry.py
+.. admonition:: wabes-tutorial/modsim_package/abaqus/rectangle_geometry.py
 
     .. literalinclude:: abaqus_rectangle_geometry.py
         :language: Python
@@ -285,11 +285,11 @@ In this case, we are using ``argparse`` in an Abaqus Python script, which will u
 2.7. See the `Python 2.7 argparse`_ documentation for more information about how
 ``argparse`` will behave in an Abaqus journal file.
 
-11. In the ``eabm_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
+11. In the ``modsim_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
     using the contents below to create the ``if`` statement within which we will call the
     ``main()`` function. Note that missing line numbers may be ignored.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
+.. admonition:: waves-tutorials/modsim_package/abaqus/rectangle_geometry.py
 
     .. literalinclude:: abaqus_rectangle_geometry.py
         :language: Python
@@ -334,7 +334,7 @@ are required for modsim project best practice when using a build system such as 
 boilerplate code that matches naming conventions used by the tutorials, but that may change in production modsim
 projects.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
+.. admonition:: waves-tutorials/modsim_package/abaqus/rectangle_geometry.py
 
      .. literalinclude:: abaqus_rectangle_geometry.py
          :language: Python
@@ -385,7 +385,7 @@ Now that you've created the geometry task in ``tutorial_01_geometry``, this sect
         cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2023 -information
         environment > rectangle_geometry.abaqus_v6.env
         cd /home/roppenheimer/waves-tutorials/build/tutorial_01_geometry && /apps/abaqus/Commands/abq2023 cae -noGui
-        /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+        /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
         scons: done building targets.
 
 The default build directory name is ``build`` and located in the same parent directory as

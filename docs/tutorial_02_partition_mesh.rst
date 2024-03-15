@@ -38,12 +38,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite tutorials/eabm_package/__init__.py --destination eabm_package
+        $ waves fetch --overwrite tutorials/modsim_package/__init__.py --destination modsim_package
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/__init__.py' 'tutorials/eabm_package/abaqus/rectangle_geometry.py'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/__init__.py' 'tutorials/modsim_package/abaqus/rectangle_geometry.py'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
+        Destination directory: 'modsim_package/abaqus'
         $ waves fetch tutorials/tutorial_01_geometry_SConstruct && mv tutorial_01_geometry_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -156,10 +156,10 @@ journal files:
 * :ref:`tutorial_geometry_waves_top_level_code_environment`
 * :ref:`tutorial_geometry_waves_retrieving_exit_codes`
 
-7. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_partition.py`` using all the contents
+7. In the ``modsim_package/abaqus`` directory, create a file called ``rectangle_partition.py`` using all the contents
    below.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_partition.py
+.. admonition:: waves-tutorials/modsim_package/abaqus/rectangle_partition.py
 
     .. literalinclude:: abaqus_rectangle_partition.py
         :language: Python
@@ -189,10 +189,10 @@ argument is how the script knows which file to copy and then modify in the Abaqu
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":``
 statement, and the ``main()`` function is called within ``sys.exit()`` for exit code retrieval.
 
-8. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_utilities.py`` using the contents
+8. In the ``modsim_package/abaqus`` directory, create a file called ``abaqus_utilities.py`` using the contents
    below.
 
-.. admonition:: waves-tutorial/eabm_package/abaqus/abaqus_utilities.py
+.. admonition:: waves-tutorial/modsim_package/abaqus/abaqus_utilities.py
 
    .. literalinclude:: abaqus_abaqus_utilities.py
       :language: Python
@@ -205,10 +205,10 @@ an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and ``orphan
 orphan mesh file. Orphan mesh files define the entire part's mesh in a text-based file. The node and element locations
 and labels are listed in a tabular format that the Abaqus file parser understands.
 
-9. In the ``eabm_package/abaqus`` directory, create a file called ``rectangle_mesh.py`` using all the contents
+9. In the ``modsim_package/abaqus`` directory, create a file called ``rectangle_mesh.py`` using all the contents
    below.
 
-.. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_mesh.py
+.. admonition:: waves-tutorials/modsim_package/abaqus/rectangle_mesh.py
 
     .. literalinclude:: abaqus_rectangle_mesh.py
         :language: Python
@@ -218,7 +218,7 @@ The ``rectangle_mesh.py`` file will have many similarities in code structure to 
 and ``rectangle_partition.py`` files. The first significant change is within the ``import`` statements at the top
 of the file. The ``rectangle_mesh.py`` file uses the ``export_mesh()`` function that is imported from the
 ``abaqus_utilities.py`` file you just created. ``abaqus_utilities.py`` exists in the
-``eabm_package/abaqus`` directory, and is never copied to the build directory.
+``modsim_package/abaqus`` directory, and is never copied to the build directory.
 
 It is possible to use a normal looking import statement because we will modify `PYTHONPATH`_ in the project
 ``SConstruct`` configuration file. Abaqus Python and Python 3 environments will both inherit the `PYTHONPATH`_ and
@@ -293,15 +293,15 @@ Build Targets
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_geometry.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_partition.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 -information
     environment > rectangle_mesh.abaqus_v6.env
     cd /home/roppenheimer/waves-tutorials/build/tutorial_02_partition_mesh && /apps/abaqus/Commands/abq2023 cae -noGui
-    /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+    /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
     scons: done building targets.
 
 ************

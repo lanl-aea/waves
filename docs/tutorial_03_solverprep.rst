@@ -34,12 +34,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination eabm_package tutorials/eabm_package/__init__.py
+        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
         WAVES fetch
-        Destination directory: 'eabm_package'
-        $ waves fetch --overwrite --destination eabm_package/abaqus 'tutorials/eabm_package/abaqus/*.py'
+        Destination directory: 'modsim_package'
+        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*.py'
         WAVES fetch
-        Destination directory: 'eabm_package/abaqus'
+        Destination directory: 'modsim_package/abaqus'
         $ waves fetch --overwrite tutorials/tutorial_01_geometry
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
@@ -62,26 +62,26 @@ Directory Structure
 Solver Input Files
 ******************
 
-5. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``eabm_package/abaqus`` sub-directory
+5. Download and copy the `WAVES tutorials abaqus source files`_ into your existing ``modsim_package/abaqus`` sub-directory
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch 'tutorials/eabm_package/abaqus/*.inp' --destination eabm_package/abaqus
+   $ waves fetch 'tutorials/modsim_package/abaqus/*.inp' --destination modsim_package/abaqus
    WAVES fetch
-   Destination directory: 'eabm_package/abaqus'
+   Destination directory: 'modsim_package/abaqus'
 
 This action will fetch the source files we included in the
-``tutorial_03_solverprep`` file into the ``waves-tutorials/eabm_package/abaqus/``
+``tutorial_03_solverprep`` file into the ``waves-tutorials/modsim_package/abaqus/``
 directory. Check the contents of this directory using the ``ls`` command.
 
 .. code-block::
 
     $ pwd
     /home/roppenheimer/waves-tutorials
-    $ ls eabm_package/abaqus
+    $ ls modsim_package/abaqus
     abaqus_utilities.py  parts.inp
     assembly.inp                 rectangle_compression.inp
     boundary.inp                 rectangle_geometry.py
@@ -197,23 +197,23 @@ Build Targets
    cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
    environment > rectangle_geometry.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_geometry.py -- > rectangle_geometry.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
    environment > rectangle_partition.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_partition.py -- > rectangle_partition.stdout 2>&1
    cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 -information
    environment > rectangle_mesh.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/build/tutorial_03_solverprep && /apps/abaqus/Commands/abq2023 cae -noGui
-   /home/roppenheimer/waves-tutorials/eabm_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
+   /home/roppenheimer/waves-tutorials/modsim_package/abaqus/rectangle_mesh.py -- > rectangle_mesh.stdout 2>&1
    Copy("build/tutorial_03_solverprep/rectangle_compression.inp",
-   "eabm_package/abaqus/rectangle_compression.inp")
-   Copy("build/tutorial_03_solverprep/assembly.inp", "eabm_package/abaqus/assembly.inp")
-   Copy("build/tutorial_03_solverprep/boundary.inp", "eabm_package/abaqus/boundary.inp")
-   Copy("build/tutorial_03_solverprep/field_output.inp", "eabm_package/abaqus/field_output.inp")
-   Copy("build/tutorial_03_solverprep/materials.inp", "eabm_package/abaqus/materials.inp")
-   Copy("build/tutorial_03_solverprep/parts.inp", "eabm_package/abaqus/parts.inp")
-   Copy("build/tutorial_03_solverprep/history_output.inp", "eabm_package/abaqus/history_output.inp")
+   "modsim_package/abaqus/rectangle_compression.inp")
+   Copy("build/tutorial_03_solverprep/assembly.inp", "modsim_package/abaqus/assembly.inp")
+   Copy("build/tutorial_03_solverprep/boundary.inp", "modsim_package/abaqus/boundary.inp")
+   Copy("build/tutorial_03_solverprep/field_output.inp", "modsim_package/abaqus/field_output.inp")
+   Copy("build/tutorial_03_solverprep/materials.inp", "modsim_package/abaqus/materials.inp")
+   Copy("build/tutorial_03_solverprep/parts.inp", "modsim_package/abaqus/parts.inp")
+   Copy("build/tutorial_03_solverprep/history_output.inp", "modsim_package/abaqus/history_output.inp")
    scons: done building targets.
 
 ************

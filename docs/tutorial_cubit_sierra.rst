@@ -47,7 +47,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_cubit tutorials/tutorial_cubit
    $ ls tutorial_cubit
-   eabm_package/  abaqus  cubit  SConstruct  sierra
+   modsim_package/  abaqus  cubit  SConstruct  sierra
 
 5. Make the new ``tutorial_cubit`` directory the current working directory
 
@@ -59,7 +59,7 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ ls
-   eabm_package/  abaqus  cubit  SConstruct  sierra
+   modsim_package/  abaqus  cubit  SConstruct  sierra
 
 **********
 SConscript
@@ -98,7 +98,7 @@ Sierra Input File(s)
 
 8. Create or review the Sierra input file from the contents below
 
-.. admonition:: waves-tutorials/tutorial_cubit/eabm_package/sierra/rectangle_compression.i
+.. admonition:: waves-tutorials/tutorial_cubit/modsim_package/sierra/rectangle_compression.i
 
    .. literalinclude:: sierra_rectangle_compression.i
       :lineno-match:
@@ -132,10 +132,10 @@ Build Targets
    Checking whether sierra program exists.../projects/sierra/sierra5121/install/tools/sntools/engine/sierra
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_mesh.py --element-type SHELL --solver sierra > rectangle_mesh.stdout 2>&1
-   Copy("build/sierra/rectangle_compression.i", "eabm_package/sierra/rectangle_compression.i")
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_mesh.py --element-type SHELL --solver sierra > rectangle_mesh.stdout 2>&1
+   Copy("build/sierra/rectangle_compression.i", "modsim_package/sierra/rectangle_compression.i")
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && /projects/sierra/sierra5121/install/tools/sntools/engine/sierra adagio --version > rectangle_compression.env
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/sierra && /projects/sierra/sierra5121/install/tools/sntools/engine/sierra adagio -i rectangle_compression.i > rectangle_compression.stdout 2>&1
    scons: done building targets.

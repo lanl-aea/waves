@@ -20,12 +20,12 @@ project_variables = {
     'version': version,
     'documentation_pdf': f"{project_name}-{version}.pdf",
     'tutorials_dir': 'waves/tutorials',
-    'modsim_dir': 'eabm_package',
-    'abaqus_dir': 'eabm_package/abaqus',
-    'argparse_types_dir': 'eabm_package/argparse_types',
-    'cubit_dir': 'eabm_package/cubit',
-    'python_dir': 'eabm_package/python',
-    'tests_dir': 'eabm_package/python/tests'
+    'modsim_dir': 'modsim_package',
+    'abaqus_dir': 'modsim_package/abaqus',
+    'argparse_types_dir': 'modsim_package/argparse_types',
+    'cubit_dir': 'modsim_package/cubit',
+    'python_dir': 'modsim_package/python',
+    'tests_dir': 'modsim_package/python/tests'
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===

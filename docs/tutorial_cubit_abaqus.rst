@@ -37,7 +37,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_cubit tutorials/tutorial_cubit
    $ ls tutorial_cubit
-   eabm_package/  abaqus  cubit  SConstruct  sierra
+   modsim_package/  abaqus  cubit  SConstruct  sierra
 
 5. Make the new ``tutorial_cubit`` directory the current working directory
 
@@ -49,7 +49,7 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ ls
-   eabm_package/  abaqus  cubit  SConstruct  sierra
+   modsim_package/  abaqus  cubit  SConstruct  sierra
 
 .. _tutorials_tutorial_cubit:
 
@@ -119,16 +119,16 @@ Build Targets
    Checking whether sierra program exists...no
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
-   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/eabm_package/cubit/rectangle_mesh.py > rectangle_mesh.stdout 2>&1
-   Copy("build/abaqus/rectangle_compression.inp", "eabm_package/abaqus/rectangle_compression.inp")
-   Copy("build/abaqus/assembly.inp", "eabm_package/abaqus/assembly.inp")
-   Copy("build/abaqus/boundary.inp", "eabm_package/abaqus/boundary.inp")
-   Copy("build/abaqus/field_output.inp", "eabm_package/abaqus/field_output.inp")
-   Copy("build/abaqus/materials.inp", "eabm_package/abaqus/materials.inp")
-   Copy("build/abaqus/parts.inp", "eabm_package/abaqus/parts.inp")
-   Copy("build/abaqus/history_output.inp", "eabm_package/abaqus/history_output.inp")
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_geometry.py > rectangle_geometry.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_partition.py > rectangle_partition.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && python /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/rectangle_mesh.py > rectangle_mesh.stdout 2>&1
+   Copy("build/abaqus/rectangle_compression.inp", "modsim_package/abaqus/rectangle_compression.inp")
+   Copy("build/abaqus/assembly.inp", "modsim_package/abaqus/assembly.inp")
+   Copy("build/abaqus/boundary.inp", "modsim_package/abaqus/boundary.inp")
+   Copy("build/abaqus/field_output.inp", "modsim_package/abaqus/field_output.inp")
+   Copy("build/abaqus/materials.inp", "modsim_package/abaqus/materials.inp")
+   Copy("build/abaqus/parts.inp", "modsim_package/abaqus/parts.inp")
+   Copy("build/abaqus/history_output.inp", "modsim_package/abaqus/history_output.inp")
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && /apps/abaqus/Commands/abq2023 -information environment > rectangle_compression.abaqus_v6.env
    cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/abaqus && /apps/abaqus/Commands/abq2023 -job rectangle_compression -input rectangle_compression -double both -interactive -ask_delete no > rectangle_compression.stdout 2>&1
    scons: done building targets.

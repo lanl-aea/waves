@@ -8,7 +8,7 @@ import argparse
 
 import pandas
 
-import eabm_package.utilities
+import modsim_package.utilities
 
 default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1',
                           'integration point': 0}
@@ -43,19 +43,19 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
-    combined_data = eabm_package.utilities.combine_data(input_files, group_path, concat_coord)
+    combined_data = modsim_package.utilities.combine_data(input_files, group_path, concat_coord)
 
     # Open and merge WAVES parameter study if provided
     if parameter_study_file:
-        combined_data = eabm_package.utilities.merge_parameter_study(parameter_study_file, combined_data)
+        combined_data = modsim_package.utilities.merge_parameter_study(parameter_study_file, combined_data)
 
     # Add units
     combined_data[x_var].attrs["units"] = x_units
     combined_data[y_var].attrs["units"] = y_units
 
     # Output files
-    eabm_package.utilities.save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file)
-    eabm_package.utilities.save_table(combined_data, selection_dict, output_csv)
+    modsim_package.utilities.save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file)
+    modsim_package.utilities.save_table(combined_data, selection_dict, output_csv)
 
     # Clean up open files
     combined_data.close()
@@ -65,7 +65,7 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
     if csv_regression_file:
         current_csv = pandas.read_csv(output_csv)
         regression_csv = pandas.read_csv(csv_regression_file)
-        regression_results.append(eabm_package.utilities.csv_files_match(current_csv, regression_csv))
+        regression_results.append(modsim_package.utilities.csv_files_match(current_csv, regression_csv))
     if len(regression_results) > 0 and not all(regression_results):
         sys.exit("One or more regression tests failed")
 

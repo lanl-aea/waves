@@ -28,7 +28,7 @@ Example usage:
 
    env = Environment()
    project_dir = pathlib.Path(Dir(".").abspath)
-   abaqus_source_dir = "eabm_package/abaqus"
+   abaqus_source_dir = "modsim_package/abaqus"
    env["abaqus_source_abspath"] = str(project_dir / abaqus_source_dir)
 
    workflow = []
