@@ -8,6 +8,7 @@ Requires the following ``SConscript(..., exports=[])``
   * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
   * ``python_source_abspath`` - String absolute path to the project's Python 3 files
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
+  * ``regression_alias`` - String for the alias collecting the regression test suite targets
   * ``archive_prefix`` - String prefix for archive target(s) containing identifying project and version information
   * ``project_configuration`` - String absolute path to the project SCons configuration file
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
@@ -167,6 +168,7 @@ archive_target = env.Tar(
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 env.Alias(env['datacheck_alias'], datacheck)
+env.Alias(env['regression_alias'], datacheck)
 env.Alias(f"{workflow_name}_archive", archive_target)
 
 if not env['unconditional_build'] and not env['abaqus']:
