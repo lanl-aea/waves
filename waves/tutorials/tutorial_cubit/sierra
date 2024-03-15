@@ -5,7 +5,7 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``sierra_source_abspath`` - String absolute path to the EABM's Sierra journal files
+  * ``sierra_source_abspath`` - String absolute path to the project's Sierra journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``cubit`` - String path for the Cubit executable
 """

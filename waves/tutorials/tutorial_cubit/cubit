@@ -5,7 +5,7 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``cubit_source_abspath`` - String absolute path to the EABM's Cubit journal files
+  * ``cubit_source_abspath`` - String absolute path to the project's Cubit journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``cubit`` - String path for the Cubit executable
 

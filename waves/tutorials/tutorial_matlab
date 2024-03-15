@@ -5,7 +5,7 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``matlab_source_abspath`` - String absolute path to the EABM's Matlab journal files
+  * ``matlab_source_abspath`` - String absolute path to the project's Matlab journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``matlab`` - String path for the Matlab executable
 """

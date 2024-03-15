@@ -5,8 +5,8 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
-  * ``python_source_abspath`` - String absolute path to the EABM's Python 3 files
+  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
+  * ``python_source_abspath`` - String absolute path to the project's Python 3 files
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable

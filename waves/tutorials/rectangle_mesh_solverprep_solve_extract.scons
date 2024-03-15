@@ -5,7 +5,7 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``abaqus_source_abspath`` - String absolute path to the EABM's Abaqus journal files
+  * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
 
 * ``simulation_variables`` - The dictionary of simulation variables with the following required keys
 
