@@ -132,9 +132,6 @@ may be added to facilitate testing at different intervals. For instance, the dat
 project changes, but the simulations might be run on a weekly schedule with a ``regression_weekly`` alias that includes
 the full simulations in addition to the unit tests and datachecks.
 
-To get approximate the time savings of the new project-wide ``datacheck`` alias for a larger modsim project, go back
-through the previous tutorials and add each simulation specific datacheck task to the new alias.
-
 **********
 SConstruct
 **********
@@ -159,33 +156,7 @@ Build Targets
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ scons datacheck --jobs=4
-
-The full simulation suite may also be executed with a single command, but will take much longer to run as the full
-simulation solve, data extraction, and post-processing will be performed. To compare the time of execution of the full
-simulation suite against the limited datacheck workflow, perform the following sequence of commands.
-
-.. code-block:: bash
-
-   $ pwd
-   /home/roppenheimer/waves-tutorials
-
-   # Find all workflows that use the datacheck alias for one-to-one real time comparison
-   $ datacheck_aliases=$(for file in $(grep -riIE "env\['datacheck_alias'\]" --include=SConscript -l); do echo $(dirname $file); done)
-
-   # Verify that the list matches those files you changed for this tutorial
-   $ echo ${datacheck_aliases}
-   ...
-
-   # Clean all and build datacheck alias
-   $ scons . --clean --jobs=4 > clean.stdout 2>&1
-   $ { time scons datacheck --jobs=4 > scons.stdout 2>&1 ; } 2> time_datacheck_workflow.txt
-
-   # Clean all and build matching full workflows
-   $ scons . --clean --jobs=4 > clean.stdout 2>&1
-   $ { time scons ${datacheck_aliases} --jobs=4 > scons.stdout 2>&1 ; } 2> time_full_workflow.txt
-
-   # Compare times
-   $ grep "real" time_{datacheck,full}_workflow.txt
+   <output truncated>
 
 7. Run the full workflow and verify that the CSV regression test passes
 
@@ -195,8 +166,15 @@ simulation suite against the limited datacheck workflow, perform the following s
    /home/roppenheimer/waves-tutorials
    $ scons tutorial_11_regression_testing --jobs=4
    <output truncated>
-   $ echo $?
-   0
+
+If you haven't added the project-wide datacheck alias to the previous tutorials, you should expect the ``datacheck``
+alias to run faster than the ``tutorial_11_regression_testing`` alias because the datacheck excludes the solve, extract,
+and post-processing tasks.
+
+To approximate the time savings of the new project-wide ``datacheck`` alias for a larger modsim project, you can go back
+through the previous tutorials and add each tutorial's datacheck task to the new alias. For a fiar comparison, you will
+also need to add a comparable alias to collect the full workflow for each tutorial, e.g. ``full_workflows``. You can
+then repeat the commands above with the ``datacheck`` and ``full_workflows`` aliases.
 
 ************
 Output Files

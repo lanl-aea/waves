@@ -117,6 +117,7 @@ Build Targets
    $ pwd
    /home/roppenheimer/waves-tutorials
    $ scons unit_testing
+   <output truncated>
 
 ************
 Output Files
