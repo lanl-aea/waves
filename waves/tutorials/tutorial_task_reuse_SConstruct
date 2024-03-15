@@ -97,9 +97,6 @@ env.Append(BUILDERS={
 
 # Comments used in tutorial code snippets: marker-6
 
-# Create a datacheck alias for reduced cost regression testing
-env.Alias(env['datacheck_alias'])
-
 # Add simulation targets
 workflow_configurations = [
     'tutorial_01_geometry',
