@@ -109,8 +109,8 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 
-To see the full power of the new project-wide ``datacheck`` alias, go back through the previous tutorials and add each
-simulation specific datacheck task to the new alias.
+To get approximate the time savings of the new project-wide ``datacheck`` alias for a larger modsim project, go back
+through the previous tutorials and add each simulation specific datacheck task to the new alias.
 
 **********
 SConstruct
