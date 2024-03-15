@@ -217,7 +217,7 @@ tutorial_files_list = [
     tutorials_dir / env['cubit_dir'] / 'rectangle_geometry.py',
     tutorials_dir / env['cubit_dir'] / 'rectangle_partition.py',
     tutorials_dir / env['cubit_dir'] / 'rectangle_mesh.py',
-    tutorials_dir / env['eabm_dir'] / 'argparse_types.py',
+    tutorials_dir / env['modsim_dir'] / 'argparse_types.py',
     tutorials_dir / env['python_dir'] / 'rectangle_compression_nominal.py',
     tutorials_dir / env['python_dir'] / 'rectangle_compression_cartesian_product.py',
     tutorials_dir / env['python_dir'] / 'rectangle_compression_cartesian_product.csv',

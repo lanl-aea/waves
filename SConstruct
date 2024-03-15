@@ -20,7 +20,7 @@ project_variables = {
     'version': version,
     'documentation_pdf': f"{project_name}-{version}.pdf",
     'tutorials_dir': 'waves/tutorials',
-    'eabm_dir': 'eabm_package',
+    'modsim_dir': 'eabm_package',
     'abaqus_dir': 'eabm_package/abaqus',
     'argparse_types_dir': 'eabm_package/argparse_types',
     'cubit_dir': 'eabm_package/cubit',
