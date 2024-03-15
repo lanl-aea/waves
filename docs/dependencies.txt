@@ -1,4 +1,4 @@
-.. _eabm_dependencies:
+.. _modsim_dependencies:
 
 ************
 Dependencies

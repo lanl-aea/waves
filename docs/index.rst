@@ -89,8 +89,8 @@
    :caption: Appendices
    :maxdepth: 1
 
-   eabm_api
-   eabm_cli
+   tutorial_api
+   tutorial_cli
 
 .. raw:: latex
 

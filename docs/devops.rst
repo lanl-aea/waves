@@ -42,7 +42,7 @@ A minimal development environment for the waves project Gitlab-CI jobs is mainta
 
       $ module load waves-env
 
-The Conda packages found in ``environment.yml`` are reproduced in the :ref:`eabm_dependencies` section.
+The Conda packages found in ``environment.yml`` are reproduced in the :ref:`modsim_dependencies` section.
 
 .. include:: contribution.txt
 

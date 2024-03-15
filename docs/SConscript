@@ -89,8 +89,8 @@ sphinx_configuration_source_list = [
 ]
 
 documentation_file_list = [
-    'eabm_api.rst',
-    'eabm_cli.rst',
+    'tutorial_api.rst',
+    'tutorial_cli.rst',
     'api.rst',
     'internal_api.rst',
     'changelog.rst',
