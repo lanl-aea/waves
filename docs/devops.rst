@@ -95,16 +95,16 @@ knowledge.
 
 This project contains several, separate `SCons`_ project configurations, where the ``SConstruct`` file name indicates an
 `SCons`_ project by convention. The WAVES package and documentation are defined in the ``waves/SConstruct`` file. The
-modsim template and regression tests are defined in a separate ``waves/quickstart/Sconstruct`` file. The WAVES tutorials
-each have a tutorial specific configuration file ``waves/tutorials/*SConstruct``. The following build commands apply to
-each, but must be run from their respective project configuration parent directories, ``waves``, ``waves/quickstart``
-and ``waves/tutorials``. The available targets and aliases differ accordingly.
+modsim template and regression tests are defined in a separate ``waves/modsim_template/Sconstruct`` file. The WAVES
+tutorials each have a tutorial specific configuration file ``waves/tutorials/*SConstruct``. The following build commands
+apply to each, but must be run from their respective project configuration parent directories, ``waves``,
+``waves/modsim_template`` and ``waves/tutorials``. The available targets and aliases differ accordingly.
 
-When executing the tutorials or quickstart build commands directly in the repository, the WAVES project root repository
-must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environments, the preferred method is to run
-``conda develop .`` once from the project root directory. See the `Conda`_ documentation for more information about
-"development" mode installs. For shared environments, the preferred solution is to prefix the following commands with
-``PYTHONPATH=.. ``, where it is assumed that the ``PWD`` is the tutorial or quickstart root directory.
+When executing the tutorials or modsim template build commands directly in the repository, the WAVES project root
+repository must be put on ``PYTHONPATH``. In personal (*but not shared*) virtual environments, the preferred method is
+to run ``conda develop .`` once from the project root directory. See the `Conda`_ documentation for more information
+about "development" mode installs. For shared environments, the preferred solution is to prefix the following commands
+with ``PYTHONPATH=.. ``, where it is assumed that the ``PWD`` is the tutorial or modsim template root directory.
 
 - View project specific command line options, default targets, and aliases
 
@@ -148,8 +148,8 @@ and run
 
    $ scons pytest
 
-The tutorials and quickstart are run as system tests and require third-party software not available on conda-forge. To
-run the system tests, install the third-party software and make them available in your ``PATH``, activate a conda
+The tutorials and modsim template are run as system tests and require third-party software not available on conda-forge.
+To run the system tests, install the third-party software and make them available in your ``PATH``, activate a conda
 environment and run
 
 .. code-block::
@@ -201,7 +201,7 @@ Documentation
   .. code-block::
 
      $ pwd
-     path/to/local/git/clone/waves/quickstart
+     path/to/local/git/clone/waves/modsim_template
      $ PYTHONPATH=/path/to/local/git/clone/waves:$PYTHONPATH scons documentation
 
 *************
@@ -209,7 +209,7 @@ Windows users
 *************
 
 This project uses symbolic links to minimize duplication of files where possible. Some files, such as the tutorial and
-quickstart eabm package files, can not be shared in common due to their applications and the necessary directory
+modsim template package files, can not be shared in common due to their applications and the necessary directory
 structure for each. However, if the file content is identical, a symbolic link is used to avoid duplicating the entire
 file.
 
