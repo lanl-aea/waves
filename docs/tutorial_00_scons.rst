@@ -261,19 +261,22 @@ must also come after all ``SConscript`` and ``Alias`` method calls. Generally, i
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons -h | grep "Local Options:" -A 10
+   $ scons -h
+   scons: Reading SConscript files ...
+   Checking whether /apps/abaqus/Commands/abq2023 program exists...no
+   Checking whether abq2023 program exists...no
+   scons: done reading SConscript files.
    Local Options:
-     --build-dir=DIR             SCons build (variant) root directory. Relative or
-                                   absolute path. (default: 'build')
-     --unconditional-build       Boolean flag to force building of conditionally
-                                   ignored targets, e.g. if the target's action
-                                   program is missing and it would normally be
-                                   ignored. (default: 'False')
+     --build-dir=DIR         SCons build (variant) root directory. Relative or absolute path. (default: 'build')
+     --unconditional-build   Boolean flag to force building of conditionally ignored targets, e.g. if the target's
+                               action program is missing and it would normally be ignored. (default: 'False')
+     --print-build-failures  Print task *.stdout target file(s) on build failures. (default: 'False')
 
    Default Targets:
 
    Target Aliases:
 
-Without piping the ``scons -h`` command through ``grep``, you will see a lot of ``scons`` help output before your
-project help message. The text shown in the sample code block above is the project specific help message(s) added in the
-previous step. The ``Default Targets:`` and ``Target Aliases:`` lists will begin to populate in the following tutorial.
+   Use scons -H for help about SCons built-in command-line options.
+
+The text shown in the sample code block above is the project specific help message(s) added in the previous step. The
+``Default Targets:`` and ``Target Aliases:`` lists will begin to populate in the following tutorial.
