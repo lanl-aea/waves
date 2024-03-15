@@ -109,6 +109,12 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 
+The datacheck targets now have a decidated alias to allow running a partial workflow. This is useful when a full
+simulation may take a long time, but the simulation preparation is worth testing on a regular basis. We've also added
+the regression alias introduced briefly in :ref:`tutorial_unit_testing`. Previously, this alias was a duplicate of the
+``unit_testing`` workflow alias. Now this alias can be used as a collector alias for running a regression suite with a
+single command, while preserving the ability to run the unit tests as a standalone workflow.
+
 To get approximate the time savings of the new project-wide ``datacheck`` alias for a larger modsim project, go back
 through the previous tutorials and add each simulation specific datacheck task to the new alias.
 
