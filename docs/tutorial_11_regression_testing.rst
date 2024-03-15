@@ -98,7 +98,7 @@ CSV file
 
 This file will be used with the :ref:`post_processing_cli` file introduced in :ref:`tutorial_post_processing`. The CLI
 option ``--csv-regression-file`` allows us to compare the expected simulation output, created above as
-``rectangle_compression_cartesian_product`` with the output of the current simulation workflow.
+``rectangle_compression_cartesian_product.csv`` with the output of the current simulation workflow.
 
 **********
 SConscript
