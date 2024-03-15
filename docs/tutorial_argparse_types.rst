@@ -114,8 +114,8 @@ return the type cast argument if all checks pass.
       :language: Python
       :diff: abaqus_rectangle_mesh.py
 
-Here we import the eabm package files as introduced in :ref:`tutorial_partition_mesh` for the meshing journal
-file, but for all journal files to use the ``positive_float`` type check in the ``argparse`` interface.
+Here we import the modsim package files as introduced in :ref:`tutorial_partition_mesh` for the meshing journal file,
+but for all journal files to use the ``positive_float`` type check in the ``argparse`` interface.
 
 **********
 SConscript

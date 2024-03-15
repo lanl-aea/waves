@@ -217,14 +217,14 @@ documentation for your functions. An example of this is in the :ref:`waves_tutor
 Abaqus Python Code
 ==================
 
-The latter portion of the ``main()`` function is the code that generates the rectangle geometry. Here, an Abaqus
-model is opened using the ``model_name`` variable as the model's name, a rectangle is drawn with dimensions ``width``
-and ``height``, and the Abaqus CAE model is saved with the name ``output_file``. One notable difference between the
-`Abaqus Scripting`_ documentation :cite:`ABAQUS` of Abaqus journal files is the use of the `PEP-8`_ style guide for
-package imports.  Here, we order the imports according to the `PEP-8`_ style and avoid bulk imports to the file's
-namespace from Abaqus Python packages. It is also worth noting that Abaqus journal files use the the Abaqus Python 2.7
-environment *not* the SCons/EABM Python 3 environment. See the `Abaqus Python Environment`_ documentation
-:cite:`ABAQUS` for more information on the Abaqus Python 2.7 environment.
+The latter portion of the ``main()`` function is the code that generates the rectangle geometry. Here, an Abaqus model
+is opened using the ``model_name`` variable as the model's name, a rectangle is drawn with dimensions ``width`` and
+``height``, and the Abaqus CAE model is saved with the name ``output_file``. One notable difference between the `Abaqus
+Scripting`_ documentation :cite:`ABAQUS` of Abaqus journal files is the use of the `PEP-8`_ style guide for package
+imports.  Here, we order the imports according to the `PEP-8`_ style and avoid bulk imports to the file's namespace from
+Abaqus Python packages. It is also worth noting that Abaqus journal files use the the Abaqus Python 2.7 environment
+*not* the SCons Python 3 environment. See the `Abaqus Python Environment`_ documentation :cite:`ABAQUS` for more
+information on the Abaqus Python 2.7 environment.
 
 .. _tutorial_geometry_waves_command_line_interfaces:
 
@@ -234,7 +234,7 @@ Command Line Interfaces
     using the contents below which contains the ``get_parser()`` function. Note that
     missing line numbers may be ignored.
 
-.. admonition:: wabes-eabm-tutorial/eabm_package/abaqus/rectangle_geometry.py
+.. admonition:: wabes-tutorial/eabm_package/abaqus/rectangle_geometry.py
 
     .. literalinclude:: abaqus_rectangle_geometry.py
         :language: Python
@@ -260,9 +260,9 @@ The code that follows uses the name of the script to define some variables. This
 assumes that the ``part_name`` variable will be equal to the name of the script and will
 remove the ``_geometry`` suffix if it exists in the file name.
 
-The default values and naming conventions in this journal file are eabm design decisions
-made for this :term:`EABM` stub repository. In practice, it may be beneficial to choose different
-default behavior depending on the design of the :term:`EABM`.
+The default values and naming conventions in this journal file are modsim project design decisions made for the
+|PROJECT| tutorials and :ref:`modsim_templates`. In practice, it may be beneficial to choose different default behavior
+depending on the design of the modsim project.
 
 The second highlighted portion defines default values for some of the command line arguments. Default values are
 assigned if no command line argument is detected for any of the expected command line arguments. This provides sensible
@@ -330,8 +330,9 @@ Entire Abaqus Journal File
 
 Shown below is ``rectangle_geometry.py`` in its entirety. The highlighted lines show the non-boilerplate code that will
 change between journal files in the tutorials. As discussed in preceding sections, some portions of the boilerplate code
-are required for :term:`EABM` best practice when using a build system such as SCons_ and other sections are boilerplate
-code that matches naming conventions used by the tutorials, but that may change in production EABMs.
+are required for modsim project best practice when using a build system such as `SCons`_ and other sections are
+boilerplate code that matches naming conventions used by the tutorials, but that may change in production modsim
+projects.
 
 .. admonition:: waves-tutorials/eabm_package/abaqus/rectangle_geometry.py
 
