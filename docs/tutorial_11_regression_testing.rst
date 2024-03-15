@@ -113,16 +113,24 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_09_post_processing
 
-There are two changes made in this tutorial. The first is to compare the expected simulation results found in the CSV
-file created above. The source list is updated to include the expected results as the CSV file create above and the
-:ref:`post_processing_cli` CLI option ``--csv-regression-file`` is given the CSV file for comparison against the current
-simulation output.
+There are two changes made in this tutorial. The first is to compare the expected simulation results to the current
+simulation's output. The source list is updated to include the expected results as the CSV file created above and the
+:ref:`post_processing_cli` option ``--csv-regression-file`` is given this CSV file for comparison against the current
+simulation output. See the :ref:`post_processing_cli` CLI documentation for a description of the post-processing
+script's behavior.
 
 The second change adds a dedicated alias for the datacheck targets to allow partial workflow execution. This is useful
 when a full simulation may take a long time, but the simulation preparation is worth testing on a regular basis. We've
 also added the regression alias introduced briefly in :ref:`tutorial_unit_testing`. Previously, this alias was a
 duplicate of the ``unit_testing`` workflow alias. Now this alias can be used as a collector alias for running a
 regression suite with a single command, while preserving the ability to run the unit tests as a standalone workflow.
+
+Here we add the datacheck targets as an example of running a partial workflow as part of the regression test suite. For
+fast running simulations, it would be valuable to run the full simulation and post-processing with CSV results testing
+as part of the regular regression suite. For large projects with long running simulations, several regression aliases
+may be added to facilitate testing at different intervals. For instance, the datachecks might be run everytime the
+project changes, but the simulations might be run on a weekly schedule with a ``regression_weekly`` alias that includes
+the full simulations in addition to the unit tests and datachecks.
 
 To get approximate the time savings of the new project-wide ``datacheck`` alias for a larger modsim project, go back
 through the previous tutorials and add each simulation specific datacheck task to the new alias.
