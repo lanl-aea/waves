@@ -42,6 +42,8 @@ Documentation
 - Moved unit test tutorial to core lessons as the new tutorial 10 (:issue:`602`, :merge:`751`). By `Sergio Cordova`_.
 - Use parameter set functions for better simulation variable documentation in the tutorials and modsim template
   (:issue:`474`, :merge:`764`). By `Kyle Brindley`_.
+- Use the SCons 4.6.0 feature to limit project usage to project-specific options and variables in the tutorials
+  (:issue:`591`, :merge:`765`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
