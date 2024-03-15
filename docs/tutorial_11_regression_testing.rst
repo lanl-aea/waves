@@ -155,8 +155,13 @@ Build Targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons datacheck --jobs=4
+   $ time scons datacheck --jobs=4
    <output truncated>
+   scons: done building targets.
+
+   real 0m9.952s
+   user 0m21.537s
+   sys  0m15.664s
 
 7. Run the full workflow and verify that the CSV regression test passes
 
@@ -164,17 +169,27 @@ Build Targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons tutorial_11_regression_testing --jobs=4
+   $ scons datacheck --clean
+   $ time scons tutorial_11_regression_testing --jobs=4
    <output truncated>
+   scons: done building targets.
+
+   real 0m29.031s
+   user 0m25.712s
+   sys  0m25.622s
 
 If you haven't added the project-wide datacheck alias to the previous tutorials, you should expect the ``datacheck``
 alias to run faster than the ``tutorial_11_regression_testing`` alias because the datacheck excludes the solve, extract,
-and post-processing tasks.
+and post-processing tasks. In these tutorials, the difference in execution time is not large. However, in many
+production modsim projects, the simulations may require hours or even days to complete. In that case, the relatively
+fast running solverprep verification may be tractable for regular testing where the full simulations and post-processing
+are not.
 
-To approximate the time savings of the new project-wide ``datacheck`` alias for a larger modsim project, you can go back
-through the previous tutorials and add each tutorial's datacheck task to the new alias. For a fiar comparison, you will
-also need to add a comparable alias to collect the full workflow for each tutorial, e.g. ``full_workflows``. You can
-then repeat the commands above with the ``datacheck`` and ``full_workflows`` aliases.
+To approximate the time savings of the new project-wide ``datacheck`` alias for a (slightly) larger modsim project, you
+can go back through the previous tutorials and add each tutorial's datacheck task to the new alias. For a fair
+comparison, you will also need to add a comparable alias to collect the full workflow for each tutorial, e.g.
+``full_workflows``. You can then repeat the ``time`` commands above with a more comprehensive ``datacheck`` and
+``full_workflows`` aliases.
 
 ************
 Output Files
