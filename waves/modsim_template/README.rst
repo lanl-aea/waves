@@ -8,8 +8,8 @@
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://lanl.github.io/waves/index.html
-.. _WAVES-EABM: https://github.com/lanl/waves/tree/main/modsim_template
-.. _WAVES-EABM documentation: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
+.. _MODSIM-TEMPLATE: https://github.com/lanl/waves/tree/main/modsim_template
+.. _MODSIM-TEMPLATE documentation: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
 .. _`Thomas Roberts`: tproberts@lanl.gov
@@ -20,9 +20,9 @@
 
 .. target-end-do-not-remove
 
-##########
-WAVES-EABM
-##########
+###############
+MODSIM-TEMPLATE
+###############
 
 .. inclusion-marker-do-not-remove
 
@@ -32,7 +32,7 @@ Description
 
 .. project-description-start-do-not-remove
 
-This `WAVES-EABM`_ based modsim repository contains an engineering analysis baseline model (EABM) that uses the `WAVES`_
+This `MODSIM-TEMPLATE`_ based modsim repository contains an engineering analysis baseline model (EABM) that uses the `WAVES`_
 collection of parametric study and simulation helper utilities. This EABM was generated from the `WAVES`_ ``fetch``
 subcommand template.
 
@@ -41,8 +41,8 @@ subcommand template.
 Documentation
 =============
 
-* GitHub (pending): https://lanl.github.io/waves/waves-eabm/index.html
-* LANL: https://aea.re-pages.lanl.gov/python-projects/waves/waves-eabm/
+* GitHub (pending): https://lanl.github.io/waves/modsim-template/index.html
+* LANL: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
 Developers
 ==========
@@ -88,13 +88,13 @@ installation`_ and `Conda environment management`_ documentation for more detail
 
    .. code-block::
 
-      $ conda env create --name waves-eabm-env --file environment.yml
+      $ conda env create --name modsim-template-env --file environment.yml
 
 2. Activate the environment
 
    .. code-block::
 
-      $ conda activate waves-eabm-env
+      $ conda activate modsim-template-env
 
 .. env-end-do-not-remove
 
@@ -114,11 +114,11 @@ available with something similar to any of the following, in increasing order of
 .. code-block::
 
    # Activate the environment
-   conda activate waves-eabm-env
+   conda activate modsim-template-env
 
    # Find the scons manpage file
    $ find $CONDA_PREFIX -name scons.1
-   /path/to/waves-eabm-env/scons.1
+   /path/to/modsim-template-env/scons.1
 
    # Open manpage directly
    $ man $CONDA_PREFIX/scons.1
