@@ -12,10 +12,10 @@
 
    .. code-block::
 
-      $ conda create --name waves-eabm-env --channel conda-forge scons waves
+      $ conda create --name waves-tutorial-env --channel conda-forge scons waves
 
 2. Activate the environment
 
    .. code-block::
 
-      $ conda activate waves-eabm-env
+      $ conda activate waves-tutorial-env

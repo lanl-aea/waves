@@ -9,13 +9,13 @@ installation`_ and `Conda environment management`_ documentation for more detail
 
    .. code-block::
 
-      $ conda create --name waves-eabm-env waves scons matplotlib pandas pyyaml xarray --channel conda-forge
+      $ conda create --name waves-tutorial-env waves scons matplotlib pandas pyyaml xarray --channel conda-forge
 
 2. Activate the environment
 
    .. code-block::
 
-      $ conda activate waves-eabm-env
+      $ conda activate waves-tutorial-env
 
 Some tutorials require additional third-party software that is not available for the `Conda`_ package manager. This
 software must be installed separately and either made available to SConstruct by modifying your system's ``PATH`` or by
