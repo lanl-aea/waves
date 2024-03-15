@@ -4,8 +4,6 @@
 Tutorial 11: Regression Testing
 ###############################
 
-.. include:: wip_warning.txt
-
 Regression testing is the practice of running a verification test suite after making changes to a repository or
 codebase. For modsim repositories, there may not be many unit or integration tests if there is no software or scripting
 library specific to the project. Instead, regression testing a modsim repository may look more like regular execution of
