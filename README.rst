@@ -87,8 +87,8 @@ installation from the command line as ``waves docs``. The documentation is also 
 * GitHub: https://lanl.github.io/waves/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/
 
-The `MODSIM-TEMPLATE documentation`_ is hosted as a separate webpage as a demonstration for what EABM documentation can
-look like.
+The `MODSIM-TEMPLATE documentation`_ is hosted as a separate webpage as a demonstration for what modsim project
+documentation can look like.
 
 * GitHub (pending): https://lanl.github.io/waves/modsim-template/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
