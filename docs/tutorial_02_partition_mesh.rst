@@ -192,7 +192,7 @@ statement, and the ``main()`` function is called within ``sys.exit()`` for exit 
 8. In the ``eabm_package/abaqus`` directory, create a file called ``abaqus_utilities.py`` using the contents
    below.
 
-.. admonition:: waves-eabm-tutoria/eabm_package/abaqus/abaqus_utilities.py
+.. admonition:: waves-tutorial/eabm_package/abaqus/abaqus_utilities.py
 
    .. literalinclude:: abaqus_abaqus_utilities.py
       :language: Python
