@@ -102,7 +102,9 @@ SConstruct
       :diff: tutorials_tutorial_09_post_processing_SConstruct
 
 Our test alias is initialized similarly to that of the workflow aliases. In order to clarify that the tests are not
-part of a modsim workflow, the ``unit_testing`` call is made separately from the workflow loop.
+part of a modsim workflow, the ``unit_testing`` call is made separately from the workflow loop. Additionally, a
+regression test alias is added as a collector alias for future expansion beyond the unit tests in
+:ref:`tutorial_regression_testing`.
 
 *************
 Build Targets
