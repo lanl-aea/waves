@@ -195,7 +195,7 @@ the simulation. As the global mesh size decreases, the final stress should start
 
 The specification of a ``selection_dict`` demonstrates another feature of the ``post_processing.py`` command line
 interface. In this case, the only ``key: value`` pair added to the ``selection_dict`` that does not already exist in the
-:ref:`eabm_post_processing_cli` CLI defaults is the specification of the time point ``'time': 1.0``. This down selects
+:ref:`post_processing_cli` CLI defaults is the specification of the time point ``'time': 1.0``. This down selects
 our data to the largest compressive stress produced by the simulation, which will be our quantity of interest (QoI) for
 this simulation workflow.
 

@@ -104,7 +104,7 @@ rectangle_compression_cartesian_product.py
     :members:
     :show-inheritance:
 
-.. _eabm_post_processing_api:
+.. _post_processing_api:
 
 post_processing.py
 ==================

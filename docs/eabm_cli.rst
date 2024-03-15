@@ -62,7 +62,7 @@ rectangle_mesh.py
 python
 ******
 
-.. _eabm_post_processing_cli:
+.. _post_processing_cli:
 
 post_processing.py
 ==================

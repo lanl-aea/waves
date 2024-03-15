@@ -125,8 +125,8 @@ operations on real geometry files, which requires system tests. :ref:`tutorial_r
 an example solution to performing system tests on simulation workflows.
 
 Take some time to review the individual functions and their documentation, both in the source file and as rendered by
-the documentation. The script API and CLI are included in the :ref:`waves_tutorial_api`: :ref:`eabm_post_processing_api` and
-:ref:`waves_tutorial_cli`: :ref:`eabm_post_processing_cli`, respectively. Generally, this example script tries to model the
+the documentation. The script API and CLI are included in the :ref:`waves_tutorial_api`: :ref:`post_processing_api` and
+:ref:`waves_tutorial_cli`: :ref:`post_processing_cli`, respectively. Generally, this example script tries to model the
 separation of: data input, data processing, data output, and status reporting. The `Software Carpentry: Python Novice`_
 is a good introduction to Python programming practices :cite:`swc-python`.
 
