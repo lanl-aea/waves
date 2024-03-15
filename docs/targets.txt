@@ -30,7 +30,6 @@
 .. _`GNU sed`: https://www.gnu.org/software/sed/
 .. _`GNU tar`: https://www.gnu.org/software/tar/
 .. _`conda-forge sed`: https://anaconda.org/conda-forge/sed
-.. _`Git Best Practices`: https://xcp-confluence.lanl.gov/display/EABM/Git+Best+Practices
 .. _`Gitlab`: https://about.gitlab.com/
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
 .. _`GitHub`: https://github.com/
