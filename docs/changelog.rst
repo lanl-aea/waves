@@ -44,6 +44,8 @@ Documentation
   (:issue:`474`, :merge:`764`). By `Kyle Brindley`_.
 - Use the SCons 4.6.0 feature to limit project usage to project-specific options and variables in the tutorials
   (:issue:`591`, :merge:`765`). By `Kyle Brindley`_.
+- Use the more generic 'modsim' term instead of the group specific 'EABM' (:issue:`615`, :merge:`766`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
