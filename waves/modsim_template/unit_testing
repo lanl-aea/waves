@@ -5,7 +5,7 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``test_source_abspath`` - String absolute path to the EABM's Python 3 test files
+  * ``test_source_abspath`` - String absolute path to the project's Python 3 test files
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
 """
 

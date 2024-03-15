@@ -32,9 +32,8 @@ Description
 
 .. project-description-start-do-not-remove
 
-This `MODSIM-TEMPLATE`_ based modsim repository contains an engineering analysis baseline model (EABM) that uses the `WAVES`_
-collection of parametric study and simulation helper utilities. This EABM was generated from the `WAVES`_ ``fetch``
-subcommand template.
+This project uses the `WAVES`_ collection of parametric study and simulation helper utilities. This project was
+generated from the `WAVES`_ ``fetch`` subcommand and `MODSIM-TEMPLATE`_.
 
 .. project-description-end-do-not-remove
 
