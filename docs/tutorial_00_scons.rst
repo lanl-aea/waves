@@ -263,8 +263,8 @@ must also come after all ``SConscript`` and ``Alias`` method calls. Generally, i
    /home/roppenheimer/waves-tutorials
    $ scons -h
    scons: Reading SConscript files ...
-   Checking whether /apps/abaqus/Commands/abq2023 program exists...no
-   Checking whether abq2023 program exists...no
+   Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
+   Checking whether abq2023 program exists.../apps/abaqus/Commands/abq2023
    scons: done reading SConscript files.
    Local Options:
      --build-dir=DIR         SCons build (variant) root directory. Relative or absolute path. (default: 'build')
