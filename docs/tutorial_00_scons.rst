@@ -83,9 +83,9 @@ package.
       :start-after: marker-1
       :end-before: marker-2
 
-The `SCons command-line build options`_ are specific to the project configuration that you are currently creating. :term:`EABM`
-projects may add or remove command line options to aid in build behavior control. The most relevant options to most
-EABMs will be the ``--build-dir``, which allows :term:`EABM` developers to change the build directory location from the
+The `SCons command-line build options`_ are specific to the project configuration that you are currently creating.
+`SCons`_ projects may add or remove command line options to aid in build behavior control. The most relevant option to
+modsim projects will be ``--build-dir``, which allows project developers to change the build directory location from the
 command line without modifying the ``SConstruct`` file source code. For example, the first ``scons`` call will create
 the default build directory named ``build`` and the second ``scons`` call will create a build directory named
 ``non_default_build``.
@@ -122,7 +122,7 @@ each task separately from the external environment. `SCons`_ projects do not inh
 build configuration by default. Instead, projects define one or more construction environments that is used to define
 per-task environment configuration.
 
-While this is a powerful feature for large, complex projects, most :term:`EABM` projects will benefit from maintaining a single
+While this is a powerful feature for large, complex projects, most modsim projects will benefit from maintaining a single
 construction environment inherited from the active shell environment at build configuration time. In addition to copying
 the active external environment, the above code adds the project command-line build options to the construction
 environment for re-use throughout the project configuration files, SConstruct and SConscript, for build control.
@@ -138,12 +138,12 @@ environment for re-use throughout the project configuration files, SConstruct an
       :start-after: marker-3
       :end-before: marker-4
 
-These checks are not strictly required for an `SCons`_ `WAVES`_ :term:`EABM`; however, they provide valuable build
-control options for :term:`EABM` developers. Most of the `WAVES tutorials`_  compute environment dependencies are
-`Python`_ packages managed with `Conda`_ as described in the :ref:`sconstruct_environment` section of this tutorial.
-Many :term:`modsim repositories` will also depend on proprietary or commercial software that is not included in a
-package manager such as `Conda`_. Instead, the project configuration can check the construction environment for software
-installation(s) and provide an environment variable to conditionally skip any tasks that depend on missing software.
+These checks are not strictly required for an `SCons`_ `WAVES`_ modsim project; however, they provide valuable build
+control options for developers. Most of the `WAVES tutorials`_  compute environment dependencies are `Python`_ packages
+managed with `Conda`_ as described in the :ref:`sconstruct_environment` section of this tutorial.  Many :term:`modsim
+repositories` will also depend on proprietary or commercial software that is not included in a package manager such as
+`Conda`_. Instead, the project configuration can check the construction environment for software installation(s) and
+provide an environment variable to conditionally skip any tasks that depend on missing software.
 
 In `WAVES`_ and `WAVES tutorials`_, this approach is primarily used to allow developers to perform development work on
 local computers without cluttering their test builds with tasks that cannot succeed on their local computer.
