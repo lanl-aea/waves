@@ -6,6 +6,7 @@ Requires the following ``SConscript(..., exports=[])``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``test_source_abspath`` - String absolute path to the project's Python 3 test files
+  * ``regression_alias`` - String for the alias collecting the regression test suite targets
 """
 
 import pathlib
@@ -35,3 +36,4 @@ workflow.extend(env.Command(
 ))
 
 env.Alias(workflow_name, workflow)
+env.Alias(env['regression_alias'], workflow)
