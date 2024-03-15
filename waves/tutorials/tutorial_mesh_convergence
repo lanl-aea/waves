@@ -8,6 +8,7 @@ Requires the following ``SConscript(..., exports=[])``
   * ``abaqus_source_abspath`` - String absolute path to the project's Abaqus journal files
   * ``python_source_abspath`` - String absolute path to the project's Python 3 files
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
+  * ``regression_alias`` - String for the alias collecting the regression test suite targets
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
@@ -174,8 +175,9 @@ workflow.extend(env.PythonScript(
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}_datacheck", datacheck)
 env.Alias(env['datacheck_alias'], datacheck)
+env.Alias(env['regression_alias'], datacheck)
 
 if not env['unconditional_build'] and not env['abaqus']:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore(['.', workflow_name], workflow)
-    Ignore(['.', model], datacheck)
+    Ignore(['.', workflow_name], datacheck)
