@@ -67,8 +67,8 @@ project_variables = {
     'abaqus_source_abspath': str(project_dir / abaqus_source_dir),
     'python_source_abspath': str(project_dir / python_source_dir),
     'test_source_abspath': str(project_dir / test_source_dir),
-    'regression_alias': 'regression'
-    'datacheck_alias': 'datacheck',
+    'regression_alias': 'regression',
+    'datacheck_alias': 'datacheck'
 }
 for key, value in project_variables.items():
     env[key] = value
