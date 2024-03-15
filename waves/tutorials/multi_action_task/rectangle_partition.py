@@ -1,1 +1,1 @@
-../../tutorials/eabm_package/abaqus/rectangle_partition.py
+../modsim_package/abaqus/rectangle_partition.py

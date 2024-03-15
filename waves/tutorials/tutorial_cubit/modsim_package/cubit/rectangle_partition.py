@@ -1,1 +1,1 @@
-../../../eabm_package/cubit/rectangle_partition.py
+../../../modsim_package/cubit/rectangle_partition.py

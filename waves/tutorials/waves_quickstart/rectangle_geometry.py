@@ -1,1 +1,1 @@
-../../tutorials/eabm_package/abaqus/rectangle_geometry.py
+../modsim_package/abaqus/rectangle_geometry.py
