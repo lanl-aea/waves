@@ -37,7 +37,7 @@ simulation_constants = {
     'global_seed': 1,
     'displacement': -0.01
 }
-kwargs={'seed': 42, 'calc_second_order': False}
+kwargs = {'seed': 42, 'calc_second_order': False}
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -52,7 +52,8 @@ parameter_generator = waves.parameter_generators.SALibSampler(
     output_file=parameter_study_file,
     output_file_type=output_file_type,
     previous_parameter_study=previous_parameter_study,
-    **kwargs)
+    **kwargs
+)
 parameter_generator.write()
 
 # Comment used in tutorial code snippets: marker-3
@@ -114,7 +115,8 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     workflow.extend(waves.scons_extensions.copy_substitute(
         abaqus_source_list,
         substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables),
-        build_subdirectory=set_name))
+        build_subdirectory=set_name
+    ))
 
 # Comment used in tutorial code snippets: marker-5
 
@@ -129,19 +131,22 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
         target=[f"{set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
         source=solve_source_list,
         job_name=datacheck_name,
-        abaqus_options=f'{abaqus_options} -datacheck'))
+        abaqus_options=f'{abaqus_options} -datacheck'
+    ))
 
     workflow.extend(env.AbaqusSolver(
         target=[f"{set_name / job_name}.sta"],
         source=solve_source_list,
         job_name=job_name,
-        abaqus_options=abaqus_options))
+        abaqus_options=abaqus_options
+    ))
 
     # Extract Abaqus
     extract_source_list = [f"{set_name / job_name}.odb"]
     workflow.extend(env.AbaqusExtract(
         target=[f"{set_name / job_name}.h5"],
-        source=extract_source_list))
+        source=extract_source_list
+    ))
 
 # Comment used in tutorial code snippets: marker-6
 
@@ -155,7 +160,8 @@ script_options += f" --parameter-study-file {parameter_study_file.name}"
 workflow.extend(env.PythonScript(
     target=[f"{output_name}.csv", "correlation_pairplot.pdf", "sensitivity.yaml"],
     source=[f"{python_source_abspath}/{output_name}.py", parameter_study_file.name] + post_processing_source,
-    script_options=script_options))
+    script_options=script_options
+))
 
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)

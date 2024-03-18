@@ -34,7 +34,8 @@ script_options = f"'{output_name}'"
 workflow.extend(env.MatlabScript(
     target=[f"{output_name}.txt"],
     source=[str(matlab_script)],
-    script_options=script_options))
+    script_options=script_options
+))
 
 # Comment used in tutorial code snippets: marker-3
 

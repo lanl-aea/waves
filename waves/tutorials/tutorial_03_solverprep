@@ -36,7 +36,8 @@ journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
-    journal_options=journal_options))
+    journal_options=journal_options
+))
 
 # Comment used in tutorial code snippets: marker-2
 
@@ -46,7 +47,8 @@ journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
-    journal_options=journal_options))
+    journal_options=journal_options
+))
 
 # Mesh
 journal_file = f"{model}_mesh"
@@ -54,7 +56,8 @@ journal_options = ""
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
-    journal_options=journal_options))
+    journal_options=journal_options
+))
 
 # Comment used in tutorial code snippets: marker-3
 

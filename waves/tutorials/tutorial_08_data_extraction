@@ -45,7 +45,8 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema(),
     output_file=parameter_study_file,
     output_file_type=output_file_type,
-    previous_parameter_study=previous_parameter_study)
+    previous_parameter_study=previous_parameter_study
+)
 parameter_generator.write()
 
 # Comment used in tutorial code snippets: marker-3
@@ -107,7 +108,8 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     workflow.extend(waves.scons_extensions.copy_substitute(
         abaqus_source_list,
         substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables),
-        build_subdirectory=set_name))
+        build_subdirectory=set_name
+    ))
 
 # Comment used in tutorial code snippets: marker-5
 
@@ -122,19 +124,22 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
         target=[f"{set_name / datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
         source=solve_source_list,
         job_name=datacheck_name,
-        abaqus_options=f'{abaqus_options} -datacheck'))
+        abaqus_options=f'{abaqus_options} -datacheck'
+    ))
 
     workflow.extend(env.AbaqusSolver(
         target=[f"{set_name / job_name}.sta"],
         source=solve_source_list,
         job_name=job_name,
-        abaqus_options=abaqus_options))
+        abaqus_options=abaqus_options
+    ))
 
     # Extract Abaqus
     extract_source_list = [f"{set_name / job_name}.odb"]
     workflow.extend(env.AbaqusExtract(
         target=[f"{set_name / job_name}.h5"],
-        source=extract_source_list))
+        source=extract_source_list
+    ))
 
 # Comment used in tutorial code snippets: marker-6
 

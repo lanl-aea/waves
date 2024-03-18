@@ -85,7 +85,8 @@ abaqus_source_list = [
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.scons_extensions.copy_substitute(
     abaqus_source_list,
-    substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)))
+    substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)
+))
 
 # Comment used in tutorial code snippets: marker-4
 
@@ -100,7 +101,8 @@ datacheck.extend(env.AbaqusSolver(
     target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
     source=solve_source_list,
     job_name=datacheck_name,
-    abaqus_options=f'{abaqus_options} -datacheck'))
+    abaqus_options=f'{abaqus_options} -datacheck'
+))
 
 # Comment used in tutorial code snippets: marker-5
 
@@ -108,7 +110,8 @@ workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
-    abaqus_options=abaqus_options))
+    abaqus_options=abaqus_options
+))
 
 # Comment used in tutorial code snippets: marker-6
 
