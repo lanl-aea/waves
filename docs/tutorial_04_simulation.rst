@@ -111,7 +111,7 @@ Running a Datacheck
        :lineno-match:
        :start-after: marker-4
        :end-before: marker-5
-       :emphasize-lines: 4-12
+       :emphasize-lines: 4-13
 
 In the changes you just made, the first line of code extracts the file ``name`` from the `Python pathlib`_ objects in
 the ``abaqus_source_list`` (which you defined in the previous tutorial) and removes any trailing ``.in`` extensions from

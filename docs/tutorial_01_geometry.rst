@@ -119,7 +119,7 @@ exist.
          :lineno-match:
          :start-after: marker-1
          :end-before: marker-3
-         :emphasize-lines: 5-10
+         :emphasize-lines: 5-11
 
 First, the ``workflow`` variable is assigned to an empty list. Eventually, ``workflow``
 will become a list of targets to build. Every time we instruct SCons to build a target(s),

@@ -114,7 +114,7 @@ SConscript
       :language: Python
       :lineno-match:
       :end-before: marker-2
-      :emphasize-lines: 19, 37-41
+      :emphasize-lines: 20, 38-42
 
 The highlighted code above points out two key changes from ``diff`` at the beginning of the file. First, we import the
 ``parameter_schema`` from the ``rectangle_compression_mesh_convergence.py`` file you created in the beginning of
@@ -133,7 +133,7 @@ dictionaries will be combined later in the ``SConscript`` file.
       :lineno-match:
       :start-after: marker-3
       :end-before: marker-4
-      :emphasize-lines: 5, 15, 21-22, 27
+      :emphasize-lines: 5, 16, 23-24, 29
 
 The code above is largely copy and paste from :ref:`tutorial_regression_testing`, with a few significant
 differences:
@@ -186,7 +186,7 @@ specified ``rectangle_partition.cae`` as a target in the ``# Partition`` workflo
       :language: Python
       :lineno-match:
       :start-after: marker-6
-      :emphasize-lines: 13-22
+      :emphasize-lines: 15-25
 
 The highlighted code above demonstrated the usage of the ``post_processing.py`` script to generate a second plot. The first
 plot, as demonstrated in :ref:`tutorial_post_processing`, is a simple stress-strain comparison for each parameter

@@ -241,7 +241,7 @@ Note the following two important aspects of the code above:
       :lineno-match:
       :start-after: marker-5
       :end-before: marker-6
-      :emphasize-lines: 2-3, 9, 15
+      :emphasize-lines: 2-3, 9, 16
 
 The code above closes out our familiar workflow with the use of the :meth:`waves.scons_extensions.abaqus_solver` method where
 the highlighted lines include the parameter set directory as part of target definitions. Note that the ``# Abaqus
