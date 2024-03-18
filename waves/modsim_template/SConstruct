@@ -45,13 +45,15 @@ AddOption(
 )
 
 # Inherit user's full environment and set project options
-env = Environment(ENV=os.environ.copy(),
-                  variant_dir_base=GetOption("variant_dir_base"),
-                  ignore_documentation=GetOption("ignore_documentation"),
-                  solve_cpus=GetOption("solve_cpus"),
-                  print_build_failures=GetOption("print_build_failures"),
-                  TARFLAGS="-c -j",
-                  TARSUFFIX=".tar.bz2")
+env = Environment(
+    ENV=os.environ.copy(),
+    variant_dir_base=GetOption("variant_dir_base"),
+    ignore_documentation=GetOption("ignore_documentation"),
+    solve_cpus=GetOption("solve_cpus"),
+    print_build_failures=GetOption("print_build_failures"),
+    TARFLAGS="-c -j",
+    TARSUFFIX=".tar.bz2"
+)
 
 # Conditionally print failed task *.stdout files
 waves.scons_extensions.print_build_failures(env["print_build_failures"])
@@ -68,12 +70,14 @@ project_configuration = pathlib.Path(inspect.getfile(lambda: None))
 project_dir = project_configuration.parent
 project_name = project_dir.name
 version = "0.1.0"
-author_list = ["Kyle Brindley",
-               "Prabhu S. Khalsa",
-               "Thomas Roberts",
-               "Sergio Cordova",
-               "Matthew Fister",
-               "Scott Ouellette"]
+author_list = [
+    "Kyle Brindley",
+    "Prabhu S. Khalsa",
+    "Thomas Roberts",
+    "Sergio Cordova",
+    "Matthew Fister",
+    "Scott Ouellette"
+]
 author_latex = r" \and ".join(author_list)
 latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
@@ -119,7 +123,8 @@ env.Append(SCANNERS=waves.scons_extensions.sphinx_scanner())
 # Dump the Conda environment as documentation of as-built target environment
 environment_target = env.CondaEnvironment(
     target=[variant_dir_base / "environment.yaml"],
-    source=[])
+    source=[]
+)
 env.AlwaysBuild(environment_target)
 Default(environment_target)
 
@@ -132,10 +137,12 @@ if not env["ignore_documentation"]:
     # Analysis report
     report_dir = pathlib.Path("report")
     build_dir = variant_dir_base / report_dir
-    SConscript(report_dir / "SConscript",
-               variant_dir=build_dir,
-               exports=["env", "project_variables"],
-               duplicate=True)
+    SConscript(
+        report_dir / "SConscript",
+        variant_dir=build_dir,
+        exports=["env", "project_variables"],
+        duplicate=True
+    )
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
 

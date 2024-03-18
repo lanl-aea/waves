@@ -59,7 +59,8 @@ env.Append(BUILDERS={
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
-    SUBST_DICT=project_substitution_dictionary)
+    SUBST_DICT=project_substitution_dictionary
+)
 
 # Copy root directory files into documentation build directory
 copy_files = (
@@ -69,9 +70,11 @@ copy_files = (
     ("environment.yml", "#/environment.yml")
 )
 for target, source in copy_files:
-    Command(target=target,
-            source=source,
-            action=Copy("$TARGET", "$SOURCE"))
+    Command(
+        target=target,
+        source=source,
+        action=Copy("$TARGET", "$SOURCE")
+    )
 
 # Explicit Sphinx documentation dependency list
 sphinx_configuration_source_list = [
@@ -243,9 +246,11 @@ tutorial_files_list = [
 copied_file_list = []
 for file_path in tutorial_files_list:
     target = f'{file_path.parts[-2]}_{file_path.name}'
-    Command(target=target,
-            source=str(file_path),
-            action=Copy("$TARGET", "$SOURCE"))
+    Command(
+        target=target,
+        source=str(file_path),
+        action=Copy("$TARGET", "$SOURCE")
+    )
     copied_file_list.append(target)
 source_files = sphinx_configuration_source_list + documentation_file_list + copied_file_list
 

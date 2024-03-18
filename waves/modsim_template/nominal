@@ -79,7 +79,8 @@ abaqus_source_list = [
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 workflow.extend(waves.scons_extensions.copy_substitute(
     abaqus_source_list,
-    substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)))
+    substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)
+))
 
 solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
 solve_source_list.append(f"{journal_file}.inp")
@@ -102,7 +103,8 @@ datacheck.extend(env.AbaqusSolver(
     target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
     source=solve_source_list,
     job_name=datacheck_name,
-    abaqus_options=f"{abaqus_options} -datacheck"))
+    abaqus_options=f"{abaqus_options} -datacheck"
+))
 
 workflow.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
@@ -117,7 +119,8 @@ workflow.extend(env.AbaqusSolver(
 extract_source_list = [f"{job_name}.odb"]
 workflow.extend(env.AbaqusExtract(
     target=[f"{job_name}.h5"],
-    source=extract_source_list))
+    source=extract_source_list
+))
 
 # Post-processing
 plot_name = "stress_strain_comparison"
@@ -129,13 +132,15 @@ script_options += f" --csv-regression-file {regression_file}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[modsim_package_abspath / "post_processing.py", regression_file] + post_processing_source,
-    script_options=script_options))
+    script_options=script_options
+))
 
 # Data archival
 archive_name = f"{env['project_name']}-{workflow_name}-{env['version']}"
 archive_target = env.Tar(
     target=archive_name,
-    source=workflow + workflow_configuration)
+    source=workflow + workflow_configuration
+)
 
 # Collector alias based on build directory name
 env.Alias(workflow_name, workflow)

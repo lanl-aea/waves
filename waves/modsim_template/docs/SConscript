@@ -12,7 +12,6 @@ Requires the following ``SConscript(..., exports=[])``
 * ``project_variables`` - The project variables for use in Sphinx documentation parameters
 """
 
-import os
 import pathlib
 
 import waves
@@ -26,7 +25,8 @@ alias_list = []
 # Perform variable substitution on Sphinx configuration file
 env.Substfile(
     "conf.py.in",
-    SUBST_DICT=waves.scons_extensions.substitution_syntax(project_variables))
+    SUBST_DICT=waves.scons_extensions.substitution_syntax(project_variables)
+)
 
 # Copy project root files required by the documentation
 project_dir = pathlib.Path(env["project_dir"])
@@ -36,7 +36,8 @@ for target, source in root_files:
     env.Command(
         target=[target],
         source=[source],
-        action=Copy("$TARGET", "$SOURCE"))
+        action=Copy("$TARGET", "$SOURCE")
+    )
 
 # Explicit Sphinx documentation dependency list
 documentation_files = [
