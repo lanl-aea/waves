@@ -8,6 +8,10 @@ Changelog
 0.8.0 (unreleased)
 ******************
 
+Internal Changes
+================
+- Standardize tutorial multiline and hanging indents (:issue:`613`, :merge:`769`). By `Sergio Cordova`_.
+
 *******************
 0.7.10 (2024-03-15)
 *******************
