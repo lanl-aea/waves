@@ -88,7 +88,9 @@ sphinx_configuration_source_list = [
     '_static/waves_logo_brandmark_smaller.png',  # Found in conf.py, which is not currently scanned
     'waves_logo_primary_large_crop.png',  # Found in conf.py, which is not currently scanned
     "favicon.ico",  # Found in conf.py, which is not currently scanned
-    '_static/custom.css'
+    '_static/custom.css',
+    '_static/custom.js',
+    '_static/wave.svg'
 ]
 
 documentation_file_list = [

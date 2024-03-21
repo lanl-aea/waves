@@ -64,6 +64,7 @@ else:
 # Add custom style sheet to make the html docs wider
 def setup(app):
     app.add_css_file('custom.css')
+    app.add_js_file('custom.js')
 
 # Add any Sphinx extension module names here, as strings.
 extensions = ['sphinx.ext.autodoc',
