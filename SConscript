@@ -10,7 +10,7 @@ pytest_source_list = [
     "pyproject.toml",
 ]
 
-pytest_command = "PYTHONDONTWRITEBYTECODE=1 pytest --junitxml=${TARGETS[0].abspath}"
+pytest_command = "PYTHONDONTWRITEBYTECODE=1 pytest --junitxml=${TARGETS[0].abspath} -n 4 "
 target = ["test_results.xml"]
 
 # TODO: Remove the "program_operations" logic when the race conditions on test_program_operations are fixed
@@ -47,7 +47,7 @@ systemtest_node = env.Command(
     target=target,
     source=source,
     action=[
-        "${pytest_command} -v --no-showlocals -n 4 -m systemtest --tb=short --cache-clear"
+        "${pytest_command} -v --no-showlocals -m systemtest --tb=short --cache-clear"
     ],
     pytest_command=pytest_command,
 )
