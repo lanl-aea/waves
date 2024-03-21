@@ -32,7 +32,7 @@ conf = env.Configure()
 env['abaqus'] = conf.CheckProg('/apps/abaqus/Commands/abq2023')
 conf.Finish()
 if env['abaqus']:
-    env.PrependENVPath("PATH", str(pathlib.Path(env['abaqus']).parent))
+    env.PrependENVPath("PATH", pathlib.Path(env['abaqus']).parent)
 
 # Call SConscript file
 SConscript('SConscript', variant_dir=env['build_dir'], exports='env', duplicate=True)

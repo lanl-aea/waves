@@ -78,7 +78,7 @@ version = '0.1.0'
 project_dir = pathlib.Path(Dir(".").abspath)
 project_variables = {
     'project_name': project_name,
-    'project_dir': str(project_dir),
+    'project_dir': project_dir,
     'version': version,
     'remote_directory': f"/users/{env['user']}/WAVES-TUTORIAL/tutorial_quinoa"
 }

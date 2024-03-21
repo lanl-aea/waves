@@ -61,9 +61,9 @@ project_dir = pathlib.Path(Dir(".").abspath)
 matlab_source_dir = "modsim_package/matlab"
 project_variables = {
     'project_name': project_name,
-    'project_dir': str(project_dir),
+    'project_dir': project_dir,
     'version': version,
-    'matlab_source_abspath': str(project_dir / matlab_source_dir)
+    'matlab_source_abspath': project_dir / matlab_source_dir
 }
 for key, value in project_variables.items():
     env[key] = value

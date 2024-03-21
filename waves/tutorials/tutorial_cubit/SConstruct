@@ -68,11 +68,11 @@ cubit_source_dir = "modsim_package/cubit"
 sierra_source_dir = "modsim_package/sierra"
 project_variables = {
     'project_name': project_name,
-    'project_dir': str(project_dir),
+    'project_dir': project_dir,
     'version': version,
-    'abaqus_source_abspath': str(project_dir / abaqus_source_dir),
-    'cubit_source_abspath': str(project_dir / cubit_source_dir),
-    'sierra_source_abspath': str(project_dir / sierra_source_dir)
+    'abaqus_source_abspath': project_dir / abaqus_source_dir,
+    'cubit_source_abspath': project_dir / cubit_source_dir,
+    'sierra_source_abspath': project_dir / sierra_source_dir
 }
 for key, value in project_variables.items():
     env[key] = value

@@ -61,15 +61,15 @@ project_dir = pathlib.Path(Dir(".").abspath)
 abaqus_source_dir = "modsim_package/argparse_types"
 project_variables = {
     'project_name': project_name,
-    'project_dir': str(project_dir),
+    'project_dir': project_dir,
     'version': version,
-    'abaqus_source_abspath': str(project_dir / abaqus_source_dir)
+    'abaqus_source_abspath': project_dir / abaqus_source_dir
 }
 for key, value in project_variables.items():
     env[key] = value
 
 # Make the project package importable for Python and Abaqus Python environments
-env.PrependENVPath("PYTHONPATH", str(project_dir))
+env.PrependENVPath("PYTHONPATH", project_dir)
 
 # Comments used in tutorial code snippets: marker-5
 
