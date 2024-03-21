@@ -29,15 +29,14 @@ model = "rectangle"
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 datacheck = []
-mesh_files = []
 
 element_type = "QUAD"
 solver = "abaqus"
-workflow, mesh_files = SConscript("cubit", exports=["env", "element_type", "solver"], duplicate=False)
+SConscript("cubit", exports=["env", "element_type", "solver"], duplicate=False)
 
 # Modify mesh target(s) element type.
 # Linux style sed command options must be modified for macOS. Command must be modified if on Windows.
-env.AddPostAction(mesh_files[0], "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
+env.AddPostAction(f"{model}_mesh.inp", "sed -i 's/CPE4/CPS4/g' ${TARGET.abspath}")
 
 # SolverPrep
 abaqus_source_list = [
@@ -54,7 +53,7 @@ workflow.extend(waves.scons_extensions.copy_substitute(abaqus_source_list))
 
 # Abaqus Solve
 solve_source_list = [source_file.name for source_file in abaqus_source_list]
-solve_source_list.append(mesh_files[0])
+solve_source_list.append(f"{model}_mesh.inp")
 job_name = pathlib.Path(solve_source_list[0]).stem
 datacheck_name = f"{job_name}_DATACHECK"
 datacheck_suffixes = ('023', 'mdl', 'sim', 'stt')

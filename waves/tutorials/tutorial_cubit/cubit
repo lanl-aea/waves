@@ -11,11 +11,6 @@ Requires the following ``SConscript(..., exports=[])``
 
 * ``element_type`` - The Cubit 4 node quadrilateral element type
 * ``solver`` - The target solver to use when writing a mesh file
-
-Returns the following variables
-
-* ``workflow`` - list of targets in the cubit workflow
-* ``mesh_files`` - list of orphan mesh file(s)
 """
 
 import pathlib
@@ -35,7 +30,6 @@ model = "rectangle"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
-mesh_files = []
 
 # Geometry
 journal_file = f"{model}_geometry"
@@ -64,15 +58,13 @@ else:
     raise RuntimeError(f"Unknown solver '{solver}'")
 journal_file = f"{model}_mesh"
 journal_options = "--element-type ${element_type} --solver ${solver}"
-mesh_targets = env.PythonScript(
+workflow.extend(env.PythonScript(
     target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
     script_options=journal_options,
     element_type=element_type,
     solver=solver
-)
-workflow.extend(mesh_targets)
-mesh_files.extend(mesh_targets[0:2])
+))
 
 # Collector alias based on parent directory name
 env.Alias(f"{workflow_name}_cubit", workflow)
@@ -80,5 +72,3 @@ env.Alias(f"{workflow_name}_cubit", workflow)
 if not env['unconditional_build'] and not env['cubit']:
     print(f"Program 'cubit' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore(['.', workflow_name], workflow)
-
-Return(["workflow", "mesh_files"])
