@@ -42,8 +42,8 @@ if not installed:
     ("scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct --unconditional-build --print-build-failures", "."),
     ("scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build --print-build-failures", "."),
     ("scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons . --unconditional-build --print-build-failures", "." / "tutorial_cubit"),
-    ("scons quinoa-local --unconditional-build --print-build-failures", "." / "tutorial_quinoa"),
+    ("scons . --unconditional-build --print-build-failures", "tutorial_cubit"),
+    ("scons quinoa-local --unconditional-build --print-build-failures", "tutorial_quinoa"),
     ("scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures", "."),
     ("scons tutorial_builder_post_actions --sconstruct=tutorial_builder_post_actions_SConstruct --unconditional-build --print-build-failures", "."),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
@@ -74,11 +74,12 @@ def test_run_tutorial(command: str, directory: str) -> None:
     """
     with tempfile.TemporaryDirectory() as temp_directory:
         fetch_command = f"{waves_command} fetch tutorials --destination {temp_directory}"
-        fetch_command = command.split(" ")
+        fetch_command = fetch_command.split(" ")
         subprocess.check_output(fetch_command, env=env, cwd=temp_directory).decode("utf-8")
 
+        run_directory = pathlib.Path(temp_directory) / directory
         command = command.split(" ")
-        subprocess.check_output(command, env=env, cwd=temp_directory / directory).decode("utf-8")
+        subprocess.check_output(command, env=env, cwd=run_directory).decode("utf-8")
 
 
 @pytest.mark.systemtest
@@ -93,7 +94,7 @@ def test_modsim_template() -> None:
         command = command.split(" ")
         subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
 
-        command = f"{waves_command} visualize nominal --sconstruct={temp_directory}/SConstruct --output-file " \
-                  f"{temp_directory}/nominal.svg"
+        output_file = pathlib.Path(temp_directory) / "nominal.svg"
+        command = f"{waves_command} visualize nominal --output-file {output_file}"
         command = command.split(" ")
         subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
