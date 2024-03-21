@@ -33,7 +33,7 @@ build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
 output_file_type = "h5"
 parameter_study_file = build_directory / f"parameter_study.{output_file_type}"
-previous_parameter_study = str(parameter_study_file) if parameter_study_file.exists() else None
+previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
 model = "rectangle"
 geometry_configuration = f"{model}_geometry_partition.scons"
 simulation_configuration = f"{model}_mesh_solverprep_solve_extract.scons"
@@ -97,7 +97,7 @@ script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 script_options += " --csv-regression-file ${SOURCES[2].abspath}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[script, parameter_study_file.name, str(regression_file)] + post_processing_source,
+    source=[script, parameter_study_file.name, regression_file] + post_processing_source,
     script_options=script_options
 ))
 

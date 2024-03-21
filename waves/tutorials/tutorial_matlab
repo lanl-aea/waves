@@ -33,7 +33,7 @@ matlab_script = matlab_source_abspath / "hello_world.m"
 script_options = f"'{output_name}'"
 workflow.extend(env.MatlabScript(
     target=[f"{output_name}.txt"],
-    source=[str(matlab_script)],
+    source=[matlab_script],
     script_options=script_options
 ))
 

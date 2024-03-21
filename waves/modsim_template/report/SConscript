@@ -31,7 +31,7 @@ report.extend(env.Substfile(
 
 # Copy project root files required by the documentation
 project_dir = pathlib.Path(env["project_dir"])
-root_files = [("README.txt", str(project_dir / "README.rst"))]
+root_files = [("README.txt", project_dir / "README.rst")]
 for target, source in root_files:
     report.extend(env.Command(
         target=[target],
