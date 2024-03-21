@@ -8,6 +8,10 @@ Changelog
 0.8.0 (unreleased)
 ******************
 
+Documentation
+=============
+- Simplify the Cubit tutorial SConscript interfaces (:issue:`618`, :merge:`771`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Standardize tutorial multiline and hanging indents (:issue:`613`, :merge:`769`). By `Sergio Cordova`_.
