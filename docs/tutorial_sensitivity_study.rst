@@ -131,4 +131,32 @@ directory is specified by name to reduce clutter in the output shown.
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ tree build/tutorial_sensitivity_study
+   $ tree build/tutorial_sensitivity_study/ -L 1
+   build/tutorial_sensitivity_study/
+   |-- correlation_pairplot.pdf
+   |-- parameter_set0
+   |-- parameter_set1
+   |-- parameter_set10
+   |-- parameter_set11
+   |-- parameter_set12
+   |-- parameter_set13
+   |-- parameter_set14
+   |-- parameter_set15
+   |-- parameter_set16
+   |-- parameter_set17
+   |-- parameter_set18
+   |-- parameter_set19
+   |-- parameter_set2
+   |-- parameter_set3
+   |-- parameter_set4
+   |-- parameter_set5
+   |-- parameter_set6
+   |-- parameter_set7
+   |-- parameter_set8
+   |-- parameter_set9
+   |-- parameter_study.h5
+   |-- sensitivity.yaml
+   |-- sensitivity_study.csv
+   `-- sensitivity_study.csv.stdout
+
+   20 directories, 5 files
