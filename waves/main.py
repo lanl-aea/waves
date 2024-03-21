@@ -333,9 +333,24 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
         try:
             return_codes = []
             tutorial_fetch_commands = _settings._tutorials_directory[tutorial]
+            tutorial_fetch_commands.append({'files': [], 'destination': None})
+            if tutorial != 0:
+                tutorial_fetch_commands.append({'files': ['tutorials/modsim_package/__init__.py'],
+                                                'destination': 'modsim_package'})
+            if tutorial >= 5:
+                tutorial_fetch_commands.append({'files': ['tutorials/modsim_package/abaqus/*'],
+                                                'destination': 'modsim_package/abaqus'})
             for tutorial_fetch_command in tutorial_fetch_commands:
                 requested_paths = tutorial_fetch_command['files']
                 destination = tutorial_fetch_command['destination']
+                if not destination:
+                    destination = pathlib.Path().cwd()
+                    tutorial_sconscript_files, sconstruct_file = get_tutorial_sconscript_files(tutorial, root_directory)
+                    requested_paths.append(sconstruct_file)
+                    if tutorial >= 2:
+                        requested_paths.extend(tutorial_sconscript_files)
+                    if tutorial >= 10:
+                        requested_paths.append('tutorials/unit_testing')
                 print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
                 print(f"Destination directory: '{destination}'", file=sys.stdout)
                 return_codes.append(fetch.recursive_copy(root_directory, relative_paths, destination,
@@ -346,6 +361,27 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
             print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stdout)
             return_code = 1
     return return_code
+
+
+def get_tutorial_sconscript_files(tutorial: int, root_directory: str | pathlib.Path):
+    from waves import fetch
+
+    available_files, not_found = fetch.available_files(root_directory=root_directory, relative_paths='tutorials/*')
+    tutorial_sconscript_files = []
+    sconstruct_file = None
+    for number in range(1, tutorial + 1):
+        search_number = str(number)
+        if len(search_number) == 1:
+            search_number = '0' + search_number
+        for file in available_files:
+            file_string = file.resolve()
+            if int(number) == tutorial and 'SConstruct' in file_string:
+                sconstruct_file = file_string
+                break
+            if 'tutorial_' + search_number in file_string and 'SConstruct' not in file_string:
+                tutorial_sconscript_files.append(file_string)
+                break
+    return tutorial_sconscript_files, sconstruct_file
 
 
 def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: list[str], exclude_regex: str,
