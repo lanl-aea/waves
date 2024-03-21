@@ -5,3 +5,40 @@
 button.copybtn {
    opacity: 1;
 }
+
+/* Wave animation */
+.wave {
+  background: url("./wave.svg") repeat-x;
+  height: 158px;
+  width: 8400px;
+  opacity: 0.3;
+  animation: wave 9s cubic-bezier(0.38, 0.43, 0.71, 0.49) infinite;
+  transform: scaleY(-1);
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
+
+@keyframes wave {
+  0% {
+    margin-left: -200px;
+  }
+  100% {
+    margin-left: -1600px;
+  }
+}
+
+/* Second wave will contain an additional animation */
+.wave:nth-of-type(2) {
+  animation: wave 9s cubic-bezier(0.38, 0.43, 0.71, 0.49) -.25s infinite, rock 9s ease -1.5s infinite;
+}
+
+@keyframes rock {
+  0%, 100% {
+    transform: translate3d(0,-20px,0) scaleY(-1);
+  }
+  50% {
+    transform: translate3d(0,0,0) scaleY(-1);
+  }
+}
+
