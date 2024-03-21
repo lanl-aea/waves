@@ -9,7 +9,7 @@ installation`_ and `Conda environment management`_ documentation for more detail
 
    .. code-block::
 
-      $ conda create --name waves-tutorial-env waves 'scons>=4.6' matplotlib pandas pyyaml xarray seaborn numpy salib --channel conda-forge
+      $ conda create --name waves-tutorial-env --channel conda-forge waves 'scons>=4.6' matplotlib pandas pyyaml xarray seaborn numpy salib
 
 2. Activate the environment
 
