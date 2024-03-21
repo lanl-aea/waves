@@ -62,6 +62,7 @@
 .. _`Python`: https://www.python.org/
 .. _`Python lambda expression`: https://docs.python.org/3/tutorial/controlflow.html#lambda-expressions
 .. _`SALib.sample`: https://salib.readthedocs.io/en/latest/api.html#
+.. _`SALib.analyze`: https://salib.readthedocs.io/en/latest/api/SALib.analyze.html
 .. _`SALib sobol`: https://salib.readthedocs.io/en/latest/api.html#sobol-sensitivity-analysis
 .. _`SALib morris`: https://salib.readthedocs.io/en/latest/api.html#method-of-morris
 .. _`scipy Sobol`: https://docs.scipy.org/doc/scipy/reference/generated/scipy.stats.qmc.Sobol.html
@@ -103,9 +104,11 @@
 .. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
 .. _`git`: https://git-scm.com/
 .. _`Git-LFS`: https://git-lfs.com/
+.. _`numpy.corrcoef`: https://numpy.org/doc/stable/reference/generated/numpy.corrcoef.html
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
 .. _`reStructuredText`: https://docutils.sourceforge.io/rst.html
 .. _`reStructuredText Primer`: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html
+.. _`seaborn.pairplot`: https://seaborn.pydata.org/generated/seaborn.pairplot.html
 .. _`shebang`: https://en.wikipedia.org/wiki/Shebang_(Unix)
 .. _`shell environment`: https://www.gnu.org/software/bash/manual/html_node/Environment.html
 .. _`Sphinx`: https://www.sphinx-doc.org/en/master/
