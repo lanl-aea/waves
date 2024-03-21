@@ -59,7 +59,7 @@ env["cubit"] = waves.scons_extensions.add_cubit(["/apps/Cubit-16.12/cubit", "cub
 env["sbatch"] = waves.scons_extensions.add_program(["sbatch"], env)
 env["user"] = getpass.getuser()
 # TODO: Ask Quinoa devs to provide a shell script or module file on HPC snow, then remove this variable
-env["quinoa_installation"] = "/users/cclong/QUINOA/quinoa/buildOS/Main"
+env["quinoa_installation"] = pathlib.Path("/users/cclong/QUINOA/quinoa/buildOS/Main")
 # FIXME: Not sure why snow doesn't provide the module function to *all* shells. Sourcing the modules.sh script works for
 # now, but explore shell initiation in HPC docs.
 # FIXME: The remote ssh command launches a non-interactive shell. Sourcing the module shell script is not sufficient, we
@@ -80,7 +80,7 @@ project_variables = {
     'project_name': project_name,
     'project_dir': project_dir,
     'version': version,
-    'remote_directory': f"/users/{env['user']}/WAVES-TUTORIAL/tutorial_quinoa"
+    'remote_directory': pathlib.Path(f"/users/{env['user']}/WAVES-TUTORIAL/tutorial_quinoa")
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -104,7 +104,7 @@ try:  # sstelmo/sstbigbird
     envQuinoa = waves.scons_extensions.shell_environment(quinoa_aea_environment)
 except subprocess.CalledProcessError:  # HPC snow
     envQuinoa = waves.scons_extensions.shell_environment(quinoa_snow_environment)
-quinoa_installation = env["quinoa_installation"]
+quinoa_installation = pathlib.Path(env["quinoa_installation"])
 envQuinoa["inciter"] = waves.scons_extensions.add_program(["inciter", quinoa_installation / "inciter"], envQuinoa)
 envQuinoa["charmrun"] = waves.scons_extensions.add_program(["charmrun", quinoa_installation / "charmrun"], envQuinoa)
 
