@@ -88,7 +88,7 @@ for key, value in project_variables.items():
 # Comments used in tutorial code snippets: marker-5
 
 # Build path object for extension and re-use
-variant_dir_base = pathlib.Path(env['variant_dir_base'])
+variant_dir_base = env['variant_dir_base']
 
 # Add custom builders
 env.Append(BUILDERS={
@@ -104,7 +104,7 @@ try:  # sstelmo/sstbigbird
     envQuinoa = waves.scons_extensions.shell_environment(quinoa_aea_environment)
 except subprocess.CalledProcessError:  # HPC snow
     envQuinoa = waves.scons_extensions.shell_environment(quinoa_snow_environment)
-quinoa_installation = pathlib.Path(env["quinoa_installation"])
+quinoa_installation = env["quinoa_installation"]
 envQuinoa["inciter"] = waves.scons_extensions.add_program(["inciter", quinoa_installation / "inciter"], envQuinoa)
 envQuinoa["charmrun"] = waves.scons_extensions.add_program(["charmrun", quinoa_installation / "charmrun"], envQuinoa)
 

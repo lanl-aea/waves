@@ -18,7 +18,7 @@ import waves
 Import("env", "envSierra")
 
 # Set project-wide paths with os-agnostic path separators
-sierra_source_abspath = pathlib.Path(env["sierra_source_abspath"])
+sierra_source_abspath = env["sierra_source_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)

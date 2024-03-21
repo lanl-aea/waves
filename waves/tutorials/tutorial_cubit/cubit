@@ -21,7 +21,7 @@ import waves
 Import('env', "element_type", "solver")
 
 # Set project-wide paths with os-agnostic path separators
-cubit_source_abspath = pathlib.Path(env["cubit_source_abspath"])
+cubit_source_abspath = env["cubit_source_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)

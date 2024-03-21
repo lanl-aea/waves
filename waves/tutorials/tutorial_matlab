@@ -16,7 +16,7 @@ import pathlib
 Import("env")
 
 # Set project-wide paths with os-agnostic path separators
-matlab_source_abspath = pathlib.Path(env["matlab_source_abspath"])
+matlab_source_abspath = env["matlab_source_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
