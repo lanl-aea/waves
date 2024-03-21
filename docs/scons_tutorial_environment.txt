@@ -12,7 +12,7 @@
 
    .. code-block::
 
-      $ conda create --name waves-tutorial-env --channel conda-forge scons waves
+      $ conda create --name waves-tutorial-env --channel conda-forge 'scons>=4.6' waves
 
 2. Activate the environment
 
