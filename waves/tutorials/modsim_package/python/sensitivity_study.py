@@ -13,7 +13,7 @@ import numpy
 import seaborn
 import SALib.analyze.delta
 
-from modsim_package.python.rectangle_compression_correlation_coefficients import parameter_schema
+from modsim_package.python.rectangle_compression_sensitivity_study import parameter_schema
 
 
 default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'time': 1.0,

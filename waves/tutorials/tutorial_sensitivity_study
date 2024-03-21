@@ -15,7 +15,7 @@ import pathlib
 
 import waves
 
-from modsim_package.python.rectangle_compression_correlation_coefficients import parameter_schema
+from modsim_package.python.rectangle_compression_sensitivity_study import parameter_schema
 
 # Inherit the parent construction environment
 Import('env')
@@ -151,14 +151,14 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
 # Comment used in tutorial code snippets: marker-6
 
 # Post-processing
-script = python_source_abspath / "correlation_coefficients.py"
+script = python_source_abspath / "sensitivity_study.py"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file ${SOURCES[2:].abspath}"
 script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(env.PythonScript(
-    target=["correlation_coefficients.csv", "correlation_pairplot.pdf", "sensitivity.yaml"],
+    target=["sensitivity_study.csv", "correlation_pairplot.pdf", "sensitivity.yaml"],
     source=[script, parameter_study_file.name] + post_processing_source,
     script_options=script_options
 ))

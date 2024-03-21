@@ -101,7 +101,7 @@ workflow_configurations = [
     'tutorial_07_cartesian_product',
     'tutorial_08_data_extraction',
     'tutorial_09_post_processing',
-    'tutorial_correlation_coefficients'
+    'tutorial_sensitivity_study'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
