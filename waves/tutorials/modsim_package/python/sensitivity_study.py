@@ -107,8 +107,6 @@ def main(input_files, output_file, group_path, selection_dict, parameter_study_f
     # Clean up open files
     combined_data.close()
 
-    return 0
-
 
 def get_parser():
     script_name = pathlib.Path(__file__)

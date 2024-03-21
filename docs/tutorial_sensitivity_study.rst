@@ -89,14 +89,9 @@ Post-processing script
    .. literalinclude:: python_sensitivity_study.py
       :language: Python
 
-A ``diff`` against the ``post_processing.py`` file from :ref:`tutorial_post_processing` is included below to
-help identify the changes made in this tutorial.
-
-.. admonition:: waves-tutorials/modsim_package/python/sensitivity_study.py
-
-   .. literalinclude:: python_sensitivity_study.py
-      :language: Python
-      :diff: python_post_processing.py
+This file should look similar to the ``post_processing.py`` file from :ref:`tutorial_post_processing`. Unused functions
+have been removed and the output has changed to reflect the sensitivity study operations. In practice, modsim projects
+would move the shared functions of both post-processing scripts to a common utilities module.
 
 **********
 SConstruct
