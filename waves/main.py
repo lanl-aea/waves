@@ -26,8 +26,8 @@ def main() -> int:
         root_directory = _settings._modsim_template_directory.parent
         relative_paths = _settings._fetch_subdirectories
         return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
-                            requested_paths=args.FILE, overwrite=args.overwrite, dry_run=args.dry_run,
-                            print_available=args.print_available)
+                            requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
+                            dry_run=args.dry_run, print_available=args.print_available)
     elif args.subcommand == 'quickstart':
         root_directory = _settings._modsim_template_directory.parent
         relative_paths = [_settings._modsim_template_directory.name]
@@ -113,6 +113,9 @@ def get_parser() -> argparse.ArgumentParser:
              "destination will not be copied. (default: PWD)",
         type=pathlib.Path,
         default=pathlib.Path().cwd())
+    fetch_parser.add_argument("--tutorial",
+        help="Fetch all necessary files for specified tutorial.",
+        type=int)
     fetch_parser.add_argument("--overwrite",
         action="store_true",
         help="Overwrite any existing files (default: %(default)s)")
@@ -287,7 +290,7 @@ def build(targets: list, scons_args: list | None = None, max_iterations: int = 5
 
 def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
           destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
-          overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
+          tutorial: int = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
     """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
 
     Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
@@ -302,9 +305,11 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
     :param destination: String or pathlike object for the destination directory
     :param requested_paths: list of relative path-like objects that subset the files found in the
         ``root_directory`` ``relative_paths``
+    :param tutorial: Integer to fetch all necessary files for the specified tutorial number.
+        Short circuited by ``print_available``
     :param overwrite: Boolean to overwrite any existing files in destination directory
     :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
-    :param print_available: Print the available source files and exit. Short circuits ``dry_run``
+    :param print_available: Print the available source files and exit. Short circuits ``dry_run`` and ``tutorial``
 
     :returns: return code
     """
@@ -319,10 +324,27 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
 
     from waves import fetch
 
-    print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
-    print(f"Destination directory: '{destination}'", file=sys.stdout)
-    return_code = fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
-                                       overwrite=overwrite, dry_run=dry_run, print_available=print_available)
+    if tutorial is None or print_available:
+        print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
+        print(f"Destination directory: '{destination}'", file=sys.stdout)
+        return_code = fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
+                                           overwrite=overwrite, dry_run=dry_run, print_available=print_available)
+    else:
+        try:
+            return_codes = []
+            tutorial_fetch_commands = _settings._tutorials_directory[tutorial]
+            for tutorial_fetch_command in tutorial_fetch_commands:
+                requested_paths = tutorial_fetch_command['files']
+                destination = tutorial_fetch_command['destination']
+                print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
+                print(f"Destination directory: '{destination}'", file=sys.stdout)
+                return_codes.append(fetch.recursive_copy(root_directory, relative_paths, destination,
+                                                         requested_paths=requested_paths, overwrite=overwrite,
+                                                         dry_run=dry_run))
+            return_code = max(return_codes)
+        except KeyError:
+            print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stdout)
+            return_code = 1
     return return_code
 
 
