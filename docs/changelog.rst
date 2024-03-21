@@ -12,6 +12,8 @@ Documentation
 =============
 - Simplify the Cubit tutorial SConscript interfaces (:issue:`618`, :merge:`771`). By `Kyle Brindley`_.
 - Add draft outline for a sensitivity study tutorial (:issue:`619`, :merge:`774`). By `Kyle Brindley`_.
+- Remove unnecessary str conversions in tutorial SCons configuration files. No longer necessary in SCons>=4.6
+  (:issue:`612`, :merge:`776`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
