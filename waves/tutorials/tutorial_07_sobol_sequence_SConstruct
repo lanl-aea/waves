@@ -78,7 +78,7 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 # Comments used in tutorial code snippets: marker-5
 
 # Build path object for extension and re-use
-variant_dir_base = env['variant_dir_base']
+variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={
