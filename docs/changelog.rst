@@ -11,6 +11,7 @@ Changelog
 Documentation
 =============
 - Simplify the Cubit tutorial SConscript interfaces (:issue:`618`, :merge:`771`). By `Kyle Brindley`_.
+- Add draft outline for a sensitivity study tutorial (:issue:`619`, :merge:`774`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
