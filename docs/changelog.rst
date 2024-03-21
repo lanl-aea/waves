@@ -16,6 +16,8 @@ Documentation
 Internal Changes
 ================
 - Standardize tutorial multiline and hanging indents (:issue:`613`, :merge:`769`). By `Sergio Cordova`_.
+- Fetch each tutorial to a unique temporary directory before running as a system test. Avoids race conditions on the
+  tutorial sconsign database file during system tests (:issue:`620`, :merge:`775`). By `Kyle Brindley`_.
 
 *******************
 0.7.10 (2024-03-15)
