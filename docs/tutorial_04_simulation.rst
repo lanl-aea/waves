@@ -35,18 +35,10 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
-        WAVES fetch
-        Destination directory: 'modsim_package'
-        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*.py' 'tutorials/modsim_package/abaqus/*.inp'
-        WAVES fetch
+        $ waves fetch --overwrite --tutorial 3 && mv tutorial_03_solverprep_SConstruct SConstruct
         Destination directory: 'modsim_package/abaqus'
-        $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh'
-        WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        $ waves fetch tutorials/tutorial_03_solverprep_SConstruct && mv tutorial_03_solverprep_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+        Destination directory: 'modsim_package'
 
 4. Download and copy the ``tutorial_03_solverprep`` file to a new file named ``tutorial_04_simulation``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.

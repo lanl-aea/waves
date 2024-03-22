@@ -38,15 +38,11 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite tutorials/modsim_package/__init__.py --destination modsim_package
-        WAVES fetch
-        Destination directory: 'modsim_package'
-        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/__init__.py' 'tutorials/modsim_package/abaqus/rectangle_geometry.py'
+        $ waves fetch --overwrite --tutorial 1 && mv tutorial_01_geometry_SConstruct SConstruct
         WAVES fetch
         Destination directory: 'modsim_package/abaqus'
-        $ waves fetch tutorials/tutorial_01_geometry_SConstruct && mv tutorial_01_geometry_SConstruct SConstruct
-        WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
+        Destination directory: 'modsim_package'
 
 
 4. Download and copy the ``tutorial_01_geometry`` file to a new file named ``tutorial_02_partition_mesh`` 

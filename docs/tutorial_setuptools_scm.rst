@@ -38,21 +38,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
-        WAVES fetch
-        Destination directory: 'modsim_package'
-        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*'
-        WAVES fetch
-        Destination directory: 'modsim_package/abaqus'
-        $ waves fetch --overwrite --destination modsim_package/python 'tutorials/modsim_package/python/__init__.py' 'tutorials/modsim_package/python/rectangle_compression_nominal.py' 'tutorials/modsim_package/python/rectangle_compression_cartesian_product.py' 'tutorials/modsim_package/python/post_processing.py' 'tutorials/modsim_package/python/tests/test_post_processing.py' 'tutorials/modsim_package/python/rectangle_compression_cartesian_product.csv'
+        $ waves fetch --overwrite --tutorial 12 && mv tutorial_12_archival_SConstruct SConstruct
         WAVES fetch
         Destination directory: 'modsim_package/python'
-        $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep' 'tutorials/tutorial_04_simulation' 'tutorials/tutorial_05_parameter_substitution' 'tutorials/tutorial_06_include_files' 'tutorials/tutorial_07_cartesian_product' 'tutorials/tutorial_08_data_extraction' 'tutorials/tutorial_09_post_processing'  'tutorials/unit_testing' 'tutorials/tutorial_11_regression_testing'
-        WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        $ waves fetch tutorials/tutorial_12_archival_SConstruct && mv tutorial_12_archival_SConstruct SConstruct
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
+        Destination directory: 'modsim_package'
+        Destination directory: 'modsim_package/abaqus'
 
 4. Download the ``tutorial_12_archival`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
    ``SConscript`` file ``tutorial_12_archival`` does not need to change because we are already using the project
