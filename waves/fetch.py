@@ -205,7 +205,15 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     return 0
 
 
-def get_tutorial_scons_files(tutorial: int, root_directory: str | pathlib.Path):
+def get_tutorial_scons_files(tutorial: int, root_directory: str | pathlib.Path) -> tuple[list, str]:
+    """Get the necessary scons files based on tutorial number.
+    
+    :param tutorial: Integer indicating the tutorial number.
+    :param root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths with
+        respect to the current working directory before searching.
+    
+    :returns: tutorial_sconscript_files, sconstruct_file
+    """
     scons_files, not_found = available_files(root_directory=root_directory, relative_paths='tutorials/')
     tutorial_sconscript_files = []
     sconstruct_file = None
@@ -223,4 +231,3 @@ def get_tutorial_scons_files(tutorial: int, root_directory: str | pathlib.Path):
                 if number != tutorial:
                     break
     return tutorial_sconscript_files, sconstruct_file
-
