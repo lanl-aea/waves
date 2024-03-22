@@ -203,3 +203,24 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     conditional_copy(copy_tuples)
 
     return 0
+
+
+def get_tutorial_scons_files(tutorial: int, root_directory: str | pathlib.Path):
+    scons_files, not_found = available_files(root_directory=root_directory, relative_paths='tutorials/')
+    tutorial_sconscript_files = []
+    sconstruct_file = None
+    for number in range(1, tutorial + 1):
+        search_number = str(number)
+        if len(search_number) == 1:
+            search_number = '0' + search_number
+        for file in scons_files:
+            file_string = str(os.path.basename(file))
+            if number == tutorial and 'SConstruct' in file_string and search_number in file_string:
+                sconstruct_file = file_string
+                break
+            if 'tutorial_' + search_number in file_string and 'SConstruct' not in file_string:
+                tutorial_sconscript_files.append(file_string)
+                if number != tutorial:
+                    break
+    return tutorial_sconscript_files, sconstruct_file
+
