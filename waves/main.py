@@ -1,6 +1,7 @@
-import argparse
-import pathlib
+import os
 import sys
+import pathlib
+import argparse
 import subprocess
 
 from waves import _settings
@@ -332,7 +333,7 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
     else:
         try:
             return_codes = []
-            tutorial_fetch_commands = _settings._tutorials_directory[tutorial]
+            tutorial_fetch_commands = _settings._tutorial_paths[tutorial]
             tutorial_fetch_commands.append({'files': [], 'destination': None})
             if tutorial != 0:
                 tutorial_fetch_commands.append({'files': ['tutorials/modsim_package/__init__.py'],
@@ -345,7 +346,7 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
                 destination = tutorial_fetch_command['destination']
                 if not destination:
                     destination = pathlib.Path().cwd()
-                    tutorial_sconscript_files, sconstruct_file = get_tutorial_sconscript_files(tutorial, root_directory)
+                    tutorial_sconscript_files, sconstruct_file = get_tutorial_scons_files(tutorial, root_directory)
                     requested_paths.append(sconstruct_file)
                     if tutorial >= 2:
                         requested_paths.extend(tutorial_sconscript_files)
@@ -363,10 +364,10 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
     return return_code
 
 
-def get_tutorial_sconscript_files(tutorial: int, root_directory: str | pathlib.Path):
+def get_tutorial_scons_files(tutorial: int, root_directory: str | pathlib.Path):
     from waves import fetch
 
-    available_files, not_found = fetch.available_files(root_directory=root_directory, relative_paths='tutorials/*')
+    available_files, not_found = fetch.available_files(root_directory=root_directory, relative_paths='tutorials/')
     tutorial_sconscript_files = []
     sconstruct_file = None
     for number in range(1, tutorial + 1):
@@ -374,13 +375,14 @@ def get_tutorial_sconscript_files(tutorial: int, root_directory: str | pathlib.P
         if len(search_number) == 1:
             search_number = '0' + search_number
         for file in available_files:
-            file_string = file.resolve()
-            if int(number) == tutorial and 'SConstruct' in file_string:
+            file_string = str(os.path.basename(file))
+            if number == tutorial and 'SConstruct' in file_string and search_number in file_string:
                 sconstruct_file = file_string
                 break
             if 'tutorial_' + search_number in file_string and 'SConstruct' not in file_string:
                 tutorial_sconscript_files.append(file_string)
-                break
+                if number != tutorial:
+                    break
     return tutorial_sconscript_files, sconstruct_file
 
 
