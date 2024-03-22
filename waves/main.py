@@ -379,10 +379,9 @@ def get_tutorial_scons_files(tutorial: int, root_directory: str | pathlib.Path):
             if number == tutorial and 'SConstruct' in file_string and search_number in file_string:
                 sconstruct_file = file_string
                 break
-            if 'tutorial_' + search_number in file_string and 'SConstruct' not in file_string:
+            if 'tutorial_' + search_number in file_string and 'SConstruct' not in file_string and number != tutorial:
                 tutorial_sconscript_files.append(file_string)
-                if number != tutorial:
-                    break
+                break
     return tutorial_sconscript_files, sconstruct_file
 
 
