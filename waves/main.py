@@ -341,6 +341,7 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
             if tutorial >= 5:
                 tutorial_fetch_commands.append({'files': ['tutorials/modsim_package/abaqus/*'],
                                                 'destination': 'modsim_package/abaqus'})
+            print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
             for tutorial_fetch_command in tutorial_fetch_commands:
                 requested_paths = tutorial_fetch_command['files']
                 destination = tutorial_fetch_command['destination']
@@ -352,7 +353,6 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
                         requested_paths.extend(tutorial_sconscript_files)
                     if tutorial >= 10:
                         requested_paths.append('tutorials/unit_testing')
-                print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
                 print(f"Destination directory: '{destination}'", file=sys.stdout)
                 return_codes.append(fetch.recursive_copy(root_directory, relative_paths, destination,
                                                          requested_paths=requested_paths, overwrite=overwrite,
