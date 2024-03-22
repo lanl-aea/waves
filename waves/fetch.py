@@ -217,7 +217,7 @@ def get_tutorial_scons_files(tutorial: int, root_directory: str | pathlib.Path) 
     scons_files, not_found = available_files(root_directory=root_directory, relative_paths='tutorials/')
     tutorial_sconscript_files = []
     sconstruct_file = None
-    for number in range(1, tutorial + 1):
+    for number in range(0, tutorial + 1):
         search_number = str(number)
         if len(search_number) == 1:
             search_number = '0' + search_number

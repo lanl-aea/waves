@@ -48,7 +48,7 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --tutorial 11
+        $ waves fetch --overwrite --tutorial 11 && mv tutorial_11_regression_testing_SConstruct SConstruct
         WAVES fetch
         Destination directory: 'modsim_package/python'
         Destination directory: '/home/roppenheimer/waves-tutorials'
