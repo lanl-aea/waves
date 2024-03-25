@@ -168,12 +168,12 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     :param print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
     if tutorial is not None:
-        try:
-            for x in range(0, tutorial + 1):
-                requested_paths.extend(_settings._tutorial_paths[x])
-        except KeyError:
+        if tutorial not in _settings._tutorial_paths.keys():
             print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stderr)
             return 1
+        else:
+            for x in range(0, tutorial + 1):
+                requested_paths.extend(_settings._tutorial_paths[x])
     if not requested_paths:
         requested_paths = []
     # Build source tree
