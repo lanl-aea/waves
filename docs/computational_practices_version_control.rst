@@ -124,25 +124,30 @@ examples of a Git log from the current project.
 
   .. code-block::
 
-     $ git show 0a00f5704d9299ffd77c83100f90676f2f509456
-     commit 0a00f5704d9299ffd77c83100f90676f2f509456
-     Author: Prabhu Khalsa <pkhalsa@pn1934993.lanl.gov>
-     Date:   Thu Jun 2 11:31:48 2022 -0600
+     $ git show 3c9322261e1aae568901e3292a68c11d3d5ce830
+     commit 3c9322261e1aae568901e3292a68c11d3d5ce830
+     Author: Kyle Brindley <kbrindley@lanl.gov>
+     Date:   Tue Mar 12 11:55:05 2024 -0600
 
-         DOC: Adding cli documentation to rst docs
+         DOC: add debugging tips to the modsim template
 
-     diff --git a/docs/cli.rst b/docs/cli.rst
-     index 114025a..cda1894 100644
-     --- a/docs/cli.rst
-     +++ b/docs/cli.rst
-     @@ -50,3 +50,10 @@ ODB Extract
+     diff --git a/waves/modsim_template/README.rst b/waves/modsim_template/README.rst
+     index 5293de6a..294ed739 100644
+     --- a/waves/modsim_template/README.rst
+     +++ b/waves/modsim_template/README.rst
+     @@ -172,6 +172,15 @@ configuration, e.g. ``tutorial_01_geometry``.
 
-      .. argparse::
-         :ref: waves.abaqus.odb_extract.get_parser
+           $ scons . --clean
+
+     +- For debugging workflows, use the verbose output option of SCons
      +
-     +*********
-     +Sta Parse
-     +*********
+     +  .. code-block:: bash
      +
-     +.. argparse::
-     +   :ref: waves.abaqus.sta_parse.get_parser
+     +     $ scons target --debug=explain
+     +
+     +Because `SCons`_ uses Python as a scripting language, the usual Python debugging techniques may be placed directly in
+     +the configuration file, as well: https://docs.python.org/3/library/pdb.html.
+     +
+      .. build-end-do-not-remove
+
+      *******
