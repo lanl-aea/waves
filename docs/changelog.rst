@@ -8,6 +8,11 @@ Changelog
 0.8.0 (unreleased)
 ******************
 
+Breaking changes
+================
+- Remove the deprecated public ``generate`` method of the parameter generators. Parameter studies are generated on class
+  instantiation since version :ref:`0.6.1`. (:issue:`605`, :merge:`777`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Simplify the Cubit tutorial SConscript interfaces (:issue:`618`, :merge:`771`). By `Kyle Brindley`_.
@@ -767,6 +772,8 @@ Internal Changes
 ================
 - Reduce builder emitter code duplication with a common "first target" emitter (:issue:`388`, :merge:`449`,
   :merge:`450`). By `Kyle Brindley`_.
+
+.. _0.6.1:
 
 ******************
 0.6.1 (2023-01-06)
