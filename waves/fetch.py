@@ -148,6 +148,16 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
         print(f"{prefix}{item}", file=stream)
 
 
+def append_tutorial_files(requested_paths, tutorial):
+    if tutorial not in _settings._tutorial_paths.keys():
+        print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stderr)
+        return 1
+    else:
+        for x in range(0, tutorial + 1):
+            requested_paths.extend(_settings._tutorial_paths[x])
+    return requested_paths
+
+
 def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
                    destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
                    tutorial: int = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
@@ -167,15 +177,12 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
-    if tutorial is not None:
-        if tutorial not in _settings._tutorial_paths.keys():
-            print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stderr)
-            return 1
-        else:
-            for x in range(0, tutorial + 1):
-                requested_paths.extend(_settings._tutorial_paths[x])
     if not requested_paths:
         requested_paths = []
+
+    if tutorial is not None:
+        requested_paths = append_tutorial_files(requested_paths, tutorial)
+
     # Build source tree
     source_files, missing_relative_paths = build_source_files(root_directory, relative_paths)
     longest_common_source_path = longest_common_path_prefix(source_files)

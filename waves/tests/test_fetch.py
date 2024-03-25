@@ -231,10 +231,11 @@ def test_print_list():
     pass
 
 
-@pytest.mark.parametrize("root_directory, source_files, source_tree, destination_tree",
-                         [(root_directory, source_files, two_file_source_tree, two_file_destination_tree)])
+@pytest.mark.parametrize("root_directory, source_files, source_tree, destination_tree, tutorial",
+                         [(root_directory, source_files, two_file_source_tree, two_file_destination_tree, None),
+                          (root_directory, source_files, two_file_source_tree, two_file_destination_tree, 6)])
 @pytest.mark.unittest
-def test_recursive_copy(root_directory, source_files, source_tree, destination_tree):
+def test_recursive_copy(root_directory, source_files, source_tree, destination_tree, tutorial):
 
     # Dummy modsim_template tree
     copy_tuples = tuple(zip(source_tree, destination_tree))
@@ -332,3 +333,18 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
         assert return_code == 0
         mock_print_list.assert_called_once_with(destination_tree)
         mock_conditional_copy.assert_not_called()
+
+    # Files in destination tree do not exist. Copy the modsim_template file tree.
+    with patch("waves.fetch.available_files", return_value=available_files_output), \
+         patch("waves.fetch.print_list") as mock_print_list, \
+         patch("waves.fetch.append_tutorial_files") as mock_append, \
+         patch("waves.fetch.conditional_copy"), \
+         patch("pathlib.Path.exists", side_effect=[False, False]), \
+         patch("filecmp.cmp", return_value=False):
+        return_code = fetch.recursive_copy(root_directory.parent, root_directory.name, destination, tutorial=tutorial)
+        assert return_code == 0
+        mock_print_list.assert_not_called()
+        if tutorial is not None:
+            mock_append.assert_called_once()
+        else:
+            mock_append.assert_not_called()
