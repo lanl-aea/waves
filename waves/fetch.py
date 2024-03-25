@@ -172,7 +172,6 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
             requested_paths = []
             for x in range(0, tutorial + 1):
                 requested_paths.extend(_settings._tutorial_paths[x])
-            requested_paths.append(get_tutorial_sconstruct_file(tutorial, root_directory))
         except KeyError:
             print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stderr)
             return 1
@@ -213,23 +212,3 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     conditional_copy(copy_tuples)
 
     return 0
-
-
-def get_tutorial_sconstruct_file(tutorial: int, root_directory: str | pathlib.Path) -> str:
-    """Get the necessary sconstruct file based on tutorial number.
-
-    :param tutorial: Integer indicating the tutorial number.
-    :param root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths with
-        respect to the current working directory before searching.
-
-    :returns: sconstruct_file
-    """
-    scons_files, not_found = available_files(root_directory=root_directory, relative_paths='tutorials/')
-    sconstruct_file = None
-    for file in scons_files:
-        tutorial_string = "0" + str(tutorial) if len(str(tutorial)) == 1 else str(tutorial)
-        file_string = str(os.path.basename(file))
-        if "SConstruct" in file_string and tutorial_string in file_string:
-            sconstruct_file = file_string
-            break
-    return sconstruct_file
