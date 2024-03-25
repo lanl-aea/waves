@@ -95,21 +95,3 @@ Odb Report File Parser
     :members:
     :private-members:
     :show-inheritance:
-
-***************
-Sta File Parser
-***************
-
-.. autoclass:: waves.abaqus.abaqus_file_parser.StaFileParser
-    :members:
-    :private-members:
-    :show-inheritance:
-
-***************
-Msg File Parser
-***************
-
-.. autoclass:: waves.abaqus.abaqus_file_parser.MsgFileParser
-    :members:
-    :private-members:
-    :show-inheritance:
