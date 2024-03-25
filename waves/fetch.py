@@ -169,7 +169,6 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     """
     if tutorial is not None:
         try:
-            requested_paths = []
             for x in range(0, tutorial + 1):
                 requested_paths.extend(_settings._tutorial_paths[x])
         except KeyError:

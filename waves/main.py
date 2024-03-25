@@ -114,7 +114,7 @@ def get_parser() -> argparse.ArgumentParser:
         type=pathlib.Path,
         default=pathlib.Path().cwd())
     fetch_parser.add_argument("--tutorial",
-        help="Fetch all necessary files for specified tutorial.",
+        help="Fetch all necessary files for specified tutorial. Appends to the positional FILE requests.",
         type=int)
     fetch_parser.add_argument("--overwrite",
         action="store_true",
