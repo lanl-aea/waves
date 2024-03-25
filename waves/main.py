@@ -306,11 +306,10 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
     :param destination: String or pathlike object for the destination directory
     :param requested_paths: list of relative path-like objects that subset the files found in the
         ``root_directory`` ``relative_paths``
-    :param tutorial: Integer to fetch all necessary files for the specified tutorial number.
-        Short circuited by ``print_available``
+    :param tutorial: Integer to fetch all necessary files for the specified tutorial number
     :param overwrite: Boolean to overwrite any existing files in destination directory
     :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
-    :param print_available: Print the available source files and exit. Short circuits ``dry_run`` and ``tutorial``
+    :param print_available: Print the available source files and exit. Short circuits ``dry_run``
 
     :returns: return code
     """
