@@ -168,7 +168,7 @@ class _ParameterGenerator(ABC):
            self._samples = numpy.zeros((set_count, parameter_count))
 
            # Work performed by common ABC methods
-           super().generate()
+           super()._generate()
         """
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
