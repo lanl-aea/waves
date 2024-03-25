@@ -148,7 +148,16 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
         print(f"{prefix}{item}", file=stream)
 
 
-def append_tutorial_files(requested_paths, tutorial):
+def extend_requested_paths(requested_paths, tutorial):
+    """Extend the requested_paths list with the necessary tutorial files.
+    
+    :param list requested_paths: list of relative path-like objects that subset the files found in the
+        ``root_directory`` ``relative_paths``
+    :param tutorial: Integer to fetch all necessary files for the specified tutorial number
+    
+    :returns: extended requested paths
+    
+    """
     if tutorial not in _settings._tutorial_paths.keys():
         print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stderr)
         return 1
@@ -181,7 +190,7 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
         requested_paths = []
 
     if tutorial is not None:
-        requested_paths = append_tutorial_files(requested_paths, tutorial)
+        requested_paths = extend_requested_paths(requested_paths, tutorial)
 
     # Build source tree
     source_files, missing_relative_paths = build_source_files(root_directory, relative_paths)
