@@ -41,12 +41,12 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --tutorial 7 && mv tutorial_07_cartesian_product_SConstruct SConstruct
+        $ waves fetch --overwrite --tutorial 7
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        $ waves fetch --overwrite --destination modsim_package/python 'tutorials/modsim_package/python/rectangle_compression_sobol_sequence.py'
+        $ waves fetch --overwrite 'tutorials/tutorial_07_sobol_sequence_SConstruct' 'tutorials/modsim_package/python/rectangle_compression_sobol_sequence.py' && mv tutorial_07_sobol_sequence_SConstruct SConstruct
         WAVES fetch
-        Destination directory: 'modsim_package/python'
+        Destination directory: '/home/roppenheimer/waves-tutorials'
 
 4. Download and copy the ``tutorial_07_sobol_sequence`` file to a new file named ``tutorial_extend_study``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
@@ -76,14 +76,14 @@ differences between the two parameter generators.
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_cartesian_product` is included below to help identify the
+A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_sobol_sequence` is included below to help identify the
 changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_extend_study_SConstruct
       :language: Python
-      :diff: tutorials_tutorial_07_cartesian_product
+      :diff: tutorials_tutorial_07_sobol_sequence_SConstruct
 
 *************
 Build Targets
