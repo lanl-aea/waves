@@ -104,17 +104,3 @@ ODB Extract
 
 .. argparse::
    :ref: waves.abaqus.odb_extract.get_parser
-
-*********
-Sta Parse
-*********
-
-.. argparse::
-   :ref: waves.abaqus.sta_parse.get_parser
-
-*********
-Msg Parse
-*********
-
-.. argparse::
-   :ref: waves.abaqus.msg_parse.get_parser
