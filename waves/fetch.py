@@ -150,7 +150,7 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
 
 def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
                    destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
-                   overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
+                   tutorial: int = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
     """Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
     the shortest possible shared source prefix.
 
@@ -162,10 +162,20 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     :param destination: String or pathlike object for the destination directory
     :param requested_paths: list of relative path-like objects that subset the files found in the
         ``root_directory`` ``relative_paths``
+    :param tutorial: Integer to fetch all necessary files for the specified tutorial number
     :param overwrite: Boolean to overwrite any existing files in destination directory
     :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
+    if tutorial is not None:
+        try:
+            requested_paths = []
+            for x in range(0, tutorial + 1):
+                requested_paths.extend(_settings._tutorial_paths[x])
+            requested_paths.append(get_tutorial_sconstruct_file(tutorial, root_directory))
+        except KeyError:
+            print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stderr)
+            return 1
     if not requested_paths:
         requested_paths = []
     # Build source tree
@@ -205,29 +215,18 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     return 0
 
 
-def get_tutorial_scons_files(tutorial: int, root_directory: str | pathlib.Path) -> tuple[list, str]:
+def get_tutorial_sconstruct_file(tutorial: int, root_directory: str | pathlib.Path) -> str:
     """Get the necessary scons files based on tutorial number.
 
     :param tutorial: Integer indicating the tutorial number.
     :param root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths with
         respect to the current working directory before searching.
 
-    :returns: tutorial_sconscript_files, sconstruct_file
+    :returns: sconstruct_file
     """
     scons_files, not_found = available_files(root_directory=root_directory, relative_paths='tutorials/')
-    tutorial_sconscript_files = []
-    sconstruct_file = None
-    for number in range(0, tutorial + 1):
-        search_number = str(number)
-        if len(search_number) == 1:
-            search_number = '0' + search_number
-        for file in scons_files:
-            file_string = str(os.path.basename(file))
-            if number == tutorial and 'SConstruct' in file_string and search_number in file_string:
-                sconstruct_file = file_string
-                break
-            if 'tutorial_' + search_number in file_string and 'SConstruct' not in file_string:
-                tutorial_sconscript_files.append(file_string)
-                if number != tutorial:
-                    break
-    return tutorial_sconscript_files, sconstruct_file
+    for file in scons_files:
+        tutorial_string = "0" + str(tutorial) if len(str(tutorial)) == 1 else str(tutorial)
+        file_string = str(os.path.basename(file))
+        if "SConstruct" in file_string and tutorial_string in file_string:
+            return file_string

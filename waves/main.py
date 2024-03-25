@@ -324,42 +324,12 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
 
     from waves import fetch
 
-    if tutorial is None or print_available:
-        print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
-        print(f"Destination directory: '{destination}'", file=sys.stdout)
-        return_code = fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
-                                           overwrite=overwrite, dry_run=dry_run, print_available=print_available)
-    else:
-        try:
-            return_codes = []
-            tutorial_fetch_commands = _settings._tutorial_paths[tutorial]
-            tutorial_fetch_commands.append({'files': [], 'destination': None})
-            if tutorial != 0:
-                tutorial_fetch_commands.append({'files': ['tutorials/modsim_package/__init__.py'],
-                                                'destination': 'modsim_package'})
-            if tutorial >= 5:
-                tutorial_fetch_commands.append({'files': ['tutorials/modsim_package/abaqus/*'],
-                                                'destination': 'modsim_package/abaqus'})
-            print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
-            for tutorial_fetch_command in tutorial_fetch_commands:
-                requested_paths = tutorial_fetch_command['files']
-                destination = tutorial_fetch_command['destination']
-                if not destination:
-                    destination = pathlib.Path().cwd()
-                    tutorial_sconscript_files, sconstruct_file = fetch.get_tutorial_scons_files(tutorial, root_directory)
-                    requested_paths.append(sconstruct_file)
-                    if tutorial >= 2:
-                        requested_paths.extend(tutorial_sconscript_files)
-                    if tutorial >= 10:
-                        requested_paths.append('tutorials/unit_testing')
-                print(f"Destination directory: '{destination}'", file=sys.stdout)
-                return_codes.append(fetch.recursive_copy(root_directory, relative_paths, destination,
-                                                         requested_paths=requested_paths, overwrite=overwrite,
-                                                         dry_run=dry_run))
-            return_code = max(return_codes)
-        except KeyError:
-            print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stdout)
-            return_code = 1
+    print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
+    print(f"Destination directory: '{destination}'", file=sys.stdout)
+    return_code = fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
+                                       tutorial=tutorial, overwrite=overwrite, dry_run=dry_run,
+                                       print_available=print_available)
+
     return return_code
 
 
