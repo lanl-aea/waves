@@ -11,7 +11,9 @@ Changelog
 Breaking changes
 ================
 - Remove the deprecated public ``generate`` method of the parameter generators. Parameter studies are generated on class
-  instantiation since version :ref:`0.6.1`. (:issue:`605`, :merge:`777`). By `Kyle Brindley`_.
+  instantiation since version :ref:`0.6.1` (:issue:`605`, :merge:`777`). By `Kyle Brindley`_.
+- Remove the deprecated ``builders`` module. Replaced by ``scons_extensions`` since version :ref:`0.7.1` (:issue:`511`,
+  :merge:`778`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -323,6 +325,8 @@ Enhancements
 - Use the draft Sphinx dependency scanner in the quickstart template modsim project (:issue:`529`, :merge:`645`). By
   `Kyle Brindley`_.
 - Update the Sierra execution environment solution (:issue:`531`, :merge:`646`). By `Kyle Brindley`_.
+
+.. _0.7.1:
 
 ******************
 0.7.1 (2023-08-28)
