@@ -37,8 +37,6 @@ Directory Structure
         $ waves fetch --overwrite --tutorial 5 && mv tutorial_05_parameter_substitution_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        Destination directory: 'modsim_package'
-        Destination directory: 'modsim_package/abaqus'
 
 4. Download and copy the ``tutorial_05_parameter_substitution`` file to a new file named ``tutorial_06_include_files``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.

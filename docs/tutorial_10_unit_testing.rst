@@ -41,10 +41,7 @@ Directory Structure
         /home/roppenheimer/waves-tutorials
         $ waves fetch --overwrite --tutorial 9 && mv tutorial_09_post_processing_SConstruct SConstruct
         WAVES fetch
-        Destination directory: 'modsim_package/python'
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        Destination directory: 'modsim_package'
-        Destination directory: 'modsim_package/abaqus'
 
 **************
 Unit test file

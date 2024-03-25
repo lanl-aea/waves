@@ -36,9 +36,7 @@ Directory Structure
         /home/roppenheimer/waves-tutorials
         $ waves fetch --overwrite --tutorial 2 && mv tutorial_02_partition_mesh_SConstruct SConstruct
         WAVES fetch
-        Destination directory: 'modsim_package/abaqus'
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        Destination directory: 'modsim_package'
 
 4. Download and copy the ``tutorial_02_partition_mesh`` file to a new file named ``tutorial_03_solverprep``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.

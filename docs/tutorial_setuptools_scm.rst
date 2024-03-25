@@ -40,10 +40,7 @@ Directory Structure
         /home/roppenheimer/waves-tutorials
         $ waves fetch --overwrite --tutorial 12 && mv tutorial_12_archival_SConstruct SConstruct
         WAVES fetch
-        Destination directory: 'modsim_package/python'
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        Destination directory: 'modsim_package'
-        Destination directory: 'modsim_package/abaqus'
 
 4. Download the ``tutorial_12_archival`` file with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand. The
    ``SConscript`` file ``tutorial_12_archival`` does not need to change because we are already using the project

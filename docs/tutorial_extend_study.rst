@@ -43,10 +43,7 @@ Directory Structure
         /home/roppenheimer/waves-tutorials
         $ waves fetch --overwrite --tutorial 7 && mv tutorial_07_cartesian_product_SConstruct SConstruct
         WAVES fetch
-        Destination directory: 'modsim_package/python'
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        Destination directory: 'modsim_package'
-        Destination directory: 'modsim_package/abaqus'
         $ waves fetch --overwrite --destination modsim_package/python 'tutorials/modsim_package/python/rectangle_compression_sobol_sequence.py'
         WAVES fetch
         Destination directory: 'modsim_package/python'

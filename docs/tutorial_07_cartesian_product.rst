@@ -39,10 +39,7 @@ Directory Structure
         /home/roppenheimer/waves-tutorials
         $ waves fetch --overwrite --tutorial 6 && mv tutorial_06_include_files_SConstruct SConstruct
         WAVES fetch
-        Destination directory: 'modsim_package/python'
         Destination directory: '/home/roppenheimer/waves-tutorials'
-        Destination directory: 'modsim_package'
-        Destination directory: 'modsim_package/abaqus'
 
 4. Download and copy the ``tutorial_06_include_files`` file to a new file named ``tutorial_07_cartesian_product``
    with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
