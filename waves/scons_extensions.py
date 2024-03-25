@@ -224,34 +224,6 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     return builder
 
 
-# TODO: Remove the **kwargs check and warning for v1.0.0 release
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
-def _warn_kwarg_change(kwargs: dict, old_kwarg: str, new_kwarg: str = "program"):
-    """Return the value of an old kwarg and raise a deprecation warning pointing to the new kwarg
-
-    Return None if the old keyword argument is not found in the keyword arguments dictionary.
-
-    >>> def function_with_kwarg_change(new_kwarg="something", **kwargs):
-    >>>     old_kwarg = waves.scons_extensions._warn_kwarg_change()
-    >>>     new_kwarg = old_kwarg if old_kwarg is not None else new_kwarg
-
-    :param kwargs: The ``**kwargs`` dictionary from a function interface
-    :param old_kwarg: The older kwarg key.
-
-    :return: Value of the ``old_kwarg`` if it exists in the ``kwargs`` dictionary. ``None`` if the old keyword isn't
-        found in the dictionary.
-    """
-    program = None
-    if old_kwarg in kwargs:
-        import warnings
-        warnings.filterwarnings('always')
-        message = f"The '{old_kwarg}' keyword argument will be deprecated in a future version. " \
-                  f"Use the '{new_kwarg}' keyword argument instead."
-        warnings.warn(message, DeprecationWarning)
-        program = kwargs[old_kwarg]
-    return program
-
-
 def project_help_message(env=None,
                          append: bool = True,
                          keep_local: bool = True) -> None:
@@ -706,10 +678,6 @@ def abaqus_journal(program: str = "abaqus", post_action: list = [], **kwargs) ->
     :return: Abaqus journal builder
     :rtype: SCons.Builder.Builder
     """
-    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
-    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
-    program = abaqus_program if abaqus_program is not None else program
     action = [
         f"{program} -information environment {_redirect_environment_postfix}",
         f"{program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} " \
@@ -874,10 +842,6 @@ def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
 
     :return: Abaqus solver builder
     """
-    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
-    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
-    program = abaqus_program if abaqus_program is not None else program
     action = [
         f"{program} -information environment {_redirect_environment_postfix}",
         f"{program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no " \
@@ -1211,10 +1175,6 @@ def matlab_script(program: str = "matlab", post_action: list[str] = [], **kwargs
 
     :return: Matlab script builder
     """
-    # TODO: Remove the **kwargs and matlab_program check for v1.0.0 release
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
-    matlab_program = _warn_kwarg_change(kwargs, "matlab_program")
-    program = matlab_program if matlab_program is not None else program
     action = [
         f"{program} ${{matlab_options}} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
@@ -1373,10 +1333,6 @@ def abaqus_extract(program: str = "abaqus", **kwargs) -> SCons.Builder.Builder:
 
     :return: Abaqus extract builder
     """
-    # TODO: Remove the **kwargs and abaqus_program check for v1.0.0 release
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
-    abaqus_program = _warn_kwarg_change(kwargs, "abaqus_program")
-    program = abaqus_program if abaqus_program is not None else program
     abaqus_extract_builder = SCons.Builder.Builder(
         action=[
             SCons.Action.Action(_build_odb_extract, varlist=["output_type", "odb_report_args", "delete_report_file"])
@@ -1454,10 +1410,6 @@ def sbatch(program: str = "sbatch", post_action: list[str] = [], **kwargs) -> SC
 
     :return: SLURM sbatch builder
     """
-    # TODO: Remove the **kwargs and sbatch_program check for v1.0.0 release
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/508
-    sbatch_program = _warn_kwarg_change(kwargs, "sbatch_program")
-    program = sbatch_program if sbatch_program is not None else program
     action = [
         f"{program} --wait --output=${{TARGETS[-1].abspath}} ${{sbatch_options}} --wrap \"${{slurm_job}}\""
     ]
