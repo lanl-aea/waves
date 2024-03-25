@@ -14,6 +14,8 @@ Breaking changes
   instantiation since version :ref:`0.6.1` (:issue:`605`, :merge:`777`). By `Kyle Brindley`_.
 - Remove the deprecated ``builders`` module. Replaced by ``scons_extensions`` since version :ref:`0.7.1` (:issue:`511`,
   :merge:`778`). By `Kyle Brindley`_.
+- Remove the deprecated ``<name>_program`` builders' keyword arguments. Replaced by ``program`` since version
+  :ref:`0.7.1` (:issue:`508`, :merge:`779`). By `Kyle Brindley`_.
 
 Documentation
 =============
