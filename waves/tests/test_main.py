@@ -23,7 +23,7 @@ def test_main():
          patch("waves.main.build") as mock_build:
         main.main()
         mock_build.assert_called_once()
-        mock_build.call_args[0] == [target_string]
+        assert mock_build.call_args[0][0] == [target_string]
 
     # TODO: deprecate the quickstart subcommand in v1
     project_directory = 'project_directory'
@@ -39,6 +39,13 @@ def test_main():
         main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[1]['requested_paths'] == requested_paths
+
+    tutorial_number = 7
+    with patch('sys.argv', ['waves.py', 'fetch', '--tutorial', str(tutorial_number)]), \
+            patch("waves.fetch.recursive_copy") as mock_recursive_copy:
+        main.main()
+        mock_recursive_copy.assert_called_once()
+        assert mock_recursive_copy.call_args[1]['tutorial'] == tutorial_number
 
 
 @pytest.mark.unittest
