@@ -81,7 +81,7 @@ _utilities.py
 odb_extract.py
 **************
 
-.. automodule:: waves.abaqus.odb_extract
+.. automodule:: waves._abaqus.odb_extract
     :members:
     :private-members:
     :show-inheritance:
@@ -91,7 +91,7 @@ odb_extract.py
 Odb Report File Parser
 **********************
 
-.. autoclass:: waves.abaqus.abaqus_file_parser.OdbReportFileParser
+.. autoclass:: waves._abaqus.abaqus_file_parser.OdbReportFileParser
     :members:
     :private-members:
     :show-inheritance:
