@@ -46,11 +46,11 @@ fetch.py
    :show-inheritance:
    :synopsis: waves module supporting the fetch subcommand
 
-************
-visualize.py
-************
+*************
+_visualize.py
+*************
 
-.. automodule:: waves.visualize
+.. automodule:: waves._visualize
    :noindex:
    :members:
    :private-members:
