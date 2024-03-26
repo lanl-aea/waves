@@ -15,6 +15,10 @@ import SALib
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key, _quantiles_attribute_key
 
+
+_exclude_from_namespace = set(globals().keys())
+
+
 # ========================================================================================================= SETTINGS ===
 _template_delimiter = '@'
 
@@ -1216,3 +1220,7 @@ class SALibSampler(_ParameterGenerator, ABC):
     def write(self) -> None:
         # Get the ABC docstring into each parameter generator API
         super().write()
+
+
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]

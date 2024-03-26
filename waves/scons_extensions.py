@@ -30,6 +30,9 @@ from waves._settings import _sbatch_wrapper_options
 from waves._settings import _sierra_environment_extension
 
 
+_exclude_from_namespace = set(globals().keys())
+
+
 def _print_failed_nodes_stdout() -> None:
     # FIXME: The program_operations throw their usual fit when this is a module-wide import
     # ``SCons.Errors.UserError: Calling Configure from Builders is not supported``
@@ -1685,3 +1688,7 @@ def sbatch_quinoa_solver(*args, **kwargs):
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap ""
     """
     return quinoa_solver(*args, **kwargs)
+
+
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]
