@@ -1,10 +1,10 @@
 import pathlib
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from waves import fetch
+from waves import fetch, _settings
 
 
 root_directory = pathlib.Path("/path/to/source")
@@ -348,3 +348,14 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
             mock_extend.assert_called_once()
         else:
             mock_extend.assert_not_called()
+
+
+@pytest.mark.unittest
+def test_extend_requested_paths():
+    class MockList:
+        pass
+    for tutorial_num in _settings._tutorial_paths.keys():
+        mock_list = MockList()
+        mock_list.extend = MagicMock()
+        fetch.extend_requested_paths(mock_list, tutorial_num)
+        assert mock_list.extend.call_count == tutorial_num + 1
