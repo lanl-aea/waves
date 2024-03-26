@@ -869,7 +869,7 @@ build_odb_extract_input = {
                          build_odb_extract_input.values(),
                          ids=build_odb_extract_input.keys())
 def test_build_odb_extract(target, source, env, calls):
-    with patch("waves.abaqus.odb_extract.odb_extract") as mock_odb_extract, \
+    with patch("waves._abaqus.odb_extract.odb_extract") as mock_odb_extract, \
          patch("pathlib.Path.unlink") as mock_unlink:
         scons_extensions._build_odb_extract(target, source, env)
     mock_odb_extract.assert_has_calls(calls)

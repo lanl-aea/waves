@@ -44,8 +44,8 @@ from subprocess import run
 from datetime import datetime
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
-from waves.abaqus import _settings
-from waves.abaqus import abaqus_file_parser
+from waves._abaqus import _settings
+from waves._abaqus import abaqus_file_parser
 from waves._utilities import _quote_spaces_in_path
 
 

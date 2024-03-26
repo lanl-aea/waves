@@ -16,7 +16,7 @@ import SCons.Node
 import SCons.Scanner
 
 from waves import _utilities
-from waves.abaqus import odb_extract
+from waves._abaqus import odb_extract
 from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions

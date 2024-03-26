@@ -10,7 +10,7 @@ from pathlib import Path
 import pytest
 from unittest.mock import patch, mock_open
 
-from waves.abaqus import odb_extract
+from waves._abaqus import odb_extract
 from waves._utilities import _quote_spaces_in_path
 
 
@@ -57,9 +57,9 @@ def test_get_parser():
 @pytest.mark.unittest
 def test_odb_extract():
     with patch('yaml.safe_dump'), \
-         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser'), \
          patch('builtins.open', mock_open(read_data="data")), \
          pytest.raises(SystemExit) as err:  # Test first critical error
         odb_extract.odb_extract(['sample.odb'], None)
@@ -67,19 +67,19 @@ def test_odb_extract():
     assert "sample.odb does not exist" in str(err.value.args)
 
     with patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
-         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
-         patch('waves.abaqus.odb_extract.print_warning') as mock_print, \
+         patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves._abaqus.odb_extract.print_warning') as mock_print, \
          patch('pathlib.Path.exists', return_value=True):  # Test warning after second critical error
         odb_extract.odb_extract(['sample'], None)
     assert err.value.code != 0
     assert "sample.odb does not exist." in str(err.value.args)
 
     with patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
-         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
+         patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
          patch('pathlib.Path.exists', return_value=True), \
          pytest.raises(SystemExit) as err:  # Test second critical error
         odb_extract.odb_extract(['sample.odb'], None, odb_report_args='odbreport all invariants',
@@ -90,10 +90,10 @@ def test_odb_extract():
     with patch('pathlib.Path.exists', return_value=True), \
          patch('builtins.open', mock_open(read_data="data")), \
          patch('yaml.safe_dump'), \
-         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=['y', None, None]), \
          patch('sys.stdin', return_value='y'), \
-         patch('waves.abaqus.odb_extract.run_external', return_value=[-1, b'', b'invalid command.']), \
+         patch('waves._abaqus.odb_extract.run_external', return_value=[-1, b'', b'invalid command.']), \
          pytest.raises(SystemExit) as err:
         odb_extract.odb_extract(['sample.odb'], None, odb_report_args="job=job_name odb=odb_filea ll")
     assert err.value.code != 0
@@ -102,11 +102,11 @@ def test_odb_extract():
     with patch('pathlib.Path.exists', side_effect=[True, True, True, False]), \
             patch('builtins.open', mock_open(read_data="data")), \
             patch('yaml.safe_dump'), \
-            patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+            patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
             patch('select.select', return_value=['y', None, None]), \
             patch('sys.stdin', return_value='y'), \
-            patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser') as mock_abaqus_file_parser, \
-            patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']), \
+            patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser') as mock_abaqus_file_parser, \
+            patch('waves._abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']), \
             pytest.raises(SystemExit) as err:
         odb_extract.odb_extract(['sample.odb'], None, odb_report_args='odbreport all', output_type='yaml')
     assert err.value.code != 0
@@ -115,12 +115,12 @@ def test_odb_extract():
     with patch('pathlib.Path.exists', return_value=True), \
             patch('builtins.open', mock_open(read_data="data")), \
             patch('yaml.safe_dump'), \
-            patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+            patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
             patch('select.select', return_value=['y', None, None]), \
             patch('sys.stdin', return_value='y'), \
-            patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser') as mock_abaqus_file_parser, \
+            patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser') as mock_abaqus_file_parser, \
             patch(
-                'waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']) \
+                'waves._abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']) \
                     as mock_run_external:
         # Test case where report args need to be adjusted and abaqus file parser is called
         odb_extract.odb_extract(['sample.odb'], None, odb_report_args="job=job_name odb=odb_filea ll")
@@ -130,11 +130,11 @@ def test_odb_extract():
     with patch('pathlib.Path.exists', return_value=True), \
          patch('builtins.open', mock_open(read_data="data")), \
          patch('yaml.safe_dump') as mock_safe_dump, \
-         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=['y', None, None]), \
          patch('sys.stdin', return_value='y'), \
-         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
-         patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']) as mock_run_external:
+         patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves._abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']) as mock_run_external:
         # Test case where output name doesn't match odb name
         odb_extract.odb_extract(['sample.odb'], 'new_name.h5', odb_report_args="odbreport all")
         mock_run_external.assert_called_with('abaqus odbreport job=new_name odb=sample.odb all blocked mode=CSV')
@@ -142,11 +142,11 @@ def test_odb_extract():
     with patch('pathlib.Path.exists', return_value=True), \
          patch('builtins.open', mock_open(read_data="data")), \
          patch('yaml.safe_dump') as mock_safe_dump, \
-         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=['y', None, None]), \
          patch('sys.stdin', return_value='y'), \
-         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
-         patch('waves.abaqus.odb_extract.run', return_value=FakeProcess) as mock_run:
+         patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves._abaqus.odb_extract.run', return_value=FakeProcess) as mock_run:
         # Test case where yaml dump is called
         odb_extract.odb_extract(['sample.odb'], None, odb_report_args="odbreport all", output_type='yaml')
         mock_safe_dump.assert_called()
@@ -156,11 +156,11 @@ def test_odb_extract():
     with patch('pathlib.Path.exists', return_value=True), \
          patch('builtins.open', mock_open(read_data="data")), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('waves.abaqus.odb_extract.which', return_value=''), \
+         patch('waves._abaqus.odb_extract.which', return_value=''), \
          patch('json.dump') as mock_safe_dump, \
-         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser'), \
+         patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser'), \
          patch('pathlib.Path.unlink') as mock_unlink, \
-         patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']):
+         patch('waves._abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']):
         # Test case where yaml dump is called
         odb_extract.odb_extract(['sample.odb'], output_file='sample.j', output_type='json', delete_report_file=True)
         mock_safe_dump.assert_called()
@@ -168,18 +168,18 @@ def test_odb_extract():
 
     with patch('pathlib.Path.exists', return_value=True), \
          patch('builtins.open', mock_open(read_data="data")), \
-         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser') as h5_parser, \
-         patch('waves.abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']):
+         patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser') as h5_parser, \
+         patch('waves._abaqus.odb_extract.run_external', return_value=[0, b'', b'valid command.']):
         # Test case where h5 file is created
         odb_extract.odb_extract(['sample.odb'], None, output_type='h5')
         h5_parser.assert_called()
 
     with patch('yaml.safe_dump'), patch('builtins.open', mock_open(read_data="data")), \
-         patch('waves.abaqus.odb_extract.which', return_value='abaqus'), \
+         patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
          patch('select.select', return_value=[None, None, None]), \
-         patch('waves.abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
+         patch('waves._abaqus.abaqus_file_parser.OdbReportFileParser', side_effect=IndexError('Test')), \
          patch('pathlib.Path.exists', return_value=True), \
          pytest.raises(SystemExit) as err:  # Test second critical error
         # Test case where h5 file is requested, but error is raised

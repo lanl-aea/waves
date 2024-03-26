@@ -20,7 +20,7 @@ import xarray
 import numpy
 import h5py
 
-from waves.abaqus import _settings
+from waves._abaqus import _settings
 
 
 class AbaqusFileParser(ABC):
