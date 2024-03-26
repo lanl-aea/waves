@@ -322,11 +322,11 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
         print(f"Could not find '{root_directory}' directory", file=sys.stderr)
         return 1
 
-    from waves import fetch
+    from waves import _fetch
 
     print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
     print(f"Destination directory: '{destination}'", file=sys.stdout)
-    return_code = fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
+    return_code = _fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
                                        tutorial=tutorial, overwrite=overwrite, dry_run=dry_run,
                                        print_available=print_available)
 

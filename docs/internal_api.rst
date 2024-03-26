@@ -35,11 +35,11 @@ main.py
    :show-inheritance:
    :synopsis: waves command line utility
 
-********
-fetch.py
-********
+*********
+_fetch.py
+*********
 
-.. automodule:: waves.fetch
+.. automodule:: waves._fetch
    :noindex:
    :members:
    :private-members:

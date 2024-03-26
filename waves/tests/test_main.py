@@ -28,21 +28,21 @@ def test_main():
     # TODO: deprecate the quickstart subcommand in v1
     project_directory = 'project_directory'
     with patch('sys.argv', ['waves.py', 'quickstart', project_directory]), \
-         patch("waves.fetch.recursive_copy") as mock_recursive_copy:
+         patch("waves._fetch.recursive_copy") as mock_recursive_copy:
         main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[0][2] == pathlib.Path(project_directory)
 
     requested_paths = ['dummy.file1', 'dummy.file2']
     with patch('sys.argv', ['waves.py', 'fetch'] + requested_paths), \
-         patch("waves.fetch.recursive_copy") as mock_recursive_copy:
+         patch("waves._fetch.recursive_copy") as mock_recursive_copy:
         main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[1]['requested_paths'] == requested_paths
 
     tutorial_number = 7
     with patch('sys.argv', ['waves.py', 'fetch', '--tutorial', str(tutorial_number)]), \
-            patch("waves.fetch.recursive_copy") as mock_recursive_copy:
+            patch("waves._fetch.recursive_copy") as mock_recursive_copy:
         main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[1]['tutorial'] == tutorial_number
@@ -86,7 +86,7 @@ def test_build():
 def test_fetch():
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
-    with patch("waves.fetch.recursive_copy") as mock_recursive_copy:
+    with patch("waves._fetch.recursive_copy") as mock_recursive_copy:
         return_code = main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
                                  ["dummy/relative/path"], "/dummy/destination")
         assert return_code != 0
