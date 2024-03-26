@@ -46,9 +46,7 @@ zip-safe = false
 where = ["."]
 
 [project.scripts]
-odb_extract = "waves.abaqus.odb_extract:main"
-msg_parse = "waves.abaqus.msg_parse:main"
-sta_parse = "waves.abaqus.sta_parse:main"
+odb_extract = "waves._abaqus.odb_extract:main"
 waves = "waves.main:main"
 
 [project.urls]
