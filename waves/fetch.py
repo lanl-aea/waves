@@ -150,13 +150,12 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
 
 def extend_requested_paths(requested_paths: list, tutorial: int) -> list:
     """Extend the requested_paths list with the necessary tutorial files.
-    
+
     :param list requested_paths: list of relative path-like objects that subset the files found in the
         ``root_directory`` ``relative_paths``
     :param tutorial: Integer to fetch all necessary files for the specified tutorial number
-    
+
     :returns: extended requested paths
-    
     """
     if tutorial not in _settings._tutorial_paths.keys():
         print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stderr)
