@@ -1,10 +1,12 @@
 import pathlib
-from unittest.mock import patch, Mock
+from unittest.mock import Mock
+from unittest.mock import patch
 from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from waves import fetch, _settings
+from waves import fetch
+from waves import _settings
 
 
 root_directory = pathlib.Path("/path/to/source")
