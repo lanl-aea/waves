@@ -158,8 +158,7 @@ def extend_requested_paths(requested_paths: list, tutorial: int) -> list:
     :returns: extended requested paths
     """
     if tutorial not in _settings._tutorial_paths.keys():
-        print(f"The tutorial number requested ('{tutorial}') does not exist.", file=sys.stderr)
-        return 1
+        raise RuntimeError(f"The tutorial number requested ('{tutorial}') does not exist.")
     else:
         for x in range(0, tutorial + 1):
             requested_paths.extend(_settings._tutorial_paths[x])
