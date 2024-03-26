@@ -5,7 +5,6 @@ import sys
 import itertools
 import copy
 import hashlib
-import warnings
 import typing
 
 import yaml
