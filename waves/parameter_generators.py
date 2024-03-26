@@ -16,27 +16,27 @@ import SALib
 from waves._settings import _hash_coordinate_key, _set_coordinate_key, _quantiles_attribute_key
 
 # ========================================================================================================= SETTINGS ===
-template_delimiter = '@'
+_template_delimiter = '@'
 
 
 class _AtSignTemplate(string.Template):
     """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
-    delimiter = template_delimiter
+    delimiter = _template_delimiter
 
 
-template_placeholder = f"{template_delimiter}number"
+_template_placeholder = f"{_template_delimiter}number"
 
-default_output_file_template = None
-default_output_file = None
-default_output_file_type = 'yaml'
-default_set_name_template = f'parameter_set{template_placeholder}'
-default_previous_parameter_study = None
-default_overwrite = False
-default_dryrun = False
-default_write_meta = False
+_default_output_file_template = None
+_default_output_file = None
+_default_output_file_type = 'yaml'
+_default_set_name_template = f'parameter_set{_template_placeholder}'
+_default_previous_parameter_study = None
+_default_overwrite = False
+_default_dryrun = False
+_default_write_meta = False
 
-parameter_study_meta_file = "parameter_study_meta.txt"
-allowable_output_file_types = ['h5', 'yaml']
+_parameter_study_meta_file = "parameter_study_meta.txt"
+_allowable_output_file_types = ['h5', 'yaml']
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
@@ -62,14 +62,14 @@ class _ParameterGenerator(ABC):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     """
     def __init__(self, parameter_schema: dict,
-                 output_file_template: str = default_output_file_template,
-                 output_file: str = default_output_file,
-                 output_file_type: str = default_output_file_type,
-                 set_name_template: str = default_set_name_template,
-                 previous_parameter_study: str = default_previous_parameter_study,
-                 overwrite: bool = default_overwrite,
-                 dryrun: bool = default_dryrun,
-                 write_meta: bool = default_write_meta,
+                 output_file_template: str = _default_output_file_template,
+                 output_file: str = _default_output_file,
+                 output_file_type: str = _default_output_file_type,
+                 set_name_template: str = _default_set_name_template,
+                 previous_parameter_study: str = _default_previous_parameter_study,
+                 overwrite: bool = _default_overwrite,
+                 dryrun: bool = _default_dryrun,
+                 write_meta: bool = _default_write_meta,
                  **kwargs) -> None:
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
@@ -85,9 +85,9 @@ class _ParameterGenerator(ABC):
             raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
                                "Please specify one or the other.")
 
-        if self.output_file_type not in allowable_output_file_types:
+        if self.output_file_type not in _allowable_output_file_types:
             raise RuntimeError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                               f"The 'output_file_type' must be one of {allowable_output_file_types}")
+                               f"The 'output_file_type' must be one of {_allowable_output_file_types}")
 
         if self.output_file:
             self.output_file = pathlib.Path(self.output_file)
@@ -100,8 +100,8 @@ class _ParameterGenerator(ABC):
         if self.output_file_template:
             self.provided_output_file_template = True
             # Append the set number placeholder if missing
-            if f'{template_placeholder}' not in self.output_file_template:
-                self.output_file_template = f"{self.output_file_template}{template_placeholder}"
+            if f'{_template_placeholder}' not in self.output_file_template:
+                self.output_file_template = f"{self.output_file_template}{_template_placeholder}"
             self.output_file_template = _AtSignTemplate(self.output_file_template)
             self.set_name_template = self.output_file_template
 
@@ -110,7 +110,7 @@ class _ParameterGenerator(ABC):
             self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
         else:
             self.output_directory = pathlib.Path('.').resolve()
-        self.parameter_study_meta_file = self.output_directory / parameter_study_meta_file
+        self.parameter_study_meta_file = self.output_directory / _parameter_study_meta_file
 
         self._validate()
         self._generate(**kwargs)

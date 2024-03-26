@@ -19,31 +19,31 @@ def parameter_study_parser() -> argparse.ArgumentParser:
     # Mutually exclusive output file options
     output_file_group = parser.add_mutually_exclusive_group()
     output_file_group.add_argument('-o', '--output-file-template',
-                                   default=parameter_generators.default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
+                                   default=parameter_generators._default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
                                    help=f"Output file template. May contain pathseps for an absolute or relative " \
-                                        f"path template. May contain ``{parameter_generators.template_placeholder}`` " \
+                                        f"path template. May contain ``{parameter_generators._template_placeholder}`` " \
                                         f"set number placeholder in the file basename but not in the path. " \
                                         f"If the placeholder is not found, it will be " \
                                         f"appended to the template string. Output files are overwritten if the "
                                         f"content of the file has changed or if ``overwrite`` is True "
                                         f"(default: %(default)s)")
     output_file_group.add_argument('-f', '--output-file',
-                                   default=parameter_generators.default_output_file, dest='OUTPUT_FILE',
+                                   default=parameter_generators._default_output_file, dest='OUTPUT_FILE',
                                    help=f"Output file name. May contain pathseps for an absolute or relative path. " \
                                          "Output file is overwritten if the content of the file has changed or if " \
                                          "``overwrite`` is True (default: %(default)s)")
 
     # Optional keyword options
     parser.add_argument('-t', '--output-file-type',
-                               default=parameter_generators.default_output_file_type,
-                               choices=parameter_generators.allowable_output_file_types,
+                               default=parameter_generators._default_output_file_type,
+                               choices=parameter_generators._allowable_output_file_types,
                                help="Output file type (default: %(default)s)")
     parser.add_argument('-s', '--set-name-template',
-                               default=parameter_generators.default_set_name_template, dest='SET_NAME_TEMPLATE',
+                               default=parameter_generators._default_set_name_template, dest='SET_NAME_TEMPLATE',
                                help="Parameter set name template. Overridden by ``output_file_template``, " \
                                     "if provided (default: %(default)s)")
     parser.add_argument('-p', '--previous-parameter-study',
-                               default=parameter_generators.default_previous_parameter_study, dest='PREVIOUS_PARAMETER_STUDY',
+                               default=parameter_generators._default_previous_parameter_study, dest='PREVIOUS_PARAMETER_STUDY',
                                help="A relative or absolute file path to a previously created parameter study Xarray " \
                                     "Dataset (default: %(default)s)")
     parser.add_argument('--overwrite', action='store_true',
@@ -59,14 +59,14 @@ def parameter_study_parser() -> argparse.ArgumentParser:
 
 def parameter_study(subcommand: str,
                     input_file_path: str,
-                    output_file_template: str = parameter_generators.default_output_file_template,
-                    output_file: str = parameter_generators.default_output_file,
-                    output_file_type: typing.Literal["yaml", "h5"] = parameter_generators.default_output_file_type,
-                    set_name_template: str = parameter_generators.default_set_name_template,
-                    previous_parameter_study: str = parameter_generators.default_previous_parameter_study,
-                    overwrite: bool = parameter_generators.default_overwrite,
-                    dryrun: bool = parameter_generators.default_dryrun,
-                    write_meta: bool = parameter_generators.default_write_meta) -> int:
+                    output_file_template: str = parameter_generators._default_output_file_template,
+                    output_file: str = parameter_generators._default_output_file,
+                    output_file_type: typing.Literal["yaml", "h5"] = parameter_generators._default_output_file_type,
+                    set_name_template: str = parameter_generators._default_set_name_template,
+                    previous_parameter_study: str = parameter_generators._default_previous_parameter_study,
+                    overwrite: bool = parameter_generators._default_overwrite,
+                    dryrun: bool = parameter_generators._default_dryrun,
+                    write_meta: bool = parameter_generators._default_write_meta) -> int:
     """Build parameter studies
 
     :param str subcommand: parameter study type to build
