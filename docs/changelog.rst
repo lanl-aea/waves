@@ -31,6 +31,10 @@ Internal Changes
 - Fetch each tutorial to a unique temporary directory before running as a system test. Avoids race conditions on the
   tutorial sconsign database file during system tests (:issue:`620`, :merge:`775`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Simplify core tutorial waves fetch commands (:issue:`617`, :merge:`773`). By `Sergio Cordova`_.
+
 *******************
 0.7.10 (2024-03-15)
 *******************
