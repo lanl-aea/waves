@@ -36,7 +36,7 @@ def parameter_study_parser() -> argparse.ArgumentParser:
     # Optional keyword options
     parser.add_argument('-t', '--output-file-type',
                                default=parameter_generators.default_output_file_type,
-                               choices=['yaml', 'h5'],
+                               choices=parameter_generators.allowable_output_file_types,
                                help="Output file type (default: %(default)s)")
     parser.add_argument('-s', '--set-name-template',
                                default=parameter_generators.default_set_name_template, dest='SET_NAME_TEMPLATE',

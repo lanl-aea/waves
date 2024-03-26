@@ -36,7 +36,7 @@ default_dryrun = False
 default_write_meta = False
 
 parameter_study_meta_file = "parameter_study_meta.txt"
-allowable_output_file_types = ('h5', 'yaml')
+allowable_output_file_types = ['h5', 'yaml']
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
