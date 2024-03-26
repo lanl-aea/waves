@@ -8,6 +8,9 @@ from waves import __version__
 from waves import _parameter_study
 
 
+_exclude_from_namespace = set(globals().keys())
+
+
 def main() -> int:
     """This is the main function that performs actions based on command line arguments.
 
@@ -399,3 +402,8 @@ def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: lis
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
+
+
+# Limit help() and 'from module import *' behavior to the module's public API
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]

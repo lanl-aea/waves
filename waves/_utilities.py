@@ -4,6 +4,9 @@ import pathlib
 import platform
 
 
+_exclude_from_namespace = set(globals().keys())
+
+
 def _quote_spaces_in_path(path: pathlib.Path | str) -> pathlib.Path:
     """Traverse parts of a path and place in double quotes if there are spaces in the part
 
@@ -122,3 +125,8 @@ def tee_subprocess(command: list[str], **kwargs) -> tuple[int, str]:
             stdout_buffer.write(line)
         output = stdout_buffer.getvalue()
     return process.returncode, output
+
+
+# Limit help() and 'from module import *' behavior to the module's public API
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]

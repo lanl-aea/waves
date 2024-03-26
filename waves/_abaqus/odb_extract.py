@@ -49,6 +49,9 @@ from waves._abaqus import abaqus_file_parser
 from waves._utilities import _quote_spaces_in_path
 
 
+_exclude_from_namespace = set(globals().keys())
+
+
 def get_parser():
     """Get parser object for command line options
 
@@ -280,3 +283,8 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())  # pragma: no cover
+
+
+# Limit help() and 'from module import *' behavior to the module's public API
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]

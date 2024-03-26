@@ -4,21 +4,23 @@ Parse various file types created via Abaqus
 .. moduleauthor:: Prabhu S. Khalsa <pkhalsa@lanl.gov>
 """
 
+from abc import ABC, abstractmethod
+import os
 import re
 import sys
-
-import yaml
-import os
-from abc import ABC, abstractmethod
 from pathlib import Path
 from datetime import datetime
 from itertools import compress
 
+import yaml
 import xarray
 import numpy
 import h5py
 
 from waves._abaqus import _settings
+
+
+_exclude_from_namespace = set(globals().keys())
 
 
 class AbaqusFileParser(ABC):
@@ -1848,3 +1850,8 @@ class OdbReportFileParser(AbaqusFileParser):
                 # TODO: In future additions of xarray, consider using option 'invalid_netcdf=True'
             else:
                 raise ValueError(f'Cannot save {type(item)} type to hdf5 file.')
+
+
+# Limit help() and 'from module import *' behavior to the module's public API
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]

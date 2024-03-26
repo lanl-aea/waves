@@ -10,6 +10,9 @@ from waves import _settings
 from waves import parameter_generators
 
 
+_exclude_from_namespace = set(globals().keys())
+
+
 def parameter_study_parser() -> argparse.ArgumentParser:
     # Required positional option
     parser = argparse.ArgumentParser(add_help=False)
@@ -111,3 +114,8 @@ def parameter_study(subcommand: str,
     parameter_generator.write()
 
     return 0
+
+
+# Limit help() and 'from module import *' behavior to the module's public API
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]

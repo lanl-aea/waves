@@ -124,3 +124,6 @@ _tutorial_paths = {
         "tutorials/tutorial_12_archival_SConstruct"
     ]
 }
+
+# Remove third-party packages from the project namespace
+del pathlib

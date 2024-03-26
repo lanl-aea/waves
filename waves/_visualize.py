@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 from waves import _settings
 
 
+_exclude_from_namespace = set(globals().keys())
+
+
 def parse_output(tree_lines: list, exclude_list: list, exclude_regex: str) -> dict:
     """
     Parse the string that has the tree output and store it in a dictionary
@@ -216,3 +219,8 @@ def visualize(tree: dict, output_file: str,
     else:
         plt.show()
     plt.clf()  # Indicates that we are done with the plot
+
+
+# Limit help() and 'from module import *' behavior to the module's public API
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]

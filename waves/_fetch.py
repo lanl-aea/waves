@@ -7,6 +7,9 @@ import pathlib
 from waves import _settings
 
 
+_exclude_from_namespace = set(globals().keys())
+
+
 def available_files(root_directory: pathlib.Path | str,
                     relative_paths: list[str]) -> tuple[list[pathlib.Path], list[str]]:
     """Build a list of files at ``relative_paths`` with respect to the root ``root_directory`` directory
@@ -225,3 +228,8 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     conditional_copy(copy_tuples)
 
     return 0
+
+
+# Limit help() and 'from module import *' behavior to the module's public API
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]
