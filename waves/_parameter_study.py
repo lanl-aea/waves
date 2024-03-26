@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """Thin CLI wrapper around :meth:`waves.parameter_generators` classes"""
 
 import argparse

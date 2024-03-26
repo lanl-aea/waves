@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 """Test odb extract
 Test odb_extract.py
 

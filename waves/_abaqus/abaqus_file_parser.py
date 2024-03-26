@@ -1,5 +1,3 @@
-#! /usr/bin/env python
-
 """Abaqus File Parser
 Parse various file types created via Abaqus
 
