@@ -291,7 +291,7 @@ def build(targets: list, scons_args: list | None = None, max_iterations: int = 5
 
 def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
           destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
-          tutorial: int = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
+          tutorial: int | None = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
     """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
 
     Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
