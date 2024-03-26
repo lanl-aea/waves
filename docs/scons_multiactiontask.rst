@@ -18,8 +18,14 @@ large amounts of disk space or when a smaller model is built in a large paramete
 necessary to operate on a common file from multiple actions. `SCons`_ provides a solution to this by allowing a task
 definition to include a list of actions. The state machine stored by `Scons`_ will not store the target state until all
 actions have been performed, which avoids re-build state ambiguity when performing more than one action on a single
-file.  While this does save storage resources, it will increase computational cost of the re-build because every source
+file. While this does save storage resources, it will increase computational cost of the re-build because every source
 file in the task definition requires the entire task to be re-executed.
+
+**********
+References
+**********
+
+* `SCons Command`_ :cite:`scons-user`
 
 ***********
 Environment
