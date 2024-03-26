@@ -334,7 +334,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
         mock_print_list.assert_called_once_with(destination_tree)
         mock_conditional_copy.assert_not_called()
 
-    # Files in destination tree do not exist. Copy the modsim_template file tree.
+    # Testing tutorial argument behavior..
     with patch("waves.fetch.available_files", return_value=available_files_output), \
          patch("waves.fetch.print_list") as mock_print_list, \
          patch("waves.fetch.extend_requested_paths") as mock_extend, \
