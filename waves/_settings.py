@@ -54,47 +54,73 @@ _parameter_study_description = \
     "all files. The dry run option will print a list of files and contents that would have been  written. " \
     "The 'h5' output is the only output type that contains both the parameter " \
     "samples and quantiles."
-_tutorial_paths = {0: [],
-                   1: ["tutorials/modsim_package/__init__.py",
-                       "tutorials/modsim_package/abaqus/__init__.py",
-                       "tutorials/modsim_package/abaqus/rectangle_geometry.py",
-                       "tutorials/tutorial_01_geometry",
-                       "tutorials/tutorial_01_geometry_SConstruct"],
-                   2: ["tutorials/modsim_package/abaqus/rectangle_partition.py",
-                       "tutorials/modsim_package/abaqus/rectangle_mesh.py",
-                       "tutorials/modsim_package/abaqus/abaqus_utilities.py",
-                       "tutorials/tutorial_02_partition_mesh",
-                       "tutorials/tutorial_02_partition_mesh_SConstruct"],
-                   3: ["tutorials/modsim_package/abaqus/parts.inp",
-                       "tutorials/modsim_package/abaqus/assembly.inp",
-                       "tutorials/modsim_package/abaqus/boundary.inp",
-                       "tutorials/modsim_package/abaqus/field_output.inp",
-                       "tutorials/modsim_package/abaqus/history_output.inp",
-                       "tutorials/modsim_package/abaqus/materials.inp",
-                       "tutorials/modsim_package/abaqus/rectangle_compression.inp",
-                       "tutorials/tutorial_03_solverprep",
-                       "tutorials/tutorial_03_solverprep_SConstruct"],
-                   4: ["tutorials/tutorial_04_simulation",
-                       "tutorials/tutorial_04_simulation_SConstruct"],
-                   5: ["tutorials/modsim_package/abaqus/rectangle_compression.inp.in",
-                       "tutorials/tutorial_05_parameter_substitution",
-                       "tutorials/tutorial_05_parameter_substitution_SConstruct"],
-                   6: ["tutorials/modsim_package/python/__init__.py",
-                       "tutorials/modsim_package/python/rectangle_compression_nominal.py",
-                       "tutorials/tutorial_06_include_files",
-                       "tutorials/tutorial_06_include_files_SConstruct"],
-                   7: ["tutorials/modsim_package/python/rectangle_compression_cartesian_product.py",
-                       "tutorials/tutorial_07_cartesian_product",
-                       "tutorials/tutorial_07_cartesian_product_SConstruct"],
-                   8: ["tutorials/tutorial_08_data_extraction",
-                       "tutorials/tutorial_08_data_extraction_SConstruct"],
-                   9: ["tutorials/modsim_package/python/post_processing.py",
-                       "tutorials/tutorial_09_post_processing",
-                       "tutorials/tutorial_09_post_processing_SConstruct"],
-                   10: ["tutorials/modsim_package/python/tests/test_post_processing.py",
-                        "tutorials/unit_testing"],
-                   11: ["tutorials/modsim_package/python/rectangle_compression_cartesian_product.csv",
-                        "tutorials/tutorial_11_regression_testing",
-                        "tutorials/tutorial_11_regression_testing_SConstruct"],
-                   12: ["tutorials/tutorial_12_archival",
-                        "tutorials/tutorial_12_archival_SConstruct"]}
+_tutorial_paths = {
+    0: [],
+    1: [
+        "tutorials/modsim_package/__init__.py",
+        "tutorials/modsim_package/abaqus/__init__.py",
+        "tutorials/modsim_package/abaqus/rectangle_geometry.py",
+        "tutorials/tutorial_01_geometry",
+        "tutorials/tutorial_01_geometry_SConstruct"
+    ],
+    2: [
+        "tutorials/modsim_package/abaqus/rectangle_partition.py",
+        "tutorials/modsim_package/abaqus/rectangle_mesh.py",
+        "tutorials/modsim_package/abaqus/abaqus_utilities.py",
+        "tutorials/tutorial_02_partition_mesh",
+        "tutorials/tutorial_02_partition_mesh_SConstruct"
+    ],
+    3: [
+        "tutorials/modsim_package/abaqus/parts.inp",
+        "tutorials/modsim_package/abaqus/assembly.inp",
+        "tutorials/modsim_package/abaqus/boundary.inp",
+        "tutorials/modsim_package/abaqus/field_output.inp",
+        "tutorials/modsim_package/abaqus/history_output.inp",
+        "tutorials/modsim_package/abaqus/materials.inp",
+        "tutorials/modsim_package/abaqus/rectangle_compression.inp",
+        "tutorials/tutorial_03_solverprep",
+        "tutorials/tutorial_03_solverprep_SConstruct"
+    ],
+    4: [
+        "tutorials/tutorial_04_simulation",
+        "tutorials/tutorial_04_simulation_SConstruct"
+    ],
+    5: [
+        "tutorials/modsim_package/abaqus/rectangle_compression.inp.in",
+        "tutorials/tutorial_05_parameter_substitution",
+        "tutorials/tutorial_05_parameter_substitution_SConstruct"
+    ],
+    6: [
+        "tutorials/modsim_package/python/__init__.py",
+        "tutorials/modsim_package/python/rectangle_compression_nominal.py",
+        "tutorials/tutorial_06_include_files",
+        "tutorials/tutorial_06_include_files_SConstruct"
+    ],
+    7: [
+        "tutorials/modsim_package/python/rectangle_compression_cartesian_product.py",
+        "tutorials/tutorial_07_cartesian_product",
+        "tutorials/tutorial_07_cartesian_product_SConstruct"
+    ],
+    8: [
+        "tutorials/tutorial_08_data_extraction",
+        "tutorials/tutorial_08_data_extraction_SConstruct"
+    ],
+    9: [
+        "tutorials/modsim_package/python/post_processing.py",
+        "tutorials/tutorial_09_post_processing",
+        "tutorials/tutorial_09_post_processing_SConstruct"
+    ],
+    10: [
+        "tutorials/modsim_package/python/tests/test_post_processing.py",
+        "tutorials/unit_testing"
+    ],
+    11: [
+        "tutorials/modsim_package/python/rectangle_compression_cartesian_product.csv",
+        "tutorials/tutorial_11_regression_testing",
+        "tutorials/tutorial_11_regression_testing_SConstruct"
+    ],
+    12: [
+        "tutorials/tutorial_12_archival",
+        "tutorials/tutorial_12_archival_SConstruct"
+    ]
+}
