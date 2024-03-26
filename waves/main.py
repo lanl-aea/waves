@@ -361,7 +361,7 @@ def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: lis
 
     :returns: return code
     """
-    from waves import visualize
+    from waves import _visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
     if not sconstruct.is_file():
         sconstruct = sconstruct / "SConstruct"
@@ -384,7 +384,7 @@ def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: lis
     if print_tree:
         print(tree_output)
         return 0
-    tree_dict = visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
+    tree_dict = _visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
     if not tree_dict['nodes']:  # If scons tree or input_file is not in the expected format the nodes will be empty
         print(f"Unexpected SCons tree format or missing target. Use SCons "
               f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
@@ -394,7 +394,7 @@ def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: lis
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
         return 0
-    visualize.visualize(tree_dict, output_file, height, width, font_size, vertical, no_labels)
+    _visualize.visualize(tree_dict, output_file, height, width, font_size, vertical, no_labels)
 
 
 if __name__ == "__main__":
