@@ -2,7 +2,8 @@
 
    Unlike the :ref:`waves_quickstart`, this tutorial will use native `SCons`_ code without the `WAVES`_ extensions and
    builders. This tutorial is included as an example for using native `SCons`_ techniques when `WAVES`_ does not support
-   required third-party software, such as numeric solvers, or for when a modsim project requires unique builder behavior.
+   required third-party software, such as numeric solvers, or for when a modsim project requires unique builder
+   behavior. You can learn more about writing your own `SCons Builders`_ in the `SCons`_ user manual :cite:`scons-user`.
 
 This quickstart will create a pure `SCons`_, minimal, single file project configuration matching the tutorials listed below.
 
