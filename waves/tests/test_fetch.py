@@ -1,5 +1,5 @@
 import pathlib
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, Mock
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -352,10 +352,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
 
 @pytest.mark.unittest
 def test_extend_requested_paths():
-    class MockList:
-        pass
     for tutorial_num in _settings._tutorial_paths.keys():
-        mock_list = MockList()
-        mock_list.extend = MagicMock()
+        mock_list = Mock()
         fetch.extend_requested_paths(mock_list, tutorial_num)
         assert mock_list.extend.call_count == tutorial_num + 1
