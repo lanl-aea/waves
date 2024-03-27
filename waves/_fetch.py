@@ -180,7 +180,9 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     """Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
     the shortest possible shared source prefix.
 
-    If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
+    If destination files exist, copy non-conflicting files unless overwrite is specified.
+
+    :raises RuntimeError: If the no requested files exist in the longest common source path
 
     :param root_directory: String or pathlike object for the root_directory directory
     :param relative_paths: List of string or pathlike objects describing relative paths to search for in
