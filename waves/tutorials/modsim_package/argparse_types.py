@@ -11,6 +11,11 @@ def positive_float(argument):
 
     :returns: argument
     :rtype: float
+
+    :raises ValueError:
+
+        * The argument can't be cast to float
+        * The argument is less than 0.0 in a float comparison
     """
     MINIMUM_VALUE = 0.0
     try:
