@@ -30,12 +30,12 @@ def export_mesh(model_object, part_name, orphan_mesh_file):
 def return_abaqus_constant(search):
     """If search is found in the abaqusConstants module, return the abaqusConstants object.
 
-    Raise a ValueError if the search string is not found.
-
     :param str search: string to search in the abaqusConstants module attributes
 
     :return value: abaqusConstants attribute
     :rtype: abaqusConstants.<search>
+
+    :raises ValueError: If the search string is not found.
     """
     search = search.upper()
     if hasattr(abaqusConstants, search):
