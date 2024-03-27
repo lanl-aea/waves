@@ -137,7 +137,6 @@ SCons Extensions
 .. automodule:: waves.scons_extensions
     :members:
     :show-inheritance:
-    :synopsis: WAVES Analysis for Verified Engineering Simulations SCons extensions
 
 ******************
 Python Package API
@@ -149,7 +148,17 @@ Parameter Generators
 .. automodule:: waves.parameter_generators
     :members:
     :show-inheritance:
-    :synopsis: A collection of Python based parameter study generators
+
+******************
+Python Package API
+******************
+**********
+Exceptions
+**********
+
+.. automodule:: waves.exceptions
+    :members:
+    :show-inheritance:
 
 ****************
 Bundled commands
