@@ -35,6 +35,8 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     :param str solver: The solver type to use when exporting the mesh
 
     :returns: writes ``output_file``.cub and ``output_file``.inp
+
+    :raises RuntimeError: If the solver is not supported
     """
 
     input_with_extension = f"{input_file}.cub"
