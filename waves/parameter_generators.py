@@ -32,7 +32,6 @@ _template_placeholder = f"{_template_delimiter}number"
 
 _default_output_file_template = None
 _default_output_file = None
-_default_output_file_type = 'yaml'
 _default_set_name_template = f'parameter_set{_template_placeholder}'
 _default_previous_parameter_study = None
 _default_overwrite = False
@@ -40,7 +39,8 @@ _default_dryrun = False
 _default_write_meta = False
 
 _parameter_study_meta_file = "parameter_study_meta.txt"
-_allowable_output_file_types = ['h5', 'yaml']
+_allowable_output_file_types = ['yaml', 'h5']
+_default_output_file_type = _allowable_output_file_types[0]
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
@@ -71,7 +71,7 @@ class _ParameterGenerator(ABC):
     def __init__(self, parameter_schema: dict,
                  output_file_template: str = _default_output_file_template,
                  output_file: str = _default_output_file,
-                 output_file_type: str = _default_output_file_type,
+                 output_file_type: typing.Literal[*_allowable_output_file_types] = _default_output_file_type,
                  set_name_template: str = _default_set_name_template,
                  previous_parameter_study: str = _default_previous_parameter_study,
                  overwrite: bool = _default_overwrite,
