@@ -206,7 +206,6 @@ def odb_extract(input_file,
 
     if delete_report_file:
         Path(job_name).unlink(missing_ok=True)  # Remove odbreport file, don't raise exception if it doesn't exist
-    return 0
 
 
 def get_odb_report_args(odb_report_args, input_file, job_name, verbose):
