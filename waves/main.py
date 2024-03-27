@@ -12,57 +12,56 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def main() -> None:
-    """This is the main function that performs actions based on command line arguments.
-
-    :returns: return code
-    """
+    """This is the main function that performs actions based on command line arguments."""
     parser = get_parser()
     args, unknown = parser.parse_known_args()
 
-    if args.subcommand == 'docs':
-        docs(print_local_path=args.print_local_path)
-    elif args.subcommand == 'build':
-        build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
-              working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
-    elif args.subcommand == 'fetch':
-        root_directory = _settings._modsim_template_directory.parent
-        relative_paths = _settings._fetch_subdirectories
-        fetch(args.subcommand, root_directory, relative_paths, args.destination,
-              requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
-              dry_run=args.dry_run, print_available=args.print_available)
-    elif args.subcommand == 'quickstart':
-        root_directory = _settings._modsim_template_directory.parent
-        relative_paths = [_settings._modsim_template_directory.name]
-        fetch(args.subcommand, root_directory, relative_paths, args.destination,
-              overwrite=args.overwrite, dry_run=args.dry_run)
-    elif args.subcommand == 'visualize':
-        visualization(target=args.TARGET, output_file=args.output_file,
-                      sconstruct=args.sconstruct, print_graphml=args.print_graphml,
-                      exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
-                      height=args.height, width=args.width, font_size=args.font_size,
-                      vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
-                      input_file=args.input_file)
-    elif args.subcommand in _settings._parameter_study_subcommands:
-        _parameter_study.parameter_study(
-            args.subcommand, args.INPUT_FILE,
-            output_file_template=args.OUTPUT_FILE_TEMPLATE,
-            output_file=args.OUTPUT_FILE,
-            output_file_type=args.output_file_type,
-            set_name_template=args.SET_NAME_TEMPLATE,
-            previous_parameter_study=args.PREVIOUS_PARAMETER_STUDY,
-            overwrite=args.overwrite,
-            dryrun=args.dryrun,
-            write_meta=args.write_meta
-        )
-    else:
-        parser.print_help()
+    try:
+        if args.subcommand == 'docs':
+            docs(print_local_path=args.print_local_path)
+        elif args.subcommand == 'build':
+            build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
+                  working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
+        elif args.subcommand == 'fetch':
+            root_directory = _settings._modsim_template_directory.parent
+            relative_paths = _settings._fetch_subdirectories
+            fetch(args.subcommand, root_directory, relative_paths, args.destination,
+                  requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
+                  dry_run=args.dry_run, print_available=args.print_available)
+        elif args.subcommand == 'quickstart':
+            root_directory = _settings._modsim_template_directory.parent
+            relative_paths = [_settings._modsim_template_directory.name]
+            fetch(args.subcommand, root_directory, relative_paths, args.destination,
+                  overwrite=args.overwrite, dry_run=args.dry_run)
+        elif args.subcommand == 'visualize':
+            visualization(target=args.TARGET, output_file=args.output_file,
+                          sconstruct=args.sconstruct, print_graphml=args.print_graphml,
+                          exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
+                          height=args.height, width=args.width, font_size=args.font_size,
+                          vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
+                          input_file=args.input_file)
+        elif args.subcommand in _settings._parameter_study_subcommands:
+            _parameter_study.parameter_study(
+                args.subcommand, args.INPUT_FILE,
+                output_file_template=args.OUTPUT_FILE_TEMPLATE,
+                output_file=args.OUTPUT_FILE,
+                output_file_type=args.output_file_type,
+                set_name_template=args.SET_NAME_TEMPLATE,
+                previous_parameter_study=args.PREVIOUS_PARAMETER_STUDY,
+                overwrite=args.overwrite,
+                dryrun=args.dryrun,
+                write_meta=args.write_meta
+            )
+        else:
+            parser.print_help()
+    except RuntimeError as err:
+        sys.exit(err.message)
 
 
 def get_parser() -> argparse.ArgumentParser:
     """Get parser object for command line options
 
     :return: parser
-    :rtype: ArgumentParser
     """
     main_description = \
         f"Provides a minimal SCons build wrapper, access to locally packaged HTML " \
@@ -205,13 +204,11 @@ def get_parser() -> argparse.ArgumentParser:
     return main_parser
 
 
-def docs(print_local_path: bool = False) -> int:
+def docs(print_local_path: bool = False) -> None:
     """Open the package HTML documentation in the system default web browser or print the path to the documentation
     index file.
 
     :param print_local_path: Flag to print the local path to terminal instead of calling the default web browser
-
-    :returns: return code
     """
 
     if print_local_path:
@@ -220,37 +217,32 @@ def docs(print_local_path: bool = False) -> int:
         else:
             # This should only be reached if the package installation structure doesn't match the assumptions in
             # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
-            print('Could not find package documentation HTML index file', file=sys.stderr)
-            return 1
+            raise RuntimeError('Could not find package documentation HTML index file')
     else:
         import webbrowser
         webbrowser.open(str(_settings._installed_docs_index))
-    return 0
 
 
 def build(targets: list, scons_args: list | None = None, max_iterations: int = 5,
           working_directory: str | pathlib.Path | None = None,
-          git_clone_directory: str | pathlib.Path | None = None) -> int:
+          git_clone_directory: str | pathlib.Path | None = None) -> None:
     """Submit an iterative SCons command
 
     SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
-    reached. If multiple targets are submitted, they are executed sequentially in the order provided.
+    reached.
 
     :param targets: list of SCons targets (positional arguments)
     :param scons_args: list of SCons arguments
     :param max_iterations: Maximum number of iterations before the iterative loop is terminated
     :param working_directory: Change the SCons command working directory
     :param git_clone_directory: Destination directory for a Git clone operation
-
-    :returns: return code
     """
     from waves._utilities import tee_subprocess
 
     if not scons_args:
         scons_args = []
     if not targets:
-        print("At least one target must be provided", file=sys.stderr)
-        return 1
+        raise RuntimeError("At least one target must be provided")
     if git_clone_directory:
         current_directory = pathlib.Path().cwd().resolve()
         git_clone_directory = pathlib.Path(git_clone_directory).resolve()
@@ -259,8 +251,7 @@ def build(targets: list, scons_args: list | None = None, max_iterations: int = 5
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
         git_clone_return_code, git_clone_stdout = tee_subprocess(command)
         if git_clone_return_code != 0:
-            print(f"command '{' '.join(command)}' failed", file=sys.stderr)
-            return 3
+            raise RuntimeError(f"command '{' '.join(command)}' failed")
     stop_trigger = "is up to date."
     scons_command = [_settings._scons_command]
     scons_command.extend(scons_args)
@@ -272,29 +263,24 @@ def build(targets: list, scons_args: list | None = None, max_iterations: int = 5
     while trigger_count < len(targets):
         count += 1
         if count > max_iterations:
-            print(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' for every target",
-                  file=sys.stderr)
-            return 2
+            raise RuntimeError(f"Exceeded maximum iterations '{max_iterations}' before finding '{stop_trigger}' "
+                                "for every target")
         print(f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",
               file=sys.stdout)
         scons_return_code, scons_stdout = tee_subprocess(command, cwd=working_directory)
         if scons_return_code != 0:
-            print(f"command '{' '.join(command)}' failed", file=sys.stderr)
-            return 3
+            raise RuntimeError(f"command '{' '.join(command)}' failed")
         trigger_count = scons_stdout.count(stop_trigger)
-
-    return 0
 
 
 def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
           destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
-          tutorial: int | None = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
+          tutorial: int | None = None, overwrite: bool = False, dry_run: bool = False,
+          print_available: bool = False) -> None:
     """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
 
     Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
     the shortest possible shared source prefix.
-
-    If files exist, report conflicting files and exit with a non-zero return code unless overwrite is specified.
 
     :param subcommand: name of the subcommand to report in STDOUT
     :param root_directory: String or pathlike object for the root_directory directory
@@ -307,8 +293,6 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
     :param overwrite: Boolean to overwrite any existing files in destination directory
     :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param print_available: Print the available source files and exit. Short circuits ``dry_run``
-
-    :returns: return code
     """
     if not requested_paths:
         requested_paths = []
@@ -316,18 +300,15 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
         # During "waves quickstart/fetch" sub-command(s), this should only be reached if the package installation
         # structure doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a
         # sign-of-life that the installed directory assumptions are correct.
-        print(f"Could not find '{root_directory}' directory", file=sys.stderr)
-        return 1
+        raise RuntimeError(f"Could not find '{root_directory}' directory")
 
     from waves import _fetch
 
     print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
     print(f"Destination directory: '{destination}'", file=sys.stdout)
-    return_code = _fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
-                                       tutorial=tutorial, overwrite=overwrite, dry_run=dry_run,
-                                       print_available=print_available)
-
-    return return_code
+    _fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
+                          tutorial=tutorial, overwrite=overwrite, dry_run=dry_run,
+                          print_available=print_available)
 
 
 def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: list[str], exclude_regex: str,
@@ -335,7 +316,7 @@ def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: lis
                   height: int = _settings._visualize_default_height, width: int = _settings._visualize_default_width,
                   font_size: int = _settings._visualize_default_font_size, vertical: bool = False,
                   no_labels: bool = False, print_tree: bool = False,
-                  input_file: str | pathlib.Path | None = None) -> int:
+                  input_file: str | pathlib.Path | None = None) -> None:
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -355,22 +336,18 @@ def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: lis
     :param no_labels: Don't print labels on the nodes of the visualization
     :param print_tree: Print the text output of the scons --tree command to the screen
     :param input_file: Path to text file storing output from scons tree command
-
-    :returns: return code
     """
     from waves import _visualize
     sconstruct = pathlib.Path(sconstruct).resolve()
     if not sconstruct.is_file():
         sconstruct = sconstruct / "SConstruct"
     if not sconstruct.exists() and not input_file:
-        print(f"\t{sconstruct} does not exist.", file=sys.stderr)
-        return 1
+        raise RuntimeError(f"\t{sconstruct} does not exist.")
     tree_output = ""
     if input_file:
         input_file = pathlib.Path(input_file)
         if not input_file.exists():
-            print(f"\t{input_file} does not exist.", file=sys.stderr)
-            return 1
+            raise RuntimeError(f"\t{input_file} does not exist.")
         else:
             tree_output = input_file.read_text()
     else:
@@ -380,17 +357,17 @@ def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: lis
         tree_output = scons_stdout.decode("utf-8")
     if print_tree:
         print(tree_output)
-        return 0
+        return
     tree_dict = _visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
     if not tree_dict['nodes']:  # If scons tree or input_file is not in the expected format the nodes will be empty
         print(f"Unexpected SCons tree format or missing target. Use SCons "
               f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
               f"the ``visualize --print-tree`` option to generate the input file.", file=sys.stderr)
-        return 1
+        return
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
-        return 0
+        return
     _visualize.visualize(tree_dict, output_file, height, width, font_size, vertical, no_labels)
 
 

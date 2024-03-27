@@ -4,6 +4,7 @@ Test waves.py
 """
 import pathlib
 from unittest.mock import patch, mock_open
+from contextlib import nullcontext as does_not_raise
 
 import pytest
 
@@ -56,18 +57,20 @@ def test_docs():
         mock_webbrowser_open.assert_called_with(str(_settings._installed_docs_index))
 
     with patch('webbrowser.open') as mock_webbrowser_open, \
-         patch('pathlib.Path.exists', return_value=True):
-        return_code = main.docs(print_local_path=True)
-        assert return_code == 0
+         patch('pathlib.Path.exists', return_value=True), \
+         does_not_raise():
+        main.docs(print_local_path=True)
         mock_webbrowser_open.assert_not_called()
 
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
     with patch('webbrowser.open') as mock_webbrowser_open, \
-         patch('pathlib.Path.exists', return_value=False):
-        return_code = main.docs(print_local_path=True)
-        assert return_code != 0
-        mock_webbrowser_open.assert_not_called()
+         patch('pathlib.Path.exists', return_value=False), \
+         pytest.raises(RuntimeError):
+        try:
+            main.docs(print_local_path=True)
+        finally:
+            mock_webbrowser_open.assert_not_called()
 
 
 @pytest.mark.unittest
@@ -86,11 +89,13 @@ def test_build():
 def test_fetch():
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
-    with patch("waves._fetch.recursive_copy") as mock_recursive_copy:
-        return_code = main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
-                                 ["dummy/relative/path"], "/dummy/destination")
-        assert return_code != 0
-        mock_recursive_copy.assert_not_called()
+    with patch("waves._fetch.recursive_copy") as mock_recursive_copy, \
+         pytest.raises(RuntimeError):
+        try:
+            main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
+                                     ["dummy/relative/path"], "/dummy/destination")
+        finally:
+            mock_recursive_copy.assert_not_called()
 
 
 parameter_study_args = {  #               subcommand,         class_name,                   argument,         option,   argument_value
@@ -130,9 +135,9 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
             arg_list.append(argument_value)
     with patch('sys.argv', arg_list), \
             patch('builtins.open', mock_open()), patch('yaml.safe_load'), \
-            patch(f'waves.parameter_generators.{class_name}') as mock_generator:
-        exit_code = main.main()
-        assert exit_code == 0
+            patch(f'waves.parameter_generators.{class_name}') as mock_generator, \
+            does_not_raise():
+        main.main()
         mock_generator.assert_called_once()
         if argument:
             assert mock_generator.call_args.kwargs[argument] == argument_value
