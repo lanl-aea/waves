@@ -266,7 +266,7 @@ def print_warning(verbose, message):
     :param str message: message to print
     """
     if verbose:
-        print(message)
+        print(message, file=sys.stderr)
 
 
 def main():
