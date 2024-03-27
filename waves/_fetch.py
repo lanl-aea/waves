@@ -78,11 +78,11 @@ def longest_common_path_prefix(file_list: str | pathlib.Path | list[str | pathli
 
     The edge case of a single path is handled by returning the parent directory
 
-    :raises RuntimeError: When file list is empty
-
     :param file_list: List of path-like objects
 
     :returns: longest common path prefix
+
+    :raises RuntimeError: When file list is empty
     """
     if isinstance(file_list, str) or isinstance(file_list, pathlib.Path):
         file_list = [file_list]
@@ -158,13 +158,13 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
 def extend_requested_paths(requested_paths: list, tutorial: typing.Literal[*_tutorial_numbers]) -> list:
     """Extend the requested_paths list with the necessary tutorial files.
 
-    :raises RuntimeError: If the requested tutorial number doesn't exist
-
     :param requested_paths: list of relative path-like objects that subset the files found in the
         ``root_directory`` ``relative_paths``
     :param tutorial: Integer to fetch all necessary files for the specified tutorial number
 
     :returns: extended requested paths
+
+    :raises RuntimeError: If the requested tutorial number doesn't exist
     """
     if tutorial not in _settings._tutorial_paths.keys():
         raise RuntimeError(f"The tutorial number requested ('{tutorial}') does not exist.")
@@ -176,13 +176,12 @@ def extend_requested_paths(requested_paths: list, tutorial: typing.Literal[*_tut
 
 def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
                    destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
-                   tutorial: int = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False):
+                   tutorial: int = None, overwrite: bool = False, dry_run: bool = False,
+                   print_available: bool = False) -> None:
     """Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
     the shortest possible shared source prefix.
 
     If destination files exist, copy non-conflicting files unless overwrite is specified.
-
-    :raises RuntimeError: If the no requested files exist in the longest common source path
 
     :param root_directory: String or pathlike object for the root_directory directory
     :param relative_paths: List of string or pathlike objects describing relative paths to search for in
@@ -194,6 +193,8 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
     :param overwrite: Boolean to overwrite any existing files in destination directory
     :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param print_available: Print the available source files and exit. Short circuits ``dry_run``
+
+    :raises RuntimeError: If the no requested files exist in the longest common source path
     """
     if not requested_paths:
         requested_paths = []
