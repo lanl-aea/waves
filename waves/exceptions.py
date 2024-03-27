@@ -15,6 +15,7 @@ specific exceptions are desirable when using the package API to allow end-users 
 differently.
 """
 
+
 class WAVESError(Exception):
     """The base class for WAVES exceptions. All exceptions that must be caught by the CLI should derive from this class."""
 
