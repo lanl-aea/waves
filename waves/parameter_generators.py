@@ -93,8 +93,8 @@ class _ParameterGenerator(ABC):
                                "Please specify one or the other.")
 
         if self.output_file_type not in _allowable_output_file_types:
-            raise RuntimeError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                               f"The 'output_file_type' must be one of {_allowable_output_file_types}")
+            raise ValueError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
+                             f"The 'output_file_type' must be one of {_allowable_output_file_types}")
 
         if self.output_file:
             self.output_file = pathlib.Path(self.output_file)
