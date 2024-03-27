@@ -1,6 +1,7 @@
 import os
 import sys
 import shutil
+import typing
 import filecmp
 import pathlib
 
@@ -8,6 +9,7 @@ from waves import _settings
 
 
 _exclude_from_namespace = set(globals().keys())
+_tutorial_numbers = tuple(_settings._tutorial_paths.keys())
 
 
 def available_files(root_directory: pathlib.Path | str,
@@ -75,6 +77,8 @@ def longest_common_path_prefix(file_list: str | pathlib.Path | list[str | pathli
     """Return the longest common file path prefix.
 
     The edge case of a single path is handled by returning the parent directory
+
+    :raises RuntimeError: When file list is empty
 
     :param file_list: List of path-like objects
 
@@ -151,8 +155,10 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
         print(f"{prefix}{item}", file=stream)
 
 
-def extend_requested_paths(requested_paths: list, tutorial: int) -> list:
+def extend_requested_paths(requested_paths: list, tutorial: typing.Literal[*_tutorial_numbers]) -> list:
     """Extend the requested_paths list with the necessary tutorial files.
+
+    :raises RuntimeError: If the requested tutorial number doesn't exist
 
     :param requested_paths: list of relative path-like objects that subset the files found in the
         ``root_directory`` ``relative_paths``
