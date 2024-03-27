@@ -274,7 +274,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
          patch("filecmp.cmp", return_value=False), \
-         does_not_raise()
+         does_not_raise():
         _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, dry_run=True)
         mock_print_list.assert_called_once_with(destination_tree)
         mock_conditional_copy.assert_not_called()
