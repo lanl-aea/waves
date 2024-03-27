@@ -11,7 +11,6 @@ SCons Extensions
     :members:
     :private-members:
     :show-inheritance:
-    :synopsis: WAVES Analysis for Verified Engineering Simulations SCons builder extensions
 
 ********************
 Parameter Generators
@@ -22,7 +21,16 @@ Parameter Generators
     :members:
     :private-members:
     :show-inheritance:
-    :synopsis: A collection of Python based parameter study generators
+
+**********
+Exceptions
+**********
+
+.. automodule:: waves.exceptions
+    :noindex:
+    :members:
+    :private-members:
+    :show-inheritance:
 
 *******
 main.py
