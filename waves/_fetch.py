@@ -170,7 +170,7 @@ def extend_requested_paths(requested_paths: list, tutorial: int) -> list:
 
 def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
                    destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
-                   tutorial: int = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False) -> int:
+                   tutorial: int = None, overwrite: bool = False, dry_run: bool = False, print_available: bool = False):
     """Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
     the shortest possible shared source prefix.
 
@@ -207,8 +207,7 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
         requested_paths_resolved = source_files
         missing_requested_paths = []
     if not requested_paths_resolved:
-        print(f"Did not find any requested files in '{longest_common_source_path}'", file=sys.stderr)
-        return 1
+        raise RuntimeError(f"Did not find any requested files in '{longest_common_source_path}'")
 
     # Build source/destination pairs
     destination = pathlib.Path(destination).resolve()
@@ -222,12 +221,10 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
         print("Files to create:")
         print_list([destination for _, destination in copy_tuples])
     if print_available or dry_run:
-        return 0
+        return
 
     # Do the work if there are any files left to copy
     conditional_copy(copy_tuples)
-
-    return 0
 
 
 # Limit help() and 'from module import *' behavior to the module's public API

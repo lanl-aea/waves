@@ -69,7 +69,7 @@ def parameter_study(subcommand: str,
                     previous_parameter_study: str = parameter_generators._default_previous_parameter_study,
                     overwrite: bool = parameter_generators._default_overwrite,
                     dryrun: bool = parameter_generators._default_dryrun,
-                    write_meta: bool = parameter_generators._default_write_meta) -> int:
+                    write_meta: bool = parameter_generators._default_write_meta) -> None:
     """Build parameter studies
 
     :param str subcommand: parameter study type to build
@@ -82,8 +82,6 @@ def parameter_study(subcommand: str,
     :param bool overwrite: overwrite all existing parameter set file(s)
     :param bool dryrun: print what files would have been written, but do no work
     :param bool write_meta: write a meta file name 'parameter_study_meta.txt' containing the parameter set file path(s)
-
-    :returns: return code
     """
 
     # Read the input stream
@@ -112,8 +110,6 @@ def parameter_study(subcommand: str,
 
     # Build the parameter study.
     parameter_generator.write()
-
-    return 0
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
