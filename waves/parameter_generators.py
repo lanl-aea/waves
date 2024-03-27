@@ -64,6 +64,9 @@ class _ParameterGenerator(ABC):
     :param dryrun: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
+
+    :raises RuntimeError: If the mutually exclusive output file template and output file options are both specified
+    :raises RuntimeError: If the an unknown output file type is requested
     """
     def __init__(self, parameter_schema: dict,
                  output_file_template: str = _default_output_file_template,
@@ -196,6 +199,8 @@ class _ParameterGenerator(ABC):
 
            parameter_1: 1
            parameter_2: a
+
+        :raises ValueError: If an unsupported output file type is requested
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(set_name) for set_name in
@@ -548,6 +553,18 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
                    'scale': 2
                }
            }
+
+        :raises TypeError:
+
+            * Parameter schema is not a dictionary
+            * Parameter schema ``num_simulations`` key is not an integer
+            * Parameter definition distribution value is not a valid Python identifier
+            * Parameter definition key(s) is not a valid Python identifier
+
+        :raises AttributeError:
+
+            * Parameter schema does not have a ``num_simulations`` key
+            * Parameter definition does not contain a ``distribution`` key
         """
         if not isinstance(self.parameter_schema, dict):
             raise TypeError("parameter_schema must be a dictionary")
@@ -666,6 +683,11 @@ class CartesianProduct(_ParameterGenerator):
            parameter_2         (data_type, parameter_set_hash) object 'a' 'b' 'a' 'b'
 
     :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises TypeError:
+
+        * Parameter schema is not a dictionary
+        * Parameter key is not a supported iterable: set, tuple, list
     """
 
     def _validate(self) -> None:
@@ -828,6 +850,14 @@ class CustomStudy(_ParameterGenerator):
            index               (data_type, parameter_set_hash) object 5 6
 
     :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises TypeError: Parameter schema is not a dictionary
+    :raises KeyError:
+
+        * Parameter schema does not contain the ``parameter_names`` key
+        * Parameter schema does not contain the ``parameter_samples`` key
+
+    :raises ValueError: The ``parameter_samples`` value is an improperly shaped array
     """
 
     def _validate(self) -> None:
@@ -1168,6 +1198,8 @@ class SALibSampler(_ParameterGenerator, ABC):
 
         * ``self._sampler_class`` set by class initiation
         * ``self._parameter_names`` set by ``self._create_parameter_names()``
+
+        :raises ValueError: A sobol or morris sampler contains fewer than two parameters
         """
         parameter_count = len(self._parameter_names)
         if self.sampler_class == "sobol" and parameter_count < 2:
