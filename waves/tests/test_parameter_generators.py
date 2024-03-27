@@ -8,6 +8,7 @@ import numpy
 import xarray
 
 from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
+from waves.exceptions import APIError, MutuallyExclusiveError, SchemaValidationError
 
 
 class TestParameterGenerator:
@@ -15,7 +16,7 @@ class TestParameterGenerator:
 
     @pytest.mark.unittest
     def test_output_file_conflict(self):
-        with pytest.raises(RuntimeError):
+        with pytest.raises(MutuallyExclusiveError):
             try:
                 OutputFileConflict = NoQuantilesGenerator({}, output_file_template='out@number',
                                                           output_file='single_output_file')
@@ -24,7 +25,7 @@ class TestParameterGenerator:
 
     @pytest.mark.unittest
     def test_output_file_type(self):
-        with pytest.raises(RuntimeError):
+        with pytest.raises(APIError):
             try:
                 OutputTypeError = NoQuantilesGenerator({}, output_file_type='notsupported')
             finally:
@@ -309,31 +310,31 @@ class TestParameterDistributions:
         ),
         "not a dict": (
             'not a dict',
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "missing num_simulation": (
             {},
-            pytest.raises(AttributeError)
+            pytest.raises(SchemaValidationError)
         ),
         "num_simulation non-integer": (
             {'num_simulations': 'not_a_number'},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "missing distribution": (
             {'num_simulations': 1, 'parameter_1': {}},
-            pytest.raises(AttributeError)
+            pytest.raises(SchemaValidationError)
         ),
         "distribution non-string": (
             {'num_simulations': 1, 'parameter_1': {'distribution': 1}},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "distribution bad identifier": (
             {'num_simulations': 1, 'parameter_1': {'distribution': 'my norm'}},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "kwarg bad identifier": (
             {'num_simulations': 1, 'parameter_1': {'distribution': 'norm', 'kwarg 1': 1}},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         )
     }
 

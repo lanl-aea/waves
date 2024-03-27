@@ -9,6 +9,7 @@ import numpy
 
 from waves.parameter_generators import CustomStudy
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
+from waves.exceptions import SchemaValidationError
 
 
 class TestCustomStudy:
@@ -25,23 +26,23 @@ class TestCustomStudy:
         ),
         "not a dict": (
             'not a dict',
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "bad schema no names": (
             {'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
-            pytest.raises(KeyError)
+            pytest.raises(SchemaValidationError)
         ),
         "bad schema no values": (
             {'parameter_names': ['a', 'b']},
-            pytest.raises(KeyError)
+            pytest.raises(SchemaValidationError)
         ),
         "bad schema dimension": (
             {'parameter_names': ['a', 'b'], 'parameter_samples': numpy.array([1, 2.0], dtype=object)},
-            pytest.raises(ValueError)
+            pytest.raises(SchemaValidationError)
         ),
         "bad schema shape": (
             {'parameter_names': ['a', 'b', 'c'], 'parameter_samples': numpy.array([[1, 2.0], [3, 4.5]], dtype=object)},
-            pytest.raises(ValueError)
+            pytest.raises(SchemaValidationError)
         ),
     }
 

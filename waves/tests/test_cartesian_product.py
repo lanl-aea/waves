@@ -9,6 +9,7 @@ import numpy
 
 from waves.parameter_generators import CartesianProduct
 from waves._settings import _set_coordinate_key
+from waves.exceptions import SchemaValidationError
 from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
 
 
@@ -22,19 +23,19 @@ class TestCartesianProduct:
         ),
         "not a dict": (
             'not a dict',
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "bad schema int": (
             {'parameter_1': 1},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "bad schema dict": (
             {'parameter_1': {'thing1': 1}},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "bad schema str": (
             {'parameter_1': 'one'},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
     }
 

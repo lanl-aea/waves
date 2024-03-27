@@ -8,6 +8,7 @@ import numpy
 
 from waves.parameter_generators import SALibSampler
 from waves._settings import _set_coordinate_key, _supported_salib_samplers
+from waves.exceptions import SchemaValidationError
 from common import consistent_hash_parameter_check, self_consistency_checks, merge_samplers
 
 
@@ -70,7 +71,7 @@ class TestSALibSampler:
                  "bounds": [[-1, 1]]
              }
             },
-            pytest.raises(ValueError)
+            pytest.raises(SchemaValidationError)
         ),
         "morris: one parameter": (
             "morris",
@@ -81,42 +82,42 @@ class TestSALibSampler:
                  "bounds": [[-1, 1]]
              }
             },
-            pytest.raises(ValueError)
+            pytest.raises(SchemaValidationError)
         ),
         "missing N": (
             "latin",
             {"problem": {"num_vars": 4, "names": ["p1"], "bounds": [[-1, 1]]}},
-            pytest.raises(AttributeError)
+            pytest.raises(SchemaValidationError)
         ),
         "missing problem": (
             "latin",
             {"N": 4},
-            pytest.raises(AttributeError)
+            pytest.raises(SchemaValidationError)
         ),
         "missing names": (
             "latin",
             {"N": 4, "problem": {"num_vars": 4, "bounds": [[-1, 1]]}},
-            pytest.raises(AttributeError)
+            pytest.raises(SchemaValidationError)
         ),
         "schema not a dict": (
             "latin",
             "not a dict",
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "N not an int": (
             "latin",
             {"N": "not an int", "problem": {"num_vars": 4, "names": ["p1"], "bounds": [[-1, 1]]}},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "problem not a dict": (
             "latin",
             {"N": 4, "problem": "not a dict"},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
         "names not a list": (
             "latin",
             {"N": 4, "problem": {"num_vars": 4, "names": "not a list", "bounds": [[-1, 1]]}},
-            pytest.raises(TypeError)
+            pytest.raises(SchemaValidationError)
         ),
     }
 
