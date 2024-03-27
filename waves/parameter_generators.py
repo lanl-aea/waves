@@ -14,6 +14,7 @@ import scipy.stats
 import SALib
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key, _quantiles_attribute_key
+from waves.exceptions import APIError, MutuallyExclusiveError, SchemaValidationError
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -21,13 +22,6 @@ _exclude_from_namespace = set(globals().keys())
 
 # ========================================================================================================= SETTINGS ===
 _template_delimiter = '@'
-
-
-class _AtSignTemplate(string.Template):
-    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
-    delimiter = _template_delimiter
-
-
 _template_placeholder = f"{_template_delimiter}number"
 
 _default_output_file_template = None
@@ -41,6 +35,11 @@ _default_write_meta = False
 _parameter_study_meta_file = "parameter_study_meta.txt"
 _allowable_output_file_types = ['yaml', 'h5']
 _default_output_file_type = _allowable_output_file_types[0]
+
+
+class _AtSignTemplate(string.Template):
+    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
+    delimiter = _template_delimiter
 
 
 # ========================================================================================== PARAMETER STUDY CLASSES ===
@@ -65,8 +64,9 @@ class _ParameterGenerator(ABC):
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
-    :raises RuntimeError: If the mutually exclusive output file template and output file options are both specified
-    :raises RuntimeError: If the an unknown output file type is requested
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If the an unknown output file type is requested
     """
     def __init__(self, parameter_schema: dict,
                  output_file_template: str = _default_output_file_template,
@@ -89,12 +89,12 @@ class _ParameterGenerator(ABC):
         self.write_meta = write_meta
 
         if self.output_file_template is not None and self.output_file is not None:
-            raise RuntimeError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
-                               "Please specify one or the other.")
+            raise MutuallyExclusiveError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
+                                         "Please specify one or the other.")
 
         if self.output_file_type not in _allowable_output_file_types:
-            raise ValueError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                             f"The 'output_file_type' must be one of {_allowable_output_file_types}")
+            raise APIError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
+                           f"The 'output_file_type' must be one of {_allowable_output_file_types}")
 
         if self.output_file:
             self.output_file = pathlib.Path(self.output_file)
@@ -200,7 +200,7 @@ class _ParameterGenerator(ABC):
            parameter_1: 1
            parameter_2: a
 
-        :raises ValueError: If an unsupported output file type is requested
+        :raises waves.exceptions.APIError: If an unsupported output file type is requested
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(set_name) for set_name in
@@ -212,8 +212,8 @@ class _ParameterGenerator(ABC):
         elif self.output_file_type == 'yaml':
             self._write_yaml(parameter_set_files)
         else:
-            raise ValueError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                             f"The 'output_file_type' must be one of {_allowable_output_file_types}")
+            raise APIError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
+                           f"The 'output_file_type' must be one of {_allowable_output_file_types}")
 
     def scons_write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
@@ -555,40 +555,37 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
                }
            }
 
-        :raises TypeError:
+        :raises waves.exceptions.SchemaValidationError:
 
             * Parameter schema is not a dictionary
             * Parameter schema ``num_simulations`` key is not an integer
             * Parameter definition distribution value is not a valid Python identifier
             * Parameter definition key(s) is not a valid Python identifier
-
-        :raises AttributeError:
-
             * Parameter schema does not have a ``num_simulations`` key
             * Parameter definition does not contain a ``distribution`` key
         """
         if not isinstance(self.parameter_schema, dict):
-            raise TypeError("parameter_schema must be a dictionary")
+            raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
         if 'num_simulations' not in self.parameter_schema.keys():
-            raise AttributeError("Parameter schema is missing the required 'num_simulations' key")
+            raise SchemaValidationError("Parameter schema is missing the required 'num_simulations' key")
         elif not isinstance(self.parameter_schema['num_simulations'], int):
-            raise TypeError("Parameter schema 'num_simulations' must be an integer.")
+            raise SchemaValidationError("Parameter schema 'num_simulations' must be an integer.")
         self._create_parameter_names()
         for name in self._parameter_names:
             parameter_keys = self.parameter_schema[name].keys()
             parameter_definition = self.parameter_schema[name]
             if 'distribution' not in parameter_keys:
-                raise AttributeError(f"Parameter '{name}' does not contain the required 'distribution' key")
+                raise SchemaValidationError(f"Parameter '{name}' does not contain the required 'distribution' key")
             elif not isinstance(parameter_definition['distribution'], str) or \
                  not parameter_definition['distribution'].isidentifier():
-                raise TypeError(f"Parameter '{name}' distribution '{parameter_definition['distribution']}' is not a " \
-                                "valid Python identifier")
+                raise SchemaValidationError(f"Parameter '{name}' distribution '{parameter_definition['distribution']}' "
+                                             "is not a valid Python identifier")
             else:
                 for key in parameter_keys:
                     if not isinstance(key, str) or not key.isidentifier():
-                        raise TypeError(f"Parameter '{name}' keyword argument '{key}' is not a valid " \
-                                        "Python identifier")
+                        raise SchemaValidationError(f"Parameter '{name}' keyword argument '{key}' is not a valid "
+                                                     "Python identifier")
         # TODO: Raise an execption if the current parameter distributions don't match the previous_parameter_study
         self.parameter_distributions = self._generate_parameter_distributions()
 
@@ -685,7 +682,7 @@ class CartesianProduct(_ParameterGenerator):
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
-    :raises TypeError:
+    :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
         * Parameter key is not a supported iterable: set, tuple, list
@@ -694,13 +691,13 @@ class CartesianProduct(_ParameterGenerator):
     def _validate(self) -> None:
         """Validate the Cartesian Product parameter schema. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
-            raise TypeError("parameter_schema must be a dictionary")
+            raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
         self._parameter_names = list(self.parameter_schema.keys())
         # List, sets, and tuples are the supported PyYAML iterables that will support expected behavior
         for name in self._parameter_names:
             if not isinstance(self.parameter_schema[name], (list, set, tuple)):
-                raise TypeError(f"Parameter '{name}' is not one of list, set, or tuple")
+                raise SchemaValidationError(f"Parameter '{name}' is not one of list, set, or tuple")
 
     def _generate(self, **kwargs) -> None:
         """Generate the Cartesian Product parameter sets."""
@@ -852,33 +849,32 @@ class CustomStudy(_ParameterGenerator):
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
-    :raises TypeError: Parameter schema is not a dictionary
-    :raises KeyError:
+    :raises waves.exceptions.SchemaValidationError:
 
+        * Parameter schema is not a dictionary
         * Parameter schema does not contain the ``parameter_names`` key
         * Parameter schema does not contain the ``parameter_samples`` key
-
-    :raises ValueError: The ``parameter_samples`` value is an improperly shaped array
+        * The ``parameter_samples`` value is an improperly shaped array
     """
 
     def _validate(self) -> None:
         """Validate the Custom Study parameter samples and names. Executed by class initiation."""
         if not isinstance(self.parameter_schema, dict):
-            raise TypeError("parameter_schema must be a dictionary")
+            raise SchemaValidationError("parameter_schema must be a dictionary")
         try:
             self._parameter_names = self.parameter_schema['parameter_names']
         except KeyError:
-            raise KeyError('parameter_schema must contain the key: parameter_names')
+            raise SchemaValidationError('parameter_schema must contain the key: parameter_names')
         if 'parameter_samples' not in self.parameter_schema:
-            raise KeyError('parameter_schema must contain the key: parameter_samples')
+            raise SchemaValidationError('parameter_schema must contain the key: parameter_samples')
         # Always convert to numpy array for shape check and _generate()
         else:
             self.parameter_schema['parameter_samples'] = numpy.array(self.parameter_schema['parameter_samples'],
                                                                      dtype=object)
         if self.parameter_schema['parameter_samples'].ndim != 2 or \
            len(self._parameter_names) != self.parameter_schema['parameter_samples'].shape[1]:
-            raise ValueError("The parameter samples must be an array of shape MxN, "
-                             "where N is the number of parameters.")
+            raise SchemaValidationError("The parameter samples must be an array of shape MxN, "
+                                        "where N is the number of parameters.")
         return
 
     def _generate(self, **kwargs) -> None:
@@ -1150,15 +1146,12 @@ class SALibSampler(_ParameterGenerator, ABC):
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
-    :raises ValueError: If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
-    :raises AttributeError:
+    :raises waves.exceptions.SchemaValidationError:
 
+        * If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
         * ``N`` is not a key of ``parameter_schema``
         * ``problem`` is not a key of ``parameter_schema``
         * ``names`` is not a key of ``parameter_schema['problem']``
-
-    :raises TypeError:
-
         * ``parameter_schema`` is not a dictionary
         * ``parameter_schema['N']`` is not an integer
         * ``parameter_schema['problem']`` is not a dictionary
@@ -1171,21 +1164,21 @@ class SALibSampler(_ParameterGenerator, ABC):
 
     def _validate(self) -> None:
         if not isinstance(self.parameter_schema, dict):
-            raise TypeError("parameter_schema must be a dictionary")
+            raise SchemaValidationError("parameter_schema must be a dictionary")
         # TODO: Settle on an input file schema and validation library
         if 'N' not in self.parameter_schema.keys():
-            raise AttributeError("Parameter schema is missing the required 'N' key")
+            raise SchemaValidationError("Parameter schema is missing the required 'N' key")
         elif not isinstance(self.parameter_schema['N'], int):
-            raise TypeError("Parameter schema 'N' must be an integer.")
+            raise SchemaValidationError("Parameter schema 'N' must be an integer.")
         # Check the SALib owned "problem" dictionary for necessary WAVES elements
         if "problem" not in self.parameter_schema.keys():
-            raise AttributeError("Parameter schema is missing the required 'problem' key")
+            raise SchemaValidationError("Parameter schema is missing the required 'problem' key")
         elif not isinstance(self.parameter_schema["problem"], dict):
-            raise TypeError("'problem' must be a dictionary")
+            raise SchemaValidationError("'problem' must be a dictionary")
         if "names" not in self.parameter_schema["problem"].keys():
-            raise AttributeError("Parameter schema 'problem' dict is missing the required 'names' key")
+            raise SchemaValidationError("Parameter schema 'problem' dict is missing the required 'names' key")
         if not isinstance(self.parameter_schema["problem"]["names"], (list, set, tuple)):
-            raise TypeError(f"Parameter 'names' is not one of list, set, or tuple")
+            raise SchemaValidationError(f"Parameter 'names' is not one of list, set, or tuple")
         self._create_parameter_names()
         # Sampler specific validation
         self._sampler_validation()
@@ -1200,13 +1193,13 @@ class SALibSampler(_ParameterGenerator, ABC):
         * ``self._sampler_class`` set by class initiation
         * ``self._parameter_names`` set by ``self._create_parameter_names()``
 
-        :raises ValueError: A sobol or morris sampler contains fewer than two parameters
+        :raises waves.exceptions.SchemaValidationError: A sobol or morris sampler contains fewer than two parameters
         """
         parameter_count = len(self._parameter_names)
         if self.sampler_class == "sobol" and parameter_count < 2:
-            raise ValueError("The SALib Sobol sampler requires at least two parameters")
+            raise SchemaValidationError("The SALib Sobol sampler requires at least two parameters")
         if self.sampler_class == "morris" and parameter_count < 2:
-            raise ValueError("The SALib Morris sampler requires at least two parameters")
+            raise SchemaValidationError("The SALib Morris sampler requires at least two parameters")
 
     def _sampler_overrides(self, override_kwargs=None) -> dict:
         """Provide sampler specific kwarg override dictionaries

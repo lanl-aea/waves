@@ -6,6 +6,7 @@ import subprocess
 from waves import _settings
 from waves import __version__
 from waves import _parameter_study
+from waves.exceptions import WAVESError
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -54,7 +55,7 @@ def main() -> None:
             )
         else:
             parser.print_help()
-    except RuntimeError as err:
+    except (WAVESError, RuntimeError) as err:
         sys.exit(err)
 
 
