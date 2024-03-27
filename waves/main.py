@@ -55,7 +55,7 @@ def main() -> None:
         else:
             parser.print_help()
     except RuntimeError as err:
-        sys.exit(err.message)
+        sys.exit(err)
 
 
 def get_parser() -> argparse.ArgumentParser:
