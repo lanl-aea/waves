@@ -11,40 +11,39 @@ from waves import _parameter_study
 _exclude_from_namespace = set(globals().keys())
 
 
-def main() -> int:
+def main() -> None:
     """This is the main function that performs actions based on command line arguments.
 
     :returns: return code
     """
-    return_code = None
     parser = get_parser()
     args, unknown = parser.parse_known_args()
 
     if args.subcommand == 'docs':
-        return_code = docs(print_local_path=args.print_local_path)
+        docs(print_local_path=args.print_local_path)
     elif args.subcommand == 'build':
-        return_code = build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
-                            working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
+        build(args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
+              working_directory=args.working_directory, git_clone_directory=args.git_clone_directory)
     elif args.subcommand == 'fetch':
         root_directory = _settings._modsim_template_directory.parent
         relative_paths = _settings._fetch_subdirectories
-        return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
-                            requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
-                            dry_run=args.dry_run, print_available=args.print_available)
+        fetch(args.subcommand, root_directory, relative_paths, args.destination,
+              requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
+              dry_run=args.dry_run, print_available=args.print_available)
     elif args.subcommand == 'quickstart':
         root_directory = _settings._modsim_template_directory.parent
         relative_paths = [_settings._modsim_template_directory.name]
-        return_code = fetch(args.subcommand, root_directory, relative_paths, args.destination,
-                            overwrite=args.overwrite, dry_run=args.dry_run)
+        fetch(args.subcommand, root_directory, relative_paths, args.destination,
+              overwrite=args.overwrite, dry_run=args.dry_run)
     elif args.subcommand == 'visualize':
-        return_code = visualization(target=args.TARGET, output_file=args.output_file,
-                                    sconstruct=args.sconstruct, print_graphml=args.print_graphml,
-                                    exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
-                                    height=args.height, width=args.width, font_size=args.font_size,
-                                    vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
-                                    input_file=args.input_file)
+        visualization(target=args.TARGET, output_file=args.output_file,
+                      sconstruct=args.sconstruct, print_graphml=args.print_graphml,
+                      exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
+                      height=args.height, width=args.width, font_size=args.font_size,
+                      vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
+                      input_file=args.input_file)
     elif args.subcommand in _settings._parameter_study_subcommands:
-        return_code = _parameter_study.parameter_study(
+        _parameter_study.parameter_study(
             args.subcommand, args.INPUT_FILE,
             output_file_template=args.OUTPUT_FILE_TEMPLATE,
             output_file=args.OUTPUT_FILE,
@@ -57,11 +56,6 @@ def main() -> int:
         )
     else:
         parser.print_help()
-
-    if return_code:
-        return return_code
-    else:
-        return 0
 
 
 def get_parser() -> argparse.ArgumentParser:
