@@ -250,9 +250,9 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.print_list") as mock_print_list, \
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
-         patch("filecmp.cmp", return_value=False):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
-        assert return_code == 0
+         patch("filecmp.cmp", return_value=False), \
+         does_not_raise():
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(copy_tuples)
 
@@ -261,10 +261,10 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.print_list") as mock_print_list, \
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
-         patch("filecmp.cmp", return_value=False):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
+         patch("filecmp.cmp", return_value=False), \
+         does_not_raise():
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
                                            requested_paths=[source_files[0]])
-        assert return_code == 0
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with((copy_tuples[0], ))
 
@@ -273,9 +273,9 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.print_list") as mock_print_list, \
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
-         patch("filecmp.cmp", return_value=False):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, dry_run=True)
-        assert return_code == 0
+         patch("filecmp.cmp", return_value=False), \
+         does_not_raise()
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, dry_run=True)
         mock_print_list.assert_called_once_with(destination_tree)
         mock_conditional_copy.assert_not_called()
 
@@ -284,20 +284,21 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.print_list") as mock_print_list, \
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
-         patch("filecmp.cmp", return_value=False):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, print_available=True)
-        assert return_code == 0
+         patch("filecmp.cmp", return_value=False), \
+         does_not_raise():
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, print_available=True)
         mock_print_list.assert_called_once_with(source_files)
         mock_conditional_copy.assert_not_called()
 
     # All files in destination tree do exist. Don't copy the modsim_template file tree.
+    # Don't error out, just remove destination file from the copy list
     with patch("waves._fetch.available_files", return_value=available_files_output), \
          patch("waves._fetch.print_list") as mock_print_list, \
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
-         patch("filecmp.cmp", return_value=True):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
-        assert return_code == 0  # Don't error out, just remove destination file from the copy list
+         patch("filecmp.cmp", return_value=True), \
+         does_not_raise():
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(())
 
@@ -306,9 +307,9 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.print_list") as mock_print_list, \
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
-         patch("filecmp.cmp", return_value=False):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
-        assert return_code == 0
+         patch("filecmp.cmp", return_value=False), \
+         does_not_raise():
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(copy_tuples)
 
@@ -318,9 +319,9 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.print_list") as mock_print_list, \
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
-         patch("filecmp.cmp", return_value=True):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
-        assert return_code == 0
+         patch("filecmp.cmp", return_value=True), \
+         does_not_raise():
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, overwrite=True)
         mock_print_list.assert_not_called()
         mock_conditional_copy.assert_called_once_with(copy_tuples)
 
@@ -329,10 +330,10 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.print_list") as mock_print_list, \
          patch("waves._fetch.conditional_copy") as mock_conditional_copy, \
          patch("pathlib.Path.exists", side_effect=[True, True]), \
-         patch("filecmp.cmp", return_value=True):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
+         patch("filecmp.cmp", return_value=True), \
+         does_not_raise():
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
                                            overwrite=True, dry_run=True)
-        assert return_code == 0
         mock_print_list.assert_called_once_with(destination_tree)
         mock_conditional_copy.assert_not_called()
 
@@ -342,9 +343,9 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          patch("waves._fetch.extend_requested_paths") as mock_extend, \
          patch("waves._fetch.conditional_copy"), \
          patch("pathlib.Path.exists", side_effect=[False, False]), \
-         patch("filecmp.cmp", return_value=False):
-        return_code = _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, tutorial=tutorial)
-        assert return_code == 0
+         patch("filecmp.cmp", return_value=False), \
+         does_not_raise():
+        _fetch.recursive_copy(root_directory.parent, root_directory.name, destination, tutorial=tutorial)
         mock_print_list.assert_not_called()
         if tutorial is not None:
             mock_extend.assert_called_once()
