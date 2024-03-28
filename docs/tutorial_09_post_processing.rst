@@ -4,6 +4,8 @@
 Tutorial 09: Post-Processing
 ############################
 
+.. _tutorial_post_processing_references:
+
 **********
 References
 **********
@@ -11,7 +13,9 @@ References
 * |PROJECT| :ref:`waves_scons_api` API: :meth:`waves.scons_extensions.python_script`
 * |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.CartesianProduct`
 * `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
-* `matplotlib` :cite:`matplotlib`
+* `pandas`_ :cite:`pandas`
+* `matplotlib`_ :cite:`matplotlib`
+* `Python generator expressions`_ :cite:`python-generator-expressions`
 
 ***********
 Environment
@@ -98,7 +102,7 @@ Post-processing script
       :language: Python
 
 The post-processing script is the first Python 3 script introduced in the core tutorials. It differs from the Abaqus
-journal files by executing against the Python 3 interpretter of the launching `Conda`_ environment where WAVES is
+journal files by executing against the Python 3 interpretter of the launching `Conda`_ environment where |PROJECT| is
 installed. Unlike the Abaqus Python 2 environment used to execute journal files, users have direct control over this
 environment and can use the full range of Python packages available with the `Conda`_ package manager.
 
@@ -113,7 +117,14 @@ operations on real geometry files, which requires system tests. :ref:`tutorial_r
 an example solution to performing system tests on simulation workflows.
 
 Take some time to review the individual functions and their documentation, both in the source file and as rendered by
-the documentation. The script API and CLI are included in the :ref:`waves_tutorial_api`: :ref:`post_processing_api` and
+the documentation. Most of the behavior is explained in the :ref:`tutorial_post_processing_references` third-party
+package documentation or the Python documentation. Most of the Python built-in operations should look familiar, but
+novice Python users may be unfamiliar with the generator expression stored in the ``data_generator`` variable of the
+``combine_data`` function. `Python generator expressions`_  behave similarly to list comprehensions. A generator
+expression is used here to avoid performing file I/O operations until the post-processing script is ready to catenate
+the results files into a single `xarray dataset`_.
+
+The script API and CLI are included in the :ref:`waves_tutorial_api`: :ref:`post_processing_api` and
 :ref:`waves_tutorial_cli`: :ref:`post_processing_cli`, respectively. Generally, this example script tries to model the
 separation of: data input, data processing, data output, and status reporting. The `Software Carpentry: Python Novice`_
 is a good introduction to Python programming practices :cite:`swc-python`.
