@@ -105,7 +105,7 @@
 .. _`conda-forge`: https://conda-forge.org/
 .. _`custom conda channel`: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/create-custom-channels.html
 .. _`directed acyclic graph`: https://en.wikipedia.org/wiki/Directed_acyclic_graph
-.. _`git`: https://git-scm.com/
+.. _`Git`: https://git-scm.com/
 .. _`Git-LFS`: https://git-lfs.com/
 .. _`numpy.corrcoef`: https://numpy.org/doc/stable/reference/generated/numpy.corrcoef.html
 .. _`re docs`: https://docs.python.org/3.6/library/re.html
