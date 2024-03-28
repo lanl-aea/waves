@@ -11,14 +11,14 @@ Documentation
 Traditionally, most engineering simulation and analysis projects publish a technical report as the final deliverable.
 Some projects may go further and deliver archives or databases of simulation input and output files. These documentation
 and archival deliverables may be sufficient for short projects, simple simulation workflows, or when there are a small
-number of contributors. When a project grows in complexity, contributors, or lifespan a more complete project
+number of contributors. When a project grows in complexity, contributors, or lifespan, a more complete project
 documentation strategy is required. Engineering analysis projects and their associated :term:`modsim repository` can have
-similar complexity to a large software project, and many of the same documentation sections are required.
+similar complexity to a large software project, and many of the same documentation sections are required:
 
 * User manual
 * Theory manual
 * Application program interface (:term:`API`)
-* Command line interface (:term:`CLI`)
+* Command-line interface (:term:`CLI`)
 * Developer manual
 * Release philosophy
 * Strategic plan/feature schedule
@@ -33,7 +33,7 @@ The documentation should include everything required for new developers to begin
 the necessary elements of a technical report. The user manual should explain what simulations are available, what
 purpose they serve, and how to run them. A theory manual should discuss any relevant analytical solutions, what
 numerical solutions were chosen and why, and any critical assumptions. The application program interface (API) and
-command line interface (CLI) should document the interfaces, behavior, and usage of all project specific scripts and
+command-line interface (CLI) should document the interfaces, behavior, and usage of all project specific scripts and
 executables in sufficient detail that a new project team member can understand and use what is available without
 examining the project source code. A developer manual will detail the contribution guidelines, style guides, version
 control behavior, continuous integration and automation solutions, and testing requirements of the project. The release

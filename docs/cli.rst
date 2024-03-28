@@ -1,11 +1,11 @@
 ######################
-Command Line Utilities
+Command-Line Utilities
 ######################
 
 .. _waves_cli:
 
 ******************************
-|project| Command Line Utility
+|project| Command-Line Utility
 ******************************
 
 .. argparse::

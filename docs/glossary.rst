@@ -12,7 +12,7 @@ Glossary
      Continuous integration
 
    CLI
-     A command line interface (CLI) is the text based user interface for modifying software execution behavior
+     A command-line interface (CLI) is the text based user interface for modifying software execution behavior
 
    DAG
      Directed acyclic graph

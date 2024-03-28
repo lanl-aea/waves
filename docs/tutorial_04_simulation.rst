@@ -143,7 +143,7 @@ The ``datacheck_suffixes`` are standard output file extensions that will form th
 `Abaqus File Extension Definitions`_ documentation :cite:`ABAQUS` for more information about each of the file
 extensions listed.
 
-One new section of code that we have not utilized yet in the previous tutorials is the passing of command line options
+One new section of code that we have not utilized yet in the previous tutorials is the passing of command-line options
 to the builder. This is done using the ``abaqus_options`` variable. Here, we instruct the Abaqus solver to use double
 precision for both the packager and the analysis. See the `Abaqus Precision Level for Executables`_ documentation
 :cite:`ABAQUS` for more information about the use of single or double precision in an Abaqus analysis.

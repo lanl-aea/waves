@@ -75,7 +75,7 @@ below to help identify the differences between the two parameter generators.
    parameter set reproducible during SCons configuration. Without this seed, *every* call of ``scons`` will produce a
    complete and unique parameter study. This will result in the full workflow re-executing on every ``scons`` call.
 
-   If a fixed seed is not acceptable, users may protect the parameter study generation with a command line option or
+   If a fixed seed is not acceptable, users may protect the parameter study generation with a command-line option or
    generate the parameter study manually and use the :meth:`waves.parameter_generators.CustomStudy` to instantiate the
    parameter study object.
 

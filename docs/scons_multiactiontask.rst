@@ -66,7 +66,7 @@ detailed review of build systems.
 A ``diff`` against the SConstruct file from :ref:`scons_quickstart` is included below to help identify the changes made
 in this tutorial. Note that the ``AbaqusJournal`` builder is no longer used. While it would be possible to adapt the
 builder to the multi-action journal file execution, in general the files executed by each action may not have a
-sufficiently similar command line interface (CLI) or naming convention to generalize a multi-task builder. Instead, the
+sufficiently similar command-line interface (CLI) or naming convention to generalize a multi-task builder. Instead, the
 more flexible, general purpose `SCons Command`_ builder is used.
 
 ..  admonition:: waves-tutorials/SConstruct

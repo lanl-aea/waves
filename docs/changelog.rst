@@ -309,7 +309,7 @@ New Features
 - Abaqus solver, Abaqus journal, and Sierra SLURM Sbatch builders (:merge:`647`, :merge:`648`). By `Kyle Brindley`_.
 - Draft SSH builder wrapper (:merge:`649`). By `Kyle Brindley`_.
 - Python SLURM Sbatch builder (:issue:`539`, :merge:`657`). By `Kyle Brindley`_.
-- Accept Sbatch command line options in the Sbatch wrapper builders (:issue:`539`, :merge:`657`). By `Kyle Brindley`_.
+- Accept Sbatch command-line options in the Sbatch wrapper builders (:issue:`539`, :merge:`657`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -355,7 +355,7 @@ Bug fixes
 
 Breaking changes
 ================
-- Deprecate the too-general ``parameter_study <study type>`` command line utility name in favor of ``waves <study
+- Deprecate the too-general ``parameter_study <study type>`` command-line utility name in favor of ``waves <study
   type>`` to avoid utility conflicts with other packages (:issue:`494`, :merge:`612`). By `Kyle Brindley`_.
 - Standardize the builder program path keyword from ``<thing>_program`` to ``program`` for greater consistency in
   builder APIs. The older keywords are preseved for backward compatibility, but they raise a deprecation warning
@@ -391,7 +391,7 @@ Internal Changes
 - More complete clean behavior for the documentation targets to reduce dev/main source conflicts during Gitlab-Pages
   builds (:issue:`516`, :merge:`625`, :merge:`626`). By `Kyle Brindley`_.
 - Update the expected Cubit version from 16.04 to 16.12 (:issue:`510`, :merge:`634`). By `Sergio Cordova`_.
-- Add the ``--build-dir`` command line option to the quickstart tutorials to enable the system tests to run in
+- Add the ``--build-dir`` command-line option to the quickstart tutorials to enable the system tests to run in
   non-default, temporary build directories (:issue:`518`, :merge:`635`). By `Kyle Brindley`_.
 - Drive the system tests (tutorials) from pytest during conda builds (:merge:`629`). By `Kyle Brindley`_.
 - Upgrade to Anaocnda 2023 on Gitlab-CI environment (:issue:`520`, :merge:`636`). By `Sergio Cordova`_.
@@ -577,7 +577,7 @@ Internal Changes
 - Add waves subcommand sign-of-life tests to the external/GitHub conda-build recipe tests (:issue:`430`, :merge:`539`).
   By `Kyle Brindley`_.
 - Seed the LatinHypercube tutorial parameter study (:issue:`241`, :merge:`540`). By `Kyle Brindley`_.
-- Fix test execution and assertions for the parameter study command line utility (:merge:`543`). By `Kyle Brindley`_.
+- Fix test execution and assertions for the parameter study command-line utility (:merge:`543`). By `Kyle Brindley`_.
 - Fix test for test_odb_extract.py to achieve 100 percent coverage (:issue:`434`, :merge:`534`). By `Prabhu Khalsa`_.
 
 *******************
@@ -607,7 +607,7 @@ Internal Changes
 - Added ``sphinx-copybutton`` package to environment (:issue:`414`, :merge:`516`). By `Sergio Cordova`_.
 - Split quickstart copy operations into smaller functions for unit testing (:issue:`428`, :merge:`522`). By `Kyle
   Brindley`_.
-- Rename command line utility module to avoid namespace confusion (:issue:`428`, :merge:`522`). By `Kyle Brindley`_.
+- Rename command-line utility module to avoid namespace confusion (:issue:`428`, :merge:`522`). By `Kyle Brindley`_.
 - Reduce fetch unit test logic duplication (:issue:`432`, :merge:`527`). By `Kyle Brindley`_.
 
 Enhancements
@@ -1401,7 +1401,7 @@ Bug fixes
 
 New Features
 ============
-- Create a ``waves`` command line utility with a version argument and a subparser for opening the packaged HTML
+- Create a ``waves`` command-line utility with a version argument and a subparser for opening the packaged HTML
   documentation in the system default web browser (:issue:`172`, :merge:`233`). By `Thomas Roberts`_.
 - Add a Conda environment builder to aid in Python software stack documentation for reproducibility (:issue:`212`,
   :merge:`239`). By `Kyle Brindley`_.
@@ -1472,7 +1472,7 @@ Breaking changes
 
 New Features
 ============
-- Add the latin hypercube generator to the parameter study command line utility (:issue:`216`, :merge:`207`). By `Kyle
+- Add the latin hypercube generator to the parameter study command-line utility (:issue:`216`, :merge:`207`). By `Kyle
   Brindley`_.
 - Accept output template pathlike strings and write parameter study meta file in the same parent directory as the
   parameter set files (:issue:`79`, :merge:`210`). By `Kyle Brindley`_.
@@ -1600,7 +1600,7 @@ Breaking changes
 - Return parameter study as an xarray dataset instead of a text YAML dictionary. Necessary for future output type
   options and multi-index tables, e.g. Latin Hypercube value and quantile information (:issue:`70`, :merge:`170`). By
   `Kyle Brindley`_.
-- Convert project command line variables to command line options (:issue:`179`, :merge:`169`). By `Kyle Brindley`_.
+- Convert project command-line variables to command-line options (:issue:`179`, :merge:`169`). By `Kyle Brindley`_.
 
 New Features
 ============
@@ -1678,7 +1678,7 @@ Internal Changes
 
 Documentation
 =============
-- Move the build wrapper discussion and usage into the command line utilities section (:issue:`168`, :merge:`143`). By
+- Move the build wrapper discussion and usage into the command-line utilities section (:issue:`168`, :merge:`143`). By
   `Kyle Brindley`_.
 - Add TOC tree captions as PDF parts in the PDF documentation build (:issue:`169`, :merge:`144`). By `Kyle Brindley`_.
 
@@ -1769,7 +1769,7 @@ Documentation
 
 New Features
 ============
-- Add the command line tools odb_extract, msg_parse, and sta_parse (:issue:`93`, :merge:`88`). By `Prabhu Khalsa`_.
+- Add the command-line tools odb_extract, msg_parse, and sta_parse (:issue:`93`, :merge:`88`). By `Prabhu Khalsa`_.
 
 Bug fixes
 =========
@@ -1894,7 +1894,7 @@ New Features
 - Limit the EABM default targets to the documentation. Requires simulation targets to be specified in the SCons command
   line arguments to avoid building all simulations from a bare ``scons`` execution (:issue:`32`, :merge:`27`). By `Kyle
   Brindley`_.
-- Make the variant (build) directory a command line variable option (:issue:`25`, :merge:`29`). By `Kyle Brindley`_.
+- Make the variant (build) directory a command-line variable option (:issue:`25`, :merge:`29`). By `Kyle Brindley`_.
 - Build the project internal variables into a substitution dictionary that can be passed to SConscript files
   (:issue:`13`, :merge:`30`). By `Kyle Brindley`_.
 - Add a copy and substitute target builder to WAVES (:issue:`28`, :merge:`32`). By `Kyle Brindley`_.
@@ -1921,7 +1921,7 @@ Documentation
 =============
 - Link from the AbaqusSolver builder to the Abaqus wrapper shell script to help explain the action definition
   (:issue:`42`, :merge:`31`). By `Kyle Brindley`_.
-- Add a command line interface (CLI) documentation page (:issue:`44`, :merge:`34`). By `Thomas Roberts`_.
+- Add a command-line interface (CLI) documentation page (:issue:`44`, :merge:`34`). By `Thomas Roberts`_.
 - Fix WAVES builder docstring example syntax (:issue:`54`, :merge:`36`). By `Kyle Brindley`_.
 - Create a custom usage message for the geometry argument parser that displays the proper command for running an Abaqus
   journal file (:issue:`55`, :merge:`37`). By `Thomas Roberts`_.
@@ -1968,7 +1968,7 @@ New Features
 - Append the Abaqus journal Builder managed targets automatically (:issue:`18`, :merge:`10`). By `Kyle Brindley`_.
 - Separate the common custom builders from the EABM SCons project configuration (:issue:`19`, :merge:`11`). By `Kyle
   Brindley`_.
-- Add a variable to pass through additional Abaqus command line arguments to the Abaqus journal file builder
+- Add a variable to pass through additional Abaqus command-line arguments to the Abaqus journal file builder
   (:issue:`19`, :merge:`11`). By `Kyle Brindley`_.
 - Add the SCons target definition equivalent to the ECMF and CMake-simulation Abaqus simulation execution (:issue:`21`,
   :merge:`13`). By `Kyle Brindley`_.

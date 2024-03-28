@@ -18,7 +18,7 @@ environment consistency.
 
 There are two major components relevant to the compute environment discussion for modsim workflows: the installed
 software and the operating system (OS) search ``PATH``. Most modsim developers will be familiar with installing software
-on their local computer. When running a simulation workflow from a command line shell, the system ``PATH`` variable
+on their local computer. When running a simulation workflow from a command-line shell, the system ``PATH`` variable
 tells the shell how to find executable software. System paths may be modified by user configuration files; however,
 managing and maintaining a common set of configuration files among several servers and multiple collaborators can be a
 difficult and error prone task, often resulting in the common "but it works on *my* computer" complaint.

@@ -70,8 +70,8 @@ A second recipe that bundles the LANL internally linked documentation is found i
 built similarly by replacing ``recipe`` with ``recipe-internal`` in the above command.
 
 This project uses the `SCons`_ build system. This section will discuss some common build operations. For a full list of
-`SCons`_ command line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
-installed with `Scons`_ in the environment and can be opened from the command line as ``man scons`` in the `AEA Compute
+`SCons`_ command-line options and target build behavior, see the `SCons manpage`_. The `SCons manpage`_ is also
+installed with `Scons`_ in the environment and can be opened from the command-line as ``man scons`` in the `AEA Compute
 environment`_. In local environments, the manpage may not be in the ``MANPATH``. You can find the manpage file and
 make them available with something similar to any of the following, in increasing order of required background
 knowledge.
@@ -106,7 +106,7 @@ to run ``conda develop .`` once from the project root directory. See the `Conda`
 about "development" mode installs. For shared environments, the preferred solution is to prefix the following commands
 with ``PYTHONPATH=.. ``, where it is assumed that the ``PWD`` is the tutorial or modsim template root directory.
 
-- View project specific command line options, default targets, and aliases
+- View project specific command-line options, default targets, and aliases
 
   .. code-block::
 

@@ -75,7 +75,7 @@ build the targets for partitioning and meshing our rectangle part. Again, the ``
 solely to minimize hard-coded duplication of the strings ``'rectangle_partition'`` and ``'rectangle_mesh'``.
 
 In the code pertaining to ``# Partition``, we will again pass an empty string for the ``journal_options``. We will
-re-open the discussion of using the journal file's command line interface via the ``journal_options`` variable in
+re-open the discussion of using the journal file's command-line interface via the ``journal_options`` variable in
 :ref:`tutorial_parameter_substitution`. Next, the ``workflow`` list is extended once again to include the action
 to use the :meth:`waves.scons_extensions.abaqus_journal` builder. The ``target`` list specifies the files created by the
 :meth:`waves.scons_extensions.abaqus_journal` task's action, and the ``source`` list specifies on which files to act in order to
@@ -94,7 +94,7 @@ in the Abaqus kernel, but now the default behavior of the journal is different.
    a new parameter is defined here that was absent in ``rectangle_geometry.py``. This parameter is defined in short
    with ``-i`` or verbosely by ``--input-file``.
 
-The ``--input-file`` command line argument defaults to the string ``'rectangle_geometry'`` and does not require a
+The ``--input-file`` command-line argument defaults to the string ``'rectangle_geometry'`` and does not require a
 file extension. So, we simply need to make sure that the ``rectangle_geometry.cae`` file (which is an output from
 the code we wrote in :ref:`tutorial_geometry`) be included in the ``source`` list. If
 ``rectangle_geometry.cae`` were left out of the source list, the SCons build system would not be able to determine
@@ -112,7 +112,7 @@ meshing journal file name  to reduce hard-coded duplication of strings. We defin
 utilize the :meth:`waves.scons_extensions.abaqus_journal` builder on the ``source`` list. Just like the code for ``#
 Partition``, we have two sources. In this tutorial, we rely on the ``rectangle_mesh.py`` CLI default arguments
 which will use the ``rectangle_partition.cae`` file as the input model file. Readers are encouraged to return to
-the :ref:`waves_tutorial_cli` to become familiar with the command line arguments available for the journal files in this
+the :ref:`waves_tutorial_cli` to become familiar with the command-line arguments available for the journal files in this
 tutorial.
 
 The ``target`` list, however, shows another difference with the behavior we have seen previously. Now, we have two
@@ -162,7 +162,7 @@ The ``rectangle_partition.py`` file is layed out in a very similar fashion to ``
 contains a ``main()`` function with `PEP-287`_ formatted docstrings. Within that ``main()`` function is Abaqus python
 code that does a few specific tasks:
 
-* Format the ``--input-file`` and ``--output-file`` command line argument values with ``.cae`` file extensions
+* Format the ``--input-file`` and ``--output-file`` command-line argument values with ``.cae`` file extensions
 * Copy the ``input_file`` to an identical ``output_file`` with a new name. This is necessary because Abaqus changes the
   contents of ``*.cae`` files on open. The content change will cause the build system to always re-run the task that
   generated the ``input_file``.
@@ -176,7 +176,7 @@ code that does a few specific tasks:
 
 The :ref:`abaqus_rectangle_partition_cli` script also contains an argument parser function, whose auto-generated
 CLI documentation can be found in the :ref:`waves_tutorial_cli`. The argument parser functions in a very similar way to that
-in the ``rectangle_geometry.py`` file, but a new command line argument ``--input-file`` is added. This command line
+in the ``rectangle_geometry.py`` file, but a new command-line argument ``--input-file`` is added. This command-line
 argument is how the script knows which file to copy and then modify in the Abaqus python code.
 
 Lastly, the execution of the ``main()`` function is protected within the context of a ``if __name__ == "__main__":``
@@ -232,7 +232,7 @@ The code that follows performs the following tasks within the new ``output_file`
 
 * Create a part instance that can be meshed. See the `Abaqus Assembly Definition`_ documentation :cite:`ABAQUS` for
   more information about defining parts, part instances, and assemblies.
-* Seed the part using the ``--global-seed`` command line argument value to define the global meshing size
+* Seed the part using the ``--global-seed`` command-line argument value to define the global meshing size
 * Mesh the part
 * Assign an element type to the part. See the `Abaqus Elements Guide`_ :cite:`ABAQUS` for more information about
   defining element types.
@@ -242,7 +242,7 @@ The code that follows performs the following tasks within the new ``output_file`
   ``abaqus_utilities.py``
 * Save the ``output_file`` with the changes made
 
-The ``rectangle_mesh.py`` script also contains an argument parser function. This command line interface has yet
+The ``rectangle_mesh.py`` script also contains an argument parser function. This command-line interface has yet
 another new argument ``--global-seed``. This argument defines global mesh sizing for the model and has a default value
 that is assigned to the ``global_seed`` variable if not specified when calling the script.
 

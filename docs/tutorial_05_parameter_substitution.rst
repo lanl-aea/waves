@@ -148,9 +148,9 @@ In the code you just added, a ``simulation_variables`` dictionary is defined.  E
 ``simulation_variables`` dictionary defines a parameter that already exists in several of the scripts we have utilized
 in the previous tutorials. The ``width`` and ``height`` parameters are used in the ``rectangle_geometry.py`` and
 ``rectangle_partition.py`` scripts, and ``global_seed`` is used in the ``rectangle_mesh.py`` script. Recall
-that each of these scripts is called using a command line interface that has default parameters. See the
+that each of these scripts is called using a command-line interface that has default parameters. See the
 :ref:`waves_tutorial_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry`, the argument
-parser for each of these scripts will supply a default value for each command line argument that is not specified
+parser for each of these scripts will supply a default value for each command-line argument that is not specified
 (assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
 passed to the :meth:`waves.scons_extensions.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that
 we get parameter substitution into our journal files when we need it. The ``width``, ``height``, and ``global_seed``
@@ -159,7 +159,7 @@ journal files via the CLI.
 
 The final key-value pair defined in the ``simulation_variables`` dictionary is ``displacement``. This parameter will be
 used in a slightly different way than the others, as the script that utilizes this parameter does not function with a
-command line interface. Recall from earlier in this tutorial, we created a new file called
+command-line interface. Recall from earlier in this tutorial, we created a new file called
 ``rectangle_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
 the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
 this is implemented with the :meth:`waves.scons_extensions.copy_substitute` method will come later in this tutorial.
@@ -177,7 +177,7 @@ this is implemented with the :meth:`waves.scons_extensions.copy_substitute` meth
       :emphasize-lines: 7, 11-12, 19, 23-24, 29, 33-34
 
 As was previously discussed, we use the key-value pairs of the ``simulation_variables`` dictionary in the arguments we
-pass to the command line interfaces for ``rectangle_{geometry,partition,mesh}.py``. Using SCons variable
+pass to the command-line interfaces for ``rectangle_{geometry,partition,mesh}.py``. Using SCons variable
 substitution as shown in the first highlighted section, we will end up passing a string that looks like the following to
 the ``rectangle_geometry.py`` CLI:
 
@@ -263,7 +263,7 @@ changes made in this tutorial.
 
 A previous tutorial constructed the ``simulation_variables`` and the ``substitution_dictionary`` variables. The
 ``simulation_variables`` dictionary is used to define simulation parameters for SCons project configuration and script
-command line interfaces. The ``substitution_dictionary`` is constructed from the ``simulation_variables`` dictionary to
+command-line interfaces. The ``substitution_dictionary`` is constructed from the ``simulation_variables`` dictionary to
 apply the parameter substitution syntax (leading and trailing ``@`` character) to each variable name for use with the
 ``copy_substitute`` method as introduced in the current tutorial.
 

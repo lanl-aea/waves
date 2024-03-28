@@ -41,7 +41,7 @@ _main.py
    :members:
    :private-members:
    :show-inheritance:
-   :synopsis: waves command line utility
+   :synopsis: waves command-line utility
 
 *********
 _fetch.py

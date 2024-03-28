@@ -13,7 +13,7 @@ Abaqus provides a scripting interface and a proprietary, binary output database 
 While this object and interface is good for scripting with the Abaqus kernel and CAE features, the Python interface is
 limited to the Python 2.7 environment that is shipped with Abaqus. When post-processing requires more Python libraries
 or other third party tools, it is common to extract a portion of the Abaqus results to an intermediate file. To reduce
-duplicated effort in extracting Abaqus ODB files to a common format, the :ref:`odb_extract_cli` command line utility and
+duplicated effort in extracting Abaqus ODB files to a common format, the :ref:`odb_extract_cli` command-line utility and
 the associated :meth:`waves.scons_extensions.abaqus_extract` builder are provided to parse the output of ``abaqus odbreport``
 into several `xarray dataset`_ objects in an H5 file.
 

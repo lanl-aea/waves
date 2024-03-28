@@ -8,7 +8,7 @@ This tutorial is intended to demonstrate several advanced usage features that we
 tutorials. Specifically, this tutorial will discuss
 
 * Building a parameter study from somewhere in the middle of the SCons workflow using a common source
-* Utilizing ``--input-file`` and ``--output-file`` command line arguments
+* Utilizing ``--input-file`` and ``--output-file`` command-line arguments
 * Using the ``post_processing.py`` script to create multiple plots
 
 **********
@@ -149,7 +149,7 @@ differences:
       :end-before: marker-5
       :emphasize-lines: 3, 9, 12-13
 
-The highlighted lines above demonstrate the usage of ``--input-file`` and ``--output--file`` command line arguments for
+The highlighted lines above demonstrate the usage of ``--input-file`` and ``--output--file`` command-line arguments for
 the ``rectangle_mesh.py`` file. In previous tutorials, we have accepted the default values for input and output
 files. In this case, however, we must specify that a common input file is used, as we want to re-use the target from the
 Partition workflow as a source. If we would have accepted the default input file name, the ``rectangle_mesh.py``
@@ -157,7 +157,7 @@ script would try to open a ``rectangle_partition.cae`` file in every parameter s
 would fail to do so, because ``rectangle_partition.cae`` resides a directory upward in the main build directory. We
 avoid this issue by providing the absolute path to ``rectangle_partition.cae`` as the ``--input-file``.
 
-The ``--output-file`` command line argument is specified in this case only for demonstration (the default value would
+The ``--output-file`` command-line argument is specified in this case only for demonstration (the default value would
 actually work just fine). It is important to note that the ``--output-file`` name is **not** given as ``set_name /
 journal_file``. This is because the :meth:`waves.scons_extensions.abaqus_journal` builder's action first changes the build
 directory to the parent directory of the first specified target, then the journal file is executed. This behavior is
@@ -181,13 +181,13 @@ plot, as demonstrated in :ref:`tutorial_post_processing`, is a simple stress-str
 set. The highlighted code is used to generate a plot of global mesh size versus the stress in the model at the end of
 the simulation. As the global mesh size decreases, the final stress should start to converge to a common value.
 
-The specification of a ``selection_dict`` demonstrates another feature of the ``post_processing.py`` command line
+The specification of a ``selection_dict`` demonstrates another feature of the ``post_processing.py`` command-line
 interface. In this case, the only ``key: value`` pair added to the ``selection_dict`` that does not already exist in the
 :ref:`post_processing_cli` CLI defaults is the specification of the time point ``'time': 1.0``. This down selects
 our data to the largest compressive stress produced by the simulation, which will be our quantity of interest (QoI) for
 this simulation workflow.
 
-The remaining changes are rather simple. The ``--x-units`` and ``--x-var`` command line arguments are updated to reflect
+The remaining changes are rather simple. The ``--x-units`` and ``--x-var`` command-line arguments are updated to reflect
 the usage of the ``global_seed`` parameter as the independent variable.
 
 **********

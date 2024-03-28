@@ -30,17 +30,17 @@ Environment
 Description
 ***********
 
-`WAVES`_ is a suite of build wrappers and command line utilities for the build system `SCons`_. Build systems help
+`WAVES`_ is a suite of build wrappers and command-line utilities for the build system `SCons`_. Build systems help
 automate the execution of complex computing workflows by constructing component task execution order. In the
 `WAVES tutorials`_ there are two components to the `SCons`_ project configuration: project configuration and
 simulation workflow configurations. This tutorial introduces the `SCons`_ project configuration file for the
 `WAVES tutorials`_ template :term:`modsim` repository.
 
-The command line utilities provided by `WAVES`_ are those utilities required to implement engineering workflows in
+The command-line utilities provided by `WAVES`_ are those utilities required to implement engineering workflows in
 traditional software build systems. For most engineering simulation workflows, software build systems will work
 out-of-the-box. However, it is difficult to implement engineering parameter studies in software build systems, which are
 designed to produce a single program, not many nearly identical configurations of the same program. The `WAVES`_
-parameter generator command line interface(s) is designed to work with most build systems, but were originally developed
+parameter generator command-line interface(s) is designed to work with most build systems, but were originally developed
 with the requirements of `CMake`_ in mind.
 
 For production engineering analysis, `WAVES`_ focuses on extending the build system `SCons`_ because `SCons`_
@@ -84,9 +84,9 @@ package.
       :end-before: marker-2
 
 The `SCons command-line build options`_ are specific to the project configuration that you are currently creating.
-`SCons`_ projects may add or remove command line options to aid in build behavior control. The most relevant option to
+`SCons`_ projects may add or remove command-line options to aid in build behavior control. The most relevant option to
 modsim projects will be ``--build-dir``, which allows project developers to change the build directory location from the
-command line without modifying the ``SConstruct`` file source code. For example, the first ``scons`` call will create
+command-line without modifying the ``SConstruct`` file source code. For example, the first ``scons`` call will create
 the default build directory named ``build`` and the second ``scons`` call will create a build directory named
 ``non_default_build``.
 
@@ -103,7 +103,7 @@ By default, |PROJECT| builders redirect task STDOUT and STDERR to a ``*.stdout``
 execution reported by SCons.  The ``--print-build-failures`` will print the associated ``*.stdout`` file of all failed
 tasks at the end of SCons execution.
 
-At the end of this tutorial, you will see how to explore the project specific command line options help and usage.
+At the end of this tutorial, you will see how to explore the project specific command-line options help and usage.
 
 6. Add the content below to the ``SConstruct`` file to initialize the `SCons construction environment`_.
 
@@ -238,7 +238,7 @@ message diplayed by the ``scons -h`` command option.
 The :meth:`waves.scons_extensions.project_help_message` wraps two common calls to the `SCons Help`_ construction environment
 method that will append the following to the project help message accessed by ``scons -h``:
 
-* the command line build options
+* the command-line build options
 * the default target list
 * the project alias list
 

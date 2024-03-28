@@ -131,7 +131,7 @@ The highlighted lines of code instruct SCons on how to build the target, an Abaq
 file whose name is constructed using the ``journal_file`` variable. The ``journal_file``
 variable exists solely to minimize hard-coded duplication of the string
 ``'rectangle_geometry'``. ``journal_options`` allows for parameters to be passed as
-command line arguments to the journal file. Using the journal file's command line
+command-line arguments to the journal file. Using the journal file's command-line
 interface with the ``journal_options`` string will be discussed in
 :ref:`tutorial_parameter_substitution`.
 
@@ -169,7 +169,7 @@ starting with familiar Abaqus Python code, and adding in the following:
 
 * Protecting your code within a ``main()`` function
 * Writing docstrings for your Python code
-* Adding a command line interface to your Python code
+* Adding a command-line interface to your Python code
 * Protecting ``main()`` function execution and returning exit codes
 
 9. In the ``modsim_package/abaqus`` directory, create a file called ``rectangle_geometry.py``
@@ -228,7 +228,7 @@ information on the Abaqus Python 2.7 environment.
 
 .. _tutorial_geometry_waves_command_line_interfaces:
 
-Command Line Interfaces
+Command-Line Interfaces
 =======================
 10. In the ``modsim_package/abaqus`` directory, continue editing the file called ``rectangle_geometry.py``
     using the contents below which contains the ``get_parser()`` function. Note that
@@ -244,9 +244,9 @@ Command Line Interfaces
         :emphasize-lines: 3-5, 12-14, 16-31
 
 This portion of ``rectangle_geometry.py`` defines the argument parsing function, ``get_parser()``, which is the
-next step in turning our simple Python script into a small software utility. Command line interfaces allow for scripts
-to be executed with optional command line arguments. This allows us to change the values of input arguments to the
-``main()`` function without any source code modification.  ``argparse`` also helps automate command line interface (CLI)
+next step in turning our simple Python script into a small software utility. Command-line interfaces allow for scripts
+to be executed with optional command-line arguments. This allows us to change the values of input arguments to the
+``main()`` function without any source code modification.  ``argparse`` also helps automate command-line interface (CLI)
 documentation. An example of this is the :ref:`waves_tutorial_cli` for :ref:`abaqus_rectangle_geometry_cli`.
 See the `Argparse tutorial`_ for an introduction to the ``argparse`` module.
 
@@ -264,10 +264,10 @@ The default values and naming conventions in this journal file are modsim projec
 |PROJECT| tutorials and :ref:`modsim_templates`. In practice, it may be beneficial to choose different default behavior
 depending on the design of the modsim project.
 
-The second highlighted portion defines default values for some of the command line arguments. Default values are
-assigned if no command line argument is detected for any of the expected command line arguments. This provides sensible
-defaults even when no command line arguments are specified. It should be noted, however, that some model developers may
-prefer to require all command line arguments every time the file is used to build a target. ``output_file`` is the name
+The second highlighted portion defines default values for some of the command-line arguments. Default values are
+assigned if no command-line argument is detected for any of the expected command-line arguments. This provides sensible
+defaults even when no command-line arguments are specified. It should be noted, however, that some model developers may
+prefer to require all command-line arguments every time the file is used to build a target. ``output_file`` is the name
 of the file that is created at the end of the ``main()`` function, which assumes ``output_file`` does not include a file
 extension. ``default_width`` and ``default_height`` define the size of the ``rectangle`` part.
 
@@ -275,7 +275,7 @@ The final highlighted portion of the code is where the ``argparse`` package is u
 define the argument parser rules. First, an argument parser is defined using the
 ``ArgumentParser`` class. This receives a brief description ``cli_description`` and
 direction ``prog`` on how to execute the program. Each subsequent call of the
-``add_argument`` method adds a command line argument to the parser's rules. Command line
+``add_argument`` method adds a command-line argument to the parser's rules. Command-line
 arguments defined using ``argparse`` have options, like ``-o`` or ``--output-file``, and
 arguments. Arguments can also have default values. ``argparse`` also allows for command
 line argument definitions to include a help message that is used to auto-generate the
@@ -308,7 +308,7 @@ of the program. See the `Python Top-Level Code Environment`_ documentation for m
 information.
 
 The first lines within the ``if __name__ == "__main__"`` context call the
-``get_parser()`` method and use ``argparse`` to separate known and unknown command line
+``get_parser()`` method and use ``argparse`` to separate known and unknown command-line
 arguments. This is required for Abaqus journal files, because Abaqus will not strip the
 CAE options from the ``abaqus cae -nogui`` command, which are irrelevant to and unused by
 the journal file interface.

@@ -25,12 +25,12 @@ References
 The relevant portion of the `SCons`_ documentation can't be hyperlinked directly. Instead, the relevant portion of the
 "Substitution Variables" section of the man pages is quoted below :cite:`scons-man`.
 
-   When a build action is executed, a hash of the command line is saved, together with other information about the
+   When a build action is executed, a hash of the command-line is saved, together with other information about the
    target(s) built by the action, for future use in rebuild determination. This is called the *build signature* (or *build
-   action signature*). The escape sequence **$(** *subexpression* **$)** may be used to indicate parts of a command line that may
+   action signature*). The escape sequence **$(** *subexpression* **$)** may be used to indicate parts of a command-line that may
    change without causing a rebuild--that is, which are not to be included when calculating the build signature. All text
-   from **$(** up to and including the matching **$)** will be removed from the command line before it is added to the build
-   signature while only the **$(** and **$)** will be removed before the command is executed. For example, the command line string:
+   from **$(** up to and including the matching **$)** will be removed from the command-line before it is added to the build
+   signature while only the **$(** and **$)** will be removed before the command is executed. For example, the command-line string:
 
    .. code-block:: bash
 
