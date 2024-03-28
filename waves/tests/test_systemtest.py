@@ -21,7 +21,7 @@ except PackageNotFoundError:
     installed = False
 
 if not installed:
-    waves_command = "python -m waves.main"
+    waves_command = "python -m waves._main"
     package_parent_path = _settings._project_root_abspath.parent
     key = "PYTHONPATH"
     if key in env:

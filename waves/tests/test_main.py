@@ -1,28 +1,25 @@
-"""Test WAVES
-
-Test waves.py
-"""
+"""Test command line utility and associated functions"""
 import pathlib
 from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
 import pytest
 
-from waves import main
+from waves import _main
 from waves import _settings
 
 
 @pytest.mark.unittest
 def test_main():
     with patch('sys.argv', ['waves.py', 'docs']), \
-         patch("waves.main.docs") as mock_docs:
-        main.main()
+         patch("waves._main.docs") as mock_docs:
+        _main.main()
         mock_docs.assert_called()
 
     target_string = 'dummy.target'
     with patch('sys.argv', ['waves.py', 'build', target_string]), \
-         patch("waves.main.build") as mock_build:
-        main.main()
+         patch("waves._main.build") as mock_build:
+        _main.main()
         mock_build.assert_called_once()
         assert mock_build.call_args[0][0] == [target_string]
 
@@ -30,21 +27,21 @@ def test_main():
     project_directory = 'project_directory'
     with patch('sys.argv', ['waves.py', 'quickstart', project_directory]), \
          patch("waves._fetch.recursive_copy") as mock_recursive_copy:
-        main.main()
+        _main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[0][2] == pathlib.Path(project_directory)
 
     requested_paths = ['dummy.file1', 'dummy.file2']
     with patch('sys.argv', ['waves.py', 'fetch'] + requested_paths), \
          patch("waves._fetch.recursive_copy") as mock_recursive_copy:
-        main.main()
+        _main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[1]['requested_paths'] == requested_paths
 
     tutorial_number = 7
     with patch('sys.argv', ['waves.py', 'fetch', '--tutorial', str(tutorial_number)]), \
             patch("waves._fetch.recursive_copy") as mock_recursive_copy:
-        main.main()
+        _main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[1]['tutorial'] == tutorial_number
 
@@ -52,14 +49,14 @@ def test_main():
 @pytest.mark.unittest
 def test_docs():
     with patch('webbrowser.open') as mock_webbrowser_open:
-        main.docs()
+        _main.docs()
         # Make sure the correct type is passed to webbrowser.open
         mock_webbrowser_open.assert_called_with(str(_settings._installed_docs_index))
 
     with patch('webbrowser.open') as mock_webbrowser_open, \
          patch('pathlib.Path.exists', return_value=True), \
          does_not_raise():
-        main.docs(print_local_path=True)
+        _main.docs(print_local_path=True)
         mock_webbrowser_open.assert_not_called()
 
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
@@ -68,7 +65,7 @@ def test_docs():
          patch('pathlib.Path.exists', return_value=False), \
          pytest.raises(RuntimeError):
         try:
-            main.docs(print_local_path=True)
+            _main.docs(print_local_path=True)
         finally:
             mock_webbrowser_open.assert_not_called()
 
@@ -76,12 +73,12 @@ def test_docs():
 @pytest.mark.unittest
 def test_build():
     with patch('waves._utilities.tee_subprocess', return_value=(0, "is up to date.")) as mock_tee_subprocess:
-        main.build(['dummy.target'])
+        _main.build(['dummy.target'])
         mock_tee_subprocess.assert_called_once()
 
     with patch('waves._utilities.tee_subprocess', return_value=(0, "is up to date.")) as mock_tee_subprocess, \
          patch("pathlib.Path.mkdir") as mock_mkdir:
-        main.build(['dummy.target'], git_clone_directory='dummy/clone')
+        _main.build(['dummy.target'], git_clone_directory='dummy/clone')
         assert mock_tee_subprocess.call_count == 2
 
 
@@ -92,7 +89,7 @@ def test_fetch():
     with patch("waves._fetch.recursive_copy") as mock_recursive_copy, \
          pytest.raises(RuntimeError):
         try:
-            main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
+            _main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
                                      ["dummy/relative/path"], "/dummy/destination")
         finally:
             mock_recursive_copy.assert_not_called()
@@ -120,13 +117,13 @@ parameter_study_args = {  #               subcommand,         class_name,       
                          ids=list(parameter_study_args.keys()))
 def test_parameter_study(subcommand, class_name, argument, option, argument_value):
     # Help/usage. Should not raise
-    with patch('sys.argv', ['main.py', subcommand, '-h']), \
+    with patch('sys.argv', ['_main.py', subcommand, '-h']), \
          pytest.raises(SystemExit) as err:
-        main.main()
+        _main.main()
     assert err.value.code == 0
 
     # Run main code. No SystemExit expected.
-    arg_list = ['main.py', subcommand, 'dummy.file']
+    arg_list = ['_main.py', subcommand, 'dummy.file']
     if option:
         arg_list.append(option)
     if argument_value:
@@ -137,7 +134,7 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
             patch('builtins.open', mock_open()), patch('yaml.safe_load'), \
             patch(f'waves.parameter_generators.{class_name}') as mock_generator, \
             does_not_raise():
-        main.main()
+        _main.main()
         mock_generator.assert_called_once()
         if argument:
             assert mock_generator.call_args.kwargs[argument] == argument_value

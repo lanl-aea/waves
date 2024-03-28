@@ -9,7 +9,7 @@ Command Line Utilities
 ******************************
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :nosubcommands:
 
@@ -22,7 +22,7 @@ docs
 ----
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :path: docs
 
@@ -32,7 +32,7 @@ fetch
 -----
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :path: fetch
 
@@ -42,7 +42,7 @@ visualize
 ---------
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :path: visualize
 
@@ -52,7 +52,7 @@ build
 -----
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :path: build
 
@@ -62,7 +62,7 @@ cartesian_product
 -----------------
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :path: cartesian_product
 
@@ -72,7 +72,7 @@ custom_study
 ------------
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :path: custom_study
 
@@ -82,7 +82,7 @@ latin_hypercube
 ---------------
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :path: latin_hypercube
 
@@ -92,7 +92,7 @@ sobol_sequence
 --------------
 
 .. argparse::
-   :ref: waves.main.get_parser
+   :ref: waves._main.get_parser
    :nodefault:
    :path: sobol_sequence
 

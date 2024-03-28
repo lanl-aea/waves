@@ -47,7 +47,7 @@ where = ["."]
 
 [project.scripts]
 odb_extract = "waves._abaqus.odb_extract:main"
-waves = "waves.main:main"
+waves = "waves._main:main"
 
 [project.urls]
 homepage = "https://github.com/lanl/waves"

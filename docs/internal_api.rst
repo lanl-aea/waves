@@ -32,11 +32,11 @@ Exceptions
     :private-members:
     :show-inheritance:
 
-*******
-main.py
-*******
+********
+_main.py
+********
 
-.. automodule:: waves.main
+.. automodule:: waves._main
    :noindex:
    :members:
    :private-members:
