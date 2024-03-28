@@ -31,13 +31,10 @@ if not installed:
     else:
         env[key] = f"{package_parent_path}"
 
-
-@pytest.mark.systemtest
-@pytest.mark.parametrize("command, directory", [
+system_tests = [
     # CLI sign-of-life and help/usage
     (f"{waves_command} --help", "."),
     (f"{waves_command} docs --help", "."),
-    (f"{waves_command} docs --print-local-path", "."),
     (f"{waves_command} fetch --help", "."),
     (f"{waves_command} visualize --help", "."),
     (f"{waves_command} build --help", "."),
@@ -79,7 +76,16 @@ if not installed:
     ("scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
     ("scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
     (f"{waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4", "."),
-])
+]
+if installed:
+    system_tests.append(
+        # The HTML docs path doesn't exist in the repository. Can only system test from an installed package.
+        (f"{waves_command} docs --print-local-path", "."),
+    )
+
+
+@pytest.mark.systemtest
+@pytest.mark.parametrize("command, directory", system_tests)
 def test_run_tutorial(command: str, directory: str) -> None:
     """Fetch and run the tutorial configuration file(s) as system tests in a temporary directory
 
