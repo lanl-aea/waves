@@ -33,7 +33,7 @@ The documentation should include everything required for new developers to begin
 the necessary elements of a technical report. The user manual should explain what simulations are available, what
 purpose they serve, and how to run them. A theory manual should discuss any relevant analytical solutions, what
 numerical solutions were chosen and why, and any critical assumptions. The application program interface (API) and
-command-line interface (CLI) should document the interfaces, behavior, and usage of all project specific scripts and
+command-line interface (CLI) should document the interfaces, behavior, and usage of all project-specific scripts and
 executables in sufficient detail that a new project team member can understand and use what is available without
 examining the project source code. A developer manual will detail the contribution guidelines, style guides, version
 control behavior, continuous integration and automation solutions, and testing requirements of the project. The release
@@ -43,10 +43,10 @@ analysis stakeholders informed about project progress and priorities. Finally, t
 project history.
 
 While most of these documentation sections will not make it into technical reports, many elements of the documentation
-may overlap with the technical report. If the technical reports are compiled from a mark up or mark down language, such
+may overlap with the technical report. If the technical reports are compiled from a markup or markdown language, such
 as `Markdown`_ :cite:`markdown`, `LaTeX`_ :cite:`latex`, or `reStructuredText`_ :cite:`rst`, then the source content may
 be shared by both the documentation and the report. This is valuable to avoid duplicate content that may become out of
-sync and reduces long term maintenance overhead.
+sync and to reduce long-term maintenance overhead.
 
 The practical examples in the :ref:`user_manual` use `reStructuredText`_ compiled with `Sphinx`_ :cite:`sphinx`, which
 integrates markup documentation with automated generation of API and CLI documentation from Python docstrings. An
