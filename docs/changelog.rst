@@ -26,6 +26,8 @@ Documentation
   (:issue:`612`, :merge:`776`). By `Kyle Brindley`_.
 - Add a reference section to the multi-action task tutorial (:issue:`623`, :merge:`782`). By `Kyle Brindley`_.
 - Add a references section to the native SCons quickstart tutorial (:issue:`622`, :merge:`783`). By `Kyle Brindley`_.
+- Complete the refernces section of the post-processing tutorial and add a brief discussion about the purpose of the
+  generator expression (:issue:`573`, :merge:`786`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
