@@ -36,6 +36,8 @@ Internal Changes
   with other Python packages in the scientific computing stack (:issue:`624`, :merge:`781`). By `Kyle Brindley`_.
 - Standardize internal API/CLI design around raised exceptions and CLI conversion of known exceptions to error messages
   and non-zero exit codes (:issue:`621`, :merge:`784`). By `Kyle Brindley`_.
+- Add CLI sign-of-life tests with help/usage to the system tests in the regression suite (:issue:`627`, :merge:`785`).
+  By `Kyle Brindley`_.
 
 Enhancements
 ============
