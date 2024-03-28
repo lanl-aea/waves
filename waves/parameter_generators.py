@@ -19,7 +19,7 @@ import scipy.stats
 import SALib
 
 from waves._settings import _hash_coordinate_key, _set_coordinate_key, _quantiles_attribute_key
-from waves.exceptions import APIError, MutuallyExclusiveError, SchemaValidationError
+from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -98,8 +98,8 @@ class _ParameterGenerator(ABC):
                                          "Please specify one or the other.")
 
         if self.output_file_type not in _allowable_output_file_types:
-            raise APIError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                           f"The 'output_file_type' must be one of {_allowable_output_file_types}")
+            raise ChoicesError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
+                               f"The 'output_file_type' must be one of {_allowable_output_file_types}")
 
         if self.output_file:
             self.output_file = pathlib.Path(self.output_file)
@@ -205,7 +205,7 @@ class _ParameterGenerator(ABC):
            parameter_1: 1
            parameter_2: a
 
-        :raises waves.exceptions.APIError: If an unsupported output file type is requested
+        :raises waves.exceptions.ChoicesError: If an unsupported output file type is requested
         """
         self.output_directory.mkdir(parents=True, exist_ok=True)
         parameter_set_files = [pathlib.Path(set_name) for set_name in
@@ -217,8 +217,8 @@ class _ParameterGenerator(ABC):
         elif self.output_file_type == 'yaml':
             self._write_yaml(parameter_set_files)
         else:
-            raise APIError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                           f"The 'output_file_type' must be one of {_allowable_output_file_types}")
+            raise ChoicesError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
+                               f"The 'output_file_type' must be one of {_allowable_output_file_types}")
 
     def scons_write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.

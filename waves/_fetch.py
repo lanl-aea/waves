@@ -11,6 +11,7 @@ import filecmp
 import pathlib
 
 from waves import _settings
+from waves.exceptions import ChoicesError
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -169,10 +170,11 @@ def extend_requested_paths(requested_paths: list, tutorial: typing.Literal[*_tut
 
     :returns: extended requested paths
 
-    :raises RuntimeError: If the requested tutorial number doesn't exist
+    :raises ChoicesError: If the requested tutorial number doesn't exist
     """
     if tutorial not in _settings._tutorial_paths.keys():
-        raise RuntimeError(f"The tutorial number requested ('{tutorial}') does not exist.")
+        raise ChoicesError(f"Requested tutorial number '{tutorial}' does not exist. "
+                           f"Must be one of {_tutorial_numbers}.")
     else:
         for x in range(0, tutorial + 1):
             requested_paths.extend(_settings._tutorial_paths[x])

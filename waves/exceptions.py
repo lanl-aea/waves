@@ -29,5 +29,9 @@ class MutuallyExclusiveError(APIError):
     """Raised during API validation that mirrors an ``argparse`` CLI mutually exclusive group."""
 
 
+class ChoicesError(APIError):
+    """Raised during API validation that mirrors an ``argparse`` CLI argument with limited choices."""
+
+
 class SchemaValidationError(APIError):
     """Raised when a WAVES parameter generator schema validation fails"""

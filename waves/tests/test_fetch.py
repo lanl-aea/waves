@@ -7,6 +7,7 @@ import pytest
 
 from waves import _fetch
 from waves import _settings
+from waves.exceptions import ChoicesError
 
 
 root_directory = pathlib.Path("/path/to/source")
@@ -362,6 +363,6 @@ def test_extend_requested_paths():
         assert mock_list.extend.call_count == tutorial_num + 1
 
     # testing key that does not exist
-    with pytest.raises(RuntimeError):
+    with pytest.raises(ChoicesError):
         _fetch.extend_requested_paths([], 'shouldRaiseError')
 

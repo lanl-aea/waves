@@ -8,7 +8,7 @@ import numpy
 import xarray
 
 from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
-from waves.exceptions import APIError, MutuallyExclusiveError, SchemaValidationError
+from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
 class TestParameterGenerator:
@@ -25,7 +25,7 @@ class TestParameterGenerator:
 
     @pytest.mark.unittest
     def test_output_file_type(self):
-        with pytest.raises(APIError):
+        with pytest.raises(ChoicesError):
             try:
                 OutputTypeError = NoQuantilesGenerator({}, output_file_type='notsupported')
             finally:
