@@ -13,8 +13,7 @@ This quickstart will create a pure `SCons`_, minimal, single file project config
 * :ref:`tutorial_solverprep`
 * :ref:`tutorial_simulation`
 
-These tutorials and this quickstart describe the computational engineering workflow through simulation execution. Using
-a single project configuration file requires `SCons`_ techniques that differ between the quickstart ``SConstruct`` file
-and the project configuration files, ``SConstruct`` and ``SConscript``, found in the full tutorials. Consequently, this
-quickstart will use a separate name for the project configuration file, ``scons_quickstart_SConstruct``, to allow the
-tutorials and this quickstart to share a common tutorial directory.
+The tutorials above and this quickstart describe the computational engineering workflow through simulation execution.
+This quickstart uses a separate, standalone subdirectory to avoid file name clashes with the full tutorial files. The
+quickstart also uses a flat directory structure to simplify the project configuration. Larger projects, like the modsim
+template, may require a hierarchical directory structure to separate files with identical basenames.
