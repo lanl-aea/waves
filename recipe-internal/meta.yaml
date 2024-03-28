@@ -81,12 +81,10 @@ test:
   imports:
     - waves
   commands:
-    # Tests that depend on correct install path
-    - waves docs --print-local-path
-    # Test as-installed project unit tests
+    # Test as-installed project regression tests
     - cd $SP_DIR/$PKG_NAME
     # FIXME: Trace the source of interference between the builder tests and the find_program tests.
     # Use ``pytest`` when fixed
-    - pytest -vvv -m "not programoperations and not systemtest"
-    - pytest -vvv -m "programoperations"
+    - pytest -vvv -n 4 -m "not programoperations and not systemtest"
+    - pytest -vvv -n 4 -m "programoperations"
     - pytest -v -n 4 -m "systemtest" --tb=short
