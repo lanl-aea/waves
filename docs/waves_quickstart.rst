@@ -4,7 +4,7 @@
 WAVES Quickstart
 ################
 
-This quickstart will create a minimal, two file project configuration matching the tutorial listed below.
+This quickstart will create a minimal, two file project configuration matching the tutorials listed below.
 
 * :ref:`tutorialsconstruct`
 * :ref:`tutorial_geometry`
@@ -13,8 +13,8 @@ This quickstart will create a minimal, two file project configuration matching t
 * :ref:`tutorial_simulation`
 
 These tutorials and this quickstart describe the computational engineering workflow through simulation execution. This
-tutorial will use a different working directory than the rest of the core tutorials as both sets of tutorials contain files
-with identical names.
+tutorial will use a different working directory and directory structure than the rest of the tutorials to avoid filename
+clashes.
 
 ***********
 Environment
