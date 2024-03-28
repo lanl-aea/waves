@@ -311,8 +311,8 @@ def alias_list_message(env=None,
 def append_env_path(program: str, env) -> None:
     """Append SCons contruction environment ``PATH`` with the program's parent directory
 
-    Raises a ``FileNotFoundError`` if the ``program`` absolute path does not exist. Uses the `SCons AppendENVPath`_
-    method. If the program parent directory is already on ``PATH``, the ``PATH`` directory order is preserved.
+    Uses the `SCons AppendENVPath`_ method. If the program parent directory is already on ``PATH``, the ``PATH``
+    directory order is preserved.
 
     .. code-block::
        :caption: Example environment modification
@@ -326,6 +326,8 @@ def append_env_path(program: str, env) -> None:
 
     :param program: An absolute path for the program to add to SCons construction environment ``PATH``
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :raises FileNotFoundError: if the ``program`` absolute path does not exist.
     """
     program = pathlib.Path(program).resolve()
     if not program.exists():

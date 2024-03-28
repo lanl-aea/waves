@@ -1,3 +1,8 @@
+"""External API module
+
+Will raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
+to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
+"""
 from abc import ABC, abstractmethod
 import pathlib
 import string

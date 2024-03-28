@@ -1,3 +1,8 @@
+"""Internal API module implementing the ``visualize`` subcommand behavior.
+
+Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
+to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
+"""
 import pathlib
 import sys
 import re

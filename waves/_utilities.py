@@ -1,3 +1,11 @@
+"""Internal API module storing project utilities.
+
+Functions that are limited in use to a public API should prefer to raise Python built-in exceptions.
+
+Functions that may be used in a CLI implementation should raise ``RuntimeError`` or a derived class of
+:class:`waves.exceptions.WAVESError` to allow the CLI implementation to convert stack-trace/exceptions into STDERR
+message and non-zero exit codes.
+"""
 import os
 import shutil
 import pathlib
@@ -44,11 +52,11 @@ def search_commands(options: list[str]) -> str | None:
 def find_command(options: list[str]) -> str | None:
     """Return first found command in list of options.
 
-    Raise a FileNotFoundError if none is found.
-
     :param options: alternate command options
 
     :returns: command absolute path
+
+    :raises FileNotFoundError: If no matching command is found
     """
     command_abspath = search_commands(options)
     if command_abspath is None:
@@ -79,13 +87,13 @@ def find_cubit_bin(options: list[str], bin_directory: str | None = None) -> path
 
     Recommend first checking to see if cubit will import.
 
-    If the Cubit command or bin directory is not found, raise a FileNotFoundError.
-
     :param options: Cubit command options
     :param bin_directory: Cubit's bin directory name. Override the bin directory returned by
         :meth:`waves._utilities.cubit_os_bin`.
 
     :returns: Cubit bin directory absolute path
+
+    :raise FileNotFoundError: If the Cubit command or bin directory is not found
     """
     if bin_directory is None:
         bin_directory = cubit_os_bin()

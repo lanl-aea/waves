@@ -1,4 +1,10 @@
-"""Thin CLI wrapper around :meth:`waves.parameter_generators` classes"""
+"""Internal API module implementing the parameter study subcommand(s) behavior.
+
+Thin CLI wrapper around :meth:`waves.parameter_generators` classes
+
+Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
+to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
+"""
 
 import argparse
 import sys
