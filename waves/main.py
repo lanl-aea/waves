@@ -1,3 +1,8 @@
+"""Internal module implementing the command line utility behavior
+
+Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow
+:meth:`waves.main.main` to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
+"""
 import sys
 import pathlib
 import argparse
