@@ -12,6 +12,7 @@ from waves import _settings
 tutorial_directory = _settings._tutorials_directory
 env = os.environ.copy()
 waves_command = "waves"
+odb_extract_command = "odb_extract"
 
 # If executing in repository, add package to PYTHONPATH
 try:
@@ -22,6 +23,7 @@ except PackageNotFoundError:
 
 if not installed:
     waves_command = "python -m waves._main"
+    odb_extract_command = "python -m waves._abaqus.odb_extract"
     package_parent_path = _settings._project_root_abspath.parent
     key = "PYTHONPATH"
     if key in env:
@@ -32,6 +34,19 @@ if not installed:
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("command, directory", [
+    # CLI sign-of-life and help/usage
+    (f"{waves_command} --help", "."),
+    (f"{waves_command} docs --help", "."),
+    (f"{waves_command} docs --print-local-path", "."),
+    (f"{waves_command} fetch --help", "."),
+    (f"{waves_command} visualize --help", "."),
+    (f"{waves_command} build --help", "."),
+    (f"{waves_command} cartesian_product --help", "."),
+    (f"{waves_command} custom_study --help", "."),
+    (f"{waves_command} latin_hypercube --help", "."),
+    (f"{waves_command} sobol_sequence --help", "."),
+    (f"{odb_extract_command} --help", "."),
+    # Tutorials
     ("scons rectangle --keep-going", "scons_quickstart"),
     ("scons rectangle --keep-going", "multi_action_task"),
     ("scons rectangle --keep-going", "waves_quickstart"),
