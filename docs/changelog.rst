@@ -28,6 +28,7 @@ Documentation
 - Add a references section to the native SCons quickstart tutorial (:issue:`622`, :merge:`783`). By `Kyle Brindley`_.
 - Complete the refernces section of the post-processing tutorial and add a brief discussion about the purpose of the
   generator expression (:issue:`573`, :merge:`786`). By `Kyle Brindley`_.
+- Address the CEA-TEC edits in the computational practices discussion (:issue:`629`, :merge:`787`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
