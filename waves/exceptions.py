@@ -6,13 +6,13 @@ when using the CLI is if the exception is unexpected and may represent an intern
 
 Most raised exceptions in the package API should be Python built-ins. However, to support the CLI error handling
 described above some exceptions need to be uniquely identifiable as package exceptions and not third-party exceptions.
-WAVES and RuntimeError exceptions will be be caught by the command line utility and converted to error messages and
-non-zero return codes. Third-party exceptions represent truly unexpected behavior that may be an internal bug and print
-a stack trace.
+:meth:`waves.exceptions.WAVESError` and ``RuntimeError`` exceptions will be be caught by the command line utility and
+converted to error messages and non-zero return codes. Third-party exceptions represent truly unexpected behavior that
+may be an internal bug and print a stack trace.
 
 This behavior could be supported by limiting package raised exceptions to RuntimeError exceptions; however, more
-specific exceptions are desirable when using the package API to allow end-users to handle collections of API exceptions
-differently.
+specific exceptions are desirable when using the package API to allow end-users to handle different collections of API
+exceptions differently.
 """
 
 
