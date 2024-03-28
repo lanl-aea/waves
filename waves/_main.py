@@ -34,11 +34,6 @@ def main() -> None:
             fetch(args.subcommand, root_directory, relative_paths, args.destination,
                   requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
                   dry_run=args.dry_run, print_available=args.print_available)
-        elif args.subcommand == 'quickstart':
-            root_directory = _settings._modsim_template_directory.parent
-            relative_paths = [_settings._modsim_template_directory.name]
-            fetch(args.subcommand, root_directory, relative_paths, args.destination,
-                  overwrite=args.overwrite, dry_run=args.dry_run)
         elif args.subcommand == 'visualize':
             visualization(target=args.TARGET, output_file=args.output_file,
                           sconstruct=args.sconstruct, print_graphml=args.print_graphml,
@@ -163,24 +158,6 @@ def get_parser() -> argparse.ArgumentParser:
         help="Path to text file with output from scons tree command (default: %(default)s). Scons target must "
              "still be specified and must be present in the input file.")
 
-    quickstart_parser = argparse.ArgumentParser(add_help=False)
-    quickstart_parser = subparsers.add_parser('quickstart',
-        description="Create an WAVES project template from the rectangle compression simulation found in " \
-                    "the WAVES tutorials.",
-        parents=[quickstart_parser])
-    quickstart_parser.add_argument("destination",
-        nargs="?",
-        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
-             "destination will not be copied. (default: PWD)",
-        type=pathlib.Path,
-        default=pathlib.Path().cwd())
-    quickstart_parser.add_argument("--overwrite",
-        action="store_true",
-        help="Overwrite any existing files (default: %(default)s)")
-    quickstart_parser.add_argument("--dry-run",
-        action="store_true",
-        help="Print the destination tree and exit (default: %(default)s)")
-
     build_parser = argparse.ArgumentParser(add_help=False)
     build_parser = subparsers.add_parser('build',
         help="Thin SCons wrapper",
@@ -303,7 +280,7 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
     if not requested_paths:
         requested_paths = []
     if not root_directory.is_dir():
-        # During "waves quickstart/fetch" sub-command(s), this should only be reached if the package installation
+        # During "waves fetch" sub-command, this should only be reached if the package installation
         # structure doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a
         # sign-of-life that the installed directory assumptions are correct.
         raise RuntimeError(f"Could not find '{root_directory}' directory")

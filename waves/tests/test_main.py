@@ -23,14 +23,6 @@ def test_main():
         mock_build.assert_called_once()
         assert mock_build.call_args[0][0] == [target_string]
 
-    # TODO: deprecate the quickstart subcommand in v1
-    project_directory = 'project_directory'
-    with patch('sys.argv', ['waves.py', 'quickstart', project_directory]), \
-         patch("waves._fetch.recursive_copy") as mock_recursive_copy:
-        _main.main()
-        mock_recursive_copy.assert_called_once()
-        assert mock_recursive_copy.call_args[0][2] == pathlib.Path(project_directory)
-
     requested_paths = ['dummy.file1', 'dummy.file2']
     with patch('sys.argv', ['waves.py', 'fetch'] + requested_paths), \
          patch("waves._fetch.recursive_copy") as mock_recursive_copy:
