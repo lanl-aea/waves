@@ -34,6 +34,8 @@ Internal Changes
   tutorial sconsign database file during system tests (:issue:`620`, :merge:`775`). By `Kyle Brindley`_.
 - Improve private/public marking in ``help()`` and provide cleaner package/module namespaces for greater consistency
   with other Python packages in the scientific computing stack (:issue:`624`, :merge:`781`). By `Kyle Brindley`_.
+- Standardize internal API/CLI design around raised exceptions and CLI conversion of known exceptions to error messages
+  and non-zero exit codes (:issue:`621`, :merge:`784`). By `Kyle Brindley`_.
 
 Enhancements
 ============
