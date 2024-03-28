@@ -17,6 +17,10 @@ Breaking changes
 - Remove the deprecated ``<name>_program`` builders' keyword arguments. Replaced by ``program`` since version
   :ref:`0.7.1` (:issue:`508`, :merge:`779`). By `Kyle Brindley`_.
 - Remove unused Abaqus Python parsers to reduce maintenance overhead (:issue:`614`, :merge:`780`). By `Kyle Brindley`_.
+- Remove the ``waves quickstart`` subcommand in favor of the more general purpose ``waves fetch`` subcommand. Older
+  behavior can be identically reproduced as ``waves fetch modsim_template``. The intention is to add additional template
+  projects and disambiguate the various "quickstart" tutorials as distinct from the template project(s) (:issue:`604`,
+  :merge:`788`). By `Kyle Brindley`_.
 
 Documentation
 =============
