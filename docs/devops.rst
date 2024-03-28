@@ -185,7 +185,7 @@ Below is an example of a visualization test of an SConstruct file using the loca
 
    $ pwd
    path/to/local/git/clone/waves/
-   $ PYTHONPATH=$PWD python -m waves.main visualize . --sconstruct /path/to/local/SConstruct
+   $ PYTHONPATH=$PWD python -m waves._main visualize . --sconstruct /path/to/local/SConstruct
 
 *************
 Documentation
