@@ -21,7 +21,7 @@ software and the operating system (OS) search ``PATH``. Most modsim developers w
 on their local computer. When running a simulation workflow from a command-line shell, the system ``PATH`` variable
 tells the shell how to find executable software. System paths may be modified by user configuration files; however,
 managing and maintaining a common set of configuration files among several servers and multiple collaborators can be a
-difficult and error prone task, often resulting in the common "but it works on *my* computer" complaint.
+difficult and error-prone task, often resulting in the common "but it works on *my* computer" complaint.
 
 Instead of managing an ever growing ``case`` or ``if`` structure to handle system changes out of your control, one
 solution to managing a common environment is to keep a version controlled environment file used for creating a common

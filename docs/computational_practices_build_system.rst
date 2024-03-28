@@ -16,7 +16,7 @@ Directed graphs
 At their core, the majority of software build systems provide two features: `directed acyclic graph`_ (DAG) construction
 and automated task execution according to that DAG. Modern software projects are often composed from a large number of
 source files with complex file and library interactions. Consequently, determining the build order and executing the
-build process is a complex and error prone task. Build systems provide a solution for automating the construction and
+build process is a complex and error-prone task. Build systems provide a solution for automating the construction and
 execution of the build DAG to reduce build errors and inconsistencies. In addition to the DAG construction and
 execution, most build systems will also provide a feature to avoid unnecessary re-execution for portions of the DAG that
 haven't changed since the last execution.
@@ -27,7 +27,7 @@ simulation boundary and loading conditions. These tasks may be interconnected, w
 another part's mesh. After executing a simulation, there may be a similarly complex post-processing workflow. When this
 process is repeated many times, as in parameter studies, it is desirable to enable programmatic execution of the
 workflow because manual processes do not scale and are prone to consistency errors. Even in the case where this process
-is not executed programmatically on a regular basis, a manual process will be error prone and difficult to document.
+is not executed programmatically on a regular basis, a manual process will be error-prone and difficult to document.
 
 Build systems are able to construct directed graphs from task definitions. Each task is defined by the developer and
 subsequently linked by the build system. Tasks are composed of targets, sources, and actions. A target is the output of

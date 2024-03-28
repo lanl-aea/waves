@@ -2,7 +2,7 @@
 Why |PROJECT|?
 ##############
 
-Managing digital data and workflows in modern computational engineering is a difficult and error prone task. The large
+Managing digital data and workflows in modern computational engineering is a difficult and error-prone task. The large
 number of steps in the workflow and complex web of interactions between data files results in non-intuitive dependencies
 that are difficult to manage by hand. This complexity grows substantially when the workflow includes parameter studies.
 
