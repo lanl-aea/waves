@@ -54,7 +54,7 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:20 :ref:`tutorial_simulation`                   Abaqus solver execution
                    00:20 :ref:`tutorial_parameter_substitution`       Parameterized builds and substituting parameter
                                                                       values into copied files
-                   00:20 :ref:`tutorial_include_files`                Including files that can be re-used in more than
+                   00:20 :ref:`tutorial_include_files`                Including files that can be reused in more than
                                                                       one workflow
                    00:30 :ref:`tutorial_cartesian_product`            Parameter study introduction using a cartesian
                                                                       product
@@ -107,6 +107,6 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:30 :ref:`tutorial_sbatch`                       Run the simulation with the SLURM workload manager
                    00:30 :ref:`tutorial_extend_study`                 Automatically extending and re-executing a
                                                                       parameter study
-                   00:30 :ref:`tutorial_task_reuse`                   Re-use task definitions
+                   00:30 :ref:`tutorial_task_reuse`                   Reuse task definitions
                    00:10 :ref:`tutorial_setuptools_scm`               Dynamic version number from git tags
 ======================== ============================================ ==================================================

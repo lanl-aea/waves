@@ -65,7 +65,7 @@ Python Parameter File
 
 In this tutorial, we will update the code from :ref:`tutorial_parameter_substitution` to use an included parameter
 file instead of hardcoding the parameter definitions in the ``SConscript`` file. This technique will allow parameter
-re-use between simulations.
+reuse between simulations.
 
 6. Create a new file ``modsim_package/python/rectangle_compression_nominal.py`` from the content below.
 

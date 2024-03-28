@@ -1,7 +1,7 @@
 .. _tutorial_task_reuse:
 
 ################################
-Tutorial: Task Definition Re-use
+Tutorial: Task Definition Reuse
 ################################
 
 .. include:: wip_warning.txt

@@ -8,7 +8,7 @@ This manual will attempt to motivate the use of an `automated build system`_ for
 and engineering. As part of this motivation, the surrounding computational practices of version control, documentation,
 compute environment management, regression testing, and data archival will also be addressed as applied to the practice
 of computational engineering. Specifically, this manual intends to motivate the adoption of these traditional software
-engineering practices for use in research and production engineering simulation projects.
+engineering practices for use in research and production-engineering simulation projects.
 
 This manual is not the first such effort in the greater scientific computing community. In fact, the authors relied
 heavily on the lesson plans of the `Software Carpentry`_, established in 1998 to teach computing skills to researchers
@@ -63,7 +63,7 @@ notebook and the strict practice of detailed and regular entries is equally impo
 
 The practices at the end of the list are more costly to implement and therefore more valuable for mature or long-lived
 projects. However, an engineer familiar with the computational tools implementing these practices will find that even
-small, short-term projects benefit from implementing all of these concepts. In production engineering environments, it
+small, short-term projects benefit from implementing all of these concepts. In production-engineering environments, it
 is beneficial to implement the full range of computational engineering concepts in a "stub" repository as a starting
 template for every project. For this purpose, |PROJECT| provides :ref:`modsim_templates` following the tutorials as a
 starting point, but it is expected that users will want to tailor a template specific to their application.

@@ -43,7 +43,7 @@ designed to produce a single program, not many nearly identical configurations o
 parameter generator command-line interface(s) is designed to work with most build systems, but were originally developed
 with the requirements of `CMake`_ in mind.
 
-For production engineering analysis, `WAVES`_ focuses on extending the build system `SCons`_ because `SCons`_
+For production-engineering analysis, `WAVES`_ focuses on extending the build system `SCons`_ because `SCons`_
 configuration files use `Python`_ as a fully featured scripting language. This choice is primarily driven by the
 familiarity of the engineering community with `Python`_ as a programming language, but also because the parameter
 generation utility can be integrated more closely with the build system, :ref:`parameter_generator_api`.
@@ -125,7 +125,7 @@ per-task environment configuration.
 While this is a powerful feature for large, complex projects, most modsim projects will benefit from maintaining a single
 construction environment inherited from the active shell environment at build configuration time. In addition to copying
 the active external environment, the above code adds the project command-line build options to the construction
-environment for re-use throughout the project configuration files, SConstruct and SConscript, for build control.
+environment for reuse throughout the project configuration files, SConstruct and SConscript, for build control.
 
 7. Add the content below to the ``SConstruct`` file to add the third-party software dependency checks to the project
    configuration.

@@ -128,12 +128,12 @@ differences:
 
 * The code pertainting to ``# Geometry`` and ``# Partition`` has been moved out of the parameter study's ``for`` loop.
   As this parameter study only involves a meshing parameter, the Geometry and Partition workflow steps need only happen
-  once. Then, the mesh convergence parameter study can re-use ``rectangle_partition.cae`` as a common source.
+  once. Then, the mesh convergence parameter study can reuse ``rectangle_partition.cae`` as a common source.
 * Note the highlighted lines for the ``target`` definitions in the ``# Geometry`` and ``# Partition`` code. Since this
   code is no longer inside of the ``for`` loop, the ``set_name`` directory has been dropped from the ``target``
   definitions. As the first bullet alluded to, the targets for ``# Geometry`` and ``# Partition`` will be built in the
   overall build directory, ``build/tutorial_mesh_convergence``.
-* The folling two highlighted lines are necessary for the parameterized ``# Mesh`` workflow steps to re-use a common
+* The folling two highlighted lines are necessary for the parameterized ``# Mesh`` workflow steps to reuse a common
   target. First, the SCons file object for the ``rectangle_partition.cae`` file is extracted from the target list,
   ``partition_target`` as a source. The absolute path to the ``rectangle_partition.cae`` file in the build
   directory is made available as a variable in the second highlighted line.
@@ -151,7 +151,7 @@ differences:
 
 The highlighted lines above demonstrate the usage of ``--input-file`` and ``--output--file`` command-line arguments for
 the ``rectangle_mesh.py`` file. In previous tutorials, we have accepted the default values for input and output
-files. In this case, however, we must specify that a common input file is used, as we want to re-use the target from the
+files. In this case, however, we must specify that a common input file is used, as we want to reuse the target from the
 Partition workflow as a source. If we would have accepted the default input file name, the ``rectangle_mesh.py``
 script would try to open a ``rectangle_partition.cae`` file in every parameter study build directory. The script
 would fail to do so, because ``rectangle_partition.cae`` resides a directory upward in the main build directory. We

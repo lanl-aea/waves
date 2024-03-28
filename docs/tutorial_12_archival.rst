@@ -82,7 +82,7 @@ Second, we build a list of all required SCons configuration files for the curren
 directory name will match the current ``SConscript`` file name. These SCons workflow configuration files will be
 archived with the output of the workflow for reproducibility of the workflow task definitions.
 
-For advanced workflows, e.g. :ref:`tutorial_task_reuse`, that re-use ``SConscript`` files, it may
+For advanced workflows, e.g. :ref:`tutorial_task_reuse`, that reuse ``SConscript`` files, it may
 be necessary to recover the current ``SConscript`` file name with a `Python lambda expression`_ as seen in the ``SConstruct``
 modifications below. If the current workflow uses more than one ``SConscript`` file, the ``workflow_configuration`` list
 should be updated to include all configuration files for the archive task.

@@ -378,7 +378,7 @@ Documentation
   (:issue:`505`, :merge:`616`). By `Kyle Brindley`_.
 - Add the WAVES primarymark image to the PDF title page (:merge:`620`). By `Kyle Brindley`_.
 - Update the Cubit tutorial to demonstrate a side-by-side comparison of Abaqus and Sierra, where the Cubit tasks are
-  re-used for both solver workflows (:issue:`513`, :merge:`623`). By `Kyle Brindley`_.
+  reused for both solver workflows (:issue:`513`, :merge:`623`). By `Kyle Brindley`_.
 - Simplified quickstart ``SConscript`` file (:issue:`453`, :merge:`619`). By `Sergio Cordova`_.
 
 Internal Changes
@@ -934,7 +934,7 @@ Bug fixes
 Internal Changes
 ================
 - Add builder action unit tests (:issue:`364`, :merge:`404`). By `Kyle Brindley`_.
-- Change post processing script name in the tutorials and quickstart template files to match broader scope
+- Change post-processing script name in the tutorials and quickstart template files to match broader scope
   (:issue:`329`, :merge:`406`). By `Kyle Brindley`_.
 
 ******************
@@ -1092,7 +1092,7 @@ Enhancements
 
 New Features
 ============
-- Add demonstration PDF report that re-uses the documentation source files to the ``waves quickstart`` template files
+- Add demonstration PDF report that reuses the documentation source files to the ``waves quickstart`` template files
   (:issue:`305`, :merge:`338`). By `Kyle Brindley`_.
 - Add Abaqus solve cpu option as a build action signature escaped sequence in the ``waves quickstart`` template files
   (:issue:`194`, :merge:`341`). By `Kyle Brindley`_.
