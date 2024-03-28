@@ -71,7 +71,7 @@ class _ParameterGenerator(ABC):
 
     :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
         options are both specified
-    :raises waves.exceptions.APIError: If the an unknown output file type is requested
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
     """
     def __init__(self, parameter_schema: dict,
                  output_file_template: str = _default_output_file_template,
