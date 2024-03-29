@@ -45,6 +45,8 @@ Internal Changes
   and non-zero exit codes (:issue:`621`, :merge:`784`). By `Kyle Brindley`_.
 - Add CLI sign-of-life tests with help/usage to the system tests in the regression suite (:issue:`627`, :merge:`785`).
   By `Kyle Brindley`_.
+- Unpacking iterables in the ``typing.Literal`` interface doesn't work in Python 3.10. Hardcode the literal type hints
+  for now (:issue:`630`, :merge:`789`). By `Kyle Brindley`_.
 
 Enhancements
 ============
