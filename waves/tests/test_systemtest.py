@@ -31,62 +31,63 @@ if not installed:
     else:
         env[key] = f"{package_parent_path}"
 
+fetch_tutorials = f"{waves_command} fetch tutorials --destination {temp_directory}"
 system_tests = [
     # CLI sign-of-life and help/usage
-    (f"{waves_command} --help", "."),
-    (f"{waves_command} docs --help", "."),
-    (f"{waves_command} fetch --help", "."),
-    (f"{waves_command} visualize --help", "."),
-    (f"{waves_command} build --help", "."),
-    (f"{waves_command} cartesian_product --help", "."),
-    (f"{waves_command} custom_study --help", "."),
-    (f"{waves_command} latin_hypercube --help", "."),
-    (f"{waves_command} sobol_sequence --help", "."),
-    (f"{odb_extract_command} --help", "."),
+    ([f"{waves_command} --help"], "."),
+    ([f"{waves_command} docs --help"], "."),
+    ([f"{waves_command} fetch --help"], "."),
+    ([f"{waves_command} visualize --help"], "."),
+    ([f"{waves_command} build --help"], "."),
+    ([f"{waves_command} cartesian_product --help"], "."),
+    ([f"{waves_command} custom_study --help"], "."),
+    ([f"{waves_command} latin_hypercube --help"], "."),
+    ([f"{waves_command} sobol_sequence --help"], "."),
+    ([f"{odb_extract_command} --help"], "."),
     # Tutorials
-    ("scons rectangle --keep-going", "scons_quickstart"),
-    ("scons rectangle --keep-going", "multi_action_task"),
-    ("scons rectangle --keep-going", "waves_quickstart"),
-    ("scons . --sconstruct=tutorial_00_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct", "."),
-    ("scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons . --unconditional-build --print-build-failures", "tutorial_cubit"),
-    ("scons quinoa-local --unconditional-build --print-build-failures", "tutorial_quinoa"),
-    ("scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_builder_post_actions --sconstruct=tutorial_builder_post_actions_SConstruct --unconditional-build --print-build-failures", "."),
+    ([fetch_tutorials, "scons rectangle --keep-going"], "scons_quickstart"),
+    ([fetch_tutorials, "scons rectangle --keep-going"], "multi_action_task"),
+    ([fetch_tutorials, "scons rectangle --keep-going"], "waves_quickstart"),
+    ([fetch_tutorials, "scons . --sconstruct=tutorial_00_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"], "."),
+    ([fetch_tutorials, "scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons . --unconditional-build --print-build-failures"], "tutorial_cubit"),
+    ([fetch_tutorials, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorial_quinoa"),
+    ([fetch_tutorials, "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_builder_post_actions --sconstruct=tutorial_builder_post_actions_SConstruct --unconditional-build --print-build-failures"], "."),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
-    #("scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_07_cartesian_product --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_07_latin_hypercube --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons unit_testing --sconstruct=tutorial_10_unit_testing_SConstruct --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_12_archival --sconstruct=tutorial_12_archival_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    ("scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures", "."),
-    (f"{waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4", "."),
+    #([fetch_tutorials, "scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_07_cartesian_product --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_07_latin_hypercube --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons unit_testing --sconstruct=tutorial_10_unit_testing_SConstruct --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_12_archival --sconstruct=tutorial_12_archival_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "."),
+    ([fetch_tutorials, f"{waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4"], "."),
 ]
 if installed:
     system_tests.append(
         # The HTML docs path doesn't exist in the repository. Can only system test from an installed package.
-        (f"{waves_command} docs --print-local-path", "."),
+        ([fetch_tutorials, f"{waves_command} docs --print-local-path"], "."),
     )
 
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("command, directory", system_tests)
-def test_run_tutorial(command: str, directory: str) -> None:
+def test_run_tutorial(commands: list[str], directory: str) -> None:
     """Fetch and run the tutorial configuration file(s) as system tests in a temporary directory
 
     :param str command: the full command string for the system test
@@ -94,13 +95,10 @@ def test_run_tutorial(command: str, directory: str) -> None:
         executed
     """
     with tempfile.TemporaryDirectory() as temp_directory:
-        fetch_command = f"{waves_command} fetch tutorials --destination {temp_directory}"
-        fetch_command = fetch_command.split(" ")
-        subprocess.check_output(fetch_command, env=env, cwd=temp_directory).decode("utf-8")
-
-        run_directory = pathlib.Path(temp_directory) / directory
-        command = command.split(" ")
-        subprocess.check_output(command, env=env, cwd=run_directory).decode("utf-8")
+        for command in commands:
+            run_directory = pathlib.Path(temp_directory) / directory
+            command = command.split(" ")
+            subprocess.check_output(command, env=env, cwd=run_directory).decode("utf-8")
 
 
 @pytest.mark.systemtest
