@@ -112,7 +112,8 @@ _tutorial_paths = {
     ],
     10: [
         "tutorials/modsim_package/python/tests/test_post_processing.py",
-        "tutorials/unit_testing"
+        "tutorials/unit_testing",
+        "tutorials/tutorial_10_unit_testing_SConstruct"
     ],
     11: [
         "tutorials/modsim_package/python/rectangle_compression_cartesian_product.csv",
