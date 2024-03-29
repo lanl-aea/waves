@@ -76,7 +76,7 @@ class _ParameterGenerator(ABC):
     def __init__(self, parameter_schema: dict,
                  output_file_template: str = _default_output_file_template,
                  output_file: str = _default_output_file,
-                 output_file_type: typing.Literal[*_allowable_output_file_types] = _default_output_file_type,
+                 output_file_type: typing.Literal["yaml", "h5"] = _default_output_file_type,
                  set_name_template: str = _default_set_name_template,
                  previous_parameter_study: str = _default_previous_parameter_study,
                  overwrite: bool = _default_overwrite,

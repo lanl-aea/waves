@@ -161,7 +161,10 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
         print(f"{prefix}{item}", file=stream)
 
 
-def extend_requested_paths(requested_paths: list, tutorial: typing.Literal[*_tutorial_numbers]) -> list:
+def extend_requested_paths(
+    requested_paths: list,
+    tutorial: typing.Literal[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+) -> list:
     """Extend the requested_paths list with the necessary tutorial files.
 
     :param requested_paths: list of relative path-like objects that subset the files found in the
