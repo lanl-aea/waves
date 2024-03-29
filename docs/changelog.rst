@@ -47,6 +47,8 @@ Internal Changes
   By `Kyle Brindley`_.
 - Unpacking iterables in the ``typing.Literal`` interface doesn't work in Python 3.10. Hardcode the literal type hints
   for now (:issue:`630`, :merge:`789`). By `Kyle Brindley`_.
+- Include the numbered tutorial fetch command in the core tutorial system tests (:issue:`625`, :merge:`790`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
