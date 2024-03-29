@@ -1,4 +1,5 @@
 import os
+import string
 import pathlib
 import tempfile
 import subprocess
@@ -31,7 +32,7 @@ if not installed:
     else:
         env[key] = f"{package_parent_path}"
 
-fetch_tutorials = f"{waves_command} fetch tutorials --destination {temp_directory}"
+fetch_tutorials = string.Template("${waves_command} fetch tutorials --destination ${temp_directory}")
 system_tests = [
     # CLI sign-of-life and help/usage
     ([f"{waves_command} --help"], "."),
@@ -45,9 +46,9 @@ system_tests = [
     ([f"{waves_command} sobol_sequence --help"], "."),
     ([f"{odb_extract_command} --help"], "."),
     # Tutorials
-    ([fetch_tutorials, "scons rectangle --keep-going"], "scons_quickstart"),
-    ([fetch_tutorials, "scons rectangle --keep-going"], "multi_action_task"),
-    ([fetch_tutorials, "scons rectangle --keep-going"], "waves_quickstart"),
+    ([string.Template("${waves_command} fetch tutorials/scons_quickstart --destination ${temp_directory}"), "scons rectangle --keep-going"], "."),
+    ([string.Template("${waves_command} fetch tutorials/multi_action_task --destination ${temp_directory}"), "scons rectangle --keep-going"], "."),
+    ([string.Template("${waves_command} fetch tutorials/waves_quickstart --destination ${temp_directory}"), "scons rectangle --keep-going"], "."),
     ([fetch_tutorials, "scons . --sconstruct=tutorial_00_SConstruct --unconditional-build --print-build-failures"], "."),
     ([fetch_tutorials, "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct --unconditional-build --print-build-failures"], "."),
     ([fetch_tutorials, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"], "."),
@@ -55,8 +56,8 @@ system_tests = [
     ([fetch_tutorials, "scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct --unconditional-build --print-build-failures"], "."),
     ([fetch_tutorials, "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build --print-build-failures"], "."),
     ([fetch_tutorials, "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build --print-build-failures"], "."),
-    ([fetch_tutorials, "scons . --unconditional-build --print-build-failures"], "tutorial_cubit"),
-    ([fetch_tutorials, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorial_quinoa"),
+    ([string.Template("${waves_command} fetch tutorials/tutorial_cubit --destination ${temp_directory}"), "scons . --unconditional-build --print-build-failures"], "."),
+    ([string.Template("${waves_command} fetch tutorials/tutorial_quinoa --destination ${temp_directory}"), "scons quinoa-local --unconditional-build --print-build-failures"], "."),
     ([fetch_tutorials, "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures"], "."),
     ([fetch_tutorials, "scons tutorial_builder_post_actions --sconstruct=tutorial_builder_post_actions_SConstruct --unconditional-build --print-build-failures"], "."),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
@@ -86,7 +87,7 @@ if installed:
 
 
 @pytest.mark.systemtest
-@pytest.mark.parametrize("command, directory", system_tests)
+@pytest.mark.parametrize("commands, directory", system_tests)
 def test_run_tutorial(commands: list[str], directory: str) -> None:
     """Fetch and run the tutorial configuration file(s) as system tests in a temporary directory
 
@@ -97,6 +98,8 @@ def test_run_tutorial(commands: list[str], directory: str) -> None:
     with tempfile.TemporaryDirectory() as temp_directory:
         for command in commands:
             run_directory = pathlib.Path(temp_directory) / directory
+            if isinstance(command, string.Template):
+                command = command.substitute({"temp_directory": temp_directory, "waves_command": waves_command})
             command = command.split(" ")
             subprocess.check_output(command, env=env, cwd=run_directory).decode("utf-8")
 
