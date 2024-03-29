@@ -55,7 +55,7 @@ _parameter_study_description = \
     "The 'h5' output is the only output type that contains both the parameter " \
     "samples and quantiles."
 _tutorial_paths = {
-    0: [],
+    0: ["tutorials/tutorial_00_SConstruct"],
     1: [
         "tutorials/modsim_package/__init__.py",
         "tutorials/modsim_package/abaqus/__init__.py",
