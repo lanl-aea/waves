@@ -8,6 +8,11 @@ Changelog
 0.8.1 (unreleased)
 ******************
 
+Enhancements
+============
+- Raise a more useful exception/error message when a previous parameter study file does not exists (:issue:`631`,
+  :merge:`791`). By `Kyle Brindley`_.
+
 ******************
 0.8.0 (2024-03-29)
 ******************
