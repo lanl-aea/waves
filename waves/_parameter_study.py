@@ -5,10 +5,11 @@ Thin CLI wrapper around :meth:`waves.parameter_generators` classes
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
-
-import argparse
+import io
 import sys
 import typing
+import pathlib
+import argparse
 
 import yaml
 
@@ -66,8 +67,28 @@ def parameter_study_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper) -> dict:
+    """Read a YAML dictionary from STDIN or a file
+
+    :param input_file: STDIN stream or file path
+
+    :returns: dictionary
+
+    :raises RuntimeError: if not STDIN and the file name does not exist
+    """
+    if isinstance(input_file, io.TextIOWrapper):
+        parameter_schema = yaml.safe_load(input_file)
+    else:
+        input_file = pathlib.Path(input_file)
+        if not input_file.is_file():
+            raise RuntimeError(f"File '{input_file}' does not exist.")
+        with open(input_file, "r") as input_file:
+            parameter_schema = yaml.safe_load(input_file)
+    return parameter_schema
+
+
 def parameter_study(subcommand: str,
-                    input_file_path: str,
+                    input_file: str | pathlib.Path | io.TextIOWrapper,
                     output_file_template: str = parameter_generators._default_output_file_template,
                     output_file: str = parameter_generators._default_output_file,
                     output_file_type: typing.Literal["yaml", "h5"] = parameter_generators._default_output_file_type,
@@ -79,7 +100,7 @@ def parameter_study(subcommand: str,
     """Build parameter studies
 
     :param str subcommand: parameter study type to build
-    :param str input_file_path: path to YAML formatted parameter study schema file
+    :param str input_file: path to YAML formatted parameter study schema file
     :param str output_file_template: output file template name
     :param str output_file: relative or absolute output file path
     :param str output_file_type: yaml or h5
@@ -89,10 +110,7 @@ def parameter_study(subcommand: str,
     :param bool dryrun: print what files would have been written, but do no work
     :param bool write_meta: write a meta file name 'parameter_study_meta.txt' containing the parameter set file path(s)
     """
-
-    # Read the input stream
-    with open(input_file_path, 'r') as input_file:
-        parameter_schema = yaml.safe_load(input_file)
+    parameter_schema = read_parameter_schema(input_file)
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = {
