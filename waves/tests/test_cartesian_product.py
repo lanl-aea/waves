@@ -95,23 +95,23 @@ class TestCartesianProduct:
              {'parameter_1': [2]},
              # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
              numpy.array(
-                 [[1], [2]], dtype=object)),
+                 [[2], [1]], dtype=object)),
         'new set':
             ({'parameter_1': [1, 2], 'parameter_2': [3.0], 'parameter_3': ['a']},
              {'parameter_1': [1, 2], 'parameter_2': [3.0, 4.0], 'parameter_3': ['a']},
              # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
              numpy.array(
-                 [[2, 3.0, "a"],
+                 [[2, 4.0, "a"],
+                  [1, 3.0, "a"],
                   [1, 4.0, "a"],
-                  [2, 4.0, "a"],
-                  [1, 3.0, "a"]], dtype=object)),
+                  [2, 3.0, "a"]], dtype=object)),
         'unchanged sets':
             ({'parameter_1': [1, 2], 'parameter_2': [3.0], 'parameter_3': ['a']},
              {'parameter_1': [1, 2], 'parameter_2': [3.0], 'parameter_3': ['a']},
              # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
              numpy.array(
-                 [[2, 3.0, "a"],
-                  [1, 3.0, "a"]], dtype=object)),
+                 [[1, 3.0, "a"],
+                  [2, 3.0, "a"]], dtype=object)),
     }
 
     @pytest.mark.unittest
