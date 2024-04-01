@@ -32,6 +32,15 @@ class TestParameterGenerator:
                 pass
 
     @pytest.mark.unittest
+    def test_missing_previous_parameter_study_file(self):
+        with pytest.raises(RuntimeError):
+            try:
+                with patch("pathlib.Path.is_file", return_value=False):
+                    MissingPreviousStudy = NoQuantilesGenerator({}, previous_parameter_study="doesnotexist.h5")
+            finally:
+                pass
+
+    @pytest.mark.unittest
     def test_scons_write(self):
         sconsWrite = NoQuantilesGenerator({})
         with patch("waves.parameter_generators._ParameterGenerator.write") as mock_write:
