@@ -104,15 +104,15 @@ class TestSobolSequence:
             {'scramble': False},
             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
             numpy.array([[5.   , 3.5  ],
-                         [7.5  , 2.75 ],
+                         [2.5  , 4.25 ],
                          [3.75 , 3.125],
-                         [0.   , 2.   ],
-                         [2.5  , 4.25 ]]),
+                         [7.5  , 2.75 ],
+                         [0.   , 2.   ]]),
             numpy.array([[0.5  , 0.5  ],
-                         [0.75 , 0.25 ],
+                         [0.25 , 0.75 ],
                          [0.375, 0.375],
-                         [0.   , 0.   ],
-                         [0.25 , 0.75 ]])
+                         [0.75 , 0.25 ],
+                         [0.   , 0.   ]])
         )
     }
 
