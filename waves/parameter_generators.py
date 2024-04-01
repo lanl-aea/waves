@@ -106,6 +106,8 @@ class _ParameterGenerator(ABC):
 
         if self.previous_parameter_study:
             self.previous_parameter_study = pathlib.Path(self.previous_parameter_study)
+            if not self.previous_parameter_study.is_file():
+                raise RuntimeError(f"Previous parameter study '{self.previous_parameter_study}' does not exist.")
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False
