@@ -8,10 +8,18 @@ Changelog
 0.8.1 (unreleased)
 ******************
 
+.. warning::
+
+   Due to a bugfix in parameter set indexing, parameter studies generated from previous versions of WAVES will appear as
+   unique parameter sets on merge with parameter studies generated from this version moving forward. It is strongly
+   recommended that users re-generate their parameter study and workflows with this version of WAVES.
+
 Bug fixes
 =========
 - Handle STDIN YAML formatted string, file paths, and missing input cases for parameter study CLI (:issue:`632`,
   :merge:`792`). By `Kyle Brindley`_.
+- Add parameter names and quantiles to the parameter set hash to guarantee unique parameter set index on changes.
+  Parameter study indices will be inconsistent with prior versions (:issue:`633`, :merge:`793`). By `Kyle Brindley`_.
 
 Enhancements
 ============
