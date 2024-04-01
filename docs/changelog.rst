@@ -18,8 +18,9 @@ Bug fixes
 =========
 - Handle STDIN YAML formatted string, file paths, and missing input cases for parameter study CLI (:issue:`632`,
   :merge:`792`). By `Kyle Brindley`_.
-- Add parameter names and quantiles to the parameter set hash to guarantee unique parameter set index on changes.
-  Parameter study indices will be inconsistent with prior versions (:issue:`633`, :merge:`793`). By `Kyle Brindley`_.
+- Add parameter names and quantiles to the parameter set hash to guarantee unique parameter set index on changes.  Fixes
+  an edge case where a parameter name changes, but the set content may appear identical. Parameter study indices will be
+  inconsistent with prior versions of WAVES (:issue:`633`, :merge:`793`). By `Kyle Brindley`_.
 
 Enhancements
 ============
