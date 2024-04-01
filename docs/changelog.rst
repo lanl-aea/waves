@@ -8,6 +8,11 @@ Changelog
 0.8.1 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Handle STDIN YAML formatted string, file paths, and missing input cases for parameter study CLI (:issue:`632`,
+  :merge:`792`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Raise a more useful exception/error message when a previous parameter study file does not exists (:issue:`631`,
