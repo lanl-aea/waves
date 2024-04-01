@@ -123,9 +123,10 @@ def test_parameter_study(subcommand, class_name, argument, option, argument_valu
         if not isinstance(argument_value, bool):
             arg_list.append(argument_value)
     with patch('sys.argv', arg_list), \
-            patch('builtins.open', mock_open()), patch('yaml.safe_load'), \
-            patch(f'waves.parameter_generators.{class_name}') as mock_generator, \
-            does_not_raise():
+         patch('builtins.open', mock_open()), patch('yaml.safe_load'), \
+         patch(f'waves.parameter_generators.{class_name}') as mock_generator, \
+         patch("pathlib.Path.is_file", return_value=True), \
+         does_not_raise():
         _main.main()
         mock_generator.assert_called_once()
         if argument:
