@@ -350,7 +350,7 @@ class _ParameterGenerator(ABC):
     def _create_parameter_set_hashes(self) -> None:
         """Construct unique, repeatable parameter set content hashes from ``self._samples``.
 
-        Creates an md5 hash from the concatenated string representation of parameter values.
+        Creates an md5 hash from the concatenated string representation of parameter ``name:value`` associations.
 
         requires:
 
@@ -361,9 +361,9 @@ class _ParameterGenerator(ABC):
         * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         """
         self._parameter_set_hashes = []
-        for row in self._samples:
-            set_values_catenation = ''.join(repr(element) for element in row)
-            set_hash = hashlib.md5(set_values_catenation.encode('utf-8')).hexdigest()
+        for sample_row in self._samples:
+            set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in zip(self._parameter_names, sample_row))
+            set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
             self._parameter_set_hashes.append(set_hash)
 
     def _create_parameter_set_names(self) -> None:
