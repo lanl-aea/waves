@@ -265,21 +265,32 @@ class TestParameterGenerator:
             assert write_yaml_file.return_value.write.call_count == expected_call_count
 
     set_hashes = {
-        'set1':
-            (numpy.array([[1, 10.1, 'a']], dtype=object), ['524c99353118939a452503456d3100e8']),
-        'set2':
-            (numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b'], [3, 30.3, 'c']], dtype=object),
-             ['524c99353118939a452503456d3100e8',
-              'b8797cbda6f68f71de15d10f6f901d5d',
-              'cff4a038d9980830bc4ea32145b26cf7'])
+        'set1': (
+            ["name1", "name2", "name3"],
+            numpy.array([[1, 10.1, 'a']], dtype=object),
+            ['732411987fea3ae4a1e0bd7ea6a8841a']
+        ),
+        'set1 different parameter names': (
+            ["newname1", "newname2", "newname3"],
+            numpy.array([[1, 10.1, 'a']], dtype=object),
+            ['45458adbaeb9a55dcec2211383c9bd96']
+        ),
+        'set2': (
+            ["name1", "name2", "name3"],
+            numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b'], [3, 30.3, 'c']], dtype=object),
+            ['732411987fea3ae4a1e0bd7ea6a8841a',
+             '6dfcf74620c998f3ef7ab4cc9fb2d510',
+             '57af5a35970eb8a1a93c1ed62ff3ff37']
+        )
     }
 
     @pytest.mark.unittest
-    @pytest.mark.parametrize('samples, expected_hashes',
+    @pytest.mark.parametrize('parameter_names, samples, expected_hashes',
                                  set_hashes.values(),
                              ids=set_hashes.keys())
-    def test_create_parameter_set_hashes(self, samples, expected_hashes):
+    def test_create_parameter_set_hashes(self, parameter_names, samples, expected_hashes):
         HashesParameterGenerator = NoQuantilesGenerator({})
+        HashesParameterGenerator._parameter_names = parameter_names
         HashesParameterGenerator._samples = samples
         HashesParameterGenerator._create_parameter_set_hashes()
         assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
