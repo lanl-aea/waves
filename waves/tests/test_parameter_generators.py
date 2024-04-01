@@ -33,10 +33,9 @@ class TestParameterGenerator:
 
     @pytest.mark.unittest
     def test_missing_previous_parameter_study_file(self):
-        with pytest.raises(RuntimeError):
+        with patch("pathlib.Path.is_file", return_value=False), pytest.raises(RuntimeError):
             try:
-                with patch("pathlib.Path.is_file", return_value=False):
-                    MissingPreviousStudy = NoQuantilesGenerator({}, previous_parameter_study="doesnotexist.h5")
+                MissingPreviousStudy = NoQuantilesGenerator({}, previous_parameter_study="doesnotexist.h5")
             finally:
                 pass
 
