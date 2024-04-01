@@ -56,9 +56,10 @@ def merge_samplers(sampler_class, first_schema, second_schema, kwargs, sampler=N
         original_study = sampler_class(sampler, first_schema, **kwargs)
     else:
         original_study = sampler_class(first_schema, **kwargs)
-    with patch('xarray.open_dataset', return_value=original_study.parameter_study):
+    with patch("xarray.open_dataset", return_value=original_study.parameter_study), \
+         patch("pathlib.Path.is_file", return_value=True):
         if sampler:
-            merged_study = sampler_class(sampler, second_schema, previous_parameter_study='dummy_string', **kwargs)
+            merged_study = sampler_class(sampler, second_schema, previous_parameter_study="dummy_string", **kwargs)
         else:
-            merged_study = sampler_class(second_schema, previous_parameter_study='dummy_string', **kwargs)
+            merged_study = sampler_class(second_schema, previous_parameter_study="dummy_string", **kwargs)
     return original_study, merged_study

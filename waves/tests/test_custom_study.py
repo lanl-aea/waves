@@ -10,6 +10,7 @@ import numpy
 from waves.parameter_generators import CustomStudy
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
 from waves.exceptions import SchemaValidationError
+from common import merge_samplers
 
 
 class TestCustomStudy:
@@ -122,9 +123,7 @@ class TestCustomStudy:
                                  merge_test.values(),
                              ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, expected_array):
-        TestMerge1 = CustomStudy(first_schema)
-        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-            TestMerge2 = CustomStudy(second_schema, previous_parameter_study='dummy_string')
+        TestMerge1, TestMerge2 = merge_samplers(CustomStudy, first_schema, second_schema, {})
         generate_array = TestMerge2._samples
         assert numpy.all(generate_array == expected_array)
         # Check for consistent hash-parameter set relationships

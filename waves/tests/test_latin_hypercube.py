@@ -8,6 +8,7 @@ import numpy
 
 from waves.parameter_generators import LatinHypercube, ScipySampler
 from waves._settings import _hash_coordinate_key, _set_coordinate_key
+from common import merge_samplers
 
 
 class TestLatinHypercube:
@@ -102,9 +103,7 @@ class TestLatinHypercube:
     def test_merge(self, first_schema, second_schema, seed, expected_samples, expected_quantiles):
         # LatinHypercube
         kwargs={'seed': seed}
-        TestMerge1 = LatinHypercube(first_schema, **kwargs)
-        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-            TestMerge2 = LatinHypercube(second_schema, previous_parameter_study='dummy_string', **kwargs)
+        TestMerge1, TestMerge2 = merge_samplers(LatinHypercube, first_schema, second_schema, kwargs)
         samples = TestMerge2._samples.astype(float)
         quantiles = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples, expected_samples)
@@ -117,9 +116,8 @@ class TestLatinHypercube:
         assert TestMerge2._parameter_set_hashes == TestMerge2.parameter_study[_hash_coordinate_key].values.tolist()
 
         # ScipySampler
-        TestMerge1 = ScipySampler("LatinHypercube", first_schema, **kwargs)
-        with patch('xarray.open_dataset', return_value=TestMerge1.parameter_study):
-            TestMerge2 = ScipySampler("LatinHypercube", second_schema, previous_parameter_study='dummy_string', **kwargs)
+        TestMerge1, TestMerge2 = merge_samplers(ScipySampler, first_schema, second_schema, kwargs,
+                                                sampler="LatinHypercube")
         samples = TestMerge2._samples.astype(float)
         quantiles = TestMerge2._quantiles.astype(float)
         assert numpy.allclose(samples, expected_samples)
