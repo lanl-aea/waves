@@ -76,6 +76,8 @@ def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper) -> 
 
     :raises RuntimeError: if not STDIN and the file name does not exist
     """
+    if input_file is None:
+        raise RuntimeError("Require an input file path or a YAML formatted string on STDIN")
     if isinstance(input_file, io.TextIOWrapper):
         parameter_schema = yaml.safe_load(input_file)
     else:

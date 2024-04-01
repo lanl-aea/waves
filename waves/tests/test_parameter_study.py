@@ -26,9 +26,16 @@ def test_read_parameter_schema():
     mock_file.assert_called_once_with(input_file, "r")
     assert parameter_schema == expected
 
-    # Text RuntimeError on missing file
+    # Test RuntimeError on missing file
     with patch("pathlib.Path.is_file", return_value=False), \
          patch('builtins.open', mock_open()) as mock_file, \
          pytest.raises(RuntimeError):
         parameter_schema = _parameter_study.read_parameter_schema(input_file)
+    mock_file.assert_not_called()
+
+    # Test RuntimeError on missing STDIN and missing file
+    with patch("pathlib.Path.is_file", return_value=False), \
+         patch('builtins.open', mock_open()) as mock_file, \
+         pytest.raises(RuntimeError):
+        parameter_schema = _parameter_study.read_parameter_schema(None)
     mock_file.assert_not_called()
