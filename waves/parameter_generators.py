@@ -356,15 +356,26 @@ class _ParameterGenerator(ABC):
 
         * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
+        uses optional if defined:
+
+        * ``self._quantiles``: The quantiles associated with the paramter study sampling distributions
+
         creates attribute:
 
         * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         """
         self._parameter_set_hashes = []
-        for sample_row in self._samples:
-            set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in zip(self._parameter_names, sample_row))
-            set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
-            self._parameter_set_hashes.append(set_hash)
+        if hasattr(self, _quantiles_attribute_key):
+            for sample_row, quantile_row in zip(self._samples, self._quantiles):
+                set_catenation = "\n".join(f"{name}:{repr(sample)}-{repr(quantile)}" for name, sample, quantile in
+                                           zip(self._parameter_names, sample_row, quantile_row))
+                set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
+                self._parameter_set_hashes.append(set_hash)
+        else:
+            for sample_row in self._samples:
+                set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in zip(self._parameter_names, sample_row))
+                set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
+                self._parameter_set_hashes.append(set_hash)
 
     def _create_parameter_set_names(self) -> None:
         """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
