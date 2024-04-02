@@ -119,7 +119,10 @@ conda-build:
     - umask 0022
     - mkdir ${conda_artifacts_directory}
     - croot="/scratch/$USER/$(basename $PWD)/${conda_artifacts_directory}"
-    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe-internal --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
+    # TODO: Re-enable fierro system tests when the cpu usage can be controlled
+    #   Add back ``--channel fierromechanics`` to the conda-build options
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/638
+    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe-internal --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
     - conda build purge --croot ${croot}
   artifacts:
     expire_in: '2 hrs'

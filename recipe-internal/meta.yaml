@@ -63,7 +63,9 @@ requirements:
 
 test:
   requires:
-    - fierro-cpu
+    # TODO: Re-enable fierro system tests when the cpu usage can be controlled
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/638
+    #- fierro-cpu
     - h5netcdf
     - h5py
     - matplotlib-base
