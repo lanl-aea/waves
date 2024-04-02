@@ -18,15 +18,32 @@ AddOption(
     metavar="DIR",
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
+AddOption(
+    "--unconditional-build",
+    dest="unconditional_build",
+    default=False,
+    action="store_true",
+    help="Boolean flag to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+            " and it would normally be ignored. (default: '%default')"
+)
+AddOption(
+    "--print-build-failures",
+    dest="print_build_failures",
+    default=False,
+    action="store_true",
+    help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+)
 
 # Inherit user's full environment and set project options
 env = Environment(
     ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
+    unconditional_build=GetOption("unconditional_build"),
+    print_build_failures=GetOption("print_build_failures")
 )
 
-# Empty defaults list to avoid building all simulation targets by default
-env.Default()
+# Conditionally print failed task *.stdout files
+waves.scons_extensions.print_build_failures(env["print_build_failures"])
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
@@ -64,4 +81,7 @@ for workflow in workflow_configurations:
     SConscript(workflow, variant_dir=build_dir, exports="env", duplicate=True)
 
 # Add default target list to help message
+env.Default()  # Empty defaults list to avoid building all simulation targets by default
+# Add aliases to help message so users know what build target options are available
+# This must come *after* all expected Alias definitions and SConscript files.
 waves.scons_extensions.project_help_message()
