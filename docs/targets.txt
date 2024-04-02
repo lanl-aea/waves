@@ -25,6 +25,9 @@
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
 .. _`Sierra`: https://www.osti.gov/biblio/1886996
 .. _`Quinoa`: https://quinoacomputing.github.io/index.html
+.. _`Fierro`: https://lanl.github.io/Fierro/index.html
+.. _`Fierro example input`: https://lanl.github.io/Fierro/cli-guide.html#example-input
+.. _`FierroMechanics`: https://anaconda.org/fierromechanics
 .. _`Environment modules`: https://modules.readthedocs.io/en/stable/modulefile.html
 .. _`GNU Make`: https://www.gnu.org/software/make/
 .. _`GNU sed`: https://www.gnu.org/software/sed/

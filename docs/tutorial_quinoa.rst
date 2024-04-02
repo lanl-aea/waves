@@ -4,6 +4,8 @@
 Tutorial: Quinoa
 ################
 
+.. include:: wip_warning.txt
+
 .. warning::
 
    Most WAVES tutorials are used as system tests in the regression test suite to ensure that the tutorial files are
