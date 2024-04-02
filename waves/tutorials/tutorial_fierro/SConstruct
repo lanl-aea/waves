@@ -1,0 +1,67 @@
+#! /usr/bin/env python
+
+import os
+import pathlib
+import inspect
+
+import waves
+
+
+# Accept command line options with fall back default values
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+
+# Inherit user's full environment and set project options
+env = Environment(
+    ENV=os.environ.copy(),
+    variant_dir_base=GetOption("variant_dir_base"),
+)
+
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
+
+# Find required programs for conditional target ignoring and absolute path for use in target actions
+env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
+
+# Set project internal variables and variable substitution dictionaries
+project_configuration = pathlib.Path(inspect.getfile(lambda: None))
+project_dir = project_configuration.parent
+project_name = project_dir.name
+author_list = [
+    "Kyle Brindley",
+]
+project_variables = {
+    "project_configuration": project_configuration,
+    "project_dir": project_dir,
+    "project_name": project_name,
+}
+for key, value in project_variables.items():
+    env[key] = value
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env["variant_dir_base"])
+
+
+# Add Fierro builder
+env.Append(BUILDERS={
+    "FierroExplicit": waves.scons_extensions.fierro_explicit()
+})
+
+# Add simulation targets
+workflow_configurations = [
+    "example_input"
+]
+for workflow in workflow_configurations:
+    build_dir = variant_dir_base / workflow
+    SConscript(workflow, variant_dir=build_dir, exports="env", duplicate=True)
+
+# Add default target list to help message
+waves.scons_extensions.project_help_message()

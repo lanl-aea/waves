@@ -1,0 +1,34 @@
+#! /usr/bin/env python
+"""Fierro example input file workflow
+
+Requires the following ``SConscript(..., exports=[])``
+
+* ``env`` - The SCons construction environment with the following required keys
+
+  * ``fierro`` - String path for the Abaqus executable
+"""
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env")
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
+# Abaqus Solve
+workflow.extend(env.FierroExplicit(
+    target=["example_input.yaml.stdout"],
+    source=["example_input.yaml"]
+))
+
+# Collector alias based on build directory name
+env.Alias(workflow_name, workflow)
+
+if not env["fierro"]:
+    print(f"Program 'fierro' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)
