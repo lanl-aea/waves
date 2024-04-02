@@ -1692,5 +1692,204 @@ def sbatch_quinoa_solver(*args, **kwargs):
     return quinoa_solver(*args, **kwargs)
 
 
+def fierro_builder(
+    program: str = "fierro",
+    subcommand: str = "",
+    required: str = "",
+    options: str = "",
+    post_action: list = []
+) -> SCons.Builder.Builder:
+    """Return a generic Fierro builder.
+
+    This builder provides a template action for the Fierro CLI. The default behavior will not do anything unless
+    the ``subcommand`` argument is updated to one of the Fierro CLI subcommands, e.g. ``parallel-implicit`` or
+    ``parallel-explicit``.
+
+    At least one target must be specified. The first target determines the working directory for the builder's action.
+    The action changes the working directory to the first target's parent directory prior to execution.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
+
+    This builder and any builders created from this template will be most useful if the ``options`` argument places
+    SCons substitution variables in the action string, e.g. ``--argument ${argument}``, such that the task definitions
+    can modify the options on a per-task basis. Any option set in this manner *must* be provided by the task definition.
+
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Fierro command line executable absolute or relative path
+    * ``subcommand``: A Fierro subcommand
+    * ``required``: A space delimited string of subcommand required arguments
+    * ``options``: A space delimited string of subcommand optional arguments
+    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults.
+    * ``redirect_action_postfix``: Advanced behavior. Most users should accept the defaults.
+
+    .. code-block::
+       :caption: action string construction
+
+       ${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
+       env.Append(BUILDERS={
+            "FierroBuilder": waves.scons_extensions.fierro_builder(
+                program=env["fierro],
+                subcommand="parallel-explicit",
+                required="${SOURCE.abspath}"
+            )
+       })
+       env.FierroBuilder(
+           target=["target.stdout"],
+           source=["source.yaml"],
+       )
+
+    :param str program: The Fierro command line executable absolute or relative path
+    :param str subcommand: A Fierro subcommand
+    :param str required: A space delimited string of subcommand required arguments
+    :param str options: A space delimited string of subcommand optional arguments
+
+    :returns: SCons Fierro builder
+    :rtype: SCons.Builder.Builder
+    """
+    action = [
+        "${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}"
+    ]
+    action = construct_action_list(action, prefix="${cd_action_prefix}")
+    action.extend(construct_action_list(post_action))
+    builder = SCons.Builder.Builder(
+        action=action,
+        emitter=_first_target_emitter,
+        cd_action_prefix=_cd_action_prefix,
+        redirect_action_postfix=_redirect_action_postfix,
+        program=program,
+        subcommand=subcommand,
+        required=required,
+        options=options
+    )
+    return builder
+
+
+def fierro_explicit(
+    program: str = "fierro",
+    subcommand: str = "parallel-explicit",
+    required: str = "${SOURCE.abspath}",
+    options: str = "",
+    post_action: list = []
+) -> SCons.Builder.Builder:
+    """Return the Fierro explicit solver builder.
+
+    At least one target must be specified. The first target determines the working directory for the builder's action.
+    The action changes the working directory to the first target's parent directory prior to execution.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
+
+    This builder and any builders created from this template will be most useful if the ``options`` argument places
+    SCons substitution variables in the action string, e.g. ``--argument ${argument}``, such that the task definitions
+    can modify the options on a per-task basis. Any option set in this manner *must* be provided by the task definition.
+
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Fierro command line executable absolute or relative path
+    * ``subcommand``: A Fierro subcommand
+    * ``required``: A space delimited string of subcommand required arguments
+    * ``options``: A space delimited string of subcommand optional arguments
+    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults.
+    * ``redirect_action_postfix``: Advanced behavior. Most users should accept the defaults.
+
+    .. code-block::
+       :caption: action string construction
+
+       ${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
+       env.Append(BUILDERS={"FierroExplicit": waves.scons_extensions.fierro_builder()})
+       env.FierroExplicit(
+           target=["target.stdout"],
+           source=["source.yaml"],
+       )
+
+    :param str program: The Fierro command line executable absolute or relative path
+    :param str subcommand: A Fierro subcommand
+    :param str required: A space delimited string of subcommand required arguments
+    :param str options: A space delimited string of subcommand optional arguments
+
+    :returns: SCons Fierro explicit solver builder
+    :rtype: SCons.Builder.Builder
+    """
+    return fierro_builder(subcommand=subcommand, required=required)
+
+
+def fierro_implicit(
+    program: str = "fierro",
+    subcommand: str = "parallel-implicit",
+    required: str = "${SOURCE.abspath}",
+    options: str = "",
+    post_action: list = []
+) -> SCons.Builder.Builder:
+    """Return the Fierro implicit solver builder.
+
+    At least one target must be specified. The first target determines the working directory for the builder's action.
+    The action changes the working directory to the first target's parent directory prior to execution.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
+
+    This builder and any builders created from this template will be most useful if the ``options`` argument places
+    SCons substitution variables in the action string, e.g. ``--argument ${argument}``, such that the task definitions
+    can modify the options on a per-task basis. Any option set in this manner *must* be provided by the task definition.
+
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Fierro command line executable absolute or relative path
+    * ``subcommand``: A Fierro subcommand
+    * ``required``: A space delimited string of subcommand required arguments
+    * ``options``: A space delimited string of subcommand optional arguments
+    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults.
+    * ``redirect_action_postfix``: Advanced behavior. Most users should accept the defaults.
+
+    .. code-block::
+       :caption: action string construction
+
+       ${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
+       env.Append(BUILDERS={"FierroImplicit": waves.scons_extensions.fierro_builder()})
+       env.FierroImplicit(
+           target=["target.stdout"],
+           source=["source.yaml"],
+       )
+
+    :param str program: The Fierro command line executable absolute or relative path
+    :param str subcommand: A Fierro subcommand
+    :param str required: A space delimited string of subcommand required arguments
+    :param str options: A space delimited string of subcommand optional arguments
+
+    :returns: SCons Fierro implicit solver builder
+    :rtype: SCons.Builder.Builder
+    """
+    return fierro_builder(subcommand=subcommand, required=required)
+
+
 _module_objects = set(globals().keys()) - _exclude_from_namespace
 __all__ = [name for name in _module_objects if not name.startswith("_")]
