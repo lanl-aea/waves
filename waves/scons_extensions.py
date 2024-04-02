@@ -1599,6 +1599,11 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
                   post_action: list[str] = []) -> SCons.Builder.Builder:
     """Quinoa solver SCons builder
 
+    .. warning::
+
+       This is an experimental builder for Quinoa support. The only emitted file is the ``target[0].stdout`` redirected
+       STDOUT and STDERR file. All relevant application output files, e.g. ``out.*`` must be specified in the target list.
+
     This builder requires at least two source files provided in the order
 
     1. Quinoa control file: ``*.q``
@@ -1615,11 +1620,6 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
     subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
     ``target.stdout``.
-
-    .. warning::
-
-       This is an experimental builder for Quinoa support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``out.*`` must be specified in the target list.
 
     .. code-block::
        :caption: SConstruct
@@ -1700,6 +1700,11 @@ def fierro_builder(
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return a generic Fierro builder.
+
+    .. warning::
+
+       This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
+       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target list.
 
     This builder provides a template action for the Fierro CLI. The default behavior will not do anything unless
     the ``subcommand`` argument is updated to one of the Fierro CLI subcommands, e.g. ``parallel-implicit`` or
@@ -1784,6 +1789,11 @@ def fierro_explicit(
 ) -> SCons.Builder.Builder:
     """Return the Fierro explicit solver builder.
 
+    .. warning::
+
+       This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
+       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target list.
+
     At least one target must be specified. The first target determines the working directory for the builder's action.
     The action changes the working directory to the first target's parent directory prior to execution.
 
@@ -1841,6 +1851,11 @@ def fierro_implicit(
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return the Fierro implicit solver builder.
+
+    .. warning::
+
+       This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
+       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target list.
 
     At least one target must be specified. The first target determines the working directory for the builder's action.
     The action changes the working directory to the first target's parent directory prior to execution.
