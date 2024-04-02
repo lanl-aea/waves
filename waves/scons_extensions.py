@@ -605,7 +605,7 @@ def _first_target_emitter(target: list, source: list, env, suffixes: list[str] =
     appending_targets = [f"{first_target}{suffix}" for suffix in appending_suffixes]
     string_targets = string_targets + replacing_targets + appending_targets
 
-    # Get a list of unique targets,  less the stdout target. Preserve the target list order.
+    # Get a list of unique targets, less the stdout target. Preserve the target list order.
     string_targets = [target_file for target_file in string_targets if target_file != stdout_target]
     string_targets = list(dict.fromkeys(string_targets))
 
