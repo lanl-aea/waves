@@ -8,6 +8,11 @@ Changelog
 0.8.2 (unreleased)
 ******************
 
+Internal Changes
+================
+- Remove the upper bound version of setuptools_scm and use the latest version in the CI environment (:issue:`635`,
+  :merge:`794`). By `Kyle Brindley`_.
+
 ******************
 0.8.1 (2024-04-01)
 ******************
