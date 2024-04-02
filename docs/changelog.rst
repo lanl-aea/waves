@@ -8,6 +8,11 @@ Changelog
 0.8.2 (unreleased)
 ******************
 
+New Features
+============
+- Draft experimental Fierro builders and add associated draft tutorial (:issue:`637`, :merge:`796`). By `Kyle
+  Brindley`_.
+
 Internal Changes
 ================
 - Remove the upper bound version of setuptools_scm and use the latest version in the CI environment (:issue:`635`,
