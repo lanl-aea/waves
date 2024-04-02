@@ -1006,3 +1006,6 @@ def test_fierro_builder(program, subcommand, post_action, node_count, action_cou
     env.Append(BUILDERS={"FierroBuilder": scons_extensions.fierro_builder(program=program, subcommand=subcommand, post_action=post_action)})
     nodes = env.FierroBuilder(target=target_list, source=source_list)
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    for node in nodes:
+        assert node.env['program'] == program
+        assert node.env['subcommand'] == subcommand
