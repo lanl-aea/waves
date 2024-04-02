@@ -12,6 +12,8 @@ Internal Changes
 ================
 - Remove the upper bound version of setuptools_scm and use the latest version in the CI environment (:issue:`635`,
   :merge:`794`). By `Kyle Brindley`_.
+- Add ``FierroMechanics`` channel and ``fierro-cpu`` to CI compute environment in preparation for draft Fierro builder
+  support (:issue:`636`, :merge:`795`). By `Kyle Brindley`_.
 
 ******************
 0.8.1 (2024-04-01)
