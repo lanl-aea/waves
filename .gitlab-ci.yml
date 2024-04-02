@@ -41,6 +41,9 @@ environment:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
     - if: $CI_COMMIT_BRANCH == "main"
   script:
+    # Always build from the base/aea compute environment with boa/libmamba
+    - module unload ${project_environment}
+    - module load ${environment}
     # Don't rebuild environment for merge request pipelines unless the environment is missing
     - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
     - if [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]] && ${exists}; then exit 0; fi
@@ -54,7 +57,7 @@ environment:
     - export HTTP_PROXY="http://$ALL_PROXY"
     - export HTTPS_PROXY=$HTTP_PROXY
     # Re-build the Conda environment on changes to environment files
-    - conda env create --prefix ${environment_path} --file environment.yml --force
+    - conda env create --prefix ${environment_path} --file environment.yml --solver=libmamba --force
     # Remove write permissions from group to avoid accidental environment changes
     - chmod -R 755 ${environment_path}
     # place the common modulefiles in an accessible location
