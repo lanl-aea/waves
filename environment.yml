@@ -1,10 +1,12 @@
 channels:
+  - fierromechanics
   - conda-forge
 
 dependencies:
   - boa
   # TODO: Remove when conda-build 24.? no longer breaks boa/mambabuild
   - conda-build ==3.28
+  - fierro-cpu
   - h5netcdf
   - h5py
   - ipython
