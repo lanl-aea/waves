@@ -1009,3 +1009,49 @@ def test_fierro_builder(program, subcommand, post_action, node_count, action_cou
     for node in nodes:
         assert node.env['program'] == program
         assert node.env['subcommand'] == subcommand
+
+
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+fierro_explicit = {
+    "default behavior": ([], 2, 1, ["input1_explicit.yaml"], ['input1_explicit.fierro']),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("post_action, node_count, action_count, source_list, target_list",
+                         fierro_explicit.values(),
+                         ids=fierro_explicit.keys())
+def test_fierro_explicit(post_action, node_count, action_count, source_list, target_list):
+    env = SCons.Environment.Environment()
+    expected_string = '${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}'
+
+    env.Append(BUILDERS={"FierroExplicit": scons_extensions.fierro_explicit(post_action=post_action)})
+    nodes = env.FierroExplicit(target=target_list, source=source_list)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    for node in nodes:
+        assert node.env['program'] == "fierro"
+        assert node.env['subcommand'] == "parallel-explicit"
+
+
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+fierro_implicit = {
+    "default behavior": ([], 2, 1, ["input1_implicit.yaml"], ['input1_implicit.fierro']),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("post_action, node_count, action_count, source_list, target_list",
+                         fierro_implicit.values(),
+                         ids=fierro_implicit.keys())
+def test_fierro_implicit(post_action, node_count, action_count, source_list, target_list):
+    env = SCons.Environment.Environment()
+    expected_string = '${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}'
+
+    env.Append(BUILDERS={"FierroImplicit": scons_extensions.fierro_implicit(post_action=post_action)})
+    nodes = env.FierroImplicit(target=target_list, source=source_list)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    for node in nodes:
+        assert node.env['program'] == "fierro"
+        assert node.env['subcommand'] == "parallel-implicit"

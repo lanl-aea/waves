@@ -1840,7 +1840,14 @@ def fierro_explicit(
     :returns: SCons Fierro explicit solver builder
     :rtype: SCons.Builder.Builder
     """
-    return fierro_builder(subcommand=subcommand, required=required)
+    builder = fierro_builder(
+        program=program,
+        subcommand=subcommand,
+        required=required,
+        options=options,
+        post_action=post_action
+    )
+    return builder
 
 
 def fierro_implicit(
@@ -1903,7 +1910,14 @@ def fierro_implicit(
     :returns: SCons Fierro implicit solver builder
     :rtype: SCons.Builder.Builder
     """
-    return fierro_builder(subcommand=subcommand, required=required)
+    builder = fierro_builder(
+        program=program,
+        subcommand=subcommand,
+        required=required,
+        options=options,
+        post_action=post_action
+    )
+    return builder
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
