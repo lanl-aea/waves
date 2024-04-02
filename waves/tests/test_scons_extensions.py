@@ -984,3 +984,25 @@ def test_sphinx_latexpdf():
     nodes = env.SphinxPDF(target=["latex/project.pdf"], source=["conf.py", "index.rst"])
     expected_string = "${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"
     check_action_string(nodes, [], 1, 1, expected_string)
+
+
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+fierro_input = {
+    "default behavior": ("fierro", "parallel-explicit", [], 2, 1, ["input1.yaml"], ['input1.fierro']),
+    "different command": ("dummy", "parallel-implicit", [], 2, 1, ["input2.yaml"], ['input2.fierro']),
+    "post action": ("fierro", "subcommand", ["post action"], 2, 1, ["input3.yaml"], ['input3.fierro']),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("program, subcommand, post_action, node_count, action_count, source_list, target_list",
+                         fierro_input.values(),
+                         ids=fierro_input.keys())
+def test_fierro_builder(program, subcommand, post_action, node_count, action_count, source_list, target_list):
+    env = SCons.Environment.Environment()
+    expected_string = '${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}'
+
+    env.Append(BUILDERS={"FierroBuilder": scons_extensions.fierro_builder(program=program, subcommand=subcommand, post_action=post_action)})
+    nodes = env.FierroBuilder(target=target_list, source=source_list)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
