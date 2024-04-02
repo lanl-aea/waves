@@ -23,7 +23,15 @@ workflow = []
 
 # Abaqus Solve
 workflow.extend(env.FierroExplicit(
-    target=["example_input.yaml.stdout"],
+    target=[
+        "example_input.yaml.stdout",
+        "vtk/outputs.vtk.series",
+        "vtk/data/VTK0.vtk",
+        "vtk/data/VTK1.vtk",
+        "vtk/data/VTK2.vtk",
+        "vtk/data/VTK3.vtk",
+        "vtk/data/VTK4.vtk",
+    ],
     source=["example_input.yaml"]
 ))
 
