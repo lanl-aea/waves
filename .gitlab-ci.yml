@@ -165,7 +165,6 @@ pages:
     - project_root=$PWD
     - rm -rf public && mkdir -p public/modsim-template
     # Ensure the ``_version.py`` file is created
-    - python -m setuptools_scm
     - scons html --clean && scons html
     - cp -r build/docs/html/* public/
     # Build modsim template documentation
