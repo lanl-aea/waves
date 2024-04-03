@@ -13,6 +13,10 @@ New Features
 - Draft experimental Fierro builders and add associated draft tutorial (:issue:`637`, :merge:`796`). By `Kyle
   Brindley`_.
 
+Documentation
+=============
+- Add part image supplemental lesson (:issue:`570`, :merge:`797`). By `Sergio Cordova`_.
+
 Internal Changes
 ================
 - Remove the upper bound version of setuptools_scm and use the latest version in the CI environment (:issue:`635`,
