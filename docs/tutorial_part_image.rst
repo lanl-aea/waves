@@ -46,7 +46,7 @@ Directory Structure
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_12_archival && cp tutorial_12_archival tutorial_task_reuse
+   $ waves fetch --overwrite tutorials/tutorial_12_archival && cp tutorial_12_archival tutorial_part_image
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -54,12 +54,12 @@ Directory Structure
 Part-Image script
 *****************
 
-5. In the ``waves-tutorials/modsim_package/python`` directory, create a file called ``export_abaqus_image.py`` using the
+5. In the ``waves-tutorials/modsim_package/abaqus`` directory, create a file called ``export_abaqus_image.py`` using the
    contents below.
 
-.. admonition:: waves-tutorials/modsim_package/python/export_abaqus_image.py
+.. admonition:: waves-tutorials/modsim_package/abaqus/export_abaqus_image.py
 
-   .. literalinclude:: export_abaqus_image.py
+   .. literalinclude:: abaqus_export_abaqus_image.py
       :language: Python
 
 The post-processing script is the first Python 3 script introduced in the core tutorials. It differs from the Abaqus
@@ -103,7 +103,7 @@ Build Targets
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ scons tutorial_task_reuse --jobs=4
+   $ scons tutorial_part_image --jobs=4
 
 ************
 Output Files

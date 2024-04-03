@@ -150,7 +150,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     # Part images
     images.extend(env.AbaqusJournal(
         target=[f"{set_name / model}_compression.png"],
-        source=[str(python_source_abspath / "export_abaqus_image.py")] + solve_source_list,
+        source=[str(abaqus_source_abspath / "export_abaqus_image.py")] + solve_source_list,
         journal_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
                         "--model-name ${model} --part-name ${model}",
         model=model
