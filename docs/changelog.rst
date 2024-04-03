@@ -70,6 +70,10 @@ Bug fixes
   re-arranged causing the set to appear new even if the set definition is otherwise identical. Parameter study indices may
   be inconsistent with prior versions of WAVES (:issue:`645`, :merge:`802`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Add part image supplemental lesson (:issue:`570`, :merge:`797`). By `Sergio Cordova`_.
+
 Internal Changes
 ================
 - Remove the upper bound version of setuptools_scm and use the latest version in the CI environment (:issue:`635`,
