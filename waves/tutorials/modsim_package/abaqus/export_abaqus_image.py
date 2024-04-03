@@ -8,7 +8,15 @@ import tempfile
 import abaqus
 import abaqusConstants
 
-import modsim_package.abaqus_utilities
+# Import the shared abaqus utilities, trying both tutorial directory structures.
+# Most end-users will implement only one of these structures and should replace
+# the try/except structure with a single import line, e.g.
+#
+# import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
+try:
+    import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
+except ImportError:
+    import abaqus_utilities
 
 
 default_x_angle = 0.

@@ -193,10 +193,13 @@ statement, and the ``main()`` function is called within ``sys.exit()`` for exit 
       :end-before: marker-1
 
 The ``abaqus_utilities.py`` script's purpose is to contain commonly used functions that we do not want to
-duplicate. At the moment, we have only created one function - ``export_mesh()``. The ``export_mesh`` function utilizes
-an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and ``orphan_mesh_file`` name to create an
-orphan mesh file. Orphan mesh files define the entire part's mesh in a text-based file. The node and element locations
-and labels are listed in a tabular format that the Abaqus file parser understands.
+duplicate. At the moment, we have only created two function - ``export_mesh()`` and ``return_abaqus_constant()``.
+The ``export_mesh`` function utilizes an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and
+``orphan_mesh_file`` name to create an orphan mesh file. Orphan mesh files define the entire part's mesh in a
+text-based file. The node and element locations and labels are listed in a tabular format that the Abaqus file parser
+understands. The ``return_abaqus_constant`` function utilizes a search string and will return the matching
+``abaqusConstants`` attribute if it exists. The ``return_abaqus_constant`` is not relevant to this tutorial but will be
+utilized in :ref:`tutorial_part_image`.
 
 9. In the ``modsim_package/abaqus`` directory, create a file called ``rectangle_mesh.py`` using all the contents
    below.
