@@ -193,7 +193,7 @@ statement, and the ``main()`` function is called within ``sys.exit()`` for exit 
       :end-before: marker-1
 
 The ``abaqus_utilities.py`` script's purpose is to contain commonly used functions that we do not want to
-duplicate. At the moment, we have only created two function - ``export_mesh()`` and ``return_abaqus_constant()``.
+duplicate. At the moment, we have only created two functions - ``export_mesh()`` and ``return_abaqus_constant()``.
 The ``export_mesh`` function utilizes an `Abaqus Model Object`_ :cite:`ABAQUS` along with a ``part_name`` and
 ``orphan_mesh_file`` name to create an orphan mesh file. Orphan mesh files define the entire part's mesh in a
 text-based file. The node and element locations and labels are listed in a tabular format that the Abaqus file parser
