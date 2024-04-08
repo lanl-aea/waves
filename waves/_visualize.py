@@ -103,7 +103,7 @@ def main(target: str, sconstruct: str | pathlib.Path, exclude_list: list[str], e
     if print_tree:
         print(tree_output)
         return
-    tree_dict = _visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
+    tree_dict = parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
     if not tree_dict['nodes']:  # If scons tree or input_file is not in the expected format the nodes will be empty
         print(f"Unexpected SCons tree format or missing target. Use SCons "
               f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
