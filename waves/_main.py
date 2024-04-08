@@ -95,7 +95,7 @@ def get_parser() -> argparse.ArgumentParser:
         "docs",
          help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
          description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
-                      "system default web browser"
+                      "system default web browser",
         parents=[_docs.get_parser()]
     )
 
