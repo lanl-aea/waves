@@ -9,10 +9,11 @@ import argparse
 
 from waves import _settings
 from waves import __version__
-from waves import _parameter_study
-from waves import _visualize
+from waves import _docs
 from waves import _fetch
+from waves import _visualize
 from waves import _build
+from waves import _parameter_study
 from waves.exceptions import WAVESError
 
 
@@ -26,12 +27,7 @@ def main() -> None:
 
     try:
         if args.subcommand == "docs":
-            docs(print_local_path=args.print_local_path)
-        elif args.subcommand == "build":
-            _build.main(
-                args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
-                working_directory=args.working_directory, git_clone_directory=args.git_clone_directory
-        )
+            _docs.main(print_local_path=args.print_local_path)
         elif args.subcommand == "fetch":
             root_directory = _settings._modsim_template_directory.parent
             relative_paths = _settings._fetch_subdirectories
@@ -49,6 +45,11 @@ def main() -> None:
                 vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
                 input_file=args.input_file
             )
+        elif args.subcommand == "build":
+            _build.main(
+                args.TARGET, scons_args=unknown, max_iterations=args.max_iterations,
+                working_directory=args.working_directory, git_clone_directory=args.git_clone_directory
+        )
         elif args.subcommand in _settings._parameter_study_subcommands:
             _parameter_study.main(
                 args.subcommand, args.INPUT_FILE,
@@ -90,17 +91,13 @@ def get_parser() -> argparse.ArgumentParser:
         metavar="{subcommand}",
         dest="subcommand")
 
-    docs_parser = subparsers.add_parser(
+    subparsers.add_parser(
         "docs",
          help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
          description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
                       "system default web browser"
+        parents=[_docs.get_parser()]
     )
-    docs_parser.add_argument("-p", "--print-local-path",
-                             action="store_true",
-                             help="Print the path to the locally installed documentation index file. " \
-                                  "As an alternative to the docs sub-command, open index.html in a web browser " \
-                                  "(default: %(default)s)")
 
     subparsers.add_parser(
         "fetch",
@@ -136,25 +133,6 @@ def get_parser() -> argparse.ArgumentParser:
         )
 
     return main_parser
-
-
-def docs(print_local_path: bool = False) -> None:
-    """Open the package HTML documentation in the system default web browser or print the path to the documentation
-    index file.
-
-    :param print_local_path: Flag to print the local path to terminal instead of calling the default web browser
-    """
-
-    if print_local_path:
-        if _settings._installed_docs_index.exists():
-            print(_settings._installed_docs_index, file=sys.stdout)
-        else:
-            # This should only be reached if the package installation structure doesn't match the assumptions in
-            # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
-            raise RuntimeError("Could not find package documentation HTML index file")
-    else:
-        import webbrowser
-        webbrowser.open(str(_settings._installed_docs_index))
 
 
 if __name__ == "__main__":
