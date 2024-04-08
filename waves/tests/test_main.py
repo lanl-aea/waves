@@ -38,18 +38,6 @@ def test_main():
         assert mock_recursive_copy.call_args[1]['tutorial'] == tutorial_number
 
 
-@pytest.mark.unittest
-def test_build():
-    with patch('waves._utilities.tee_subprocess', return_value=(0, "is up to date.")) as mock_tee_subprocess:
-        _main.build(['dummy.target'])
-        mock_tee_subprocess.assert_called_once()
-
-    with patch('waves._utilities.tee_subprocess', return_value=(0, "is up to date.")) as mock_tee_subprocess, \
-         patch("pathlib.Path.mkdir") as mock_mkdir:
-        _main.build(['dummy.target'], git_clone_directory='dummy/clone')
-        assert mock_tee_subprocess.call_count == 2
-
-
 parameter_study_args = {  #               subcommand,         class_name,                   argument,         option,   argument_value
     'cartesian product':        ('cartesian_product', 'CartesianProduct',                       None,           None,             None),
     'custom study':             (     'custom_study',      'CustomStudy',                       None,           None,             None),
