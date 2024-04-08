@@ -8,7 +8,7 @@ import pathlib
 import argparse
 
 from waves import _settings
-from waves._utilities import tee_subprocess
+from waves import _utilities
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -62,7 +62,7 @@ def main(targets: list, scons_args: list | None = None, max_iterations: int = 5,
         git_clone_directory.mkdir(parents=True, exist_ok=True)
         working_directory = str(git_clone_directory)
         command = ["git", "clone", "--no-hardlinks", str(current_directory), working_directory]
-        git_clone_return_code, git_clone_stdout = tee_subprocess(command)
+        git_clone_return_code, git_clone_stdout = _utilities.tee_subprocess(command)
         if git_clone_return_code != 0:
             raise RuntimeError(f"command '{' '.join(command)}' failed")
     stop_trigger = "is up to date."
@@ -80,7 +80,7 @@ def main(targets: list, scons_args: list | None = None, max_iterations: int = 5,
                                 "for every target")
         print(f"\n{_settings._project_name_short.lower()} build iteration {count}: '{' '.join(command)}'\n",
               file=sys.stdout)
-        scons_return_code, scons_stdout = tee_subprocess(command, cwd=working_directory)
+        scons_return_code, scons_stdout = _utilities.tee_subprocess(command, cwd=working_directory)
         if scons_return_code != 0:
             raise RuntimeError(f"command '{' '.join(command)}' failed")
         trigger_count = scons_stdout.count(stop_trigger)

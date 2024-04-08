@@ -3,7 +3,10 @@
 Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVESError` to allow the CLI implementation
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
+import sys
 import argparse
+
+from waves import _settings
 
 
 _exclude_from_namespace = set(globals().keys())
