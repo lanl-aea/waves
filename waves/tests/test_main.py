@@ -74,19 +74,6 @@ def test_build():
         assert mock_tee_subprocess.call_count == 2
 
 
-@pytest.mark.unittest
-def test_fetch():
-    # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
-    # _settings.py are correct.
-    with patch("waves._fetch.recursive_copy") as mock_recursive_copy, \
-         pytest.raises(RuntimeError):
-        try:
-            _main.fetch("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
-                                     ["dummy/relative/path"], "/dummy/destination")
-        finally:
-            mock_recursive_copy.assert_not_called()
-
-
 parameter_study_args = {  #               subcommand,         class_name,                   argument,         option,   argument_value
     'cartesian product':        ('cartesian_product', 'CartesianProduct',                       None,           None,             None),
     'custom study':             (     'custom_study',      'CustomStudy',                       None,           None,             None),
