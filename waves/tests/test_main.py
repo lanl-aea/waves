@@ -12,13 +12,13 @@ from waves import _settings
 @pytest.mark.unittest
 def test_main():
     with patch('sys.argv', ['waves.py', 'docs']), \
-         patch("waves._main.docs") as mock_docs:
+         patch("waves.docs._main") as mock_docs:
         _main.main()
         mock_docs.assert_called()
 
     target_string = 'dummy.target'
     with patch('sys.argv', ['waves.py', 'build', target_string]), \
-         patch("waves._main.build") as mock_build:
+         patch("waves._build.main") as mock_build:
         _main.main()
         mock_build.assert_called_once()
         assert mock_build.call_args[0][0] == [target_string]
@@ -36,30 +36,6 @@ def test_main():
         _main.main()
         mock_recursive_copy.assert_called_once()
         assert mock_recursive_copy.call_args[1]['tutorial'] == tutorial_number
-
-
-@pytest.mark.unittest
-def test_docs():
-    with patch('webbrowser.open') as mock_webbrowser_open:
-        _main.docs()
-        # Make sure the correct type is passed to webbrowser.open
-        mock_webbrowser_open.assert_called_with(str(_settings._installed_docs_index))
-
-    with patch('webbrowser.open') as mock_webbrowser_open, \
-         patch('pathlib.Path.exists', return_value=True), \
-         does_not_raise():
-        _main.docs(print_local_path=True)
-        mock_webbrowser_open.assert_not_called()
-
-    # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
-    # _settings.py are correct.
-    with patch('webbrowser.open') as mock_webbrowser_open, \
-         patch('pathlib.Path.exists', return_value=False), \
-         pytest.raises(RuntimeError):
-        try:
-            _main.docs(print_local_path=True)
-        finally:
-            mock_webbrowser_open.assert_not_called()
 
 
 @pytest.mark.unittest
