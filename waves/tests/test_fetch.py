@@ -22,6 +22,19 @@ two_file_source_tree = [root_directory / path for path in source_files]
 two_file_destination_tree = [destination / path for path in source_files]
 
 
+@pytest.mark.unittest
+def test_fetch():
+    # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
+    # _settings.py are correct.
+    with patch("waves._fetch.recursive_copy") as mock_recursive_copy, \
+         pytest.raises(RuntimeError):
+        try:
+            _fetch.main("dummy_subcommand", pathlib.Path("/directory/assumptions/are/wrong"),
+                        ["dummy/relative/path"], "/dummy/destination")
+        finally:
+            mock_recursive_copy.assert_not_called()
+
+
 conditional_copy_input = {
     "one new file": (  # File does not exist
         one_file_copy_tuples,
