@@ -1,5 +1,4 @@
 """Test command line utility and associated functions"""
-import pathlib
 from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
