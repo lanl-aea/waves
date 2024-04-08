@@ -23,6 +23,8 @@ Internal Changes
   :merge:`794`). By `Kyle Brindley`_.
 - Add ``FierroMechanics`` channel and ``fierro-cpu`` to CI compute environment in preparation for draft Fierro builder
   support (:issue:`636`, :merge:`795`). By `Kyle Brindley`_.
+- Separate subcommand implementations into supporting modules for reduced clutter in main CLI implementation
+  (:issue:`641`, :merge:`798`). By `Kyle Brindley`_.
 
 ******************
 0.8.1 (2024-04-01)
