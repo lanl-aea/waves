@@ -11,6 +11,7 @@ import subprocess
 from waves import _settings
 from waves import __version__
 from waves import _parameter_study
+from waves import _visualize
 from waves.exceptions import WAVESError
 
 
@@ -127,36 +128,9 @@ def get_parser() -> argparse.ArgumentParser:
     visualize_parser = subparsers.add_parser(
         "visualize",
         help="Create an SCons project visualization",
-        description="Create a visual representation of the directed acyclic graph used by your SCons project "
+        description="Create a visual representation of the directed acyclic graph used by your SCons project.",
+        parents=[_visualize.get_parser()]
     )
-    visualize_parser.add_argument("TARGET", help=f"SCons target")
-    visualize_parser.add_argument("--sconstruct", type=str, default="SConstruct",
-        help="Path to SConstruct file (default: %(default)s)")
-    visualize_parser.add_argument("-o", "--output-file", type=str,
-        help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
-             "(default: %(default)s)")
-    visualize_parser.add_argument("--height", type=int, default=12,
-        help="Height of visualization in inches if being saved to a file (default: %(default)s)")
-    visualize_parser.add_argument("--width", type=int, default=36,
-        help="Width of visualization in inches if being saved to a file (default: %(default)s)")
-    visualize_parser.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
-        help="Font size of file names in points (default: %(default)s)")
-    visualize_parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
-        help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
-    visualize_parser.add_argument("-r", "--exclude-regex", type=str,
-        help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
-    print_group = visualize_parser.add_mutually_exclusive_group()
-    print_group.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
-        help="Print the visualization in graphml format (default: %(default)s)")
-    print_group.add_argument("--print-tree", action="store_true",
-        help="Print the output of the scons tree command to the screen (default: %(default)s)")
-    visualize_parser.add_argument("--vertical", action="store_true",
-        help="Display the graph in a vertical layout (default: %(default)s)")
-    visualize_parser.add_argument("-n", "--no-labels", action="store_true",
-        help="Create visualization without labels on the nodes (default: %(default)s)")
-    visualize_parser.add_argument("--input-file", type=str,
-        help="Path to text file with output from scons tree command (default: %(default)s). Scons target must "
-             "still be specified and must be present in the input file.")
 
     build_parser = subparsers.add_parser(
         'build',
