@@ -65,7 +65,7 @@ def get_parser() -> argparse.ArgumentParser:
     :return: parser
     """
     main_description = \
-        f"Provides a minimal SCons build wrapper, access to locally packaged HTML " \
+        f"Provides a parameter generator, minimal SCons build wrapper, access to locally packaged HTML " \
          "documentation, and modsim template file generator."
     main_parser = argparse.ArgumentParser(
         description=main_description,
@@ -82,27 +82,27 @@ def get_parser() -> argparse.ArgumentParser:
         metavar="{subcommand}",
         dest="subcommand")
 
-    docs_parser = argparse.ArgumentParser(add_help=False)
-    docs_parser = subparsers.add_parser('docs',
-            help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
-            description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
-                         "system default web browser",
-            parents=[docs_parser])
+    docs_parser = subparsers.add_parser(
+        'docs',
+         help=f"Open the {_settings._project_name_short.upper()} HTML documentation",
+         description=f"Open the packaged {_settings._project_name_short.upper()} HTML documentation in the  " \
+                      "system default web browser"
+    )
     docs_parser.add_argument('-p', '--print-local-path',
                              action='store_true',
                              help="Print the path to the locally installed documentation index file. " \
                                   "As an alternative to the docs sub-command, open index.html in a web browser " \
                                   "(default: %(default)s)")
 
-    fetch_parser = argparse.ArgumentParser(add_help=False)
-    fetch_parser = subparsers.add_parser('fetch',
+    fetch_parser = subparsers.add_parser(
+        'fetch',
         help="Fetch and copy WAVES modsim template files and directories",
         description="Fetch and copy WAVES modsim template files and directories. If no ``FILE`` is specified, " \
             "all available files will be created. Directories are recursively copied. ``pathlib.Path`` recursive " \
             "pattern matching is possible. The source path is truncated to use the shortest common file prefix, " \
             "e.g. requesting two files ``common/source/file.1`` and ``common/source/file.2`` will create " \
-            "``/destination/file.1`` and ``/destination/file.2``, respectively.",
-        parents=[fetch_parser])
+            "``/destination/file.1`` and ``/destination/file.2``, respectively."
+    )
     fetch_parser.add_argument("FILE", nargs="*",
                               help=f"modsim template file or directory")
     fetch_parser.add_argument("--destination",
@@ -124,11 +124,11 @@ def get_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Print available modsim template files and exit (default: %(default)s)")
 
-    visualize_parser = argparse.ArgumentParser(add_help=False)
-    visualize_parser = subparsers.add_parser("visualize",
+    visualize_parser = subparsers.add_parser(
+        "visualize",
         help="Create an SCons project visualization",
-        description="Create a visual representation of the directed acyclic graph used by your SCons project ",
-        parents=[visualize_parser])
+        description="Create a visual representation of the directed acyclic graph used by your SCons project "
+    )
     visualize_parser.add_argument("TARGET", help=f"SCons target")
     visualize_parser.add_argument("--sconstruct", type=str, default="SConstruct",
         help="Path to SConstruct file (default: %(default)s)")
@@ -158,11 +158,11 @@ def get_parser() -> argparse.ArgumentParser:
         help="Path to text file with output from scons tree command (default: %(default)s). Scons target must "
              "still be specified and must be present in the input file.")
 
-    build_parser = argparse.ArgumentParser(add_help=False)
-    build_parser = subparsers.add_parser('build',
+    build_parser = subparsers.add_parser(
+        'build',
         help="Thin SCons wrapper",
-        description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date.",
-        parents=[build_parser])
+        description="Thin SCons wrapper to programmatically re-run SCons until all targets are reported up-to-date."
+    )
     build_parser.add_argument("TARGET", nargs="+",
                               help=f"SCons target list")
     build_parser.add_argument("-m", "--max-iterations", type=int, default=5,
