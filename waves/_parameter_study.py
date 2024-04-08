@@ -20,7 +20,11 @@ from waves import parameter_generators
 _exclude_from_namespace = set(globals().keys())
 
 
-def parameter_study_parser() -> argparse.ArgumentParser:
+def get_parser() -> argparse.ArgumentParser:
+    """Return a 'no-help' parser for the parameter study subcommand(s)
+
+    :return: parser
+    """
     # Required positional option
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument('INPUT_FILE', nargs='?', default=(None if sys.stdin.isatty() else sys.stdin),
@@ -89,16 +93,16 @@ def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper | No
     return parameter_schema
 
 
-def parameter_study(subcommand: str,
-                    input_file: str | pathlib.Path | io.TextIOWrapper | None,
-                    output_file_template: str = parameter_generators._default_output_file_template,
-                    output_file: str = parameter_generators._default_output_file,
-                    output_file_type: typing.Literal["yaml", "h5"] = parameter_generators._default_output_file_type,
-                    set_name_template: str = parameter_generators._default_set_name_template,
-                    previous_parameter_study: str = parameter_generators._default_previous_parameter_study,
-                    overwrite: bool = parameter_generators._default_overwrite,
-                    dryrun: bool = parameter_generators._default_dryrun,
-                    write_meta: bool = parameter_generators._default_write_meta) -> None:
+def main(subcommand: str,
+         input_file: str | pathlib.Path | io.TextIOWrapper | None,
+         output_file_template: str = parameter_generators._default_output_file_template,
+         output_file: str = parameter_generators._default_output_file,
+         output_file_type: typing.Literal["yaml", "h5"] = parameter_generators._default_output_file_type,
+         set_name_template: str = parameter_generators._default_set_name_template,
+         previous_parameter_study: str = parameter_generators._default_previous_parameter_study,
+         overwrite: bool = parameter_generators._default_overwrite,
+         dryrun: bool = parameter_generators._default_dryrun,
+         write_meta: bool = parameter_generators._default_write_meta) -> None:
     """Build parameter studies
 
     :param str subcommand: parameter study type to build
