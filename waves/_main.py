@@ -36,12 +36,14 @@ def main() -> None:
                   requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
                   dry_run=args.dry_run, print_available=args.print_available)
         elif args.subcommand == 'visualize':
-            visualization(target=args.TARGET, output_file=args.output_file,
-                          sconstruct=args.sconstruct, print_graphml=args.print_graphml,
-                          exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
-                          height=args.height, width=args.width, font_size=args.font_size,
-                          vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
-                          input_file=args.input_file)
+            _visualize.main(
+                target=args.TARGET, output_file=args.output_file,
+                sconstruct=args.sconstruct, print_graphml=args.print_graphml,
+                exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
+                height=args.height, width=args.width, font_size=args.font_size,
+                vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
+                input_file=args.input_file
+        )
         elif args.subcommand in _settings._parameter_study_subcommands:
             _parameter_study.parameter_study(
                 args.subcommand, args.INPUT_FILE,
@@ -266,66 +268,6 @@ def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: l
     _fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
                           tutorial=tutorial, overwrite=overwrite, dry_run=dry_run,
                           print_available=print_available)
-
-
-def visualization(target: str, sconstruct: str | pathlib.Path, exclude_list: list[str], exclude_regex: str,
-                  output_file: str | pathlib.Path | None = None, print_graphml: bool = False,
-                  height: int = _settings._visualize_default_height, width: int = _settings._visualize_default_width,
-                  font_size: int = _settings._visualize_default_font_size, vertical: bool = False,
-                  no_labels: bool = False, print_tree: bool = False,
-                  input_file: str | pathlib.Path | None = None) -> None:
-    """Visualize the directed acyclic graph created by a SCons build
-
-    Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
-    dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
-    as well.
-
-    :param target: String specifying an SCons target
-    :param sconstruct: Path to an SConstruct file or parent directory
-    :param exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
-    :param exclude_regex: exclude nodes that match this regular expression
-    :param output_file: File for saving the visualization
-    :param print_graphml: Whether to print the graph in graphml format
-    :param height: Height of visualization if being saved to a file
-    :param width: Width of visualization if being saved to a file
-    :param font_size: Font size of node labels
-    :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
-    :param no_labels: Don't print labels on the nodes of the visualization
-    :param print_tree: Print the text output of the scons --tree command to the screen
-    :param input_file: Path to text file storing output from scons tree command
-    """
-    from waves import _visualize
-    sconstruct = pathlib.Path(sconstruct).resolve()
-    if not sconstruct.is_file():
-        sconstruct = sconstruct / "SConstruct"
-    if not sconstruct.exists() and not input_file:
-        raise RuntimeError(f"\t{sconstruct} does not exist.")
-    tree_output = ""
-    if input_file:
-        input_file = pathlib.Path(input_file)
-        if not input_file.exists():
-            raise RuntimeError(f"\t{input_file} does not exist.")
-        else:
-            tree_output = input_file.read_text()
-    else:
-        scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
-        scons_command.extend(_settings._scons_visualize_arguments)
-        scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
-        tree_output = scons_stdout.decode("utf-8")
-    if print_tree:
-        print(tree_output)
-        return
-    tree_dict = _visualize.parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
-    if not tree_dict['nodes']:  # If scons tree or input_file is not in the expected format the nodes will be empty
-        print(f"Unexpected SCons tree format or missing target. Use SCons "
-              f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
-              f"the ``visualize --print-tree`` option to generate the input file.", file=sys.stderr)
-        return
-
-    if print_graphml:
-        print(tree_dict['graphml'], file=sys.stdout)
-        return
-    _visualize.visualize(tree_dict, output_file, height, width, font_size, vertical, no_labels)
 
 
 if __name__ == "__main__":
