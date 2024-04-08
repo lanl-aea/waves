@@ -12,7 +12,7 @@ from waves import _settings
 @pytest.mark.unittest
 def test_main():
     with patch('sys.argv', ['waves.py', 'docs']), \
-         patch("waves.docs._main") as mock_docs:
+         patch("waves._docs.main") as mock_docs:
         _main.main()
         mock_docs.assert_called()
 
