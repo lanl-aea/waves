@@ -65,6 +65,16 @@ _visualize.py
    :show-inheritance:
    :synopsis: waves module supporting the visualize subcommand
 
+*********
+_build.py
+*********
+
+.. automodule:: waves._build
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
+
 *******************
 _parameter_study.py
 *******************
