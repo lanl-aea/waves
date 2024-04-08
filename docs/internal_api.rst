@@ -41,7 +41,16 @@ _main.py
    :members:
    :private-members:
    :show-inheritance:
-   :synopsis: waves command-line utility
+
+********
+_docs.py
+********
+
+.. automodule:: waves._docs
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
 
 *********
 _fetch.py
@@ -52,7 +61,6 @@ _fetch.py
    :members:
    :private-members:
    :show-inheritance:
-   :synopsis: waves module supporting the fetch subcommand
 
 *************
 _visualize.py
@@ -63,7 +71,6 @@ _visualize.py
    :members:
    :private-members:
    :show-inheritance:
-   :synopsis: waves module supporting the visualize subcommand
 
 *********
 _build.py
@@ -103,7 +110,6 @@ odb_extract.py
     :members:
     :private-members:
     :show-inheritance:
-    :synopsis: Extracts an odbreport file produced by Abaqus
 
 **********************
 Odb Report File Parser
