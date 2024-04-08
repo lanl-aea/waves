@@ -16,6 +16,10 @@ from waves import _settings
 _exclude_from_namespace = set(globals().keys())
 
 
+def get_parser():
+    pass
+
+
 def parse_output(tree_lines: list, exclude_list: list, exclude_regex: str) -> dict:
     """
     Parse the string that has the tree output and store it in a dictionary
