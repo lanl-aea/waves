@@ -12,6 +12,7 @@ from waves import _settings
 from waves import __version__
 from waves import _parameter_study
 from waves import _visualize
+from waves import _fetch
 from waves.exceptions import WAVESError
 
 
@@ -32,9 +33,11 @@ def main() -> None:
         elif args.subcommand == 'fetch':
             root_directory = _settings._modsim_template_directory.parent
             relative_paths = _settings._fetch_subdirectories
-            fetch(args.subcommand, root_directory, relative_paths, args.destination,
-                  requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
-                  dry_run=args.dry_run, print_available=args.print_available)
+            _fetch.main(
+                args.subcommand, root_directory, relative_paths, args.destination,
+                requested_paths=args.FILE, tutorial=args.tutorial, overwrite=args.overwrite,
+                dry_run=args.dry_run, print_available=args.print_available
+            )
         elif args.subcommand == 'visualize':
             _visualize.main(
                 target=args.TARGET, output_file=args.output_file,
@@ -43,7 +46,7 @@ def main() -> None:
                 height=args.height, width=args.width, font_size=args.font_size,
                 vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
                 input_file=args.input_file
-        )
+            )
         elif args.subcommand in _settings._parameter_study_subcommands:
             _parameter_study.parameter_study(
                 args.subcommand, args.INPUT_FILE,
@@ -104,28 +107,9 @@ def get_parser() -> argparse.ArgumentParser:
             "all available files will be created. Directories are recursively copied. ``pathlib.Path`` recursive " \
             "pattern matching is possible. The source path is truncated to use the shortest common file prefix, " \
             "e.g. requesting two files ``common/source/file.1`` and ``common/source/file.2`` will create " \
-            "``/destination/file.1`` and ``/destination/file.2``, respectively."
+            "``/destination/file.1`` and ``/destination/file.2``, respectively.",
+        parents=[_fetch.get_parser()]
     )
-    fetch_parser.add_argument("FILE", nargs="*",
-                              help=f"modsim template file or directory")
-    fetch_parser.add_argument("--destination",
-        help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
-             "destination will not be copied. (default: PWD)",
-        type=pathlib.Path,
-        default=pathlib.Path().cwd())
-    fetch_parser.add_argument("--tutorial",
-        help="Fetch all necessary files for specified tutorial. Appends to the positional FILE requests.",
-        type=int,
-        choices=_settings._tutorial_paths.keys())
-    fetch_parser.add_argument("--overwrite",
-        action="store_true",
-        help="Overwrite any existing files (default: %(default)s)")
-    fetch_parser.add_argument("--dry-run",
-        action="store_true",
-        help="Print the destination tree and exit (default: %(default)s)")
-    fetch_parser.add_argument("--print-available",
-        action="store_true",
-        help="Print available modsim template files and exit (default: %(default)s)")
 
     visualize_parser = subparsers.add_parser(
         "visualize",
@@ -230,44 +214,6 @@ def build(targets: list, scons_args: list | None = None, max_iterations: int = 5
         if scons_return_code != 0:
             raise RuntimeError(f"command '{' '.join(command)}' failed")
         trigger_count = scons_stdout.count(stop_trigger)
-
-
-def fetch(subcommand: str, root_directory: str | pathlib.Path, relative_paths: list[str | pathlib.Path],
-          destination: str | pathlib.Path, requested_paths: list[str | pathlib.Path] | None = None,
-          tutorial: int | None = None, overwrite: bool = False, dry_run: bool = False,
-          print_available: bool = False) -> None:
-    """Thin wrapper on :meth:`waves.fetch.recursive_copy` to provide subcommand specific behavior and STDOUT/STDERR
-
-    Recursively copy requested paths from root_directory/relative_paths directories into destination directory using
-    the shortest possible shared source prefix.
-
-    :param subcommand: name of the subcommand to report in STDOUT
-    :param root_directory: String or pathlike object for the root_directory directory
-    :param relative_paths: List of string or pathlike objects describing relative paths to search for in
-        root_directory
-    :param destination: String or pathlike object for the destination directory
-    :param requested_paths: list of relative path-like objects that subset the files found in the
-        ``root_directory`` ``relative_paths``
-    :param tutorial: Integer to fetch all necessary files for the specified tutorial number
-    :param overwrite: Boolean to overwrite any existing files in destination directory
-    :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
-    :param print_available: Print the available source files and exit. Short circuits ``dry_run``
-    """
-    if not requested_paths:
-        requested_paths = []
-    if not root_directory.is_dir():
-        # During "waves fetch" sub-command, this should only be reached if the package installation
-        # structure doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a
-        # sign-of-life that the installed directory assumptions are correct.
-        raise RuntimeError(f"Could not find '{root_directory}' directory")
-
-    from waves import _fetch
-
-    print(f"{_settings._project_name_short} {subcommand}", file=sys.stdout)
-    print(f"Destination directory: '{destination}'", file=sys.stdout)
-    _fetch.recursive_copy(root_directory, relative_paths, destination, requested_paths=requested_paths,
-                          tutorial=tutorial, overwrite=overwrite, dry_run=dry_run,
-                          print_available=print_available)
 
 
 if __name__ == "__main__":
