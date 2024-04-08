@@ -11,7 +11,14 @@ from waves import _settings
 from waves._utilities import tee_subprocess
 
 
+_exclude_from_namespace = set(globals().keys())
+
+
 def get_parser() -> argparse.ArgumentParser:
+    """Return a 'no-help' parser for the build subcommand
+
+    :return: parser
+    """
     parser = argparse.ArgumentParser(add_help=False)
 
     parser.add_argument("TARGET", nargs="+",
@@ -77,3 +84,8 @@ def main(targets: list, scons_args: list | None = None, max_iterations: int = 5,
         if scons_return_code != 0:
             raise RuntimeError(f"command '{' '.join(command)}' failed")
         trigger_count = scons_stdout.count(stop_trigger)
+
+
+# Limit help() and 'from module import *' behavior to the module's public API
+_module_objects = set(globals().keys()) - _exclude_from_namespace
+__all__ = [name for name in _module_objects if not name.startswith("_")]
