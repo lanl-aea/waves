@@ -12,6 +12,7 @@ New Features
 ============
 - Draft experimental Fierro builders and add associated draft tutorial (:issue:`637`, :merge:`796`). By `Kyle
   Brindley`_.
+- Draft experimental Ansys APDL builder (:issue:`800`). By `Kyle Brindley`_.
 
 Documentation
 =============
