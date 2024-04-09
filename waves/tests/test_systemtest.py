@@ -1,4 +1,5 @@
 import os
+import shlex
 import string
 import pathlib
 import tempfile
@@ -121,14 +122,14 @@ def test_modsim_template() -> None:
     """Fetch and run the modsim template as a system test in a temporary directory"""
     with tempfile.TemporaryDirectory() as temp_directory:
         command = f"{waves_command} fetch modsim_template --destination {temp_directory}"
-        command = command.split(" ")
+        command = shlex.split(command)
         subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
 
         command = "scons . --jobs=4"
-        command = command.split(" ")
+        command = shlex.split(command)
         subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
 
         output_file = pathlib.Path(temp_directory) / "nominal.svg"
         command = f"{waves_command} visualize nominal --output-file {output_file}"
-        command = command.split(" ")
+        command = shlex.split(command)
         subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
