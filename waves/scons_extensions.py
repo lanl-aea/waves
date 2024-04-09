@@ -1758,6 +1758,7 @@ def fierro_builder(
     :param str subcommand: A Fierro subcommand
     :param str required: A space delimited string of subcommand required arguments
     :param str options: A space delimited string of subcommand optional arguments
+    :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro builder
     :rtype: SCons.Builder.Builder
@@ -1766,7 +1767,7 @@ def fierro_builder(
         "${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}"
     ]
     action = construct_action_list(action, prefix="${cd_action_prefix}")
-    action.extend(construct_action_list(post_action))
+    action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -1916,6 +1917,80 @@ def fierro_implicit(
         required=required,
         options=options,
         post_action=post_action
+    )
+    return builder
+
+
+def ansys_apld(
+    program="ansys",
+    required="-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
+    options="",
+    post_action: list = []
+) -> SCons.Builder.Builder:
+    """Return an Ansys APDL builder.
+
+    .. warning::
+
+       This is an experimental builder for Ansys support. The only emitted file is the ``target[0].stdout`` redirected
+       STDOUT and STDERR file. All relevant application output files, e.g. ``*.rst`` must be specified in the target list.
+
+    At least one target must be specified. The first target determines the working directory for the builder's action.
+    The action changes the working directory to the first target's parent directory prior to execution.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
+    ``target.stdout``.
+
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Ansys command line executable absolute or relative path
+    * ``required``: A space delimited string of subcommand required arguments
+    * ``options``: A space delimited string of subcommand optional arguments
+    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults.
+
+    .. code-block::
+       :caption: action string construction
+
+       ${cd_action_prefix} ${program} ${required} ${options} ${redirect_action_postfix}
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env["ansys"] = waves.scons_extensions.add_program(["ansys232"], env)
+       env.Append(BUILDERS={
+            "AnsysAPDL": waves.scons_extensions.ansys_apdl(
+                program=env["ansys]
+            )
+       })
+       env.AnsysAPDL(
+           target=["job.rst"],
+           source=["source.dat"],
+           options="-j job"
+       )
+
+    :param str program: The Ansys command line executable absolute or relative path
+    :param str required: A space delimited string of subcommand required arguments
+    :param str options: A space delimited string of subcommand optional arguments
+    :param list post_action: List of shell command string(s) to append to the builder's action list.
+
+    :returns: SCons Fierro builder
+    :rtype: SCons.Builder.Builder
+    """
+    action = [
+        "${program} ${required} ${options}"
+    ]
+    action = construct_action_list(action, prefix="${cd_action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
+    builder = SCons.Builder.Builder(
+        action=action,
+        emitter=_first_target_emitter,
+        cd_action_prefix=_cd_action_prefix,
+        program=program,
+        required=required,
+        options=options
     )
     return builder
 
