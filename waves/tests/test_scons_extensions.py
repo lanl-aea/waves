@@ -160,7 +160,8 @@ def test_ssh_builder_actions():
     assert ssh_python_builder_action_list == expected
 
 
-def check_action_string(nodes, post_action, node_count, action_count, expected_string):
+def check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="cd ${TARGET.dir.abspath} &&"):
     """Verify the expected action string against a builder's target nodes
 
     :param SCons.Node.NodeList nodes: Target node list returned by a builder
@@ -177,7 +178,7 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
        finalized action list.
     """
     for action in post_action:
-        expected_string = expected_string + f"\ncd ${{TARGET.dir.abspath}} && {action}"
+        expected_string = expected_string + f"\n{post_action_prefix} {action}"
     assert len(nodes) == node_count
     for node in nodes:
         node.get_executor()
@@ -1005,7 +1006,8 @@ def test_fierro_builder(program, subcommand, post_action, node_count, action_cou
 
     env.Append(BUILDERS={"FierroBuilder": scons_extensions.fierro_builder(program=program, subcommand=subcommand, post_action=post_action)})
     nodes = env.FierroBuilder(target=target_list, source=source_list)
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${cd_action_prefix}")
     for node in nodes:
         assert node.env['program'] == program
         assert node.env['subcommand'] == subcommand
@@ -1028,7 +1030,8 @@ def test_fierro_explicit(post_action, node_count, action_count, source_list, tar
 
     env.Append(BUILDERS={"FierroExplicit": scons_extensions.fierro_explicit(post_action=post_action)})
     nodes = env.FierroExplicit(target=target_list, source=source_list)
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${cd_action_prefix}")
     for node in nodes:
         assert node.env['program'] == "fierro"
         assert node.env['subcommand'] == "parallel-explicit"
@@ -1051,7 +1054,33 @@ def test_fierro_implicit(post_action, node_count, action_count, source_list, tar
 
     env.Append(BUILDERS={"FierroImplicit": scons_extensions.fierro_implicit(post_action=post_action)})
     nodes = env.FierroImplicit(target=target_list, source=source_list)
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${cd_action_prefix}")
     for node in nodes:
         assert node.env['program'] == "fierro"
         assert node.env['subcommand'] == "parallel-implicit"
+
+
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+ansys_apdl_input = {
+    "default behavior": ("ansys232", [], 2, 1, ["input1.dat"], ['input1.ansys']),
+    "different command": ("dummy", [], 2, 1, ["input2.dat"], ['input2.ansys']),
+    "post action": ("ansys", ["post action"], 2, 1, ["input3.dat"], ['input3.ansys']),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("program, post_action, node_count, action_count, source_list, target_list",
+                         ansys_apdl_input.values(),
+                         ids=ansys_apdl_input.keys())
+def test_ansys_apdl(program, post_action, node_count, action_count, source_list, target_list):
+    env = SCons.Environment.Environment()
+    expected_string = '${cd_action_prefix} ${program} ${required} ${options}'
+
+    env.Append(BUILDERS={"AnsysAPDL": scons_extensions.ansys_apdl(program=program, post_action=post_action)})
+    nodes = env.AnsysAPDL(target=target_list, source=source_list)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${cd_action_prefix}")
+    for node in nodes:
+        assert node.env['program'] == program

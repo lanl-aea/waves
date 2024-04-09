@@ -1921,7 +1921,7 @@ def fierro_implicit(
     return builder
 
 
-def ansys_apld(
+def ansys_apdl(
     program="ansys",
     required="-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
     options="",
