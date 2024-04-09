@@ -1931,6 +1931,11 @@ def ansys_apld(
 
     .. warning::
 
+       This builder does not have a tutorial and is not included in the regression test suite yet. Contact the
+       development team if you encounter problems or have recommendations for improved design behavior.
+
+    .. warning::
+
        This is an experimental builder for Ansys support. The only emitted file is the ``target[0].stdout`` redirected
        STDOUT and STDERR file. All relevant application output files, e.g. ``*.rst`` must be specified in the target list.
 
