@@ -365,6 +365,7 @@ class _ParameterGenerator(ABC):
         * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         """
         self._parameter_set_hashes = []
+        import pdb; pdb.set_trace()
         if hasattr(self, _quantiles_attribute_key):
             for sample_row, quantile_row in zip(self._samples, self._quantiles):
                 set_catenation = "\n".join(f"{name}:{repr(sample)}-{repr(quantile)}" for name, sample, quantile in
@@ -446,7 +447,7 @@ class _ParameterGenerator(ABC):
         array = xarray.DataArray(
             data,
             coords=[self._parameter_set_hashes, self._parameter_names],
-            dims=["parameter_set_hash", "parameters"],
+            dims=[_hash_coordinate_key, _parameter_coordinate_key],
             name=name
         )
         return array
@@ -472,9 +473,9 @@ class _ParameterGenerator(ABC):
         if hasattr(self, _quantiles_attribute_key):
             quantiles = self._create_parameter_array(self._quantiles, name="quantiles")
             self.parameter_study = xarray.concat([quantiles, samples],
-                    xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset("parameters")
+                    xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset(_parameter_coordinate_key)
         else:
-            self.parameter_study = samples.to_dataset("parameters").expand_dims(data_type=["samples"])
+            self.parameter_study = samples.to_dataset(_parameter_coordinate_key).expand_dims(data_type=["samples"])
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
