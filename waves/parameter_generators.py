@@ -375,13 +375,14 @@ class _ParameterGenerator(ABC):
         self._parameter_set_hashes = []
         if hasattr(self, _quantiles_attribute_key):
             for sample_row, quantile_row in zip(self._samples, self._quantiles):
-                set_catenation = "\n".join(f"{name}:{repr(sample)}-{repr(quantile)}" for name, sample, quantile in
-                                           zip(self._parameter_names, sample_row, quantile_row))
+                sorted_contents = sorted(zip(self._parameter_names, sample_row, quantile_row))
+                set_catenation = "\n".join(f"{name}:{repr(sample)}-{repr(quantile)}" for name, sample, quantile in sorted_contents)
                 set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
                 self._parameter_set_hashes.append(set_hash)
         else:
             for sample_row in self._samples:
-                set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in zip(self._parameter_names, sample_row))
+                sorted_contents = sorted(zip(self._parameter_names, sample_row))
+                set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
                 set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
                 self._parameter_set_hashes.append(set_hash)
 
