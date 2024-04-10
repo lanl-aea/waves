@@ -21,6 +21,7 @@ _scons_tree_status = {'E': 'exists', 'R': 'exists in repository only', 'b': 'imp
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"
+_parameter_coordinate_key = "parameters"
 _set_coordinate_key = "parameter_sets"
 _quantiles_attribute_key = "_quantiles"
 _cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
