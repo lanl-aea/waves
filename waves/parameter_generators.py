@@ -18,7 +18,12 @@ import xarray
 import scipy.stats
 import SALib
 
-from waves._settings import _hash_coordinate_key, _set_coordinate_key, _quantiles_attribute_key
+from waves._settings import _hash_coordinate_key
+from waves._settings import _parameter_coordinate_key
+from waves._settings import _set_coordinate_key
+from waves._settings import _samples_data_variable
+from waves._settings import _quantiles_data_variable
+from waves._settings import _quantiles_attribute_key
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
@@ -26,20 +31,23 @@ _exclude_from_namespace = set(globals().keys())
 
 
 # ========================================================================================================= SETTINGS ===
-_template_delimiter = '@'
+_template_delimiter = "@"
 _template_placeholder = f"{_template_delimiter}number"
 
 _default_output_file_template = None
 _default_output_file = None
-_default_set_name_template = f'parameter_set{_template_placeholder}'
+_default_set_name_template = f"parameter_set{_template_placeholder}"
 _default_previous_parameter_study = None
 _default_overwrite = False
 _default_dryrun = False
 _default_write_meta = False
 
 _parameter_study_meta_file = "parameter_study_meta.txt"
-_allowable_output_file_types = ['yaml', 'h5']
+_allowable_output_file_types = ["yaml", "h5"]
+_allowable_output_file_typing = typing.Literal["yaml", "h5"]
 _default_output_file_type = _allowable_output_file_types[0]
+
+_allowable_data_type = typing.Literal[_samples_data_variable, _quantiles_data_variable]
 
 
 class _AtSignTemplate(string.Template):
@@ -76,7 +84,7 @@ class _ParameterGenerator(ABC):
     def __init__(self, parameter_schema: dict,
                  output_file_template: str = _default_output_file_template,
                  output_file: str = _default_output_file,
-                 output_file_type: typing.Literal["yaml", "h5"] = _default_output_file_type,
+                 output_file_type: _allowable_output_file_typing = _default_output_file_type,
                  set_name_template: str = _default_set_name_template,
                  previous_parameter_study: str = _default_previous_parameter_study,
                  overwrite: bool = _default_overwrite,
@@ -365,7 +373,6 @@ class _ParameterGenerator(ABC):
         * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         """
         self._parameter_set_hashes = []
-        import pdb; pdb.set_trace()
         if hasattr(self, _quantiles_attribute_key):
             for sample_row, quantile_row in zip(self._samples, self._quantiles):
                 set_catenation = "\n".join(f"{name}:{repr(sample)}-{repr(quantile)}" for name, sample, quantile in
@@ -469,17 +476,17 @@ class _ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         """
-        samples = self._create_parameter_array(self._samples, name="samples")
+        samples = self._create_parameter_array(self._samples, name=_samples_data_variable)
         if hasattr(self, _quantiles_attribute_key):
-            quantiles = self._create_parameter_array(self._quantiles, name="quantiles")
+            quantiles = self._create_parameter_array(self._quantiles, name=_quantiles_data_variable)
             self.parameter_study = xarray.concat([quantiles, samples],
-                    xarray.DataArray(["quantiles", "samples"], dims="data_type")).to_dataset(_parameter_coordinate_key)
+                    xarray.DataArray([_quantiles_data_variable, _samples_data_variable], dims="data_type")).to_dataset(_parameter_coordinate_key)
         else:
-            self.parameter_study = samples.to_dataset(_parameter_coordinate_key).expand_dims(data_type=["samples"])
+            self.parameter_study = samples.to_dataset(_parameter_coordinate_key).expand_dims(data_type=[_samples_data_variable])
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
-    def _parameter_study_to_numpy(self, data_type: typing.Literal["samples", "quantiles"]):
+    def _parameter_study_to_numpy(self, data_type: _allowable_data_type):
         """Return the parameter study data as a 2D numpy array
 
         :param str data_type: The data_type selection to return - samples or quantiles
@@ -492,7 +499,10 @@ class _ParameterGenerator(ABC):
             data.append(data_row.squeeze().to_array().to_numpy())
         return numpy.array(data, dtype=object)
 
-    def parameter_study_to_dict(self, data_type: typing.Literal["samples", "quantiles"] = 'samples') -> dict:
+    def parameter_study_to_dict(
+        self,
+        data_type: _allowable_data_type = _samples_data_variable
+    ) -> dict:
         """Return parameter study as a dictionary
 
         Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
