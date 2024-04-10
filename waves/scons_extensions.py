@@ -636,7 +636,7 @@ def _abaqus_journal_emitter(target: list, source: list, env) -> tuple[list, list
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def abaqus_journal(program: str = "abaqus", post_action: list = [], **kwargs) -> SCons.Builder.Builder:
+def abaqus_journal(program: str = "abaqus", post_action: list = []) -> SCons.Builder.Builder:
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
@@ -775,8 +775,7 @@ def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> tuple[l
 
 
 def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
-                  emitter: typing.Literal["standard", "explicit", "datacheck"] | None = None,
-                  **kwargs) -> SCons.Builder.Builder:
+                  emitter: typing.Literal["standard", "explicit", "datacheck"] | None = None) -> SCons.Builder.Builder:
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -1136,7 +1135,7 @@ def _matlab_script_emitter(target: list, source: list, env) -> tuple[list, list]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def matlab_script(program: str = "matlab", post_action: list[str] = [], **kwargs) -> SCons.Builder.Builder:
+def matlab_script(program: str = "matlab", post_action: list[str] = []) -> SCons.Builder.Builder:
     """Matlab script SCons builder
 
     .. warning::
@@ -1273,7 +1272,7 @@ def _abaqus_extract_emitter(target: list, source: list, env) -> tuple[list, list
     return target, source
 
 
-def abaqus_extract(program: str = "abaqus", **kwargs) -> SCons.Builder.Builder:
+def abaqus_extract(program: str = "abaqus") -> SCons.Builder.Builder:
     """Abaqus ODB file extraction Builder
 
     This builder executes the ``odb_extract`` command line utility against an ODB file in the source list. The ODB file
@@ -1378,7 +1377,7 @@ def _build_odb_extract(target: list, source: list, env) -> None:
     return None
 
 
-def sbatch(program: str = "sbatch", post_action: list[str] = [], **kwargs) -> SCons.Builder.Builder:
+def sbatch(program: str = "sbatch", post_action: list[str] = []) -> SCons.Builder.Builder:
     """`SLURM`_ `sbatch`_ SCons builder
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
