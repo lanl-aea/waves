@@ -8,11 +8,23 @@ Changelog
 0.8.2 (unreleased)
 ******************
 
+.. warning::
+
+   Due to a bugfix in parameter set indexing, parameter studies generated with this version may index as new parameter
+   sets on merge with parameter studies from older versions of WAVES even if the parameter sets have not changed. It is
+   strongly recommended that users re-generate their parameter study files.
+
 New Features
 ============
 - Draft experimental Fierro builders and add associated draft tutorial (:issue:`637`, :merge:`796`). By `Kyle
   Brindley`_.
 - Draft experimental Ansys APDL builder (:issue:`800`). By `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Sort parameter set definitions by parameter name for hash index creation. Fixes an edge case where the parameters are
+  re-arranged causing the set to appear new even if the set definition is otherwise identical. Parameter study indices may
+  be inconsistent with prior versions of WAVES (:issue:`645`, :merge:`802`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -29,15 +41,15 @@ Internal Changes
 
 .. warning::
 
-   Due to a bugfix in parameter set indexing, parameter studies generated from previous versions of WAVES will appear as
-   unique parameter sets on merge with parameter studies generated from this version moving forward. It is strongly
-   recommended that users re-generate their parameter study and workflows with this version of WAVES.
+   Due to a bugfix in parameter set indexing, parameter studies generated with this version will index as new parameter
+   sets on merge with parameter studies from older versions of WAVES even if the parameter sets have not changed. It is
+   strongly recommended that users re-generate their parameter study files.
 
 Bug fixes
 =========
 - Handle STDIN YAML formatted string, file paths, and missing input cases for parameter study CLI (:issue:`632`,
   :merge:`792`). By `Kyle Brindley`_.
-- Add parameter names and quantiles to the parameter set hash to guarantee unique parameter set index on changes.  Fixes
+- Add parameter names and quantiles to the parameter set hash to guarantee unique parameter set index on changes. Fixes
   an edge case where a parameter name changes, but the set content may appear identical. Parameter study indices will be
   inconsistent with prior versions of WAVES (:issue:`633`, :merge:`793`). By `Kyle Brindley`_.
 
