@@ -5,11 +5,15 @@ Changelog
 #########
 
 ******************
-0.8.3 (unreleased)
+0.8.4 (unreleased)
 ******************
 
-Internal Changes
-================
+******************
+0.8.3 (2024-04-10)
+******************
+
+Bug fixes
+=========
 - Remove unused kwargs arguments to improve API error reporting in builders. Argument no longer used after :issue:`508`
   and :merge:`779` as part of the keyword argument standardization (:issue:`646`, :merge:`803`). By `Kyle Brindley`_.
 
