@@ -271,6 +271,12 @@ class TestParameterGenerator:
             None,
             ['732411987fea3ae4a1e0bd7ea6a8841a']
         ),
+        'set1 different parameter order': (
+            ["name3", "name2", "name1"],
+            numpy.array([['a', 10.1, 1]], dtype=object),
+            None,
+            ['732411987fea3ae4a1e0bd7ea6a8841a']
+        ),
         'set1 different parameter names': (
             ["newname1", "newname2", "newname3"],
             numpy.array([[1, 10.1, 'a']], dtype=object),
