@@ -8,6 +8,10 @@ Changelog
 0.8.4 (unreleased)
 ******************
 
+Documentation
+=============
+- Fix broken abaqus links (:issue:`642`, :merge:`805`). By `Sergio Cordova`_.
+
 ******************
 0.8.3 (2024-04-10)
 ******************
