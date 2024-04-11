@@ -4,6 +4,8 @@
 Tutorial: Part Image
 ####################
 
+This is an example implementation where an Abaqus python script is used to export an image to the build directory.
+
 **********
 References
 **********
