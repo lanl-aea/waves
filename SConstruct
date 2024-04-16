@@ -105,7 +105,7 @@ else:
 
 # Add pytests
 build_dir = variant_dir_base / "pytest"
-SConscript(dirs=".", variant_dir=build_dir, exports='env', duplicate=False)
+SConscript("pytest", variant_dir=build_dir, exports='env', duplicate=False)
 
 # Style checks
 build_dir = variant_dir_base / "flake8"
