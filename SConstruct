@@ -105,11 +105,11 @@ else:
 
 # Add pytests
 build_dir = variant_dir_base / "pytest"
-SConscript("pytest", variant_dir=build_dir, exports='env', duplicate=False)
+SConscript(build_dir.name, variant_dir=build_dir, exports='env', duplicate=False)
 
 # Style checks
 build_dir = variant_dir_base / "flake8"
-SConscript("flake8", variant_dir=build_dir, exports='env', duplicate=False)
+SConscript(build_dir.name, variant_dir=build_dir, exports='env', duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
