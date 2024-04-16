@@ -96,7 +96,7 @@ flake8:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
-    - flake8
+    - scons flake8
   tags:
     # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
     - sstbigbird-shell-aea
