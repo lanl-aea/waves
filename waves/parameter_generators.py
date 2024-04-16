@@ -414,7 +414,8 @@ class _ParameterGenerator(ABC):
         * ``self._parameter_set_names``
         """
         self._create_parameter_set_names()
-        new_set_names = set(self._parameter_set_names.values()) - set(self.parameter_study.coords[_set_coordinate_key].values)
+        new_set_names = set(self._parameter_set_names.values()) -
+                        set(self.parameter_study.coords[_set_coordinate_key].values)
         null_set_names = self.parameter_study.coords[_set_coordinate_key].isnull()
         if any(null_set_names):
             self.parameter_study.coords[_set_coordinate_key][null_set_names] = list(new_set_names)
@@ -480,10 +481,13 @@ class _ParameterGenerator(ABC):
         samples = self._create_parameter_array(self._samples, name=_samples_data_variable)
         if hasattr(self, _quantiles_attribute_key):
             quantiles = self._create_parameter_array(self._quantiles, name=_quantiles_data_variable)
-            self.parameter_study = xarray.concat([quantiles, samples],
-                    xarray.DataArray([_quantiles_data_variable, _samples_data_variable], dims="data_type")).to_dataset(_parameter_coordinate_key)
+            self.parameter_study = xarray.concat(
+                    [quantiles, samples],
+                    xarray.DataArray([_quantiles_data_variable, _samples_data_variable], dims="data_type")
+            ).to_dataset(_parameter_coordinate_key)
         else:
-            self.parameter_study = samples.to_dataset(_parameter_coordinate_key).expand_dims(data_type=[_samples_data_variable])
+            self.parameter_study = \
+                samples.to_dataset(_parameter_coordinate_key).expand_dims(data_type=[_samples_data_variable])
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
@@ -655,8 +659,8 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
 
         Sets attribute(s):
 
-        * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets, number
-          of parameters).
+        * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets,
+            number of parameters).
         """
         self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
