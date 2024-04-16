@@ -497,7 +497,11 @@ def _cache_environment(command: str, cache: str | None = None,
     return environment
 
 
-def shell_environment(command: str, cache: str | None = None, overwrite_cache: bool = False) -> SCons.Environment.Environment:
+def shell_environment(
+    command: str,
+    cache: str | None = None,
+    overwrite_cache: bool = False
+) -> SCons.Environment.Environment:
     """Return an SCons shell environment from a cached file or by running a shell command
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
@@ -680,7 +684,7 @@ def abaqus_journal(program: str = "abaqus", post_action: list = []) -> SCons.Bui
 
     :return: Abaqus journal builder
     :rtype: SCons.Builder.Builder
-    """
+    """  # noqa: E501
     action = [
         f"{program} -information environment {_redirect_environment_postfix}",
         f"{program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} " \
@@ -705,7 +709,7 @@ def sbatch_abaqus_journal(*args, **kwargs):
        :caption: Sbatch Abaqus journal builder action
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1"
-    """
+    """  # noqa: E501
     return abaqus_journal(*args, **kwargs)
 
 
@@ -782,7 +786,8 @@ def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
     function accepts all SCons Builder arguments and adds the keyword argument(s):
 
     * ``job_name``: The job name string. If not specified ``job_name`` defaults to the root input file stem. The Builder
-      emitter will append common Abaqus output files as targets automatically from the ``job_name``, e.g. ``job_name.odb``.
+        emitter will append common Abaqus output files as targets automatically from the ``job_name``, e.g.
+        ``job_name.odb``.
     * ``abaqus_options``: The Abaqus command line options provided as a string.
     * ``suffixes``: override the emitter targets with a new list of extensions, e.g.
       ``AbaqusSolver(target=[], source=["input.inp"], suffixes=[".odb"])`` will emit only one file named
@@ -843,7 +848,7 @@ def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
         * default value: [".odb", ".dat", ".msg", ".com", ".prt"]
 
     :return: Abaqus solver builder
-    """
+    """  # noqa: E501
     action = [
         f"{program} -information environment {_redirect_environment_postfix}",
         f"{program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no " \
@@ -878,7 +883,7 @@ def sbatch_abaqus_solver(*args, **kwargs):
        :caption: Sbatch Abaqus solver builder action
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1"
-    """
+    """  # noqa: E501
     return abaqus_solver(*args, **kwargs)
 
 
@@ -950,7 +955,7 @@ def sierra(program: str = "sierra", application: str = "adagio", post_action: li
         ${TARGET.dir.abspath} && ${post_action}``.
 
     :return: Sierra builder
-    """
+    """  # noqa: E501
     action = [
         f"{program} {application} --version {_redirect_environment_postfix}",
         f"{program} ${{sierra_options}} {application} ${{application_options}} -i ${{SOURCE.file}} " \
@@ -976,7 +981,7 @@ def sbatch_sierra(*args, **kwargs):
        :caption: sbatch Sierra builder action
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGETS[-1].abspath} 2>&1"
-    """
+    """  # noqa: E501
     return sierra(*args, **kwargs)
 
 
@@ -1025,7 +1030,7 @@ def copy_substitute(source_list: list, substitution_dictionary: dict | None = No
         copies as a new symbolic link. If false, symbolic links are copied as a new file (dereferenced).
 
     :return: SCons NodeList of Copy and Substfile target nodes
-    """
+    """  # noqa: E501
     if not substitution_dictionary:
         substitution_dictionary = {}
     build_subdirectory = pathlib.Path(build_subdirectory)
@@ -1085,7 +1090,7 @@ def python_script(post_action: list[str] = []) -> SCons.Builder.Builder:
 
     :return: Python script builder
     :rtype: SCons.Builder.Builder
-    """
+    """  # noqa: E501
     action = [
         f"python ${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_redirect_action_postfix}"
     ]
@@ -1109,7 +1114,7 @@ def sbatch_python_script(*args, **kwargs):
        :caption: Sbatch Python script builder action
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGETS[-1].abspath} 2>&1"
-    """
+    """  # noqa: E501
     return python_script(*args, **kwargs)
 
 
@@ -1176,7 +1181,7 @@ def matlab_script(program: str = "matlab", post_action: list[str] = []) -> SCons
         ${TARGET.dir.abspath} && ${post_action}``
 
     :return: Matlab script builder
-    """
+    """  # noqa: E501
     action = [
         f"{program} ${{matlab_options}} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
@@ -1214,11 +1219,11 @@ def conda_environment() -> SCons.Builder.Builder:
 
     The modsim owner may choose to re-use this builder throughout their project configuration to provide various levels
     of granularity in the recorded Conda environment state. It's recommended to include this builder at least once for
-    any workflows that also use the :meth:`waves.scons_extensions.python_builder`. The builder may be re-used once per build
-    sub-directory to provide more granular build environment reproducibility in the event that sub-builds are run at
-    different times with variations in the active Conda environment. For per-Python script task environment
-    reproducibility, the builder source list can be linked to the output of a :meth:`waves.scons_extensions.python_builder` task
-    with a target environment file name to match.
+    any workflows that also use the :meth:`waves.scons_extensions.python_builder`. The builder may be re-used once per
+    build sub-directory to provide more granular build environment reproducibility in the event that sub-builds are run
+    at different times with variations in the active Conda environment. For per-Python script task environment
+    reproducibility, the builder source list can be linked to the output of a
+    :meth:`waves.scons_extensions.python_builder` task with a target environment file name to match.
 
     The first recommendation, always building the project wide Conda environment file, is demonstrated in the example
     usage below.
@@ -1601,7 +1606,8 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     .. warning::
 
        This is an experimental builder for Quinoa support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``out.*`` must be specified in the target list.
+       STDOUT and STDERR file. All relevant application output files, e.g. ``out.*`` must be specified in the target
+       list.
 
     This builder requires at least two source files provided in the order
 
@@ -1654,7 +1660,7 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
         ${TARGET.dir.abspath} && ${post_action}``
 
     :return: Quinoa builder
-    """
+    """  # noqa: E501
     if prefix_command and not prefix_command.strip().endswith(" &&"):
         prefix_command = prefix_command.strip()
         prefix_command += " &&"
@@ -1703,7 +1709,8 @@ def fierro_builder(
     .. warning::
 
        This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target list.
+       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target
+       list.
 
     This builder provides a template action for the Fierro CLI. The default behavior will not do anything unless
     the ``subcommand`` argument is updated to one of the Fierro CLI subcommands, e.g. ``parallel-implicit`` or
@@ -1792,7 +1799,8 @@ def fierro_explicit(
     .. warning::
 
        This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target list.
+       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target
+       list.
 
     At least one target must be specified. The first target determines the working directory for the builder's action.
     The action changes the working directory to the first target's parent directory prior to execution.
@@ -1862,7 +1870,8 @@ def fierro_implicit(
     .. warning::
 
        This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target list.
+       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target
+       list.
 
     At least one target must be specified. The first target determines the working directory for the builder's action.
     The action changes the working directory to the first target's parent directory prior to execution.
@@ -1936,7 +1945,8 @@ def ansys_apdl(
     .. warning::
 
        This is an experimental builder for Ansys support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``*.rst`` must be specified in the target list.
+       STDOUT and STDERR file. All relevant application output files, e.g. ``*.rst`` must be specified in the target
+       list.
 
     At least one target must be specified. The first target determines the working directory for the builder's action.
     The action changes the working directory to the first target's parent directory prior to execution.
