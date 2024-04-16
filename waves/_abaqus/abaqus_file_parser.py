@@ -1770,7 +1770,13 @@ class OdbReportFileParser(AbaqusFileParser):
                 xr_dataset = extract[keys[0]][keys[1]][keys[2]]
             # Create or append to h5 file with xarray datasets
             if xr_dataset:  # If the dataset isn't empty
-                xr_dataset.to_netcdf(path=filename, mode='a', format="NETCDF4", group=dataset, engine=_settings._default_xarray_engine)
+                xr_dataset.to_netcdf(
+                    path=filename,
+                    mode='a',
+                    format="NETCDF4",
+                    group=dataset,
+                    engine=_settings._default_xarray_engine
+                )
                 extract_h5[dataset] = h5py.ExternalLink(filename, dataset)  # Link to datasets in file
                 non_empty_datasets.append(dataset)
 
@@ -1786,8 +1792,8 @@ class OdbReportFileParser(AbaqusFileParser):
     def save_dict_to_group(self, h5file, path, data_member, output_file):
         """Recursively save data from python dictionary to hdf5 file.
 
-        This method can handle data types of int, float, str, and xarray Datasets, as well as lists or dictionaries of the
-        aforementioned types. Tuples are assumed to have ints or floats.
+        This method can handle data types of int, float, str, and xarray Datasets, as well as lists or dictionaries of
+        the aforementioned types. Tuples are assumed to have ints or floats.
 
         :param stream h5file: file stream to write data into
         :param str path: name of hdf5 group to write into
@@ -1846,7 +1852,13 @@ class OdbReportFileParser(AbaqusFileParser):
             elif isinstance(item, dict):
                 self.save_dict_to_group(h5file, f'{path}{key}/', item, output_file)
             elif isinstance(item, xarray.core.dataset.Dataset) or isinstance(item, xarray.core.dataarray.DataArray):
-                item.to_netcdf(path=output_file, mode='a', format="NETCDF4", group=f'{path}{key}/', engine=_settings._default_xarray_engine)
+                item.to_netcdf(
+                    path=output_file,
+                    mode='a',
+                    format="NETCDF4",
+                    group=f'{path}{key}/',
+                    engine=_settings._default_xarray_engine
+                )
                 # TODO: In future additions of xarray, consider using option 'invalid_netcdf=True'
             else:
                 raise ValueError(f'Cannot save {type(item)} type to hdf5 file.')
