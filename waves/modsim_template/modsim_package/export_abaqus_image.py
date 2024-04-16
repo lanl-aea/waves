@@ -22,8 +22,8 @@ cli_description = "Save an assembly view image of an Abaqus model from an input 
 # One time dump from abaqus.session.viewports['Viewport: 1'].colorMappings.keys()) to stay Python 3 compatible for
 # Sphinx documentation
 color_map_choices = [
-    'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance',
-    'Element set', 'Averaging region', 'Element type', 'Default', 'Assembly', 'Part geometry', 'Load', 'Boundary condition',
+    'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance', 'Element set',
+    'Averaging region', 'Element type', 'Default', 'Assembly', 'Part geometry', 'Load', 'Boundary condition',
     'Interaction', 'Constraint', 'Property', 'Meshability', 'Instance type', 'Set', 'Surface', 'Internal set',
     'Internal surface', 'Display group', 'Selection group', 'Skin', 'Stringer', 'Cell', 'Face'
 ]

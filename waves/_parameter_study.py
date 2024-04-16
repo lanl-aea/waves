@@ -27,47 +27,66 @@ def get_parser() -> argparse.ArgumentParser:
     """
     # Required positional option
     parser = argparse.ArgumentParser(add_help=False)
-    parser.add_argument('INPUT_FILE', nargs='?', default=(None if sys.stdin.isatty() else sys.stdin),
-                        help=f"YAML formatted parameter study schema file (default: STDIN)")
+    parser.add_argument(
+        'INPUT_FILE', nargs='?', default=(None if sys.stdin.isatty() else sys.stdin),
+        help=f"YAML formatted parameter study schema file (default: STDIN)"
+    )
 
     # Mutually exclusive output file options
     output_file_group = parser.add_mutually_exclusive_group()
-    output_file_group.add_argument('-o', '--output-file-template',
-                                   default=parameter_generators._default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
-                                   help=f"Output file template. May contain pathseps for an absolute or relative " \
-                                        f"path template. May contain ``{parameter_generators._template_placeholder}`` " \
-                                        f"set number placeholder in the file basename but not in the path. " \
-                                        f"If the placeholder is not found, it will be " \
-                                        f"appended to the template string. Output files are overwritten if the "
-                                        f"content of the file has changed or if ``overwrite`` is True "
-                                        f"(default: %(default)s)")
-    output_file_group.add_argument('-f', '--output-file',
-                                   default=parameter_generators._default_output_file, dest='OUTPUT_FILE',
-                                   help=f"Output file name. May contain pathseps for an absolute or relative path. " \
-                                         "Output file is overwritten if the content of the file has changed or if " \
-                                         "``overwrite`` is True (default: %(default)s)")
+    output_file_group.add_argument(
+        '-o', '--output-file-template',
+        default=parameter_generators._default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
+        help=f"Output file template. May contain pathseps for an absolute or relative " \
+             f"path template. May contain ``{parameter_generators._template_placeholder}`` " \
+             f"set number placeholder in the file basename but not in the path. " \
+             f"If the placeholder is not found, it will be " \
+             f"appended to the template string. Output files are overwritten if the "
+             f"content of the file has changed or if ``overwrite`` is True "
+             f"(default: %(default)s)"
+    )
+    output_file_group.add_argument(
+        '-f', '--output-file',
+        default=parameter_generators._default_output_file, dest='OUTPUT_FILE',
+        help=f"Output file name. May contain pathseps for an absolute or relative path. " \
+              "Output file is overwritten if the content of the file has changed or if " \
+              "``overwrite`` is True (default: %(default)s)"
+    )
 
     # Optional keyword options
-    parser.add_argument('-t', '--output-file-type',
-                               default=parameter_generators._default_output_file_type,
-                               choices=parameter_generators._allowable_output_file_types,
-                               help="Output file type (default: %(default)s)")
-    parser.add_argument('-s', '--set-name-template',
-                               default=parameter_generators._default_set_name_template, dest='SET_NAME_TEMPLATE',
-                               help="Parameter set name template. Overridden by ``output_file_template``, " \
-                                    "if provided (default: %(default)s)")
-    parser.add_argument('-p', '--previous-parameter-study',
-                               default=parameter_generators._default_previous_parameter_study, dest='PREVIOUS_PARAMETER_STUDY',
-                               help="A relative or absolute file path to a previously created parameter study Xarray " \
-                                    "Dataset (default: %(default)s)")
-    parser.add_argument('--overwrite', action='store_true',
-                               help=f"Overwrite existing output files (default: %(default)s)")
-    parser.add_argument('--dryrun', action='store_true',
-                               help=f"Print contents of new parameter study output files to STDOUT and exit " \
-                                    f"(default: %(default)s)")
-    parser.add_argument('--write-meta', action='store_true',
-                               help="Write a meta file named 'parameter_study_meta.txt' containing the " \
-                                    "parameter set file names (default: %(default)s)")
+    parser.add_argument(
+        '-t', '--output-file-type',
+        default=parameter_generators._default_output_file_type,
+        choices=parameter_generators._allowable_output_file_types,
+        help="Output file type (default: %(default)s)"
+    )
+    parser.add_argument(
+        '-s', '--set-name-template',
+        default=parameter_generators._default_set_name_template, dest='SET_NAME_TEMPLATE',
+        help="Parameter set name template. Overridden by ``output_file_template``, " \
+             "if provided (default: %(default)s)"
+    )
+    parser.add_argument(
+        '-p', '--previous-parameter-study',
+        default=parameter_generators._default_previous_parameter_study, dest='PREVIOUS_PARAMETER_STUDY',
+        help="A relative or absolute file path to a previously created parameter study Xarray " \
+             "Dataset (default: %(default)s)"
+    )
+    parser.add_argument(
+        '--overwrite', action='store_true',
+        help=f"Overwrite existing output files (default: %(default)s)"
+    )
+    parser.add_argument(
+        '--dryrun', action='store_true',
+        help=f"Print contents of new parameter study output files to STDOUT and exit " \
+                    f"(default: %(default)s)"
+    )
+    parser.add_argument(
+        '--write-meta', action='store_true',
+        help="Write a meta file named 'parameter_study_meta.txt' containing the " \
+             "parameter set file names (default: %(default)s)"
+    )
+
     return parser
 
 
