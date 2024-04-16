@@ -17,7 +17,9 @@ exceptions differently.
 
 
 class WAVESError(Exception):
-    """The base class for WAVES exceptions. All exceptions that must be caught by the CLI should derive from this class."""
+    """The base class for WAVES exceptions. All exceptions that must be caught by the CLI should derive from this
+    class.
+    """
 
 
 class APIError(WAVESError):
