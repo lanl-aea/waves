@@ -102,12 +102,16 @@ class _ParameterGenerator(ABC):
         self.write_meta = write_meta
 
         if self.output_file_template is not None and self.output_file is not None:
-            raise MutuallyExclusiveError("The options 'output_file_template' and 'output_file' are mutually exclusive. " \
-                                         "Please specify one or the other.")
+            raise MutuallyExclusiveError(
+                "The options 'output_file_template' and 'output_file' are mutually exclusive. " \
+                "Please specify one or the other."
+            )
 
         if self.output_file_type not in _allowable_output_file_types:
-            raise ChoicesError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                               f"The 'output_file_type' must be one of {_allowable_output_file_types}")
+            raise ChoicesError(
+                f"Unsupported 'output_file_type': '{self.output_file_type}. " \
+                f"The 'output_file_type' must be one of {_allowable_output_file_types}"
+            )
 
         if self.output_file:
             self.output_file = pathlib.Path(self.output_file)
@@ -163,21 +167,21 @@ class _ParameterGenerator(ABC):
 
         Must set the class attributes:
 
-        * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets, number
-          of parameters). If it's possible that the samples may be of mixed type, ``numpy.array(..., dtype=object)``
-          should be used to preserve the original Python types.
+        * ``self._samples``: The parameter study samples. A 2D numpy array in the shape (number of parameter sets,
+            number of parameters). If it's possible that the samples may be of mixed type,
+            ``numpy.array(..., dtype=object)`` should be used to preserve the original Python types.
         * ``self._parameter_set_hashes``: list of parameter set content hashes created by calling
           ``self._create_parameter_set_hashes`` after populating the ``self._samples`` parameter study values.
-        * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name strings created by calling
-          ``self._create_parameter_set_names`` after populating ``self._parameter_set_hashes``.
+        * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name strings created by
+            calling ``self._create_parameter_set_names`` after populating ``self._parameter_set_hashes``.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
           ``self._create_parameter_study()`` after defining ``self._samples`` and the optional ``self._quantiles`` class
           attribute.
 
         May set the class attributes:
 
-        * ``self._quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape (number
-          of parameter sets, number of parameters)
+        * ``self._quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape
+            (number of parameter sets, number of parameters)
 
         Minimum necessary work example:
 
@@ -376,7 +380,8 @@ class _ParameterGenerator(ABC):
         if hasattr(self, _quantiles_attribute_key):
             for sample_row, quantile_row in zip(self._samples, self._quantiles):
                 sorted_contents = sorted(zip(self._parameter_names, sample_row, quantile_row))
-                set_catenation = "\n".join(f"{name}:{repr(sample)}-{repr(quantile)}" for name, sample, quantile in sorted_contents)
+                set_catenation = \
+                    "\n".join(f"{name}:{repr(sample)}-{repr(quantile)}" for name, sample, quantile in sorted_contents)
                 set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
                 self._parameter_set_hashes.append(set_hash)
         else:
