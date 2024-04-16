@@ -141,6 +141,18 @@ with ``PYTHONPATH=.. ``, where it is assumed that the ``PWD`` is the tutorial or
 Test
 ****
 
+The project regression suite is collected under the ``regression`` alias and can be run as
+
+.. code-block::
+
+   $ scons regression
+
+The continuous integration server also performs a separate style guide check using ``flake8`` and associated alias
+
+.. code-block::
+
+   $ scons flake8
+
 WAVES has dedicated target aliases for the unit and system tests. To run the unit tests, activate a conda environment
 and run
 
