@@ -62,44 +62,58 @@ def get_parser():
     example = f''' Example: >> {_program_name} sample.odb\n '''
     parser = ArgumentParser(description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter, epilog=example,
                             prog=_program_name)
-    parser.add_argument(nargs=1,
-                        dest='input_file',
-                        type=str,
-                        help='odb or odbreport file for extracting data',
-                        metavar='sample.odb')
-    parser.add_argument('-o', '--output-file',
-                        dest='output_file',
-                        type=str,
-                        help='file for printing output',
-                        metavar='sample.h5')
-    parser.add_argument('-f', '--output-file-type',
-                        dest='output_type',
-                        choices=['yaml', 'json', 'h5'],
-                        type=str,
-                        default='h5',
-                        help='Type of file in which to store output data',
-                        metavar='h5')
-    parser.add_argument('-r', '--odb-report-args',
-                        dest='odb_report_args',
-                        type=str,
-                        help='Arguments to give to the odbreport command. Require the ``option=value`` interface style.',
-                        metavar='"step=step1 results"')
-    parser.add_argument('-a', '--abaqus-command',
-                        dest='abaqus_command',
-                        type=str,
-                        default=_settings._default_abaqus_command,
-                        help='Abaqus command to use',
-                        metavar='/path/to/abaqus')
-    parser.add_argument('-d', '--delete-report-file',
-                        action="store_true",
-                        dest='delete_report_file',
-                        default=False,
-                        help='Delete after parsing the file created by the odbreport command')
-    parser.add_argument('-v', '--verbose',
-                        action="store_true",
-                        dest='verbose',
-                        default=False,
-                        help='Print all messages')
+    parser.add_argument(
+        nargs=1,
+        dest='input_file',
+        type=str,
+        help='odb or odbreport file for extracting data',
+        metavar='sample.odb'
+    )
+    parser.add_argument(
+        '-o', '--output-file',
+        dest='output_file',
+        type=str,
+        help='file for printing output',
+        metavar='sample.h5'
+    )
+    parser.add_argument(
+        '-f', '--output-file-type',
+        dest='output_type',
+        choices=['yaml', 'json', 'h5'],
+        type=str,
+        default='h5',
+        help='Type of file in which to store output data',
+        metavar='h5'
+    )
+    parser.add_argument(
+        '-r', '--odb-report-args',
+        dest='odb_report_args',
+        type=str,
+        help='Arguments to give to the odbreport command. Require the ``option=value`` interface style.',
+        metavar='"step=step1 results"'
+    )
+    parser.add_argument(
+        '-a', '--abaqus-command',
+        dest='abaqus_command',
+        type=str,
+        default=_settings._default_abaqus_command,
+        help='Abaqus command to use',
+        metavar='/path/to/abaqus'
+    )
+    parser.add_argument(
+        '-d', '--delete-report-file',
+        action="store_true",
+        dest='delete_report_file',
+        default=False,
+        help='Delete after parsing the file created by the odbreport command'
+    )
+    parser.add_argument(
+        '-v', '--verbose',
+        action="store_true",
+        dest='verbose',
+        default=False,
+        help='Print all messages'
+    )
     return parser
 
 
@@ -185,15 +199,23 @@ def odb_extract(input_file,
 
     if output_type == 'h5':  # If the dataset isn't empty
         try:
-            abaqus_file_parser.OdbReportFileParser(job_name, 'extract', output_file, time_stamp).parse(h5_file=output_file)
-        except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if a string is found where an integer is expected
+            abaqus_file_parser.OdbReportFileParser(
+                job_name,
+                'extract',
+                output_file,
+                time_stamp
+            ).parse(h5_file=output_file)
+        # Index error is reached if a line is split and the line is empty (i.e. file is empty), ValueError is reached if
+        # a string is found where an integer is expected
+        except (IndexError, ValueError) as e:
             sys.exit(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
     else:
         parsed_odb = None
         # Parse output of odbreport
         try:
             parsed_odb = abaqus_file_parser.OdbReportFileParser(job_name, 'odb').parsed
-        except (IndexError, ValueError) as e:  # Index error is reached if a line is split and the line is empty (i.e. file is empty)
+        # Index error is reached if a line is split and the line is empty (i.e. file is empty0)
+        except (IndexError, ValueError) as e:
             sys.exit(f'{job_name} could not be parsed. Please check if file is in expected format. {e}')
 
         # Write parsed output
