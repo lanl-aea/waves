@@ -414,7 +414,7 @@ class _ParameterGenerator(ABC):
         * ``self._parameter_set_names``
         """
         self._create_parameter_set_names()
-        new_set_names = set(self._parameter_set_names.values()) -
+        new_set_names = set(self._parameter_set_names.values()) - \
                         set(self.parameter_study.coords[_set_coordinate_key].values)
         null_set_names = self.parameter_study.coords[_set_coordinate_key].isnull()
         if any(null_set_names):
