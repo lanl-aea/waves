@@ -12,6 +12,11 @@ Documentation
 =============
 - Fix broken abaqus links (:issue:`642`, :merge:`805`). By `Sergio Cordova`_.
 
+Internal Changes
+================
+- Switch to flake8 for style checking and address line length and whitespace errors (:issue:`649`, :merge:`806`). By
+  `Kyle Brindley`_.
+
 ******************
 0.8.3 (2024-04-10)
 ******************
