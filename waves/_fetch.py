@@ -132,11 +132,11 @@ def build_source_files(
 
     If no source files are found, an empty list is returned.
 
-    :param str root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths with
-        respect to the current working directory before searching.
+    :param str root_directory: Relative or absolute root path to search. Relative paths are converted to absolute paths
+        with respect to the current working directory before searching.
     :param list relative_paths: Relative paths to search for. Directories are searched recursively for files.
-    :param list exclude_patterns: list of strings to exclude from the root_directory directory tree if the path contains a
-        matching string.
+    :param list exclude_patterns: list of strings to exclude from the root_directory directory tree if the path contains
+        a matching string.
 
     :returns: source_files, not_found
     :rtype: tuple of lists
@@ -289,7 +289,8 @@ def recursive_copy(root_directory: str | pathlib.Path, relative_paths: list[str 
 
     # Down select to requested file list
     if requested_paths:
-        requested_paths_resolved, missing_requested_paths = build_source_files(longest_common_source_path, requested_paths)
+        requested_paths_resolved, missing_requested_paths = \
+            build_source_files(longest_common_source_path, requested_paths)
     else:
         requested_paths_resolved = source_files
         missing_requested_paths = []
