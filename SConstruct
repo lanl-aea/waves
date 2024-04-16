@@ -107,6 +107,10 @@ else:
 build_dir = variant_dir_base / "pytest"
 SConscript(dirs=".", variant_dir=build_dir, exports='env', duplicate=False)
 
+# Style checks
+build_dir = variant_dir_base / "flake8"
+SConscript("flake8", variant_dir=build_dir, exports='env', duplicate=False)
+
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
