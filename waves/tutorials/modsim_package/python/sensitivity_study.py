@@ -131,9 +131,9 @@ def get_parser():
                         help="The h5py group path to the dataset object (default: %(default)s)")
     parser.add_argument("-s", "--selection-dict", type=str, default=None,
                         help="The YAML formatted dictionary file to define the down selection of data to be plotted. " \
-                             "Dictionary key: value pairs must match the data variables and coordinates of the expected Xarray Dataset object. " \
-                             "If no file is provided, the a default selection dict will be used " \
-                             f"(default: {default_selection_dict})")
+                             "Dictionary key: value pairs must match the data variables and coordinates of the " \
+                             "expected Xarray Dataset object. If no file is provided, the a default selection dict " \
+                             f"will be used (default: {default_selection_dict})")
     parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
                         help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)")
 

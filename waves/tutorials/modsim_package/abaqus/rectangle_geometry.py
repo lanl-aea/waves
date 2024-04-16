@@ -27,10 +27,10 @@ def main(output_file, model_name, part_name, width, height):
     s = abaqus.mdb.models[model_name].ConstrainedSketch(name=part_name, sheetSize=1.0)
     s.setPrimaryObject(option=abaqusConstants.STANDALONE)
 
-    s.Line(point1=(  0.0,    0.0), point2=(width,    0.0))
-    s.Line(point1=(width,    0.0), point2=(width, height))
-    s.Line(point1=(width, height), point2=(  0.0, height))
-    s.Line(point1=(  0.0, height), point2=(  0.0,    0.0))
+    s.Line(point1=(  0.0,    0.0), point2=(width,    0.0))  # noqa: E201,E241
+    s.Line(point1=(width,    0.0), point2=(width, height))  # noqa: E201,E241
+    s.Line(point1=(width, height), point2=(  0.0, height))  # noqa: E201,E241
+    s.Line(point1=(  0.0, height), point2=(  0.0,    0.0))  # noqa: E201,E241
 
     s.unsetPrimaryObject()
     p = abaqus.mdb.models[model_name].Part(name=part_name, dimensionality=abaqusConstants.TWO_D_PLANAR,
