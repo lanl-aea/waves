@@ -16,6 +16,7 @@ Internal Changes
 ================
 - Switch to flake8 for style checking and address line length and whitespace errors (:issue:`649`, :merge:`806`). By
   `Kyle Brindley`_.
+- Use an SCons task to drive flake8 more consistently with other project tasks (:merge:`807`). By `Kyle Brindley`_.
 
 ******************
 0.8.3 (2024-04-10)
