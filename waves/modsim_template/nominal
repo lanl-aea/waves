@@ -31,7 +31,8 @@ workflow_configuration = [env["project_configuration"], workflow_name]
 model = "rectangle"
 simulation_variables = rectangle_compression.nominal()
 
-# Collect the target nodes to build a concise alias for all targets
+# Collect the target nodes to build concise target alias(es)
+artifacts = []
 workflow = []
 datacheck = []
 images = []
@@ -39,7 +40,7 @@ images = []
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = "--width ${width} --height ${height}"
-workflow.extend(env.AbaqusJournal(
+artifacts.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{modsim_package_abspath / journal_file}.py"],
     journal_options=journal_options,
@@ -49,7 +50,7 @@ workflow.extend(env.AbaqusJournal(
 # Partition
 journal_file = f"{model}_partition"
 journal_options = "--width ${width} --height ${height}"
-workflow.extend(env.AbaqusJournal(
+artifacts.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{modsim_package_abspath / journal_file}.py", f"{model}_geometry.cae"],
     journal_options=journal_options,
@@ -59,7 +60,7 @@ workflow.extend(env.AbaqusJournal(
 # Mesh
 journal_file = f"{model}_mesh"
 journal_options = "--global-seed ${global_seed}"
-workflow.extend(env.AbaqusJournal(
+artifacts.extend(env.AbaqusJournal(
     target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{modsim_package_abspath / journal_file}.py", f"{model}_partition.cae"],
     journal_options=journal_options,
@@ -77,7 +78,7 @@ abaqus_source_list = [
     modsim_package_abspath / "history_output.inp"
 ]
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-workflow.extend(waves.scons_extensions.copy_substitute(
+artifacts.extend(waves.scons_extensions.copy_substitute(
     abaqus_source_list,
     substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)
 ))
@@ -106,7 +107,7 @@ datacheck.extend(env.AbaqusSolver(
     abaqus_options=f"{abaqus_options} -datacheck"
 ))
 
-workflow.extend(env.AbaqusSolver(
+artifacts.extend(env.AbaqusSolver(
     target=[f"{job_name}.sta"],
     source=solve_source_list,
     job_name=job_name,
@@ -117,7 +118,7 @@ workflow.extend(env.AbaqusSolver(
 
 # Abaqus Extract
 extract_source_list = [f"{job_name}.odb"]
-workflow.extend(env.AbaqusExtract(
+artifacts.extend(env.AbaqusExtract(
     target=[f"{job_name}.h5"],
     source=extract_source_list
 ))
@@ -136,10 +137,11 @@ workflow.extend(env.PythonScript(
 ))
 
 # Data archival
+artifacts.extend(workflow)
 archive_name = f"{env['project_name']}-{workflow_name}-{env['version']}"
 archive_target = env.Tar(
     target=archive_name,
-    source=workflow + workflow_configuration
+    source=artifacts + workflow_configuration
 )
 
 # Collector alias based on build directory name
