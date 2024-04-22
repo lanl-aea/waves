@@ -116,7 +116,7 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
     return cubit_bin
 
 
-def tee_subprocess(command: typing.Iterable[str], **kwargs) -> typing.Tuple[int, str]:
+def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str]:
     """Stream STDOUT to terminal while saving buffer to variable
 
     :param command: Command to execute provided a list of strings
