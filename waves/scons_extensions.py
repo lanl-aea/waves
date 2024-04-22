@@ -918,7 +918,11 @@ def _sierra_emitter(target: list, source: list, env) -> typing.Tuple[list, list]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def sierra(program: str = "sierra", application: str = "adagio", post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
+def sierra(
+    program: str = "sierra",
+    application: str = "adagio",
+    post_action: typing.Iterable[str] = []
+) -> SCons.Builder.Builder:
     """Sierra SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -1559,7 +1563,11 @@ def sphinx_latexpdf(program: str = "sphinx-build", options: str = "", builder: s
     return sphinx_latex
 
 
-def _custom_scanner(pattern: str, suffixes: typing.Iterable[str], flags: typing.Optional[int] = None) -> SCons.Scanner.Scanner:
+def _custom_scanner(
+    pattern: str,
+    suffixes: typing.Iterable[str],
+    flags: typing.Optional[int] = None
+) -> SCons.Scanner.Scanner:
     """Custom Scons scanner
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
