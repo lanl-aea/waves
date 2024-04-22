@@ -708,7 +708,7 @@ def abaqus_journal(program: str = "abaqus", post_action: list = []) -> SCons.Bui
     return abaqus_journal_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program: str = "sbatch", options=_sbatch_wrapper_options)
 def sbatch_abaqus_journal(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
 
@@ -882,7 +882,7 @@ def abaqus_solver(program: str = "abaqus", post_action: typing.Iterable[str] = [
     return abaqus_solver_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program: str = "sbatch", options: str = _sbatch_wrapper_options)
 def sbatch_abaqus_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
 
@@ -980,7 +980,7 @@ def sierra(program: str = "sierra", application: str = "adagio", post_action: ty
     return sierra_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program: str = "sbatch", options: str = _sbatch_wrapper_options)
 def sbatch_sierra(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
 
@@ -1113,7 +1113,7 @@ def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Build
     return python_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program: str = "sbatch", options: str = _sbatch_wrapper_options)
 def sbatch_python_script(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.python_script`
 
@@ -1692,7 +1692,7 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     return quinoa_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program: str = "sbatch", options: str = _sbatch_wrapper_options)
 def sbatch_quinoa_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_solver`
 
@@ -1940,9 +1940,9 @@ def fierro_implicit(
 
 
 def ansys_apdl(
-    program="ansys",
-    required="-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
-    options="",
+    program: str = "ansys",
+    required=: str = "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
+    options: str = "",
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return an Ansys APDL builder.
