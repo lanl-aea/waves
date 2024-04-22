@@ -266,7 +266,7 @@ def recursive_copy(
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
     requested_paths: typing.Optional[typing.Iterable[typing.Union[str, pathlib.Path]]] = None,
-    tutorial: int = None,
+    tutorial: typing.Optional[int] = None,
     overwrite: bool = False,
     dry_run: bool = False,
     print_available: bool = False
