@@ -327,7 +327,7 @@ class _ParameterGenerator(ABC):
                     else:
                         self._conditionally_write_yaml(parameter_set_file, yaml.safe_load(text))
 
-    def _conditionally_write_yaml(self, output_file: str | pathlib.Path, parameter_dictionary: dict) -> None:
+    def _conditionally_write_yaml(self, output_file: typing.Union[str, pathlib.Path], parameter_dictionary: dict) -> None:
         """Write YAML file over previous study if the datasets have changed or self.overwrite is True
 
         :param output_file: A relative or absolute file path to the output YAML file

@@ -458,7 +458,7 @@ def _return_environment(command: str) -> dict:
     return environment
 
 
-def _cache_environment(command: str, cache: str | None = None,
+def _cache_environment(command: str, cache: typing.Optional[str] = None,
                        overwrite_cache: bool = False, verbose: bool = False) -> dict:
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 
@@ -499,7 +499,7 @@ def _cache_environment(command: str, cache: str | None = None,
 
 def shell_environment(
     command: str,
-    cache: str | None = None,
+    cache: typing.Optional[str] = None,
     overwrite_cache: bool = False
 ) -> SCons.Environment.Environment:
     """Return an SCons shell environment from a cached file or by running a shell command
@@ -779,7 +779,7 @@ def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> tuple[l
 
 
 def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
-                  emitter: typing.Literal["standard", "explicit", "datacheck"] | None = None) -> SCons.Builder.Builder:
+                  emitter: typing.Literal["standard", "explicit", "datacheck", None] = None) -> SCons.Builder.Builder:
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -985,7 +985,7 @@ def sbatch_sierra(*args, **kwargs):
     return sierra(*args, **kwargs)
 
 
-def copy_substitute(source_list: list, substitution_dictionary: dict | None = None,
+def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[dict] = None,
                     env: SCons.Environment.Environment = SCons.Environment.Environment(),
                     build_subdirectory: str = ".", symlink: bool = False) -> SCons.Node.NodeList:
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
@@ -1549,7 +1549,7 @@ def sphinx_latexpdf(program: str = "sphinx-build", options: str = "", builder: s
     return sphinx_latex
 
 
-def _custom_scanner(pattern: str, suffixes: list[str], flags: int | None = None) -> SCons.Scanner.Scanner:
+def _custom_scanner(pattern: str, suffixes: list[str], flags: typing.Optional[int] = None) -> SCons.Scanner.Scanner:
     """Custom Scons scanner
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of

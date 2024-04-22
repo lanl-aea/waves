@@ -90,7 +90,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper | None) -> dict:
+def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None]) -> dict:
     """Read a YAML dictionary from STDIN or a file
 
     :param input_file: STDIN stream or file path
@@ -113,7 +113,7 @@ def read_parameter_schema(input_file: str | pathlib.Path | io.TextIOWrapper | No
 
 
 def main(subcommand: str,
-         input_file: str | pathlib.Path | io.TextIOWrapper | None,
+         input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None],
          output_file_template: str = parameter_generators._default_output_file_template,
          output_file: str = parameter_generators._default_output_file,
          output_file_type: typing.Literal["yaml", "h5"] = parameter_generators._default_output_file_type,
