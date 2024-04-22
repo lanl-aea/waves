@@ -4,6 +4,7 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 import sys
+import typing
 import pathlib
 import argparse
 
@@ -37,9 +38,9 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(targets: list, scons_args: list | None = None, max_iterations: int = 5,
-         working_directory: str | pathlib.Path | None = None,
-         git_clone_directory: str | pathlib.Path | None = None) -> None:
+def main(targets: list, scons_args: typing.Optional[list] = None, max_iterations: int = 5,
+         working_directory: typing.Union[str, pathlib.Path, None] = None,
+         git_clone_directory: typing.Union[str, pathlib.Path, None] = None) -> None:
     """Submit an iterative SCons command
 
     SCons command is re-submitted until SCons reports that the target 'is up to date.' or the iteration count is
