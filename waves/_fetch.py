@@ -123,7 +123,7 @@ def available_files(
         elif absolute_path.is_dir():
             file_list = [path for path in absolute_path.rglob("*") if path.is_file()]
         else:
-            file_list = [path for path in root_directory.rglob(relative_path) if path.is_file()]
+            file_list = [path for path in root_directory.rglob(str(relative_path)) if path.is_file()]
         if file_list:
             available_files.extend(file_list)
         else:
