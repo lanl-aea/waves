@@ -287,7 +287,7 @@ class _ParameterGenerator(ABC):
         if write:
             parameter_study.to_netcdf(path=existing_parameter_study, mode='w', format="NETCDF4", engine='h5netcdf')
 
-    def _write_yaml(self, parameter_set_files: list[pathlib.Path]) -> None:
+    def _write_yaml(self, parameter_set_files: typing.Iterable[pathlib.Path]) -> None:
         """Write YAML formatted output to STDOUT, separate set files, or a single file
 
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
@@ -343,7 +343,7 @@ class _ParameterGenerator(ABC):
             with open(output_file, 'w') as outfile:
                 outfile.write(yaml.dump(parameter_dictionary))
 
-    def _write_meta(self, parameter_set_files: list[pathlib.Path]) -> None:
+    def _write_meta(self, parameter_set_files: typing.Iterable[pathlib.Path]) -> None:
         """Write the parameter study meta data file.
 
         The parameter study meta file is always overwritten. It should *NOT* be used to determine if the parameter study
