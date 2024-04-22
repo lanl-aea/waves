@@ -114,11 +114,11 @@ def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOW
 
 def main(subcommand: str,
          input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None],
-         output_file_template: str = parameter_generators._default_output_file_template,
-         output_file: str = parameter_generators._default_output_file,
+         output_file_template: typing.Optional[str] = parameter_generators._default_output_file_template,
+         output_file: typing.Optional[str] = parameter_generators._default_output_file,
          output_file_type: typing.Literal["yaml", "h5"] = parameter_generators._default_output_file_type,
          set_name_template: str = parameter_generators._default_set_name_template,
-         previous_parameter_study: str = parameter_generators._default_previous_parameter_study,
+         previous_parameter_study: typing.Optional[str] = parameter_generators._default_previous_parameter_study,
          overwrite: bool = parameter_generators._default_overwrite,
          dryrun: bool = parameter_generators._default_dryrun,
          write_meta: bool = parameter_generators._default_write_meta) -> None:
