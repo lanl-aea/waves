@@ -97,7 +97,7 @@ def main(
 def available_files(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]]
-) -> typing.Tuple[typing.List[pathlib.Path], typing.List[str]]:
+) -> typing.Tuple[typing.List[pathlib.Path], typing.List[typing.Union[str, pathlib.Path]]]:
     """Build a list of files at ``relative_paths`` with respect to the root ``root_directory`` directory
 
     Returns a list of absolute paths and a list of any relative paths that were not found. Falls back to a full
