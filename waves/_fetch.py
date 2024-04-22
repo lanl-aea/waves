@@ -93,8 +93,10 @@ def main(
                    print_available=print_available)
 
 
-def available_files(root_directory: typing.Union[str, pathlib.Path],
-                    relative_paths: typing.Iterable[str]) -> typing.Tuple[typing.List[pathlib.Path], typing.List[str]]:
+def available_files(
+    root_directory: typing.Union[str, pathlib.Path],
+    relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]]
+) -> typing.Tuple[typing.List[pathlib.Path], typing.List[str]]:
     """Build a list of files at ``relative_paths`` with respect to the root ``root_directory`` directory
 
     Returns a list of absolute paths and a list of any relative paths that were not found. Falls back to a full
@@ -131,8 +133,8 @@ def available_files(root_directory: typing.Union[str, pathlib.Path],
 
 
 def build_source_files(
-    root_directory: str,
-    relative_paths: typing.Iterable[str],
+    root_directory: typing.Union[str, pathlib.Path],
+    relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     exclude_patterns: typing.Iterable[str] = _settings._fetch_exclude_patterns
 ) -> typing.Tuple[typing.List[pathlib.Path], typing.List[str]]:
     """Wrap :meth:`available_files` and trim list based on exclude patterns
