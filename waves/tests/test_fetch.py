@@ -35,6 +35,16 @@ def test_fetch():
             mock_recursive_copy.assert_not_called()
 
 
+def test_fetch_settings():
+    """Check that the implemented tutorial settings and the static type hints are consistent.
+
+    The type hints and implemented integer checks are forced to be consistent in the fetch module, but the type hints
+    ``typing.Literal`` can't be built from the settings tutorial path dictionary keys. Unit test to avoid out-of-sync
+    programmatic errors between settings variables.
+    """
+    assert tuple(_settings._tutorial_paths.keys()) == _fetch._allowable_tutorial_numbers
+
+
 conditional_copy_input = {
     "one new file": (  # File does not exist
         one_file_copy_tuples,
