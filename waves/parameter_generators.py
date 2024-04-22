@@ -82,11 +82,11 @@ class _ParameterGenerator(ABC):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     """
     def __init__(self, parameter_schema: dict,
-                 output_file_template: str = _default_output_file_template,
-                 output_file: str = _default_output_file,
+                 output_file_template: typing.Optional[str] = _default_output_file_template,
+                 output_file: typing.Optional[str] = _default_output_file,
                  output_file_type: _allowable_output_file_typing = _default_output_file_type,
                  set_name_template: str = _default_set_name_template,
-                 previous_parameter_study: str = _default_previous_parameter_study,
+                 previous_parameter_study: typing.Optional[str] = _default_previous_parameter_study,
                  overwrite: bool = _default_overwrite,
                  dryrun: bool = _default_dryrun,
                  write_meta: bool = _default_write_meta,
