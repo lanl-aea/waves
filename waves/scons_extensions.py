@@ -351,7 +351,7 @@ def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", postfi
     return {f"{prefix}{key}{postfix}": value for key, value in substitution_dictionary.items()}
 
 
-def find_program(names: list[str], env) -> str:
+def find_program(names: typing.Iterable[str], env) -> str:
     """Search for a program from a list of possible program names.
 
     Returns the absolute path of the first program name found. If path parts contain spaces, the part will be wrapped in
@@ -376,7 +376,7 @@ def find_program(names: list[str], env) -> str:
     return first_found_path
 
 
-def add_program(names: list[str], env) -> str:
+def add_program(names: typing.Iterable[str], env) -> str:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
@@ -401,7 +401,7 @@ def add_program(names: list[str], env) -> str:
     return first_found_path
 
 
-def add_cubit(names: list[str], env) -> str:
+def add_cubit(names: typing.Iterable[str], env) -> str:
     """Modifies environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
@@ -528,7 +528,11 @@ def shell_environment(
     return SCons.Environment.Environment(ENV=shell_environment)
 
 
-def construct_action_list(actions: list[str], prefix: str = _cd_action_prefix, postfix: str = "") -> list[str]:
+def construct_action_list(
+    actions: typing.Iterable[str],
+    prefix: str = _cd_action_prefix,
+    postfix: str = ""
+) -> typing.Iterable[str]:
     """Return an action list with a common pre/post-fix
 
     Returns the constructed action list with pre/post fix strings as
@@ -574,8 +578,14 @@ def _build_subdirectory(target: list) -> pathlib.Path:
     return build_subdirectory
 
 
-def _first_target_emitter(target: list, source: list, env, suffixes: list[str] = [], appending_suffixes: list[str] = [],
-                          stdout_extension: str = _stdout_extension) -> tuple[list, list]:
+def _first_target_emitter(
+    target: list,
+    source: list,
+    env,
+    suffixes: typing.Iterable[str] = [],
+    appending_suffixes: typing.Iterable[str] = [],
+    stdout_extension: str = _stdout_extension
+) -> typing.Tuple[list, list]:
     """Appends the target list with the builder managed targets
 
     Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
@@ -619,7 +629,7 @@ def _first_target_emitter(target: list, source: list, env, suffixes: list[str] =
     return string_targets, source
 
 
-def _abaqus_journal_emitter(target: list, source: list, env) -> tuple[list, list]:
+def _abaqus_journal_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Appends the abaqus_journal builder target list with the builder managed targets
 
     Appends ``target[0]``.abaqus_v6.env and ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder
@@ -714,8 +724,8 @@ def sbatch_abaqus_journal(*args, **kwargs):
 
 
 def _abaqus_solver_emitter(target: list, source: list, env,
-                           suffixes: list[str] = _abaqus_solver_common_suffixes,
-                           stdout_extension: str = _stdout_extension) -> tuple[list, list]:
+                           suffixes: typing.Iterable[str] = _abaqus_solver_common_suffixes,
+                           stdout_extension: str = _stdout_extension) -> typing.Tuple[list, list]:
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -763,22 +773,22 @@ def _abaqus_solver_emitter(target: list, source: list, env,
     return string_targets, source
 
 
-def _abaqus_standard_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
+def _abaqus_standard_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Passes the standard specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_standard_extensions)
 
 
-def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
+def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Passes the explicit specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_explicit_extensions)
 
 
-def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> tuple[list, list]:
+def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Passes the datacheck specific extensions to :meth:`_abaqus_solver_emitter`"""
     return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
 
 
-def abaqus_solver(program: str = "abaqus", post_action: list[str] = [],
+def abaqus_solver(program: str = "abaqus", post_action: typing.Iterable[str] = [],
                   emitter: typing.Literal["standard", "explicit", "datacheck", None] = None) -> SCons.Builder.Builder:
     """Abaqus solver SCons builder
 
@@ -887,7 +897,7 @@ def sbatch_abaqus_solver(*args, **kwargs):
     return abaqus_solver(*args, **kwargs)
 
 
-def _sierra_emitter(target: list, source: list, env) -> tuple[list, list]:
+def _sierra_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Appends the sierra builder target list with the builder managed targets
 
     Appends ``target[0]``.env and ``target[0]``.stdout  to the ``target`` list. The Sierra Builder requires
@@ -908,7 +918,7 @@ def _sierra_emitter(target: list, source: list, env) -> tuple[list, list]:
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def sierra(program: str = "sierra", application: str = "adagio", post_action: list[str] = []) -> SCons.Builder.Builder:
+def sierra(program: str = "sierra", application: str = "adagio", post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
     """Sierra SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -1048,7 +1058,7 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
     return target_list
 
 
-def python_script(post_action: list[str] = []) -> SCons.Builder.Builder:
+def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
     """Python script SCons builder
 
     This builder requires that the python script to execute is the first source in the list. The builder returned by
@@ -1118,7 +1128,7 @@ def sbatch_python_script(*args, **kwargs):
     return python_script(*args, **kwargs)
 
 
-def _matlab_script_emitter(target: list, source: list, env) -> tuple[list, list]:
+def _matlab_script_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Appends the matlab_script builder target list with the builder managed targets
 
     Appends ``target[0]``.matlab.env and ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires
@@ -1140,7 +1150,7 @@ def _matlab_script_emitter(target: list, source: list, env) -> tuple[list, list]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def matlab_script(program: str = "matlab", post_action: list[str] = []) -> SCons.Builder.Builder:
+def matlab_script(program: str = "matlab", post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
     """Matlab script SCons builder
 
     .. warning::
@@ -1250,7 +1260,7 @@ def conda_environment() -> SCons.Builder.Builder:
     return conda_environment_builder
 
 
-def _abaqus_extract_emitter(target: list, source: list, env) -> tuple[list, list]:
+def _abaqus_extract_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Prepends the abaqus extract builder target H5 file if none is specified. Appends the source[0].csv file unless
     ``delete_report_file`` is ``True``.  Always appends the ``target[0]_datasets.h5`` file.
 
@@ -1382,7 +1392,7 @@ def _build_odb_extract(target: list, source: list, env) -> None:
     return None
 
 
-def sbatch(program: str = "sbatch", post_action: list[str] = []) -> SCons.Builder.Builder:
+def sbatch(program: str = "sbatch", post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
     """`SLURM`_ `sbatch`_ SCons builder
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
@@ -1549,7 +1559,7 @@ def sphinx_latexpdf(program: str = "sphinx-build", options: str = "", builder: s
     return sphinx_latex
 
 
-def _custom_scanner(pattern: str, suffixes: list[str], flags: typing.Optional[int] = None) -> SCons.Scanner.Scanner:
+def _custom_scanner(pattern: str, suffixes: typing.Iterable[str], flags: typing.Optional[int] = None) -> SCons.Scanner.Scanner:
     """Custom Scons scanner
 
     constructs a scanner object based on a regular expression pattern. Will only search for files matching the list of
@@ -1600,7 +1610,7 @@ def _custom_scanner(pattern: str, suffixes: list[str], flags: typing.Optional[in
 
 def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun_options: str = "+p1",
                   inciter_options: str = "", prefix_command: str = "",
-                  post_action: list[str] = []) -> SCons.Builder.Builder:
+                  post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
     """Quinoa solver SCons builder
 
     .. warning::

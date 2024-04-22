@@ -38,7 +38,7 @@ def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path
     return new_path
 
 
-def search_commands(options: list[str]) -> typing.Optional[str]:
+def search_commands(options: typing.Iterable[str]) -> typing.Optional[str]:
     """Return the first found command in the list of options. Return None if none are found.
 
     :param list options: executable path(s) to test
@@ -50,7 +50,7 @@ def search_commands(options: list[str]) -> typing.Optional[str]:
     return command_abspath
 
 
-def find_command(options: list[str]) -> typing.Optional[str]:
+def find_command(options: typing.Iterable[str]) -> typing.Optional[str]:
     """Return first found command in list of options.
 
     :param options: alternate command options
@@ -83,7 +83,7 @@ def cubit_os_bin() -> str:
     return bin_directory
 
 
-def find_cubit_bin(options: list[str], bin_directory: typing.Optional[str] = None) -> pathlib.Path:
+def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional[str] = None) -> pathlib.Path:
     """Provided a few options for the Cubit executable, search for the bin directory.
 
     Recommend first checking to see if cubit will import.
@@ -116,7 +116,7 @@ def find_cubit_bin(options: list[str], bin_directory: typing.Optional[str] = Non
     return cubit_bin
 
 
-def tee_subprocess(command: list[str], **kwargs) -> tuple[int, str]:
+def tee_subprocess(command: typing.Iterable[str], **kwargs) -> typing.Tuple[int, str]:
     """Stream STDOUT to terminal while saving buffer to variable
 
     :param command: Command to execute provided a list of strings
