@@ -93,7 +93,7 @@ if installed:
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("commands, fetch_options", system_tests)
-def test_run_tutorial(commands: list[str], fetch_options: typing.Optional[str]) -> None:
+def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
     """Fetch and run the tutorial configuration file(s) as system tests in a temporary directory
 
     Iterates on the command strings in the commands list. Performs string template substitution using keys:
