@@ -65,7 +65,7 @@ def main() -> None:
         else:
             parser.print_help()
     except (WAVESError, RuntimeError) as err:
-        sys.exit(err)
+        sys.exit(str(err))
 
 
 def get_parser() -> argparse.ArgumentParser:
