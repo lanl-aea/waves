@@ -103,13 +103,11 @@ if not env['ignore_documentation']:
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
 
-# Add pytests
-build_dir = variant_dir_base / "pytest"
-SConscript(build_dir.name, variant_dir=build_dir, exports='env', duplicate=False)
-
-# Style checks
-build_dir = variant_dir_base / "flake8"
-SConscript(build_dir.name, variant_dir=build_dir, exports='env', duplicate=False)
+# Add pytests, style checks, and static type checking
+workflow_configurations = ["pytest", "flake8", "mypy"]
+for workflow in workflow_configurations:
+    build_dir = variant_dir_base / workflow
+    SConscript(build_dir.name, variant_dir=build_dir, exports='env', duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
 # Add aliases to help message so users know what build target options are available

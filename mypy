@@ -1,0 +1,15 @@
+#! /usr/bin/env python
+
+# Inherit the parent construction environment
+Import("env")
+
+target = env.Command(
+    target=["mypy.txt"],
+    source=["mypy"],
+    action=[
+        "mypy waves/ --exclude modsim_template --exclude tutorials --exclude tests " \
+            "--disable-error-code=import-untyped | tee ${TARGET.abspath}"
+    ]
+)
+env.AlwaysBuild(target)
+env.Alias("mypy", target)
