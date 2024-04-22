@@ -1240,7 +1240,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         if self.sampler_class == "morris" and parameter_count < 2:
             raise SchemaValidationError("The SALib Morris sampler requires at least two parameters")
 
-    def _sampler_overrides(self, override_kwargs=None) -> dict:
+    def _sampler_overrides(self, override_kwargs: dict = {}) -> dict:
         """Provide sampler specific kwarg override dictionaries
 
         * sobol produces duplicate parameter sets for two parameters when ``calc_second_order`` is ``True``. Override
@@ -1250,8 +1250,6 @@ class SALibSampler(_ParameterGenerator, ABC):
 
         :return: override kwarg dictionary
         """
-        if not override_kwargs:
-            override_kwargs = {}
         parameter_count = len(self._parameter_names)
         if self.sampler_class == "sobol" and parameter_count == 2:
             override_kwargs = {**override_kwargs, "calc_second_order": False}
@@ -1265,8 +1263,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         """Generate the `SALib.sample`_ ``sampler_class`` parameter sets"""
         N = self.parameter_schema['N']
         parameter_count = len(self._parameter_names)
-        common_override_kwargs = {}
-        override_kwargs = self._sampler_overrides(common_override_kwargs)
+        override_kwargs = self._sampler_overrides({})
         if kwargs:
             kwargs.update(override_kwargs)
         else:
