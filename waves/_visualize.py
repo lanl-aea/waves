@@ -6,6 +6,7 @@ to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 import subprocess
 import argparse
 import pathlib
+import typing
 import sys
 import re
 
@@ -57,12 +58,13 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(target: str, sconstruct: str | pathlib.Path, exclude_list: list[str], exclude_regex: str,
-         output_file: str | pathlib.Path | None = None, print_graphml: bool = False,
+def main(target: str, sconstruct: typing.Union[str, pathlib.Path],
+         exclude_list: typing.Iterable[str], exclude_regex: str,
+         output_file: typing.Unioon[str, pathlib.Path, None] = None, print_graphml: bool = False,
          height: int = _settings._visualize_default_height, width: int = _settings._visualize_default_width,
          font_size: int = _settings._visualize_default_font_size, vertical: bool = False,
          no_labels: bool = False, print_tree: bool = False,
-         input_file: str | pathlib.Path | None = None) -> None:
+         input_file: typing.Union[str, pathlib.Path, None] = None) -> None:
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -187,7 +189,7 @@ def parse_output(tree_lines: list, exclude_list: list, exclude_regex: str) -> di
 
 
 def check_regex_exclude(exclude_regex: str, node_name: str, current_indent: int, exclude_indent: int,
-                        exclude_node: bool = False) -> tuple[bool, int]:
+                        exclude_node: bool = False) -> typing.Tuple[bool, int]:
     """
     Excludes node names that match the regular expression
 
