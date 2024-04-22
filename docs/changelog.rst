@@ -10,7 +10,8 @@ Changelog
 
 Bug fixes
 =========
-- Python 3.8 compatible type hints (:issue:`650`, :merge:`809`). By `Kyle Brindley`_.
+- Fix Python 3.8 and 3.9 incompatibility introduced in :ref:`` (:merge:`749`) with Python 3.8 compatible type
+  annotations (:issue:`650`, :merge:`809`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -136,6 +137,8 @@ Internal Changes
 Enhancements
 ============
 - Simplify core tutorial waves fetch commands (:issue:`617`, :merge:`773`). By `Sergio Cordova`_.
+
+.. _0.7.10:
 
 *******************
 0.7.10 (2024-03-15)
