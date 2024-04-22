@@ -458,7 +458,7 @@ def _return_environment(command: str) -> dict:
     return environment
 
 
-def _cache_environment(command: str, cache: typing.Optional[str] = None,
+def _cache_environment(command: str, cache: typing.Optional[typing.Union[str, pathlib.Path]] = None,
                        overwrite_cache: bool = False, verbose: bool = False) -> dict:
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 
