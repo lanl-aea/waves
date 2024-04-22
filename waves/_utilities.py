@@ -50,7 +50,7 @@ def search_commands(options: typing.Iterable[str]) -> typing.Optional[str]:
     return command_abspath
 
 
-def find_command(options: typing.Iterable[str]) -> typing.Optional[str]:
+def find_command(options: typing.Iterable[str]) -> str:
     """Return first found command in list of options.
 
     :param options: alternate command options
