@@ -80,6 +80,7 @@ def main(
     """
     if not requested_paths:
         requested_paths = []
+    root_directory = pathlib.Path(root_directory)
     if not root_directory.is_dir():
         # During "waves fetch" sub-command, this should only be reached if the package installation
         # structure doesn't match the assumptions in _settings.py. It is used by the Conda build tests as a
