@@ -137,7 +137,7 @@ def build_source_files(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     exclude_patterns: typing.Iterable[str] = _settings._fetch_exclude_patterns
-) -> typing.Tuple[typing.List[pathlib.Path], typing.List[str]]:
+) -> typing.Tuple[typing.List[pathlib.Path], typing.List[typing.Union[str, pathlib.Path]]]:
     """Wrap :meth:`available_files` and trim list based on exclude patterns
 
     If no source files are found, an empty list is returned.
