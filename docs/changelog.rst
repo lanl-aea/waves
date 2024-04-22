@@ -8,6 +8,10 @@ Changelog
 0.8.4 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Python 3.8 compatible type hints (:issue:`650`, :merge:`809`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Fix broken abaqus links (:issue:`642`, :merge:`805`). By `Sergio Cordova`_.
