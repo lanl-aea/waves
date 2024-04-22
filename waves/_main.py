@@ -136,7 +136,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+    main()  # pragma: no cover
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
