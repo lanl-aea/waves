@@ -43,8 +43,8 @@ _default_dryrun = False
 _default_write_meta = False
 
 _parameter_study_meta_file = "parameter_study_meta.txt"
-_allowable_output_file_types = ["yaml", "h5"]
 _allowable_output_file_typing = typing.Literal["yaml", "h5"]
+_allowable_output_file_types = typing.get_args(_allowable_output_file_typing)
 _default_output_file_type = _allowable_output_file_types[0]
 
 _allowable_data_type = typing.Literal[_samples_data_variable, _quantiles_data_variable]
