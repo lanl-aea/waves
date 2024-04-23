@@ -29,7 +29,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("TARGET", help=f"SCons target")
     parser.add_argument("--sconstruct", type=str, default="SConstruct",
         help="Path to SConstruct file (default: %(default)s)")
-    parser.add_argument("-o", "--output-file", type=str,
+    parser.add_argument("-o", "--output-file", type=pathlib.Path,
         help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
              "(default: %(default)s)")
     parser.add_argument("--height", type=int, default=12,
@@ -58,13 +58,21 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(target: str, sconstruct: typing.Union[str, pathlib.Path],
-         exclude_list: typing.Iterable[str], exclude_regex: str,
-         output_file: typing.Union[str, pathlib.Path, None] = None, print_graphml: bool = False,
-         height: int = _settings._visualize_default_height, width: int = _settings._visualize_default_width,
-         font_size: int = _settings._visualize_default_font_size, vertical: bool = False,
-         no_labels: bool = False, print_tree: bool = False,
-         input_file: typing.Union[str, pathlib.Path, None] = None) -> None:
+def main(
+    target: str,
+    sconstruct: typing.Union[str, pathlib.Path],
+    exclude_list: typing.List[str],
+    exclude_regex: str,
+    output_file: typing.Optional[pathlib.Path] = None,
+    print_graphml: bool = False,
+    height: int = _settings._visualize_default_height,
+    width: int = _settings._visualize_default_width,
+    font_size: int = _settings._visualize_default_font_size,
+    vertical: bool = False,
+    no_labels: bool = False,
+    print_tree: bool = False,
+    input_file: typing.Union[str, pathlib.Path, None] = None
+) -> None:
     """Visualize the directed acyclic graph created by a SCons build
 
     Uses matplotlib and networkx to build out an acyclic directed graph showing the relationships of the various
@@ -118,7 +126,7 @@ def main(target: str, sconstruct: typing.Union[str, pathlib.Path],
     visualize(tree_dict, output_file, height, width, font_size, vertical, no_labels)
 
 
-def parse_output(tree_lines: list, exclude_list: list, exclude_regex: str) -> dict:
+def parse_output(tree_lines: typing.List[str], exclude_list: typing.List[str], exclude_regex: str) -> dict:
     """
     Parse the string that has the tree output and store it in a dictionary
 
@@ -129,7 +137,7 @@ def parse_output(tree_lines: list, exclude_list: list, exclude_regex: str) -> di
     :returns: dictionary of tree output
     """
     edges = list()  # List of tuples for storing all connections
-    node_info = dict()
+    node_info: typing.Dict[str, typing.Dict] = dict()
     node_number = 0
     nodes = list()
     higher_nodes = dict()
@@ -169,7 +177,7 @@ def parse_output(tree_lines: list, exclude_list: list, exclude_regex: str) -> di
                 graphml_edges += f'    <edge source="{higher_node}" target="{node_name}"/>\n'
             node_info[node_name]['status'] = status
 
-    tree_dict = dict()
+    tree_dict: typing.Dict[str, typing.Any] = dict()
     tree_dict['nodes'] = nodes
     tree_dict['edges'] = edges
     tree_dict['node_info'] = node_info
@@ -235,11 +243,15 @@ def click_arrow(event, annotations: dict, arrows: dict) -> None:
                     fig.canvas.draw_idle()
 
 
-def visualize(tree: dict, output_file: str,
-              height: int = _settings._visualize_default_height,
-              width: int = _settings._visualize_default_width,
-              font_size: int = _settings._visualize_default_font_size,
-              vertical: bool = False, no_labels: bool = False) -> None:
+def visualize(
+    tree: dict,
+    output_file: typing.Optional[pathlib.Path] = None,
+    height: int = _settings._visualize_default_height,
+    width: int = _settings._visualize_default_width,
+    font_size: int = _settings._visualize_default_font_size,
+    vertical: bool = False,
+    no_labels: bool = False
+) -> None:
     """Create a visualization showing the tree
 
     :param tree: output of the scons tree command stored as dictionary
@@ -269,8 +281,8 @@ def visualize(tree: dict, output_file: str,
     box_color = '#5AC7CB'  # Light blue from Waves Logo
     arrow_color = '#B7DEBE'  # Light green from Waves Logo
     # TODO: separate plot construction from output for easier unit testing
-    annotations = dict()
-    arrows = dict()
+    annotations: typing.Dict[str, typing.Any] = dict()
+    arrows: typing.Dict[str, typing.Dict] = dict()
     ax = plt.gca()
     ax.axis('off')
     fig = plt.gcf()
@@ -311,10 +323,10 @@ def visualize(tree: dict, output_file: str,
 
     fig.canvas.mpl_connect("button_press_event", lambda x: click_arrow(x, annotations, arrows))
 
-    if output_file:
-        file_name = pathlib.Path(output_file)
+    if output_file is not None:
+        file_name = output_file
         file_name.parent.mkdir(parents=True, exist_ok=True)
-        suffix = file_name.suffix
+        suffix = output_file.suffix
         if not suffix or suffix[1:] not in list(fig.canvas.get_supported_filetypes().keys()):
             # If there is no suffix or it's not supported by matplotlib, use svg
             file_name = file_name.with_suffix('.svg')
