@@ -1788,7 +1788,7 @@ def fierro_builder(
     :rtype: SCons.Builder.Builder
     """
     action = [
-        "${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}"
+        "${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}"
     ]
     action = construct_action_list(action, prefix="${cd_action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
