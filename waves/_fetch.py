@@ -28,7 +28,8 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
 
     parser.add_argument("FILE", nargs="*",
-        help=f"modsim template file or directory")
+        help=f"modsim template file or directory",
+        type=pathlib.Path)
     parser.add_argument("--destination",
         help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
              "destination will not be copied. (default: PWD)",
@@ -56,7 +57,7 @@ def main(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.List[typing.Union[str, pathlib.Path]] = [],
+    requested_paths: typing.List[pathlib.Path] = [],
     tutorial: typing.Optional[_allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
@@ -72,7 +73,7 @@ def main(
     :param relative_paths: List of string or pathlike objects describing relative paths to search for in
         root_directory
     :param destination: String or pathlike object for the destination directory
-    :param requested_paths: list of relative path-like objects that subset the files found in the
+    :param requested_paths: list of Path objects that subset the files found in the
         ``root_directory`` ``relative_paths``
     :param tutorial: Integer to fetch all necessary files for the specified tutorial number
     :param overwrite: Boolean to overwrite any existing files in destination directory
@@ -156,7 +157,7 @@ def build_source_files(
     return source_files, not_found
 
 
-def longest_common_path_prefix(file_list: typing.Iterable[typing.Union[str, pathlib.Path]]) -> pathlib.Path:
+def longest_common_path_prefix(file_list: typing.List[pathlib.Path]) -> pathlib.Path:
     """Return the longest common file path prefix.
 
     The edge case of a single path is handled by returning the parent directory
@@ -167,9 +168,6 @@ def longest_common_path_prefix(file_list: typing.Iterable[typing.Union[str, path
 
     :raises RuntimeError: When file list is empty
     """
-    if isinstance(file_list, str) or isinstance(file_list, pathlib.Path):
-        file_list = [file_list]
-    file_list = [pathlib.Path(path) for path in file_list]
     number_of_files = len(file_list)
     if number_of_files < 1:
         raise RuntimeError("No files in 'file_list'")
@@ -182,12 +180,12 @@ def longest_common_path_prefix(file_list: typing.Iterable[typing.Union[str, path
 
 def build_destination_files(
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.List[typing.Union[str, pathlib.Path]]
+    requested_paths: typing.List[pathlib.Path]
 ) -> typing.Tuple[list, list]:
     """Build destination file paths from the requested paths, truncating the longest possible source prefix path
 
     :param destination: String or pathlike object for the destination directory
-    :param requested_paths: List of requested file paths
+    :param requested_paths: List of requested files as path-objects
 
     :returns: destination files, existing files
     """
@@ -198,11 +196,14 @@ def build_destination_files(
     return destination_files, existing_files
 
 
-def build_copy_tuples(destination: typing.Union[str, pathlib.Path], requested_paths_resolved: list,
-                      overwrite: bool = False) -> typing.Tuple[tuple]:
+def build_copy_tuples(
+    destination: typing.Union[str, pathlib.Path],
+    requested_paths_resolved: typing.List[pathlib.Path],
+    overwrite: bool = False
+) -> typing.Tuple[tuple]:
     """
     :param destination: String or pathlike object for the destination directory
-    :param requested_paths_resolved: List of absolute requested file paths
+    :param requested_paths_resolved: List of absolute requested files as path-objects
 
     :returns: requested and destination file path pairs
     """
@@ -241,9 +242,9 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
 
 
 def extend_requested_paths(
-    requested_paths: typing.List[typing.Union[str, pathlib.Path]],
+    requested_paths: typing.List[pathlib.Path],
     tutorial: _allowable_tutorial_numbers_typing
-) -> list:
+) -> typing.List[pathlib.Path]:
     """Extend the requested_paths list with the necessary tutorial files.
 
     :param requested_paths: list of relative path-like objects that subset the files found in the
@@ -267,7 +268,7 @@ def recursive_copy(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.List[typing.Union[str, pathlib.Path]] = [],
+    requested_paths: typing.List[pathlib.Path] = [],
     tutorial: typing.Optional[_allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
@@ -282,7 +283,7 @@ def recursive_copy(
     :param relative_paths: List of string or pathlike objects describing relative paths to search for in
         root_directory
     :param destination: String or pathlike object for the destination directory
-    :param requested_paths: list of relative path-like objects that subset the files found in the
+    :param requested_paths: list of relative path-objects that subset the files found in the
         ``root_directory`` ``relative_paths``
     :param tutorial: Integer to fetch all necessary files for the specified tutorial number
     :param overwrite: Boolean to overwrite any existing files in destination directory
