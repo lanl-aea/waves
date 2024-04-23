@@ -179,8 +179,8 @@ def test_build_source_files(root_directory, relative_paths, exclude_patterns,
 expected_path = pathlib.Path("/path/to/source")
 longest_common_path_prefix_input = {
     "no list": ([], expected_path, pytest.raises(RuntimeError)),
-    "one file, str": (str(one_file_source_tree[0]), expected_path, does_not_raise()),
-    "one file, path": (one_file_source_tree[0], expected_path, does_not_raise()),
+    "one file, str": (str(one_file_source_tree[0]), expected_path, pytest.raises(ValueError)),
+    "one file, path": (one_file_source_tree[0], expected_path, pytest.raises(TypeError)),
     "one file, list": (one_file_source_tree, expected_path, does_not_raise()),
     "two files": (two_file_source_tree, expected_path, does_not_raise()),
 }
