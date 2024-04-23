@@ -208,10 +208,11 @@ def build_copy_tuples(
     :returns: requested and destination file path pairs
     """
     destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
+    copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in
+                   zip(requested_paths_resolved, destination_files)]
     if not overwrite and existing_files:
         copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in
-                       zip(requested_paths_resolved, destination_files) if
-                       destination_file not in existing_files]
+                       copy_tuples if destination_file not in existing_files]
     return copy_tuples
 
 

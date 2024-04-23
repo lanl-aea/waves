@@ -227,12 +227,12 @@ build_copy_tuples_input = {
     "two files, one exists, overwrite": (
         "/path/to/destination", two_file_source_tree, True,
         (two_file_destination_tree, [two_file_destination_tree[1]]),
-        tuple(zip(two_file_source_tree, two_file_destination_tree))
+        list(zip(two_file_source_tree, two_file_destination_tree))
     ),
     "two files, one exists, no overwrite": (
         "/path/to/destination", two_file_source_tree, False,
         (two_file_destination_tree, [two_file_destination_tree[1]]),
-        tuple(zip([two_file_source_tree[0]], [two_file_destination_tree[0]]))
+        list(zip([two_file_source_tree[0]], [two_file_destination_tree[0]]))
     )
 }
 
@@ -264,7 +264,7 @@ def test_print_list():
 def test_recursive_copy(root_directory, source_files, source_tree, destination_tree, tutorial):
 
     # Dummy modsim_template tree
-    copy_tuples = tuple(zip(source_tree, destination_tree))
+    copy_tuples = list(zip(source_tree, destination_tree))
     not_found = []
     available_files_output = (source_tree, not_found)
     single_file_requested = ([source_tree[0]], not_found)
@@ -290,7 +290,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
         _fetch.recursive_copy(root_directory.parent, root_directory.name, destination,
                                            requested_paths=[source_files[0]])
         mock_print_list.assert_not_called()
-        mock_conditional_copy.assert_called_once_with((copy_tuples[0], ))
+        mock_conditional_copy.assert_called_once_with([copy_tuples[0]])
 
     # Files in destination tree do not exist, but dry-run. Print destination file tree.
     with patch("waves._fetch.available_files", return_value=available_files_output), \
@@ -324,7 +324,7 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
          does_not_raise():
         _fetch.recursive_copy(root_directory.parent, root_directory.name, destination)
         mock_print_list.assert_not_called()
-        mock_conditional_copy.assert_called_once_with(())
+        mock_conditional_copy.assert_called_once_with([])
 
     # Files in destination tree do exist, we want to overwrite contents, and the files differ. Copy the source file.
     with patch("waves._fetch.available_files", return_value=available_files_output), \
