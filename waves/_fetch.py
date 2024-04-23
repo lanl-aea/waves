@@ -27,27 +27,40 @@ def get_parser() -> argparse.ArgumentParser:
     """
     parser = argparse.ArgumentParser(add_help=False)
 
-    parser.add_argument("FILE", nargs="*",
+    parser.add_argument(
+        "FILE",
+        nargs="*",
         help=f"modsim template file or directory",
-        type=pathlib.Path)
-    parser.add_argument("--destination",
+        type=pathlib.Path
+    )
+    parser.add_argument(
+        "--destination",
         help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
              "destination will not be copied. (default: PWD)",
         type=pathlib.Path,
-        default=pathlib.Path().cwd())
-    parser.add_argument("--tutorial",
+        default=pathlib.Path().cwd()
+    )
+    parser.add_argument(
+        "--tutorial",
         help="Fetch all necessary files for specified tutorial. Appends to the positional FILE requests.",
         type=int,
-        choices=_settings._tutorial_paths.keys())
-    parser.add_argument("--overwrite",
+        choices=_settings._tutorial_paths.keys()
+    )
+    parser.add_argument(
+        "--overwrite",
         action="store_true",
-        help="Overwrite any existing files (default: %(default)s)")
-    parser.add_argument("--dry-run",
+        help="Overwrite any existing files (default: %(default)s)"
+    )
+    parser.add_argument(
+        "--dry-run",
         action="store_true",
-        help="Print the destination tree and exit (default: %(default)s)")
-    parser.add_argument("--print-available",
+        help="Print the destination tree and exit (default: %(default)s)"
+    )
+    parser.add_argument(
+        "--print-available",
         action="store_true",
-        help="Print available modsim template files and exit (default: %(default)s)")
+        help="Print available modsim template files and exit (default: %(default)s)"
+    )
 
     return parser
 
