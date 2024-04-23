@@ -28,7 +28,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
 
     parser.add_argument("FILE", nargs="*",
-                              help=f"modsim template file or directory")
+        help=f"modsim template file or directory")
     parser.add_argument("--destination",
         help="Destination directory. Unless ``--overwrite`` is specified, conflicting file names in the " \
              "destination will not be copied. (default: PWD)",
@@ -56,7 +56,7 @@ def main(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.Optional[typing.Iterable[typing.Union[str, pathlib.Path]]] = None,
+    requested_paths: typing.List[typing.Union[str, pathlib.Path]] = [],
     tutorial: typing.Optional[_allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
@@ -79,8 +79,6 @@ def main(
     :param dry_run: Print the destination tree and exit. Short circuited by ``print_available``
     :param print_available: Print the available source files and exit. Short circuits ``dry_run``
     """
-    if not requested_paths:
-        requested_paths = []
     root_directory = pathlib.Path(root_directory)
     if not root_directory.is_dir():
         # During "waves fetch" sub-command, this should only be reached if the package installation
@@ -184,7 +182,7 @@ def longest_common_path_prefix(file_list: typing.Iterable[typing.Union[str, path
 
 def build_destination_files(
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.Iterable[typing.Union[str, pathlib.Path]]
+    requested_paths: typing.List[typing.Union[str, pathlib.Path]]
 ) -> typing.Tuple[list, list]:
     """Build destination file paths from the requested paths, truncating the longest possible source prefix path
 
@@ -243,7 +241,7 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
 
 
 def extend_requested_paths(
-    requested_paths: list,
+    requested_paths: typing.List[typing.Union[str, pathlib.Path]],
     tutorial: _allowable_tutorial_numbers_typing
 ) -> list:
     """Extend the requested_paths list with the necessary tutorial files.
@@ -269,7 +267,7 @@ def recursive_copy(
     root_directory: typing.Union[str, pathlib.Path],
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
-    requested_paths: typing.Optional[typing.List[typing.Union[str, pathlib.Path]]] = None,
+    requested_paths: typing.List[typing.Union[str, pathlib.Path]] = [],
     tutorial: typing.Optional[_allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
@@ -293,9 +291,6 @@ def recursive_copy(
 
     :raises RuntimeError: If the no requested files exist in the longest common source path
     """
-    if not requested_paths:
-        requested_paths = []
-
     if tutorial is not None:
         requested_paths = extend_requested_paths(requested_paths, tutorial)
 
@@ -307,7 +302,7 @@ def recursive_copy(
         print_list([path.relative_to(longest_common_source_path) for path in source_files])
 
     # Down select to requested file list
-    if requested_paths:
+    if len(requested_paths) > 0:
         requested_paths_resolved, missing_requested_paths = \
             build_source_files(longest_common_source_path, requested_paths)
     else:
