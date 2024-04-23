@@ -46,7 +46,7 @@ env = Environment(
 waves.scons_extensions.print_build_failures(env["print_build_failures"])
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
+env["fierro"] = waves.scons_extensions.add_program(["fierro-parallel-explicit"], env)
 
 # Set project internal variables and variable substitution dictionaries
 project_configuration = pathlib.Path(inspect.getfile(lambda: None))
