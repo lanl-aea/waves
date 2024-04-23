@@ -4,11 +4,11 @@
 Import("env")
 
 target = env.Command(
-    target=["mypy.txt"],
+    target=["mypy.txt", "any-exprs.txt", "types-of-anys.txt"],
     source=["mypy"],
     action=[
         "set -o pipefail; mypy waves/ --exclude modsim_template --exclude tutorials --exclude tests " \
-            "--disable-error-code=import-untyped | tee ${TARGET.abspath}"
+            "--disable-error-code=import-untyped --any-exprs-report ${TARGET.dir} | tee ${TARGET.abspath}"
     ]
 )
 env.AlwaysBuild(target)
