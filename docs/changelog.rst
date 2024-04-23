@@ -26,6 +26,8 @@ Internal Changes
   (:issue:`651`, :merge:`808`). By `Kyle Brindley`_.
 - Resolved all static type checks in the ``_fetch`` and ``_visualize`` internal modules (:merge:`811`). By `Kyle
   Brindley`_.
+- Update Fierro builder to account for change in executable name(s)/CLI (:issue:`647`, :merge:`812`). By `Kyle
+  Brindley`_.
 
 ******************
 0.8.3 (2024-04-10)
