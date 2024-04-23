@@ -181,7 +181,7 @@ def longest_common_path_prefix(file_list: typing.List[pathlib.Path]) -> pathlib.
 def build_destination_files(
     destination: typing.Union[str, pathlib.Path],
     requested_paths: typing.List[pathlib.Path]
-) -> typing.Tuple[list, list]:
+) -> typing.Tuple[typing.List[pathlib.Path], typing.List[pathlib.Path]]:
     """Build destination file paths from the requested paths, truncating the longest possible source prefix path
 
     :param destination: String or pathlike object for the destination directory
