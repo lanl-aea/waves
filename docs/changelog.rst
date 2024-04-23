@@ -24,6 +24,7 @@ Internal Changes
 - Use an SCons task to drive flake8 more consistently with other project tasks (:merge:`807`). By `Kyle Brindley`_.
 - Separate modsim template workflow results from intermediate build artifacts to clean up workflow visualization
   (:issue:`651`, :merge:`808`). By `Kyle Brindley`_.
+- Resolved all static type checks in the ``_fetch`` module (:merge:`811`). By `Kyle Brindley`_.
 
 ******************
 0.8.3 (2024-04-10)
