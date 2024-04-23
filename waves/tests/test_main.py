@@ -1,4 +1,5 @@
 """Test command line utility and associated functions"""
+import pathlib
 from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
 
@@ -23,11 +24,12 @@ def test_main():
         assert mock_build.call_args[0][0] == [target_string]
 
     requested_paths = ['dummy.file1', 'dummy.file2']
+    requested_paths_args = [pathlib.Path(path) for path in requested_paths]
     with patch('sys.argv', ['waves.py', 'fetch'] + requested_paths), \
          patch("waves._fetch.recursive_copy") as mock_recursive_copy:
         _main.main()
         mock_recursive_copy.assert_called_once()
-        assert mock_recursive_copy.call_args[1]['requested_paths'] == requested_paths
+        assert mock_recursive_copy.call_args[1]['requested_paths'] == requested_paths_args
 
     tutorial_number = 7
     with patch('sys.argv', ['waves.py', 'fetch', '--tutorial', str(tutorial_number)]), \
