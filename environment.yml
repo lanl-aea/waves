@@ -12,6 +12,7 @@ dependencies:
   - h5py
   - ipython
   - matplotlib-base
+  - mypy
   - networkx
   - numpy
   - pandas
