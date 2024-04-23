@@ -200,7 +200,7 @@ def build_copy_tuples(
     destination: typing.Union[str, pathlib.Path],
     requested_paths_resolved: typing.List[pathlib.Path],
     overwrite: bool = False
-) -> typing.Tuple[tuple]:
+) -> typing.List[typing.Tuple[pathlib.Path, typing.Any]]:
     """
     :param destination: String or pathlike object for the destination directory
     :param requested_paths_resolved: List of absolute requested files as path-objects
@@ -208,14 +208,14 @@ def build_copy_tuples(
     :returns: requested and destination file path pairs
     """
     destination_files, existing_files = build_destination_files(destination, requested_paths_resolved)
-    copy_tuples = tuple(zip(requested_paths_resolved, destination_files))
     if not overwrite and existing_files:
-        copy_tuples = tuple((requested_path, destination_file) for requested_path, destination_file in copy_tuples if
-                            destination_file not in existing_files)
+        copy_tuples = [(requested_path, destination_file) for requested_path, destination_file in
+                       zip(requested_paths_resolved, destination_files) if
+                       destination_file not in existing_files]
     return copy_tuples
 
 
-def conditional_copy(copy_tuples: typing.Tuple[tuple]) -> None:
+def conditional_copy(copy_tuples: typing.List[typing.Tuple[pathlib.Path, typing.Any]]) -> None:
     """Copy when destination file doesn't exist or doesn't match source file content
 
     Uses Python ``shutil.copyfile``, so meta data isn't preserved. Creates intermediate parent directories prior to
