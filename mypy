@@ -7,7 +7,7 @@ target = env.Command(
     target=["mypy.txt"],
     source=["mypy"],
     action=[
-        "mypy waves/ --exclude modsim_template --exclude tutorials --exclude tests " \
+        "set -o pipefail; mypy waves/ --exclude modsim_template --exclude tutorials --exclude tests " \
             "--disable-error-code=import-untyped | tee ${TARGET.abspath}"
     ]
 )
