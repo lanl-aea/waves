@@ -28,27 +28,25 @@ fs = SCons.Node.FS.FS()
 testing_windows, root_fs = platform_check()
 
 
-string_action_list = {
-    "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
-    "two actions": (SCons.Builder.Builder(action=["first action", "second action"]), ["first action", "second action"]),
-}
-
-
 def test_print_failed_nodes_stdout():
     mock_failure_file = unittest.mock.Mock()
     mock_failure_file.node = unittest.mock.Mock()
     mock_failure_file.node.abspath = "/failed_node_stdout.ext"
     with patch("SCons.Script.GetBuildFailures", return_value=[mock_failure_file]), \
-         patch("pathlib.Path.exists", return_value=True), \
-         patch("builtins.open"), \
+         patch("pathlib.Path.exists", return_value=True) as mock_exists, \
+         patch("builtins.open") as mock_open, \
          patch("builtins.print") as mock_print:
         scons_extensions._print_failed_nodes_stdout()
-        assert mock_print.call_count == 2
+        mock_exists.assert_called_once()
+        mock_open.assert_called_once()
+        mock_print.assert_called_once()
     with patch("SCons.Script.GetBuildFailures", return_value=[mock_failure_file]), \
-         patch("pathlib.Path.exists", return_value=False), \
-         patch("builtins.open"), \
+         patch("pathlib.Path.exists", return_value=False) as mock_exists, \
+         patch("builtins.open") as mock_open, \
          patch("builtins.print") as mock_print:
         scons_extensions._print_failed_nodes_stdout()
+        mock_exists.assert_called()
+        mock_open.assert_not_called()
         mock_print.assert_called_once()
 
 
@@ -59,6 +57,12 @@ def test_print_build_failures():
     with patch("atexit.register") as mock_atexit:
         scons_extensions.print_build_failures(False)
         mock_atexit.assert_not_called()
+
+
+string_action_list = {
+    "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
+    "two actions": (SCons.Builder.Builder(action=["first action", "second action"]), ["first action", "second action"]),
+}
 
 
 @pytest.mark.unittest
