@@ -446,7 +446,7 @@ class _ParameterGenerator(ABC):
         self.parameter_study = xarray.merge(
             [self.parameter_study.reset_coords(), parameter_set_names_array]).set_coords(_set_coordinate_key)
 
-    def _create_parameter_array(self, data, name: str):
+    def _create_parameter_array(self, data: numpy.ndarray, name: str) -> xarray.DataArray:
         """Create the standard structure for a parameter_study array
 
         requires:
