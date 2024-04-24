@@ -993,6 +993,10 @@ def test_sphinx_latexpdf():
 
 quinoa_solver = {
     "default behavior": ("charmrun", "inciter", "+p1", "", "", [],  2, 1, ["input1.q", "input1.exo"], ["input1.quinoa"]),
+    "different commands": ("notcharmrun", "notinciter", "+p2", "inciter options", "prefix", [],  2, 1,
+                           ["input2.q", "input2.exo"], ["input2.quinoa"]),
+    "post action": ("charmrun", "inciter", "+p1", "", "", ["post action"],  2, 1,
+                    ["input3.q", "input3.exo"], ["input3.quinoa"]),
 }
 
 
@@ -1011,12 +1015,16 @@ def test_quinoa_solver(charmrun, inciter, charmrun_options, inciter_options, pre
         inciter=inciter,
         charmrun_options=charmrun_options,
         inciter_options=inciter_options,
+        prefix_command=prefix_command,
         post_action=post_action
     )})
     nodes = env.QuinoaSolver(target=target_list, source=source_list)
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
     for node in nodes:
-        assert node.env['prefix_command'] == prefix_command
+        if prefix_command:
+            assert node.env['prefix_command'] == prefix_command + " &&"
+        else:
+            assert node.env['prefix_command'] == ""
         assert node.env['charmrun'] == charmrun
         assert node.env['charmrun_options'] == charmrun_options
         assert node.env['inciter'] == inciter
