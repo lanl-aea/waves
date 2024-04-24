@@ -1015,6 +1015,12 @@ def test_quinoa_solver(charmrun, inciter, charmrun_options, inciter_options, pre
     )})
     nodes = env.QuinoaSolver(target=target_list, source=source_list)
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    for node in nodes:
+        assert node.env['prefix_command'] == prefix_command
+        assert node.env['charmrun'] == charmrun
+        assert node.env['charmrun_options'] == charmrun_options
+        assert node.env['inciter'] == inciter
+        assert node.env['inciter_options'] == inciter_options
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
