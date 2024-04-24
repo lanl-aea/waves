@@ -433,7 +433,6 @@ class _ParameterGenerator(ABC):
         """Create an Xarray DataArray with the parameter set names using parameter set hashes as the coordinate
 
         :return: parameter_set_names_array
-        :rtype: xarray.DataArray
         """
         return xarray.DataArray(list(self._parameter_set_names.values()),
                                 coords=[list(self._parameter_set_names.keys())],
@@ -459,7 +458,6 @@ class _ParameterGenerator(ABC):
         :param name: Name of the array. Used as a data variable name when converting to parameter study dataset.
 
         :returns: parameter study array
-        :rtype: xarray.DataArra
         """
         array = xarray.DataArray(
             data,
@@ -499,13 +497,12 @@ class _ParameterGenerator(ABC):
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
-    def _parameter_study_to_numpy(self, data_type: _allowable_data_type_typing):
+    def _parameter_study_to_numpy(self, data_type: _allowable_data_type_typing) -> numpy.ndarray:
         """Return the parameter study data as a 2D numpy array
 
         :param str data_type: The data_type selection to return - samples or quantiles
 
         :return: data
-        :rtype: numpy.array
         """
         data = []
         for set_hash, data_row in self.parameter_study.sel(data_type=data_type).groupby(_hash_coordinate_key):
@@ -515,7 +512,7 @@ class _ParameterGenerator(ABC):
     def parameter_study_to_dict(
         self,
         data_type: _allowable_data_type_typing = _samples_data_variable
-    ) -> dict:
+    ) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
         """Return parameter study as a dictionary
 
         Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
@@ -533,7 +530,6 @@ class _ParameterGenerator(ABC):
         :param str data_type: The data_type selection to return - samples or quantiles
 
         :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
-        :rtype: dict - {str: {str: value}}
         """
         parameter_study_dictionary = {}
         for set_name, parameters in self.parameter_study.sel(data_type=data_type).groupby(_set_coordinate_key):
