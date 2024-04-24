@@ -40,12 +40,18 @@ def _print_failed_nodes_stdout() -> None:
     """Query the SCons reported build failures and print the associated node's STDOUT file, if it exists"""
     build_failures = SCons.Script.GetBuildFailures()
     for failure in build_failures:
-        stdout_path = pathlib.Path(failure.node.abspath).with_suffix(_stdout_extension).resolve()
-        if stdout_path.exists():
+        node_path = pathlib.Path(failure.node.abspath)
+        stdout_path_options = [
+            node_path.parent / f"{node_path}{_stdout_extension}",
+            node_path.with_suffix(_stdout_extension)
+        ]
+        stdout_path_options = [path.resolve() for path in stdout_path_options]
+        try:
+            stdout_path = next((path for path in stdout_path_options if path.exists()))
             with open(stdout_path, "r") as stdout_file:
-                print(f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n", file=sys.stderr)
-                print(stdout_file.read(), file=sys.stderr)
-        else:
+                print(f"\n{failure.node} failed with STDOUT file '{stdout_path}'\n{stdout_file.read()}",
+                      file=sys.stderr)
+        except StopIteration:
             print(f"\n{failure.node} failed\n", file=sys.stderr)
 
 
