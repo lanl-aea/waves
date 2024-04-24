@@ -50,7 +50,7 @@ try:
     __version__ = version("waves")
 except PackageNotFoundError:
     try:
-        from waves import _version
+        from waves import _version  # type: ignore[attr-defined]
         __version__ = _version.version
     except ImportError:
         # Should only hit this when running as an un-installed package in the local repository
