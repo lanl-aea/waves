@@ -10,7 +10,7 @@ Changelog
 
 Bug fixes
 =========
-- Fix Python 3.8 and 3.9 incompatibility introduced in :ref:`` (:merge:`749`) with Python 3.8 compatible type
+- Fix Python 3.8 and 3.9 incompatibility introduced in :ref:`0.7.10` (:merge:`749`) with Python 3.8 compatible type
   annotations (:issue:`650`, :merge:`809`). By `Kyle Brindley`_.
 - Search for the default target naming convention when printing failed node STDOUT files (:issue:`648`, :merge:`814`).
   By `Kyle Brindley`_.
