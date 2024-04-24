@@ -21,6 +21,7 @@ import SALib
 from waves._settings import _hash_coordinate_key
 from waves._settings import _parameter_coordinate_key
 from waves._settings import _set_coordinate_key
+from waves._settings import _allowable_data_type_typing
 from waves._settings import _samples_data_variable
 from waves._settings import _quantiles_data_variable
 from waves._settings import _quantiles_attribute_key
@@ -46,8 +47,6 @@ _parameter_study_meta_file = "parameter_study_meta.txt"
 _allowable_output_file_typing = typing.Literal["yaml", "h5"]
 _allowable_output_file_types = typing.get_args(_allowable_output_file_typing)
 _default_output_file_type = _allowable_output_file_types[0]
-
-_allowable_data_type = typing.Literal[_samples_data_variable, _quantiles_data_variable]
 
 
 class _AtSignTemplate(string.Template):
@@ -500,7 +499,7 @@ class _ParameterGenerator(ABC):
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
-    def _parameter_study_to_numpy(self, data_type: _allowable_data_type):
+    def _parameter_study_to_numpy(self, data_type: _allowable_data_type_typing):
         """Return the parameter study data as a 2D numpy array
 
         :param str data_type: The data_type selection to return - samples or quantiles
@@ -515,7 +514,7 @@ class _ParameterGenerator(ABC):
 
     def parameter_study_to_dict(
         self,
-        data_type: _allowable_data_type = _samples_data_variable
+        data_type: _allowable_data_type_typing = _samples_data_variable
     ) -> dict:
         """Return parameter study as a dictionary
 
