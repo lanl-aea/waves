@@ -197,7 +197,7 @@ class _ParameterGenerator(ABC):
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
-        if self.previous_parameter_study:
+        if self.previous_parameter_study is not None:
             self._merge_parameter_studies()
 
     def write(self) -> None:
@@ -552,7 +552,12 @@ class _ParameterGenerator(ABC):
         * ``self._quantiles``: if it exists
         * ``self._parameter_set_hashes``
         * ``self._parameter_set_names``
+
+        :raises RuntimeError: If the ``self.parameter_study`` attribute is None
         """
+        if self.previous_parameter_study is None:
+            raise RuntimeError("Called without a previous parameter study")
+
         # Swap dimensions from the set name to the set hash to merge identical sets
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
         previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
