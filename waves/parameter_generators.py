@@ -272,12 +272,12 @@ class _ParameterGenerator(ABC):
                     else:
                         self._conditionally_write_dataset(parameter_set_file, parameter_set)
 
-    def _conditionally_write_dataset(self, existing_parameter_study: str, parameter_study) -> None:
+    def _conditionally_write_dataset(self, existing_parameter_study: str, parameter_study: xarray.Dataset) -> None:
         """Write NetCDF file over previous study if the datasets have changed or self.overwrite is True
 
         :param existing_parameter_study: A relative or absolute file path to a previously created parameter
             study Xarray Dataset
-        :param xarray.Dataset parameter_study: Parameter study xarray data
+        :param parameter_study: Parameter study xarray dataset
         """
         write = True
         if not self.overwrite and pathlib.Path(existing_parameter_study).is_file():
