@@ -1,3 +1,4 @@
+import typing
 import pathlib
 
 # Set some semi-private project meta variables for package internal use to avoid hardcode duplication
@@ -23,8 +24,10 @@ _stdout_extension = ".stdout"
 _hash_coordinate_key = "parameter_set_hash"
 _parameter_coordinate_key = "parameters"
 _set_coordinate_key = "parameter_sets"
-_samples_data_variable = "samples"
-_quantiles_data_variable = "quantiles"
+_allowable_data_type_typing = typing.Literal["samples", "quantiles"]
+_allowable_data_type = typing.get_args(_allowable_data_type_typing)
+_samples_data_variable = _allowable_data_type[0]
+_quantiles_data_variable = _allowable_data_type[1]
 _quantiles_attribute_key = "_quantiles"
 _cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
 _redirect_action_postfix = "> ${TARGETS[-1].abspath} 2>&1"
