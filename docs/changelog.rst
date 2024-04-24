@@ -32,6 +32,7 @@ Internal Changes
   Brindley`_.
 - Add mypy static type checking configuration file for better consistency between CI and developer execution
   (:issue:`653`, :merge:`813`). By `Kyle Brindley`_.
+- Add Quinoa Solver builder unit tests (:issue:`561`, :merge:`815`). By `Kyle Brindley`_.
 
 ******************
 0.8.3 (2024-04-10)
