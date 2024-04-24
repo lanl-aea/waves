@@ -1685,8 +1685,8 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
 
     :return: Quinoa builder
     """  # noqa: E501
-    if prefix_command and not prefix_command.strip().endswith(" &&"):
-        prefix_command = prefix_command.strip()
+    prefix_command = prefix_command.strip()
+    if prefix_command and not prefix_command.endswith(" &&"):
         prefix_command += " &&"
     action = [
         f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
