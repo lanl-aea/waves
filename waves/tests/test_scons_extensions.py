@@ -991,6 +991,32 @@ def test_sphinx_latexpdf():
     check_action_string(nodes, [], 1, 1, expected_string)
 
 
+quinoa_solver = {
+    "default behavior": ("charmrun", "inciter", "+p1", "", "", [],  2, 1, ["input1.q", "input1.exo"], ["input1.quinoa"]),
+}
+
+
+@pytest.mark.unittest
+@pytest.mark.parametrize("charmrun, inciter, charmrun_options, inciter_options, prefix_command, post_action, node_count, action_count, source_list, target_list",
+                         quinoa_solver.values(),
+                         ids=quinoa_solver.keys())
+def test_quinoa_solver(charmrun, inciter, charmrun_options, inciter_options, prefix_command, post_action,
+                       node_count, action_count, source_list, target_list):
+    env = SCons.Environment.Environment()
+    expected_string = f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
+                      "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
+                      f"{_redirect_action_postfix}"
+    env.Append(BUILDERS={"QuinoaSolver": scons_extensions.quinoa_solver(
+        charmrun=charmrun,
+        inciter=inciter,
+        charmrun_options=charmrun_options,
+        inciter_options=inciter_options,
+        post_action=post_action
+    )})
+    nodes = env.QuinoaSolver(target=target_list, source=source_list)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 fierro_input = {
