@@ -28,6 +28,8 @@ Internal Changes
   Brindley`_.
 - Update Fierro builder to account for change in executable name(s)/CLI (:issue:`647`, :merge:`812`). By `Kyle
   Brindley`_.
+- Add mypy static type checking configuration file for better consistency between CI and developer execution
+  (:issue:`653`, :merge:`813`). By `Kyle Brindley`_.
 
 ******************
 0.8.3 (2024-04-10)
