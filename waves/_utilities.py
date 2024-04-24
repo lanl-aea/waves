@@ -110,9 +110,10 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
             cubit_bin = cubit_bin.parent
     else:
         search = cubit_bin.glob(bin_directory)
-        cubit_bin = next((path for path in search if path.name == bin_directory), None)
-    if cubit_bin is None:
-        raise FileNotFoundError(message)
+        try:
+            cubit_bin = next((path for path in search if path.name == bin_directory))
+        except StopIteration:
+            raise FileNotFoundError(message)
     return cubit_bin
 
 
