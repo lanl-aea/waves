@@ -6,4 +6,5 @@ cd %modsim_template_directory%
 scons -h
 waves visualize nominal --output-file nominal.svg
 cd %SP_DIR%\%PKG_NAME%
-pytest
+pytest -vvv -n 4 -m "not programoperations and not systemtest"
+pytest -vvv -n 4 -m "programoperations"
