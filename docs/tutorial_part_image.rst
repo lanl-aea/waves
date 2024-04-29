@@ -94,8 +94,9 @@ specified.
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify the
-changes made in this tutorial.
+7. Add the images tasks and alias to the ``tutorial_part_image`` SConscript file. A``diff`` against the
+   ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify the changes made in
+   this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_part_image
 
@@ -103,12 +104,15 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_12_archival
 
+Generating images will be part of a separate workflow. To do this we have created an ``images`` list that will capture
+the `SCons`_ tasks and have mapped a new alias to that list.
+
 **********
 SConstruct
 **********
 
-A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival` is included below to help identify the
-changes made in this tutorial.
+8. Add the ``tutorial_part_image`` SConscript file to the workflow. A ``diff`` against the ``SConstruct`` file from
+   :ref:`tutorial_archival` is included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
 
@@ -120,7 +124,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-7. Build the new targets
+9. Build the new targets
 
 .. code-block:: bash
 
@@ -132,8 +136,8 @@ Build Targets
 Output Files
 ************
 
-8. View the output files. Notice that the output files from :ref:`tutorial_regression_testing` have been created with
-   the addition of the ``.png`` output files.
+10. View the output files. Notice that the output files from :ref:`tutorial_regression_testing` have been created with
+    the addition of the ``.png`` output files.
 
 .. code-block:: bash
 
