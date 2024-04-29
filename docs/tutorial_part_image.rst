@@ -4,7 +4,8 @@
 Tutorial: Part Image
 ####################
 
-This is an example implementation where an Abaqus python script is used to export an image to the build directory.
+This is an example implementation where an Abaqus python script is used to export an assembly view image of an Abaqus
+model from an input or CAE file.
 
 **********
 References
@@ -57,12 +58,37 @@ Part-Image script
 *****************
 
 5. In the ``waves-tutorials/modsim_package/abaqus`` directory, create a file called ``export_abaqus_image.py`` using the
-   contents below.
+   contents below which contains the ``main()`` function.
 
 .. admonition:: waves-tutorials/modsim_package/abaqus/export_abaqus_image.py
 
    .. literalinclude:: abaqus_export_abaqus_image.py
       :language: Python
+      :lineno-match:
+      :end-before: marker-1
+      :emphasize-lines: 40-60
+
+The ``export_abaqus_image.py`` file is an Abaqus journal file. The top of the file imports standard library modules,
+Abaqus modules, and the ``abaqus_utilities.py`` module create in :ref:`tutorial_partition_mesh`. The ``main()`` function
+takes two required arguments ``input_file`` which is an Abaqus CAE ``*.cae`` or Abaqus input ``*.inp`` file and
+``output_file`` which is the file path of the assembly view image that this function will create.
+
+6. In the ``waves-tutorials/modsim_package/abaqus`` directory, continue editing the file ``export_abaqus_image.py``
+   using the contents below which contains the rest of the script.
+
+.. admonition:: waves-tutorials/modsim_package/abaqus/export_abaqus_image.py
+
+   .. literalinclude:: abaqus_export_abaqus_image.py
+      :language: Python
+      :lineno-match:
+      :start-after: marker-1
+      :emphasize-lines: 9-30
+
+The ``image()`` function utilizes the rest of the optional arguments that were passed from the ``main()`` function. The
+arguments ``color_map``, ``x_angle``, ``y_angle``, and ``z_angle`` are used to adjust the viewer window. The
+``model_name`` and ``part_name`` are used to set the Abaqus part assembly. The ``image_size`` parameter can change the
+size of your output image. All of these arguments are optional and have default values to rely on if no value was
+specified.
 
 **********
 SConscript

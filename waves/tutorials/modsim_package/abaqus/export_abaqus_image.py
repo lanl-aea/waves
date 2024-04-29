@@ -130,8 +130,6 @@ def image(output_file,
     output_format = abaqus_utilities.return_abaqus_constant(output_file_extension)
     abaqus.session.printToFile(fileName=output_file_stem, format=output_format, canvasObjects=(viewport,))
 
-# Comment used in tutorial code snippets: marker-2
-
 
 def get_parser():
     file_name = inspect.getfile(lambda: None)
