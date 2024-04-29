@@ -73,6 +73,8 @@ def main(input_file, output_file,
         sys.stderr.write("Unknown file extension {}".format(input_file_extension))
         sys.exit(1)
 
+# Comment used in tutorial code snippets: marker-1
+
 
 def image(output_file,
           x_angle=default_x_angle,
@@ -127,6 +129,8 @@ def image(output_file,
 
     output_format = abaqus_utilities.return_abaqus_constant(output_file_extension)
     abaqus.session.printToFile(fileName=output_file_stem, format=output_format, canvasObjects=(viewport,))
+
+# Comment used in tutorial code snippets: marker-2
 
 
 def get_parser():
