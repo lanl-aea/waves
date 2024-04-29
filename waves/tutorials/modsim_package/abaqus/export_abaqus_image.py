@@ -8,7 +8,7 @@ import tempfile
 import abaqus
 import abaqusConstants
 
-import abaqus_utilities
+import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
 
 
 default_x_angle = 0.
