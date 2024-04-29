@@ -8,15 +8,7 @@ import tempfile
 import abaqus
 import abaqusConstants
 
-# Import the shared abaqus utilities, trying both tutorial directory structures.
-# Most end-users will implement only one of these structures and should replace
-# the try/except structure with a single import line, e.g.
-#
-# import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
-try:
-    import modsim_package.abaqus.abaqus_utilities as abaqus_utilities
-except ImportError:
-    import abaqus_utilities
+import abaqus_utilities
 
 
 default_x_angle = 0.
@@ -30,8 +22,8 @@ cli_description = "Save an assembly view image of an Abaqus model from an input 
 # One time dump from abaqus.session.viewports['Viewport: 1'].colorMappings.keys()) to stay Python 3 compatible for
 # Sphinx documentation
 color_map_choices = [
-    'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance',
-    'Element set', 'Averaging region', 'Element type', 'Default', 'Assembly', 'Part geometry', 'Load', 'Boundary condition',
+    'Material', 'Section', 'Composite layup', 'Composite ply', 'Part', 'Part instance', 'Element set',
+    'Averaging region', 'Element type', 'Default', 'Assembly', 'Part geometry', 'Load', 'Boundary condition',
     'Interaction', 'Constraint', 'Property', 'Meshability', 'Instance type', 'Set', 'Surface', 'Internal set',
     'Internal surface', 'Display group', 'Selection group', 'Skin', 'Stringer', 'Cell', 'Face'
 ]
@@ -133,7 +125,7 @@ def image(output_file,
     abaqus.session.printOptions.setValues(vpDecorations=abaqusConstants.OFF)
     abaqus.session.pngOptions.setValues(imageSize=image_size)
 
-    output_format = modsim_package.abaqus_utilities.return_abaqus_constant(output_file_extension)
+    output_format = abaqus_utilities.return_abaqus_constant(output_file_extension)
     abaqus.session.printToFile(fileName=output_file_stem, format=output_format, canvasObjects=(viewport,))
 
 

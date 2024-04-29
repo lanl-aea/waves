@@ -10,6 +10,12 @@ This is an example implementation where an Abaqus python script is used to expor
 References
 **********
 
+Below is a list of references for more information about topics that are not explicitly
+covered in this tutorial.
+
+* `Abaqus Scripting`_ :cite:`ABAQUS`
+* `Abaqus Python Environment`_ :cite:`ABAQUS`
+
 ***********
 Environment
 ***********
