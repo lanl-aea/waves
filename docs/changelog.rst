@@ -18,6 +18,7 @@ Bug fixes
 Documentation
 =============
 - Fix broken abaqus links (:issue:`642`, :merge:`805`). By `Sergio Cordova`_.
+- Add part image supplemental lesson (:issue:`570`, :merge:`797`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
@@ -60,19 +61,11 @@ New Features
   Brindley`_.
 - Draft experimental Ansys APDL builder (:issue:`800`). By `Kyle Brindley`_.
 
-Documentation
-=============
-- Add part image supplemental lesson (:issue:`570`, :merge:`797`). By `Sergio Cordova`_.
-
 Bug fixes
 =========
 - Sort parameter set definitions by parameter name for hash index creation. Fixes an edge case where the parameters are
   re-arranged causing the set to appear new even if the set definition is otherwise identical. Parameter study indices may
   be inconsistent with prior versions of WAVES (:issue:`645`, :merge:`802`). By `Kyle Brindley`_.
-
-Documentation
-=============
-- Add part image supplemental lesson (:issue:`570`, :merge:`797`). By `Sergio Cordova`_.
 
 Internal Changes
 ================
