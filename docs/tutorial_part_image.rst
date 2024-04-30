@@ -94,7 +94,7 @@ specified.
 SConscript
 **********
 
-7. Add the images tasks and alias to the ``tutorial_part_image`` SConscript file. A``diff`` against the
+7. Add the ``images`` task list and alias to the ``tutorial_part_image`` SConscript file. A``diff`` against the
    ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify the changes made in
    this tutorial.
 
