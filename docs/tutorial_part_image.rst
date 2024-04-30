@@ -70,7 +70,7 @@ Part-Image script
 
 The ``export_abaqus_image.py`` file is an Abaqus journal file. The top of the file imports standard library modules,
 Abaqus modules, and the ``abaqus_utilities.py`` module create in :ref:`tutorial_partition_mesh`. The ``main()`` function
-takes two required arguments ``input_file`` which is an Abaqus CAE ``*.cae`` or Abaqus input ``*.inp`` file and
+takes two required arguments: ``input_file`` which is an Abaqus CAE ``*.cae`` or Abaqus input ``*.inp`` file and
 ``output_file`` which is the file path of the assembly view image that this function will create.
 
 6. In the ``waves-tutorials/modsim_package/abaqus`` directory, continue editing the file ``export_abaqus_image.py``
