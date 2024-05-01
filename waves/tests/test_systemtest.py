@@ -59,7 +59,9 @@ system_tests = [
     ([fetch_template, "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build --print-build-failures"], "--tutorial 3"),
     ([fetch_template, "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build --print-build-failures"], "--tutorial 4"),
     ([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_cubit"),
-    ([fetch_template, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorials/tutorial_quinoa"),
+    # TODO: Re-enable quinoa tests when AEA server deployment stabilizes
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/657
+    #([fetch_template, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorials/tutorial_quinoa"),
     # TODO: Re-enable fierro system tests when the cpu usage can be controlled
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/638
     #([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_fierro"),
