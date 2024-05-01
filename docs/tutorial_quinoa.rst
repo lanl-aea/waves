@@ -9,6 +9,14 @@ Tutorial: Quinoa
 .. warning::
 
    Most WAVES tutorials are used as system tests in the regression test suite to ensure that the tutorial files are
+   up-to-date and functional. While the Quinoa team refactors around a breaking change in the input file parser, the
+   Quiona tutorial is not part of the regression suite, but the Quinoa builder unit tests are part of the verification
+   suite. If you run into problems running this tutorial, please contact the Quiona development team for the current
+   status of the input file parser.
+
+.. warning::
+
+   Most WAVES tutorials are used as system tests in the regression test suite to ensure that the tutorial files are
    up-to-date and functional. The ``quinoa-local`` alias *without* sbatch submission is part of the regression suite,
    but neither the sbatch submission nor the ``quinoa-remote`` alias is regression tested. The SSH remote excution and
    sbatch behavior was tested when the tutorial was written and is expected to run correctly. If you run into problems
