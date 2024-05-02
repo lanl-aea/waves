@@ -67,8 +67,8 @@ This file should look similar to the parameter study file in :ref:`tutorial_sobo
 the SALib :cite:`salib` based parameter generator :meth:`waves.parameter_generators.SALibSampler` instead of the SciPy
 :cite:`scipy` based parameter generator :meth:`waves.parameter_generators.SobolSequence`. Both SALib and SciPy are good
 packages for generating samples and post-processing data, but this tutorial will use SALib for the sensitivity analysis
-post-processing workflow so the tutorial will generate with the matching package. It is not always necessary to match
-the sample generator to the sensitivity analysis tools, but some analysis solutions are sensitive to the sample
+post-processing workflow so the tutorial will generate samples with the matching package. It is not always necessary to
+match the sample generator to the sensitivity analysis tools, but some analysis solutions are sensitive to the sample
 generation algorithm. Readers are encouraged to review both packages to match the sample generation and analysis
 strategy to their needs.
 
