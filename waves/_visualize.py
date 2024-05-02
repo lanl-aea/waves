@@ -11,7 +11,7 @@ import sys
 import re
 
 import networkx
-import matplotlib.pyplot as plt
+import matplotlib.pyplot
 
 from waves import _settings
 
@@ -111,14 +111,13 @@ def main(
         scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
         tree_output = scons_stdout.decode("utf-8")
     if print_tree:
-        print(tree_output)
+        print(tree_output, file=sys.stdout)
         return
     tree_dict = parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
     if not tree_dict['nodes']:  # If scons tree or input_file is not in the expected format the nodes will be empty
-        print(f"Unexpected SCons tree format or missing target. Use SCons "
-              f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
-              f"the ``visualize --print-tree`` option to generate the input file.", file=sys.stderr)
-        return
+        raise RuntimeError(f"Unexpected SCons tree format or missing target. Use SCons "
+                           f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
+                           f"the ``visualize --print-tree`` option to generate the input file.")
 
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
@@ -223,8 +222,8 @@ def click_arrow(event, annotations: dict, arrows: dict) -> None:
     :param annotations: Dictionary linking node names to their annotations
     :param arrows: Dictionary linking darker arrow annotations to node names
     """
-    fig = plt.gcf()
-    ax = plt.gca()
+    fig = matplotlib.pyplot.gcf()
+    ax = matplotlib.pyplot.gca()
     for key in annotations.keys():
         if annotations[key].contains(event)[0]:  # If the text annotation contains the event (i.e. is clicked on)
             for to_arrow in arrows[key]['to']:
@@ -283,9 +282,9 @@ def visualize(
     # TODO: separate plot construction from output for easier unit testing
     annotations: typing.Dict[str, typing.Any] = dict()
     arrows: typing.Dict[str, typing.Dict] = dict()
-    ax = plt.gca()
+    ax = matplotlib.pyplot.gca()
     ax.axis('off')
-    fig = plt.gcf()
+    fig = matplotlib.pyplot.gcf()
     for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
         label_A = A
         label_B = B
@@ -332,12 +331,12 @@ def visualize(
             file_name = file_name.with_suffix('.svg')
             print(f"WARNING: extension '{suffix}' is not supported by matplotlib. Falling back to '{file_name}'",
                   file=sys.stderr)
-        fig = plt.gcf()
+        fig = matplotlib.pyplot.gcf()
         fig.set_size_inches((width, height), forward=False)
         fig.savefig(str(file_name))
     else:
-        plt.show()
-    plt.clf()  # Indicates that we are done with the plot
+        matplotlib.pyplot.show()
+    matplotlib.pyplot.clf()  # Indicates that we are done with the plot
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
