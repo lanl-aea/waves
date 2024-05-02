@@ -18,6 +18,9 @@ from waves import _settings
 
 _exclude_from_namespace = set(globals().keys())
 
+box_color = '#5AC7CB'  # Light blue from Waves Logo
+arrow_color = '#B7DEBE'  # Light green from Waves Logo
+
 
 def get_parser() -> argparse.ArgumentParser:
     """Return a 'no-help' parser for the visualize subcommand
@@ -42,17 +45,21 @@ def get_parser() -> argparse.ArgumentParser:
         help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
     parser.add_argument("-r", "--exclude-regex", type=str,
         help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
+
     print_group = parser.add_mutually_exclusive_group()
     print_group.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
-        help="Print the visualization in graphml format (default: %(default)s)")
+        help="Print the visualization in graphml format and exit (default: %(default)s)")
     print_group.add_argument("--print-tree", action="store_true",
-        help="Print the output of the scons tree command to the screen (default: %(default)s)")
+        help="Print the output of the SCons tree command to the screen and exit (default: %(default)s)")
+
     parser.add_argument("--vertical", action="store_true",
         help="Display the graph in a vertical layout (default: %(default)s)")
     parser.add_argument("-n", "--no-labels", action="store_true",
         help="Create visualization without labels on the nodes (default: %(default)s)")
+    parser.add_argument("-c", "--node-count", action="store_true",
+        help="Add the node count as a figure annotation (default: %(default)s)")
     parser.add_argument("--input-file", type=str,
-        help="Path to text file with output from scons tree command (default: %(default)s). Scons target must "
+        help="Path to text file with output from SCons tree command (default: %(default)s). SCons target must "
              "still be specified and must be present in the input file.")
 
     return parser
@@ -61,16 +68,17 @@ def get_parser() -> argparse.ArgumentParser:
 def main(
     target: str,
     sconstruct: typing.Union[str, pathlib.Path],
-    exclude_list: typing.List[str],
-    exclude_regex: str,
     output_file: typing.Optional[pathlib.Path] = None,
-    print_graphml: bool = False,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
+    exclude_list: typing.List[str] = _settings._visualize_exclude,
+    exclude_regex: typing.Optional[str] = None,
+    print_graphml: bool = False,
+    print_tree: bool = False,
     vertical: bool = False,
     no_labels: bool = False,
-    print_tree: bool = False,
+    node_count: bool = False,
     input_file: typing.Union[str, pathlib.Path, None] = None
 ) -> None:
     """Visualize the directed acyclic graph created by a SCons build
@@ -81,17 +89,18 @@ def main(
 
     :param target: String specifying an SCons target
     :param sconstruct: Path to an SConstruct file or parent directory
-    :param exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
-    :param exclude_regex: exclude nodes that match this regular expression
     :param output_file: File for saving the visualization
-    :param print_graphml: Whether to print the graph in graphml format
     :param height: Height of visualization if being saved to a file
     :param width: Width of visualization if being saved to a file
     :param font_size: Font size of node labels
+    :param exclude_list: exclude nodes starting with strings in this list (e.g. /usr/bin)
+    :param exclude_regex: exclude nodes that match this regular expression
+    :param print_graphml: Whether to print the graph in graphml format
+    :param print_tree: Print the text output of the ``scons --tree`` command to the screen
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param no_labels: Don't print labels on the nodes of the visualization
-    :param print_tree: Print the text output of the scons --tree command to the screen
-    :param input_file: Path to text file storing output from scons tree command
+    :param node_count: Add a node count annotation
+    :param input_file: Path to text file storing output from SCons tree command
     """
     sconstruct = pathlib.Path(sconstruct).resolve()
     if not sconstruct.is_file():
@@ -122,12 +131,24 @@ def main(
     if print_graphml:
         print(tree_dict['graphml'], file=sys.stdout)
         return
-    visualize(tree_dict, output_file, height, width, font_size, vertical, no_labels)
+    visualize(
+        tree_dict,
+        output_file=output_file,
+        height=height,
+        width=width,
+        font_size=font_size,
+        vertical=vertical,
+        no_labels=no_labels,
+        node_count=node_count
+    )
 
 
-def parse_output(tree_lines: typing.List[str], exclude_list: typing.List[str], exclude_regex: str) -> dict:
-    """
-    Parse the string that has the tree output and store it in a dictionary
+def parse_output(
+    tree_lines: typing.List[str],
+    exclude_list: typing.List[str] = _settings._visualize_exclude,
+    exclude_regex: typing.Optional[str] = None
+) -> dict:
+    """Parse the string that has the tree output and store it in a dictionary
 
     :param tree_lines: output of the scons tree command
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
@@ -197,8 +218,7 @@ def parse_output(tree_lines: typing.List[str], exclude_list: typing.List[str], e
 
 def check_regex_exclude(exclude_regex: str, node_name: str, current_indent: int, exclude_indent: int,
                         exclude_node: bool = False) -> typing.Tuple[bool, int]:
-    """
-    Excludes node names that match the regular expression
+    """Excludes node names that match the regular expression
 
     :param str exclude_regex: Regular expression
     :param str node_name: Name of the node
@@ -215,15 +235,13 @@ def check_regex_exclude(exclude_regex: str, node_name: str, current_indent: int,
 
 
 def click_arrow(event, annotations: dict, arrows: dict) -> None:
-    """
-    Create effect with arrows when mouse click
+    """Create effect with arrows when mouse click
 
     :param matplotlib.backend_bases.Event event: Event that is handled by this function
     :param annotations: Dictionary linking node names to their annotations
     :param arrows: Dictionary linking darker arrow annotations to node names
     """
     figure = matplotlib.pyplot.gcf()
-    axis = matplotlib.pyplot.gca()
     for key in annotations.keys():
         if annotations[key].contains(event)[0]:  # If the text annotation contains the event (i.e. is clicked on)
             for to_arrow in arrows[key]['to']:
@@ -242,6 +260,34 @@ def click_arrow(event, annotations: dict, arrows: dict) -> None:
                     figure.canvas.draw_idle()
 
 
+def add_node_count(
+    axes: matplotlib.axes.Axes,
+    node_count: int,
+    size: int,
+    facecolor: str = box_color,
+    boxstyle: str = "round",
+    loc: str = "lower left"
+) -> None:
+    """Add node count annotation to axes
+
+    :param axes: Axes object to annotate
+    :param node_count: Number of nodes
+    :param size: Font size
+    :param facecolor: Color of box background
+    :param boxstyle: Annotation box style
+    :param loc: Location of annotation on axes
+    """
+    annotation = matplotlib.offsetbox.AnchoredText(
+        f"Node count: {node_count}",
+        frameon=True,
+        loc=loc,
+        prop=dict(size=size, ha="center")
+    )
+    annotation.patch.set_boxstyle(boxstyle)
+    annotation.patch.set_facecolor(facecolor)
+    axes.add_artist(annotation)
+
+
 def visualize(
     tree: dict,
     output_file: typing.Optional[pathlib.Path] = None,
@@ -249,7 +295,8 @@ def visualize(
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
     vertical: bool = False,
-    no_labels: bool = False
+    no_labels: bool = False,
+    node_count: bool = False
 ) -> None:
     """Create a visualization showing the tree
 
@@ -260,6 +307,7 @@ def visualize(
     :param font_size: Font size of file names in points
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param no_labels: Don't print labels on the nodes of the visualization
+    :param node_count: Add a node count annotation
     """
     graph = networkx.DiGraph()
     graph.add_nodes_from(tree['nodes'])
@@ -278,21 +326,12 @@ def visualize(
     # The nodes are drawn tiny so that labels can go on top
     collection = networkx.draw_networkx_nodes(graph, pos=pos, node_size=0)
     figure = collection.get_figure()
-    axis = figure.axes[0]
-    axis.axis("off")
+    axes = figure.axes[0]
+    axes.axis("off")
 
-    box_color = '#5AC7CB'  # Light blue from Waves Logo
-    arrow_color = '#B7DEBE'  # Light green from Waves Logo
-
-    node_count_annotation = matplotlib.offsetbox.AnchoredText(
-        f"Node count: {len(tree['nodes'])}",
-        frameon=True,
-        loc="lower left",
-        prop=dict(size=font_size, ha="center")
-    )
-    node_count_annotation.patch.set_boxstyle("round")
-    node_count_annotation.patch.set_facecolor(box_color)
-    axis.add_artist(node_count_annotation)
+    # Add node count annotation if requested
+    if node_count:
+        add_node_count(axes, len(tree['nodes']), font_size)
 
     # TODO: separate plot construction from output for easier unit testing
     annotations: typing.Dict[str, typing.Any] = dict()
@@ -303,18 +342,18 @@ def visualize(
         if no_labels:
             label_A = " "
             label_B = " "
-        patchA = axis.annotate(label_A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
+        patchA = axes.annotate(label_A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
                                bbox=dict(facecolor=box_color, boxstyle='round'))
-        patchB = axis.annotate(label_B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
+        patchB = axes.annotate(label_B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
                                bbox=dict(facecolor=box_color, boxstyle='round'))
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        axis.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=arrowprops)
+        axes.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=arrowprops)
 
         annotations[A] = patchA
         annotations[B] = patchB
         dark_props = dict(arrowstyle="<-", color="0.0", connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        dark_arrow = axis.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data',
+        dark_arrow = axes.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data',
                                  arrowprops=dark_props)
         dark_arrow.set_visible(False)  # Draw simultaneous darker arrow, but don't show it
         try:

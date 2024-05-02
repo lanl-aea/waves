@@ -38,11 +38,19 @@ def main() -> None:
             )
         elif args.subcommand == "visualize":
             _visualize.main(
-                target=args.TARGET, output_file=args.output_file,
-                sconstruct=args.sconstruct, print_graphml=args.print_graphml,
-                exclude_list=args.exclude_list, exclude_regex=args.exclude_regex,
-                height=args.height, width=args.width, font_size=args.font_size,
-                vertical=args.vertical, no_labels=args.no_labels, print_tree=args.print_tree,
+                target=args.TARGET,
+                sconstruct=args.sconstruct,
+                output_file=args.output_file,
+                height=args.height,
+                width=args.width,
+                font_size=args.font_size,
+                exclude_list=args.exclude_list,
+                exclude_regex=args.exclude_regex,
+                print_graphml=args.print_graphml,
+                print_tree=args.print_tree,
+                vertical=args.vertical,
+                no_labels=args.no_labels,
+                node_count=args.node_count,
                 input_file=args.input_file
             )
         elif args.subcommand == "build":
