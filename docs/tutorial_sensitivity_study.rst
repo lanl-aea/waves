@@ -52,6 +52,17 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
+********************
+Parameter Study File
+********************
+
+5. Create a new file ``modsim_package/python/rectangle_compression_sensitivity_study.py`` from the content below.
+
+.. admonition:: waves-tutorials/modsim_package/python/rectangle_compression_sensitivity_study.py
+
+   .. literalinclude:: python_rectangle_compression_sensitivity_study.py
+      :language: Python
+
 **********
 SConscript
 **********
@@ -69,7 +80,7 @@ the changes made in this tutorial.
 Post-processing script
 **********************
 
-5. In the ``waves-tutorials/modsim_package/python`` directory, create a file called ``sensitivity_study.py`` using the
+6. In the ``waves-tutorials/modsim_package/python`` directory, create a file called ``sensitivity_study.py`` using the
    contents below.
 
 .. admonition:: waves-tutorials/modsim_package/python/sensitivity_study.py
@@ -85,7 +96,7 @@ move the shared functions of both post-processing scripts to a common utilities 
 SConstruct
 **********
 
-6. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival` is included
+7. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival` is included
    below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -98,7 +109,7 @@ SConstruct
 Build Targets
 *************
 
-7. Build the new sensitivity study targets
+8. Build the new sensitivity study targets
 
 .. code-block:: bash
 
