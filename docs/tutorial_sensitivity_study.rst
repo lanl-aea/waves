@@ -37,30 +37,18 @@ Directory Structure
 
         $ pwd
         /home/roppenheimer/waves-tutorials
-        $ waves fetch --overwrite --destination modsim_package tutorials/modsim_package/__init__.py
-        WAVES fetch
-        Destination directory: 'modsim_package'
-        $ waves fetch --overwrite --destination modsim_package/abaqus 'tutorials/modsim_package/abaqus/*'
-        WAVES fetch
-        Destination directory: 'modsim_package/abaqus'
-        $ waves fetch --overwrite --destination modsim_package/python 'tutorials/modsim_package/python/__init__.py' 'tutorials/modsim_package/python/rectangle_compression_nominal.py' 'tutorials/modsim_package/python/rectangle_compression_cartesian_product.py' 'tutorials/modsim_package/python/post_processing.py'
-        WAVES fetch
-        Destination directory: 'modsim_package/python'
-        $ waves fetch --overwrite 'tutorials/tutorial_01_geometry' 'tutorials/tutorial_02_partition_mesh' 'tutorials/tutorial_03_solverprep' 'tutorials/tutorial_04_simulation' 'tutorials/tutorial_05_parameter_substitution' 'tutorials/tutorial_06_include_files' 'tutorials/tutorial_07_cartesian_product' 'tutorials/tutorial_08_data_extraction' 'tutorials/tutorial_09_post_processing'
-        WAVES fetch
-        Destination directory: '/home/roppenheimer/waves-tutorials'
-        $ waves fetch tutorials/tutorial_09_post_processing_SConstruct && mv tutorial_09_post_processing_SConstruct SConstruct
+        $ waves fetch --overwrite --tutorial 12 && mv tutorial_12_archival_SConstruct SConstruct
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_09_post_processing`` file to a new file named ``tutorial_sensitivity_study``
-   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+4. Download and copy the ``tutorial_12_archival`` file to a new file named ``tutorial_sensitivity_study`` with the
+   :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --overwrite tutorials/tutorial_09_post_processing && cp tutorial_09_post_processing tutorial_sensitivity_study
+   $ waves fetch --overwrite tutorials/tutorial_12_archival && cp tutorial_12_archival tutorial_sensitivity_study
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
@@ -68,14 +56,14 @@ Directory Structure
 SConscript
 **********
 
-A ``diff`` against the ``tutorial_09_post_processing`` file from :ref:`tutorial_post_processing` is included below to
-help identify the changes made in this tutorial.
+A ``diff`` against the ``tutorial_12_archival`` file from :ref:`tutorial_archival` is included below to help identify
+the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_sensitivity_study
 
    .. literalinclude:: tutorials_tutorial_sensitivity_study
       :language: Python
-      :diff: tutorials_tutorial_09_post_processing
+      :diff: tutorials_tutorial_12_archival
 
 **********************
 Post-processing script
@@ -89,22 +77,22 @@ Post-processing script
    .. literalinclude:: python_sensitivity_study.py
       :language: Python
 
-This file should look similar to the ``post_processing.py`` file from :ref:`tutorial_post_processing`. Unused functions
-have been removed and the output has changed to reflect the sensitivity study operations. In practice, modsim projects
-would move the shared functions of both post-processing scripts to a common utilities module.
+This file should look similar to the ``post_processing.py`` file from :ref:`tutorial_archival`. Unused functions have
+been removed and the output has changed to reflect the sensitivity study operations. In practice, modsim projects would
+move the shared functions of both post-processing scripts to a common utilities module.
 
 **********
 SConstruct
 **********
 
-6. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_post_processing`
-   is included below to help identify the changes made in this tutorial.
+6. Update the ``SConstruct`` file. A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_archival` is included
+   below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/SConstruct
 
    .. literalinclude:: tutorials_tutorial_sensitivity_study_SConstruct
       :language: Python
-      :diff: tutorials_tutorial_09_post_processing_SConstruct
+      :diff: tutorials_tutorial_12_archival_SConstruct
 
 *************
 Build Targets

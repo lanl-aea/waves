@@ -42,8 +42,8 @@ Directory Structure
         WAVES fetch
         Destination directory: '/home/roppenheimer/waves-tutorials'
 
-4. Download and copy the ``tutorial_12_archival`` file to a new file named ``tutorial_part_image``
-   with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+4. Download and copy the ``tutorial_12_archival`` file to a new file named ``tutorial_part_image`` with the
+   :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
