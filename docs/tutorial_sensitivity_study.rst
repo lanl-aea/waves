@@ -95,9 +95,31 @@ Post-processing script
    .. literalinclude:: python_sensitivity_study.py
       :language: Python
 
-This file should look similar to the ``post_processing.py`` file from :ref:`tutorial_archival`. Unused functions have
-been removed and the output has changed to reflect the sensitivity study operations. In practice, modsim projects should
-move the shared functions of both post-processing scripts to a common utilities module.
+This file should look similar to the ``post_processing.py`` file from :ref:`tutorial_post_processing`. Unused functions
+have been removed and the output has changed to reflect the sensitivity study operations. In practice, modsim projects
+should move the shared functions of both post-processing scripts to a common utilities module.
+
+Unlike :ref:`tutorial_post_processing`, the sensitivity study script does require the parameter study file. It is not
+possible to calculate the sensitivity of output variables to input variables without associating output files with their
+parameter set. After merging the output datasets with the parameter study, the correlation coefficients can be plotted
+with seaborn :cite:`seaborn`. Numpy :cite:`numpy` is used to perform a similar correlation coefficients calculation that
+can be saved to a CSV file for further post-processing or regression testing as in :ref:`tutorial_regression_testing`.
+Finally, SALib :cite:`salib` is used to perform a delta moment-independent analysis, which is compatible with all SALib
+sampling techniques.
+
+The value of processing output data into an Xarray :cite:`xarray` dataset is evident here, where each new plotting
+and analysis tool requires data in a slightly different form factor. For these tutorials, WAVES provides an extraction
+utility to process simulation output data into an Xarray dataset. However, it is well worth the modsim owner's time to
+seek out or write similar data serialization utilities for all project numeric solvers. Beyond the ease of
+post-processing, tightly coupled and named column data structures reduce the chances of post-processing errors during
+data handling operations.
+
+While the post-processing approach outlined in this tutorial gives users a starting point for performing all forms of
+parameter studies (sensitivity, perturbation, uncertainty propagation, etc) the choice of input sampling tools,
+parameter sampling ranges and distributions, and analysis tools is highly dependent on the needs of the project and the
+characteristics of the input space and numerica solvers. Modsim project owners are encouraged to read the sampling and
+analysis documentation closely and seek advice from statistics and uncertainty experts in building and interpreting
+their parameter studies.
 
 **********
 SConstruct
