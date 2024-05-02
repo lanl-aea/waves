@@ -163,7 +163,7 @@ script_options = "--input-file ${SOURCES[2:].abspath}"
 script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(env.PythonScript(
-    target=["sensitivity_study.csv", "correlation_pairplot.pdf", "sensitivity.yaml"],
+    target=["sensitivity_study.pdf", "sensitivity_study.csv", "sensitivity_study.yaml"],
     source=[script, parameter_study_file.name] + post_processing_source,
     script_options=script_options
 ))

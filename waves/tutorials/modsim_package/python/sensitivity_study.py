@@ -59,12 +59,12 @@ def merge_parameter_study(parameter_study_file, combined_data):
 def main(input_files, output_file, group_path, selection_dict, parameter_study_file=None):
     """Catenate ``input_files`` datasets along the ``parameter_sets`` dimension and plot selected data.
 
-    Optionally merges the parameter study results datasets with the parameter study definition dataset, where the
-    parameter study dataset file is assumed to be written by a WAVES parameter generator.
+    Merges the parameter study results datasets with the parameter study definition dataset, where the parameter study
+    dataset file is assumed to be written by a WAVES parameter generator.
 
     :param list input_files: list of path-like or file-like objects pointing to h5netcdf files containing Xarray
         Datasets
-    :param str output_file: The plot file name. Relative or absolute path.
+    :param str output_file: The correlation coefficients plot file name. Relative or absolute path.
     :param str group_path: The h5netcdf group path locating the Xarray Dataset in the input files.
     :param dict selection_dict: Dictionary to define the down selection of data to be plotted. Dictionary ``key: value``
         pairs must match the data variables and coordinates of the expected Xarray Dataset object.
@@ -73,19 +73,19 @@ def main(input_files, output_file, group_path, selection_dict, parameter_study_f
     """
     output_file = pathlib.Path(output_file)
     output_csv = output_file.with_suffix(".csv")
+    output_yaml = output_file.with_suffix(".yaml")
     concat_coord = "parameter_sets"
 
     # Build single dataset along the "parameter_sets" dimension
     combined_data = combine_data(input_files, group_path, concat_coord)
 
-    # Open and merge WAVES parameter study if provided
-    if parameter_study_file:
-        combined_data = merge_parameter_study(parameter_study_file, combined_data)
+    # Merge WAVES parameter study if provided
+    combined_data = merge_parameter_study(parameter_study_file, combined_data)
 
     # Correlation coefficients
     correlation_data = combined_data.sel(selection_dict).to_array().to_pandas().transpose()
     seaborn.pairplot(correlation_data, corner=True)
-    matplotlib.pyplot.savefig("correlation_pairplot.pdf")
+    matplotlib.pyplot.savefig(output_file)
 
     correlation_matrix = numpy.corrcoef(correlation_data.to_numpy(), rowvar=False)
     correlation_coefficients = pandas.DataFrame(correlation_matrix, index=correlation_data.columns,
@@ -101,7 +101,7 @@ def main(input_files, output_file, group_path, selection_dict, parameter_study_f
         if isinstance(value, numpy.ndarray):
             value = value.tolist()
         sensitivity_yaml[key] = value
-    with open("sensitivity.yaml", "w") as output:
+    with open(output_yaml, "w") as output:
         output.write(yaml.safe_dump(sensitivity_yaml))
 
     # Clean up open files
@@ -115,18 +115,22 @@ def get_parser():
     default_parameter_study_file = None
 
     prog = f"python {script_name.name} "
-    cli_description = "Read Xarray Datasets and plot stress-strain comparisons as a function of parameter set name. " \
+    cli_description = "Read Xarray Datasets and plot correlation coefficients as a function of parameter set name. " \
                       " Save to ``output_file``."
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     required_named = parser.add_argument_group('required named arguments')
     required_named.add_argument("-i", "--input-file", nargs="+", required=True,
                                 help="The Xarray Dataset file(s)")
+    required_named.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
+                                help="An optional h5 file with a WAVES parameter study Xarray Dataset " \
+                                     "(default: %(default)s)")
 
     parser.add_argument("-o", "--output-file", type=str, default=default_output_file,
-                        help="The output file for the stress-strain comparison plot with extension, " \
+                        help="The output file for the correlation coefficients plot with extension, " \
                              "e.g. ``output_file.pdf``. Extension must be supported by matplotlib. File stem is also " \
-                             "used for the CSV table output, e.g. ``output_file.csv``. (default: %(default)s)")
+                             "used for the CSV table output, e.g. ``output_file.csv``, and sensitivity results, e.g. " \
+                             "``output_file.yaml``. (default: %(default)s)")
     parser.add_argument("-g", "--group-path", type=str, default=default_group_path,
                         help="The h5py group path to the dataset object (default: %(default)s)")
     parser.add_argument("-s", "--selection-dict", type=str, default=None,
@@ -134,8 +138,6 @@ def get_parser():
                              "Dictionary key: value pairs must match the data variables and coordinates of the " \
                              "expected Xarray Dataset object. If no file is provided, the a default selection dict " \
                              f"will be used (default: {default_selection_dict})")
-    parser.add_argument("-p", "--parameter-study-file", type=str, default=default_parameter_study_file,
-                        help="An optional h5 file with a WAVES parameter study Xarray Dataset (default: %(default)s)")
 
     return parser
 
@@ -148,8 +150,10 @@ if __name__ == "__main__":
     else:
         with open(args.selection_dict, 'r') as input_yaml:
             selection_dict = yaml.safe_load(input_yaml)
-    sys.exit(main(input_files=args.input_file,
-                  output_file=args.output_file,
-                  group_path=args.group_path,
-                  selection_dict=selection_dict,
-                  parameter_study_file=args.parameter_study_file))
+    sys.exit(main(
+        input_files=args.input_file,
+        output_file=args.output_file,
+        group_path=args.group_path,
+        selection_dict=selection_dict,
+        parameter_study_file=args.parameter_study_file
+    ))
