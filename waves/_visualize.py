@@ -283,6 +283,17 @@ def visualize(
 
     box_color = '#5AC7CB'  # Light blue from Waves Logo
     arrow_color = '#B7DEBE'  # Light green from Waves Logo
+
+    node_count_annotation = matplotlib.offsetbox.AnchoredText(
+        f"Node count: {len(tree['nodes'])}",
+        frameon=True,
+        loc="lower left",
+        prop=dict(size=font_size, ha="center")
+    )
+    node_count_annotation.patch.set_boxstyle("round")
+    node_count_annotation.patch.set_facecolor(box_color)
+    axis.add_artist(node_count_annotation)
+
     # TODO: separate plot construction from output for easier unit testing
     annotations: typing.Dict[str, typing.Any] = dict()
     arrows: typing.Dict[str, typing.Dict] = dict()
@@ -293,9 +304,9 @@ def visualize(
             label_A = " "
             label_B = " "
         patchA = axis.annotate(label_A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
-                             bbox=dict(facecolor=box_color, boxstyle='round'))
+                               bbox=dict(facecolor=box_color, boxstyle='round'))
         patchB = axis.annotate(label_B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
-                             bbox=dict(facecolor=box_color, boxstyle='round'))
+                               bbox=dict(facecolor=box_color, boxstyle='round'))
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
         axis.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=arrowprops)
