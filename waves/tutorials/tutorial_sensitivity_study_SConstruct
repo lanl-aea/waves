@@ -3,6 +3,7 @@
 import os
 import sys
 import pathlib
+import inspect
 
 import waves
 
@@ -42,7 +43,8 @@ env = Environment(
     ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
     unconditional_build=GetOption("unconditional_build"),
-    print_build_failures=GetOption("print_build_failures")
+    print_build_failures=GetOption("print_build_failures"),
+    TARFLAGS="-c -j"
 )
 
 # Conditionally print failed task *.stdout files
@@ -58,15 +60,23 @@ env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq20
 # Set project internal variables and variable substitution dictionaries
 project_name = 'WAVES-TUTORIAL'
 version = '0.1.0'
-project_dir = pathlib.Path(Dir(".").abspath)
+archive_prefix = f"{project_name}-{version}"
+project_configuration = pathlib.Path(inspect.getfile(lambda: None))
+project_dir = project_configuration.parent
 abaqus_source_dir = "modsim_package/abaqus"
 python_source_dir = "modsim_package/python"
+test_source_dir = "modsim_package/python/tests"
 project_variables = {
+    "project_configuration": project_configuration,
     'project_name': project_name,
     'project_dir': project_dir,
     'version': version,
     'abaqus_source_abspath': project_dir / abaqus_source_dir,
-    'python_source_abspath': project_dir / python_source_dir
+    'python_source_abspath': project_dir / python_source_dir,
+    'test_source_abspath': project_dir / test_source_dir,
+    'regression_alias': 'regression',
+    'datacheck_alias': 'datacheck',
+    'archive_prefix': archive_prefix
 }
 for key, value in project_variables.items():
     env[key] = value
@@ -101,11 +111,18 @@ workflow_configurations = [
     'tutorial_07_cartesian_product',
     'tutorial_08_data_extraction',
     'tutorial_09_post_processing',
+    'tutorial_11_regression_testing',
+    'tutorial_12_archival'
     'tutorial_sensitivity_study'
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
     SConscript(workflow, variant_dir=build_dir, exports='env', duplicate=False)
+
+# Add unit test target
+test_workflow = 'unit_testing'
+test_build_dir = variant_dir_base / test_workflow
+SConscript(test_workflow, variant_dir=test_build_dir, exports='env', duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
 
