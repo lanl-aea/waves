@@ -88,6 +88,8 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       sequence
                    00:30 :ref:`tutorial_mesh_convergence`             Mesh convergence parameter study that uses
                                                                       common Geometry and Partition tasks.
+                   00:10 :ref:`tutorial_part_image`                   Generate Abaqus model images for documentation
+                   00:30 :ref:`tutorial_sensitivity_study`            Run a sensitivity study with numpy and SALib
 ======================== ============================================ ==================================================
 
 ************************
@@ -102,7 +104,6 @@ Work-in-progress Lessons
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
-                   00:30 :ref:`tutorial_sensitivity_study`            Run a sensitivity study with numpy and SALib
                    00:30 :ref:`tutorial_remote_execution`             Run the simulation on a remote server via SSH
                    00:30 :ref:`tutorial_sbatch`                       Run the simulation with the SLURM workload manager
                    00:30 :ref:`tutorial_extend_study`                 Automatically extending and re-executing a

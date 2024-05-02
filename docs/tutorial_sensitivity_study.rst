@@ -4,8 +4,6 @@
 Tutorial: Sensitivity Study
 ###########################
 
-.. include:: wip_warning.txt
-
 **********
 References
 **********

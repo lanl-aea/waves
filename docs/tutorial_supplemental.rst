@@ -16,3 +16,4 @@ Supplemental Lessons
    tutorial_07_sobol_sequence
    tutorial_mesh_convergence
    tutorial_part_image
+   tutorial_sensitivity_study
