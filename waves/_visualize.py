@@ -222,8 +222,8 @@ def click_arrow(event, annotations: dict, arrows: dict) -> None:
     :param annotations: Dictionary linking node names to their annotations
     :param arrows: Dictionary linking darker arrow annotations to node names
     """
-    fig = matplotlib.pyplot.gcf()
-    ax = matplotlib.pyplot.gca()
+    figure = matplotlib.pyplot.gcf()
+    axis = matplotlib.pyplot.gca()
     for key in annotations.keys():
         if annotations[key].contains(event)[0]:  # If the text annotation contains the event (i.e. is clicked on)
             for to_arrow in arrows[key]['to']:
@@ -232,14 +232,14 @@ def click_arrow(event, annotations: dict, arrows: dict) -> None:
                         to_arrow.set_visible(False)
                     else:
                         to_arrow.set_visible(True)
-                    fig.canvas.draw_idle()
+                    figure.canvas.draw_idle()
             for from_arrow in arrows[key]['from']:
                 if from_arrow:
                     if from_arrow.get_visible():
                         from_arrow.set_visible(False)
                     else:
                         from_arrow.set_visible(True)
-                    fig.canvas.draw_idle()
+                    figure.canvas.draw_idle()
 
 
 def visualize(
@@ -278,7 +278,8 @@ def visualize(
     # The nodes are drawn tiny so that labels can go on top
     collection = networkx.draw_networkx_nodes(graph, pos=pos, node_size=0)
     figure = collection.get_figure()
-    figure.axes[0].axis("off")
+    axis = figure.axes[0]
+    axis.axis("off")
 
     box_color = '#5AC7CB'  # Light blue from Waves Logo
     arrow_color = '#B7DEBE'  # Light green from Waves Logo
@@ -291,18 +292,18 @@ def visualize(
         if no_labels:
             label_A = " "
             label_B = " "
-        patchA = ax.annotate(label_A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
+        patchA = axis.annotate(label_A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
                              bbox=dict(facecolor=box_color, boxstyle='round'))
-        patchB = ax.annotate(label_B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
+        patchB = axis.annotate(label_B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
                              bbox=dict(facecolor=box_color, boxstyle='round'))
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        ax.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=arrowprops)
+        axis.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=arrowprops)
 
         annotations[A] = patchA
         annotations[B] = patchB
         dark_props = dict(arrowstyle="<-", color="0.0", connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        dark_arrow = ax.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data',
+        dark_arrow = axis.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data',
                                  arrowprops=dark_props)
         dark_arrow.set_visible(False)  # Draw simultaneous darker arrow, but don't show it
         try:
@@ -320,20 +321,19 @@ def visualize(
             arrows[B]['to'] = list()
             arrows[B]['to'].append(dark_arrow)
 
-    fig.canvas.mpl_connect("button_press_event", lambda x: click_arrow(x, annotations, arrows))
+    figure.canvas.mpl_connect("button_press_event", lambda x: click_arrow(x, annotations, arrows))
 
     if output_file is not None:
         file_name = output_file
         file_name.parent.mkdir(parents=True, exist_ok=True)
         suffix = output_file.suffix
-        if not suffix or suffix[1:] not in list(fig.canvas.get_supported_filetypes().keys()):
+        if not suffix or suffix[1:] not in list(figure.canvas.get_supported_filetypes().keys()):
             # If there is no suffix or it's not supported by matplotlib, use svg
             file_name = file_name.with_suffix('.svg')
             print(f"WARNING: extension '{suffix}' is not supported by matplotlib. Falling back to '{file_name}'",
                   file=sys.stderr)
-        fig = matplotlib.pyplot.gcf()
-        fig.set_size_inches((width, height), forward=False)
-        fig.savefig(str(file_name))
+        figure.set_size_inches((width, height), forward=False)
+        figure.savefig(str(file_name))
     else:
         matplotlib.pyplot.show()
     matplotlib.pyplot.clf()  # Indicates that we are done with the plot
