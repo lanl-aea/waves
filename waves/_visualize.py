@@ -275,16 +275,16 @@ def visualize(
             pos[k][-1] *= -1
     else:
         pos = networkx.multipartite_layout(graph, subset_key="layer")
-    networkx.draw_networkx_nodes(graph, pos=pos, node_size=0)  # The nodes are drawn tiny so that labels can go on top
+    # The nodes are drawn tiny so that labels can go on top
+    collection = networkx.draw_networkx_nodes(graph, pos=pos, node_size=0)
+    figure = collection.get_figure()
+    figure.axes[0].axis("off")
 
     box_color = '#5AC7CB'  # Light blue from Waves Logo
     arrow_color = '#B7DEBE'  # Light green from Waves Logo
     # TODO: separate plot construction from output for easier unit testing
     annotations: typing.Dict[str, typing.Any] = dict()
     arrows: typing.Dict[str, typing.Dict] = dict()
-    ax = matplotlib.pyplot.gca()
-    ax.axis('off')
-    fig = matplotlib.pyplot.gcf()
     for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
         label_A = A
         label_B = B
