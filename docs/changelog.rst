@@ -14,6 +14,11 @@ Documentation
 - Add a warning about whitespace in SCons command line options in the first tutorial (:merge:`821`). By `Kyle
   Brindley`_.
 
+Enhancements
+============
+- Add an option to annotate the visualize output with the number of nodes (:issue:`654`, :merge:`822`). By `Kyle
+  Brindley`_.
+
 ******************
 0.8.4 (2024-05-01)
 ******************
