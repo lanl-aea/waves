@@ -63,6 +63,15 @@ Parameter Study File
    .. literalinclude:: python_rectangle_compression_sensitivity_study.py
       :language: Python
 
+This file should look similar to the parameter study file in :ref:`tutorial_sobol_sequence`; however, this tutorial uses
+the SALib :cite:`salib` based parameter generator :meth:`waves.parameter_generators.SALibSampler` instead of the SciPy
+:cite:`scipy` based parameter generator :meth:`waves.parameter_generators.SobolSequence`. Both SALib and SciPy are good
+packages for generating samples and post-processing data, but this tutorial will use SALib for the sensitivity analysis
+post-processing workflow so the tutorial will generate with the matching package. It is not always necessary to match
+the sample generator to the sensitivity analysis tools, but some analysis solutions are sensitive to the sample
+generation algorithm. Readers are encouraged to review both packages to match the sample generation and analysis
+strategy to their needs.
+
 **********
 SConscript
 **********
@@ -89,7 +98,7 @@ Post-processing script
       :language: Python
 
 This file should look similar to the ``post_processing.py`` file from :ref:`tutorial_archival`. Unused functions have
-been removed and the output has changed to reflect the sensitivity study operations. In practice, modsim projects would
+been removed and the output has changed to reflect the sensitivity study operations. In practice, modsim projects should
 move the shared functions of both post-processing scripts to a common utilities module.
 
 **********
