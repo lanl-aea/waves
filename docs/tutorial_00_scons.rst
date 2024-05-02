@@ -90,10 +90,17 @@ command-line without modifying the ``SConstruct`` file source code. For example,
 the default build directory named ``build`` and the second ``scons`` call will create a build directory named
 ``non_default_build``.
 
+.. warning::
+
+   The equals sign separator is important to the internal implementation of options defined by ``AddOption`` in
+   SConstruct files. When whitespace is used to delimit the option from the argument, the argument handling is undefined
+   and may result in unexpected behavior. Interested readers can read more in the SCons documentation:
+   https://scons.org/doc/production/HTML/scons-user.html#app-functions
+
 .. code-block::
 
    $ scons
-   $ scons --build-dir non_default_build
+   $ scons --build-dir=non_default_build
 
 The ``--unconditional-build`` option is mostly useful for :ref:`testing` and continuous integration. It is used in the
 tutorial workflows to force a workflow to execute, even if the required programs are not found. This is useful for

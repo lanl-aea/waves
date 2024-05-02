@@ -8,6 +8,10 @@ Changelog
 0.8.5 (unreleased)
 ******************
 
+Documentation
+=============
+- Release the sensitivity study as a supplemental lesson (:issue:`643`, :merge:`820`). By `Kyle Brindley`_.
+
 ******************
 0.8.4 (2024-05-01)
 ******************
