@@ -107,8 +107,8 @@ def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOW
         input_file = pathlib.Path(input_file)
         if not input_file.is_file():
             raise RuntimeError(f"File '{input_file}' does not exist.")
-        with open(input_file, "r") as input_file:
-            parameter_schema = yaml.safe_load(input_file)
+        with open(input_file, "r") as input_handle:
+            parameter_schema = yaml.safe_load(input_handle)
     return parameter_schema
 
 
@@ -135,7 +135,10 @@ def main(subcommand: str,
     :param bool dryrun: print what files would have been written, but do no work
     :param bool write_meta: write a meta file name 'parameter_study_meta.txt' containing the parameter set file path(s)
     """
-    parameter_schema = read_parameter_schema(input_file)
+    try:
+        parameter_schema = read_parameter_schema(input_file)
+    except yaml.parser.ParserError as err:
+        raise RuntimeError(f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}")
 
     # Retrieve and instantiate the subcommand class
     available_parameter_generators = {
