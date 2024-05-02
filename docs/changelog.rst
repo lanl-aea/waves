@@ -39,6 +39,8 @@ Internal Changes
   (:issue:`653`, :merge:`813`). By `Kyle Brindley`_.
 - Add Quinoa Solver builder unit tests (:issue:`561`, :merge:`815`). By `Kyle Brindley`_.
 - Match GitHub (external) recipe test commands to internal recipe test commands (:merge:`817`). By `Kyle Brindley`_.
+- Report YAML loading syntax errors with a message and non-zero exit code instead of a stack trace (:issue:`658`,
+  :merge:`819`). By `Kyle Brindley`_.
 
 ******************
 0.8.3 (2024-04-10)
