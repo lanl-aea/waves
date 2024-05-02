@@ -159,3 +159,17 @@ directory is specified by name to reduce clutter in the output shown.
    `-- sensitivity_study.csv.stdout
 
    20 directories, 5 files
+
+The purpose of the sensitivity study is to observe the relationships between the input space parameters (width and
+height) on the output space parameters (peak stress). The script writes a correlation coefficients plot relating each
+input and output space parameter to every other parameter.
+
+.. figure:: tutorial_sensitivity_study_sensitivity_study.png
+   :align: center
+
+Here we can see both the input and output histograms on the diagonal. The scatter plots show the relationships between
+parameters. We can see very little correlation between the stress output and the width input, and strongly linear
+correlation between the stress output and the height input. This is the result we should expect because we are applying
+a fixed displacement load and stress is linearly dependent on the applied strain, which is a function of the change in
+displacement and the unloaded height. If we were instead applying a force, we should expect the opposite correlation
+because stress would then depend on the applied load divided by the cross-sectional area.
