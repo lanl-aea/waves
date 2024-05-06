@@ -2,11 +2,10 @@
 
 # Prereqs and conflicts
 conflict aea-release
+conflict aea-quarterly
 conflict aea-beta
 
 # Set AEA standard software version and environment names
-set anaconda_version "2023.03"
-set python_version "3.10"
 set environment "waves-env"
 
 # Get current hostname
@@ -14,32 +13,27 @@ set hostname [info hostname]
 
 # Set host specific environment information
 set projects ""
-set software_prefix ""
 set anaconda_path ""
 # HPC case
-if { [ string match "sn-rfe?.lanl.gov" $hostname ] ||
-     [ string match "sn???.localdomain" $hostname ] } {
-    set software_prefix "/usr/projects/hpcsoft/common/x86_64"
+if { [ string match "*.localdomain" $hostname ] ||
+     [ string match "??-rfe?.lanl.gov" $hostname ] ||
+     [ string match "??-fe?.lanl.gov" $hostname ] } {
     set projects "/usr/projects/ea"
-
-    module load intel
 # W-13 machine cases
 } elseif { [ string match "*.lanl.gov" $hostname ] } {
-    set software_prefix "/apps"
     set projects "/projects"
 # Error out
 } else {
     error "Unknown or unsupported host"
 }
-set anaconda_path "$software_prefix/anaconda/$anaconda_version-python-$python_version"
-set anaconda_bin "$anaconda_path/bin"
 set environment_path "$projects/aea_compute/$environment"
+set anaconda_source "$environment_path/etc/profile.d/conda.sh"
 set environment_bin "$environment_path/bin"
 set environment_man "$environment_path/share/man"
 
 # Set the bash environment variables similarly to HPC anaconda module
 # Reference - sn-rfe.lanl.gov:/usr/projects/hpcsoft/modulefiles/toss3/snow/tools/python/3.10-anaconda-2023.03
-prepend-path PATH "$environment_bin:$anaconda_bin"
+prepend-path PATH "$environment_bin"
 prepend-path MANPATH "$environment_man"
 
 # Activate the Conda environment
@@ -47,7 +41,8 @@ prepend-path MANPATH "$environment_man"
 set conda_variables "CONDA_SHLVL CONDA_EXE _CE_CONDA CONDA_PYTHON_EXE"
 set conda_functions "__add_sys_prefix_to_path __conda_hashr __conda_activate __conda_reactivate conda"
 if { [module-info mode load] || [module-info mode switch2] } {
-    puts stdout "source $anaconda_path/etc/profile.d/conda.sh; conda activate $projects/aea_compute/$environment;"
+    puts stdout "source $anaconda_source > /dev/null;"
+    puts stdout "conda activate $projects/aea_compute/$environment;"
 } elseif { [module-info mode remove] && ![module-info mode switch3] } {
     # TODO: use "getenv" when module v4.0 is available
     # https://modules.readthedocs.io/en/latest/modulefile.html#mfcmd-getenv
@@ -56,7 +51,9 @@ if { [module-info mode load] || [module-info mode switch2] } {
     } else {
         set conda_shlvl 1
     }
-    puts stdout "for ((i=1;i<=$conda_shlvl+1;i++)); do conda deactivate; done;"
+    for {set i 0} {$i < $conda_shlvl} {incr i} {
+        puts stdout "conda deactivate;"
+    }
     puts stdout "unset -f $conda_functions;"
     puts stdout "unset $conda_variables;"
 }
@@ -66,12 +63,8 @@ module-whatis "Configure the common WAVES development bash and Conda environment
 proc ModulesHelp {} {
     global hostname
     global environment
-    global software_prefix
     global projects
-    global anaconda_version
-    global python_version
     global anaconda_path
-    global anaconda_bin
     global environment_path
     global environment_bin
     global environment_man
@@ -79,14 +72,11 @@ proc ModulesHelp {} {
     puts stderr "\nWAVES modulefiles debugging information"
     puts stderr "hostname: $hostname"
     puts stderr "environment: $environment"
-    puts stderr "software_prefix: $software_prefix"
     puts stderr "projects: $projects"
-    puts stderr "anaconda_version: $anaconda_version"
-    puts stderr "python_version: $python_version"
     puts stderr "anaconda_path: $anaconda_path"
     puts stderr "environment_path: $environment_path"
 
     puts stderr "\n\nModifies environment variables"
-    puts stderr "PATH prepended with: $environment_bin:$anaconda_bin"
+    puts stderr "PATH prepended with: $environment_bin"
     puts stderr "MANPATH prepended with: $environment_man"
 }

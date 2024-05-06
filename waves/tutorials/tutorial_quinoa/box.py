@@ -16,8 +16,8 @@ def main(output_file, xlength, ylength, zlength):
 
     # Geometry
     cubit.cmd(f"brick x {xlength} y {ylength} z {zlength}")
-    cubit.cmd(f"move volume 1 x {xlength*.5} y {ylength*.5} z {zlength*.5}")
-    cubit.cmd(f"webcut volume 1 with plane xplane offset {xlength*.5} noimprint nomerge")
+    cubit.cmd(f"move volume 1 x {xlength * 0.5} y {ylength * 0.5} z {zlength * 0.5}")
+    cubit.cmd(f"webcut volume 1 with plane xplane offset {xlength * 0.5} noimprint nomerge")
     cubit.cmd(f"merge volume 1 2")
 
     # Sets (partition)

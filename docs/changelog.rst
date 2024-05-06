@@ -14,6 +14,11 @@ Documentation
 - Add a warning about whitespace in SCons command line options in the first tutorial (:merge:`821`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- Activate project CI environment directly. Fixes errors related to conda-build/boa/mambabuild during packaging
+  (:merge:`823`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Add an option to annotate the visualize output with the number of nodes (:issue:`654`, :merge:`822`). By `Kyle

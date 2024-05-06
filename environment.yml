@@ -4,8 +4,6 @@ channels:
 
 dependencies:
   - boa
-  # TODO: Remove when conda-build 24.? no longer breaks boa/mambabuild
-  - conda-build ==3.28
   - fierro-cpu
   - flake8
   - h5netcdf
