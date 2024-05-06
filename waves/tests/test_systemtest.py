@@ -53,7 +53,10 @@ system_tests = [
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/waves_quickstart"),
     ([fetch_template, "scons . --sconstruct=tutorial_00_SConstruct --unconditional-build --print-build-failures"], "--tutorial 0"),
     ([fetch_template, "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct --unconditional-build --print-build-failures"], "--tutorial 1"),
-    ([fetch_template, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"], "tutorials"),
+    pytest.param(
+        [fetch_template, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"], "tutorials",
+        marks=pytest.mark.skip("Too few licenses to reliably pass")
+    ),
     ([fetch_template, "scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct --unconditional-build --print-build-failures"], "--tutorial 2"),
     ([fetch_template, "scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build --print-build-failures"], "--tutorial 3"),
