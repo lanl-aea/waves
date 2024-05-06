@@ -2891,6 +2891,151 @@ def ansys_apdl_builder_factory(
     )
     return builder
 
+# TODO: address Explicit-specific restart files: ['abq', 'pac', 'sel']
+# TODO: allow for import jobs that don't execute Abaqus with oldjob=
+# TODO: add double='both' kwarg
+def Abaqus(env, job, inp=None, user=None, default_cpus=1, oldjob=None, write_restart=False,
+           extra_sources=list(), extra_targets=list(), extra_options='', builder='AbaqusSolver', **builder_kwargs):
+    """SCons Pseudo-Builder for running Abaqus jobs.
+
+    This SCons Pseudo-Builder wraps the WAVES Abaqus builders to automatically adjust the Abaqus command, sources list,
+    and target list when specifying restart jobs and user subroutines. It also allows for specification of a default
+    number of CPUs which can be overwritten by the ``--abaqus-cpus`` CLI argument.
+
+    Parameters
+    ----------
+    job : str
+        Abaqus job name.
+    inp : str, optional
+        Abaqus input file name. Defaults to <job>.inp.
+    user : str, optional
+        User subroutine. Default: None.
+    default_cpus : int, optional
+        CPUs to use for simulation. Is superceded by ``--abaqus-cpus`` if provided.
+    oldjob : str, optional
+        Name of job to restart/import.
+    write_restart : bool, optional
+        If True, add restart files to target list. This is required if you want to use these restart files for a restart
+        job.
+    extra_sources : list, optional
+        Additional sources to supply to builder.
+    extra_targets : list, optional
+        Additional targets to supply to builder.
+    extra_options : list, optional
+        Additional Abaqus options to supply to builder.
+    builder : str, optional
+        Name of Abaqus solver builder. Default: 'AbaqusSolver'.
+    **builder_kwargs : kwargs, optional
+        Any additional kwargs are passed through to the builder.
+
+    Returns
+    -------
+    target : list of SCons Target
+        All targets associated with Abaqus simulation.
+
+    Example
+    -------
+    To use ``Abaqus``, first import it in your SConstruct file. That might look like:
+
+    .. code-block:: python
+
+        from scons_extensions.abaqus import Abaqus
+
+    Next, add the method to your environment:
+
+    .. code-block:: python
+
+        env.AddMethod(Abaqus, "Abaqus")
+
+    To define a simple Abaqus simulation:
+
+    .. code-block:: python
+
+        env.Abaqus(job='preload')
+
+    The job name can differ from the input file name:
+
+    .. code-block:: python
+
+        env.Abaqus(job='assembly_preload', inp='preload.inp')
+
+    Specifying a user subroutine automatically adds the user subroutine to the source list:
+
+    .. code-block:: python
+        
+        env.Abaqus(job='preload', user='assembly.f')
+
+    If you write restart files, you can add the restart files to the target list with:
+
+    .. code-block:: python
+        
+        env.Abaqus(job='preload', write_restart=True)
+
+    This is important when you expect to use the restart files, as SCons will know to check that the required restart
+    files exist and are up-to-date:
+
+    .. code-block:: python
+        
+        env.Abaqus(job='drop', oldjob='preload')
+
+    If your Abaqus job depends on files which aren't detected by the implicit dependency scanners, you can add them to
+    the source list directly:
+
+    .. code-block:: python
+
+        env.Abaqus(job='preload', extra_sources=['user_subroutine_input.csv'])
+    """
+    OUTPUT_EXTENSIONS = ['com', 'dat', 'msg', 'odb', 'sta']
+    RESTART_EXTENSIONS = ['mdl', 'odb', 'prt', 'res', 'sim', 'stt']
+
+    # Initialize with empty arguments for AbaqusSolver builder
+    sources = list()
+    targets = list()
+    options = ''
+
+    # Specify double=both, which is ignored by Standard but a good default for Explicit
+    options += ' double=both'
+
+    # Like Abaqus, assume input file is <job>.inp unless otherwise specified
+    if inp:
+        options += f" input={inp}"
+    else:
+        inp = pathlib.Path(job).with_suffix('.inp')
+    # Include input file as first source
+    sources.append(inp)
+
+    targets.extend([f"{job}.{ext}" for ext in OUTPUT_EXTENSIONS])
+
+    # Always allow user to override CPUs with CLI option and exclude CPUs from build signature
+    options += f" $(cpus={env['abaqus_cpus'] or default_cpus}$)"
+
+    # If restarting a job, add old job restart files to sources
+    if oldjob:
+        sources.extend([f"{oldjob}.{ext}" for ext in RESTART_EXTENSIONS])
+        options += f' oldjob={oldjob}'
+
+    # If writing restart files, add restart files to targets
+    if write_restart:
+        targets.extend([f"{job}.{ext}" for ext in RESTART_EXTENSIONS])
+
+    # If user subroutine is specified, add user subroutine to sources
+    if user:
+        sources.append(user)
+        options += f" user={user}"
+
+    # Append user-specified arguments for AbaqusSolver builder
+    if extra_sources:
+        sources.extend(extra_sources)
+    if extra_targets:
+        targets.extend(extra_targets)
+    if extra_options:
+        options += f" {extra_options}"
+
+    # Get builder from environment
+    env_builder = getattr(env, builder)
+
+    return env_builder(target=targets, source=sources, abaqus_options=options, **builder_kwargs)
+
 
 def parameter_study(
     env: SCons.Environment.Environment,
