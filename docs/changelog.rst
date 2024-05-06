@@ -18,6 +18,7 @@ Internal Changes
 ================
 - Activate project CI environment directly. Fixes errors related to conda-build/boa/mambabuild during packaging
   (:merge:`823`). By `Kyle Brindley`_.
+- Skip Matlab system test because there are too few licenses for reliable execution (:merge:`824`). By `Kyle Brindley`_.
 
 Enhancements
 ============
