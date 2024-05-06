@@ -64,10 +64,16 @@ system_tests = [
     ([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_cubit"),
     # TODO: Re-enable quinoa tests when AEA server deployment stabilizes
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/657
-    #([fetch_template, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorials/tutorial_quinoa"),
+    pytest.param(
+        [fetch_template, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorials/tutorial_quinoa",
+        marks=pytest.mark.skip("Re-enable quinoa tests when AEA server deployment stabilizes")
+    ),
     # TODO: Re-enable fierro system tests when the cpu usage can be controlled
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/638
-    #([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_fierro"),
+    pytest.param(
+        [fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_fierro",
+        marks=pytest.mark.skip("Re-enable fierro system tests when the cpu usage can be controlled")
+    ),
     ([fetch_template, "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons tutorial_builder_post_actions --sconstruct=tutorial_builder_post_actions_SConstruct --unconditional-build --print-build-failures"], "tutorials"),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
