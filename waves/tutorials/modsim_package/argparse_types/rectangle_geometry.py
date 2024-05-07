@@ -1,7 +1,7 @@
-import sys
 import os
-import argparse
+import sys
 import inspect
+import argparse
 
 import abaqus
 import abaqusConstants
@@ -14,8 +14,8 @@ def main(output_file, model_name, part_name, width, height):
 
     This script creates a simple Abaqus model with a single rectangle part.
 
-    :param str output_file: The output file for the Abaqus model without extension. Will be appended with the required
-        extension, e.g. ``output_file``.cae
+    :param str output_file: The output file for the Abaqus model. Will be stripped of the extension and ``.cae`` will be
+        used.
     :param str model_name: The name of the Abaqus model
     :param str part_name: The name of the Abaqus part
     :param float width: The rectangle width
@@ -23,6 +23,7 @@ def main(output_file, model_name, part_name, width, height):
 
     :returns: writes ``output_file``.cae
     """
+    output_file = os.path.splitext(output_file)[0] + ".cae"
 
     abaqus.mdb.Model(name=model_name, modelType=abaqusConstants.STANDARD_EXPLICIT)
 

@@ -1,6 +1,6 @@
 import sys
-import argparse
 import pathlib
+import argparse
 
 import cubit
 
@@ -10,13 +10,15 @@ def main(output_file, width, height):
 
     This script creates a simple Cubit model with a single rectangle part.
 
-    :param str output_file: The output file for the Cubit model without extension. Will be appended with the required
-        extension, e.g. ``output_file``.cub
+    :param str output_file: The output file for the Abaqus model. Will be stripped of the extension and ``.cub`` will be
+        used.
     :param float width: The rectangle width
     :param float height: The rectangle height
 
     :returns: writes ``output_file``.cub
     """
+    output_file = pathlib.Path(output_file).with_suffix(".cub")
+
     cubit.init(['cubit', '-noecho', '-nojournal', '-nographics', '-batch'])
     cubit.cmd('new')
     cubit.cmd('reset')
