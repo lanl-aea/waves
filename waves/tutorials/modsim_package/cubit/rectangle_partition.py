@@ -13,10 +13,10 @@ def main(input_file, output_file, width, height):
 
     **Feature labels:**
 
-    * ``bottom_left`` - bottom left node
-    * ``bottom_right`` - bottom right node
-    * ``top_right`` - top right node
-    * ``top_left`` - top left node
+    * ``bottom_left`` - bottom left vertex
+    * ``bottom_right`` - bottom right vertex
+    * ``top_right`` - top right vertex
+    * ``top_left`` - top left vertex
     * ``left`` - left edge nodes
     * ``top`` - top edge nodes
     * ``right`` - right edge nodes
