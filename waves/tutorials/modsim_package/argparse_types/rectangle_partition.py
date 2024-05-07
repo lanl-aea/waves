@@ -47,35 +47,31 @@ def main(input_file, output_file, model_name, part_name, width, height):
 
     abaqus.openMdb(pathName=output_with_extension)
 
-    p = abaqus.mdb.models[model_name].parts[part_name]
+    part = abaqus.mdb.models[model_name].parts[part_name]
 
-    v = p.vertices
+    vertices = part.vertices.findAt(((0, 0, 0),),)
+    part.Set(vertices=vertices, name='bottom_left')
 
-    verts = v.findAt(((0, 0, 0),),)
-    p.Set(vertices=verts, name='bottom_left')
+    vertices = part.vertices.findAt(((width, 0, 0),),)
+    part.Set(vertices=vertices, name='bottom_right')
 
-    verts = v.findAt(((width, 0, 0),),)
-    p.Set(vertices=verts, name='bottom_right')
+    vertices = part.vertices.findAt(((width, height, 0),),)
+    part.Set(vertices=vertices, name='top_right')
 
-    verts = v.findAt(((width, height, 0),),)
-    p.Set(vertices=verts, name='top_right')
+    vertices = part.vertices.findAt(((0, height, 0),),)
+    part.Set(vertices=vertices, name='top_left')
 
-    verts = v.findAt(((0, height, 0),),)
-    p.Set(vertices=verts, name='top_left')
+    side1Edges = part.edges.findAt(((0, height / 2., 0),),)
+    part.Set(edges=side1Edges, name='left')
 
-    s = p.edges
+    side1Edges = part.edges.findAt(((width / 2., height, 0),),)
+    part.Set(edges=side1Edges, name='top')
 
-    side1Edges = s.findAt(((0, height / 2., 0),),)
-    p.Set(edges=side1Edges, name='left')
+    side1Edges = part.edges.findAt(((width, height / 2., 0),),)
+    part.Set(edges=side1Edges, name='right')
 
-    side1Edges = s.findAt(((width / 2., height, 0),),)
-    p.Set(edges=side1Edges, name='top')
-
-    side1Edges = s.findAt(((width, height / 2., 0),),)
-    p.Set(edges=side1Edges, name='right')
-
-    side1Edges = s.findAt(((width / 2., 0, 0),),)
-    p.Set(edges=side1Edges, name='bottom')
+    side1Edges = part.edges.findAt(((width / 2., 0, 0),),)
+    part.Set(edges=side1Edges, name='bottom')
 
     abaqus.mdb.save()
 

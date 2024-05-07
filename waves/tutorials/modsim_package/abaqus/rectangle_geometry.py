@@ -71,9 +71,9 @@ def get_parser():
     parser.add_argument('--part-name', type=str, default=default_part_name,
                         help="The name of the Abaqus part")
     parser.add_argument('--width', type=float, default=default_width,
-                        help="The rectangle width")
+                        help="The rectangle width. Positive float.")
     parser.add_argument('--height', type=float, default=default_height,
-                        help="The rectangle height")
+                        help="The rectangle height. Positive float.")
     return parser
 
 # Comment used in tutorial code snippets: marker-2

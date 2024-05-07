@@ -53,24 +53,21 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     abaqus.openMdb(pathName=output_with_extension)
 
-    p = abaqus.mdb.models[model_name].parts[part_name]
-    a = abaqus.mdb.models[model_name].rootAssembly
-    a.Instance(name=part_name, part=p, dependent=abaqusConstants.ON)
+    part = abaqus.mdb.models[model_name].parts[part_name]
+    assembly = abaqus.mdb.models[model_name].rootAssembly
+    assembly.Instance(name=part_name, part=part, dependent=abaqusConstants.ON)
 
-    p.seedPart(size=global_seed, deviationFactor=0.1, minSizeFactor=0.1)
-    p.generateMesh()
+    part.seedPart(size=global_seed, deviationFactor=0.1, minSizeFactor=0.1)
+    part.generateMesh()
 
     elemType1 = mesh.ElemType(elemCode=abaqusConstants.CPS4R, elemLibrary=abaqusConstants.STANDARD)
 
-    f = p.faces
-    s = p.edges
-    faces = f[:]
-
+    faces = part.faces
     pickedRegions = (faces, )
 
-    p.setElementType(regions=pickedRegions, elemTypes=(elemType1,))
-    p.Set(faces=faces, name='ELEMENTS')
-    p.Set(faces=faces, name='ALLNODES')
+    part.setElementType(regions=pickedRegions, elemTypes=(elemType1,))
+    part.Set(faces=faces, name='ELEMENTS')
+    part.Set(faces=faces, name='ALLNODES')
 
     model_object = abaqus.mdb.models[model_name]
     abaqus_utilities.export_mesh(model_object, part_name, output_file)
@@ -111,7 +108,7 @@ def get_parser():
     parser.add_argument('--part-name', type=str, default=default_part_name,
                         help="The name of the Abaqus part")
     parser.add_argument('--global-seed', type=float, default=default_global_seed,
-                        help="The global mesh seed size")
+                        help="The global mesh seed size. Positive float.")
     return parser
 
 
