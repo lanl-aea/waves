@@ -21,12 +21,14 @@ env.Append(BUILDERS={
 env.Command(
     target=["rectangle_mesh.cae", "rectangle_mesh.inp"],
     source=["rectangle_geometry.py", "rectangle_partition.py", "rectangle_mesh.py", "abaqus_utilities.py"],
-    action=["cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/rectangle_geometry.py " \
-            "${abaqus_options} -- --output-file ${TARGET.filebase}",
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/rectangle_partition.py " \
-            "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}",
-            "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCE.dir.abspath}/rectangle_mesh.py " \
-            "${abaqus_options} -- --input-file ${TARGET.filebase} --output-file ${TARGET.filebase}"],
+    action=[
+        "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[0].abspath} " \
+            "${abaqus_options} -- --output-file ${TARGET.abspath}",
+        "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[1].abspath} " \
+            "${abaqus_options} -- --input-file ${TARGET.abspath} --output-file ${TARGET.abspath}",
+        "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[2].abspath} " \
+            "${abaqus_options} -- --input-file ${TARGET.abspath} --output-file ${TARGET.abspath}"
+    ],
     abaqus_program=env['abaqus']
 )
 
