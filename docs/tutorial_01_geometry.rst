@@ -339,7 +339,7 @@ projects.
      .. literalinclude:: abaqus_rectangle_geometry.py
          :language: Python
          :linenos:
-         :emphasize-lines: 11-23, 25-36, 48, 51-54, 57, 60-70, 83-87
+         :emphasize-lines: 11-23, 26-37, 49, 52-55, 58, 61-71, 84-88
 
 ***************
 SConstruct File
