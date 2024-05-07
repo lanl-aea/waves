@@ -19,6 +19,8 @@ Internal Changes
 - Activate project CI environment directly. Fixes errors related to conda-build/boa/mambabuild during packaging
   (:merge:`823`). By `Kyle Brindley`_.
 - Skip Matlab system test because there are too few licenses for reliable execution (:merge:`824`). By `Kyle Brindley`_.
+- Update the tutorial journal files for better compliance with PEP-8. Use Abaqus Python API for rectangle sketch
+  generation (:issue:`661`, :merge:`826`). By `Kyle Brindley`_.
 
 Enhancements
 ============
