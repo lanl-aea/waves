@@ -24,12 +24,9 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     This script meshes a simple Abaqus model with a single rectangle part.
 
-    **Node sets:**
+    **Feature labels:**
 
     * ``NODES`` - all part nodes
-
-    **Element sets:**
-
     * ``ELEMENTS`` - all part elements
 
     :param str input_file: The Abaqus model file created by ``rectangle_geometry.py`` without extension. Will be

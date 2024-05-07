@@ -11,12 +11,16 @@ def main(input_file, output_file, width, height):
 
     This script partitions a simple Cubit model with a single rectangle part.
 
-    **Element sets:**
+    **Feature labels:**
 
-    * ``top`` - top edge
-    * ``bottom`` - bottom edge
-    * ``left`` - left edge
-    * ``right`` - right edge
+    * ``bottom_left`` - bottom left node
+    * ``bottom_right`` - bottom right node
+    * ``top_right`` - top right node
+    * ``top_left`` - top left node
+    * ``left`` - left edge nodes
+    * ``top`` - top edge nodes
+    * ``right`` - right edge nodes
+    * ``bottom`` - bottom edge nodes
 
     :param str input_file: The Cubit model file created by ``rectangle_geometry.py`` without extension. Will be
         appended with the required extension, e.g. ``input_file``.cub
@@ -42,14 +46,32 @@ def main(input_file, output_file, width, height):
 
     cubit.cmd(f"open '{output_with_extension}'")
 
-    cubit.cmd("sideset 1 add curve 3")
-    cubit.cmd("sideset 1 name 'elset_top'")
-    cubit.cmd("sideset 2 add curve 1")
-    cubit.cmd("sideset 2 name 'elset_bottom'")
-    cubit.cmd("sideset 3 add curve 4")
-    cubit.cmd("sideset 3 name 'elset_left'")
-    cubit.cmd("sideset 4 add curve 2")
-    cubit.cmd("sideset 4 name 'elset_right'")
+    cubit.cmd("nodeset 1 add vertex 1")
+    cubit.cmd("nodeset 1 name 'bottom_left'")
+    cubit.cmd("nodeset 2 add vertex 2")
+    cubit.cmd("nodeset 2 name 'bottom_right'")
+    cubit.cmd("nodeset 3 add vertex 3")
+    cubit.cmd("nodeset 3 name 'top_right'")
+    cubit.cmd("nodeset 4 add vertex 4")
+    cubit.cmd("nodeset 4 name 'top_left'")
+
+    cubit.cmd("nodeset 5 add curve 4")
+    cubit.cmd("nodeset 5 name 'left'")
+    cubit.cmd("nodeset 6 add curve 3")
+    cubit.cmd("nodeset 6 name 'top'")
+    cubit.cmd("nodeset 7 add curve 2")
+    cubit.cmd("nodeset 7 name 'right'")
+    cubit.cmd("nodeset 8 add curve 1")
+    cubit.cmd("nodeset 8 name 'bottom'")
+
+    cubit.cmd("sideset 1 add curve 4")
+    cubit.cmd("sideset 1 name 'left'")
+    cubit.cmd("sideset 2 add curve 3")
+    cubit.cmd("sideset 2 name 'top'")
+    cubit.cmd("sideset 3 add curve 2")
+    cubit.cmd("sideset 3 name 'right'")
+    cubit.cmd("sideset 4 add curve 1")
+    cubit.cmd("sideset 4 name 'bottom'")
 
     cubit.cmd(f"save as '{output_with_extension}' overwrite")
 

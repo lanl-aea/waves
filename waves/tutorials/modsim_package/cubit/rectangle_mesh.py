@@ -11,19 +11,9 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
 
     This script meshes a simple Cubit model with a single rectangle part.
 
-    **Node sets:**
+    **Feature labels:**
 
-    * ``bottom_left`` - bottom left node
-    * ``bottom_right`` - bottom right node
-    * ``top_right`` - top right node
-    * ``top_left`` - top left node
-    * ``top`` - top edge nodes
-    * ``bottom`` - bottom edge nodes
-    * ``left`` - left edge nodes
-    * ``right`` - right edge nodes
-
-    **Element sets:**
-
+    * ``NODES`` - all part nodes
     * ``ELEMENTS`` - all part elements
 
     :param str input_file: The Cubit model file created by ``rectangle_geometry.py`` without extension. Will be
@@ -57,26 +47,10 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     cubit.cmd("mesh surface 1")
     cubit.cmd("set duplicate block elements off")
 
-    cubit.cmd("nodeset 1 add vertex 1")
-    cubit.cmd("nodeset 1 name 'bottom_left'")
-    cubit.cmd("nodeset 2 add vertex 2")
-    cubit.cmd("nodeset 2 name 'bottom_right'")
-    cubit.cmd("nodeset 3 add vertex 3")
-    cubit.cmd("nodeset 3 name 'top_right'")
-    cubit.cmd("nodeset 4 add vertex 4")
-    cubit.cmd("nodeset 4 name 'top_left'")
-
-    cubit.cmd("nodeset 5 add curve 3")
-    cubit.cmd("nodeset 5 name 'top'")
-    cubit.cmd("nodeset 6 add curve 1")
-    cubit.cmd("nodeset 6 name 'bottom'")
-    cubit.cmd("nodeset 7 add curve 4")
-    cubit.cmd("nodeset 7 name 'left'")
-    cubit.cmd("nodeset 8 add curve 2")
-    cubit.cmd("nodeset 8 name 'right'")
+    cubit.cmd("nodeset 9 add surface 1")
+    cubit.cmd("nodeset 9 name 'NODES'")
 
     cubit.cmd("block 1 add surface 1")
-
     cubit.cmd(f"block 1 name 'ELEMENTS' Element type {element_type}")
 
     cubit.cmd(f"save as '{output_with_extension}' overwrite")
