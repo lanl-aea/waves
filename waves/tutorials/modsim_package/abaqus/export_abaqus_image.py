@@ -43,7 +43,7 @@ def main(input_file, output_file,
     Abaqus CAE files are copied to a temporary file before opening to avoid file modification, which is necessary for
     compatibility with build systems such as SCons.
 
-    :param str input_file: Abaqus input file. Suports ``*.inp`` and ``*.cae``.
+    :param str input_file: Abaqus input file. Supports ``*.inp`` and ``*.cae``.
     :param str output_file: Output image file. Supports ``*.png`` and ``*.svg``.
     :param float x_angle: Rotation about X-axis in degrees for ``abaqus.session.viewports[].view.rotate`` Abaqus Python
         method
