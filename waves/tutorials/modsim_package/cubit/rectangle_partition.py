@@ -26,18 +26,17 @@ def main(input_file, output_file, width, height):
     * ``elset_right`` - right edge elements
     * ``elset_bottom`` - bottom edge elements
 
-    :param str input_file: The Cubit model file created by ``rectangle_geometry.py`` without extension. Will be
-        appended with the required extension, e.g. ``input_file``.cub
-    :param str output_file: The output file for the Cubit model without extension. Will be appended with the required
-        extension, e.g. ``output_file``.cub
+    :param str input_file: The Cubit model file created by ``rectangle_geometry.py``. Will be stripped of the extension
+        and ``.cub`` will be used.
+    :param str output_file: The output file for the Cubit model. Will be stripped of the extension and ``.cub`` will be
+        used.
     :param float width: The rectangle width
     :param float height: The rectangle height
 
     :returns: writes ``output_file``.cub
     """
-
-    input_with_extension = f"{input_file}.cub"
-    output_with_extension = f"{output_file}.cub"
+    input_file = pathlib.Path(input_file).with_suffix(".cub")
+    output_file = pathlib.Path(output_file).with_suffix(".cub")
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons

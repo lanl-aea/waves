@@ -23,10 +23,10 @@ def main(input_file, output_file, model_name, part_name, width, height):
     * ``right`` - right edge
     * ``bottom`` - bottom edge
 
-    :param str input_file: The Abaqus model file created by ``rectangle_geometry.py`` without extension. Will be
-        appended with the required extension, e.g. ``input_file``.cae
-    :param str output_file: The output file for the Abaqus model without extension. Will be appended with the required
-        extension, e.g. ``output_file``.cae
+    :param str input_file: The Abaqus model file created by ``rectangle_geometry.py``. Will be stripped of the extension
+        and ``.cae`` will be used.
+    :param str output_file: The output file for the Abaqus model. Will be stripped of the extension and ``.cae`` will be
+        used.
     :param str model_name: The name of the Abaqus model
     :param str part_name: The name of the Abaqus part
     :param float width: The rectangle width
@@ -34,9 +34,8 @@ def main(input_file, output_file, model_name, part_name, width, height):
 
     :returns: writes ``output_file``.cae
     """
-
-    input_with_extension = '{}.cae'.format(input_file)
-    output_with_extension = '{}.cae'.format(output_file)
+    input_file = os.path.splitext(input_file)[0] + ".cae"
+    output_file = os.path.splitext(output_file)[0] + ".cae"
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
