@@ -16,10 +16,10 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     * ``NODES`` - all part nodes
     * ``ELEMENTS`` - all part elements
 
-    :param str input_file: The Cubit model file created by ``rectangle_geometry.py`` without extension. Will be
-        appended with the required extension, e.g. ``input_file``.cub
-    :param str output_file: The output file for the Cubit model without extension. Will be appended with the required
-        extension, e.g. ``output_file``.cub
+    :param str input_file: The Cubit model file created by ``rectangle_geometry.py``. Will be stripped of the extension
+        and ``.cub`` will be used.
+    :param str output_file: The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and
+        ``.inp`` will be used for the model and orphan mesh output files, respectively.
     :param float global_seed: The global mesh seed size
     :param str element_type: The model element type. Must be a supported Cubit 4 node element type.
     :param str solver: The solver type to use when exporting the mesh
@@ -28,9 +28,8 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
 
     :raises RuntimeError: If the solver is not supported
     """
-
-    input_with_extension = f"{input_file}.cub"
-    output_with_extension = f"{output_file}.cub"
+    input_file = pathlib.Path(input_file).with_suffix(".cub")
+    output_file = pathlib.Path(output_file).with_suffix(".cub")
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
