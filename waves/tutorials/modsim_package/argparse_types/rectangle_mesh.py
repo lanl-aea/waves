@@ -19,7 +19,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     **Node sets:**
 
-    * ``ALLNODES`` - all part nodes
+    * ``NODES`` - all part nodes
 
     **Element sets:**
 
@@ -60,7 +60,7 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
     part.setElementType(regions=pickedRegions, elemTypes=(elemType1,))
     part.Set(faces=faces, name='ELEMENTS')
-    part.Set(faces=faces, name='ALLNODES')
+    part.Set(faces=faces, name='NODES')
 
     model_object = abaqus.mdb.models[model_name]
     modsim_package.abaqus.abaqus_utilities.export_mesh(model_object, part_name, output_file)

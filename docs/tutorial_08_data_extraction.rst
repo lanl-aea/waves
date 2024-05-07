@@ -156,7 +156,7 @@ excludes the large, unsorted data in the ``/odb`` group path).
    /RECTANGLE/FieldOutputs/ALL_ELEMENTS External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_ELEMENTS}
    /RECTANGLE/FieldOutputs/ALL_NODES External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/FieldOutputs/ALL_NODES}
    /RECTANGLE/HistoryOutputs Group
-   /RECTANGLE/HistoryOutputs/ALLNODES External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/HistoryOutputs/ALLNODES}
+   /RECTANGLE/HistoryOutputs/NODES External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/HistoryOutputs/NODES}
    /RECTANGLE/Mesh          External Link {/projects/kbrindley/w13repos/waves/waves/tutorials/build/tutorial_08_data_extraction/parameter_set0/rectangle_compression_datasets.h5//RECTANGLE/Mesh}
    /xarray                  Group
    /xarray/Dataset          Dataset {4}
@@ -185,13 +185,13 @@ excludes the large, unsorted data in the ``/odb`` group path).
    /RECTANGLE/FieldOutputs/ALL_NODES/step Dataset {1}
    /RECTANGLE/FieldOutputs/ALL_NODES/time Dataset {5}
    /RECTANGLE/HistoryOutputs Group
-   /RECTANGLE/HistoryOutputs/ALLNODES Group
-   /RECTANGLE/HistoryOutputs/ALLNODES/U1 Dataset {1, 14}
-   /RECTANGLE/HistoryOutputs/ALLNODES/U2 Dataset {1, 14}
-   /RECTANGLE/HistoryOutputs/ALLNODES/node Dataset {1}
-   /RECTANGLE/HistoryOutputs/ALLNODES/step Dataset {1}
-   /RECTANGLE/HistoryOutputs/ALLNODES/time Dataset {14}
-   /RECTANGLE/HistoryOutputs/ALLNODES/type Dataset {1}
+   /RECTANGLE/HistoryOutputs/NODES Group
+   /RECTANGLE/HistoryOutputs/NODES/U1 Dataset {1, 14}
+   /RECTANGLE/HistoryOutputs/NODES/U2 Dataset {1, 14}
+   /RECTANGLE/HistoryOutputs/NODES/node Dataset {1}
+   /RECTANGLE/HistoryOutputs/NODES/step Dataset {1}
+   /RECTANGLE/HistoryOutputs/NODES/time Dataset {14}
+   /RECTANGLE/HistoryOutputs/NODES/type Dataset {1}
    /RECTANGLE/Mesh          Group
    /RECTANGLE/Mesh/CPS4R    Dataset {1}
    /RECTANGLE/Mesh/CPS4R_mesh Dataset {1, 4}
