@@ -22,6 +22,8 @@ Internal Changes
 - Update the tutorial journal files for better compliance with PEP-8. Use Abaqus Python API for rectangle sketch
   generation (:issue:`661`, :merge:`826`). By `Kyle Brindley`_.
 - Add lazy loader package to CI environment for testing (:issue:`664`, :merge:`827`). By `Kyle Brindley`_.
+- Handle file extensions in the tutorial and modsim template Abaqus and Cubit journal files (:issue:`663`,
+  :merge:`828`). By `Kyle Brindley`_.
 
 Enhancements
 ============
