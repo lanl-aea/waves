@@ -29,8 +29,6 @@ def main(output_file, width, height):
 
     cubit.cmd(f"save as '{output_file}.cub' overwrite")
 
-    return 0
-
 
 def get_parser():
     script_name = pathlib.Path(__file__)

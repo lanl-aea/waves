@@ -73,8 +73,6 @@ def main(input_file, output_file, model_name, part_name, width, height):
 
     abaqus.mdb.save()
 
-    return 0
-
 
 def get_parser():
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE

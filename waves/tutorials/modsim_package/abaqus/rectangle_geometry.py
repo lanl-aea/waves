@@ -35,8 +35,6 @@ def main(output_file, model_name, part_name, width, height):
 
     abaqus.mdb.saveAs(pathName='{}.cae'.format(output_file))
 
-    return 0
-
 # Comment used in tutorial code snippets: marker-1
 
 
