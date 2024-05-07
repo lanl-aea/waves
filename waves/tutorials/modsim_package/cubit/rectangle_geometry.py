@@ -10,7 +10,7 @@ def main(output_file, width, height):
 
     This script creates a simple Cubit model with a single rectangle part.
 
-    :param str output_file: The output file for the Abaqus model. Will be stripped of the extension and ``.cub`` will be
+    :param str output_file: The output file for the Cubit model. Will be stripped of the extension and ``.cub`` will be
         used.
     :param float width: The rectangle width
     :param float height: The rectangle height
