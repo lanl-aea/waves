@@ -95,11 +95,11 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('--input-file', type=str, default=default_input_file,
-                        help="The Abaqus model file created by ``rectangle_geometry.py`` without extension. " \
-                             "Will be appended with the required extension, e.g. ``input_file``.cae")
+                        help="The Abaqus model file created by ``rectangle_geometry.py``. " \
+                             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae")
     parser.add_argument('--output-file', type=str, default=default_output_file,
-                        help="The output file for the Abaqus model without extension. Will be appended with the " \
-                             "required extension, e.g. ``output_file``.cae")
+                        help="The output file for the Abaqus model. " \
+                             "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae")
     parser.add_argument('--model-name', type=str, default=default_part_name,
                         help="The name of the Abaqus model")
     parser.add_argument('--part-name', type=str, default=default_part_name,
