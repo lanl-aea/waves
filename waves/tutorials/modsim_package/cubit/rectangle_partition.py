@@ -21,6 +21,10 @@ def main(input_file, output_file, width, height):
     * ``top`` - top edge nodes
     * ``right`` - right edge nodes
     * ``bottom`` - bottom edge nodes
+    * ``elset_left`` - left edge elements
+    * ``elset_top`` - top edge elements
+    * ``elset_right`` - right edge elements
+    * ``elset_bottom`` - bottom edge elements
 
     :param str input_file: The Cubit model file created by ``rectangle_geometry.py`` without extension. Will be
         appended with the required extension, e.g. ``input_file``.cub
@@ -65,13 +69,13 @@ def main(input_file, output_file, width, height):
     cubit.cmd("nodeset 8 name 'bottom'")
 
     cubit.cmd("sideset 1 add curve 4")
-    cubit.cmd("sideset 1 name 'left'")
+    cubit.cmd("sideset 1 name 'elset_left'")
     cubit.cmd("sideset 2 add curve 3")
-    cubit.cmd("sideset 2 name 'top'")
+    cubit.cmd("sideset 2 name 'elset_top'")
     cubit.cmd("sideset 3 add curve 2")
-    cubit.cmd("sideset 3 name 'right'")
+    cubit.cmd("sideset 3 name 'elset_right'")
     cubit.cmd("sideset 4 add curve 1")
-    cubit.cmd("sideset 4 name 'bottom'")
+    cubit.cmd("sideset 4 name 'elset_bottom'")
 
     cubit.cmd(f"save as '{output_with_extension}' overwrite")
 
