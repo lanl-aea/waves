@@ -45,7 +45,8 @@ def get_parser():
                                      prog=prog)
     parser.add_argument('--output-file', type=str, default=default_output_file,
                         help="The output file for the Cubit model. " \
-                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub")
+                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub " \
+                             "(default: %(default)s")
     parser.add_argument('--width', type=float, default=default_width,
                         help="The rectangle width")
     parser.add_argument('--height', type=float, default=default_height,

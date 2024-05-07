@@ -93,11 +93,13 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('--input-file', type=str, default=default_input_file,
-                        help="The Cubit model file created by ``rectangle_geometry.py`` without extension. " \
-                             "Will be appended with the required extension, e.g. ``input_file``.cub")
+                        help="The Cubit model file created by ``rectangle_geometry.py``. " \
+                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub " \
+                             "(default: %(default)s")
     parser.add_argument('--output-file', type=str, default=default_output_file,
-                        help="The output file for the Cubit model without extension. Will be appended with the " \
-                             "required extension, e.g. ``output_file``.cub")
+                        help="The output file for the Cubit model. " \
+                             "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub " \
+                             "(default: %(default)s")
     parser.add_argument('--width', type=float, default=default_width,
                         help="The rectangle width")
     parser.add_argument('--height', type=float, default=default_height,
