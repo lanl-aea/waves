@@ -16,7 +16,7 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     * ``NODES`` - all part nodes
     * ``ELEMENTS`` - all part elements
 
-    :param str input_file: The Cubit model file created by ``rectangle_geometry.py``. Will be stripped of the extension
+    :param str input_file: The Cubit model file created by ``rectangle_partition.py``. Will be stripped of the extension
         and ``.cub`` will be used.
     :param str output_file: The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and
         ``.inp`` will be used for the model and orphan mesh output files, respectively.
@@ -79,7 +79,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description,
                                      prog=prog)
     parser.add_argument('--input-file', type=str, default=default_input_file,
-                        help="The Cubit model file created by ``rectangle_geometry.py``. " \
+                        help="The Cubit model file created by ``rectangle_partition.py``. " \
                              "Will be stripped of the extension and ``.cub`` will be used, e.g. ``input_file``.cub " \
                              "(default: %(default)s")
     parser.add_argument('--output-file', type=str, default=default_output_file,
