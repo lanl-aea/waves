@@ -234,7 +234,7 @@ Command-Line Interfaces
     using the contents below which contains the ``get_parser()`` function. Note that
     missing line numbers may be ignored.
 
-.. admonition:: wabes-tutorial/modsim_package/abaqus/rectangle_geometry.py
+.. admonition:: waves-tutorial/modsim_package/abaqus/rectangle_geometry.py
 
     .. literalinclude:: abaqus_rectangle_geometry.py
         :language: Python
@@ -339,7 +339,7 @@ projects.
      .. literalinclude:: abaqus_rectangle_geometry.py
          :language: Python
          :linenos:
-         :emphasize-lines: 11-23, 27-38, 54, 57-60, 63, 66-76, 88-92
+         :emphasize-lines: 11-23, 25-36, 50, 53-56, 59, 62-72, 85-89
 
 ***************
 SConstruct File
