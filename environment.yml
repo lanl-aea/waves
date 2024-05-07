@@ -9,6 +9,7 @@ dependencies:
   - h5netcdf
   - h5py
   - ipython
+  - lazy_loader >=0.4
   - matplotlib-base
   - mypy
   - networkx
