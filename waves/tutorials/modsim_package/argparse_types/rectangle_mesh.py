@@ -1,8 +1,8 @@
-import sys
 import os
-import argparse
-import inspect
+import sys
 import shutil
+import inspect
+import argparse
 
 import abaqus
 import abaqusConstants

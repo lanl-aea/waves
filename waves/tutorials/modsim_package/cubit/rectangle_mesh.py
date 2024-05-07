@@ -1,7 +1,7 @@
 import sys
-import argparse
-import pathlib
 import shutil
+import pathlib
+import argparse
 
 import cubit
 
