@@ -612,7 +612,7 @@ def test_sbatch_sierra():
     assert builder.emitter == scons_extensions._sierra_emitter
 
 
-copy_substitute_input = {
+copy_substfile_input = {
     "strings": (["dummy", "dummy2.in", "root.inp.in", "conf.py.in"],
                 ["dummy", "dummy2.in", "dummy2", "root.inp.in", "root.inp", "conf.py.in", "conf.py"]),
     "pathlib.Path()s": ([pathlib.Path("dummy"), pathlib.Path("dummy2.in")],
@@ -622,9 +622,15 @@ copy_substitute_input = {
 
 @pytest.mark.unittest
 @pytest.mark.parametrize("source_list, expected_list",
-                         copy_substitute_input.values(),
-                         ids=copy_substitute_input.keys())
-def test_copy_substitute(source_list, expected_list):
+                         copy_substfile_input.values(),
+                         ids=copy_substfile_input.keys())
+def test_copy_substfile(source_list, expected_list):
+    env = SCons.Environment.Environment()
+    target_list = scons_extensions.copy_substfile(env, source_list, {})
+    target_files = [str(target) for target in target_list]
+    assert target_files == expected_list
+
+    # TODO: Remove when the copy substitute method is deprecated
     target_list = scons_extensions.copy_substitute(source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
