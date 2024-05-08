@@ -88,6 +88,8 @@ env.Append(BUILDERS={
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
     'PythonScript': waves.scons_extensions.python_script()
 })
+env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
+
 envSierra.Append(BUILDERS={
     'Sierra': waves.scons_extensions.sierra(program=envSierra['sierra'])
 })
