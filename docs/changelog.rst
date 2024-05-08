@@ -8,11 +8,20 @@ Changelog
 0.8.5 (unreleased)
 ******************
 
+New Features
+============
+- Add a copy substfile pseudo-builder as a replacement for the ``copy_substitute`` method. Pseudo-builders use the same
+  access syntax as SCons builders and are the recommended solution for wrapping builders with advanced behaviors
+  (:issue:`662`, :merge:`829`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Release the sensitivity study as a supplemental lesson (:issue:`643`, :merge:`820`). By `Kyle Brindley`_.
 - Add a warning about whitespace in SCons command line options in the first tutorial (:merge:`821`). By `Kyle
   Brindley`_.
+- Update all tutorials and the modsim template to use a copy substitute pseudo-builder instead of the
+  ``copy_substitute`` function. Pseudo-builders use the same access syntax as SCons builders and are the recommended
+  solution for wrapping builders with advanced behaviors (:issue:`662`, :merge:`829`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
