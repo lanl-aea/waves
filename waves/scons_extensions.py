@@ -1005,6 +1005,72 @@ def sbatch_sierra(*args, **kwargs):
     return sierra(*args, **kwargs)
 
 
+def copy_substfile(
+    env: SCons.Environment.Environment,
+    source_list: list,
+    substitution_dictionary: typing.Optional[dict] = None,
+    build_subdirectory: str = ".",
+    symlink: bool = False
+) -> SCons.Node.Nodelist:
+    """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames
+
+    `SCons Pseudo-Builder`_ to chain two builders:  a builder with the `SCons Copy`_ action and the `SCons Substfile`_
+    builders. Files are first copied to the build (variant) directory and then template substitution is performed on
+    template files (any file ending with ``*.in`` suffix) to create a file without the template suffix.
+
+    When pseudo-builders are added to the environment with the `SCons AddMethod`_ function they can be accessed with the
+    same syntax as a normal builder. When called from the construction environment, the ``env`` argument is omitted. See
+    the example below.
+
+    To avoid dependency cycles, the source file(s) should be passed by absolute path.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import pathlib
+       import waves
+       current_directory = pathlib.Path(Dir(".").abspath)
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
+       source_list = [
+           "#/subdir3/file_three.ext",              # File found with respect to project root directory using SCons notation
+           current_directory / file_one.ext,        # File found in current SConscript directory
+           current_directory / "subdir2/file_two",  # File found below current SConscript directory
+           current_directory / "file_four.ext.in"   # File with substitutions matching substitution dictionary keys
+       ]
+       substitution_dictionary = {
+           "@variable_one@": "value_one"
+       }
+       env.CopySubstfile(source_list, substitution_dictionary=substitution_dictionary)
+
+    :param env: An SCons construction environment to use when defining the targets.
+    :param source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
+    :param substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional
+        template characters if present, e.g. ``@variable@``. The template character, e.g. ``@``, can be anything that
+        works in the `SCons Substfile`_ builder.
+    :param build_subdirectory: build subdirectory relative path prepended to target files
+    :param symlink: Whether symbolic links are created as new symbolic links. If true, symbolic links are shallow
+        copies as a new symbolic link. If false, symbolic links are copied as a new file (dereferenced).
+
+    :return: SCons NodeList of Copy and Substfile target nodes
+    """  # noqa: E501
+    if not substitution_dictionary:
+        substitution_dictionary = {}
+    build_subdirectory = pathlib.Path(build_subdirectory)
+    target_list = SCons.Node.NodeList()
+    source_list = [pathlib.Path(source_file) for source_file in source_list]
+    for source_file in source_list:
+        copy_target = build_subdirectory / source_file.name
+        target_list += env.Command(
+                target=str(copy_target),
+                source=str(source_file),
+                action=SCons.Defaults.Copy("${TARGET}", "${SOURCE}", symlink))
+        if source_file.suffix == _scons_substfile_suffix:
+            substfile_target = build_subdirectory / source_file.name
+            target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
+    return target_list
+
+
 def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[dict] = None,
                     env: SCons.Environment.Environment = SCons.Environment.Environment(),
                     build_subdirectory: str = ".", symlink: bool = False) -> SCons.Node.NodeList:
@@ -1038,7 +1104,7 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
        substitution_dictionary = {
            "@variable_one@": "value_one"
        }
-       waves.scons_extensions.copy_substitute(source_list, substitution_dictionary, env)
+       waves.scons_extensions.copy_substitute(source_list, substitution_dictionary=substitution_dictionary, env)
 
     :param source_list: List of pathlike objects or strings. Will be converted to list of pathlib.Path objects.
     :param substitution_dictionary: key: value pairs for template substitution. The keys must contain the optional
@@ -1051,22 +1117,14 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
 
     :return: SCons NodeList of Copy and Substfile target nodes
     """  # noqa: E501
-    if not substitution_dictionary:
-        substitution_dictionary = {}
-    build_subdirectory = pathlib.Path(build_subdirectory)
-    target_list = SCons.Node.NodeList()
-    source_list = [pathlib.Path(source_file) for source_file in source_list]
-    for source_file in source_list:
-        copy_target = build_subdirectory / source_file.name
-        target_list += env.Command(
-                target=str(copy_target),
-                source=str(source_file),
-                action=SCons.Defaults.Copy("${TARGET}", "${SOURCE}", symlink))
-        if source_file.suffix == _scons_substfile_suffix:
-            substfile_target = build_subdirectory / source_file.name
-            target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
+    target_list = copy_substfile(
+        env,
+        source_list,
+        substitution_dictionary=substitution_dictionary,
+        build_subdirectory=build_subdirectory,
+        symlink=symlink
+    )
     return target_list
-
 
 def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
     """Python script SCons builder
