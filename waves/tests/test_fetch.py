@@ -388,4 +388,3 @@ def test_extend_requested_paths():
     # testing key that does not exist
     with pytest.raises(ChoicesError):
         _fetch.extend_requested_paths([], 'shouldRaiseError')
-
