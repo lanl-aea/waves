@@ -1,4 +1,5 @@
 """Abaqus utilities to be re-used in multiple places"""
+import os
 import re
 
 import abaqusConstants
