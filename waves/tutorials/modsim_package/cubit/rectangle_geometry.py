@@ -29,13 +29,13 @@ def main(output_file, width, height):
     cubit.cmd(f"create vertex 0 {height} 0")
     cubit.cmd(f"create surface vertex 1,2,3,4")
 
-    cubit.cmd(f"save as '{output_file}.cub' overwrite")
+    cubit.cmd(f"save as '{output_file}' overwrite")
 
 
 def get_parser():
     script_name = pathlib.Path(__file__)
     # Set default parameter values
-    default_output_file = script_name.stem
+    default_output_file = script_name.with_suffix(".cub").name
     default_width = 1.0
     default_height = 1.0
 

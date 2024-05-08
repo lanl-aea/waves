@@ -30,6 +30,8 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     """
     input_file = pathlib.Path(input_file).with_suffix(".cub")
     output_file = pathlib.Path(output_file).with_suffix(".cub")
+    abaqus_mesh_file = output_file.with_suffix(".inp")
+    exodus_mesh_file = output_file.with_suffix(".inp")
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
@@ -56,10 +58,10 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
 
     if solver.lower() == "abaqus":
         # Export Abaqus orphan mesh for Abaqus workflow
-        cubit.cmd(f"export abaqus '{output_file}.inp' partial dimension 2 block 1 overwrite everything")
+        cubit.cmd(f"export abaqus '{abaqus_mesh_file}' partial dimension 2 block 1 overwrite everything")
     elif solver.lower() in ["sierra", "adagio"]:
         # Export Genesis file for Sierra workflow
-        cubit.cmd(f"export mesh '{output_file}.g' overwrite")
+        cubit.cmd(f"export mesh '{exodus_mesh_file}' overwrite")
     else:
         raise RuntimeError(f"Uknown solver '{solver}'")
 
@@ -67,8 +69,8 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
 def get_parser():
     script_name = pathlib.Path(__file__)
     # Set default parameter values
-    default_input_file = script_name.stem.replace('_mesh', '_partition')
-    default_output_file = script_name.stem
+    default_input_file = script_name.with_suffix(".cub").name.replace('_mesh', '_partition')
+    default_output_file = script_name.with_suffix(".cub").name
     default_global_seed = 1.0
     default_element_type = "QUAD"
     default_solver = "abaqus"
