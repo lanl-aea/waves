@@ -91,7 +91,7 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
-# Add custom builders
+# Add builders and pseudo-builders
 env.Append(BUILDERS={
     'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),

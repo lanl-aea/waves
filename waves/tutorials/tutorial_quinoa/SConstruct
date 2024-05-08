@@ -90,7 +90,7 @@ for key, value in project_variables.items():
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
-# Add custom builders
+# Add builders and pseudo-builders
 env.Append(BUILDERS={
     'PythonScript': waves.scons_extensions.python_script(),
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(

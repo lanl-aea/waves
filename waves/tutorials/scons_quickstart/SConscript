@@ -11,7 +11,7 @@ abaqus_solver = Builder(
            "${abaqus_options} -interactive -ask_delete no"
 )
 
-# Add custom builders
+# Add builders and pseudo-builders
 env.Append(BUILDERS={
     'AbaqusJournal': abaqus_journal,
     'AbaqusSolver': abaqus_solver
