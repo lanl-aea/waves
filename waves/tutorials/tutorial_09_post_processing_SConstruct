@@ -87,6 +87,7 @@ env.Append(BUILDERS={
     'AbaqusExtract': waves.scons_extensions.abaqus_extract(program=env['abaqus']),
     'PythonScript': waves.scons_extensions.python_script()
 })
+env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 
 # Comments used in tutorial code snippets: marker-6
 
