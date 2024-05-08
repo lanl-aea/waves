@@ -1078,6 +1078,12 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
 
     .. warning::
 
+       The copy_substitute function will be deprecated in favor of the copy_substfile pseudo-builder in a future
+       version. See the copy_substfile API:
+       https://aea.re-pages.lanl.gov/python-projects/waves/api.html#waves.scons_extensions.copy_substfile
+
+    .. warning::
+
        This is a Python function and not an SCons builder. It cannot be added to the construction environment
        ``BUILDERS`` list. The function returns a list of targets instead of a Builder object.
 
