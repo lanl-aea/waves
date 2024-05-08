@@ -1120,7 +1120,10 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
     # TODO: Deprecate this function in favor of the pseudo-builder copy_substfile
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/665
     import warnings
-    warnings.warn("The copy_substitute function will be deprecated in favor of the copy_substfile pseudo-builder in a future version")
+    message = "The copy_substitute function will be deprecated in favor of the copy_substfile pseudo-builder in a " \
+              "future version. See the copy_substfile API: " \
+              "https://aea.re-pages.lanl.gov/python-projects/waves/api.html#waves.scons_extensions.copy_substfile"
+    warnings.warn(message)
     target_list = copy_substfile(
         env,
         source_list,
