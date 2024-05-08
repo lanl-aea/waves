@@ -12,8 +12,6 @@ Requires the following ``SConscript(..., exports=[])``
 
 import pathlib
 
-import waves
-
 # Inherit the parent construction environment
 Import("env", "envSierra")
 
