@@ -10,6 +10,7 @@ References
 
 * Bash concepts used in this tutorial: `Bash Variables`_, `Bash Arrays`_, `Bash Parameter Expansion`_ :cite:`gnu-bash`
 * `Abaqus *INCLUDE`_ keyword documentation :cite:`ABAQUS`
+* `SCons Pseudo-Builder`_, `SCons AddMethod`_, and `SCons Copy`_ :cite:`scons-user`
 
 ***********
 Environment
