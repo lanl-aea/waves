@@ -119,7 +119,6 @@ exist.
          :lineno-match:
          :start-after: marker-1
          :end-before: marker-3
-         :emphasize-lines: 5-11
 
 First, the ``workflow`` variable is assigned to an empty list. Eventually, ``workflow``
 will become a list of targets to build. Every time we instruct SCons to build a target(s),
@@ -127,7 +126,7 @@ we will ``extend`` this list and finally create an alias that matches the parent
 directory name. The alias thus represents the list of targets specified in the
 ``SConscript`` file.
 
-The highlighted lines of code instruct SCons on how to build the target, an Abaqus CAE
+The final block of code instructs SCons on how to build the target, an Abaqus CAE
 file whose name is constructed using the ``journal_file`` variable. The ``journal_file``
 variable exists solely to minimize hard-coded duplication of the string
 ``'rectangle_geometry'``. ``journal_options`` allows for parameters to be passed as
