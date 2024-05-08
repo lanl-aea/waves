@@ -45,9 +45,9 @@ def main(input_file, output_file, model_name, part_name, global_seed):
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
     if input_file != output_file:
-        shutil.copyfile(input_with_extension, output_with_extension)
+        shutil.copyfile(input_file, output_file)
 
-    abaqus.openMdb(pathName=output_with_extension)
+    abaqus.openMdb(pathName=output_file)
 
     part = abaqus.mdb.models[model_name].parts[part_name]
     assembly = abaqus.mdb.models[model_name].rootAssembly

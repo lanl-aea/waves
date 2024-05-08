@@ -34,13 +34,13 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
     if input_file != output_file:
-        shutil.copyfile(input_with_extension, output_with_extension)
+        shutil.copyfile(input_file, output_file)
 
     cubit.init(['cubit', '-noecho', '-nojournal', '-nographics', '-batch'])
     cubit.cmd('new')
     cubit.cmd('reset')
 
-    cubit.cmd(f"open '{output_with_extension}'")
+    cubit.cmd(f"open '{output_file}'")
 
     cubit.cmd(f"surface 1 size {global_seed}")
     cubit.cmd("mesh surface 1")
@@ -52,7 +52,7 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     cubit.cmd("block 1 add surface 1")
     cubit.cmd(f"block 1 name 'ELEMENTS' Element type {element_type}")
 
-    cubit.cmd(f"save as '{output_with_extension}' overwrite")
+    cubit.cmd(f"save as '{output_file}' overwrite")
 
     if solver.lower() == "abaqus":
         # Export Abaqus orphan mesh for Abaqus workflow

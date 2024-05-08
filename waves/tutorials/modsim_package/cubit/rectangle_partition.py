@@ -41,13 +41,13 @@ def main(input_file, output_file, width, height):
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
     if input_file != output_file:
-        shutil.copyfile(input_with_extension, output_with_extension)
+        shutil.copyfile(input_file, output_file)
 
     cubit.init(['cubit', '-noecho', '-nojournal', '-nographics', '-batch'])
     cubit.cmd('new')
     cubit.cmd('reset')
 
-    cubit.cmd(f"open '{output_with_extension}'")
+    cubit.cmd(f"open '{output_file}'")
 
     cubit.cmd("nodeset 1 add vertex 1")
     cubit.cmd("nodeset 1 name 'bottom_left'")
@@ -76,7 +76,7 @@ def main(input_file, output_file, width, height):
     cubit.cmd("sideset 4 add curve 1")
     cubit.cmd("sideset 4 name 'elset_bottom'")
 
-    cubit.cmd(f"save as '{output_with_extension}' overwrite")
+    cubit.cmd(f"save as '{output_file}' overwrite")
 
 
 def get_parser():
