@@ -1138,6 +1138,7 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
     )
     return target_list
 
+
 def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
     """Python script SCons builder
 
