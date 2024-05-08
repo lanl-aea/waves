@@ -31,7 +31,7 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
     input_file = pathlib.Path(input_file).with_suffix(".cub")
     output_file = pathlib.Path(output_file).with_suffix(".cub")
     abaqus_mesh_file = output_file.with_suffix(".inp")
-    exodus_mesh_file = output_file.with_suffix(".inp")
+    exodus_mesh_file = output_file.with_suffix(".g")
 
     # Avoid modifying the contents or timestamp on the input file.
     # Required to get conditional re-builds with a build system such as GNU Make, CMake, or SCons
