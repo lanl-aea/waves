@@ -6,10 +6,19 @@ import cubit
 
 
 def main(output_file, xlength, ylength, zlength):
-    """Write brick geometry with specified dimensions"""
-    cubit.init(['cubit', '-noecho', '-nojournal', '-nographics', '-batch'])
-    cubit.cmd('new')
-    cubit.cmd('reset')
+    """Write brick geometry with specified dimensions
+
+    :param str output_file: The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and
+        ``.exo`` will be used for the model and mesh files, respectively.
+    :param xlength: box edge length on global x axis
+    :param ylength: box edge length on global y axis
+    :param zlength: box edge length on global z axis
+
+    :returns: writes ``output_file``.cub and ``output_file``.exo
+    """
+    cubit.init(["cubit", "-noecho", "-nojournal", "-nographics", "-batch"])
+    cubit.cmd("new")
+    cubit.cmd("reset")
 
     cubit_file = pathlib.Path(output_file).with_suffix(".cub")
     exodus_file = cubit_file.with_suffix(".exo")
@@ -56,24 +65,30 @@ def main(output_file, xlength, ylength, zlength):
 
 
 def get_parser():
+    """Return the command line parser"""
     script_name = pathlib.Path(__file__)
-
     prog = f"python {script_name.name} "
-    cli_description = "Write brick geometry ``output_file``.cub with specified dimensions"
+    cli_description = "Write brick geometry ``output_file``.cub and ``output_file``.exo with specified dimensions"
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('--output-file', type=str, required=True)
-    parser.add_argument('--xlength', type=float, required=True)
-    parser.add_argument('--ylength', type=float, required=True)
-    parser.add_argument('--zlength', type=float, required=True)
+    parser.add_argument(
+        "--output-file",
+        type=str,
+        required=True,
+        help="The output file for the Cubit model. Will be stripped of the extension and ``.cub`` and ``.exo`` will " \
+             "be used for the model and mesh files, respectively."
+    )
+    parser.add_argument("--xlength", type=float, required=True, help="box edge length on global x axis")
+    parser.add_argument("--ylength", type=float, required=True, help="box edge length on global y axis")
+    parser.add_argument("--zlength", type=float, required=True, help="box edge length on global z axis")
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
-    args, unknown = parser.parse_known_args()
-    sys.exit(main(
+    args = parser.parse_args()
+    main(
         output_file=args.output_file,
         xlength=args.xlength,
         ylength=args.ylength,
         zlength=args.zlength
-    ))
+    )
