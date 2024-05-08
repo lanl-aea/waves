@@ -128,24 +128,21 @@ this is implemented.
 Each file in the ``abaqus_source_list`` is specified with its absolute path with ``pathlib`` and the
 ``abaqus_source_abspath`` variable constructed in the project configuration ``SConstruct`` file.  After constructing the
 ``abaqus_source_list``, we must first convert each string (which represent the absolute paths of each file in the list)
-to a `Python pathlib`_ object.  While not strictly neccessary for the :meth:`waves.scons_extensions.copy_substitute` method, the
-`Python pathlib`_ objects are used elsewhere in the `SConscript` file.
+to a `Python pathlib`_ object. While not strictly neccessary for the :meth:`waves.scons_extensions.copy_substfile`
+pseudo-builder, the `Python pathlib`_ objects are used elsewhere in the ``SConscript`` file.
 
 Just as in the previous tutorials, we now need to extend the ``workflow`` list. Recall that we have already extended the
-workflow three times - once each for the Geometry, Partition, and Mesh processes. Note that the syntax in this case is
-different from before, as we now need to call the :meth:`waves.scons_extensions.copy_substitute` method as a function from the
-``waves`` module.
+workflow three times - once each for the Geometry, Partition, and Mesh processes.
 
-Unlike the ``AbaqusJournal`` builder, the :meth:`waves.scons_extensions.copy_substitute` is not a builder, but a Python method
-which only requires the source file name(s). This is possible because the target file can be inferred from the copy
-operation and build directory. With this simplified method interface, it's also possible to pass a list of source files
-instead of defining a unique task for each item in the ``abaqus_source_list``. The
-:meth:`waves.scons_extensions.copy_substitute` method will construct the per-file tasks automatically and return the complete
-list of targets.
+Unlike the ``AbaqusJournal`` builder, the :meth:`waves.scons_extensions.copy_substfile` is not a builder, but an `SCons
+Pseudo-Builder`_ which only requires the source file name(s). This is possible because the target file can be inferred
+from the copy operation and build directory. With this pseudo-builder interface, it's also possible to pass a list of
+source files instead of defining a unique task for each item in the ``abaqus_source_list``. The
+:meth:`waves.scons_extensions.copy_substfile` pseudo-builder will construct the per-file tasks automatically and return
+the complete list of targets.
 
-In summary of the changes you just made to the ``tutorial_03_solverprep`` file,
-a ``diff`` against the ``SConscript`` file from :ref:`tutorial_partition_mesh` is
-included below to help identify the changes made in this tutorial.
+In summary of the changes you just made to the ``tutorial_03_solverprep`` file, a ``diff`` against the ``SConscript``
+file from :ref:`tutorial_partition_mesh` is included below to help identify the changes made in this tutorial.
 
 .. admonition:: waves-tutorials/tutorial_03_solverprep
 
@@ -157,8 +154,7 @@ included below to help identify the changes made in this tutorial.
 SConstruct
 **********
 
-8. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the
-   ``waves-tutorials/SConstruct`` file.
+8. Add ``tutorial_03_solverprep`` to the ``workflow_configurations`` list in the ``waves-tutorials/SConstruct`` file.
 
 A ``diff`` against the ``SConstruct`` file from :ref:`tutorial_partition_mesh` is included below to help identify the
 changes made in this tutorial.
@@ -168,6 +164,9 @@ changes made in this tutorial.
    .. literalinclude:: tutorials_tutorial_03_solverprep_SConstruct
       :language: Python
       :diff: tutorials_tutorial_02_partition_mesh_SConstruct
+
+Note that while an `SCons Pseudo-Builder`_ is accessed with the same syntax as a normal builder in the ``SConscript``
+file, it must be added to the construction environment with the `SCons AddMethod`_ function in the ``SConstruct`` file.
 
 *************
 Build Targets
@@ -275,8 +274,8 @@ directory, ``tutorial_03_solverprep``, pertains to the targets we just built.
 
 It is worth noting that the ``tutorial_03_solverprep`` build directory contains all the
 files from the previous two tutorials. The additional files are the files from the
-``abaqus_source_list`` that were acted on with the :meth:`waves.scons_extensions.copy_substitute`
-method. In this case, the files were simply copied into the build directory with no
+``abaqus_source_list`` that were acted on with the :meth:`waves.scons_extensions.copy_substfile`
+pseudo-builder. In this case, the files were simply copied into the build directory with no
 modification to the source code. :ref:`tutorial_parameter_substitution` will discuss
 how parameters can be inserted into these solver input files.
 
