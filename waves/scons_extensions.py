@@ -1011,7 +1011,7 @@ def copy_substfile(
     substitution_dictionary: typing.Optional[dict] = None,
     build_subdirectory: str = ".",
     symlink: bool = False
-) -> SCons.Node.Nodelist:
+) -> SCons.Node.NodeList:
     """Pseudo-builder to copy source list to build directory and perform template substitutions on ``*.in`` filenames
 
     `SCons Pseudo-Builder`_ to chain two builders:  a builder with the `SCons Copy`_ action and the `SCons Substfile`_
