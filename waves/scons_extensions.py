@@ -1117,6 +1117,8 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
 
     :return: SCons NodeList of Copy and Substfile target nodes
     """  # noqa: E501
+    # TODO: Deprecate this function in favor of the pseudo-builder copy_substfile
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/665
     target_list = copy_substfile(
         env,
         source_list,

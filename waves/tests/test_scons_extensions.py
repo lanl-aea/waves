@@ -637,6 +637,7 @@ def test_copy_substfile(source_list, expected_list):
     assert target_files == expected_list
 
     # TODO: Remove when the copy substitute method is deprecated
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/665
     target_list = scons_extensions.copy_substitute(source_list, {})
     target_files = [str(target) for target in target_list]
     assert target_files == expected_list
