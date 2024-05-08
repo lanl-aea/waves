@@ -66,7 +66,6 @@ Part-Image script
       :language: Python
       :lineno-match:
       :end-before: marker-1
-      :emphasize-lines: 40-60
 
 The ``export_abaqus_image.py`` file is an Abaqus journal file. The top of the file imports standard library modules,
 Abaqus modules, and the ``abaqus_utilities.py`` module create in :ref:`tutorial_partition_mesh`. The ``main()`` function
@@ -82,7 +81,6 @@ takes two required arguments: ``input_file`` which is an Abaqus CAE ``*.cae`` or
       :language: Python
       :lineno-match:
       :start-after: marker-1
-      :emphasize-lines: 9-30
 
 The ``image()`` function utilizes the rest of the optional arguments that were passed from the ``main()`` function. The
 arguments ``color_map``, ``x_angle``, ``y_angle``, and ``z_angle`` are used to adjust the viewer window. The
