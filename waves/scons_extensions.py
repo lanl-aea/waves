@@ -1079,8 +1079,7 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
     .. warning::
 
        The copy_substitute function will be deprecated in favor of the copy_substfile pseudo-builder in a future
-       version. See the copy_substfile API:
-       https://aea.re-pages.lanl.gov/python-projects/waves/api.html#waves.scons_extensions.copy_substfile
+       version. See the :meth:`waves.scons_extensions.copy_substfile` API.
 
     .. warning::
 
