@@ -554,14 +554,6 @@ def test_sbatch_abaqus_solver():
     assert builder.emitter == scons_extensions._abaqus_solver_emitter
 
 
-copy_substitute_input = {
-    "strings": (["dummy", "dummy2.in", "root.inp.in", "conf.py.in"],
-                ["dummy", "dummy2.in", "dummy2", "root.inp.in", "root.inp", "conf.py.in", "conf.py"]),
-    "pathlib.Path()s": ([pathlib.Path("dummy"), pathlib.Path("dummy2.in")],
-                        ["dummy", "dummy2.in", "dummy2"]),
-}
-
-
 source_file = fs.File("dummy.i")
 sierra_emitter_input = {
     "one target": (
@@ -618,6 +610,14 @@ def test_sbatch_sierra():
     builder = scons_extensions.sbatch_sierra()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._sierra_emitter
+
+
+copy_substitute_input = {
+    "strings": (["dummy", "dummy2.in", "root.inp.in", "conf.py.in"],
+                ["dummy", "dummy2.in", "dummy2", "root.inp.in", "root.inp", "conf.py.in", "conf.py"]),
+    "pathlib.Path()s": ([pathlib.Path("dummy"), pathlib.Path("dummy2.in")],
+                        ["dummy", "dummy2.in", "dummy2"]),
+}
 
 
 @pytest.mark.unittest
