@@ -133,10 +133,9 @@ differences:
   code is no longer inside of the ``for`` loop, the ``set_name`` directory has been dropped from the ``target``
   definitions. As the first bullet alluded to, the targets for ``# Geometry`` and ``# Partition`` will be built in the
   overall build directory, ``build/tutorial_mesh_convergence``.
-* The folling two highlighted lines are necessary for the parameterized ``# Mesh`` workflow steps to reuse a common
-  target. First, the SCons file object for the ``rectangle_partition.cae`` file is extracted from the target list,
-  ``partition_target`` as a source. The absolute path to the ``rectangle_partition.cae`` file in the build
-  directory is made available as a variable in the second highlighted line.
+* The following highlighted line is necessary for the parameterized ``# Mesh`` workflow steps to reuse a common
+  target. The SCons file object for the ``rectangle_partition.cae`` file is extracted from the target list,
+  ``partition_target``, as a source.
 * The final highlighted line shows how the ``simulation_variables`` dictionary is constructed by combining the
   ``simulation_constants`` and the ``global_seed`` parameters for every simulation.
 
@@ -147,7 +146,7 @@ differences:
       :lineno-match:
       :start-after: marker-4
       :end-before: marker-5
-      :emphasize-lines: 3, 9, 12-13
+      :emphasize-lines: 3, 9, 12, 17
 
 The highlighted lines above demonstrate the usage of ``--input-file`` and ``--output--file`` command-line arguments for
 the ``rectangle_mesh.py`` file. In previous tutorials, we have accepted the default values for input and output
