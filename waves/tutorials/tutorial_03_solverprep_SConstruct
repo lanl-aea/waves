@@ -78,6 +78,7 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add custom builders
 env.Append(BUILDERS={'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus'])})
+env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 
 # Comments used in tutorial code snippets: marker-6
 
