@@ -5,21 +5,26 @@ from modsim_package.python import post_processing
 
 def test_csv_files_match():
     data = {
-        'DummyLine': [1, 2, 3],
-        'SecondDummyLine': [4, 5, 6]
+        'time': [0., 0.5, 1.0],
+        'Column1': [1, 2, 3],
+        'Column2': [4, 5, 6]
     }
     # Control DataFrame
-    control = pandas.DataFrame(data)
+    control = pandas.DataFrame.from_dict(data)
 
     # Identical DataFrame
     identical_copy = control.copy()
+    unsorted_copy = control[["time", "Column2", "Column1"]]
 
     # Different DataFrame
     different_copy = control.copy()
-    different_copy.loc[0, 'DummyLine'] = 999
+    different_copy.loc[0, 'Column1'] = 999
 
     # Assert that the function returns False when the DataFrames differ
-    assert post_processing.csv_files_match(control, different_copy) is False
+    assert post_processing.csv_files_match(control, different_copy, sort_columns=["time"]) is False
 
     # Assert that the function returns True when the DataFrames are identical
-    assert post_processing.csv_files_match(control, identical_copy) is True
+    assert post_processing.csv_files_match(control, identical_copy, sort_columns=["time"]) is True
+
+    # Assert that the function returns True when the sorted DataFrames are identical
+    assert post_processing.csv_files_match(control, unsorted_copy, sort_columns=["time"]) is True
