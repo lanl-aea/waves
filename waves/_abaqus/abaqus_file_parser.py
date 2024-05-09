@@ -1761,6 +1761,11 @@ class OdbReportFileParser(AbaqusFileParser):
         if datasets_file.exists():
             datasets_file = datasets_file.parent / f"{datasets_file.stem}_datasets_{time_stamp}" \
                                                    f"{_settings._default_h5_extension}"
+
+        # Always create a datasets file, even if it's empty. Required for predictable behavior in a build system task,
+        # e.g. WAVES abaqus_extract builder.
+        datasets_file.touch()
+
         filename = str(datasets_file)
         for dataset in datasets:
             keys = dataset.split('/')  # Get instance, (Mesh|HistoryOutputs|FieldOutputs),(region name|None)
