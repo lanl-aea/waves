@@ -78,7 +78,8 @@ def get_parser():
         '-o', '--output-file',
         dest='output_file',
         type=str,
-        help='file for printing output',
+        help='File for printing output. If none is provided, takes the basename of the input file ' \
+             '(default: %(default)s)',
         metavar='sample.h5'
     )
     parser.add_argument(
@@ -87,14 +88,15 @@ def get_parser():
         choices=['yaml', 'json', 'h5'],
         type=str,
         default='h5',
-        help='Type of file in which to store output data',
+        help='Type of file in which to store output data (default: %(default)s)',
         metavar='h5'
     )
     parser.add_argument(
         '-r', '--odb-report-args',
         dest='odb_report_args',
         type=str,
-        help='Arguments to give to the odbreport command. Require the ``option=value`` interface style.',
+        help='Arguments to give to the odbreport command. Require the ``option=value`` interface style ' \
+             '(default: %(default)s)',
         metavar='"step=step1 results"'
     )
     parser.add_argument(
@@ -102,7 +104,7 @@ def get_parser():
         dest='abaqus_command',
         type=str,
         default=_settings._default_abaqus_command,
-        help='Abaqus command to use',
+        help='Abaqus command to use (default: %(default)s)',
         metavar='/path/to/abaqus'
     )
     parser.add_argument(
@@ -110,14 +112,14 @@ def get_parser():
         action="store_true",
         dest='delete_report_file',
         default=False,
-        help='Delete after parsing the file created by the odbreport command'
+        help='Delete after parsing the file created by the odbreport command (default: %(default)s)'
     )
     parser.add_argument(
         '-v', '--verbose',
         action="store_true",
         dest='verbose',
         default=False,
-        help='Print all messages'
+        help='Print all messages (default: %(default)s)'
     )
     return parser
 
