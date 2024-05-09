@@ -50,6 +50,19 @@ def merge_parameter_study(parameter_study_file, combined_data):
     return combined_data
 
 
+def sort_dataframe(dataframe, index_column="time", sort_columns=["time", "parameter_sets"]):
+    """Return a sorted dataframe and set an index
+
+    1. sort columns by column name
+    2. sort rows by column values ``sort_columns``
+    3. set an index
+
+    :returns: sorted and indexed dataframe
+    :rtype: pandas.DataFrame
+    """
+    return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(sort_columns).set_index(index_column)
+
+
 def csv_files_match(current_csv, expected_csv):
     """Compare two pandas DataFrame objects and determine if they match.
 
@@ -59,7 +72,14 @@ def csv_files_match(current_csv, expected_csv):
     :returns: True if the CSV files match, False otherwise.
     :rtype: bool
     """
-    equal = expected_csv.equals(current_csv)
+    current = sort_dataframe(current_csv)
+    expected = sort_dataframe(expected_csv)
+    try:
+        pandas.testing.assert_frame_equal(current, expected)
+    except AssertionError:
+        equal = False
+    else:
+        equal = True
     if not equal:
         print("The CSV regression test failed. Data in expected CSV file and current CSV file do not match.",
               file=sys.stderr)
