@@ -85,6 +85,21 @@ def test_save_table():
     mock_to_csv.assert_called_once_with(output_file)
 
 
+def test_sort_dataframe():
+    data = {
+        'time': [0., 0.5, 1.0],
+        'Column1': [1, 2, 3],
+        'Column2': [4, 5, 6]
+    }
+    control = pandas.DataFrame.from_dict(data)
+    unsorted_copy = control[["Column2", "Column1", "time"]]
+
+    sorted_control = utilities.sort_dataframe(control, sort_columns=["time"])
+    sorted_copy = utilities.sort_dataframe(unsorted_copy, sort_columns=["time"])
+
+    pandas.testing.assert_frame_equal(sorted_control, sorted_copy)
+
+
 def test_csv_files_match():
     data = {
         'time': [0., 0.5, 1.0],
