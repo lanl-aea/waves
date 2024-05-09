@@ -14,6 +14,12 @@ New Features
   access syntax as SCons builders and are the recommended solution for wrapping builders with advanced behaviors
   (:issue:`662`, :merge:`829`). By `Kyle Brindley`_.
 
+Bug fixes
+=========
+- Always write both ``odb_extract`` output files: ``output_file.h5`` and ``output_file_datasets.h5`` for more
+  predictable behavior in programmatic workflows, e.g. the abaqus extract builder (:issue:`478`, :merge:`830`). By `Kyle
+  Brindley`_.
+
 Documentation
 =============
 - Release the sensitivity study as a supplemental lesson (:issue:`643`, :merge:`820`). By `Kyle Brindley`_.
@@ -22,6 +28,7 @@ Documentation
 - Update all tutorials and the modsim template to use a copy substitute pseudo-builder instead of the
   ``copy_substitute`` function. Pseudo-builders use the same access syntax as SCons builders and are the recommended
   solution for wrapping builders with advanced behaviors (:issue:`662`, :merge:`829`). By `Kyle Brindley`_.
+- Improve the formatting of the odb extract help message (:issue:`478`, :merge:`830`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
