@@ -71,7 +71,7 @@ changes made in this tutorial.
 The Python 3 post-processing script is executed with the :meth:`waves.scons_extensions.python_script` builder. This
 builder behaves similarly to the :meth:`waves.scons_extensions.abaqus_journal` builders introduced in earlier tutorials.
 Unlike the Abaqus journal builder, the Python script builder doesn't allow the user to specify an executable path. The
-builder uses the same Python interpretter as the launching `Conda`_ environment where `SCons`_ and WAVES are installed.
+builder uses the same Python interpreter as the launching `Conda`_ environment where `SCons`_ and WAVES are installed.
 
 Advanced `SCons`_ users may be tempted to write an `SCons Python function builder`_ for the post-processing task
 :cite:`SCons`. A Python function builder would have the advantage of allowing users to pass Python objects to the task
@@ -102,15 +102,15 @@ Post-processing script
       :language: Python
 
 The post-processing script is the first Python 3 script introduced in the core tutorials. It differs from the Abaqus
-journal files by executing against the Python 3 interpretter of the launching `Conda`_ environment where |PROJECT| is
+journal files by executing against the Python 3 interpreter of the launching `Conda`_ environment where |PROJECT| is
 installed. Unlike the Abaqus Python 2 environment used to execute journal files, users have direct control over this
 environment and can use the full range of Python packages available with the `Conda`_ package manager.
 
 Additionally, the full Python 3 environment allows greater flexibility in unit testing. The post-processing script has
-been broken into small units of work for ease of testing, which will be introduced in
-:ref:`tutorial_unit_testing`. Testing is important to verify that data manipulation is performed correctly. As an
-added benefit, writing small, single-purpose functions makes project code more re-usable and the project can build a
-small library of common utilities.
+been broken into small units of work for ease of testing, which will be introduced in :ref:`tutorial_unit_testing`.
+Testing is important to verify that data manipulation is performed correctly. As an added benefit, writing small,
+single-purpose functions makes project code more re-usable and the project can build a small library of common
+utilities.
 
 While it is possible to unit test Abaqus Python 2 scripts, most operations in the tutorial journal files require
 operations on real geometry files, which requires system tests. :ref:`tutorial_regression_testing` will introduce
