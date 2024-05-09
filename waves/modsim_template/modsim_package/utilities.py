@@ -2,6 +2,7 @@
 import sys
 import pathlib
 
+import pandas
 import xarray
 import matplotlib.pyplot
 
