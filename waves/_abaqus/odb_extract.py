@@ -1,12 +1,18 @@
 #! /usr/bin/env python
 
-"""Extracts data from an Abaqus odb file.
-Calls odbreport feature of Abaqus, parses resultant file, and creates output file.
-Most simulation data lives in a group path following the instance and set name, e.g.
-/INSTANCE/FieldOutputs/ELEMENT_SET, and can be accessed with xarray as
-xarray.open_dataset("sample.h5", group="/INSTANCE/FieldOutputs/ELEMENT_SET"). You can view all group paths with
-h5ls -r sample.h5. Additional ODB information is available in the /odb group path. The /xarray/Dataset group path
-contains a list of group paths that contain an xarray dataset.
+"""Extracts data from an Abaqus odb file. Writes two files 'output_file.h5' and 'output_file_datasets.h5'
+
+Calls odbreport feature of Abaqus, parses resultant file, and creates output file. Most simulation data lives in a
+group path following the instance and set name, e.g. '/INSTANCE/FieldOutputs/ELEMENT_SET', and can be accessed with
+xarray as
+
+.. code-block::
+
+   import xarray
+   xarray.open_dataset("sample.h5", group="/INSTANCE/FieldOutputs/ELEMENT_SET")
+
+You can view all group paths with 'h5ls -r sample.h5'. Additional ODB information is available in the '/odb' group
+path. The '/xarray/Dataset' group path contains a list of group paths that contain an xarray dataset.
 
 .. code-block::
    :caption: Format of HDF5 file
@@ -28,7 +34,6 @@ contains a list of group paths that contain an xarray dataset.
        rootAssembly/      # Group with datasets that match odb file organization per Abaqus documentation
        sectionCategories/ # Group with datasets that match odb file organization per Abaqus documentation
    /xarray/          # Group with a dataset that lists the location of all data written from xarray datasets
-
 """
 
 import os
@@ -42,7 +47,7 @@ from shutil import which
 from pathlib import Path
 from subprocess import run
 from datetime import datetime
-from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
 
 from waves._abaqus import _settings
 from waves._abaqus import abaqus_file_parser
@@ -60,7 +65,7 @@ def get_parser():
     """
     _program_name = Path(__file__).stem
     example = f''' Example: >> {_program_name} sample.odb\n '''
-    parser = ArgumentParser(description=__doc__, formatter_class=ArgumentDefaultsHelpFormatter, epilog=example,
+    parser = ArgumentParser(description=__doc__, formatter_class=RawDescriptionHelpFormatter, epilog=example,
                             prog=_program_name)
     parser.add_argument(
         nargs=1,
