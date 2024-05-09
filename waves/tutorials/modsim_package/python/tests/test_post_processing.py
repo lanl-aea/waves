@@ -29,7 +29,7 @@ def test_csv_files_match():
 
     # Identical DataFrame
     identical_copy = control.copy()
-    unsorted_copy = control[["Column2", "Column1", "time"]]
+    unsorted_copy = control[["time", "Column2", "Column1"]]
 
     # Different DataFrame
     different_copy = control.copy()
