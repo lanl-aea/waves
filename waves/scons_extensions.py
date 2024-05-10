@@ -58,6 +58,21 @@ def _print_failed_nodes_stdout() -> None:
 def print_build_failures(print_stdout: bool = True) -> None:
     """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
 
+    .. code-block::
+       :caption: SConstruct
+
+       AddOption(
+           "--print-build-failures",
+           dest="print_build_failures",
+           default=False,
+           action="store_true",
+           help="Print task *.stdout target file(s) on build failures. (default: '%default')"
+       )
+       env = Environment(
+           print_build_failures=GetOption("print_build_failures")
+       )
+       waves.scons_extensions.print_build_failures(env["print_build_failures"])
+
     :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
     """
     if print_stdout:

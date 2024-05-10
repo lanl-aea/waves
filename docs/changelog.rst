@@ -8,6 +8,10 @@ Changelog
 0.8.6 (unreleased)
 ******************
 
+Documentation
+=============
+- Add example usage for print build failures function (:issue:`670`, :merge:`833`). By `Kyle Brindley`_.
+
 ******************
 0.8.5 (2024-05-09)
 ******************
