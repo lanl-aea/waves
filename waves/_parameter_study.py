@@ -36,7 +36,8 @@ def get_parser() -> argparse.ArgumentParser:
     output_file_group = parser.add_mutually_exclusive_group()
     output_file_group.add_argument(
         '-o', '--output-file-template',
-        default=parameter_generators._default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
+        default=parameter_generators._default_output_file_template,
+        dest='OUTPUT_FILE_TEMPLATE',
         help=f"Output file template. May contain pathseps for an absolute or relative " \
              f"path template. May contain the ``{parameter_generators._template_placeholder}`` " \
              f"set number placeholder in the file basename but not in the path. " \
@@ -47,7 +48,8 @@ def get_parser() -> argparse.ArgumentParser:
     )
     output_file_group.add_argument(
         '-f', '--output-file',
-        default=parameter_generators._default_output_file, dest='OUTPUT_FILE',
+        default=parameter_generators._default_output_file,
+        dest='OUTPUT_FILE',
         help=f"Output file name. May contain pathseps for an absolute or relative path. " \
               "Output file is overwritten if the content of the file has changed or if " \
               "``overwrite`` is True (default: %(default)s)"
@@ -62,13 +64,15 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         '-s', '--set-name-template',
-        default=parameter_generators._default_set_name_template, dest='SET_NAME_TEMPLATE',
+        default=parameter_generators._default_set_name_template,
+        dest='SET_NAME_TEMPLATE',
         help="Parameter set name template. Overridden by ``output_file_template``, " \
              "if provided (default: %(default)s)"
     )
     parser.add_argument(
         '-p', '--previous-parameter-study',
-        default=parameter_generators._default_previous_parameter_study, dest='PREVIOUS_PARAMETER_STUDY',
+        default=parameter_generators._default_previous_parameter_study,
+        dest='PREVIOUS_PARAMETER_STUDY',
         help="A relative or absolute file path to a previously created parameter study Xarray " \
              "Dataset (default: %(default)s)"
     )
@@ -77,7 +81,9 @@ def get_parser() -> argparse.ArgumentParser:
         help=f"Overwrite existing output files (default: %(default)s)"
     )
     parser.add_argument(
-        '--dryrun', action='store_true',
+        '--dry-run', '--dryrun',
+        dest='dry_run',
+        action='store_true',
         help=f"Print contents of new parameter study output files to STDOUT and exit " \
                     f"(default: %(default)s)"
     )
