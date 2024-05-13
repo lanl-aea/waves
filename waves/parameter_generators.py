@@ -690,13 +690,16 @@ class CartesianProduct(_ParameterGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
-    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
-        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
-        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
-        will be appended to the template string.
-    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
-        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is always overwritten.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
@@ -774,13 +777,16 @@ class LatinHypercube(_ScipyGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
-        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
-        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
-        will be appended to the template string.
-    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
-        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is always overwritten.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
@@ -856,13 +862,16 @@ class CustomStudy(_ParameterGenerator):
         the number of parameters. Parameter names in the form of a 1D array with length N. When creating a
         `parameter_samples` array with mixed type (e.g. string and floats) use `dtype=object` to preserve the mixed
         types and avoid casting all values to a common type (e.g. all your floats will become strings).
-    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
-        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
-        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
-        will be appended to the template string.
-    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
-        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is always overwritten.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
@@ -953,13 +962,16 @@ class SobolSequence(_ScipyGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         SobolSequence expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
-        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
-        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
-        will be appended to the template string.
-    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
-        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is always overwritten.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
@@ -1046,13 +1058,16 @@ class ScipySampler(_ScipyGenerator):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         ScipySampler expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
-        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
-        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
-        will be appended to the template string.
-    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
-        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is always overwritten.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
@@ -1146,13 +1161,16 @@ class SALibSampler(_ParameterGenerator, ABC):
     :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         SALibSampler expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
-    :param str output_file_template: Output file name template. Required if parameter sets will be written to files
-        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
-        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
-        will be appended to the template string.
-    :param str output_file: Output file name for a single file output of the parameter study. May contain pathseps for
-        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is always overwritten.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
     :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
