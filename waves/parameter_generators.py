@@ -73,7 +73,7 @@ class _ParameterGenerator(ABC):
         and ``output_file_template`` are mutually exclusive.
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
     :param dryrun: Print contents of new parameter study output files to STDOUT and exit
@@ -295,7 +295,7 @@ class _ParameterGenerator(ABC):
 
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
 
-        :param list parameter_set_files: List of pathlib.Path parameter set file paths
+        :param parameter_set_files: List of pathlib.Path parameter set file paths
         """
         text_list = []
         # Construct the output text
@@ -504,7 +504,7 @@ class _ParameterGenerator(ABC):
     def _parameter_study_to_numpy(self, data_type: _allowable_data_type_typing) -> numpy.ndarray:
         """Return the parameter study data as a 2D numpy array
 
-        :param str data_type: The data_type selection to return - samples or quantiles
+        :param data_type: The data_type selection to return - samples or quantiles
 
         :return: data
         """
@@ -531,7 +531,7 @@ class _ParameterGenerator(ABC):
            parameter_set2: {'parameter_1': 2, 'parameter_2': 'a'}
            parameter_set3: {'parameter_1': 2, 'parameter_2': 'b'}
 
-        :param str data_type: The data_type selection to return - samples or quantiles
+        :param data_type: The data_type selection to return - samples or quantiles
 
         :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
         """
@@ -687,7 +687,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
 class CartesianProduct(_ParameterGenerator):
     """Builds a cartesian product parameter study
 
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
@@ -700,13 +700,13 @@ class CartesianProduct(_ParameterGenerator):
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
         and ``output_file_template`` are mutually exclusive.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
-    :param bool overwrite: Overwrite existing output files
-    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+    :param overwrite: Overwrite existing output files
+    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
     Example
@@ -774,7 +774,7 @@ class LatinHypercube(_ScipyGenerator):
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
        parameters and the parameter study samples and quantiles.
 
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
@@ -787,13 +787,13 @@ class LatinHypercube(_ScipyGenerator):
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
         and ``output_file_template`` are mutually exclusive.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
-    :param bool overwrite: Overwrite existing output files
-    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+    :param overwrite: Overwrite existing output files
+    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
@@ -857,7 +857,7 @@ class LatinHypercube(_ScipyGenerator):
 class CustomStudy(_ParameterGenerator):
     """Builds a custom parameter study from user-specified values
 
-    :param array parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
+    :param parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
         Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
         the number of parameters. Parameter names in the form of a 1D array with length N. When creating a
         `parameter_samples` array with mixed type (e.g. string and floats) use `dtype=object` to preserve the mixed
@@ -872,13 +872,13 @@ class CustomStudy(_ParameterGenerator):
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
         and ``output_file_template`` are mutually exclusive.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
-    :param bool overwrite: Overwrite existing output files
-    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+    :param overwrite: Overwrite existing output files
+    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
     Example
@@ -959,7 +959,7 @@ class SobolSequence(_ScipyGenerator):
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
        parameters and the parameter study samples and quantiles.
 
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         SobolSequence expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
@@ -972,13 +972,13 @@ class SobolSequence(_ScipyGenerator):
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
         and ``output_file_template`` are mutually exclusive.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
-    :param bool overwrite: Overwrite existing output files
-    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+    :param overwrite: Overwrite existing output files
+    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
@@ -1054,8 +1054,8 @@ class ScipySampler(_ScipyGenerator):
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
        parameters and the parameter study samples and quantiles.
 
-    :param str sampler_class: The `scipy.stats.qmc`_ sampler class name. Case sensitive.
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param sampler_class: The `scipy.stats.qmc`_ sampler class name. Case sensitive.
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         ScipySampler expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
@@ -1068,13 +1068,13 @@ class ScipySampler(_ScipyGenerator):
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
         and ``output_file_template`` are mutually exclusive.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
-    :param bool overwrite: Overwrite existing output files
-    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+    :param overwrite: Overwrite existing output files
+    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
@@ -1157,8 +1157,8 @@ class SALibSampler(_ParameterGenerator, ABC):
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
        parameters and the parameter study samples.
 
-    :param str sampler_class: The `SALib.sample`_ sampler class name. Case sensitive.
-    :param dict parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
+    :param sampler_class: The `SALib.sample`_ sampler class name. Case sensitive.
+    :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         SALibSampler expects "schema value" to be a dictionary with a strict structure and several required keys.
         Validated on class instantiation.
     :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
@@ -1171,13 +1171,13 @@ class SALibSampler(_ParameterGenerator, ABC):
         be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
         Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
         and ``output_file_template`` are mutually exclusive.
-    :param str output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
-    :param str set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
-    :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
+    :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
+    :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
+    :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
-    :param bool overwrite: Overwrite existing output files
-    :param bool dryrun: Print contents of new parameter study output files to STDOUT and exit
-    :param bool write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
+    :param overwrite: Overwrite existing output files
+    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
@@ -1272,7 +1272,7 @@ class SALibSampler(_ParameterGenerator, ABC):
         * sobol produces duplicate parameter sets for two parameters when ``calc_second_order`` is ``True``. Override
           this kwarg to be ``False`` if there are only two parameters.
 
-        :param dict override_kwargs: any common kwargs to include in the override dictionary
+        :param override_kwargs: any common kwargs to include in the override dictionary
 
         :return: override kwarg dictionary
         """
