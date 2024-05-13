@@ -12,6 +12,11 @@ Documentation
 =============
 - Add example usage for print build failures function (:issue:`670`, :merge:`833`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Change the parameter generator API deafult output file type H5 files. Matches tutorial behavior to default behavior
+  for reduced configuration during preferred usage (:merge:`834`). By `Kyle Brindley`_.
+
 ******************
 0.8.5 (2024-05-09)
 ******************
