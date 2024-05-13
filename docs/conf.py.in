@@ -48,6 +48,8 @@ copyright = f"{datetime.date.today().year} Triad National Security, LLC. All Rig
 # Suppress warnings that can't be fixed
 suppress_warnings = ["epub.unknown_project_files", "epub.duplicated_toc_entry"]
 
+maximum_signature_line_length = 120
+
 # -- Project Variables -------------------------------------------------------
 rst_prolog = f'.. |copyright| replace:: © Copyright {copyright}.\n' \
              f'.. |project| replace:: {_project_name_short}\n' \

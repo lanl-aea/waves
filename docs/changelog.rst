@@ -11,6 +11,7 @@ Changelog
 Documentation
 =============
 - Add example usage for print build failures function (:issue:`670`, :merge:`833`). By `Kyle Brindley`_.
+- Break long API function signatures into multiple lines for better readability (:merge:`835`) By `Kyle Brindley`_.
 
 Enhancements
 ============
