@@ -38,7 +38,7 @@ def get_parser() -> argparse.ArgumentParser:
         '-o', '--output-file-template',
         default=parameter_generators._default_output_file_template, dest='OUTPUT_FILE_TEMPLATE',
         help=f"Output file template. May contain pathseps for an absolute or relative " \
-             f"path template. May contain ``{parameter_generators._template_placeholder}`` " \
+             f"path template. May contain the ``{parameter_generators._template_placeholder}`` " \
              f"set number placeholder in the file basename but not in the path. " \
              f"If the placeholder is not found, it will be " \
              f"appended to the template string. Output files are overwritten if the "
@@ -56,7 +56,7 @@ def get_parser() -> argparse.ArgumentParser:
     # Optional keyword options
     parser.add_argument(
         '-t', '--output-file-type',
-        default=parameter_generators._default_output_file_type,
+        default=parameter_generators._default_output_file_type_cli,
         choices=parameter_generators._allowable_output_file_types,
         help="Output file type (default: %(default)s)"
     )
@@ -116,7 +116,8 @@ def main(subcommand: str,
          input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None],
          output_file_template: typing.Optional[str] = parameter_generators._default_output_file_template,
          output_file: typing.Optional[str] = parameter_generators._default_output_file,
-         output_file_type: typing.Literal["yaml", "h5"] = parameter_generators._default_output_file_type,
+         output_file_type: parameter_generators._allowable_output_file_typing = \
+                           parameter_generators._default_output_file_type_cli,
          set_name_template: str = parameter_generators._default_set_name_template,
          previous_parameter_study: typing.Optional[str] = parameter_generators._default_previous_parameter_study,
          overwrite: bool = parameter_generators._default_overwrite,

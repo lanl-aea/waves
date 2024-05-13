@@ -44,9 +44,10 @@ _default_dryrun = False
 _default_write_meta = False
 
 _parameter_study_meta_file = "parameter_study_meta.txt"
-_allowable_output_file_typing = typing.Literal["yaml", "h5"]
+_allowable_output_file_typing = typing.Literal["h5", "yaml"]
 _allowable_output_file_types = typing.get_args(_allowable_output_file_typing)
-_default_output_file_type = _allowable_output_file_types[0]
+_default_output_file_type_api = _allowable_output_file_types[0]
+_default_output_file_type_cli = _allowable_output_file_types[1]
 
 
 class _AtSignTemplate(string.Template):
@@ -60,13 +61,16 @@ class _ParameterGenerator(ABC):
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
         ``{parameter_name: schema_value}``.  Validated on class instantiation.
-    :param output_file_template: Output file name template. Required if parameter sets will be written to files
-        instead of printed to STDOUT. May contain pathseps for an absolute or relative path template. May contain the
-        ``@number`` set number placeholder in the file basename but not in the path. If the placeholder is not found it
-        will be appended to the template string.
-    :param output_file: Output file name for a single file output of the parameter study. May contain pathseps for
-        an absolute or relative path. ``output_file`` and ``output_file_template`` are mutually exclusive. Output file
-        is overwritten if the content of the file has changed or if ``overwrite`` is True.
+    :param output_file_template: Output file name template for multiple file output of the parameter study. Required if
+        parameter sets will be written to files instead of printed to STDOUT. May contain pathseps for an absolute or
+        relative path template. May contain the ``@number`` set number placeholder in the file basename but not in the
+        path. If the placeholder is not found it will be appended to the template string. Output files are overwritten
+        if the content of the file has changed or if ``overwrite`` is True. ``output_file_template`` and ``output_file``
+        are mutually exclusive.
+    :param output_file: Output file name for single file output of the parameter study. Required if parameter sets will
+        be written to a file instead of printed to STDOUT. May contain pathseps for an absolute or relative path.
+        Output file is overwritten if the content of the file has changed or if ``overwrite`` is True. ``output_file``
+        and ``output_file_template`` are mutually exclusive.
     :param output_file_type: Output file syntax or type. Options are: 'yaml', 'h5'.
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param str previous_parameter_study: A relative or absolute file path to a previously created parameter
@@ -83,7 +87,7 @@ class _ParameterGenerator(ABC):
     def __init__(self, parameter_schema: dict,
                  output_file_template: typing.Optional[str] = _default_output_file_template,
                  output_file: typing.Optional[str] = _default_output_file,
-                 output_file_type: _allowable_output_file_typing = _default_output_file_type,
+                 output_file_type: _allowable_output_file_typing = _default_output_file_type_api,
                  set_name_template: str = _default_set_name_template,
                  previous_parameter_study: typing.Optional[str] = _default_previous_parameter_study,
                  overwrite: bool = _default_overwrite,
