@@ -51,6 +51,7 @@ def main() -> None:
                 vertical=args.vertical,
                 no_labels=args.no_labels,
                 node_count=args.node_count,
+                transparent=args.transparent,
                 input_file=args.input_file
             )
         elif args.subcommand == "build":

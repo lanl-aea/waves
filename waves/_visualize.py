@@ -58,6 +58,8 @@ def get_parser() -> argparse.ArgumentParser:
         help="Create visualization without labels on the nodes (default: %(default)s)")
     parser.add_argument("-c", "--node-count", action="store_true",
         help="Add the node count as a figure annotation (default: %(default)s)")
+    parser.add_argument("--transparent", action="store_true",
+        help="Use a transparent background. Requires a format that supports transparency (default: %(default)s)")
     parser.add_argument("--input-file", type=str,
         help="Path to text file with output from SCons tree command (default: %(default)s). SCons target must "
              "still be specified and must be present in the input file.")
@@ -79,6 +81,7 @@ def main(
     vertical: bool = False,
     no_labels: bool = False,
     node_count: bool = False,
+    transparent: bool = False,
     input_file: typing.Union[str, pathlib.Path, None] = None
 ) -> None:
     """Visualize the directed acyclic graph created by a SCons build
@@ -100,6 +103,7 @@ def main(
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param no_labels: Don't print labels on the nodes of the visualization
     :param node_count: Add a node count annotation
+    :param transparent: Use a transparent background
     :param input_file: Path to text file storing output from SCons tree command
     """
     sconstruct = pathlib.Path(sconstruct).resolve()
@@ -139,7 +143,8 @@ def main(
         font_size=font_size,
         vertical=vertical,
         no_labels=no_labels,
-        node_count=node_count
+        node_count=node_count,
+        transparent=transparent
     )
 
 
@@ -296,7 +301,8 @@ def visualize(
     font_size: int = _settings._visualize_default_font_size,
     vertical: bool = False,
     no_labels: bool = False,
-    node_count: bool = False
+    node_count: bool = False,
+    transparent: bool = False
 ) -> None:
     """Create a visualization showing the tree
 
@@ -308,6 +314,7 @@ def visualize(
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param no_labels: Don't print labels on the nodes of the visualization
     :param node_count: Add a node count annotation
+    :param transparent: Use a transparent background
     """
     graph = networkx.DiGraph()
     graph.add_nodes_from(tree['nodes'])
@@ -383,7 +390,7 @@ def visualize(
             print(f"WARNING: extension '{suffix}' is not supported by matplotlib. Falling back to '{file_name}'",
                   file=sys.stderr)
         figure.set_size_inches((width, height), forward=False)
-        figure.savefig(str(file_name), transparent=True)
+        figure.savefig(str(file_name), transparent=transparent)
     else:
         matplotlib.pyplot.show()
     matplotlib.pyplot.clf()  # Indicates that we are done with the plot
