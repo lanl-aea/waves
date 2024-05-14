@@ -130,9 +130,9 @@ def main(
 
     if print_graphml:
         import io
-        with io.StringIO() as graphml:
+        with io.BytesIO() as graphml:
             networkx.write_graphml_lxml(graph, graphml)
-            print(graphml.get_value())
+            print(graphml.getvalue().decode("utf-8"))
         return
     visualize(
         graph,
@@ -329,7 +329,7 @@ def visualize(
 
     # Add node count annotation if requested
     if node_count:
-        add_node_count(axes, len(tree['nodes']), font_size)
+        add_node_count(axes, len(graph.nodes), font_size)
 
     # TODO: separate plot construction from output for easier unit testing
     annotations: typing.Dict[str, typing.Any] = dict()
