@@ -144,7 +144,6 @@ def main(
     plot(figure, output_file=output_file, transparent=transparent)
 
 
-
 def graph_to_graphml(graph: networkx.DiGraph) -> str:
     """Return the networkx graphml text
 
