@@ -357,7 +357,7 @@ def visualize(
         annotations[B] = patchB
         dark_props = dict(arrowstyle="<-", color="0.0", connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
         dark_arrow = axes.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data',
-                                 arrowprops=dark_props)
+                                   arrowprops=dark_props)
         dark_arrow.set_visible(False)  # Draw simultaneous darker arrow, but don't show it
         try:
             arrows[A]['from'].append(dark_arrow)
