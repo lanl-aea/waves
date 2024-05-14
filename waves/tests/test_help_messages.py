@@ -7,7 +7,6 @@ import pytest
 from waves import scons_extensions
 
 
-@pytest.mark.unittest
 def test_default_targets_message():
     import SCons.Script  # Magic smoke that turns SCons.Defaults.DefaultEnvironment from a SCons.Environment.Base to SCons.Script.SConscript.SConsEnvironment
     import SCons.Defaults
@@ -40,7 +39,6 @@ def test_default_targets_message():
     mock_help.assert_called_once_with("\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
 
 
-@pytest.mark.unittest
 def test_alias_list_message():
     import SCons.Script
     import SCons.Defaults
@@ -72,7 +70,6 @@ def test_alias_list_message():
     mock_help.assert_called_once_with("\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
 
 
-@pytest.mark.unittest
 def test_project_help_message():
     # Default behavior
     with patch("waves.scons_extensions.default_targets_message") as mock_targets, \

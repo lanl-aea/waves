@@ -45,14 +45,12 @@ class FakeProcess:
     stderr = b'valid command.'
 
 
-@pytest.mark.unittest
 def test_get_parser():
     with patch('sys.argv', ['odb_extract.py', 'sample.odb']):
         cmd_args = odb_extract.get_parser().parse_args()
         assert cmd_args.abaqus_command == "abq2023"
 
 
-@pytest.mark.unittest
 def test_odb_extract():
     with patch('yaml.safe_dump'), \
          patch('waves._abaqus.odb_extract.which', return_value='abaqus'), \
@@ -199,7 +197,6 @@ odb_report_arguments = { #odb_report_args,                      input_file,     
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("odb_report_args, input_file, job_name",
                          odb_report_arguments.values(),
                          ids=odb_report_arguments.keys())

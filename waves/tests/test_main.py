@@ -9,7 +9,6 @@ from waves import _main
 from waves import _settings
 
 
-@pytest.mark.unittest
 def test_main():
     with patch('sys.argv', ['waves.py', 'docs']), \
          patch("waves._docs.main") as mock_docs:

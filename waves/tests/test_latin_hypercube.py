@@ -55,7 +55,6 @@ class TestLatinHypercube:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize(generate_input_interface,
                              generate_input.values(),
                              ids=generate_input.keys())
@@ -96,7 +95,6 @@ class TestLatinHypercube:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('first_schema, second_schema, seed, expected_samples, expected_quantiles',
                                  merge_test.values(),
                              ids=merge_test.keys())

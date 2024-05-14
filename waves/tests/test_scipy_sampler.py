@@ -32,7 +32,6 @@ class TestScipySampler:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, kwargs",
                              generate_input.values(),
                              ids=generate_input.keys())
@@ -71,7 +70,6 @@ class TestScipySampler:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('first_schema, second_schema, kwargs', merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs):
         for sampler in _supported_scipy_samplers:

@@ -22,7 +22,6 @@ two_file_source_tree = [root_directory / path for path in source_files]
 two_file_destination_tree = [destination / path for path in source_files]
 
 
-@pytest.mark.unittest
 def test_fetch():
     # Test the "unreachable" exit code used as a sign-of-life that the installed package structure assumptions in
     # _settings.py are correct.
@@ -65,7 +64,6 @@ conditional_copy_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("copy_tuples, exists_side_effect, filecmp_side_effect, copyfile_call",
                          conditional_copy_input.values(),
                          ids=conditional_copy_input.keys())
@@ -121,7 +119,6 @@ available_files_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("root_directory, relative_paths, " \
                          "is_file_side_effect, is_dir_side_effect, rglob_side_effect, " \
                          "expected_files, expected_missing, mock_rglob_argument",
@@ -161,7 +158,6 @@ build_source_files_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("root_directory, relative_paths, exclude_patterns, " \
                          "available_files_side_effect, " \
                          "expected_source_files",
@@ -186,7 +182,6 @@ longest_common_path_prefix_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("file_list, expected_path, outcome",
                          longest_common_path_prefix_input.values(),
                          ids=longest_common_path_prefix_input.keys())
@@ -208,7 +203,6 @@ build_destination_files_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("destination, requested_paths, " \
                          "exists_side_effect, " \
                          "expected_destination_files, expected_existing_files",
@@ -237,7 +231,6 @@ build_copy_tuples_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("destination, requested_paths_resolved, overwrite, " \
                          "build_destination_files_side_effect, " \
                          "expected_copy_tuples",
@@ -251,7 +244,6 @@ def test_build_copy_tuples(destination, requested_paths_resolved, overwrite,
         assert copy_tuples == expected_copy_tuples
 
 
-@pytest.mark.unittest
 def test_print_list():
     # TODO: implement stdout tests
     pass
@@ -260,7 +252,6 @@ def test_print_list():
 @pytest.mark.parametrize("root_directory, source_files, source_tree, destination_tree, tutorial",
                          [(root_directory, source_files, two_file_source_tree, two_file_destination_tree, None),
                           (root_directory, source_files, two_file_source_tree, two_file_destination_tree, 6)])
-@pytest.mark.unittest
 def test_recursive_copy(root_directory, source_files, source_tree, destination_tree, tutorial):
 
     # Dummy modsim_template tree
@@ -377,7 +368,6 @@ def test_recursive_copy(root_directory, source_files, source_tree, destination_t
             mock_extend.assert_not_called()
 
 
-@pytest.mark.unittest
 def test_extend_requested_paths():
     # Testing accepted tutorial keys
     for tutorial_num in _settings._tutorial_paths.keys():

@@ -38,7 +38,6 @@ quote_spaces_in_path_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("path, expected",
                          quote_spaces_in_path_input.values(),
                          ids=quote_spaces_in_path_input.keys())

@@ -7,7 +7,6 @@ from waves import _settings
 from waves import _docs
 
 
-@pytest.mark.unittest
 def test_docs():
     with patch('webbrowser.open') as mock_webbrowser_open:
         _docs.main()

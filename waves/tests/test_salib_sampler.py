@@ -30,7 +30,6 @@ class TestSALibSampler:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('sampler_class, parameter_schema, original, expected',
                              sampler_overrides.values(),
                              ids=sampler_overrides.keys())
@@ -121,7 +120,6 @@ class TestSALibSampler:
         ),
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('sampler_class, parameter_schema, outcome',
                              validate_input.values(),
                              ids=validate_input.keys())
@@ -200,7 +198,6 @@ class TestSALibSampler:
             return False
         return True
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, kwargs",
                              generate_input.values(),
                              ids=generate_input.keys())
@@ -304,7 +301,6 @@ class TestSALibSampler:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('first_schema, second_schema, kwargs',
                                  merge_test.values(),
                              ids=merge_test.keys())

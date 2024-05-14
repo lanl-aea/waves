@@ -4,7 +4,6 @@ import networkx
 from waves import _visualize
 
 
-@pytest.mark.unittest
 def test_check_regex_exclude():
     """Test the regular expression exclusion of the visualize subcommand"""
     exclude_regex = 'dummy_name[0-7]+'

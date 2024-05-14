@@ -60,8 +60,6 @@ write_to = "waves/_version.py"
 
 [tool.pytest.ini_options]
 markers = [
-    "unittest: marks codebase unit tests",
-    "integrationtest: marks integration tests",
     "systemtest: marks system tests, e.g. the tutorials",
     # FIXME: Trace the source of interference between the builder tests and the find_program tests
     # Remove tag and use of tag when fixed.

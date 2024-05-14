@@ -47,7 +47,6 @@ class TestCustomStudy:
         ),
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('parameter_schema, outcome',
                              validate_input.values(),
                              ids=validate_input.keys())
@@ -69,7 +68,6 @@ class TestCustomStudy:
                                [3, 4.5]], dtype=object))
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('parameter_schema, expected_array',
                                  generate_io.values(),
                              ids=generate_io.keys())
@@ -130,7 +128,6 @@ class TestCustomStudy:
         ),
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('first_schema, second_schema, expected_array',
                                  merge_test.values(),
                              ids=merge_test.keys())
@@ -180,7 +177,6 @@ class TestCustomStudy:
                    "parameter_set1:\n  a: 3\n  b: 4.5\n")])
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('parameter_schema, output_file_template, output_file, output_type, file_count, expected_calls',
                                  generate_io.values(),
                              ids=generate_io.keys())

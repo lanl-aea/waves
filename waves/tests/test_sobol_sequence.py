@@ -46,7 +46,6 @@ class TestSobolSequence:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, kwargs, expected_samples, expected_quantiles",
                              generate_input.values(),
                              ids=generate_input.keys())
@@ -116,7 +115,6 @@ class TestSobolSequence:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('first_schema, second_schema, kwargs, expected_samples, expected_quantiles',
                              merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):

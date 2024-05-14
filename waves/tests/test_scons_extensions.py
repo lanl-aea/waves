@@ -65,7 +65,6 @@ string_action_list = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("builder, expected",
                          string_action_list.values(),
                          ids=string_action_list.keys())
@@ -81,7 +80,6 @@ catenate_builder_actions = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("action_list, catenated_actions",
                          catenate_builder_actions.values(),
                          ids=catenate_builder_actions.keys())
@@ -219,7 +217,6 @@ prepend_env_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("program, mock_exists, outcome",
                          prepend_env_input.values(),
                          ids=prepend_env_input.keys())
@@ -247,7 +244,6 @@ substitution_syntax_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("substitution_dictionary, keyword_arguments, expected_dictionary",
                          substitution_syntax_input.values(),
                          ids=substitution_syntax_input.keys())
@@ -262,7 +258,6 @@ return_environment = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("stdout, expected",
                          return_environment.values(),
                          ids=return_environment.keys())
@@ -292,7 +287,6 @@ cache_environment = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("cache, overwrite_cache, expected, file_exists",
                          cache_environment.values(),
                          ids=cache_environment.keys())
@@ -322,7 +316,6 @@ shell_environment = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("cache, overwrite_cache, expected, verbose",
                          shell_environment.values(),
                          ids=shell_environment.keys())
@@ -349,7 +342,6 @@ construct_action_list = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("actions, prefix, postfix, expected",
                          construct_action_list.values(),
                          ids=construct_action_list.keys())
@@ -369,7 +361,6 @@ journal_emitter_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("target, source, expected",
                          journal_emitter_input.values(),
                          ids=journal_emitter_input.keys())
@@ -387,7 +378,6 @@ abaqus_journal_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("program, post_action, node_count, action_count, target_list",
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
@@ -499,7 +489,6 @@ solver_emitter_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("job_name, suffixes, target, source, expected, outcome",
                          solver_emitter_input.values(),
                          ids=solver_emitter_input.keys())
@@ -527,7 +516,6 @@ abaqus_solver_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("program, post_action, node_count, action_count, source_list, emitter, suffixes",
                          abaqus_solver_input.values(),
                          ids=abaqus_solver_input.keys())
@@ -569,7 +557,6 @@ sierra_emitter_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("target, source, expected",
                          sierra_emitter_input.values(),
                          ids=sierra_emitter_input.keys())
@@ -587,7 +574,6 @@ sierra_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("program, application, post_action, node_count, action_count, source_list, target_list",
                          sierra_input.values(),
                          ids=sierra_input.keys())
@@ -620,7 +606,6 @@ copy_substfile_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("source_list, expected_list",
                          copy_substfile_input.values(),
                          ids=copy_substfile_input.keys())
@@ -650,7 +635,6 @@ build_subdirectory_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("target, expected",
                          build_subdirectory_input.values(),
                          ids=build_subdirectory_input.keys())
@@ -703,7 +687,6 @@ first_target_emitter_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("target, source, expected",
                          first_target_emitter_input.values(),
                          ids=first_target_emitter_input.keys())
@@ -721,7 +704,6 @@ python_script_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("post_action, node_count, action_count, target_list",
                          python_script_input.values(),
                          ids=python_script_input.keys())
@@ -753,7 +735,6 @@ matlab_emitter_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("target, source, expected",
                          matlab_emitter_input.values(),
                          ids=matlab_emitter_input.keys())
@@ -771,7 +752,6 @@ matlab_script_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("program, post_action, node_count, action_count, target_list",
                          matlab_script_input.values(),
                          ids=matlab_script_input.keys())
@@ -792,7 +772,6 @@ def test_matlab_script(program, post_action, node_count, action_count, target_li
     check_action_string(nodes, post_action, node_count, action_count, expected_string)
 
 
-@pytest.mark.unittest
 def test_conda_environment():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"CondaEnvironment": scons_extensions.conda_environment()})
@@ -849,7 +828,6 @@ abaqus_extract_emitter_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("target, source, expected, env",
                          abaqus_extract_emitter_input.values(),
                          ids=abaqus_extract_emitter_input.keys())
@@ -858,7 +836,6 @@ def test_abaqus_extract_emitter(target, source, expected, env):
     assert target == expected
 
 
-@pytest.mark.unittest
 def test_abaqus_extract():
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"AbaqusExtract": scons_extensions.abaqus_extract()})
@@ -882,7 +859,6 @@ build_odb_extract_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("target, source, env, calls",
                          build_odb_extract_input.values(),
                          ids=build_odb_extract_input.keys())
@@ -904,7 +880,6 @@ sbatch_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("program, post_action, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
@@ -938,7 +913,6 @@ scanner_input = {                                   # content,       expected_de
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("content, expected_dependencies",
                          scanner_input.values(),
                          ids=scanner_input.keys())
@@ -974,7 +948,6 @@ sphinx_scanner_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("content, expected_dependencies",
                          sphinx_scanner_input.values(),
                          ids=sphinx_scanner_input.keys())
@@ -1013,7 +986,6 @@ quinoa_solver = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("charmrun, inciter, charmrun_options, inciter_options, prefix_command, post_action, node_count, action_count, source_list, target_list",
                          quinoa_solver.values(),
                          ids=quinoa_solver.keys())
@@ -1053,7 +1025,6 @@ fierro_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("program, subcommand, post_action, node_count, action_count, source_list, target_list",
                          fierro_input.values(),
                          ids=fierro_input.keys())
@@ -1077,7 +1048,6 @@ fierro_explicit = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("post_action, node_count, action_count, source_list, target_list",
                          fierro_explicit.values(),
                          ids=fierro_explicit.keys())
@@ -1101,7 +1071,6 @@ fierro_implicit = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("post_action, node_count, action_count, source_list, target_list",
                          fierro_implicit.values(),
                          ids=fierro_implicit.keys())
@@ -1127,7 +1096,6 @@ ansys_apdl_input = {
 }
 
 
-@pytest.mark.unittest
 @pytest.mark.parametrize("program, post_action, node_count, action_count, source_list, target_list",
                          ansys_apdl_input.values(),
                          ids=ansys_apdl_input.keys())

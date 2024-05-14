@@ -39,7 +39,6 @@ class TestCartesianProduct:
         ),
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('parameter_schema, outcome',
                              validate_input.values(),
                              ids=validate_input.keys())
@@ -68,7 +67,6 @@ class TestCartesianProduct:
                                  [2, 4.0]], dtype=object))
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('parameter_schema, expected_array',
                                  generate_io.values(),
                              ids=generate_io.keys())
@@ -114,7 +112,6 @@ class TestCartesianProduct:
                   [2, 3.0, "a"]], dtype=object)),
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('first_schema, second_schema, expected_array', merge_test.values(), ids=merge_test.keys())
     def test_merge(self, first_schema, second_schema, expected_array):
         original_study, merged_study = merge_samplers(CartesianProduct, first_schema, second_schema, {})
@@ -172,7 +169,6 @@ class TestCartesianProduct:
                    "parameter_set3:\n  parameter_1: 2\n  parameter_2: b\n")])
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('parameter_schema, output_file_template, output_file, output_type, file_count, ' \
                              'expected_calls',
                                  generate_io.values(),

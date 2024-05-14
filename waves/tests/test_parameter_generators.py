@@ -14,7 +14,6 @@ from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidat
 class TestParameterGenerator:
     """Class for testing ABC ParameterGenerator"""
 
-    @pytest.mark.unittest
     def test_output_file_conflict(self):
         with pytest.raises(MutuallyExclusiveError):
             try:
@@ -23,7 +22,6 @@ class TestParameterGenerator:
             finally:
                 pass
 
-    @pytest.mark.unittest
     def test_output_file_type(self):
         with pytest.raises(ChoicesError):
             try:
@@ -31,7 +29,6 @@ class TestParameterGenerator:
             finally:
                 pass
 
-    @pytest.mark.unittest
     def test_missing_previous_parameter_study_file(self):
         with patch("pathlib.Path.is_file", return_value=False), pytest.raises(RuntimeError):
             try:
@@ -39,7 +36,6 @@ class TestParameterGenerator:
             finally:
                 pass
 
-    @pytest.mark.unittest
     def test_scons_write(self):
         sconsWrite = NoQuantilesGenerator({})
         with patch("waves.parameter_generators._ParameterGenerator.write") as mock_write:
@@ -53,7 +49,6 @@ class TestParameterGenerator:
         'file template': (    {},       'out', 'overridden',           ['out0'])
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
         kwargs = {"sets": length}
@@ -61,7 +56,6 @@ class TestParameterGenerator:
         set_samples = sconsIterator.parameter_study_to_dict()
         assert set_samples == {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('schema, file_template, set_template, expected',
                                  templates.values(),
                              ids=templates.keys())
@@ -81,7 +75,6 @@ class TestParameterGenerator:
                                                      set_name_template=set_template, **kwargs)
         assert list(TemplateGenerator._parameter_set_names.values()) == expected
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('schema, file_template, set_template, expected',
                                  templates.values(),
                              ids=templates.keys())
@@ -116,7 +109,6 @@ class TestParameterGenerator:
         'dryrun-4':      (     {},    'out',     False,   True,   [False,  True],    1,            1),
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, is_file, sets, stdout_calls',
                                  init_write_stdout.values(),
                              ids=init_write_stdout.keys())
@@ -156,7 +148,6 @@ class TestParameterGenerator:
         'overwrite-4': (      {},    'out',      True,  False,   [ True, False],    2,     2),
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, is_file, sets, files',
                                  init_write_files.values(),
                              ids=init_write_files.keys())
@@ -184,7 +175,6 @@ class TestParameterGenerator:
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == files
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('schema, template, overwrite, dryrun, is_file, sets, files',
                                  init_write_files.values(),
                              ids=init_write_files.keys())
@@ -222,7 +212,6 @@ class TestParameterGenerator:
         'not-file-2':          (   False, [False],     False,                   1),
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
                              init_write_dataset_files.values(),
                              ids=init_write_dataset_files.keys())
@@ -243,7 +232,6 @@ class TestParameterGenerator:
             WriteParameterGenerator._conditionally_write_dataset('dummy_string', xarray.Dataset())
             assert xarray_to_netcdf.call_count == expected_call_count
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('equals, is_file, overwrite, expected_call_count',
                              init_write_dataset_files.values(),
                              ids=init_write_dataset_files.keys())
@@ -299,7 +287,6 @@ class TestParameterGenerator:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('parameter_names, samples, quantiles, expected_hashes',
                                  set_hashes.values(),
                              ids=set_hashes.keys())
@@ -312,7 +299,6 @@ class TestParameterGenerator:
         HashesParameterGenerator._create_parameter_set_hashes()
         assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
 
-    @pytest.mark.unittest
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
         SetNamesParameterGenerator = NoQuantilesGenerator({}, output_file_template='out')
@@ -321,7 +307,6 @@ class TestParameterGenerator:
         SetNamesParameterGenerator._create_parameter_set_names()
         assert list(SetNamesParameterGenerator._parameter_set_names.values()) == ['out0', 'out1']
 
-    @pytest.mark.unittest
     def test_parameter_study_to_numpy(self):
         """Test the self-consistency of the parameter study dataset construction and deconstruction"""
         # Setup
@@ -374,7 +359,6 @@ class TestParameterDistributions:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize('parameter_schema, outcome',
                              validate_input.values(),
                              ids=validate_input.keys())
@@ -410,7 +394,6 @@ class TestParameterDistributions:
         )
     }
 
-    @pytest.mark.unittest
     @pytest.mark.parametrize("parameter_schema, expected_scipy_kwds",
                              generate_input.values(),
                              ids=generate_input.keys())

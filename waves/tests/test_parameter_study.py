@@ -7,7 +7,6 @@ import pytest
 from waves import _parameter_study
 
 
-@pytest.mark.unittest
 def test_read_parameter_schema():
     # Test STDIN/TexIOWrapper read
     input_file = io.TextIOWrapper(io.BytesIO(b"{a: [1], b: [2]}"))
