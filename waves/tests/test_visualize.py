@@ -27,3 +27,19 @@ def test_graph_to_graphml():
     graphml = _visualize.graph_to_graphml(graph)
     assert isinstance(graphml, str)
     assert graphml != ""
+
+
+def test_parse_output():
+    """Test raises behavior and regression test a sample SCons tree output parsing"""
+    # Check for a runtime error on empty parsing
+    with pytest.raises(RuntimeError):
+        graph = _visualize.parse_output([])
+
+    # Sign-of-life with partial reproduction of modsim template nominal tree output
+    tree_output = "[E b   C  ]+-nominal\n[  B      ]  +-build/nominal/stress_strain_comparison.pdf"
+    tree_lines = tree_output.split("\n")
+    graph = _visualize.parse_output(tree_lines)
+    assert len(graph.nodes) == 2
+    assert len(graph.edges) == 1
+    assert "nominal" in graph.nodes
+    assert "build/nominal/stress_strain_comparison.pdf" in graph.nodes
