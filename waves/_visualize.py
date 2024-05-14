@@ -9,6 +9,7 @@ import pathlib
 import typing
 import sys
 import re
+import io
 
 import networkx
 import matplotlib.pyplot
@@ -129,10 +130,7 @@ def main(
     graph = parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
 
     if print_graphml:
-        import io
-        with io.BytesIO() as graphml:
-            networkx.write_graphml_lxml(graph, graphml)
-            print(graphml.getvalue().decode("utf-8"))
+        print(graph_to_graphml(graph))
         return
     visualize(
         graph,
@@ -145,6 +143,17 @@ def main(
         node_count=node_count,
         transparent=transparent
     )
+
+
+def graph_to_graphml(graph: networkx.DiGraph) -> str:
+    """Return the networkx graphml text
+
+    :param graph: networkx directed graph
+    """
+    with io.BytesIO() as graphml_buffer:
+        networkx.write_graphml_lxml(graph, graphml_buffer)
+        graphml = graphml_buffer.getvalue().decode("utf-8")
+    return graphml
 
 
 def parse_output(
