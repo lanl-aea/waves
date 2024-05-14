@@ -383,7 +383,7 @@ def visualize(
             print(f"WARNING: extension '{suffix}' is not supported by matplotlib. Falling back to '{file_name}'",
                   file=sys.stderr)
         figure.set_size_inches((width, height), forward=False)
-        figure.savefig(str(file_name))
+        figure.savefig(str(file_name), transparent=True)
     else:
         matplotlib.pyplot.show()
     matplotlib.pyplot.clf()  # Indicates that we are done with the plot
