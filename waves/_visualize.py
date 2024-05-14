@@ -126,17 +126,16 @@ def main(
     if print_tree:
         print(tree_output, file=sys.stdout)
         return
-    tree_dict = parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
-    if not tree_dict['nodes']:  # If scons tree or input_file is not in the expected format the nodes will be empty
-        raise RuntimeError(f"Unexpected SCons tree format or missing target. Use SCons "
-                           f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
-                           f"the ``visualize --print-tree`` option to generate the input file.")
+    graph = parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
 
     if print_graphml:
-        print(tree_dict['graphml'], file=sys.stdout)
+        import io
+        with io.StringIO() as graphml:
+            networkx.write_graphml_lxml(graph, graphml)
+            print(graphml.get_value())
         return
     visualize(
-        tree_dict,
+        graph,
         output_file=output_file,
         height=height,
         width=width,
@@ -152,14 +151,16 @@ def parse_output(
     tree_lines: typing.List[str],
     exclude_list: typing.List[str] = _settings._visualize_exclude,
     exclude_regex: typing.Optional[str] = None
-) -> dict:
-    """Parse the string that has the tree output and store it in a dictionary
+) -> networkx.DiGraph:
+    """Parse the string that has the tree output and return as a networkx directed graph
 
     :param tree_lines: output of the scons tree command
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param exclude_regex: exclude nodes that match this regular expression
 
-    :returns: dictionary of tree output
+    :returns: networkx directed graph
+
+    :raises RuntimeError: If the parsed input doesn't contain recognizable SCons nodes
     """
     edges = list()  # List of tuples for storing all connections
     node_info: typing.Dict[str, typing.Dict] = dict()
@@ -202,23 +203,17 @@ def parse_output(
                 graphml_edges += f'    <edge source="{higher_node}" target="{node_name}"/>\n'
             node_info[node_name]['status'] = status
 
-    tree_dict: typing.Dict[str, typing.Any] = dict()
-    tree_dict['nodes'] = nodes
-    tree_dict['edges'] = edges
-    tree_dict['node_info'] = node_info
+    # If SCons tree or input_file is not in the expected format the nodes will be empty
+    if len(nodes) <= 0:
+        raise RuntimeError(f"Unexpected SCons tree format or missing target. Use SCons "
+                           f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
+                           f"the ``visualize --print-tree`` option to generate the input file.")
 
-    tree_dict['graphml'] = '''<?xml version = "1.0" encoding = "UTF-8"?>
-      <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns
-      http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd ">
-      <graph id = "tree" edgedefault = "directed">
-    '''
-    tree_dict['graphml'] += graphml_nodes
-    tree_dict['graphml'] += graphml_edges
-    tree_dict['graphml'] += '  </graph>\n</graphml>\n'
+    graph = networkx.DiGraph()
+    graph.add_nodes_from(nodes)
+    graph.add_edges_from(edges)
 
-    return tree_dict
+    return graph
 
 
 def check_regex_exclude(exclude_regex: str, node_name: str, current_indent: int, exclude_indent: int,
@@ -294,7 +289,7 @@ def add_node_count(
 
 
 def visualize(
-    tree: dict,
+    graph: networkx.DiGraph,
     output_file: typing.Optional[pathlib.Path] = None,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
@@ -316,10 +311,6 @@ def visualize(
     :param node_count: Add a node count annotation
     :param transparent: Use a transparent background
     """
-    graph = networkx.DiGraph()
-    graph.add_nodes_from(tree['nodes'])
-    graph.add_edges_from(tree['edges'])
-
     for layer, nodes in enumerate(networkx.topological_generations(graph)):
         # `multipartite_layout` expects the layer as a node attribute, so it's added here
         for node in nodes:
