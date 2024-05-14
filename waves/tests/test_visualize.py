@@ -1,6 +1,3 @@
-"""
-Test visualize.py
-"""
 import pytest
 import networkx
 
