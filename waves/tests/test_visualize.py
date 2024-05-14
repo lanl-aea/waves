@@ -1,3 +1,6 @@
+import pathlib
+from unittest.mock import patch
+
 import pytest
 import networkx
 import matplotlib.pyplot
@@ -57,3 +60,19 @@ def test_visualize():
     graph = networkx.DiGraph()
     graph.add_edge(1, 2)
     _visualize.visualize(graph)
+
+
+def test_plot():
+    """Check that the expected plot output function is called"""
+    figure, axes = matplotlib.pyplot.subplots()
+    with patch("matplotlib.pyplot.show") as mock_show, \
+         patch("matplotlib.figure.Figure.savefig") as mock_savefig:
+        _visualize.plot(figure, output_file=None)
+    mock_show.assert_called_once()
+    mock_savefig.assert_not_called()
+
+    with patch("matplotlib.pyplot.show") as mock_show, \
+         patch("matplotlib.figure.Figure.savefig") as mock_savefig:
+        _visualize.plot(figure, output_file=pathlib.Path("dummy.png"))
+    mock_savefig.assert_called_once()
+    mock_show.assert_not_called()
