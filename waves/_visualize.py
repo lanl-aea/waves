@@ -132,17 +132,17 @@ def main(
     if print_graphml:
         print(graph_to_graphml(graph))
         return
-    visualize(
+    figure = visualize(
         graph,
-        output_file=output_file,
         height=height,
         width=width,
         font_size=font_size,
         vertical=vertical,
         no_labels=no_labels,
         node_count=node_count,
-        transparent=transparent
     )
+    plot(figure, output_file=output_file, transparent=transparent)
+
 
 
 def graph_to_graphml(graph: networkx.DiGraph) -> str:
@@ -163,7 +163,7 @@ def parse_output(
 ) -> networkx.DiGraph:
     """Parse the string that has the tree output and return as a networkx directed graph
 
-    :param tree_lines: output of the scons tree command
+    :param tree_lines: output of the scons tree command pre-split on newlines to a list of strings
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param exclude_regex: exclude nodes that match this regular expression
 
@@ -299,26 +299,22 @@ def add_node_count(
 
 def visualize(
     graph: networkx.DiGraph,
-    output_file: typing.Optional[pathlib.Path] = None,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
     vertical: bool = False,
     no_labels: bool = False,
     node_count: bool = False,
-    transparent: bool = False
-) -> None:
+) -> matplotlib.figure.Figure:
     """Create a visualization showing the tree
 
     :param tree: output of the scons tree command stored as dictionary
-    :param output_file: Name of file to store visualization
     :param height: Height of visualization if being saved to a file
     :param width: Width of visualization if being saved to a file
     :param font_size: Font size of file names in points
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param no_labels: Don't print labels on the nodes of the visualization
     :param node_count: Add a node count annotation
-    :param transparent: Use a transparent background
     """
     for layer, nodes in enumerate(networkx.topological_generations(graph)):
         # `multipartite_layout` expects the layer as a node attribute, so it's added here
@@ -378,8 +374,22 @@ def visualize(
             arrows[B]['to'] = list()
             arrows[B]['to'].append(dark_arrow)
 
-    figure.canvas.mpl_connect("button_press_event", lambda x: click_arrow(x, annotations, arrows))
+    figure.set_size_inches((width, height), forward=False)
 
+    return figure
+
+
+def plot(
+    figure: matplotlib.figure.Figure,
+    output_file: typing.Optional[pathlib.Path] = None,
+    transparent: bool = False
+) -> None:
+    """Open a matplotlib plot or save to file
+
+    :param figure: The matplotlib figure
+    :param output_file: File for saving the visualization
+    :param transparent: Use a transparent background
+    """
     if output_file is not None:
         file_name = output_file
         file_name.parent.mkdir(parents=True, exist_ok=True)
@@ -389,9 +399,9 @@ def visualize(
             file_name = file_name.with_suffix('.svg')
             print(f"WARNING: extension '{suffix}' is not supported by matplotlib. Falling back to '{file_name}'",
                   file=sys.stderr)
-        figure.set_size_inches((width, height), forward=False)
         figure.savefig(str(file_name), transparent=transparent)
     else:
+        figure.canvas.mpl_connect("button_press_event", lambda x: click_arrow(x, annotations, arrows))
         matplotlib.pyplot.show()
     matplotlib.pyplot.clf()  # Indicates that we are done with the plot
 
