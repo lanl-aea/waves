@@ -5,17 +5,6 @@ import matplotlib.pyplot
 from waves import _visualize
 
 
-def test_check_regex_exclude():
-    """Test the regular expression exclusion of the visualize subcommand"""
-    exclude_regex = 'dummy_name[0-7]+'
-    # If node name matches the regular expression
-    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name5', 3, 0, False) == (True, 3)
-    # if node name does not match the regular expression
-    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name8', 2, 1, False) == (False, 1)
-    # If node name does not match the regular expression but the node was already excluded
-    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name9', 4, 2, True) == (True, 2)
-
-
 def test_graph_to_graphml():
     """Sign-of-life test for a non-empty Python string return value.
 
@@ -44,6 +33,17 @@ def test_parse_output():
     assert len(graph.edges) == 1
     assert "nominal" in graph.nodes
     assert "build/nominal/stress_strain_comparison.pdf" in graph.nodes
+
+
+def test_check_regex_exclude():
+    """Test the regular expression exclusion of the visualize subcommand"""
+    exclude_regex = 'dummy_name[0-7]+'
+    # If node name matches the regular expression
+    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name5', 3, 0, False) == (True, 3)
+    # if node name does not match the regular expression
+    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name8', 2, 1, False) == (False, 1)
+    # If node name does not match the regular expression but the node was already excluded
+    assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name9', 4, 2, True) == (True, 2)
 
 
 def test_add_node_count():
