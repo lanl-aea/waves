@@ -54,7 +54,6 @@ parameter_study_args = {  #               subcommand,         class_name,       
 }
 
 
-@pytest.mark.integrationtest
 @pytest.mark.parametrize('subcommand, class_name, argument, option, argument_value',
                          parameter_study_args.values(),
                          ids=list(parameter_study_args.keys()))
