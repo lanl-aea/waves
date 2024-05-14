@@ -13,6 +13,13 @@ Documentation
 - Add example usage for print build failures function (:issue:`670`, :merge:`833`). By `Kyle Brindley`_.
 - Break long API function signatures into multiple lines for better readability (:merge:`835`) By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Use networkx built-in graphml writer (:issue:`672`, :merge:`838`). By `Kyle Brindley`_.
+- Remove unused and redundant pytest markers (:issue:`672`, :merge:`838`). By `Kyle Brindley`_.
+- Add minimal and sign-of-life unit tests for more of the visualize subcommand implementation (:issue:`672`,
+  :merge:`838`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Change the parameter generator API deafult output file type H5 files. Matches tutorial behavior to default behavior
