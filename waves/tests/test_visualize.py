@@ -1,5 +1,6 @@
 import pytest
 import networkx
+import matplotlib.pyplot
 
 from waves import _visualize
 
@@ -43,3 +44,16 @@ def test_parse_output():
     assert len(graph.edges) == 1
     assert "nominal" in graph.nodes
     assert "build/nominal/stress_strain_comparison.pdf" in graph.nodes
+
+
+def test_add_node_count():
+    """Sign-of-life test for the axes artist annotation"""
+    figure, axes = matplotlib.pyplot.subplots()
+    _visualize.add_node_count(axes, 1, 12)
+
+
+def test_visualize():
+    """Sign-of-life test for the visualize figure"""
+    graph = networkx.DiGraph()
+    graph.add_edge(1, 2)
+    _visualize.visualize(graph)
