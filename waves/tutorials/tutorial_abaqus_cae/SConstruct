@@ -1,14 +1,13 @@
 #! /usr/bin/env python
 
 import os
-import pathlib
 
 import waves
 
-# Accept command line options with fall back default values
+# Add build directory CLI arg
 AddOption(
     "--build-dir",
-    dest="variant_dir_base",
+    dest="build_dir",
     default="build",
     nargs=1,
     type="string",
@@ -16,67 +15,27 @@ AddOption(
     metavar="DIR",
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
-AddOption(
-    "--unconditional-build",
-    dest="unconditional_build",
-    default=False,
-    action="store_true",
-    help="Boolean flag to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
-            " and it would normally be ignored. (default: '%default')"
-)
-AddOption(
-    "--print-build-failures",
-    dest="print_build_failures",
-    default=False,
-    action="store_true",
-    help="Print task *.stdout target file(s) on build failures. (default: '%default')"
-)
 
-
-# Inherit user's full environment and set project options
+# Inherit user's full environment
 env = Environment(
     ENV=os.environ.copy(),
-    variant_dir_base=GetOption("variant_dir_base"),
-    unconditional_build=GetOption("unconditional_build"),
-    print_build_failures=GetOption("print_build_failures")
+    build_dir=GetOption("build_dir")
 )
 
-# Conditionally print failed task *.stdout files
-waves.scons_extensions.print_build_failures(env["print_build_failures"])
-
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["abaqus"] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
 
-# Set project internal variables and variable substitution dictionaries
-project_name = "WAVES-CAE"
-version = "0.1.0"
-project_dir = pathlib.Path(Dir(".").abspath)
-project_variables = {
-    "project_name": project_name,
-    "project_dir":  project_dir,
-    "version": version
-}
-
-# Build path object for extension and re-use
-variant_dir_base = pathlib.Path(env["variant_dir_base"])
-
 # Add WAVES builders
 env.Append(BUILDERS={
-    "AbaqusJournal": waves.scons_extensions.abaqus_journal(program=env["abaqus"]),
-    "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["abaqus"])
+    "AbaqusJournal": waves.scons_extensions.abaqus_journal(program=env["abaqus"])
 })
 
-# Add simulation targets
-workflow_configurations = [
-    "beam"
-]
-for workflow in workflow_configurations:
-    build_dir = variant_dir_base / workflow
-    SConscript(workflow, variant_dir=build_dir, exports="env", duplicate=True)
+# Call SConscript file
+SConscript("SConscript", variant_dir=env["build_dir"], exports="env", duplicate=True)
 
-# Add default target list to help message
-env.Default()  # Empty defaults list to avoid building all simulation targets by default
-# Add aliases to help message so users know what build target options are available
+# List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.
 waves.scons_extensions.project_help_message()
