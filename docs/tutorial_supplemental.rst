@@ -17,3 +17,4 @@ Supplemental Lessons
    tutorial_mesh_convergence
    tutorial_part_image
    tutorial_sensitivity_study
+   tutorial_abaqus_cae

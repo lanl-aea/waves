@@ -153,6 +153,7 @@ documentation_file_list = [
     'tutorial_task_reuse.rst',
     'tutorial_part_image.rst',
     'waves_quickstart.rst',
+    'tutorial_abaqus_cae.rst',
     'zreferences.rst',
 ]
 
@@ -255,6 +256,8 @@ tutorial_files_list = [
     tutorials_dir / "tutorial_fierro/example_input",
     tutorials_dir / "tutorial_fierro/example_input.yaml",
     tutorials_dir / "waves_quickstart/SConscript",
+    tutorials_dir / "tutorial_abaqus_cae/SConscript",
+    tutorials_dir / "tutorial_abaqus_cae/submit_cae.py",
     tutorials_dir / 'scons_quickstart/SConscript',
     tutorials_dir / 'multi_action_task/SConscript',
 ]

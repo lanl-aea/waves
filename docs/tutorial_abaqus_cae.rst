@@ -94,6 +94,12 @@ the simulation. You can read more about journal file design in the core tutorial
 command line interface, default execution values, input file handling to avoid accidental source modification during
 workflow execution, and function separation to smaller unit tasks.
 
+.. admonition:: tutorial_abaqus_cae/submit_cae.py
+
+    .. literalinclude:: tutorial_abaqus_cae_submit_cae.py
+       :language: Python
+       :lineno-match:
+
 After command line utility design, Python coding practices, and the Python style guide, the most unique aspect of this
 journal file is the ``return_json_dictionary`` function. This is necessary to convert string based job arguments to
 Abaqus scripting objects found in the ``abaqusConstants`` module. In an active modsim project, this function would be
