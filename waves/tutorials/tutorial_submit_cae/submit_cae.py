@@ -65,11 +65,11 @@ def get_parser():
         "Because Abaqus modifies CAE files on open, a temporary copy of the file is created to avoid constant job " \
         "rebuilds in build tools like SCons or Make."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('-i', '--input-file', type=str, required=True,
+    parser.add_argument('--input-file', type=str, required=True,
                         help="The Abaqus CAE model file with extension, e.g. ``input_file.cae``")
-    parser.add_argument('-j', '--job-name', type=str, required=True,
+    parser.add_argument('--job-name', type=str, required=True,
                         help="The name of the Abaqus job")
-    parser.add_argument('-m', '--model-name', type=str, default=default_model_name,
+    parser.add_argument('--model-name', type=str, default=default_model_name,
                         help="The name of the Abaqus model (default %(default)s)")
     parser.add_argument('--cpus', type=int, default=default_cpus,
                         help="The number of cpus for the Abaqus simulation (default %(default)s)")
