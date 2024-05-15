@@ -38,8 +38,8 @@ Environment
 Directory Structure
 *******************
 
-3. Create the project directory structure and copy the `WAVES quickstart source files`_ into the
-   ``~/waves-tutorials/tutorial_abaqus_cae`` sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
+3. Create the project directory structure and copy the tutorial files into the ``~/waves-tutorials/tutorial_abaqus_cae``
+   sub-directory with the :ref:`waves_cli` :ref:`waves_fetch_cli` subcommand.
 
 .. code-block:: bash
 
@@ -73,8 +73,8 @@ produce a job submission ready ``beam.cae`` file. See the Abaqus manual for a tu
 
 The tutorial task is a single Abaqus journal file execution. It should look similar to the journal file tasks introduced
 in the core tutorials: :ref:`tutorial_geometry` and :ref:`tutorial_partition_mesh`. You can read more about the behavior
-of the ``AbaqusJournal`` in the builder constructor function :meth:`waves.scons_extensions.abaqus_journal` and the core
-tutorials
+of the ``AbaqusJournal`` builder in the function API :meth:`waves.scons_extensions.abaqus_journal` and the core
+tutorials.
 
 .. admonition:: tutorial_abaqus_cae/SConscript
 
@@ -90,7 +90,7 @@ Abaqus Journal File
 
 The Abaqus journal file is a small command line utility designed to open job submission ready CAE model files and submit
 the simulation. You can read more about journal file design in the core tutorials: :ref:`tutorial_geometry` and
-:ref:`tutorial_partition_mesh`. This journal files shares many of the same features, such as docstrings for the API, a
+:ref:`tutorial_partition_mesh`. This journal file shares many of the same features, such as docstrings for the API, a
 command line interface, default execution values, input file handling to avoid accidental source modification during
 workflow execution, and function separation to smaller unit tasks.
 
@@ -196,13 +196,6 @@ To better understand the mixed workflow, open the ``build/beam.cae`` file and ed
 finished editing the file, save it, close Abaqus CAE, and re-run the ``scons submit_beam_cae`` command. Observe the
 SCons output during execution and the timestamp changes in the build directory. It should look similar to the example
 output below.
-
-.. warning::
-
-   Your interactive changes to ``beam.cae`` will be preserved by the ``submit_beam_cae`` workflow and alias. However, if
-   you re-run the ``create_beam_cae`` workflow, ``beam.cae`` will be overwritten by the CAE file creation workflow. This
-   can be useful if you'd like to reset the tutorial, but may cause confusion when testing interactive edits to the CAE
-   file.
 
 .. code-block::
 
