@@ -6,17 +6,18 @@ import pathlib
 Import("env")
 
 # Simulation variables
-build_directory = pathlib.Path(Dir(".").abspath)
-workflow_name = build_directory.name
+workflow_name = "submit_beam_cae"
 
 # Collect the target nodes to build a concise alias for all targets
 cae_prep = []
 workflow = []
 
+# Comment used in tutorial code snippets: marker-1
+
 # Create the job-ready beam example CAE file
 cae_prep.extend(env.Command(
     target=["beamExample.py"],
-    source=["beam"],
+    source=["SConscript"],
     action=[
         "cd ${TARGET.dir.abspath} && ${abaqus} fetch job=beamExample",
         "echo \"mdb.saveAs(pathName='beam.cae')\" >> ${TARGET.abspath}"
@@ -29,12 +30,16 @@ cae_prep.extend(env.AbaqusJournal(
     source=["beamExample.py"]
 ))
 
+# Comment used in tutorial code snippets: marker-2
+
 # Run the tutorial CAE job submission solution
 workflow.extend(env.AbaqusJournal(
     target=["beam.odb"],
     source=["submit_cae.py", "beam.cae"],
     journal_options="--input-file ${SOURCES[1].abspath} --job-name beam --model-name Beam"
 ))
+
+# Comment used in tutorial code snippets: marker-3
 
 # Collector alias based on build directory name
 env.Alias("create_beam_cae", cae_prep)
