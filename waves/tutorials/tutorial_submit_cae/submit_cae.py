@@ -1,0 +1,120 @@
+import os
+import shutil
+import inspect
+import tempfile
+import argparse
+
+import abaqus
+import abaqusConstants
+import job
+
+
+def main(input_file, job_name, model_name="Model-1", cpus=None, **kwargs):
+    """Open an Abaqus CAE model file and submit the job.
+
+    If the job already exists, ignore the model name and update the job options. If the job does not exist, create it
+    using the job attributes passed in from the API/CLI, e.g. ``cpus`` and ``kwargs``.
+
+    Because Abaqus modifies CAE files on open, a temporary copy of the file is created to avoid constant job rebuilds in
+    build tools like SCons or Make.
+
+    See ``mdb.Job`` in the "Abaqus Scripting Reference Guide" for job behavior and keyword arguments.
+
+    :param str input_file: CAE file to open by absolute or relative path. Must include the extension.
+    :param str job_name: The name of the Abaqus job
+    :param str model_name: The name of the Abaqus model
+    :param int cpus: The number of CPUs for the Abaqus solver
+    :param kwargs: The ``abaqus.mdb.Job`` keyword arguments. If the job exists, these overwrite existing job
+        attributes. If provided, the ``cpus`` argument overrides both existing job attributes _and_ the kwargs.
+    """
+    if cpus is not None:
+        kwargs.update({"numCpus": cpus})
+
+    with tempfile.NamedTemporaryFile(suffix='.cae', dir=".") as copy_file:
+        shutil.copyfile(input_file, copy_file.name)
+
+        abaqus.openMdb(pathName=copy_file.name)
+
+        if job in mdb.jobs.keys():
+            script_job = mdb.jobs[job]
+            script_job.setValues(**kwargs)
+            model_name = script_job.model
+
+        if model_name in mdb.models.keys():
+            script_job = abaqus.mdb.Job(name=job_name, model=model_name, **kwargs)
+        else:
+            raise RuntimeError("Could not find model name '{}' in file '{}'\n".format(model_name, input_file))
+
+        script_job.submit()
+        script_job.waitForCompletion()
+
+
+def get_parser():
+    filename = inspect.getfile(lambda: None)
+    basename = os.path.basename(filename)
+    basename_without_extension, extension = os.path.splitext(basename)
+
+    default_model_name = "Model-1"
+    default_cpus = None
+    default_json_file = None
+
+    prog = "abaqus cae -noGui {} --".format(basename)
+    cli_description = "Open an Abaqus CAE model file and submit the job." \
+        "If the job already exists, ignore the model name and update the job options. If the job does not exist, " \
+        "create it using the job attributes passed in from the API/CLI, e.g. ``cpus`` and ``kwargs``. " \
+        "Because Abaqus modifies CAE files on open, a temporary copy of the file is created to avoid constant job " \
+        "rebuilds in build tools like SCons or Make."
+    parser = argparse.ArgumentParser(description=cli_description, prog=prog)
+    parser.add_argument('-i', '--input-file', type=str, required=True,
+                        help="The Abaqus CAE model file with extension, e.g. ``input_file.cae``")
+    parser.add_argument('-j', '--job-name', type=str, required=True,
+                        help="The name of the Abaqus job")
+    parser.add_argument('-m', '--model-name', type=str, default=default_model_name,
+                        help="The name of the Abaqus model (default %(default)s)")
+    parser.add_argument('--cpus', type=int, default=default_cpus,
+                        help="The number of cpus for the Abaqus simulation (default %(default)s)")
+    parser.add_argument('--json-file', type=str, default=default_json_file,
+                        help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` "
+                             "(default %(default)s)")
+    return parser
+
+
+def return_json_dictionary(json_file):
+    """Open a JSON file and return a dictionary compatible with Abaqus keyword arguments
+
+    If the JSON file is ``None``, return an empty dictionary. Convert unicode strings to str. If a value is found in
+    ``abaqusConstants`` convert the value.
+
+    :param str json_file: path to a JSON file
+
+    :returns: Abaqus compatible keyword argument dictionary
+    :rtype: dict
+    """
+    kwargs = {}
+    if json_file is not None:
+        with open(json_file) as json_open:
+            dictionary = json.load(json_open)
+        for key, value in dictionary.items():
+            if isinstance(key, unicode):
+                key = str(key)
+            if isinstance(value, unicode):
+                value = str(value)
+            if hasattr(abaqusConstants, value):
+                value = getattr(abaqusConstants, value)
+        kwargs[key] = value
+    return kwargs
+
+
+if __name__ == '__main__':
+    parser = get_parser()
+    args, unknown = parser.parse_known_args()
+
+    kwargs = return_json_dictionary(args.json_file)
+
+    sys.exit(main(
+        input_file=args.input_file,
+        job_name=args.job_name,
+        model_name=args.model_name,
+        cpus=args.cpus,
+        **kwargs
+   ))

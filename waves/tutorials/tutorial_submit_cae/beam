@@ -1,0 +1,51 @@
+#! /usr/bin/env python
+
+import pathlib
+
+# Inherit the parent construction environment
+Import("env")
+
+# Simulation variables
+build_directory = pathlib.Path(Dir(".").abspath)
+workflow_name = build_directory.name
+
+# Collect the target nodes to build a concise alias for all targets
+workflow = []
+
+workflow.extend(env.Command(
+    target=["beamExample.py"],
+    source=["beam"],
+    action=[
+        "cd ${TARGET.dir.abspath} && ${abaqus} fetch job=beamExample"
+    ],
+    abaqus=env["abaqus"]
+))
+
+workflow.extend(env.Command(
+    target=["beam.py"],
+    source=["beamExample.py"],
+    action=[
+        "sed '${regex}' ${SOURCE.abspath} > ${TARGET.abspath}",
+        "echo \"mdb.saveAs(pathName='beam.cae')\" >> ${TARGET.abspath}"
+    ],
+    regex=r"/import job/,$$d"
+))
+
+
+workflow.extend(env.AbaqusJournal(
+    target=["beam.cae"],
+    source=["beam.py"]
+))
+
+workflow.extend(env.AbaqusJournal(
+    target=["beam.odb"],
+    source=["submit_cae.py", "beam.cae"],
+    journal_options="--input-file ${SOURCES[1].abspath} --job-name beam --model-name Beam"
+))
+
+# Collector alias based on build directory name
+env.Alias(workflow_name, workflow)
+
+if not env["abaqus"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+    Ignore([".", workflow_name], workflow)
