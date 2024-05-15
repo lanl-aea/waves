@@ -30,7 +30,7 @@ def main(input_file, job_name, model_name="Model-1", cpus=None, **kwargs):
     if cpus is not None:
         kwargs.update({"numCpus": cpus})
 
-    with tempfile.NamedTemporaryFile(suffix='.cae', dir=".") as copy_file:
+    with tempfile.NamedTemporaryFile(suffix=".cae", dir=".") as copy_file:
         shutil.copyfile(input_file, copy_file.name)
 
         abaqus.openMdb(pathName=copy_file.name)
@@ -65,15 +65,15 @@ def get_parser():
         "Because Abaqus modifies CAE files on open, a temporary copy of the file is created to avoid constant job " \
         "rebuilds in build tools like SCons or Make."
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
-    parser.add_argument('--input-file', type=str, required=True,
+    parser.add_argument("--input-file", type=str, required=True,
                         help="The Abaqus CAE model file with extension, e.g. ``input_file.cae``")
-    parser.add_argument('--job-name', type=str, required=True,
+    parser.add_argument("--job-name", type=str, required=True,
                         help="The name of the Abaqus job")
-    parser.add_argument('--model-name', type=str, default=default_model_name,
+    parser.add_argument("--model-name", type=str, default=default_model_name,
                         help="The name of the Abaqus model (default %(default)s)")
-    parser.add_argument('--cpus', type=int, default=default_cpus,
+    parser.add_argument("--cpus", type=int, default=default_cpus,
                         help="The number of cpus for the Abaqus simulation (default %(default)s)")
-    parser.add_argument('--json-file', type=str, default=default_json_file,
+    parser.add_argument("--json-file", type=str, default=default_json_file,
                         help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` "
                              "(default %(default)s)")
     return parser
@@ -105,7 +105,7 @@ def return_json_dictionary(json_file):
     return kwargs
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parser = get_parser()
     args, unknown = parser.parse_known_args()
 
