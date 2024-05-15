@@ -90,6 +90,7 @@ Time to complete (HH:MM) Tutorial                                     Summary
                                                                       common Geometry and Partition tasks.
                    00:10 :ref:`tutorial_part_image`                   Generate Abaqus model images for documentation
                    00:30 :ref:`tutorial_sensitivity_study`            Run a sensitivity study with numpy and SALib
+                   00:30 :ref:`tutorial_abaqus_cae`                   Integrate Abaqus CAE with build system workflows
 ======================== ============================================ ==================================================
 
 ************************
