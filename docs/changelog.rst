@@ -12,6 +12,8 @@ Documentation
 =============
 - Add example usage for print build failures function (:issue:`670`, :merge:`833`). By `Kyle Brindley`_.
 - Break long API function signatures into multiple lines for better readability (:merge:`835`) By `Kyle Brindley`_.
+- Add a tutorial for integrating interactively edited CAE files with a build system (:issue:`497`, :merge:`839`). By
+  `Kyle Brindley`_.
 
 Internal Changes
 ================
