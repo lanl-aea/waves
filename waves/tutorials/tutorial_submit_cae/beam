@@ -16,25 +16,15 @@ workflow.extend(env.Command(
     target=["beamExample.py"],
     source=["beam"],
     action=[
-        "cd ${TARGET.dir.abspath} && ${abaqus} fetch job=beamExample"
+        "cd ${TARGET.dir.abspath} && ${abaqus} fetch job=beamExample",
+        "echo \"mdb.saveAs(pathName='beam.cae')\" >> ${TARGET.abspath}"
     ],
     abaqus=env["abaqus"]
 ))
 
-workflow.extend(env.Command(
-    target=["beam.py"],
-    source=["beamExample.py"],
-    action=[
-        "sed '${regex}' ${SOURCE.abspath} > ${TARGET.abspath}",
-        "echo \"mdb.saveAs(pathName='beam.cae')\" >> ${TARGET.abspath}"
-    ],
-    regex=r"/import job/,$$d"
-))
-
-
 workflow.extend(env.AbaqusJournal(
     target=["beam.cae"],
-    source=["beam.py"]
+    source=["beamExample.py"]
 ))
 
 workflow.extend(env.AbaqusJournal(
