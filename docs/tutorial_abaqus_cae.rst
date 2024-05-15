@@ -194,7 +194,30 @@ look identical (except for timestamps and job name) to the output produced by th
 
 To better understand the mixed workflow, open the ``build/beam.cae`` file and edit it with Abaqus CAE. When you've
 finished editing the file, save it, close Abaqus CAE, and re-run the ``scons submit_beam_cae`` command. Observe the
-SCons output during execution and the timestamp changes in the build directory.
+SCons output during execution and the timestamp changes in the build directory. It should look similar to the example
+output below.
+
+.. warning::
+
+   Your interactive changes to ``beam.cae`` will be preserved by the ``submit_beam_cae`` workflow and alias. However, if
+   you re-run the ``create_beam_cae`` workflow, ``beam.cae`` will be overwritten by the CAE file creation workflow. This
+   can be useful if you'd like to reset the tutorial, but may cause confusion when testing interactive edits to the CAE
+   file.
+
+.. code-block::
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae
+   $ scons submit_beam_cae --debug=explain
+   scons: Reading SConscript files ...
+   Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
+   Checking whether abq2023 program exists...no
+   scons: done reading SConscript files.
+   scons: Building targets ...
+   scons: rebuilding `build/beam.odb' because `build/beam.cae' changed
+   cd /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build && /apps/abaqus/Commands/abq2023 -information environment > /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.odb.abaqus_v6.env 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build && /apps/abaqus/Commands/abq2023 cae -noGui /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/submit_cae.py -- --input-file /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.cae --job-name beam --model-name Beam > /home/roppenheimer/waves-tutorials/tutorial_abaqus_cae/build/beam.odb.stdout 2>&1
+   scons: done building targets.
 
 ************
 Output Files
