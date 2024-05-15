@@ -10,9 +10,11 @@ build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 
 # Collect the target nodes to build a concise alias for all targets
+cae_prep = []
 workflow = []
 
-workflow.extend(env.Command(
+# Create the job-ready beam example CAE file
+cae_prep.extend(env.Command(
     target=["beamExample.py"],
     source=["beam"],
     action=[
@@ -22,11 +24,12 @@ workflow.extend(env.Command(
     abaqus=env["abaqus"]
 ))
 
-workflow.extend(env.AbaqusJournal(
+cae_prep.extend(env.AbaqusJournal(
     target=["beam.cae"],
     source=["beamExample.py"]
 ))
 
+# Run the tutorial CAE job submission solution
 workflow.extend(env.AbaqusJournal(
     target=["beam.odb"],
     source=["submit_cae.py", "beam.cae"],
@@ -34,6 +37,7 @@ workflow.extend(env.AbaqusJournal(
 ))
 
 # Collector alias based on build directory name
+env.Alias("create_beam_cae", cae_prep)
 env.Alias(workflow_name, workflow)
 
 if not env["abaqus"]:
