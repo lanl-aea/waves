@@ -9,7 +9,11 @@ import abaqusConstants
 import job
 
 
-def main(input_file, job_name, model_name="Model-1", cpus=None, **kwargs):
+default_model_name = "Model-1"
+default_cpus = None
+
+
+def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus, **kwargs):
     """Open an Abaqus CAE model file and submit the job.
 
     If the job already exists, ignore the model name and update the job options. If the job does not exist, create it
@@ -52,10 +56,7 @@ def main(input_file, job_name, model_name="Model-1", cpus=None, **kwargs):
 def get_parser():
     filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
-    basename_without_extension, extension = os.path.splitext(basename)
 
-    default_model_name = "Model-1"
-    default_cpus = None
     default_json_file = None
 
     prog = "abaqus cae -noGui {} --".format(basename)
