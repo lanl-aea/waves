@@ -8,6 +8,10 @@ Changelog
 0.9.0 (unreleased)
 ******************
 
+Internal Changes
+================
+- Add pygraphviz to CI environment (:merge:`844`). By `Kyle Brindley`_.
+
 ******************
 0.8.6 (2024-05-16)
 ******************
