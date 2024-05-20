@@ -303,9 +303,7 @@ def visualize(
     :param node_count: Add a node count annotation
     """
     if vertical:
-        pos = networkx.multipartite_layout(graph, subset_key="layer", align="horizontal")
-        for k in pos:  # Flip the layout so the root node is on top
-            pos[k][-1] *= -1
+        pos = networkx.multipartite_layout(networkx.reverse(graph), subset_key="layer", align="horizontal")
     else:
         pos = networkx.multipartite_layout(graph, subset_key="layer")
     # The nodes are drawn tiny so that labels can go on top
