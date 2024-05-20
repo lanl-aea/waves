@@ -194,7 +194,7 @@ def parse_output(
             if exclude_node:
                 continue
             if node_name not in graph.nodes:
-                graph.add_node(node_name, label=node_name)
+                graph.add_node(node_name, label=node_name, layer=current_indent)
             higher_nodes[current_indent] = node_name
 
             if current_indent != 1:  # If it's not the first node which is the top level node
@@ -302,10 +302,6 @@ def visualize(
     :param no_labels: Don't print labels on the nodes of the visualization
     :param node_count: Add a node count annotation
     """
-    for layer, nodes in enumerate(networkx.topological_generations(graph)):
-        # `multipartite_layout` expects the layer as a node attribute, so it's added here
-        for node in nodes:
-            graph.nodes[node]["layer"] = layer
     if vertical:
         pos = networkx.multipartite_layout(graph, subset_key="layer", align="horizontal")
         for k in pos:  # Flip the layout so the root node is on top
