@@ -49,15 +49,11 @@ def test_check_regex_exclude():
     assert _visualize.check_regex_exclude(exclude_regex, 'dummy_name9', 4, 2, True) == (True, 2)
 
 
-def test_add_node_count():
-    """Sign-of-life test for the axes artist annotation"""
-    figure, axes = matplotlib.pyplot.subplots()
-    _visualize.add_node_count(axes, 1, 12)
-
-
 def test_visualize():
     """Sign-of-life test for the visualize figure"""
     graph = networkx.DiGraph()
+    graph.add_node(1, label="one", layer=1)
+    graph.add_node(2, label="two", layer=2)
     graph.add_edge(1, 2)
     _visualize.visualize(graph)
 

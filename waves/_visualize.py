@@ -256,6 +256,8 @@ def visualize(
 ) -> matplotlib.figure.Figure:
     """Create a visualization showing the tree
 
+    Nodes in graph require the ``layer`` and ``label`` attributes.
+
     :param tree: output of the scons tree command stored as dictionary
     :param height: Height of visualization if being saved to a file
     :param width: Width of visualization if being saved to a file
