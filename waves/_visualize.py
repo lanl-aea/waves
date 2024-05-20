@@ -127,7 +127,13 @@ def main(
     if print_tree:
         print(tree_output, file=sys.stdout)
         return
-    graph = parse_output(tree_output.split('\n'), exclude_list=exclude_list, exclude_regex=exclude_regex)
+    graph = parse_output(
+        tree_output.split('\n'),
+        exclude_list=exclude_list,
+        exclude_regex=exclude_regex,
+        no_labels=no_labels,
+        node_count=node_count
+    )
 
     if print_graphml:
         print(graph_to_graphml(graph))
@@ -138,8 +144,6 @@ def main(
         width=width,
         font_size=font_size,
         vertical=vertical,
-        no_labels=no_labels,
-        node_count=node_count,
     )
     plot(figure, output_file=output_file, transparent=transparent)
 
@@ -158,13 +162,17 @@ def graph_to_graphml(graph: networkx.DiGraph) -> str:
 def parse_output(
     tree_lines: typing.List[str],
     exclude_list: typing.List[str] = _settings._visualize_exclude,
-    exclude_regex: typing.Optional[str] = None
+    exclude_regex: typing.Optional[str] = None,
+    no_labels: bool = False,
+    node_count: bool = False,
 ) -> networkx.DiGraph:
     """Parse the string that has the tree output and return as a networkx directed graph
 
     :param tree_lines: output of the scons tree command pre-split on newlines to a list of strings
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param exclude_regex: exclude nodes that match this regular expression
+    :param no_labels: Don't print labels on the nodes of the visualization
+    :param node_count: Add a node count annotation
 
     :returns: networkx directed graph
 
@@ -193,8 +201,14 @@ def parse_output(
                                                                exclude_indent, exclude_node)
             if exclude_node:
                 continue
+
+            if no_labels:
+                label = " "
+            else:
+                label = node_name
+
             if node_name not in graph.nodes:
-                graph.add_node(node_name, label=node_name, layer=current_indent)
+                graph.add_node(node_name, label=label, layer=current_indent)
             higher_nodes[current_indent] = node_name
 
             if current_indent != 1:  # If it's not the first node which is the top level node
@@ -207,6 +221,10 @@ def parse_output(
         raise RuntimeError(f"Unexpected SCons tree format or missing target. Use SCons "
                            f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
                            f"the ``visualize --print-tree`` option to generate the input file.")
+
+    if node_count:
+        label = f"Node count: {number_of_nodes}"
+        graph.add_node(label, label=label, layer=min(higher_nodes.keys()))
 
     return graph
 
@@ -229,42 +247,12 @@ def check_regex_exclude(exclude_regex: str, node_name: str, current_indent: int,
     return exclude_node, exclude_indent
 
 
-def add_node_count(
-    axes: matplotlib.axes.Axes,
-    node_count: int,
-    size: int,
-    facecolor: str = box_color,
-    boxstyle: str = "round",
-    loc: str = "lower left"
-) -> None:
-    """Add node count annotation to axes
-
-    :param axes: Axes object to annotate
-    :param node_count: Number of nodes
-    :param size: Font size
-    :param facecolor: Color of box background
-    :param boxstyle: Annotation box style
-    :param loc: Location of annotation on axes
-    """
-    annotation = matplotlib.offsetbox.AnchoredText(
-        f"Node count: {node_count}",
-        frameon=True,
-        loc=loc,
-        prop=dict(size=size, ha="center")
-    )
-    annotation.patch.set_boxstyle(boxstyle)
-    annotation.patch.set_facecolor(facecolor)
-    axes.add_artist(annotation)
-
-
 def visualize(
     graph: networkx.DiGraph,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
     vertical: bool = False,
-    no_labels: bool = False,
-    node_count: bool = False,
 ) -> matplotlib.figure.Figure:
     """Create a visualization showing the tree
 
@@ -273,8 +261,6 @@ def visualize(
     :param width: Width of visualization if being saved to a file
     :param font_size: Font size of file names in points
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
-    :param no_labels: Don't print labels on the nodes of the visualization
-    :param node_count: Add a node count annotation
     """
     multipartite_kwargs = dict(align="vertical")
     if vertical:
@@ -287,18 +273,11 @@ def visualize(
     axes = figure.axes[0]
     axes.axis("off")
 
-    # Add node count annotation if requested
-    if node_count:
-        add_node_count(axes, len(graph.nodes), font_size)
-
     # Labels are written on top of existing nodes, which are laid out by networkx
     annotations: typing.Dict[str, typing.Any] = dict()
 
     for node in graph.nodes:
-        if no_labels:
-            label = " "
-        else:
-            label = graph.nodes[node]['label']
+        label = graph.nodes[node]['label']
 
         annotations[node] = axes.annotate(
             label,
