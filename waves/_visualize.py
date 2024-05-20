@@ -19,6 +19,7 @@ from waves import _settings
 
 _exclude_from_namespace = set(globals().keys())
 
+_default_sconstruct = pathlib.Path("SConstruct")
 _default_node_color = '#5AC7CB'  # Light blue from Waves Logo
 _default_edge_color = '#B7DEBE'  # Light green from Waves Logo
 
@@ -35,7 +36,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("-o", "--output-file", type=pathlib.Path,
         help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
              "(default: %(default)s)")
-    parser.add_argument("--sconstruct", type=str, default="SConstruct",
+    parser.add_argument("--sconstruct", type=pathlib.Path, default=_default_sconstruct,
         help="Path to SConstruct file (default: %(default)s)")
     parser.add_argument("--input-file", type=str,
         help="Path to text file with output from SCons tree command (default: %(default)s). SCons target must "
@@ -60,9 +61,9 @@ def get_parser() -> argparse.ArgumentParser:
     )
 
     plot_options = parser.add_argument_group("plot options", "plot options affect the output figure")
-    plot_options.add_argument("--height", type=int, default=12,
+    plot_options.add_argument("--height", type=int, default=_settings._visualize_default_height,
         help="Height of visualization in inches if being saved to a file (default: %(default)s)")
-    plot_options.add_argument("--width", type=int, default=36,
+    plot_options.add_argument("--width", type=int, default=_settings._visualize_default_width,
         help="Width of visualization in inches if being saved to a file (default: %(default)s)")
     plot_options.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
         help="Font size of file names in points (default: %(default)s)")
@@ -90,7 +91,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main(
     target: str,
-    sconstruct: typing.Union[str, pathlib.Path],
+    sconstruct: pathlib.Path = _default_SConstruct,
     output_file: typing.Optional[pathlib.Path] = None,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
