@@ -68,11 +68,11 @@ def get_parser() -> argparse.ArgumentParser:
     plot_options.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
         help="Font size of file names in points (default: %(default)s)")
     plot_options.add_argument(
-        "--node-color",  type=str, default=_default_node_color,
+        "--node-color", type=str, default=_default_node_color,
         help="Node face color (default: %(default)s)"
     )
     plot_options.add_argument(
-        "--edge-color",  type=str, default=_default_edge_color,
+        "--edge-color", type=str, default=_default_edge_color,
         help="Edge (arrow) color (default: %(default)s)"
     )
     plot_options.add_argument("--vertical", action="store_true",
