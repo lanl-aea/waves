@@ -12,6 +12,13 @@ Internal Changes
 ================
 - Add pygraphviz to CI environment (:merge:`844`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Improve consistency between plot and graphml output for the visualize subcommand. Reduce plot annotations for smaller
+  images, which removes click event matplotlib behavior broken since :ref:`0.8.6`. (:merge:`845`). By `Kyle Brindley`_.
+
+.. _0.8.6:
+
 ******************
 0.8.6 (2024-05-16)
 ******************
