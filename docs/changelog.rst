@@ -15,10 +15,6 @@ Breaking changes
 - Change API/CLI options from ``dryrun`` to ``dry_run`` and ``--dry-run``, respectively, for greater PEP-8 and SCons
   consistency (:issue:`671`, :merge:`846`). By `Kyle Brindley`_.
 
-Internal Changes
-================
-- Add pygraphviz to CI environment (:merge:`844`). By `Kyle Brindley`_.
-
 Enhancements
 ============
 - Improve consistency between plot and graphml output for the visualize subcommand (:merge:`845`). By `Kyle Brindley`_.
