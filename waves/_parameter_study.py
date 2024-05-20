@@ -36,10 +36,10 @@ def get_parser() -> argparse.ArgumentParser:
     output_file_group = parser.add_mutually_exclusive_group()
     output_file_group.add_argument(
         '-o', '--output-file-template',
-        default=parameter_generators._default_output_file_template,
+        default=_settings._default_output_file_template,
         dest='OUTPUT_FILE_TEMPLATE',
         help=f"Output file template. May contain pathseps for an absolute or relative " \
-             f"path template. May contain the ``{parameter_generators._template_placeholder}`` " \
+             f"path template. May contain the ``{_settings._template_placeholder}`` " \
              f"set number placeholder in the file basename but not in the path. " \
              f"If the placeholder is not found, it will be " \
              f"appended to the template string. Output files are overwritten if the "
@@ -48,7 +48,7 @@ def get_parser() -> argparse.ArgumentParser:
     )
     output_file_group.add_argument(
         '-f', '--output-file',
-        default=parameter_generators._default_output_file,
+        default=_settings._default_output_file,
         dest='OUTPUT_FILE',
         help=f"Output file name. May contain pathseps for an absolute or relative path. " \
               "Output file is overwritten if the content of the file has changed or if " \
@@ -58,20 +58,20 @@ def get_parser() -> argparse.ArgumentParser:
     # Optional keyword options
     parser.add_argument(
         '-t', '--output-file-type',
-        default=parameter_generators._default_output_file_type_cli,
-        choices=parameter_generators._allowable_output_file_types,
+        default=_settings._default_output_file_type_cli,
+        choices=_settings._allowable_output_file_types,
         help="Output file type (default: %(default)s)"
     )
     parser.add_argument(
         '-s', '--set-name-template',
-        default=parameter_generators._default_set_name_template,
+        default=_settings._default_set_name_template,
         dest='SET_NAME_TEMPLATE',
         help="Parameter set name template. Overridden by ``output_file_template``, " \
              "if provided (default: %(default)s)"
     )
     parser.add_argument(
         '-p', '--previous-parameter-study',
-        default=parameter_generators._default_previous_parameter_study,
+        default=_settings._default_previous_parameter_study,
         dest='PREVIOUS_PARAMETER_STUDY',
         help="A relative or absolute file path to a previously created parameter study Xarray " \
              "Dataset (default: %(default)s)"
@@ -119,15 +119,15 @@ def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOW
 
 def main(subcommand: str,
          input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None],
-         output_file_template: typing.Optional[str] = parameter_generators._default_output_file_template,
-         output_file: typing.Optional[str] = parameter_generators._default_output_file,
-         output_file_type: parameter_generators._allowable_output_file_typing = \
-                           parameter_generators._default_output_file_type_cli,
-         set_name_template: str = parameter_generators._default_set_name_template,
-         previous_parameter_study: typing.Optional[str] = parameter_generators._default_previous_parameter_study,
-         overwrite: bool = parameter_generators._default_overwrite,
-         dry_run: bool = parameter_generators._default_dry_run,
-         write_meta: bool = parameter_generators._default_write_meta) -> None:
+         output_file_template: typing.Optional[str] = _settings._default_output_file_template,
+         output_file: typing.Optional[str] = _settings._default_output_file,
+         output_file_type: _settings._allowable_output_file_typing = \
+                           _settings._default_output_file_type_cli,
+         set_name_template: str = _settings._default_set_name_template,
+         previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+         overwrite: bool = _settings._default_overwrite,
+         dry_run: bool = _settings._default_dry_run,
+         write_meta: bool = _settings._default_write_meta) -> None:
     """Build parameter studies
 
     :param str subcommand: parameter study type to build

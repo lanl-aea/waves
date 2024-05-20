@@ -5,6 +5,8 @@ import pathlib
 _project_root_abspath = pathlib.Path(__file__).parent.resolve()
 _project_name_short = _project_root_abspath.name.upper()
 _project_name = f"{_project_name_short} Analysis for Verified Engineering Simulations"
+
+# SCons extensions
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
 _abaqus_solver_common_suffixes = [".odb", ".dat", ".msg", ".com", ".prt"]
@@ -21,6 +23,22 @@ _scons_tree_status = {'E': 'exists', 'R': 'exists in repository only', 'b': 'imp
                       'H ': 'no cache'}
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
+
+# Parameter generators
+_template_delimiter = "@"
+_template_placeholder = f"{_template_delimiter}number"
+_default_set_name_template = f"parameter_set{_template_placeholder}"
+_default_previous_parameter_study = None
+_default_overwrite = False
+_default_dry_run = False
+_default_write_meta = False
+_default_output_file_template = None
+_default_output_file = None
+_parameter_study_meta_file = "parameter_study_meta.txt"
+_allowable_output_file_typing = typing.Literal["h5", "yaml"]
+_allowable_output_file_types = typing.get_args(_allowable_output_file_typing)
+_default_output_file_type_api = _allowable_output_file_types[0]
+_default_output_file_type_cli = _allowable_output_file_types[1]
 _hash_coordinate_key = "parameter_set_hash"
 _parameter_coordinate_key = "parameters"
 _set_coordinate_key = "parameter_sets"
@@ -37,8 +55,6 @@ _modsim_template_directory = _project_root_abspath / "modsim_template"
 _tutorials_directory = _project_root_abspath / "tutorials"
 _supported_scipy_samplers = ["Sobol", "Halton", "LatinHypercube", "PoissonDisk"]
 _supported_salib_samplers = ["latin", "fast_sampler", "sobol", "finite_diff", "morris"]
-_fetch_exclude_patterns = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
-_fetch_subdirectories = ["modsim_template", "tutorials"]
 _visualize_exclude = ["/usr/bin"]
 _visualize_default_height = 12
 _visualize_default_width = 36
@@ -60,6 +76,10 @@ _parameter_study_description = \
     "all files. The dry run option will print a list of files and contents that would have been  written. " \
     "The 'h5' output is the only output type that contains both the parameter " \
     "samples and quantiles."
+
+# Fetch
+_fetch_exclude_patterns = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
+_fetch_subdirectories = ["modsim_template", "tutorials"]
 _tutorial_paths = {
     0: [pathlib.Path("tutorials/tutorial_00_SConstruct")],
     1: [

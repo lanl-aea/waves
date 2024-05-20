@@ -18,6 +18,15 @@ import xarray
 import scipy.stats
 import SALib
 
+from waves._settings import _template_delimiter
+from waves._settings import _template_placeholder
+from waves._settings import _default_set_name_template
+from waves._settings import _default_previous_parameter_study
+from waves._settings import _default_overwrite
+from waves._settings import _default_dry_run
+from waves._settings import _default_write_meta
+from waves._settings import _default_output_file_template
+from waves._settings import _default_output_file
 from waves._settings import _hash_coordinate_key
 from waves._settings import _parameter_coordinate_key
 from waves._settings import _set_coordinate_key
@@ -25,29 +34,15 @@ from waves._settings import _allowable_data_type_typing
 from waves._settings import _samples_data_variable
 from waves._settings import _quantiles_data_variable
 from waves._settings import _quantiles_attribute_key
+from waves._settings import _parameter_study_meta_file
+from waves._settings import _allowable_output_file_typing
+from waves._settings import _allowable_output_file_types
+from waves._settings import _default_output_file_type_api
+from waves._settings import _default_output_file_type_cli
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
 _exclude_from_namespace = set(globals().keys())
-
-
-# ========================================================================================================= SETTINGS ===
-_template_delimiter = "@"
-_template_placeholder = f"{_template_delimiter}number"
-
-_default_output_file_template = None
-_default_output_file = None
-_default_set_name_template = f"parameter_set{_template_placeholder}"
-_default_previous_parameter_study = None
-_default_overwrite = False
-_default_dry_run = False
-_default_write_meta = False
-
-_parameter_study_meta_file = "parameter_study_meta.txt"
-_allowable_output_file_typing = typing.Literal["h5", "yaml"]
-_allowable_output_file_types = typing.get_args(_allowable_output_file_typing)
-_default_output_file_type_api = _allowable_output_file_types[0]
-_default_output_file_type_cli = _allowable_output_file_types[1]
 
 
 class _AtSignTemplate(string.Template):
@@ -55,7 +50,6 @@ class _AtSignTemplate(string.Template):
     delimiter = _template_delimiter
 
 
-# ========================================================================================== PARAMETER STUDY CLASSES ===
 class _ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
