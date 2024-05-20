@@ -91,7 +91,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main(
     target: str,
-    sconstruct: pathlib.Path = _default_SConstruct,
+    sconstruct: pathlib.Path = _default_sconstruct,
     output_file: typing.Optional[pathlib.Path] = None,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
