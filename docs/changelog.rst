@@ -12,6 +12,8 @@ Breaking changes
 ================
 - Remove click event matplotlib behavior broken since :ref:`0.8.6`. Allows reduced plot annotations for smaller image
   sizes (:merge:`845`). By `Kyle Brindley`_.
+- Change API/CLI options from ``dryrun`` to ``dry_run`` and ``--dry-run``, respectively, for greater PEP-8 and SCons
+  consistency (:issue:`671`, :merge:`846`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
