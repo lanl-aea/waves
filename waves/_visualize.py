@@ -291,9 +291,8 @@ def visualize(
     if node_count:
         add_node_count(axes, len(graph.nodes), font_size)
 
-    # Arrows and labels are written on top of existing nodes, which are laid out by networkx
+    # Labels are written on top of existing nodes, which are laid out by networkx
     annotations: typing.Dict[str, typing.Any] = dict()
-    arrows: typing.Dict[str, typing.Dict] = dict()
 
     for node in graph.nodes:
         if no_labels:
