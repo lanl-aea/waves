@@ -49,7 +49,7 @@ parameter_study_args = {  #               subcommand,         class_name,       
     'set name template':        (   'sobol_sequence',    'SobolSequence',        'set_name_template',           '-s',        '@number'),
     'previous parameter study': ('cartesian_product', 'CartesianProduct', 'previous_parameter_study',           '-p', 'dummy_file.txt'),
     'overwrite':                (     'custom_study',      'CustomStudy',                'overwrite',  '--overwrite',             True),
-    'dry run':                  (  'latin_hypercube',   'LatinHypercube',                   'dry_run',     '--dry-run',             True),
+    'dry run':                  (  'latin_hypercube',   'LatinHypercube',                  'dry_run',    '--dry-run',             True),
     'write meta':               (   'sobol_sequence',    'SobolSequence',               'write_meta', '--write-meta',             True)
 }
 

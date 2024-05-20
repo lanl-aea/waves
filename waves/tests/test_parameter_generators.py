@@ -103,10 +103,10 @@ class TestParameterGenerator:
         'no-template-2': (     {},     None,      True,  False,          [False],    1,            1),
         'no-template-3': (     {},     None,     False,   True,   [False, False],    2,            1),
         'no-template-4': (     {},     None,     False,  False,   [ True,  True],    2,            1),
-        'dry_run-1':      (     {},    'out',     False,   True,          [False],    1,            1),
-        'dry_run-2':      (     {},    'out',      True,   True,          [False],    1,            1),
-        'dry_run-3':      (     {},    'out',      True,   True,   [ True, False],    2,            2),
-        'dry_run-4':      (     {},    'out',     False,   True,   [False,  True],    1,            1),
+        'dry_run-1':     (     {},    'out',     False,   True,          [False],    1,            1),
+        'dry_run-2':     (     {},    'out',      True,   True,          [False],    1,            1),
+        'dry_run-3':     (     {},    'out',      True,   True,   [ True, False],    2,            2),
+        'dry_run-4':     (     {},    'out',     False,   True,   [False,  True],    1,            1),
     }
 
     @pytest.mark.parametrize('schema, template, overwrite, dry_run, is_file, sets, stdout_calls',
@@ -139,13 +139,13 @@ class TestParameterGenerator:
             assert stdout_write.call_count == stdout_calls
 
     init_write_files = {# schema, template, overwrite, dry_run,          is_file, sets, files
-        'template-1':  (      {},    'out',     False,  False,          [False],    1,     1),
-        'template-2':  (      {},    'out',     False,  False,   [False, False],    2,     2),
-        'template-3':  (      {},    'out',     False,  False,   [ True,  True],    2,     0),
-        'template-4':  (      {},    'out',     False,  False,   [ True, False],    2,     1),
-        'overwrite-2': (      {},    'out',      True,  False,   [False, False],    2,     2),
-        'overwrite-3': (      {},    'out',      True,  False,   [ True,  True],    2,     2),
-        'overwrite-4': (      {},    'out',      True,  False,   [ True, False],    2,     2),
+        'template-1':  (      {},    'out',     False,   False,          [False],    1,     1),
+        'template-2':  (      {},    'out',     False,   False,   [False, False],    2,     2),
+        'template-3':  (      {},    'out',     False,   False,   [ True,  True],    2,     0),
+        'template-4':  (      {},    'out',     False,   False,   [ True, False],    2,     1),
+        'overwrite-2': (      {},    'out',      True,   False,   [False, False],    2,     2),
+        'overwrite-3': (      {},    'out',      True,   False,   [ True,  True],    2,     2),
+        'overwrite-4': (      {},    'out',      True,   False,   [ True, False],    2,     2),
     }
 
     @pytest.mark.parametrize('schema, template, overwrite, dry_run, is_file, sets, files',
