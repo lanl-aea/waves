@@ -354,7 +354,7 @@ def visualize(
             arrows[B]['to'] = list()
             arrows[B]['to'].append(dark_arrow)
 
-    figure.set_size_inches((width, height), forward=False)
+    figure.set_size_inches((width, height))
 
     return figure
 
