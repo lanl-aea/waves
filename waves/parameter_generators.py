@@ -40,7 +40,7 @@ _default_output_file = None
 _default_set_name_template = f"parameter_set{_template_placeholder}"
 _default_previous_parameter_study = None
 _default_overwrite = False
-_default_dryrun = False
+_default_dry_run = False
 _default_write_meta = False
 
 _parameter_study_meta_file = "parameter_study_meta.txt"
@@ -76,7 +76,7 @@ class _ParameterGenerator(ABC):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
@@ -91,7 +91,7 @@ class _ParameterGenerator(ABC):
                  set_name_template: str = _default_set_name_template,
                  previous_parameter_study: typing.Optional[str] = _default_previous_parameter_study,
                  overwrite: bool = _default_overwrite,
-                 dryrun: bool = _default_dryrun,
+                 dry_run: bool = _default_dry_run,
                  write_meta: bool = _default_write_meta,
                  **kwargs) -> None:
         self.parameter_schema = parameter_schema
@@ -101,7 +101,7 @@ class _ParameterGenerator(ABC):
         self.set_name_template = _AtSignTemplate(set_name_template)
         self.previous_parameter_study = previous_parameter_study
         self.overwrite = overwrite
-        self.dryrun = dryrun
+        self.dry_run = dry_run
         self.write_meta = write_meta
 
         if self.output_file_template is not None and self.output_file is not None:
@@ -254,7 +254,7 @@ class _ParameterGenerator(ABC):
         Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
         """
         if self.output_file:
-            if self.dryrun:
+            if self.dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{self.parameter_study}\n")
             else:
                 self.output_file.parent.mkdir(parents=True, exist_ok=True)
@@ -269,7 +269,7 @@ class _ParameterGenerator(ABC):
                 # If overwrite is specified or if file doesn't exist
                 elif self.overwrite or not parameter_set_file.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
-                    if self.dryrun:
+                    if self.dry_run:
                         sys.stdout.write(f"{parameter_set_file.resolve()}:\n{parameter_set}")
                         sys.stdout.write("\n")
                     else:
@@ -314,9 +314,9 @@ class _ParameterGenerator(ABC):
             text_list = [f"{parameter_set_file.name}:\n{text}" for parameter_set_file, text in
                          zip(parameter_set_files, text_list)]
             output_text = "".join(text_list)
-            if self.output_file and not self.dryrun:
+            if self.output_file and not self.dry_run:
                 self._conditionally_write_yaml(self.output_file, yaml.safe_load(output_text))
-            elif self.output_file and self.dryrun:
+            elif self.output_file and self.dry_run:
                 sys.stdout.write(f"{self.output_file.resolve()}\n{output_text}")
             else:
                 sys.stdout.write(output_text)
@@ -325,7 +325,7 @@ class _ParameterGenerator(ABC):
             for parameter_set_file, text in zip(parameter_set_files, text_list):
                 if self.overwrite or not parameter_set_file.is_file():
                     # If dry run is specified, print the files that would have been written to stdout
-                    if self.dryrun:
+                    if self.dry_run:
                         sys.stdout.write(f"{parameter_set_file.resolve()}\n{text}")
                     else:
                         self._conditionally_write_yaml(parameter_set_file, yaml.safe_load(text))
@@ -705,7 +705,7 @@ class CartesianProduct(_ParameterGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
@@ -792,7 +792,7 @@ class LatinHypercube(_ScipyGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -877,7 +877,7 @@ class CustomStudy(_ParameterGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
@@ -977,7 +977,7 @@ class SobolSequence(_ScipyGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -1073,7 +1073,7 @@ class ScipySampler(_ScipyGenerator):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
@@ -1176,7 +1176,7 @@ class SALibSampler(_ParameterGenerator, ABC):
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
     :param overwrite: Overwrite existing output files
-    :param dryrun: Print contents of new parameter study output files to STDOUT and exit
+    :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method

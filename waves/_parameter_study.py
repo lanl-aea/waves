@@ -81,8 +81,7 @@ def get_parser() -> argparse.ArgumentParser:
         help=f"Overwrite existing output files (default: %(default)s)"
     )
     parser.add_argument(
-        '--dry-run', '--dryrun',
-        dest='dry_run',
+        '--dry-run',
         action='store_true',
         help=f"Print contents of new parameter study output files to STDOUT and exit " \
                     f"(default: %(default)s)"
@@ -127,7 +126,7 @@ def main(subcommand: str,
          set_name_template: str = parameter_generators._default_set_name_template,
          previous_parameter_study: typing.Optional[str] = parameter_generators._default_previous_parameter_study,
          overwrite: bool = parameter_generators._default_overwrite,
-         dryrun: bool = parameter_generators._default_dryrun,
+         dry_run: bool = parameter_generators._default_dry_run,
          write_meta: bool = parameter_generators._default_write_meta) -> None:
     """Build parameter studies
 
@@ -139,7 +138,7 @@ def main(subcommand: str,
     :param str set_name_template: parameter set name string template. May contain '@number' for the set number.
     :param str previous_parameter_study: relative or absolute path to previous parameter study file
     :param bool overwrite: overwrite all existing parameter set file(s)
-    :param bool dryrun: print what files would have been written, but do no work
+    :param bool dry_run: print what files would have been written, but do no work
     :param bool write_meta: write a meta file name 'parameter_study_meta.txt' containing the parameter set file path(s)
     """
     try:
@@ -163,7 +162,7 @@ def main(subcommand: str,
             set_name_template=set_name_template,
             previous_parameter_study=previous_parameter_study,
             overwrite=overwrite,
-            dryrun=dryrun,
+            dry_run=dry_run,
             write_meta=write_meta
         )
 

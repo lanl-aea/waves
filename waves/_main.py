@@ -68,7 +68,7 @@ def main() -> None:
                 set_name_template=args.SET_NAME_TEMPLATE,
                 previous_parameter_study=args.PREVIOUS_PARAMETER_STUDY,
                 overwrite=args.overwrite,
-                dryrun=args.dry_run,
+                dry_run=args.dry_run,
                 write_meta=args.write_meta
             )
         else:
