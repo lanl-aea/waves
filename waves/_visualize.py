@@ -303,11 +303,11 @@ def visualize(
     :param node_count: Add a node count annotation
     """
     if vertical:
-        pos = networkx.multipartite_layout(networkx.reverse(graph), subset_key="layer", align="horizontal")
+        node_positions = networkx.multipartite_layout(networkx.reverse(graph), subset_key="layer", align="horizontal")
     else:
-        pos = networkx.multipartite_layout(graph, subset_key="layer")
+        node_positions = networkx.multipartite_layout(graph, subset_key="layer")
     # The nodes are drawn tiny so that labels can go on top
-    collection = networkx.draw_networkx_nodes(graph, pos=pos, node_size=0)
+    collection = networkx.draw_networkx_nodes(graph, pos=node_positions, node_size=0)
     figure = collection.get_figure()
     axes = figure.axes[0]
     axes.axis("off")
@@ -320,23 +320,23 @@ def visualize(
     annotations: typing.Dict[str, typing.Any] = dict()
     arrows: typing.Dict[str, typing.Dict] = dict()
     for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
-        label_A = A
-        label_B = B
+        label_A = graph.nodes[A]['label']
+        label_B = graph.nodes[B]['label']
         if no_labels:
             label_A = " "
             label_B = " "
-        patchA = axes.annotate(label_A, xy=pos[A], xycoords='data', ha='center', va='center', size=font_size,
+        patchA = axes.annotate(label_A, xy=node_positions[A], xycoords='data', ha='center', va='center', size=font_size,
                                bbox=dict(facecolor=box_color, boxstyle='round'))
-        patchB = axes.annotate(label_B, xy=pos[B], xycoords='data', ha='center', va='center', size=font_size,
+        patchB = axes.annotate(label_B, xy=node_positions[B], xycoords='data', ha='center', va='center', size=font_size,
                                bbox=dict(facecolor=box_color, boxstyle='round'))
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        axes.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data', arrowprops=arrowprops)
+        axes.annotate("", xy=node_positions[B], xycoords='data', xytext=node_positions[A], textcoords='data', arrowprops=arrowprops)
 
         annotations[A] = patchA
         annotations[B] = patchB
         dark_props = dict(arrowstyle="<-", color="0.0", connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        dark_arrow = axes.annotate("", xy=pos[B], xycoords='data', xytext=pos[A], textcoords='data',
+        dark_arrow = axes.annotate("", xy=node_positions[B], xycoords='data', xytext=node_positions[A], textcoords='data',
                                    arrowprops=dark_props)
         dark_arrow.set_visible(False)  # Draw simultaneous darker arrow, but don't show it
         try:
