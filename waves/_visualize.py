@@ -293,22 +293,31 @@ def visualize(
     # TODO: separate plot construction from output for easier unit testing
     annotations: typing.Dict[str, typing.Any] = dict()
     arrows: typing.Dict[str, typing.Dict] = dict()
-    for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
-        label_A = graph.nodes[A]['label']
-        label_B = graph.nodes[B]['label']
+
+    for node in graph.nodes:
         if no_labels:
-            label_A = " "
-            label_B = " "
-        patchA = axes.annotate(label_A, xy=node_positions[A], xycoords='data', ha='center', va='center', size=font_size,
-                               bbox=dict(facecolor=box_color, boxstyle='round'))
-        patchB = axes.annotate(label_B, xy=node_positions[B], xycoords='data', ha='center', va='center', size=font_size,
-                               bbox=dict(facecolor=box_color, boxstyle='round'))
+            label = " "
+        else:
+            label = graph.nodes[node]['label']
+
+        annotations[node] = axes.annotate(
+            label,
+            xy=node_positions[node],
+            xycoords='data',
+            ha='center',
+            va='center',
+            size=font_size,
+            bbox=dict(facecolor=box_color, boxstyle='round')
+        )
+
+    for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
+        patchA = annotations[A]
+        patchB = annotations[B]
+
         arrowprops = dict(
             arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
         axes.annotate("", xy=node_positions[B], xycoords='data', xytext=node_positions[A], textcoords='data', arrowprops=arrowprops)
 
-        annotations[A] = patchA
-        annotations[B] = patchB
         dark_props = dict(arrowstyle="<-", color="0.0", connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
         dark_arrow = axes.annotate("", xy=node_positions[B], xycoords='data', xytext=node_positions[A], textcoords='data',
                                    arrowprops=dark_props)
