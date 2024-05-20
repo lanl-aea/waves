@@ -359,7 +359,6 @@ def plot(
         figure.savefig(str(file_name), transparent=transparent)
     else:
         matplotlib.pyplot.show()
-    matplotlib.pyplot.clf()  # Indicates that we are done with the plot
 
 
 # Limit help() and 'from module import *' behavior to the module's public API
