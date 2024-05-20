@@ -194,7 +194,7 @@ def parse_output(
             if exclude_node:
                 continue
             if node_name not in graph.nodes:
-                graph.add_node(node_name, label=node_name, status=status)
+                graph.add_node(node_name, label=node_name)
             higher_nodes[current_indent] = node_name
 
             if current_indent != 1:  # If it's not the first node which is the top level node
