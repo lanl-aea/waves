@@ -229,32 +229,6 @@ def check_regex_exclude(exclude_regex: str, node_name: str, current_indent: int,
     return exclude_node, exclude_indent
 
 
-def click_arrow(event, annotations: dict, arrows: dict) -> None:
-    """Create effect with arrows when mouse click
-
-    :param matplotlib.backend_bases.Event event: Event that is handled by this function
-    :param annotations: Dictionary linking node names to their annotations
-    :param arrows: Dictionary linking darker arrow annotations to node names
-    """
-    figure = matplotlib.pyplot.gcf()
-    for key in annotations.keys():
-        if annotations[key].contains(event)[0]:  # If the text annotation contains the event (i.e. is clicked on)
-            for to_arrow in arrows[key]['to']:
-                if to_arrow:
-                    if to_arrow.get_visible():
-                        to_arrow.set_visible(False)
-                    else:
-                        to_arrow.set_visible(True)
-                    figure.canvas.draw_idle()
-            for from_arrow in arrows[key]['from']:
-                if from_arrow:
-                    if from_arrow.get_visible():
-                        from_arrow.set_visible(False)
-                    else:
-                        from_arrow.set_visible(True)
-                    figure.canvas.draw_idle()
-
-
 def add_node_count(
     axes: matplotlib.axes.Axes,
     node_count: int,
@@ -381,7 +355,6 @@ def plot(
                   file=sys.stderr)
         figure.savefig(str(file_name), transparent=transparent)
     else:
-        figure.canvas.mpl_connect("button_press_event", lambda x: click_arrow(x, annotations, arrows))
         matplotlib.pyplot.show()
     matplotlib.pyplot.clf()  # Indicates that we are done with the plot
 
