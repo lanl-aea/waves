@@ -216,7 +216,7 @@ def parse_output(
                 graph.add_edge(node_name, higher_node)
 
     # If SCons tree or input_file is not in the expected format the nodes will be empty
-    number_of_nodes = len(graph.nodes)
+    number_of_nodes = graph.number_of_nodes()
     if number_of_nodes <= 0:
         raise RuntimeError(f"Unexpected SCons tree format or missing target. Use SCons "
                            f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
