@@ -31,39 +31,51 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(add_help=False)
 
     parser.add_argument("TARGET", help=f"SCons target")
-    parser.add_argument("--sconstruct", type=str, default="SConstruct",
-        help="Path to SConstruct file (default: %(default)s)")
+
     parser.add_argument("-o", "--output-file", type=pathlib.Path,
         help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
              "(default: %(default)s)")
-    parser.add_argument("--height", type=int, default=12,
+    parser.add_argument("--sconstruct", type=str, default="SConstruct",
+        help="Path to SConstruct file (default: %(default)s)")
+    parser.add_argument("--input-file", type=str,
+        help="Path to text file with output from SCons tree command (default: %(default)s). SCons target must "
+             "still be specified and must be present in the input file.")
+
+    graph_options = parser.add_argument_group("graph options", "graph options affect plotting and graphml output")
+    graph_options.add_argument(
+        "-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
+        help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)"
+    )
+    graph_options.add_argument(
+        "-r", "--exclude-regex", type=str,
+        help="If a node matches this regular expression, do not visualize it (default: %(default)s)"
+    )
+    graph_options.add_argument(
+        "-n", "--no-labels", action="store_true",
+        help="Create visualization without labels on the nodes (default: %(default)s)"
+    )
+    graph_options.add_argument(
+        "-c", "--node-count", action="store_true",
+        help="Add the node count as an node with no edges (default: %(default)s)"
+    )
+
+    plot_options = parser.add_argument_group("plot options", "plot options affect the output figure")
+    plot_options.add_argument("--height", type=int, default=12,
         help="Height of visualization in inches if being saved to a file (default: %(default)s)")
-    parser.add_argument("--width", type=int, default=36,
+    plot_options.add_argument("--width", type=int, default=36,
         help="Width of visualization in inches if being saved to a file (default: %(default)s)")
-    parser.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
+    plot_options.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
         help="Font size of file names in points (default: %(default)s)")
-    parser.add_argument("-e", "--exclude-list", nargs="*", default=_settings._visualize_exclude,
-        help="If a node starts or ends with one of these string literals, do not visualize it (default: %(default)s)")
-    parser.add_argument("-r", "--exclude-regex", type=str,
-        help="If a node matches this regular expression, do not visualize it (default: %(default)s)")
+    plot_options.add_argument("--vertical", action="store_true",
+        help="Display the graph in a vertical layout (default: %(default)s)")
+    plot_options.add_argument("--transparent", action="store_true",
+        help="Use a transparent background. Requires a format that supports transparency (default: %(default)s)")
 
     print_group = parser.add_mutually_exclusive_group()
     print_group.add_argument("-g", "--print-graphml", dest="print_graphml", action="store_true",
         help="Print the visualization in graphml format and exit (default: %(default)s)")
     print_group.add_argument("--print-tree", action="store_true",
         help="Print the output of the SCons tree command to the screen and exit (default: %(default)s)")
-
-    parser.add_argument("--vertical", action="store_true",
-        help="Display the graph in a vertical layout (default: %(default)s)")
-    parser.add_argument("-n", "--no-labels", action="store_true",
-        help="Create visualization without labels on the nodes (default: %(default)s)")
-    parser.add_argument("-c", "--node-count", action="store_true",
-        help="Add the node count as a figure annotation (default: %(default)s)")
-    parser.add_argument("--transparent", action="store_true",
-        help="Use a transparent background. Requires a format that supports transparency (default: %(default)s)")
-    parser.add_argument("--input-file", type=str,
-        help="Path to text file with output from SCons tree command (default: %(default)s). SCons target must "
-             "still be specified and must be present in the input file.")
 
     return parser
 
@@ -103,7 +115,7 @@ def main(
     :param print_tree: Print the text output of the ``scons --tree`` command to the screen
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param no_labels: Don't print labels on the nodes of the visualization
-    :param node_count: Add a node count annotation
+    :param node_count: Add a node count orphan node 
     :param transparent: Use a transparent background
     :param input_file: Path to text file storing output from SCons tree command
     """
@@ -172,7 +184,7 @@ def parse_output(
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param exclude_regex: exclude nodes that match this regular expression
     :param no_labels: Don't print labels on the nodes of the visualization
-    :param node_count: Add a node count annotation
+    :param node_count: Add a node count orphan node 
 
     :returns: networkx directed graph
 
