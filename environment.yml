@@ -16,7 +16,6 @@ dependencies:
   - numpy
   - pandas
   - pip
-  - pygraphviz
   - pytest
   - pytest-cov
   - pytest-xdist
