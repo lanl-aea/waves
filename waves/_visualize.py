@@ -170,13 +170,8 @@ def parse_output(
 
     :raises RuntimeError: If the parsed input doesn't contain recognizable SCons nodes
     """
-    edges = list()  # List of tuples for storing all connections
-    node_info: typing.Dict[str, typing.Dict] = dict()
-    node_number = 0
-    nodes = list()
+    graph = networkx.DiGraph()
     higher_nodes = dict()
-    graphml_nodes = ''
-    graphml_edges = ''
     exclude_node = False
     exclude_indent = 0
     for line in tree_lines:
@@ -198,28 +193,20 @@ def parse_output(
                                                                exclude_indent, exclude_node)
             if exclude_node:
                 continue
-            node_number += 1  # Increment the node_number
-            if node_name not in nodes:
-                nodes.append(node_name)
-                graphml_nodes += f'    <node id="{node_name}"><data key="label">{node_name}</data></node>\n'
-                node_info[node_name] = dict()
+            if node_name not in graph.nodes:
+                graph.add_node(node_name, label=node_name, status=status)
             higher_nodes[current_indent] = node_name
 
             if current_indent != 1:  # If it's not the first node which is the top level node
                 higher_node = higher_nodes[current_indent - 1]
-                edges.append((higher_node, node_name))
-                graphml_edges += f'    <edge source="{higher_node}" target="{node_name}"/>\n'
-            node_info[node_name]['status'] = status
+                graph.add_edge(higher_node, node_name)
 
     # If SCons tree or input_file is not in the expected format the nodes will be empty
-    if len(nodes) <= 0:
+    number_of_nodes = len(graph.nodes)
+    if number_of_nodes <= 0:
         raise RuntimeError(f"Unexpected SCons tree format or missing target. Use SCons "
                            f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
                            f"the ``visualize --print-tree`` option to generate the input file.")
-
-    graph = networkx.DiGraph()
-    graph.add_nodes_from(nodes)
-    graph.add_edges_from(edges)
 
     return graph
 
