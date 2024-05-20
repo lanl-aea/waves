@@ -275,12 +275,9 @@ def visualize(
 
     # Labels are written on top of existing nodes, which are laid out by networkx
     annotations: typing.Dict[str, typing.Any] = dict()
-
     for node in graph.nodes:
-        label = graph.nodes[node]['label']
-
         annotations[node] = axes.annotate(
-            label,
+            graph.nodes[node]['label'],
             xy=node_positions[node],
             xycoords='data',
             ha='center',
