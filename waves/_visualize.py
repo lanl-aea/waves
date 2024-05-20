@@ -199,7 +199,7 @@ def parse_output(
 
             if current_indent != 1:  # If it's not the first node which is the top level node
                 higher_node = higher_nodes[current_indent - 1]
-                graph.add_edge(higher_node, node_name)
+                graph.add_edge(node_name, higher_node)
 
     # If SCons tree or input_file is not in the expected format the nodes will be empty
     number_of_nodes = len(graph.nodes)
@@ -276,10 +276,10 @@ def visualize(
     :param no_labels: Don't print labels on the nodes of the visualization
     :param node_count: Add a node count annotation
     """
+    multipartite_kwargs = dict(align="vertical")
     if vertical:
-        node_positions = networkx.multipartite_layout(networkx.reverse(graph), subset_key="layer", align="horizontal")
-    else:
-        node_positions = networkx.multipartite_layout(graph, subset_key="layer")
+        multipartite_kwargs.update({"align": "horizontal"})
+    node_positions = networkx.multipartite_layout(graph, subset_key="layer", **multipartite_kwargs)
 
     # The nodes are drawn tiny so that labels can go on top
     collection = networkx.draw_networkx_nodes(graph, pos=node_positions, node_size=0)
@@ -310,9 +310,9 @@ def visualize(
             bbox=dict(facecolor=box_color, boxstyle='round')
         )
 
-    for A, B in graph.edges:
-        patchA = annotations[A]
-        patchB = annotations[B]
+    for source, target in graph.edges:
+        patchA = annotations[target]
+        patchB = annotations[source]
 
         arrowprops = dict(
             arrowstyle="<-",
@@ -323,9 +323,9 @@ def visualize(
         )
         axes.annotate(
             "",
-            xy=node_positions[B],
+            xy=node_positions[source],
             xycoords='data',
-            xytext=node_positions[A],
+            xytext=node_positions[target],
             textcoords='data',
             arrowprops=arrowprops
         )
