@@ -280,6 +280,7 @@ def visualize(
         node_positions = networkx.multipartite_layout(networkx.reverse(graph), subset_key="layer", align="horizontal")
     else:
         node_positions = networkx.multipartite_layout(graph, subset_key="layer")
+
     # The nodes are drawn tiny so that labels can go on top
     collection = networkx.draw_networkx_nodes(graph, pos=node_positions, node_size=0)
     figure = collection.get_figure()
@@ -290,7 +291,7 @@ def visualize(
     if node_count:
         add_node_count(axes, len(graph.nodes), font_size)
 
-    # TODO: separate plot construction from output for easier unit testing
+    # Arrows and labels are written on top of existing nodes, which are laid out by networkx
     annotations: typing.Dict[str, typing.Any] = dict()
     arrows: typing.Dict[str, typing.Dict] = dict()
 
@@ -310,32 +311,25 @@ def visualize(
             bbox=dict(facecolor=box_color, boxstyle='round')
         )
 
-    for A, B in graph.edges:  # Arrows and labels are written on top of existing nodes, which are laid out by networkx
+    for A, B in graph.edges:
         patchA = annotations[A]
         patchB = annotations[B]
 
         arrowprops = dict(
-            arrowstyle="<-", color=arrow_color, connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        axes.annotate("", xy=node_positions[B], xycoords='data', xytext=node_positions[A], textcoords='data', arrowprops=arrowprops)
-
-        dark_props = dict(arrowstyle="<-", color="0.0", connectionstyle='arc3,rad=0.1', patchA=patchA, patchB=patchB)
-        dark_arrow = axes.annotate("", xy=node_positions[B], xycoords='data', xytext=node_positions[A], textcoords='data',
-                                   arrowprops=dark_props)
-        dark_arrow.set_visible(False)  # Draw simultaneous darker arrow, but don't show it
-        try:
-            arrows[A]['from'].append(dark_arrow)
-        except KeyError:
-            arrows[A] = dict()
-            arrows[A]['from'] = list()
-            arrows[A]['to'] = list()
-            arrows[A]['from'].append(dark_arrow)
-        try:
-            arrows[B]['to'].append(dark_arrow)
-        except KeyError:
-            arrows[B] = dict()
-            arrows[B]['from'] = list()
-            arrows[B]['to'] = list()
-            arrows[B]['to'].append(dark_arrow)
+            arrowstyle="<-",
+            color=arrow_color,
+            connectionstyle='arc3,rad=0.1',
+            patchA=patchA,
+            patchB=patchB
+        )
+        axes.annotate(
+            "",
+            xy=node_positions[B],
+            xycoords='data',
+            xytext=node_positions[A],
+            textcoords='data',
+            arrowprops=arrowprops
+        )
 
     figure.set_size_inches((width, height))
 
