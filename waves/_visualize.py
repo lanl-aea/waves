@@ -19,8 +19,8 @@ from waves import _settings
 
 _exclude_from_namespace = set(globals().keys())
 
-box_color = '#5AC7CB'  # Light blue from Waves Logo
-arrow_color = '#B7DEBE'  # Light green from Waves Logo
+_default_node_color = '#5AC7CB'  # Light blue from Waves Logo
+_default_edge_color = '#B7DEBE'  # Light green from Waves Logo
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -66,6 +66,14 @@ def get_parser() -> argparse.ArgumentParser:
         help="Width of visualization in inches if being saved to a file (default: %(default)s)")
     plot_options.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
         help="Font size of file names in points (default: %(default)s)")
+    plot_options.add_argument(
+        "--node-color",  type=str, default=_default_node_color,
+        help="Node face color (default: %(default)s)"
+    )
+    plot_options.add_argument(
+        "--edge-color",  type=str, default=_default_edge_color,
+        help="Edge (arrow) color (default: %(default)s)"
+    )
     plot_options.add_argument("--vertical", action="store_true",
         help="Display the graph in a vertical layout (default: %(default)s)")
     plot_options.add_argument("--transparent", action="store_true",
@@ -87,6 +95,8 @@ def main(
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
+    node_color: str = _default_node_color,
+    edge_color: str = _default_edge_color,
     exclude_list: typing.List[str] = _settings._visualize_exclude,
     exclude_regex: typing.Optional[str] = None,
     print_graphml: bool = False,
@@ -115,7 +125,7 @@ def main(
     :param print_tree: Print the text output of the ``scons --tree`` command to the screen
     :param vertical: Specifies a vertical layout of graph instead of the default horizontal layout
     :param no_labels: Don't print labels on the nodes of the visualization
-    :param node_count: Add a node count orphan node 
+    :param node_count: Add a node count orphan node
     :param transparent: Use a transparent background
     :param input_file: Path to text file storing output from SCons tree command
     """
@@ -155,6 +165,8 @@ def main(
         height=height,
         width=width,
         font_size=font_size,
+        node_color=node_color,
+        edge_color=edge_color,
         vertical=vertical,
     )
     plot(figure, output_file=output_file, transparent=transparent)
@@ -184,7 +196,7 @@ def parse_output(
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param exclude_regex: exclude nodes that match this regular expression
     :param no_labels: Don't print labels on the nodes of the visualization
-    :param node_count: Add a node count orphan node 
+    :param node_count: Add a node count orphan node
 
     :returns: networkx directed graph
 
@@ -264,6 +276,8 @@ def visualize(
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
+    node_color: str = _default_node_color,
+    edge_color: str = _default_edge_color,
     vertical: bool = False,
 ) -> matplotlib.figure.Figure:
     """Create a visualization showing the tree
@@ -297,7 +311,7 @@ def visualize(
             ha='center',
             va='center',
             size=font_size,
-            bbox=dict(facecolor=box_color, boxstyle='round')
+            bbox=dict(facecolor=node_color, boxstyle='round')
         )
 
     for source, target in graph.edges:
@@ -306,7 +320,7 @@ def visualize(
 
         arrowprops = dict(
             arrowstyle="<-",
-            color=arrow_color,
+            color=edge_color,
             connectionstyle='arc3,rad=0.1',
             patchA=patchA,
             patchB=patchB

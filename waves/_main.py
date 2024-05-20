@@ -44,6 +44,8 @@ def main() -> None:
                 height=args.height,
                 width=args.width,
                 font_size=args.font_size,
+                node_color=args.node_color,
+                edge_color=args.edge_color,
                 exclude_list=args.exclude_list,
                 exclude_regex=args.exclude_regex,
                 print_graphml=args.print_graphml,
