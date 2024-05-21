@@ -154,5 +154,10 @@ _tutorial_paths = {
     ]
 }
 
+# Visualize
+_default_sconstruct = pathlib.Path("SConstruct")
+_default_node_color = '#5AC7CB'  # Light blue from Waves Logo
+_default_edge_color = '#B7DEBE'  # Light green from Waves Logo
+
 # Remove third-party packages from the project namespace
 del pathlib

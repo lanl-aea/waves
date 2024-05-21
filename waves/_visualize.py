@@ -19,10 +19,6 @@ from waves import _settings
 
 _exclude_from_namespace = set(globals().keys())
 
-_default_sconstruct = pathlib.Path("SConstruct")
-_default_node_color = '#5AC7CB'  # Light blue from Waves Logo
-_default_edge_color = '#B7DEBE'  # Light green from Waves Logo
-
 
 def get_parser() -> argparse.ArgumentParser:
     """Return a 'no-help' parser for the visualize subcommand
@@ -36,7 +32,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("-o", "--output-file", type=pathlib.Path,
         help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
              "(default: %(default)s)")
-    parser.add_argument("--sconstruct", type=pathlib.Path, default=_default_sconstruct,
+    parser.add_argument("--sconstruct", type=pathlib.Path, default=_settings._default_sconstruct,
         help="Path to SConstruct file (default: %(default)s)")
     parser.add_argument("--input-file", type=str,
         help="Path to text file with output from SCons tree command (default: %(default)s). SCons target must "
@@ -68,11 +64,11 @@ def get_parser() -> argparse.ArgumentParser:
     plot_options.add_argument("--font-size", type=int, default=_settings._visualize_default_font_size,
         help="Font size of file names in points (default: %(default)s)")
     plot_options.add_argument(
-        "--node-color", type=str, default=_default_node_color,
+        "--node-color", type=str, default=_settings._default_node_color,
         help="Node face color (default: %(default)s)"
     )
     plot_options.add_argument(
-        "--edge-color", type=str, default=_default_edge_color,
+        "--edge-color", type=str, default=_settings._default_edge_color,
         help="Edge (arrow) color (default: %(default)s)"
     )
     plot_options.add_argument("--vertical", action="store_true",
@@ -91,13 +87,13 @@ def get_parser() -> argparse.ArgumentParser:
 
 def main(
     target: str,
-    sconstruct: pathlib.Path = _default_sconstruct,
+    sconstruct: pathlib.Path = _settings._default_sconstruct,
     output_file: typing.Optional[pathlib.Path] = None,
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
-    node_color: str = _default_node_color,
-    edge_color: str = _default_edge_color,
+    node_color: str = _settings._default_node_color,
+    edge_color: str = _settings._default_edge_color,
     exclude_list: typing.List[str] = _settings._visualize_exclude,
     exclude_regex: typing.Optional[str] = None,
     print_graphml: bool = False,
@@ -277,8 +273,8 @@ def visualize(
     height: int = _settings._visualize_default_height,
     width: int = _settings._visualize_default_width,
     font_size: int = _settings._visualize_default_font_size,
-    node_color: str = _default_node_color,
-    edge_color: str = _default_edge_color,
+    node_color: str = _settings._default_node_color,
+    edge_color: str = _settings._default_edge_color,
     vertical: bool = False,
 ) -> matplotlib.figure.Figure:
     """Create a visualization showing the tree
