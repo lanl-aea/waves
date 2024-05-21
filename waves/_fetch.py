@@ -16,8 +16,6 @@ from waves.exceptions import ChoicesError
 
 
 _exclude_from_namespace = set(globals().keys())
-_allowable_tutorial_numbers_typing = typing.Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-_allowable_tutorial_numbers = typing.get_args(_allowable_tutorial_numbers_typing)
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -71,7 +69,7 @@ def main(
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
     requested_paths: typing.List[pathlib.Path] = [],
-    tutorial: typing.Optional[_allowable_tutorial_numbers_typing] = None,
+    tutorial: typing.Optional[_settings._allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
     print_available: bool = False
@@ -257,7 +255,7 @@ def print_list(things_to_print: list, prefix: str = "\t", stream=sys.stdout) -> 
 
 def extend_requested_paths(
     requested_paths: typing.List[pathlib.Path],
-    tutorial: _allowable_tutorial_numbers_typing
+    tutorial: _settings._allowable_tutorial_numbers_typing
 ) -> typing.List[pathlib.Path]:
     """Extend the requested_paths list with the necessary tutorial files.
 
@@ -271,7 +269,7 @@ def extend_requested_paths(
     """
     if tutorial not in _settings._tutorial_paths.keys():
         raise ChoicesError(f"Requested tutorial number '{tutorial}' does not exist. "
-                           f"Must be one of {_allowable_tutorial_numbers}.")
+                           f"Must be one of {_settings._allowable_tutorial_numbers}.")
     else:
         for x in range(0, tutorial + 1):
             requested_paths.extend(_settings._tutorial_paths[x])
@@ -283,7 +281,7 @@ def recursive_copy(
     relative_paths: typing.Iterable[typing.Union[str, pathlib.Path]],
     destination: typing.Union[str, pathlib.Path],
     requested_paths: typing.List[pathlib.Path] = [],
-    tutorial: typing.Optional[_allowable_tutorial_numbers_typing] = None,
+    tutorial: typing.Optional[_settings._allowable_tutorial_numbers_typing] = None,
     overwrite: bool = False,
     dry_run: bool = False,
     print_available: bool = False

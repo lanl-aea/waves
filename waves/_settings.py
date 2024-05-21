@@ -78,6 +78,8 @@ _parameter_study_description = \
     "samples and quantiles."
 
 # Fetch
+_allowable_tutorial_numbers_typing = typing.Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+_allowable_tutorial_numbers = typing.get_args(_allowable_tutorial_numbers_typing)
 _fetch_exclude_patterns = ["__pycache__", ".pyc", ".sconf_temp", ".sconsign.dblite", "config.log"]
 _fetch_subdirectories = ["modsim_template", "tutorials"]
 _tutorial_paths = {
