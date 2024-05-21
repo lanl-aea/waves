@@ -13,21 +13,9 @@ import SCons.Environment
 import SCons.Node
 import SCons.Scanner
 
+from waves import _settings
 from waves import _utilities
 from waves._abaqus import odb_extract
-from waves._settings import _abaqus_environment_extension
-from waves._settings import _abaqus_datacheck_extensions
-from waves._settings import _abaqus_explicit_extensions
-from waves._settings import _abaqus_standard_extensions
-from waves._settings import _abaqus_solver_common_suffixes
-from waves._settings import _scons_substfile_suffix
-from waves._settings import _stdout_extension
-from waves._settings import _cd_action_prefix
-from waves._settings import _redirect_action_postfix
-from waves._settings import _redirect_environment_postfix
-from waves._settings import _matlab_environment_extension
-from waves._settings import _sbatch_wrapper_options
-from waves._settings import _sierra_environment_extension
 
 
 _exclude_from_namespace = set(globals().keys())
@@ -42,8 +30,8 @@ def _print_failed_nodes_stdout() -> None:
     for failure in build_failures:
         node_path = pathlib.Path(failure.node.abspath)
         stdout_path_options = [
-            node_path.parent / f"{node_path}{_stdout_extension}",
-            node_path.with_suffix(_stdout_extension)
+            node_path.parent / f"{node_path}{_settings._stdout_extension}",
+            node_path.with_suffix(_settings._stdout_extension)
         ]
         stdout_path_options = [path.resolve() for path in stdout_path_options]
         try:
@@ -551,7 +539,7 @@ def shell_environment(
 
 def construct_action_list(
     actions: typing.Iterable[str],
-    prefix: str = _cd_action_prefix,
+    prefix: str = _settings._cd_action_prefix,
     postfix: str = ""
 ) -> typing.Iterable[str]:
     """Return an action list with a common pre/post-fix
@@ -605,7 +593,7 @@ def _first_target_emitter(
     env,
     suffixes: typing.Iterable[str] = [],
     appending_suffixes: typing.Iterable[str] = [],
-    stdout_extension: str = _stdout_extension
+    stdout_extension: str = _settings._stdout_extension
 ) -> typing.Tuple[list, list]:
     """Appends the target list with the builder managed targets
 
@@ -667,7 +655,7 @@ def _abaqus_journal_emitter(target: list, source: list, env) -> typing.Tuple[lis
 
     :return: target, source
     """
-    appending_suffixes = [_abaqus_environment_extension]
+    appending_suffixes = [_settings._abaqus_environment_extension]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
@@ -717,9 +705,9 @@ def abaqus_journal(program: str = "abaqus", post_action: list = []) -> SCons.Bui
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        f"{program} -information environment {_redirect_environment_postfix}",
+        f"{program} -information environment {_settings._redirect_environment_postfix}",
         f"{program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} " \
-            f"{_redirect_action_postfix}"
+            f"{_settings._redirect_action_postfix}"
     ]
     action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
@@ -729,7 +717,7 @@ def abaqus_journal(program: str = "abaqus", post_action: list = []) -> SCons.Bui
     return abaqus_journal_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_journal(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal`
 
@@ -744,9 +732,12 @@ def sbatch_abaqus_journal(*args, **kwargs):
     return abaqus_journal(*args, **kwargs)
 
 
-def _abaqus_solver_emitter(target: list, source: list, env,
-                           suffixes: typing.Iterable[str] = _abaqus_solver_common_suffixes,
-                           stdout_extension: str = _stdout_extension) -> typing.Tuple[list, list]:
+def _abaqus_solver_emitter(
+    target: list,
+    source: list, env,
+    suffixes: typing.Iterable[str] = _settings._abaqus_solver_common_suffixes,
+    stdout_extension: str = _settings._stdout_extension
+) -> typing.Tuple[list, list]:
     """Appends the abaqus_solver builder target list with the builder managed targets
 
     If no targets are provided to the Builder, the emitter will assume all emitted targets build in the current build
@@ -772,7 +763,7 @@ def _abaqus_solver_emitter(target: list, source: list, env,
         env["job_name"] = primary_input_file.stem
     if isinstance(suffixes, str):
         suffixes = [suffixes]
-    suffixes.append(_abaqus_environment_extension)
+    suffixes.append(_settings._abaqus_environment_extension)
     build_subdirectory = _build_subdirectory(target)
 
     # Search for a user specified stdout file. Fall back to job name with appended stdout extension
@@ -796,17 +787,17 @@ def _abaqus_solver_emitter(target: list, source: list, env,
 
 def _abaqus_standard_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Passes the standard specific extensions to :meth:`_abaqus_solver_emitter`"""
-    return _abaqus_solver_emitter(target, source, env, _abaqus_standard_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_standard_extensions)
 
 
 def _abaqus_explicit_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Passes the explicit specific extensions to :meth:`_abaqus_solver_emitter`"""
-    return _abaqus_solver_emitter(target, source, env, _abaqus_explicit_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_explicit_extensions)
 
 
 def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Passes the datacheck specific extensions to :meth:`_abaqus_solver_emitter`"""
-    return _abaqus_solver_emitter(target, source, env, _abaqus_datacheck_extensions)
+    return _abaqus_solver_emitter(target, source, env, _settings._abaqus_datacheck_extensions)
 
 
 def abaqus_solver(program: str = "abaqus", post_action: typing.Iterable[str] = [],
@@ -881,9 +872,9 @@ def abaqus_solver(program: str = "abaqus", post_action: typing.Iterable[str] = [
     :return: Abaqus solver builder
     """  # noqa: E501
     action = [
-        f"{program} -information environment {_redirect_environment_postfix}",
+        f"{program} -information environment {_settings._redirect_environment_postfix}",
         f"{program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no " \
-            f"{_redirect_action_postfix}"
+            f"{_settings._redirect_action_postfix}"
     ]
     action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
@@ -903,7 +894,7 @@ def abaqus_solver(program: str = "abaqus", post_action: typing.Iterable[str] = [
     return abaqus_solver_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_abaqus_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_solver`
 
@@ -935,7 +926,7 @@ def _sierra_emitter(target: list, source: list, env) -> typing.Tuple[list, list]
 
     :return: target, source
     """
-    appending_suffixes = [_sierra_environment_extension]
+    appending_suffixes = [_settings._sierra_environment_extension]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
@@ -992,9 +983,9 @@ def sierra(
     :return: Sierra builder
     """  # noqa: E501
     action = [
-        f"{program} {application} --version {_redirect_environment_postfix}",
+        f"{program} {application} --version {_settings._redirect_environment_postfix}",
         f"{program} ${{sierra_options}} {application} ${{application_options}} -i ${{SOURCE.file}} " \
-            f"{_redirect_action_postfix}"
+            f"{_settings._redirect_action_postfix}"
     ]
     action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
@@ -1005,7 +996,7 @@ def sierra(
     return sierra_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_sierra(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra`
 
@@ -1080,7 +1071,7 @@ def copy_substfile(
                 target=str(copy_target),
                 source=str(source_file),
                 action=SCons.Defaults.Copy("${TARGET}", "${SOURCE}", symlink))
-        if source_file.suffix == _scons_substfile_suffix:
+        if source_file.suffix == _settings._scons_substfile_suffix:
             substfile_target = build_subdirectory / source_file.name
             target_list += env.Substfile(str(substfile_target), SUBST_DICT=substitution_dictionary)
     return target_list
@@ -1198,7 +1189,7 @@ def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Build
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        f"python ${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_redirect_action_postfix}"
+        f"python ${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_settings._redirect_action_postfix}"
     ]
     action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
@@ -1209,7 +1200,7 @@ def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Build
     return python_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_python_script(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.python_script`
 
@@ -1242,7 +1233,7 @@ def _matlab_script_emitter(target: list, source: list, env) -> typing.Tuple[list
 
     :return: target, source
     """
-    appending_suffixes = [_matlab_environment_extension]
+    appending_suffixes = [_settings._matlab_environment_extension]
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
@@ -1293,11 +1284,11 @@ def matlab_script(program: str = "matlab", post_action: typing.Iterable[str] = [
             "\"path(path, '${SOURCE.dir.abspath}'); " \
             "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
             "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
-            f"{_redirect_environment_postfix}",
+            f"{_settings._redirect_environment_postfix}",
         f"{program} ${{matlab_options}} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
             "${SOURCE.filebase}(${script_options})\" " \
-            f"{_redirect_action_postfix}"
+            f"{_settings._redirect_action_postfix}"
     ]
     action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
@@ -1775,9 +1766,9 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     if prefix_command and not prefix_command.endswith(" &&"):
         prefix_command += " &&"
     action = [
-        f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
+        f"${{prefix_command}} {_settings._cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
-            f"{_redirect_action_postfix}"
+            f"{_settings._redirect_action_postfix}"
     ]
     action.extend(construct_action_list(post_action))
     quinoa_builder = SCons.Builder.Builder(
@@ -1792,7 +1783,7 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     return quinoa_builder
 
 
-@catenate_actions(program="sbatch", options=_sbatch_wrapper_options)
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
 def sbatch_quinoa_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_solver`
 
@@ -1887,8 +1878,8 @@ def fierro_builder(
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
-        cd_action_prefix=_cd_action_prefix,
-        redirect_action_postfix=_redirect_action_postfix,
+        cd_action_prefix=_settings._cd_action_prefix,
+        redirect_action_postfix=_settings._redirect_action_postfix,
         program=program,
         subcommand=subcommand,
         required=required,
@@ -2111,7 +2102,7 @@ def ansys_apdl(
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
-        cd_action_prefix=_cd_action_prefix,
+        cd_action_prefix=_settings._cd_action_prefix,
         program=program,
         required=required,
         options=options
