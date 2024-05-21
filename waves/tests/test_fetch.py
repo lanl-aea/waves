@@ -41,7 +41,7 @@ def test_fetch_settings():
     ``typing.Literal`` can't be built from the settings tutorial path dictionary keys. Unit test to avoid out-of-sync
     programmatic errors between settings variables.
     """
-    assert tuple(_settings._tutorial_paths.keys()) == _fetch._allowable_tutorial_numbers
+    assert tuple(_settings._tutorial_paths.keys()) == _settings._allowable_tutorial_numbers
 
 
 conditional_copy_input = {
