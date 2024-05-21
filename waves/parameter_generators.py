@@ -18,27 +18,12 @@ import xarray
 import scipy.stats
 import SALib
 
-from waves._settings import _template_delimiter
-from waves._settings import _template_placeholder
-from waves._settings import _default_set_name_template
-from waves._settings import _default_previous_parameter_study
-from waves._settings import _default_overwrite
-from waves._settings import _default_dry_run
-from waves._settings import _default_write_meta
-from waves._settings import _default_output_file_template
-from waves._settings import _default_output_file
+from waves import _settings
 from waves._settings import _hash_coordinate_key
 from waves._settings import _parameter_coordinate_key
 from waves._settings import _set_coordinate_key
-from waves._settings import _allowable_data_type_typing
 from waves._settings import _samples_data_variable
 from waves._settings import _quantiles_data_variable
-from waves._settings import _quantiles_attribute_key
-from waves._settings import _parameter_study_meta_file
-from waves._settings import _allowable_output_file_typing
-from waves._settings import _allowable_output_file_types
-from waves._settings import _default_output_file_type_api
-from waves._settings import _default_output_file_type_cli
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
@@ -47,7 +32,7 @@ _exclude_from_namespace = set(globals().keys())
 
 class _AtSignTemplate(string.Template):
     """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
-    delimiter = _template_delimiter
+    delimiter = _settings._template_delimiter
 
 
 class _ParameterGenerator(ABC):
@@ -79,14 +64,14 @@ class _ParameterGenerator(ABC):
     :raises waves.exceptions.APIError: If an unknown output file type is requested
     """
     def __init__(self, parameter_schema: dict,
-                 output_file_template: typing.Optional[str] = _default_output_file_template,
-                 output_file: typing.Optional[str] = _default_output_file,
-                 output_file_type: _allowable_output_file_typing = _default_output_file_type_api,
-                 set_name_template: str = _default_set_name_template,
-                 previous_parameter_study: typing.Optional[str] = _default_previous_parameter_study,
-                 overwrite: bool = _default_overwrite,
-                 dry_run: bool = _default_dry_run,
-                 write_meta: bool = _default_write_meta,
+                 output_file_template: typing.Optional[str] = _settings._default_output_file_template,
+                 output_file: typing.Optional[str] = _settings._default_output_file,
+                 output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
+                 set_name_template: str = _settings._default_set_name_template,
+                 previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+                 overwrite: bool = _settings._default_overwrite,
+                 dry_run: bool = _settings._default_dry_run,
+                 write_meta: bool = _settings._default_write_meta,
                  **kwargs) -> None:
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
@@ -104,10 +89,10 @@ class _ParameterGenerator(ABC):
                 "Please specify one or the other."
             )
 
-        if self.output_file_type not in _allowable_output_file_types:
+        if self.output_file_type not in _settings._allowable_output_file_types:
             raise ChoicesError(
                 f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                f"The 'output_file_type' must be one of {_allowable_output_file_types}"
+                f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}"
             )
 
         if self.output_file:
@@ -123,8 +108,8 @@ class _ParameterGenerator(ABC):
         if self.output_file_template:
             self.provided_output_file_template = True
             # Append the set number placeholder if missing
-            if f'{_template_placeholder}' not in self.output_file_template:
-                self.output_file_template = f"{self.output_file_template}{_template_placeholder}"
+            if f'{_settings._template_placeholder}' not in self.output_file_template:
+                self.output_file_template = f"{self.output_file_template}{_settings._template_placeholder}"
             self.output_file_template = _AtSignTemplate(self.output_file_template)
             self.set_name_template = self.output_file_template
 
@@ -133,7 +118,7 @@ class _ParameterGenerator(ABC):
             self.output_directory = pathlib.Path(self.output_file_template.safe_substitute()).parent
         else:
             self.output_directory = pathlib.Path('.').resolve()
-        self.parameter_study_meta_file = self.output_directory / _parameter_study_meta_file
+        self.parameter_study_meta_file = self.output_directory / _settings._parameter_study_meta_file
 
         self._validate()
         self._generate(**kwargs)
@@ -229,7 +214,7 @@ class _ParameterGenerator(ABC):
             self._write_yaml(parameter_set_files)
         else:
             raise ChoicesError(f"Unsupported 'output_file_type': '{self.output_file_type}. " \
-                               f"The 'output_file_type' must be one of {_allowable_output_file_types}")
+                               f"The 'output_file_type' must be one of {_settings._allowable_output_file_types}")
 
     def scons_write(self, target: list, source: list, env) -> None:
         """`SCons Python build function`_ wrapper for the parameter generator's write() function.
@@ -378,7 +363,7 @@ class _ParameterGenerator(ABC):
         * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         """
         self._parameter_set_hashes = []
-        if hasattr(self, _quantiles_attribute_key):
+        if hasattr(self, _settings._quantiles_attribute_key):
             for sample_row, quantile_row in zip(self._samples, self._quantiles):
                 sorted_contents = sorted(zip(self._parameter_names, sample_row, quantile_row))
                 set_catenation = \
@@ -483,7 +468,7 @@ class _ParameterGenerator(ABC):
         * ``self.parameter_study``
         """
         samples = self._create_parameter_array(self._samples, name=_samples_data_variable)
-        if hasattr(self, _quantiles_attribute_key):
+        if hasattr(self, _settings._quantiles_attribute_key):
             quantiles = self._create_parameter_array(self._quantiles, name=_quantiles_data_variable)
             self.parameter_study = xarray.concat(
                     [quantiles, samples],
@@ -495,7 +480,7 @@ class _ParameterGenerator(ABC):
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
-    def _parameter_study_to_numpy(self, data_type: _allowable_data_type_typing) -> numpy.ndarray:
+    def _parameter_study_to_numpy(self, data_type: _settings._allowable_data_type_typing) -> numpy.ndarray:
         """Return the parameter study data as a 2D numpy array
 
         :param data_type: The data_type selection to return - samples or quantiles
@@ -509,7 +494,7 @@ class _ParameterGenerator(ABC):
 
     def parameter_study_to_dict(
         self,
-        data_type: _allowable_data_type_typing = _samples_data_variable
+        data_type: _settings._allowable_data_type_typing = _samples_data_variable
     ) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
         """Return parameter study as a dictionary
 
@@ -565,7 +550,7 @@ class _ParameterGenerator(ABC):
 
         # Recover parameter study numpy array(s) to match merged study
         self._samples = self._parameter_study_to_numpy('samples')
-        if hasattr(self, _quantiles_attribute_key):
+        if hasattr(self, _settings._quantiles_attribute_key):
             self._quantiles = self._parameter_study_to_numpy('quantiles')
 
         # Recalculate attributes with lengths matching the number of parameter sets
