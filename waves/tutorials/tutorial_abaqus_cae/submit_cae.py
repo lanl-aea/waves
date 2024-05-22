@@ -81,7 +81,7 @@ def get_parser():
     parser.add_argument("--json-file", type=str, default=default_json_file,
                         help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` "
                              "(default %(default)s)")
-    parser.add_argument("--write-inp", action="store_true",
+    parser.add_argument("--write-inp", "--write-input", action="store_true",
                         help="Write an Abaqus ``job.inp`` file and exit without submitting the job "
                              "(default %(default)s)")
     return parser
