@@ -18,6 +18,8 @@ Breaking changes
 Internal Changes
 ================
 - Move remaining module constants into package settings (:issue:`673`, :merge:`848`). By `Kyle Brindley`_.
+- Use full namespace in submit CAE tutorial journal file. Add a feature to write an input file and exit instead of
+  submitting the job (:merge:`852`). By `Kyle Brindley`_.
 
 Enhancements
 ============
