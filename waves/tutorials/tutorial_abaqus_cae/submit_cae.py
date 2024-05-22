@@ -28,6 +28,7 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
     :param str job_name: The name of the Abaqus job
     :param str model_name: The name of the Abaqus model
     :param int cpus: The number of CPUs for the Abaqus solver
+    :param bool write_input: write an Abaqus ``job.inp`` file and exit without submitting the job
     :param kwargs: The ``abaqus.mdb.Job`` keyword arguments. If the job exists, these overwrite existing job
         attributes. If provided, the ``cpus`` argument overrides both existing job attributes _and_ the kwargs.
     """
@@ -81,7 +82,7 @@ def get_parser():
                         help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` "
                              "(default %(default)s)")
     parser.add_argument("--write-inp", action="store_true",
-                        help="Write an Abaqus ``job.inp`` file and exit without submittinG the job "
+                        help="Write an Abaqus ``job.inp`` file and exit without submitting the job "
                              "(default %(default)s)"
     return parser
 
@@ -123,5 +124,6 @@ if __name__ == "__main__":
         job_name=args.job_name,
         model_name=args.model_name,
         cpus=args.cpus,
+        write_input=args.write_input,
         **kwargs
    ))
