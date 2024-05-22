@@ -13,7 +13,7 @@ default_model_name = "Model-1"
 default_cpus = None
 
 
-def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus, **kwargs):
+def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus, write_input=False, **kwargs):
     """Open an Abaqus CAE model file and submit the job.
 
     If the job already exists, ignore the model name and update the job options. If the job does not exist, create it
@@ -49,8 +49,11 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
         else:
             raise RuntimeError("Could not find model name '{}' in file '{}'\n".format(model_name, input_file))
 
-        script_job.submit()
-        script_job.waitForCompletion()
+        if write_input:
+            script_job.writeInput(consistencyChecking=abaqusConstants.OFF)
+        else:
+            script_job.submit()
+            script_job.waitForCompletion()
 
 
 def get_parser():
@@ -77,6 +80,9 @@ def get_parser():
     parser.add_argument("--json-file", type=str, default=default_json_file,
                         help="A JSON file containing a dictionary of keyword arguments for ``abaqus.mdb.Job`` "
                              "(default %(default)s)")
+    parser.add_argument("--write-inp", action="store_true",
+                        help="Write an Abaqus ``job.inp`` file and exit without submittinG the job "
+                             "(default %(default)s)"
     return parser
 
 
