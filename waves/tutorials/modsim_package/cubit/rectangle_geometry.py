@@ -41,8 +41,7 @@ def get_parser():
 
     prog = f"python {script_name.name} "
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.cub Cubit model file."
-    parser = argparse.ArgumentParser(description=cli_description,
-                                     prog=prog)
+    parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument('--output-file', type=str, default=default_output_file,
                         help="The output file for the Cubit model. " \
                              "Will be stripped of the extension and ``.cub`` will be used, e.g. ``output_file``.cub " \

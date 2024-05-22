@@ -103,8 +103,7 @@ def get_parser():
     prog = "abaqus cae -noGui {} --".format(basename)
     cli_description = "Partition the simple rectangle geometry created by ``rectangle_geometry.py`` " \
                       "and write an ``output_file``.cae Abaqus model file."
-    parser = argparse.ArgumentParser(description=cli_description,
-                                     prog=prog)
+    parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument('--input-file', type=str, default=default_input_file,
                         help="The Abaqus model file created by ``rectangle_geometry.py``. " \
                              "Will be stripped of the extension and ``.cae`` will be used, e.g. ``input_file``.cae")

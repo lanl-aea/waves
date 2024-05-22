@@ -90,8 +90,7 @@ def get_parser():
     prog = f"python {script_name.name} "
     cli_description = "Read Xarray Datasets and plot stress-strain comparisons as a function of parameter set name. " \
                       " Save to ``output_file``."
-    parser = argparse.ArgumentParser(description=cli_description,
-                                     prog=prog)
+    parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     required_named = parser.add_argument_group('required named arguments')
     required_named.add_argument("-i", "--input-file", nargs="+", required=True,
                                 help="The Xarray Dataset file(s)")

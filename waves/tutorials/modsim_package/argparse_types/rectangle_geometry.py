@@ -67,8 +67,7 @@ def get_parser():
 
     prog = "abaqus cae -noGui {} --".format(basename)
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.cae Abaqus model file."
-    parser = argparse.ArgumentParser(description=cli_description,
-                                     prog=prog)
+    parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument('--output-file', type=str, default=default_output_file,
                         help="The output file for the Abaqus model. " \
                              "Will be stripped of the extension and ``.cae`` will be used, e.g. ``output_file``.cae")
