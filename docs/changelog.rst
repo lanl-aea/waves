@@ -25,6 +25,8 @@ Enhancements
 ============
 - Improve consistency between plot and graphml output for the visualize subcommand (:merge:`845`). By `Kyle Brindley`_.
 - Add options to change plot colors in visualize plot output (:issue:`667`, :merge:`847`). By `Kyle Brindley`_.
+- Try to catch CLI typos in the tutorial and modsim template Abaqus journal files (:issue:`675`, :merge:`853`). By
+  `Kyle Brindley`_.
 
 .. _0.8.6:
 
