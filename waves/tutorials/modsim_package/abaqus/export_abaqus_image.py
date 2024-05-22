@@ -131,6 +131,15 @@ def image(output_file,
 
 
 def get_parser():
+    """Return parser for CLI options
+
+    All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
+    including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
+    line options and should be avoided.
+
+    :returns: parser
+    :rtype: argparse.ArgumentParser
+    """
     file_name = inspect.getfile(lambda: None)
     base_name = os.path.basename(file_name)
     prog = "abaqus cae -noGui {} --".format(base_name)

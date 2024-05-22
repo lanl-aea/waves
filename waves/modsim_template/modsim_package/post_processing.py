@@ -71,6 +71,15 @@ def main(input_files, output_file, group_path, x_var, x_units, y_var, y_units, s
 
 
 def get_parser():
+    """Return parser for CLI options
+
+    All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
+    including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
+    line options and should be avoided.
+
+    :returns: parser
+    :rtype: argparse.ArgumentParser
+    """
     script_name = pathlib.Path(__file__)
     default_output_file = f"{script_name.stem}.pdf"
     default_group_path = "RECTANGLE/FieldOutputs/ALL_ELEMENTS"
