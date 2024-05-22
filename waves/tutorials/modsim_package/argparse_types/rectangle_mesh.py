@@ -65,6 +65,15 @@ def main(input_file, output_file, model_name, part_name, global_seed):
 
 
 def get_parser():
+    """Return parser for CLI options
+
+    All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
+    including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
+    line options and should be avoided.
+
+    :returns: parser
+    :rtype: argparse.ArgumentParser
+    """
     # The global '__file__' variable doesn't appear to be set when executing from Abaqus CAE
     filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
@@ -106,6 +115,11 @@ if __name__ == '__main__':
         args, unknown = parser.parse_known_args()
     except SystemExit as err:
         sys.exit(err.code)
+    # Check for typos in expected arguments. Assumes all arguments use ``--option`` syntax, which is unused by Abaqus.
+    possible_typos = [argument for argument in unknown if argument.startswith("--")]
+    if len(possible_typos) > 0:
+        raise RuntimeError("Found possible typos in CLI option(s) {}".format(possible_typos))
+
     sys.exit(main(
         input_file=args.input_file,
         output_file=args.output_file,
