@@ -106,8 +106,10 @@ if __name__ == '__main__':
         args, unknown = parser.parse_known_args()
     except SystemExit as err:
         sys.exit(err.code)
-    sys.exit(main(input_file=args.input_file,
-                  output_file=args.output_file,
-                  model_name=args.model_name,
-                  part_name=args.part_name,
-                  global_seed=args.global_seed))
+    sys.exit(main(
+        input_file=args.input_file,
+        output_file=args.output_file,
+        model_name=args.model_name,
+        part_name=args.part_name,
+        global_seed=args.global_seed
+    ))

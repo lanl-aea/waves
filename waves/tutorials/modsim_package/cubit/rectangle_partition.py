@@ -110,7 +110,9 @@ def get_parser():
 if __name__ == '__main__':
     parser = get_parser()
     args = parser.parse_args()
-    sys.exit(main(input_file=args.input_file,
-                  output_file=args.output_file,
-                  width=args.width,
-                  height=args.height))
+    sys.exit(main(
+        input_file=args.input_file,
+        output_file=args.output_file,
+        width=args.width,
+        height=args.height
+    ))
