@@ -58,6 +58,15 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
 
 
 def get_parser():
+    """Return parser for CLI options
+
+    All options should use the double-hyphen ``--option VALUE`` syntax to avoid clashes with the Abaqus option syntax,
+    including flag style arguments ``--flag``. Single hyphen ``-f`` flag syntax often clashes with the Abaqus command
+    line options and should be avoided.
+
+    :returns: parser
+    :rtype: argparse.ArgumentParser
+    """
     filename = inspect.getfile(lambda: None)
     basename = os.path.basename(filename)
 
@@ -115,7 +124,13 @@ def return_json_dictionary(json_file):
 
 if __name__ == "__main__":
     parser = get_parser()
-    args, unknown = parser.parse_known_args()
+    try:
+        args, unknown = parser.parse_known_args()
+    except SystemExit as err:
+        sys.exit(err.code)
+    possible_typos = [argument for argument in unknown if argument.startswith("--")]
+    if len(possible_typos) > 0:
+        raise RuntimeError("Found possible typos in CLI option(s) {}".format(possible_typos))
 
     kwargs = return_json_dictionary(args.json_file)
 
