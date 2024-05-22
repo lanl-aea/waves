@@ -127,19 +127,22 @@ def get_parser():
 
 if __name__ == "__main__":
     parser = get_parser()
-    args, unknown = parser.parse_known_args()
+    args = parser.parse_args()
     if not args.selection_dict:
         selection_dict = default_selection_dict
     else:
         with open(args.selection_dict, 'r') as input_yaml:
             selection_dict = yaml.safe_load(input_yaml)
-    sys.exit(main(input_files=args.input_file,
-                  output_file=args.output_file,
-                  group_path=args.group_path,
-                  x_var=args.x_var,
-                  x_units=args.x_units,
-                  y_var=args.y_var,
-                  y_units=args.y_units,
-                  selection_dict=selection_dict,
-                  parameter_study_file=args.parameter_study_file,
-                  csv_regression_file=args.csv_regression_file))
+
+    sys.exit(main(
+        input_files=args.input_file,
+        output_file=args.output_file,
+        group_path=args.group_path,
+        x_var=args.x_var,
+        x_units=args.x_units,
+        y_var=args.y_var,
+        y_units=args.y_units,
+        selection_dict=selection_dict,
+        parameter_study_file=args.parameter_study_file,
+        csv_regression_file=args.csv_regression_file
+    ))

@@ -127,9 +127,16 @@ if __name__ == '__main__':
         args, unknown = parser.parse_known_args()
     except SystemExit as err:
         sys.exit(err.code)
-    sys.exit(main(input_file=args.input_file,
-                  output_file=args.output_file,
-                  model_name=args.model_name,
-                  part_name=args.part_name,
-                  width=args.width,
-                  height=args.height))
+    # Check for typos in expected arguments. Assumes all arguments use ``--option`` syntax, which is unused by Abaqus.
+    possible_typos = [argument for argument in unknown if argument.startswith("--")]
+    if len(possible_typos) > 0:
+        raise RuntimeError("Found possible typos in CLI option(s) {}".format(possible_typos))
+
+    sys.exit(main(
+        input_file=args.input_file,
+        output_file=args.output_file,
+        model_name=args.model_name,
+        part_name=args.part_name,
+        width=args.width,
+        height=args.height
+    ))
