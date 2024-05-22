@@ -158,7 +158,7 @@ script = python_source_abspath / "sensitivity_study.py"
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file ${SOURCES[2:].abspath}"
-script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += " --output-file ${TARGET.file}"
 script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(env.PythonScript(
     target=["sensitivity_study.pdf", "sensitivity_study.csv", "sensitivity_study.yaml"],
