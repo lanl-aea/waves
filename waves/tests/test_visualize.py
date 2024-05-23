@@ -25,6 +25,15 @@ def test_ancestor_subgraph():
     assert list(subgraph.nodes) == ["parent"]
 
 
+def test_add_node_count():
+    graph = networkx.DiGraph()
+    graph.add_node(1, label="one", layer=1)
+    graph.add_node(2, label="two", layer=2)
+    graph.add_edge(1, 2)
+    new_graph = _visualize.add_node_count(graph)
+    assert "Node count: 2" in new_graph.nodes
+
+
 def test_graph_to_graphml():
     """Sign-of-life test for a non-empty Python string return value.
 
