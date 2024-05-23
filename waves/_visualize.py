@@ -154,9 +154,10 @@ def main(
         exclude_list=exclude_list,
         exclude_regex=exclude_regex,
         no_labels=no_labels,
-        node_count=node_count
     )
     subgraph = ancestor_subgraph(graph, targets)
+    if node_count:
+        subgraph = add_node_count(subgraph)
 
     if print_graphml:
         print(graph_to_graphml(subgraph))
@@ -177,10 +178,12 @@ def ancestor_subgraph(
     graph: networkx.DiGraph,
     nodes: typing.Iterable[str]
 ) -> networkx.DiGraph:
-    """Return a subgraph containing nodes and their ancestors
+    """Return a new directed graph containing nodes and their ancestors
 
     :param graph: original directed graph
     :param nodes: iterable of nodes name strings
+
+    :returns: subgraph
 
     :raises RuntimeError: If one or more nodes are missing from the graph
     """
@@ -195,7 +198,23 @@ def ancestor_subgraph(
     if missing:
         raise RuntimeError(f"Nodes '{' '.join(missing)}' not found in the graph")
 
-    return graph.subgraph(sources)
+    return networkx.DiGraph(graph.subgraph(sources))
+
+
+def add_node_count(graph: networkx.DiGraph, text: str = "Node count: ") -> networkx.DiGraph:
+    """Add an orphan node with the total node count to a directed graph
+
+    The graph nodes must contain a ``layer`` attribute with integer values. Orphan node is assigned to the minimum
+    layer.
+
+    :param graph: original graph
+    :param text: Leading text for node name and label
+    """
+    number_of_nodes = graph.number_of_nodes()
+    label = f"{text}{number_of_nodes}"
+    layer = min(graph.nodes[node]["layer"] for node in graph.nodes)
+    graph.add_node(label, label=label, layer=layer)
+    return graph
 
 
 def graph_to_graphml(graph: networkx.DiGraph) -> str:
@@ -214,7 +233,6 @@ def parse_output(
     exclude_list: typing.List[str] = _settings._visualize_exclude,
     exclude_regex: typing.Optional[str] = None,
     no_labels: bool = False,
-    node_count: bool = False,
 ) -> networkx.DiGraph:
     """Parse the string that has the tree output and return as a networkx directed graph
 
@@ -222,7 +240,6 @@ def parse_output(
     :param exclude_list: exclude nodes starting with strings in this list(e.g. /usr/bin)
     :param exclude_regex: exclude nodes that match this regular expression
     :param no_labels: Don't print labels on the nodes of the visualization
-    :param node_count: Add a node count orphan node
 
     :returns: networkx directed graph
 
@@ -271,10 +288,6 @@ def parse_output(
         raise RuntimeError(f"Unexpected SCons tree format. Use SCons "
                            f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
                            f"the ``visualize --print-tree`` option to generate the input file.")
-
-    if node_count:
-        label = f"Node count: {number_of_nodes}"
-        graph.add_node(label, label=label, layer=min(higher_nodes.keys()))
 
     return graph
 
