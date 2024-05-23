@@ -129,11 +129,14 @@ def main(
     :param transparent: Use a transparent background
     :param input_file: Path to text file storing output from SCons tree command
     """
+    # Source file handling
     sconstruct = pathlib.Path(sconstruct).resolve()
     if not sconstruct.is_file():
         sconstruct = sconstruct / "SConstruct"
     if not sconstruct.exists() and not input_file:
         raise RuntimeError(f"\t{sconstruct} does not exist.")
+
+    # Generate or read the SCons tree text
     tree_output = ""
     if input_file:
         input_file = pathlib.Path(input_file)
@@ -146,9 +149,15 @@ def main(
         scons_command.extend(_settings._scons_visualize_arguments)
         scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
         tree_output = scons_stdout.decode("utf-8")
+
+    # Command output
     if print_tree:
         print(tree_output, file=sys.stdout)
         return
+
+    # Create the target selected subgraph
+    # TODO: Wrap all graph handling into a parent function for unit testing
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/677
     graph = parse_output(
         tree_output.split('\n'),
         exclude_list=exclude_list,
@@ -159,6 +168,7 @@ def main(
     if node_count:
         subgraph = add_node_count(subgraph)
 
+    # Command output
     if print_graphml:
         print(graph_to_graphml(subgraph))
         return
