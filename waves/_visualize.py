@@ -156,7 +156,7 @@ def main(
         no_labels=no_labels,
         node_count=node_count
     )
-    subgraph = ancestors(graph, targets)
+    subgraph = ancestor_subgraph(graph, targets)
 
     if print_graphml:
         print(graph_to_graphml(subgraph))
@@ -173,7 +173,7 @@ def main(
     plot(figure, output_file=output_file, transparent=transparent)
 
 
-def ancestors(
+def ancestor_subgraph(
     graph: networkx.DiGraph,
     nodes: typing.Iterable[str]
 ) -> networkx.DiGraph:
@@ -182,18 +182,20 @@ def ancestors(
     :param graph: original directed graph
     :param nodes: iterable of nodes name strings
 
-    :raises RuntimeError: If the subgraph is empty (no nodes found)
+    :raises RuntimeError: If one or more nodes are missing from the graph
     """
     sources = set(nodes)
+    missing = list()
     for node in nodes:
-        sources = sources.union(networkx.ancestors(graph, node))
-    subgraph = graph.subgraph(sources)
+        try:
+            sources = sources.union(networkx.ancestors(graph, node))
+        except networkx.NetworkXError as err:
+            missing.append(node)
 
-    number_of_nodes = subgraph.number_of_nodes()
-    if number_of_nodes <= 0:
-        raise RuntimeError(f"Nodes '{' '.join(nodes)}' not found in the graph")
+    if missing:
+        raise RuntimeError(f"Nodes '{' '.join(missing)}' not found in the graph")
 
-    return subgraph
+    return graph.subgraph(sources)
 
 
 def graph_to_graphml(graph: networkx.DiGraph) -> str:

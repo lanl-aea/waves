@@ -8,6 +8,23 @@ import matplotlib.pyplot
 from waves import _visualize
 
 
+def test_ancestor_subgraph():
+    graph = networkx.DiGraph()
+    graph.add_edge("parent", "child")
+
+    # Check for a runtime error on empty subgraph/missing node
+    with pytest.raises(RuntimeError):
+        subgraph = _visualize.ancestor_subgraph(graph, ["notanode"])
+
+    # Check subgraph(s)
+    subgraph = _visualize.ancestor_subgraph(graph, ["child"])
+    assert subgraph.nodes == graph.nodes
+
+    # Check subgraph(s)
+    subgraph = _visualize.ancestor_subgraph(graph, ["parent"])
+    assert list(subgraph.nodes) == ["parent"]
+
+
 def test_graph_to_graphml():
     """Sign-of-life test for a non-empty Python string return value.
 
