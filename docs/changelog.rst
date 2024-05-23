@@ -15,6 +15,10 @@ Breaking changes
 - Change API/CLI options from ``dryrun`` to ``dry_run`` and ``--dry-run``, respectively, for greater PEP-8 and SCons
   consistency (:issue:`671`, :merge:`846`). By `Kyle Brindley`_.
 
+Bug fixes
+=========
+- Visualize subgraph by targets when provided an SCons tree file (:issue:`676`, :merge:`854`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Move remaining module constants into package settings (:issue:`673`, :merge:`848`). By `Kyle Brindley`_.
@@ -27,6 +31,8 @@ Enhancements
 - Add options to change plot colors in visualize plot output (:issue:`667`, :merge:`847`). By `Kyle Brindley`_.
 - Try to catch CLI typos in the tutorial and modsim template Abaqus journal files (:issue:`675`, :merge:`853`). By
   `Kyle Brindley`_.
+- Accept multiple targets in visualize subcommand. More closely match visualize/build CLI pass through behavior
+  (:issue:`676`, :merge:`854`). By `Kyle Brindley`_.
 
 .. _0.8.6:
 
