@@ -27,7 +27,11 @@ def get_parser() -> argparse.ArgumentParser:
     """
     parser = argparse.ArgumentParser(add_help=False)
 
-    parser.add_argument("TARGET", help=f"SCons target")
+    parser.add_argument(
+        "TARGET",
+        nargs="+",
+        help=f"SCons target(s)"
+    )
 
     parser.add_argument("-o", "--output-file", type=pathlib.Path,
         help="Path to output image file with an extension supported by matplotlib, e.g. 'visualization.svg' " \
@@ -35,8 +39,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("--sconstruct", type=pathlib.Path, default=_settings._default_sconstruct,
         help="Path to SConstruct file (default: %(default)s)")
     parser.add_argument("--input-file", type=str,
-        help="Path to text file with output from SCons tree command (default: %(default)s). SCons target must "
-             "still be specified and must be present in the input file.")
+        help="Path to text file with output from SCons tree command (default: %(default)s)")
 
     graph_options = parser.add_argument_group("graph options", "graph options affect plotting and graphml output")
     graph_options.add_argument(
@@ -86,7 +89,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def main(
-    target: str,
+    target: typing.List[str],
     sconstruct: pathlib.Path = _settings._default_sconstruct,
     output_file: typing.Optional[pathlib.Path] = None,
     height: int = _settings._visualize_default_height,
@@ -110,7 +113,7 @@ def main(
     dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
     as well.
 
-    :param target: String specifying an SCons target
+    :param target: String(s) specifying an SCons target(s)
     :param sconstruct: Path to an SConstruct file or parent directory
     :param output_file: File for saving the visualization
     :param height: Height of visualization if being saved to a file
@@ -139,7 +142,7 @@ def main(
         else:
             tree_output = input_file.read_text()
     else:
-        scons_command = [_settings._scons_command, target, f"--sconstruct={sconstruct.name}"]
+        scons_command = [_settings._scons_command] + target + [f"--sconstruct={sconstruct.name}"]
         scons_command.extend(_settings._scons_visualize_arguments)
         scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
         tree_output = scons_stdout.decode("utf-8")
