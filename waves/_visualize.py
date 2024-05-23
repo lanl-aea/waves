@@ -89,7 +89,7 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 def main(
-    target: typing.List[str],
+    targets: typing.List[str],
     sconstruct: pathlib.Path = _settings._default_sconstruct,
     output_file: typing.Optional[pathlib.Path] = None,
     height: int = _settings._visualize_default_height,
@@ -113,7 +113,7 @@ def main(
     dependencies using boxes and arrows. The visualization can be saved as an svg and graphml output can be printed
     as well.
 
-    :param target: String(s) specifying an SCons target(s)
+    :param targets: Strings specifying SCons targets
     :param sconstruct: Path to an SConstruct file or parent directory
     :param output_file: File for saving the visualization
     :param height: Height of visualization if being saved to a file
@@ -142,7 +142,7 @@ def main(
         else:
             tree_output = input_file.read_text()
     else:
-        scons_command = [_settings._scons_command] + target + [f"--sconstruct={sconstruct.name}"]
+        scons_command = [_settings._scons_command] + targets + [f"--sconstruct={sconstruct.name}"]
         scons_command.extend(_settings._scons_visualize_arguments)
         scons_stdout = subprocess.check_output(scons_command, cwd=sconstruct.parent)
         tree_output = scons_stdout.decode("utf-8")
@@ -156,12 +156,13 @@ def main(
         no_labels=no_labels,
         node_count=node_count
     )
+    subgraph = ancestors(graph, targets)
 
     if print_graphml:
-        print(graph_to_graphml(graph))
+        print(graph_to_graphml(subgraph))
         return
     figure = visualize(
-        graph,
+        subgraph,
         height=height,
         width=width,
         font_size=font_size,
@@ -170,6 +171,29 @@ def main(
         vertical=vertical,
     )
     plot(figure, output_file=output_file, transparent=transparent)
+
+
+def ancestors(
+    graph: networkx.DiGraph,
+    nodes: typing.Iterable[str]
+) -> networkx.DiGraph:
+    """Return a subgraph containing nodes and their ancestors
+
+    :param graph: original directed graph
+    :param nodes: iterable of nodes name strings
+
+    :raises RuntimeError: If the subgraph is empty (no nodes found)
+    """
+    sources = set(nodes)
+    for node in nodes:
+        sources = sources.union(networkx.ancestors(graph, node))
+    subgraph = graph.subgraph(sources)
+
+    number_of_nodes = subgraph.number_of_nodes()
+    if number_of_nodes <= 0:
+        raise RuntimeError(f"Nodes '{' '.join(nodes)}' not found in the graph")
+
+    return subgraph
 
 
 def graph_to_graphml(graph: networkx.DiGraph) -> str:
@@ -242,7 +266,7 @@ def parse_output(
     # If SCons tree or input_file is not in the expected format the nodes will be empty
     number_of_nodes = graph.number_of_nodes()
     if number_of_nodes <= 0:
-        raise RuntimeError(f"Unexpected SCons tree format or missing target. Use SCons "
+        raise RuntimeError(f"Unexpected SCons tree format. Use SCons "
                            f"options '{' '.join(_settings._scons_visualize_arguments)}' or "
                            f"the ``visualize --print-tree`` option to generate the input file.")
 
