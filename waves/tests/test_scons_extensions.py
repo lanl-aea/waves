@@ -1030,7 +1030,8 @@ fierro_input = {
                          ids=fierro_input.keys())
 def test_fierro_builder(program, subcommand, post_action, node_count, action_count, source_list, target_list):
     env = SCons.Environment.Environment()
-    expected_string = '${cd_action_prefix} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}'
+    expected_string = '${cd_action_prefix} ${mpirun} ${mprirun_options} ${program}-${subcommand} ${required} ' \
+                      '${options} ${redirect_action_postfix}'
 
     env.Append(BUILDERS={"FierroBuilder": scons_extensions.fierro_builder(program=program, subcommand=subcommand, post_action=post_action)})
     nodes = env.FierroBuilder(target=target_list, source=source_list)
@@ -1053,7 +1054,8 @@ fierro_explicit = {
                          ids=fierro_explicit.keys())
 def test_fierro_explicit(post_action, node_count, action_count, source_list, target_list):
     env = SCons.Environment.Environment()
-    expected_string = '${cd_action_prefix} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}'
+    expected_string = '${cd_action_prefix} ${mpirun} ${mprirun_options} ${program}-${subcommand} ${required} ' \
+                      '${options} ${redirect_action_postfix}'
 
     env.Append(BUILDERS={"FierroExplicit": scons_extensions.fierro_explicit(post_action=post_action)})
     nodes = env.FierroExplicit(target=target_list, source=source_list)
@@ -1076,7 +1078,8 @@ fierro_implicit = {
                          ids=fierro_implicit.keys())
 def test_fierro_implicit(post_action, node_count, action_count, source_list, target_list):
     env = SCons.Environment.Environment()
-    expected_string = '${cd_action_prefix} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}'
+    expected_string = '${cd_action_prefix} ${mpirun} ${mprirun_options} ${program}-${subcommand} ${required} ' \
+                      '${options} ${redirect_action_postfix}'
 
     env.Append(BUILDERS={"FierroImplicit": scons_extensions.fierro_implicit(post_action=post_action)})
     nodes = env.FierroImplicit(target=target_list, source=source_list)
