@@ -1875,7 +1875,7 @@ def fierro_builder(
 
     :returns: SCons Fierro builder
     :rtype: SCons.Builder.Builder
-    """
+    """  # noqa: E501
     action = [
         "${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}"
     ]
@@ -1939,7 +1939,7 @@ def fierro_explicit(
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}
+       ${cd_action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}
 
     .. code-block::
        :caption: SConstruct
@@ -1962,7 +1962,7 @@ def fierro_explicit(
 
     :returns: SCons Fierro explicit solver builder
     :rtype: SCons.Builder.Builder
-    """
+    """  # noqa: E501
     builder = fierro_builder(
         mpirun=mpirun,
         mpirun_options=mpirun_options,
@@ -2018,7 +2018,7 @@ def fierro_implicit(
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}
+       ${cd_action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}
 
     .. code-block::
        :caption: SConstruct
@@ -2041,7 +2041,7 @@ def fierro_implicit(
 
     :returns: SCons Fierro implicit solver builder
     :rtype: SCons.Builder.Builder
-    """
+    """  # noqa: E501
     builder = fierro_builder(
         mpirun=mpirun,
         mpirun_options=mpirun_options,
