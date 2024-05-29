@@ -69,7 +69,7 @@ variant_dir_base = pathlib.Path(env["variant_dir_base"])
 
 # Add Fierro builder
 env.Append(BUILDERS={
-    "FierroExplicit": waves.scons_extensions.fierro_explicit(program="mpirun -n 1 fierro")
+    "FierroExplicit": waves.scons_extensions.fierro_explicit()
 })
 
 # Add simulation targets
