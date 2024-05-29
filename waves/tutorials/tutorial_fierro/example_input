@@ -28,7 +28,8 @@ workflow = []
 # explicit clean request.
 workflow.extend(env.FierroExplicit(
     target=["example_input.yaml.stdout"],
-    source=["example_input.yaml"]
+    source=["example_input.yaml"],
+    mpi_processes=env["mpi_processes"]
 ))
 env.Clean(workflow, [Dir("vtk")])
 

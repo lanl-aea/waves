@@ -33,13 +33,24 @@ AddOption(
     action="store_true",
     help="Print task *.stdout target file(s) on build failures. (default: '%default')"
 )
+AddOption(
+    "--mpi-processes",
+    dest="mpi_processes",
+    default=1,
+    nargs=1,
+    type="int",
+    action="store",
+    metavar="N",
+    help="Run the Fierro Solve task using N MPI processes. (default: '%default')"
+)
 
 # Inherit user's full environment and set project options
 env = Environment(
     ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
     unconditional_build=GetOption("unconditional_build"),
-    print_build_failures=GetOption("print_build_failures")
+    print_build_failures=GetOption("print_build_failures"),
+    mpi_processes=GetOption("mpi_processes")
 )
 
 # Conditionally print failed task *.stdout files
@@ -52,9 +63,6 @@ env["fierro"] = waves.scons_extensions.add_program(["fierro-parallel-explicit"],
 project_configuration = pathlib.Path(inspect.getfile(lambda: None))
 project_dir = project_configuration.parent
 project_name = project_dir.name
-author_list = [
-    "Kyle Brindley",
-]
 project_variables = {
     "project_configuration": project_configuration,
     "project_dir": project_dir,
@@ -66,10 +74,9 @@ for key, value in project_variables.items():
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env["variant_dir_base"])
 
-
 # Add Fierro builder
 env.Append(BUILDERS={
-    "FierroExplicit": waves.scons_extensions.fierro_explicit()
+    "FierroExplicit": waves.scons_extensions.fierro_explicit(mpirun_options="-np $(${mpi_processes}$)")
 })
 
 # Add simulation targets
