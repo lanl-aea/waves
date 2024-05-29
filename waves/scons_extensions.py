@@ -1800,7 +1800,7 @@ def sbatch_quinoa_solver(*args, **kwargs):
 
 def fierro_builder(
     mpirun: str = "mpirun",
-    mpirun_options: str = "-n 1",
+    mpirun_options: str = "-np 1",
     program: str = "fierro",
     subcommand: str = "",
     required: str = "",
@@ -1898,7 +1898,7 @@ def fierro_builder(
 
 def fierro_explicit(
     mpirun: str = "mpirun",
-    mpirun_options: str = "-n 1",
+    mpirun_options: str = "-np 1",
     program: str = "fierro",
     subcommand: str = "parallel-explicit",
     required: str = "${SOURCE.abspath}",
@@ -1977,7 +1977,7 @@ def fierro_explicit(
 
 def fierro_implicit(
     mpirun: str = "mpirun",
-    mpirun_options: str = "-n 1",
+    mpirun_options: str = "-np 1",
     program: str = "fierro",
     subcommand: str = "parallel-implicit",
     required: str = "${SOURCE.abspath}",
