@@ -1799,6 +1799,8 @@ def sbatch_quinoa_solver(*args, **kwargs):
 
 
 def fierro_builder(
+    mpirun: str = "mpirun",
+    mpirun_options: str = "-n 1",
     program: str = "fierro",
     subcommand: str = "",
     required: str = "",
@@ -1831,6 +1833,8 @@ def fierro_builder(
 
     *Builder/Task keyword arguments*
 
+    * ``mpirun``: The MPI run command line executable absolute or relative path
+    * ``mpirun_options``: A space delimited string of ``mpirun`` arguments
     * ``program``: The Fierro command line executable absolute or relative path
     * ``subcommand``: A Fierro subcommand
     * ``required``: A space delimited string of subcommand required arguments
@@ -1841,7 +1845,7 @@ def fierro_builder(
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${program} ${subcommand} ${required} ${options} ${redirect_action_postfix}
+       ${cd_action_prefix} ${mpirun} ${mprirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}
 
     .. code-block::
        :caption: SConstruct
@@ -1861,6 +1865,8 @@ def fierro_builder(
            source=["source.yaml"],
        )
 
+    :param str mpirun: The MPI run command line executable absolute or relative path
+    :param str mpirun_options: A space delimited string of ``mpirun`` arguments
     :param str program: The Fierro command line executable absolute or relative path
     :param str subcommand: A Fierro subcommand
     :param str required: A space delimited string of subcommand required arguments
@@ -1871,7 +1877,7 @@ def fierro_builder(
     :rtype: SCons.Builder.Builder
     """
     action = [
-        "${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}"
+        "${mpirun} ${mprirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}"
     ]
     action = construct_action_list(action, prefix="${cd_action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
@@ -1889,6 +1895,8 @@ def fierro_builder(
 
 
 def fierro_explicit(
+    mpirun: str = "mpirun",
+    mpirun_options: str = "-n 1",
     program: str = "fierro",
     subcommand: str = "parallel-explicit",
     required: str = "${SOURCE.abspath}",
@@ -1917,6 +1925,8 @@ def fierro_explicit(
 
     *Builder/Task keyword arguments*
 
+    * ``mpirun``: The MPI run command line executable absolute or relative path
+    * ``mpirun_options``: A space delimited string of ``mpirun`` arguments
     * ``program``: The Fierro command line executable absolute or relative path
     * ``subcommand``: A Fierro subcommand
     * ``required``: A space delimited string of subcommand required arguments
@@ -1941,6 +1951,8 @@ def fierro_explicit(
            source=["source.yaml"],
        )
 
+    :param str mpirun: The MPI run command line executable absolute or relative path
+    :param str mpirun_options: A space delimited string of ``mpirun`` arguments
     :param str program: The Fierro command line executable absolute or relative path
     :param str subcommand: A Fierro subcommand
     :param str required: A space delimited string of subcommand required arguments
@@ -1950,6 +1962,8 @@ def fierro_explicit(
     :rtype: SCons.Builder.Builder
     """
     builder = fierro_builder(
+        mpirun=mpirun,
+        mpirun_options=mpirun_options,
         program=program,
         subcommand=subcommand,
         required=required,
@@ -1960,6 +1974,8 @@ def fierro_explicit(
 
 
 def fierro_implicit(
+    mpirun: str = "mpirun",
+    mpirun_options: str = "-n 1",
     program: str = "fierro",
     subcommand: str = "parallel-implicit",
     required: str = "${SOURCE.abspath}",
@@ -1988,6 +2004,8 @@ def fierro_implicit(
 
     *Builder/Task keyword arguments*
 
+    * ``mpirun``: The MPI run command line executable absolute or relative path
+    * ``mpirun_options``: A space delimited string of ``mpirun`` arguments
     * ``program``: The Fierro command line executable absolute or relative path
     * ``subcommand``: A Fierro subcommand
     * ``required``: A space delimited string of subcommand required arguments
@@ -2012,6 +2030,8 @@ def fierro_implicit(
            source=["source.yaml"],
        )
 
+    :param str mpirun: The MPI run command line executable absolute or relative path
+    :param str mpirun_options: A space delimited string of ``mpirun`` arguments
     :param str program: The Fierro command line executable absolute or relative path
     :param str subcommand: A Fierro subcommand
     :param str required: A space delimited string of subcommand required arguments
@@ -2021,6 +2041,8 @@ def fierro_implicit(
     :rtype: SCons.Builder.Builder
     """
     builder = fierro_builder(
+        mpirun=mpirun,
+        mpirun_options=mpirun_options,
         program=program,
         subcommand=subcommand,
         required=required,
