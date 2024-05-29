@@ -6,13 +6,6 @@ Tutorial: Fierro
 
 .. include:: wip_warning.txt
 
-.. warning::
-
-   Most WAVES tutorials are used as system tests in the regression test suite to ensure that the tutorial files are
-   up-to-date and functional. The Fierro tutorial is not part of the regression suite, but the Fierro builder unit tests
-   are part of the verification suite. If you run into problems running this tutorial, please contact the WAVES
-   development team.
-
 **********
 References
 **********

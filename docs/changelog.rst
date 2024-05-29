@@ -24,6 +24,7 @@ Internal Changes
 - Move remaining module constants into package settings (:issue:`673`, :merge:`848`). By `Kyle Brindley`_.
 - Use full namespace in submit CAE tutorial journal file. Add a feature to write an input file and exit instead of
   submitting the job (:merge:`852`). By `Kyle Brindley`_.
+- Re-enable the Fierro tutorial system tests (:issue:`638`, :merge:`856`). By `Kyle Brindley`_.
 
 Enhancements
 ============
@@ -33,6 +34,7 @@ Enhancements
   `Kyle Brindley`_.
 - Accept multiple targets in visualize subcommand. More closely match visualize/build CLI pass through behavior
   (:issue:`676`, :merge:`854`). By `Kyle Brindley`_.
+- Add MPI run executable and options to the Fierro builder (:issue:`638`, :merge:`856`). By `Kyle Brindley`_.
 
 .. _0.8.6:
 
