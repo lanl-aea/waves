@@ -36,6 +36,7 @@ env.Clean(workflow, [Dir("vtk")])
 # Collector alias based on build directory name
 env.Alias(workflow_name, workflow)
 
-if not env['unconditional_build'] and not env['fierro']:
-    print(f"Program 'fierro' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
+if not env['unconditional_build'] and (not env['fierro'] or not env['mpirun']):
+    print(f"Program 'fierro' or 'mpirun' was not found in construction environment. " \
+          f"Ignoring '{workflow_name}' target(s)")
     Ignore([".", workflow_name], workflow)
