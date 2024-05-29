@@ -1845,7 +1845,7 @@ def fierro_builder(
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${mpirun} ${mprirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}
+       ${cd_action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}
 
     .. code-block::
        :caption: SConstruct
@@ -1877,7 +1877,7 @@ def fierro_builder(
     :rtype: SCons.Builder.Builder
     """
     action = [
-        "${mpirun} ${mprirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}"
+        "${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}"
     ]
     action = construct_action_list(action, prefix="${cd_action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
@@ -1886,6 +1886,8 @@ def fierro_builder(
         emitter=_first_target_emitter,
         cd_action_prefix=_settings._cd_action_prefix,
         redirect_action_postfix=_settings._redirect_action_postfix,
+        mpirun=mpirun,
+        mpirun_options=mpirun_options,
         program=program,
         subcommand=subcommand,
         required=required,
@@ -1945,7 +1947,7 @@ def fierro_explicit(
        import waves
        env = Environment()
        env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
-       env.Append(BUILDERS={"FierroExplicit": waves.scons_extensions.fierro_builder()})
+       env.Append(BUILDERS={"FierroExplicit": waves.scons_extensions.fierro_explicit()})
        env.FierroExplicit(
            target=["target.stdout"],
            source=["source.yaml"],
@@ -2024,7 +2026,7 @@ def fierro_implicit(
        import waves
        env = Environment()
        env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
-       env.Append(BUILDERS={"FierroImplicit": waves.scons_extensions.fierro_builder()})
+       env.Append(BUILDERS={"FierroImplicit": waves.scons_extensions.fierro_implicit()})
        env.FierroImplicit(
            target=["target.stdout"],
            source=["source.yaml"],
