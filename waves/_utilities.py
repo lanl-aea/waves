@@ -12,8 +12,15 @@ import typing
 import pathlib
 import platform
 
+from waves import _settings
+
 
 _exclude_from_namespace = set(globals().keys())
+
+
+class _AtSignTemplate(string.Template):
+    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
+    delimiter = _settings._template_delimiter
 
 
 def _quote_spaces_in_path(path: typing.Union[str, pathlib.Path]) -> pathlib.Path:

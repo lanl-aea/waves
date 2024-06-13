@@ -19,6 +19,7 @@ import scipy.stats
 import SALib
 
 from waves import _settings
+from waves import _utilities
 from waves._settings import _hash_coordinate_key
 from waves._settings import _parameter_coordinate_key
 from waves._settings import _set_coordinate_key
@@ -28,11 +29,6 @@ from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidat
 
 
 _exclude_from_namespace = set(globals().keys())
-
-
-class _AtSignTemplate(string.Template):
-    """Use the CMake '@' delimiter in a Python 'string.Template' to avoid clashing with bash variable syntax"""
-    delimiter = _settings._template_delimiter
 
 
 class _ParameterGenerator(ABC):
@@ -77,7 +73,7 @@ class _ParameterGenerator(ABC):
         self.output_file_template = output_file_template
         self.output_file = output_file
         self.output_file_type = output_file_type
-        self.set_name_template = _AtSignTemplate(set_name_template)
+        self.set_name_template = _utilities._AtSignTemplate(set_name_template)
         self.previous_parameter_study = previous_parameter_study
         self.overwrite = overwrite
         self.dry_run = dry_run
@@ -110,7 +106,7 @@ class _ParameterGenerator(ABC):
             # Append the set number placeholder if missing
             if f'{_settings._template_placeholder}' not in self.output_file_template:
                 self.output_file_template = f"{self.output_file_template}{_settings._template_placeholder}"
-            self.output_file_template = _AtSignTemplate(self.output_file_template)
+            self.output_file_template = _utilities._AtSignTemplate(self.output_file_template)
             self.set_name_template = self.output_file_template
 
         # Infer output directory from output file template if provided. Set to PWD otherwise.
