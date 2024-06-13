@@ -8,6 +8,7 @@ message and non-zero exit codes.
 """
 import os
 import shutil
+import string
 import typing
 import pathlib
 import platform

@@ -5,7 +5,6 @@ to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 from abc import ABC, abstractmethod
 import pathlib
-import string
 import sys
 import itertools
 import copy
