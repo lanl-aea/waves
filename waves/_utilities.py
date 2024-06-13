@@ -33,7 +33,7 @@ def set_name_substitution(
     """Replace ``@identifier`` with replacement text in a list of strings
 
     :param source: List of strings
-    :param replacement: substitution string for the identifier 
+    :param replacement: substitution string for the identifier
     :param identifier: template identifier to replace, e.g. ``@identifier`` becomes ``replacement``
     :param postfix to insert after the replacement text
     """
