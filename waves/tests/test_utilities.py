@@ -8,35 +8,35 @@ from waves import _utilities
 
 
 set_name_substitution = {
-    "default pattern": (
+    "default identifier": (
         ["@{set_name}lions.txt", "@{set_name}tigers.txt", "bears.txt"],
         "set0",
         "set_name",
         "/",
         ["set0/lions.txt", "set0/tigers.txt", "bears.txt"]
     ),
-    "different pattern": (
-        ["@{pattern}lions.txt", "@{pattern}tigers.txt", "bears.txt"],
+    "different identifier": (
+        ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "set1",
-        "pattern",
+        "identifier",
         "/",
         ["set1/lions.txt", "set1/tigers.txt", "bears.txt"]
     ),
-    "remove pattern, no postfix": (
-        ["@{pattern}lions.txt", "@{pattern}tigers.txt", "bears.txt"],
+    "remove identifier, no postfix": (
+        ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "",
-        "pattern",
+        "identifier",
         "",
         ["lions.txt", "tigers.txt", "bears.txt"]
     ),
 }
 
 
-@pytest.mark.parametrize("sources, replacement, pattern, postfix, expected",
+@pytest.mark.parametrize("sources, replacement, identifier, postfix, expected",
                          set_name_substitution.values(),
                          ids=set_name_substitution.keys())
-def test_set_name_substitution(sources, replacement, pattern, postfix, expected):
-    replaced_sources = _utilities.set_name_substitution(sources, replacement, pattern=pattern, postfix=postfix)
+def test_set_name_substitution(sources, replacement, identifier, postfix, expected):
+    replaced_sources = _utilities.set_name_substitution(sources, replacement, identifier=identifier, postfix=postfix)
     assert replaced_sources == expected
 
 

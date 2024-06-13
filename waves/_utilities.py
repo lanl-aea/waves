@@ -27,17 +27,17 @@ class _AtSignTemplate(string.Template):
 def set_name_substitution(
     source: typing.List[str],
     replacement: str,
-    pattern: str = "set_name",
+    identifier: str = "set_name",
     postfix: str = "/"
 ) -> typing.List[str]:
-    """Replace ``@pattern`` with replacement text in a list of strings
+    """Replace ``@identifier`` with replacement text in a list of strings
 
     :param source: List of strings
-    :param replacement: substitution string for the pattern
-    :param pattern: template pattern to replace, e.g. ``@pattern`` becomes ``replacement``
+    :param replacement: substitution string for the identifier 
+    :param identifier: template identifier to replace, e.g. ``@identifier`` becomes ``replacement``
     :param postfix to insert after the replacement text
     """
-    mapping = {pattern: f"{replacement}{postfix}"}
+    mapping = {identifier: f"{replacement}{postfix}"}
     return [_AtSignTemplate(node).safe_substitute(mapping) for node in source]
 
 
