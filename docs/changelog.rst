@@ -8,6 +8,12 @@ Changelog
 0.9.1 (unreleased)
 ******************
 
+New Features
+============
+- Draft experimental parameter study pseudo-builder as one option for task re-use without task duplication. Intended to
+  reduce the nominal/mesh convergence examples to a single workflow file (:issue:`680`, :merge:`858`). By `Kyle
+  Brindley`_.
+
 ******************
 0.9.0 (2024-05-29)
 ******************
