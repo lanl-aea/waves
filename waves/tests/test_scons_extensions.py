@@ -1121,6 +1121,12 @@ python_script_input = {
     "pass through: no study": (
         2, 1, ["file1.out"], None
     ),
+    "pass through: target string": (
+        2, 1, "file1.out", None
+    ),
+    "pass through: target pathlib": (
+        2, 1, pathlib.Path("file1.out"), None
+    ),
     "pass through: dictionary": (
         2, 1, ["file2.out"], {"parameter_one": 1}
     ),
