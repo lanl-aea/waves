@@ -1112,3 +1112,30 @@ def test_ansys_apdl(program, post_action, node_count, action_count, source_list,
                         post_action_prefix="${cd_action_prefix}")
     for node in nodes:
         assert node.env['program'] == program
+
+
+# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
+# target per set.
+python_script_input = {
+    "pass through": (2, 1, ["python_script1.out"], None),
+}
+
+
+@pytest.mark.parametrize("node_count, action_count, target_list, study",
+                         python_script_input.values(),
+                         ids=python_script_input.keys())
+def test_parameter_study(node_count, action_count, target_list, study):
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script()})
+    env.AddMethod(scons_extensions.parameter_study, "ParameterStudy")
+
+    nodes = env.ParameterStudy(
+        env.PythonScript,
+        target=target_list,
+        source=["python_script.py"],
+        script_options="",
+        study=study
+    )
+    expected_string = 'cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} ' \
+                      f'{_redirect_action_postfix}'
+    check_action_string(nodes, [], node_count, action_count, expected_string)

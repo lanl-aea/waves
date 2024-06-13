@@ -2249,9 +2249,9 @@ def parameter_study(
         :param pattern: template pattern to replace, e.g. ``@pattern`` becomes ``replacement``
         :param postfix to insert after the replacement text
         """
-        template = _utilities._AtSignTemplate(node)
+        template = _utilities._AtSignTemplate
         mapping = {pattern: f"{replacement}{postfix}"}
-        return [template.safe_substitute(mapping) for node in source]
+        return [template(node).safe_substitute(mapping) for node in source]
 
     # SCons accepts strings or a list, so we should too
     # TODO: Look for a better solution and update all WAVES "isnotiterable and isnot string-like" checks
@@ -2266,14 +2266,14 @@ def parameter_study(
             subdirectory = pathlib.Path(set_name)
             set_sources = set_name_substitution(source, set_name)
             set_targets = [subdirectory / node for node in target]
-            return_targets.append(builder(target=set_targets, source=set_sources, *args, **kwargs, **parameters))
+            return_targets.extend(builder(target=set_targets, source=set_sources, *args, **kwargs, **parameters))
     # Is it better to accept a dictionary of nominal variables or to add a "Nominal" parameter generator?
     elif isinstance(study, dict):
         set_sources = set_name_substitution(source, "")
-        return_targets.append(builder(target=target, source=set_sources, *args, **kwargs, **study))
+        return_targets.extend(builder(target=target, source=set_sources, *args, **kwargs, **study))
     else:
         set_sources = set_name_substitution(source, "")
-        return_targets.append(builder(target=target, source=set_sources, *args, **kwargs))
+        return_targets.extend(builder(target=target, source=set_sources, *args, **kwargs))
     return return_targets
 
 
