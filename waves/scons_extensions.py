@@ -2,6 +2,7 @@ import re
 import sys
 import yaml
 import atexit
+import string
 import typing
 import pathlib
 import functools
@@ -2183,7 +2184,7 @@ def parameter_study(
            "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
            "AbaqusSolver": waves.scons_extensions.abaqus_solver()
        })
-       env.AddMethod(parameter_study_pseudo_builder, "ParameterStudyPseudoBuilder")
+       env.AddMethod(waves.scons_extensions.parameter_study, "ParameterStudy")
 
        parameter_study_file = pathlib.Path("parameter_study.h5")
        previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
@@ -2205,7 +2206,7 @@ def parameter_study(
 
        Import("env", "study")
 
-       env.ParameterStudyPseudoBuilder(
+       env.ParameterStudy(
            env.AbaqusJournal,
            target=["job.inp"],
            source=["journal.py"],
@@ -2213,7 +2214,7 @@ def parameter_study(
            study=study
        )
 
-       env.ParameterStudyPseudoBuilder(
+       env.ParameterStudy(
            env.AbaqusSolver,
            target=["job.odb"],
            source=["@{set_name}job.inp"],
