@@ -2134,5 +2134,133 @@ def ansys_apdl(
     return builder
 
 
+def parameter_study(
+    env,
+    builder: SCons.Builder.Builder,
+    target: list,
+    source: list,
+    *args,
+    study: typing.Optional[typing.Union[waves.parameter_generators._ParameterGenerator, dict]] = None,
+    **kwargs
+) -> SCons.Node.NodeList:
+    """Parameter study pseudo-builder.
+
+    .. warning::
+
+       Experimental solution to improved parameter study task re-use. The function name and interface are subject to
+       change without notice until this warning is removed.
+
+    `SCons Pseudo-Builder`_ aids in task construction for WAVES parameter studies with any SCons builder. Works with
+    WAVES parameter generators module or parameter dictionaries to reduce parameter study task definition boilerplate and
+    make nominal workflow definitions directly re-usable in parameter studies.
+
+    * If the study is a WAVES parameter generator object, loop over the parameter sets and prepend the set names to the
+      task target list.
+    * If the study is a ``dict()``, unpack the dictionary as keyword arguments to the builder.
+    * In all other cases, the task is passed through unchanged to the builder and the study variable is ignored.
+
+    When chaining parameter study tasks, sources belonging to the parameter study can be prefixed by the template
+    ``@{set_name}source.ext``. If the task uses a parameter study, the set name directory prefix will be added, e.g.
+    ``parameter_set0/source.ext``. If the task is not part of a parameter study, the set name will be removed from the
+    source, e.g. ``source.ext``. The ``@`` symbol is used as the delimiter to reduce with clashes in shell variable
+    syntax and SCons substitution syntax.
+
+    When pseudo-builders are added to the environment with the `SCons AddMethod`_ function they can be accessed with the
+    same syntax as a normal builder. When called from the construction environment, the ``env`` argument is omitted.
+
+    This pseudo-builder is most powerful when used in an SConscript call to a separate workflow configuration file. The
+    SConscript file can then be called with a nominal parameter dictionary or with a parameter generator object. See the
+    example below.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import pathlib
+       import waves
+
+       env = Environment()
+       env.Append(BUILDERS={
+           "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
+           "AbaqusSolver": waves.scons_extensions.abaqus_solver()
+       })
+       env.AddMethod(parameter_study_pseudo_builder, "ParameterStudyPseudoBuilder")
+
+       parameter_study_file = pathlib.Path("parameter_study.h5")
+       previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
+       parameter_generator = waves.parameter_generators.CartesianProduct(
+           {"parameter_one": [1, 2, 3]},
+           output_file="parameter_study.h5",
+           previous_parameter_study=previous_parameter_study
+       )
+
+       studies = (
+           ("SConscript", parameter_generator),
+           ("SConscript", {"parameter_one": 1})
+       )
+       for workflow, study in studies:
+           SConscript(workflow, exports=["env", "study"])
+
+    .. code-block::
+       :caption: SConscript
+
+       Import("env", "study")
+
+       env.ParameterStudyPseudoBuilder(
+           env.AbaqusJournal,
+           target=["job.inp"],
+           source=["journal.py"],
+           job="job",
+           study=study
+       )
+
+       env.ParameterStudyPseudoBuilder(
+           env.AbaqusSolver,
+           target=["job.odb"],
+           source=["@{set_name}job.inp"],
+           job="job",
+           study=study
+       )
+
+    :param SCons.Script.SConscript.SConsEnvironment env: An SCons construction environment to use when defining the
+        targets.
+    :param builder: The builder to parameterize
+    :param target: The list of task target files. Will be prepended with a set name directory if a parameter generator
+        ``study`` is provided, e.g. ``parameter_set0/target.ext``.
+    :param args: All other positional arguments are passed through to the builder directly
+    :param study: Parameter generator or dictionary parameter set to provide to the builder. Parameter generators are
+        unpacked with set name directory prefixes. Dictionaries are unpacked as keyword arguments.
+    :param kwargs: all other keyword arguments are passed through to the builder directly
+
+    :return: SCons NodeList of target nodes
+    """  # noqa: E501
+    class _AtSignTemplate(string.Template):
+        delimiter = "@"
+
+    set_pattern = "set_name"
+
+    # SCons accepts strings or a list, so we should too
+    # TODO: Look for a better solution and update all WAVES "isnotiterable and isnot string-like" checks
+    if isinstance(target, (str, pathlib.Path)):
+        target = [target]
+    if isinstance(source, (str, pathlib.Path)):
+        source = [source]
+
+    return_targets = list()
+    if isinstance(study, waves.parameter_generators._ParameterGenerator):
+        for set_name, parameters in study.parameter_study_to_dict().items():
+            subdirectory = pathlib.Path(set_name)
+            set_sources = [_AtSignTemplate(node).safe_substitute({set_pattern: f"{set_name}/"}) for node in source]
+            set_targets = [subdirectory / node for node in target]
+            return_targets.append(builder(target=set_targets, source=set_sources, *args, **kwargs, **parameters))
+    # Is it better to accept a dictionary of nominal variables or to add a "Nominal" parameter generator?
+    elif isinstance(study, dict):
+        set_sources = [_AtSignTemplate(node).safe_substitute({set_pattern: ""}) for node in source]
+        return_targets.append(builder(target=target, source=set_sources, *args, **kwargs, **study))
+    else:
+        set_sources = [_AtSignTemplate(node).safe_substitute({set_pattern: ""}) for node in source]
+        return_targets.append(builder(target=target, source=set_sources, *args, **kwargs))
+    return return_targets
+
+
 _module_objects = set(globals().keys()) - _exclude_from_namespace
 __all__ = [name for name in _module_objects if not name.startswith("_")]
