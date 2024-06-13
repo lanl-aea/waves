@@ -35,7 +35,7 @@ def set_name_substitution(
     :param source: List of strings
     :param replacement: substitution string for the identifier
     :param identifier: template identifier to replace, e.g. ``@identifier`` becomes ``replacement``
-    :param postfix to insert after the replacement text
+    :param postfix: to insert after the replacement text
     """
     mapping = {identifier: f"{replacement}{postfix}"}
     return [_AtSignTemplate(node).safe_substitute(mapping) for node in source]
