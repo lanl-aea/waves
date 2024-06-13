@@ -2140,7 +2140,7 @@ def parameter_study(
     target: list,
     source: list,
     *args,
-    study: typing.Optional[typing.Union[waves.parameter_generators._ParameterGenerator, dict]] = None,
+    study=None,
     **kwargs
 ) -> SCons.Node.NodeList:
     """Parameter study pseudo-builder.
@@ -2233,6 +2233,9 @@ def parameter_study(
 
     :return: SCons NodeList of target nodes
     """  # noqa: E501
+    # Avoid importing parameter generator module (heavy) unless necessary
+    from waves import parameter_generators
+
     def set_name_substitution(
         source: typing.List[str],
         replacement: str,
@@ -2258,7 +2261,7 @@ def parameter_study(
         source = [source]
 
     return_targets = list()
-    if isinstance(study, waves.parameter_generators._ParameterGenerator):
+    if isinstance(study, parameter_generators._ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             subdirectory = pathlib.Path(set_name)
             set_sources = set_name_substitution(source, set_name)
