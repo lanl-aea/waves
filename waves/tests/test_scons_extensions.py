@@ -11,6 +11,7 @@ import pytest
 import SCons.Node.FS
 
 from waves import scons_extensions
+from waves import parameter_generators
 from waves._settings import _cd_action_prefix
 from waves._settings import _redirect_action_postfix
 from waves._settings import _redirect_environment_postfix
@@ -1117,7 +1118,15 @@ def test_ansys_apdl(program, post_action, node_count, action_count, source_list,
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 python_script_input = {
-    "pass through": (2, 1, ["python_script1.out"], None),
+    "pass through: no study": (
+        2, 1, ["file1.out"], None
+    ),
+    "pass through: dictionary": (
+        2, 1, ["file2.out"], {"parameter_one": 1}
+    ),
+    "study: two sets": (
+        4, 1, ["file3.out"], parameter_generators.CartesianProduct({"one": [1, 2]})
+    )
 }
 
 
