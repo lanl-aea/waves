@@ -14,6 +14,11 @@ New Features
   reduce the nominal/mesh convergence examples to a single workflow file (:issue:`680`, :merge:`858`). By `Kyle
   Brindley`_.
 
+Internal Changes
+================
+- Add meshio to CI environment for mesh conversion workflows, e.g. a future Cubit+Fierro tutorial (:issue:`681`,
+  :merge:`859`). By `Kyle Brindley`_.
+
 ******************
 0.9.0 (2024-05-29)
 ******************
