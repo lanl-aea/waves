@@ -35,7 +35,7 @@ env.Command(
     target=[f"{model}_mesh.vtk"],
     source=[f"{model}_mesh.g"],
     action=[
-        "meshio convert --input-format=exodus ${SOURCE.abspath} ${TARGET.abspath}"
+        "meshio convert --ascii --input-format=exodus ${SOURCE.abspath} ${TARGET.abspath}"
     ]
 )
 
