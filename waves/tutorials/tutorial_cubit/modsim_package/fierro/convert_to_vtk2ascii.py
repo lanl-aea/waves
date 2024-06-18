@@ -32,8 +32,8 @@ def main():
     parser = get_parser()
     args = parser.parse_args()
 
-    with open(args.infile, 'r') as input_file:
-        mesh = meshio.read(input_file, file_format=args.input_format)
+    infile = pathlib.Path(args.infile).resolve()
+    mesh = meshio.read(infile, file_format=args.input_format)
 
     # Ensure input mesh structure meets Fierro criteria
     if len(mesh.cells) != 1:
@@ -51,7 +51,8 @@ def main():
     ncells = cells.shape[0]
     pts_per_cell = cells.shape[1]
 
-    with open(args.outfile, 'w') as mesh_out:
+    outfile = pathlib.Path(args.outfile).resolve()
+    with open(outfile, 'w') as mesh_out:
 
         mesh_out.write('# vtk DataFile Version 2.0\n')
         mesh_out.write('meshio converted to Fierro VTK\n')
