@@ -58,15 +58,15 @@ def main():
         mesh_out.write('meshio converted to Fierro VTK\n')
         mesh_out.write('ASCII\n')
         mesh_out.write('DATASET UNSTRUCTURED_GRID\n')
-        #write points
+        # Write points
         mesh_out.write('POINTS '+str(npoints)+' double\n')
         for n in range(npoints):
-            #print(points[n,:])
             for i in range(ndim):
                 mesh_out.write(str(points[n,i])+' ')
             mesh_out.write('\n')
         mesh_out.write('\n')
-        #write cells
+
+        # Write cells
         mesh_out.write('CELLS '+str(ncells)+' '+str(ncells*pts_per_cell+ncells)+'\n')
         for n in range(ncells):
             mesh_out.write(str(pts_per_cell)+' ')
