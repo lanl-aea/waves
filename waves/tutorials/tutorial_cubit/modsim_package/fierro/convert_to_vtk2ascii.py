@@ -1,3 +1,4 @@
+import pathlib
 import argparse
 
 import meshio
@@ -29,6 +30,7 @@ def get_parser():
 
 def main():
     parser = get_parser()
+    args = parser.parse_args()
 
     with open(args.infile, 'r') as input_file:
         mesh = meshio.read(input_file, file_format=args.input_format)
@@ -80,5 +82,5 @@ def main():
                 mesh_out.write('12\n')
 
 
-if __name__ = "__main__":
+if __name__ == "__main__":
     main()

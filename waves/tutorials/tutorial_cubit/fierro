@@ -31,12 +31,10 @@ solver = "sierra"
 SConscript("cubit", exports=["env", "element_type", "solver"], duplicate=False)
 
 # Convert mesh file type for Fierro
-env.Command(
+env.PythonScript(
     target=[f"{model}_mesh.vtk"],
-    source=[f"{model}_mesh.g"],
-    action=[
-        "meshio convert --ascii --input-format=exodus ${SOURCE.abspath} ${TARGET.abspath}"
-    ]
+    source=[fierro_source_abspath / "convert_to_vtk2ascii.py", f"{model}_mesh.g"],
+    script_options="--input-format=exodus $SOURCE.abspath $TARGET.abspath"
 )
 
 # SolverPrep
