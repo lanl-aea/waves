@@ -59,22 +59,22 @@ def main():
         mesh_out.write('ASCII\n')
         mesh_out.write('DATASET UNSTRUCTURED_GRID\n')
         # Write points
-        mesh_out.write('POINTS '+str(npoints)+' double\n')
+        mesh_out.write(f"POINTS {npoints} double\n")
         for n in range(npoints):
             for i in range(ndim):
-                mesh_out.write(str(points[n,i])+' ')
+                mesh_out.write(f"{points[n, i]} ")
             mesh_out.write('\n')
         mesh_out.write('\n')
 
         # Write cells
-        mesh_out.write('CELLS '+str(ncells)+' '+str(ncells*pts_per_cell+ncells)+'\n')
+        mesh_out.write(f'CELLS {ncells} {ncells * pts_per_cell + ncells}\n')
         for n in range(ncells):
-            mesh_out.write(str(pts_per_cell)+' ')
+            mesh_out.write(f"{pts_per_cell} ")
             for i in range(pts_per_cell):
-                mesh_out.write(str(cells[n,i])+' ')
+                mesh_out.write(f"{cells[n, i]} ")
             mesh_out.write('\n')
         mesh_out.write('\n')
-        mesh_out.write('CELL_TYPES '+str(ncells)+'\n')
+        mesh_out.write(f'CELL_TYPES {ncells}\n')
         if ndim == 2:
             for n in range(ncells):
                 mesh_out.write('9\n')
