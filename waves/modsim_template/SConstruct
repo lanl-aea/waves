@@ -81,7 +81,7 @@ author_list = [
 author_latex = r" \and ".join(author_list)
 latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
-modsim_package_dir = "modsim_package"
+modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
 project_variables = {
     "project_configuration": project_configuration,
