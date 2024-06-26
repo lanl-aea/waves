@@ -104,8 +104,10 @@ class TestLatinHypercube:
         TestMerge1, TestMerge2 = merge_samplers(LatinHypercube, first_schema, second_schema, kwargs)
         samples = TestMerge2._samples.astype(float)
         quantiles = TestMerge2._quantiles.astype(float)
-        assert numpy.allclose(samples, expected_samples)
-        assert numpy.allclose(quantiles, expected_quantiles)
+        # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+        # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
+        assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
+        assert numpy.allclose(numpy.sort(quantiles, axis=0), numpy.sort(expected_quantiles, axis=0))
         # Check for consistent hash-parameter set relationships
         for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
             assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
@@ -118,8 +120,10 @@ class TestLatinHypercube:
                                                 sampler="LatinHypercube")
         samples = TestMerge2._samples.astype(float)
         quantiles = TestMerge2._quantiles.astype(float)
-        assert numpy.allclose(samples, expected_samples)
-        assert numpy.allclose(quantiles, expected_quantiles)
+        # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
+        # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
+        assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
+        assert numpy.allclose(numpy.sort(quantiles, axis=0), numpy.sort(expected_quantiles, axis=0))
         # Check for consistent hash-parameter set relationships
         for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
             assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
