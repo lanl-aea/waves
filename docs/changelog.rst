@@ -18,6 +18,8 @@ Internal Changes
 ================
 - Add meshio to CI environment for mesh conversion workflows, e.g. a future Cubit+Fierro tutorial (:issue:`681`,
   :merge:`859`). By `Kyle Brindley`_.
+- Restrict CI and tutorial environments to numpy <2 until SALib is compatible or packaged with an upper-bound
+  (:issue:`685`, :merge:`863`). By `Kyle Brindley`_.
 
 ******************
 0.9.0 (2024-05-29)
