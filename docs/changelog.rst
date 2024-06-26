@@ -18,6 +18,7 @@ New Features
 - Draft experimental parameter study pseudo-builder as one option for task re-use without task duplication. Intended to
   reduce the nominal/mesh convergence examples to a single workflow file (:issue:`680`, :merge:`858`). By `Kyle
   Brindley`_.
+- Add argparse type checker unit test example to the modsim template (:issue:`683`, :merge:`861`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
