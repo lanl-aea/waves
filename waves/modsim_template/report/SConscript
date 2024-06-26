@@ -36,7 +36,7 @@ for target, source in root_files:
     report.extend(env.Command(
         target=[target],
         source=[source],
-        action=Copy("$TARGET", "$SOURCE")
+        action=Copy("$TARGET", "$SOURCE", False)
     ))
 
 # Copy documentation source files re-used in the report
