@@ -8,6 +8,11 @@ Changelog
 0.9.1 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Fix the namespace of the example argparse types script in the tutorial and modsim template (:issue:`683`,
+  :merge:`861`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Draft experimental parameter study pseudo-builder as one option for task re-use without task duplication. Intended to
