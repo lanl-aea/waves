@@ -36,7 +36,7 @@ for target, source in root_files:
     env.Command(
         target=[target],
         source=[source],
-        action=Copy("$TARGET", "$SOURCE")
+        action=Copy("$TARGET", "$SOURCE", False)
     )
 
 # Explicit Sphinx documentation dependency list
