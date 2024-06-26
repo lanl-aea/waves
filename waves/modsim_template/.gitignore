@@ -1,6 +1,7 @@
 # Project files
 build*/
 *.tar.bz2
+*.h5
 
 # SCons files
 .sconsign.dblite

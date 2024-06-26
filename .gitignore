@@ -6,6 +6,7 @@ modsim_template_test/
 test_modsim_template/
 *.tar.bz2
 *.zip
+*.h5
 .scons_autocomplete
 
 # SCons files
