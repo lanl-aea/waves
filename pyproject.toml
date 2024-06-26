@@ -65,7 +65,7 @@ markers = [
     # Remove tag and use of tag when fixed.
     "programoperations: marks tests that don't play nicely with SCons internal API usage"
 ]
-addopts = "--ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest'"
+addopts = "--ignore='waves/modsim_template/' --ignore='modsim_template/' --ignore='waves/modsim_template2/' --ignore='modsim_template2/' --ignore='waves/tutorials/' --ignore='tutorials/' --tb=long --showlocals --failed-first --strict-markers -m 'not systemtest'"
 
 [tool.mypy]
 disable_error_code = "import-untyped"
