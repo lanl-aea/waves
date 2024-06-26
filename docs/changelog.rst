@@ -13,6 +13,10 @@ Bug fixes
 - Fix the namespace of the example argparse types script in the tutorial and modsim template (:issue:`683`,
   :merge:`861`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Add discussion about modsim template trade-offs and features (:issue:`687`, :merge:`865`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Draft experimental parameter study pseudo-builder as one option for task re-use without task duplication. Intended to
@@ -21,6 +25,8 @@ New Features
 - Add argparse type checker unit test example to the modsim template (:issue:`683`, :merge:`861`). By `Kyle Brindley`_.
 - Re-use the part and simulation task definitions in the modsim template workflows (:issue:`684`, :merge:`862`). By
   `Kyle Brindley`_.
+- Add modsim template with advanced features to reduce configuration verbosity (:issue:`687`, :merge:`865`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
