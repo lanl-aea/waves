@@ -30,9 +30,10 @@ Template comparisons
 ********************
 
 There are currently two template projects available: ``modsim_template`` and ``modsim_template_2``. The former is most
-similar to the tutorials and will be the easiest to start from for novice SCons and WAVES users. It allows for a great
+similar to the tutorials and will be the easiest starting point for novice SCons and WAVES users. It allows for a great
 deal of flexibility in both source and build tree structure. The latter has advantages for advanced SCons and WAVES
-users but places restrictions on the source and build tree structures and may be difficult for novice users to navigate.
+users but places restrictions on the source and build tree structures and may be difficult for novice command line users
+to navigate.
 
 ``modsim_template_2`` uses the `SCons SConscript`_ ``duplicate=True`` default behavior :cite:`SCons,scons-user` to
 reduce the number of explicit file copy operations with :meth:`waves.scons_extensions.copy_substfile` and the Abaqus
