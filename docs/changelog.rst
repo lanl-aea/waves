@@ -20,6 +20,8 @@ Internal Changes
   :merge:`859`). By `Kyle Brindley`_.
 - Restrict CI and tutorial environments to numpy <2 until SALib is compatible or packaged with an upper-bound
   (:issue:`685`, :merge:`863`). By `Kyle Brindley`_.
+- Improve robustness against changing parameter study set order in unit tests (:issue:`683`, :merge:`861`). By `Kyle
+  Brindley`_.
 
 ******************
 0.9.0 (2024-05-29)
