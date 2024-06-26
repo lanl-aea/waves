@@ -28,105 +28,22 @@ modsim_package_abspath = env["modsim_package_abspath"]
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_configuration = [env["project_configuration"], workflow_name]
-model = "rectangle"
 simulation_variables = rectangle_compression.nominal()
 
 # Collect the target nodes to build concise target alias(es)
 artifacts = []
 workflow = []
-datacheck = []
-images = []
 
-# Geometry
-journal_file = f"{model}_geometry"
-journal_options = "--width ${width} --height ${height}"
-artifacts.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{modsim_package_abspath / journal_file}.py"],
-    journal_options=journal_options,
-    **simulation_variables
-))
+# Rectangle part
+artifacts.extend(SConscript("rectangle", exports=["env", "simulation_variables"]))
 
-# Partition
-journal_file = f"{model}_partition"
-journal_options = "--width ${width} --height ${height}"
-artifacts.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{modsim_package_abspath / journal_file}.py", f"{model}_geometry.cae"],
-    journal_options=journal_options,
-    **simulation_variables
-))
-
-# Mesh
-journal_file = f"{model}_mesh"
-journal_options = "--global-seed ${global_seed}"
-artifacts.extend(env.AbaqusJournal(
-    target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
-    source=[f"{modsim_package_abspath / journal_file}.py", f"{model}_partition.cae"],
-    journal_options=journal_options,
-    **simulation_variables
-))
-
-# SolverPrep
-abaqus_source_list = [
-    modsim_package_abspath / f"{model}_compression.inp.in",
-    modsim_package_abspath / "assembly.inp",
-    modsim_package_abspath / "boundary.inp",
-    modsim_package_abspath / "field_output.inp",
-    modsim_package_abspath / "materials.inp",
-    modsim_package_abspath / "parts.inp",
-    modsim_package_abspath / "history_output.inp"
-]
-abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
-artifacts.extend(env.CopySubstfile(
-    abaqus_source_list,
-    substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)
-))
-
-solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]
-solve_source_list.append(f"{journal_file}.inp")
-
-# Part images
-images.extend(env.AbaqusJournal(
-    target=[f"{model}_compression.png"],
-    source=[modsim_package_abspath / "export_abaqus_image.py"] + solve_source_list,
-    journal_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
-                    "--model-name ${model} --part-name ${model}",
-    model=model
-))
-
-# Abaqus Solve
-job_name = pathlib.Path(solve_source_list[0]).stem
-datacheck_name = f"{job_name}_DATACHECK"
-datacheck_suffixes = ("023", "mdl", "sim", "stt")
-abaqus_options="-double both"
-datacheck.extend(env.AbaqusSolver(
-    target=[f"{datacheck_name}.{suffix}" for suffix in datacheck_suffixes],
-    source=solve_source_list,
-    job_name=datacheck_name,
-    abaqus_options=f"{abaqus_options} -datacheck"
-))
-
-artifacts.extend(env.AbaqusSolver(
-    target=[f"{job_name}.sta"],
-    source=solve_source_list,
-    job_name=job_name,
-    abaqus_options="${global_abaqus_options} -cpus $(${solve_cpus}$)",
-    global_abaqus_options=abaqus_options,
-    solve_cpus=env["solve_cpus"]
-))
-
-# Abaqus Extract
-extract_source_list = [f"{job_name}.odb"]
-artifacts.extend(env.AbaqusExtract(
-    target=[f"{job_name}.h5"],
-    source=extract_source_list
-))
+# Rectangle compression simulation
+artifacts.extend(SConscript("rectangle_compression", exports=["env", "simulation_variables", "workflow_name"]))
 
 # Post-processing
 plot_name = "stress_strain_comparison"
 regression_file = modsim_package_abspath / f"{workflow_name}_{plot_name}.csv"
-post_processing_source = [f"{job_name}_datasets.h5"]
+post_processing_source = ["rectangle_compression_datasets.h5"]
 script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
 script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
 script_options += f" --csv-regression-file {regression_file}"
@@ -146,13 +63,8 @@ archive_target = env.Tar(
 
 # Collector alias based on build directory name
 env.Alias(workflow_name, workflow)
-env.Alias(f"{workflow_name}_datacheck", datacheck)
-env.Alias(env["datacheck_alias"], datacheck)
-env.Alias(env["regression_alias"], datacheck)
 env.Alias(f"{workflow_name}_archive", archive_target)
-env.Alias("images", images)
 
 if not env["abaqus"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore([".", workflow_name], workflow)
-    Ignore([".", workflow_name], datacheck)
