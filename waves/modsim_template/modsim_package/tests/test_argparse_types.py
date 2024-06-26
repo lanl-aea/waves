@@ -1,3 +1,4 @@
+import argparse
 from contextlib import nullcontext as does_not_raise
 
 import pytest
@@ -6,7 +7,9 @@ from modsim_package import argparse_types
 
 
 positive_float = {
-    "positive float": ('1', 1., does_not_raise())
+    "positive float": ("1", 1., does_not_raise()),
+    "negative float": ("-1", None, pytest.raises(argparse.ArgumentTypeError)),
+    "string": ("not a float", None, pytest.raises(argparse.ArgumentTypeError))
 }
 
 
