@@ -12,18 +12,40 @@ Prerequisites
 
 .. include:: tutorial_00_prerequisites.txt
 
-In addition to the tutorial prerequisites, the modsim template implements documentation with `Sphinx`_. The Sphinx
+In addition to the tutorial prerequisites, the modsim templates implement documentation with `Sphinx`_. The Sphinx
 tutorial below is a good introduction to writing documentation with `reStructuredText`_ :cite:`rst`. The Sphinx
 documentation also contains a useful reference in the `reStructuredText Primer`_ :cite:`sphinx`.
 
 4. `Sphinx`_ tutorial: https://www.sphinx-doc.org/en/master/tutorial/index.html :cite:`sphinx,sphinx-tutorial`
 
-There is one significant difference between the Sphinx tutorial and the modsim template project. The Sphinx tutorial and
-Sphinx documentation assumes that users are building documentation with `GNU Make`_ :cite:`gnu-make`. Since the modsim
-template and WAVES already use the `SCons`_ :cite:`SCons` build system for running workflows, the documentation template
-files also use SCons as the build system. Users can find the available documentation commands with ``scons -h`` and the
-documentation configuration is found in the ``modsim_template/docs/SConscript`` file, which should look familiar to
-SCons users but may require some translation from the Sphinx manual build commands.
+There is one significant difference between the Sphinx tutorial and the modsim templates documentation. The Sphinx
+tutorial and Sphinx documentation assumes that users are building documentation with `GNU Make`_ :cite:`gnu-make`. Since
+the modsim templates and WAVES already use the `SCons`_ :cite:`SCons` build system for running workflows, the
+documentation template files also use SCons as the build system. Users can find the available documentation commands
+with ``scons -h`` and the documentation configuration is found in the ``modsim_template/docs/SConscript`` file, which
+should look familiar to SCons users but may require some translation from the Sphinx manual build commands.
+
+********************
+Template comparisons
+********************
+
+There are currently two template projects available: ``modsim_template`` and ``modsim_template_2``. The former is most
+similar to the tutorials and will be the easiest to start from for novice SCons and WAVES users. It allows for a great
+deal of flexibility in both source and build tree structure. The latter has advantages for advanced SCons and WAVES
+users but places restrictions on the source and build tree structures and may be difficult for novice users to navigate.
+
+``modsim_template_2`` uses the `SCons SConscript`_ ``duplicate=True`` default behavior :cite:`SCons,scons-user` to
+reduce the number of explicit file copy operations with :meth:`waves.scons_extensions.copy_substfile` and the Abaqus
+input file scanner, :meth:`waves.scons_extensions.abaqus_input_scanner`, to reduce the size of Abaqus solver source file
+lists. Both features help reduce SConstruct and SConscript verbosity and aid in automated source list construction.
+
+However, these features restrict source and/or build tree structure. Both features require that the SConscript files
+must be co-located with the source files they describe, so the part and simulation SConscript files (``rectangle`` and
+``rectangle_compression``) are found in the ``modsim_package`` directory in ``modsim_template_2``. To preserve the build
+tree structure with nested SConscript calls, all SConscript files must be found in the same parent directory, so the
+calling workflow SConscript files (``nominal`` and ``mesh_convergence``) must also be located in the ``modsim_package``
+directory. This template requires a totally flat ``modsim_package`` structure, which may be cumbersome for large
+projects, particularly if users tend to rely on graphical file browsers.
 
 ********************
 Fetch Template Files

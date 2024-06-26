@@ -96,6 +96,7 @@
 .. _`SCons Appendix D`: https://scons.org/doc/production/HTML/scons-user/apd.html
 .. _`SCons FindFile`: https://scons.org/doc/production/HTML/scons-user/ch26s04.html
 .. _`SCons Python function builder`: https://scons.org/doc/production/HTML/scons-user.html#id1477
+.. _`SCons SConscript`: https://scons.org/doc/production/HTML/scons-user/ch14.html
 .. _`setuptools_scm`: https://setuptools-scm.readthedocs.io/en/latest/
 .. _`Software Carpentry`: https://software-carpentry.org/
 .. _`Software Carpentry: Python Novice`: https://swcarpentry.github.io/python-novice-inflammation/
