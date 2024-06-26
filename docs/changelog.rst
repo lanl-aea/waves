@@ -19,6 +19,8 @@ New Features
   reduce the nominal/mesh convergence examples to a single workflow file (:issue:`680`, :merge:`858`). By `Kyle
   Brindley`_.
 - Add argparse type checker unit test example to the modsim template (:issue:`683`, :merge:`861`). By `Kyle Brindley`_.
+- Re-use the part and simulation task definitions in the modsim template workflows (:issue:`684`, :merge:`862`). By
+  `Kyle Brindley`_.
 
 Internal Changes
 ================
