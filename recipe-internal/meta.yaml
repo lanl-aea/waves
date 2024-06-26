@@ -69,7 +69,9 @@ test:
     - h5netcdf
     - h5py
     - matplotlib-base
-    - numpy
+    # TODO: Remove upper bound when SALib is numpy 2.0 compatible
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/686
+    - numpy <2
     - pandas
     - pytest
     - pytest-xdist
