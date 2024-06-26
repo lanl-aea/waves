@@ -84,52 +84,53 @@ available_files_input = {
     "one file, str": (
         "/path/to/source", "dummy.file1",
         [True], [False], [],
-        one_file_source_tree, [], None
+        one_file_source_tree, [], None, None
     ),
     "one file, list": (
         "/path/to/source", ["dummy.file1"],
         [True], [False], [],
-        one_file_source_tree, [], None
+        one_file_source_tree, [], None, None
     ),
     "one file, not found": (
         "/path/to/source", ["dummy.file1"],
         [False], [False], [[]],
-        [], ["dummy.file1"], "dummy.file1"
+        [], ["dummy.file1"], "dummy.file1", None
     ),
     "two files": (
         "/path/to/source", ["dummy.file2", "dummy.file1"],
         [True, True], [], [],
-        two_file_source_tree, [], None
+        two_file_source_tree, [], None, None
     ),
     "one directory, one file": (
         "/path/to", "source",
         [False, True], [True], [one_file_source_tree],
-        one_file_source_tree, [], "*"
+        one_file_source_tree, [], None, "**"
     ),
     "one directory, two files": (
         "/path/to", "source",
         [False, True, True], [True], [two_file_source_tree],
-        two_file_source_tree, [], "*"
+        two_file_source_tree, [], None, "**"
     ),
     "two files, rglob pattern": (
         "/path/to/source", ["dummy.file*"],
         [False, True, True], [False], [two_file_source_tree],
-        two_file_source_tree, [], "dummy.file*"
+        two_file_source_tree, [], "dummy.file*", None
     )
 }
 
 
 @pytest.mark.parametrize("root_directory, relative_paths, " \
                          "is_file_side_effect, is_dir_side_effect, rglob_side_effect, " \
-                         "expected_files, expected_missing, mock_rglob_argument",
+                         "expected_files, expected_missing, mock_rglob_argument, mock_glob_argument",
                          available_files_input.values(),
                          ids=available_files_input.keys())
 def test_available_files(root_directory, relative_paths,
                          is_file_side_effect, is_dir_side_effect, rglob_side_effect,
-                         expected_files, expected_missing, mock_rglob_argument):
+                         expected_files, expected_missing, mock_rglob_argument, mock_glob_argument):
     with patch("pathlib.Path.is_file", side_effect=is_file_side_effect), \
          patch("pathlib.Path.is_dir", side_effect=is_dir_side_effect), \
-         patch("pathlib.Path.rglob", side_effect=rglob_side_effect) as mock_rglob:
+         patch("pathlib.Path.rglob", side_effect=rglob_side_effect) as mock_rglob, \
+         patch("glob.glob", side_effect=rglob_side_effect) as mock_glob:
         available_files, not_found = _fetch.available_files(root_directory, relative_paths)
         assert available_files == expected_files
         assert not_found == expected_missing
@@ -137,6 +138,11 @@ def test_available_files(root_directory, relative_paths,
             mock_rglob.assert_called_once_with(mock_rglob_argument)
         else:
             mock_rglob.assert_not_called()
+        if mock_glob_argument:
+            mock_glob.assert_called_once()
+        else:
+            mock_glob.assert_not_called()
+
 
 
 build_source_files_input = {
