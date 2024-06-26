@@ -5,7 +5,6 @@ to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 import os
 import sys
-import glob
 import shutil
 import typing
 import filecmp
@@ -133,11 +132,7 @@ def available_files(
         if absolute_path.is_file():
             file_list.append(absolute_path)
         elif absolute_path.is_dir():
-            # pathlib.Path.rglob doesn't traverse symlinked directories: https://github.com/python/cpython/issues/77609.
-            # We use symlinked directories in the repository to reduce data duplication and keep identical files in sync
-            # during changes, so we must recurse the in-repository source tree with glob.
-            file_list = [absolute_path / path for path in glob.glob("**", root_dir=absolute_path, recursive=True)]
-            file_list = [path for path in file_list if path.is_file()]
+            file_list = [path for path in absolute_path.rglob("*") if path.is_file()]
         else:
             file_list = [path for path in root_directory.rglob(str(relative_path)) if path.is_file()]
         if file_list:
