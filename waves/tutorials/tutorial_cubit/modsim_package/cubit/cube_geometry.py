@@ -91,5 +91,6 @@ if __name__ == '__main__':
     sys.exit(main(
         output_file=args.output_file,
         width=args.width,
-        height=args.height
+        height=args.height,
+        depth=args.depth
     ))
