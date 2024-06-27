@@ -11,7 +11,6 @@ Tutorial: Cubit+Sierra
    sbatch submission behavior is not. If you run into problems running this tutorial, please contact the WAVES
    development team.
 
-
 **********
 References
 **********
@@ -47,7 +46,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_cubit tutorials/tutorial_cubit
    $ ls tutorial_cubit
-   modsim_package/  abaqus  cubit  SConstruct  sierra
+   modsim_package/  abaqus  cubit  SConstruct  sierra fierro
 
 5. Make the new ``tutorial_cubit`` directory the current working directory
 
@@ -59,15 +58,15 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ ls
-   modsim_package/  abaqus  cubit  SConstruct  sierra
+   modsim_package/  abaqus  cubit  SConstruct  sierra fierro
 
 **********
 SConscript
 **********
 
-Note that the ``tutorial_cubit`` directory has three SConscript files: ``cubit``, ``abaqus``, ``sierra``. The first and
-last are relevant to the current tutorial. The ``abaqus`` workflow is described in the complementary
-:ref:`tutorial_cubit_abaqus`.
+Note that the ``tutorial_cubit`` directory has four SConscript files: ``cubit``, ``abaqus``, ``sierra``, and ``fierro``.
+The ``cubit`` and ``sierra`` files are relevant to the current tutorial. The ``abaqus`` and ``fierro`` workflows are
+described in the complementary :ref:`tutorial_cubit_abaqus` and :ref:`tutorial_cubit_fierro`.
 
 6. Review the ``cubit`` and ``sierra`` tutorials and compare them against the :ref:`tutorial_simulation` files.
 

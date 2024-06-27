@@ -80,6 +80,30 @@ rectangle_mesh.py
     :members:
     :show-inheritance:
 
+cube_geometry.py
+================
+
+.. automodule:: modsim_package.cubit.cube_geometry
+    :noindex:
+    :members:
+    :show-inheritance:
+
+cube_partition.py
+=================
+
+.. automodule:: modsim_package.cubit.cube_partition
+    :noindex:
+    :members:
+    :show-inheritance:
+
+cube_mesh.py
+============
+
+.. automodule:: modsim_package.cubit.cube_mesh
+    :noindex:
+    :members:
+    :show-inheritance:
+
 ******
 python
 ******

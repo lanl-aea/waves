@@ -1,8 +1,8 @@
 .. _tutorial_cubit_fierro:
 
-################
-Tutorial: Fierro
-################
+######################
+Tutorial: Cubit+Fierro
+######################
 
 .. include:: wip_warning.txt
 
@@ -10,7 +10,9 @@ Tutorial: Fierro
 References
 **********
 
-* `Fierro example input`_: Fierro documentation :cite:`fierro,fierro-docs`
+* `Cubit`_: Python Interface :cite:`cubit`
+* `Cubit`_: Importing Cubit into Python :cite:`cubit`
+* `Fierro`_ documentation :cite:`fierro,fierro-docs`
 
 ***********
 Environment
@@ -20,7 +22,7 @@ Environment
 
    The Fierro tutorial requires a different compute environment than the other tutorials. The following commands create
    a dedicated environment is created for the use of this tutorial. You can also use your existing tutorial environment
-   environment if you add the `FierroMechanics`_ channel and install the ``fierro-cpu`` package.
+   environment if you add the `FierroMechanics`_ channel and install the ``fierro-cpu`` and ``meshio`` packages.
 
 `SCons`_, `WAVES`_, and `Fierro`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the
 `Conda installation`_ and `Conda environment management`_ documentation for more details about using `Conda`_.
@@ -29,7 +31,7 @@ Environment
 
    .. code-block::
 
-      $ conda create --name waves-fierro-env --channel fierromechanics --channel conda-forge waves 'scons>=4.6' fierro-cpu
+      $ conda create --name waves-fierro-env --channel fierromechanics --channel conda-forge waves 'scons>=4.6' fierro-cpu meshio
 
 2. Activate the environment
 
@@ -43,52 +45,98 @@ Directory Structure
 
 .. include:: tutorial_directory_setup.txt
 
-4. Create a new ``tutorial_fierro`` directory with the ``waves fetch`` command below
+4. Create a new ``tutorial_cubit`` directory with the ``waves fetch`` command below
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ waves fetch --destination tutorial_fierro tutorials/tutorial_fierro
-   $ ls tutorial_fierro
-   SConstruct example_input example_input.yaml
+   $ waves fetch --destination tutorial_cubit tutorials/tutorial_cubit
+   $ ls tutorial_cubit
+   modsim_package/  abaqus  cubit  SConstruct  sierra fierro
 
-5. Make the new ``tutorial_fierro`` directory the current working directory
+5. Make the new ``tutorial_cubit`` directory the current working directory
 
 .. code-block:: bash
 
    $ pwd
    /home/roppenheimer/waves-tutorials
-   $ cd tutorial_fierro
+   $ cd tutorial_cubit
    $ pwd
-   /home/roppenheimer/waves-tutorials/tutorial_fierro
+   /home/roppenheimer/waves-tutorials/tutorial_cubit
    $ ls
-   SConstruct example_input example_input.yaml
+   modsim_package/  abaqus  cubit  SConstruct  sierra fierro
 
 **********
 SConscript
 **********
 
-6. Review the ``SConscript`` file.
+Note that the ``tutorial_cubit`` directory has four SConscript files: ``cubit``, ``abaqus``, ``sierra``, and ``fierro``.
+The ``cubit`` and ``fierro`` files are relevant to the current tutorial. The ``abaqus`` and ``sierra`` workflows are
+described in the complementary :ref:`tutorial_cubit_abaqus` and :ref:`tutorial_cubit_sierra`.
 
-The structure has changed enough from the core tutorials that a diff view is not as useful. Instead the contents of the
-new SConscript files are duplicated below.
+6. Review the ``cubit`` and ``fierro`` tutorials and compare them against the :ref:`tutorial_simulation` files.
 
-.. admonition:: waves-tutorials/tutorial_fierro/example_input
+The structure has changed enough that a diff view is not as useful. Instead the contents of the new SConscript files are
+duplicated below.
 
-   .. literalinclude:: tutorial_fierro_example_input
+.. admonition:: waves-tutorials/tutorial_cubit/cubit
+
+   .. literalinclude:: tutorial_cubit_cubit
       :language: Python
       :lineno-match:
+
+.. admonition:: waves-tutorials/tutorial_cubit/fierro
+
+   .. literalinclude:: tutorial_cubit_fierro
+      :language: Python
+      :lineno-match:
+
+*******************
+Cubit Journal Files
+*******************
+
+Unlike :ref:`tutorial_cubit_abaqus` and :ref:`tutorial_cubit_sierra`, this tutorial creates a 3D cube geometry. The
+`Fierro`_ implicit solver works best with 3D geometries and meshes. The 3D geometry, mesh, and simulation match the
+uniaxial compression boundary conditions of the 2D simulation as closely as possible with the `Fierro`_ boundary
+conditions.
+
+7. Review the following journal files in the ``waves-tutorials/modsim_package/cubit`` directory.
+
+The Cubit journal files include as similar CLI as introduced in :ref:`tutorial_partition_mesh` for the Abaqus journal
+files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
+files is the opportunity to use Python 3 with Cubit, where Abaqus journal files must use the Abaqus controlled
+installation of Python 2. The API and CLI built from the Cubit journal files' docstrings may be found in the
+:ref:`waves_tutorial_api` for :ref:`cubit_journal_api` and the :ref:`waves_tutorial_cli` for :ref:`cubit_journal_cli`,
+respectively.
+
+.. admonition:: waves-tutorials/tutorial_cubit/modsim_package/cubit/cube_geometry.py
+
+   .. literalinclude:: cubit_cube_geometry.py
+       :language: Python
+       :lineno-match:
+
+.. admonition:: waves-tutorials/tutorial_cubit/modsim_package/cubit/cube_partition.py
+
+   .. literalinclude:: cubit_cube_partition.py
+       :language: Python
+       :lineno-match:
+
+.. admonition:: waves-tutorials/tutorial_cubit/modsim_package/cubit/cube_mesh.py
+
+   .. literalinclude:: cubit_cube_mesh.py
+       :language: Python
+       :lineno-match:
 
 ********************
 Fierro Input File(s)
 ********************
 
-8. Create or review the `Fierro example input`_ file from the contents below :cite:`fierro-docs`
+8. Create or review the `Fierro`_ input file from the contents below
 
-.. admonition:: waves-tutorials/tutorial_fierro/example_input.yaml
+.. admonition:: waves-tutorials/tutorial_cubit_fierro/modsim_package/fierro/cube_compression.yaml
 
-   .. literalinclude:: tutorial_fierro_example_input.yaml
+   .. literalinclude:: fierro_cube_compression.yaml
       :lineno-match:
 
 **********
@@ -116,15 +164,38 @@ Build Targets
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-tutorials/tutorial_fierro
-   $ scons example_input
+   /path/to/waves-tutorials/tutorial_cubit
+   $ scons fierro
    scons: Reading SConscript files ...
-   Checking whether fierro program exists.../projects/aea_compute/waves-env/bin/fierro
+   Checking whether /apps/abaqus/Commands/abq2023 program exists.../apps/abaqus/Commands/abq2023
+   Checking whether abq2023 program exists...no
+   Checking whether /apps/Cubit-16.12/cubit program exists.../apps/Cubit-16.12/cubit
+   Checking whether cubit program exists...no
+   Checking whether fierro-parallel-implicit program exists.../projects/aea_compute/waves-env/bin/fierro-parallel-implicit
+   Sourcing the shell environment with command 'module use /projects/aea_compute/modulefiles && module load sierra' ...
+   Checking whether sierra program exists.../projects/sierra/sierra5193/install/tools/sntools/engine/sierra
    scons: done reading SConscript files.
    scons: Building targets ...
-   cd /projects/kbrindley/w13repos/waves/waves/tutorials/tutorial_fierro/build/example_input && fierro parallel-explicit
-   /projects/kbrindley/w13repos/waves/waves/tutorials/tutorial_fierro/build/example_input/example_input.yaml >
-   /projects/kbrindley/w13repos/waves/waves/tutorials/tutorial_fierro/build/example_input/example_input.yaml.stdout 2>&1
+   Copy("build/fierro/cube_compression.yaml", "modsim_package/fierro/cube_compression.yaml")
+   Copy("build/fierro/elasticity3D.xml", "modsim_package/fierro/elasticity3D.xml")
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro && python
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/cube_geometry.py >
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro/cube_geometry.cub.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro && python
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/cube_partition.py >
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro/cube_partition.cub.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro && python
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/cubit/cube_mesh.py --element-type HEX
+   --solver sierra > /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro/cube_mesh.g.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro && python
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/modsim_package/fierro/convert_to_vtk2ascii.py
+   --input-format=exodus /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro/cube_mesh.g
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro/cube_mesh.vtk >
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro/cube_mesh.vtk.stdout 2>&1
+   cd /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro && mpirun -np 1
+   fierro-parallel-implicit
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro/cube_compression.yaml >
+   /home/roppenheimer/waves-tutorials/tutorial_cubit/build/fierro/cube_compression.stdout 2>&1
    scons: done building targets.
 
 ************
@@ -137,20 +208,22 @@ below.
 .. code-block:: bash
 
    $ pwd
-   /home/roppenheimer/waves-tutorials/tutorial_fierro
-   $ tree build/
-   build
-   `-- example_input
-       |-- example_input
-       |-- example_input.yaml
-       |-- example_input.yaml.stdout
-       `-- vtk
-           |-- data
-           |   |-- VTK0.vtk
-           |   |-- VTK1.vtk
-           |   |-- VTK2.vtk
-           |   |-- VTK3.vtk
-           |   `-- VTK4.vtk
-           `-- outputs.vtk.series
+   /home/roppenheimer/waves-tutorials/tutorial_cubit
+   $ tree build/fierro/
+   build/fierro/
+   |-- TecplotTO0.dat
+   |-- TecplotTO_undeformed0.dat
+   |-- cube_compression.stdout
+   |-- cube_compression.yaml
+   |-- cube_geometry.cub
+   |-- cube_geometry.cub.stdout
+   |-- cube_mesh.cub
+   |-- cube_mesh.g
+   |-- cube_mesh.g.stdout
+   |-- cube_mesh.vtk
+   |-- cube_mesh.vtk.stdout
+   |-- cube_partition.cub
+   |-- cube_partition.cub.stdout
+   `-- elasticity3D.xml
 
-   3 directories, 9 files
+   0 directories, 14 files
