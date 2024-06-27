@@ -58,6 +58,24 @@ rectangle_mesh.py
 .. argparse::
     :ref: modsim_package.cubit.rectangle_mesh.get_parser
 
+cube_geometry.py
+================
+
+.. argparse::
+    :ref: modsim_package.cubit.cube_geometry.get_parser
+
+cube_partition.py
+=================
+
+.. argparse::
+    :ref: modsim_package.cubit.cube_partition.get_parser
+
+cube_mesh.py
+============
+
+.. argparse::
+    :ref: modsim_package.cubit.cube_mesh.get_parser
+
 ******
 python
 ******
