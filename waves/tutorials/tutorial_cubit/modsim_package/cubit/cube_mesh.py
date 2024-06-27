@@ -69,8 +69,7 @@ def main(input_file, output_file, global_seed, element_type="QUAD", solver="abaq
 def get_parser():
     script_name = pathlib.Path(__file__)
     # Set default parameter values
-    # TODO: separate sets into a partition script
-    default_input_file = script_name.with_suffix(".cub").name.replace('_mesh', '_geometry')
+    default_input_file = script_name.with_suffix(".cub").name.replace('_mesh', '_partition')
     default_output_file = script_name.with_suffix(".cub").name
     default_global_seed = 1.0
     default_element_type = "HEX"

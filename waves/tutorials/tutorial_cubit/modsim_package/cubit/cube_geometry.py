@@ -27,37 +27,6 @@ def main(output_file, width, height, depth):
     cubit.cmd(f"brick x {width} y {height} z {depth}")
     cubit.cmd(f"move volume 1 x {width / 2} y {height / 2} z {depth / 2} include_merged")
 
-    # TODO: separate sets into a partition script
-    cubit.cmd("nodeset 1 add surface 5")
-    cubit.cmd("nodeset 1 name 'top'")
-    cubit.cmd("sideset 1 add surface 5")
-    cubit.cmd("sideset 1 name 'top'")
-
-    cubit.cmd("nodeset 2 add surface 3")
-    cubit.cmd("nodeset 2 name 'bottom'")
-    cubit.cmd("sideset 2 add surface 3")
-    cubit.cmd("sideset 2 name 'bottom'")
-
-    cubit.cmd("nodeset 3 add surface 4")
-    cubit.cmd("nodeset 3 name 'left'")
-    cubit.cmd("sideset 3 add surface 4")
-    cubit.cmd("sideset 3 name 'left'")
-
-    cubit.cmd("nodeset 4 add surface 6")
-    cubit.cmd("nodeset 4 name 'right'")
-    cubit.cmd("sideset 4 add surface 6")
-    cubit.cmd("sideset 4 name 'right'")
-
-    cubit.cmd("nodeset 5 add surface 1")
-    cubit.cmd("nodeset 5 name 'front'")
-    cubit.cmd("sideset 5 add surface 1")
-    cubit.cmd("sideset 5 name 'front'")
-
-    cubit.cmd("nodeset 6 add surface 2")
-    cubit.cmd("nodeset 6 name 'back'")
-    cubit.cmd("sideset 6 add surface 2")
-    cubit.cmd("sideset 6 name 'back'")
-
     cubit.cmd(f"save as '{output_file}' overwrite")
 
 
