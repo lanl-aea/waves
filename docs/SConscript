@@ -253,6 +253,8 @@ tutorial_files_list = [
     tutorials_dir / "tutorial_cubit/SConstruct",
     tutorials_dir / "tutorial_cubit/modsim_package/sierra/rectangle_compression.i",
     tutorials_dir / "tutorial_cubit/modsim_package/fierro/cube_compression.yaml",
+    tutorials_dir / "tutorial_cubit/modsim_package/fierro/convert_to_vtk2ascii.py",
+    tutorials_dir / "tutorial_cubit/modsim_package/fierro/elasticity3D.xml",
     tutorials_dir / "tutorial_quinoa/SConstruct",
     tutorials_dir / "tutorial_quinoa/SConscript",
     tutorials_dir / "tutorial_quinoa/box.py",

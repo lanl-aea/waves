@@ -4,8 +4,6 @@
 Tutorial: Cubit+Fierro
 ######################
 
-.. include:: wip_warning.txt
-
 **********
 References
 **********
@@ -13,6 +11,8 @@ References
 * `Cubit`_: Python Interface :cite:`cubit`
 * `Cubit`_: Importing Cubit into Python :cite:`cubit`
 * `Fierro`_ documentation :cite:`fierro,fierro-docs`
+* `meshio`_
+* `vtk`_
 
 ***********
 Environment
@@ -128,6 +128,20 @@ respectively.
        :language: Python
        :lineno-match:
 
+*************
+Python Script
+*************
+
+Fierro doesn't read Sierra formatted (Genesis/Exodus) meshes natively. We need to convert from the Cubit Genesis mesh to
+an older `vtk`_ ASCII text mesh file with `meshio`_. The `Fierro`_ development team provided a draft conversion script
+that has been updated here to use a similar CLI to `meshio`_.
+
+.. admonition:: waves-tutorials/tutorial_cubit/modsim_package/fierro/convert_to_vtk2ascii.py
+
+   .. literalinclude:: fierro_convert_to_vtk2ascii.py
+       :language: Python
+       :lineno-match:
+
 ********************
 Fierro Input File(s)
 ********************
@@ -137,6 +151,16 @@ Fierro Input File(s)
 .. admonition:: waves-tutorials/tutorial_cubit_fierro/modsim_package/fierro/cube_compression.yaml
 
    .. literalinclude:: fierro_cube_compression.yaml
+      :lineno-match:
+
+The current version of the `Fierro`_ implicit solver requires an XML formatted input file to provide Trilinos solver
+controls. A future version of `Fierro`_ will consolidate the Trilinos controls directly into the input file. Until then,
+the following XML file must be present in the same directory as the input file when executing
+``fierro-parallel-implicit``.
+
+.. admonition:: waves-tutorials/tutorial_cubit_fierro/modsim_package/fierro/elasticity3D.xml
+
+   .. literalinclude:: fierro_elasticity3D.xml
       :lineno-match:
 
 **********

@@ -44,6 +44,7 @@
 .. _`Material Database`: https://ddw-confluence.lanl.gov/display/MD/Material+Database
 .. _`Material Models members`: https://re-git.lanl.gov/groups/aea/material-models/-/group_members
 .. _`Material Models`: https://re-git.lanl.gov/aea/material-models
+.. _`meshio`: https://github.com/nschloe/meshio
 .. _`pandas`: https://pandas.pydata.org/
 .. _`PEP-257`: https://peps.python.org/pep-0257/
 .. _`PEP-287`: https://peps.python.org/pep-0287/
@@ -103,6 +104,7 @@
 .. _`Sphinx style guide`: https://documentation-style-guide-sphinx.readthedocs.io/en/latest/style-guide.html#
 .. _`SLURM`: https://slurm.schedmd.com/
 .. _`sbatch`: https://slurm.schedmd.com/sbatch.html
+.. _`vtk`: https://vtk.org/
 .. _`h5py`: https://www.h5py.org/
 .. _`The HDF5 Group command-line-tools`: https://docs.hdfgroup.org/hdf5/develop/_view_tools_view.html
 .. _`matplotlib`: https://matplotlib.org/stable/
