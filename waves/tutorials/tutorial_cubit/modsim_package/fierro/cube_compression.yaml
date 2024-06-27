@@ -24,13 +24,6 @@ fea_module_parameters:
         value: 0.0
 
       - surface:
-          type: x_plane
-          # TODO: replace with element set "left"
-          plane_position: 0.0
-        type: displacement
-        value: 0.0
-
-      - surface:
           type: y_plane
           # TODO: replace with element set "top", or at least the "height" parameter
           plane_position: 1.0
