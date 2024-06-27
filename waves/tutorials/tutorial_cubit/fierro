@@ -21,7 +21,7 @@ fierro_source_abspath = env["fierro_source_abspath"]
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
-model = "rectangle"
+model = "cube"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
@@ -39,7 +39,7 @@ env.PythonScript(
 
 # SolverPrep
 fierro_source_list = [
-    fierro_source_abspath / "rectangle_compression.yaml"
+    fierro_source_abspath / "cube_compression.yaml"
 ]
 fierro_source_list = [pathlib.Path(source_file) for source_file in fierro_source_list]
 workflow.extend(env.CopySubstfile(fierro_source_list))
@@ -48,7 +48,7 @@ workflow.extend(env.CopySubstfile(fierro_source_list))
 solve_source_list = [source_file.name for source_file in fierro_source_list]
 solve_source_list.append(f"{model}_mesh.vtk")
 workflow.extend(env.FierroImplicit(
-    target=["rectangle_compression.stdout"],
+    target=["cube_compression.stdout"],
     source=solve_source_list
 ))
 

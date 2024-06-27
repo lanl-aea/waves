@@ -26,11 +26,12 @@ cubit_source_abspath = env["cubit_source_abspath"]
 # Simulation variables
 build_directory = pathlib.Path(Dir('.').abspath)
 workflow_name = build_directory.name
-model = "rectangle"
 
 # Collect the target nodes to build a concise alias for all targets
 workflow = []
 
+# Rectangle 2D
+model = "rectangle"
 # Geometry
 journal_file = f"{model}_geometry"
 journal_options = ""
@@ -61,6 +62,38 @@ journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(env.PythonScript(
     target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
+    script_options=journal_options,
+    element_type=element_type,
+    solver=solver
+))
+
+
+# Cube 3D
+model = "cube"
+# Geometry
+journal_file = f"{model}_geometry"
+journal_options = ""
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.cub"],
+    source=[f"{cubit_source_abspath / journal_file}.py"],
+    script_options=journal_options
+))
+
+# Partition
+# TODO: separate sets into a partition script
+
+# Mesh
+if solver.lower() == "abaqus":
+    mesh_extension = "inp"
+elif solver.lower() in ["sierra", "adagio"]:
+    mesh_extension = "g"
+else:
+    raise RuntimeError(f"Unknown solver '{solver}'")
+journal_file = f"{model}_mesh"
+journal_options = "--element-type ${element_type} --solver ${solver}"
+workflow.extend(env.PythonScript(
+    target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
+    source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
     script_options=journal_options,
     element_type=element_type,
     solver=solver
