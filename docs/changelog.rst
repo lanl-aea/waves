@@ -16,6 +16,9 @@ Bug fixes
 Documentation
 =============
 - Add discussion about modsim template trade-offs and features (:issue:`687`, :merge:`865`). By `Kyle Brindley`_.
+- Re-write the Fierro tutorial as a Cubit+Fierro tutorial. Made possible with a mesh conversion script
+  originally authored by Evan Lieberman and modified to add WAVES style CLI (:issue:`681`, :merge:`859`). By `Kyle
+  Brindley`_.
 
 New Features
 ============
