@@ -1,8 +1,8 @@
-num_dims: 2
+num_dims: 3
 input_options:
     mesh_file_format: vtk
-    mesh_file_name: rectangle_mesh.vtk
-    element_type: quad4
+    mesh_file_name: cube.vtk
+    element_type: hex8
     zero_index_base: true
 
 materials:
@@ -19,21 +19,21 @@ fea_module_parameters:
       - surface:
           type: y_plane
           # TODO: replace with element set "bottom"
-          plane_position: 0.0
+          plane_position: -0.5
         type: displacement
         value: 0.0
 
       - surface:
           type: x_plane
           # TODO: replace with element set "left"
-          plane_position: 0.0
+          plane_position: -0.5
         type: displacement
         value: 0.0
 
       - surface:
           type: y_plane
           # TODO: replace with element set "top", or at least the "height" parameter
-          plane_position: 1.0
+          plane_position: 0.5
         type: displacement
         # TODO: replace with "displacement" parameter
         value: -0.01
