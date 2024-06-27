@@ -1,7 +1,7 @@
 num_dims: 3
 input_options:
     mesh_file_format: vtk
-    mesh_file_name: cube.vtk
+    mesh_file_name: cube_mesh.vtk
     element_type: hex8
     zero_index_base: true
 

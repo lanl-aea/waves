@@ -49,7 +49,7 @@ workflow.extend(env.CopySubstfile(fierro_source_list))
 solve_source_list = [source_file.name for source_file in fierro_source_list]
 solve_source_list.append(f"{model}_mesh.vtk")
 workflow.extend(env.FierroImplicit(
-    target=["cube_compression.stdout"],
+    target=["cube_compression.stdout", "TecplotTO0.dat", "TecplotTO_undeformed0.dat"],
     source=solve_source_list
 ))
 
