@@ -150,9 +150,9 @@ feedback to developers about the excutable status and workflow configuration.
 The structure has changed enough from the core tutorials that a diff view is not as useful. Instead the contents of the
 SConstruct file is duplicated below.
 
-.. admonition:: waves-tutorials/tutorial_fierro/SConstruct
+.. admonition:: waves-tutorials/tutorial_cubit/SConstruct
 
-   .. literalinclude:: tutorial_fierro_SConstruct
+   .. literalinclude:: tutorial_cubit_SConstruct
       :language: Python
 
 *************
