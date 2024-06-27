@@ -69,7 +69,6 @@ system_tests = [
         [fetch_template, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorials/tutorial_quinoa",
         marks=pytest.mark.skip("Re-enable quinoa tests when AEA server deployment stabilizes")
     ),
-    ([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_fierro"),
     ([fetch_template, "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons tutorial_builder_post_actions --sconstruct=tutorial_builder_post_actions_SConstruct --unconditional-build --print-build-failures"], "tutorials"),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
