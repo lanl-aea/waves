@@ -5,6 +5,11 @@ input_options:
     element_type: hex8
     zero_index_base: true
 
+output_options:
+  output_fields:
+    - displacement
+    - strain
+
 materials:
   - id: 0
     elastic_modulus: 100
