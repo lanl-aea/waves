@@ -24,7 +24,7 @@ def main(output_file, width, height, depth):
     cubit.cmd('new')
     cubit.cmd('reset')
 
-    cubit.cmd(f"brick {width} {height} {depth}")
+    cubit.cmd(f"brick x {width} y {height} z {depth}")
     cubit.cmd(f"move volume 1 x {width / 2} y {height / 2} z {depth / 2} include_merged")
 
     # TODO: separate sets into a partition script
