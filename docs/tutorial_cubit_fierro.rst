@@ -1,4 +1,4 @@
-.. _tutorial_fierro:
+.. _tutorial_cubit_fierro:
 
 ################
 Tutorial: Fierro

@@ -112,5 +112,5 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:30 :ref:`tutorial_task_reuse`                   Reuse task definitions
                    00:10 :ref:`tutorial_setuptools_scm`               Dynamic version number from git tags
                    00:10 :ref:`tutorial_quinoa`                       `Quinoa`_ builders
-                   00:10 :ref:`tutorial_fierro`                       `Fierro`_ builders
+                   00:10 :ref:`tutorial_cubit_fierro`                 `Fierro`_ builders
 ======================== ============================================ ==================================================
