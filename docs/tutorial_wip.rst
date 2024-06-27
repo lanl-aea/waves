@@ -11,4 +11,3 @@ Work-in-progress Lessons
    tutorial_task_reuse
    tutorial_setuptools_scm
    tutorial_quinoa
-   tutorial_cubit_fierro

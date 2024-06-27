@@ -79,8 +79,10 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:20 :ref:`tutorial_argparse_types`               Add input verification to workflow parameters
                    00:20 :ref:`tutorial_cubit_abaqus`                 Geometry, partition, and mesh examples with Cubit
                                                                       replicating :ref:`tutorial_simulation`
-                   00:20 :ref:`tutorial_cubit_sierra`                 Side-by-side Abaqus and Sierra workflows
+                   00:20 :ref:`tutorial_cubit_sierra`                 Side-by-side Abaqus and `Sierra`_ workflows
                                                                       complementing :ref:`tutorial_cubit_abaqus`
+                   00:30 :ref:`tutorial_cubit_fierro`                 `Fierro`_ builders and workflow complementing
+                                                                      :ref:`tutorial_cubit_abaqus`
                    00:10 :ref:`tutorial_escape_sequences`             Changing task actions without re-building the task
                    00:30 :ref:`tutorial_latin_hypercube`              Parameter study introduction using a latin
                                                                       hypercube
@@ -112,5 +114,4 @@ Time to complete (HH:MM) Tutorial                                     Summary
                    00:30 :ref:`tutorial_task_reuse`                   Reuse task definitions
                    00:10 :ref:`tutorial_setuptools_scm`               Dynamic version number from git tags
                    00:10 :ref:`tutorial_quinoa`                       `Quinoa`_ builders
-                   00:10 :ref:`tutorial_cubit_fierro`                 `Fierro`_ builders
 ======================== ============================================ ==================================================

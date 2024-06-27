@@ -11,6 +11,7 @@ Supplemental Lessons
    tutorial_argparse_types
    tutorial_cubit_abaqus
    tutorial_cubit_sierra
+   tutorial_cubit_fierro
    tutorial_escape_sequences
    tutorial_07_latin_hypercube
    tutorial_07_sobol_sequence
