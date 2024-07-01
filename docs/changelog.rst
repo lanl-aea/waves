@@ -8,6 +8,11 @@ Changelog
 0.9.2 (unreleased)
 ******************
 
+Internal Changes
+================
+- Remove conda channel index from CI deployment job. Can't separate the CI environment and continue to index the shared
+  conda channel (:issue:`695`, :merge:`868`). By `Kyle Brindley`_.
+
 ******************
 0.9.1 (2024-07-01)
 ******************

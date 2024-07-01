@@ -147,10 +147,6 @@ deploy:
     # Change group for access by all W-13 staff and prevent accidental modification by institutional account in CI jobs
     - chgrp w13users ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
     - chmod 555 ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
-    # Update the AEA Conda Channel index
-    - conda index ${aea_conda_channel}
-    # Troubleshooting conda channel deploy and index update
-    - conda search --channel file://${aea_conda_channel}/ --override-channels waves
   tags:
     - shell-aea
 
