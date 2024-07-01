@@ -85,8 +85,7 @@ fast-test:
         coverage_format: cobertura
         path: build/pytest/coverage.xml
   tags:
-    # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
-    - sstbigbird-shell-aea
+    - shell-aea
 
 flake8:
   stage: test
@@ -98,8 +97,7 @@ flake8:
   script:
     - scons flake8
   tags:
-    # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
-    - sstbigbird-shell-aea
+    - shell-aea
 
 conda-build:
   stage: test
@@ -126,8 +124,7 @@ conda-build:
     paths:
       - conda-bld/noarch/waves-*-*.tar.bz2
   tags:
-    # Return to ``shell-aea`` when sstelmo is upgraded to RHEL8
-    - sstbigbird-shell-aea
+    - shell-aea
 
 deploy:
   stage: deploy

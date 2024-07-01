@@ -12,6 +12,7 @@ Internal Changes
 ================
 - Remove conda channel index from CI deployment job. Can't separate the CI environment and continue to index the shared
   conda channel (:issue:`695`, :merge:`868`). By `Kyle Brindley`_.
+- Use both AEA Gitlab-Runner servers in CI jobs (:issue:`696`, :merge:`869`). By `Kyle Brindley`_.
 
 ******************
 0.9.1 (2024-07-01)
