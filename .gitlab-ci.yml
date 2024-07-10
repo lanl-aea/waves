@@ -99,43 +99,6 @@ flake8:
   tags:
     - shell-aea
 
-pypi-build:
-  stage: test
-  variables:
-    GIT_STRATEGY: clone
-  dependencies: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
-  script:
-    - python -m build
-  artifacts:
-    expire_in: '2 hrs'
-    paths:
-      - dist/waves*.tar.gz
-      - dist/waves*.whl
-  tags:
-    - shell-aea
-
-pypi-deploy:
-  stage: deploy
-  variables:
-    GIT_STRATEGY: clone
-  dependencies:
-    - pypi-build
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    # TODO: remove the MR deployment after testing and before merging
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/merge_requests/870
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
-  script:
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
-  tags:
-    - shell-aea
-
 conda-build:
   stage: test
   variables:
@@ -181,6 +144,21 @@ deploy:
     # Change group for access by all W-13 staff and prevent accidental modification by institutional account in CI jobs
     - chgrp w13users ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
     - chmod 555 ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
+  tags:
+    - shell-aea
+
+pypi-deploy:
+  stage: deploy
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    # Only deploy to Gitlab PyPI registry for clean version tags
+    - if [[ -z $(git tag --points-at HEAD) ]]; then exit 0; fi
+    - python -m build
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
   tags:
     - shell-aea
 
