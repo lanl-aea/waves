@@ -99,6 +99,25 @@ flake8:
   tags:
     - shell-aea
 
+pypi-build:
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+  script:
+    - python -m build
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - dist/waves*.tar.gz
+      - dist/waves*.whl
+  tags:
+    - shell-aea
+
 conda-build:
   stage: test
   variables:
