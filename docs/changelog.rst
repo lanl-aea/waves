@@ -8,6 +8,11 @@ Changelog
 0.9.3 (unreleased)
 ******************
 
+Internal Changes
+================
+- Build the pip package with ``matplotlib`` as a dependency because PyPI doesn't have a ``matplotlib-base`` package
+  (:issue:`698`, :merge:`872`). By `Kyle Brindley`_
+
 ******************
 0.9.2 (2024-07-10)
 ******************
