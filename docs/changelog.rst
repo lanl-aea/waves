@@ -8,6 +8,10 @@ Changelog
 0.9.4 (unreleased)
 ******************
 
+Documentation
+=============
+- Clean up the index by removing the Python method entries (:issue:`699`, :merge:`873`). By `Kyle Brindley`_.
+
 ******************
 0.9.3 (2024-07-11)
 ******************

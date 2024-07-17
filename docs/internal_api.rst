@@ -107,15 +107,17 @@ odb_extract.py
 **************
 
 .. automodule:: waves._abaqus.odb_extract
-    :members:
-    :private-members:
-    :show-inheritance:
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
 
 **********************
 Odb Report File Parser
 **********************
 
 .. autoclass:: waves._abaqus.abaqus_file_parser.OdbReportFileParser
-    :members:
-    :private-members:
-    :show-inheritance:
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
