@@ -10,10 +10,10 @@
 
 .. only:: html
 
-   .. image:: https://img.shields.io/github/actions/workflow/status/lanl/waves/pages.yml?branch=main&label=GitHub-Pages
+   .. image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
       :target: https://lanl-aea.github.io/waves/
 
-   .. image:: https://img.shields.io/github/v/release/lanl/waves?label=GitHub-Release
+   .. image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
       :target: https://github.com/lanl-aea/waves/releases
 
    .. image:: https://img.shields.io/conda/vn/conda-forge/waves
