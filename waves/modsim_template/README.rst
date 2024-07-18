@@ -7,7 +7,7 @@
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
-.. _WAVES: https://lanl.github.io/waves/index.html
+.. _WAVES: https://lanl-aea.github.io/waves/index.html
 .. _MODSIM-TEMPLATE: https://github.com/lanl/waves/tree/main/modsim_template
 .. _MODSIM-TEMPLATE documentation: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
@@ -40,7 +40,7 @@ generated from the `WAVES`_ ``fetch`` subcommand and `MODSIM-TEMPLATE`_.
 Documentation
 =============
 
-* GitHub (pending): https://lanl.github.io/waves/modsim-template/index.html
+* GitHub (pending): https://lanl-aea.github.io/waves/modsim-template/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
 Developers

@@ -11,7 +11,7 @@
 .. only:: html
 
    .. image:: https://img.shields.io/github/actions/workflow/status/lanl/waves/pages.yml?branch=main&label=GitHub-Pages
-      :target: https://lanl.github.io/waves/
+      :target: https://lanl-aea.github.io/waves/
 
    .. image:: https://img.shields.io/github/v/release/lanl/waves?label=GitHub-Release
       :target: https://github.com/lanl/waves/releases

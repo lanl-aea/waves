@@ -11,6 +11,8 @@ Changelog
 Documentation
 =============
 - Clean up the index by removing the Python method entries (:issue:`699`, :merge:`873`). By `Kyle Brindley`_.
+- Update the GitHub URLs for the migration to https://github.com/lanl-aea (:issue:`700`, :merge:`874`).  By `Kyle
+  Brindley`_.
 
 ******************
 0.9.3 (2024-07-11)

@@ -53,7 +53,7 @@ waves = "waves._main:main"
 homepage = "https://github.com/lanl/waves"
 documentation = "https://github.com/lanl/waves"
 repository = "https://github.com/lanl/waves"
-changelog = "https://lanl.github.io/waves/changelog.html"
+changelog = "https://lanl-aea.github.io/waves/changelog.html"
 
 [tool.setuptools_scm]
 write_to = "waves/_version.py"

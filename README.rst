@@ -6,7 +6,7 @@
 .. _SCons: https://scons.org/
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
-.. _WAVES: https://lanl.github.io/waves/index.html
+.. _WAVES: https://lanl-aea.github.io/waves/index.html
 .. _WAVES repository: https://github.com/lanl/waves
 .. _WAVES releases: https://github.com/lanl/waves/releases/
 .. _MODSIM-TEMPLATE: https://github.com/lanl/waves/tree/main/waves/modsim_template
@@ -26,7 +26,7 @@ WAVES
 #####
 
 .. image:: https://img.shields.io/github/actions/workflow/status/lanl/waves/pages.yml?branch=main&label=GitHub-Pages
-   :target: https://lanl.github.io/waves/
+   :target: https://lanl-aea.github.io/waves/
 
 .. image:: https://img.shields.io/github/v/release/lanl/waves?label=GitHub-Release
    :target: https://github.com/lanl/waves/releases
@@ -84,13 +84,13 @@ Documentation
 The documentation is bundled with the Conda package and can be accessed locally without a network connection after
 installation from the command line as ``waves docs``. The documentation is also web-hosted:
 
-* GitHub: https://lanl.github.io/waves/index.html
+* GitHub: https://lanl-aea.github.io/waves/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/
 
 The `MODSIM-TEMPLATE documentation`_ is hosted as a separate webpage as a demonstration for what modsim project
 documentation can look like.
 
-* GitHub (pending): https://lanl.github.io/waves/modsim-template/index.html
+* GitHub (pending): https://lanl-aea.github.io/waves/modsim-template/index.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
 **********
@@ -127,7 +127,7 @@ Developer Notes
 
 The full developer manual can be found at:
 
-* GitHub: https://lanl.github.io/waves/devops.html
+* GitHub: https://lanl-aea.github.io/waves/devops.html
 * LANL: https://aea.re-pages.lanl.gov/python-projects/waves/devops.html
 
 Clone the project
