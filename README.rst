@@ -7,9 +7,9 @@
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://lanl-aea.github.io/waves/index.html
-.. _WAVES repository: https://github.com/lanl/waves
-.. _WAVES releases: https://github.com/lanl/waves/releases/
-.. _MODSIM-TEMPLATE: https://github.com/lanl/waves/tree/main/waves/modsim_template
+.. _WAVES repository: https://github.com/lanl-aea/waves
+.. _WAVES releases: https://github.com/lanl-aea/waves/releases/
+.. _MODSIM-TEMPLATE: https://github.com/lanl-aea/waves/tree/main/waves/modsim_template
 .. _MODSIM-TEMPLATE documentation: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
@@ -25,11 +25,11 @@
 WAVES
 #####
 
-.. image:: https://img.shields.io/github/actions/workflow/status/lanl/waves/pages.yml?branch=main&label=GitHub-Pages
+.. image:: https://img.shields.io/github/actions/workflow/status/lanl-aea/waves/pages.yml?branch=main&label=GitHub-Pages
    :target: https://lanl-aea.github.io/waves/
 
-.. image:: https://img.shields.io/github/v/release/lanl/waves?label=GitHub-Release
-   :target: https://github.com/lanl/waves/releases
+.. image:: https://img.shields.io/github/v/release/lanl-aea/waves?label=GitHub-Release
+   :target: https://github.com/lanl-aea/waves/releases
 
 .. image:: https://img.shields.io/conda/vn/conda-forge/waves
    :target: https://anaconda.org/conda-forge/waves
@@ -139,7 +139,7 @@ Clone the project
 
   .. code-block::
 
-     $ git clone git@github.com:lanl/waves.git
+     $ git clone git@github.com:lanl-aea/waves.git
 
 * LANL
 
