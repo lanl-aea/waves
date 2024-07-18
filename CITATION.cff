@@ -21,7 +21,7 @@ authors:
   orcid: "https://orcid.org/0009-0003-5753-031X"
 title: "waves"
 doi: 10.5281/zenodo.7574167
-url: "https://github.com/lanl/waves"
+url: "https://github.com/lanl-aea/waves"
 license: BSD-3-Clause
 date-released: 2024-05-01
 identifiers:

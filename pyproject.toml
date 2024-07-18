@@ -50,9 +50,9 @@ odb_extract = "waves._abaqus.odb_extract:main"
 waves = "waves._main:main"
 
 [project.urls]
-homepage = "https://github.com/lanl/waves"
-documentation = "https://github.com/lanl/waves"
-repository = "https://github.com/lanl/waves"
+homepage = "https://github.com/lanl-aea/waves"
+documentation = "https://github.com/lanl-aea/waves"
+repository = "https://github.com/lanl-aea/waves"
 changelog = "https://lanl-aea.github.io/waves/changelog.html"
 
 [tool.setuptools_scm]

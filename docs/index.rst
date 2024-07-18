@@ -14,7 +14,7 @@
       :target: https://lanl-aea.github.io/waves/
 
    .. image:: https://img.shields.io/github/v/release/lanl/waves?label=GitHub-Release
-      :target: https://github.com/lanl/waves/releases
+      :target: https://github.com/lanl-aea/waves/releases
 
    .. image:: https://img.shields.io/conda/vn/conda-forge/waves
       :target: https://anaconda.org/conda-forge/waves

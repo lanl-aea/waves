@@ -8,7 +8,7 @@
 .. _SCons documentation: https://scons.org/documentation.html
 .. _SCons manpage: https://scons.org/doc/production/HTML/scons-man.html
 .. _WAVES: https://lanl-aea.github.io/waves/index.html
-.. _MODSIM-TEMPLATE: https://github.com/lanl/waves/tree/main/modsim_template
+.. _MODSIM-TEMPLATE: https://github.com/lanl-aea/waves/tree/main/modsim_template
 .. _MODSIM-TEMPLATE documentation: https://aea.re-pages.lanl.gov/python-projects/waves/modsim-template/
 
 .. _`Kyle Brindley`: kbrindley@lanl.gov
