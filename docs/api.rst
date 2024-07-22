@@ -8,7 +8,7 @@ External API
 SCons Extensions
 ****************
 
-.. only:: html
+.. only:: builder_html
 
    .. automodule:: waves.scons_extensions
       :members:
