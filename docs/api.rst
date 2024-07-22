@@ -8,13 +8,13 @@ External API
 SCons Extensions
 ****************
 
-.. only:: builder_html
+.. only:: html or epub
 
    .. automodule:: waves.scons_extensions
       :members:
       :show-inheritance:
 
-.. only:: latex or man or epub
+.. only:: latex or man
 
    .. automodule:: waves.scons_extensions
       :noindex:
@@ -27,13 +27,13 @@ SCons Extensions
 Parameter Generators
 ********************
 
-.. only:: html
+.. only:: html or epub
 
    .. automodule:: waves.parameter_generators
       :members:
       :show-inheritance:
 
-.. only:: latex or man or epub
+.. only:: latex or man
 
    .. automodule:: waves.parameter_generators
       :noindex:
@@ -44,13 +44,13 @@ Parameter Generators
 Exceptions
 **********
 
-.. only:: html
+.. only:: html or epub
 
    .. automodule:: waves.exceptions
       :members:
       :show-inheritance:
 
-.. only:: latex or man or epub
+.. only:: latex or man
 
    .. automodule:: waves.exceptions
       :noindex:
