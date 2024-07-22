@@ -8,6 +8,11 @@ Changelog
 0.9.5 (unreleased)
 ******************
 
+Documentation
+=============
+- Return the Python method section headers to the HTML sidebar while preserving a cleaner PDF index without the Python
+  methods (:issue:`702`, :merge:`875`). By `Kyle Brindley`_.
+
 ******************
 0.9.4 (2024-07-18)
 ******************
