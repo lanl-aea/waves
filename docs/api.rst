@@ -8,10 +8,18 @@ External API
 SCons Extensions
 ****************
 
-.. automodule:: waves.scons_extensions
-   :noindex:
-   :members:
-   :show-inheritance:
+.. only:: html
+
+   .. automodule:: waves.scons_extensions
+      :members:
+      :show-inheritance:
+
+.. only:: latex or man or epub
+
+   .. automodule:: waves.scons_extensions
+      :noindex:
+      :members:
+      :show-inheritance:
 
 .. _parameter_generator_api:
 
@@ -19,16 +27,32 @@ SCons Extensions
 Parameter Generators
 ********************
 
-.. automodule:: waves.parameter_generators
-   :noindex:
-   :members:
-   :show-inheritance:
+.. only:: html
+
+   .. automodule:: waves.parameter_generators
+      :members:
+      :show-inheritance:
+
+.. only:: latex or man or epub
+
+   .. automodule:: waves.parameter_generators
+      :noindex:
+      :members:
+      :show-inheritance:
 
 **********
 Exceptions
 **********
 
-.. automodule:: waves.exceptions
-   :noindex:
-   :members:
-   :show-inheritance:
+.. only:: html
+
+   .. automodule:: waves.exceptions
+      :members:
+      :show-inheritance:
+
+.. only:: latex or man or epub
+
+   .. automodule:: waves.exceptions
+      :noindex:
+      :members:
+      :show-inheritance:
