@@ -317,6 +317,7 @@ shell_environment = {
 }
 
 
+@pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
 @pytest.mark.parametrize("cache, overwrite_cache, expected, verbose",
                          shell_environment.values(),
                          ids=shell_environment.keys())
