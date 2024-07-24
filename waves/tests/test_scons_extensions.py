@@ -673,17 +673,17 @@ first_target_emitter_input = {
     "subdirectory only stdout": (
         ["set1/subdir1.stdout"],
         [source_file],
-        [f"set1{os.sep}subdir1.stdout"]
+        [f"set1/subdir1.stdout"]
     ),
     "subdirectory first stdout": (
         ["set1/subdir2.stdout", "set1/subdir2.cub"],
         [source_file],
-        [f"set1{os.sep}subdir2.cub", f"set1{os.sep}subdir2.stdout"]
+        [f"set1/subdir2.cub", f"set1/subdir2.stdout"]
     ),
     "subdirectory second stdout": (
         [ "set1/subdir3.cub", "set1/subdir3.stdout"],
         [source_file],
-        [f"set1{os.sep}subdir3.cub", f"set1{os.sep}subdir3.stdout"]
+        [f"set1/subdir3.cub", f"set1/subdir3.stdout"]
     )
 }
 
