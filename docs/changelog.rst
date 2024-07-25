@@ -8,6 +8,11 @@ Changelog
 0.9.5 (unreleased)
 ******************
 
+Bug fixes
+=========
+- Fix the Windows installation CLI entry points and add the conda-build preferred entry points recipe entry
+  (:issue:`703`, :merge:`877`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Return the Python method section headers to the HTML sidebar while preserving a cleaner PDF index without the Python
