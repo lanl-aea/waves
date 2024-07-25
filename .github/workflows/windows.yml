@@ -1,0 +1,31 @@
+# Reference: https://github.com/softprops/action-gh-release
+name: Windows build and test on new tags
+
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          lfs: 'true'
+          fetch-depth: 0
+      - name: MiniConda setup
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: true
+          activate-environment: ""
+      - name: Conda environment
+        shell: powershell
+        run: conda install conda-build conda-verify 'scons>=4' 'setuptools>=62' 'setuptools_scm[toml]>=6.2' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes --channel conda-forge
+      - name: Conda build
+        shell: powershell
+        run: $env:VERSION=(python -m setuptools_scm); conda build recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
