@@ -22,9 +22,10 @@ jobs:
         with:
           auto-activate-base: true
           activate-environment: ""
+          miniforge-version: latest
       - name: Conda environment
         shell: powershell
-        run: conda install conda-build conda-verify 'scons>=4' 'setuptools>=62' 'setuptools_scm[toml]>=6.2' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes --channel conda-forge
+        run: conda install boa conda-build conda-verify 'setuptools_scm[toml]>=6.2' --yes
       - name: Conda build
         shell: powershell
-        run: $env:VERSION=(python -m setuptools_scm); conda build recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
+        run: $env:VERSION=(python -m setuptools_scm); conda mambabuild recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
