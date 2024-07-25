@@ -8,11 +8,18 @@ import pytest
 from waves import _fetch
 from waves import _settings
 from waves.exceptions import ChoicesError
+from common import platform_check
 
 
-root_directory = pathlib.Path("/path/to/source")
+testing_windows, root_fs = platform_check()
+
+if testing_windows:
+    root_directory = pathlib.Path("C:/path/to/source")
+    destination = pathlib.Path("C:/path/to/destination")
+else:
+    root_directory = pathlib.Path("/path/to/source")
+    destination = pathlib.Path("/path/to/destination")
 source_files = [pathlib.Path("dummy.file1"), pathlib.Path("dummy.file2")]
-destination = pathlib.Path("/path/to/destination")
 
 one_file_source_tree = [root_directory / source_files[0]]
 one_file_destination_tree = [destination / source_files[0]]
@@ -172,7 +179,7 @@ def test_build_source_files(root_directory, relative_paths, exclude_patterns,
         assert source_files == expected_source_files
 
 
-expected_path = pathlib.Path("/path/to/source")
+expected_path = root_directory
 longest_common_path_prefix_input = {
     "no list": ([], expected_path, pytest.raises(RuntimeError)),
     "one file, str": (str(one_file_source_tree[0]), expected_path, pytest.raises(ValueError)),
