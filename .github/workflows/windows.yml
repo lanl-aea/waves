@@ -1,4 +1,3 @@
-# Reference: https://github.com/softprops/action-gh-release
 name: Windows build and test on new tags
 
 on:
