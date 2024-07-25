@@ -25,15 +25,16 @@ jobs:
         with:
           auto-activate-base: true
           activate-environment: ""
+          miniforge-version: latest
       - name: Conda environment
         shell: bash -el {0}
-        run: conda install conda-build conda-verify 'scons>=4' 'setuptools>=62' 'setuptools_scm[toml]>=6.2' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes --channel conda-forge
+        run: conda install boa conda-build conda-verify 'scons>=4' 'setuptools>=62' 'setuptools_scm[toml]>=6.2' 'sphinx>=7.1' sphinx-argparse 'sphinx-copybutton>=0.5.1' 'sphinx_rtd_theme>=1' sphinxcontrib-bibtex --yes
       - name: Build documentation
         shell: bash -el {0}
         run: scons latexpdf
       - name: Conda build
         shell: bash -el {0}
-        run: VERSION=$(python -m setuptools_scm) conda build recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
+        run: VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel conda-forge --no-anaconda-upload --output-folder conda-bld
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
