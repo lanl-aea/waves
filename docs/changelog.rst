@@ -26,6 +26,8 @@ Internal Changes
 - Add CI test for the external conda-build recipe (:issue:`703`, :merge:`877`). By `Kyle Brindley`_.
 - Add Windows CI build/test for new tags in GitHub Actions. Update all GitHub Actions to use miniforge for reduced
   environment changes after configuration (:issue:`704`, :merge:`878`). By `Kyle Brindley`_.
+- Update remaining unit test Windows path expectations for Windows absolute paths (:issue:`705`, :merge:`879`). By `Kyle
+  Brindley`_.
 
 ******************
 0.9.4 (2024-07-18)
