@@ -24,6 +24,8 @@ Internal Changes
   improved robustness in building expected results or converting all paths to UNIX style path seps (:merge:`876`). By
   `Kyle Brindley`_.
 - Add CI test for the external conda-build recipe (:issue:`703`, :merge:`877`). By `Kyle Brindley`_.
+- Add Windows CI build/test for new tags in GitHub Actions. Update all GitHub Actions to use miniforge for reduced
+  environment changes after configuration (:issue:`704`, :merge:`878`). By `Kyle Brindley`_.
 
 ******************
 0.9.4 (2024-07-18)
