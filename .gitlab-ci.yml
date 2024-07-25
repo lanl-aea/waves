@@ -31,6 +31,7 @@ before_script:
   - if [[ -d ${environment_path} ]]; then module unload ${environment}; module load ${project_environment}; fi
   - conda info
   - conda_artifacts_directory='conda-bld'
+  - croot="/scratch/$USER/$(basename $PWD)/${conda_artifacts_directory}"
 
 environment:
   stage: environment
@@ -116,13 +117,33 @@ conda-build:
     # Override default permissions. Set group to rx with no write permissions.
     - umask 0022
     - mkdir ${conda_artifacts_directory}
-    - croot="/scratch/$USER/$(basename $PWD)/${conda_artifacts_directory}"
-    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe-internal --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot} --output-folder ${conda_artifacts_directory}
-    - conda build purge --croot ${croot}
+    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe-internal --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot}/recipe-internal --output-folder ${conda_artifacts_directory}
+    - conda build purge --croot ${croot}/recipe-internal
   artifacts:
     expire_in: '2 hrs'
     paths:
       - conda-bld/noarch/waves-*-*.tar.bz2
+  tags:
+    - shell-aea
+
+conda-build-external:
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    # Set the LANL internal proxies
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    - mkdir ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot}/recipe-external --output-folder ${conda_artifacts_directory}
+    - conda build purge --croot ${croot}/recipe-external
   tags:
     - shell-aea
 
