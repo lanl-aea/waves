@@ -1,9 +1,9 @@
 name: Windows build and test on new tags
 
 on:
-  push:
-    tags:
-      - "[0-9]+.[0-9]+.[0-9]+"
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
