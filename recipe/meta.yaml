@@ -22,14 +22,6 @@ build:
   number: 0
   script_env:
     - SETUPTOOLS_SCM_PRETEND_VERSION={{ VERSION }}
-  script:
-    # Build and install Conda package
-    - '%PYTHON% -m build --no-isolation'
-    - '%PYTHON% -m pip install dist/%PKG_NAME%-%PKG_VERSION%.tar.gz --no-deps --ignore-installed -v --no-build-isolation'
-    - '%PYTHON% -m pip show %PKG_NAME%'
-    # Build man page and HTML documentation to bundle in Conda package
-    - scons man html
-    - '%PYTHON% package_documentation.py'
   entry_points:
     - odb_extract = waves._abaqus.odb_extract:main
     - waves = waves._main:main
