@@ -23,6 +23,7 @@ Internal Changes
 - Update unit tests for inconsistent pathlib path seps in Windows Powershell execution. Larger refactor required for
   improved robustness in building expected results or converting all paths to UNIX style path seps (:merge:`876`). By
   `Kyle Brindley`_.
+- Add CI test for the external conda-build recipe (:issue:`703`, :merge:`877`). By `Kyle Brindley`_.
 
 ******************
 0.9.4 (2024-07-18)
