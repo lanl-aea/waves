@@ -385,14 +385,20 @@ abaqus_journal_input = {
                          ids=abaqus_journal_input.keys())
 def test_abaqus_journal(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment ' \
-                      f'{_redirect_environment_postfix}\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {program} cae -noGui ${{SOURCE.abspath}} ' \
-                      f'${{abaqus_options}} -- ${{journal_options}} {_redirect_action_postfix}'
+    expected_string = '${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix}\n' \
+                      '${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ' \
+                          '${redirect_action_postfix}'
 
     env.Append(BUILDERS={"AbaqusJournal": scons_extensions.abaqus_journal(program, post_action)})
     nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${cd_action_prefix")
+    for node in nodes:
+        assert node.env["program"] == program
+        assert node.env["required"] == "cae -noGui ${SOURCE.abspath}"
+        assert node.env["cd_action_prefix"] == _cd_action_prefix
+        assert node.env["redirect_environment_postfix"] == _redirect_environment_postfix
+        assert node.env["redirect_action_postfix"] == _redirect_action_postfix
 
 
 def test_sbatch_abaqus_journal():
