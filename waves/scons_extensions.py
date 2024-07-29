@@ -672,10 +672,17 @@ def abaqus_journal(
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
     function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
     also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
-    override the builder returned by this function. Additional task keyword argument(s):
+    override the builder returned by this function. Task keyword argument(s):
 
-    * ``journal_options``: The journal file command line options provided as a string.
-    * ``abaqus_options``: The Abaqus command line options provided as a string.
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Abaqus command line executable absolute or relative path
+    * ``required``: A space delimited string of Abaqus required arguments
+    * ``abaqus_options``: The Abaqus command line options provided as a string
+    * ``journal_options``: The journal file command line options provided as a string
+    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults
+    * ``redirect_action_postfix``: Advanced behavior. Most users should accept the defaults.
+    * ``redirect_environment_postfix``: Advanced behavior. Most users should accept the defaults.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
@@ -690,15 +697,17 @@ def abaqus_journal(
     ``target.stdout``.
 
     .. code-block::
-       :caption: Abaqus journal builder action
+       :caption: Abaqus journal builder action keywords
 
+       ${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix}",
        ${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}
 
     With the default argument values, this expands to
 
     .. code-block::
-       :caption: Abaqus journal builder action
+       :caption: Abaqus journal builder action default expansion
 
+       cd ${TARGET.dir.abspath} && abaqus -information environment > ${TARGETS[-2].abspath} 2>&1
        cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
@@ -710,12 +719,16 @@ def abaqus_journal(
        env.Append(BUILDERS={"AbaqusJournal": waves.scons_extensions.abaqus_journal()})
        env.AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
-    :param str program: An absolute path or basename string for the abaqus program.
-    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+    :param program: The Abaqus command line executable absolute or relative path
+    :param required: A space delimited string of Abaqus required arguments
+    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
+    :param cd_action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param redirect_action_postfix: Advanced behavior. Most users should accept the defaults.
+    :param redirect_environment_postfix: Advanced behavior. Most users should accept the defaults.
 
     :return: Abaqus journal builder
     :rtype: SCons.Builder.Builder
