@@ -728,14 +728,6 @@ class CartesianProduct(_ParameterGenerator):
         self._samples = numpy.array(list(itertools.product(*self.parameter_schema.values())), dtype=object)
         super()._generate()
 
-    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
-        # Get the ABC docstring into each paramter generator API
-        return super().parameter_study_to_dict(*args, **kwargs)
-
-    def write(self) -> None:
-        # Get the ABC docstring into each paramter generator API
-        super().write()
-
 
 class LatinHypercube(_ScipyGenerator):
     """Builds a Latin-Hypercube parameter study from the `scipy Latin Hypercube`_ class
@@ -818,14 +810,6 @@ class LatinHypercube(_ScipyGenerator):
     def _generate(self, **kwargs) -> None:
         """Generate the Latin Hypercube parameter sets"""
         super()._generate(**kwargs)
-
-    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
-        # Get the ABC docstring into each paramter generator API
-        return super().parameter_study_to_dict(*args, **kwargs)
-
-    def write(self) -> None:
-        # Get the ABC docstring into each paramter generator API
-        super().write()
 
 
 class CustomStudy(_ParameterGenerator):
@@ -913,14 +897,6 @@ class CustomStudy(_ParameterGenerator):
         self._samples = self.parameter_schema['parameter_samples']
         super()._generate()
 
-    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
-        # Get the ABC docstring into each paramter generator API
-        return super().parameter_study_to_dict(*args, **kwargs)
-
-    def write(self) -> None:
-        # Get the ABC docstring into each paramter generator API
-        super().write()
-
 
 class SobolSequence(_ScipyGenerator):
     """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
@@ -999,14 +975,6 @@ class SobolSequence(_ScipyGenerator):
     def _generate(self, **kwargs) -> None:
         """Generate the parameter study dataset from the user provided parameter array"""
         super()._generate(**kwargs)
-
-    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
-        # Get the ABC docstring into each parameter generator API
-        return super().parameter_study_to_dict(*args, **kwargs)
-
-    def write(self) -> None:
-        # Get the ABC docstring into each parameter generator API
-        super().write()
 
 
 class ScipySampler(_ScipyGenerator):
@@ -1097,14 +1065,6 @@ class ScipySampler(_ScipyGenerator):
     def _generate(self, **kwargs) -> None:
         """Generate the `scipy.stats.qmc`_ ``sampler_class`` parameter sets"""
         super()._generate(**kwargs)
-
-    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
-        # Get the ABC docstring into each parameter generator API
-        return super().parameter_study_to_dict(*args, **kwargs)
-
-    def write(self) -> None:
-        # Get the ABC docstring into each parameter generator API
-        super().write()
 
 
 class SALibSampler(_ParameterGenerator, ABC):
@@ -1274,14 +1234,6 @@ class SALibSampler(_ParameterGenerator, ABC):
         self._samples = sampler.sample(problem, N, **kwargs)
         self._samples = numpy.unique(self._samples, axis=0)
         super()._generate()
-
-    def parameter_study_to_dict(self, *args, **kwargs) -> dict:
-        # Get the ABC docstring into each parameter generator API
-        return super().parameter_study_to_dict(*args, **kwargs)
-
-    def write(self) -> None:
-        # Get the ABC docstring into each parameter generator API
-        super().write()
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace

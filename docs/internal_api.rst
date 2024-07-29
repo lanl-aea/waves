@@ -20,6 +20,7 @@ Parameter Generators
     :noindex:
     :members:
     :private-members:
+    :inherited-members:
     :show-inheritance:
 
 **********

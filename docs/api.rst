@@ -31,6 +31,7 @@ Parameter Generators
 
    .. automodule:: waves.parameter_generators
       :members:
+      :inherited-members:
       :show-inheritance:
 
 .. only:: latex or man
@@ -38,6 +39,7 @@ Parameter Generators
    .. automodule:: waves.parameter_generators
       :noindex:
       :members:
+      :inherited-members:
       :show-inheritance:
 
 **********

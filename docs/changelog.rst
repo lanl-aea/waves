@@ -8,6 +8,10 @@ Changelog
 0.9.6 (unreleased)
 ******************
 
+Documentation
+=============
+- Improved inclusion of inherited, public methods in the external API (:issue:`706`, :merge:`880`). By `Kyle Brindley`_.
+
 ******************
 0.9.5 (2024-07-25)
 ******************
