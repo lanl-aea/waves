@@ -7,31 +7,43 @@ SCons Extensions
 ****************
 
 .. automodule:: waves.scons_extensions
-    :noindex:
-    :members:
-    :private-members:
-    :show-inheritance:
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
 
 ********************
 Parameter Generators
 ********************
 
 .. automodule:: waves.parameter_generators
-    :noindex:
-    :members:
-    :private-members:
-    :inherited-members:
-    :show-inheritance:
+   :noindex:
+   :members:
+   :private-members:
+   :inherited-members:
+   :show-inheritance:
+
+   .. autoclass:: waves.parameter_generators._ParameterGenerator
+      :noindex:
+      :members:
+      :private-members:
+      :show-inheritance:
+
+   .. autoclass:: waves.parameter_generators._ScipyGenerator
+      :noindex:
+      :members:
+      :private-members:
+      :show-inheritance:
 
 **********
 Exceptions
 **********
 
 .. automodule:: waves.exceptions
-    :noindex:
-    :members:
-    :private-members:
-    :show-inheritance:
+   :noindex:
+   :members:
+   :private-members:
+   :show-inheritance:
 
 ********
 _main.py
@@ -102,6 +114,12 @@ _utilities.py
    :members:
    :private-members:
    :show-inheritance:
+
+   .. autoclass:: waves._utilities._AtSignTemplate
+      :noindex:
+      :members:
+      :private-members:
+      :show-inheritance:
 
 **************
 odb_extract.py
