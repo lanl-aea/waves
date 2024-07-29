@@ -659,11 +659,20 @@ def _abaqus_journal_emitter(target: list, source: list, env) -> typing.Tuple[lis
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def abaqus_journal(program: str = "abaqus", post_action: list = []) -> SCons.Builder.Builder:
+def abaqus_journal(
+    program: str = "abaqus",
+    required: str = "cae -noGUI ${SOURCE.abspath}",
+    cd_action_prefix: str = _settings._cd_action_prefix,
+    redirect_action_postfix: str = _settings._redirect_action_postfix,
+    redirect_environment_postfix: str = _settings._redirect_environment_postfix,
+    post_action: list = []
+) -> SCons.Builder.Builder:
     """Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds the keyword argument(s):
+    function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
+    also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
+    override the builder returned by this function. Additional task keyword argument(s):
 
     * ``journal_options``: The journal file command line options provided as a string.
     * ``abaqus_options``: The Abaqus command line options provided as a string.
@@ -679,6 +688,13 @@ def abaqus_journal(program: str = "abaqus", post_action: list = []) -> SCons.Bui
     a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
     subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
     ``target.stdout``.
+
+    .. code-block::
+       :caption: Abaqus journal builder action
+
+       ${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}
+
+    With the default argument values, this expands to
 
     .. code-block::
        :caption: Abaqus journal builder action
@@ -705,15 +721,20 @@ def abaqus_journal(program: str = "abaqus", post_action: list = []) -> SCons.Bui
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        f"{program} -information environment {_settings._redirect_environment_postfix}",
-        f"{program} cae -noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} " \
-            f"{_settings._redirect_action_postfix}"
+        "${program} -information environment ${redirect_environment_postfix}",
+        "${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}"
     ]
-    action = construct_action_list(action)
-    action.extend(construct_action_list(post_action))
+    action = construct_action_list(action, prefix="${cd_action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_abaqus_journal_emitter)
+        emitter=_abaqus_journal_emitter,
+        cd_action_prefix=cd_action_prefix,
+        program=program,
+        required=required,
+        redirect_action_postfix=redirect_action_postfix,
+        redirect_environment_postfix=redirect_environment_postfix
+    )
     return abaqus_journal_builder
 
 
@@ -1715,7 +1736,7 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     1. Quinoa control file: ``*.q``
     2. Exodus mesh file: ``*.exo``
 
-    The builder returned by this function accepts all SCons Builder arguments.  Except for the ``post_action``, the
+    The builder returned by this function accepts all SCons Builder arguments. Except for the ``post_action``, the
     arguments of this function are also available as keyword arguments of the builder. When provided during task
     definition, the keyword arguments override the builder returned by this function.
 
