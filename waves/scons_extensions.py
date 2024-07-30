@@ -973,7 +973,12 @@ def sbatch_abaqus_solver(*args, **kwargs):
     modify sbatch behavior.
 
     .. code-block::
-       :caption: Sbatch Abaqus solver builder action
+       :caption: Sbatch Abaqus solver builder action default expansion
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}"
+
+    .. code-block::
+       :caption: Sbatch Abaqus solver builder action default expansion
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1"
     """  # noqa: E501
