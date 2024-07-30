@@ -542,13 +542,13 @@ def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, out
 # target per set.
 abaqus_solver_input = {
     "default behavior": (
-        {"program": "abaqus", "emitter": None}, [], 7, 1, ["input1.inp"], None
+        {"program": "abaqus"}, [], 7, 1, ["input1.inp"], None
     ),
     "different command": (
-        {"program": "dummy", "emitter": None}, [], 7, 1, ["input2.inp"], None
+        {"program": "dummy"}, [], 7, 1, ["input2.inp"], None
     ),
     "post action": (
-        {"program": "abaqus", "emitter": None}, ["post action"], 7, 1, ["input3.inp"], None
+        {"program": "abaqus"}, ["post action"], 7, 1, ["input3.inp"], None
     ),
     "standard solver": (
         {"program": "abaqus", "emitter": "standard"}, [], 8, 1, ["input4.inp"], None
@@ -597,7 +597,7 @@ def test_abaqus_solver(kwargs, post_action, node_count, action_count, source_lis
     check_action_string(
         nodes, post_action, node_count, action_count, expected_string, post_action_prefix="${action_prefix}"
     )
-    check_expected_targets(nodes, kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
+    check_expected_targets(nodes, expected_kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
 
 
 def test_sbatch_abaqus_solver():
