@@ -382,8 +382,8 @@ abaqus_journal_input = {
          "program": "someothercommand",
          "action_prefix": "nocd",
          "required": "cae python",
-         "action_postfix": "",
-         "environment_postfix": ""
+         "action_suffix": "",
+         "environment_suffix": ""
         },
         [], 3, 1, ["nodefaults.cae"]
     ),
@@ -405,15 +405,15 @@ def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_li
         "program": "abaqus",
         "required": "cae -noGUI ${SOURCE.abspath}",
         "action_prefix": _cd_action_prefix,
-        "action_postfix": _redirect_action_postfix,
-        "environment_postfix": _redirect_environment_postfix
+        "action_suffix": _redirect_action_postfix,
+        "environment_suffix": _redirect_environment_postfix
     }
     # Update expected arguments to match test case
     expected_kwargs.update(kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_string = '${action_prefix} ${program} -information environment ${environment_postfix}\n' \
+    expected_string = '${action_prefix} ${program} -information environment ${environment_suffix}\n' \
                       '${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ' \
-                          '${action_postfix}'
+                          '${action_suffix}'
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
@@ -430,8 +430,8 @@ def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_li
 
 def test_sbatch_abaqus_journal():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ' \
-               '${program} -information environment ${environment_postfix} && ${action_prefix} ' \
-               '${program} ${required} ${abaqus_options} -- ${journal_options} ${action_postfix}"'
+               '${program} -information environment ${environment_suffix} && ${action_prefix} ' \
+               '${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"'
     builder = scons_extensions.sbatch_abaqus_journal()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._abaqus_journal_emitter
