@@ -377,6 +377,16 @@ abaqus_journal_input = {
     "default behavior": (
         {"program": "abaqus"}, [], 3, 1, ["journal1.cae"]
     ),
+    "no defaults": (
+        {
+         "program": "someothercommand",
+         "cd_action_prefix": "nocd",
+         "required": "cae python",
+         "redirect_action_postfix": "",
+         "redirect_environment_postfix": ""
+        },
+        [], 3, 1, ["nodefaults.cae"]
+    ),
     "different command": (
         {"program": "dummy"}, [], 3, 1, ["journal2.cae"]
     ),
