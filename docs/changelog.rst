@@ -4,13 +4,18 @@
 Changelog
 #########
 
-******************
-0.9.6 (unreleased)
-******************
+*******************
+0.10.0 (unreleased)
+*******************
 
 Documentation
 =============
 - Improved inclusion of inherited, public methods in the external API (:issue:`706`, :merge:`880`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Expose the Abaqus journal action keyword arguments to the constructor API and task definition for greater flexibility
+  in constructed builder behavior (:issue:`708`, :merge:`881`). By `Kyle Brindley`_.
 
 ******************
 0.9.5 (2024-07-25)
