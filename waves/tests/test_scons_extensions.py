@@ -556,15 +556,19 @@ abaqus_solver_input = {
                          ids=abaqus_solver_input.keys())
 def test_abaqus_solver(program, post_action, node_count, action_count, source_list, emitter, suffixes):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} -information environment ' \
-                      f'{_redirect_environment_postfix}\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {program} -job ${{job_name}} -input ' \
-                       '${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no ' \
-                      f'{_redirect_action_postfix}'
+    expected_string = \
+        "${action_prefix} ${program} -information environment ${environment_suffix}\n" \
+        "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} " \
+            "${action_suffix}"
 
-    env.Append(BUILDERS={"AbaqusSolver": scons_extensions.abaqus_solver(program, post_action, emitter)})
+    env.Append(BUILDERS={
+        "AbaqusSolver": scons_extensions.abaqus_solver(program=program, post_action=post_action, emitter=emitter)
+    })
     nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+    check_action_string(
+        nodes, post_action, node_count, action_count, expected_string, post_action_prefix="${action_prefix}"
+    )
     check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
 
 
