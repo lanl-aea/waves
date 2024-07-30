@@ -598,6 +598,10 @@ def test_abaqus_solver(kwargs, post_action, node_count, action_count, source_lis
         nodes, post_action, node_count, action_count, expected_string, post_action_prefix="${action_prefix}"
     )
     check_expected_targets(nodes, expected_kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            if key is not "emitter":
+                assert node.env[key] == expected_value
 
 
 def test_sbatch_abaqus_solver():
