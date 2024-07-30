@@ -841,7 +841,7 @@ def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> typing.
 
 def abaqus_solver(
     program: str = "abaqus",
-    required: str = "-interactive -ask_delete no"
+    required: str = "-interactive -ask_delete no",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_postfix,
     environment_suffix: str = _settings._redirect_environment_postfix,
