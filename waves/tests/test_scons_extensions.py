@@ -541,35 +541,63 @@ def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, out
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 abaqus_solver_input = {
-    "default behavior": ("abaqus", [], 7, 1, ["input1.inp"], None, None),
-    "different command": ("dummy", [], 7, 1, ["input2.inp"], None, None),
-    "post action": ("abaqus", ["post action"], 7, 1, ["input3.inp"], None, None),
-    "standard solver": ("abaqus", [], 8, 1, ["input4.inp"], "standard", None),
-    "explicit solver": ("abaqus", [], 8, 1, ["input5.inp"], "explicit", None),
-    "datacheck solver": ("abaqus", [], 11, 1, ["input6.inp"], "datacheck", None),
-    "standard solver, suffixes override": ("abaqus", [], 3, 1, ["input4.inp"], "standard", [".odb"]),
+    "default behavior": (
+        {"program": "abaqus", "emitter": None}, [], 7, 1, ["input1.inp"], None
+    ),
+    "different command": (
+        {"program": "dummy", "emitter": None}, [], 7, 1, ["input2.inp"], None
+    ),
+    "post action": (
+        {"program": "abaqus", "emitter": None}, ["post action"], 7, 1, ["input3.inp"], None
+    ),
+    "standard solver": (
+        {"program": "abaqus", "emitter": "standard"}, [], 8, 1, ["input4.inp"], None
+    ),
+    "explicit solver": (
+        {"program": "abaqus", "emitter": "explicit"}, [], 8, 1, ["input5.inp"], None
+    ),
+    "datacheck solver": (
+        {"program": "abaqus", "emitter": "datacheck"}, [], 11, 1, ["input6.inp"], None
+    ),
+    "standard solver, suffixes override": (
+        {"program": "abaqus", "emitter": "standard"}, [], 3, 1, ["input4.inp"], [".odb"]
+    ),
 }
 
 
-@pytest.mark.parametrize("program, post_action, node_count, action_count, source_list, emitter, suffixes",
+@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, source_list, suffixes",
                          abaqus_solver_input.values(),
                          ids=abaqus_solver_input.keys())
-def test_abaqus_solver(program, post_action, node_count, action_count, source_list, emitter, suffixes):
-    env = SCons.Environment.Environment()
+def test_abaqus_solver(kwargs, post_action, node_count, action_count, source_list, suffixes):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "program": "abaqus",
+        "required": "-interactive -ask_delete no",
+        "action_prefix": _cd_action_prefix,
+        "action_suffix": _redirect_action_postfix,
+        "environment_suffix": _redirect_environment_postfix,
+        "emitter": None
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         "${action_prefix} ${program} -information environment ${environment_suffix}\n" \
         "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} " \
             "${action_suffix}"
 
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "AbaqusSolver": scons_extensions.abaqus_solver(program=program, post_action=post_action, emitter=emitter)
+        "AbaqusSolver": scons_extensions.abaqus_solver(**kwargs, post_action=post_action)
     })
     nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
 
+    # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(
         nodes, post_action, node_count, action_count, expected_string, post_action_prefix="${action_prefix}"
     )
-    check_expected_targets(nodes, emitter, pathlib.Path(source_list[0]).stem, suffixes)
+    check_expected_targets(nodes, kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
 
 
 def test_sbatch_abaqus_solver():
