@@ -672,7 +672,7 @@ def abaqus_journal(
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
     function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
     also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
-    override the builder returned by this function. Task keyword argument(s):
+    override the builder returned by this function.
 
     *Builder/Task keyword arguments*
 
@@ -848,11 +848,17 @@ def abaqus_solver(
     post_action: typing.Iterable[str] = [],
     emitter: typing.Literal["standard", "explicit", "datacheck", None] = None
 ) -> SCons.Builder.Builder:
-    """Abaqus solver SCons builder
+    """Construct and return an Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds the keyword argument(s):
+    function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
+    also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
+    override the builder returned by this function.
 
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Abaqus command line executable absolute or relative path
+    * ``required``: A space delimited string of Abaqus required arguments
     * ``job_name``: The job name string. If not specified ``job_name`` defaults to the root input file stem. The Builder
         emitter will append common Abaqus output files as targets automatically from the ``job_name``, e.g.
         ``job_name.odb``.
@@ -860,6 +866,9 @@ def abaqus_solver(
     * ``suffixes``: override the emitter targets with a new list of extensions, e.g.
       ``AbaqusSolver(target=[], source=["input.inp"], suffixes=[".odb"])`` will emit only one file named
       ``job_name.odb``.
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults
+    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
+    * ``environment_suffix``: Advanced behavior. Most users should accept the defaults.
 
     The first target determines the working directory for the builder's action, as shown in the action code snippet
     below. The action changes the working directory to the first target's parent directory prior to executing the
@@ -897,11 +906,22 @@ def abaqus_solver(
        env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
 
     .. code-block::
-       :caption: Abaqus solver builder action
+       :caption: Abaqus solver builder action keywords
 
+       ${action_prefix} ${program} -information environment ${environment_suffix}
+       ${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}
+
+    .. code-block::
+       :caption: Abaqus solver builder action default expansion
+
+       cd ${TARGET.dir.abspath} && abaqus -information environment > ${TARGETS[-2].abspath} 2>&1
        cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1
 
     :param program: An absolute path or basename string for the abaqus program
+    :param required: A space delimited string of Abaqus required arguments
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_suffix: Advanced behavior. Most users should accept the defaults.
+    :param environment_suffix: Advanced behavior. Most users should accept the defaults.
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
