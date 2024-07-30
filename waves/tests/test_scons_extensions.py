@@ -374,31 +374,43 @@ def test_abaqus_journal_emitter(target, source, expected):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 abaqus_journal_input = {
-    "default behavior": ("abaqus", [], 3, 1, ["journal1.cae"]),
-    "different command": ("dummy", [], 3, 1, ["journal2.cae"]),
-    "post action": ("abaqus", ["post action"], 3, 1, ["journal3.cae"])
+    "default behavior": (
+        {"program": "abaqus"}, [], 3, 1, ["journal1.cae"]
+    ),
+    "different command": (
+        {"program": "dummy"}, [], 3, 1, ["journal2.cae"]
+    ),
+    "post action": (
+        {"program": "abaqus"}, ["post action"], 3, 1, ["journal3.cae"]
+    )
 }
 
 
-@pytest.mark.parametrize("program, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, target_list",
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
-def test_abaqus_journal(program, post_action, node_count, action_count, target_list):
+def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_list):
+    expected_kwargs = {
+        "program": "abaqus",
+        "required": "cae -noGUI ${SOURCE.abspath}",
+        "cd_action_prefix": _cd_action_prefix,
+        "redirect_action_postfix": _redirect_action_postfix,
+        "redirect_environment_postfix": _redirect_environment_postfix
+    }
+    expected_kwargs.update(kwargs)
+
     env = SCons.Environment.Environment()
     expected_string = '${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix}\n' \
                       '${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ' \
                           '${redirect_action_postfix}'
 
-    env.Append(BUILDERS={"AbaqusJournal": scons_extensions.abaqus_journal(program, post_action=post_action)})
+    env.Append(BUILDERS={"AbaqusJournal": scons_extensions.abaqus_journal(**kwargs, post_action=post_action)})
     nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
                         post_action_prefix="${cd_action_prefix}")
     for node in nodes:
-        assert node.env["program"] == program
-        assert node.env["required"] == "cae -noGUI ${SOURCE.abspath}"
-        assert node.env["cd_action_prefix"] == _cd_action_prefix
-        assert node.env["redirect_environment_postfix"] == _redirect_environment_postfix
-        assert node.env["redirect_action_postfix"] == _redirect_action_postfix
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 def test_sbatch_abaqus_journal():
