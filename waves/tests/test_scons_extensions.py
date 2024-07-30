@@ -618,9 +618,10 @@ def test_abaqus_solver(kwargs, node_count, action_count, source_list, suffixes):
 
 
 def test_sbatch_abaqus_solver():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
-        f'-information environment {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && abaqus -job ${{job_name}} ' \
-        f'-input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no {_redirect_action_postfix}"'
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "' \
+               '${action_prefix} ${program} -information environment ${environment_suffix} && ' \
+               '${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ' \
+                   '${action_suffix}"'
     builder = scons_extensions.sbatch_abaqus_solver()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._abaqus_solver_emitter
