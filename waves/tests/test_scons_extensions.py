@@ -400,6 +400,7 @@ abaqus_journal_input = {
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
 def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_list):
+    # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
         "required": "cae -noGUI ${SOURCE.abspath}",
@@ -407,15 +408,19 @@ def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_li
         "redirect_action_postfix": _redirect_action_postfix,
         "redirect_environment_postfix": _redirect_environment_postfix
     }
+    # Update expected arguments to match test case
     expected_kwargs.update(kwargs)
-
-    env = SCons.Environment.Environment()
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = '${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix}\n' \
                       '${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ' \
                           '${redirect_action_postfix}'
 
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
     env.Append(BUILDERS={"AbaqusJournal": scons_extensions.abaqus_journal(**kwargs, post_action=post_action)})
     nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
+
+    # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
                         post_action_prefix="${cd_action_prefix}")
     for node in nodes:
