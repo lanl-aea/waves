@@ -544,6 +544,16 @@ abaqus_solver_input = {
     "default behavior": (
         {"program": "abaqus"}, [], 7, 1, ["input1.inp"], None
     ),
+    "no defaults": (
+        {
+         "program": "notdefault",
+         "required": "-other options",
+         "action_prefix": "nocd",
+         "action_suffix": "",
+         "environment_suffix": ""
+        },
+        [], 7, 1, ["nodefaults.inp"], None
+    ),
     "different command": (
         {"program": "dummy"}, [], 7, 1, ["input2.inp"], None
     ),
