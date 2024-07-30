@@ -742,9 +742,9 @@ def abaqus_journal(
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_journal_emitter,
-        action_prefix=action_prefix,
         program=program,
         required=required,
+        action_prefix=action_prefix,
         action_suffix=action_suffix,
         environment_suffix=environment_suffix
     )
@@ -839,8 +839,15 @@ def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> typing.
     return _abaqus_solver_emitter(target, source, env, _settings._abaqus_datacheck_extensions)
 
 
-def abaqus_solver(program: str = "abaqus", post_action: typing.Iterable[str] = [],
-                  emitter: typing.Literal["standard", "explicit", "datacheck", None] = None) -> SCons.Builder.Builder:
+def abaqus_solver(
+    program: str = "abaqus",
+    required: str = "-interactive -ask_delete no"
+    action_prefix: str = _settings._cd_action_prefix,
+    action_suffix: str = _settings._redirect_action_postfix,
+    environment_suffix: str = _settings._redirect_environment_postfix,
+    post_action: typing.Iterable[str] = [],
+    emitter: typing.Literal["standard", "explicit", "datacheck", None] = None
+) -> SCons.Builder.Builder:
     """Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
@@ -911,12 +918,11 @@ def abaqus_solver(program: str = "abaqus", post_action: typing.Iterable[str] = [
     :return: Abaqus solver builder
     """  # noqa: E501
     action = [
-        f"{program} -information environment {_settings._redirect_environment_postfix}",
-        f"{program} -job ${{job_name}} -input ${{SOURCE.filebase}} ${{abaqus_options}} -interactive -ask_delete no " \
-            f"{_settings._redirect_action_postfix}"
+        "${program} -information environment ${environment_suffix}",
+        "${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}"
     ]
-    action = construct_action_list(action)
-    action.extend(construct_action_list(post_action))
+    action = construct_action_list(action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     if emitter:
         emitter = emitter.lower()
     if emitter == 'standard':
@@ -929,7 +935,13 @@ def abaqus_solver(program: str = "abaqus", post_action: typing.Iterable[str] = [
         abaqus_emitter = _abaqus_solver_emitter
     abaqus_solver_builder = SCons.Builder.Builder(
         action=action,
-        emitter=abaqus_emitter)
+        emitter=abaqus_emitter,
+        program=program,
+        required=required,
+        action_prefix=action_prefix,
+        action_suffix=action_suffix,
+        environment_suffix=environment_suffix
+    )
     return abaqus_solver_builder
 
 
