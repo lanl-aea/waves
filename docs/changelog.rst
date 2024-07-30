@@ -8,6 +8,11 @@ Changelog
 0.10.0 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Remove unnecessary single quotes in task definition shell commands. Fixes errors in Windows Powershell tutorial
+  execution (:issue:`717`, :merge:`882`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Improved inclusion of inherited, public methods in the external API (:issue:`706`, :merge:`880`). By `Kyle Brindley`_.

@@ -153,7 +153,7 @@ regression_file = python_source_abspath / "rectangle_compression_cartesian_produ
 post_processing_source = [f"{pathlib.Path(set_name) / job_name}_datasets.h5" for set_name in
                           parameter_generator.parameter_study.parameter_sets.values]
 script_options = "--input-file ${SOURCES[3:].abspath}"
-script_options += " --output-file ${TARGET.file} --x-units 'mm/mm' --y-units 'MPa'"
+script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
 script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 script_options += " --csv-regression-file ${SOURCES[2].abspath}"
 workflow.extend(env.PythonScript(
