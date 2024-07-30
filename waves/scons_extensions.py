@@ -667,7 +667,7 @@ def abaqus_journal(
     environment_postfix: str = _settings._redirect_environment_postfix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
-    """Abaqus journal file SCons builder
+    """Construct and return an Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
     function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
