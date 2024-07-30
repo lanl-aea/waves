@@ -380,10 +380,10 @@ abaqus_journal_input = {
     "no defaults": (
         {
          "program": "someothercommand",
-         "cd_action_prefix": "nocd",
+         "action_prefix": "nocd",
          "required": "cae python",
-         "redirect_action_postfix": "",
-         "redirect_environment_postfix": ""
+         "action_postfix": "",
+         "environment_postfix": ""
         },
         [], 3, 1, ["nodefaults.cae"]
     ),
@@ -404,16 +404,16 @@ def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_li
     expected_kwargs = {
         "program": "abaqus",
         "required": "cae -noGUI ${SOURCE.abspath}",
-        "cd_action_prefix": _cd_action_prefix,
-        "redirect_action_postfix": _redirect_action_postfix,
-        "redirect_environment_postfix": _redirect_environment_postfix
+        "action_prefix": _cd_action_prefix,
+        "action_postfix": _redirect_action_postfix,
+        "environment_postfix": _redirect_environment_postfix
     }
     # Update expected arguments to match test case
     expected_kwargs.update(kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_string = '${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix}\n' \
-                      '${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ' \
-                          '${redirect_action_postfix}'
+    expected_string = '${action_prefix} ${program} -information environment ${environment_postfix}\n' \
+                      '${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ' \
+                          '${action_postfix}'
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
@@ -422,16 +422,16 @@ def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_li
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${cd_action_prefix}")
+                        post_action_prefix="${action_prefix}")
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
 
 
 def test_sbatch_abaqus_journal():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${cd_action_prefix} ' \
-               '${program} -information environment ${redirect_environment_postfix} && ${cd_action_prefix} ' \
-               '${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}"'
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ' \
+               '${program} -information environment ${environment_postfix} && ${action_prefix} ' \
+               '${program} ${required} ${abaqus_options} -- ${journal_options} ${action_postfix}"'
     builder = scons_extensions.sbatch_abaqus_journal()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._abaqus_journal_emitter

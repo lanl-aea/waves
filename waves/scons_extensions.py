@@ -662,9 +662,9 @@ def _abaqus_journal_emitter(target: list, source: list, env) -> typing.Tuple[lis
 def abaqus_journal(
     program: str = "abaqus",
     required: str = "cae -noGUI ${SOURCE.abspath}",
-    cd_action_prefix: str = _settings._cd_action_prefix,
-    redirect_action_postfix: str = _settings._redirect_action_postfix,
-    redirect_environment_postfix: str = _settings._redirect_environment_postfix,
+    action_prefix: str = _settings._cd_action_prefix,
+    action_postfix: str = _settings._redirect_action_postfix,
+    environment_postfix: str = _settings._redirect_environment_postfix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Abaqus journal file SCons builder
@@ -699,8 +699,8 @@ def abaqus_journal(
     .. code-block::
        :caption: Abaqus journal builder action keywords
 
-       ${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix}
-       ${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}
+       ${action_prefix} ${program} -information environment ${environment_postfix}
+       ${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_postfix}
 
     With the default argument values, this expands to
 
@@ -726,27 +726,27 @@ def abaqus_journal(
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
         ${TARGET.dir.abspath} && ${post_action}``
-    :param cd_action_prefix: Advanced behavior. Most users should accept the defaults.
-    :param redirect_action_postfix: Advanced behavior. Most users should accept the defaults.
-    :param redirect_environment_postfix: Advanced behavior. Most users should accept the defaults.
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_postfix: Advanced behavior. Most users should accept the defaults.
+    :param environment_postfix: Advanced behavior. Most users should accept the defaults.
 
     :return: Abaqus journal builder
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        "${program} -information environment ${redirect_environment_postfix}",
-        "${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}"
+        "${program} -information environment ${environment_postfix}",
+        "${program} ${required} ${abaqus_options} -- ${journal_options} ${action_postfix}"
     ]
-    action = construct_action_list(action, prefix="${cd_action_prefix}")
-    action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
+    action = construct_action_list(action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_journal_emitter,
-        cd_action_prefix=cd_action_prefix,
+        action_prefix=action_prefix,
         program=program,
         required=required,
-        redirect_action_postfix=redirect_action_postfix,
-        redirect_environment_postfix=redirect_environment_postfix
+        action_postfix=action_postfix,
+        environment_postfix=environment_postfix
     )
     return abaqus_journal_builder
 
@@ -761,7 +761,7 @@ def sbatch_abaqus_journal(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Abaqus journal builder action keywords
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix} && ${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} -information environment ${environment_postfix} && ${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_postfix}"
 
     .. code-block::
        :caption: Sbatch Abaqus journal builder action default expansion
