@@ -699,7 +699,7 @@ def abaqus_journal(
     .. code-block::
        :caption: Abaqus journal builder action keywords
 
-       ${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix}",
+       ${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix}
        ${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}
 
     With the default argument values, this expands to
@@ -759,7 +759,12 @@ def sbatch_abaqus_journal(*args, **kwargs):
     modify sbatch behavior.
 
     .. code-block::
-       :caption: Sbatch Abaqus journal builder action
+       :caption: Sbatch Abaqus journal builder action keywords
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${cd_action_prefix} ${program} -information environment ${redirect_environment_postfix} && ${cd_action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}"
+
+    .. code-block::
+       :caption: Sbatch Abaqus journal builder action default expansion
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1"
     """  # noqa: E501

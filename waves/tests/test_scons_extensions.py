@@ -402,9 +402,9 @@ def test_abaqus_journal(program, post_action, node_count, action_count, target_l
 
 
 def test_sbatch_abaqus_journal():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus ' \
-        f'-information environment {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && abaqus cae ' \
-        f'-noGui ${{SOURCE.abspath}} ${{abaqus_options}} -- ${{journal_options}} {_redirect_action_postfix}"'
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${cd_action_prefix} ' \
+               '${program} -information environment ${redirect_environment_postfix} && ${cd_action_prefix} ' \
+               '${program} ${required} ${abaqus_options} -- ${journal_options} ${redirect_action_postfix}"'
     builder = scons_extensions.sbatch_abaqus_journal()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._abaqus_journal_emitter
