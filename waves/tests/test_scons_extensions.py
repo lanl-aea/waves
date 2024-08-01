@@ -656,6 +656,16 @@ sierra_input = {
     "default behavior": (
         {}, [], 3, 1, ["input1.i"], ['inptu1.g']
     ),
+    "no defaults": (
+        {
+         "program": "different program",
+         "application": "different application",
+         "action_prefix": "different prefix",
+         "action_suffix": "different action suffix",
+         "environment_suffix": "different environment suffix",
+        },
+        [], 3, 1, ["nodefaults.i"], ['nodefaults.g']
+    ),
     "different command": (
         {"program": "dummy", "application": "application"}, [], 3, 1, ["input2.i"], ['inptu2.g']
     ),
