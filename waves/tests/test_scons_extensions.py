@@ -664,14 +664,15 @@ sierra_input = {
                          ids=sierra_input.keys())
 def test_sierra(program, application, post_action, node_count, action_count, source_list, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} {application} --version ' \
-                      f'{_redirect_environment_postfix}\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {program} ${{sierra_options}} {application} ${{application_options}} -i ' \
-                      f'${{SOURCE.file}} {_redirect_action_postfix}'
-
-    env.Append(BUILDERS={"Sierra": scons_extensions.sierra(program, application, post_action)})
+    expected_string = \
+        "${action_prefix} ${program} ${application} --version ${environment_suffix}\n" \
+        "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}"
+    env.Append(BUILDERS={
+        "Sierra": scons_extensions.sierra(program=program, application=application, post_action=post_action)
+    })
     nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${action_prefix}")
 
 
 def test_sbatch_sierra():
