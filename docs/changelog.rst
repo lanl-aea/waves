@@ -21,6 +21,8 @@ Enhancements
 ============
 - Expose the Abaqus journal action keyword arguments to the constructor API and task definition for greater flexibility
   in constructed builder behavior (:issue:`708`, :merge:`881`). By `Kyle Brindley`_.
+- Expose the Abaqus solver action keyword arguments to the constructor API and task definitions for greater flexibility
+  in constructed builder behavior (:issue:`710`, :merge:`883`). By `Kyle Brindley`_.
 
 ******************
 0.9.5 (2024-07-25)
