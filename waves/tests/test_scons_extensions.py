@@ -903,19 +903,20 @@ matlab_script_input = {
                          ids=matlab_script_input.keys())
 def test_matlab_script(program, post_action, node_count, action_count, target_list):
     env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
+    expected_string = '${action_prefix} ${program} ${matlab_options} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '[fileList, productList] = matlab.codetools.requiredFilesAndProducts(\'${SOURCE.file}\'); ' \
                           'disp(cell2table(fileList)); disp(struct2table(productList, \'AsArray\', true)); exit;" ' \
-                          f'{_redirect_environment_postfix}\n' \
-                      f'cd ${{TARGET.dir.abspath}} && {program} ${{matlab_options}} -batch ' \
+                          '${environment_suffix}\n' \
+                      '${action_prefix} ${program} ${matlab_options} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
                           '${SOURCE.filebase}(${script_options})\" ' \
-                          f'{_redirect_action_postfix}'
+                          '${action_suffix}'
 
-    env.Append(BUILDERS={"MatlabScript": scons_extensions.matlab_script(program, post_action)})
+    env.Append(BUILDERS={"MatlabScript": scons_extensions.matlab_script(program=program, post_action=post_action)})
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${action_prefix}")
 
 
 def test_conda_environment():

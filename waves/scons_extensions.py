@@ -1455,7 +1455,7 @@ def matlab_script(
         "${program} ${matlab_options} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
             "${SOURCE.filebase}(${script_options})\" " \
-            "{action_suffix}"
+            "${action_suffix}"
     ]
     action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
