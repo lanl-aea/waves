@@ -653,26 +653,50 @@ def test_sierra_emitter(target, source, expected):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 sierra_input = {
-    "default behavior": ("sierra", "adagio", [], 3, 1, ["input1.i"], ['inptu1.g']),
-    "different command": ("dummy", "application", [], 3, 1, ["input2.i"], ['inptu2.g']),
-    "post action": ("sierra", "adagio", ["post action"], 3, 1, ["input3.i"], ['inptu3.g']),
+    "default behavior": (
+        {}, [], 3, 1, ["input1.i"], ['inptu1.g']
+    ),
+    "different command": (
+        {"program": "dummy", "application": "application"}, [], 3, 1, ["input2.i"], ['inptu2.g']
+    ),
+    "post action": (
+        {}, ["post action"], 3, 1, ["input3.i"], ['inptu3.g']
+    ),
 }
 
 
-@pytest.mark.parametrize("program, application, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, source_list, target_list",
                          sierra_input.values(),
                          ids=sierra_input.keys())
-def test_sierra(program, application, post_action, node_count, action_count, source_list, target_list):
-    env = SCons.Environment.Environment()
+def test_sierra(kwargs, post_action, node_count, action_count, source_list, target_list):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "program": "sierra",
+        "application": "adagio",
+        "action_prefix": _cd_action_prefix,
+        "action_suffix": _redirect_action_postfix,
+        "environment_suffix": _redirect_environment_postfix
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         "${action_prefix} ${program} ${application} --version ${environment_suffix}\n" \
         "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}"
+
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "Sierra": scons_extensions.sierra(program=program, application=application, post_action=post_action)
+        "Sierra": scons_extensions.sierra(**kwargs, post_action=post_action)
     })
+
+    # Test task definition node counts, action(s), and task keyword arguments
     nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
                         post_action_prefix="${action_prefix}")
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 def test_sbatch_sierra():
