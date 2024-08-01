@@ -156,8 +156,8 @@ def test_ssh_builder_actions():
     expected = [
         'ssh ${remote_server} "mkdir -p ${remote_directory}"',
         "rsync -rlptv ${SOURCES.abspath} ${remote_server}:${remote_directory}",
-        "ssh ${remote_server} 'cd ${remote_directory} && python ${python_options} ${SOURCE.file} " \
-        "${script_options} > ${TARGETS[-1].file} 2>&1'",
+        "ssh ${remote_server} '${action_prefix} ${program} ${python_options} ${SOURCE.file} " \
+            "${script_options} ${action_suffix}'",
         "rsync -rltpv ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}"
     ]
     assert ssh_python_builder_action_list == expected
@@ -863,8 +863,8 @@ def test_python_script(kwargs, post_action, node_count, action_count, target_lis
 
 
 def test_sbatch_python_script():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ' \
-        f'${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_redirect_action_postfix}"'
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "' \
+       '${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"'
     builder = scons_extensions.sbatch_python_script()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._first_target_emitter
