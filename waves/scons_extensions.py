@@ -1386,6 +1386,7 @@ def matlab_script(
     program: str = "matlab",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_postfix,
+    environment_suffix: str = _settings._redirect_environment_postfix,
     post_action: typing.Iterable[str] = []
 ) -> SCons.Builder.Builder:
     """Matlab script SCons builder
@@ -1404,6 +1405,7 @@ def matlab_script(
     * ``script_options``: The Matlab function interface options in Matlab syntax and provided as a string.
     * ``action_prefix``: Advanced behavior. Most users should accept the defaults
     * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
+    * ``environment_suffix``: Advanced behavior. Most users should accept the defaults.
 
     The parent directory absolute path is added to the Matlab ``path`` variable prior to execution. All required Matlab
     files should be co-located in the same source directory.
@@ -1423,16 +1425,19 @@ def matlab_script(
     .. code-block::
        :caption: Matlab script builder action keywords
 
+       ${action_prefix} ${program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); [fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;" ${environment_suffix}
        ${action_prefix} ${program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" ${action_suffix}
 
     .. code-block::
        :caption: Matlab script builder action default expansion
 
+       cd ${TARGET.dir.abspath} && matlab ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); [fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;" > ${TARGETS[-2].abspath} 2>&1
        cd ${TARGET.dir.abspath} && matlab ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGETS[-1].abspath} 2>&1
 
     :param program: An absolute path or basename string for the Matlab program.
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
+    :param environment_suffix: Advanced behavior. Most users should accept the defaults.
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
         non-zero exit code even if Matlab does not. Builder keyword variables are available for substitution in the
