@@ -1052,24 +1052,54 @@ def test_build_odb_extract(target, source, env, calls):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 sbatch_input = {
-    "default behavior": ("sbatch", [], 2, 1, ["target1.out"]),
-    "different command": ("dummy", [], 2, 1, ["target2.out"]),
-    "post action": ("sbatch", ["post action"], 2, 1, ["target3.out"])
+    "default behavior": (
+        {}, [], 2, 1, ["target1.out"]
+    ),
+    "no defaults": (
+        {}, [], 2, 1, ["target1.out"]
+    ),
+    "different command": (
+        {
+         "program": "different program",
+         "required": "different required",
+         "action_prefix": "different action prefix",
+        },
+        [], 2, 1, ["nodefaults.out"]
+    ),
+    "post action": (
+        {}, ["post action"], 2, 1, ["target3.out"]
+    )
 }
 
 
-@pytest.mark.parametrize("program, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
-def test_sbatch(program, post_action, node_count, action_count, target_list):
-    env = SCons.Environment.Environment()
-    expected_string = f'cd ${{TARGET.dir.abspath}} && {program} --wait --output=${{TARGETS[-1].abspath}} ' \
-                       '${sbatch_options} --wrap "${slurm_job}"'
+def test_sbatch(kwargs, post_action, node_count, action_count, target_list):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "program": "sbatch",
+        "required": "--wait --output=${TARGETS[-1].abspath}",
+        "action_prefix": _cd_action_prefix
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_string = \
+        '${action_prefix} ${program} ${required} ${sbatch_options} --wrap "${slurm_job}"'
 
-    env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(program, post_action)})
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(**kwargs, post_action=post_action)})
     nodes = env.SlurmSbatch(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET")
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+    # Test task definition node counts, action(s), and task keyword arguments
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${action_prefix}")
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 scanner_input = {                                   # content,       expected_dependencies

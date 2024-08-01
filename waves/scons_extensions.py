@@ -1655,7 +1655,7 @@ def _build_odb_extract(target: list, source: list, env) -> None:
 
 def sbatch(
     program: str = "sbatch",
-    required: str = "--wait --output=${TARGETS[-1].abspath}"
+    required: str = "--wait --output=${TARGETS[-1].abspath}",
     action_prefix: str = _settings._cd_action_prefix,
     post_action: typing.Iterable[str] = []
 ) -> SCons.Builder.Builder:
@@ -1715,8 +1715,8 @@ def sbatch(
     action = [
         "${program} ${required} ${sbatch_options} --wrap \"${slurm_job}\""
     ]
-    action = construct_action_list(action)
-    action.extend(construct_action_list(post_action))
+    action = construct_action_list(action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
