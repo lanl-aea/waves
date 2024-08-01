@@ -828,7 +828,7 @@ python_script_input = {
         },
         [], 2, 1, ["nodefaults.out"]
     ),
-    "different command": ({}, [], 2, 1, ["python_script2.out"]),
+    "different command": ({"program": "python2"}, [], 2, 1, ["python_script2.out"]),
     "post action": ({}, ["post action"], 2, 1, ["python_script3.out"])
 }
 
