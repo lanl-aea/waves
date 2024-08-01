@@ -25,6 +25,8 @@ Enhancements
   in constructed builder behavior (:issue:`710`, :merge:`883`). By `Kyle Brindley`_.
 - Expose the Sierra action keyword arguments to the constructor API and task definitions for greater flexibility in
   constructed builder behavior (:issue:`711`, :merge:`885`). By `Kyle Brindley`_.
+- Expose the Python script action keyword arguments to the constructor API and task definitions for greater flexibility
+  in constructed builder behavior (:issue:`711`, :merge:`885`). By `Kyle Brindley`_.
 
 ******************
 0.9.5 (2024-07-25)
