@@ -1267,14 +1267,26 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
     return target_list
 
 
-def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
-    """Python script SCons builder
+def python_script(
+    program: str = "abaqus",
+    action_prefix: str = _settings._cd_action_prefix,
+    action_suffix: str = _settings._redirect_action_postfix,
+    post_action: typing.Iterable[str] = []
+) -> SCons.Builder.Builder:
+    """Construct and return a Python script SCons builder
 
-    This builder requires that the python script to execute is the first source in the list. The builder returned by
-    this function accepts all SCons Builder arguments and adds the keyword argument(s):
+    This builder requires that the Python script to execute is the first source in the list. The builder returned by
+    this function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function
+    are also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
+    override the builder returned by this function.
 
-    * ``script_options``: The Python script command line arguments provided as a string.
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Abaqus command line executable absolute or relative path
     * ``python_options``: The Python command line arguments provided as a string.
+    * ``script_options``: The Python script command line arguments provided as a string.
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults
+    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
@@ -1289,7 +1301,12 @@ def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Build
     ``target.stdout``.
 
     .. code-block::
-       :caption: Python script builder action
+       :caption: Python script builder action keywords
+
+       ${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}
+
+    .. code-block::
+       :caption: Python script builder action default expansion
 
        cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGETS[-1].abspath} 2>&1
 
@@ -1301,7 +1318,10 @@ def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Build
        env.Append(BUILDERS={"PythonScript": waves.scons_extensions.python_script()})
        env.PythonScript(target=["my_output.stdout"], source=["my_script.py"], python_options="", script_options="")
 
-    :param list post_action: List of shell command string(s) to append to the builder's action list. Implemented to
+    :param program: An absolute path or basename string for the Python interpretter
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_suffix: Advanced behavior. Most users should accept the defaults.
+    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
         non-zero exit code even if Python does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
@@ -1311,13 +1331,16 @@ def python_script(post_action: typing.Iterable[str] = []) -> SCons.Builder.Build
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        f"python ${{python_options}} ${{SOURCE.abspath}} ${{script_options}} {_settings._redirect_action_postfix}"
+        "${program} ${python_options} ${SOURCE.abspath} ${script_options} {action_suffix}"
     ]
-    action = construct_action_list(action)
-    action.extend(construct_action_list(post_action))
+    action = construct_action_list(action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     python_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter
+        emitter=_first_target_emitter,
+        program=program,
+        action_prefix=action_prefix,
+        action_suffix=action_suffix
     )
     return python_builder
 
