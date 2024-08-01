@@ -218,7 +218,8 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     # Early substitution using default action pre/suffixes
     action_list = [action.replace("${action_prefix}", _settings._cd_action_prefix) for action in action_list]
     action_list = [action.replace("${action_suffix}", _settings._redirect_action_postfix) for action in action_list]
-    action_list = [action.replace("${environment_suffix}", _settings._redirect_environment_postfix) for action in action_list]
+    action_list = [action.replace("${environment_suffix}", _settings._redirect_environment_postfix)
+                   for action in action_list]
 
     action_list = [action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix) for action in action_list]
     action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
