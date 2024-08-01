@@ -143,9 +143,6 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``remote_server``.
     * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
       system.
-    * Replaces instances of ``${action_prefix}`` with the default value ``cd ${TARGET.dir.abspath} &&``.
-    * Replaces instances of ``${action_suffix}`` with the default value ``> ${TARGET[-1].abspath 2>&1``.
-    * Replaces instances of ``${environment_suffix}`` with the default value ``> ${TARGET[-2].abspath 2>&1``.
     * Replaces instances of ``cd ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
       actions.
     * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
@@ -215,22 +212,22 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
 
     :returns: modified builder
     """
-    action_list = _string_action_list(builder)
     cd_prefix = f"cd {remote_directory} &&"
+    def ssh_action_substitutions(action, cd_prefix=cd_prefix):
+        action = action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix)
+        action = action.replace("SOURCE.abspath", "SOURCE.file")
+        action = action.replace("SOURCES.abspath", "SOURCES.file")
+        action = re.sub(r"(SOURCES\[[-0-9]+\])\.abspath", r"\1.file", action)
+        action = re.sub(r"(TARGETS\[[-0-9]+\])\.abspath", r"\1.file", action)
+        return action
 
-    # Early substitution using default action pre/suffixes
-    action_list = [action.replace("${action_prefix}", _settings._cd_action_prefix) for action in action_list]
-    action_list = [action.replace("${action_suffix}", _settings._redirect_action_postfix) for action in action_list]
-    action_list = [action.replace("${environment_suffix}", _settings._redirect_environment_postfix)
-                   for action in action_list]
-
-    action_list = [action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix) for action in action_list]
-    action_list = [action.replace("SOURCE.abspath", "SOURCE.file") for action in action_list]
-    action_list = [action.replace("SOURCES.abspath", "SOURCES.file") for action in action_list]
-    action_list = [re.sub(r"(SOURCES\[[-0-9]+\])\.abspath", r"\1.file", action) for action in action_list]
-    action_list = [re.sub(r"(TARGETS\[[-0-9]+\])\.abspath", r"\1.file", action) for action in action_list]
+    action_list = _string_action_list(builder)
+    action_list = [ssh_action_substitions(action) for action in action_list]
     action_list = [f"{cd_prefix} {action}" if not action.startswith(cd_prefix) else action for action in action_list]
     action_list = [f"ssh {remote_server} '{action}'" for action in action_list]
+
+    for key, value in builder.overrides.items():
+        builder.overrides[key] = ssh_action_substitutions(value)
 
     ssh_actions = [
         f"ssh {remote_server} \"mkdir -p {remote_directory}\"",
