@@ -1029,15 +1029,27 @@ def _sierra_emitter(target: list, source: list, env) -> typing.Tuple[list, list]
 def sierra(
     program: str = "sierra",
     application: str = "adagio",
+    action_prefix: str = _settings._cd_action_prefix,
+    action_suffix: str = _settings._redirect_action_postfix,
+    environment_suffix: str = _settings._redirect_environment_postfix,
     post_action: typing.Iterable[str] = []
 ) -> SCons.Builder.Builder:
-    """Sierra SCons builder
+    """Construct and return a Sierra SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments and adds the keyword argument(s):
+    function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
+    also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
+    override the builder returned by this function.
 
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Sierra command line executable absolute or relative path
+    * ``application``: The Sierra application subcommand
     * ``sierra_options``: The Sierra command line options provided as a string.
     * ``application_options``: The application (e.g. adagio) command line options provided as a string.
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults
+    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
+    * ``environment_suffix``: Advanced behavior. Most users should accept the defaults.
 
     The first target determines the working directory for the builder's action, as shown in the action code snippet
     below. The action changes the working directory to the first target's parent directory prior to executing sierra.
@@ -1064,12 +1076,22 @@ def sierra(
        env.Sierra(target=["output.e"], source=["input.i"])
 
     .. code-block::
-       :caption: Sierra builder action
+       :caption: Sierra builder action default expansion
 
+       ${action_prefix} ${program} ${application} --version ${environment_suffix}
+       ${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}
+
+    .. code-block::
+       :caption: Sierra builder action default expansion
+
+       cd ${TARGET.dir.abspath} && ${program} ${application} --version > ${TARGETS[-2].abspath} 2>&1
        cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGETS[-1].abspath} 2>&1
 
     :param program: An absolute path or basename string for the Sierra program
     :param application: The string name for the Sierra application
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_suffix: Advanced behavior. Most users should accept the defaults.
+    :param environment_suffix: Advanced behavior. Most users should accept the defaults.
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Sierra log for error keywords and throw a
         non-zero exit code even if Sierra does not. Builder keyword variables are available for substitution in the
@@ -1079,15 +1101,19 @@ def sierra(
     :return: Sierra builder
     """  # noqa: E501
     action = [
-        f"{program} {application} --version {_settings._redirect_environment_postfix}",
-        f"{program} ${{sierra_options}} {application} ${{application_options}} -i ${{SOURCE.file}} " \
-            f"{_settings._redirect_action_postfix}"
+        "${program} ${application} --version ${environment_suffix}",
+        "${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}"
     ]
-    action = construct_action_list(action)
-    action.extend(construct_action_list(post_action))
+    action = construct_action_list(action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     sierra_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_sierra_emitter
+        emitter=_sierra_emitter,
+        program=program,
+        application=application,
+        action_prefix=action_prefix,
+        action_suffix=action_suffix,
+        environment_suffix=environment_suffix
     )
     return sierra_builder
 
