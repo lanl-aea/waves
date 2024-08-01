@@ -1064,7 +1064,7 @@ sbatch_input = {
          "required": "different required",
          "action_prefix": "different action prefix",
         },
-        [], 2, 1, ["nodefaults.out"]
+        [], 2, 1, ["sbatch_nodefaults.out"]
     ),
     "post action": (
         {}, ["post action"], 2, 1, ["target3.out"]
