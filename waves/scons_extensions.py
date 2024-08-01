@@ -143,6 +143,9 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``remote_server``.
     * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
       system.
+    * Replaces instances of ``${action_prefix}`` with the default value ``cd ${TARGET.dir.abspath} &&``.
+    * Replaces instances of ``${action_suffix}`` with the default value ``> ${TARGET[-1].abspath 2>&1``.
+    * Replaces instances of ``${environment_suffix}`` with the default value ``> ${TARGET[-2].abspath 2>&1``.
     * Replaces instances of ``cd ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
       actions.
     * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
