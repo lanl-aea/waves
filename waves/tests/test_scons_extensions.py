@@ -1285,10 +1285,12 @@ python_script_input = {
                          python_script_input.values(),
                          ids=python_script_input.keys())
 def test_parameter_study(node_count, action_count, target_list, study):
+    expected_string = '${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ' \
+                          '${action_suffix}'
+
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": scons_extensions.python_script()})
     env.AddMethod(scons_extensions.parameter_study, "ParameterStudy")
-
     nodes = env.ParameterStudy(
         env.PythonScript,
         target=target_list,
@@ -1296,6 +1298,5 @@ def test_parameter_study(node_count, action_count, target_list, study):
         script_options="",
         study=study
     )
-    expected_string = 'cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} ' \
-                      f'{_redirect_action_postfix}'
+
     check_action_string(nodes, [], node_count, action_count, expected_string)
