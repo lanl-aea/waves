@@ -676,9 +676,10 @@ def test_sierra(program, application, post_action, node_count, action_count, sou
 
 
 def test_sbatch_sierra():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && sierra adagio ' \
-        f'--version {_redirect_environment_postfix} && cd ${{TARGET.dir.abspath}} && sierra ${{sierra_options}} adagio ' \
-        f'${{application_options}} -i ${{SOURCE.file}} {_redirect_action_postfix}"'
+    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "' \
+        '${action_prefix} ${program} ${application} --version ${environment_suffix} && ' \
+        '${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ' \
+           '${action_suffix}"'
     builder = scons_extensions.sbatch_sierra()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._sierra_emitter
