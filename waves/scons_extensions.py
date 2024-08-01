@@ -215,6 +215,7 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     :returns: modified builder
     """
     cd_prefix = f"cd {remote_directory} &&"
+
     def ssh_action_substitutions(action, cd_prefix=cd_prefix):
         action = action.replace("cd ${TARGET.dir.abspath} &&", cd_prefix)
         action = action.replace("SOURCE.abspath", "SOURCE.file")
