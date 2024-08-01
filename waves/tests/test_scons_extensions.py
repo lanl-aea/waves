@@ -895,6 +895,15 @@ matlab_script_input = {
     "default behavior": (
         {}, [], 3, 1, ["matlab_script1.out"]
     ),
+    "no defaults": (
+        {
+         "program": "different program",
+         "action_prefix": "different action prefix",
+         "action_suffix": "different action suffix",
+         "environment_suffix": "different environment suffix",
+        },
+        [], 3, 1, ["nodefaults.out"]
+    ),
     "different command": (
         {"program": "/different/matlab"}, [], 3, 1, ["matlab_script2.out"]
     ),
