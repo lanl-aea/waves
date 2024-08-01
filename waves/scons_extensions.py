@@ -1128,7 +1128,7 @@ def sbatch_sierra(*args, **kwargs):
     .. code-block::
        :caption: sbatch Sierra builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} > ${TARGETS[-1].abspath} 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}"
     """  # noqa: E501
     return sierra(*args, **kwargs)
 
@@ -1355,7 +1355,7 @@ def sbatch_python_script(*args, **kwargs):
     .. code-block::
        :caption: Sbatch Python script builder action
 
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} > ${TARGETS[-1].abspath} 2>&1"
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
     """  # noqa: E501
     return python_script(*args, **kwargs)
 
@@ -1399,6 +1399,8 @@ def matlab_script(
     this function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function
     are also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
     override the builder returned by this function.
+
+    *Builder/Task keyword arguments*
 
     * ``program``: The Matlab command line executable absolute or relative path
     * ``matlab_options``: The Matlab command line options provided as a string.
@@ -1651,8 +1653,25 @@ def _build_odb_extract(target: list, source: list, env) -> None:
     return None
 
 
-def sbatch(program: str = "sbatch", post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
+def sbatch(
+    program: str = "sbatch",
+    required: str = "--wait --output=${TARGETS[-1].abspath}"
+    action_prefix: str = _settings._cd_action_prefix,
+    post_action: typing.Iterable[str] = []
+) -> SCons.Builder.Builder:
     """`SLURM`_ `sbatch`_ SCons builder
+
+    The builder returned by this function accepts all SCons Builder arguments. Except for the ``post_action``, the
+    arguments of this function are also available as keyword arguments of the builder. When provided during task
+    definition, the keyword arguments override the builder returned by this function.
+
+    *Builder/Task keyword arguments*
+
+    * ``program``: The sbatch command line executable absolute or relative path
+    * ``required``: A space delimited string of sbatch required arguments
+    * ``slurm_job``: The command to submit with sbatch
+    * ``sbatch_options``: Optional sbatch options
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults
 
     The builder does not use a SLURM batch script. Instead, it requires the ``slurm_job`` variable to be defined with
     the command string to execute.
@@ -1665,7 +1684,12 @@ def sbatch(program: str = "sbatch", post_action: typing.Iterable[str] = []) -> S
     ``target`` list.
 
     .. code-block::
-       :caption: SLURM sbatch builder action
+       :caption: SLURM sbatch builder action keywords
+
+       ${action_prefix} ${program} ${required} ${sbatch_options} --wrap "${slurm_job}"
+
+    .. code-block::
+       :caption: SLURM sbatch builder action default expansion
 
        cd ${TARGET.dir.abspath} && sbatch --wait --output=${TARGETS[-1].abspath} ${sbatch_options} --wrap ${slurm_job}
 
@@ -1678,6 +1702,8 @@ def sbatch(program: str = "sbatch", post_action: typing.Iterable[str] = []) -> S
        env.SlurmSbatch(target=["my_output.stdout"], source=["my_source.input"], slurm_job="cat $SOURCE > $TARGET")
 
     :param program: An absolute path or basename string for the sbatch program.
+    :param required: A space delimited string of sbatch required arguments
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
@@ -1687,13 +1713,16 @@ def sbatch(program: str = "sbatch", post_action: typing.Iterable[str] = []) -> S
     :return: SLURM sbatch builder
     """
     action = [
-        f"{program} --wait --output=${{TARGETS[-1].abspath}} ${{sbatch_options}} --wrap \"${{slurm_job}}\""
+        "${program} ${required} ${sbatch_options} --wrap \"${slurm_job}\""
     ]
     action = construct_action_list(action)
     action.extend(construct_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter
+        emitter=_first_target_emitter,
+        program=program,
+        required=required,
+        action_prefix=action_prefix
     )
     return sbatch_builder
 
