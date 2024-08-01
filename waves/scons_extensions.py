@@ -216,7 +216,7 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     """
     cd_prefix = f"cd {remote_directory} &&"
 
-    def ssh_action_substitutions(action: str, cd_prefix: str: = cd_prefix) -> str:
+    def ssh_action_substitutions(action: str, cd_prefix: str = cd_prefix) -> str:
         """Perform the SSH action string substitutions
 
         :param action: The original action string
@@ -233,7 +233,7 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
 
     action_list = _string_action_list(builder)
     action_list = [ssh_action_substitutions(action) for action in action_list]
-    action_list = [f"{cd_prefix} {action}" if not action.startswith(cd_prefix) else action for action in action_list]
+    action_list = [f"{cd_prefix} {action}" if not action.startswith(cd_prefix) and not action.startswith("${action_prefix}") else action for action in action_list]
     action_list = [f"ssh {remote_server} '{action}'" for action in action_list]
 
     for key, value in builder.overrides.items():
