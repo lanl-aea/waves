@@ -29,6 +29,8 @@ Enhancements
   in constructed builder behavior (:issue:`712`, :merge:`886`). By `Kyle Brindley`_.
 - Expose the Matlab script action keyword arguments to the constructor API and task definitions for greater flexibility
   in constructed builder behavior (:issue:`713`, :merge:`887`). By `Kyle Brindley`_.
+- Expose the SLURM sbatch action keyword arguments to the constructor API and task definitions for greater flexibility
+  in constructed builder behavior (:issue:`715`, :merge:`888`). By `Kyle Brindley`_.
 
 ******************
 0.9.5 (2024-07-25)
