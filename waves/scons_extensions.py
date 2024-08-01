@@ -1461,7 +1461,12 @@ def matlab_script(
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     matlab_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_matlab_script_emitter)
+        emitter=_matlab_script_emitter
+        program=program,
+        action_prefix=action_prefix,
+        action_suffix=action_suffix
+        environment_suffix=environment_suffix
+    )
     return matlab_builder
 
 
