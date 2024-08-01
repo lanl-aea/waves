@@ -144,9 +144,11 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
       system.
     * Replaces instances of ``cd ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
-      actions.
+      actions and keyword arguments.
     * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
-      actions.
+      actions and keyword arguments.
+    * Replaces instances of ``SOURCES[0-9]/TARGETS[0-9].abspath`` with  ``SOURCES[0-9]/TARGETS[0-9].file`` in the
+      original builder action and keyword arguments.
     * Prefixes all original builder actions with ``cd ${remote_directory} &&``.
     * All original builder actions are wrapped in single quotes as ``'{original action}'`` to preserve the ``&&`` as
       part of the ``remote_server`` command. Shell variables, e.g. ``$USER``, will not be expanded on the
@@ -222,7 +224,7 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
         return action
 
     action_list = _string_action_list(builder)
-    action_list = [ssh_action_substitions(action) for action in action_list]
+    action_list = [ssh_action_substitutions(action) for action in action_list]
     action_list = [f"{cd_prefix} {action}" if not action.startswith(cd_prefix) else action for action in action_list]
     action_list = [f"ssh {remote_server} '{action}'" for action in action_list]
 
