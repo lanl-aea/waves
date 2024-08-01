@@ -744,8 +744,8 @@ def abaqus_journal(
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
+        ``${action_prefix} ${post_action}``.
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
     :param environment_suffix: Advanced behavior. Most users should accept the defaults.
@@ -945,8 +945,8 @@ def abaqus_solver(
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``.
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
+        ``${action_prefix} ${post_action}``.
     :param emitter: emit file extensions based on the value of this variable. Overridden by the ``suffixes`` keyword
         argument that may be provided in the Task definition.
 
@@ -1095,8 +1095,8 @@ def sierra(
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Sierra log for error keywords and throw a
         non-zero exit code even if Sierra does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``.
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
+        ``${action_prefix} ${post_action}``.
 
     :return: Sierra builder
     """  # noqa: E501
@@ -1282,7 +1282,7 @@ def python_script(
 
     *Builder/Task keyword arguments*
 
-    * ``program``: The Abaqus command line executable absolute or relative path
+    * ``program``: The Python interpretter command line executable absolute or relative path
     * ``python_options``: The Python command line arguments provided as a string.
     * ``script_options``: The Python script command line arguments provided as a string.
     * ``action_prefix``: Advanced behavior. Most users should accept the defaults
@@ -1324,8 +1324,8 @@ def python_script(
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
         non-zero exit code even if Python does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
+        ``${action_prefix} ${post_action}``.
 
     :return: Python script builder
     :rtype: SCons.Builder.Builder
@@ -1382,18 +1382,28 @@ def _matlab_script_emitter(target: list, source: list, env) -> typing.Tuple[list
     return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
-def matlab_script(program: str = "matlab", post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
+def matlab_script(
+    program: str = "matlab",
+    action_prefix: str = _settings._cd_action_prefix,
+    action_suffix: str = _settings._redirect_action_postfix,
+    post_action: typing.Iterable[str] = []
+) -> SCons.Builder.Builder:
     """Matlab script SCons builder
 
     .. warning::
 
        Experimental implementation is subject to change
 
-    This builder requires that the Matlab script is the first source in the list. The builder returned by this function
-    accepts all SCons Builder arguments and adds the keyword argument(s):
+    This builder requires that the Matlab script to execute is the first source in the list. The builder returned by
+    this function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function
+    are also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
+    override the builder returned by this function.
 
-    * ``script_options``: The Matlab function interface options in Matlab syntax and provided as a string.
+    * ``program``: The Matlab command line executable absolute or relative path
     * ``matlab_options``: The Matlab command line options provided as a string.
+    * ``script_options``: The Matlab function interface options in Matlab syntax and provided as a string.
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults
+    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
 
     The parent directory absolute path is added to the Matlab ``path`` variable prior to execution. All required Matlab
     files should be co-located in the same source directory.
@@ -1411,32 +1421,39 @@ def matlab_script(program: str = "matlab", post_action: typing.Iterable[str] = [
     ``target.stdout``.
 
     .. code-block::
-       :caption: Matlab script builder action
+       :caption: Matlab script builder action keywords
 
-       cd ${TARGET.dir.abspath} && {program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGETS[-1].abspath} 2>&1
+       ${action_prefix} ${program} ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" ${action_suffix}
+
+    .. code-block::
+       :caption: Matlab script builder action default expansion
+
+       cd ${TARGET.dir.abspath} && matlab ${matlab_options} -batch "path(path, '${SOURCE.dir.abspath}'); ${SOURCE.filebase}(${script_options})" > ${TARGETS[-1].abspath} 2>&1
 
     :param program: An absolute path or basename string for the Matlab program.
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_suffix: Advanced behavior. Most users should accept the defaults.
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
         non-zero exit code even if Matlab does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``
+        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
+        ``${action_prefix} ${post_action}``.
 
     :return: Matlab script builder
     """  # noqa: E501
     action = [
-        f"{program} ${{matlab_options}} -batch " \
+        f"${program} ${matlab_options} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
             "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
             "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
-            f"{_settings._redirect_environment_postfix}",
-        f"{program} ${{matlab_options}} -batch " \
+            "${environment_suffix}",
+        "${program} ${matlab_options} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
             "${SOURCE.filebase}(${script_options})\" " \
-            f"{_settings._redirect_action_postfix}"
+            "{action_suffix}"
     ]
-    action = construct_action_list(action)
-    action.extend(construct_action_list(post_action))
+    action = construct_action_list(action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     matlab_builder = SCons.Builder.Builder(
         action=action,
         emitter=_matlab_script_emitter)
@@ -1655,7 +1672,7 @@ def sbatch(program: str = "sbatch", post_action: typing.Iterable[str] = []) -> S
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
         ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``
+        ${TARGET.dir.abspath} && ${post_action}``.
 
     :return: SLURM sbatch builder
     """
