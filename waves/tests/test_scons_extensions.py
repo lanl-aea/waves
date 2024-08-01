@@ -819,22 +819,47 @@ def test_first_target_emitter(target, source, expected):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 python_script_input = {
-    "default behavior": ([], 2, 1, ["python_script1.out"]),
-    "different command": ([], 2, 1, ["python_script2.out"]),
-    "post action": (["post action"], 2, 1, ["python_script3.out"])
+    "default behavior": ({}, [], 2, 1, ["python_script1.out"]),
+    "no defaults": (
+        {
+         "program": "different program",
+         "action_prefix": "different prefix",
+         "action_suffix": "different action suffix",
+        },
+        [], 2, 1, ["nodefaults.out"]
+    ),
+    "different command": ({}, [], 2, 1, ["python_script2.out"]),
+    "post action": ({}, ["post action"], 2, 1, ["python_script3.out"])
 }
 
 
-@pytest.mark.parametrize("post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, target_list",
                          python_script_input.values(),
                          ids=python_script_input.keys())
-def test_python_script(post_action, node_count, action_count, target_list):
+def test_python_script(kwargs, post_action, node_count, action_count, target_list):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "program": "python",
+        "action_prefix": _cd_action_prefix,
+        "action_suffix": _redirect_action_postfix,
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_string = \
+       "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
+
+    # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(post_action)})
+    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(**kwargs, post_action=post_action)})
     nodes = env.PythonScript(target=target_list, source=["python_script.py"], script_options="")
-    expected_string = 'cd ${TARGET.dir.abspath} && python ${python_options} ${SOURCE.abspath} ${script_options} ' \
-                      f'{_redirect_action_postfix}'
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+
+    # Test task definition node counts, action(s), and task keyword arguments
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${action_prefix}")
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 def test_sbatch_python_script():

@@ -1268,7 +1268,7 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
 
 
 def python_script(
-    program: str = "abaqus",
+    program: str = "python",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_postfix,
     post_action: typing.Iterable[str] = []
@@ -1331,7 +1331,7 @@ def python_script(
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        "${program} ${python_options} ${SOURCE.abspath} ${script_options} {action_suffix}"
+        "${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
     ]
     action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
