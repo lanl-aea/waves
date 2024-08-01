@@ -1447,7 +1447,7 @@ def matlab_script(
     :return: Matlab script builder
     """  # noqa: E501
     action = [
-        f"${program} ${matlab_options} -batch " \
+        "${program} ${matlab_options} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
             "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
             "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
