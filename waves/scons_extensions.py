@@ -1944,8 +1944,8 @@ def quinoa_solver(
     charmrun_options: str = "+p1",
     inciter_options: str = "",
     prefix_command: str = "",
-    action_prefix: str = _cd_action_prefix,
-    action_suffix: str = _redirect_action_postfix,
+    action_prefix: str = _settings._cd_action_prefix,
+    action_suffix: str = _settings._redirect_action_postfix,
     post_action: typing.Iterable[str] = []
 ) -> SCons.Builder.Builder:
     """Quinoa solver SCons builder
@@ -2033,7 +2033,7 @@ def quinoa_solver(
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     quinoa_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,

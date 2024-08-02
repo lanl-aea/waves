@@ -1328,42 +1328,78 @@ def test_sphinx_latexpdf():
 
 
 quinoa_solver = {
-    "default behavior": ("charmrun", "inciter", "+p1", "", "", [],  2, 1, ["input1.q", "input1.exo"], ["input1.quinoa"]),
-    "different commands": ("notcharmrun", "notinciter", "+p2", "inciter options", "prefix", [],  2, 1,
-                           ["input2.q", "input2.exo"], ["input2.quinoa"]),
-    "post action": ("charmrun", "inciter", "+p1", "", "", ["post action"],  2, 1,
-                    ["input3.q", "input3.exo"], ["input3.quinoa"]),
+    "default behavior": (
+        {}, {}, [],  2, 1, ["input1.q", "input1.exo"], ["input1.quinoa"]
+    ),
+    "no defaults": (
+        {
+         "charmrun": "different charmrun",
+         "inciter": "different inciter",
+         "charmrun_options": "different charmrun options",
+         "inciter_options": "different inciter options",
+         "prefix_command": "different prefix command",
+         "action_prefix": "different action prefix",
+         "action_suffix": "different action suffix"
+        },
+        {}, [],  2, 1, ["input2.q", "input2.exo"], ["input2.quinoa"]
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "charmrun": "different charmrun",
+         "inciter": "different inciter",
+         "charmrun_options": "different charmrun options",
+         "inciter_options": "different inciter options",
+         "prefix_command": "different prefix command",
+         "action_prefix": "different action prefix",
+         "action_suffix": "different action suffix"
+        },
+        [],  2, 1, ["input3.q", "input3.exo"], ["input3.quinoa"]
+    ),
+    "post action": (
+        {}, {}, ["post action"],  2, 1, ["input4.q", "input4.exo"], ["input4.quinoa"]
+    ),
 }
 
 
-@pytest.mark.parametrize("charmrun, inciter, charmrun_options, inciter_options, prefix_command, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
                          quinoa_solver.values(),
                          ids=quinoa_solver.keys())
-def test_quinoa_solver(charmrun, inciter, charmrun_options, inciter_options, prefix_command, post_action,
-                       node_count, action_count, source_list, target_list):
+def test_quinoa_solver(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "charmrun": "charmrun",
+        "inciter": "inciter",
+        "charmrun_options": "+p1",
+        "inciter_options": "",
+        "prefix_command": "",
+        "action_prefix": _cd_action_prefix,
+        "action_suffix": _redirect_action_postfix,
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(builder_kwargs)
+    if expected_kwargs["prefix_command"] and not expected_kwargs["prefix_command"].endswith(" &&"):
+        expected_kwargs["prefix_command"] += " &&"
+    expected_kwargs.update(task_kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_string = \
+        "${prefix_command} ${action_prefix} ${charmrun} ${charmrun_options} " \
+            "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
+            "${action_suffix}"
+
+    # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    expected_string = f"${{prefix_command}} {_cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
-                      "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
-                      f"{_redirect_action_postfix}"
-    env.Append(BUILDERS={"QuinoaSolver": scons_extensions.quinoa_solver(
-        charmrun=charmrun,
-        inciter=inciter,
-        charmrun_options=charmrun_options,
-        inciter_options=inciter_options,
-        prefix_command=prefix_command,
-        post_action=post_action
-    )})
-    nodes = env.QuinoaSolver(target=target_list, source=source_list)
-    check_action_string(nodes, post_action, node_count, action_count, expected_string)
+    env.Append(BUILDERS={
+        "QuinoaSolver": scons_extensions.quinoa_solver(**builder_kwargs, post_action=post_action)
+    })
+    nodes = env.QuinoaSolver(target=target_list, source=source_list, **task_kwargs)
+
+    # Test task definition node counts, action(s), and task keyword arguments
+    check_action_string(nodes, post_action, node_count, action_count, expected_string,
+                        post_action_prefix="${action_prefix}")
     for node in nodes:
-        if prefix_command:
-            assert node.env['prefix_command'] == prefix_command + " &&"
-        else:
-            assert node.env['prefix_command'] == ""
-        assert node.env['charmrun'] == charmrun
-        assert node.env['charmrun_options'] == charmrun_options
-        assert node.env['inciter'] == inciter
-        assert node.env['inciter_options'] == inciter_options
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
