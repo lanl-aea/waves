@@ -826,7 +826,7 @@ python_script_input = {
          "action_prefix": "different prefix",
          "action_suffix": "different action suffix",
         },
-        [], 2, 1, ["nodefaults.out"]
+        [], 2, 1, ["python_nodefaults.out"]
     ),
     "different command": ({"program": "python2"}, [], 2, 1, ["python_script2.out"]),
     "post action": ({}, ["post action"], 2, 1, ["python_script3.out"])
@@ -902,7 +902,7 @@ matlab_script_input = {
          "action_suffix": "different action suffix",
          "environment_suffix": "different environment suffix",
         },
-        [], 3, 1, ["nodefaults.out"]
+        [], 3, 1, ["matlab_nodefaults.out"]
     ),
     "different command": (
         {"program": "/different/matlab"}, [], 3, 1, ["matlab_script2.out"]
