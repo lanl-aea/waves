@@ -67,7 +67,7 @@ def print_build_failures(print_stdout: bool = True) -> None:
         atexit.register(_print_failed_nodes_stdout)
 
 
-def _string_action_list(builder: SCons.Builder.Builder) -> list[str]:
+def string_action_list(builder: SCons.Builder.Builder) -> list[str]:
     """Return a builder's action list as a list of str
 
     :param builder: The builder to extract the action list from
@@ -96,7 +96,7 @@ def catenate_builder_actions(builder: SCons.Builder.Builder,
 
     :returns: modified builder
     """
-    action_list = _string_action_list(builder)
+    action_list = string_action_list(builder)
     action = " && ".join(action_list)
     action = f"{program} {options} \"{action}\""
     builder.action = SCons.Action.CommandAction(action)
@@ -231,7 +231,7 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
         action = re.sub(r"(TARGETS\[[-0-9]+\])\.abspath", r"\1.file", action)
         return action
 
-    action_list = _string_action_list(builder)
+    action_list = string_action_list(builder)
     action_list = [ssh_action_substitutions(action) for action in action_list]
     action_list = [
         f"{cd_prefix} {action}" if not action.startswith(cd_prefix) and not action.startswith("${action_prefix}")
