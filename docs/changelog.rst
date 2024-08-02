@@ -19,6 +19,8 @@ New Features
 ============
 - Add a function to convert a builder's action list to a list of strings (:issue:`721`, :merge:`892`). By `Kyle
   Brindley`_.
+- Add a function to convert a list of action strings to an SCons ListAction object (:issue:`721`, :merge:`892`). By
+  `Kyle Brindley`_.
 
 Bug fixes
 =========
