@@ -860,24 +860,33 @@ def test_first_target_emitter(target, source, expected):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 python_script_input = {
-    "default behavior": ({}, [], 2, 1, ["python_script1.out"]),
+    "default behavior": ({}, {}, [], 2, 1, ["python_script1.out"]),
     "no defaults": (
         {
          "program": "different program",
          "action_prefix": "different prefix",
          "action_suffix": "different action suffix",
         },
-        [], 2, 1, ["python_nodefaults.out"]
+        {}, [], 2, 1, ["python_script2.out"]
     ),
-    "different command": ({"program": "python2"}, [], 2, 1, ["python_script2.out"]),
-    "post action": ({}, ["post action"], 2, 1, ["python_script3.out"])
+    "task kwargs overrides": (
+        {},
+        {
+         "program": "different program",
+         "action_prefix": "different prefix",
+         "action_suffix": "different action suffix",
+        },
+        [], 2, 1, ["python_script3.out"]
+    ),
+    "different command": ({"program": "python2"}, {}, [], 2, 1, ["python_script4.out"]),
+    "post action": ({}, {}, ["post action"], 2, 1, ["python_script5.out"])
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list",
                          python_script_input.values(),
                          ids=python_script_input.keys())
-def test_python_script(builder_kwargs, post_action, node_count, action_count, target_list):
+def test_python_script(builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "python",
@@ -886,6 +895,7 @@ def test_python_script(builder_kwargs, post_action, node_count, action_count, ta
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
        "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
@@ -893,7 +903,7 @@ def test_python_script(builder_kwargs, post_action, node_count, action_count, ta
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(**builder_kwargs, post_action=post_action)})
-    nodes = env.PythonScript(target=target_list, source=["python_script.py"], script_options="")
+    nodes = env.PythonScript(target=target_list, source=["python_script.py"], script_options="", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
