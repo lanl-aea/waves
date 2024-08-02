@@ -396,10 +396,10 @@ abaqus_journal_input = {
 }
 
 
-@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, target_list",
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
-def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_list):
+def test_abaqus_journal(builder_kwargs, post_action, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
@@ -409,7 +409,7 @@ def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_li
         "environment_suffix": _redirect_environment_postfix
     }
     # Update expected arguments to match test case
-    expected_kwargs.update(kwargs)
+    expected_kwargs.update(builder_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = '${action_prefix} ${program} -information environment ${environment_suffix}\n' \
                       '${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ' \
@@ -417,7 +417,9 @@ def test_abaqus_journal(kwargs, post_action, node_count, action_count, target_li
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AbaqusJournal": scons_extensions.abaqus_journal(**kwargs, post_action=post_action)})
+    env.Append(BUILDERS={
+        "AbaqusJournal": scons_extensions.abaqus_journal(**builder_kwargs, post_action=post_action)
+    })
     nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
 
     # Test task definition node counts, action(s), and task keyword arguments
@@ -576,10 +578,10 @@ abaqus_solver_input = {
 }
 
 
-@pytest.mark.parametrize("kwargs, node_count, action_count, source_list, suffixes",
+@pytest.mark.parametrize("builder_kwargs, node_count, action_count, source_list, suffixes",
                          abaqus_solver_input.values(),
                          ids=abaqus_solver_input.keys())
-def test_abaqus_solver(kwargs, node_count, action_count, source_list, suffixes):
+def test_abaqus_solver(builder_kwargs, node_count, action_count, source_list, suffixes):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
@@ -591,7 +593,7 @@ def test_abaqus_solver(kwargs, node_count, action_count, source_list, suffixes):
         "post_action": []
     }
     # Update expected arguments to match test case
-    expected_kwargs.update(kwargs)
+    expected_kwargs.update(builder_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         "${action_prefix} ${program} -information environment ${environment_suffix}\n" \
@@ -601,13 +603,14 @@ def test_abaqus_solver(kwargs, node_count, action_count, source_list, suffixes):
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "AbaqusSolver": scons_extensions.abaqus_solver(**kwargs)
+        "AbaqusSolver": scons_extensions.abaqus_solver(**builder_kwargs)
     })
     nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(
-        nodes, kwargs["post_action"], node_count, action_count, expected_string, post_action_prefix="${action_prefix}"
+        nodes, builder_kwargs["post_action"], node_count, action_count, expected_string,
+        post_action_prefix="${action_prefix}"
     )
     check_expected_targets(nodes, expected_kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
     expected_kwargs.pop("emitter")
@@ -675,10 +678,10 @@ sierra_input = {
 }
 
 
-@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, source_list, target_list",
                          sierra_input.values(),
                          ids=sierra_input.keys())
-def test_sierra(kwargs, post_action, node_count, action_count, source_list, target_list):
+def test_sierra(builder_kwargs, post_action, node_count, action_count, source_list, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "sierra",
@@ -688,7 +691,7 @@ def test_sierra(kwargs, post_action, node_count, action_count, source_list, targ
         "environment_suffix": _redirect_environment_postfix
     }
     # Update expected arguments to match test case
-    expected_kwargs.update(kwargs)
+    expected_kwargs.update(builder_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         "${action_prefix} ${program} ${application} --version ${environment_suffix}\n" \
@@ -697,7 +700,7 @@ def test_sierra(kwargs, post_action, node_count, action_count, source_list, targ
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "Sierra": scons_extensions.sierra(**kwargs, post_action=post_action)
+        "Sierra": scons_extensions.sierra(**builder_kwargs, post_action=post_action)
     })
 
     # Test task definition node counts, action(s), and task keyword arguments
@@ -833,10 +836,10 @@ python_script_input = {
 }
 
 
-@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, target_list",
                          python_script_input.values(),
                          ids=python_script_input.keys())
-def test_python_script(kwargs, post_action, node_count, action_count, target_list):
+def test_python_script(builder_kwargs, post_action, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "python",
@@ -844,14 +847,14 @@ def test_python_script(kwargs, post_action, node_count, action_count, target_lis
         "action_suffix": _redirect_action_postfix,
     }
     # Update expected arguments to match test case
-    expected_kwargs.update(kwargs)
+    expected_kwargs.update(builder_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
        "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(**kwargs, post_action=post_action)})
+    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(**builder_kwargs, post_action=post_action)})
     nodes = env.PythonScript(target=target_list, source=["python_script.py"], script_options="")
 
     # Test task definition node counts, action(s), and task keyword arguments
@@ -913,10 +916,10 @@ matlab_script_input = {
 }
 
 
-@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, target_list",
                          matlab_script_input.values(),
                          ids=matlab_script_input.keys())
-def test_matlab_script(kwargs, post_action, node_count, action_count, target_list):
+def test_matlab_script(builder_kwargs, post_action, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "matlab",
@@ -925,7 +928,7 @@ def test_matlab_script(kwargs, post_action, node_count, action_count, target_lis
         "environment_suffix": _redirect_environment_postfix,
     }
     # Update expected arguments to match test case
-    expected_kwargs.update(kwargs)
+    expected_kwargs.update(builder_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = '${action_prefix} ${program} ${matlab_options} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
@@ -939,7 +942,9 @@ def test_matlab_script(kwargs, post_action, node_count, action_count, target_lis
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"MatlabScript": scons_extensions.matlab_script(**kwargs, post_action=post_action)})
+    env.Append(BUILDERS={
+        "MatlabScript": scons_extensions.matlab_script(**builder_kwargs, post_action=post_action)
+    })
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
 
     # Test task definition node counts, action(s), and task keyword arguments
@@ -977,10 +982,10 @@ conda_environment_input = {
 }
 
 
-@pytest.mark.parametrize("kwargs, task_kwargs, target",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target",
                          conda_environment_input.values(),
                          ids=conda_environment_input.keys())
-def test_conda_environment(kwargs, task_kwargs, target):
+def test_conda_environment(builder_kwargs, task_kwargs, target):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "conda",
@@ -990,14 +995,16 @@ def test_conda_environment(kwargs, task_kwargs, target):
         "action_prefix": _cd_action_prefix
     }
     # Update expected arguments to match test case
-    expected_kwargs.update(kwargs)
+    expected_kwargs.update(builder_kwargs)
     expected_kwargs.update(task_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = '${action_prefix} ${program} ${subcommand} ${required} ${options}'
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"CondaEnvironment": scons_extensions.conda_environment(**kwargs)})
+    env.Append(BUILDERS={
+        "CondaEnvironment": scons_extensions.conda_environment(**builder_kwargs)
+    })
     nodes = env.CondaEnvironment(target=target, source=[], **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
@@ -1120,10 +1127,10 @@ sbatch_input = {
 }
 
 
-@pytest.mark.parametrize("kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
-def test_sbatch(kwargs, post_action, node_count, action_count, target_list):
+def test_sbatch(builder_kwargs, post_action, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "sbatch",
@@ -1131,14 +1138,16 @@ def test_sbatch(kwargs, post_action, node_count, action_count, target_list):
         "action_prefix": _cd_action_prefix
     }
     # Update expected arguments to match test case
-    expected_kwargs.update(kwargs)
+    expected_kwargs.update(builder_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         '${action_prefix} ${program} ${required} ${sbatch_options} --wrap "${slurm_job}"'
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"SlurmSbatch": scons_extensions.sbatch(**kwargs, post_action=post_action)})
+    env.Append(BUILDERS={
+        "SlurmSbatch": scons_extensions.sbatch(**builder_kwargs, post_action=post_action)
+    })
     nodes = env.SlurmSbatch(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET")
 
