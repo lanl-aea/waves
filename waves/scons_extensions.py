@@ -1472,7 +1472,13 @@ def matlab_script(
     return matlab_builder
 
 
-def conda_environment() -> SCons.Builder.Builder:
+def conda_environment(
+    program: str = "conda",
+    subcommand: str = "env export",
+    required: str = "--file ${TARGET.abspath}",
+    options: str = "",
+    action_prefix: str = _settings._cd_action_prefix,
+) -> SCons.Builder.Builder:
     """Create a Conda environment file with ``conda env export``
 
     This builder is intended to help WAVES workflows document the Conda environment used in the current build. At least
@@ -1484,9 +1490,14 @@ def conda_environment() -> SCons.Builder.Builder:
     directory prior to creating the Conda environment file.
 
     .. code-block::
-       :caption: Conda environment builder action
+       :caption: Conda environment builder action default expansion
 
-       cd ${TARGET.dir.abspath} && conda env export ${conda_env_export_options} --file ${TARGET.file}
+       ${action_prefix} ${program} ${subcommand} ${required} ${options}"
+
+    .. code-block::
+       :caption: Conda environment builder action default expansion
+
+       cd ${TARGET.dir.abspath} && conda env export --file ${TARGET.file} ${options}
 
     The modsim owner may choose to re-use this builder throughout their project configuration to provide various levels
     of granularity in the recorded Conda environment state. It's recommended to include this builder at least once for
@@ -1512,11 +1523,16 @@ def conda_environment() -> SCons.Builder.Builder:
     :rtype: SCons.Builder.Builder
     """
     action = [
-        f"conda env export ${{conda_env_export_options}} --file ${{TARGET.file}}"
+        "${program} ${subcommand} ${required} ${options}"
     ]
-    action = construct_action_list(action)
+    action = construct_action_list(action, prefix="${action_prefix}")
     conda_environment_builder = SCons.Builder.Builder(
-        action=action
+        action=action,
+        program=program,
+        subcommand=subcommand,
+        required=required,
+        options=options,
+        action_prefix=action_prefix
     )
     return conda_environment_builder
 
