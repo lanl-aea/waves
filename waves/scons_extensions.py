@@ -2036,7 +2036,9 @@ def fierro_builder(
     subcommand: str = "",
     required: str = "",
     options: str = "",
-    post_action: list = []
+    post_action: list = [],
+    action_prefix: str = _settings._cd_action_prefix,
+    action_suffix: str = _settings._redirect_action_postfix,
 ) -> SCons.Builder.Builder:
     """Return a generic Fierro builder.
 
@@ -2070,13 +2072,18 @@ def fierro_builder(
     * ``subcommand``: A Fierro subcommand
     * ``required``: A space delimited string of subcommand required arguments
     * ``options``: A space delimited string of subcommand optional arguments
-    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults.
-    * ``redirect_action_postfix``: Advanced behavior. Most users should accept the defaults.
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults.
+    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
 
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}
+       ${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       cd ${TARGET.dir.abspath} && mpirun -np 1 fierro-${subcommand} ${required} ${options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -2102,27 +2109,29 @@ def fierro_builder(
     :param str subcommand: A Fierro subcommand
     :param str required: A space delimited string of subcommand required arguments
     :param str options: A space delimited string of subcommand optional arguments
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_suffix: Advanced behavior. Most users should accept the defaults.
     :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro builder
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        "${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}"
+        "${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}"
     ]
-    action = construct_action_list(action, prefix="${cd_action_prefix}")
-    action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
+    action = construct_action_list(action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
-        cd_action_prefix=_settings._cd_action_prefix,
-        redirect_action_postfix=_settings._redirect_action_postfix,
         mpirun=mpirun,
         mpirun_options=mpirun_options,
         program=program,
         subcommand=subcommand,
         required=required,
-        options=options
+        options=options,
+        action_prefix=action_prefix,
+        action_suffix=action_suffix
     )
     return builder
 
@@ -2134,6 +2143,8 @@ def fierro_explicit(
     subcommand: str = "parallel-explicit",
     required: str = "${SOURCE.abspath}",
     options: str = "",
+    action_prefix: str = _settings._cd_action_prefix,
+    action_suffix: str = _settings._redirect_action_postfix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return the Fierro explicit solver builder.
@@ -2164,13 +2175,18 @@ def fierro_explicit(
     * ``subcommand``: A Fierro subcommand
     * ``required``: A space delimited string of subcommand required arguments
     * ``options``: A space delimited string of subcommand optional arguments
-    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults.
-    * ``redirect_action_postfix``: Advanced behavior. Most users should accept the defaults.
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults.
+    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
 
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}
+       ${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       cd ${TARGET.dir.abspath} && mpirun -np 1 fierro-parallel-explicit ${SOURCE.abspath} ${options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -2190,6 +2206,9 @@ def fierro_explicit(
     :param str subcommand: A Fierro subcommand
     :param str required: A space delimited string of subcommand required arguments
     :param str options: A space delimited string of subcommand optional arguments
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_suffix: Advanced behavior. Most users should accept the defaults.
+    :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro explicit solver builder
     :rtype: SCons.Builder.Builder
@@ -2201,6 +2220,8 @@ def fierro_explicit(
         subcommand=subcommand,
         required=required,
         options=options,
+        action_prefix=action_prefix,
+        action_suffix=action_suffix,
         post_action=post_action
     )
     return builder
@@ -2213,6 +2234,8 @@ def fierro_implicit(
     subcommand: str = "parallel-implicit",
     required: str = "${SOURCE.abspath}",
     options: str = "",
+    action_prefix: str = _settings._cd_action_prefix,
+    action_suffix: str = _settings._redirect_action_postfix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return the Fierro implicit solver builder.
@@ -2243,13 +2266,18 @@ def fierro_implicit(
     * ``subcommand``: A Fierro subcommand
     * ``required``: A space delimited string of subcommand required arguments
     * ``options``: A space delimited string of subcommand optional arguments
-    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults.
-    * ``redirect_action_postfix``: Advanced behavior. Most users should accept the defaults.
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults.
+    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
 
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${redirect_action_postfix}
+       ${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       cd ${TARGET.dir.abspath} && mpirun -np 1 fierro-parallel-implicit ${SOURCE.abspath} ${options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -2269,6 +2297,9 @@ def fierro_implicit(
     :param str subcommand: A Fierro subcommand
     :param str required: A space delimited string of subcommand required arguments
     :param str options: A space delimited string of subcommand optional arguments
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_suffix: Advanced behavior. Most users should accept the defaults.
+    :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro implicit solver builder
     :rtype: SCons.Builder.Builder
@@ -2280,6 +2311,8 @@ def fierro_implicit(
         subcommand=subcommand,
         required=required,
         options=options,
+        action_prefix=action_prefix,
+        action_suffix=action_suffix,
         post_action=post_action
     )
     return builder
