@@ -683,7 +683,7 @@ def test_sierra_emitter(target, source, expected):
 # target per set.
 sierra_input = {
     "default behavior": (
-        {}, [], 3, 1, ["input1.i"], ['inptu1.g']
+        {}, {}, [], 3, 1, ["input1.i"], ['inptu1.g']
     ),
     "no defaults": (
         {
@@ -693,21 +693,32 @@ sierra_input = {
          "action_suffix": "different action suffix",
          "environment_suffix": "different environment suffix",
         },
-        [], 3, 1, ["nodefaults.i"], ['nodefaults.g']
+        {}, [], 3, 1, ["nodefaults.i"], ['nodefaults.g']
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "program": "different program",
+         "application": "different application",
+         "action_prefix": "different prefix",
+         "action_suffix": "different action suffix",
+         "environment_suffix": "different environment suffix",
+        },
+        [], 3, 1, ["sierra_taskkwargoverrides.i"], ['sierra_taskkwargoverrides.g']
     ),
     "different command": (
-        {"program": "dummy", "application": "application"}, [], 3, 1, ["input2.i"], ['inptu2.g']
+        {"program": "dummy", "application": "application"}, {}, [], 3, 1, ["input2.i"], ['inptu2.g']
     ),
     "post action": (
-        {}, ["post action"], 3, 1, ["input3.i"], ['inptu3.g']
+        {}, {}, ["post action"], 3, 1, ["input3.i"], ['inptu3.g']
     ),
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
                          sierra_input.values(),
                          ids=sierra_input.keys())
-def test_sierra(builder_kwargs, post_action, node_count, action_count, source_list, target_list):
+def test_sierra(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "sierra",
@@ -718,6 +729,7 @@ def test_sierra(builder_kwargs, post_action, node_count, action_count, source_li
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         "${action_prefix} ${program} ${application} --version ${environment_suffix}\n" \
@@ -730,7 +742,7 @@ def test_sierra(builder_kwargs, post_action, node_count, action_count, source_li
     })
 
     # Test task definition node counts, action(s), and task keyword arguments
-    nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="")
+    nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="", **task_kwargs)
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
                         post_action_prefix="${action_prefix}")
     for node in nodes:
