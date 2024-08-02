@@ -2322,7 +2322,7 @@ def ansys_apdl(
     program: str = "ansys",
     required: str = "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
     options: str = "",
-    action_prefix: str = _cd_action_prefix,
+    action_prefix: str = _settings._cd_action_prefix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return an Ansys APDL builder.

@@ -1500,25 +1500,65 @@ def test_fierro_implicit(builder_kwargs, task_kwargs, post_action, node_count, a
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 ansys_apdl_input = {
-    "default behavior": ("ansys232", [], 2, 1, ["input1.dat"], ['input1.ansys']),
-    "different command": ("dummy", [], 2, 1, ["input2.dat"], ['input2.ansys']),
-    "post action": ("ansys", ["post action"], 2, 1, ["input3.dat"], ['input3.ansys']),
+    "default behavior": (
+        {}, {}, [], 2, 1, ["input1.dat"], ['input1.ansys']
+    ),
+    "different command": (
+        {"program": "dummy"}, {}, [], 2, 1, ["input2.dat"], ['input2.ansys']
+    ),
+    "post action": (
+        {}, {}, ["post action"], 2, 1, ["input3.dat"], ['input3.ansys']
+    ),
+    "no defaults": (
+        {
+         "program": "different program",
+         "required": "different required",
+         "options": "different options",
+         "action_prefix": "different action prefix",
+        },
+        {}, [], 2, 1, ["input4.dat"], ['input4.ansys']
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "program": "different program",
+         "required": "different required",
+         "options": "different options",
+         "action_prefix": "different action prefix",
+        },
+        [], 2, 1, ["input4.dat"], ['input5.ansys']
+    )
 }
 
 
-@pytest.mark.parametrize("program, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
                          ansys_apdl_input.values(),
                          ids=ansys_apdl_input.keys())
-def test_ansys_apdl(program, post_action, node_count, action_count, source_list, target_list):
-    env = SCons.Environment.Environment()
-    expected_string = '${cd_action_prefix} ${program} ${required} ${options}'
+def test_ansys_apdl(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "program": "ansys",
+        "required": "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
+        "options": "",
+        "action_prefix": _cd_action_prefix
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_string = '${action_prefix} ${program} ${required} ${options}'
 
-    env.Append(BUILDERS={"AnsysAPDL": scons_extensions.ansys_apdl(program=program, post_action=post_action)})
-    nodes = env.AnsysAPDL(target=target_list, source=source_list)
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"AnsysAPDL": scons_extensions.ansys_apdl(**builder_kwargs, post_action=post_action)})
+    nodes = env.AnsysAPDL(target=target_list, source=source_list, **task_kwargs)
+
+    # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${cd_action_prefix}")
+                        post_action_prefix="${action_prefix}")
     for node in nodes:
-        assert node.env['program'] == program
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
