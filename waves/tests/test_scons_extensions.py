@@ -375,7 +375,7 @@ def test_abaqus_journal_emitter(target, source, expected):
 # target per set.
 abaqus_journal_input = {
     "default behavior": (
-        {"program": "abaqus"}, [], 3, 1, ["journal1.cae"]
+        {}, {}, [], 3, 1, ["abaqus_journal_1.cae"]
     ),
     "no defaults": (
         {
@@ -385,21 +385,32 @@ abaqus_journal_input = {
          "action_suffix": "",
          "environment_suffix": ""
         },
-        [], 3, 1, ["nodefaults.cae"]
+        {}, [], 3, 1, ["abaqus_journal_2.cae"]
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "program": "someothercommand",
+         "action_prefix": "nocd",
+         "required": "cae python",
+         "action_suffix": "",
+         "environment_suffix": ""
+        },
+        [], 3, 1, ["abaqus_journal_3.cae"]
     ),
     "different command": (
-        {"program": "dummy"}, [], 3, 1, ["journal2.cae"]
+        {"program": "dummy"}, {}, [], 3, 1, ["abaqus_journal_4.cae"]
     ),
     "post action": (
-        {"program": "abaqus"}, ["post action"], 3, 1, ["journal3.cae"]
+        {"program": "abaqus"}, {}, ["post action"], 3, 1, ["abaqus_journal_5.cae"]
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list",
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
-def test_abaqus_journal(builder_kwargs, post_action, node_count, action_count, target_list):
+def test_abaqus_journal(builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
@@ -410,6 +421,7 @@ def test_abaqus_journal(builder_kwargs, post_action, node_count, action_count, t
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = '${action_prefix} ${program} -information environment ${environment_suffix}\n' \
                       '${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ' \
@@ -420,7 +432,7 @@ def test_abaqus_journal(builder_kwargs, post_action, node_count, action_count, t
     env.Append(BUILDERS={
         "AbaqusJournal": scons_extensions.abaqus_journal(**builder_kwargs, post_action=post_action)
     })
-    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="")
+    nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
