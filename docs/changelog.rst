@@ -8,6 +8,11 @@ Changelog
 0.10.0 (unreleased)
 *******************
 
+Breaking changes
+================
+- Change the Conda environment action options from ``conda_env_export_options`` to ``options`` for improved builder
+  action string keyword argument consistency (:issue:`719`, :merge:`889`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
 - Remove unnecessary single quotes in task definition shell commands. Fixes errors in Windows Powershell tutorial
@@ -31,6 +36,8 @@ Enhancements
   in constructed builder behavior (:issue:`713`, :merge:`887`). By `Kyle Brindley`_.
 - Expose the SLURM sbatch action keyword arguments to the constructor API and task definitions for greater flexibility
   in constructed builder behavior (:issue:`715`, :merge:`888`). By `Kyle Brindley`_.
+- Expose the Conda environment export action keyword arguments to the constructor API and task definitions for greater
+  flexibility in constructed builder behavior (:issue:`719`, :merge:`889`). By `Kyle Brindley`_.
 
 ******************
 0.9.5 (2024-07-25)
