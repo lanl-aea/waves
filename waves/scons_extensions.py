@@ -2322,6 +2322,7 @@ def ansys_apdl(
     program: str = "ansys",
     required: str = "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
     options: str = "",
+    action_prefix: str = _cd_action_prefix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return an Ansys APDL builder.
@@ -2350,7 +2351,7 @@ def ansys_apdl(
     * ``program``: The Ansys command line executable absolute or relative path
     * ``required``: A space delimited string of subcommand required arguments
     * ``options``: A space delimited string of subcommand optional arguments
-    * ``cd_action_prefix``: Advanced behavior. Most users should accept the defaults.
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults.
 
     .. code-block::
        :caption: action string construction
@@ -2377,6 +2378,7 @@ def ansys_apdl(
     :param str program: The Ansys command line executable absolute or relative path
     :param str required: A space delimited string of subcommand required arguments
     :param str options: A space delimited string of subcommand optional arguments
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro builder
@@ -2385,12 +2387,12 @@ def ansys_apdl(
     action = [
         "${program} ${required} ${options}"
     ]
-    action = construct_action_list(action, prefix="${cd_action_prefix}")
-    action.extend(construct_action_list(post_action, prefix="${cd_action_prefix}"))
+    action = construct_action_list(action, prefix="${action_prefix}")
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
-        cd_action_prefix=_settings._cd_action_prefix,
+        action_prefix=action_prefix,
         program=program,
         required=required,
         options=options
