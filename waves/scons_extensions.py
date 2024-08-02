@@ -1938,9 +1938,16 @@ def _custom_scanner(
     return custom_scanner
 
 
-def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun_options: str = "+p1",
-                  inciter_options: str = "", prefix_command: str = "",
-                  post_action: typing.Iterable[str] = []) -> SCons.Builder.Builder:
+def quinoa_solver(
+    charmrun: str = "charmrun",
+    inciter: str = "inciter",
+    charmrun_options: str = "+p1",
+    inciter_options: str = "",
+    prefix_command: str = "",
+    action_prefix: str = _cd_action_prefix,
+    action_suffix: str = _redirect_action_postfix,
+    post_action: typing.Iterable[str] = []
+) -> SCons.Builder.Builder:
     """Quinoa solver SCons builder
 
     .. warning::
@@ -1957,6 +1964,16 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     The builder returned by this function accepts all SCons Builder arguments. Except for the ``post_action``, the
     arguments of this function are also available as keyword arguments of the builder. When provided during task
     definition, the keyword arguments override the builder returned by this function.
+
+    *Builder/Task keyword arguments*
+
+    * ``charmrun: The relative or absolute path to the charmrun executable
+    * ``charmrun_options: The charmrun command line interface options
+    * ``inciter: The relative or absolute path to the inciter (quinoa) executable
+    * ``inciter_options: The inciter (quinoa executable) command line interface options
+    * ``prefix_command``: Optional prefix command intended for environment preparation
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults
+    * ``action_suffix``: Advanced behavior. Most users should accept the defaults
 
     The first target determines the working directory for the builder's action, as shown in the action code snippet
     below. The action changes the working directory to the first target's parent directory prior to executing quinoa.
@@ -1980,7 +1997,12 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
        env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"], charmrun_options="+p4")
 
     .. code-block::
-       :caption: Quinoa builder action
+       :caption: Quinoa builder action keywords
+
+       ${prefix_command} ${action_prefix} ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control=${SOURCES[0].abspath} --input ${SOURCES[1].abspath} ${action_suffix}
+
+    .. code-block::
+       :caption: Quinoa builder action default expansion
 
        ${prefix_command} ${TARGET.dir.abspath} && ${charmrun} ${charmrun_options} ${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} > ${TARGETS[-1].abspath} 2>&1
 
@@ -1993,6 +2015,8 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
         :meth:`waves.scons_extensions.ssh_builder_actions`. For local, direct execution, user's should prefer to create
         an SCons construction environment with :meth:`waves.scons_extensions.shell_environment`. When overriding in a
         task definition, the prefix command *must* end with ``' &&'``.
+    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param action_suffix: Advanced behavior. Most users should accept the defaults.
     :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
         allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
         non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
@@ -2005,11 +2029,11 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
     if prefix_command and not prefix_command.endswith(" &&"):
         prefix_command += " &&"
     action = [
-        f"${{prefix_command}} {_settings._cd_action_prefix} ${{charmrun}} ${{charmrun_options}} " \
+        "${prefix_command} ${action_prefix} ${charmrun} ${charmrun_options} " \
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
-            f"{_settings._redirect_action_postfix}"
+            "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action))
+    action.extend(construct_action_list(post_action, prefix="${action_prefix}")
     quinoa_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -2017,7 +2041,9 @@ def quinoa_solver(charmrun: str = "charmrun", inciter: str = "inciter", charmrun
         charmrun=charmrun,
         charmrun_options=charmrun_options,
         inciter=inciter,
-        inciter_options=inciter_options
+        inciter_options=inciter_options,
+        action_prefix=action_prefix,
+        action_suffix=action_suffix
     )
     return quinoa_builder
 
