@@ -1167,29 +1167,35 @@ def test_build_odb_extract(target, source, env, calls):
 # target per set.
 sbatch_input = {
     "default behavior": (
-        {}, [], 2, 1, ["target1.out"]
+        {}, {}, [], 2, 1, ["sbatch1.out"]
     ),
     "no defaults": (
-        {}, [], 2, 1, ["target1.out"]
-    ),
-    "different command": (
         {
          "program": "different program",
          "required": "different required",
          "action_prefix": "different action prefix",
         },
-        [], 2, 1, ["sbatch_nodefaults.out"]
+        {}, [], 2, 1, ["sbatch2.out"]
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "program": "different program",
+         "required": "different required",
+         "action_prefix": "different action prefix",
+        },
+        [], 2, 1, ["sbatch3.out"]
     ),
     "post action": (
-        {}, ["post action"], 2, 1, ["target3.out"]
+        {}, {}, ["post action"], 2, 1, ["sbatch4.out"]
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
-def test_sbatch(builder_kwargs, post_action, node_count, action_count, target_list):
+def test_sbatch(builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "sbatch",
@@ -1198,6 +1204,7 @@ def test_sbatch(builder_kwargs, post_action, node_count, action_count, target_li
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         '${action_prefix} ${program} ${required} ${sbatch_options} --wrap "${slurm_job}"'
@@ -1208,7 +1215,7 @@ def test_sbatch(builder_kwargs, post_action, node_count, action_count, target_li
         "SlurmSbatch": scons_extensions.sbatch(**builder_kwargs, post_action=post_action)
     })
     nodes = env.SlurmSbatch(target=target_list, source=["source.in"], sbatch_options="",
-                            slurm_job="echo $SOURCE > $TARGET")
+                            slurm_job="echo $SOURCE > $TARGET", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
