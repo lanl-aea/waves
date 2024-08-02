@@ -55,6 +55,8 @@ Enhancements
   flexibility in constructed builder behavior (:issue:`719`, :merge:`889`). By `Kyle Brindley`_.
 - Expose the Fierro and Ansys APDL action keyword arguments to the constructor API and task definitions for greater
   flexibility in constructed builder behavior (:issue:`709`, :merge:`890`). By `Kyle Brindley`_.
+- Expose the Quinoa action keyword arguments to the constructor API and task definitions for greater flexibility in
+  constructed builder behavior (:issue:`714`, :merge:`893`). By `Kyle Brindley`_.
 
 ******************
 0.9.5 (2024-07-25)
