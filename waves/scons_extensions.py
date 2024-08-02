@@ -67,6 +67,17 @@ def print_build_failures(print_stdout: bool = True) -> None:
         atexit.register(_print_failed_nodes_stdout)
 
 
+def action_list(actions: typing.Iterable[str]) -> SCons.Action.ListAction:
+    """Convert a list of action strings to an SCons.Action.ListAction object
+
+    :param actions: List of action strings
+
+    :returns: SCons.Action.ListAction object of SCons.Action.CommandAction
+    """
+    command_actions = [SCons.Action.CommandAction(action) for action in actions]
+    return SCons.Action.ListAction(command_actions)
+
+
 def action_list_strings(builder: SCons.Builder.Builder) -> list[str]:
     """Return a builder's action list as a list of str
 
@@ -82,8 +93,11 @@ def action_list_strings(builder: SCons.Builder.Builder) -> list[str]:
     return action_list
 
 
-def catenate_builder_actions(builder: SCons.Builder.Builder,
-                             program: str = "", options: str = "") -> SCons.Builder.Builder:
+def catenate_builder_actions(
+    builder: SCons.Builder.Builder,
+    program: str = "",
+    options: str = ""
+) -> SCons.Builder.Builder:
     """Catenate a builder's arguments and prepend the program and options
 
     .. code-block::
@@ -248,9 +262,8 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     ]
     ssh_actions.extend(action_list)
     ssh_actions.append(f"rsync -rltpv {remote_server}:{remote_directory}/ ${{TARGET.dir.abspath}}")
-    ssh_actions = [SCons.Action.CommandAction(action) for action in ssh_actions]
 
-    builder.action = SCons.Action.ListAction(ssh_actions)
+    builder.action = action_list(ssh_actions)
     return builder
 
 
