@@ -1354,25 +1354,74 @@ def test_fierro_builder(builder_kwargs, task_kwargs, post_action, node_count, ac
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 fierro_explicit = {
-    "default behavior": ([], 2, 1, ["input1_explicit.yaml"], ['input1_explicit.fierro']),
+    "default behavior": (
+        {}, {}, [], 2, 1, ["input1_explicit.yaml"], ['input1_explicit.fierro']
+    ),
+    "no defaults": (
+        {
+         "mpirun": "different mpirun",
+         "mpirun_options": "different mpirun options",
+         "program": "different program",
+         "subcommand": "different subcommand",
+         "required": "different required",
+         "options": "different options",
+         "action_prefix": "different action prefix",
+         "action_suffix": "different action suffix"
+        },
+        {}, [], 2, 1, ["input2_explicit.yaml"], ['input2_explicit.fierro']
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "mpirun": "different mpirun",
+         "mpirun_options": "different mpirun options",
+         "program": "different program",
+         "subcommand": "different subcommand",
+         "required": "different required",
+         "options": "different options",
+         "action_prefix": "different action prefix",
+         "action_suffix": "different action suffix"
+        },
+        [], 2, 1, ["input3_explicit.yaml"], ['input3_explicit.fierro']
+    )
 }
 
 
-@pytest.mark.parametrize("post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
                          fierro_explicit.values(),
                          ids=fierro_explicit.keys())
-def test_fierro_explicit(post_action, node_count, action_count, source_list, target_list):
-    env = SCons.Environment.Environment()
-    expected_string = '${cd_action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ' \
-                      '${options} ${redirect_action_postfix}'
+def test_fierro_explicit(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "mpirun": "mpirun",
+        "mpirun_options": "-np 1",
+        "program": "fierro",
+        "subcommand": "parallel-explicit",
+        "required": "${SOURCE.abspath}",
+        "options": "",
+        "action_prefix": _cd_action_prefix,
+        "action_suffix": _redirect_action_postfix
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_string = \
+        '${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}'
 
-    env.Append(BUILDERS={"FierroExplicit": scons_extensions.fierro_explicit(post_action=post_action)})
-    nodes = env.FierroExplicit(target=target_list, source=source_list)
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={
+        "FierroExplicit": scons_extensions.fierro_explicit(**builder_kwargs, post_action=post_action)
+    })
+    nodes = env.FierroExplicit(target=target_list, source=source_list, **task_kwargs)
+
+    # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${cd_action_prefix}")
+                        post_action_prefix="${action_prefix}")
     for node in nodes:
-        assert node.env['program'] == "fierro"
-        assert node.env['subcommand'] == "parallel-explicit"
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
