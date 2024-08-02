@@ -1967,10 +1967,10 @@ def quinoa_solver(
 
     *Builder/Task keyword arguments*
 
-    * ``charmrun: The relative or absolute path to the charmrun executable
-    * ``charmrun_options: The charmrun command line interface options
-    * ``inciter: The relative or absolute path to the inciter (quinoa) executable
-    * ``inciter_options: The inciter (quinoa executable) command line interface options
+    * ``charmrun``: The relative or absolute path to the charmrun executable
+    * ``charmrun_options``: The charmrun command line interface options
+    * ``inciter``: The relative or absolute path to the inciter (quinoa) executable
+    * ``inciter_options``: The inciter (quinoa executable) command line interface options
     * ``prefix_command``: Optional prefix command intended for environment preparation
     * ``action_prefix``: Advanced behavior. Most users should accept the defaults
     * ``action_suffix``: Advanced behavior. Most users should accept the defaults
