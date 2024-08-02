@@ -67,7 +67,7 @@ def print_build_failures(print_stdout: bool = True) -> None:
         atexit.register(_print_failed_nodes_stdout)
 
 
-def action_list(actions: typing.Iterable[str]) -> SCons.Action.ListAction:
+def action_list_scons(actions: typing.Iterable[str]) -> SCons.Action.ListAction:
     """Convert a list of action strings to an SCons.Action.ListAction object
 
     :param actions: List of action strings
@@ -263,7 +263,7 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
     ssh_actions.extend(action_list)
     ssh_actions.append(f"rsync -rltpv {remote_server}:{remote_directory}/ ${{TARGET.dir.abspath}}")
 
-    builder.action = action_list(ssh_actions)
+    builder.action = action_list_scons(ssh_actions)
     return builder
 
 

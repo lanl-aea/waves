@@ -60,6 +60,25 @@ def test_print_build_failures():
         mock_atexit.assert_not_called()
 
 
+action_list_scons = {
+    "one action": (
+        ["one action"], SCons.Action.ListAction([SCons.Action.CommandAction("one action")])
+    ),
+    "two actions": (
+        ["first action", "second action"],
+        SCons.Action.ListAction([SCons.Action.CommandAction("first action"), SCons.Action.CommandAction("second action")])
+    )
+}
+
+
+@pytest.mark.parametrize("actions, expected",
+                         action_list_scons.values(),
+                         ids=action_list_scons.keys())
+def test_action_list_scons(actions, expected):
+    list_action = scons_extensions.action_list_scons(actions)
+    assert list_action == expected
+
+
 action_list_strings = {
     "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
     "two actions": (SCons.Builder.Builder(action=["first action", "second action"]), ["first action", "second action"]),
