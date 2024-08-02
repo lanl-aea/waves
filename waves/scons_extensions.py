@@ -958,7 +958,8 @@ def abaqus_solver(
     """  # noqa: E501
     action = [
         "${action_prefix} ${program} -information environment ${environment_suffix}",
-        "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}"
+        "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} " \
+            "${action_suffix}"
     ]
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     if emitter:
@@ -1100,7 +1101,8 @@ def sierra(
     """  # noqa: E501
     action = [
         "${action_prefix} ${program} ${application} --version ${environment_suffix}",
-        "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}"
+        "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} " \
+            "${action_suffix}"
     ]
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     sierra_builder = SCons.Builder.Builder(
