@@ -1481,9 +1481,17 @@ def conda_environment(
 ) -> SCons.Builder.Builder:
     """Create a Conda environment file with ``conda env export``
 
-    This builder is intended to help WAVES workflows document the Conda environment used in the current build. At least
-    one target file must be specified for the ``conda env export --file ${TARGET}`` output. Additional options to the
-    Conda ``env export`` subcommand may be passed as the builder keyword argument ``conda_env_export_options``.
+    This builder is intended to help WAVES workflows document the Conda environment used in the current build. The
+    arguments of this function are also available as keyword arguments of the builder. When provided during task
+    definition, the keyword arguments override the builder returned by this function.
+
+    *Builder/Task keyword arguments*
+
+    * ``program``: The Conda command line executable absolute or relative path
+    * ``subcommand``: The Conda environment export subcommand
+    * ``required``: A space delimited string of subcommand required arguments
+    * ``options``: A space delimited string of subcommand optional arguments
+    * ``action_prefix``: Advanced behavior. Most users should accept the defaults
 
     At least one target must be specified. The first target determines the working directory for the builder's action,
     as shown in the action code snippet below. The action changes the working directory to the first target's parent
@@ -1497,7 +1505,7 @@ def conda_environment(
     .. code-block::
        :caption: Conda environment builder action default expansion
 
-       cd ${TARGET.dir.abspath} && conda env export --file ${TARGET.file} ${options}
+       cd ${TARGET.dir.abspath} && conda env export --file ${TARGET.abspath} ${options}
 
     The modsim owner may choose to re-use this builder throughout their project configuration to provide various levels
     of granularity in the recorded Conda environment state. It's recommended to include this builder at least once for
@@ -1518,6 +1526,12 @@ def conda_environment(
        env.Append(BUILDERS={"CondaEnvironment": waves.scons_extensions.conda_environment()})
        environment_target = env.CondaEnvironment(target=["environment.yaml"])
        env.AlwaysBuild(environment_target)
+
+    :param program: The Conda command line executable absolute or relative path
+    :param subcommand: The Conda environment export subcommand
+    :param required: A space delimited string of subcommand required arguments
+    :param options: A space delimited string of subcommand optional arguments
+    :param action_prefix: Advanced behavior. Most users should accept the defaults
 
     :return: Conda environment builder
     :rtype: SCons.Builder.Builder
