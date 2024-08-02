@@ -944,7 +944,7 @@ def test_matlab_script_emitter(target, source, expected):
 # target per set.
 matlab_script_input = {
     "default behavior": (
-        {}, [], 3, 1, ["matlab_script1.out"]
+        {}, {}, [], 3, 1, ["matlab_script1.out"]
     ),
     "no defaults": (
         {
@@ -953,21 +953,31 @@ matlab_script_input = {
          "action_suffix": "different action suffix",
          "environment_suffix": "different environment suffix",
         },
-        [], 3, 1, ["matlab_nodefaults.out"]
+        {}, [], 3, 1, ["matlab_script2.out"]
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "program": "different program",
+         "action_prefix": "different action prefix",
+         "action_suffix": "different action suffix",
+         "environment_suffix": "different environment suffix",
+        },
+        [], 3, 1, ["matlab_script3.out"]
     ),
     "different command": (
-        {"program": "/different/matlab"}, [], 3, 1, ["matlab_script2.out"]
+        {"program": "/different/matlab"}, {}, [], 3, 1, ["matlab_script4.out"]
     ),
     "post action": (
-        {}, ["post action"], 3, 1, ["matlab_script3.out"]
+        {}, {}, ["post action"], 3, 1, ["matlab_script5.out"]
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list",
                          matlab_script_input.values(),
                          ids=matlab_script_input.keys())
-def test_matlab_script(builder_kwargs, post_action, node_count, action_count, target_list):
+def test_matlab_script(builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "matlab",
@@ -977,6 +987,7 @@ def test_matlab_script(builder_kwargs, post_action, node_count, action_count, ta
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = '${action_prefix} ${program} ${matlab_options} -batch ' \
                           '"path(path, \'${SOURCE.dir.abspath}\'); ' \
@@ -993,7 +1004,7 @@ def test_matlab_script(builder_kwargs, post_action, node_count, action_count, ta
     env.Append(BUILDERS={
         "MatlabScript": scons_extensions.matlab_script(**builder_kwargs, post_action=post_action)
     })
-    nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="")
+    nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, post_action, node_count, action_count, expected_string,
