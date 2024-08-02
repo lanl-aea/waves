@@ -1477,7 +1477,7 @@ def conda_environment(
     subcommand: str = "env export",
     required: str = "--file ${TARGET.abspath}",
     options: str = "",
-    action_prefix: str = _settings._cd_action_prefix,
+    action_prefix: str = _settings._cd_action_prefix
 ) -> SCons.Builder.Builder:
     """Create a Conda environment file with ``conda env export``
 

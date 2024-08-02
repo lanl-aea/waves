@@ -950,13 +950,49 @@ def test_matlab_script(kwargs, post_action, node_count, action_count, target_lis
             assert node.env[key] == expected_value
 
 
-def test_conda_environment():
+conda_environment_input = {
+    "defaults": ({}, ["conda_environment_1.yml"]),
+    "no defaults": (
+        {
+         "program": "different program",
+         "subcommand": "different subcommand",
+         "required": "different required",
+         "options": "different options",
+         "action_prefix": "different action prefix",
+        },
+        ["conda_environment_2.yml"]
+    )
+}
+
+
+@pytest.mark.parametrize("kwargs, target",
+                         conda_environment_input.values(),
+                         ids=conda_environment_input.keys())
+def test_conda_environment(kwargs, target):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "program": "conda",
+        "subcommand": "env export",
+        "required": "--file ${TARGET.abspath}",
+        "options": "",
+        "action_prefix": _cd_action_prefix
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_string = '${action_prefix} ${program} ${subcommand} ${required} ${options}'
+
+    # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"CondaEnvironment": scons_extensions.conda_environment()})
+    env.Append(BUILDERS={"CondaEnvironment": scons_extensions.conda_environment(**kwargs)})
     nodes = env.CondaEnvironment(
-        target=["environment.yaml"], source=[], conda_env_export_options="")
-    expected_string = 'cd ${TARGET.dir.abspath} && conda env export ${conda_env_export_options} --file ${TARGET.file}'
+        target=target, source=[], conda_env_export_options="")
+
+    # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, [], 1, 1, expected_string)
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 source_file = fs.File("dummy.odb")
