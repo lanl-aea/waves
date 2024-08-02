@@ -15,6 +15,11 @@ Breaking changes
 - Change the Fierro and Ansys APDL action prefix and suffix options for improved builder action string keyword argument
   consistency (:issue:`709`, :merge:`890`). By `Kyle Brindley`_.
 
+New Features
+============
+- Add a function to convert a builder's action list to a list of strings (:issue:`721`, :merge:`892`). By `Kyle
+  Brindley`_.
+
 Bug fixes
 =========
 - Remove unnecessary single quotes in task definition shell commands. Fixes errors in Windows Powershell tutorial
@@ -27,6 +32,8 @@ Documentation
 Internal Changes
 ================
 - Test per-task action string keyword argument overrides (:issue:`720`, :merge:`891`). By `Kyle Brindley`_.
+- Inline the action prefix for builder factory actions for more obvious unit test expectations (:issue:`721`,
+  :merge:`892`). By `Kyle Brindley`_.
 
 Enhancements
 ============
