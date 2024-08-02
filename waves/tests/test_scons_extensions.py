@@ -951,7 +951,7 @@ def test_matlab_script(kwargs, post_action, node_count, action_count, target_lis
 
 
 conda_environment_input = {
-    "defaults": ({}, ["conda_environment_1.yml"]),
+    "defaults": ({}, {}, ["conda_environment_1.yml"]),
     "no defaults": (
         {
          "program": "different program",
@@ -960,15 +960,27 @@ conda_environment_input = {
          "options": "different options",
          "action_prefix": "different action prefix",
         },
+        {},
         ["conda_environment_2.yml"]
+    ),
+    "task keyword overrides": (
+        {},
+        {
+         "program": "different program",
+         "subcommand": "different subcommand",
+         "required": "different required",
+         "options": "different options",
+         "action_prefix": "different action prefix",
+        },
+        ["conda_environment_3.yml"]
     )
 }
 
 
-@pytest.mark.parametrize("kwargs, target",
+@pytest.mark.parametrize("kwargs, task_kwargs, target",
                          conda_environment_input.values(),
                          ids=conda_environment_input.keys())
-def test_conda_environment(kwargs, target):
+def test_conda_environment(kwargs, task_kwargs, target):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "conda",
@@ -979,14 +991,14 @@ def test_conda_environment(kwargs, target):
     }
     # Update expected arguments to match test case
     expected_kwargs.update(kwargs)
+    expected_kwargs.update(task_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = '${action_prefix} ${program} ${subcommand} ${required} ${options}'
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"CondaEnvironment": scons_extensions.conda_environment(**kwargs)})
-    nodes = env.CondaEnvironment(
-        target=target, source=[], conda_env_export_options="")
+    nodes = env.CondaEnvironment(target=target, source=[], **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, [], 1, 1, expected_string)
