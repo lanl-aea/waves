@@ -24,6 +24,10 @@ Documentation
 =============
 - Improved inclusion of inherited, public methods in the external API (:issue:`706`, :merge:`880`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Test per-task action string keyword argument overrides (:issue:`720`, :merge:`891`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Expose the Abaqus journal action keyword arguments to the constructor API and task definition for greater flexibility
