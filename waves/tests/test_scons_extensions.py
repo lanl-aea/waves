@@ -60,17 +60,17 @@ def test_print_build_failures():
         mock_atexit.assert_not_called()
 
 
-string_action_list = {
+action_list_strings = {
     "one action": (SCons.Builder.Builder(action="one action"), ["one action"]),
     "two actions": (SCons.Builder.Builder(action=["first action", "second action"]), ["first action", "second action"]),
 }
 
 
 @pytest.mark.parametrize("builder, expected",
-                         string_action_list.values(),
-                         ids=string_action_list.keys())
-def test_string_action_list(builder, expected):
-    action_list = scons_extensions._string_action_list(builder)
+                         action_list_strings.values(),
+                         ids=action_list_strings.keys())
+def test_action_list_strings(builder, expected):
+    action_list = scons_extensions.action_list_strings(builder)
     assert action_list == expected
 
 
