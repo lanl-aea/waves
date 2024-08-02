@@ -556,7 +556,7 @@ def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, out
 # target per set.
 abaqus_solver_input = {
     "default behavior": (
-        {"program": "abaqus", "post_action": []}, 7, 1, ["input1.inp"], None
+        {"program": "abaqus", "post_action": []}, {}, 7, 1, ["input1.inp"], None
     ),
     "no defaults": (
         {
@@ -567,33 +567,46 @@ abaqus_solver_input = {
          "environment_suffix": "",
          "post_action": []
         },
-        7, 1, ["nodefaults.inp"], None
+        {}, 7, 1, ["abaqus_solver_2.inp"], None
+    ),
+    "task kwargs overrides": (
+        {
+         "post_action": []
+        },
+        {
+         "program": "notdefault",
+         "required": "-other options",
+         "action_prefix": "nocd",
+         "action_suffix": "",
+         "environment_suffix": "",
+        },
+        7, 1, ["abaqus_solver_3.inp"], None
     ),
     "different command": (
-        {"program": "dummy", "post_action": []}, 7, 1, ["input2.inp"], None
+        {"program": "dummy", "post_action": []}, {}, 7, 1, ["input2.inp"], None
     ),
     "post action": (
-        {"program": "abaqus", "post_action": ["post action"]}, 7, 1, ["input3.inp"], None
+        {"program": "abaqus", "post_action": ["post action"]}, {}, 7, 1, ["input3.inp"], None
     ),
     "standard solver": (
-        {"program": "abaqus", "emitter": "standard", "post_action": []}, 8, 1, ["input4.inp"], None
+        {"program": "abaqus", "emitter": "standard", "post_action": []}, {}, 8, 1, ["input4.inp"], None
     ),
     "explicit solver": (
-        {"program": "abaqus", "emitter": "explicit", "post_action": []}, 8, 1, ["input5.inp"], None
+        {"program": "abaqus", "emitter": "explicit", "post_action": []}, {}, 8, 1, ["input5.inp"], None
     ),
     "datacheck solver": (
-        {"program": "abaqus", "emitter": "datacheck", "post_action": []}, 11, 1, ["input6.inp"], None
+        {"program": "abaqus", "emitter": "datacheck", "post_action": []}, {}, 11, 1, ["input6.inp"], None
     ),
     "standard solver, suffixes override": (
-        {"program": "abaqus", "emitter": "standard", "post_action": []}, 3, 1, ["input4.inp"], [".odb"]
+        {"program": "abaqus", "emitter": "standard", "post_action": []}, {}, 3, 1, ["input4.inp"], [".odb"]
     ),
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, node_count, action_count, source_list, suffixes",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, suffixes",
                          abaqus_solver_input.values(),
                          ids=abaqus_solver_input.keys())
-def test_abaqus_solver(builder_kwargs, node_count, action_count, source_list, suffixes):
+def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, source_list, suffixes):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
@@ -606,6 +619,7 @@ def test_abaqus_solver(builder_kwargs, node_count, action_count, source_list, su
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         "${action_prefix} ${program} -information environment ${environment_suffix}\n" \
@@ -617,7 +631,7 @@ def test_abaqus_solver(builder_kwargs, node_count, action_count, source_list, su
     env.Append(BUILDERS={
         "AbaqusSolver": scons_extensions.abaqus_solver(**builder_kwargs)
     })
-    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes)
+    nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(
