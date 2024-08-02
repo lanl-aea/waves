@@ -67,8 +67,8 @@ def print_build_failures(print_stdout: bool = True) -> None:
         atexit.register(_print_failed_nodes_stdout)
 
 
-def _string_action_list(builder: SCons.Builder.Builder) -> list:
-    """Return a builders action list as a list of str
+def _string_action_list(builder: SCons.Builder.Builder) -> list[str]:
+    """Return a builder's action list as a list of str
 
     :param builder: The builder to extract the action list from
 
@@ -754,10 +754,9 @@ def abaqus_journal(
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        "${program} -information environment ${environment_suffix}",
-        "${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"
+        "${action_prefix} ${program} -information environment ${environment_suffix}",
+        "${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
@@ -958,10 +957,9 @@ def abaqus_solver(
     :return: Abaqus solver builder
     """  # noqa: E501
     action = [
-        "${program} -information environment ${environment_suffix}",
-        "${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}"
+        "${action_prefix} ${program} -information environment ${environment_suffix}",
+        "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}"
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     if emitter:
         emitter = emitter.lower()
@@ -1101,10 +1099,9 @@ def sierra(
     :return: Sierra builder
     """  # noqa: E501
     action = [
-        "${program} ${application} --version ${environment_suffix}",
-        "${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}"
+        "${action_prefix} ${program} ${application} --version ${environment_suffix}",
+        "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}"
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     sierra_builder = SCons.Builder.Builder(
         action=action,
@@ -1331,9 +1328,8 @@ def python_script(
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        "${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
+        "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     python_builder = SCons.Builder.Builder(
         action=action,
@@ -1449,17 +1445,16 @@ def matlab_script(
     :return: Matlab script builder
     """  # noqa: E501
     action = [
-        "${program} ${matlab_options} -batch " \
+        "${action_prefix} ${program} ${matlab_options} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
             "[fileList, productList] = matlab.codetools.requiredFilesAndProducts('${SOURCE.file}'); " \
             "disp(cell2table(fileList)); disp(struct2table(productList, 'AsArray', true)); exit;\" " \
             "${environment_suffix}",
-        "${program} ${matlab_options} -batch " \
+        "${action_prefix} ${program} ${matlab_options} -batch " \
             "\"path(path, '${SOURCE.dir.abspath}'); " \
             "${SOURCE.filebase}(${script_options})\" " \
             "${action_suffix}"
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     matlab_builder = SCons.Builder.Builder(
         action=action,
@@ -1537,9 +1532,8 @@ def conda_environment(
     :rtype: SCons.Builder.Builder
     """
     action = [
-        "${program} ${subcommand} ${required} ${options}"
+        "${action_prefix} ${program} ${subcommand} ${required} ${options}"
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     conda_environment_builder = SCons.Builder.Builder(
         action=action,
         program=program,
@@ -1743,9 +1737,8 @@ def sbatch(
     :return: SLURM sbatch builder
     """
     action = [
-        "${program} ${required} ${sbatch_options} --wrap \"${slurm_job}\""
+        "${action_prefix} ${program} ${required} ${sbatch_options} --wrap \"${slurm_job}\""
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
@@ -2117,9 +2110,8 @@ def fierro_builder(
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
     action = [
-        "${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}"
+        "${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}"
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     builder = SCons.Builder.Builder(
         action=action,
@@ -2385,9 +2377,8 @@ def ansys_apdl(
     :rtype: SCons.Builder.Builder
     """
     action = [
-        "${program} ${required} ${options}"
+        "${action_prefix} ${program} ${required} ${options}"
     ]
-    action = construct_action_list(action, prefix="${action_prefix}")
     action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
     builder = SCons.Builder.Builder(
         action=action,
