@@ -131,6 +131,16 @@ def test_cubit_os_bin():
         assert bin_directory == "bin"
 
 
+def test_find_cubit_bin():
+    mock_abspath = pathlib.Path("/mock/path/parent/cubit")
+    mock_macos_bin = mock_abspath.parent / "intermediate/MacOS"
+    with patch("waves._utilities.find_command", return_value=str(mock_abspath)), \
+         patch("os.path.realpath", return_value=str(mock_abspath)), \
+         patch("pathlib.Path.rglob", return_value=[mock_macos_bin]) as mock_rglob:
+        cubit_bin = _utilities.find_cubit_bin(mock_abspath, bin_directory="MacOS")
+    assert cubit_bin == mock_macos_bin
+
+
 def test_tee_subprocess():
     with patch("subprocess.Popen") as mock_popen:
         _utilities.tee_subprocess(['dummy'])
