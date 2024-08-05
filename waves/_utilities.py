@@ -134,7 +134,7 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
         while cubit_bin.name != bin_directory:
             cubit_bin = cubit_bin.parent
     else:
-        search = cubit_bin.glob(bin_directory)
+        search = cubit_bin.rglob(bin_directory)
         try:
             cubit_bin = next((path for path in search if path.name == bin_directory))
         except StopIteration:
