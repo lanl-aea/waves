@@ -26,6 +26,8 @@ Bug fixes
 =========
 - Remove unnecessary single quotes in task definition shell commands. Fixes errors in Windows Powershell tutorial
   execution (:issue:`717`, :merge:`882`). By `Kyle Brindley`_.
+- Fix recursive search for Cubit bin directory (:merge:`894`). By `Kyle Brindley`_.
+- Allow Cubit+ tutorials to run when Sierra is not installed (:merge:`894`). By `Kyle Brindley`_.
 
 Documentation
 =============
