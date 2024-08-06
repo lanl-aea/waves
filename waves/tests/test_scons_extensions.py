@@ -13,8 +13,8 @@ import SCons.Node.FS
 from waves import scons_extensions
 from waves import parameter_generators
 from waves._settings import _cd_action_prefix
-from waves._settings import _redirect_action_postfix
-from waves._settings import _redirect_environment_postfix
+from waves._settings import _redirect_action_suffix
+from waves._settings import _redirect_environment_suffix
 from waves._settings import _abaqus_environment_extension
 from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions
@@ -435,8 +435,8 @@ def test_abaqus_journal(builder_kwargs, task_kwargs, post_action, node_count, ac
         "program": "abaqus",
         "required": "cae -noGUI ${SOURCE.abspath}",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix,
-        "environment_suffix": _redirect_environment_postfix
+        "action_suffix": _redirect_action_suffix,
+        "environment_suffix": _redirect_environment_suffix
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
@@ -631,8 +631,8 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
         "program": "abaqus",
         "required": "-interactive -ask_delete no",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix,
-        "environment_suffix": _redirect_environment_postfix,
+        "action_suffix": _redirect_action_suffix,
+        "environment_suffix": _redirect_environment_suffix,
         "emitter": None,
         "post_action": []
     }
@@ -743,8 +743,8 @@ def test_sierra(builder_kwargs, task_kwargs, post_action, node_count, action_cou
         "program": "sierra",
         "application": "adagio",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix,
-        "environment_suffix": _redirect_environment_postfix
+        "action_suffix": _redirect_action_suffix,
+        "environment_suffix": _redirect_environment_suffix
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
@@ -910,7 +910,7 @@ def test_python_script(builder_kwargs, task_kwargs, post_action, node_count, act
     expected_kwargs = {
         "program": "python",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix,
+        "action_suffix": _redirect_action_suffix,
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
@@ -1001,8 +1001,8 @@ def test_matlab_script(builder_kwargs, task_kwargs, post_action, node_count, act
     expected_kwargs = {
         "program": "matlab",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix,
-        "environment_suffix": _redirect_environment_postfix,
+        "action_suffix": _redirect_action_suffix,
+        "environment_suffix": _redirect_environment_suffix,
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
@@ -1374,7 +1374,7 @@ def test_quinoa_solver(builder_kwargs, task_kwargs, post_action, node_count, act
         "inciter_options": "",
         "prefix_command": "",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix,
+        "action_suffix": _redirect_action_suffix,
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
@@ -1457,7 +1457,7 @@ def test_fierro_builder(builder_kwargs, task_kwargs, post_action, node_count, ac
         "required": "",
         "options": "",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix
+        "action_suffix": _redirect_action_suffix
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
@@ -1530,7 +1530,7 @@ def test_fierro_explicit(builder_kwargs, task_kwargs, post_action, node_count, a
         "required": "${SOURCE.abspath}",
         "options": "",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix
+        "action_suffix": _redirect_action_suffix
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
@@ -1603,7 +1603,7 @@ def test_fierro_implicit(builder_kwargs, task_kwargs, post_action, node_count, a
         "required": "${SOURCE.abspath}",
         "options": "",
         "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_postfix
+        "action_suffix": _redirect_action_suffix
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)

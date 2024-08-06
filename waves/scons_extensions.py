@@ -696,8 +696,8 @@ def abaqus_journal(
     program: str = "abaqus",
     required: str = "cae -noGUI ${SOURCE.abspath}",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
-    environment_suffix: str = _settings._redirect_environment_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
+    environment_suffix: str = _settings._redirect_environment_suffix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Construct and return an Abaqus journal file SCons builder
@@ -875,8 +875,8 @@ def abaqus_solver(
     program: str = "abaqus",
     required: str = "-interactive -ask_delete no",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
-    environment_suffix: str = _settings._redirect_environment_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
+    environment_suffix: str = _settings._redirect_environment_suffix,
     post_action: typing.Iterable[str] = [],
     emitter: typing.Literal["standard", "explicit", "datacheck", None] = None
 ) -> SCons.Builder.Builder:
@@ -1042,8 +1042,8 @@ def sierra(
     program: str = "sierra",
     application: str = "adagio",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
-    environment_suffix: str = _settings._redirect_environment_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
+    environment_suffix: str = _settings._redirect_environment_suffix,
     post_action: typing.Iterable[str] = []
 ) -> SCons.Builder.Builder:
     """Construct and return a Sierra SCons builder
@@ -1282,7 +1282,7 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
 def python_script(
     program: str = "python",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
     post_action: typing.Iterable[str] = []
 ) -> SCons.Builder.Builder:
     """Construct and return a Python script SCons builder
@@ -1396,8 +1396,8 @@ def _matlab_script_emitter(target: list, source: list, env) -> typing.Tuple[list
 def matlab_script(
     program: str = "matlab",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
-    environment_suffix: str = _settings._redirect_environment_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
+    environment_suffix: str = _settings._redirect_environment_suffix,
     post_action: typing.Iterable[str] = []
 ) -> SCons.Builder.Builder:
     """Matlab script SCons builder
@@ -1945,7 +1945,7 @@ def quinoa_solver(
     inciter_options: str = "",
     prefix_command: str = "",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
     post_action: typing.Iterable[str] = []
 ) -> SCons.Builder.Builder:
     """Quinoa solver SCons builder
@@ -2072,7 +2072,7 @@ def fierro_builder(
     options: str = "",
     post_action: list = [],
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
 ) -> SCons.Builder.Builder:
     """Return a generic Fierro builder.
 
@@ -2177,7 +2177,7 @@ def fierro_explicit(
     required: str = "${SOURCE.abspath}",
     options: str = "",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return the Fierro explicit solver builder.
@@ -2268,7 +2268,7 @@ def fierro_implicit(
     required: str = "${SOURCE.abspath}",
     options: str = "",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_postfix,
+    action_suffix: str = _settings._redirect_action_suffix,
     post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return the Fierro implicit solver builder.
