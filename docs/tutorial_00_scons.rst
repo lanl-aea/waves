@@ -240,7 +240,7 @@ file names may also be cumbersome to type when explicitly listing build targets 
 convenience, the `WAVES tutorials`_ simulation configurations will add a collector alias for the list of simulation targets
 with the `SCons Alias`_ feature. By convention, the `WAVES tutorials`_ match the alias name to the simulation subdirectory
 name. :ref:`tutorial_geometry` will introduce the first target alias, which will then populate the project help
-message diplayed by the ``scons -h`` command option.
+message displayed by the ``scons -h`` command option.
 
 The :meth:`waves.scons_extensions.project_help_message` wraps two common calls to the `SCons Help`_ construction environment
 method that will append the following to the project help message accessed by ``scons -h``:
