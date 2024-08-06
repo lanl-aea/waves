@@ -14,6 +14,8 @@ Breaking changes
   action string keyword argument consistency (:issue:`719`, :merge:`889`). By `Kyle Brindley`_.
 - Change the Fierro and Ansys APDL action prefix and suffix options for improved builder action string keyword argument
   consistency (:issue:`709`, :merge:`890`). By `Kyle Brindley`_.
+- Update the default ``construct_action_list`` prefix string to match builder factories' action string updates
+  (:issue:`716`, :merge:`895`). By `Kyle Brindley`_.
 
 New Features
 ============

@@ -572,7 +572,7 @@ def shell_environment(
 
 def construct_action_list(
     actions: typing.Iterable[str],
-    prefix: str = _settings._cd_action_prefix,
+    prefix: str = "${action_prefix}",
     postfix: str = ""
 ) -> typing.Iterable[str]:
     """Return an action list with a common pre/post-fix
@@ -770,7 +770,7 @@ def abaqus_journal(
         "${action_prefix} ${program} -information environment ${environment_suffix}",
         "${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_journal_emitter,
@@ -974,7 +974,7 @@ def abaqus_solver(
         "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} " \
             "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     if emitter:
         emitter = emitter.lower()
     if emitter == 'standard':
@@ -1117,7 +1117,7 @@ def sierra(
         "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} " \
             "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     sierra_builder = SCons.Builder.Builder(
         action=action,
         emitter=_sierra_emitter,
@@ -1345,7 +1345,7 @@ def python_script(
     action = [
         "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     python_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -1470,7 +1470,7 @@ def matlab_script(
             "${SOURCE.filebase}(${script_options})\" " \
             "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
         emitter=_matlab_script_emitter,
@@ -1754,7 +1754,7 @@ def sbatch(
     action = [
         "${action_prefix} ${program} ${required} ${sbatch_options} --wrap \"${slurm_job}\""
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -2033,7 +2033,7 @@ def quinoa_solver(
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     quinoa_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -2153,7 +2153,7 @@ def fierro_builder(
     action = [
         "${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -2420,7 +2420,7 @@ def ansys_apdl(
     action = [
         "${action_prefix} ${program} ${required} ${options}"
     ]
-    action.extend(construct_action_list(post_action, prefix="${action_prefix}"))
+    action.extend(construct_action_list(post_action))
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
