@@ -2389,7 +2389,12 @@ def ansys_apdl(
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${program} ${required} ${options} ${redirect_action_postfix}
+       ${cd_action_prefix} ${program} ${required} ${options}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       cd ${TARGET.dir.abspath} && ansys -i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath} ${options}
 
     .. code-block::
        :caption: SConstruct
