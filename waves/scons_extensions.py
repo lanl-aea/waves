@@ -2554,10 +2554,10 @@ def parameter_study(
             return_targets.extend(builder(target=set_targets, source=set_sources, *args, **kwargs, **parameters))
     # Is it better to accept a dictionary of nominal variables or to add a "Nominal" parameter generator?
     elif isinstance(study, dict):
-        set_sources = _utilities.set_name_substitution(source, "", postfix="")
+        set_sources = _utilities.set_name_substitution(source, "", suffix="")
         return_targets.extend(builder(target=target, source=set_sources, *args, **kwargs, **study))
     else:
-        set_sources = _utilities.set_name_substitution(source, "", postfix="")
+        set_sources = _utilities.set_name_substitution(source, "", suffix="")
         return_targets.extend(builder(target=target, source=set_sources, *args, **kwargs))
     return return_targets
 

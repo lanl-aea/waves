@@ -28,16 +28,16 @@ def set_name_substitution(
     source: typing.List[str],
     replacement: str,
     identifier: str = "set_name",
-    postfix: str = "/"
+    suffix: str = "/"
 ) -> typing.List[str]:
     """Replace ``@identifier`` with replacement text in a list of strings
 
     :param source: List of strings
     :param replacement: substitution string for the identifier
     :param identifier: template identifier to replace, e.g. ``@identifier`` becomes ``replacement``
-    :param postfix: to insert after the replacement text
+    :param suffix: to insert after the replacement text
     """
-    mapping = {identifier: f"{replacement}{postfix}"}
+    mapping = {identifier: f"{replacement}{suffix}"}
     return [_AtSignTemplate(node).safe_substitute(mapping) for node in source]
 
 
