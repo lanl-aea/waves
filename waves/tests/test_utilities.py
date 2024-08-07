@@ -22,7 +22,7 @@ set_name_substitution = {
         "/",
         ["set1/lions.txt", "set1/tigers.txt", "bears.txt"]
     ),
-    "remove identifier, no postfix": (
+    "remove identifier, no suffix": (
         ["@{identifier}lions.txt", "@{identifier}tigers.txt", "bears.txt"],
         "",
         "identifier",
@@ -32,11 +32,11 @@ set_name_substitution = {
 }
 
 
-@pytest.mark.parametrize("sources, replacement, identifier, postfix, expected",
+@pytest.mark.parametrize("sources, replacement, identifier, suffix, expected",
                          set_name_substitution.values(),
                          ids=set_name_substitution.keys())
-def test_set_name_substitution(sources, replacement, identifier, postfix, expected):
-    replaced_sources = _utilities.set_name_substitution(sources, replacement, identifier=identifier, postfix=postfix)
+def test_set_name_substitution(sources, replacement, identifier, suffix, expected):
+    replaced_sources = _utilities.set_name_substitution(sources, replacement, identifier=identifier, suffix=suffix)
     assert replaced_sources == expected
 
 
