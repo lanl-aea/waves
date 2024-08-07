@@ -19,6 +19,9 @@ Breaking changes
 - Re-arrange the Abaqus solver's required options in the action string to move closer to a standardized action string
   template across all builders. Will cause Abaqus solver tasks to re-build for the new action signature. Does *not*
   change the default Abaqus options (:issue:`723`, :merge:`896`). By `Kyle Brindley`_.
+- Replace 'postfix' name with 'suffix' in function keyword argument APIs for better consistency with builder action
+  construction naming conventions. Maintains 'postfix' keyword arguments with a v1 deprecation warning in this version
+  (:issue:`722`, :merge:`897`). By `Kyle Brindley`_.
 
 New Features
 ============
