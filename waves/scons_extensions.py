@@ -377,8 +377,8 @@ def append_env_path(program: str, env) -> None:
     env.AppendENVPath("PATH", str(program.parent), delete_existing=False)
 
 
-def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", postfix: str = "@") -> dict:
-    """Return a dictionary copy with the pre/postfix added to the key strings
+def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", suffix: str = "@", postfix: str = "") -> dict:
+    """Return a dictionary copy with the pre/suffix added to the key strings
 
     Assumes a flat dictionary with keys of type str. Keys that aren't strings will be converted to their string
     representation. Nested dictionaries can be supplied, but only the first layer keys will be modified. Dictionary
@@ -386,11 +386,18 @@ def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", postfi
 
     :param dict substitution_dictionary: Original dictionary to copy
     :param string prefix: String to prepend to all dictionary keys
-    :param string postfix: String to append to all dictionary keys
+    :param string suffix: String to append to all dictionary keys
 
-    :return: Copy of the dictionary with key strings modified by the pre/posfix
+    :return: Copy of the dictionary with key strings modified by the pre/suffix
     """
-    return {f"{prefix}{key}{postfix}": value for key, value in substitution_dictionary.items()}
+    # TODO: Remove when the 'postfix' kwarg is removed
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
+    if postfix:
+        import warnings
+        message = "The 'postfix' keyword will be replaced by 'suffix' in version 1.0"
+        warnings.warn(message)
+        suffix = postfix
+    return {f"{prefix}{key}{suffix}": value for key, value in substitution_dictionary.items()}
 
 
 def find_program(names: typing.Iterable[str], env) -> str:

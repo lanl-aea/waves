@@ -255,7 +255,7 @@ def test_append_env_path(program, mock_exists, outcome):
 substitution_dictionary = {"thing1": 1, "thing_two": "two"}
 substitution_syntax_input = {
     "default characters": (substitution_dictionary, {}, {"@thing1@": 1, "@thing_two@": "two"}),
-    "provided pre/postfix": (substitution_dictionary, {"prefix": "$", "postfix": "%"},
+    "provided pre/suffix": (substitution_dictionary, {"prefix": "$", "suffix": "%"},
                              {"$thing1%": 1, "$thing_two%": "two"}),
     "int key": ({1: "one"}, {}, {"@1@": "one"}),
     "float key": ({1.0: "one"}, {}, {"@1.0@": "one"}),
@@ -269,6 +269,17 @@ substitution_syntax_input = {
                          ids=substitution_syntax_input.keys())
 def test_substitution_syntax(substitution_dictionary, keyword_arguments, expected_dictionary):
     output_dictionary = scons_extensions.substitution_syntax(substitution_dictionary, **keyword_arguments)
+    assert output_dictionary == expected_dictionary
+
+
+# TODO: Remove when the 'postfix' kwarg is removed
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
+def test_substitution_syntax_warning():
+    substitution_dictionary = {"thing1": 1, "thing_two": "two"}
+    expected_dictionary = {"@thing1%": 1, "@thing_two%": "two"}
+    with patch("warnings.warn") as mock_warn:
+        output_dictionary = scons_extensions.substitution_syntax(substitution_dictionary, postfix="%")
+        mock_warn.assert_called_with("The 'postfix' keyword will be replaced by 'suffix' in version 1.0")
     assert output_dictionary == expected_dictionary
 
 
