@@ -667,8 +667,7 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
 def test_sbatch_abaqus_solver():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "' \
                '${action_prefix} ${program} -information environment ${environment_suffix} && ' \
-               '${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ' \
-                   '${action_suffix}"'
+               '${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}"'
     builder = scons_extensions.sbatch_abaqus_solver()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions._abaqus_solver_emitter
