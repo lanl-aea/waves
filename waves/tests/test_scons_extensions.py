@@ -629,7 +629,7 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
-        "required": "-interactive -ask_delete no",
+        "required": "-interactive -ask_delete no -job ${job_name} -input ${SOURCE.filebase}",
         "action_prefix": _cd_action_prefix,
         "action_suffix": _redirect_action_suffix,
         "environment_suffix": _redirect_environment_suffix,
@@ -642,8 +642,7 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
     # Expected action matches the pre-SCons-substitution string with newline delimiter
     expected_string = \
         "${action_prefix} ${program} -information environment ${environment_suffix}\n" \
-        "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} " \
-            "${action_suffix}"
+        "${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}"
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()

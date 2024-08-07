@@ -873,7 +873,7 @@ def _abaqus_datacheck_solver_emitter(target: list, source: list, env) -> typing.
 
 def abaqus_solver(
     program: str = "abaqus",
-    required: str = "-interactive -ask_delete no",
+    required: str = "-interactive -ask_delete no -job ${job_name} -input ${SOURCE.filebase}",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
     environment_suffix: str = _settings._redirect_environment_suffix,
@@ -941,13 +941,13 @@ def abaqus_solver(
        :caption: Abaqus solver builder action keywords
 
        ${action_prefix} ${program} -information environment ${environment_suffix}
-       ${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} ${action_suffix}
+       ${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}
 
     .. code-block::
        :caption: Abaqus solver builder action default expansion
 
        cd ${TARGET.dir.abspath} && abaqus -information environment > ${TARGETS[-2].abspath} 2>&1
-       cd ${TARGET.dir.abspath} && ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} -interactive -ask_delete no > ${TARGETS[-1].abspath} 2>&1
+       cd ${TARGET.dir.abspath} && ${program} -interactive -ask_delete no -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} > ${TARGETS[-1].abspath} 2>&1
 
     :param program: An absolute path or basename string for the abaqus program
     :param required: A space delimited string of Abaqus required arguments
@@ -971,8 +971,7 @@ def abaqus_solver(
     """  # noqa: E501
     action = [
         "${action_prefix} ${program} -information environment ${environment_suffix}",
-        "${action_prefix} ${program} -job ${job_name} -input ${SOURCE.filebase} ${abaqus_options} ${required} " \
-            "${action_suffix}"
+        "${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}"
     ]
     action.extend(construct_action_list(post_action))
     if emitter:
