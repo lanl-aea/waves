@@ -580,6 +580,7 @@ def shell_environment(
 def construct_action_list(
     actions: typing.Iterable[str],
     prefix: str = "${action_prefix}",
+    suffix: str = "",
     postfix: str = ""
 ) -> typing.Iterable[str]:
     """Return an action list with a common pre/post-fix
@@ -588,14 +589,14 @@ def construct_action_list(
 
     .. code-block::
 
-       f"{prefix} {new_action} {postfix}"
+       f"{prefix} {new_action} {suffix}"
 
     where SCons action objects are converted to their string representation. If a string is passed instead of a list, it
     is first converted to a list. If an empty list is passed, and empty list is returned.
 
     :param actions: List of action strings
     :param prefix: Common prefix to prepend to each action
-    :param postfix: Common postfix to append to each action
+    :param suffix: Common suffix to append to each action
 
     :return: action list
     """
@@ -607,9 +608,16 @@ def construct_action_list(
         iterator = iter([actions])
     if prefix:
         prefix = prefix + " "
+    # TODO: Remove when the 'postfix' kwarg is removed
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
     if postfix:
-        postfix = " " + postfix
-    new_actions = [f"{prefix}{action}{postfix}" for action in iterator]
+        import warnings
+        message = "The 'postfix' keyword will be replaced by 'suffix' in version 1.0"
+        warnings.warn(message)
+        suffix = postfix
+    if suffix:
+        suffix = " " + suffix
+    new_actions = [f"{prefix}{action}{suffix}" for action in iterator]
     return new_actions
 
 

@@ -361,24 +361,35 @@ def test_shell_environment(cache, overwrite_cache, expected, verbose):
 
 
 prefix = f"{_cd_action_prefix}"
-postfix = "postfix"
+suffix = "suffix"
 construct_action_list = {
     "list1": (["thing1"], prefix, "", [f"{prefix} thing1"]),
     "list2": (["thing1", "thing2"], prefix, "", [f"{prefix} thing1", f"{prefix} thing2"]),
     "tuple": (("thing1",), prefix, "", [f"{prefix} thing1"]),
     "str":  ("thing1", prefix, "", [f"{prefix} thing1"]),
-    "list1 postfix": (["thing1"], prefix, postfix, [f"{prefix} thing1 {postfix}"]),
-    "list2 postfix": (["thing1", "thing2"], prefix, postfix, [f"{prefix} thing1 {postfix}", f"{prefix} thing2 {postfix}"]),
-    "tuple postfix": (("thing1",), prefix, postfix, [f"{prefix} thing1 {postfix}"]),
-    "str postfix":  ("thing1", prefix, postfix, [f"{prefix} thing1 {postfix}"]),
+    "list1 suffix": (["thing1"], prefix, suffix, [f"{prefix} thing1 {suffix}"]),
+    "list2 suffix": (["thing1", "thing2"], prefix, suffix, [f"{prefix} thing1 {suffix}", f"{prefix} thing2 {suffix}"]),
+    "tuple suffix": (("thing1",), prefix, suffix, [f"{prefix} thing1 {suffix}"]),
+    "str suffix":  ("thing1", prefix, suffix, [f"{prefix} thing1 {suffix}"]),
 }
 
 
-@pytest.mark.parametrize("actions, prefix, postfix, expected",
+@pytest.mark.parametrize("actions, prefix, suffix, expected",
                          construct_action_list.values(),
                          ids=construct_action_list.keys())
-def test_construct_action_list(actions, prefix, postfix, expected):
-    output = scons_extensions.construct_action_list(actions, prefix=prefix, postfix=postfix)
+def test_construct_action_list(actions, prefix, suffix, expected):
+    output = scons_extensions.construct_action_list(actions, prefix=prefix, suffix=suffix)
+    assert output == expected
+
+
+# TODO: Remove when the 'postfix' kwarg is removed
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
+def test_construct_action_list_warning():
+    original = ["thing1"]
+    expected = ["prefix thing1 suffix"]
+    with patch("warnings.warn") as mock_warn:
+        output = scons_extensions.construct_action_list(original, prefix="prefix", postfix="suffix")
+        mock_warn.assert_called_with("The 'postfix' keyword will be replaced by 'suffix' in version 1.0")
     assert output == expected
 
 
