@@ -55,21 +55,10 @@ waves.scons_extensions.print_build_failures(env["print_build_failures"])
 env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
 env["fierro"] = waves.scons_extensions.add_program(["fierro-parallel-implicit"], env)
 
-# Cubit Python requires a separate construction environment
-# TODO: Write as an ``add_cubit_python`` function
-envCubit = Environment()
-envCubit["python"] = waves.scons_extensions.add_program(
-    ["/apps/Cubit-16.16/bin/python3/python3.7",
-     "/Applications/Cubit-16.18/Cubit.app/Contents/Frameworks/Python.framework/Versions/3.9/bin/python3"],
-    envCubit
-)
-if envCubit["python"].startswith("/apps"):
-    cubit_bin = "/apps/Cubit-16.16/bin"
-elif envCubit["python"].startswith("/Applications"):
-    cubit_bin = "/Applications/Cubit-16.18/Cubit.app/Contents/MacOS"
-else:
-    cubit_bin = ""
-envCubit.PrependENVPath("PYTHONPATH", cubit_bin)
+# Cubit Python requires a separate construction environment to avoid putting Cubit distributed Python packages in the
+# parent Python 3 environment's PYTHONPATH
+envCubit = Environment(ENV=os.environ.copy())
+envCubit["python"] = waves.scons_extensions.add_cubit_python(["/apps/Cubit-16.12/cubit", "cubit"], envCubit)
 
 # Sierra requires a separate construction environment
 try:
