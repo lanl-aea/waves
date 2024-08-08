@@ -712,15 +712,14 @@ def abaqus_journal(
     required: str = "cae -noGUI ${SOURCE.abspath}",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
-    environment_suffix: str = _settings._redirect_environment_suffix,
-    post_action: list = []
+    environment_suffix: str = _settings._redirect_environment_suffix
 ) -> SCons.Builder.Builder:
     """Construct and return an Abaqus journal file SCons builder
 
     This builder requires that the journal file to execute is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
-    also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
-    override the builder returned by this function.
+    function accepts all SCons Builder arguments. The arguments of this function are also available as keyword arguments
+    of the builder. When provided during task definition, the keyword arguments override the builder returned by this
+    function.
 
     *Builder/Task keyword arguments*
 
@@ -769,11 +768,6 @@ def abaqus_journal(
 
     :param program: The Abaqus command line executable absolute or relative path
     :param required: A space delimited string of Abaqus required arguments
-    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
-        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
-        ``${action_prefix} ${post_action}``.
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
     :param environment_suffix: Advanced behavior. Most users should accept the defaults.
@@ -785,7 +779,6 @@ def abaqus_journal(
         "${action_prefix} ${program} -information environment ${environment_suffix}",
         "${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action))
     abaqus_journal_builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_journal_emitter,
@@ -892,15 +885,14 @@ def abaqus_solver(
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
     environment_suffix: str = _settings._redirect_environment_suffix,
-    post_action: typing.Iterable[str] = [],
     emitter: typing.Literal["standard", "explicit", "datacheck", None] = None
 ) -> SCons.Builder.Builder:
     """Construct and return an Abaqus solver SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
-    also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
-    override the builder returned by this function.
+    function accepts all SCons Builder arguments. The arguments of this function are also available as keyword arguments
+    of the builder. When provided during task definition, the keyword arguments override the builder returned by this
+    function.
 
     *Builder/Task keyword arguments*
 
@@ -946,8 +938,7 @@ def abaqus_solver(
        env.Append(BUILDERS={
            "AbaqusSolver": waves.scons_extensions.abaqus_solver(),
            "AbaqusStandard": waves.scons_extensions.abaqus_solver(emitter='standard'),
-           "AbaqusOld": waves.scons_extensions.abaqus_solver(program="abq2019"),
-           "AbaqusPost": waves.scons_extensions.abaqus_solver(post_action="grep -E '\\<SUCCESSFULLY' ${job_name}.sta")
+           "AbaqusOld": waves.scons_extensions.abaqus_solver(program="abq2019")
        })
        env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", abaqus_options="-cpus 4")
        env.AbaqusSolver(target=[], source=["input.inp"], job_name="my_job", suffixes=[".odb"])
@@ -969,11 +960,6 @@ def abaqus_solver(
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
     :param environment_suffix: Advanced behavior. Most users should accept the defaults.
-    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
-        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
-        ``${action_prefix} ${post_action}``.
     :param emitter: emit file extensions based on the value of this variable. Overridden by the ``suffixes`` keyword
         argument that may be provided in the Task definition.
 
@@ -988,7 +974,6 @@ def abaqus_solver(
         "${action_prefix} ${program} -information environment ${environment_suffix}",
         "${action_prefix} ${program} ${required} ${abaqus_options} ${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action))
     if emitter:
         emitter = emitter.lower()
     if emitter == 'standard':
@@ -1057,15 +1042,14 @@ def sierra(
     application: str = "adagio",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
-    environment_suffix: str = _settings._redirect_environment_suffix,
-    post_action: typing.Iterable[str] = []
+    environment_suffix: str = _settings._redirect_environment_suffix
 ) -> SCons.Builder.Builder:
     """Construct and return a Sierra SCons builder
 
     This builder requires that the root input file is the first source in the list. The builder returned by this
-    function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function are
-    also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
-    override the builder returned by this function.
+    function accepts all SCons Builder arguments. The arguments of this function are also available as keyword arguments
+    of the builder. When provided during task definition, the keyword arguments override the builder returned by this
+    function.
 
     *Builder/Task keyword arguments*
 
@@ -1118,11 +1102,6 @@ def sierra(
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
     :param environment_suffix: Advanced behavior. Most users should accept the defaults.
-    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect the Sierra log for error keywords and throw a
-        non-zero exit code even if Sierra does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
-        ``${action_prefix} ${post_action}``.
 
     :return: Sierra builder
     """  # noqa: E501
@@ -1131,7 +1110,6 @@ def sierra(
         "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} " \
             "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action))
     sierra_builder = SCons.Builder.Builder(
         action=action,
         emitter=_sierra_emitter,
@@ -1296,15 +1274,14 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
 def python_script(
     program: str = "python",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_suffix,
-    post_action: typing.Iterable[str] = []
+    action_suffix: str = _settings._redirect_action_suffix
 ) -> SCons.Builder.Builder:
     """Construct and return a Python script SCons builder
 
     This builder requires that the Python script to execute is the first source in the list. The builder returned by
-    this function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function
-    are also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
-    override the builder returned by this function.
+    this function accepts all SCons Builder arguments. The arguments of this function are also available as keyword
+    arguments of the builder. When provided during task definition, the keyword arguments override the builder returned
+    by this function.
 
     *Builder/Task keyword arguments*
 
@@ -1347,11 +1324,6 @@ def python_script(
     :param program: An absolute path or basename string for the Python interpretter
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
-    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
-        non-zero exit code even if Python does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
-        ``${action_prefix} ${post_action}``.
 
     :return: Python script builder
     :rtype: SCons.Builder.Builder
@@ -1359,7 +1331,6 @@ def python_script(
     action = [
         "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action))
     python_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -1411,8 +1382,7 @@ def matlab_script(
     program: str = "matlab",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
-    environment_suffix: str = _settings._redirect_environment_suffix,
-    post_action: typing.Iterable[str] = []
+    environment_suffix: str = _settings._redirect_environment_suffix
 ) -> SCons.Builder.Builder:
     """Matlab script SCons builder
 
@@ -1421,9 +1391,9 @@ def matlab_script(
        Experimental implementation is subject to change
 
     This builder requires that the Matlab script to execute is the first source in the list. The builder returned by
-    this function accepts all SCons Builder arguments. Except for the ``post_action``, the arguments of this function
-    are also available as keyword arguments of the builder. When provided during task definition, the keyword arguments
-    override the builder returned by this function.
+    this function accepts all SCons Builder arguments. The arguments of this function are also available as keyword
+    arguments of the builder. When provided during task definition, the keyword arguments override the builder returned
+    by this function.
 
     *Builder/Task keyword arguments*
 
@@ -1465,11 +1435,6 @@ def matlab_script(
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
     :param environment_suffix: Advanced behavior. Most users should accept the defaults.
-    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect a log for error keywords and throw a
-        non-zero exit code even if Matlab does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as
-        ``${action_prefix} ${post_action}``.
 
     :return: Matlab script builder
     """  # noqa: E501
@@ -1484,7 +1449,6 @@ def matlab_script(
             "${SOURCE.filebase}(${script_options})\" " \
             "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action))
     matlab_builder = SCons.Builder.Builder(
         action=action,
         emitter=_matlab_script_emitter,
@@ -1709,14 +1673,13 @@ def _build_odb_extract(target: list, source: list, env) -> None:
 def sbatch(
     program: str = "sbatch",
     required: str = "--wait --output=${TARGETS[-1].abspath}",
-    action_prefix: str = _settings._cd_action_prefix,
-    post_action: typing.Iterable[str] = []
+    action_prefix: str = _settings._cd_action_prefix
 ) -> SCons.Builder.Builder:
     """`SLURM`_ `sbatch`_ SCons builder
 
-    The builder returned by this function accepts all SCons Builder arguments. Except for the ``post_action``, the
-    arguments of this function are also available as keyword arguments of the builder. When provided during task
-    definition, the keyword arguments override the builder returned by this function.
+    The builder returned by this function accepts all SCons Builder arguments. The arguments of this function are also
+    available as keyword arguments of the builder. When provided during task definition, the keyword arguments override
+    the builder returned by this function.
 
     *Builder/Task keyword arguments*
 
@@ -1757,18 +1720,12 @@ def sbatch(
     :param program: An absolute path or basename string for the sbatch program.
     :param required: A space delimited string of sbatch required arguments
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
-    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
-        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``.
 
     :return: SLURM sbatch builder
     """
     action = [
         "${action_prefix} ${program} ${required} ${sbatch_options} --wrap \"${slurm_job}\""
     ]
-    action.extend(construct_action_list(post_action))
     sbatch_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -1959,8 +1916,7 @@ def quinoa_solver(
     inciter_options: str = "",
     prefix_command: str = "",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_suffix,
-    post_action: typing.Iterable[str] = []
+    action_suffix: str = _settings._redirect_action_suffix
 ) -> SCons.Builder.Builder:
     """Quinoa solver SCons builder
 
@@ -1975,9 +1931,9 @@ def quinoa_solver(
     1. Quinoa control file: ``*.q``
     2. Exodus mesh file: ``*.exo``
 
-    The builder returned by this function accepts all SCons Builder arguments. Except for the ``post_action``, the
-    arguments of this function are also available as keyword arguments of the builder. When provided during task
-    definition, the keyword arguments override the builder returned by this function.
+    The builder returned by this function accepts all SCons Builder arguments. The arguments of this function are also
+    available as keyword arguments of the builder. When provided during task definition, the keyword arguments override
+    the builder returned by this function.
 
     *Builder/Task keyword arguments*
 
@@ -2031,11 +1987,6 @@ def quinoa_solver(
         task definition, the prefix command *must* end with ``' &&'``.
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
-    :param post_action: List of shell command string(s) to append to the builder's action list. Implemented to
-        allow post target modification or introspection, e.g. inspect the Abaqus log for error keywords and throw a
-        non-zero exit code even if Abaqus does not. Builder keyword variables are available for substitution in the
-        ``post_action`` action using the ``${}`` syntax. Actions are executed in the first target's directory as ``cd
-        ${TARGET.dir.abspath} && ${post_action}``
 
     :return: Quinoa builder
     """  # noqa: E501
@@ -2047,7 +1998,6 @@ def quinoa_solver(
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             "${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action))
     quinoa_builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -2084,7 +2034,6 @@ def fierro_builder(
     subcommand: str = "",
     required: str = "",
     options: str = "",
-    post_action: list = [],
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
 ) -> SCons.Builder.Builder:
@@ -2159,7 +2108,6 @@ def fierro_builder(
     :param str options: A space delimited string of subcommand optional arguments
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
-    :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro builder
     :rtype: SCons.Builder.Builder
@@ -2167,7 +2115,6 @@ def fierro_builder(
     action = [
         "${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}"
     ]
-    action.extend(construct_action_list(post_action))
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
@@ -2192,7 +2139,6 @@ def fierro_explicit(
     options: str = "",
     action_prefix: str = _settings._cd_action_prefix,
     action_suffix: str = _settings._redirect_action_suffix,
-    post_action: list = []
 ) -> SCons.Builder.Builder:
     """Return the Fierro explicit solver builder.
 
@@ -2255,7 +2201,6 @@ def fierro_explicit(
     :param str options: A space delimited string of subcommand optional arguments
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
-    :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro explicit solver builder
     :rtype: SCons.Builder.Builder
@@ -2268,8 +2213,7 @@ def fierro_explicit(
         required=required,
         options=options,
         action_prefix=action_prefix,
-        action_suffix=action_suffix,
-        post_action=post_action
+        action_suffix=action_suffix
     )
     return builder
 
@@ -2282,8 +2226,7 @@ def fierro_implicit(
     required: str = "${SOURCE.abspath}",
     options: str = "",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_suffix,
-    post_action: list = []
+    action_suffix: str = _settings._redirect_action_suffix
 ) -> SCons.Builder.Builder:
     """Return the Fierro implicit solver builder.
 
@@ -2346,7 +2289,6 @@ def fierro_implicit(
     :param str options: A space delimited string of subcommand optional arguments
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
     :param action_suffix: Advanced behavior. Most users should accept the defaults.
-    :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro implicit solver builder
     :rtype: SCons.Builder.Builder
@@ -2359,8 +2301,7 @@ def fierro_implicit(
         required=required,
         options=options,
         action_prefix=action_prefix,
-        action_suffix=action_suffix,
-        post_action=post_action
+        action_suffix=action_suffix
     )
     return builder
 
@@ -2369,8 +2310,7 @@ def ansys_apdl(
     program: str = "ansys",
     required: str = "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
     options: str = "",
-    action_prefix: str = _settings._cd_action_prefix,
-    post_action: list = []
+    action_prefix: str = _settings._cd_action_prefix
 ) -> SCons.Builder.Builder:
     """Return an Ansys APDL builder.
 
@@ -2431,7 +2371,6 @@ def ansys_apdl(
     :param str required: A space delimited string of subcommand required arguments
     :param str options: A space delimited string of subcommand optional arguments
     :param action_prefix: Advanced behavior. Most users should accept the defaults.
-    :param list post_action: List of shell command string(s) to append to the builder's action list.
 
     :returns: SCons Fierro builder
     :rtype: SCons.Builder.Builder
@@ -2439,7 +2378,6 @@ def ansys_apdl(
     action = [
         "${action_prefix} ${program} ${required} ${options}"
     ]
-    action.extend(construct_action_list(post_action))
     builder = SCons.Builder.Builder(
         action=action,
         emitter=_first_target_emitter,
