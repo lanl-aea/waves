@@ -1703,4 +1703,4 @@ def test_parameter_study(node_count, action_count, target_list, study):
         study=study
     )
 
-    check_action_string(nodes, [], node_count, action_count, expected_string)
+    check_action_string(nodes, node_count, action_count, expected_string)
