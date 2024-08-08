@@ -558,6 +558,7 @@ def add_cubit_python(names: typing.Iterable[str], env) -> str:
     if cubit_python:
         cubit_bin = _utilities.find_cubit_bin([first_found_path])
         env.PrependENVPath("PYTHONPATH", str(cubit_bin))
+    return cubit_python
 
 
 def _return_environment(command: str) -> dict:
