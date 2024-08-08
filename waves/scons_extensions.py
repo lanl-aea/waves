@@ -139,24 +139,46 @@ def catenate_actions(**outer_kwargs):
     return intermediate_decorator
 
 
-def ssh_builder_actions(builder: SCons.Builder.Builder,
-                        remote_server: str = "${remote_server}",
-                        remote_directory: str = "${remote_directory}") -> SCons.Builder.Builder:
-    """Wrap a builder's action list with remote copy operations and ssh commands
+def ssh_builder_actions(
+    builder: SCons.Builder.Builder,
+    remote_server: str = "",
+    remote_directory: str = "",
+    rsync_push_options: str = "-rlptv",
+    rsync_pull_options: str = "-rlptv",
+    ssh_options: str = ""
+) -> SCons.Builder.Builder:
+    """Wrap and modify a builder's action list with remote copy operations and SSH commands
 
-    By default, the remote server and remote directory strings are written to accept (and *require*) task-by-task
-    overrides via task keyword arguments. Any SCons replacement string patterns, ``${variable}``, will make that
-    ``variable`` a *required* task keyword argument. Only if the remote server and/or remote directory are known to be
-    constant across all possible tasks should those variables be overridden with a string literal containing no
-    ``${variable}`` SCons keyword replacement patterns.
+    .. warning::
+
+       This builder does *not* provide asynchronous server-client behavior. The local/client machine must maintain the
+       SSH connection continuously throughout the duration of the task. If the SSH connection is interrupted, the task
+       will fail. This makes SSH wrapped builders fragile with respect to network connectivity. Users are strongly
+       encouraged to seek solutions that allow full software installation and full workflow execution on the
+       target compute server. If mixed server execution is required, a build directory on a shared network drive
+       and interrupted workflow execution should be preferred over SSH wrapped builders.
+
+    If the remote server and remote directory strings are not specified at builder instantation, then the task
+    definitions *must* specify these keyword arguments. If a portion of the remote server and/or remote directory are
+    known to be constant across all possible tasks, users may define their own substitution keyword arguments. For
+    example, the following remote directory uses common leading path elements and introduces a new keyword variable
+    ``task_directory`` to allow per-task changes to the remote directory:
+    ``remote_directory="/path/to/base/build/${task_directory}".
 
     .. include:: ssh_builder_actions_warning.txt
+
+    *Builder/Task keyword arguments*
+
+    * ``remote_server``: remote server where the original builder's actions should be executed
+    * ``remote_directory``: absolute or relative path where the original builder's actions should be executed.
+    * ``rsync_push_options``: rsync options when pushing sources to the remote server
+    * ``rsync_pull_options``: rsync options when pulling remote directory from the remote server
+    * ``ssh_options``: SSH options when running the original builder's actions on the remote server
 
     Design assumptions
 
     * Creates the ``remote_directory`` with ``mkdir -p``. ``mkdir`` must exist on the ``remote_server``.
-    * Copies all source files to a flat ``remote_directory`` with ``rsync -rlptv``. ``rsync`` must exist on the local
-      system.
+    * Copies all source files to a flat ``remote_directory`` with ``rsync``. ``rsync`` must exist on the local system.
     * Replaces instances of ``cd ${TARGET.dir.abspath} &&`` with ``cd ${remote_directory} &&`` in the original builder
       actions and keyword arguments.
     * Replaces instances of ``SOURCE.abspath`` or ``SOURCES.abspath`` with ``SOURCE[S].file`` in the original builder
@@ -179,12 +201,21 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
        env = Environment()
        env.Append(BUILDERS={
            "SSHAbaqusSolver": waves.scons_extensions.ssh_builder_actions(
-               waves.scons_extensions.abaqus_solver(program="/remote/server/installation/path/of/abaqus"),
-               remote_server="myserver.mydomain.com"
+               waves.scons_extensions.abaqus_solver(
+                   program="/remote/server/installation/path/of/abaqus"
+               ),
+               remote_server="myserver.mydomain.com",
+               remote_directory="/scratch/${user}/myproject/myworkflow/${task_directory}"
            )
        })
-       env.SSHAbaqusSolver(target=["myjob.sta"], source=["input.inp"], job_name="myjob", abaqus_options="-cpus 4",
-                           remote_directory="/scratch/${user}/myproject/myworkflow", user=user)
+       env.SSHAbaqusSolver(
+           target=["myjob.sta"],
+           source=["input.inp"],
+           job_name="myjob",
+           abaqus_options="-cpus 4",
+           task_directory="myjob",
+           user=user
+       )
 
     .. code-block::
        :caption: my_package.py
@@ -196,10 +227,13 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
            for action in builder.action.list:
                print(action.cmd_list)
 
-       def cat(program="cat"):
-           return SCons.Builder.Builder(action=
-               [f"{program} ${{SOURCES.abspath}} | tee ${{TARGETS.file}}", "echo \\"Hello World!\\""]
+       def cat():
+           builder = SCons.Builder.Builder(
+               action=[
+                   "cat ${SOURCES.abspath} | tee ${TARGETS[0].abspath}", "echo \\"Hello World!\\""
+               ]
            )
+           return builder
 
        build_cat = cat()
 
@@ -211,24 +245,25 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
 
        >>> import my_package
        >>> my_package.print_builder_actions(my_package.build_cat)
-       cat ${SOURCES.abspath} | tee ${TARGETS.file}
+       cat ${SOURCES.abspath} | tee ${TARGETS[0].abspath}
        echo "Hello World!"
        >>> my_package.print_builder_actions(my_package.ssh_build_cat)
-       ssh myserver.mydomain.com "mkdir -p /scratch/roppenheimer/ssh_wrapper"
-       rsync -rlptv ${SOURCES.abspath} myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper
-       ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && cat ${SOURCES.file} | tee ${TARGETS.file}'
-       ssh myserver.mydomain.com 'cd /scratch/roppenheimer/ssh_wrapper && echo "Hello World!"'
-       rsync -rltpv myserver.mydomain.com:/scratch/roppenheimer/ssh_wrapper/ ${TARGET.dir.abspath}
+       ssh ${remote_server} "mkdir -p /scratch/roppenheimer/ssh_wrapper"
+       rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}
+       ssh ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'
+       ssh ${remote_server} 'cd ${remote_directory} && echo "Hello World!"'
+       rsync ${rsync_pull_options} ${remote_server}:${remote_directory} ${TARGET.dir.abspath}
 
     :param builder: The SCons builder to modify
-    :param remote_server: remote server where the original builder's actions should be executed. The default string
-        *requires* every task to specify a matching keyword argument string.
-    :param remote_directory: absolute or relative path where the original builder's actions should be executed. The
-        default string *requires* every task to specify a matching keyword argument string.
+    :param remote_server: remote server where the original builder's actions should be executed
+    :param remote_directory: absolute or relative path where the original builder's actions should be executed.
+    :param rsync_push_options: rsync options when pushing sources to the remote server
+    :param rsync_pull_options: rsync options when pulling remote directory from the remote server
+    :param ssh_options: SSH options when running the original builder's actions on the remote server
 
     :returns: modified builder
     """
-    cd_prefix = f"cd {remote_directory} &&"
+    cd_prefix = f"cd ${remote_directory} &&"
 
     def ssh_action_substitutions(action: str, cd_prefix: str = cd_prefix) -> str:
         """Perform the SSH action string substitutions
@@ -245,25 +280,39 @@ def ssh_builder_actions(builder: SCons.Builder.Builder,
         action = re.sub(r"(TARGETS\[[-0-9]+\])\.abspath", r"\1.file", action)
         return action
 
+    # Retrieve original builder actions and modify for design assumptions
     action_list = action_list_strings(builder)
     action_list = [ssh_action_substitutions(action) for action in action_list]
     action_list = [
         f"{cd_prefix} {action}" if not action.startswith(cd_prefix) and not action.startswith("${action_prefix}")
         else action for action in action_list
     ]
-    action_list = [f"ssh {remote_server} '{action}'" for action in action_list]
+    action_list = [f"ssh ${{ssh_options}} ${{remote_server}} '{action}'" for action in action_list]
 
+    # Pre/Append SSH wrapper actions
+    ssh_actions = [
+        "ssh ${remote_server} \"mkdir -p ${remote_directory}\"",
+        "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}"
+    ]
+    ssh_actions.extend(action_list)
+    ssh_actions.append("rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}")
+
+    # Override oroginal builder actions with SSH wrapped action updates
+    builder.action = action_list_scons(ssh_actions)
+
+    # Modify builder keyword arguments for design assumptions
     for key, value in builder.overrides.items():
         builder.overrides[key] = ssh_action_substitutions(value)
 
-    ssh_actions = [
-        f"ssh {remote_server} \"mkdir -p {remote_directory}\"",
-        f"rsync -rlptv ${{SOURCES.abspath}} {remote_server}:{remote_directory}"
-    ]
-    ssh_actions.extend(action_list)
-    ssh_actions.append(f"rsync -rltpv {remote_server}:{remote_directory}/ ${{TARGET.dir.abspath}}")
+    # Add or override builder keyword arguments with SSH wrapper added keyword arguments
+    builder.overrides.update({
+        "remote_server": remote_server,
+        "remote_directory": remote_directory,
+        "rsync_push_options": rsync_push_options,
+        "rsync_pull_options": rsync_pull_options,
+        "ssh_options": ssh_options
+    })
 
-    builder.action = action_list_scons(ssh_actions)
     return builder
 
 
