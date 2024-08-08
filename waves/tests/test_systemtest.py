@@ -70,7 +70,6 @@ system_tests = [
         marks=pytest.mark.skip("Re-enable quinoa tests when AEA server deployment stabilizes")
     ),
     ([fetch_template, "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, "scons tutorial_builder_post_actions --sconstruct=tutorial_builder_post_actions_SConstruct --unconditional-build --print-build-failures"], "tutorials"),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
     pytest.param(

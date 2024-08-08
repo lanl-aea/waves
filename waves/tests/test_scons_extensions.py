@@ -182,12 +182,10 @@ def test_ssh_builder_actions():
     assert ssh_python_builder_action_list == expected
 
 
-def check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="cd ${TARGET.dir.abspath} &&"):
+def check_action_string(nodes, node_count, action_count, expected_string):
     """Verify the expected action string against a builder's target nodes
 
     :param SCons.Node.NodeList nodes: Target node list returned by a builder
-    :param list post_action: list of post action strings passed to builder
     :param int node_count: expected length of ``nodes``
     :param int action_count: expected length of action list for each node
     :param str expected_string: the builder's action string.
@@ -199,8 +197,6 @@ def check_action_string(nodes, post_action, node_count, action_count, expected_s
        separated string. The ``action_count`` should be set to ``1`` until this method is updated to search for the
        finalized action list.
     """
-    for action in post_action:
-        expected_string = expected_string + f"\n{post_action_prefix} {action}"
     assert len(nodes) == node_count
     for node in nodes:
         node.get_executor()
@@ -416,7 +412,7 @@ def test_abaqus_journal_emitter(target, source, expected):
 # target per set.
 abaqus_journal_input = {
     "default behavior": (
-        {}, {}, [], 3, 1, ["abaqus_journal_1.cae"]
+        {}, {}, 3, 1, ["abaqus_journal_1.cae"]
     ),
     "no defaults": (
         {
@@ -426,7 +422,7 @@ abaqus_journal_input = {
          "action_suffix": "",
          "environment_suffix": ""
         },
-        {}, [], 3, 1, ["abaqus_journal_2.cae"]
+        {}, 3, 1, ["abaqus_journal_2.cae"]
     ),
     "task kwargs overrides": (
         {},
@@ -437,21 +433,18 @@ abaqus_journal_input = {
          "action_suffix": "",
          "environment_suffix": ""
         },
-        [], 3, 1, ["abaqus_journal_3.cae"]
+        3, 1, ["abaqus_journal_3.cae"]
     ),
     "different command": (
-        {"program": "dummy"}, {}, [], 3, 1, ["abaqus_journal_4.cae"]
+        {"program": "dummy"}, {}, 3, 1, ["abaqus_journal_4.cae"]
     ),
-    "post action": (
-        {"program": "abaqus"}, {}, ["post action"], 3, 1, ["abaqus_journal_5.cae"]
-    )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, target_list",
                          abaqus_journal_input.values(),
                          ids=abaqus_journal_input.keys())
-def test_abaqus_journal(builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list):
+def test_abaqus_journal(builder_kwargs, task_kwargs, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "abaqus",
@@ -471,13 +464,12 @@ def test_abaqus_journal(builder_kwargs, task_kwargs, post_action, node_count, ac
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "AbaqusJournal": scons_extensions.abaqus_journal(**builder_kwargs, post_action=post_action)
+        "AbaqusJournal": scons_extensions.abaqus_journal(**builder_kwargs)
     })
     nodes = env.AbaqusJournal(target=target_list, source=["journal.py"], journal_options="", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -597,7 +589,7 @@ def test_abaqus_solver_emitter(job_name, suffixes, target, source, expected, out
 # target per set.
 abaqus_solver_input = {
     "default behavior": (
-        {"program": "abaqus", "post_action": []}, {}, 7, 1, ["input1.inp"], None
+        {"program": "abaqus"}, {}, 7, 1, ["input1.inp"], None
     ),
     "no defaults": (
         {
@@ -605,15 +597,12 @@ abaqus_solver_input = {
          "required": "-other options",
          "action_prefix": "nocd",
          "action_suffix": "",
-         "environment_suffix": "",
-         "post_action": []
+         "environment_suffix": ""
         },
         {}, 7, 1, ["abaqus_solver_2.inp"], None
     ),
     "task kwargs overrides": (
-        {
-         "post_action": []
-        },
+        {},
         {
          "program": "notdefault",
          "required": "-other options",
@@ -624,22 +613,19 @@ abaqus_solver_input = {
         7, 1, ["abaqus_solver_3.inp"], None
     ),
     "different command": (
-        {"program": "dummy", "post_action": []}, {}, 7, 1, ["input2.inp"], None
-    ),
-    "post action": (
-        {"program": "abaqus", "post_action": ["post action"]}, {}, 7, 1, ["input3.inp"], None
+        {"program": "dummy"}, {}, 7, 1, ["input2.inp"], None
     ),
     "standard solver": (
-        {"program": "abaqus", "emitter": "standard", "post_action": []}, {}, 8, 1, ["input4.inp"], None
+        {"program": "abaqus", "emitter": "standard"}, {}, 8, 1, ["input4.inp"], None
     ),
     "explicit solver": (
-        {"program": "abaqus", "emitter": "explicit", "post_action": []}, {}, 8, 1, ["input5.inp"], None
+        {"program": "abaqus", "emitter": "explicit"}, {}, 8, 1, ["input5.inp"], None
     ),
     "datacheck solver": (
-        {"program": "abaqus", "emitter": "datacheck", "post_action": []}, {}, 11, 1, ["input6.inp"], None
+        {"program": "abaqus", "emitter": "datacheck"}, {}, 11, 1, ["input6.inp"], None
     ),
     "standard solver, suffixes override": (
-        {"program": "abaqus", "emitter": "standard", "post_action": []}, {}, 3, 1, ["input4.inp"], [".odb"]
+        {"program": "abaqus", "emitter": "standard"}, {}, 3, 1, ["input4.inp"], [".odb"]
     ),
 }
 
@@ -655,8 +641,7 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
         "action_prefix": _cd_action_prefix,
         "action_suffix": _redirect_action_suffix,
         "environment_suffix": _redirect_environment_suffix,
-        "emitter": None,
-        "post_action": []
+        "emitter": None
     }
     # Update expected arguments to match test case
     expected_kwargs.update(builder_kwargs)
@@ -675,12 +660,10 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(
-        nodes, builder_kwargs["post_action"], node_count, action_count, expected_string,
-        post_action_prefix="${action_prefix}"
+        nodes, node_count, action_count, expected_string
     )
     check_expected_targets(nodes, expected_kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
     expected_kwargs.pop("emitter")
-    expected_kwargs.pop("post_action")
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -722,7 +705,7 @@ def test_sierra_emitter(target, source, expected):
 # target per set.
 sierra_input = {
     "default behavior": (
-        {}, {}, [], 3, 1, ["input1.i"], ['inptu1.g']
+        {}, {}, 3, 1, ["input1.i"], ['inptu1.g']
     ),
     "no defaults": (
         {
@@ -732,7 +715,7 @@ sierra_input = {
          "action_suffix": "different action suffix",
          "environment_suffix": "different environment suffix",
         },
-        {}, [], 3, 1, ["nodefaults.i"], ['nodefaults.g']
+        {}, 3, 1, ["nodefaults.i"], ['nodefaults.g']
     ),
     "task kwargs overrides": (
         {},
@@ -743,21 +726,18 @@ sierra_input = {
          "action_suffix": "different action suffix",
          "environment_suffix": "different environment suffix",
         },
-        [], 3, 1, ["sierra_taskkwargoverrides.i"], ['sierra_taskkwargoverrides.g']
+        3, 1, ["sierra_taskkwargoverrides.i"], ['sierra_taskkwargoverrides.g']
     ),
     "different command": (
-        {"program": "dummy", "application": "application"}, {}, [], 3, 1, ["input2.i"], ['inptu2.g']
-    ),
-    "post action": (
-        {}, {}, ["post action"], 3, 1, ["input3.i"], ['inptu3.g']
-    ),
+        {"program": "dummy", "application": "application"}, {}, 3, 1, ["input2.i"], ['inptu2.g']
+    )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
                          sierra_input.values(),
                          ids=sierra_input.keys())
-def test_sierra(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+def test_sierra(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "sierra",
@@ -777,13 +757,12 @@ def test_sierra(builder_kwargs, task_kwargs, post_action, node_count, action_cou
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "Sierra": scons_extensions.sierra(**builder_kwargs, post_action=post_action)
+        "Sierra": scons_extensions.sierra(**builder_kwargs)
     })
 
     # Test task definition node counts, action(s), and task keyword arguments
     nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="", **task_kwargs)
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -899,14 +878,14 @@ def test_first_target_emitter(target, source, expected):
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 python_script_input = {
-    "default behavior": ({}, {}, [], 2, 1, ["python_script1.out"]),
+    "default behavior": ({}, {}, 2, 1, ["python_script1.out"]),
     "no defaults": (
         {
          "program": "different program",
          "action_prefix": "different prefix",
          "action_suffix": "different action suffix",
         },
-        {}, [], 2, 1, ["python_script2.out"]
+        {}, 2, 1, ["python_script2.out"]
     ),
     "task kwargs overrides": (
         {},
@@ -915,17 +894,16 @@ python_script_input = {
          "action_prefix": "different prefix",
          "action_suffix": "different action suffix",
         },
-        [], 2, 1, ["python_script3.out"]
+        2, 1, ["python_script3.out"]
     ),
     "different command": ({"program": "python2"}, {}, [], 2, 1, ["python_script4.out"]),
-    "post action": ({}, {}, ["post action"], 2, 1, ["python_script5.out"])
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, target_list",
                          python_script_input.values(),
                          ids=python_script_input.keys())
-def test_python_script(builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list):
+def test_python_script(builder_kwargs, task_kwargs, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "python",
@@ -941,12 +919,11 @@ def test_python_script(builder_kwargs, task_kwargs, post_action, node_count, act
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(**builder_kwargs, post_action=post_action)})
+    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(**builder_kwargs)})
     nodes = env.PythonScript(target=target_list, source=["python_script.py"], script_options="", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -983,7 +960,7 @@ def test_matlab_script_emitter(target, source, expected):
 # target per set.
 matlab_script_input = {
     "default behavior": (
-        {}, {}, [], 3, 1, ["matlab_script1.out"]
+        {}, {}, 3, 1, ["matlab_script1.out"]
     ),
     "no defaults": (
         {
@@ -992,7 +969,7 @@ matlab_script_input = {
          "action_suffix": "different action suffix",
          "environment_suffix": "different environment suffix",
         },
-        {}, [], 3, 1, ["matlab_script2.out"]
+        {}, 3, 1, ["matlab_script2.out"]
     ),
     "task kwargs overrides": (
         {},
@@ -1002,21 +979,18 @@ matlab_script_input = {
          "action_suffix": "different action suffix",
          "environment_suffix": "different environment suffix",
         },
-        [], 3, 1, ["matlab_script3.out"]
+        3, 1, ["matlab_script3.out"]
     ),
     "different command": (
-        {"program": "/different/matlab"}, {}, [], 3, 1, ["matlab_script4.out"]
-    ),
-    "post action": (
-        {}, {}, ["post action"], 3, 1, ["matlab_script5.out"]
+        {"program": "/different/matlab"}, {}, 3, 1, ["matlab_script4.out"]
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, target_list",
                          matlab_script_input.values(),
                          ids=matlab_script_input.keys())
-def test_matlab_script(builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list):
+def test_matlab_script(builder_kwargs, task_kwargs, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "matlab",
@@ -1041,13 +1015,12 @@ def test_matlab_script(builder_kwargs, task_kwargs, post_action, node_count, act
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "MatlabScript": scons_extensions.matlab_script(**builder_kwargs, post_action=post_action)
+        "MatlabScript": scons_extensions.matlab_script(**builder_kwargs)
     })
     nodes = env.MatlabScript(target=target_list, source=["matlab_script.py"], script_options="", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -1224,17 +1197,14 @@ sbatch_input = {
          "action_prefix": "different action prefix",
         },
         [], 2, 1, ["sbatch3.out"]
-    ),
-    "post action": (
-        {}, {}, ["post action"], 2, 1, ["sbatch4.out"]
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, target_list",
                          sbatch_input.values(),
                          ids=sbatch_input.keys())
-def test_sbatch(builder_kwargs, task_kwargs, post_action, node_count, action_count, target_list):
+def test_sbatch(builder_kwargs, task_kwargs, node_count, action_count, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "sbatch",
@@ -1251,14 +1221,13 @@ def test_sbatch(builder_kwargs, task_kwargs, post_action, node_count, action_cou
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "SlurmSbatch": scons_extensions.sbatch(**builder_kwargs, post_action=post_action)
+        "SlurmSbatch": scons_extensions.sbatch(**builder_kwargs)
     })
     nodes = env.SlurmSbatch(target=target_list, source=["source.in"], sbatch_options="",
                             slurm_job="echo $SOURCE > $TARGET", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -1349,7 +1318,7 @@ def test_sphinx_latexpdf():
 
 quinoa_solver = {
     "default behavior": (
-        {}, {}, [],  2, 1, ["input1.q", "input1.exo"], ["input1.quinoa"]
+        {}, {}, 2, 1, ["input1.q", "input1.exo"], ["input1.quinoa"]
     ),
     "no defaults": (
         {
@@ -1361,7 +1330,7 @@ quinoa_solver = {
          "action_prefix": "different action prefix",
          "action_suffix": "different action suffix"
         },
-        {}, [],  2, 1, ["input2.q", "input2.exo"], ["input2.quinoa"]
+        {}, 2, 1, ["input2.q", "input2.exo"], ["input2.quinoa"]
     ),
     "task kwargs overrides": (
         {},
@@ -1374,18 +1343,15 @@ quinoa_solver = {
          "action_prefix": "different action prefix",
          "action_suffix": "different action suffix"
         },
-        [],  2, 1, ["input3.q", "input3.exo"], ["input3.quinoa"]
-    ),
-    "post action": (
-        {}, {}, ["post action"],  2, 1, ["input4.q", "input4.exo"], ["input4.quinoa"]
-    ),
+        2, 1, ["input3.q", "input3.exo"], ["input3.quinoa"]
+    )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
                          quinoa_solver.values(),
                          ids=quinoa_solver.keys())
-def test_quinoa_solver(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+def test_quinoa_solver(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "charmrun": "charmrun",
@@ -1410,13 +1376,12 @@ def test_quinoa_solver(builder_kwargs, task_kwargs, post_action, node_count, act
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "QuinoaSolver": scons_extensions.quinoa_solver(**builder_kwargs, post_action=post_action)
+        "QuinoaSolver": scons_extensions.quinoa_solver(**builder_kwargs)
     })
     nodes = env.QuinoaSolver(target=target_list, source=source_list, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -1426,13 +1391,10 @@ def test_quinoa_solver(builder_kwargs, task_kwargs, post_action, node_count, act
 # target per set.
 fierro_input = {
     "default behavior": (
-        {"subcommand": "parallel-explicit"}, {}, [], 2, 1, ["input1.yaml"], ['input1.fierro']
+        {"subcommand": "parallel-explicit"}, {}, 2, 1, ["input1.yaml"], ['input1.fierro']
     ),
     "different command": (
-        {"program": "dummy", "subcommand": "parallel-implicit"}, {}, [], 2, 1, ["input2.yaml"], ['input2.fierro']
-    ),
-    "post action": (
-        {"subcommand": "subcommand"}, {}, ["post action"], 2, 1, ["input3.yaml"], ['input3.fierro']
+        {"program": "dummy", "subcommand": "parallel-implicit"}, {}, 2, 1, ["input2.yaml"], ['input2.fierro']
     ),
     "no defaults": (
         {
@@ -1445,7 +1407,7 @@ fierro_input = {
          "action_prefix": "different action prefix",
          "action_suffix": "different action suffix"
         },
-        {}, [], 2, 1, ["input4.yaml"], ['input4.fierro']
+        {}, 2, 1, ["input4.yaml"], ['input4.fierro']
     ),
     "task kwargs overrides": (
         {},
@@ -1459,15 +1421,15 @@ fierro_input = {
          "action_prefix": "different action prefix",
          "action_suffix": "different action suffix"
         },
-        [], 2, 1, ["input5.yaml"], ['input5.fierro']
+        2, 1, ["input5.yaml"], ['input5.fierro']
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
                          fierro_input.values(),
                          ids=fierro_input.keys())
-def test_fierro_builder(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+def test_fierro_builder(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "mpirun": "mpirun",
@@ -1489,13 +1451,12 @@ def test_fierro_builder(builder_kwargs, task_kwargs, post_action, node_count, ac
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "FierroBuilder": scons_extensions.fierro_builder(**builder_kwargs, post_action=post_action)
+        "FierroBuilder": scons_extensions.fierro_builder(**builder_kwargs)
     })
     nodes = env.FierroBuilder(target=target_list, source=source_list, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -1505,7 +1466,7 @@ def test_fierro_builder(builder_kwargs, task_kwargs, post_action, node_count, ac
 # target per set.
 fierro_explicit = {
     "default behavior": (
-        {}, {}, [], 2, 1, ["input1_explicit.yaml"], ['input1_explicit.fierro']
+        {}, {}, 2, 1, ["input1_explicit.yaml"], ['input1_explicit.fierro']
     ),
     "no defaults": (
         {
@@ -1518,7 +1479,7 @@ fierro_explicit = {
          "action_prefix": "different action prefix",
          "action_suffix": "different action suffix"
         },
-        {}, [], 2, 1, ["input2_explicit.yaml"], ['input2_explicit.fierro']
+        {}, 2, 1, ["input2_explicit.yaml"], ['input2_explicit.fierro']
     ),
     "task kwargs overrides": (
         {},
@@ -1532,15 +1493,15 @@ fierro_explicit = {
          "action_prefix": "different action prefix",
          "action_suffix": "different action suffix"
         },
-        [], 2, 1, ["input3_explicit.yaml"], ['input3_explicit.fierro']
+        2, 1, ["input3_explicit.yaml"], ['input3_explicit.fierro']
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
                          fierro_explicit.values(),
                          ids=fierro_explicit.keys())
-def test_fierro_explicit(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+def test_fierro_explicit(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "mpirun": "mpirun",
@@ -1562,13 +1523,12 @@ def test_fierro_explicit(builder_kwargs, task_kwargs, post_action, node_count, a
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "FierroExplicit": scons_extensions.fierro_explicit(**builder_kwargs, post_action=post_action)
+        "FierroExplicit": scons_extensions.fierro_explicit(**builder_kwargs)
     })
     nodes = env.FierroExplicit(target=target_list, source=source_list, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -1578,7 +1538,7 @@ def test_fierro_explicit(builder_kwargs, task_kwargs, post_action, node_count, a
 # target per set.
 fierro_implicit = {
     "default behavior": (
-        {}, {}, [], 2, 1, ["input1_implicit.yaml"], ['input1_implicit.fierro']
+        {}, {}, 2, 1, ["input1_implicit.yaml"], ['input1_implicit.fierro']
     ),
     "no defaults": (
         {
@@ -1591,7 +1551,7 @@ fierro_implicit = {
          "action_prefix": "different action prefix",
          "action_suffix": "different action suffix"
         },
-        {}, [], 2, 1, ["input2_implicit.yaml"], ['input2_implicit.fierro']
+        {}, 2, 1, ["input2_implicit.yaml"], ['input2_implicit.fierro']
     ),
     "task kwargs overrides": (
         {},
@@ -1605,15 +1565,15 @@ fierro_implicit = {
          "action_prefix": "different action prefix",
          "action_suffix": "different action suffix"
         },
-        [], 2, 1, ["input3_implicit.yaml"], ['input3_implicit.fierro']
+        2, 1, ["input3_implicit.yaml"], ['input3_implicit.fierro']
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
                          fierro_implicit.values(),
                          ids=fierro_implicit.keys())
-def test_fierro_implicit(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+def test_fierro_implicit(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "mpirun": "mpirun",
@@ -1635,13 +1595,12 @@ def test_fierro_implicit(builder_kwargs, task_kwargs, post_action, node_count, a
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={
-        "FierroImplicit": scons_extensions.fierro_implicit(**builder_kwargs, post_action=post_action)
+        "FierroImplicit": scons_extensions.fierro_implicit(**builder_kwargs)
     })
     nodes = env.FierroImplicit(target=target_list, source=source_list, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -1651,13 +1610,10 @@ def test_fierro_implicit(builder_kwargs, task_kwargs, post_action, node_count, a
 # target per set.
 ansys_apdl_input = {
     "default behavior": (
-        {}, {}, [], 2, 1, ["input1.dat"], ['input1.ansys']
+        {}, {}, 2, 1, ["input1.dat"], ['input1.ansys']
     ),
     "different command": (
-        {"program": "dummy"}, {}, [], 2, 1, ["input2.dat"], ['input2.ansys']
-    ),
-    "post action": (
-        {}, {}, ["post action"], 2, 1, ["input3.dat"], ['input3.ansys']
+        {"program": "dummy"}, {}, 2, 1, ["input2.dat"], ['input2.ansys']
     ),
     "no defaults": (
         {
@@ -1666,7 +1622,7 @@ ansys_apdl_input = {
          "options": "different options",
          "action_prefix": "different action prefix",
         },
-        {}, [], 2, 1, ["input4.dat"], ['input4.ansys']
+        {}, 2, 1, ["input4.dat"], ['input4.ansys']
     ),
     "task kwargs overrides": (
         {},
@@ -1676,15 +1632,15 @@ ansys_apdl_input = {
          "options": "different options",
          "action_prefix": "different action prefix",
         },
-        [], 2, 1, ["input4.dat"], ['input5.ansys']
+        2, 1, ["input4.dat"], ['input5.ansys']
     )
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
                          ansys_apdl_input.values(),
                          ids=ansys_apdl_input.keys())
-def test_ansys_apdl(builder_kwargs, task_kwargs, post_action, node_count, action_count, source_list, target_list):
+def test_ansys_apdl(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "program": "ansys",
@@ -1700,12 +1656,11 @@ def test_ansys_apdl(builder_kwargs, task_kwargs, post_action, node_count, action
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AnsysAPDL": scons_extensions.ansys_apdl(**builder_kwargs, post_action=post_action)})
+    env.Append(BUILDERS={"AnsysAPDL": scons_extensions.ansys_apdl(**builder_kwargs)})
     nodes = env.AnsysAPDL(target=target_list, source=source_list, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, post_action, node_count, action_count, expected_string,
-                        post_action_prefix="${action_prefix}")
+    check_action_string(nodes, node_count, action_count, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
