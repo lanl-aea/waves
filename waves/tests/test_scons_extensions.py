@@ -659,9 +659,7 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
     nodes = env.AbaqusSolver(target=[], source=source_list, abaqus_options="", suffixes=suffixes, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(
-        nodes, node_count, action_count, expected_string
-    )
+    check_action_string(nodes, node_count, action_count, expected_string)
     check_expected_targets(nodes, expected_kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
     expected_kwargs.pop("emitter")
     for node in nodes:
@@ -896,7 +894,7 @@ python_script_input = {
         },
         2, 1, ["python_script3.out"]
     ),
-    "different command": ({"program": "python2"}, {}, [], 2, 1, ["python_script4.out"]),
+    "different command": ({"program": "python2"}, {}, 2, 1, ["python_script4.out"]),
 }
 
 
@@ -1079,7 +1077,7 @@ def test_conda_environment(builder_kwargs, task_kwargs, target):
     nodes = env.CondaEnvironment(target=target, source=[], **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, [], 1, 1, expected_string)
+    check_action_string(nodes, 1, 1, expected_string)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
@@ -1146,7 +1144,7 @@ def test_abaqus_extract():
     nodes = env.AbaqusExtract(
         target=["abaqus_extract.h5"], source=["abaqus_extract.odb"], journal_options="")
     expected_string = '_build_odb_extract(target, source, env)'
-    check_action_string(nodes, [], 3, 1, expected_string)
+    check_action_string(nodes, 3, 1, expected_string)
 
 
 source_file = fs.File("/dummy.source")
@@ -1179,7 +1177,7 @@ def test_build_odb_extract(target, source, env, calls):
 # target per set.
 sbatch_input = {
     "default behavior": (
-        {}, {}, [], 2, 1, ["sbatch1.out"]
+        {}, {}, 2, 1, ["sbatch1.out"]
     ),
     "no defaults": (
         {
@@ -1187,7 +1185,7 @@ sbatch_input = {
          "required": "different required",
          "action_prefix": "different action prefix",
         },
-        {}, [], 2, 1, ["sbatch2.out"]
+        {}, 2, 1, ["sbatch2.out"]
     ),
     "task kwargs overrides": (
         {},
@@ -1196,7 +1194,7 @@ sbatch_input = {
          "required": "different required",
          "action_prefix": "different action prefix",
         },
-        [], 2, 1, ["sbatch3.out"]
+        2, 1, ["sbatch3.out"]
     )
 }
 
@@ -1305,7 +1303,7 @@ def test_sphinx_build():
     env.Append(BUILDERS={"SphinxBuild": scons_extensions.sphinx_build()})
     nodes = env.SphinxBuild(target=["html/index.html"], source=["conf.py", "index.rst"])
     expected_string = "${program} ${options} -b ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.abspath} ${tags}"
-    check_action_string(nodes, [], 1, 1, expected_string)
+    check_action_string(nodes, 1, 1, expected_string)
 
 
 def test_sphinx_latexpdf():
@@ -1313,7 +1311,7 @@ def test_sphinx_latexpdf():
     env.Append(BUILDERS={"SphinxPDF": scons_extensions.sphinx_latexpdf()})
     nodes = env.SphinxPDF(target=["latex/project.pdf"], source=["conf.py", "index.rst"])
     expected_string = "${program} -M ${builder} ${TARGET.dir.dir.abspath} ${TARGET.dir.dir.abspath} ${tags} ${options}"
-    check_action_string(nodes, [], 1, 1, expected_string)
+    check_action_string(nodes, 1, 1, expected_string)
 
 
 quinoa_solver = {
