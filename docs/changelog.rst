@@ -22,6 +22,9 @@ Breaking changes
 - Replace 'postfix' name with 'suffix' in function keyword argument APIs for better consistency with builder action
   construction naming conventions. Maintains 'postfix' keyword arguments with a v1 deprecation warning in this version
   (:issue:`722`, :merge:`897`). By `Kyle Brindley`_.
+- Remove the largely unused ``post_action`` builder behavior in favor of more modifiable builders and action modifier
+  functions. Similar behavior can be provided on a per-target basis with the `SCons AddPostAction`_ feature
+  (:issue:`725`, :merge:`898`). By `Kyle Brindley`_.
 
 New Features
 ============
