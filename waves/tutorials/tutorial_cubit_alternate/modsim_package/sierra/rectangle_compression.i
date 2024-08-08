@@ -1,0 +1,1 @@
+../../../tutorial_cubit/modsim_package/sierra/rectangle_compression.i
