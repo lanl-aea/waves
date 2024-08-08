@@ -25,6 +25,8 @@ Breaking changes
 - Remove the largely unused ``post_action`` builder behavior in favor of more modifiable builders and action modifier
   functions. Similar behavior can be provided on a per-target basis with the `SCons AddPostAction`_ feature
   (:issue:`725`, :merge:`898`). By `Kyle Brindley`_.
+- Replace the rsync options with a keyword argument in the  SSH builder actions (:issue:`728`, :merge:`899`). By `Kyle
+  Brindley`_.
 
 New Features
 ============
@@ -70,6 +72,8 @@ Enhancements
   flexibility in constructed builder behavior (:issue:`709`, :merge:`890`). By `Kyle Brindley`_.
 - Expose the Quinoa action keyword arguments to the constructor API and task definitions for greater flexibility in
   constructed builder behavior (:issue:`714`, :merge:`893`). By `Kyle Brindley`_.
+- Expose the SSH builder actions keyword arguments to the constructor API and task definitions for greater flexibility
+  in constructed builder behavior (:issue:`728`, :merge:`899`). By `Kyle Brindley`_.
 
 ******************
 0.9.5 (2024-07-25)
