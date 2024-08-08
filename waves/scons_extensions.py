@@ -163,7 +163,7 @@ def ssh_builder_actions(
     known to be constant across all possible tasks, users may define their own substitution keyword arguments. For
     example, the following remote directory uses common leading path elements and introduces a new keyword variable
     ``task_directory`` to allow per-task changes to the remote directory:
-    ``remote_directory="/path/to/base/build/${task_directory}".
+    ``remote_directory="/path/to/base/build/${task_directory}"``.
 
     .. include:: ssh_builder_actions_warning.txt
 
