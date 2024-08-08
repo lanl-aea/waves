@@ -180,17 +180,6 @@ list by the builder. The ``source`` list once again utlizes the existing ``solve
 ``job_name`` now uses the ``job_name`` variable that was defined at the beginning of this tutorial. Lastly, the
 ``-double both`` option is included with the ``abaqus_options`` variable.
 
-.. note::
-
-    The :meth:`waves.scons_extensions.solve_abaqus` builder has the option to retrieve non-zero exit codes from the Abaqus
-    solver by parsing the output ``.sta`` file using ``grep``. The :meth:`waves.scons_extensions.solve_abaqus` API provides an
-    example of the ``post_action`` builder argument as well as how exit codes are returned to the build system.
-
-    This functionality is useful in cases where the model developer wants the build system to exit its processes if an
-    Abaqus analysis does not complete successfully. By default, Abaqus will return a zero exit code regardless of
-    analysis success, and the build system will continue to build targets. If an analysis fails, the source files which
-    are required to build certain targets may not exist, which will also cause the build system to fail.
-
 In summary of the changes you just made to the ``tutorial_04_simulation`` file, a ``diff`` against the
 ``SConscript`` file from :ref:`tutorial_solverprep` is included below to help identify the changes made in this
 tutorial. Note the addition of a separate datacheck alias, which will be used in
