@@ -248,10 +248,10 @@ def ssh_builder_actions(
        cat ${SOURCES.abspath} | tee ${TARGETS[0].abspath}
        echo "Hello World!"
        >>> my_package.print_builder_actions(my_package.ssh_build_cat)
-       ssh ${remote_server} "mkdir -p /scratch/roppenheimer/ssh_wrapper"
+       ssh ${ssh_options} ${remote_server} "mkdir -p /scratch/roppenheimer/ssh_wrapper"
        rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}
-       ssh ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'
-       ssh ${remote_server} 'cd ${remote_directory} && echo "Hello World!"'
+       ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && cat ${SOURCES.file} | tee ${TARGETS[0].file}'
+       ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo "Hello World!"'
        rsync ${rsync_pull_options} ${remote_server}:${remote_directory} ${TARGET.dir.abspath}
 
     :param builder: The SCons builder to modify
@@ -263,7 +263,7 @@ def ssh_builder_actions(
 
     :returns: modified builder
     """
-    cd_prefix = f"cd ${remote_directory} &&"
+    cd_prefix = "cd ${remote_directory} &&"
 
     def ssh_action_substitutions(action: str, cd_prefix: str = cd_prefix) -> str:
         """Perform the SSH action string substitutions
@@ -291,7 +291,7 @@ def ssh_builder_actions(
 
     # Pre/Append SSH wrapper actions
     ssh_actions = [
-        "ssh ${remote_server} \"mkdir -p ${remote_directory}\"",
+        "ssh ${ssh_options} ${remote_server} \"mkdir -p ${remote_directory}\"",
         "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}"
     ]
     ssh_actions.extend(action_list)
