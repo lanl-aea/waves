@@ -516,10 +516,10 @@ def add_cubit(names: typing.Iterable[str], env) -> str:
        env = Environment()
        env["cubit"] = waves.scons_extensions.add_cubit(["cubit"], env)
 
-    :param names: list of string program names. May include an absolute path.
+    :param names: list of string program names for the main Cubit executable. May include an absolute path.
     :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
 
-    :return: Absolute path of the found program. None if none of the names are found.
+    :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
     first_found_path = add_program(names, env)
     if first_found_path:
@@ -528,6 +528,36 @@ def add_cubit(names: typing.Iterable[str], env) -> str:
         env.PrependENVPath("PYTHONPATH", str(cubit_bin))
         env.PrependENVPath("LD_LIBRARY_PATH", str(cubit_python_library_dir))
     return first_found_path
+
+
+def add_cubit_python(names: typing.Iterable[str], env) -> str:
+    """Modifies environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
+
+    Returns the absolute path of the first Cubit Python intepreter found. Appends ``PATH`` with Cubit Python parent
+    directory if a program is found and the directory is not already on ``PATH``. Prepends ``PYTHONPATH`` with
+    ``parent/bin``.
+
+    Returns None if no Cubit Python interpreter is found.
+
+    .. code-block::
+       :caption: Example Cubit environment modification
+
+       import waves
+
+       env = Environment()
+       env["python"] = waves.scons_extensions.add_cubit_python(["cubit"], env)
+
+    :param names: list of string program names for the main Cubit executable. May include an absolute path.
+    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+
+    :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
+    """
+    first_found_path = find_program(names, env)
+    cubit_python = _utilities.find_cubit_python([first_found_path])
+    cubit_python = add_program([cubit_python], env)
+    if cubit_python:
+        cubit_bin = _utilities.find_cubit_bin([first_found_path])
+        env.PrependENVPath("PYTHONPATH", str(cubit_bin))
 
 
 def _return_environment(command: str) -> dict:

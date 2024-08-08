@@ -142,6 +142,32 @@ def find_cubit_bin(options: typing.Iterable[str], bin_directory: typing.Optional
     return cubit_bin
 
 
+def find_cubit_python(options: typing.Iterable[str], python_command: str = "python3*") -> pathlib.Path:
+    """Provided a few options for the Cubit executable, search for the Cubit Python interpreter.
+
+    Recommend first checking to see if cubit will import.
+
+    :param options: Cubit command options
+    :param python_command: Cubit's Python executable file basename or ``pathlib.Path.rglob`` pattern
+
+    :returns: Cubit Python intepreter executable absolute path
+
+    :raise FileNotFoundError: If the Cubit command or Cubit Python interpreter is not found
+    """
+    message = "Could not find a Cubit Python interpreter. Please ensure the Cubit executable is on PATH or provide " \
+              "an absolute path to the Cubit executable."
+
+    cubit_command = find_command(options)
+    cubit_command = os.path.realpath(cubit_command)
+    cubit_parent = pathlib.Path(cubit_command).parent
+    search = cubit_parent.rglob(python_command)
+    try:
+        cubit_python = next((path for path in search if path.is_file() and os.access(path, os.X_OK)))
+    except StopIteration:
+        raise FileNotFoundError(message)
+    return cubit_python
+
+
 def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str]:
     """Stream STDOUT to terminal while saving buffer to variable
 
