@@ -125,9 +125,48 @@ def test_catenate_actions():
     assert builder.action.cmd_list == "bash -c \"dog $SOURCE > $TARGET\""
 
 
-def test_ssh_builder_actions():
-    remote_server = "myserver.mydomain.com"
-    remote_directory = "/scratch/roppenheimer/ssh_wrapper"
+ssh_builder_actions = {
+    "default kwargs": (["ssh_builder_actions.out1"], {}, {}),
+    "builder override kwargs": (
+        ["ssh_builder_actions.out2"],
+        {
+         "remote_server": "different remote server",
+         "remote_directory": "different remote directory",
+         "rsync_push_options": "different rsync push options",
+         "rsync_pull_options": "different rsync pull options",
+         "ssh_options": "different ssh options"
+        },
+        {}
+    ),
+    "task override kwargs": (
+        ["ssh_builder_actions.out3"],
+        {},
+        {
+         "remote_server": "different remote server",
+         "remote_directory": "different remote directory",
+         "rsync_push_options": "different rsync push options",
+         "rsync_pull_options": "different rsync pull options",
+         "ssh_options": "different ssh options"
+        }
+    ),
+}
+
+
+@pytest.mark.parametrize("target, builder_kwargs, task_kwargs",
+                         ssh_builder_actions.values(),
+                         ids=ssh_builder_actions.keys())
+def test_ssh_builder_actions(target, builder_kwargs, task_kwargs):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "remote_server": "",
+        "remote_directory": "",
+        "rsync_push_options": "-rlptv",
+        "rsync_pull_options": "-rlptv",
+        "ssh_options": ""
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
 
     def cat():
         return SCons.Builder.Builder(action=[
@@ -149,11 +188,10 @@ def test_ssh_builder_actions():
         "cat ${SOURCES[-1].abspath} > ${TARGETS[-1].abspath}",
         'echo "Hello World!"'
     ]
+    # Test builder action(s)
     assert build_cat_action_list == expected
 
-    ssh_build_cat = scons_extensions.ssh_builder_actions(
-        cat(), remote_server=remote_server
-    )
+    ssh_build_cat = scons_extensions.ssh_builder_actions(cat(), **builder_kwargs)
     ssh_build_cat_action_list = [action.cmd_list for action in ssh_build_cat.action.list]
     expected = [
         'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
@@ -168,7 +206,18 @@ def test_ssh_builder_actions():
         "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && echo \"Hello World!\"'",
         "rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}"
     ]
+    # Test builder action(s)
     assert ssh_build_cat_action_list == expected
+
+    # Test task keyword arguments
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={
+        "SSHBuildCat": ssh_build_cat
+    })
+    nodes = env.SSHBuildCat(target=target, source=["dummy.py"], **task_kwargs)
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
     ssh_python_builder = scons_extensions.ssh_builder_actions(
         scons_extensions.python_script()
