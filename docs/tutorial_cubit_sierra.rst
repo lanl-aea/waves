@@ -11,6 +11,8 @@ Tutorial: Cubit+Sierra
    sbatch submission behavior is not. If you run into problems running this tutorial, please contact the WAVES
    development team.
 
+.. include:: tutorial_cubit_alternate.txt
+
 **********
 References
 **********

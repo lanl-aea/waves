@@ -8,6 +8,8 @@ This tutorial implements the same workflow introduced in :ref:`tutorial_simulati
 :cite:`cubit` for the geometry, partition, and meshing tasks. It is included as an example for how to use `Cubit`_ with
 a build system and include best practices, such as an API and CLI.
 
+.. include:: tutorial_cubit_alternate.txt
+
 **********
 References
 **********

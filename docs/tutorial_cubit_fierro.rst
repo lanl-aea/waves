@@ -4,6 +4,8 @@
 Tutorial: Cubit+Fierro
 ######################
 
+.. include:: tutorial_cubit_alternate.txt
+
 **********
 References
 **********
