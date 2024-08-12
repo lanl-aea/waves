@@ -113,3 +113,26 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
         assert str(cubit_library_path) == env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0]
     else:
         assert original_path == env["ENV"]["PATH"]
+
+
+def test_add_cubit_python():
+    env = SCons.Environment.Environment()
+    cubit_bin = "/path/to/cubit/bin/"
+    cubit_python = "/path/to/cubit/bin/python"
+
+    # Cubit Python not found mocked by add_program
+    with patch("waves._utilities.find_cubit_python"), \
+         patch("waves.scons_extensions.find_program"), \
+         patch("waves.scons_extensions.add_program", return_value=None):
+        program = scons_extensions.add_cubit_python("dummy_cubit_executable", env)
+    assert program == None
+    assert "PYTHONPATH" not in env["ENV"]
+
+    # Cubit Python found mocked by add_program
+    with patch("waves._utilities.find_cubit_python"), \
+         patch("waves.scons_extensions.find_program"), \
+         patch("waves.scons_extensions.add_program", return_value=cubit_python), \
+         patch("waves._utilities.find_cubit_bin", return_value=cubit_bin):
+        program = scons_extensions.add_cubit_python("dummy_cubit_executable", env)
+    assert program == cubit_python
+    assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
