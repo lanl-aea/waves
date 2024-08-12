@@ -142,6 +142,18 @@ def test_find_cubit_bin():
     assert cubit_bin == mock_macos_bin
 
 
+def test_find_cubit_python():
+    mock_abspath = pathlib.Path("/mock/path/parent/cubit")
+    mock_python = mock_abspath.parent / "bin/python3"
+    with patch("waves._utilities.find_command"), \
+         patch("os.path.realpath", return_value=str(mock_abspath)), \
+         patch("pathlib.Path.rglob", return_value=[mock_python]) as mock_rglob, \
+         patch("pathlib.Path.is_file", return_value=True), \
+         patch("os.access", return_value=True):
+        cubit_python = _utilities.find_cubit_python(mock_abspath)
+    assert cubit_python == mock_python
+
+
 def test_tee_subprocess():
     with patch("subprocess.Popen") as mock_popen:
         _utilities.tee_subprocess(['dummy'])
