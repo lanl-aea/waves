@@ -1,0 +1,14 @@
+.. note::
+
+   Depending on your Cubit installation and operating system, it may not be
+   possible to import Cubit into arbitrary Python 3 environments. Instead, it
+   may be necessary to execute Cubit Python scripts using the Python
+   interpreter bundled with Cubit. An alternate Cubit tutorial using
+   :meth:`waves.scons_extensions.add_cubit_python` is provided as
+   ``tutorial_cubit_alternate``
+
+   .. code-block::
+
+      $ pwd
+      /home/roppenheimer/waves-tutorials
+      $ waves fetch --destination tutorial_cubit_alternate tutorials/tutorial_cubit_alternate
