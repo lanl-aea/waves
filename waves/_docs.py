@@ -4,6 +4,7 @@ Should raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAV
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 import sys
+import pathlib
 import argparse
 
 from waves import _settings
@@ -30,7 +31,7 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main(print_local_path: bool = False) -> None:
+def main(documentation_index: pathlib.Path, print_local_path: bool = False) -> None:
     """Open the package HTML documentation in the system default web browser or print the path to the documentation
     index file.
 
@@ -38,15 +39,15 @@ def main(print_local_path: bool = False) -> None:
     """
 
     if print_local_path:
-        if _settings._installed_docs_index.exists():
-            print(_settings._installed_docs_index, file=sys.stdout)
+        if documentation_index.exists():
+            print(documentation_index, file=sys.stdout)
         else:
             # This should only be reached if the package installation structure doesn't match the assumptions in
             # _settings.py. It is used by the Conda build tests as a sign-of-life that the assumptions are correct.
             raise RuntimeError("Could not find package documentation HTML index file")
     else:
         import webbrowser
-        webbrowser.open(str(_settings._installed_docs_index))
+        webbrowser.open(str(documentation_index))
 
 
 # Limit help() and 'from module import *' behavior to the module's public API

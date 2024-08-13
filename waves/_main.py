@@ -27,7 +27,7 @@ def main() -> None:
 
     try:
         if args.subcommand == "docs":
-            _docs.main(print_local_path=args.print_local_path)
+            _docs.main(_settings._installed_docs_index, print_local_path=args.print_local_path)
         elif args.subcommand == "fetch":
             root_directory = _settings._modsim_template_directory.parent
             relative_paths = _settings._fetch_subdirectories

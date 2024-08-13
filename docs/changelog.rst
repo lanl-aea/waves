@@ -51,6 +51,8 @@ Internal Changes
 - Test per-task action string keyword argument overrides (:issue:`720`, :merge:`891`). By `Kyle Brindley`_.
 - Inline the action prefix for builder factory actions for more obvious unit test expectations (:issue:`721`,
   :merge:`892`). By `Kyle Brindley`_.
+- Add the documentation index file path to the docs subcommand internal API (:issue:`730`, :merge:`901`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============
