@@ -197,8 +197,8 @@ pages:
     - project_root=$PWD
     - rm -rf public && mkdir -p public/modsim-template
     # Ensure the ``_version.py`` file is created
-    - scons html --clean && scons html
-    - cp -r build/docs/html/* public/
+    - scons html-internal --clean && scons html-internal
+    - cp -r build/docs/html-internal/* public/
     # Build modsim template documentation
     - cd waves/modsim_template
     - PYTHONPATH=${project_root} scons html
