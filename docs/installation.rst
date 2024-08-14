@@ -12,10 +12,10 @@ Installation
    LANL internal installation
    **************************
 
-   |PROJECT| versions are released internally with continuous delivery practices. Production versions are released
-   internally a month or two before the open-source release on conda-forge. The bleeding edge development version is
-   released daily during active development cycles, often with several releases per day. Users can access the internal
-   release through several mechanisms.
+   |PROJECT| is released internally with continuous delivery practices. Production versions are released internally a
+   month or two before the open-source release on conda-forge. The bleeding edge development version is released daily
+   during active development cycles, often with several releases per day. Users can access the internal release through
+   several mechanisms.
 
    W-13/AEA RHEL servers
    =====================
