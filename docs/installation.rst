@@ -8,9 +8,9 @@ Installation
 
 .. only:: aea
 
-   **************************
+   ##########################
    LANL internal installation
-   **************************
+   ##########################
 
    |PROJECT| is released internally with continuous delivery practices. Production versions are released internally a
    month or two before the open-source release on conda-forge. The bleeding edge development version is released daily
