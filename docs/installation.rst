@@ -26,6 +26,6 @@ Installation
    =======================
 
    Users with access to the |PROJECT| `upstream repository`_ or the `AEA Gitlab group`_ may also install from the
-   experimental Gitlab PyPI-style `package registry`_: https://re-git.lanl.gov/aea/python-projects/waves/-/packages.
+   experimental Gitlab PyPI-style package registry: https://re-git.lanl.gov/aea/python-projects/waves/-/packages.
    Click on a package to view in the Gitlab installation instructions, e.g.
    https://re-git.lanl.gov/aea/python-projects/waves/-/packages/19.
