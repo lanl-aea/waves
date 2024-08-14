@@ -2,15 +2,21 @@
 Installation
 ############
 
+.. only:: aea
+
+   ***********
+   Open source
+   ***********
+
 .. include:: README.txt
    :start-after: installation-start-do-not-remove
    :end-before: installation-end-do-not-remove
 
 .. only:: aea
 
-   ##########################
-   LANL internal installation
-   ##########################
+   *************
+   LANL internal
+   *************
 
    |PROJECT| is released internally with continuous delivery practices. Production versions are released internally a
    month or two before the open-source release on conda-forge. The bleeding edge development version is released daily
