@@ -988,12 +988,12 @@ def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
             "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
 
     # Handle additional builder kwargs without changing default behavior
-    builder_attributes = {}
+    emitter_handling = {}
     if emitter is not None:
-        builder_attributes.update({"emitter": emitter})
+        emitter_handling.update({"emitter": emitter})
 
     # Test builder object attributes
-    builder = scons_extensions.builder_factory(**builder_kwargs, **builder_attributes)
+    builder = scons_extensions.builder_factory(**builder_kwargs, **emitter_handling)
     assert builder.action.cmd_list == expected_action
     assert builder.emitter == emitter
 
@@ -1006,6 +1006,90 @@ def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, 1, 1, expected_action)
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
+
+
+first_target_builder = {
+    "default behavior": ({}, {}, ["first_target_builder.out1"], None, 2),
+    "different emitter": ({}, {}, ["first_target_builder.out1"], dummy_emitter_for_testing, 1),
+    "builder kwargs overrides": (
+        {
+         "environment": "different environment",
+         "action_prefix": "different action prefix",
+         "program": "different program",
+         "program_required": "different program required",
+         "program_options": "different program options",
+         "subcommand": "different subcommand",
+         "subcommand_required": "different subcommand required",
+         "subcommand_options": "different subcommand options",
+         "action_suffix": "different action suffix"
+        },
+        {}, ["first_target_builder.out2"], None, 2
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "environment": "different environment",
+         "action_prefix": "different action prefix",
+         "program": "different program",
+         "program_required": "different program required",
+         "program_options": "different program options",
+         "subcommand": "different subcommand",
+         "subcommand_required": "different subcommand required",
+         "subcommand_options": "different subcommand options",
+         "action_suffix": "different action suffix"
+        },
+        ["first_target_builder.out3"], None, 2
+    ),
+}
+
+
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         first_target_builder.values(),
+                         ids=first_target_builder.keys())
+def test_first_target_builder(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "",
+        "program_required": "",
+        "program_options": "",
+        "subcommand": "",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_action = \
+        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
+            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+
+    # Handle additional builder kwargs without changing default behavior
+    emitter_handling = {}
+    if emitter is None:
+        emitter = scons_extensions.first_target_emitter
+    emitter_handling.update({"emitter": emitter})
+
+    # Test builder object attributes
+    builder = scons_extensions.first_target_builder(**builder_kwargs, **emitter_handling)
+    assert builder.action.cmd_list == expected_action
+    assert builder.emitter == emitter
+
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={
+        "FirstTargetFactory": builder
+    })
+    nodes = env.FirstTargetFactory(target=target, source=["first_target_factory.in"], **task_kwargs)
+
+    # Test task definition node counts, action(s), and task keyword arguments
+    check_action_string(nodes, expected_node_count, 1, expected_action)
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
