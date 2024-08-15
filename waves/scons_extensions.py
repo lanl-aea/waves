@@ -839,7 +839,7 @@ def builder_factory(
         subcommand=subcommand,
         subcommand_required=subcommand_required,
         subcommand_options=subcommand_options,
-        action_suffix=action_suffix
+        action_suffix=action_suffix,
         **kwargs
     )
     return builder

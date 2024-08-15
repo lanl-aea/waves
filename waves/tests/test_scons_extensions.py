@@ -924,6 +924,76 @@ def test_first_target_emitter(target, source, expected):
     assert target == expected
 
 
+builder_factory = {
+    "default behavior": ({}, {}, ["builder_factory.out1"]),
+    "builder kwargs overrides": (
+        {
+         "environment": "different environment",
+         "action_prefix": "different action prefix",
+         "program": "different program",
+         "program_required": "different program required",
+         "program_options": "different program options",
+         "subcommand": "different subcommand",
+         "subcommand_required": "different subcommand required",
+         "subcommand_options": "different subcommand options",
+         "action_suffix": "different action suffix"
+        },
+        {}, ["builder_factory.out2"]
+    ),
+    "task kwargs overrides": (
+        {},
+        {
+         "environment": "different environment",
+         "action_prefix": "different action prefix",
+         "program": "different program",
+         "program_required": "different program required",
+         "program_options": "different program options",
+         "subcommand": "different subcommand",
+         "subcommand_required": "different subcommand required",
+         "subcommand_options": "different subcommand options",
+         "action_suffix": "different action suffix"
+        },
+        ["builder_factory.out3"]
+    ),
+}
+
+
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target",
+                         builder_factory.values(),
+                         ids=builder_factory.keys())
+def test_builder_factory(builder_kwargs, task_kwargs, target):
+    # Set default expectations to match default argument values
+    expected_kwargs = {
+        "environment": "",
+        "action_prefix": "",
+        "program": "",
+        "program_required": "",
+        "program_options": "",
+        "subcommand": "",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": ""
+    }
+    # Update expected arguments to match test case
+    expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_action = \
+        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
+            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={"BuilderFactory": scons_extensions.builder_factory(**builder_kwargs)})
+    nodes = env.BuilderFactory(target=target, source=["builder_factory.in"], **task_kwargs)
+
+    # Test task definition node counts, action(s), and task keyword arguments
+    check_action_string(nodes, 1, 1, expected_action)
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
+
+
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 python_script_input = {
