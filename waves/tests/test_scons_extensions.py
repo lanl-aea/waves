@@ -920,7 +920,7 @@ first_target_emitter_input = {
                          first_target_emitter_input.values(),
                          ids=first_target_emitter_input.keys())
 def test_first_target_emitter(target, source, expected):
-    target, source = scons_extensions._first_target_emitter(target, source, None)
+    target, source = scons_extensions.first_target_emitter(target, source, None)
     assert target == expected
 
 
@@ -983,7 +983,7 @@ def test_sbatch_python_script():
        '${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"'
     builder = scons_extensions.sbatch_python_script()
     assert builder.action.cmd_list == expected
-    assert builder.emitter == scons_extensions._first_target_emitter
+    assert builder.emitter == scons_extensions.first_target_emitter
 
 
 source_file = fs.File("dummy.m")

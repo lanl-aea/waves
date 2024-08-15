@@ -715,7 +715,7 @@ def _build_subdirectory(target: list) -> pathlib.Path:
     return build_subdirectory
 
 
-def _first_target_emitter(
+def first_target_emitter(
     target: list,
     source: list,
     env,
@@ -784,7 +784,7 @@ def _abaqus_journal_emitter(target: list, source: list, env) -> typing.Tuple[lis
     :return: target, source
     """
     appending_suffixes = [_settings._abaqus_environment_extension]
-    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
+    return first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def abaqus_journal(
@@ -1114,7 +1114,7 @@ def _sierra_emitter(target: list, source: list, env) -> typing.Tuple[list, list]
     :return: target, source
     """
     appending_suffixes = [_settings._sierra_environment_extension]
-    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
+    return first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def sierra(
@@ -1413,7 +1413,7 @@ def python_script(
     ]
     python_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter,
+        emitter=first_target_emitter,
         program=program,
         action_prefix=action_prefix,
         action_suffix=action_suffix
@@ -1455,7 +1455,7 @@ def _matlab_script_emitter(target: list, source: list, env) -> typing.Tuple[list
     :return: target, source
     """
     appending_suffixes = [_settings._matlab_environment_extension]
-    return _first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
+    return first_target_emitter(target, source, env, appending_suffixes=appending_suffixes)
 
 
 def matlab_script(
@@ -1808,7 +1808,7 @@ def sbatch(
     ]
     sbatch_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter,
+        emitter=first_target_emitter,
         program=program,
         required=required,
         action_prefix=action_prefix
@@ -2080,7 +2080,7 @@ def quinoa_solver(
     ]
     quinoa_builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter,
+        emitter=first_target_emitter,
         prefix_command=prefix_command,
         charmrun=charmrun,
         charmrun_options=charmrun_options,
@@ -2197,7 +2197,7 @@ def fierro_builder(
     ]
     builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter,
+        emitter=first_target_emitter,
         mpirun=mpirun,
         mpirun_options=mpirun_options,
         program=program,
@@ -2460,7 +2460,7 @@ def ansys_apdl(
     ]
     builder = SCons.Builder.Builder(
         action=action,
-        emitter=_first_target_emitter,
+        emitter=first_target_emitter,
         action_prefix=action_prefix,
         program=program,
         required=required,
