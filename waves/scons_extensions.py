@@ -766,6 +766,85 @@ def first_target_emitter(
     return string_targets, source
 
 
+def builder_factory(
+    environment: str = "",
+    action_prefix: str = "",
+    program: str = "",
+    program_required: str = "",
+    program_options: str = "",
+    subcommand: str = "",
+    subcommand_required: str = "",
+    subcommand_options: str = "",
+    action_suffix: str = "",
+    emitter=None,
+    **kwargs
+) -> SCons.Builder.Builder:
+    """Generic WAVES builder factory returning a builder with no emitter
+
+    This builder provides a template action string with placeholder keyword arguments for WAVES style builders. The
+    default behavior will not do anything unless the ``program`` or ``subcommand`` argument is updated to include an
+    executable program. Because this builder has no emitter, all task targets must be fully specified in the task
+    definition. See :meth:`first_target_builder` for an example of the default options used by most WAVES builders.
+
+    .. code-block::
+       :caption: action string construction
+
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
+
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution. By
+        default, SCons performs actions in the parent directory of the SConstruct file. However, many computational
+        science and engineering programs leave output files in the current working directory, so it is convenient and
+        sometimes necessary to change to the target's parent directory prior to execution.
+    :param program: This variable is intended to containg the primary command line executable absolute or relative path
+    :param program_required: This variable is intended to contain a space delimited string of required program options
+        and arguments that are crucial to builder behavior and should not be modified except by advanced users.
+    :param program_options: This variable is intended to contain a space delimited string of optional program options
+        and arguments that can be freely modified by the user.
+    :param subcommand: A Fierro subcommand
+    :param subcommand_required: This variable is intended to contain a space delimited string of subcommand required
+        options and arguments that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: This variable is intended to contain a space delimited string of optional subcommand options
+        and arguments that can be freely modified by the user.
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations. By
+        default, SCons streams all STDOUT and STDERR to the terminal. However, in long or parallel workflows this may
+        clutter the terminal and make it difficult to isolate critical debugging information, so it is convenient to
+        redirect each program's output to a task specific log file for later inspection and troubleshooting.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
+
+    :returns: SCons template builder
+    :rtype: SCons.Builder.Builder
+    """  # noqa: E501
+    action = [
+        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
+            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+    ]
+    builder = SCons.Builder.Builder(
+        action=action,
+        emitter=emitter,
+        environment=environment,
+        action_prefix=action_prefix,
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix
+        **kwargs
+    )
+    return builder
+
+
 def _abaqus_journal_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Appends the abaqus_journal builder target list with the builder managed targets
 
