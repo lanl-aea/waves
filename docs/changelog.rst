@@ -54,6 +54,8 @@ Internal Changes
   :merge:`892`). By `Kyle Brindley`_.
 - Add the documentation index file path to the docs subcommand internal API (:issue:`730`, :merge:`901`). By `Kyle
   Brindley`_.
+- Use a common downstream pipeline to deploy to the internal conda channel (:issue:`733`, :merge:`904`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============

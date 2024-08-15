@@ -147,26 +147,20 @@ conda-build-external:
   tags:
     - shell-aea
 
-deploy:
+aea-conda-deploy:
   stage: deploy
-  variables:
-    GIT_STRATEGY: clone
-  dependencies:
-    - conda-build
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
     - if: $CI_COMMIT_BRANCH == "main"
-  script:
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
-    # Copy Conda package to AEA Conda Channel
-    - cp ${conda_artifacts_directory}/noarch/waves-*-*.tar.bz2 ${aea_conda_channel}/noarch
-    # Change group for access by all W-13 staff and prevent accidental modification by institutional account in CI jobs
-    - chgrp w13users ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
-    - chmod 555 ${aea_conda_channel}/noarch/waves-*-*.tar.bz2 || true
-  tags:
-    - shell-aea
+  variables:
+    # The aea-conda-deploy job *must* define these variables
+    PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
+    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
+    AEA_CONDA_PACKAGE_JOB: conda-build
+    AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
+  trigger:
+    project: aea/developer-operations/aea-conda
+    branch: main
+    strategy: depend
 
 pypi-deploy:
   stage: deploy
