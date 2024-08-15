@@ -14,7 +14,6 @@ before_script:
   # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
   # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/7
   - aea_compute_path="/projects/aea_compute"
-  - aea_conda_channel="${aea_compute_path}/aea-conda"
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
@@ -147,12 +146,14 @@ conda-build-external:
   tags:
     - shell-aea
 
+# https://re-git.lanl.gov/aea/developer-operations/aea-conda
 aea-conda-deploy:
   stage: deploy
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH == "main"
   variables:
-    # The aea-conda-deploy job *must* define these variables
     PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
     PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
     AEA_CONDA_PACKAGE_JOB: conda-build
