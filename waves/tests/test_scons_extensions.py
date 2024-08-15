@@ -29,6 +29,10 @@ fs = SCons.Node.FS.FS()
 testing_windows, root_fs = platform_check()
 
 
+def dummy_emitter_for_testing(target, source, env):
+    return target, source
+
+
 def test_print_failed_nodes_stdout():
     mock_failure_file = unittest.mock.Mock()
     mock_failure_file.node = unittest.mock.Mock()
@@ -925,7 +929,8 @@ def test_first_target_emitter(target, source, expected):
 
 
 builder_factory = {
-    "default behavior": ({}, {}, ["builder_factory.out1"]),
+    "default behavior": ({}, {}, ["builder_factory.out1"], None),
+    "different emitter": ({}, {}, ["builder_factory.out1"], dummy_emitter_for_testing),
     "builder kwargs overrides": (
         {
          "environment": "different environment",
@@ -938,7 +943,7 @@ builder_factory = {
          "subcommand_options": "different subcommand options",
          "action_suffix": "different action suffix"
         },
-        {}, ["builder_factory.out2"]
+        {}, ["builder_factory.out2"], None
     ),
     "task kwargs overrides": (
         {},
@@ -953,15 +958,15 @@ builder_factory = {
          "subcommand_options": "different subcommand options",
          "action_suffix": "different action suffix"
         },
-        ["builder_factory.out3"]
+        ["builder_factory.out3"], None
     ),
 }
 
 
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target",
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter",
                          builder_factory.values(),
                          ids=builder_factory.keys())
-def test_builder_factory(builder_kwargs, task_kwargs, target):
+def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "environment": "",
@@ -982,9 +987,21 @@ def test_builder_factory(builder_kwargs, task_kwargs, target):
         "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
             "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
 
+    # Handle additional builder kwargs without changing default behavior
+    builder_attributes = {}
+    if emitter is not None:
+        builder_attributes.update({"emitter": emitter})
+
+    # Test builder object attributes
+    builder = scons_extensions.builder_factory(**builder_kwargs, **builder_attributes)
+    assert builder.action.cmd_list == expected_action
+    assert builder.emitter == emitter
+
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"BuilderFactory": scons_extensions.builder_factory(**builder_kwargs)})
+    env.Append(BUILDERS={
+        "BuilderFactory": builder
+    })
     nodes = env.BuilderFactory(target=target, source=["builder_factory.in"], **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
