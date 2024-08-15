@@ -8,6 +8,12 @@ Changelog
 0.10.1 (unreleased)
 *******************
 
+New Features
+============
+- Expose the most common "first target emitter" to the public API (:issue:`718`, :merge:`906`). By `Kyle Brindley`_.
+- Add template builder factories with |PROJECT| style action string construction and common emitter behavior
+  (:issue:`718`, :merge:`906`). By `Kyle Brindley`_.
+
 *******************
 0.10.0 (2024-08-15)
 *******************
