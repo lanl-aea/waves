@@ -7,6 +7,7 @@ Functions that may be used in a CLI implementation should raise ``RuntimeError``
 message and non-zero exit codes.
 """
 import os
+import re
 import shutil
 import string
 import typing
@@ -214,15 +215,22 @@ def return_environment(
 
     :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
-    variables = subprocess.run(
-        [shell, string_option, f"\"{command} {separator} {environment}\""],
+    result = subprocess.run(
+        f"{shell} {string_option} \"{command} {separator} {environment}\"",
         check=True,
-        capture_output=True
-    ).stdout.decode().split("\x00")
+        capture_output=True,
+        shell=True
+    )
+    stdout = result.stdout.decode()
+    variables = stdout.split("\x00")
+    first_key, first_value = variables[0].rsplit("=", 1)
+    if "\n" in first_key:
+        first_key = first_key.rsplit("\n")[-1]
+    variables[0] = f"{first_key}={first_value}"
 
     environment = dict()
     for line in variables:
-        if line != "" or "=" not in line:
+        if line != "":
             key, value = line.split("=", 1)
             environment[key] = value
 
