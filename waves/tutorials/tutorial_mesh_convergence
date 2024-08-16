@@ -170,14 +170,15 @@ workflow.extend(env.PythonScript(
 
 plot_name = "mesh_convergence_stress"
 selection_dict = python_source_abspath / f"{plot_name}.yaml"
-script_options = "--input-file " + " ".join(str(path) for path in post_processing_source)
+script_options = "--input-file ${post_processing_source}"
 script_options += " --output-file ${TARGET.file} --x-units mm --y-units MPa --x-var global_seed --y-var S"
 script_options += f" --parameter-study-file {parameter_study_file.name}"
 script_options += f" --selection-dict {selection_dict}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[script, parameter_study_file.name] + post_processing_source,
-    script_options=script_options
+    script_options=script_options,
+    post_processing_source=post_processing_source
 ))
 
 # Collector alias based on parent directory name
