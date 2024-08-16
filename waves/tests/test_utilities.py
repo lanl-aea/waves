@@ -199,7 +199,24 @@ return_environment = {
     ),
     "newlines": (
         "command", {}, b"thing1=a\nnewline\x00thing2=b", {"thing1": "a\nnewline", "thing2": "b"}
-    )
+    ),
+    "tcsh": (
+        "command", {"shell": "tcsh"},
+        b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
+    ),
+    "no defaults": (
+        "command",
+        {
+         "shell": "different shell",
+         "redirect": "different redirect",
+         "string_option": "different string option",
+         "separator": "different separator",
+         "environment": "different environment",
+         "redirect_dictionary": {},
+         "redirect_fallback": "different redirect fallback"
+        },
+        b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
+    ),
 }
 
 
@@ -211,9 +228,11 @@ def test_return_environment(command, kwargs, stdout, expected):
     :param bytes stdout: byte string with null delimited shell environment variables
     :param dict expected: expected dictionary output containing string key:value pairs and preserving newlines
     """
+    redirect_kwargs = {key: kwargs[key] for key in ["shell", "redirect", "redirect_dictionary", "redirect_fallback"]
+                       if key in kwargs}
     expected_kwargs = {
         "shell": "bash",
-        "redirect": _settings._sh_redirect_string,
+        "redirect": _utilities.shell_redirect(**redirect_kwargs),
         "string_option": "-c",
         "separator": "&&",
         "environment": "env -0",
@@ -228,7 +247,8 @@ def test_return_environment(command, kwargs, stdout, expected):
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
     with patch("subprocess.run", return_value=mock_run_return) as mock_run:
-        environment_dictionary = _utilities.return_environment(command)
+        environment_dictionary = _utilities.return_environment(command, **kwargs)
+
     assert environment_dictionary == expected
     mock_run.assert_called_once_with(
         expected_command, check=True, capture_output=True
