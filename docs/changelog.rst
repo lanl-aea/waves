@@ -22,7 +22,7 @@ Documentation
 Enhancements
 ============
 - Support SCons construction environment recovery for more than just bash. Explicit support for: sh, bash, zsh, csh,
-  tcsh (:issue:`735`, :merge:`908`). By `Kyle Brindley`_.
+  tcsh (:issue:`735`, :merge:`908`, :issue:`736`, :merge:`909`). By `Kyle Brindley`_.
 
 *******************
 0.10.0 (2024-08-15)
