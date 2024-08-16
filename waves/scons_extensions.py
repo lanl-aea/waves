@@ -581,6 +581,7 @@ def shell_environment(
        env = waves.scons_extensions.shell_environment("source my_script.sh")
 
     :param command: the shell command to execute
+    :param shell: the shell to use when executing command by absolute or relative path
     :param cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
         formatted file regardless of extension.
     :param overwrite_cache: Ignore previously cached files if they exist.
