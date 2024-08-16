@@ -231,7 +231,7 @@ def return_environment(
 
     .. code-block::
 
-       {shell} {string_option} {command} {redirect} {separator} {environment}
+       {shell} {string_option} "{command} {redirect} {separator} {environment}"
 
     :param command: the shell command to execute
     :param shell: the shell to use when executing command by absolute or relative path
@@ -256,7 +256,7 @@ def return_environment(
         redirect_fallback=redirect_fallback
     )
     variables = subprocess.run(
-        [shell, string_option, f"{command} {redirect} {separator} {environment}"],
+        [shell, string_option, f"\"{command} {redirect} {separator} {environment}\""],
         check=True,
         capture_output=True
     ).stdout.decode().split("\x00")
@@ -287,7 +287,7 @@ def cache_environment(
 
        .. code-block::
 
-          {shell} -c {command} > /dev/null 2>&1 && env -0
+          {shell} -c "{command} > /dev/null 2>&1 && env -0"
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
     ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.

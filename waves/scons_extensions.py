@@ -578,7 +578,7 @@ def shell_environment(
 
        .. code-block::
 
-          {shell} -c {command} > /dev/null 2>&1 && env -0
+          {shell} -c "{command} > /dev/null 2>&1 && env -0"
 
     .. code-block::
        :caption: SConstruct
