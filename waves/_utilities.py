@@ -191,19 +191,60 @@ def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str
     return process.returncode, output
 
 
-def return_environment(command: str) -> dict:
+def shell_redirect(
+    shell: str = "bash",
+    redirect: typing.Optional[str] = None,
+    redirect_dictionary: dict = _settings._redirect_strings,
+    redirect_fallback: str = _settings._sh_redirect_string
+) -> str:
+    if redirect is None:
+        if shell in redirect_dictionary:
+            redirect = redirect_dictionary[shell]
+        else:
+            redirect = redirect_fallback
+    return redirect
+
+
+def return_environment(
+    command: str,
+    shell: str = "bash",
+    redirect: typing.Optional[str] = None,
+    string_option: str = "-c",
+    separator: str = "&&",
+    environment: str = "env -0",
+    redirect_dictionary: dict = _settings._redirect_strings,
+    redirect_fallback: str = _settings._sh_redirect_string
+) -> dict:
     """Run a shell command and return the shell environment as a dictionary
 
-    .. warning::
+    .. code-block::
 
-       Currently only supports bash shells
+       {shell} {string_option} {command} {redirect} {separator} {environment}
 
     :param command: the shell command to execute
+    :param shell: the shell to use when executing command by absolute or relative path
+    :param redirect: the shell's STDOUT redirect to avoid command output to terminal polluting the captured environment.
+        If set to None, attempt to match the redirect string against the provided shell dictionary. Fall back to
+        provided fall back.
+    :param string_option: the shell's option to execute a string command
+    :param separator: the shell's command separator, e.g. ``;`` or ``&&``.
+    :param environment: environment command to print environment on STDOUT with null terminated seperators
+    :param redirect_dictionary: A dictionary of shell: redirect string options
+    :param redirect_fallback: The fall back redirect string when none is provided and the shell is not found in the
+        redirect dictionary
 
     :returns: shell environment dictionary
+
+    :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
+    redirect = shell_redirect(
+        shell=shell,
+        redirect=redirect,
+        redirect_dictionary=redirect_dictionary,
+        redirect_fallback=redirect_fallback
+    )
     variables = subprocess.run(
-        ["bash", "-c", f"trap 'env -0' exit; {command} > /dev/null 2>&1"],
+        [shell, string_option, f"{command} {redirect} {separator} {environment}"],
         check=True,
         capture_output=True
     ).stdout.decode().split("\x00")
@@ -217,8 +258,13 @@ def return_environment(command: str) -> dict:
     return environment
 
 
-def cache_environment(command: str, cache: typing.Optional[typing.Union[str, pathlib.Path]] = None,
-                       overwrite_cache: bool = False, verbose: bool = False) -> dict:
+def cache_environment(
+    command: str,
+    shell: str = "bash",
+    cache: typing.Optional[typing.Union[str, pathlib.Path]] = None,
+    overwrite_cache: bool = False,
+    verbose: bool = False
+) -> dict:
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
@@ -235,6 +281,8 @@ def cache_environment(command: str, cache: typing.Optional[typing.Union[str, pat
     :param verbose: Print SCons configuration-like action messages when True
 
     :returns: shell environment dictionary
+
+    :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
     if cache:
         cache = pathlib.Path(cache).resolve()
@@ -247,7 +295,7 @@ def cache_environment(command: str, cache: typing.Optional[typing.Union[str, pat
     else:
         if verbose:
             print(f"Sourcing the shell environment with command '{command}' ...")
-        environment = return_environment(command)
+        environment = return_environment(command, shell=shell)
 
     if cache:
         with open(cache, "w") as cache_file:
