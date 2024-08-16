@@ -162,37 +162,6 @@ def test_tee_subprocess():
     mock_popen.assert_called_once()
 
 
-shell_redirect = {
-    "default kwargs": (
-        {}, _settings._sh_redirect_string
-    ),
-    "no defaults": (
-        {
-         "redirect_dictionary": {},
-         "redirect_fallback": "different redirect fall back"
-        },
-        "different redirect fall back"
-    ),
-    "default fall back": (
-        {"shell": "unknown shell"}, _settings._sh_redirect_string
-    ),
-    "tcsh": (
-        {"shell": "tcsh"}, _settings._csh_redirect_string
-    ),
-    "requested redirect": (
-        {"redirect": "different redirect"}, "different redirect"
-    ),
-}
-
-
-@pytest.mark.parametrize("kwargs, expected_string",
-                         shell_redirect.values(),
-                         ids=shell_redirect.keys())
-def test_shell_redirect(kwargs, expected_string):
-    redirect = _utilities.shell_redirect(**kwargs)
-    assert redirect == expected_string
-
-
 return_environment = {
     "no newlines": (
         "command", {}, b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
@@ -208,12 +177,9 @@ return_environment = {
         "command",
         {
          "shell": "different shell",
-         "redirect": "different redirect",
          "string_option": "different string option",
          "separator": "different separator",
          "environment": "different environment",
-         "redirect_dictionary": {},
-         "redirect_fallback": "different redirect fallback"
         },
         b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
     ),
@@ -228,22 +194,16 @@ def test_return_environment(command, kwargs, stdout, expected):
     :param bytes stdout: byte string with null delimited shell environment variables
     :param dict expected: expected dictionary output containing string key:value pairs and preserving newlines
     """
-    redirect_kwargs = {key: kwargs[key] for key in ["shell", "redirect", "redirect_dictionary", "redirect_fallback"]
-                       if key in kwargs}
     expected_kwargs = {
         "shell": "bash",
-        "redirect": _utilities.shell_redirect(**redirect_kwargs),
         "string_option": "-c",
         "separator": "&&",
         "environment": "env -0",
-        "redirect_dictionary": _settings._redirect_strings,
-        "redirect_fallback": _settings._sh_redirect_string
     }
     expected_kwargs.update(kwargs)
     expected_command = \
         [expected_kwargs["shell"], expected_kwargs["string_option"],
-         f"\"{command} {expected_kwargs['redirect']} " \
-         f"{expected_kwargs['separator']} {expected_kwargs['environment']}\""]
+         f"\"{command} {expected_kwargs['separator']} {expected_kwargs['environment']}\""]
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
     with patch("subprocess.run", return_value=mock_run_return) as mock_run:

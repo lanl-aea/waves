@@ -191,72 +191,31 @@ def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str
     return process.returncode, output
 
 
-def shell_redirect(
-    shell: str = "bash",
-    redirect: typing.Optional[str] = None,
-    redirect_dictionary: dict = _settings._redirect_strings,
-    redirect_fallback: str = _settings._sh_redirect_string
-) -> str:
-    """Return a requested, known, or fallback shell redirection string
-
-    :param shell: the shell to use when executing command by absolute or relative path
-    :param redirect: the shell's STDOUT redirect to avoid command output to terminal polluting the captured environment.
-        If set to None, attempt to match the redirect string against the provided shell dictionary. Fall back to
-        provided fall back.
-    :param redirect_dictionary: A dictionary of shell: redirect string options
-    :param redirect_fallback: The fall back redirect string when none is provided and the shell is not found in the
-        redirect dictionary
-
-    :returns: shell redirection string
-    """
-    if redirect is None:
-        if shell in redirect_dictionary:
-            redirect = redirect_dictionary[shell]
-        else:
-            redirect = redirect_fallback
-    return redirect
-
-
 def return_environment(
     command: str,
     shell: str = "bash",
-    redirect: typing.Optional[str] = None,
     string_option: str = "-c",
     separator: str = "&&",
     environment: str = "env -0",
-    redirect_dictionary: dict = _settings._redirect_strings,
-    redirect_fallback: str = _settings._sh_redirect_string
 ) -> dict:
     """Run a shell command and return the shell environment as a dictionary
 
     .. code-block::
 
-       {shell} {string_option} "{command} {redirect} {separator} {environment}"
+       {shell} {string_option} "{command} {separator} {environment}"
 
     :param command: the shell command to execute
     :param shell: the shell to use when executing command by absolute or relative path
-    :param redirect: the shell's STDOUT redirect to avoid command output to terminal polluting the captured environment.
-        If set to None, attempt to match the redirect string against the provided shell dictionary. Fall back to
-        provided fall back.
     :param string_option: the shell's option to execute a string command
     :param separator: the shell's command separator, e.g. ``;`` or ``&&``.
     :param environment: environment command to print environment on STDOUT with null terminated seperators
-    :param redirect_dictionary: A dictionary of shell: redirect string options
-    :param redirect_fallback: The fall back redirect string when none is provided and the shell is not found in the
-        redirect dictionary
 
     :returns: shell environment dictionary
 
     :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
-    redirect = shell_redirect(
-        shell=shell,
-        redirect=redirect,
-        redirect_dictionary=redirect_dictionary,
-        redirect_fallback=redirect_fallback
-    )
     variables = subprocess.run(
-        [shell, string_option, f"\"{command} {redirect} {separator} {environment}\""],
+        [shell, string_option, f"\"{command} {separator} {environment}\""],
         check=True,
         capture_output=True
     ).stdout.decode().split("\x00")
@@ -282,12 +241,11 @@ def cache_environment(
     .. warning::
 
        Currently assumes a nix flavored shell: sh, bash, zsh, csh, tcsh. May work with any shell supporting command
-       construction as below, where the redirection command is modified for csh/tcsh but all other shells use sh style
-       redirection.
+       construction as below.
 
        .. code-block::
 
-          {shell} -c "{command} > /dev/null 2>&1 && env -0"
+          {shell} -c "{command} && env -0"
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
     ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
