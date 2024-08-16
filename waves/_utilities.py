@@ -12,6 +12,9 @@ import string
 import typing
 import pathlib
 import platform
+import subprocess
+
+import yaml
 
 from waves import _settings
 
@@ -186,6 +189,71 @@ def tee_subprocess(command: typing.List[str], **kwargs) -> typing.Tuple[int, str
             stdout_buffer.write(line)
         output = stdout_buffer.getvalue()
     return process.returncode, output
+
+
+def return_environment(command: str) -> dict:
+    """Run a shell command and return the shell environment as a dictionary
+
+    .. warning::
+
+       Currently only supports bash shells
+
+    :param command: the shell command to execute
+
+    :returns: shell environment dictionary
+    """
+    variables = subprocess.run(
+        ["bash", "-c", f"trap 'env -0' exit; {command} > /dev/null 2>&1"],
+        check=True,
+        capture_output=True
+    ).stdout.decode().split("\x00")
+
+    environment = dict()
+    for line in variables:
+        if line != "":
+            key, value = line.split("=", 1)
+            environment[key] = value
+
+    return environment
+
+
+def cache_environment(command: str, cache: typing.Optional[typing.Union[str, pathlib.Path]] = None,
+                       overwrite_cache: bool = False, verbose: bool = False) -> dict:
+    """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
+
+    If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
+    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
+
+    .. warning::
+
+       Currently only supports bash shells
+
+    :param command: the shell command to execute
+    :param cache: absolute or relative path to read/write a shell environment dictionary. Will be written as YAML
+        formatted file regardless of extension.
+    :param overwrite_cache: Ignore previously cached files if they exist.
+    :param verbose: Print SCons configuration-like action messages when True
+
+    :returns: shell environment dictionary
+    """
+    if cache:
+        cache = pathlib.Path(cache).resolve()
+
+    if cache and cache.exists() and not overwrite_cache:
+        if verbose:
+            print(f"Sourcing the shell environment from cached file '{cache}' ...")
+        with open(cache, "r") as cache_file:
+            environment = yaml.safe_load(cache_file)
+    else:
+        if verbose:
+            print(f"Sourcing the shell environment with command '{command}' ...")
+        environment = return_environment(command)
+
+    if cache:
+        with open(cache, "w") as cache_file:
+            yaml.safe_dump(environment, cache_file)
+
+    return environment
 
 
 # Limit help() and 'from module import *' behavior to the module's public API

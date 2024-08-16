@@ -334,63 +334,6 @@ def test_substitution_syntax_warning():
     assert output_dictionary == expected_dictionary
 
 
-return_environment = {
-    "no newlines": (b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}),
-    "newlines": (b"thing1=a\nnewline\x00thing2=b", {"thing1": "a\nnewline", "thing2": "b"})
-}
-
-
-@pytest.mark.parametrize("stdout, expected",
-                         return_environment.values(),
-                         ids=return_environment.keys())
-def test_return_environment(stdout, expected):
-    """
-    :param bytes stdout: byte string with null delimited shell environment variables
-    :param dict expected: expected dictionary output containing string key:value pairs and preserving newlines
-    """
-    mock_run_return = subprocess.CompletedProcess(args="dummy", returncode=0, stdout=stdout)
-    with patch("subprocess.run", return_value=mock_run_return):
-        environment_dictionary = scons_extensions._return_environment("dummy")
-    assert environment_dictionary == expected
-
-
-cache_environment = {
-        # cache,       overwrite_cache, expected,        file_exists
-    "no cache":
-        (None,         False,           {"thing1": "a"}, False),
-    "cache exists":
-        ("dummy.yaml", False,           {"thing1": "a"}, True),
-    "cache doesn't exist":
-        ("dummy.yaml", False,           {"thing1": "a"}, False),
-    "overwrite cache":
-        ("dummy.yaml", True,            {"thing1": "a"}, True),
-    "don't overwrite cache":
-        ("dummy.yaml", False,           {"thing1": "a"}, False)
-}
-
-
-@pytest.mark.parametrize("cache, overwrite_cache, expected, file_exists",
-                         cache_environment.values(),
-                         ids=cache_environment.keys())
-def test_cache_environment(cache, overwrite_cache, expected, file_exists):
-    with patch("waves.scons_extensions._return_environment", return_value=expected) as return_environment, \
-         patch("yaml.safe_load", return_value=expected) as yaml_load, \
-         patch("pathlib.Path.exists", return_value=file_exists), \
-         patch("yaml.safe_dump") as yaml_dump, \
-         patch("builtins.open"):
-        environment_dictionary = scons_extensions._cache_environment("dummy command", cache=cache,
-                                                                     overwrite_cache=overwrite_cache)
-        if cache and file_exists and not overwrite_cache:
-            yaml_load.assert_called_once()
-            return_environment.assert_not_called()
-        else:
-            yaml_load.assert_not_called()
-            return_environment.assert_called_once()
-        if cache:
-            yaml_dump.assert_called_once()
-    assert environment_dictionary == expected
-
-
 shell_environment = {
     "no cache": (None, False, {"thing1": "a"}, True),
     "cache": ("dummy.yaml", False, {"thing1": "a"}, True),
@@ -403,7 +346,7 @@ shell_environment = {
                          shell_environment.values(),
                          ids=shell_environment.keys())
 def test_shell_environment(cache, overwrite_cache, expected, verbose):
-    with patch("waves.scons_extensions._cache_environment", return_value=expected) as cache_environment:
+    with patch("waves._utilities.cache_environment", return_value=expected) as cache_environment:
         env = scons_extensions.shell_environment("dummy", cache=cache, overwrite_cache=overwrite_cache)
         cache_environment.assert_called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache,
                                                   verbose=verbose)
