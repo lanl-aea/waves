@@ -335,23 +335,38 @@ def test_substitution_syntax_warning():
 
 
 shell_environment = {
-    "no cache": (None, False, {"thing1": "a"}, True),
-    "cache": ("dummy.yaml", False, {"thing1": "a"}, True),
-    "cache overwrite": ("dummy.yaml", True, {"thing1": "a"}, True),
+    "default kwargs": (
+        {}, {"thing1": "a"}
+    ),
+    "no cache": (
+        {"cache": None, "overwrite_cache": False}, {"thing1": "a"}
+    ),
+    "cache": (
+        {"cache": "dummy.yaml", "overwrite_cache": False}, {"thing1": "a"}
+    ),
+    "cache overwrite": (
+        {"cache": "dummy.yaml", "overwrite_cache": True}, {"thing1": "a"}
+    ),
 }
 
 
 @pytest.mark.skipif(testing_windows, reason="BASH shell specific function incompatible with Windows")
-@pytest.mark.parametrize("cache, overwrite_cache, expected, verbose",
+@pytest.mark.parametrize("kwargs, expected_environment",
                          shell_environment.values(),
                          ids=shell_environment.keys())
-def test_shell_environment(cache, overwrite_cache, expected, verbose):
-    with patch("waves._utilities.cache_environment", return_value=expected) as cache_environment:
-        env = scons_extensions.shell_environment("dummy", cache=cache, overwrite_cache=overwrite_cache)
-        cache_environment.assert_called_once_with("dummy", cache=cache, overwrite_cache=overwrite_cache,
-                                                  verbose=verbose)
+def test_shell_environment(kwargs, expected_environment):
+    expected_kwargs = {
+        "shell": "bash",
+        "cache": None,
+        "overwrite_cache": False
+    }
+    expected_kwargs.update(kwargs)
+
+    with patch("waves._utilities.cache_environment", return_value=expected_environment) as cache_environment:
+        env = scons_extensions.shell_environment("dummy", **kwargs)
+        cache_environment.assert_called_once_with("dummy", **expected_kwargs, verbose=True)
     # Check that the expected dictionary is a subset of the SCons construction environment
-    assert all(env["ENV"].get(key, None) == value for key, value in expected.items())
+    assert all(env["ENV"].get(key, None) == value for key, value in expected_environment.items())
 
 
 prefix = f"{_cd_action_prefix}"
