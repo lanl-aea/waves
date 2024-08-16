@@ -194,23 +194,45 @@ def test_shell_redirect(kwargs, expected_string):
 
 
 return_environment = {
-    "no newlines": (b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}),
-    "newlines": (b"thing1=a\nnewline\x00thing2=b", {"thing1": "a\nnewline", "thing2": "b"})
+    "no newlines": (
+        "command", {}, b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
+    ),
+    "newlines": (
+        "command", {}, b"thing1=a\nnewline\x00thing2=b", {"thing1": "a\nnewline", "thing2": "b"}
+    )
 }
 
 
-@pytest.mark.parametrize("stdout, expected",
+@pytest.mark.parametrize("command, kwargs, stdout, expected",
                          return_environment.values(),
                          ids=return_environment.keys())
-def test_return_environment(stdout, expected):
+def test_return_environment(command, kwargs, stdout, expected):
     """
     :param bytes stdout: byte string with null delimited shell environment variables
     :param dict expected: expected dictionary output containing string key:value pairs and preserving newlines
     """
-    mock_run_return = subprocess.CompletedProcess(args="dummy", returncode=0, stdout=stdout)
-    with patch("subprocess.run", return_value=mock_run_return):
-        environment_dictionary = _utilities.return_environment("dummy")
+    expected_kwargs = {
+        "shell": "bash",
+        "redirect": _settings._sh_redirect_string,
+        "string_option": "-c",
+        "separator": "&&",
+        "environment": "env -0",
+        "redirect_dictionary": _settings._redirect_strings,
+        "redirect_fallback": _settings._sh_redirect_string
+    }
+    expected_kwargs.update(kwargs)
+    expected_command = \
+        [expected_kwargs["shell"], expected_kwargs["string_option"],
+         f"{command} {expected_kwargs['redirect']} " \
+         f"{expected_kwargs['separator']} {expected_kwargs['environment']}"]
+
+    mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
+    with patch("subprocess.run", return_value=mock_run_return) as mock_run:
+        environment_dictionary = _utilities.return_environment(command)
     assert environment_dictionary == expected
+    mock_run.assert_called_once_with(
+        expected_command, check=True, capture_output=True
+    )
 
 
 cache_environment = {
