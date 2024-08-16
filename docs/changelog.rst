@@ -19,6 +19,11 @@ Documentation
 - In the mesh convergence tutorial and modsim templates, SCons joins list variables as space separated strings. No need
   to join lists of strings separately from task definition (:issue:`734`, :merge:`907`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Support SCons construction environment recovery for more than just bash. Explicit support for: sh, bash, zsh, csh,
+  tcsh (:issue:`735`, :merge:`908`). By `Kyle Brindley`_.
+
 *******************
 0.10.0 (2024-08-15)
 *******************

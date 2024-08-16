@@ -197,6 +197,18 @@ def shell_redirect(
     redirect_dictionary: dict = _settings._redirect_strings,
     redirect_fallback: str = _settings._sh_redirect_string
 ) -> str:
+    """Return a requested, known, or fallback shell redirection string
+
+    :param shell: the shell to use when executing command by absolute or relative path
+    :param redirect: the shell's STDOUT redirect to avoid command output to terminal polluting the captured environment.
+        If set to None, attempt to match the redirect string against the provided shell dictionary. Fall back to
+        provided fall back.
+    :param redirect_dictionary: A dictionary of shell: redirect string options
+    :param redirect_fallback: The fall back redirect string when none is provided and the shell is not found in the
+        redirect dictionary
+
+    :returns: shell redirection string
+    """
     if redirect is None:
         if shell in redirect_dictionary:
             redirect = redirect_dictionary[shell]
@@ -267,12 +279,18 @@ def cache_environment(
 ) -> dict:
     """Retrieve cached environment dictionary or run a shell command to generate environment dictionary
 
-    If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
-    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
-
     .. warning::
 
-       Currently only supports bash shells
+       Currently assumes a *nix flavored shell: sh, bash, zsh, csh, tcsh. May work with any shell supporting command
+       construction as below, where the redirection command is modified for csh/tcsh but all other shells use sh style
+       redirection.
+
+       .. code-block::
+
+          {shell} -c {command} > /dev/null 2>&1 && env -0
+
+    If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
+    ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
 
     :param command: the shell command to execute
     :param shell: the shell to use when executing command by absolute or relative path

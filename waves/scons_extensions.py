@@ -572,7 +572,13 @@ def shell_environment(
 
     .. warning::
 
-       Currently only supports bash shells
+       Currently assumes a *nix flavored shell: sh, bash, zsh, csh, tcsh. May work with any shell supporting command
+       construction as below, where the redirection command is modified for csh/tcsh but all other shells use sh style
+       redirection.
+
+       .. code-block::
+
+          {shell} -c {command} > /dev/null 2>&1 && env -0
 
     .. code-block::
        :caption: SConstruct
