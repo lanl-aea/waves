@@ -242,8 +242,8 @@ def test_return_environment(command, kwargs, stdout, expected):
     expected_kwargs.update(kwargs)
     expected_command = \
         [expected_kwargs["shell"], expected_kwargs["string_option"],
-         f"{command} {expected_kwargs['redirect']} " \
-         f"{expected_kwargs['separator']} {expected_kwargs['environment']}"]
+         f"\"{command} {expected_kwargs['redirect']} " \
+         f"{expected_kwargs['separator']} {expected_kwargs['environment']}\""]
 
     mock_run_return = subprocess.CompletedProcess(args=command, returncode=0, stdout=stdout)
     with patch("subprocess.run", return_value=mock_run_return) as mock_run:
