@@ -5,6 +5,7 @@ from contextlib import nullcontext as does_not_raise
 
 import pytest
 
+from waves import _settings
 from waves import _utilities
 
 
@@ -159,6 +160,37 @@ def test_tee_subprocess():
     with patch("subprocess.Popen") as mock_popen:
         _utilities.tee_subprocess(['dummy'])
     mock_popen.assert_called_once()
+
+
+shell_redirect = {
+    "default kwargs": (
+        {}, _settings._sh_redirect_string
+    ),
+    "no defaults": (
+        {
+         "redirect_dictionary": {},
+         "redirect_fallback": "different redirect fall back"
+        },
+        "different redirect fall back"
+    ),
+    "default fall back": (
+        {"shell": "unknown shell"}, _settings._sh_redirect_string
+    ),
+    "tcsh": (
+        {"shell": "tcsh"}, _settings._csh_redirect_string
+    ),
+    "requested redirect": (
+        {"redirect": "different redirect"}, "different redirect"
+    ),
+}
+
+
+@pytest.mark.parametrize("kwargs, expected_string",
+                         shell_redirect.values(),
+                         ids=shell_redirect.keys())
+def test_shell_redirect(kwargs, expected_string):
+    redirect = _utilities.shell_redirect(**kwargs)
+    assert redirect == expected_string
 
 
 return_environment = {
