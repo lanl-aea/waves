@@ -222,7 +222,7 @@ def return_environment(
 
     environment = dict()
     for line in variables:
-        if line != "":
+        if line != "" or "=" not in line:
             key, value = line.split("=", 1)
             environment[key] = value
 

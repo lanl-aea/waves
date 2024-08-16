@@ -169,6 +169,10 @@ return_environment = {
     "newlines": (
         "command", {}, b"thing1=a\nnewline\x00thing2=b", {"thing1": "a\nnewline", "thing2": "b"}
     ),
+    "extra leading lines": (
+        "command", {}, b"command output\nwith newlines\nthing1=a\nnewline\x00thing2=b",
+        {"thing1": "a\nnewline", "thing2": "b"}
+    ),
     "tcsh": (
         "command", {"shell": "tcsh"},
         b"thing1=a\x00thing2=b", {"thing1": "a", "thing2": "b"}
