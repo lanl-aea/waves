@@ -338,6 +338,9 @@ shell_environment = {
     "default kwargs": (
         {}, {"thing1": "a"}
     ),
+    "different shell": (
+        {"shell": "different shell"}, {"thing1": "a"}
+    ),
     "no cache": (
         {"cache": None, "overwrite_cache": False}, {"thing1": "a"}
     ),
