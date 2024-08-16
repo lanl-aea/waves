@@ -1,11 +1,9 @@
 import re
 import sys
-import yaml
 import atexit
 import typing
 import pathlib
 import functools
-import subprocess
 
 import SCons.Defaults
 import SCons.Builder
