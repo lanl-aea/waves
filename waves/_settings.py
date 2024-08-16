@@ -6,6 +6,17 @@ _project_root_abspath = pathlib.Path(__file__).parent.resolve()
 _project_name_short = _project_root_abspath.name.upper()
 _project_name = f"{_project_name_short} Analysis for Verified Engineering Simulations"
 
+# Utilities
+_sh_redirect_string = "> /dev/null 2>&1"
+_csh_redirect_string = ">& /dev/null"
+_redirect_strings = {
+    "sh": _sh_redirect_string,
+    "bash": _sh_redirect_string,
+    "zsh": _sh_redirect_string,
+    "csh": _csh_redirect_string,
+    "tcsh": _csh_redirect_string,
+}
+
 # SCons extensions
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
@@ -18,11 +29,23 @@ _sbatch_wrapper_options = "--wait --output=${TARGET.base}.slurm.out ${sbatch_opt
 _sierra_environment_extension = ".env"
 _scons_command = "scons"
 _scons_visualize_arguments = ["-Q", "--tree=status", "-n"]
-_scons_tree_status = {'E': 'exists', 'R': 'exists in repository only', 'b': 'implicit builder', 'B': 'explicit builder',
-                      'S': 'side effect', 'P': 'precious', 'A': 'always build', 'C': 'current', 'N': 'no clean',
-                      'H ': 'no cache'}
+_scons_tree_status = {
+    'E': 'exists',
+    'R': 'exists in repository only',
+    'b': 'implicit builder',
+    'B': 'explicit builder',
+    'S': 'side effect',
+    'P': 'precious',
+    'A': 'always build',
+    'C': 'current',
+    'N': 'no clean',
+    'H ': 'no cache'
+}
 _scons_substfile_suffix = ".in"
 _stdout_extension = ".stdout"
+_cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
+_redirect_action_suffix = "> ${TARGETS[-1].abspath} 2>&1"
+_redirect_environment_suffix = "> ${TARGETS[-2].abspath} 2>&1"
 
 # Parameter generators
 _template_delimiter = "@"
@@ -47,9 +70,6 @@ _allowable_data_type = typing.get_args(_allowable_data_type_typing)
 _samples_data_variable = _allowable_data_type[0]
 _quantiles_data_variable = _allowable_data_type[1]
 _quantiles_attribute_key = "_quantiles"
-_cd_action_prefix = 'cd ${TARGET.dir.abspath} &&'
-_redirect_action_suffix = "> ${TARGETS[-1].abspath} 2>&1"
-_redirect_environment_suffix = "> ${TARGETS[-2].abspath} 2>&1"
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _modsim_template_directory = _project_root_abspath / "modsim_template"
 _tutorials_directory = _project_root_abspath / "tutorials"
