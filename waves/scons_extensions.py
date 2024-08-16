@@ -561,6 +561,7 @@ def add_cubit_python(names: typing.Iterable[str], env) -> str:
 
 def shell_environment(
     command: str,
+    shell: str = "bash",
     cache: typing.Optional[str] = None,
     overwrite_cache: bool = False
 ) -> SCons.Environment.Environment:
@@ -585,9 +586,12 @@ def shell_environment(
     :param overwrite_cache: Ignore previously cached files if they exist.
 
     :returns: SCons shell environment
+
+    :raises subprocess.CalledProcessError: When the shell command returns a non-zero exit status
     """
     shell_environment = _utilities.cache_environment(
         command,
+        shell=shell,
         cache=cache,
         overwrite_cache=overwrite_cache,
         verbose=True
