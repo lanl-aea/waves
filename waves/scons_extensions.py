@@ -579,6 +579,10 @@ def shell_environment(
 
           {shell} -c "{command} && env -0"
 
+       The method may fail if the command produces stdout that does not terminate in a newline. Redirect command output
+       away from stdout if this causes problems, e.g. ``command = 'command > /dev/null && command two > /dev/null'`` in
+       most shells.
+
     .. code-block::
        :caption: SConstruct
 

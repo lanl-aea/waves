@@ -205,6 +205,12 @@ def return_environment(
 
        {shell} {string_option} "{command} {separator} {environment}"
 
+    .. warning::
+
+       The method may fail if the command produces stdout that does not terminate in a newline. Redirect command output
+       away from stdout if this causes problems, e.g. ``command = 'command > /dev/null && command two > /dev/null'`` in
+       most shells.
+
     :param command: the shell command to execute
     :param shell: the shell to use when executing command by absolute or relative path
     :param string_option: the shell's option to execute a string command
@@ -254,6 +260,10 @@ def cache_environment(
        .. code-block::
 
           {shell} -c "{command} && env -0"
+
+       The method may fail if the command produces stdout that does not terminate in a newline. Redirect command output
+       away from stdout if this causes problems, e.g. ``command = 'command > /dev/null && command two > /dev/null'`` in
+       most shells.
 
     If the environment is created successfully and a cache file is requested, the cache file is _always_ written. The
     ``overwrite_cache`` behavior forces the shell ``command`` execution, even when the cache file is present.
