@@ -59,7 +59,7 @@ requirements:
     - networkx
     - numpy
     - pyyaml
-    - salib >=1
+    - salib >=1.5.1
     - scipy >=1.7
     - scons
     - xarray
@@ -71,9 +71,7 @@ test:
     - h5py
     - matplotlib-base
     - meshio
-    # TODO: Remove upper bound when SALib is numpy 2.0 compatible
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/686
-    - numpy <2
+    - numpy
     - pandas
     - pytest
     - pytest-xdist
