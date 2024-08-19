@@ -56,7 +56,7 @@ def check_action_string(nodes, expected_node_count, expected_action_count, expec
         assert str(node.executor.action_list[0]) == expected_string
 
 
-def check_expected_targets(nodes, solver, stem, suffixes):
+def check_abaqus_solver_targets(nodes, solver, stem, suffixes):
     """Verify the expected action string against a builder's target nodes
 
     :param SCons.Node.NodeList nodes: Target node list returned by a builder
@@ -821,7 +821,7 @@ def test_abaqus_solver(builder_kwargs, task_kwargs, node_count, action_count, so
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, node_count, action_count, expected_string)
-    check_expected_targets(nodes, expected_kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
+    check_abaqus_solver_targets(nodes, expected_kwargs["emitter"], pathlib.Path(source_list[0]).stem, suffixes)
     expected_kwargs.pop("emitter")
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
