@@ -834,6 +834,12 @@ def first_target_builder_factory(
 
        ${environment} cd ${TARGET.dir.abspath} && ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
 
+    .. warning::
+
+       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent
+       STDOUT file handling behavior as :meth:`first_target_emitter` or updating the ``action_suffix`` to match their
+       emitter's behavior.
+
     :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
         SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
         using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
@@ -858,9 +864,7 @@ def first_target_builder_factory(
         default, SCons streams all STDOUT and STDERR to the terminal. However, in long or parallel workflows this may
         clutter the terminal and make it difficult to isolate critical debugging information, so it is convenient to
         redirect each program's output to a task specific log file for later inspection and troubleshooting.
-    :param emitter: An SCons emitter function. This is not a keyword argument in the action string. *Users overriding
-        this argument are responsible for providing an emitter with equivalent STDOUT file handling behavior as
-        :meth:`first_target_emitter` or updating the ``action_suffix`` to match their emitter's behavior.*
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
     :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
 
     :returns: SCons template builder
