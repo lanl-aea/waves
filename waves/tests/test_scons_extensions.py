@@ -24,6 +24,7 @@ from waves._settings import _stdout_extension
 from common import platform_check
 
 
+# Test setup and helper functions
 fs = SCons.Node.FS.FS()
 
 testing_windows, root_fs = platform_check()
@@ -33,6 +34,113 @@ def dummy_emitter_for_testing(target, source, env):
     return target, source
 
 
+def check_action_string(nodes, expected_node_count, expected_action_count, expected_string):
+    """Verify the expected action string against a builder's target nodes
+
+    :param SCons.Node.NodeList nodes: Target node list returned by a builder
+    :param int expected_node_count: expected length of ``nodes``
+    :param int expected_action_count: expected length of action list for each node
+    :param str expected_string: the builder's action string.
+
+    .. note::
+
+       The method of interrogating a node's action list results in a newline separated string instead of a list of
+       actions. The ``expected_string`` should contain all elements of the expected action list as a single, newline
+       separated string. The ``action_count`` should be set to ``1`` until this method is updated to search for the
+       finalized action list.
+    """
+    assert len(nodes) == expected_node_count
+    for node in nodes:
+        node.get_executor()
+        assert len(node.executor.action_list) == expected_action_count
+        assert str(node.executor.action_list[0]) == expected_string
+
+
+def check_expected_targets(nodes, solver, stem, suffixes):
+    """Verify the expected action string against a builder's target nodes
+
+    :param SCons.Node.NodeList nodes: Target node list returned by a builder
+    :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck).
+    :param str stem: stem name of file
+    :param list suffixes: list of override suffixes provided to the task
+    """
+    expected_suffixes = [_stdout_extension, _abaqus_environment_extension]
+    if suffixes:
+        expected_suffixes.extend(suffixes)
+    elif solver == 'standard':
+        expected_suffixes.extend(_abaqus_standard_extensions)
+    elif solver == 'explicit':
+        expected_suffixes.extend(_abaqus_explicit_extensions)
+    elif solver == 'datacheck':
+        expected_suffixes.extend(_abaqus_datacheck_extensions)
+    else:
+        expected_suffixes.extend(_abaqus_solver_common_suffixes)
+    suffixes = [str(node).split(stem)[-1] for node in nodes]
+    assert set(expected_suffixes) == set(suffixes)
+
+
+def check_builder_factory(
+    name: str,
+    default_kwargs: dict,
+    builder_kwargs: dict,
+    task_kwargs: dict,
+    target: list,
+    default_emitter=None,
+    emitter=False,
+    expected_node_count: int = 1,
+) -> None:
+    """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`
+
+    :param name: Name of the factory to test
+    :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
+        factory under test.
+    :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
+    :param task_kwargs: Keyword arguments unpacked at the task instantiation
+    :param target: Explicit list of targets provided at the task instantiation
+    :param default_emitter: The emitter to expect when None is provided for ``emitter`` keyword argument.
+    :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``False`` to avoid
+        providing an emitter argument to the builder factory.
+    :param expected_node_count: The expected number of target nodes. Should match the length of the target list unless
+        a non-default emitter is included. Defaults to 1 for ``default_emitter=None``.
+    """
+    # Set default expectations to match default argument values
+    expected_kwargs = default_kwargs
+    # Update expected arguments to match test case
+    expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_action = \
+        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
+            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+
+    # Handle additional builder kwargs without changing default behavior
+    expected_emitter = default_emitter
+    emitter_handling = {}
+    if emitter is not False:
+        expected_emitter = emitter
+        emitter_handling.update({"emitter": emitter})
+
+    # Test builder object attributes
+    factory = getattr(scons_extensions, name)
+    builder = factory(**builder_kwargs, **emitter_handling)
+    assert builder.action.cmd_list == expected_action
+    assert builder.emitter == expected_emitter
+
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={
+        "Builder": builder
+    })
+    nodes = env.Builder(target=target, source=["first_target_builder_factory.in"], **task_kwargs)
+
+    # Test task definition node counts, action(s), and task keyword arguments
+    check_action_string(nodes, expected_node_count, 1, expected_action)
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
+
+
+# Actual tests
 def test_print_failed_nodes_stdout():
     mock_failure_file = unittest.mock.Mock()
     mock_failure_file.node = unittest.mock.Mock()
@@ -235,51 +343,6 @@ def test_ssh_builder_actions(target, builder_kwargs, task_kwargs):
         "rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}"
     ]
     assert ssh_python_builder_action_list == expected
-
-
-def check_action_string(nodes, node_count, action_count, expected_string):
-    """Verify the expected action string against a builder's target nodes
-
-    :param SCons.Node.NodeList nodes: Target node list returned by a builder
-    :param int node_count: expected length of ``nodes``
-    :param int action_count: expected length of action list for each node
-    :param str expected_string: the builder's action string.
-
-    .. note::
-
-       The method of interrogating a node's action list results in a newline separated string instead of a list of
-       actions. The ``expected_string`` should contain all elements of the expected action list as a single, newline
-       separated string. The ``action_count`` should be set to ``1`` until this method is updated to search for the
-       finalized action list.
-    """
-    assert len(nodes) == node_count
-    for node in nodes:
-        node.get_executor()
-        assert len(node.executor.action_list) == action_count
-        assert str(node.executor.action_list[0]) == expected_string
-
-
-def check_expected_targets(nodes, solver, stem, suffixes):
-    """Verify the expected action string against a builder's target nodes
-
-    :param SCons.Node.NodeList nodes: Target node list returned by a builder
-    :param str solver: emit file extensions based on the value of this variable (standard/explicit/datacheck).
-    :param str stem: stem name of file
-    :param list suffixes: list of override suffixes provided to the task
-    """
-    expected_suffixes = [_stdout_extension, _abaqus_environment_extension]
-    if suffixes:
-        expected_suffixes.extend(suffixes)
-    elif solver == 'standard':
-        expected_suffixes.extend(_abaqus_standard_extensions)
-    elif solver == 'explicit':
-        expected_suffixes.extend(_abaqus_explicit_extensions)
-    elif solver == 'datacheck':
-        expected_suffixes.extend(_abaqus_datacheck_extensions)
-    else:
-        expected_suffixes.extend(_abaqus_solver_common_suffixes)
-    suffixes = [str(node).split(stem)[-1] for node in nodes]
-    assert set(expected_suffixes) == set(suffixes)
 
 
 prepend_env_input = {
@@ -890,7 +953,7 @@ def test_first_target_emitter(target, source, expected):
 
 
 builder_factory = {
-    "default behavior": ({}, {}, ["builder_factory.out1"], None),
+    "default behavior": ({}, {}, ["builder_factory.out1"], False),
     "different emitter": ({}, {}, ["builder_factory.out1"], dummy_emitter_for_testing),
     "builder kwargs overrides": (
         {
@@ -904,7 +967,7 @@ builder_factory = {
          "subcommand_options": "different subcommand options",
          "action_suffix": "different action suffix"
         },
-        {}, ["builder_factory.out2"], None
+        {}, ["builder_factory.out2"], False
     ),
     "task kwargs overrides": (
         {},
@@ -919,7 +982,7 @@ builder_factory = {
          "subcommand_options": "different subcommand options",
          "action_suffix": "different action suffix"
         },
-        ["builder_factory.out3"], None
+        ["builder_factory.out3"], False
     ),
 }
 
@@ -928,8 +991,7 @@ builder_factory = {
                          builder_factory.values(),
                          ids=builder_factory.keys())
 def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
-    # Set default expectations to match default argument values
-    expected_kwargs = {
+    default_kwargs = {
         "environment": "",
         "action_prefix": "",
         "program": "",
@@ -940,40 +1002,20 @@ def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
         "subcommand_options": "",
         "action_suffix": ""
     }
-    # Update expected arguments to match test case
-    expected_kwargs.update(builder_kwargs)
-    expected_kwargs.update(task_kwargs)
-    # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_action = \
-        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
-            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
-
-    # Handle additional builder kwargs without changing default behavior
-    emitter_handling = {}
-    if emitter is not None:
-        emitter_handling.update({"emitter": emitter})
-
-    # Test builder object attributes
-    builder = scons_extensions.builder_factory(**builder_kwargs, **emitter_handling)
-    assert builder.action.cmd_list == expected_action
-    assert builder.emitter == emitter
-
-    # Assemble the builder and a task to interrogate
-    env = SCons.Environment.Environment()
-    env.Append(BUILDERS={
-        "BuilderFactory": builder
-    })
-    nodes = env.BuilderFactory(target=target, source=["builder_factory.in"], **task_kwargs)
-
-    # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, 1, 1, expected_action)
-    for node in nodes:
-        for key, expected_value in expected_kwargs.items():
-            assert node.env[key] == expected_value
+    check_builder_factory(
+        "builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=None,
+        emitter=emitter,
+        expected_node_count=1
+    )
 
 
 first_target_builder_factory = {
-    "default behavior": ({}, {}, ["first_target_builder_factory.out1"], None, 2),
+    "default behavior": ({}, {}, ["first_target_builder_factory.out1"], False, 2),
     "different emitter": ({}, {}, ["first_target_builder_factory.out1"], dummy_emitter_for_testing, 1),
     "builder kwargs overrides": (
         {
@@ -987,7 +1029,7 @@ first_target_builder_factory = {
          "subcommand_options": "different subcommand options",
          "action_suffix": "different action suffix"
         },
-        {}, ["first_target_builder_factory.out2"], None, 2
+        {}, ["first_target_builder_factory.out2"], False, 2
     ),
     "task kwargs overrides": (
         {},
@@ -1002,7 +1044,7 @@ first_target_builder_factory = {
          "subcommand_options": "different subcommand options",
          "action_suffix": "different action suffix"
         },
-        ["first_target_builder_factory.out3"], None, 2
+        ["first_target_builder_factory.out3"], False, 2
     ),
 }
 
@@ -1012,7 +1054,7 @@ first_target_builder_factory = {
                          ids=first_target_builder_factory.keys())
 def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
     # Set default expectations to match default argument values
-    expected_kwargs = {
+    default_kwargs = {
         "environment": "",
         "action_prefix": _cd_action_prefix,
         "program": "",
@@ -1023,37 +1065,16 @@ def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitt
         "subcommand_options": "",
         "action_suffix": _redirect_action_suffix
     }
-    # Update expected arguments to match test case
-    expected_kwargs.update(builder_kwargs)
-    expected_kwargs.update(task_kwargs)
-    # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_action = \
-        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
-            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
-
-    # Handle additional builder kwargs without changing default behavior
-    emitter_handling = {}
-    if emitter is None:
-        emitter = scons_extensions.first_target_emitter
-    emitter_handling.update({"emitter": emitter})
-
-    # Test builder object attributes
-    builder = scons_extensions.first_target_builder_factory(**builder_kwargs, **emitter_handling)
-    assert builder.action.cmd_list == expected_action
-    assert builder.emitter == emitter
-
-    # Assemble the builder and a task to interrogate
-    env = SCons.Environment.Environment()
-    env.Append(BUILDERS={
-        "FirstTargetFactory": builder
-    })
-    nodes = env.FirstTargetFactory(target=target, source=["first_target_builder_factory.in"], **task_kwargs)
-
-    # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, expected_node_count, 1, expected_action)
-    for node in nodes:
-        for key, expected_value in expected_kwargs.items():
-            assert node.env[key] == expected_value
+    check_builder_factory(
+        "first_target_builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=scons_extensions.first_target_emitter,
+        emitter=emitter,
+        expected_node_count=expected_node_count
+    )
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
