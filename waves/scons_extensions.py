@@ -815,8 +815,7 @@ def first_target_builder_factory(
     emitter=first_target_emitter,
     **kwargs
 ) -> SCons.Builder.Builder:
-    """Template builder factory with WAVES default action behaviors and emitter built on
-    :meth:`waves.scons_extensions.builder_factory`.
+    """Template builder factory with WAVES default action behaviors and a task STDOUT file emitter
 
     This builder factory provides a template action string with placeholder keyword arguments and WAVES builder default
     behavior. The default behavior will not do anything unless the ``program`` or ``subcommand`` argument is updated to
