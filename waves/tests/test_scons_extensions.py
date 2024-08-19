@@ -79,7 +79,49 @@ def check_expected_targets(nodes, solver, stem, suffixes):
     assert set(expected_suffixes) == set(suffixes)
 
 
-def first_target_builder_factory_test_cases(name: str):
+def first_target_builder_factory_test_cases(name: str) -> dict:
+    """Returns template test cases for builder factories based on
+    :meth:`waves.scons_extensions.first_target_builder_factory`
+
+    Intended to work in conjunction with :meth:`check_builder_factory` template test function.
+
+    Required because tests involving real SCons tasks require unique target files, one per test. The returned dictionary
+    constructs the target files names from ``{name}.out{number}``. Use as
+
+    .. code-block::
+
+        test_name = "new_builder_factory"
+        @pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                                 first_target_builder_factory_test_cases(test_name).values(),
+                                 ids=first_target_builder_factory_test_cases(test_name).keys())
+        def test_new_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+            # Set default expectations to match default argument values
+            default_kwargs = {
+                "environment": "",
+                "action_prefix": _cd_action_prefix,
+                "program": "",
+                "program_required": "",
+                "program_options": "",
+                "subcommand": "",
+                "subcommand_required": "",
+                "subcommand_options": "",
+                "action_suffix": _redirect_action_suffix
+            }
+            check_builder_factory(
+                "new_builder_factory",
+                default_kwargs=default_kwargs,
+                builder_kwargs=builder_kwargs,
+                task_kwargs=task_kwargs,
+                target=target,
+                default_emitter=scons_extensions.first_target_emitter,
+                emitter=emitter,
+                expected_node_count=expected_node_count
+            )
+
+    :param name: target file name prefix
+
+    :returns: test cases for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`
+    """
     target_file_names = [
         f"{name}.out{number}" for number in range(4)
     ]
