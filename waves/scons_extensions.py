@@ -705,7 +705,7 @@ def builder_factory(
         default, SCons performs actions in the parent directory of the SConstruct file. However, many computational
         science and engineering programs leave output files in the current working directory, so it is convenient and
         sometimes necessary to change to the target's parent directory prior to execution.
-    :param program: This variable is intended to containg the primary command line executable absolute or relative path
+    :param program: This variable is intended to contain the primary command line executable absolute or relative path
     :param program_required: This variable is intended to contain a space delimited string of required program options
         and arguments that are crucial to builder behavior and should not be modified except by advanced users.
     :param program_options: This variable is intended to contain a space delimited string of optional program options
@@ -713,10 +713,10 @@ def builder_factory(
     :param subcommand: This variable is intended to contain the program's subcommand. If the program variable is set to
         a launch controlling program, e.g. ``mpirun`` or ``charmrun``, then the subcommand may need to contain the full
         target executable program and any subcommands.
-    :param subcommand_required: This variable is intended to contain a space delimited string of subcommand required
+    :param subcommand_required: This variable is intended to contain a space delimited string of required subcommand
         options and arguments that are crucial to builder behavior and should not be modified except by advanced users.
-    :param subcommand_options: This variable is intended to contain a space delimited string of optional subcommand options
-        and arguments that can be freely modified by the user.
+    :param subcommand_options: This variable is intended to contain a space delimited string of optional subcommand
+        options and arguments that can be freely modified by the user.
     :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations. By
         default, SCons streams all STDOUT and STDERR to the terminal. However, in long or parallel workflows this may
         clutter the terminal and make it difficult to isolate critical debugging information, so it is convenient to
