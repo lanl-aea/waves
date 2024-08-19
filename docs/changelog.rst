@@ -16,6 +16,8 @@ New Features
 - Rename the first target builder (factory) to clarify that this function returns a builder. Clarify that the first
   target emitter is not a factory and that the keyword arguments can not be used directly in a builder definition
   (:issue:`738`, :merge:`910`). By `Kyle Brindley`_.
+- Add a Quinoa builder factory on the first target builder factory template (:issue:`739`, :merge:`911`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============
