@@ -817,11 +817,18 @@ def first_target_builder_factory(
 ) -> SCons.Builder.Builder:
     """Template builder factory with WAVES default action behaviors and a task STDOUT file emitter
 
-    This builder factory provides a template action string with placeholder keyword arguments and WAVES builder default
-    behavior. The default behavior will not do anything unless the ``program`` or ``subcommand`` argument is updated to
-    include an executable program. This builder factory uses the :meth:`waves.scons_extensions.first_target_emitter`. At
-    least one task target must be specified in the task definition and the last target will always be the expected
-    STDOUT and STDERR redirection output file, ``TARGETS[-1]`` ending in ``*.stdout``.
+    This builder factory extends :meth:`waves.scons_extensions.builder_factory` to provide a template action string with
+    placeholder keyword arguments and WAVES builder default behavior. The default behavior will not do anything unless
+    the ``program`` or ``subcommand`` argument is updated to include an executable program. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
+
+    .. warning::
+
+       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
+       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
+       to match their emitter's behavior.
 
     .. code-block::
        :caption: action string construction
@@ -832,12 +839,6 @@ def first_target_builder_factory(
        :caption: action string default expansion
 
        ${environment} cd ${TARGET.dir.abspath} && ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
-
-    .. warning::
-
-       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent
-       STDOUT file handling behavior as :meth:`first_target_emitter` or updating the ``action_suffix`` to match their
-       emitter's behavior.
 
     :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
         SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
