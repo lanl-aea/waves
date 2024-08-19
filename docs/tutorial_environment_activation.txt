@@ -5,14 +5,17 @@
 `SCons`_ and `WAVES`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the `Conda
 installation`_ and `Conda environment management`_ documentation for more details about using `Conda`_.
 
-.. TODO: Remove upper bound when SALib is numpy 2.0 compatible
-.. https://re-git.lanl.gov/aea/python-projects/waves/-/issues/686
+.. note::
+
+   The SALib and numpy versions may not need to be this strict for most tutorials. However,
+   :ref:`tutorial_sensitivity_study` uncovered some undocumented SALib version sensitivity to numpy surrounding the
+   numpy v2 rollout.
 
 1. Create the tutorials environment if it doesn't exist
 
    .. code-block::
 
-      $ conda create --name waves-tutorial-env --channel conda-forge waves 'scons>=4.6' matplotlib pandas pyyaml xarray seaborn 'numpy<2' salib
+      $ conda create --name waves-tutorial-env --channel conda-forge waves 'scons>=4.6' matplotlib pandas pyyaml xarray seaborn 'numpy>=2' 'salib>=1.5.1'
 
 2. Activate the environment
 
