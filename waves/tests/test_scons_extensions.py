@@ -79,6 +79,46 @@ def check_expected_targets(nodes, solver, stem, suffixes):
     assert set(expected_suffixes) == set(suffixes)
 
 
+def first_target_builder_factory_test_cases(name: str):
+    target_file_names = [
+        f"{name}.out{number}" for number in range(4)
+    ]
+    test_cases = {
+        "default behavior": ({}, {}, [target_file_names[0]], False, 2),
+        "different emitter": ({}, {}, [target_file_names[1]], dummy_emitter_for_testing, 1),
+        "builder kwargs overrides": (
+            {
+             "environment": "different environment",
+             "action_prefix": "different action prefix",
+             "program": "different program",
+             "program_required": "different program required",
+             "program_options": "different program options",
+             "subcommand": "different subcommand",
+             "subcommand_required": "different subcommand required",
+             "subcommand_options": "different subcommand options",
+             "action_suffix": "different action suffix"
+            },
+            {}, [target_file_names[2]], False, 2
+        ),
+        "task kwargs overrides": (
+            {},
+            {
+             "environment": "different environment",
+             "action_prefix": "different action prefix",
+             "program": "different program",
+             "program_required": "different program required",
+             "program_options": "different program options",
+             "subcommand": "different subcommand",
+             "subcommand_required": "different subcommand required",
+             "subcommand_options": "different subcommand options",
+             "action_suffix": "different action suffix"
+            },
+            [target_file_names[3]], False, 2
+        ),
+    }
+    return test_cases
+
+
 def check_builder_factory(
     name: str,
     default_kwargs: dict,
@@ -131,7 +171,7 @@ def check_builder_factory(
     env.Append(BUILDERS={
         "Builder": builder
     })
-    nodes = env.Builder(target=target, source=["first_target_builder_factory.in"], **task_kwargs)
+    nodes = env.Builder(target=target, source=["check_builder_factory.in"], **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, expected_node_count, 1, expected_action)
@@ -1014,44 +1054,10 @@ def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
     )
 
 
-first_target_builder_factory = {
-    "default behavior": ({}, {}, ["first_target_builder_factory.out1"], False, 2),
-    "different emitter": ({}, {}, ["first_target_builder_factory.out1"], dummy_emitter_for_testing, 1),
-    "builder kwargs overrides": (
-        {
-         "environment": "different environment",
-         "action_prefix": "different action prefix",
-         "program": "different program",
-         "program_required": "different program required",
-         "program_options": "different program options",
-         "subcommand": "different subcommand",
-         "subcommand_required": "different subcommand required",
-         "subcommand_options": "different subcommand options",
-         "action_suffix": "different action suffix"
-        },
-        {}, ["first_target_builder_factory.out2"], False, 2
-    ),
-    "task kwargs overrides": (
-        {},
-        {
-         "environment": "different environment",
-         "action_prefix": "different action prefix",
-         "program": "different program",
-         "program_required": "different program required",
-         "program_options": "different program options",
-         "subcommand": "different subcommand",
-         "subcommand_required": "different subcommand required",
-         "subcommand_options": "different subcommand options",
-         "action_suffix": "different action suffix"
-        },
-        ["first_target_builder_factory.out3"], False, 2
-    ),
-}
-
-
+test_name = "first_target_builder_factory"
 @pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         first_target_builder_factory.values(),
-                         ids=first_target_builder_factory.keys())
+                         first_target_builder_factory_test_cases(test_name).values(),
+                         ids=first_target_builder_factory_test_cases(test_name).keys())
 def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
     # Set default expectations to match default argument values
     default_kwargs = {
