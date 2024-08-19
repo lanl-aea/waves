@@ -685,7 +685,7 @@ def builder_factory(
     This builder provides a template action string with placeholder keyword arguments in the action string. The
     default behavior will not do anything unless the ``program`` or ``subcommand`` argument is updated to include an
     executable program. Because this builder has no emitter, all task targets must be fully specified in the task
-    definition. See :meth:`first_target_factory` for an example of the default options used by most WAVES builders.
+    definition. See :meth:`first_target_builder_factory` for an example of the default options used by most WAVES builders.
 
     .. code-block::
        :caption: action string construction
@@ -802,7 +802,7 @@ def first_target_emitter(
     return string_targets, source
 
 
-def first_target_factory(
+def first_target_builder_factory(
     environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
     program: str = "",
