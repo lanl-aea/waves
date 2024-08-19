@@ -90,10 +90,10 @@ def first_target_builder_factory_test_cases(name: str) -> dict:
 
     .. code-block::
 
-        test_name = "new_builder_factory"
+        new_builder_factory_tests = first_target_builder_factory_test_cases("new_builder_factory")
         @pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                                 first_target_builder_factory_test_cases(test_name).values(),
-                                 ids=first_target_builder_factory_test_cases(test_name).keys())
+                                 new_builder_factory_tests.values(),
+                                 ids=new_builder_factory_tests.keys())
         def test_new_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
             # Set default expectations to match default argument values
             default_kwargs = {
@@ -1096,10 +1096,10 @@ def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
     )
 
 
-test_name = "first_target_builder_factory"
+first_target_builder_factory_tests = first_target_builder_factory_test_cases("first_target_builder_factory")
 @pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         first_target_builder_factory_test_cases(test_name).values(),
-                         ids=first_target_builder_factory_test_cases(test_name).keys())
+                         first_target_builder_factory_tests.values(),
+                         ids=first_target_builder_factory_tests.keys())
 def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
     # Set default expectations to match default argument values
     default_kwargs = {
@@ -1115,6 +1115,35 @@ def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitt
     }
     check_builder_factory(
         "first_target_builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=scons_extensions.first_target_emitter,
+        emitter=emitter,
+        expected_node_count=expected_node_count
+    )
+
+
+quinoa_builder_factory_tests = first_target_builder_factory_test_cases("quinoa_builder_factory")
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         quinoa_builder_factory_tests.values(),
+                         ids=quinoa_builder_factory_tests.keys())
+def test_quinoa_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+    # Set default expectations to match default argument values
+    default_kwargs = {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "charmrun",
+        "program_required": "",
+        "program_options": "+p1",
+        "subcommand": "inciter",
+        "subcommand_required": "--control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath}",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+    check_builder_factory(
+        "quinoa_builder_factory",
         default_kwargs=default_kwargs,
         builder_kwargs=builder_kwargs,
         task_kwargs=task_kwargs,
