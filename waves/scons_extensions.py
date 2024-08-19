@@ -667,60 +667,6 @@ def _build_subdirectory(target: list) -> pathlib.Path:
     return build_subdirectory
 
 
-def first_target_emitter(
-    target: list,
-    source: list,
-    env,
-    suffixes: typing.Iterable[str] = [],
-    appending_suffixes: typing.Iterable[str] = [],
-    stdout_extension: str = _settings._stdout_extension
-) -> typing.Tuple[list, list]:
-    """SCons emitter function that emits new targets based on the first target
-
-    Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
-    extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
-    reason. The stdout file is always placed at the end of the returned target list.
-
-    This is an SCons emitter function and not an emitter factory. The suffix arguments: ``suffixes`` and
-    ``appending_suffixes`` are only relevant for developers writing new emitters which call this function as a base. The
-    suffixes list emits targets where the suffix replaces the first target's suffix, e.g. for ``target.ext`` emit a new
-    target ``target.suffix``. The appending suffixes list emits targets where the suffix appends the first target's
-    suffix, e.g.  for ``target.ext`` emit a new target ``target.ext.appending_suffix``.
-
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
-    extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
-
-    :param target: The target file list of strings
-    :param source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-    :param suffixes: Suffixes which should replace the first target's extension
-    :param appending_suffixes: Suffixes which should append the first target's extension
-
-    :return: target, source
-    """
-    string_targets = [str(target_file) for target_file in target]
-    first_target = pathlib.Path(string_targets[0])
-
-    # Search for a user specified stdout file. Fall back to first target with appended stdout extension
-    stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
-                         f"{first_target}{stdout_extension}")
-
-    replacing_targets = [str(first_target.with_suffix(suffix)) for suffix in suffixes]
-    appending_targets = [f"{first_target}{suffix}" for suffix in appending_suffixes]
-    string_targets = string_targets + replacing_targets + appending_targets
-
-    # Get a list of unique targets, less the stdout target. Preserve the target list order.
-    string_targets = [target_file for target_file in string_targets if target_file != stdout_target]
-    string_targets = list(dict.fromkeys(string_targets))
-
-    # Always append the stdout target for easier use in the action string
-    string_targets.append(stdout_target)
-
-    return string_targets, source
-
-
 def builder_factory(
     environment: str = "",
     action_prefix: str = "",
@@ -739,7 +685,7 @@ def builder_factory(
     This builder provides a template action string with placeholder keyword arguments in the action string. The
     default behavior will not do anything unless the ``program`` or ``subcommand`` argument is updated to include an
     executable program. Because this builder has no emitter, all task targets must be fully specified in the task
-    definition. See :meth:`first_target_builder` for an example of the default options used by most WAVES builders.
+    definition. See :meth:`first_target_factory` for an example of the default options used by most WAVES builders.
 
     .. code-block::
        :caption: action string construction
@@ -802,7 +748,61 @@ def builder_factory(
     return builder
 
 
-def first_target_builder(
+def first_target_emitter(
+    target: list,
+    source: list,
+    env,
+    suffixes: typing.Iterable[str] = [],
+    appending_suffixes: typing.Iterable[str] = [],
+    stdout_extension: str = _settings._stdout_extension
+) -> typing.Tuple[list, list]:
+    """SCons emitter function that emits new targets based on the first target
+
+    Searches for a file ending in the stdout extension. If none is found, creates a target by appending the stdout
+    extension to the first target in the ``target`` list. The associated Builder requires at least one target for this
+    reason. The stdout file is always placed at the end of the returned target list.
+
+    This is an SCons emitter function and not an emitter factory. The suffix arguments: ``suffixes`` and
+    ``appending_suffixes`` are only relevant for developers writing new emitters which call this function as a base. The
+    suffixes list emits targets where the suffix replaces the first target's suffix, e.g. for ``target.ext`` emit a new
+    target ``target.suffix``. The appending suffixes list emits targets where the suffix appends the first target's
+    suffix, e.g.  for ``target.ext`` emit a new target ``target.ext.appending_suffix``.
+
+    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
+    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
+    subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt, provide a STDOUT redirect file with the ``.stdout``
+    extension as a target, e.g. ``target.stdout`` or ``parameter_set1/target.stdout``.
+
+    :param target: The target file list of strings
+    :param source: The source file list of SCons.Node.FS.File objects
+    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param suffixes: Suffixes which should replace the first target's extension
+    :param appending_suffixes: Suffixes which should append the first target's extension
+
+    :return: target, source
+    """
+    string_targets = [str(target_file) for target_file in target]
+    first_target = pathlib.Path(string_targets[0])
+
+    # Search for a user specified stdout file. Fall back to first target with appended stdout extension
+    stdout_target = next((target_file for target_file in string_targets if target_file.endswith(stdout_extension)),
+                         f"{first_target}{stdout_extension}")
+
+    replacing_targets = [str(first_target.with_suffix(suffix)) for suffix in suffixes]
+    appending_targets = [f"{first_target}{suffix}" for suffix in appending_suffixes]
+    string_targets = string_targets + replacing_targets + appending_targets
+
+    # Get a list of unique targets, less the stdout target. Preserve the target list order.
+    string_targets = [target_file for target_file in string_targets if target_file != stdout_target]
+    string_targets = list(dict.fromkeys(string_targets))
+
+    # Always append the stdout target for easier use in the action string
+    string_targets.append(stdout_target)
+
+    return string_targets, source
+
+
+def first_target_factory(
     environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
     program: str = "",
@@ -818,10 +818,10 @@ def first_target_builder(
     """Template builder factory with WAVES default action behaviors and emitter built on
     :meth:`waves.scons_extensions.builder_factory`.
 
-    This builder provides a template action string with placeholder keyword arguments and WAVES builder default
+    This builder factory provides a template action string with placeholder keyword arguments and WAVES builder default
     behavior. The default behavior will not do anything unless the ``program`` or ``subcommand`` argument is updated to
-    include an executable program. This builder uses the :meth:`waves.scons_extensions.first_target_emitter`. At least
-    one task target must be specified in the task definition and the last target will always be the expected
+    include an executable program. This builder factory uses the :meth:`waves.scons_extensions.first_target_emitter`. At
+    least one task target must be specified in the task definition and the last target will always be the expected
     STDOUT and STDERR redirection output file, ``TARGETS[-1]`` ending in ``*.stdout``.
 
     .. code-block::
@@ -858,7 +858,9 @@ def first_target_builder(
         default, SCons streams all STDOUT and STDERR to the terminal. However, in long or parallel workflows this may
         clutter the terminal and make it difficult to isolate critical debugging information, so it is convenient to
         redirect each program's output to a task specific log file for later inspection and troubleshooting.
-    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string. *Users overriding
+        this argument are responsible for providing an emitter with equivalent STDOUT file handling behavior as
+        :meth:`first_target_emitter` or updating the ``action_suffix`` to match their emitter's behavior.*
     :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
 
     :returns: SCons template builder
