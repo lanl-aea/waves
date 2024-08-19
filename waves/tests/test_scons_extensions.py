@@ -972,9 +972,9 @@ def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
             assert node.env[key] == expected_value
 
 
-first_target_builder = {
-    "default behavior": ({}, {}, ["first_target_builder.out1"], None, 2),
-    "different emitter": ({}, {}, ["first_target_builder.out1"], dummy_emitter_for_testing, 1),
+first_target_factory = {
+    "default behavior": ({}, {}, ["first_target_factory.out1"], None, 2),
+    "different emitter": ({}, {}, ["first_target_factory.out1"], dummy_emitter_for_testing, 1),
     "builder kwargs overrides": (
         {
          "environment": "different environment",
@@ -987,7 +987,7 @@ first_target_builder = {
          "subcommand_options": "different subcommand options",
          "action_suffix": "different action suffix"
         },
-        {}, ["first_target_builder.out2"], None, 2
+        {}, ["first_target_factory.out2"], None, 2
     ),
     "task kwargs overrides": (
         {},
@@ -1002,15 +1002,15 @@ first_target_builder = {
          "subcommand_options": "different subcommand options",
          "action_suffix": "different action suffix"
         },
-        ["first_target_builder.out3"], None, 2
+        ["first_target_factory.out3"], None, 2
     ),
 }
 
 
 @pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         first_target_builder.values(),
-                         ids=first_target_builder.keys())
-def test_first_target_builder(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+                         first_target_factory.values(),
+                         ids=first_target_factory.keys())
+def test_first_target_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
     # Set default expectations to match default argument values
     expected_kwargs = {
         "environment": "",
@@ -1038,7 +1038,7 @@ def test_first_target_builder(builder_kwargs, task_kwargs, target, emitter, expe
     emitter_handling.update({"emitter": emitter})
 
     # Test builder object attributes
-    builder = scons_extensions.first_target_builder(**builder_kwargs, **emitter_handling)
+    builder = scons_extensions.first_target_factory(**builder_kwargs, **emitter_handling)
     assert builder.action.cmd_list == expected_action
     assert builder.emitter == emitter
 
