@@ -2227,7 +2227,7 @@ def sbatch_quinoa_solver(*args, **kwargs):
     return quinoa_solver(*args, **kwargs)
 
 
-def quinoa_factory(
+def quinoa_builder_factory(
     environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
     program: str = "charmrun",
@@ -2236,7 +2236,7 @@ def quinoa_factory(
     subcommand: str = "inciter",
     subcommand_required: str = "--control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath}",
     subcommand_options: str = "",
-    action_suffix: str = _settings._redirect_action_suffix
+    action_suffix: str = _settings._redirect_action_suffix,
     emitter=first_target_emitter,
     **kwargs
 ) -> SCons.Builder.Builder:
