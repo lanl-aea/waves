@@ -13,6 +13,9 @@ New Features
 - Expose the most common "first target emitter" to the public API (:issue:`718`, :merge:`906`). By `Kyle Brindley`_.
 - Add template builder factories with |PROJECT| style action string construction and common emitter behavior
   (:issue:`718`, :merge:`906`). By `Kyle Brindley`_.
+- Rename the first target builder (factory) to clarify that this function returns a builder. Clarify that the first
+  target emitter is not a factory and that the keyword arguments can not be used directly in a builder definition
+  (:issue:`738`, :merge:`910`). By `Kyle Brindley`_.
 
 Documentation
 =============
