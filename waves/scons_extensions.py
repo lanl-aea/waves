@@ -2493,10 +2493,6 @@ def sierra_builder_factory(
 ) -> SCons.Builder.Builder:
     """Sierra builder factory
 
-    .. warning::
-
-       This is an experimental builder. It is subject to change without warning.
-
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
     definition and the last target will always be the expected STDOUT and STDERR redirection output file,
