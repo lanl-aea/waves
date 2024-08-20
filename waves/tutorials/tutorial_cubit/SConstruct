@@ -101,7 +101,7 @@ env.Append(BUILDERS={
 env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 
 envSierra.Append(BUILDERS={
-    'Sierra': waves.scons_extensions.sierra(program=envSierra['sierra'])
+    'Sierra': waves.scons_extensions.sierra_builder_factory(program=envSierra['sierra'])
 })
 
 # Comments used in tutorial code snippets: marker-6
