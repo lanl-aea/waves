@@ -2347,6 +2347,12 @@ def fierro_explicit_builder_factory(
     definition and the last target will always be the expected STDOUT and STDERR redirection output file,
     ``TARGETS[-1]`` ending in ``*.stdout``.
 
+    .. warning::
+
+       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
+       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
+       to match their emitter's behavior.
+
     With the default ``subcommand_required`` options this builder requires at least one source file provided in
     the order:
 
