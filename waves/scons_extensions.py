@@ -2506,7 +2506,7 @@ def sierra_builder_factory(
 
     With the default options this builder requires the following sources file provided in the order:
 
-    1. Sierra input file: ``*.g``
+    1. Sierra input file: ``*.i``
 
     .. code-block::
        :caption: action string construction
