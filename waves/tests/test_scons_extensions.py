@@ -1209,6 +1209,34 @@ def test_fierro_implicit_builder_factory(builder_kwargs, task_kwargs, target, em
     )
 
 
+ansys_apdl_builder_factory_tests = first_target_builder_factory_test_cases("ansys_apdl_builder_factory")
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         ansys_apdl_builder_factory_tests.values(),
+                         ids=ansys_apdl_builder_factory_tests.keys())
+def test_ansys_apdl_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+    default_kwargs = {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "ansys",
+        "program_required": "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
+        "program_options": "",
+        "subcommand": "",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": ""
+    }
+    check_builder_factory(
+        "ansys_apdl_builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=scons_extensions.first_target_emitter,
+        emitter=emitter,
+        expected_node_count=expected_node_count
+    )
+
+
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
 # target per set.
 python_script_input = {
@@ -1713,66 +1741,6 @@ def test_quinoa_solver(builder_kwargs, task_kwargs, node_count, action_count, so
         "QuinoaSolver": scons_extensions.quinoa_solver(**builder_kwargs)
     })
     nodes = env.QuinoaSolver(target=target_list, source=source_list, **task_kwargs)
-
-    # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, node_count, action_count, expected_string)
-    for node in nodes:
-        for key, expected_value in expected_kwargs.items():
-            assert node.env[key] == expected_value
-
-
-# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
-# target per set.
-ansys_apdl_input = {
-    "default behavior": (
-        {}, {}, 2, 1, ["input1.dat"], ['input1.ansys']
-    ),
-    "different command": (
-        {"program": "dummy"}, {}, 2, 1, ["input2.dat"], ['input2.ansys']
-    ),
-    "no defaults": (
-        {
-         "program": "different program",
-         "required": "different required",
-         "options": "different options",
-         "action_prefix": "different action prefix",
-        },
-        {}, 2, 1, ["input4.dat"], ['input4.ansys']
-    ),
-    "task kwargs overrides": (
-        {},
-        {
-         "program": "different program",
-         "required": "different required",
-         "options": "different options",
-         "action_prefix": "different action prefix",
-        },
-        2, 1, ["input4.dat"], ['input5.ansys']
-    )
-}
-
-
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
-                         ansys_apdl_input.values(),
-                         ids=ansys_apdl_input.keys())
-def test_ansys_apdl(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
-    # Set default expectations to match default argument values
-    expected_kwargs = {
-        "program": "ansys",
-        "required": "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
-        "options": "",
-        "action_prefix": _cd_action_prefix
-    }
-    # Update expected arguments to match test case
-    expected_kwargs.update(builder_kwargs)
-    expected_kwargs.update(task_kwargs)
-    # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_string = '${action_prefix} ${program} ${required} ${options}'
-
-    # Assemble the builder and a task to interrogate
-    env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"AnsysAPDL": scons_extensions.ansys_apdl(**builder_kwargs)})
-    nodes = env.AnsysAPDL(target=target_list, source=source_list, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, node_count, action_count, expected_string)

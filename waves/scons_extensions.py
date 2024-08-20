@@ -2588,17 +2588,19 @@ def ansys_apdl_builder_factory(
     :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
 
     :returns: Ansys builder
-    """
-    action = [
-        "${action_prefix} ${program} ${required} ${options}"
-    ]
-    builder = SCons.Builder.Builder(
-        action=action,
-        emitter=first_target_emitter,
+    """  # noqa: E501
+    builder = first_target_builder_factory(
+        environment=environment,
         action_prefix=action_prefix,
         program=program,
-        required=required,
-        options=options
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs
     )
     return builder
 
