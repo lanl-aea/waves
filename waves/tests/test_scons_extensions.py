@@ -1125,6 +1125,34 @@ def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitt
     )
 
 
+python_builder_factory_tests = first_target_builder_factory_test_cases("python_builder_factory")
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         python_builder_factory_tests.values(),
+                         ids=python_builder_factory_tests.keys())
+def test_python_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+    default_kwargs = {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "python",
+        "program_required": "",
+        "program_options": "",
+        "subcommand": "${SOURCE.abspath}",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+    check_builder_factory(
+        "python_builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=scons_extensions.first_target_emitter,
+        emitter=emitter,
+        expected_node_count=expected_node_count
+    )
+
+
 quinoa_builder_factory_tests = first_target_builder_factory_test_cases("quinoa_builder_factory")
 @pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
                          quinoa_builder_factory_tests.values(),
