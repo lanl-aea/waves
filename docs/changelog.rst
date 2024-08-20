@@ -27,6 +27,8 @@ New Features
   (:issue:`738`, :merge:`910`). By `Kyle Brindley`_.
 - Add a Quinoa builder factory on the first target builder factory template (:issue:`739`, :merge:`911`). By `Kyle
   Brindley`_.
+- Add a Python builder factory on the first target builder factory template (:issue:`741`, :merge:`915`). By `Kyle
+  Brindley`_.
 
 Documentation
 =============
