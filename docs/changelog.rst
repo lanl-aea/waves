@@ -34,6 +34,7 @@ Documentation
 =============
 - In the mesh convergence tutorial and modsim templates, SCons joins list variables as space separated strings. No need
   to join lists of strings separately from task definition (:issue:`734`, :merge:`907`). By `Kyle Brindley`_.
+- Update the tutorials to use the Python builder factory (:issue:`741`, :merge:`915`). By `Kyle Brindley`_.
 
 Enhancements
 ============
