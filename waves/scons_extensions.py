@@ -829,7 +829,7 @@ def first_target_builder_factory(
 
        Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
        file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
-       to match their emitter's behavior.
+       option to match their emitter's behavior.
 
     .. code-block::
        :caption: action string construction
@@ -2251,7 +2251,7 @@ def quinoa_builder_factory(
 
        Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
        file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
-       to match their emitter's behavior.
+       option to match their emitter's behavior.
 
     With the default options this builder requires the following sources file provided in the order:
 
@@ -2350,7 +2350,7 @@ def fierro_explicit_builder_factory(
 
        Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
        file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
-       to match their emitter's behavior.
+       option to match their emitter's behavior.
 
     With the default options this builder requires the following sources file provided in the order:
 
@@ -2534,8 +2534,8 @@ def ansys_apdl_builder_factory(
     .. warning::
 
        Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
-       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
-       to match their emitter's behavior.
+       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``program_required``
+       option to match their emitter's behavior.
 
     With the default options this builder requires the following sources file provided in the order:
 
