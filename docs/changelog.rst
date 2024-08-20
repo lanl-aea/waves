@@ -10,12 +10,15 @@ Changelog
 
 Breaking changes
 ================
-- Re-write the Fierro builders to use the template first target builder factory. Fierro builders are still considered
+- Re-write the Fierro builders to use the template first target builder factory. Builders are still considered
   experimental as the Fierro CLI stabilizes, so no minor version bump for the builder name and API change (:issue:`743`,
   :merge:`913`). By `Kyle Brindley`_.
-- Re-write the Ansys APDL builder to use the template first target builder factory. Ansys APDL builder is still
-  considered experimental pending a system test and user feedback, so no minor version bump for the builder name and API
-  change (:issue:`742`, :merge:`914`). By `Kyle Brindley`_.
+- Re-write the Ansys APDL builder to use the template first target builder factory. Builder is still considered
+  experimental pending a system test and user feedback, so no minor version bump for the builder name and API change
+  (:issue:`742`, :merge:`914`). By `Kyle Brindley`_.
+- Re-write the Sierra builder to use the template first target builder factory. Builder is still considered experimental
+  pending user feedback, so no minor version bump for the builder name and API change (:issue:`742`, :merge:`914`). By
+  `Kyle Brindley`_.
 
 New Features
 ============
