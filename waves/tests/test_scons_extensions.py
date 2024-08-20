@@ -1034,8 +1034,8 @@ def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitt
 
 
 sbatch_first_target_builder_factory_names = [
-    "sbatch_quinoa_builder_factory",
-    "sbatch_sierra_builder_factory",
+    "quinoa_builder_factory",
+    "sierra_builder_factory",
 ]
 
 
@@ -1048,12 +1048,19 @@ def test_sbatch_first_target_builder_factories(name: str):
        @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
        def sbatch_thing_builder_factory(*args, **kwargs):
            return thing_builder_factory(*args, **kwargs)
+
+    Assumes the naming convention ``thing_builder_factory`` and ``sbatch_thing_builder_factory``
+
+    :param name: wrapped builder factory name
     """
     expected = f'sbatch {_sbatch_wrapper_options} "' \
         '${environment} ${action_prefix} ${program} ${program_required} ${program_options} ' \
         '${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"'
-    factory = getattr(scons_extensions, name)
-    builder = factory()
+    wrapped_factory = getattr(scons_extensions, name)
+    factory = getattr(scons_extensions, f"sbatch_{name}")
+    with patch(f"waves.scons_extensions.{name}", side_effect=wrapped_factory) as mock_wrapped_factory:
+        builder = factory()
+        mock_wrapped_factory.assert_called_once()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions.first_target_emitter
 
