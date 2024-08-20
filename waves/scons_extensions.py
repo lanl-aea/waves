@@ -2253,7 +2253,7 @@ def quinoa_builder_factory(
        file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
        to match their emitter's behavior.
 
-    With the default ``subcommand_required`` Quinoa options this builder requires at least two source files provided in
+    With the default ``subcommand_required`` options this builder requires at least two source files provided in
     the order:
 
     1. Quinoa control file: ``*.q``
@@ -2265,12 +2265,12 @@ def quinoa_builder_factory(
        import waves
        env = waves.scons_extensions.shell_environment("module load quinoa")
        env.Append(BUILDERS={
-           "QuinoaSolver": waves.scons_extensions.quinoa_solver(charmrun_options="+p1"),
+           "QuinoaSolver": waves.scons_extensions.quinoa_builder_factory(),
        })
        # Serial execution with "+p1"
        env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"])
        # Parallel execution with "+p4"
-       env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"], charmrun_options="+p4")
+       env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"], program_options="+p4")
 
     .. code-block::
        :caption: action string construction
@@ -2323,60 +2323,44 @@ def quinoa_builder_factory(
     return builder
 
 
-def fierro_builder(
-    mpirun: str = "mpirun",
-    mpirun_options: str = "-np 1",
-    program: str = "fierro",
-    subcommand: str = "",
-    required: str = "",
-    options: str = "",
+def fierro_explicit_builder_factory(
+    environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
+    program: str = "mpirun",
+    program_required: str = "",
+    program_options: str = "-np 1",
+    subcommand: str = "fierro-parallel-explicit",
+    subcommand_required: str = "${SOURCE.abspath}",
+    subcommand_options: str = "",
     action_suffix: str = _settings._redirect_action_suffix,
+    emitter=first_target_emitter,
+    **kwargs
 ) -> SCons.Builder.Builder:
-    """Return a generic Fierro builder.
+    """Fierro explicit builder factory.
 
     .. warning::
 
-       This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target
-       list.
+       This is an experimental builder. It is subject to change without warning.
 
-    This builder provides a template action for the Fierro CLI. The default behavior will not do anything unless
-    the ``subcommand`` argument is updated to one of the Fierro CLI subcommands, e.g. ``parallel-implicit`` or
-    ``parallel-explicit``.
+    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
 
-    At least one target must be specified. The first target determines the working directory for the builder's action.
-    The action changes the working directory to the first target's parent directory prior to execution.
+    With the default ``subcommand_required`` options this builder requires at least one source file provided in
+    the order:
 
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
-    ``target.stdout``.
-
-    This builder and any builders created from this template will be most useful if the ``options`` argument places
-    SCons substitution variables in the action string, e.g. ``--argument ${argument}``, such that the task definitions
-    can modify the options on a per-task basis. Any option set in this manner *must* be provided by the task definition.
-
-    *Builder/Task keyword arguments*
-
-    * ``mpirun``: The MPI run command line executable absolute or relative path
-    * ``mpirun_options``: A space delimited string of ``mpirun`` arguments
-    * ``program``: The Fierro command line executable absolute or relative path
-    * ``subcommand``: A Fierro subcommand
-    * ``required``: A space delimited string of subcommand required arguments
-    * ``options``: A space delimited string of subcommand optional arguments
-    * ``action_prefix``: Advanced behavior. Most users should accept the defaults.
-    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
+    1. Fierro input file: ``*.yaml``
 
     .. code-block::
        :caption: action string construction
 
-       ${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
 
     .. code-block::
        :caption: action string default expansion
 
-       cd ${TARGET.dir.abspath} && mpirun -np 1 fierro-${subcommand} ${required} ${options} > ${TARGETS[-1].abspath} 2>&1
+       ${environment} cd ${TARGET.dir.abspath} && mpirun ${program_required} -np 1 fierro-parallel-explicit ${SOURCE.abspath} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -2384,186 +2368,87 @@ def fierro_builder(
        import waves
        env = Environment()
        env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
-       env.Append(BUILDERS={
-            "FierroBuilder": waves.scons_extensions.fierro_builder(
-                program=env["fierro],
-                subcommand="parallel-explicit",
-                required="${SOURCE.abspath}"
-            )
-       })
-       env.FierroBuilder(
-           target=["target.stdout"],
-           source=["source.yaml"],
-       )
-
-    :param str mpirun: The MPI run command line executable absolute or relative path
-    :param str mpirun_options: A space delimited string of ``mpirun`` arguments
-    :param str program: The Fierro command line executable absolute or relative path
-    :param str subcommand: A Fierro subcommand
-    :param str required: A space delimited string of subcommand required arguments
-    :param str options: A space delimited string of subcommand optional arguments
-    :param action_prefix: Advanced behavior. Most users should accept the defaults.
-    :param action_suffix: Advanced behavior. Most users should accept the defaults.
-
-    :returns: SCons Fierro builder
-    :rtype: SCons.Builder.Builder
-    """  # noqa: E501
-    action = [
-        "${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}"
-    ]
-    builder = SCons.Builder.Builder(
-        action=action,
-        emitter=first_target_emitter,
-        mpirun=mpirun,
-        mpirun_options=mpirun_options,
-        program=program,
-        subcommand=subcommand,
-        required=required,
-        options=options,
-        action_prefix=action_prefix,
-        action_suffix=action_suffix
-    )
-    return builder
-
-
-def fierro_explicit(
-    mpirun: str = "mpirun",
-    mpirun_options: str = "-np 1",
-    program: str = "fierro",
-    subcommand: str = "parallel-explicit",
-    required: str = "${SOURCE.abspath}",
-    options: str = "",
-    action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_suffix,
-) -> SCons.Builder.Builder:
-    """Return the Fierro explicit solver builder.
-
-    .. warning::
-
-       This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target
-       list.
-
-    At least one target must be specified. The first target determines the working directory for the builder's action.
-    The action changes the working directory to the first target's parent directory prior to execution.
-
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
-    ``target.stdout``.
-
-    This builder and any builders created from this template will be most useful if the ``options`` argument places
-    SCons substitution variables in the action string, e.g. ``--argument ${argument}``, such that the task definitions
-    can modify the options on a per-task basis. Any option set in this manner *must* be provided by the task definition.
-
-    *Builder/Task keyword arguments*
-
-    * ``mpirun``: The MPI run command line executable absolute or relative path
-    * ``mpirun_options``: A space delimited string of ``mpirun`` arguments
-    * ``program``: The Fierro command line executable absolute or relative path
-    * ``subcommand``: A Fierro subcommand
-    * ``required``: A space delimited string of subcommand required arguments
-    * ``options``: A space delimited string of subcommand optional arguments
-    * ``action_prefix``: Advanced behavior. Most users should accept the defaults.
-    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
-
-    .. code-block::
-       :caption: action string construction
-
-       ${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}
-
-    .. code-block::
-       :caption: action string default expansion
-
-       cd ${TARGET.dir.abspath} && mpirun -np 1 fierro-parallel-explicit ${SOURCE.abspath} ${options} > ${TARGETS[-1].abspath} 2>&1
-
-    .. code-block::
-       :caption: SConstruct
-
-       import waves
-       env = Environment()
-       env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
-       env.Append(BUILDERS={"FierroExplicit": waves.scons_extensions.fierro_explicit()})
+       env.Append(BUILDERS={"FierroExplicit": waves.scons_extensions.fierro_explicit_builder_factory()})
        env.FierroExplicit(
            target=["target.stdout"],
            source=["source.yaml"],
        )
 
-    :param str mpirun: The MPI run command line executable absolute or relative path
-    :param str mpirun_options: A space delimited string of ``mpirun`` arguments
-    :param str program: The Fierro command line executable absolute or relative path
-    :param str subcommand: A Fierro subcommand
-    :param str required: A space delimited string of subcommand required arguments
-    :param str options: A space delimited string of subcommand optional arguments
-    :param action_prefix: Advanced behavior. Most users should accept the defaults.
-    :param action_suffix: Advanced behavior. Most users should accept the defaults.
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
+    :param program: The mpirun absolute or relative path
+    :param program_required: Space delimited string of required mprirun options and arguments that are crucial to
+        builder behavior and should not be modified except by advanced users
+    :param program_options: Space delimited string of optional mpirun options and arguments that can be freely
+        modified by the user
+    :param subcommand: The Fierro absolute or relative path
+    :param subcommand_required: Space delimited string of required Fierro options and arguments
+        that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: Space delimited string of optional Fierro options and arguments
+        that can be freely modified by the user
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
 
-    :returns: SCons Fierro explicit solver builder
-    :rtype: SCons.Builder.Builder
+    :returns: Fierro explicit builder
     """  # noqa: E501
-    builder = fierro_builder(
-        mpirun=mpirun,
-        mpirun_options=mpirun_options,
-        program=program,
-        subcommand=subcommand,
-        required=required,
-        options=options,
+    builder = first_target_builder_factory(
+        environment=environment,
         action_prefix=action_prefix,
-        action_suffix=action_suffix
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs
     )
     return builder
 
 
-def fierro_implicit(
-    mpirun: str = "mpirun",
-    mpirun_options: str = "-np 1",
-    program: str = "fierro",
-    subcommand: str = "parallel-implicit",
-    required: str = "${SOURCE.abspath}",
-    options: str = "",
+def fierro_implicit_builder_factory(
+    environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
-    action_suffix: str = _settings._redirect_action_suffix
+    program: str = "mpirun",
+    program_required: str = "",
+    program_options: str = "-np 1",
+    subcommand: str = "fierro-parallel-implicit",
+    subcommand_required: str = "${SOURCE.abspath}",
+    subcommand_options: str = "",
+    action_suffix: str = _settings._redirect_action_suffix,
+    emitter=first_target_emitter,
+    **kwargs
 ) -> SCons.Builder.Builder:
-    """Return the Fierro implicit solver builder.
+    """Fierro implicit builder factory.
 
     .. warning::
 
-       This is an experimental builder for Fierro support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``*.vtk`` must be specified in the target
-       list.
+       This is an experimental builder. It is subject to change without warning.
 
-    At least one target must be specified. The first target determines the working directory for the builder's action.
-    The action changes the working directory to the first target's parent directory prior to execution.
+    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
 
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
-    ``target.stdout``.
+    With the default ``subcommand_required`` options this builder requires at least one source file provided in
+    the order:
 
-    This builder and any builders created from this template will be most useful if the ``options`` argument places
-    SCons substitution variables in the action string, e.g. ``--argument ${argument}``, such that the task definitions
-    can modify the options on a per-task basis. Any option set in this manner *must* be provided by the task definition.
-
-    *Builder/Task keyword arguments*
-
-    * ``mpirun``: The MPI run command line executable absolute or relative path
-    * ``mpirun_options``: A space delimited string of ``mpirun`` arguments
-    * ``program``: The Fierro command line executable absolute or relative path
-    * ``subcommand``: A Fierro subcommand
-    * ``required``: A space delimited string of subcommand required arguments
-    * ``options``: A space delimited string of subcommand optional arguments
-    * ``action_prefix``: Advanced behavior. Most users should accept the defaults.
-    * ``action_suffix``: Advanced behavior. Most users should accept the defaults.
+    1. Fierro input file: ``*.yaml``
 
     .. code-block::
        :caption: action string construction
 
-       ${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
 
     .. code-block::
        :caption: action string default expansion
 
-       cd ${TARGET.dir.abspath} && mpirun -np 1 fierro-parallel-implicit ${SOURCE.abspath} ${options} > ${TARGETS[-1].abspath} 2>&1
+       ${environment} cd ${TARGET.dir.abspath} && mpirun ${program_required} -np 1 fierro-parallel-implicit ${SOURCE.abspath} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
 
     .. code-block::
        :caption: SConstruct
@@ -2571,33 +2456,45 @@ def fierro_implicit(
        import waves
        env = Environment()
        env["fierro"] = waves.scons_extensions.add_program(["fierro"], env)
-       env.Append(BUILDERS={"FierroImplicit": waves.scons_extensions.fierro_implicit()})
+       env.Append(BUILDERS={"FierroImplicit": waves.scons_extensions.fierro_implicit_builder_factory()})
        env.FierroImplicit(
            target=["target.stdout"],
            source=["source.yaml"],
        )
 
-    :param str mpirun: The MPI run command line executable absolute or relative path
-    :param str mpirun_options: A space delimited string of ``mpirun`` arguments
-    :param str program: The Fierro command line executable absolute or relative path
-    :param str subcommand: A Fierro subcommand
-    :param str required: A space delimited string of subcommand required arguments
-    :param str options: A space delimited string of subcommand optional arguments
-    :param action_prefix: Advanced behavior. Most users should accept the defaults.
-    :param action_suffix: Advanced behavior. Most users should accept the defaults.
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
+    :param program: The mpirun absolute or relative path
+    :param program_required: Space delimited string of required mprirun options and arguments that are crucial to
+        builder behavior and should not be modified except by advanced users
+    :param program_options: Space delimited string of optional mpirun options and arguments that can be freely
+        modified by the user
+    :param subcommand: The Fierro absolute or relative path
+    :param subcommand_required: Space delimited string of required Fierro options and arguments
+        that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: Space delimited string of optional Fierro options and arguments
+        that can be freely modified by the user
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
 
-    :returns: SCons Fierro implicit solver builder
-    :rtype: SCons.Builder.Builder
+    :returns: Fierro implicit builder
     """  # noqa: E501
-    builder = fierro_builder(
-        mpirun=mpirun,
-        mpirun_options=mpirun_options,
-        program=program,
-        subcommand=subcommand,
-        required=required,
-        options=options,
+    builder = first_target_builder_factory(
+        environment=environment,
         action_prefix=action_prefix,
-        action_suffix=action_suffix
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs
     )
     return builder
 
