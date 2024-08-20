@@ -68,7 +68,7 @@ quinoa_snow_environment  = "source /etc/profile.d/modules.sh && " \
                            "module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler " \
                                       "/usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && " \
                            "module load gcc/9.3.0 openmpi/2.1.2"
-quinoa_aea_environment = "source /projects/cclong/quinoa/loadenv.sh"
+quinoa_aea_environment = "module use /projects/aea_compute/modulefiles && module load aea-quinoa"
 
 # Comments used in tutorial code snippets: marker-4
 
