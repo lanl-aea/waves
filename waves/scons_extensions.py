@@ -2171,7 +2171,7 @@ def quinoa_solver(
             "${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} " \
             "${action_suffix}"
     ]
-    quinoa_builder = SCons.Builder.Builder(
+    builder = SCons.Builder.Builder(
         action=action,
         emitter=first_target_emitter,
         prefix_command=prefix_command,
@@ -2182,7 +2182,7 @@ def quinoa_solver(
         action_prefix=action_prefix,
         action_suffix=action_suffix
     )
-    return quinoa_builder
+    return builder
 
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
@@ -2317,7 +2317,7 @@ def sbatch_quinoa_builder_factory(*args, **kwargs):
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
     """  # noqa: E501
-    return sierra_builder_factory(*args, **kwargs)
+    return quinoa_builder_factory(*args, **kwargs)
 
 
 def fierro_explicit_builder_factory(

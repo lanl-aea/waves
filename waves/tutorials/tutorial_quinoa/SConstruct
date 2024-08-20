@@ -95,7 +95,7 @@ env.Append(BUILDERS={
     'PythonScript': waves.scons_extensions.python_builder_factory(),
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
         waves.scons_extensions.sbatch_quinoa_builder_factory(environment=f"{quinoa_snow_environment} &&"),
-        remote_server="sn-rfe.lanl.gov"
+        remote_server="ro-rfe.lanl.gov"
     )
 })
 
