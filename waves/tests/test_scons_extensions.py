@@ -477,7 +477,10 @@ def test_substitution_syntax_warning():
     expected_dictionary = {"@thing1%": 1, "@thing_two%": "two"}
     with patch("warnings.warn") as mock_warn:
         output_dictionary = scons_extensions.substitution_syntax(substitution_dictionary, postfix="%")
-        mock_warn.assert_called_with("The 'postfix' keyword will be replaced by 'suffix' in version 1.0")
+        mock_warn.assert_called_once_with(
+            "The 'postfix' keyword will be replaced by 'suffix' in version 1.0",
+            DeprecationWarning
+        )
     assert output_dictionary == expected_dictionary
 
 
@@ -548,7 +551,10 @@ def test_construct_action_list_warning():
     expected = ["prefix thing1 suffix"]
     with patch("warnings.warn") as mock_warn:
         output = scons_extensions.construct_action_list(original, prefix="prefix", postfix="suffix")
-        mock_warn.assert_called_with("The 'postfix' keyword will be replaced by 'suffix' in version 1.0")
+        mock_warn.assert_called_once_with(
+            "The 'postfix' keyword will be replaced by 'suffix' in version 1.0",
+            DeprecationWarning
+        )
     assert output == expected
 
 
@@ -1661,6 +1667,8 @@ def test_sphinx_latexpdf():
     check_action_string(nodes, 1, 1, expected_string)
 
 
+# Remove the older quinoa builders in favor of the builder factory template for WAVESv1.0
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/745
 quinoa_solver = {
     "default behavior": (
         {}, {}, 2, 1, ["input1.q", "input1.exo"], ["input1.quinoa"]
@@ -1693,6 +1701,8 @@ quinoa_solver = {
 }
 
 
+# Remove the older quinoa builders in favor of the builder factory template for WAVESv1.0
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/745
 @pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
                          quinoa_solver.values(),
                          ids=quinoa_solver.keys())
@@ -1719,10 +1729,13 @@ def test_quinoa_solver(builder_kwargs, task_kwargs, node_count, action_count, so
             "${action_suffix}"
 
     # Assemble the builder and a task to interrogate
+    message = "This builder will be replaced by ``waves.scons_extensions.quinoa_builder_factory`` in version 1.0"
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={
-        "QuinoaSolver": scons_extensions.quinoa_solver(**builder_kwargs)
-    })
+    with patch("warnings.warn") as mock_warn:
+        env.Append(BUILDERS={
+            "QuinoaSolver": scons_extensions.quinoa_solver(**builder_kwargs)
+        })
+        mock_warn.assert_called_once_with(message, DeprecationWarning)
     nodes = env.QuinoaSolver(target=target_list, source=source_list, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
@@ -1730,6 +1743,21 @@ def test_quinoa_solver(builder_kwargs, task_kwargs, node_count, action_count, so
     for node in nodes:
         for key, expected_value in expected_kwargs.items():
             assert node.env[key] == expected_value
+
+
+# Remove the older quinoa builders in favor of the builder factory template for WAVESv1.0
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/745
+def test_sbatch_quinoa_solver():
+    expected = f'sbatch {_sbatch_wrapper_options} "' \
+        '${prefix_command} ${action_prefix} ${charmrun} ${charmrun_options} ' \
+        '${inciter} ${inciter_options} --control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath} ' \
+        '${action_suffix}"'
+    message = "This builder will be replaced by ``waves.scons_extensions.sbatch_quinoa_builder_factory`` in version 1.0"
+    with patch("warnings.warn") as mock_warn:
+        builder = scons_extensions.sbatch_quinoa_solver()
+        mock_warn.assert_any_call(message, DeprecationWarning)
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions.first_target_emitter
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new

@@ -442,7 +442,7 @@ def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", suffix
     if postfix:
         import warnings
         message = "The 'postfix' keyword will be replaced by 'suffix' in version 1.0"
-        warnings.warn(message)
+        warnings.warn(message, DeprecationWarning)
         suffix = postfix
     return {f"{prefix}{key}{suffix}": value for key, value in substitution_dictionary.items()}
 
@@ -645,7 +645,7 @@ def construct_action_list(
     if postfix:
         import warnings
         message = "The 'postfix' keyword will be replaced by 'suffix' in version 1.0"
-        warnings.warn(message)
+        warnings.warn(message, DeprecationWarning)
         suffix = postfix
     if suffix:
         suffix = " " + suffix
@@ -1339,7 +1339,7 @@ def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[
     message = "The copy_substitute function will be deprecated in favor of the copy_substfile pseudo-builder in a " \
               "future version. See the copy_substfile API: " \
               "https://aea.re-pages.lanl.gov/python-projects/waves/api.html#waves.scons_extensions.copy_substfile"
-    warnings.warn(message)
+    warnings.warn(message, DeprecationWarning)
     target_list = copy_substfile(
         env,
         source_list,
@@ -2090,9 +2090,8 @@ def quinoa_solver(
 
     .. warning::
 
-       This is an experimental builder for Quinoa support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``out.*`` must be specified in the target
-       list.
+       This builder will be deprecated in version 1.0. Please use
+       :meth:`waves.scons_extensions.sbatch_quinoa_builder_factory`.
 
     This builder requires at least two source files provided in the order
 
@@ -2158,6 +2157,12 @@ def quinoa_solver(
 
     :return: Quinoa builder
     """  # noqa: E501
+    # Remove the older quinoa builders in favor of the builder factory template for WAVESv1.0
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/745
+    import warnings
+    message = "This builder will be replaced by ``waves.scons_extensions.quinoa_builder_factory`` in version 1.0"
+    warnings.warn(message, DeprecationWarning)
+
     prefix_command = prefix_command.strip()
     if prefix_command and not prefix_command.endswith(" &&"):
         prefix_command += " &&"
@@ -2184,6 +2189,11 @@ def quinoa_solver(
 def sbatch_quinoa_solver(*args, **kwargs):
     """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_solver`
 
+    .. warning::
+
+       This builder will be deprecated in version 1.0. Please use
+       :meth:`waves.scons_extensions.sbatch_quinoa_builder_factory`.
+
     Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
     modify sbatch behavior.
 
@@ -2192,6 +2202,11 @@ def sbatch_quinoa_solver(*args, **kwargs):
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap ""
     """
+    # Remove the older quinoa builders in favor of the builder factory template for WAVESv1.0
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/745
+    import warnings
+    message = "This builder will be replaced by ``waves.scons_extensions.sbatch_quinoa_builder_factory`` in version 1.0"
+    warnings.warn(message, DeprecationWarning)
     return quinoa_solver(*args, **kwargs)
 
 
