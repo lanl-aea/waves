@@ -8,6 +8,12 @@ Changelog
 0.10.1 (unreleased)
 *******************
 
+Breaking changes
+================
+- Re-write the Fierro builders to use the template first target builder factory. Fierro builders are still considered
+  experimental as the Fierro CLI stabilizes, so no minor version bump for the builder name and API change (:issue:`743`,
+  :merge:`913`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Expose the most common "first target emitter" to the public API (:issue:`718`, :merge:`906`). By `Kyle Brindley`_.
