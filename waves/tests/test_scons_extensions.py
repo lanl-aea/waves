@@ -1130,7 +1130,6 @@ quinoa_builder_factory_tests = first_target_builder_factory_test_cases("quinoa_b
                          quinoa_builder_factory_tests.values(),
                          ids=quinoa_builder_factory_tests.keys())
 def test_quinoa_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    # Set default expectations to match default argument values
     default_kwargs = {
         "environment": "",
         "action_prefix": _cd_action_prefix,
@@ -1144,6 +1143,62 @@ def test_quinoa_builder_factory(builder_kwargs, task_kwargs, target, emitter, ex
     }
     check_builder_factory(
         "quinoa_builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=scons_extensions.first_target_emitter,
+        emitter=emitter,
+        expected_node_count=expected_node_count
+    )
+
+
+fierro_explicit_builder_factory_tests = first_target_builder_factory_test_cases("fierro_explicit_builder_factory")
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         fierro_explicit_builder_factory_tests.values(),
+                         ids=fierro_explicit_builder_factory_tests.keys())
+def test_fierro_explicit_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+    default_kwargs = {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "mpirun",
+        "program_required": "",
+        "program_options": "-np 1",
+        "subcommand": "fierro-parallel-explicit",
+        "subcommand_required": "${SOURCE.abspath}",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+    check_builder_factory(
+        "fierro_explicit_builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=scons_extensions.first_target_emitter,
+        emitter=emitter,
+        expected_node_count=expected_node_count
+    )
+
+
+fierro_implicit_builder_factory_tests = first_target_builder_factory_test_cases("fierro_implicit_builder_factory")
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         fierro_implicit_builder_factory_tests.values(),
+                         ids=fierro_implicit_builder_factory_tests.keys())
+def test_fierro_implicit_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+    default_kwargs = {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "mpirun",
+        "program_required": "",
+        "program_options": "-np 1",
+        "subcommand": "fierro-parallel-implicit",
+        "subcommand_required": "${SOURCE.abspath}",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+    check_builder_factory(
+        "fierro_implicit_builder_factory",
         default_kwargs=default_kwargs,
         builder_kwargs=builder_kwargs,
         task_kwargs=task_kwargs,
@@ -1658,225 +1713,6 @@ def test_quinoa_solver(builder_kwargs, task_kwargs, node_count, action_count, so
         "QuinoaSolver": scons_extensions.quinoa_solver(**builder_kwargs)
     })
     nodes = env.QuinoaSolver(target=target_list, source=source_list, **task_kwargs)
-
-    # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, node_count, action_count, expected_string)
-    for node in nodes:
-        for key, expected_value in expected_kwargs.items():
-            assert node.env[key] == expected_value
-
-
-# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
-# target per set.
-fierro_input = {
-    "default behavior": (
-        {"subcommand": "parallel-explicit"}, {}, 2, 1, ["input1.yaml"], ['input1.fierro']
-    ),
-    "different command": (
-        {"program": "dummy", "subcommand": "parallel-implicit"}, {}, 2, 1, ["input2.yaml"], ['input2.fierro']
-    ),
-    "no defaults": (
-        {
-         "mpirun": "different mpirun",
-         "mpirun_options": "different mpirun options",
-         "program": "different program",
-         "subcommand": "different subcommand",
-         "required": "different required",
-         "options": "different options",
-         "action_prefix": "different action prefix",
-         "action_suffix": "different action suffix"
-        },
-        {}, 2, 1, ["input4.yaml"], ['input4.fierro']
-    ),
-    "task kwargs overrides": (
-        {},
-        {
-         "mpirun": "different mpirun",
-         "mpirun_options": "different mpirun options",
-         "program": "different program",
-         "subcommand": "different subcommand",
-         "required": "different required",
-         "options": "different options",
-         "action_prefix": "different action prefix",
-         "action_suffix": "different action suffix"
-        },
-        2, 1, ["input5.yaml"], ['input5.fierro']
-    )
-}
-
-
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
-                         fierro_input.values(),
-                         ids=fierro_input.keys())
-def test_fierro_builder(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
-    # Set default expectations to match default argument values
-    expected_kwargs = {
-        "mpirun": "mpirun",
-        "mpirun_options": "-np 1",
-        "program": "fierro",
-        "subcommand": "",
-        "required": "",
-        "options": "",
-        "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_suffix
-    }
-    # Update expected arguments to match test case
-    expected_kwargs.update(builder_kwargs)
-    expected_kwargs.update(task_kwargs)
-    # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_string = \
-        '${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}'
-
-    # Assemble the builder and a task to interrogate
-    env = SCons.Environment.Environment()
-    env.Append(BUILDERS={
-        "FierroBuilder": scons_extensions.fierro_builder(**builder_kwargs)
-    })
-    nodes = env.FierroBuilder(target=target_list, source=source_list, **task_kwargs)
-
-    # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, node_count, action_count, expected_string)
-    for node in nodes:
-        for key, expected_value in expected_kwargs.items():
-            assert node.env[key] == expected_value
-
-
-# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
-# target per set.
-fierro_explicit = {
-    "default behavior": (
-        {}, {}, 2, 1, ["input1_explicit.yaml"], ['input1_explicit.fierro']
-    ),
-    "no defaults": (
-        {
-         "mpirun": "different mpirun",
-         "mpirun_options": "different mpirun options",
-         "program": "different program",
-         "subcommand": "different subcommand",
-         "required": "different required",
-         "options": "different options",
-         "action_prefix": "different action prefix",
-         "action_suffix": "different action suffix"
-        },
-        {}, 2, 1, ["input2_explicit.yaml"], ['input2_explicit.fierro']
-    ),
-    "task kwargs overrides": (
-        {},
-        {
-         "mpirun": "different mpirun",
-         "mpirun_options": "different mpirun options",
-         "program": "different program",
-         "subcommand": "different subcommand",
-         "required": "different required",
-         "options": "different options",
-         "action_prefix": "different action prefix",
-         "action_suffix": "different action suffix"
-        },
-        2, 1, ["input3_explicit.yaml"], ['input3_explicit.fierro']
-    )
-}
-
-
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
-                         fierro_explicit.values(),
-                         ids=fierro_explicit.keys())
-def test_fierro_explicit(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
-    # Set default expectations to match default argument values
-    expected_kwargs = {
-        "mpirun": "mpirun",
-        "mpirun_options": "-np 1",
-        "program": "fierro",
-        "subcommand": "parallel-explicit",
-        "required": "${SOURCE.abspath}",
-        "options": "",
-        "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_suffix
-    }
-    # Update expected arguments to match test case
-    expected_kwargs.update(builder_kwargs)
-    expected_kwargs.update(task_kwargs)
-    # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_string = \
-        '${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}'
-
-    # Assemble the builder and a task to interrogate
-    env = SCons.Environment.Environment()
-    env.Append(BUILDERS={
-        "FierroExplicit": scons_extensions.fierro_explicit(**builder_kwargs)
-    })
-    nodes = env.FierroExplicit(target=target_list, source=source_list, **task_kwargs)
-
-    # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, node_count, action_count, expected_string)
-    for node in nodes:
-        for key, expected_value in expected_kwargs.items():
-            assert node.env[key] == expected_value
-
-
-# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
-# target per set.
-fierro_implicit = {
-    "default behavior": (
-        {}, {}, 2, 1, ["input1_implicit.yaml"], ['input1_implicit.fierro']
-    ),
-    "no defaults": (
-        {
-         "mpirun": "different mpirun",
-         "mpirun_options": "different mpirun options",
-         "program": "different program",
-         "subcommand": "different subcommand",
-         "required": "different required",
-         "options": "different options",
-         "action_prefix": "different action prefix",
-         "action_suffix": "different action suffix"
-        },
-        {}, 2, 1, ["input2_implicit.yaml"], ['input2_implicit.fierro']
-    ),
-    "task kwargs overrides": (
-        {},
-        {
-         "mpirun": "different mpirun",
-         "mpirun_options": "different mpirun options",
-         "program": "different program",
-         "subcommand": "different subcommand",
-         "required": "different required",
-         "options": "different options",
-         "action_prefix": "different action prefix",
-         "action_suffix": "different action suffix"
-        },
-        2, 1, ["input3_implicit.yaml"], ['input3_implicit.fierro']
-    )
-}
-
-
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
-                         fierro_implicit.values(),
-                         ids=fierro_implicit.keys())
-def test_fierro_implicit(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
-    # Set default expectations to match default argument values
-    expected_kwargs = {
-        "mpirun": "mpirun",
-        "mpirun_options": "-np 1",
-        "program": "fierro",
-        "subcommand": "parallel-implicit",
-        "required": "${SOURCE.abspath}",
-        "options": "",
-        "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_suffix
-    }
-    # Update expected arguments to match test case
-    expected_kwargs.update(builder_kwargs)
-    expected_kwargs.update(task_kwargs)
-    # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_string = \
-        '${action_prefix} ${mpirun} ${mpirun_options} ${program}-${subcommand} ${required} ${options} ${action_suffix}'
-
-    # Assemble the builder and a task to interrogate
-    env = SCons.Environment.Environment()
-    env.Append(BUILDERS={
-        "FierroImplicit": scons_extensions.fierro_implicit(**builder_kwargs)
-    })
-    nodes = env.FierroImplicit(target=target_list, source=source_list, **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
     check_action_string(nodes, node_count, action_count, expected_string)
