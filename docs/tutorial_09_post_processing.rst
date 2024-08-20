@@ -10,7 +10,7 @@ Tutorial 09: Post-Processing
 References
 **********
 
-* |PROJECT| :ref:`waves_scons_api` API: :meth:`waves.scons_extensions.python_script`
+* |PROJECT| :ref:`waves_scons_api` API: :meth:`waves.scons_extensions.python_builder_factory`
 * |PROJECT| :ref:`parameter_generator_api` API: :meth:`waves.parameter_generators.CartesianProduct`
 * `Xarray`_ and the `xarray dataset`_ :cite:`xarray,hoyer2017xarray`
 * `pandas`_ :cite:`pandas`
@@ -68,10 +68,10 @@ changes made in this tutorial.
       :language: Python
       :diff: tutorials_tutorial_08_data_extraction
 
-The Python 3 post-processing script is executed with the :meth:`waves.scons_extensions.python_script` builder. This
+The Python 3 post-processing script is executed with the :meth:`waves.scons_extensions.python_builder_factory`. This
 builder behaves similarly to the :meth:`waves.scons_extensions.abaqus_journal` builders introduced in earlier tutorials.
-Unlike the Abaqus journal builder, the Python script builder doesn't allow the user to specify an executable path. The
-builder uses the same Python interpreter as the launching `Conda`_ environment where `SCons`_ and WAVES are installed.
+By default, the builder uses the same Python interpreter as the launching `Conda`_ environment where `SCons`_ and WAVES
+are installed. So unlike Abaqus Python, the user has full control over the Python execution environment.
 
 Advanced `SCons`_ users may be tempted to write an `SCons Python function builder`_ for the post-processing task
 :cite:`SCons`. A Python function builder would have the advantage of allowing users to pass Python objects to the task

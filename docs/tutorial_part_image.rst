@@ -4,7 +4,7 @@
 Tutorial: Part Image
 ####################
 
-This is an example implementation where an Abaqus python script is used to export an assembly view image of an Abaqus
+This is an example implementation where an Abaqus Python script is used to export an assembly view image of an Abaqus
 model from an input or CAE file.
 
 **********
