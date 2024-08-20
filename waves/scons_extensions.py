@@ -1786,11 +1786,11 @@ def conda_environment(
 
     The modsim owner may choose to re-use this builder throughout their project configuration to provide various levels
     of granularity in the recorded Conda environment state. It's recommended to include this builder at least once for
-    any workflows that also use the :meth:`waves.scons_extensions.python_builder`. The builder may be re-used once per
-    build sub-directory to provide more granular build environment reproducibility in the event that sub-builds are run
-    at different times with variations in the active Conda environment. For per-Python script task environment
+    any workflows that also use the :meth:`waves.scons_extensions.python_builder_factory`. The builder may be re-used
+    once per build sub-directory to provide more granular build environment reproducibility in the event that sub-builds
+    are run at different times with variations in the active Conda environment. For per-Python script task environment
     reproducibility, the builder source list can be linked to the output of a
-    :meth:`waves.scons_extensions.python_builder` task with a target environment file name to match.
+    :meth:`waves.scons_extensions.python_builder_factory` task with a target environment file name to match.
 
     The first recommendation, always building the project wide Conda environment file, is demonstrated in the example
     usage below.
