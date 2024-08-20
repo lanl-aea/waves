@@ -1278,7 +1278,10 @@ def test_python_script(builder_kwargs, task_kwargs, node_count, action_count, ta
 
     # Assemble the builder and a task to interrogate
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(**builder_kwargs)})
+    message = "This builder will be replaced by ``waves.scons_extensions.python_builder_factory`` in version 1.0"
+    with patch("warnings.warn") as mock_warn:
+        env.Append(BUILDERS={"PythonScript": scons_extensions.python_script(**builder_kwargs)})
+        mock_warn.assert_any_call(message, DeprecationWarning)
     nodes = env.PythonScript(target=target_list, source=["python_script.py"], script_options="", **task_kwargs)
 
     # Test task definition node counts, action(s), and task keyword arguments
@@ -1291,7 +1294,10 @@ def test_python_script(builder_kwargs, task_kwargs, node_count, action_count, ta
 def test_sbatch_python_script():
     expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "' \
        '${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"'
-    builder = scons_extensions.sbatch_python_script()
+    message = "This builder will be replaced by ``waves.scons_extensions.sbatch_python_builder_factory`` in version 1.0"
+    with patch("warnings.warn") as mock_warn:
+        builder = scons_extensions.sbatch_python_script()
+        mock_warn.assert_any_call(message, DeprecationWarning)
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions.first_target_emitter
 

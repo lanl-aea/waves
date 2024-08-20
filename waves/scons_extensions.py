@@ -1407,6 +1407,12 @@ def python_script(
     :return: Python script builder
     :rtype: SCons.Builder.Builder
     """  # noqa: E501
+    # Remove the older python builders in favor of the builder factory template for WAVESv1.0
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/747
+    import warnings
+    message = "This builder will be replaced by ``waves.scons_extensions.python_builder_factory`` in version 1.0"
+    warnings.warn(message, DeprecationWarning)
+
     action = [
         "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
     ]
@@ -1432,6 +1438,12 @@ def sbatch_python_script(*args, **kwargs):
 
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ${action_suffix}"
     """  # noqa: E501
+    # Remove the older python builders in favor of the builder factory template for WAVESv1.0
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/747
+    import warnings
+    message = "This builder will be replaced by ``waves.scons_extensions.sbatch_python_builder_factory`` in version 1.0"
+    warnings.warn(message, DeprecationWarning)
+
     return python_script(*args, **kwargs)
 
 
@@ -2222,6 +2234,7 @@ def sbatch_quinoa_solver(*args, **kwargs):
     import warnings
     message = "This builder will be replaced by ``waves.scons_extensions.sbatch_quinoa_builder_factory`` in version 1.0"
     warnings.warn(message, DeprecationWarning)
+
     return quinoa_solver(*args, **kwargs)
 
 
