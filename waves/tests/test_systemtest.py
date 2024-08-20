@@ -125,7 +125,7 @@ def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Opti
             if isinstance(command, string.Template):
                 command = command.substitute(template_substitution)
             command = command.split(" ")
-            subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
+            subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
 
 
 @pytest.mark.parametrize("template_name", ["modsim_template", "modsim_template_2"])
@@ -135,13 +135,13 @@ def test_modsim_templates(template_name) -> None:
     with tempfile.TemporaryDirectory() as temp_directory:
         command = f"{waves_command} fetch {template_name} --destination {temp_directory}"
         command = shlex.split(command)
-        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
+        subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
 
         command = "scons . --jobs=4"
         command = shlex.split(command)
-        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
+        subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
 
         output_file = pathlib.Path(temp_directory) / "nominal.svg"
         command = f"{waves_command} visualize nominal --output-file {output_file}"
         command = shlex.split(command)
-        subprocess.check_output(command, env=env, cwd=temp_directory).decode("utf-8")
+        subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
