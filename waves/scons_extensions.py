@@ -979,7 +979,7 @@ def abaqus_journal(
         "${action_prefix} ${program} -information environment ${environment_suffix}",
         "${action_prefix} ${program} ${required} ${abaqus_options} -- ${journal_options} ${action_suffix}"
     ]
-    abaqus_journal_builder = SCons.Builder.Builder(
+    builder = SCons.Builder.Builder(
         action=action,
         emitter=_abaqus_journal_emitter,
         program=program,
@@ -988,7 +988,7 @@ def abaqus_journal(
         action_suffix=action_suffix,
         environment_suffix=environment_suffix
     )
-    return abaqus_journal_builder
+    return builder
 
 
 @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
@@ -1009,6 +1009,116 @@ def sbatch_abaqus_journal(*args, **kwargs):
        sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "cd ${TARGET.dir.abspath} && abaqus cae -noGui ${SOURCE.abspath} ${abaqus_options} -- ${journal_options} > ${TARGETS[-1].abspath} 2>&1"
     """  # noqa: E501
     return abaqus_journal(*args, **kwargs)
+
+
+def abaqus_journal_builder_factory(
+    environment: str = "",
+    action_prefix: str = _settings._cd_action_prefix,
+    program: str = "abaqus",
+    program_required: str = "cae -noGUI=${SOURCES[0].abspath}",
+    program_options: str = "",
+    subcommand: str = "--",
+    subcommand_required: str = "",
+    subcommand_options: str = "",
+    action_suffix: str = _settings._redirect_action_suffix,
+    emitter=first_target_emitter,
+    **kwargs
+) -> SCons.Builder.Builder:
+    """Abaqus builder factory
+
+    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
+
+    .. warning::
+
+       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
+       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
+       option to match their emitter's behavior.
+
+    With the default options this builder requires the following sources file provided in the order:
+
+    1. Abaqus journal file: ``*.py``
+
+    .. code-block::
+       :caption: action string construction
+
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       ${environment} cd ${TARGET.dir.abspath} && abaqus cae -noGUI=${SOURCES[0].abspath} ${program_options} -- ${subcommand_required} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment()
+       env["abaqus"] = waves.scons_extensions.add_program(["abaqus"], env)
+       env.Append(BUILDERS={
+           "AbaqusJournal": waves.scons_extensions.abaqus_journal_builder_factory(
+               program=env["abaqus"]
+           )
+       })
+       env.AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"])
+
+    The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
+    available as keyword arguments of the builder. When provided during task definition, the task keyword arguments
+    override the builder keyword arguments.
+
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
+    :param program: The Abaqus absolute or relative path
+    :param program_required: Space delimited string of required Abaqus options and arguments that are crucial to
+        builder behavior and should not be modified except by advanced users
+    :param program_options: Space delimited string of optional Abaqus options and arguments that can be freely
+        modified by the user
+    :param subcommand: The shell separator for positional arguments used to separate Abaqus program from Abaqus journal
+        file arguments and options
+    :param subcommand_required: Space delimited string of required Abaqus journal file options and arguments
+        that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: Space delimited string of optional Abaqus journal file options and arguments
+        that can be freely modified by the user
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
+
+    :return: Abaqus journal builder
+    """  # noqa: E501
+    builder = first_target_builder_factory(
+        environment=environment,
+        action_prefix=action_prefix,
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs
+    )
+    return builder
+
+
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+def sbatch_abaqus_journal_builder_factory(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
+
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: action string construction
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+    """  # noqa: E501
+    return abaqus_journal_builder_factory(*args, **kwargs)
 
 
 def _abaqus_solver_emitter(
