@@ -1524,6 +1524,21 @@ def python_builder_factory(
     return builder
 
 
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+def sbatch_python_builder_factory(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.python_builder_factory`
+
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: action string construction
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+    """  # noqa: E501
+    return python_builder_factory(*args, **kwargs)
+
+
 def _matlab_script_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
     """Appends the matlab_script builder target list with the builder managed targets
 

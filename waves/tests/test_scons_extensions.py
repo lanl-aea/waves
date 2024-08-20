@@ -1034,6 +1034,7 @@ def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitt
 
 
 sbatch_first_target_builder_factory_names = [
+    "python_builder_factory",
     "quinoa_builder_factory",
     "sierra_builder_factory",
 ]
