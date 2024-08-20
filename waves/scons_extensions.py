@@ -2253,8 +2253,7 @@ def quinoa_builder_factory(
        file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
        to match their emitter's behavior.
 
-    With the default ``subcommand_required`` options this builder requires at least two source files provided in
-    the order:
+    With the default options this builder requires the following sources file provided in the order:
 
     1. Quinoa control file: ``*.q``
     2. Exodus mesh file: ``*.exo``
@@ -2353,8 +2352,7 @@ def fierro_explicit_builder_factory(
        file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
        to match their emitter's behavior.
 
-    With the default ``subcommand_required`` options this builder requires at least one source file provided in
-    the order:
+    With the default options this builder requires the following sources file provided in the order:
 
     1. Fierro input file: ``*.yaml``
 
@@ -2441,8 +2439,7 @@ def fierro_implicit_builder_factory(
     definition and the last target will always be the expected STDOUT and STDERR redirection output file,
     ``TARGETS[-1]`` ending in ``*.stdout``.
 
-    With the default ``subcommand_required`` options this builder requires at least one source file provided in
-    the order:
+    With the default options this builder requires the following sources file provided in the order:
 
     1. Fierro input file: ``*.yaml``
 
@@ -2505,49 +2502,54 @@ def fierro_implicit_builder_factory(
     return builder
 
 
-def ansys_apdl(
+def ansys_apdl_builder_factory(
+    environment: str = "",
+    action_prefix: str = _settings._cd_action_prefix,
     program: str = "ansys",
-    required: str = "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
-    options: str = "",
-    action_prefix: str = _settings._cd_action_prefix
+    program_required: str = "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
+    program_options: str = "",
+    subcommand: str = "",
+    subcommand_required: str = "",
+    subcommand_options: str = "",
+    action_suffix: str = "",
+    emitter=first_target_emitter,
+    **kwargs
 ) -> SCons.Builder.Builder:
-    """Return an Ansys APDL builder.
+    """Ansys APDL builder factory.
+
+    .. warning::
+
+       This is an experimental builder. It is subject to change without warning.
 
     .. warning::
 
        This builder does not have a tutorial and is not included in the regression test suite yet. Contact the
        development team if you encounter problems or have recommendations for improved design behavior.
 
+    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
+
     .. warning::
 
-       This is an experimental builder for Ansys support. The only emitted file is the ``target[0].stdout`` redirected
-       STDOUT and STDERR file. All relevant application output files, e.g. ``*.rst`` must be specified in the target
-       list.
+       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
+       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
+       to match their emitter's behavior.
 
-    At least one target must be specified. The first target determines the working directory for the builder's action.
-    The action changes the working directory to the first target's parent directory prior to execution.
+    With the default options this builder requires the following sources file provided in the order:
 
-    The emitter will assume all emitted targets build in the current build directory. If the target(s) must be built in
-    a build subdirectory, e.g. in a parameterized target build, then the first target must be provided with the build
-    subdirectory, e.g. ``parameter_set1/my_target.ext``. When in doubt, provide a STDOUT redirect file as a target, e.g.
-    ``target.stdout``.
-
-    *Builder/Task keyword arguments*
-
-    * ``program``: The Ansys command line executable absolute or relative path
-    * ``required``: A space delimited string of subcommand required arguments
-    * ``options``: A space delimited string of subcommand optional arguments
-    * ``action_prefix``: Advanced behavior. Most users should accept the defaults.
+    1. Ansys APDL file: ``*.dat``
 
     .. code-block::
        :caption: action string construction
 
-       ${cd_action_prefix} ${program} ${required} ${options}
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
 
     .. code-block::
        :caption: action string default expansion
 
-       cd ${TARGET.dir.abspath} && ansys -i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath} ${options}
+       ${environment} cd ${TARGET.dir.abspath} && ansys -i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
 
     .. code-block::
        :caption: SConstruct
@@ -2556,23 +2558,36 @@ def ansys_apdl(
        env = Environment()
        env["ansys"] = waves.scons_extensions.add_program(["ansys232"], env)
        env.Append(BUILDERS={
-            "AnsysAPDL": waves.scons_extensions.ansys_apdl(
+            "AnsysAPDL": waves.scons_extensions.ansys_apdl_builder_factory(
                 program=env["ansys]
             )
        })
        env.AnsysAPDL(
            target=["job.rst"],
            source=["source.dat"],
-           options="-j job"
+           program_options="-j job"
        )
 
-    :param str program: The Ansys command line executable absolute or relative path
-    :param str required: A space delimited string of subcommand required arguments
-    :param str options: A space delimited string of subcommand optional arguments
-    :param action_prefix: Advanced behavior. Most users should accept the defaults.
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
+    :param program: The Ansys absolute or relative path
+    :param program_required: Space delimited string of required Ansys options and arguments that are crucial to
+        builder behavior and should not be modified except by advanced users
+    :param program_options: Space delimited string of optional Ansys options and arguments that can be freely
+        modified by the user
+    :param subcommand: A subcommand absolute or relative path
+    :param subcommand_required: Space delimited string of required subcommand options and arguments
+        that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: Space delimited string of optional subcommand options and arguments
+        that can be freely modified by the user
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
 
-    :returns: SCons Fierro builder
-    :rtype: SCons.Builder.Builder
+    :returns: Ansys builder
     """
     action = [
         "${action_prefix} ${program} ${required} ${options}"
