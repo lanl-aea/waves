@@ -17,7 +17,7 @@ Breaking changes
   experimental pending a system test and user feedback, so no minor version bump for the builder name and API change
   (:issue:`742`, :merge:`914`). By `Kyle Brindley`_.
 - Re-write the Sierra builder to use the template first target builder factory. Builder is still considered experimental
-  pending user feedback, so no minor version bump for the builder name and API change (:issue:`742`, :merge:`914`). By
+  pending user feedback, so no minor version bump for the builder name and API change (:issue:`744`, :merge:`916`). By
   `Kyle Brindley`_.
 
 New Features
@@ -38,6 +38,7 @@ Documentation
 - In the mesh convergence tutorial and modsim templates, SCons joins list variables as space separated strings. No need
   to join lists of strings separately from task definition (:issue:`734`, :merge:`907`). By `Kyle Brindley`_.
 - Update the tutorials to use the Python builder factory (:issue:`741`, :merge:`915`). By `Kyle Brindley`_.
+- Update the tutorials to use the Sierra builder factory (:issue:`744`, :merge:`916`). By `Kyle Brindley`_.
 
 Enhancements
 ============
