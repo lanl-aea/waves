@@ -99,13 +99,13 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 env.Append(BUILDERS={
     'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
-    'PythonScript': waves.scons_extensions.python_script(),
+    'PythonScript': waves.scons_extensions.python_builder_factory(),
     'FierroImplicit': waves.scons_extensions.fierro_implicit_builder_factory()
 })
 env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 
 envCubit.Append(BUILDERS={
-    "PythonScript": waves.scons_extensions.python_script(program=envCubit["python"])
+    "PythonScript": waves.scons_extensions.python_builder_factory(program=envCubit["python"])
 })
 
 envSierra.Append(BUILDERS={

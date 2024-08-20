@@ -92,7 +92,7 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add builders and pseudo-builders
 env.Append(BUILDERS={
-    'PythonScript': waves.scons_extensions.python_script(),
+    'PythonScript': waves.scons_extensions.python_builder_factory(),
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
         waves.scons_extensions.sbatch_quinoa_solver(prefix_command=f"{quinoa_snow_environment} &&"),
         remote_server="sn-rfe.lanl.gov"

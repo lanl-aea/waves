@@ -113,7 +113,7 @@ env.Append(BUILDERS={
     "AbaqusJournal": waves.scons_extensions.abaqus_journal(program=env["abaqus"]),
     "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["abaqus"]),
     "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["abaqus"]),
-    "PythonScript": waves.scons_extensions.python_script(),
+    "PythonScript": waves.scons_extensions.python_builder_factory(),
     "CondaEnvironment": waves.scons_extensions.conda_environment(),
     "SphinxBuild": waves.scons_extensions.sphinx_build(program=env["sphinx_build"], options="-W"),
     "SphinxPDF": waves.scons_extensions.sphinx_latexpdf(program=env["sphinx_build"], options="-W")
