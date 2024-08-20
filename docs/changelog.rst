@@ -32,6 +32,7 @@ New Features
   Brindley`_.
 - Add a Python builder factory on the first target builder factory template (:issue:`741`, :merge:`915`). By `Kyle
   Brindley`_.
+- Add an SBatch Quinoa builder factory (:issue:`740`, :merge:`917`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -39,6 +40,7 @@ Documentation
   to join lists of strings separately from task definition (:issue:`734`, :merge:`907`). By `Kyle Brindley`_.
 - Update the tutorials to use the Python builder factory (:issue:`741`, :merge:`915`). By `Kyle Brindley`_.
 - Update the tutorials to use the Sierra builder factory (:issue:`744`, :merge:`916`). By `Kyle Brindley`_.
+- Add deprecation warnings to the older pattern Quinoa builders (:issue:`740`, :merge:`917`). By `Kyle Brindley`_.
 
 Enhancements
 ============
