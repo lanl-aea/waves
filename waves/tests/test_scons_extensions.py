@@ -414,14 +414,15 @@ def test_ssh_builder_actions(target, builder_kwargs, task_kwargs):
             assert node.env[key] == expected_value
 
     ssh_python_builder = scons_extensions.ssh_builder_actions(
-        scons_extensions.python_script()
+        scons_extensions.python_builder_factory()
     )
     ssh_python_builder_action_list = [action.cmd_list for action in ssh_python_builder.action.list]
     expected = [
         'ssh ${ssh_options} ${remote_server} "mkdir -p ${remote_directory}"',
         "rsync ${rsync_push_options} ${SOURCES.abspath} ${remote_server}:${remote_directory}",
-        "ssh ${ssh_options} ${remote_server} '${action_prefix} ${program} ${python_options} ${SOURCE.file} " \
-            "${script_options} ${action_suffix}'",
+        "ssh ${ssh_options} ${remote_server} 'cd ${remote_directory} && ${environment} ${action_prefix} " \
+            "${program} ${program_required} ${program_options} " \
+            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}'",
         "rsync ${rsync_pull_options} ${remote_server}:${remote_directory}/ ${TARGET.dir.abspath}"
     ]
     assert ssh_python_builder_action_list == expected
