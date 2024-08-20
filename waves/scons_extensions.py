@@ -1024,7 +1024,7 @@ def abaqus_journal_builder_factory(
     emitter=first_target_emitter,
     **kwargs
 ) -> SCons.Builder.Builder:
-    """Abaqus builder factory
+    """Abaqus journal builder factory
 
     This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
     the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
