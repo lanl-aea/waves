@@ -33,6 +33,7 @@ New Features
 - Add a Python builder factory on the first target builder factory template (:issue:`741`, :merge:`915`). By `Kyle
   Brindley`_.
 - Add an SBatch Quinoa builder factory (:issue:`740`, :merge:`917`). By `Kyle Brindley`_.
+- Add an SBatch Python builder factory (:issue:`746`, :merge:`918`). By `Kyle Brindley`_.
 
 Documentation
 =============
@@ -41,6 +42,7 @@ Documentation
 - Update the tutorials to use the Python builder factory (:issue:`741`, :merge:`915`). By `Kyle Brindley`_.
 - Update the tutorials to use the Sierra builder factory (:issue:`744`, :merge:`916`). By `Kyle Brindley`_.
 - Add deprecation warnings to the older pattern Quinoa builders (:issue:`740`, :merge:`917`). By `Kyle Brindley`_.
+- Add deprecation warnings to the older pattern Python builders (:issue:`746`, :merge:`918`). By `Kyle Brindley`_.
 
 Enhancements
 ============
