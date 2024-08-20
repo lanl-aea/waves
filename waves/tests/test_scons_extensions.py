@@ -20,6 +20,7 @@ from waves._settings import _abaqus_datacheck_extensions
 from waves._settings import _abaqus_explicit_extensions
 from waves._settings import _abaqus_standard_extensions
 from waves._settings import _abaqus_solver_common_suffixes
+from waves._settings import _sbatch_wrapper_options
 from waves._settings import _stdout_extension
 from common import platform_check
 
@@ -838,106 +839,6 @@ def test_sbatch_abaqus_solver():
     assert builder.emitter == scons_extensions._abaqus_solver_emitter
 
 
-source_file = fs.File("dummy.i")
-sierra_emitter_input = {
-    "one target": (
-        ["target.sierra"],
-        [source_file],
-        ["target.sierra", "target.sierra.env", "target.sierra.stdout"]
-    ),
-    "subdirectory": (
-        ["set1/dummy.sierra"],
-        [source_file],
-        ["set1/dummy.sierra", f"set1{os.sep}dummy.sierra.env", f"set1{os.sep}dummy.sierra.stdout"]
-    )
-}
-
-
-@pytest.mark.parametrize("target, source, expected",
-                         sierra_emitter_input.values(),
-                         ids=sierra_emitter_input.keys())
-def test_sierra_emitter(target, source, expected):
-    target, source = scons_extensions._sierra_emitter(target, source, None)
-    assert target == expected
-
-
-# TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
-# target per set.
-sierra_input = {
-    "default behavior": (
-        {}, {}, 3, 1, ["input1.i"], ['inptu1.g']
-    ),
-    "no defaults": (
-        {
-         "program": "different program",
-         "application": "different application",
-         "action_prefix": "different prefix",
-         "action_suffix": "different action suffix",
-         "environment_suffix": "different environment suffix",
-        },
-        {}, 3, 1, ["nodefaults.i"], ['nodefaults.g']
-    ),
-    "task kwargs overrides": (
-        {},
-        {
-         "program": "different program",
-         "application": "different application",
-         "action_prefix": "different prefix",
-         "action_suffix": "different action suffix",
-         "environment_suffix": "different environment suffix",
-        },
-        3, 1, ["sierra_taskkwargoverrides.i"], ['sierra_taskkwargoverrides.g']
-    ),
-    "different command": (
-        {"program": "dummy", "application": "application"}, {}, 3, 1, ["input2.i"], ['inptu2.g']
-    )
-}
-
-
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list",
-                         sierra_input.values(),
-                         ids=sierra_input.keys())
-def test_sierra(builder_kwargs, task_kwargs, node_count, action_count, source_list, target_list):
-    # Set default expectations to match default argument values
-    expected_kwargs = {
-        "program": "sierra",
-        "application": "adagio",
-        "action_prefix": _cd_action_prefix,
-        "action_suffix": _redirect_action_suffix,
-        "environment_suffix": _redirect_environment_suffix
-    }
-    # Update expected arguments to match test case
-    expected_kwargs.update(builder_kwargs)
-    expected_kwargs.update(task_kwargs)
-    # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_string = \
-        "${action_prefix} ${program} ${application} --version ${environment_suffix}\n" \
-        "${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ${action_suffix}"
-
-    # Assemble the builder and a task to interrogate
-    env = SCons.Environment.Environment()
-    env.Append(BUILDERS={
-        "Sierra": scons_extensions.sierra(**builder_kwargs)
-    })
-
-    # Test task definition node counts, action(s), and task keyword arguments
-    nodes = env.Sierra(target=target_list, source=source_list, sierra_options="", application_options="", **task_kwargs)
-    check_action_string(nodes, node_count, action_count, expected_string)
-    for node in nodes:
-        for key, expected_value in expected_kwargs.items():
-            assert node.env[key] == expected_value
-
-
-def test_sbatch_sierra():
-    expected = 'sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "' \
-        '${action_prefix} ${program} ${application} --version ${environment_suffix} && ' \
-        '${action_prefix} ${program} ${sierra_options} ${application} ${application_options} -i ${SOURCE.file} ' \
-           '${action_suffix}"'
-    builder = scons_extensions.sbatch_sierra()
-    assert builder.action.cmd_list == expected
-    assert builder.emitter == scons_extensions._sierra_emitter
-
-
 copy_substfile_input = {
     "strings": (["dummy", "dummy2.in", "root.inp.in", "conf.py.in"],
                 ["dummy", "dummy2.in", "dummy2", "root.inp.in", "root.inp", "conf.py.in", "conf.py"]),
@@ -1236,6 +1137,43 @@ def test_fierro_implicit_builder_factory(builder_kwargs, task_kwargs, target, em
         emitter=emitter,
         expected_node_count=expected_node_count
     )
+
+
+sierra_builder_factory_tests = first_target_builder_factory_test_cases("sierra_builder_factory")
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         sierra_builder_factory_tests.values(),
+                         ids=sierra_builder_factory_tests.keys())
+def test_sierra_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+    default_kwargs = {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "sierra",
+        "program_required": "",
+        "program_options": "",
+        "subcommand": "adagio",
+        "subcommand_required": "-i ${SOURCE.abspath}",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+    check_builder_factory(
+        "sierra_builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=scons_extensions.first_target_emitter,
+        emitter=emitter,
+        expected_node_count=expected_node_count
+    )
+
+
+def test_sbatch_sierra_builder_factory():
+    expected = f'sbatch {_sbatch_wrapper_options} "' \
+        '${environment} ${action_prefix} ${program} ${program_required} ${program_options} ' \
+        '${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"'
+    builder = scons_extensions.sbatch_sierra_builder_factory()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions.first_target_emitter
 
 
 ansys_apdl_builder_factory_tests = first_target_builder_factory_test_cases("ansys_apdl_builder_factory")

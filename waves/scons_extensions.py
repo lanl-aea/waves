@@ -1216,106 +1216,6 @@ def sbatch_abaqus_solver(*args, **kwargs):
     return abaqus_solver(*args, **kwargs)
 
 
-def sierra_builder_factory(
-    environment: str = "",
-    action_prefix: str = _settings._cd_action_prefix,
-    program: str = "sierra",
-    program_required: str = "",
-    program_options: str = "",
-    subcommand: str = "adagio",
-    subcommand_required: str = "${SOURCE.abspath}",
-    subcommand_options: str = "",
-    action_suffix: str = _settings._redirect_action_suffix,
-    emitter=first_target_emitter,
-    **kwargs
-) -> SCons.Builder.Builder:
-    """Sierra builder factory
-
-    .. warning::
-
-       This is an experimental builder. It is subject to change without warning.
-
-    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
-    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
-    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
-    ``TARGETS[-1]`` ending in ``*.stdout``.
-
-    .. warning::
-
-       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
-       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
-       option to match their emitter's behavior.
-
-    With the default options this builder requires the following sources file provided in the order:
-
-    1. Sierra input file: ``*.g``
-
-    .. code-block::
-       :caption: action string construction
-
-       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
-
-    .. code-block::
-       :caption: action string default expansion
-
-       ${environment} cd ${TARGET.dir.abspath} && sierra ${program_required} ${program_options} adagio ${SOURCE.abspath} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
-
-    The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
-    available as keyword arguments of the builder. When provided during task definition, the task keyword arguments
-    override the builder keyword arguments.
-
-    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
-        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
-        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
-        part of the builder action.
-    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
-    :param program: The Sierra absolute or relative path
-    :param program_required: Space delimited string of required Sierra options and arguments that are crucial to
-        builder behavior and should not be modified except by advanced users
-    :param program_options: Space delimited string of optional Sierra options and arguments that can be freely
-        modified by the user
-    :param subcommand: The Sierra application absolute or relative path
-    :param subcommand_required: Space delimited string of required Sierra application options and arguments
-        that are crucial to builder behavior and should not be modified except by advanced users.
-    :param subcommand_options: Space delimited string of optional Sierra application options and arguments
-        that can be freely modified by the user
-    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
-    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
-    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
-
-    :returns: Sierra builder
-    """  # noqa: E501
-    builder = first_target_builder_factory(
-        environment=environment,
-        action_prefix=action_prefix,
-        program=program,
-        program_required=program_required,
-        program_options=program_options,
-        subcommand=subcommand,
-        subcommand_required=subcommand_required,
-        subcommand_options=subcommand_options,
-        action_suffix=action_suffix,
-        emitter=emitter,
-        **kwargs
-    )
-    return builder
-
-
-@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
-def sbatch_sierra(*args, **kwargs):
-    """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra_builder_factory`
-
-    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
-    modify sbatch behavior.
-
-    .. code-block::
-       :caption: action string construction
-
-       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
-    """  # noqa: E501
-    return sierra_builder_factory(*args, **kwargs)
-
-
 def copy_substfile(
     env: SCons.Environment.Environment,
     source_list: list,
@@ -2576,6 +2476,106 @@ def fierro_implicit_builder_factory(
         **kwargs
     )
     return builder
+
+
+def sierra_builder_factory(
+    environment: str = "",
+    action_prefix: str = _settings._cd_action_prefix,
+    program: str = "sierra",
+    program_required: str = "",
+    program_options: str = "",
+    subcommand: str = "adagio",
+    subcommand_required: str = "-i ${SOURCE.abspath}",
+    subcommand_options: str = "",
+    action_suffix: str = _settings._redirect_action_suffix,
+    emitter=first_target_emitter,
+    **kwargs
+) -> SCons.Builder.Builder:
+    """Sierra builder factory
+
+    .. warning::
+
+       This is an experimental builder. It is subject to change without warning.
+
+    This builder factory extends :meth:`waves.scons_extensions.first_target_builder_factory`. This builder factory uses
+    the :meth:`waves.scons_extensions.first_target_emitter`. At least one task target must be specified in the task
+    definition and the last target will always be the expected STDOUT and STDERR redirection output file,
+    ``TARGETS[-1]`` ending in ``*.stdout``.
+
+    .. warning::
+
+       Users overriding the ``emitter`` keyword argument are responsible for providing an emitter with equivalent STDOUT
+       file handling behavior as :meth:`waves.scons_extensions.first_target_emitter` or updating the ``action_suffix``
+       option to match their emitter's behavior.
+
+    With the default options this builder requires the following sources file provided in the order:
+
+    1. Sierra input file: ``*.g``
+
+    .. code-block::
+       :caption: action string construction
+
+       ${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}
+
+    .. code-block::
+       :caption: action string default expansion
+
+       ${environment} cd ${TARGET.dir.abspath} && sierra ${program_required} ${program_options} adagio ${SOURCE.abspath} ${subcommand_options} > ${TARGETS[-1].abspath} 2>&1
+
+    The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
+    available as keyword arguments of the builder. When provided during task definition, the task keyword arguments
+    override the builder keyword arguments.
+
+    :param environment: This variable is intended primarily for use with builders and tasks that can not execute from an
+        SCons construction environment. For instance, when tasks execute on a remote server with SSH wrapped actions
+        using :meth:`waves.scons_extensions.ssh_builder_actions` and therefore must initialize the remote environment as
+        part of the builder action.
+    :param action_prefix: This variable is intended to perform directory change operations prior to program execution
+    :param program: The Sierra absolute or relative path
+    :param program_required: Space delimited string of required Sierra options and arguments that are crucial to
+        builder behavior and should not be modified except by advanced users
+    :param program_options: Space delimited string of optional Sierra options and arguments that can be freely
+        modified by the user
+    :param subcommand: The Sierra application absolute or relative path
+    :param subcommand_required: Space delimited string of required Sierra application options and arguments
+        that are crucial to builder behavior and should not be modified except by advanced users.
+    :param subcommand_options: Space delimited string of optional Sierra application options and arguments
+        that can be freely modified by the user
+    :param action_suffix: This variable is intended to perform program STDOUT and STDERR redirection operations.
+    :param emitter: An SCons emitter function. This is not a keyword argument in the action string.
+    :param kwargs: Any additional keyword arguments are passed directly to the SCons builder object.
+
+    :returns: Sierra builder
+    """  # noqa: E501
+    builder = first_target_builder_factory(
+        environment=environment,
+        action_prefix=action_prefix,
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs
+    )
+    return builder
+
+
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+def sbatch_sierra_builder_factory(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.sierra_builder_factory`
+
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: action string construction
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+    """  # noqa: E501
+    return sierra_builder_factory(*args, **kwargs)
 
 
 def ansys_apdl_builder_factory(
