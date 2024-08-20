@@ -64,12 +64,7 @@ system_tests = [
     ([fetch_template, "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build --print-build-failures"], "--tutorial 4"),
     ([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_cubit"),
     ([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_cubit_alternate"),
-    # TODO: Re-enable quinoa tests when AEA server deployment stabilizes
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/657
-    pytest.param(
-        [fetch_template, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorials/tutorial_quinoa",
-        marks=pytest.mark.skip("Re-enable quinoa tests when AEA server deployment stabilizes")
-    ),
+    ([fetch_template, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorials/tutorial_quinoa"),
     ([fetch_template, "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures"], "tutorials"),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
