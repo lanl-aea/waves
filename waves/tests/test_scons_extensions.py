@@ -883,59 +883,6 @@ def test_build_subdirectory(target, expected):
     assert scons_extensions._build_subdirectory(target) == expected
 
 
-source_file = fs.File("dummy.py")
-first_target_emitter_input = {
-    "one target": (
-        ["target.cub"],
-        [source_file],
-        ["target.cub", "target.cub.stdout"]
-    ),
-    "only stdout": (
-        ["only.stdout"],
-        [source_file],
-        ["only.stdout"]
-    ),
-    "first stdout": (
-        ["first.stdout", "first.cub"],
-        [source_file],
-        ["first.cub", "first.stdout"]
-    ),
-    "second stdout": (
-        ["second.cub", "second.stdout"],
-        [source_file],
-        ["second.cub", "second.stdout"]
-    ),
-    "subdirectory": (
-        ["set1/dummy.cub"],
-        [source_file],
-        ["set1/dummy.cub", f"set1{os.sep}dummy.cub.stdout"]
-    ),
-    "subdirectory only stdout": (
-        ["set1/subdir1.stdout"],
-        [source_file],
-        [f"set1/subdir1.stdout"]
-    ),
-    "subdirectory first stdout": (
-        ["set1/subdir2.stdout", "set1/subdir2.cub"],
-        [source_file],
-        [f"set1/subdir2.cub", f"set1/subdir2.stdout"]
-    ),
-    "subdirectory second stdout": (
-        [ "set1/subdir3.cub", "set1/subdir3.stdout"],
-        [source_file],
-        [f"set1/subdir3.cub", f"set1/subdir3.stdout"]
-    )
-}
-
-
-@pytest.mark.parametrize("target, source, expected",
-                         first_target_emitter_input.values(),
-                         ids=first_target_emitter_input.keys())
-def test_first_target_emitter(target, source, expected):
-    target, source = scons_extensions.first_target_emitter(target, source, None)
-    assert target == expected
-
-
 builder_factory = {
     "default behavior": ({}, {}, ["builder_factory.out1"], False),
     "different emitter": ({}, {}, ["builder_factory.out1"], dummy_emitter_for_testing),
@@ -998,6 +945,59 @@ def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
     )
 
 
+source_file = fs.File("dummy.py")
+first_target_emitter_input = {
+    "one target": (
+        ["target.cub"],
+        [source_file],
+        ["target.cub", "target.cub.stdout"]
+    ),
+    "only stdout": (
+        ["only.stdout"],
+        [source_file],
+        ["only.stdout"]
+    ),
+    "first stdout": (
+        ["first.stdout", "first.cub"],
+        [source_file],
+        ["first.cub", "first.stdout"]
+    ),
+    "second stdout": (
+        ["second.cub", "second.stdout"],
+        [source_file],
+        ["second.cub", "second.stdout"]
+    ),
+    "subdirectory": (
+        ["set1/dummy.cub"],
+        [source_file],
+        ["set1/dummy.cub", f"set1{os.sep}dummy.cub.stdout"]
+    ),
+    "subdirectory only stdout": (
+        ["set1/subdir1.stdout"],
+        [source_file],
+        [f"set1/subdir1.stdout"]
+    ),
+    "subdirectory first stdout": (
+        ["set1/subdir2.stdout", "set1/subdir2.cub"],
+        [source_file],
+        [f"set1/subdir2.cub", f"set1/subdir2.stdout"]
+    ),
+    "subdirectory second stdout": (
+        [ "set1/subdir3.cub", "set1/subdir3.stdout"],
+        [source_file],
+        [f"set1/subdir3.cub", f"set1/subdir3.stdout"]
+    )
+}
+
+
+@pytest.mark.parametrize("target, source, expected",
+                         first_target_emitter_input.values(),
+                         ids=first_target_emitter_input.keys())
+def test_first_target_emitter(target, source, expected):
+    target, source = scons_extensions.first_target_emitter(target, source, None)
+    assert target == expected
+
+
 first_target_builder_factory_tests = first_target_builder_factory_test_cases("first_target_builder_factory")
 @pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
                          first_target_builder_factory_tests.values(),
@@ -1025,6 +1025,31 @@ def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitt
         emitter=emitter,
         expected_node_count=expected_node_count
     )
+
+
+sbatch_first_target_builder_factory_names = [
+    "sbatch_quinoa_builder_factory",
+    "sbatch_sierra_builder_factory",
+]
+
+
+@pytest.mark.parametrize("name", sbatch_first_target_builder_factory_names)
+def test_sbatch_first_target_builder_factories(name: str):
+    """Test the sbatch builder factories created as
+
+    .. code-block::
+
+       @catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+       def sbatch_thing_builder_factory(*args, **kwargs):
+           return thing_builder_factory(*args, **kwargs)
+    """
+    expected = f'sbatch {_sbatch_wrapper_options} "' \
+        '${environment} ${action_prefix} ${program} ${program_required} ${program_options} ' \
+        '${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"'
+    factory = getattr(scons_extensions, name)
+    builder = factory()
+    assert builder.action.cmd_list == expected
+    assert builder.emitter == scons_extensions.first_target_emitter
 
 
 python_builder_factory_tests = first_target_builder_factory_test_cases("python_builder_factory")
@@ -1165,15 +1190,6 @@ def test_sierra_builder_factory(builder_kwargs, task_kwargs, target, emitter, ex
         emitter=emitter,
         expected_node_count=expected_node_count
     )
-
-
-def test_sbatch_sierra_builder_factory():
-    expected = f'sbatch {_sbatch_wrapper_options} "' \
-        '${environment} ${action_prefix} ${program} ${program_required} ${program_options} ' \
-        '${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"'
-    builder = scons_extensions.sbatch_sierra_builder_factory()
-    assert builder.action.cmd_list == expected
-    assert builder.emitter == scons_extensions.first_target_emitter
 
 
 ansys_apdl_builder_factory_tests = first_target_builder_factory_test_cases("ansys_apdl_builder_factory")
