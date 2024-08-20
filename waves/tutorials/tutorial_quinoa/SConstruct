@@ -94,7 +94,7 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 env.Append(BUILDERS={
     'PythonScript': waves.scons_extensions.python_builder_factory(),
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
-        waves.scons_extensions.sbatch_quinoa_solver(prefix_command=f"{quinoa_snow_environment} &&"),
+        waves.scons_extensions.sbatch_quinoa_builder_factory(environment=f"{quinoa_snow_environment} &&"),
         remote_server="sn-rfe.lanl.gov"
     )
 })
@@ -110,11 +110,11 @@ envQuinoa["charmrun"] = waves.scons_extensions.add_program(["charmrun", quinoa_i
 
 # Add WAVES builders. If sbatch is found, use it.
 # Should allow the same scons alias to run directly on sstbigbird, but submit as an sbatch job on HPC
-quinoa_builder = waves.scons_extensions.quinoa_solver
+quinoa_builder_factory = waves.scons_extensions.quinoa_builder_factory
 if env["sbatch"] is not None:
-    quinoa_builder = waves.scons_extensions.sbatch_quinoa_solver
+    quinoa_builder_factory = waves.scons_extensions.sbatch_quinoa_builder_factory
 envQuinoa.Append(BUILDERS={
-    "QuinoaSolver": quinoa_builder(charmrun=envQuinoa["charmrun"], inciter=envQuinoa["inciter"])
+    "QuinoaSolver": quinoa_builder_factory(program=envQuinoa["charmrun"], subcommand=envQuinoa["inciter"])
 })
 
 # Comments used in tutorial code snippets: marker-6
