@@ -44,6 +44,10 @@ Documentation
 - Add deprecation warnings to the older pattern Quinoa builders (:issue:`740`, :merge:`917`). By `Kyle Brindley`_.
 - Add deprecation warnings to the older pattern Python builders (:issue:`746`, :merge:`918`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Re-enable the Quinoa CI system tests (:issue:`657`, :merge:`919`). By `Kyle Brindley`_.
+
 Enhancements
 ============
 - Support SCons construction environment recovery for more than just bash. Explicit support for: sh, bash, zsh, csh,
