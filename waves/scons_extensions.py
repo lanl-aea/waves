@@ -2290,6 +2290,21 @@ def quinoa_builder_factory(
     return builder
 
 
+@catenate_actions(program="sbatch", options=_settings._sbatch_wrapper_options)
+def sbatch_quinoa_builder_factory(*args, **kwargs):
+    """Thin pass through wrapper of :meth:`waves.scons_extensions.quinoa_builder_factory`
+
+    Catenate the actions and submit with `SLURM`_ `sbatch`_. Accepts the ``sbatch_options`` builder keyword argument to
+    modify sbatch behavior.
+
+    .. code-block::
+       :caption: action string construction
+
+       sbatch --wait --output=${TARGET.base}.slurm.out ${sbatch_options} --wrap "${environment} ${action_prefix} ${program} ${program_required} ${program_options} ${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+    """  # noqa: E501
+    return sierra_builder_factory(*args, **kwargs)
+
+
 def fierro_explicit_builder_factory(
     environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
