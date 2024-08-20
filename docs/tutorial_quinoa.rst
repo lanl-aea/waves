@@ -50,7 +50,7 @@ Directory Structure
    /home/roppenheimer/waves-tutorials
    $ waves fetch --destination tutorial_quinoa tutorials/tutorial_quinoa
    $ ls tutorial_quinoa
-   box.py flow.q SConstruct SConscript
+   box.py flow.lua SConstruct SConscript
 
 5. Make the new ``tutorial_quinoa`` directory the current working directory
 
@@ -62,7 +62,7 @@ Directory Structure
    $ pwd
    /home/roppenheimer/waves-tutorials/tutorial_quinoa
    $ ls
-   box.py flow.q SConstruct SConscript
+   box.py flow.lua SConstruct SConscript
 
 **********
 SConscript
@@ -103,9 +103,9 @@ Quinoa Input File(s)
 
 8. Create or review the Quinoa input file from the contents below
 
-.. admonition:: waves-tutorials/tutorial_quinoa/flow.q
+.. admonition:: waves-tutorials/tutorial_quinoa/flow.lua
 
-   .. literalinclude:: tutorial_quinoa_flow.q
+   .. literalinclude:: tutorial_quinoa_flow.lua
       :lineno-match:
 
 **********
@@ -155,14 +155,14 @@ Build Targets
    cd /projects//w13repos/waves-quinoa/build && python /homes/roppenheimer/waves-tutorials/tutorial_quinoa/build/box.py --output-file /homes/roppenheimer/waves-tutorials/tutorial_quinoa/build/box.cub --xlength 1.0 --ylength 0.5 --zlength 0.5 > box.stdout 2>&1
    ssh sn-rfe.lanl.gov "mkdir -p /users//WAVES-TUTORIAL/tutorial_quinoa"
    stty: standard input: Inappropriate ioctl for device
-   rsync -rlptv /projects//w13repos/waves-quinoa/build/flow.q /homes/roppenheimer/waves-tutorials/tutorial_quinoa/build/box.exo sn-rfe.lanl.gov:/users/roppeheimer/WAVES-TUTORIAL/tutorial_quinoa
+   rsync -rlptv /projects//w13repos/waves-quinoa/build/flow.lua /homes/roppenheimer/waves-tutorials/tutorial_quinoa/build/box.exo sn-rfe.lanl.gov:/users/roppeheimer/WAVES-TUTORIAL/tutorial_quinoa
    stty: standard input: Inappropriate ioctl for device
    sending incremental file list
    box.exo
 
    sent 2,936 bytes  received 2,177 bytes  3,408.67 bytes/sec
    total size is 250,497  speedup is 48.99
-   ssh sn-rfe.lanl.gov 'cd /users//WAVES-TUTORIAL/tutorial_quinoa && sbatch --wait --output=build/remote.slurm.out --wrap "source /etc/profile.d/modules.sh && module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler /usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && module load gcc/9.3.0 openmpi/2.1.2 && cd /users/roppeheimer/WAVES-TUTORIAL/tutorial_quinoa && /users/cclong/QUINOA/quinoa/buildOS/Main/charmrun +p4 /users/cclong/QUINOA/quinoa/buildOS/Main/inciter --verbose --control flow.q --input box.exo > remote.stdout 2>&1"'
+   ssh sn-rfe.lanl.gov 'cd /users//WAVES-TUTORIAL/tutorial_quinoa && sbatch --wait --output=build/remote.slurm.out --wrap "source /etc/profile.d/modules.sh && module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler /usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && module load gcc/9.3.0 openmpi/2.1.2 && cd /users/roppeheimer/WAVES-TUTORIAL/tutorial_quinoa && /users/cclong/QUINOA/quinoa/buildOS/Main/charmrun +p4 /users/cclong/QUINOA/quinoa/buildOS/Main/inciter --verbose --control flow.lua --input box.exo > remote.stdout 2>&1"'
    stty: standard input: Inappropriate ioctl for device
    Submitted batch job 6542014
    rsync -rltpv sn-rfe.lanl.gov:/users//WAVES-TUTORIAL/tutorial_quinoa/ /homes/roppenheimer/waves-tutorials/tutorial_quinoa/build
@@ -226,7 +226,7 @@ below.
    ├── build
    │   └── remote.slurm.out
    ├── diag
-   ├── flow.q
+   ├── flow.lua
    ├── inciter_input.log
    ├── inciter_screen.log
    ├── mesh_edge_pdf.0.txt

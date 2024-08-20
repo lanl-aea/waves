@@ -258,7 +258,7 @@ tutorial_files_list = [
     tutorials_dir / "tutorial_quinoa/SConstruct",
     tutorials_dir / "tutorial_quinoa/SConscript",
     tutorials_dir / "tutorial_quinoa/box.py",
-    tutorials_dir / "tutorial_quinoa/flow.q",
+    tutorials_dir / "tutorial_quinoa/flow.lua",
     tutorials_dir / "waves_quickstart/SConscript",
     tutorials_dir / "tutorial_abaqus_cae/SConscript",
     tutorials_dir / "tutorial_abaqus_cae/submit_cae.py",

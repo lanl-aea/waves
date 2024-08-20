@@ -2156,9 +2156,9 @@ def quinoa_solver(
            "QuinoaSolver": waves.scons_extensions.quinoa_solver(charmrun_options="+p1"),
        })
        # Serial execution with "+p1"
-       env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"])
+       env.QuinoaSolver(target=["flow.stdout"], source=["flow.lua", "box.exo"])
        # Parallel execution with "+p4"
-       env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"], charmrun_options="+p4")
+       env.QuinoaSolver(target=["flow.stdout"], source=["flow.lua", "box.exo"], charmrun_options="+p4")
 
     .. code-block::
        :caption: Quinoa builder action keywords
@@ -2288,9 +2288,9 @@ def quinoa_builder_factory(
            "QuinoaSolver": waves.scons_extensions.quinoa_builder_factory(),
        })
        # Serial execution with "+p1"
-       env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"])
+       env.QuinoaSolver(target=["flow.stdout"], source=["flow.lua", "box.exo"])
        # Parallel execution with "+p4"
-       env.QuinoaSolver(target=["flow.stdout"], source=["flow.q", "box.exo"], program_options="+p4")
+       env.QuinoaSolver(target=["flow.stdout"], source=["flow.lua", "box.exo"], program_options="+p4")
 
     The builder returned by this factory accepts all SCons Builder arguments. The arguments of this function are also
     available as keyword arguments of the builder. When provided during task definition, the task keyword arguments
