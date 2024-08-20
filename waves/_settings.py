@@ -6,17 +6,6 @@ _project_root_abspath = pathlib.Path(__file__).parent.resolve()
 _project_name_short = _project_root_abspath.name.upper()
 _project_name = f"{_project_name_short} Analysis for Verified Engineering Simulations"
 
-# Utilities
-_sh_redirect_string = "> /dev/null 2>&1"
-_csh_redirect_string = ">& /dev/null"
-_redirect_strings = {
-    "sh": _sh_redirect_string,
-    "bash": _sh_redirect_string,
-    "zsh": _sh_redirect_string,
-    "csh": _csh_redirect_string,
-    "tcsh": _csh_redirect_string,
-}
-
 # SCons extensions
 _abaqus_environment_file = "abaqus_v6.env"
 _abaqus_environment_extension = f".{_abaqus_environment_file}"
