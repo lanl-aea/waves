@@ -163,7 +163,7 @@ script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(env.PythonScript(
     target=["sensitivity_study.pdf", "sensitivity_study.csv", "sensitivity_study.yaml"],
     source=[script, parameter_study_file.name] + post_processing_source,
-    script_options=script_options
+    subcommand_options=script_options
 ))
 
 # Data archival

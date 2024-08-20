@@ -96,7 +96,7 @@ script_options += " --csv-regression-file ${SOURCES[2].abspath}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[script, parameter_study_file.name, regression_file] + post_processing_source,
-    script_options=script_options
+    subcommand_options=script_options
 ))
 
 # Data archival

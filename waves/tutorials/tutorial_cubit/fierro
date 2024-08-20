@@ -34,7 +34,7 @@ SConscript("cubit", exports=["env", "element_type", "solver"], duplicate=False)
 env.PythonScript(
     target=[f"{model}_mesh.vtk"],
     source=[fierro_source_abspath / "convert_to_vtk2ascii.py", f"{model}_mesh.g"],
-    script_options="--input-format=exodus ${SOURCES[1].abspath} ${TARGET.abspath}"
+    subcommand_options="--input-format=exodus ${SOURCES[1].abspath} ${TARGET.abspath}"
 )
 
 # SolverPrep

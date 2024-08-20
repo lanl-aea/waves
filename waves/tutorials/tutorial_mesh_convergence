@@ -165,7 +165,7 @@ script_options += " --parameter-study-file ${SOURCES[1].abspath}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[script, parameter_study_file.name] + post_processing_source,
-    script_options=script_options
+    subcommand_options=script_options
 ))
 
 plot_name = "mesh_convergence_stress"
@@ -177,7 +177,7 @@ script_options += f" --selection-dict {selection_dict}"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
     source=[script, parameter_study_file.name] + post_processing_source,
-    script_options=script_options,
+    subcommand_options=script_options,
     post_processing_source=post_processing_source
 ))
 

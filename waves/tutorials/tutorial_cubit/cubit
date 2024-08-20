@@ -38,7 +38,7 @@ journal_options = ""
 workflow.extend(env.PythonScript(
     target=[f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py"],
-    script_options=journal_options
+    subcommand_options=journal_options
 ))
 
 # Partition
@@ -47,7 +47,7 @@ journal_options = ""
 workflow.extend(env.PythonScript(
     target=[f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
-    script_options=journal_options
+    subcommand_options=journal_options
 ))
 
 # Mesh
@@ -62,7 +62,7 @@ journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(env.PythonScript(
     target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
-    script_options=journal_options,
+    subcommand_options=journal_options,
     element_type=element_type,
     solver=solver
 ))
@@ -76,7 +76,7 @@ journal_options = ""
 workflow.extend(env.PythonScript(
     target=[f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py"],
-    script_options=journal_options
+    subcommand_options=journal_options
 ))
 
 # Partition
@@ -85,7 +85,7 @@ journal_options = ""
 workflow.extend(env.PythonScript(
     target=[f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_geometry.cub"],
-    script_options=journal_options
+    subcommand_options=journal_options
 ))
 
 # Mesh
@@ -100,7 +100,7 @@ journal_options = "--element-type ${element_type} --solver ${solver}"
 workflow.extend(env.PythonScript(
     target=[f"{journal_file}.{mesh_extension}", f"{journal_file}.cub"],
     source=[f"{cubit_source_abspath / journal_file}.py", f"{model}_partition.cub"],
-    script_options=journal_options,
+    subcommand_options=journal_options,
     element_type=element_type,
     solver=solver
 ))

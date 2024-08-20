@@ -22,7 +22,7 @@ remote_directory_prefix = env["remote_directory"]
 mesh = env.PythonScript(
     target=["box.cub", "box.exo"],
     source=["box.py"],
-    script_options="--output-file ${TARGET.abspath} --xlength ${xlength} --ylength ${ylength} --zlength ${zlength}",
+    subcommand_options="--output-file ${TARGET.abspath} --xlength ${xlength} --ylength ${ylength} --zlength ${zlength}",
     **simulation_variables
 )
 workflow.extend(mesh)
