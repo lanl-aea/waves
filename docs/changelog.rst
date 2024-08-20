@@ -28,12 +28,14 @@ New Features
 - Rename the first target builder (factory) to clarify that this function returns a builder. Clarify that the first
   target emitter is not a factory and that the keyword arguments can not be used directly in a builder definition
   (:issue:`738`, :merge:`910`). By `Kyle Brindley`_.
-- Add a Quinoa builder factory on the first target builder factory template (:issue:`739`, :merge:`911`). By `Kyle
+- Add a Quinoa builder factory based on the first target builder factory template (:issue:`739`, :merge:`911`). By `Kyle
   Brindley`_.
-- Add a Python builder factory on the first target builder factory template (:issue:`741`, :merge:`915`). By `Kyle
+- Add a Python builder factory based on the first target builder factory template (:issue:`741`, :merge:`915`). By `Kyle
   Brindley`_.
 - Add an SBatch Quinoa builder factory (:issue:`740`, :merge:`917`). By `Kyle Brindley`_.
 - Add an SBatch Python builder factory (:issue:`746`, :merge:`918`). By `Kyle Brindley`_.
+- Add an Abaqus journal builder factory based on the first target builder factory template (:issue:`748`, :merge:`921`).
+  By `Kyle Brindley`_.
 
 Documentation
 =============
