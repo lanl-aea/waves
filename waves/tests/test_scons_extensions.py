@@ -1036,6 +1036,7 @@ def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitt
 sbatch_first_target_builder_factory_names = [
     "python_builder_factory",
     "abaqus_journal_builder_factory",
+    "abaqus_solver_builder_factory",
     "quinoa_builder_factory",
     "sierra_builder_factory",
 ]
@@ -1113,6 +1114,34 @@ def test_abaqus_journal_builder_factory(builder_kwargs, task_kwargs, target, emi
     }
     check_builder_factory(
         "abaqus_journal_builder_factory",
+        default_kwargs=default_kwargs,
+        builder_kwargs=builder_kwargs,
+        task_kwargs=task_kwargs,
+        target=target,
+        default_emitter=scons_extensions.first_target_emitter,
+        emitter=emitter,
+        expected_node_count=expected_node_count
+    )
+
+
+abaqus_solver_builder_factory_tests = first_target_builder_factory_test_cases("abaqus_solver_builder_factory")
+@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         abaqus_solver_builder_factory_tests.values(),
+                         ids=abaqus_solver_builder_factory_tests.keys())
+def test_abaqus_solver_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+    default_kwargs = {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "abaqus",
+        "program_required": "-interactive -ask_delete no -input ${SOURCE.filebase}",
+        "program_options": "",
+        "subcommand": "",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+    check_builder_factory(
+        "abaqus_solver_builder_factory",
         default_kwargs=default_kwargs,
         builder_kwargs=builder_kwargs,
         task_kwargs=task_kwargs,
