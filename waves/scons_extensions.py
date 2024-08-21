@@ -1134,13 +1134,12 @@ def _abaqus_solver_emitter(
     least one target must be provided with the build subdirectory, e.g. ``parameter_set1/target.ext``. When in doubt,
     provide the output database as a target, e.g. ``job_name.odb``
 
-    If "suffixes" is a key in the environment, ``env``, then the suffixes list will override the ``suffixes_to_extend``
-    argument.
+    If "suffixes" is a key in the environment, ``env``, then the suffixes list will override the ``suffixes`` argument.
 
     :param target: The target file list of strings
     :param source: The source file list of SCons.Node.FS.File objects
     :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
-    :param suffixes_to_extend: List of strings to use as emitted file suffixes. Must contain the leading period,
+    :param suffixes: List of strings to use as emitted file suffixes. Must contain the leading period,
         e.g. ``.extension``
 
     :return: target, source
