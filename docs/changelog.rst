@@ -36,6 +36,8 @@ New Features
 - Add an SBatch Python builder factory (:issue:`746`, :merge:`918`). By `Kyle Brindley`_.
 - Add an Abaqus journal builder factory based on the first target builder factory template (:issue:`748`, :merge:`921`).
   By `Kyle Brindley`_.
+- Add an Abaqus solver builder factory based on the first target builder factory template (:issue:`749`, :merge:`922`).
+  By `Kyle Brindley`_.
 
 Documentation
 =============
