@@ -393,15 +393,38 @@ prepend_env_input = {
                          prepend_env_input.values(),
                          ids=prepend_env_input.keys())
 def test_append_env_path(program, mock_exists, outcome):
+    # Test function interface
     env = SCons.Environment.Environment()
     with patch("pathlib.Path.exists", return_value=mock_exists), outcome:
+        try:
+            scons_extensions.append_env_path(env, program)
+            assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
+            assert "PYTHONPATH" not in env["ENV"]
+            assert "LD_LIBRARY_PATH" not in env["ENV"]
+        finally:
+            pass
+
+    # Test AddMethod interface
+    env.AddMethod(scons_extensions.append_env_path, "AppendEnvPath")
+    with patch("pathlib.Path.exists", return_value=mock_exists), outcome:
+        try:
+            env.AppendEnvPath(program)
+            assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
+            assert "PYTHONPATH" not in env["ENV"]
+            assert "LD_LIBRARY_PATH" not in env["ENV"]
+        finally:
+            pass
+
+    # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    with patch("pathlib.Path.exists", return_value=mock_exists), \
+         patch("warnings.warn") as mock_warn, outcome:
         try:
             scons_extensions.append_env_path(program, env)
             assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
             assert "PYTHONPATH" not in env["ENV"]
             assert "LD_LIBRARY_PATH" not in env["ENV"]
         finally:
-            pass
+            mock_warn.assert_called_once()
 
 
 substitution_dictionary = {"thing1": 1, "thing_two": "two"}
