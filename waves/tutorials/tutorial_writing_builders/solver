@@ -63,14 +63,17 @@ def configure(args):
 
 def fake_solve(output_file, configuration, solve_cpus):
     """Common solve logic because we do not really have separate routines"""
-    if solve_cpus == 1:
-        with open(output_file, 'w') as output_writer:
-            output_writer.write(yaml.safe_dump(configuration))
-    else:
-        for solve_cpu in range(solve_cpus):
-            solve_cpu_file = output_file.with_suffix(f"{_output_file_extension}{solve_cpu}")
-            with open(solve_cpu_file, 'w') as output_writer:
+    with open("solver.log", "w") as log_writer:
+        if solve_cpus == 1:
+            with open(output_file, 'w') as output_writer:
+                log_writer.write(f"writing: {output_file}\n")
                 output_writer.write(yaml.safe_dump(configuration))
+        else:
+            for solve_cpu in range(solve_cpus):
+                solve_cpu_file = output_file.with_suffix(f"{_output_file_extension}{solve_cpu}")
+                with open(solve_cpu_file, 'w') as output_writer:
+                    log_writer.write(f"{writing: solve_cpu_file}\n")
+                    output_writer.write(yaml.safe_dump(configuration))
 
 
 def implicit(args):
