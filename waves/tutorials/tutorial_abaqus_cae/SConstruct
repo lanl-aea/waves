@@ -38,4 +38,4 @@ SConscript("SConscript", variant_dir=env["build_dir"], exports="env", duplicate=
 
 # List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.
-env.ProjectHelp()()
+env.ProjectHelp()
