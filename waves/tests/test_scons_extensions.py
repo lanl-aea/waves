@@ -80,7 +80,7 @@ def check_abaqus_solver_targets(nodes, solver, stem, suffixes):
     assert set(expected_suffixes) == set(suffixes)
 
 
-def first_target_builder_factory_test_cases(name: str) -> dict:
+def first_target_builder_factory_test_cases(name: str, default_kwargs: dict) -> dict:
     """Returns template test cases for builder factories based on
     :meth:`waves.scons_extensions.first_target_builder_factory`
 
@@ -91,25 +91,25 @@ def first_target_builder_factory_test_cases(name: str) -> dict:
 
     .. code-block::
 
-        new_builder_factory_tests = first_target_builder_factory_test_cases("new_builder_factory")
-        @pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+        default_kwargs = {
+            "environment": "",
+            "action_prefix": _cd_action_prefix,
+            "program": "",
+            "program_required": "",
+            "program_options": "",
+            "subcommand": "",
+            "subcommand_required": "",
+            "subcommand_options": "",
+            "action_suffix": _redirect_action_suffix
+        }
+        new_builder_factory_tests = first_target_builder_factory_test_cases("new_builder_factory", default_kwargs)
+        @pytest.mark.parametrize("factory_name, default_kwargs, builder_kwargs, task_kwargs, target, emitter, expected_node_count",
                                  new_builder_factory_tests.values(),
                                  ids=new_builder_factory_tests.keys())
-        def test_new_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
+        def test_new_builder_factory(factory_name, default_kwargs, builder_kwargs, task_kwargs, target, emitter, expected_node_count):
             # Set default expectations to match default argument values
-            default_kwargs = {
-                "environment": "",
-                "action_prefix": _cd_action_prefix,
-                "program": "",
-                "program_required": "",
-                "program_options": "",
-                "subcommand": "",
-                "subcommand_required": "",
-                "subcommand_options": "",
-                "action_suffix": _redirect_action_suffix
-            }
             check_builder_factory(
-                "new_builder_factory",
+                name=factory_name,
                 default_kwargs=default_kwargs,
                 builder_kwargs=builder_kwargs,
                 task_kwargs=task_kwargs,
@@ -119,7 +119,10 @@ def first_target_builder_factory_test_cases(name: str) -> dict:
                 expected_node_count=expected_node_count
             )
 
-    :param name: target file name prefix
+    :param name: Target file name prefix. Target file names must be unique in the entire test suite, so matching the
+        builder factory under test is a good choice.
+    :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
+        factory under test.
 
     :returns: test cases for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`
     """
@@ -127,9 +130,14 @@ def first_target_builder_factory_test_cases(name: str) -> dict:
         f"{name}.out{number}" for number in range(4)
     ]
     test_cases = {
-        "default behavior": ({}, {}, [target_file_names[0]], False, 2),
-        "different emitter": ({}, {}, [target_file_names[1]], dummy_emitter_for_testing, 1),
-        "builder kwargs overrides": (
+        f"{name} default behavior": (
+            name, default_kwargs, {}, {}, [target_file_names[0]], False, 2
+        ),
+        f"{name} different emitter": (
+            name, default_kwargs, {}, {}, [target_file_names[1]], dummy_emitter_for_testing, 1
+        ),
+        f"{name} builder kwargs overrides": (
+            name, default_kwargs,
             {
              "environment": "different environment",
              "action_prefix": "different action prefix",
@@ -143,7 +151,8 @@ def first_target_builder_factory_test_cases(name: str) -> dict:
             },
             {}, [target_file_names[2]], False, 2
         ),
-        "task kwargs overrides": (
+        f"{name} task kwargs overrides": (
+            name, default_kwargs,
             {},
             {
              "environment": "different environment",
@@ -1004,13 +1013,9 @@ def test_first_target_emitter(target, source, expected):
     assert target == expected
 
 
-first_target_builder_factory_tests = first_target_builder_factory_test_cases("first_target_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         first_target_builder_factory_tests.values(),
-                         ids=first_target_builder_factory_tests.keys())
-def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    # Set default expectations to match default argument values
-    default_kwargs = {
+first_target_builder_factory_tests = first_target_builder_factory_test_cases(
+    "first_target_builder_factory",
+    {
         "environment": "",
         "action_prefix": _cd_action_prefix,
         "program": "",
@@ -1021,8 +1026,147 @@ def test_first_target_builder_factory(builder_kwargs, task_kwargs, target, emitt
         "subcommand_options": "",
         "action_suffix": _redirect_action_suffix
     }
+)
+first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "python_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "python",
+        "program_required": "",
+        "program_options": "",
+        "subcommand": "${SOURCE.abspath}",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+))
+first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "abaqus_journal_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "abaqus",
+        "program_required": "cae -noGUI=${SOURCES[0].abspath}",
+        "program_options": "",
+        "subcommand": "--",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+))
+first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "abaqus_solver_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "abaqus",
+        "program_required": "-interactive -ask_delete no -input ${SOURCE.filebase}",
+        "program_options": "",
+        "subcommand": "",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+))
+first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "quinoa_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "charmrun",
+        "program_required": "",
+        "program_options": "+p1",
+        "subcommand": "inciter",
+        "subcommand_required": "--control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath}",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+))
+first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "fierro_explicit_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "mpirun",
+        "program_required": "",
+        "program_options": "-np 1",
+        "subcommand": "fierro-parallel-explicit",
+        "subcommand_required": "${SOURCE.abspath}",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+))
+first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "fierro_implicit_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "mpirun",
+        "program_required": "",
+        "program_options": "-np 1",
+        "subcommand": "fierro-parallel-implicit",
+        "subcommand_required": "${SOURCE.abspath}",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+))
+first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "sierra_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "sierra",
+        "program_required": "",
+        "program_options": "",
+        "subcommand": "adagio",
+        "subcommand_required": "-i ${SOURCE.abspath}",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+))
+first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "ansys_apdl_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "ansys",
+        "program_required": "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
+        "program_options": "",
+        "subcommand": "",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": ""
+    }
+))
+
+@pytest.mark.parametrize("factory_name, default_kwargs, builder_kwargs, task_kwargs, target, emitter, expected_node_count",
+                         first_target_builder_factory_tests.values(),
+                         ids=first_target_builder_factory_tests.keys())
+def test_first_target_builder_factories(
+    factory_name,
+    default_kwargs,
+    builder_kwargs,
+    task_kwargs,
+    target,
+    emitter,
+    expected_node_count
+) -> None:
+    """Test builder factories patterned on the first target builder factory
+
+    :param factory_name: Name of the factory to test
+    :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
+        factory under test.
+    :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
+    :param task_kwargs: Keyword arguments unpacked at the task instantiation
+    :param target: Explicit list of targets provided at the task instantiation
+    :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``False`` to avoid
+        providing an emitter argument to the builder factory.
+    :param expected_node_count: The expected number of target nodes. Should match the length of the target list unless
+        a non-default emitter is included. Defaults to 1 for ``default_emitter=None``.
+    """
     check_builder_factory(
-        "first_target_builder_factory",
+        name=factory_name,
         default_kwargs=default_kwargs,
         builder_kwargs=builder_kwargs,
         task_kwargs=task_kwargs,
@@ -1066,230 +1210,6 @@ def test_sbatch_first_target_builder_factories(name: str):
         mock_wrapped_factory.assert_called_once()
     assert builder.action.cmd_list == expected
     assert builder.emitter == scons_extensions.first_target_emitter
-
-
-python_builder_factory_tests = first_target_builder_factory_test_cases("python_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         python_builder_factory_tests.values(),
-                         ids=python_builder_factory_tests.keys())
-def test_python_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": _cd_action_prefix,
-        "program": "python",
-        "program_required": "",
-        "program_options": "",
-        "subcommand": "${SOURCE.abspath}",
-        "subcommand_required": "",
-        "subcommand_options": "",
-        "action_suffix": _redirect_action_suffix
-    }
-    check_builder_factory(
-        "python_builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=scons_extensions.first_target_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
-
-
-abaqus_journal_builder_factory_tests = first_target_builder_factory_test_cases("abaqus_journal_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         abaqus_journal_builder_factory_tests.values(),
-                         ids=abaqus_journal_builder_factory_tests.keys())
-def test_abaqus_journal_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": _cd_action_prefix,
-        "program": "abaqus",
-        "program_required": "cae -noGUI=${SOURCES[0].abspath}",
-        "program_options": "",
-        "subcommand": "--",
-        "subcommand_required": "",
-        "subcommand_options": "",
-        "action_suffix": _redirect_action_suffix
-    }
-    check_builder_factory(
-        "abaqus_journal_builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=scons_extensions.first_target_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
-
-
-abaqus_solver_builder_factory_tests = first_target_builder_factory_test_cases("abaqus_solver_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         abaqus_solver_builder_factory_tests.values(),
-                         ids=abaqus_solver_builder_factory_tests.keys())
-def test_abaqus_solver_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": _cd_action_prefix,
-        "program": "abaqus",
-        "program_required": "-interactive -ask_delete no -input ${SOURCE.filebase}",
-        "program_options": "",
-        "subcommand": "",
-        "subcommand_required": "",
-        "subcommand_options": "",
-        "action_suffix": _redirect_action_suffix
-    }
-    check_builder_factory(
-        "abaqus_solver_builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=scons_extensions.first_target_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
-
-
-quinoa_builder_factory_tests = first_target_builder_factory_test_cases("quinoa_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         quinoa_builder_factory_tests.values(),
-                         ids=quinoa_builder_factory_tests.keys())
-def test_quinoa_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": _cd_action_prefix,
-        "program": "charmrun",
-        "program_required": "",
-        "program_options": "+p1",
-        "subcommand": "inciter",
-        "subcommand_required": "--control ${SOURCES[0].abspath} --input ${SOURCES[1].abspath}",
-        "subcommand_options": "",
-        "action_suffix": _redirect_action_suffix
-    }
-    check_builder_factory(
-        "quinoa_builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=scons_extensions.first_target_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
-
-
-fierro_explicit_builder_factory_tests = first_target_builder_factory_test_cases("fierro_explicit_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         fierro_explicit_builder_factory_tests.values(),
-                         ids=fierro_explicit_builder_factory_tests.keys())
-def test_fierro_explicit_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": _cd_action_prefix,
-        "program": "mpirun",
-        "program_required": "",
-        "program_options": "-np 1",
-        "subcommand": "fierro-parallel-explicit",
-        "subcommand_required": "${SOURCE.abspath}",
-        "subcommand_options": "",
-        "action_suffix": _redirect_action_suffix
-    }
-    check_builder_factory(
-        "fierro_explicit_builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=scons_extensions.first_target_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
-
-
-fierro_implicit_builder_factory_tests = first_target_builder_factory_test_cases("fierro_implicit_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         fierro_implicit_builder_factory_tests.values(),
-                         ids=fierro_implicit_builder_factory_tests.keys())
-def test_fierro_implicit_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": _cd_action_prefix,
-        "program": "mpirun",
-        "program_required": "",
-        "program_options": "-np 1",
-        "subcommand": "fierro-parallel-implicit",
-        "subcommand_required": "${SOURCE.abspath}",
-        "subcommand_options": "",
-        "action_suffix": _redirect_action_suffix
-    }
-    check_builder_factory(
-        "fierro_implicit_builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=scons_extensions.first_target_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
-
-
-sierra_builder_factory_tests = first_target_builder_factory_test_cases("sierra_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         sierra_builder_factory_tests.values(),
-                         ids=sierra_builder_factory_tests.keys())
-def test_sierra_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": _cd_action_prefix,
-        "program": "sierra",
-        "program_required": "",
-        "program_options": "",
-        "subcommand": "adagio",
-        "subcommand_required": "-i ${SOURCE.abspath}",
-        "subcommand_options": "",
-        "action_suffix": _redirect_action_suffix
-    }
-    check_builder_factory(
-        "sierra_builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=scons_extensions.first_target_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
-
-
-ansys_apdl_builder_factory_tests = first_target_builder_factory_test_cases("ansys_apdl_builder_factory")
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         ansys_apdl_builder_factory_tests.values(),
-                         ids=ansys_apdl_builder_factory_tests.keys())
-def test_ansys_apdl_builder_factory(builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": _cd_action_prefix,
-        "program": "ansys",
-        "program_required": "-i ${SOURCES[0].abspath} -o ${TARGETS[-1].abspath}",
-        "program_options": "",
-        "subcommand": "",
-        "subcommand_required": "",
-        "subcommand_options": "",
-        "action_suffix": ""
-    }
-    check_builder_factory(
-        "ansys_apdl_builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=scons_extensions.first_target_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
 
 
 # TODO: Figure out how to cleanly reset the construction environment between parameter sets instead of passing a new
