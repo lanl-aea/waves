@@ -17,6 +17,7 @@ AddOption(
 )
 
 env = Environment(
+    ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
 )
 env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")

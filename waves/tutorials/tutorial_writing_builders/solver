@@ -57,18 +57,21 @@ def configure(args):
     return configuration
 
 
+def fake_solve(output_file, configuration):
+    with open(output_file, 'w') as output_writer:
+        output_writer.write(yaml.safe_dump(configuration))
+
+
 def implicit(args):
     configuration = configure(args)
     output_file = name_output_file(args.input_file, args.output_file)
-    with open(output_file, 'w') as output_writer:
-        output_writer.write(yaml.safe_dump(configuration))
+    fake_solve(output_file, configuration)
 
 
 def explicit(args):
     configuration = configure(args)
     output_file = name_output_file(args.input_file, args.output_file)
-    with open(output_file, 'w') as output_writer:
-        output_writer.write(yaml.safe_dump(configuration))
+    fake_solve(output_file, configuration)
 
 
 def merge(args):
