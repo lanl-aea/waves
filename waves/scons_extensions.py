@@ -357,6 +357,9 @@ def default_targets_message(
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
+    if not hasattr(env, "Help"):
+        from SCons.Script.SConscript import SConsEnvironment
+        env.AddMethod(SConsEnvironment.Help, "Help")
     default_targets_help = "\nDefault Targets:\n"
     for target in SCons.Script.DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
@@ -388,6 +391,9 @@ def alias_list_message(
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
+    if not hasattr(env, "Help"):
+        from SCons.Script.SConscript import SConsEnvironment
+        env.AddMethod(SConsEnvironment.Help, "Help")
     alias_help = "\nTarget Aliases:\n"
     for alias in SCons.Node.Alias.default_ans:
         alias_help += f"    {alias}\n"
