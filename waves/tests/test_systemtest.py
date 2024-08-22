@@ -84,7 +84,7 @@ system_tests = [
     ([fetch_template, "scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "--tutorial 11"),
     ([fetch_template, "scons tutorial_12_archival --sconstruct=tutorial_12_archival_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "--tutorial 12"),
-    ([fetch_template, "scons . --print-build-failures"], "tutorials/tutorial_writing_builders"),
+    ([fetch_template, "scons ."], "tutorials/tutorial_writing_builders"),
     ([fetch_template, "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, f"{waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4"], "tutorials"),

@@ -5,35 +5,6 @@ import pathlib
 import waves
 
 
-AddOption(
-    "--build-dir",
-    dest="variant_dir_base",
-    default="build",
-    nargs=1,
-    type="string",
-    action="store",
-    metavar="DIR",
-    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
-)
-AddOption(
-    "--solve-cpus",
-    dest="solve_cpus",
-    default=1,
-    nargs=1,
-    type="int",
-    action="store",
-    metavar="N",
-    help="Run the solver task using N CPUs. (default: '%default')"
-)
-
-env = Environment(
-    ENV=os.environ.copy(),
-    variant_dir_base=GetOption("variant_dir_base"),
-    solve_cpus=GetOption("solve_cpus"),
-)
-env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
-env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-
 # Write an example custom builder on the WAVES builder factory template
 def solver_builder_factory(
     environment: str = "",
@@ -65,6 +36,42 @@ def solver_builder_factory(
         **kwargs
     )
     return builder
+
+
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+AddOption(
+    "--solve-cpus",
+    dest="solve_cpus",
+    default=1,
+    nargs=1,
+    type="int",
+    action="store",
+    metavar="N",
+    help="Run the solver task using N CPUs. (default: '%default')"
+)
+
+env = Environment(
+    ENV=os.environ.copy(),
+    variant_dir_base=GetOption("variant_dir_base"),
+    solve_cpus=GetOption("solve_cpus"),
+)
+env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
+env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+
+# Conditionally print failed task *.stdout files
+waves.scons_extensions.print_build_failures()
+
+# Empty defaults list to avoid building all simulation targets by default
+env.Default()
 
 # Add project builders and scanners
 solver_executable = pathlib.Path("solver").resolve()
