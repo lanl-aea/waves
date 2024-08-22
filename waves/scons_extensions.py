@@ -439,7 +439,7 @@ def append_env_path(
        env = Environment()
        env["program"] = waves.scons_extensions.find_program(env, ["program"])
        if env["program"]:
-           waves.append_env_path(env["program"], env)
+           waves.append_env_path(env, env["program"])
 
     :param env: The SCons construction environment object to modify
     :param program: An absolute path for the program to add to SCons construction environment ``PATH``
