@@ -15,10 +15,21 @@ AddOption(
     metavar="DIR",
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
+AddOption(
+    "--solve-cpus",
+    dest="solve_cpus",
+    default=1,
+    nargs=1,
+    type="int",
+    action="store",
+    metavar="N",
+    help="Run the solver task using N CPUs. (default: '%default')"
+)
 
 env = Environment(
     ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
+    solve_cpus=GetOption("solve_cpus"),
 )
 env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
 env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
@@ -26,14 +37,14 @@ env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
 # Write an example custom builder on the WAVES builder factory template
 def solver_builder_factory(
     environment: str = "",
-    action_prefix: str = "",
+    action_prefix: str = "cd ${TARGET.dir.abspath} &&",
     program: str = "solver",
     program_required: str = "",
     program_options: str = "",
     subcommand: str = "implicit",
     subcommand_required: str = "--input-file ${SOURCES[0].abspath} --output-file=${TARGETS[0].abspath}",
     subcommand_options: str = "",
-    action_suffix: str = "",
+    action_suffix: str = "> ${TARGETS[-1].abspath} 2>&1",
     emitter=waves.scons_extensions.first_target_emitter,
     **kwargs
 ) -> Builder:
@@ -59,7 +70,7 @@ def solver_builder_factory(
 solver_executable = pathlib.Path("solver").resolve()
 env["solver"] = env.AddProgram([solver_executable])
 env.Append(BUILDERS={
-    "Solver": solver_builder_factory()
+    "Solver": solver_builder_factory(subcommand_options="$(--jobs $solve_cpus$)")
 })
 
 # Build path object for extension and re-use

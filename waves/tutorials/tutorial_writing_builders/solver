@@ -15,6 +15,7 @@ _output_file_extension = ".out"
 
 
 def main():
+    """Main function implementing the command line interface and program flow"""
     parser = get_parser()
     subcommand_list = parser._subparsers._group_actions[0].choices.keys()
     args = parser.parse_args()
@@ -27,12 +28,14 @@ def main():
 
 
 def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pathlib.Path:
+    """Create the output file name from the input file if not specified"""
     if output_file is None:
         output_file = input_file.with_suffix(_output_file_extension)
     return output_file
 
 
 def read_input(input_file: pathlib.Path) -> dict:
+    """Return the configuration by reading the input file and handling common errors"""
     input_file.resolve()
     if not input_file.is_file():
         print("input file '{input_file}' does not exist", file=sys.stderr)
@@ -46,6 +49,7 @@ def read_input(input_file: pathlib.Path) -> dict:
 
 
 def configure(args):
+    """Return the configuration with appended executable information"""
     configuration = read_input(args.input_file)
     if "routine" in configuration and configuration["routine"].lower() != args.subcommand.lower():
         print(
@@ -57,24 +61,34 @@ def configure(args):
     return configuration
 
 
-def fake_solve(output_file, configuration):
-    with open(output_file, 'w') as output_writer:
-        output_writer.write(yaml.safe_dump(configuration))
+def fake_solve(output_file, configuration, jobs):
+    """Common solve logic because we do not really have separate routines"""
+    if jobs == 1:
+        with open(output_file, 'w') as output_writer:
+            output_writer.write(yaml.safe_dump(configuration))
+    else:
+        for job in range(jobs):
+            job_file = output_file.with_suffix(f"{_output_file_extension}{job}")
+            with open(job_file, 'w') as output_writer:
+                output_writer.write(yaml.safe_dump(configuration))
 
 
 def implicit(args):
+    """Implicit routine"""
     configuration = configure(args)
     output_file = name_output_file(args.input_file, args.output_file)
-    fake_solve(output_file, configuration)
+    fake_solve(output_file, configuration, args.jobs)
 
 
 def explicit(args):
+    """Explicit routine"""
     configuration = configure(args)
     output_file = name_output_file(args.input_file, args.output_file)
-    fake_solve(output_file, configuration)
+    fake_solve(output_file, configuration, args.jobs)
 
 
 def merge(args):
+    """Merge parellized output files into a single output file"""
     pass
 
 

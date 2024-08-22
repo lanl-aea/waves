@@ -3,5 +3,6 @@ Import("env")
 
 env.Solver(
     target=["implicit.out"],
-    source=["implicit.yaml"]
+    source=["implicit.yaml"],
+    solve_cpus=env["solve_cpus"]
 )
