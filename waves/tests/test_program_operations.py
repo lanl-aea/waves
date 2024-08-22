@@ -222,23 +222,68 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
 
 
 def test_add_cubit_python():
+
+    # Test function style interface
     env = SCons.Environment.Environment()
     cubit_bin = "/path/to/cubit/bin/"
     cubit_python = "/path/to/cubit/bin/python"
-
     # Cubit Python not found mocked by add_program
     with patch("waves._utilities.find_cubit_python"), \
          patch("waves.scons_extensions.find_program"), \
          patch("waves.scons_extensions.add_program", return_value=None):
-        program = scons_extensions.add_cubit_python("dummy_cubit_executable", env)
+        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
     assert program == None
     assert "PYTHONPATH" not in env["ENV"]
-
     # Cubit Python found mocked by add_program
     with patch("waves._utilities.find_cubit_python"), \
          patch("waves.scons_extensions.find_program"), \
          patch("waves.scons_extensions.add_program", return_value=cubit_python), \
          patch("waves._utilities.find_cubit_bin", return_value=cubit_bin):
+        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
+    assert program == cubit_python
+    assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
+
+    # Test SCons AddMethod style interface
+    env = SCons.Environment.Environment()
+    env.AddMethod(scons_extensions.add_cubit_python, "AddCubitPython")
+    cubit_bin = "/path/to/cubit/bin/"
+    cubit_python = "/path/to/cubit/bin/python"
+    # Cubit Python not found mocked by add_program
+    with patch("waves._utilities.find_cubit_python"), \
+         patch("waves.scons_extensions.find_program"), \
+         patch("waves.scons_extensions.add_program", return_value=None):
+        program = env.AddCubitPython("dummy_cubit_executable")
+    assert program == None
+    assert "PYTHONPATH" not in env["ENV"]
+    # Cubit Python found mocked by add_program
+    with patch("waves._utilities.find_cubit_python"), \
+         patch("waves.scons_extensions.find_program"), \
+         patch("waves.scons_extensions.add_program", return_value=cubit_python), \
+         patch("waves._utilities.find_cubit_bin", return_value=cubit_bin):
+        program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
+    assert program == cubit_python
+    assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
+
+    # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    env = SCons.Environment.Environment()
+    cubit_bin = "/path/to/cubit/bin/"
+    cubit_python = "/path/to/cubit/bin/python"
+    # Cubit Python not found mocked by add_program
+    with patch("waves._utilities.find_cubit_python"), \
+         patch("waves.scons_extensions.find_program"), \
+         patch("waves.scons_extensions.add_program", return_value=None), \
+         patch("warnings.warn") as mock_warn:
         program = scons_extensions.add_cubit_python("dummy_cubit_executable", env)
+        mock_warn.assert_called_once()
+    assert program == None
+    assert "PYTHONPATH" not in env["ENV"]
+    # Cubit Python found mocked by add_program
+    with patch("waves._utilities.find_cubit_python"), \
+         patch("waves.scons_extensions.find_program"), \
+         patch("waves.scons_extensions.add_program", return_value=cubit_python), \
+         patch("waves._utilities.find_cubit_bin", return_value=cubit_bin), \
+         patch("warnings.warn") as mock_warn:
+        program = scons_extensions.add_cubit_python("dummy_cubit_executable", env)
+        mock_warn.assert_called_once()
     assert program == cubit_python
     assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
