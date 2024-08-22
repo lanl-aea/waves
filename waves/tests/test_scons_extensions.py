@@ -416,6 +416,7 @@ def test_append_env_path(program, mock_exists, outcome):
             pass
 
     # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     with patch("pathlib.Path.exists", return_value=mock_exists), \
          patch("warnings.warn") as mock_warn, outcome:
         try:

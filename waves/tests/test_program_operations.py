@@ -68,6 +68,7 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     assert program == first_found_path
 
     # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
@@ -118,6 +119,7 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
         assert original_path == env["ENV"]["PATH"]
 
     # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
     mock_conf = unittest.mock.Mock()
@@ -195,6 +197,7 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
         assert original_path == env["ENV"]["PATH"]
 
     # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
     mock_conf = unittest.mock.Mock()
@@ -265,6 +268,7 @@ def test_add_cubit_python():
     assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
     # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     env = SCons.Environment.Environment()
     cubit_bin = "/path/to/cubit/bin/"
     cubit_python = "/path/to/cubit/bin/python"

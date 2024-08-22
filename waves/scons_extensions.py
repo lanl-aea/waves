@@ -447,6 +447,7 @@ def append_env_path(
     :raises FileNotFoundError: if the ``program`` absolute path does not exist.
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
         import warnings
         message = "The append_env_path function arguments were reversed in v0.11 from " \
@@ -486,6 +487,7 @@ def find_program(
     :return: Absolute path of the found program. None if none of the names are found.
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
         message = "The find_program function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' " \
@@ -533,6 +535,7 @@ def add_program(
     :return: Absolute path of the found program. None if none of the names are found.
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
         message = "The add_program arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
@@ -574,6 +577,7 @@ def add_cubit(
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
         message = "The add_cubit function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
@@ -618,6 +622,7 @@ def add_cubit_python(
     :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
         message = "The add_cubit_python function arguments were reversed in v0.11 from " \
