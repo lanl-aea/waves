@@ -61,15 +61,15 @@ def configure(args):
     return configuration
 
 
-def fake_solve(output_file, configuration, jobs):
+def fake_solve(output_file, configuration, solve_cpus):
     """Common solve logic because we do not really have separate routines"""
-    if jobs == 1:
+    if solve_cpus == 1:
         with open(output_file, 'w') as output_writer:
             output_writer.write(yaml.safe_dump(configuration))
     else:
-        for job in range(jobs):
-            job_file = output_file.with_suffix(f"{_output_file_extension}{job}")
-            with open(job_file, 'w') as output_writer:
+        for solve_cpu in range(solve_cpus):
+            solve_cpu_file = output_file.with_suffix(f"{_output_file_extension}{solve_cpu}")
+            with open(solve_cpu_file, 'w') as output_writer:
                 output_writer.write(yaml.safe_dump(configuration))
 
 
@@ -162,6 +162,7 @@ def get_parser():
     merge_parser = subparsers.add_parser(
         "merge",
         help=f"Merge output files (unimplemented)",
+        parents=[subcommand_parser_parent]
     )
 
     return main_parser
