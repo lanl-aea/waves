@@ -575,7 +575,7 @@ def add_cubit(
         swap_names = env
         return add_cubit(swap_env, swap_names)
 
-    first_found_path = add_program(names, env)
+    first_found_path = add_program(env, names)
     if first_found_path:
         cubit_bin = _utilities.find_cubit_bin([first_found_path])
         cubit_python_library_dir = cubit_bin / "python3"
@@ -620,9 +620,9 @@ def add_cubit_python(
         swap_names = env
         return add_cubit_python(swap_env, swap_names)
 
-    first_found_path = find_program(names, env)
+    first_found_path = find_program(env, names)
     cubit_python = _utilities.find_cubit_python([first_found_path])
-    cubit_python = add_program([cubit_python], env)
+    cubit_python = add_program(env, [cubit_python])
     if cubit_python:
         cubit_bin = _utilities.find_cubit_bin([first_found_path])
         env.PrependENVPath("PYTHONPATH", str(cubit_bin))

@@ -73,8 +73,8 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
          patch("warnings.warn") as mock_warn:
         program = scons_extensions.find_program(names, env)
+        mock_warn.assert_called_once()
     assert program == first_found_path
-    mock_warn.assert_called_once()
 
 
 # FIXME: Trace the source of interference between the builder tests and the find_program tests
@@ -86,10 +86,9 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
                          find_program_input.values(),
                          ids=find_program_input.keys())
 def test_add_program(names, checkprog_side_effect, first_found_path):
+    # Test function style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
-
-    # Test function style interface
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
@@ -103,6 +102,8 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
         assert original_path == env["ENV"]["PATH"]
 
     # Test SCons AddMethod style interface
+    env = SCons.Environment.Environment()
+    original_path = env["ENV"]["PATH"]
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     env.AddMethod(scons_extensions.add_program, "AddProgram")
@@ -117,13 +118,15 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
         assert original_path == env["ENV"]["PATH"]
 
     # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    env = SCons.Environment.Environment()
+    original_path = env["ENV"]["PATH"]
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
          patch("pathlib.Path.exists", return_value=True), \
          patch("warnings.warn") as mock_warn:
         program = scons_extensions.add_program(names, env)
-    mock_warn.assert_called_once()
+        mock_warn.assert_called_once()
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = str(pathlib.Path(first_found_path).parent)
@@ -141,6 +144,8 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
                          find_program_input.values(),
                          ids=find_program_input.keys())
 def test_add_cubit(names, checkprog_side_effect, first_found_path):
+
+    # Test function style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
     mock_conf = unittest.mock.Mock()
@@ -152,7 +157,58 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
     with patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return), \
          patch("SCons.SConf.SConfBase", return_value=mock_conf), \
          patch("pathlib.Path.exists", return_value=True):
+        program = scons_extensions.add_cubit(env, names)
+    assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = pathlib.Path(first_found_path).parent
+        cubit_bin = parent_path / "bin"
+        cubit_library_path = cubit_bin / "python3"
+        assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        assert str(cubit_bin) == env["ENV"]["PYTHONPATH"].split(os.pathsep)[0]
+        assert str(cubit_library_path) == env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0]
+    else:
+        assert original_path == env["ENV"]["PATH"]
+
+    # Test SCons AddMethod style interface
+    env = SCons.Environment.Environment()
+    env.AddMethod(scons_extensions.add_cubit, "AddCubit")
+    original_path = env["ENV"]["PATH"]
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    if first_found_path is not None:
+        find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
+    else:
+        find_cubit_bin_return = None
+    with patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return), \
+         patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("pathlib.Path.exists", return_value=True):
+        program = env.AddCubit(names)
+    assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = pathlib.Path(first_found_path).parent
+        cubit_bin = parent_path / "bin"
+        cubit_library_path = cubit_bin / "python3"
+        assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
+        assert str(cubit_bin) == env["ENV"]["PYTHONPATH"].split(os.pathsep)[0]
+        assert str(cubit_library_path) == env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0]
+    else:
+        assert original_path == env["ENV"]["PATH"]
+
+    # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    env = SCons.Environment.Environment()
+    original_path = env["ENV"]["PATH"]
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    if first_found_path is not None:
+        find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
+    else:
+        find_cubit_bin_return = None
+    with patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return), \
+         patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("pathlib.Path.exists", return_value=True), \
+         patch("warnings.warn") as mock_warn:
         program = scons_extensions.add_cubit(names, env)
+        mock_warn.assert_called_once()
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = pathlib.Path(first_found_path).parent
