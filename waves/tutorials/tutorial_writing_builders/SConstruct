@@ -1,0 +1,40 @@
+#! /usr/bin/env python
+import os
+import pathlib
+
+import waves
+
+
+AddOption(
+    "--build-dir",
+    dest="variant_dir_base",
+    default="build",
+    nargs=1,
+    type="string",
+    action="store",
+    metavar="DIR",
+    help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
+)
+
+env = Environment(
+    variant_dir_base=GetOption("variant_dir_base"),
+)
+env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
+env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+
+# Add project builders and scanners
+env.Append(BUILDERS={
+})
+
+# Build path object for extension and re-use
+variant_dir_base = pathlib.Path(env["variant_dir_base"])
+
+# Add simulation targets
+workflow_configurations = [
+]
+for workflow in workflow_configurations:
+    build_dir = variant_dir_base / workflow
+    SConscript(workflow, variant_dir=build_dir, exports="env", duplicate=False)
+
+# Print project local help
+env.ProjectHelp()
