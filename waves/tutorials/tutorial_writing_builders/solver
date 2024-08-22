@@ -1,0 +1,29 @@
+#!/usr/bin/env python
+"""Example for common commercial and research solver behavior and handling"""
+
+import pathlib
+import argparse
+
+
+def main():
+    parser = get_parser()
+    args = parser.parse_args()
+
+
+def get_parser():
+    cli_description = "Dummy solver with file handling behavior similar to numeric solvers"
+    parser = argparse.ArgumentParser(description=cli_description)
+    required_named = parser.add_argument_group('required named arguments')
+    required_named.add_argument(
+        "-i", "--input-file", type=pathlib.Path, required=True,
+        help="The Solver input file"
+    )
+    parser.add_argument(
+        "-o", "--output-file", type=pathlib.Path, default=None, required=False,
+        help="The Solver results file. If none is provided, uses the pattern ``input_file.out``"
+    )
+
+    return parser
+
+if __name__ == "__main__":
+    main()
