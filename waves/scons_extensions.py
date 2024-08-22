@@ -362,9 +362,9 @@ def default_targets_message(
     for target in SCons.Script.DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
     try:
-        SConsEnvironment.Help(default_targets_help, append=append, keep_local=keep_local)
+        SConsEnvironment.Help(env, default_targets_help, append=append, keep_local=keep_local)
     except TypeError as err:
-        SConsEnvironment.Help(default_targets_help, append=append)
+        SConsEnvironment.Help(env, default_targets_help, append=append)
 
 
 def alias_list_message(
@@ -394,9 +394,9 @@ def alias_list_message(
     for alias in SCons.Node.Alias.default_ans:
         alias_help += f"    {alias}\n"
     try:
-        SConsEnvironment.Help(alias_help, append=append, keep_local=keep_local)
+        SConsEnvironment.Help(env, alias_help, append=append, keep_local=keep_local)
     except TypeError:
-        SConsEnvironment.Help(alias_help, append=append)
+        SConsEnvironment.Help(env, alias_help, append=append)
 
 
 def append_env_path(
