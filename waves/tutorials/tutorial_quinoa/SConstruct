@@ -106,8 +106,8 @@ try:  # sstelmo/sstbigbird
 except subprocess.CalledProcessError:  # HPC snow
     envQuinoa = waves.scons_extensions.shell_environment(quinoa_snow_environment)
 quinoa_installation = pathlib.Path(env["quinoa_installation"])
-envQuinoa["inciter"] = waves.scons_extensions.add_program(["inciter", quinoa_installation / "inciter"], envQuinoa)
-envQuinoa["charmrun"] = waves.scons_extensions.add_program(["charmrun", quinoa_installation / "charmrun"], envQuinoa)
+envQuinoa["inciter"] = waves.scons_extensions.add_program(envQuinoa, ["inciter", quinoa_installation / "inciter"])
+envQuinoa["charmrun"] = waves.scons_extensions.add_program(envQuinoa, ["charmrun", quinoa_installation / "charmrun"])
 
 # Add WAVES builders. If sbatch is found, use it.
 # Should allow the same scons alias to run directly on sstbigbird, but submit as an sbatch job on HPC

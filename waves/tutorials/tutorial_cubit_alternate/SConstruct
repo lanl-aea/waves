@@ -66,7 +66,7 @@ try:
 except subprocess.CalledProcessError:
     print("Failed to initialize the Sierra environment", file=sys.stderr)
     envSierra = Environment()
-envSierra["sierra"] = waves.scons_extensions.add_program(["sierra"], envSierra)
+envSierra["sierra"] = waves.scons_extensions.add_program(envSierra, ["sierra"])
 
 # Comments used in tutorial code snippets: marker-4
 
