@@ -399,36 +399,6 @@ def alias_list_message(
         SConsEnvironment.Help(env, alias_help, append=append)
 
 
-def append_env_path(
-    program: str,
-    env: SCons.Environment.Environment
-) -> None:
-    """Append SCons contruction environment ``PATH`` with the program's parent directory
-
-    Uses the `SCons AppendENVPath`_ method. If the program parent directory is already on ``PATH``, the ``PATH``
-    directory order is preserved.
-
-    .. code-block::
-       :caption: Example environment modification
-
-       import waves
-
-       env = Environment()
-       env["program"] = waves.scons_extensions.find_program(["program"], env)
-       if env["program"]:
-           waves.append_env_path(env["program"], env)
-
-    :param program: An absolute path for the program to add to SCons construction environment ``PATH``
-    :param env: The SCons construction environment object to modify
-
-    :raises FileNotFoundError: if the ``program`` absolute path does not exist.
-    """
-    program = pathlib.Path(program).resolve()
-    if not program.exists():
-        raise FileNotFoundError(f"The program '{program}' does not exist.")
-    env.AppendENVPath("PATH", str(program.parent), delete_existing=False)
-
-
 def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", suffix: str = "@", postfix: str = "") -> dict:
     """Return a dictionary copy with the pre/suffix added to the key strings
 
@@ -452,9 +422,49 @@ def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", suffix
     return {f"{prefix}{key}{suffix}": value for key, value in substitution_dictionary.items()}
 
 
+def append_env_path(
+    env: SCons.Environment.Environment,
+    program: str
+) -> None:
+    """Append SCons contruction environment ``PATH`` with the program's parent directory
+
+    Uses the `SCons AppendENVPath`_ method. If the program parent directory is already on ``PATH``, the ``PATH``
+    directory order is preserved.
+
+    .. code-block::
+       :caption: Example environment modification
+
+       import waves
+
+       env = Environment()
+       env["program"] = waves.scons_extensions.find_program(["program"], env)
+       if env["program"]:
+           waves.append_env_path(env["program"], env)
+
+    :param program: An absolute path for the program to add to SCons construction environment ``PATH``
+    :param env: The SCons construction environment object to modify
+
+    :raises FileNotFoundError: if the ``program`` absolute path does not exist.
+    """
+    # TODO: Remove if-structure after full deprecation of the older argument order
+    if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
+        import warnings
+        message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
+                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
+        warnings.warn(message)
+        swap_env = program
+        swap_program = env
+        return append_env_path(swap_env, swap_program)
+
+    program = pathlib.Path(program).resolve()
+    if not program.exists():
+        raise FileNotFoundError(f"The program '{program}' does not exist.")
+    env.AppendENVPath("PATH", str(program.parent), delete_existing=False)
+
+
 def find_program(
-    names: typing.Iterable[str],
-    env: SCons.Environment.Environment
+    env: SCons.Environment.Environment,
+    names: typing.Iterable[str]
 ) -> str:
     """Search for a program from a list of possible program names.
 
@@ -466,6 +476,16 @@ def find_program(
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
+    # TODO: Remove if-structure after full deprecation of the older argument order
+    if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
+        import warnings
+        message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
+                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
+        warnings.warn(message, SyntaxWarning)
+        swap_env = program
+        swap_program = env
+        return find_program(swap_env, swap_program)
+
     if isinstance(names, str):
         names = [names]
     conf = env.Configure()
@@ -477,12 +497,13 @@ def find_program(
     first_found_path = next((path for path in program_paths if path is not None), None)
     if first_found_path:
         first_found_path = str(_utilities._quote_spaces_in_path(first_found_path))
+
     return first_found_path
 
 
 def add_program(
-    names: typing.Iterable[str],
-    env: SCons.Environment.Environment
+    env: SCons.Environment.Environment,
+    names: typing.Iterable[str]
 ) -> str:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
@@ -502,6 +523,16 @@ def add_program(
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
+    # TODO: Remove if-structure after full deprecation of the older argument order
+    if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
+        import warnings
+        message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
+                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
+        warnings.warn(message, SyntaxWarning)
+        swap_env = program
+        swap_program = env
+        return add_program(swap_env, swap_program)
+
     first_found_path = find_program(names, env)
     if first_found_path:
         append_env_path(first_found_path, env)
@@ -509,8 +540,8 @@ def add_program(
 
 
 def add_cubit(
-    names: typing.Iterable[str],
-    env: SCons.Environment.Environment
+    env: SCons.Environment.Environment,
+    names: typing.Iterable[str]
 ) -> str:
     """Modifies environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
@@ -533,6 +564,16 @@ def add_cubit(
 
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
+    # TODO: Remove if-structure after full deprecation of the older argument order
+    if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
+        import warnings
+        message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
+                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
+        warnings.warn(message)
+        swap_env = program
+        swap_program = env
+        return add_cubit(swap_env, swap_program)
+
     first_found_path = add_program(names, env)
     if first_found_path:
         cubit_bin = _utilities.find_cubit_bin([first_found_path])
@@ -543,8 +584,8 @@ def add_cubit(
 
 
 def add_cubit_python(
-    names: typing.Iterable[str],
-    env: SCons.Environment.Environment
+    env: SCons.Environment.Environment,
+    names: typing.Iterable[str]
 ) -> str:
     """Modifies environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
@@ -567,6 +608,16 @@ def add_cubit_python(
 
     :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
     """
+    # TODO: Remove if-structure after full deprecation of the older argument order
+    if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
+        import warnings
+        message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
+                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
+        warnings.warn(message)
+        swap_env = program
+        swap_program = env
+        return add_cubit_python(swap_env, swap_program)
+
     first_found_path = find_program(names, env)
     cubit_python = _utilities.find_cubit_python([first_found_path])
     cubit_python = add_program([cubit_python], env)
