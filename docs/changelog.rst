@@ -47,6 +47,8 @@ Documentation
 - Update the tutorials to use the Sierra builder factory (:issue:`744`, :merge:`916`). By `Kyle Brindley`_.
 - Add deprecation warnings to the older pattern Quinoa builders (:issue:`740`, :merge:`917`). By `Kyle Brindley`_.
 - Add deprecation warnings to the older pattern Python builders (:issue:`746`, :merge:`918`). By `Kyle Brindley`_.
+- Update the tutorials and modsim templates to use the SCons ``AddMethod`` style access for project help messages
+  (:issue:`753`, :merge:`924`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
@@ -57,6 +59,8 @@ Enhancements
 ============
 - Support SCons construction environment recovery for more than just bash. Explicit support for: sh, bash, zsh, csh,
   tcsh (:issue:`735`, :merge:`908`, :issue:`736`, :merge:`909`). By `Kyle Brindley`_.
+- Improve the help message functions environment handling for use with SCons ``AddMethod`` (:issue:`753`, :merge:`924`).
+  By `Kyle Brindley`_.
 
 *******************
 0.10.0 (2024-08-15)
