@@ -77,7 +77,7 @@ env.Default()
 solver_executable = pathlib.Path("solver").resolve()
 env["solver"] = env.AddProgram([solver_executable])
 env.Append(BUILDERS={
-    "Solver": solver_builder_factory(subcommand_options="$(--jobs $solve_cpus$)")
+    "Solver": solver_builder_factory(subcommand_options="$(--solve-cpus=${solve_cpus}$)")
 })
 
 # Build path object for extension and re-use

@@ -77,14 +77,14 @@ def implicit(args):
     """Implicit routine"""
     configuration = configure(args)
     output_file = name_output_file(args.input_file, args.output_file)
-    fake_solve(output_file, configuration, args.jobs)
+    fake_solve(output_file, configuration, args.solve_cpus)
 
 
 def explicit(args):
     """Explicit routine"""
     configuration = configure(args)
     output_file = name_output_file(args.input_file, args.output_file)
-    fake_solve(output_file, configuration, args.jobs)
+    fake_solve(output_file, configuration, args.solve_cpus)
 
 
 def merge(args):
@@ -136,7 +136,7 @@ def get_parser():
              f"If none is provided, uses the pattern ``input_file{_output_file_extension}``"
     )
     subcommand_parser_parent.add_argument(
-        "-j", "--jobs", type=positive_int, default=1, required=False,
+        "-n", "--solve-cpus", type=positive_int, default=1, required=False,
         help=f"The number of threads to use (default: %(default)s)"
     )
 
