@@ -4,7 +4,6 @@ from unittest.mock import patch, call, ANY
 
 import pytest
 import SCons.Environment
-from SCons.Script.SConscript import SConsEnvironment
 
 from waves import scons_extensions
 
