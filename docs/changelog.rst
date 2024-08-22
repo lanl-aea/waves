@@ -5,7 +5,7 @@ Changelog
 #########
 
 *******************
-0.10.1 (unreleased)
+0.11.0 (unreleased)
 *******************
 
 Breaking changes
@@ -19,6 +19,9 @@ Breaking changes
 - Re-write the Sierra builder to use the template first target builder factory. Builder is still considered experimental
   pending user feedback, so no minor version bump for the builder name and API change (:issue:`744`, :merge:`916`). By
   `Kyle Brindley`_.
+- Re-order the program operation function arguments for compatibility with SCons ``AddMethod``. Backward compatibility
+  is maintained with a syntax warning and instructions for what to change for v1 (:issue:`754`, :merge:`925`). By `Kyle
+  Brindley`_.
 
 New Features
 ============
