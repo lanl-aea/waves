@@ -102,6 +102,7 @@ env.Append(BUILDERS={
     'PythonScript': waves.scons_extensions.python_builder_factory(),
     'FierroImplicit': waves.scons_extensions.fierro_implicit_builder_factory()
 })
+env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
 env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 
 envCubit.Append(BUILDERS={

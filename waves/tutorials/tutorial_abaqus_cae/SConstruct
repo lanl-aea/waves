@@ -32,6 +32,7 @@ env["abaqus"] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq20
 env.Append(BUILDERS={
     "AbaqusJournal": waves.scons_extensions.abaqus_journal(program=env["abaqus"])
 })
+env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
 
 # Call SConscript file
 SConscript("SConscript", variant_dir=env["build_dir"], exports="env", duplicate=True)

@@ -118,8 +118,8 @@ env.Append(BUILDERS={
     "SphinxBuild": waves.scons_extensions.sphinx_build(program=env["sphinx_build"], options="-W"),
     "SphinxPDF": waves.scons_extensions.sphinx_latexpdf(program=env["sphinx_build"], options="-W")
 })
-env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
+env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 env.Append(SCANNERS=waves.scons_extensions.sphinx_scanner())
 
 # Dump the Conda environment as documentation of as-built target environment

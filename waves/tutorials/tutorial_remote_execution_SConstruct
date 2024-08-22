@@ -88,6 +88,7 @@ env.Append(BUILDERS={
         remote_directory=f"/scratch/{user}/WAVES-TUTORIAL/tutorial_remote_execution"
     )
 })
+env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
 env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 
 # Comments used in tutorial code snippets: marker-6

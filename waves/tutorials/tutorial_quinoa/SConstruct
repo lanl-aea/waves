@@ -98,6 +98,7 @@ env.Append(BUILDERS={
         remote_server="ro-rfe.lanl.gov"
     )
 })
+env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
 
 # Source the Quinoa environment and store it separately from the Conda/Cubit environment to avoid PATH interference
 try:  # sstelmo/sstbigbird
