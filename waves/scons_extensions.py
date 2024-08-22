@@ -437,12 +437,12 @@ def append_env_path(
        import waves
 
        env = Environment()
-       env["program"] = waves.scons_extensions.find_program(["program"], env)
+       env["program"] = waves.scons_extensions.find_program(env, ["program"])
        if env["program"]:
            waves.append_env_path(env["program"], env)
 
-    :param program: An absolute path for the program to add to SCons construction environment ``PATH``
     :param env: The SCons construction environment object to modify
+    :param program: An absolute path for the program to add to SCons construction environment ``PATH``
 
     :raises FileNotFoundError: if the ``program`` absolute path does not exist.
     """
@@ -472,8 +472,16 @@ def find_program(
     Returns the absolute path of the first program name found. If path parts contain spaces, the part will be wrapped in
     double quotes.
 
-    :param names: list of string program names. May include an absolute path.
+    .. code-block::
+       :caption: Example search for an executable named "program"
+
+       import waves
+
+       env = Environment()
+       env["program"] = waves.scons_extensions.find_program(env, ["program"])
+
     :param env: The SCons construction environment object to modify
+    :param names: list of string program names. May include an absolute path.
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
@@ -517,10 +525,10 @@ def add_program(
        import waves
 
        env = Environment()
-       env["program"] = waves.scons_extensions.add_program(["program"], env)
+       env["program"] = waves.scons_extensions.add_program(env, ["program"])
 
-    :param names: list of string program names. May include an absolute path.
     :param env: The SCons construction environment object to modify
+    :param names: list of string program names. May include an absolute path.
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
@@ -558,10 +566,10 @@ def add_cubit(
        import waves
 
        env = Environment()
-       env["cubit"] = waves.scons_extensions.add_cubit(["cubit"], env)
+       env["cubit"] = waves.scons_extensions.add_cubit(env, ["cubit"])
 
-    :param names: list of string program names for the main Cubit executable. May include an absolute path.
     :param env: The SCons construction environment object to modify
+    :param names: list of string program names for the main Cubit executable. May include an absolute path.
 
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
@@ -602,10 +610,10 @@ def add_cubit_python(
        import waves
 
        env = Environment()
-       env["python"] = waves.scons_extensions.add_cubit_python(["cubit"], env)
+       env["python"] = waves.scons_extensions.add_cubit_python(env, ["cubit"])
 
-    :param names: list of string program names for the main Cubit executable. May include an absolute path.
     :param env: The SCons construction environment object to modify
+    :param names: list of string program names for the main Cubit executable. May include an absolute path.
 
     :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
     """
