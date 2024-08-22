@@ -482,9 +482,9 @@ def find_program(
         message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
                   "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
         warnings.warn(message, SyntaxWarning)
-        swap_env = program
-        swap_program = env
-        return find_program(swap_env, swap_program)
+        swap_env = names
+        swap_names = env
+        return find_program(swap_env, swap_names)
 
     if isinstance(names, str):
         names = [names]
@@ -529,9 +529,9 @@ def add_program(
         message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
                   "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
         warnings.warn(message, SyntaxWarning)
-        swap_env = program
-        swap_program = env
-        return add_program(swap_env, swap_program)
+        swap_env = names
+        swap_names = env
+        return add_program(swap_env, swap_names)
 
     first_found_path = find_program(names, env)
     if first_found_path:
@@ -565,14 +565,14 @@ def add_cubit(
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
-    if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
+    if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
         message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
                   "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
         warnings.warn(message)
-        swap_env = program
-        swap_program = env
-        return add_cubit(swap_env, swap_program)
+        swap_env = names
+        swap_names = env
+        return add_cubit(swap_env, swap_names)
 
     first_found_path = add_program(names, env)
     if first_found_path:
@@ -609,14 +609,14 @@ def add_cubit_python(
     :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
-    if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
+    if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
         message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
                   "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
         warnings.warn(message)
-        swap_env = program
-        swap_program = env
-        return add_cubit_python(swap_env, swap_program)
+        swap_env = names
+        swap_names = env
+        return add_cubit_python(swap_env, swap_names)
 
     first_found_path = find_program(names, env)
     cubit_python = _utilities.find_cubit_python([first_found_path])
