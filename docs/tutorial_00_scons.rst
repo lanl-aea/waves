@@ -164,6 +164,11 @@ project is built may have different versions available. The project will build w
 without changes to the project configuration. If a program is found, it will also be added to the SCons environment
 ``PATH``.
 
+The :meth:`waves.scons_extensions.add_program` is added to the construction environment with `SCons AddMethod`_ for
+convenience. Anywhere the construction environment is available, we can use ``env.AddProgram``. It is also possible to
+use the :meth:`waves.scons_extensions.add_program` function directly. Most projects will search for more than one
+third-party software, so the shortened ``env.AddProgram`` function call is also less to type.
+
 .. note::
 
    The Abaqus program naming convention used here is specific to the naming convention used on the `WAVES`_ continuous
