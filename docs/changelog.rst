@@ -51,6 +51,7 @@ Documentation
 Internal Changes
 ================
 - Re-enable the Quinoa CI system tests (:issue:`657`, :merge:`919`). By `Kyle Brindley`_.
+- Consolidate builder factory tests under a single test function (:issue:`750`, :merge:`923`). By `Kyle Brindley`_.
 
 Enhancements
 ============
