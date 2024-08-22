@@ -1058,7 +1058,8 @@ def abaqus_journal(
 
        import waves
        env = Environment()
-       env["abaqus"] = waves.scons_extensions.add_program(env, ["abaqus"])
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["abaqus"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={"AbaqusJournal": waves.scons_extensions.abaqus_journal()})
        env.AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
@@ -1152,7 +1153,8 @@ def abaqus_journal_builder_factory(
 
        import waves
        env = Environment()
-       env["abaqus"] = waves.scons_extensions.add_program(env, ["abaqus"])
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["abaqus"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={
            "AbaqusJournal": waves.scons_extensions.abaqus_journal_builder_factory(
                program=env["abaqus"]
@@ -1340,7 +1342,8 @@ def abaqus_solver(
 
        import waves
        env = Environment()
-       env["abaqus"] = waves.scons_extensions.add_program(env, ["abaqus"])
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["abaqus"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={
            "AbaqusSolver": waves.scons_extensions.abaqus_solver(),
            "AbaqusStandard": waves.scons_extensions.abaqus_solver(emitter='standard'),
@@ -1447,7 +1450,8 @@ def abaqus_solver_builder_factory(
 
        import waves
        env = Environment()
-       env["abaqus"] = waves.scons_extensions.add_program(env, ["abaqus"])
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["abaqus"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={
            "AbaqusSolver": waves.scons_extensions.abaqus_solver_builder_factory(
                program=env["abaqus"]
@@ -2142,7 +2146,8 @@ def abaqus_extract(program: str = "abaqus") -> SCons.Builder.Builder:
 
        import waves
        env = Environment()
-       env["abaqus"] = waves.scons_extensions.add_program(env, ["abaqus"])
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["abaqus"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={"AbaqusExtract": waves.scons_extensions.abaqus_extract()})
        env.AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 
@@ -2728,7 +2733,8 @@ def fierro_explicit_builder_factory(
 
        import waves
        env = Environment()
-       env["fierro"] = waves.scons_extensions.add_program(env, ["fierro"])
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["fierro"] = env.AddProgram(["fierro-parallel-explicit"])
        env.Append(BUILDERS={"FierroExplicit": waves.scons_extensions.fierro_explicit_builder_factory()})
        env.FierroExplicit(
            target=["target.stdout"],
@@ -2819,7 +2825,8 @@ def fierro_implicit_builder_factory(
 
        import waves
        env = Environment()
-       env["fierro"] = waves.scons_extensions.add_program(env, ["fierro"])
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["fierro"] = env.AddProgram(["fierro-parallel-implicit"])
        env.Append(BUILDERS={"FierroImplicit": waves.scons_extensions.fierro_implicit_builder_factory()})
        env.FierroImplicit(
            target=["target.stdout"],
@@ -3017,7 +3024,8 @@ def ansys_apdl_builder_factory(
 
        import waves
        env = Environment()
-       env["ansys"] = waves.scons_extensions.add_program(env, ["ansys232"])
+       env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+       env["ansys"] = env.AddProgram(["ansys232"])
        env.Append(BUILDERS={
             "AnsysAPDL": waves.scons_extensions.ansys_apdl_builder_factory(
                 program=env["ansys]
