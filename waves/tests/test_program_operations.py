@@ -59,6 +59,14 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
         program = scons_extensions.find_program(env, names)
     assert program == first_found_path
 
+    # Test SCons AddMethod style interface
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    env.AddMethod(scons_extensions.find_program, "FindProgram")
+    with patch("SCons.SConf.SConfBase", return_value=mock_conf):
+        program = env.FindProgram(names)
+    assert program == first_found_path
+
     # TODO: Remove reversed arguments test after full deprecation of the older argument order
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
@@ -67,14 +75,6 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
         program = scons_extensions.find_program(names, env)
     assert program == first_found_path
     mock_warn.assert_called_once()
-
-    # Test SCons AddMethod style interface
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
-    env.AddMethod(scons_extensions.find_program, "FindProgram")
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf):
-        program = env.FindProgram(names)
-    assert program == first_found_path
 
 
 # FIXME: Trace the source of interference between the builder tests and the find_program tests
@@ -88,11 +88,42 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
 def test_add_program(names, checkprog_side_effect, first_found_path):
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
+
+    # Test function style interface
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
          patch("pathlib.Path.exists", return_value=True):
+        program = scons_extensions.add_program(env, names)
+    assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = str(pathlib.Path(first_found_path).parent)
+        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
+    else:
+        assert original_path == env["ENV"]["PATH"]
+
+    # Test SCons AddMethod style interface
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    env.AddMethod(scons_extensions.add_program, "AddProgram")
+    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("pathlib.Path.exists", return_value=True):
+        program = env.AddProgram(names)
+    assert program == first_found_path
+    if first_found_path is not None:
+        parent_path = str(pathlib.Path(first_found_path).parent)
+        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
+    else:
+        assert original_path == env["ENV"]["PATH"]
+
+    # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("pathlib.Path.exists", return_value=True), \
+         patch("warnings.warn") as mock_warn:
         program = scons_extensions.add_program(names, env)
+    mock_warn.assert_called_once()
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = str(pathlib.Path(first_found_path).parent)

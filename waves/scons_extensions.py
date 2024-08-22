@@ -534,9 +534,9 @@ def add_program(
         swap_names = env
         return add_program(swap_env, swap_names)
 
-    first_found_path = find_program(names, env)
+    first_found_path = find_program(env, names)
     if first_found_path:
-        append_env_path(first_found_path, env)
+        append_env_path(env, first_found_path)
     return first_found_path
 
 
