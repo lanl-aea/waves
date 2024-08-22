@@ -178,67 +178,6 @@ def first_target_builder_factory_test_cases(
     return test_cases
 
 
-def check_builder_factory(
-    name: str,
-    default_kwargs: dict,
-    builder_kwargs: dict,
-    task_kwargs: dict,
-    target: list,
-    default_emitter=None,
-    emitter=False,
-    expected_node_count: int = 1,
-) -> None:
-    """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`
-
-    :param name: Name of the factory to test
-    :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
-        factory under test.
-    :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
-    :param task_kwargs: Keyword arguments unpacked at the task instantiation
-    :param target: Explicit list of targets provided at the task instantiation
-    :param default_emitter: The emitter to expect when ``False`` is provided for ``emitter`` keyword argument.
-    :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``False`` to avoid
-        providing an emitter argument to the builder factory.
-    :param expected_node_count: The expected number of target nodes. Should match the length of the target list unless
-        a non-default emitter is included. Defaults to 1 for ``default_emitter=None``.
-    """
-    # Set default expectations to match default argument values
-    expected_kwargs = default_kwargs
-    # Update expected arguments to match test case
-    expected_kwargs.update(builder_kwargs)
-    expected_kwargs.update(task_kwargs)
-    # Expected action matches the pre-SCons-substitution string with newline delimiter
-    expected_action = \
-        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
-            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
-
-    # Handle additional builder kwargs without changing default behavior
-    expected_emitter = default_emitter
-    emitter_handling = {}
-    if emitter is not False:
-        expected_emitter = emitter
-        emitter_handling.update({"emitter": emitter})
-
-    # Test builder object attributes
-    factory = getattr(scons_extensions, name)
-    builder = factory(**builder_kwargs, **emitter_handling)
-    assert builder.action.cmd_list == expected_action
-    assert builder.emitter == expected_emitter
-
-    # Assemble the builder and a task to interrogate
-    env = SCons.Environment.Environment()
-    env.Append(BUILDERS={
-        "Builder": builder
-    })
-    nodes = env.Builder(target=target, source=["check_builder_factory.in"], **task_kwargs)
-
-    # Test task definition node counts, action(s), and task keyword arguments
-    check_action_string(nodes, expected_node_count, 1, expected_action)
-    for node in nodes:
-        for key, expected_value in expected_kwargs.items():
-            assert node.env[key] == expected_value
-
-
 # Actual tests
 def test_print_failed_nodes_stdout():
     mock_failure_file = unittest.mock.Mock()
@@ -1104,17 +1043,17 @@ builder_factory_tests.update(first_target_builder_factory_test_cases(
 @pytest.mark.parametrize("factory_name, default_kwargs, builder_kwargs, task_kwargs, target, default_emitter, emitter, expected_node_count",
                          builder_factory_tests.values(),
                          ids=builder_factory_tests.keys())
-def test_first_target_builder_factories(
-    factory_name,
-    default_kwargs,
-    builder_kwargs,
-    task_kwargs,
-    target,
+def test_builder_factory(
+    factory_name: str,
+    default_kwargs: dict,
+    builder_kwargs: dict,
+    task_kwargs: dict,
+    target: list,
     default_emitter,
     emitter,
-    expected_node_count
+    expected_node_count: int,
 ) -> None:
-    """Test builder factories patterned on the first target builder factory
+    """Template test for builder factories based on :meth:`waves.scons_extensions.builder_factory`
 
     :param factory_name: Name of the factory to test
     :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
@@ -1122,21 +1061,46 @@ def test_first_target_builder_factories(
     :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
     :param task_kwargs: Keyword arguments unpacked at the task instantiation
     :param target: Explicit list of targets provided at the task instantiation
+    :param default_emitter: The emitter to expect when ``False`` is provided for ``emitter`` keyword argument.
     :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``False`` to avoid
         providing an emitter argument to the builder factory.
-    :param expected_node_count: The expected number of target nodes. Should match the length of the target list unless
-        a non-default emitter is included. Defaults to 1 for ``default_emitter=None``.
+    :param expected_node_count: The expected number of target nodes.
     """
-    check_builder_factory(
-        name=factory_name,
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=default_emitter,
-        emitter=emitter,
-        expected_node_count=expected_node_count
-    )
+    # Set default expectations to match default argument values
+    expected_kwargs = default_kwargs
+    # Update expected arguments to match test case
+    expected_kwargs.update(builder_kwargs)
+    expected_kwargs.update(task_kwargs)
+    # Expected action matches the pre-SCons-substitution string with newline delimiter
+    expected_action = \
+        "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
+            "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
+
+    # Handle additional builder kwargs without changing default behavior
+    expected_emitter = default_emitter
+    emitter_handling = {}
+    if emitter is not False:
+        expected_emitter = emitter
+        emitter_handling.update({"emitter": emitter})
+
+    # Test builder object attributes
+    factory = getattr(scons_extensions, factory_name)
+    builder = factory(**builder_kwargs, **emitter_handling)
+    assert builder.action.cmd_list == expected_action
+    assert builder.emitter == expected_emitter
+
+    # Assemble the builder and a task to interrogate
+    env = SCons.Environment.Environment()
+    env.Append(BUILDERS={
+        "Builder": builder
+    })
+    nodes = env.Builder(target=target, source=["check_builder_factory.in"], **task_kwargs)
+
+    # Test task definition node counts, action(s), and task keyword arguments
+    check_action_string(nodes, expected_node_count, 1, expected_action)
+    for node in nodes:
+        for key, expected_value in expected_kwargs.items():
+            assert node.env[key] == expected_value
 
 
 sbatch_first_target_builder_factory_names = [
