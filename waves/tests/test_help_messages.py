@@ -4,6 +4,7 @@ from unittest.mock import patch, call, ANY
 
 import pytest
 import SCons.Environment
+from SCons.Script.SConscript import SConsEnvironment
 
 from waves import scons_extensions
 
@@ -13,34 +14,34 @@ def test_default_targets_message():
     with patch("SCons.Script.SConscript.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help:
         scons_extensions.default_targets_message()
     calls = [
-        call(ANY, "\nDefault Targets:\n", append=True, keep_local=True),
-        call(ANY, "\nDefault Targets:\n", append=True)
+        call("\nDefault Targets:\n", append=True, keep_local=True),
+        call("\nDefault Targets:\n", append=True)
     ]
     mock_help.assert_has_calls(calls)
 
     # No environment provided
-    with patch("SCons.Script.SConscript.SConsEnvironment.Help") as mock_help:
+    with patch("SCons.Script.SConscript.SConsEnvironment.Help", side_effect=[None, None]) as mock_help:
         scons_extensions.default_targets_message()
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with("\nDefault Targets:\n", append=True, keep_local=True)
 
     # Provide environment with no defaults
     env = SCons.Environment.Environment()
     env.Default()
     with patch("SCons.Script.SConscript.SConsEnvironment.Help") as mock_help:
         scons_extensions.default_targets_message(env)
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with("\nDefault Targets:\n", append=True, keep_local=True)
 
     # Provide environment with defaults
     env.Default("dummy.target")
     with patch("SCons.Script.SConscript.SConsEnvironment.Help") as mock_help:
         scons_extensions.default_targets_message(env)
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with("\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
 
     # Test the Method style interface
     env.AddMethod(scons_extensions.default_targets_message, "ProjectHelp")
     with patch("SCons.Script.SConscript.SConsEnvironment.Help") as mock_help:
         env.ProjectHelp()
-    mock_help.assert_called_once_with(ANY, "\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with("\nDefault Targets:\n    dummy.target\n", append=True, keep_local=True)
 
 
 def test_alias_list_message():
@@ -48,33 +49,33 @@ def test_alias_list_message():
     with patch("SCons.Script.SConscript.SConsEnvironment.Help", side_effect=[TypeError, None]) as mock_help:
         scons_extensions.alias_list_message()
     calls = [
-        call(ANY, "\nTarget Aliases:\n", append=True, keep_local=True),
-        call(ANY, "\nTarget Aliases:\n", append=True)
+        call("\nTarget Aliases:\n", append=True, keep_local=True),
+        call("\nTarget Aliases:\n", append=True)
     ]
     mock_help.assert_has_calls(calls)
 
     # No environment provided
     with patch("SCons.Script.SConscript.SConsEnvironment.Help") as mock_help:
         scons_extensions.alias_list_message()
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with("\nTarget Aliases:\n", append=True, keep_local=True)
 
     # Provide environment with no aliases
     env = SCons.Environment.Environment()
     with patch("SCons.Script.SConscript.SConsEnvironment.Help") as mock_help:
         scons_extensions.alias_list_message(env)
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with("\nTarget Aliases:\n", append=True, keep_local=True)
 
     # Provide environment with alias
     env.Alias("dummy_alias", "dummy.target")
     with patch("SCons.Script.SConscript.SConsEnvironment.Help") as mock_help:
         scons_extensions.alias_list_message(env)
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with("\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
 
     # Test the Method style interface
     env.AddMethod(scons_extensions.alias_list_message, "ProjectHelp")
     with patch("SCons.Script.SConscript.SConsEnvironment.Help") as mock_help:
         env.ProjectHelp()
-    mock_help.assert_called_once_with(ANY, "\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
+    mock_help.assert_called_once_with("\nTarget Aliases:\n    dummy_alias\n", append=True, keep_local=True)
 
 
 def test_project_help_message():
