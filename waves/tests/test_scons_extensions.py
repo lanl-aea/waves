@@ -89,7 +89,7 @@ def first_target_builder_factory_test_cases(
     """Returns template test cases for builder factories based on
     :meth:`waves.scons_extensions.first_target_builder_factory`
 
-    Intended to work in conjunction with :meth:`check_builder_factory` template test function.
+    Intended to work in conjunction with :meth:`test_builder_factory` template test function.
 
     Required because tests involving real SCons tasks require unique target files, one per test. The returned dictionary
     constructs the target files names from ``{name}.out{number}``. Use as
@@ -112,7 +112,6 @@ def first_target_builder_factory_test_cases(
                                  new_builder_factory_tests.values(),
                                  ids=new_builder_factory_tests.keys())
         def test_new_builder_factory(factory_name, default_kwargs, builder_kwargs, task_kwargs, target, emitter, expected_node_count):
-            # Set default expectations to match default argument values
             check_builder_factory(
                 name=factory_name,
                 default_kwargs=default_kwargs,
