@@ -80,7 +80,12 @@ def check_abaqus_solver_targets(nodes, solver, stem, suffixes):
     assert set(expected_suffixes) == set(suffixes)
 
 
-def first_target_builder_factory_test_cases(name: str, default_kwargs: dict) -> dict:
+def first_target_builder_factory_test_cases(
+    name: str,
+    default_kwargs: dict,
+    default_emitter = scons_extensions.first_target_emitter,
+    expected_node_count = 2
+) -> dict:
     """Returns template test cases for builder factories based on
     :meth:`waves.scons_extensions.first_target_builder_factory`
 
@@ -123,6 +128,8 @@ def first_target_builder_factory_test_cases(name: str, default_kwargs: dict) -> 
         builder factory under test is a good choice.
     :param default_kwargs: Set the default keyword argument values. Expected to be constant as a function of builder
         factory under test.
+    :param default_emitter: The emitter to expect when ``False`` is provided for ``emitter`` keyword argument.
+    :param expected_node_count: The expected number of target nodes with the default emitter.
 
     :returns: test cases for builder factories based on :meth:`waves.scons_extensions.first_target_builder_factory`
     """
@@ -131,10 +138,10 @@ def first_target_builder_factory_test_cases(name: str, default_kwargs: dict) -> 
     ]
     test_cases = {
         f"{name} default behavior": (
-            name, default_kwargs, {}, {}, [target_file_names[0]], False, 2
+            name, default_kwargs, {}, {}, [target_file_names[0]], default_emitter, False, expected_node_count
         ),
         f"{name} different emitter": (
-            name, default_kwargs, {}, {}, [target_file_names[1]], dummy_emitter_for_testing, 1
+            name, default_kwargs, {}, {}, [target_file_names[1]], default_emitter, dummy_emitter_for_testing, 1
         ),
         f"{name} builder kwargs overrides": (
             name, default_kwargs,
@@ -149,7 +156,7 @@ def first_target_builder_factory_test_cases(name: str, default_kwargs: dict) -> 
              "subcommand_options": "different subcommand options",
              "action_suffix": "different action suffix"
             },
-            {}, [target_file_names[2]], False, 2
+            {}, [target_file_names[2]], default_emitter, False, expected_node_count
         ),
         f"{name} task kwargs overrides": (
             name, default_kwargs,
@@ -165,7 +172,7 @@ def first_target_builder_factory_test_cases(name: str, default_kwargs: dict) -> 
              "subcommand_options": "different subcommand options",
              "action_suffix": "different action suffix"
             },
-            [target_file_names[3]], False, 2
+            [target_file_names[3]], default_emitter, False, expected_node_count
         ),
     }
     return test_cases
@@ -189,7 +196,7 @@ def check_builder_factory(
     :param builder_kwargs: Keyword arguments unpacked at the builder instantiation
     :param task_kwargs: Keyword arguments unpacked at the task instantiation
     :param target: Explicit list of targets provided at the task instantiation
-    :param default_emitter: The emitter to expect when None is provided for ``emitter`` keyword argument.
+    :param default_emitter: The emitter to expect when ``False`` is provided for ``emitter`` keyword argument.
     :param emitter: A custom factory emitter. Mostly intended as a pass-through check. Set to ``False`` to avoid
         providing an emitter argument to the builder factory.
     :param expected_node_count: The expected number of target nodes. Should match the length of the target list unless
@@ -898,68 +905,6 @@ def test_build_subdirectory(target, expected):
     assert scons_extensions._build_subdirectory(target) == expected
 
 
-builder_factory = {
-    "default behavior": ({}, {}, ["builder_factory.out1"], False),
-    "different emitter": ({}, {}, ["builder_factory.out1"], dummy_emitter_for_testing),
-    "builder kwargs overrides": (
-        {
-         "environment": "different environment",
-         "action_prefix": "different action prefix",
-         "program": "different program",
-         "program_required": "different program required",
-         "program_options": "different program options",
-         "subcommand": "different subcommand",
-         "subcommand_required": "different subcommand required",
-         "subcommand_options": "different subcommand options",
-         "action_suffix": "different action suffix"
-        },
-        {}, ["builder_factory.out2"], False
-    ),
-    "task kwargs overrides": (
-        {},
-        {
-         "environment": "different environment",
-         "action_prefix": "different action prefix",
-         "program": "different program",
-         "program_required": "different program required",
-         "program_options": "different program options",
-         "subcommand": "different subcommand",
-         "subcommand_required": "different subcommand required",
-         "subcommand_options": "different subcommand options",
-         "action_suffix": "different action suffix"
-        },
-        ["builder_factory.out3"], False
-    ),
-}
-
-
-@pytest.mark.parametrize("builder_kwargs, task_kwargs, target, emitter",
-                         builder_factory.values(),
-                         ids=builder_factory.keys())
-def test_builder_factory(builder_kwargs, task_kwargs, target, emitter):
-    default_kwargs = {
-        "environment": "",
-        "action_prefix": "",
-        "program": "",
-        "program_required": "",
-        "program_options": "",
-        "subcommand": "",
-        "subcommand_required": "",
-        "subcommand_options": "",
-        "action_suffix": ""
-    }
-    check_builder_factory(
-        "builder_factory",
-        default_kwargs=default_kwargs,
-        builder_kwargs=builder_kwargs,
-        task_kwargs=task_kwargs,
-        target=target,
-        default_emitter=None,
-        emitter=emitter,
-        expected_node_count=1
-    )
-
-
 source_file = fs.File("dummy.py")
 first_target_emitter_input = {
     "one target": (
@@ -1013,7 +958,23 @@ def test_first_target_emitter(target, source, expected):
     assert target == expected
 
 
-first_target_builder_factory_tests = first_target_builder_factory_test_cases(
+builder_factory_tests = first_target_builder_factory_test_cases(
+    "builder_factory",
+    {
+        "environment": "",
+        "action_prefix": "",
+        "program": "",
+        "program_required": "",
+        "program_options": "",
+        "subcommand": "",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": ""
+    },
+    default_emitter=None,
+    expected_node_count=1
+)
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "first_target_builder_factory",
     {
         "environment": "",
@@ -1026,8 +987,8 @@ first_target_builder_factory_tests = first_target_builder_factory_test_cases(
         "subcommand_options": "",
         "action_suffix": _redirect_action_suffix
     }
-)
-first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+))
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "python_builder_factory",
     {
         "environment": "",
@@ -1041,7 +1002,7 @@ first_target_builder_factory_tests.update(first_target_builder_factory_test_case
         "action_suffix": _redirect_action_suffix
     }
 ))
-first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "abaqus_journal_builder_factory",
     {
         "environment": "",
@@ -1055,7 +1016,7 @@ first_target_builder_factory_tests.update(first_target_builder_factory_test_case
         "action_suffix": _redirect_action_suffix
     }
 ))
-first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "abaqus_solver_builder_factory",
     {
         "environment": "",
@@ -1069,7 +1030,7 @@ first_target_builder_factory_tests.update(first_target_builder_factory_test_case
         "action_suffix": _redirect_action_suffix
     }
 ))
-first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "quinoa_builder_factory",
     {
         "environment": "",
@@ -1083,7 +1044,7 @@ first_target_builder_factory_tests.update(first_target_builder_factory_test_case
         "action_suffix": _redirect_action_suffix
     }
 ))
-first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "fierro_explicit_builder_factory",
     {
         "environment": "",
@@ -1097,7 +1058,7 @@ first_target_builder_factory_tests.update(first_target_builder_factory_test_case
         "action_suffix": _redirect_action_suffix
     }
 ))
-first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "fierro_implicit_builder_factory",
     {
         "environment": "",
@@ -1111,7 +1072,7 @@ first_target_builder_factory_tests.update(first_target_builder_factory_test_case
         "action_suffix": _redirect_action_suffix
     }
 ))
-first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "sierra_builder_factory",
     {
         "environment": "",
@@ -1125,7 +1086,7 @@ first_target_builder_factory_tests.update(first_target_builder_factory_test_case
         "action_suffix": _redirect_action_suffix
     }
 ))
-first_target_builder_factory_tests.update(first_target_builder_factory_test_cases(
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "ansys_apdl_builder_factory",
     {
         "environment": "",
@@ -1140,15 +1101,16 @@ first_target_builder_factory_tests.update(first_target_builder_factory_test_case
     }
 ))
 
-@pytest.mark.parametrize("factory_name, default_kwargs, builder_kwargs, task_kwargs, target, emitter, expected_node_count",
-                         first_target_builder_factory_tests.values(),
-                         ids=first_target_builder_factory_tests.keys())
+@pytest.mark.parametrize("factory_name, default_kwargs, builder_kwargs, task_kwargs, target, default_emitter, emitter, expected_node_count",
+                         builder_factory_tests.values(),
+                         ids=builder_factory_tests.keys())
 def test_first_target_builder_factories(
     factory_name,
     default_kwargs,
     builder_kwargs,
     task_kwargs,
     target,
+    default_emitter,
     emitter,
     expected_node_count
 ) -> None:
@@ -1171,7 +1133,7 @@ def test_first_target_builder_factories(
         builder_kwargs=builder_kwargs,
         task_kwargs=task_kwargs,
         target=target,
-        default_emitter=scons_extensions.first_target_emitter,
+        default_emitter=default_emitter,
         emitter=emitter,
         expected_node_count=expected_node_count
     )
