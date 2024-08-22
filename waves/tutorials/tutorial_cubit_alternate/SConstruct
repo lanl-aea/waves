@@ -58,7 +58,7 @@ env["fierro"] = waves.scons_extensions.add_program(env, ["fierro-parallel-implic
 # Cubit Python requires a separate construction environment to avoid putting Cubit distributed Python packages in the
 # parent Python 3 environment's PYTHONPATH
 envCubit = Environment(ENV=os.environ.copy())
-envCubit["python"] = waves.scons_extensions.add_cubit_python(["/apps/Cubit-16.12/cubit", "cubit"], envCubit)
+envCubit["python"] = waves.scons_extensions.add_cubit_python(envCubit, ["/apps/Cubit-16.12/cubit", "cubit"])
 
 # Sierra requires a separate construction environment
 try:
