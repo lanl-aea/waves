@@ -449,8 +449,9 @@ def append_env_path(
     # TODO: Remove if-structure after full deprecation of the older argument order
     if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
         import warnings
-        message = "The function arguments were reversed in v0.11 from '(program, env)' to '(env, program)' "\
-                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
+        message = "The append_env_path function arguments were reversed in v0.11 from " \
+                  "'(program, env)' to '(env, program)'to enable use with SCons AddMethod. " \
+                  "Please reverse the argument order in this function call."
         warnings.warn(message, SyntaxWarning)
         swap_env = program
         swap_program = env
@@ -479,7 +480,7 @@ def find_program(
     # TODO: Remove if-structure after full deprecation of the older argument order
     if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
-        message = "The function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
+        message = "The find_program function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' " \
                   "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
         warnings.warn(message, SyntaxWarning)
         swap_env = names
@@ -526,7 +527,7 @@ def add_program(
     # TODO: Remove if-structure after full deprecation of the older argument order
     if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
-        message = "The function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
+        message = "The add_program arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
                   "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
         warnings.warn(message, SyntaxWarning)
         swap_env = names
@@ -567,7 +568,7 @@ def add_cubit(
     # TODO: Remove if-structure after full deprecation of the older argument order
     if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
-        message = "The function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
+        message = "The add_cubit function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
                   "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
         warnings.warn(message, SyntaxWarning)
         swap_env = names
@@ -611,8 +612,9 @@ def add_cubit_python(
     # TODO: Remove if-structure after full deprecation of the older argument order
     if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
         import warnings
-        message = "The function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
-                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call."
+        message = "The add_cubit_python function arguments were reversed in v0.11 from " \
+                  "'(names, env)' to '(env, names)' to enable use with SCons AddMethod. " \
+                  "Please reverse the argument order in this function call."
         warnings.warn(message, SyntaxWarning)
         swap_env = names
         swap_names = env
