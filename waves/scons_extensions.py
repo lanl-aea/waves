@@ -1520,9 +1520,13 @@ def copy_substfile(
     return target_list
 
 
-def copy_substitute(source_list: list, substitution_dictionary: typing.Optional[dict] = None,
-                    env: SCons.Environment.Environment = SCons.Environment.Environment(),
-                    build_subdirectory: str = ".", symlink: bool = False) -> SCons.Node.NodeList:
+def copy_substitute(
+    source_list: list,
+    substitution_dictionary: typing.Optional[dict] = None,
+    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    build_subdirectory: str = ".",
+    symlink: bool = False
+) -> SCons.Node.NodeList:
     """Copy source list to current variant directory and perform template substitutions on ``*.in`` filenames
 
     .. warning::
