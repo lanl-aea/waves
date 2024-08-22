@@ -55,8 +55,10 @@ env.SetOption("duplicate", "copy")
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
+env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+env.AddMethod(waves.scons_extensions.add_cubit, "AddCubit")
 env["cubit"] = waves.scons_extensions.add_cubit(env, ["/apps/Cubit-16.12/cubit", "cubit"])
-env["sbatch"] = waves.scons_extensions.add_program(env, ["sbatch"])
+env["sbatch"] = env.AddProgram(["sbatch"])
 env["user"] = getpass.getuser()
 # TODO: Ask Quinoa devs to provide a shell script or module file on HPC snow, then remove this variable
 env["quinoa_installation"] = pathlib.Path("/users/cclong/QUINOA/quinoa/buildOS/Main")

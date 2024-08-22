@@ -26,7 +26,8 @@ env = Environment(
 env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env["abaqus"] = waves.scons_extensions.add_program(env, ["/apps/abaqus/Commands/abq2023", "abq2023"])
+env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
+env["abaqus"] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq2023"])
 
 # Add WAVES builders
 env.Append(BUILDERS={
