@@ -314,9 +314,11 @@ def ssh_builder_actions(
     return builder
 
 
-def project_help_message(env=None,
-                         append: bool = True,
-                         keep_local: bool = True) -> None:
+def project_help_message(
+    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    append: bool = True,
+    keep_local: bool = True
+) -> None:
     """Add default targets and alias lists to project help message
 
     See the `SCons Help`_ documentation for appending behavior. Thin wrapper around
@@ -324,7 +326,7 @@ def project_help_message(env=None,
     * :meth:`waves.scons_extensions.default_targets_message`
     * :meth:`waves.scons_extensions.alias_list_message`
 
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
@@ -333,9 +335,11 @@ def project_help_message(env=None,
     alias_list_message(env=env, append=append, keep_local=keep_local)
 
 
-def default_targets_message(env=None,
-                            append: bool = True,
-                            keep_local: bool = True) -> None:
+def default_targets_message(
+    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    append: bool = True,
+    keep_local: bool = True
+) -> None:
     """Add a default targets list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -348,14 +352,11 @@ def default_targets_message(env=None,
 
     where the targets are recovered from ``SCons.Script.DEFAULT_TARGETS``.
 
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    import SCons.Script  # Required to get a full construction environment
-    if not env:
-        env = SCons.Environment.Environment()
     default_targets_help = "\nDefault Targets:\n"
     for target in SCons.Script.DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
@@ -365,9 +366,11 @@ def default_targets_message(env=None,
         env.Help(default_targets_help, append=append)
 
 
-def alias_list_message(env=None,
-                       append: bool = True,
-                       keep_local: bool = True) -> None:
+def alias_list_message(
+    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    append: bool = True,
+    keep_local: bool = True
+) -> None:
     """Add the alias list to the project's help message
 
     See the `SCons Help`_ documentation for appending behavior. Adds text to the project help message formatted as
@@ -380,14 +383,11 @@ def alias_list_message(env=None,
 
     where the aliases are recovered from ``SCons.Node.Alias.default_ans``.
 
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param env: The SCons construction environment object to modify
     :param append: append to the ``env.Help`` message (default). When False, the ``env.Help`` message will be
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    import SCons.Script  # Required to get a full construction environment
-    if not env:
-        env = SCons.Environment.Environment()
     alias_help = "\nTarget Aliases:\n"
     for alias in SCons.Node.Alias.default_ans:
         alias_help += f"    {alias}\n"
@@ -397,7 +397,10 @@ def alias_list_message(env=None,
         env.Help(alias_help, append=append)
 
 
-def append_env_path(program: str, env) -> None:
+def append_env_path(
+    program: str,
+    env: SCons.Environment.Environment
+) -> None:
     """Append SCons contruction environment ``PATH`` with the program's parent directory
 
     Uses the `SCons AppendENVPath`_ method. If the program parent directory is already on ``PATH``, the ``PATH``
@@ -414,7 +417,7 @@ def append_env_path(program: str, env) -> None:
            waves.append_env_path(env["program"], env)
 
     :param program: An absolute path for the program to add to SCons construction environment ``PATH``
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param env: The SCons construction environment object to modify
 
     :raises FileNotFoundError: if the ``program`` absolute path does not exist.
     """
@@ -447,14 +450,17 @@ def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", suffix
     return {f"{prefix}{key}{suffix}": value for key, value in substitution_dictionary.items()}
 
 
-def find_program(names: typing.Iterable[str], env) -> str:
+def find_program(
+    names: typing.Iterable[str],
+    env: SCons.Environment.Environment
+) -> str:
     """Search for a program from a list of possible program names.
 
     Returns the absolute path of the first program name found. If path parts contain spaces, the part will be wrapped in
     double quotes.
 
     :param names: list of string program names. May include an absolute path.
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
@@ -472,7 +478,10 @@ def find_program(names: typing.Iterable[str], env) -> str:
     return first_found_path
 
 
-def add_program(names: typing.Iterable[str], env) -> str:
+def add_program(
+    names: typing.Iterable[str],
+    env: SCons.Environment.Environment
+) -> str:
     """Search for a program from a list of possible program names. Add first found to system ``PATH``.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory
@@ -487,7 +496,7 @@ def add_program(names: typing.Iterable[str], env) -> str:
        env["program"] = waves.scons_extensions.add_program(["program"], env)
 
     :param names: list of string program names. May include an absolute path.
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param env: The SCons construction environment object to modify
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
@@ -497,7 +506,10 @@ def add_program(names: typing.Iterable[str], env) -> str:
     return first_found_path
 
 
-def add_cubit(names: typing.Iterable[str], env) -> str:
+def add_cubit(
+    names: typing.Iterable[str],
+    env: SCons.Environment.Environment
+) -> str:
     """Modifies environment variables with the paths required to ``import cubit`` in a Python3 environment.
 
     Returns the absolute path of the first program name found. Appends ``PATH`` with first program's parent directory if
@@ -515,7 +527,7 @@ def add_cubit(names: typing.Iterable[str], env) -> str:
        env["cubit"] = waves.scons_extensions.add_cubit(["cubit"], env)
 
     :param names: list of string program names for the main Cubit executable. May include an absolute path.
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param env: The SCons construction environment object to modify
 
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
@@ -528,7 +540,10 @@ def add_cubit(names: typing.Iterable[str], env) -> str:
     return first_found_path
 
 
-def add_cubit_python(names: typing.Iterable[str], env) -> str:
+def add_cubit_python(
+    names: typing.Iterable[str],
+    env: SCons.Environment.Environment
+) -> str:
     """Modifies environment variables with the paths required to ``import cubit`` with the Cubit Python interpreter.
 
     Returns the absolute path of the first Cubit Python intepreter found. Appends ``PATH`` with Cubit Python parent
@@ -546,7 +561,7 @@ def add_cubit_python(names: typing.Iterable[str], env) -> str:
        env["python"] = waves.scons_extensions.add_cubit_python(["cubit"], env)
 
     :param names: list of string program names for the main Cubit executable. May include an absolute path.
-    :param SCons.Script.SConscript.SConsEnvironment env: The SCons construction environment object to modify
+    :param env: The SCons construction environment object to modify
 
     :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
     """
@@ -752,7 +767,7 @@ def builder_factory(
 def first_target_emitter(
     target: list,
     source: list,
-    env,
+    env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = [],
     appending_suffixes: typing.Iterable[str] = [],
     stdout_extension: str = _settings._stdout_extension
@@ -776,7 +791,7 @@ def first_target_emitter(
 
     :param target: The target file list of strings
     :param source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param env: The builder's SCons construction environment object
     :param suffixes: Suffixes which should replace the first target's extension
     :param appending_suffixes: Suffixes which should append the first target's extension
 
@@ -886,7 +901,11 @@ def first_target_builder_factory(
     return builder
 
 
-def _abaqus_journal_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
+def _abaqus_journal_emitter(
+    target: list,
+    source: list,
+    env: SCons.Environment.Environment
+) -> typing.Tuple[list, list]:
     """Appends the abaqus_journal builder target list with the builder managed targets
 
     Appends ``target[0]``.abaqus_v6.env and ``target[0]``.stdout to the ``target`` list. The abaqus_journal Builder
@@ -899,7 +918,7 @@ def _abaqus_journal_emitter(target: list, source: list, env) -> typing.Tuple[lis
 
     :param target: The target file list of strings
     :param source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param env: The builder's SCons construction environment object
 
     :return: target, source
     """
@@ -1123,7 +1142,8 @@ def sbatch_abaqus_journal_builder_factory(*args, **kwargs):
 
 def _abaqus_solver_emitter(
     target: list,
-    source: list, env,
+    source: list,
+    env: SCons.Environment.Environment,
     suffixes: typing.Iterable[str] = _settings._abaqus_solver_common_suffixes,
     stdout_extension: str = _settings._stdout_extension
 ) -> typing.Tuple[list, list]:
@@ -1138,7 +1158,7 @@ def _abaqus_solver_emitter(
 
     :param target: The target file list of strings
     :param source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param env: The builder's SCons construction environment object
     :param suffixes: List of strings to use as emitted file suffixes. Must contain the leading period,
         e.g. ``.extension``
 
@@ -1769,7 +1789,11 @@ def sbatch_python_builder_factory(*args, **kwargs):
     return python_builder_factory(*args, **kwargs)
 
 
-def _matlab_script_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
+def _matlab_script_emitter(
+    target: list,
+    source: list,
+    env: SCons.Environment.Environment
+) -> typing.Tuple[list, list]:
     """Appends the matlab_script builder target list with the builder managed targets
 
     Appends ``target[0]``.matlab.env and ``target[0]``.stdout to the ``target`` list. The matlab_script Builder requires
@@ -1783,7 +1807,7 @@ def _matlab_script_emitter(target: list, source: list, env) -> typing.Tuple[list
 
     :param target: The target file list of strings
     :param source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param env: The builder's SCons construction environment object
 
     :return: target, source
     """
@@ -1951,7 +1975,11 @@ def conda_environment(
     return conda_environment_builder
 
 
-def _abaqus_extract_emitter(target: list, source: list, env) -> typing.Tuple[list, list]:
+def _abaqus_extract_emitter(
+    target: list,
+    source: list,
+    env: SCons.Environment.Environment
+) -> typing.Tuple[list, list]:
     """Prepends the abaqus extract builder target H5 file if none is specified. Appends the source[0].csv file unless
     ``delete_report_file`` is ``True``.  Always appends the ``target[0]_datasets.h5`` file.
 
@@ -1962,7 +1990,7 @@ def _abaqus_extract_emitter(target: list, source: list, env) -> typing.Tuple[lis
 
     :param target: The target file list of strings
     :param source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param env: The builder's SCons construction environment object
 
     :return: target, source
     """
@@ -2050,12 +2078,16 @@ def abaqus_extract(program: str = "abaqus") -> SCons.Builder.Builder:
     return abaqus_extract_builder
 
 
-def _build_odb_extract(target: list, source: list, env) -> None:
+def _build_odb_extract(
+    target: list,
+    source: list,
+    env: SCons.Environment.Environment
+) -> None:
     """Define the odb_extract action when used as an internal package and not a command line utility
 
     :param target: The target file list of strings
     :param source: The source file list of SCons.Node.FS.File objects
-    :param SCons.Script.SConscript.SConsEnvironment env: The builder's SCons construction environment object
+    :param env: The builder's SCons construction environment object
     """
     # Default odb_extract arguments
     output_type = "h5"
@@ -2308,7 +2340,7 @@ def _custom_scanner(
         https://scons.org/doc/1.2.0/HTML/scons-user/c3755.html
 
         :param node: SCons Node object representing the file to scan
-        :param SCons.Environment.Environment env: SCons Environment object
+        :param env: SCons Environment object
         :param path: Path argument passed to the scan function
 
         :return: List of file dependencies found during scanning
@@ -2958,7 +2990,7 @@ def ansys_apdl_builder_factory(
 
 
 def parameter_study(
-    env,
+    env: SCons.Environment.Environment,
     builder: SCons.Builder.Builder,
     target: list,
     source: list,
@@ -3044,8 +3076,7 @@ def parameter_study(
            study=study
        )
 
-    :param SCons.Script.SConscript.SConsEnvironment env: An SCons construction environment to use when defining the
-        targets.
+    :param env: An SCons construction environment to use when defining the targets.
     :param builder: The builder to parameterize
     :param target: The list of task target files. Will be prepended with a set name directory if a parameter generator
         ``study`` is provided, e.g. ``parameter_set0/target.ext``.

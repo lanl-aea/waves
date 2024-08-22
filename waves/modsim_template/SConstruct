@@ -119,6 +119,7 @@ env.Append(BUILDERS={
     "SphinxPDF": waves.scons_extensions.sphinx_latexpdf(program=env["sphinx_build"], options="-W")
 })
 env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
+env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
 env.Append(SCANNERS=waves.scons_extensions.sphinx_scanner())
 
 # Dump the Conda environment as documentation of as-built target environment
@@ -164,4 +165,4 @@ SConscript(test_workflow, variant_dir=test_build_dir, exports='env', duplicate=F
 # Add default target list to help message
 # Add aliases to help message so users know what build target options are available
 # This must come *after* all expected Alias definitions and SConscript files.
-waves.scons_extensions.project_help_message()
+env.ProjectHelp()
