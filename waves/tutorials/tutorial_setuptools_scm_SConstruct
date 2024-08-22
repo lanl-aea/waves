@@ -55,7 +55,7 @@ waves.scons_extensions.print_build_failures(env["print_build_failures"])
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = waves.scons_extensions.add_program(["/apps/abaqus/Commands/abq2023", "abq2023"], env)
+env['abaqus'] = waves.scons_extensions.add_program(env, ["/apps/abaqus/Commands/abq2023", "abq2023"])
 
 # Comments used in tutorial code snippets: marker-4
 
