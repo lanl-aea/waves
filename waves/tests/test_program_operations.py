@@ -51,10 +51,29 @@ find_program_input = {
                          ids=find_program_input.keys())
 def test_find_program(names, checkprog_side_effect, first_found_path):
     env = SCons.Environment.Environment()
+
+    # Test function style interface
     mock_conf = unittest.mock.Mock()
     mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     with patch("SCons.SConf.SConfBase", return_value=mock_conf):
+        program = scons_extensions.find_program(env, names)
+    assert program == first_found_path
+
+    # TODO: Remove reversed arguments test after full deprecation of the older argument order
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("warnings.warn") as mock_warn:
         program = scons_extensions.find_program(names, env)
+    assert program == first_found_path
+    mock_warn.assert_called_once()
+
+    # Test SCons AddMethod style interface
+    mock_conf = unittest.mock.Mock()
+    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
+    env.AddMethod(scons_extensions.find_program, "FindProgram")
+    with patch("SCons.SConf.SConfBase", return_value=mock_conf):
+        program = env.FindProgram(names)
     assert program == first_found_path
 
 
