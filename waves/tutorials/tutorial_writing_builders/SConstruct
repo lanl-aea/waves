@@ -22,8 +22,43 @@ env = Environment(
 env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
 env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
 
+# Write an example custom builder on the WAVES builder factory template
+def solver_builder_factory(
+    environment: str = "",
+    action_prefix: str = "",
+    program: str = "solver",
+    program_required: str = "",
+    program_options: str = "",
+    subcommand: str = "implicit",
+    subcommand_required: str = "--input-file ${SOURCES[0].abspath} --output-file=${TARGETS[0].abspath}",
+    subcommand_options: str = "",
+    action_suffix: str = "",
+    emitter=waves.scons_extensions.first_target_emitter,
+    **kwargs
+) -> Builder:
+    """
+    :return: Solver journal builder
+    """  # noqa: E501
+    builder = waves.scons_extensions.first_target_builder_factory(
+        environment=environment,
+        action_prefix=action_prefix,
+        program=program,
+        program_required=program_required,
+        program_options=program_options,
+        subcommand=subcommand,
+        subcommand_required=subcommand_required,
+        subcommand_options=subcommand_options,
+        action_suffix=action_suffix,
+        emitter=emitter,
+        **kwargs
+    )
+    return builder
+
 # Add project builders and scanners
+solver_executable = pathlib.Path("solver").resolve()
+env["solver"] = env.AddProgram([solver_executable])
 env.Append(BUILDERS={
+    "Solver": solver_builder_factory()
 })
 
 # Build path object for extension and re-use
@@ -31,6 +66,7 @@ variant_dir_base = pathlib.Path(env["variant_dir_base"])
 
 # Add simulation targets
 workflow_configurations = [
+    "implicit_workflow"
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
