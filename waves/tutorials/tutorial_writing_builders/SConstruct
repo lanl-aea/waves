@@ -13,7 +13,7 @@ def solver_builder_factory(
     program_required: str = "",
     program_options: str = "",
     subcommand: str = "implicit",
-    subcommand_required: str = "--input-file ${SOURCES[0].abspath} --output-file=${TARGETS[0].abspath}",
+    subcommand_required: str = "--input-file ${SOURCES[0].abspath} --output-file=${TARGETS[0].abspath} --overwrite",
     subcommand_options: str = "",
     action_suffix: str = "> ${TARGETS[-1].abspath} 2>&1",
     emitter=waves.scons_extensions.first_target_emitter,
