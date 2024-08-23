@@ -60,38 +60,39 @@ def configure(args):
         sys.exit(2)
     configuration["routine"] = args.subcommand.lower()
     configuration["version"] = _project_name_version
-    with open(_log_file, "w") as log_writer:
+    with open(_log_file, "w+") as log_writer:
         log_writer.write(f"{configuration['version']}\n{configuration['routine']}\n")
     return configuration
 
 
-def fake_solve(output_file, configuration, solve_cpus):
+def fake_solve(output_file, configuration, solve_cpus, overwrite):
     """Common solve logic because we do not really have separate routines"""
     with open(_log_file, "a+") as log_writer:
         if solve_cpus == 1:
-            with open(output_file, 'w') as output_writer:
-                log_writer.write(f"writing: {output_file}\n")
-                output_writer.write(yaml.safe_dump(configuration))
+            output_files = [output_file]
         else:
-            for solve_cpu in range(solve_cpus):
-                solve_cpu_file = output_file.with_suffix(f"{_output_file_extension}{solve_cpu}")
-                with open(solve_cpu_file, 'w') as output_writer:
-                    log_writer.write(f"{writing: solve_cpu_file}\n")
-                    output_writer.write(yaml.safe_dump(configuration))
+            output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for solve_cpu in range(solve_cpus)]
+        if any([output.is_file() for output in output_files]) and not overwrite:
+            print("Output file(s) already exist. Exiting.", file=sys.stderr)
+            sys.exit(3)
+        for output in output_files:
+            with open(output, 'w') as output_writer:
+                log_writer.write(f"writing: {output}\n")
+                output_writer.write(yaml.safe_dump(configuration))
 
 
 def implicit(args):
     """Implicit routine"""
     configuration = configure(args)
     output_file = name_output_file(args.input_file, args.output_file)
-    fake_solve(output_file, configuration, args.solve_cpus)
+    fake_solve(output_file, configuration, args.solve_cpus, args.overwrite)
 
 
 def explicit(args):
     """Explicit routine"""
     configuration = configure(args)
     output_file = name_output_file(args.input_file, args.output_file)
-    fake_solve(output_file, configuration, args.solve_cpus)
+    fake_solve(output_file, configuration, args.solve_cpus, args.overwrite)
 
 
 def merge(args):
@@ -145,6 +146,10 @@ def get_parser():
     subcommand_parser_parent.add_argument(
         "-n", "--solve-cpus", type=positive_int, default=1, required=False,
         help=f"The number of threads to use (default: %(default)s)"
+    )
+    subcommand_parser_parent.add_argument(
+        "--overwrite", action="store_true",
+        help=f"Overwrite existing output files (default: %(default)s)"
     )
 
     subparsers = main_parser.add_subparsers(
