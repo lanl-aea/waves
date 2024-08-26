@@ -109,7 +109,6 @@ def read_input(input_file: pathlib.Path) -> dict:
 def configure(args: argparse.Namespace) -> dict:
     """Return the configuration with appended executable information
 
-
     :param args: The command line argument namespace
 
     :raises RuntimeError: if the subcommand doesn't match the input file routine

@@ -119,8 +119,96 @@ def test_read_input(input_file, is_file_result, mock_data, expected, outcome):
             pass
 
 
-def test_configure():
-    pass
+configure = {
+    "implicit input": (
+        argparse.Namespace(
+            subcommand="implicit",
+            input_file="implicit.yaml",
+            output_file=None,
+            solve_cpus=1,
+            overwrite=False
+        ),
+        {"key1": "value1"},
+        {
+         "key1": "value1",
+         "routine": "implicit",
+         "output_file": "implicit.out",
+         "solve_cpus": 1,
+         "overwrite": False
+        },
+        does_not_raise()
+    ),
+    "explicit input": (
+        argparse.Namespace(
+            subcommand="explicit",
+            input_file="explicit.yaml",
+            output_file=None,
+            solve_cpus=1,
+            overwrite=False
+        ),
+        {"key1": "value1"},
+        {
+         "key1": "value1",
+         "routine": "explicit",
+         "output_file": "explicit.out",
+         "solve_cpus": 1,
+         "overwrite": False
+        },
+        does_not_raise()
+    ),
+    "mismatch routine": (
+        argparse.Namespace(
+            subcommand="implicit",
+            input_file="implicit.yaml",
+            output_file=None,
+            solve_cpus=1,
+            overwrite=False
+        ),
+        {"key1": "value1", "routine": "nonimplicit"},
+        {"output_file": "mismatch.out"},
+        pytest.raises(RuntimeError)
+    ),
+    "no cli defaults": (
+        argparse.Namespace(
+            subcommand="implicit",
+            input_file=pathlib.Path("different.yaml"),
+            output_file=pathlib.Path("different.out"),
+            solve_cpus=2,
+            overwrite=True
+        ),
+        {"key1": "value1"},
+        {
+         "key1": "value1",
+         "routine": "implicit",
+         "output_file": "different.out",
+         "solve_cpus": 2,
+         "overwrite": True
+        },
+        does_not_raise()
+    ),
+}
+
+
+@pytest.mark.parametrize("args, read_input, expected, outcome",
+                         configure.values(), ids=configure.keys())
+def test_configure(args, read_input, expected, outcome):
+    log_file = pathlib.Path("solver.log")
+    output_file = pathlib.Path(expected["output_file"])
+    mocked_configuration = {
+        "version": solver._project_name_version,
+        "log_file": str(log_file),
+    }
+    expected.update(**mocked_configuration)
+    with patch("solver.read_input", return_value=read_input), \
+         patch("solver.name_log_file", return_value=log_file), \
+         patch("solver.name_output_file", return_value=output_file), \
+         patch("builtins.open", mock_open()), \
+         outcome:
+        try:
+            returned_configuration = solver.configure(args)
+            assert returned_configuration == expected
+        finally:
+            pass
 
 
 def test_solve():
