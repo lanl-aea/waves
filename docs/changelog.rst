@@ -52,6 +52,7 @@ Documentation
 - Add deprecation warnings to the older pattern Python builders (:issue:`746`, :merge:`918`). By `Kyle Brindley`_.
 - Update the tutorials and modsim templates to use the SCons ``AddMethod`` style access for project help messages
   (:issue:`753`, :merge:`924`). By `Kyle Brindley`_.
+- Add a work-in-progress tutorial for writing builders (:issue:`727`, :merge:`926`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
