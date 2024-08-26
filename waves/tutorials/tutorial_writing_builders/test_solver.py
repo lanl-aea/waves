@@ -39,6 +39,13 @@ def test_main():
         mock_implicit.assert_not_called()
         mock_explicit.assert_called_once()
 
+    # Check RuntimeError converted to SystemExit
+    with patch('sys.argv', ['solver.py', 'explicit', '-i', 'dummy_input.yaml']), \
+         patch('solver.explicit', side_effect=RuntimeError("message")), \
+         pytest.raises(SystemExit) as err:
+        solver.main()
+        assert str(err) == message
+
 
 name_output_file = {
     "no output file": (pathlib.Path("input.yaml"), None, pathlib.Path("input.out")),
@@ -64,16 +71,26 @@ def test_name_output_file(input_file, output_file, expected):
 
 
 name_log_file = {
-    "no log file exists": (pathlib.Path("solver.log"), 10, [False], pathlib.Path("solver.log")),
+    "no log file exists": (pathlib.Path("solver.log"), 10, [False], pathlib.Path("solver.log"), does_not_raise()),
+    "last iteration file": (
+        pathlib.Path("solver.log"), 2, [True, True, False], pathlib.Path("solver.log2"), does_not_raise()
+    ),
+    "default log file exists": (
+        pathlib.Path("solver.log"), 10, [True, False], pathlib.Path("solver.log1"), does_not_raise()
+    ),
+    "too many iterations": (pathlib.Path("solver.log"), 0, [True], None, pytest.raises(RuntimeError)),
 }
 
 
-@pytest.mark.parametrize("log_file, max_iterations, exists_side_effect, expected",
+@pytest.mark.parametrize("log_file, max_iterations, exists_side_effect, expected, outcome",
                          name_log_file.values(), ids=name_log_file.keys())
-def test_name_log_file(log_file, max_iterations, exists_side_effect, expected):
-    with patch("pathlib.Path.exists", side_effect=exists_side_effect):
-        returned_log_file = solver.name_log_file(log_file, max_iterations=max_iterations)
-        assert returned_log_file == expected
+def test_name_log_file(log_file, max_iterations, exists_side_effect, expected, outcome):
+    with patch("pathlib.Path.exists", side_effect=exists_side_effect), outcome:
+        try:
+            returned_log_file = solver.name_log_file(log_file, max_iterations=max_iterations)
+            assert returned_log_file == expected
+        finally:
+            pass
 
 
 positive_nonzero_int = {

@@ -53,8 +53,11 @@ def main():
     if args.subcommand not in subcommand_list:
         parser.print_help()
     else:
-        subcommand = globals()[args.subcommand]
-        subcommand(args)
+        try:
+            subcommand = globals()[args.subcommand]
+            subcommand(args)
+        except RuntimeError as err:
+            sys.exit(str(err))
 
 
 def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pathlib.Path:
@@ -68,18 +71,18 @@ def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pat
 def name_log_file(log_file: pathlib.Path, max_iterations: int = 10) -> pathlib.Path:
     """Return the first free log file name
 
-    Call sys.exit(4) if no log file name is free within the max iterations
-
     :param log_file: Log file base name
     :param max_iterations: Maximum number of allowable log files
+
+    :raises RuntimeError: if no log file name is free within the max iterations
     """
     log_file = _log_file
     count = 0
     while log_file.exists():
         count = count + 1
         if count > max_iterations:
-            print("Found the maximum number of log files. Please remove old log files and try again", file=sys.stderr)
-            sys.exit(4)
+            message = "Found the maximum number of log files. Please remove old log files and try again."
+            raise RuntimeError(message)
         log_file = log_file.with_suffix(f"{_log_file_extension}{count}")
     return log_file
 
@@ -87,9 +90,9 @@ def name_log_file(log_file: pathlib.Path, max_iterations: int = 10) -> pathlib.P
 def read_input(input_file: pathlib.Path) -> dict:
     """Return the configuration by reading the input file and handling common errors
 
-    Call sys.exit(1) if the YAML file can not be read
-
     :param input_file: The input YAML file absolute or relative path
+
+    :raises RuntimeError: if the YAML file can not be read
     """
     input_file.resolve()
     if not input_file.is_file():
@@ -98,25 +101,23 @@ def read_input(input_file: pathlib.Path) -> dict:
         with open(input_file, "r") as input_handle:
             configuration = yaml.safe_load(input_handle)
     except yaml.parser.ParserError as err:
-        print(f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}", file=sys.stderr)
-        sys.exit(1)
+        message = f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
+        raise RuntimeError(message)
     return configuration
 
 
 def configure(args) -> dict:
     """Return the configuration with appended executable information
 
-    Call sys.exit(2) if the subcommand doesn't match the input file routine
 
     :param args: The command line argument namespace
+
+    :raises RuntimeError: if the subcommand doesn't match the input file routine
     """
     configuration = read_input(args.input_file)
     if "routine" in configuration and configuration["routine"].lower() != args.subcommand.lower():
-        print(
-            f"requested routine '{configuration['routine']}' does not match subcommmand '{args.subcommand}'",
-            file=sys.stderr
-        )
-        sys.exit(2)
+        message = f"requested routine '{configuration['routine']}' does not match subcommmand '{args.subcommand}'"
+        raise RuntimeError(message)
     configuration["routine"] = args.subcommand.lower()
     configuration["version"] = _project_name_version
     configuration["log_file"] = str(name_log_file(_log_file))
@@ -134,9 +135,9 @@ def configure(args) -> dict:
 def fake_solve(configuration: dict) -> None:
     """Common solve logic because we do not really have separate routines
 
-    Call sys.exit(3) if any output file already exists and overwrite is not requested.
-
     :param configuration: The solver configuration
+
+    :raises RuntimeError: if any output file already exists and overwrite is not requested.
     """
     log_file = pathlib.Path(configuration["log_file"])
     output_file = pathlib.Path(configuration["output_file"])
@@ -149,8 +150,8 @@ def fake_solve(configuration: dict) -> None:
         output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for
                         solve_cpu in range(solve_cpus)]
     if any([output.is_file() for output in output_files]) and not overwrite:
-        print("Output file(s) already exist. Exiting.", file=sys.stderr)
-        sys.exit(3)
+        message = "Output file(s) already exist. Exiting."
+        raise RuntimeError(message)
 
     with open(log_file, "a+") as log_writer:
         for output in output_files:
