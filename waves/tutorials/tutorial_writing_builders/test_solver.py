@@ -42,6 +42,9 @@ def test_main():
 
 name_output_file = {
     "no output file": (pathlib.Path("input.yaml"), None, pathlib.Path("input.out")),
+    "no output file, relative input path": (
+        pathlib.Path("relative/input.yaml"), None, pathlib.Path("relative/input.out")
+    ),
     "output file": (pathlib.Path("input.yaml"), pathlib.Path("output_file.out"), pathlib.Path("output_file.out")),
     "output file, wrong extension": (
         pathlib.Path("input.yaml"), pathlib.Path("output_file.wrong"), pathlib.Path("output_file.out")
