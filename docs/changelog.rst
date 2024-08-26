@@ -22,6 +22,9 @@ Breaking changes
 - Re-order the program operation function arguments for compatibility with SCons ``AddMethod``. Backward compatibility
   is maintained with a syntax warning and instructions for what to change for v1 (:issue:`754`, :merge:`925`). By `Kyle
   Brindley`_.
+- Add a construction environment argument to the ``print_build_failures`` method for compatibility with SCons
+  ``AddMethod``. Backward compatibility is maintained with a syntax warning and instructions for what to change for v1
+  (:issue:`757`, :merge:`927`). By `Kyle Brindley`_.
 
 New Features
 ============
