@@ -46,6 +46,11 @@ name_output_file = {
         pathlib.Path("relative/input.yaml"), None, pathlib.Path("relative/input.out")
     ),
     "output file": (pathlib.Path("input.yaml"), pathlib.Path("output_file.out"), pathlib.Path("output_file.out")),
+    "output file, mismatched relative paths": (
+        pathlib.Path("relative/input.yaml"),
+        pathlib.Path("different/output_file.out"),
+        pathlib.Path("different/output_file.out")
+    ),
     "output file, wrong extension": (
         pathlib.Path("input.yaml"), pathlib.Path("output_file.wrong"), pathlib.Path("output_file.out")
     )
