@@ -131,8 +131,8 @@ def configure(args: argparse.Namespace) -> dict:
     return configuration
 
 
-def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list:
-    """Build the solve output file list
+def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list[pathlib.Path]:
+    """Return the solve output file list to match the number of solve cpus
 
     :param output_file: base name for the output file
     :param solve_cpus: integer number of solve cpus
