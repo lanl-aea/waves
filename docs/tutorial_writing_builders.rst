@@ -217,10 +217,80 @@ environment ``PATH``. Besides the default action construction, the project adds 
 Building targets
 ****************
 
-************
-Output Files
-************
+First, run the workflow with the default number of solve cpus and observe the output directory.
 
-**********************
-Workflow Visualization
-**********************
+.. code-block::
+
+   $ scons implicit_workflow
+   scons: Reading SConscript files ...
+   Checking whether /home/roppenheimer/waves-tutorials/tutorial_writing_builders/solver.py program exists.../home/roppenheimer/waves-tutorials/tutorial_writing_builders/solver.py
+   scons: done reading SConscript files.
+   scons: Building targets ...
+   cd /home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow && solver.py implicit --input-file /home/roppenheimer/waves-tutorials/tutorial_writing_builders/implicit.yaml --output-file=/home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow/implicit.out --overwrite --solve-cpus=1 > /home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow/implicit.out.stdout 2>&1
+   scons: done building targets.
+   $ find build -type f
+   build/implicit_workflow/implicit.out
+   build/implicit_workflow/implicit.out.stdout
+   build/implicit_workflow/solver.log
+
+Re-run the workflow with two solve cpus. Note that since the target definition and output files have changes, the
+original, single cpu solve output file is left around and not overwritten. A more advanced builder or user task
+definition is required to clean up previous files when the expected target file list changes.
+
+Observe that the previous log file still exists and a new log file with extension ``*.log1`` is found in the build
+output. Cleaning log files to produce deterministic output for task log file tracking and cleaning would require a more
+advanced user task definition. It would be tempting to write a builder action that always purges log files prior to
+execution; however, if the end user were running multiple solver tasks in this build directory, all log files of
+previous tasks would also be removed. In this case, it is probably better to leave log file handling to the end user.
+
+Finally, the user target list construction combined with the builder ``--output-file`` option handling results in the
+``*.stdout`` file name change from ``implicit.out.stdout`` to ``implicit.out0.stdout``. A builder factory emitter could
+be written to look for the ``solve_cpus`` environment varible to match emitted solver output targets to solver output
+handling. Changing the ``*.stdout`` naming convention for greater consistency is possible to handle in the builder
+factory, but would be more difficult to implement robustly and document clearly, so matching the extension of the first
+expected target is probably best.
+
+.. code-block::
+
+   $ scons implicit_workflow --solve-cpus=2
+   scons: Reading SConscript files ...
+   Checking whether /home/roppenheimer/waves-tutorials/tutorial_writing_builders/solver.py program exists.../home/roppenheimer/waves-tutorials/tutorial_writing_builders/solver.py
+   scons: done reading SConscript files.
+   scons: Building targets ...
+   cd /home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow && solver.py implicit --input-file /home/roppenheimer/waves-tutorials/tutorial_writing_builders/implicit.yaml --output-file=/home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow/implicit.out0 --overwrite --solve-cpus=2 > /home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow/implicit.out0.stdout 2>&1
+   scons: done building targets.
+   $ find build -type f                                                          
+   build/implicit_workflow/implicit.out0
+   build/implicit_workflow/implicit.out
+   build/implicit_workflow/solver.log1
+   build/implicit_workflow/implicit.out1
+   build/implicit_workflow/implicit.out.stdout
+   build/implicit_workflow/implicit.out0.stdout
+   build/implicit_workflow/solver.log
+
+Run the clean operation with the two solve cpus option and observe that the entire builder directory is removed. This is
+necessary for the end user to have consistent log file purging behavior without resorting to shell remove commands.
+Removing build directory artifacts by shell command is not necessarily a bad practices, but can build up muscle memory
+for commands that are unnecessarily destructive, such as removing the entire build directory with ``rm -r build``. In a
+single workflow project like this tutorial this achieves the same result. But in a project with many or computationally
+expensive workflows this muscle memory may result in expensive data loss and ``scons workflow --clean`` operations
+should be preferred, but not relied upon, for better data retention habits.
+
+.. code-block::
+
+   $ scons implicit_workflow --solve-cpus=2 --clean
+   scons: Reading SConscript files ...
+   Checking whether /home/roppenheimer/waves-tutorials/tutorial_writing_builders/solver.py program exists.../home/roppenheimer/waves-tutorials/tutorial_writing_builders/solver.py
+   scons: done reading SConscript files.
+   scons: Cleaning targets ...
+   Removed build/implicit_workflow/implicit.out0
+   Removed build/implicit_workflow/implicit.out1
+   Removed build/implicit_workflow/implicit.out0.stdout
+   Removed build/implicit_workflow/implicit.out
+   Removed build/implicit_workflow/implicit.out.stdout
+   Removed build/implicit_workflow/solver.log
+   Removed build/implicit_workflow/solver.log1
+   Removed directory build/implicit_workflow
+   scons: done cleaning targets.
+   $ find build -type f                                                                  
+   $
