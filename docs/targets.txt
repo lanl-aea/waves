@@ -76,6 +76,7 @@
 .. _`scipy.stats.qmc`: https://docs.scipy.org/doc/scipy/reference/stats.qmc.html
 .. _`SCons AddPostAction`: https://scons.org/doc/production/HTML/scons-user.html#app-functions
 .. _`SCons Builders`: https://scons.org/doc/production/HTML/scons-user/ch17.html
+.. _`SCons Emitters`: https://scons.org/doc/production/HTML/scons-user.html#id1459
 .. _`SCons Command`: https://scons.org/doc/production/HTML/scons-user/ch18.html
 .. _`SCons Copy`: https://scons.org/doc/production/HTML/scons-user/ch12.html#id1406
 .. _`SCons Pseudo-Builder`: https://scons.org/doc/production/HTML/scons-user/ch19.html

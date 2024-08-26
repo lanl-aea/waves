@@ -10,6 +10,7 @@ sys.dont_write_bytecode = True
 # -- Project information -----------------------------------------------------
 project_dir = pathlib.Path(r'@project_dir@').resolve()
 tutorials_dir = project_dir / pathlib.Path(r'@tutorials_dir@')
+tutorial_writing_builders_dir = project_dir / pathlib.Path(r'@tutorials_dir@') / "tutorial_writing_builders"
 
 # Name, Group, Email
 authors = [('Kyle Brindley', '<kbrindley@lanl.gov>'),
@@ -28,6 +29,7 @@ author_manpage = author_manpage.rstrip(', ')
 # Add paths to API/CLI files
 sys.path.insert(0, str(project_dir))
 sys.path.insert(0, str(tutorials_dir))
+sys.path.insert(0, str(tutorial_writing_builders_dir))
 
 # Mock modules unavailable in the Conda development environment, e.g. Abaqus Python modules, and large imports not
 # required by the documentation build, e.g. cubit.

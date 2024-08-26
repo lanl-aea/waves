@@ -141,6 +141,7 @@ documentation_file_list = [
     'tutorial_10_unit_testing.rst',
     'tutorial_11_regression_testing.rst',
     'tutorial_12_archival.rst',
+    'tutorial_writing_builders.rst',
     'tutorial_setuptools_scm.rst',
     'tutorial_cubit_abaqus.rst',
     'tutorial_cubit_sierra.rst',
