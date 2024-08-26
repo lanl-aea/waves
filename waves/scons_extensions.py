@@ -67,11 +67,12 @@ def print_build_failures(
     # TODO: Remove if-structure after full deprecation of the older argument order
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/758
     if isinstance(env, bool):
-        import warnings.warn
+        import warnings
         message = "The print_builder_failures function gained an argument from '(print_stdout)' to " \
                   "'(env, print_stdout)' to enable use with SCons AddMethod. " \
                   "Please provide keyword arguments or update the function call arguments " \
                   "prior to the version 1.0 release."
+        warnings.warn(message)
         print_stdout = env
     if print_stdout:
         atexit.register(_print_failed_nodes_stdout)
