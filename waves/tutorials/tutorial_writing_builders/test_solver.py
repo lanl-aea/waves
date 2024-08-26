@@ -1,3 +1,4 @@
+import pathlib
 import argparse
 from unittest.mock import patch, mock_open
 from contextlib import nullcontext as does_not_raise
@@ -39,7 +40,22 @@ def test_main():
         mock_explicit.assert_called_once()
 
 
-positive_float = {
+name_output_file = {
+    "no output file": (pathlib.Path("input.yaml"), None, pathlib.Path("input.out")),
+    "output file": (pathlib.Path("input.yaml"), pathlib.Path("output_file.out"), pathlib.Path("output_file.out")),
+    "output file, wrong extension": (
+        pathlib.Path("input.yaml"), pathlib.Path("output_file.wrong"), pathlib.Path("output_file.out")
+    )
+}
+
+
+@pytest.mark.parametrize("input_file, output_file, expected", name_output_file.values(), ids=name_output_file.keys())
+def test_name_output_file(input_file, output_file, expected):
+    returned_output_file = solver.name_output_file(input_file, output_file)
+    assert returned_output_file == expected
+
+
+positive_nonzero_int = {
     "positive int": ("1", 1, does_not_raise()),
     "larger positive int": ("100", 100, does_not_raise()),
     "zero": ("0", None, pytest.raises(argparse.ArgumentTypeError)),
@@ -48,7 +64,7 @@ positive_float = {
 }
 
 
-@pytest.mark.parametrize("argument, expected, outcome", positive_float.values(), ids=positive_float.keys())
+@pytest.mark.parametrize("argument, expected, outcome", positive_nonzero_int.values(), ids=positive_nonzero_int.keys())
 def test_positive_nonzero_int(argument, expected, outcome):
     with outcome:
         try:

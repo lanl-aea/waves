@@ -61,6 +61,7 @@ def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pat
     """Create the output file name from the input file if not specified"""
     if output_file is None:
         output_file = input_file.with_suffix(_output_file_extension)
+    output_file = output_file.with_suffix(_output_file_extension)
     return output_file
 
 
