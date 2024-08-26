@@ -47,7 +47,6 @@ solver_executable = pathlib.Path("solver").resolve()
 env["solver"] = env.AddProgram([solver_executable])
 env.Append(BUILDERS={
     "Solver": scons_extensions.solver_builder_factory(
-        program=env["solver"],
         subcommand_options="$(--solve-cpus=${solve_cpus}$)"
     )
 })
