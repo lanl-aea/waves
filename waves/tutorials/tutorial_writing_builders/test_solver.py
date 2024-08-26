@@ -119,6 +119,26 @@ def test_read_input(input_file, is_file_result, mock_data, expected, outcome):
             pass
 
 
+def test_implicit():
+    dummy_namespace = {"dummy": "namespace"}
+    dummy_configuration = {"configuration": "value"}
+    with patch("solver.configure", side_effect=[dummy_configuration]) as mock_configure, \
+         patch("solver.solve") as mock_solve:
+        solver.implicit(dummy_namespace)
+        mock_configure.assert_called_once_with(dummy_namespace)
+        mock_solve.assert_called_once_with(dummy_configuration)
+
+
+def test_explicit():
+    dummy_namespace = {"dummy": "namespace"}
+    dummy_configuration = {"configuration": "value"}
+    with patch("solver.configure", side_effect=[dummy_configuration]) as mock_configure, \
+         patch("solver.solve") as mock_solve:
+        solver.implicit(dummy_namespace)
+        mock_configure.assert_called_once_with(dummy_namespace)
+        mock_solve.assert_called_once_with(dummy_configuration)
+
+
 positive_nonzero_int = {
     "positive int": ("1", 1, does_not_raise()),
     "larger positive int": ("100", 100, does_not_raise()),

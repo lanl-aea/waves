@@ -132,7 +132,7 @@ def configure(args) -> dict:
     return configuration
 
 
-def fake_solve(configuration: dict) -> None:
+def solve(configuration: dict) -> None:
     """Common solve logic because we do not really have separate routines
 
     :param configuration: The solver configuration
@@ -166,7 +166,7 @@ def implicit(args):
     :param args: The command line argument namespace
     """
     configuration = configure(args)
-    fake_solve(configuration)
+    solve(configuration)
 
 
 def explicit(args):
@@ -175,7 +175,7 @@ def explicit(args):
     :param args: The command line argument namespace
     """
     configuration = configure(args)
-    fake_solve(configuration)
+    solve(configuration)
 
 
 def positive_nonzero_int(argument):
