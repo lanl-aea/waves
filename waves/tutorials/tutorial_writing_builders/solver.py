@@ -146,7 +146,8 @@ def fake_solve(configuration: dict) -> None:
     if solve_cpus == 1:
         output_files = [output_file]
     else:
-        output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for solve_cpu in range(solve_cpus)]
+        output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for
+                        solve_cpu in range(solve_cpus)]
     if any([output.is_file() for output in output_files]) and not overwrite:
         print("Output file(s) already exist. Exiting.", file=sys.stderr)
         sys.exit(3)
@@ -248,6 +249,7 @@ def get_parser() -> argparse.ArgumentParser:
     )
 
     return main_parser
+
 
 if __name__ == "__main__":
     main()
