@@ -118,6 +118,34 @@ Solver documentation
     :members:
     :show-inheritance:
 
+*******
+Builder
+*******
+
+The tutorial's builder factory is written as a project specific Python module such that it could be documented and
+packaged for distribution. It is also possible to write builder factories and builders directly into SCons configuration
+files. 
+
+.. literalinclude:: tutorial_writing_builders_scons_extensions.py
+   :language: Python
+   :lineno-match:
+
+Example unit tests to verify the builder action string, keywords, emitter, and node count are also provided. These are
+similar to the |PROJECT| unit test verification suite for builder facotories based on
+:meth:`waves.scons_extensions.first_target_builder_factory` and should be the minimum verification implemented for
+similar builders.
+
+Unit tests are not sufficient to verify desired solver behavior. System tests that run a real, but minimal, example
+problem should also be implemented to ensure that the builder action string, task re-execution, file handling
+expecations, and command line options are appropriate for workflow use. The system tests should be complete enough to
+verify that the third-party solver behavior still matches the assumptions in the buider design. For |PROJECT|, the
+tutorials serve as system tests for builder design. For a project specific builder, a minimal working example should be
+included in the project as an inexpensive verification check and easy-to-use troubleshooting task.
+
+.. literalinclude:: tutorial_writing_builders_test_scons_extensions.py
+   :language: Python
+   :lineno-match:
+
 **********
 SConscript
 **********
