@@ -63,6 +63,19 @@ def test_name_output_file(input_file, output_file, expected):
     assert returned_output_file == expected
 
 
+name_log_file = {
+    "no log file exists": (pathlib.Path("solver.log"), 10, [False], pathlib.Path("solver.log")),
+}
+
+
+@pytest.mark.parametrize("log_file, max_iterations, exists_side_effect, expected",
+                         name_log_file.values(), ids=name_log_file.keys())
+def test_name_log_file(log_file, max_iterations, exists_side_effect, expected):
+    with patch("pathlib.Path.exists", side_effect=exists_side_effect):
+        returned_log_file = solver.name_log_file(log_file, max_iterations=max_iterations)
+        assert returned_log_file == expected
+
+
 positive_nonzero_int = {
     "positive int": ("1", 1, does_not_raise()),
     "larger positive int": ("100", 100, does_not_raise()),
