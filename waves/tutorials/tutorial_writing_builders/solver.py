@@ -195,7 +195,7 @@ def positive_nonzero_int(argument):
         argument = int(argument)
     except ValueError:
         raise argparse.ArgumentTypeError("invalid integer value: '{}'".format(argument))
-    if not argument > MINIMUM_VALUE:
+    if not argument >= MINIMUM_VALUE:
         raise argparse.ArgumentTypeError("invalid positive integer: '{}'".format(argument))
     return argument
 
