@@ -49,7 +49,7 @@ env = Environment(
 )
 
 # Conditionally print failed task *.stdout files
-waves.scons_extensions.print_build_failures(env["print_build_failures"])
+waves.scons_extensions.print_build_failures(print_stdout=env["print_build_failures"])
 
 # Comments used in tutorial code snippets: marker-3
 
