@@ -93,6 +93,32 @@ def test_name_log_file(log_file, max_iterations, exists_side_effect, expected, o
             pass
 
 
+read_input = {
+    "good yaml": (
+        pathlib.Path("dummy.yaml"), True, "routine: implicit", {"routine": "implicit"}, does_not_raise()
+    ),
+    "bad yaml": (
+        pathlib.Path("dummy.yaml"), True, "\tnotvalidyaml", None, pytest.raises(RuntimeError)
+    ),
+    "file does not exist": (
+        pathlib.Path("dummy.yaml"), False, None, None, pytest.raises(RuntimeError)
+    ),
+}
+
+
+@pytest.mark.parametrize("input_file, is_file_result, mock_data, expected, outcome",
+                         read_input.values(), ids=read_input.keys())
+def test_read_input(input_file, is_file_result, mock_data, expected, outcome):
+    with patch("pathlib.Path.is_file", side_effect=[is_file_result]), \
+         patch("builtins.open", mock_open(read_data=mock_data)), \
+         outcome:
+        try:
+            configuration = solver.read_input(input_file)
+            assert configuration == expected
+        finally:
+            pass
+
+
 positive_nonzero_int = {
     "positive int": ("1", 1, does_not_raise()),
     "larger positive int": ("100", 100, does_not_raise()),

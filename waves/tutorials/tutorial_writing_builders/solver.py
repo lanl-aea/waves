@@ -96,13 +96,13 @@ def read_input(input_file: pathlib.Path) -> dict:
     """
     input_file.resolve()
     if not input_file.is_file():
-        print("input file '{input_file}' does not exist", file=sys.stderr)
-    try:
-        with open(input_file, "r") as input_handle:
+        raise RuntimeError(f"input file '{input_file}' does not exist")
+    with open(input_file, "r") as input_handle:
+        try:
             configuration = yaml.safe_load(input_handle)
-    except yaml.parser.ParserError as err:
-        message = f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
-        raise RuntimeError(message)
+        except (yaml.parser.ParserError, yaml.scanner.ScannerError) as err:
+            message = f"Error loading '{input_file}'. Check the YAML syntax.\nyaml.parser.ParserError: {err}"
+            raise RuntimeError(message)
     return configuration
 
 
