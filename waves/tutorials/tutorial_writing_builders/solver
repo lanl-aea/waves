@@ -1,6 +1,23 @@
 #!/usr/bin/env python
 """Example for common commercial and research solver behavior and handling
 
+.. warning::
+
+   The solver I/O handling and CLI are *NOT* good behaviors for authors and developers of command line utilities. They
+   are intended to be examples of representative types of challenging behaviors to consider when writing SCons builders.
+
+Solver I/O behaviors:
+
+1. Log files are written to the current working directory. Log files are never overwritten and must be cleaned manually.
+   Log files are automatically incremented from ``solver.log`` to ``solver.log10``. If no free log file number is found
+   and the maximum number of 10 is found, the solver exits with a non-zero exit code.
+2. The output file name is built in preferred order: CLI ``--output-file`` argument or the ``--input-file`` argument
+   with the replacement extension ``.out``.
+3. The implicit and explicit routines write output file(s) based on the requested number of threads. If only one thread
+   is requested, the output file name is used. If more than one thread, N, is requested, each thread writes to a
+   separately numbered output file 0-N.
+4. If any output file exists and the overwrite behavior is not requested, the solver exits with a non-zero exit code.
+
 Runtime errors are returned as non-zero exit codes. Internal errors are returned as the appropriate exception.
 
 Exit codes:
