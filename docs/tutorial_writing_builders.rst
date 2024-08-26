@@ -160,6 +160,28 @@ included in the project as an inexpensive verification check and easy-to-use tro
 SConscript
 **********
 
+The task target list depends on the solver options. The builder is not written to manage or inspect the solver command
+line options and does not include an emitter to match the builder target expectations to the solver command line
+options. Instead, the end user is expected to manage the target list directly.
+
+As in many of the tutorials, the number of solve cpus is accepted from the project specific command line arguments. The
+SConscript file implementing an implicit solver workflow inspects the construction environment solve cpus option prior
+to configuring the task to determine the expected target list. Since the solver overrides the output file extension, no
+special handling of the ``--output-file`` option is required to truncate or correct the provided extension when the
+target list changes.
+
+Since the solver does not provide any overwrite behavior for the log file, a user owned clean options is provided to
+clean the entire workflow build directory in addition to the known target list. This is necessary to help workflow users
+purge log files and to avoid solver task failures when the maximum number of log files is reached. More advanced
+builder authors might choose to implement a log file clean action prior to the solver action. More advanced end users
+might prefer to use an `SCons AddPreAction`_ to perform log file cleaning even when the builder does not. Without either
+implementation, users must remember to clean their build directory regularly to avoid solver exits from accumulated log
+files.
+
+.. literalinclude:: tutorial_writing_builders_test_scons_extensions.py
+   :language: Python
+   :lineno-match:
+
 **********
 SConstruct
 **********
