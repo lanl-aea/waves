@@ -27,7 +27,6 @@ Exit codes:
 3. output file exists and no overwrite was requested
 4. reached max log file integer before finding a free file name
 """
-
 import sys
 import pathlib
 import argparse
