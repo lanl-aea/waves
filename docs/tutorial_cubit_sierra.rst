@@ -25,13 +25,6 @@ References
 Environment
 ***********
 
-.. only:: aea
-
-   .. warning::
-
-      On AEA servers, this tutorial only works with RHEL8. At the time of this writing, that means ``sstbigbird`` and
-      not ``sstelmo``.
-
 .. include:: tutorial_environment_activation.txt
 
 *******************
