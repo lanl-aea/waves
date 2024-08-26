@@ -60,8 +60,10 @@ def print_build_failures(
        env = Environment(
            print_build_failures=GetOption("print_build_failures")
        )
-       waves.scons_extensions.print_build_failures(env["print_build_failures"])
+       env.AddMethod(waves.scons_extensions.print_build_failures, "PrintBuildFailures")
+       env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 
+    :param env: SCons construction environment
     :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
