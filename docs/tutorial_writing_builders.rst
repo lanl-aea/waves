@@ -127,6 +127,12 @@ behavior and task options to write complete target lists. There is an overwrite 
 to make task behavior more predictable. There is no interactive behavior to work around and also no CLI option to force
 non-interactive behavior.
 
+Normally the internal implementation and API are not accessible to solver users. Here, the full internal API is produced
+as an example of Python command line utility and to allow users to play with solver behavior to more closely match
+solvers of interest. While the Python implementation is written to |PROJECT| style and functional programming best
+practices, the file handling behavior itself is undesirable when users have direct control over command line utility
+behavior.
+
 Solver documentation
 ====================
 
@@ -263,7 +269,7 @@ expected target is probably best.
    scons: Building targets ...
    cd /home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow && solver.py implicit --input-file /home/roppenheimer/waves-tutorials/tutorial_writing_builders/implicit.yaml --output-file=/home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow/implicit.out0 --overwrite --solve-cpus=2 > /home/roppenheimer/waves-tutorials/tutorial_writing_builders/build/implicit_workflow/implicit.out0.stdout 2>&1
    scons: done building targets.
-   $ find build -type f                                                          
+   $ find build -type f
    build/implicit_workflow/implicit.out0
    build/implicit_workflow/implicit.out
    build/implicit_workflow/solver.log1
@@ -296,5 +302,5 @@ should be preferred, but not relied upon, for better data retention habits.
    Removed build/implicit_workflow/solver.log1
    Removed directory build/implicit_workflow
    scons: done cleaning targets.
-   $ find build -type f                                                                  
+   $ find build -type f
    $

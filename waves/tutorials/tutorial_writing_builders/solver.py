@@ -69,6 +69,9 @@ def name_log_file(log_file: pathlib.Path, max_iterations: int = 10) -> pathlib.P
     """Return the first free log file name
 
     Call sys.exit(4) if no log file name is free within the max iterations
+
+    :param log_file: Log file base name
+    :param max_iterations: Maximum number of allowable log files
     """
     log_file = _log_file
     count = 0
@@ -85,6 +88,8 @@ def read_input(input_file: pathlib.Path) -> dict:
     """Return the configuration by reading the input file and handling common errors
 
     Call sys.exit(1) if the YAML file can not be read
+
+    :param input_file: The input YAML file absolute or relative path
     """
     input_file.resolve()
     if not input_file.is_file():
@@ -101,8 +106,9 @@ def read_input(input_file: pathlib.Path) -> dict:
 def configure(args) -> dict:
     """Return the configuration with appended executable information
 
-
     Call sys.exit(2) if the subcommand doesn't match the input file routine
+
+    :param args: The command line argument namespace
     """
     configuration = read_input(args.input_file)
     if "routine" in configuration and configuration["routine"].lower() != args.subcommand.lower():
@@ -129,6 +135,8 @@ def fake_solve(configuration: dict) -> None:
     """Common solve logic because we do not really have separate routines
 
     Call sys.exit(3) if any output file already exists and overwrite is not requested.
+
+    :param configuration: The solver configuration
     """
     log_file = pathlib.Path(configuration["log_file"])
     output_file = pathlib.Path(configuration["output_file"])
@@ -151,19 +159,25 @@ def fake_solve(configuration: dict) -> None:
 
 
 def implicit(args):
-    """Implicit routine"""
+    """Implicit routine
+
+    :param args: The command line argument namespace
+    """
     configuration = configure(args)
     fake_solve(configuration)
 
 
 def explicit(args):
-    """Explicit routine"""
+    """Explicit routine
+
+    :param args: The command line argument namespace
+    """
     configuration = configure(args)
     fake_solve(configuration)
 
 
-def positive_int(argument):
-    """Type function for argparse - positive integers
+def positive_nonzero_int(argument):
+    """Type function for argparse - positive, non-zero integers
 
     :param str argument: string argument from argparse
 
@@ -173,9 +187,9 @@ def positive_int(argument):
     :raises ValueError:
 
         * The argument can't be cast to int
-        * The argument is less than 0
+        * The argument is less than 1
     """
-    MINIMUM_VALUE = 0
+    MINIMUM_VALUE = 1
     try:
         argument = int(argument)
     except ValueError:
@@ -186,6 +200,7 @@ def positive_int(argument):
 
 
 def get_parser() -> argparse.ArgumentParser:
+    """Return the argparse CLI parser"""
     main_parser = argparse.ArgumentParser(description=_cli_description)
     main_parser.add_argument(
         "-V", "--version",
@@ -205,7 +220,7 @@ def get_parser() -> argparse.ArgumentParser:
              f"If none is provided, uses the pattern ``input_file{_output_file_extension}``"
     )
     subcommand_parser_parent.add_argument(
-        "-n", "--solve-cpus", type=positive_int, default=_default_solve_cpus, required=False,
+        "-n", "--solve-cpus", type=positive_nonzero_int, default=_default_solve_cpus, required=False,
         help=f"The number of threads to use (default: %(default)s)"
     )
     subcommand_parser_parent.add_argument(
