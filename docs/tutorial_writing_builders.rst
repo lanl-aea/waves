@@ -101,7 +101,14 @@ is outside the scope of the current tutorial, but there are examples in :ref:`sc
 help advanced users pull apart existing builders to augment the action list.
 
 The placeholder solver used in this tutorial does no real work, but provides some common output handling use cases as
-examples for considerations in builder design.
+examples for considerations in builder design. As seen in the solver documentation below, the solver writes a log file
+with no path controls and no overwrite behavior. The solver builder can not reliably manage this file, except to change
+to the target parent directory prior to solver execution to ensure that the log is co-located with other task output
+files. The output file names are deterministic, but require task specific knowledge of the solver options. As a first
+draft, the builder will make no attempt to predict output file names and instead rely on the user's knowledge of solver
+behavior and task options to write complete target lists. There is an overwrite option, which the builder will require
+to make task behavior more predictable. There is no interactive behavior to work around and also no CLI option to force
+non-interactive behavior.
 
 Solver documentation
 ====================
