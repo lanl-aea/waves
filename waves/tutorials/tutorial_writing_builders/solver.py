@@ -15,7 +15,7 @@ Solver I/O behaviors:
    with the replacement extension ``.out``.
 3. The implicit and explicit routines write output file(s) based on the requested number of threads. If only one thread
    is requested, the output file name is used. If more than one thread, N, is requested, each thread writes to a
-   separately numbered output file 0-N.
+   separately numbered output file 0 to (N-1) as ``output_file.out{number}``.
 4. If any output file exists and the overwrite behavior is not requested, the solver exits with a non-zero exit code.
 
 Runtime errors are returned as non-zero exit codes. Internal errors are returned as the appropriate exception.

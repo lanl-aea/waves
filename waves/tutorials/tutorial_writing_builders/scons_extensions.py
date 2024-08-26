@@ -6,7 +6,7 @@ import SCons.Builder
 def solver_builder_factory(
     environment: str = "",
     action_prefix: str = "cd ${TARGET.dir.abspath} &&",
-    program: str = "solver",
+    program: str = "solver.py",
     program_required: str = "",
     program_options: str = "",
     subcommand: str = "implicit",

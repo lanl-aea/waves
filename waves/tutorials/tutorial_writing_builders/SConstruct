@@ -43,7 +43,7 @@ waves.scons_extensions.print_build_failures()
 env.Default()
 
 # Add project builders and scanners
-solver_executable = pathlib.Path("solver").resolve()
+solver_executable = pathlib.Path("solver.py").resolve()
 env["solver"] = env.AddProgram([solver_executable])
 env.Append(BUILDERS={
     "Solver": scons_extensions.solver_builder_factory(

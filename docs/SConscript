@@ -266,7 +266,7 @@ tutorial_files_list = [
     tutorials_dir / 'scons_quickstart/SConscript',
     tutorials_dir / 'multi_action_task/SConscript',
     tutorials_dir / 'tutorial_writing_builders/SConstruct',
-    tutorials_dir / 'tutorial_writing_builders/SConscript',
+    tutorials_dir / 'tutorial_writing_builders/implicit_workflow',
     tutorials_dir / 'tutorial_writing_builders/scons_extensions.py',
     tutorials_dir / 'tutorial_writing_builders/test_scons_extensions.py',
 ]
