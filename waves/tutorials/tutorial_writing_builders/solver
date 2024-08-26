@@ -1,5 +1,15 @@
 #!/usr/bin/env python
-"""Example for common commercial and research solver behavior and handling"""
+"""Example for common commercial and research solver behavior and handling
+
+Runtime errors are returned as non-zero exit codes. Internal errors are returned as the appropriate exception.
+
+Exit codes:
+
+1. error loading YAML input file
+2. mismatched subcommand and input file routine request
+3. output file exists and no overwrite was requested
+4. reached max log file integer before finding a free file name
+"""
 
 import sys
 import pathlib
@@ -12,7 +22,8 @@ _version = "1.0.0"
 _project_name = pathlib.Path(__file__).stem
 _project_name_version = f"{_project_name} {_version}"
 _output_file_extension = ".out"
-_log_file = "solver.log"
+_log_file_extension = ".log"
+_log_file = pathlib.Path(f"solver{_log_file_extension}")
 
 
 def main():
@@ -35,8 +46,27 @@ def name_output_file(input_file: pathlib.Path, output_file: pathlib.Path) -> pat
     return output_file
 
 
+def name_log_file(log_file: pathlib.Path, max_iterations: int = 10) -> pathlib.Path:
+    """Return the first free log file name
+
+    Call sys.exit(4) if no log file name is free within the max iterations
+    """
+    log_file = _log_file
+    count = 0
+    while log_file.exists():
+        count = count + 1
+        if count > max_iterations:
+            print("Found the maximum number of log files. Please remove old log files and try again", file=sys.stderr)
+            sys.exit(4)
+        log_file = log_file.with_suffix(f"{_log_file_extension}{count}")
+    return log_file
+
+
 def read_input(input_file: pathlib.Path) -> dict:
-    """Return the configuration by reading the input file and handling common errors"""
+    """Return the configuration by reading the input file and handling common errors
+
+    Call sys.exit(1) if the YAML file can not be read
+    """
     input_file.resolve()
     if not input_file.is_file():
         print("input file '{input_file}' does not exist", file=sys.stderr)
@@ -49,8 +79,12 @@ def read_input(input_file: pathlib.Path) -> dict:
     return configuration
 
 
-def configure(args):
-    """Return the configuration with appended executable information"""
+def configure(args) -> dict:
+    """Return the configuration with appended executable information
+
+
+    Call sys.exit(2) if the subcommand doesn't match the input file routine
+    """
     configuration = read_input(args.input_file)
     if "routine" in configuration and configuration["routine"].lower() != args.subcommand.lower():
         print(
@@ -60,21 +94,37 @@ def configure(args):
         sys.exit(2)
     configuration["routine"] = args.subcommand.lower()
     configuration["version"] = _project_name_version
-    with open(_log_file, "w+") as log_writer:
+    configuration["log_file"] = str(name_log_file(_log_file))
+    configuration["output_file"] = str(name_output_file(args.input_file, args.output_file))
+    configuration["solve_cpus"] = args.solve_cpus
+    configuration["overwrite"] = args.overwrite
+
+    with open(configuration["log_file"], "w+") as log_writer:
         log_writer.write(f"{configuration['version']}\n{configuration['routine']}\n")
+        log_writer.write(f"{configuration['log_file']}\n{configuration['output_file']}\n")
+
     return configuration
 
 
-def fake_solve(output_file, configuration, solve_cpus, overwrite):
-    """Common solve logic because we do not really have separate routines"""
-    with open(_log_file, "a+") as log_writer:
-        if solve_cpus == 1:
-            output_files = [output_file]
-        else:
-            output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for solve_cpu in range(solve_cpus)]
-        if any([output.is_file() for output in output_files]) and not overwrite:
-            print("Output file(s) already exist. Exiting.", file=sys.stderr)
-            sys.exit(3)
+def fake_solve(configuration: dict) -> None:
+    """Common solve logic because we do not really have separate routines
+
+    Call sys.exit(3) if any output file already exists and overwrite is not requested.
+    """
+    log_file = pathlib.Path(configuration["log_file"])
+    output_file = pathlib.Path(configuration["output_file"])
+    solve_cpus = configuration["solve_cpus"]
+    overwrite = configuration["overwrite"]
+
+    if solve_cpus == 1:
+        output_files = [output_file]
+    else:
+        output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for solve_cpu in range(solve_cpus)]
+    if any([output.is_file() for output in output_files]) and not overwrite:
+        print("Output file(s) already exist. Exiting.", file=sys.stderr)
+        sys.exit(3)
+
+    with open(log_file, "a+") as log_writer:
         for output in output_files:
             with open(output, 'w') as output_writer:
                 log_writer.write(f"writing: {output}\n")
@@ -84,15 +134,13 @@ def fake_solve(output_file, configuration, solve_cpus, overwrite):
 def implicit(args):
     """Implicit routine"""
     configuration = configure(args)
-    output_file = name_output_file(args.input_file, args.output_file)
-    fake_solve(output_file, configuration, args.solve_cpus, args.overwrite)
+    fake_solve(configuration)
 
 
 def explicit(args):
     """Explicit routine"""
     configuration = configure(args)
-    output_file = name_output_file(args.input_file, args.output_file)
-    fake_solve(output_file, configuration, args.solve_cpus, args.overwrite)
+    fake_solve(configuration)
 
 
 def merge(args):
@@ -123,7 +171,7 @@ def positive_int(argument):
     return argument
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     cli_description = "Dummy solver with file handling behavior similar to numeric solvers"
     main_parser = argparse.ArgumentParser(description=cli_description)
     main_parser.add_argument(
