@@ -124,7 +124,17 @@ Builder
 
 The tutorial's builder factory is written as a project specific Python module such that it could be documented and
 packaged for distribution. It is also possible to write builder factories and builders directly into SCons configuration
-files. 
+files.
+
+The builder itself is largely boilerplate documentation and a pass-through to the
+:meth:`waves.scons_extensions.first_target_builder_factory`. Strictly speaking, the builder factory could be written
+much more compactly by passing unchanged arguments through as ``*kwargs``. Hear, they are kept in the builder factory
+definition to make documentation of the factory defaults easier and to explicitly set the defaults independently from
+the |PROJECT| function.
+
+Writing the entire builder from scratch would not require many extra lines of code. The use of the |PROJECT| function is
+primarily to provide consistency with |PROJECT| builder factories. Builder factory authors are encouraged to read the
+`SCons Builders`_ documentation when their solver needs are not met by the |PROJECT| template builder factories.
 
 .. literalinclude:: tutorial_writing_builders_scons_extensions.py
    :language: Python
