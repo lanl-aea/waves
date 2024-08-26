@@ -41,7 +41,10 @@ def _print_failed_nodes_stdout() -> None:
             print(f"\n{failure.node} failed\n", file=sys.stderr)
 
 
-def print_build_failures(print_stdout: bool = True) -> None:
+def print_build_failures(
+    env: SCons.Environment.Environment = SCons.Environment.Environment(),
+    print_stdout: bool = True
+) -> None:
     """On exit, query the SCons reported build failures and print the associated node's STDOUT file, if it exists
 
     .. code-block::
@@ -61,6 +64,15 @@ def print_build_failures(print_stdout: bool = True) -> None:
 
     :param print_stdout: Boolean to set the exit behavior. If False, don't modify the exit behavior.
     """
+    # TODO: Remove if-structure after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/758
+    if isinstance(env, bool):
+        import warnings.warn
+        message = "The print_builder_failures function gained an argument from '(print_stdout)' to " \
+                  "'(env, print_stdout)' to enable use with SCons AddMethod. " \
+                  "Please provide keyword arguments or update the function call arguments " \
+                  "prior to the version 1.0 release."
+        print_stdout = env
     if print_stdout:
         atexit.register(_print_failed_nodes_stdout)
 
@@ -451,7 +463,7 @@ def append_env_path(
     if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
         import warnings
         message = "The append_env_path function arguments were reversed in v0.11 from " \
-                  "'(program, env)' to '(env, program)'to enable use with SCons AddMethod. " \
+                  "'(program, env)' to '(env, program)' to enable use with SCons AddMethod. " \
                   "Please reverse the argument order in this function call " \
                   "prior to the version 1.0 release."
         warnings.warn(message, SyntaxWarning)
