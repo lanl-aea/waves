@@ -39,6 +39,22 @@ Directory Structure
    $ ls tutorial_writing_builders
    SConstruct implicit.yaml implicit_workflow scons_extensions.py solver test_scons_extensions.py
 
+4. Make the new ``tutorial_writing_builders`` directory the current working directory
+
+.. code-block:: bash
+
+   $ pwd
+   /home/roppenheimer/waves-tutorials
+   $ cd tutorial_writing_builders
+   $ pwd
+   /home/roppenheimer/waves-tutorials/tutorial_writing_builders
+   $ ls tutorial_writing_builders
+   SConstruct implicit.yaml implicit_workflow scons_extensions.py solver test_scons_extensions.py
+
+5. Make the ``solver.py`` file executable. In a linux shell, use the command
+
+   $ chmod +x solver.py
+
 ******
 Solver
 ******
@@ -178,13 +194,24 @@ might prefer to use an `SCons AddPreAction`_ to perform log file cleaning even w
 implementation, users must remember to clean their build directory regularly to avoid solver exits from accumulated log
 files.
 
-.. literalinclude:: tutorial_writing_builders_test_scons_extensions.py
+.. literalinclude:: tutorial_writing_builders_implicit_workflow
    :language: Python
    :lineno-match:
 
 **********
 SConstruct
 **********
+
+The SConstruct file of this tutorial is a stripped down example of the core tutorials. All features of the project
+configuration should look familiar to the core tutorials. It implements a variant build directory, solve cpus control,
+and environment recovery from the launching shell. Since the solver behaves like a project specific file, the solver
+executable is found by absolute path from the tutorial/project directory and the parent directory is added to the
+environment ``PATH``. Besides the default action construction, the project adds a project-specific solver option and the
+``solve_cpus`` task keyword argument.
+
+.. literalinclude:: tutorial_writing_builders_SConstruct
+   :language: Python
+   :lineno-match:
 
 ****************
 Building targets
