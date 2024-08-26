@@ -211,8 +211,63 @@ def test_configure(args, read_input, expected, outcome):
             pass
 
 
-def test_solve():
-    pass
+solve_output_files = {
+    "one": (pathlib.Path("output.out"), 1, [pathlib.Path("output.out")]),
+    "two": (pathlib.Path("output.out"), 2, [pathlib.Path("output.out0"), pathlib.Path("output.out1")])
+}
+
+
+@pytest.mark.parametrize("output_file, solve_cpus, expected",
+                         solve_output_files.values(), ids=solve_output_files.keys())
+def test_solve_output_files(output_file, solve_cpus, expected):
+    output_files = solver.solve_output_files(output_file, solve_cpus)
+    assert output_files == expected
+
+
+solve = {
+    "no output files exist": (
+        {
+         "log_file": "solver.log",
+         "output_file": "output.out",
+         "solve_cpus": 1,
+         "overwrite": False
+        },
+        False,
+        does_not_raise()
+    ),
+    "output files exist: overwrite": (
+        {
+         "log_file": "solver.log",
+         "output_file": "output.out",
+         "solve_cpus": 1,
+         "overwrite": True
+        },
+        True,
+        does_not_raise()
+    ),
+    "output files exist: no overwrite": (
+        {
+         "log_file": "solver.log",
+         "output_file": "output.out",
+         "solve_cpus": 1,
+         "overwrite": False
+        },
+        True,
+        pytest.raises(RuntimeError)
+    ),
+}
+
+
+@pytest.mark.parametrize("configuration, exists, outcome",
+                         solve.values(), ids=solve.keys())
+def test_solve(configuration, exists, outcome):
+    with patch("pathlib.Path.exists", return_value=exists), \
+         patch("builtins.open", mock_open()), \
+         outcome:
+        try:
+            solver.solve(configuration)
+        finally:
+            pass
 
 
 def test_implicit():

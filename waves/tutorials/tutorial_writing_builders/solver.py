@@ -131,6 +131,20 @@ def configure(args: argparse.Namespace) -> dict:
     return configuration
 
 
+def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list:
+    """Build the solve output file list
+
+    :param output_file: base name for the output file
+    :param solve_cpus: integer number of solve cpus
+    """
+    if solve_cpus == 1:
+        output_files = [output_file]
+    else:
+        output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for
+                        solve_cpu in range(solve_cpus)]
+    return output_files
+
+
 def solve(configuration: dict) -> None:
     """Common solve logic because we do not really have separate routines
 
@@ -143,12 +157,8 @@ def solve(configuration: dict) -> None:
     solve_cpus = configuration["solve_cpus"]
     overwrite = configuration["overwrite"]
 
-    if solve_cpus == 1:
-        output_files = [output_file]
-    else:
-        output_files = [output_file.with_suffix(f"{_output_file_extension}{solve_cpu}") for
-                        solve_cpu in range(solve_cpus)]
-    if any([output.is_file() for output in output_files]) and not overwrite:
+    output_files = solve_output_files(output_file, solve_cpus)
+    if any([output.exists() for output in output_files]) and not overwrite:
         message = "Output file(s) already exist. Exiting."
         raise RuntimeError(message)
 
