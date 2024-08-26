@@ -106,7 +106,7 @@ def read_input(input_file: pathlib.Path) -> dict:
     return configuration
 
 
-def configure(args) -> dict:
+def configure(args: argparse.Namespace) -> dict:
     """Return the configuration with appended executable information
 
 
@@ -160,7 +160,7 @@ def solve(configuration: dict) -> None:
                 output_writer.write(yaml.safe_dump(configuration))
 
 
-def implicit(args):
+def implicit(args: argparse.Namespace) -> None:
     """Implicit routine
 
     :param args: The command line argument namespace
@@ -169,7 +169,7 @@ def implicit(args):
     solve(configuration)
 
 
-def explicit(args):
+def explicit(args: argparse.Namespace) -> None:
     """Explicit routine
 
     :param args: The command line argument namespace

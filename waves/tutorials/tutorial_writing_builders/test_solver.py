@@ -119,6 +119,14 @@ def test_read_input(input_file, is_file_result, mock_data, expected, outcome):
             pass
 
 
+def test_configure():
+    pass
+
+
+def test_solve():
+    pass
+
+
 def test_implicit():
     dummy_namespace = {"dummy": "namespace"}
     dummy_configuration = {"configuration": "value"}
@@ -156,3 +164,7 @@ def test_positive_nonzero_int(argument, expected, outcome):
             assert answer == expected
         finally:
             pass
+
+
+def test_get_parser():
+    pass
