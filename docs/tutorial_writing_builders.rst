@@ -14,8 +14,9 @@ see the :ref:`scons_quickstart`.
 References
 **********
 
-* `SCons Builders`_ :cite:`scons-user`
 * :ref:`scons_quickstart`
+* `SCons Builders`_ :cite:`scons-user`
+* `SCons AddPostAction`_ and `SCons AddPreAction`_ :cite:`scons-user`
 
 ***********
 Environment
@@ -233,9 +234,12 @@ First, run the workflow with the default number of solve cpus and observe the ou
    build/implicit_workflow/implicit.out.stdout
    build/implicit_workflow/solver.log
 
-Re-run the workflow with two solve cpus. Note that since the target definition and output files have changes, the
-original, single cpu solve output file is left around and not overwritten. A more advanced builder or user task
-definition is required to clean up previous files when the expected target file list changes.
+Re-run the workflow with two solve cpus. The task re-runs because the target list has changed. With the target list
+change, the original, single cpu solve output file is left around and not overwritten. A more advanced builder or user
+task definition is required to clean up previous files when the expected target file list changes. If the solver or
+builder factory provided an option to merge the multiple cpu output files, it could be possible for the user to write a
+task that does not re-execute when the number of solve cpus changes. In this tutorial, the user would need to write the
+merge operation as an `SCons AddPostAction`_ to get similar behavior when the requested solver cpus changed.
 
 Observe that the previous log file still exists and a new log file with extension ``*.log1`` is found in the build
 output. Cleaning log files to produce deterministic output for task log file tracking and cleaning would require a more
