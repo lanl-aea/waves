@@ -74,7 +74,7 @@ def test_solver_builder_factory(
     expected_kwargs = {
         "environment": "",
         "action_prefix": "cd ${TARGET.dir.abspath} &&",
-        "program": "solver",
+        "program": "solver.py",
         "program_required": "",
         "program_options": "",
         "subcommand": "implicit",
