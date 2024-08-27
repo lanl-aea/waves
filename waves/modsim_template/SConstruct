@@ -45,7 +45,7 @@ AddOption(
 )
 
 # Inherit user's full environment and set project options
-env = Environment(
+env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
     ignore_documentation=GetOption("ignore_documentation"),

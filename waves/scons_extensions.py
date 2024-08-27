@@ -3290,6 +3290,13 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return copy_substfile(self, *args, **kwargs)
 
+    def ProjectHelp(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.project_help`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
+        return project_help_message(self, *args, **kwargs)
+
     def ParameterStudy(self, *args, **kwargs):
         """:meth:`waves.scons_extensions.parameter_study`
 

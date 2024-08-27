@@ -2053,6 +2053,7 @@ waves_environment = {
     "AddCubit": ("AddCubit", "add_cubit"),
     "AddCubitPython": ("AddCubitPython", "add_cubit_python"),
     "CopySubstfile": ("CopySubstfile", "copy_substfile"),
+    "ProjectHelp": ("ProjectHelp", "project_help_message"),
     "ParameterStudy": ("ParameterStudy", "parameter_study"),
 }
 
