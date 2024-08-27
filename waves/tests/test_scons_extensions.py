@@ -30,6 +30,34 @@ fs = SCons.Node.FS.FS()
 testing_windows, root_fs = platform_check()
 
 
+check_program = {
+    "found": ("program", "/usr/bin/program", "Checking whether 'program' program exists.../usr/bin/program"),
+    "not found": ("program", None, "Checking whether 'program' program exists...no"),
+}
+
+
+@pytest.mark.parametrize("prog_name, shutil_return_value, message",
+                         check_program.values(),
+                         ids=check_program.keys())
+def test_check_program(prog_name, shutil_return_value, message):
+    env = SCons.Environment.Environment()
+
+    # Test function style interface
+    with patch("shutil.which", return_value=shutil_return_value), \
+         patch("builtins.print") as mock_print:
+        returned_absolute_path = scons_extensions.check_program(env, prog_name)
+        assert returned_absolute_path == shutil_return_value
+        mock_print.assert_called_once_with(message)
+
+    # Test SCons AddMethod style interface
+    env.AddMethod(scons_extensions.check_program, "CheckProgram")
+    with patch("shutil.which", return_value=shutil_return_value), \
+         patch("builtins.print") as mock_print:
+        returned_absolute_path = env.CheckProgram(prog_name)
+        assert returned_absolute_path == shutil_return_value
+        mock_print.assert_called_once_with(message)
+
+
 find_program_input = {
     "string": (
         "dummy",
