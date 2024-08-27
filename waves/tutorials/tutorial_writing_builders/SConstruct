@@ -33,8 +33,6 @@ env = waves.scons_extensions.WAVESEnvironment(
     variant_dir_base=GetOption("variant_dir_base"),
     solve_cpus=GetOption("solve_cpus"),
 )
-env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
-env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
 
 # Conditionally print failed task *.stdout files
 waves.scons_extensions.print_build_failures()

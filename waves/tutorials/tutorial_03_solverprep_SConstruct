@@ -50,7 +50,6 @@ waves.scons_extensions.print_build_failures(print_stdout=env["print_build_failur
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
 env['abaqus'] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq2023"])
 
 # Comments used in tutorial code snippets: marker-4
@@ -79,8 +78,6 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add builders and pseudo-builders
 env.Append(BUILDERS={'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus'])})
-env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
-env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
 
 # Comments used in tutorial code snippets: marker-6
 
