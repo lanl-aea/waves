@@ -28,7 +28,7 @@ AddOption(
     help="Run the solver task using N CPUs. (default: '%default')"
 )
 
-env = Environment(
+env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
     solve_cpus=GetOption("solve_cpus"),

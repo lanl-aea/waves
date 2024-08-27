@@ -26,7 +26,7 @@ Example usage:
 
    import pathlib
 
-   env = Environment()
+   env = waves.scons_extensions.WAVESEnvironment()
    project_dir = pathlib.Path(Dir(".").abspath)
    abaqus_source_dir = "modsim_package/abaqus"
    env["abaqus_source_abspath"] = project_dir / abaqus_source_dir

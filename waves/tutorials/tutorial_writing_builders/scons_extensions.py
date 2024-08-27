@@ -46,7 +46,7 @@ def solver_builder_factory(
        :caption: SConstruct
 
        import waves
-       env = Environment()
+       env = waves.scons_extensions.WAVESEnvironment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
        env["solver"] = env.AddProgram(["solver"])
        env.Append(BUILDERS={"Solver": solver_explicit_builder_factory()})

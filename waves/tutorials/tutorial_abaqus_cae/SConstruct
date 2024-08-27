@@ -17,7 +17,7 @@ AddOption(
 )
 
 # Inherit user's full environment
-env = Environment(
+env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     build_dir=GetOption("build_dir")
 )
