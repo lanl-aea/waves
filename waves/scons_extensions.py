@@ -3242,35 +3242,59 @@ class WAVESEnvironment(SConsEnvironment):
     """Thin overload of SConsEnvironment with WAVES construction environment methods"""
 
     def PrintBuildFailures(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.print_build_failures`"""
+        """:meth:`waves.scons_extensions.print_build_failures`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
         return print_build_failures(self, *args, **kwargs)
 
     def CheckProgram(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.check_program`"""
+        """:meth:`waves.scons_extensions.check_program`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
         return check_program(self, *args, **kwargs)
 
     def FindProgram(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.find_program`"""
+        """:meth:`waves.scons_extensions.find_program`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
         return find_program(self, *args, **kwargs)
 
     def AddProgram(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.add_program`"""
+        """:meth:`waves.scons_extensions.add_program`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
         return add_program(self, *args, **kwargs)
 
     def AddCubit(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.add_cubit`"""
+        """:meth:`waves.scons_extensions.add_cubit`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
         return add_cubit(self, *args, **kwargs)
 
     def AddCubitPython(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.add_cubit_python`"""
+        """:meth:`waves.scons_extensions.add_cubit_python`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
         return add_cubit_python(self, *args, **kwargs)
 
     def CopySubstfile(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.copy_substfile`"""
+        """:meth:`waves.scons_extensions.copy_substfile`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
         return copy_substfile(self, *args, **kwargs)
 
     def ParameterStudy(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.parameter_study`"""
+        """:meth:`waves.scons_extensions.parameter_study`
+
+        When using this environment builder, do not provide the first ``env`` argument
+        """
         return parameter_study(self, *args, **kwargs)
 
 
