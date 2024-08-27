@@ -26,10 +26,8 @@ if env["coverage_report"]:
 pytest_node = env.Command(
     target=target,
     source=pytest_source_list,
-    # TODO: Revert to a single, simple "pytest_command" when the race conditions on test_program_operations are fixed
     action=[
-        "${pytest_command} -vvv -m 'not programoperations and not systemtest' ${coverage}",
-        "${pytest_command} -vvv -m 'programoperations' ${program_operations_coverage}",
+        "${pytest_command} -vvv -m 'not systemtest' ${coverage}",
         "${coverage_command}"
     ],
     pytest_command=pytest_command,
