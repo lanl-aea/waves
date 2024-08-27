@@ -2043,3 +2043,24 @@ def test_parameter_study(node_count, action_count, target_list, study):
     )
 
     check_action_string(nodes, node_count, action_count, expected_string)
+
+
+waves_environment = {
+    "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures"),
+    "CheckProgram": ("CheckProgram", "check_program"),
+    "FindProgram": ("FindProgram", "find_program"),
+    "AddProgram": ("AddProgram", "add_program"),
+    "AddCubit": ("AddCubit", "add_cubit"),
+    "AddCubitPython": ("AddCubitPython", "add_cubit_python"),
+    "CopySubstfile": ("CopySubstfile", "copy_substfile"),
+    "ParameterStudy": ("ParameterStudy", "parameter_study"),
+}
+
+
+@pytest.mark.parametrize("method, function", waves_environment.values(), ids=waves_environment.keys())
+def test_waves_environment(method, function):
+    env = scons_extensions.WAVESEnvironment()
+    attribute = getattr(env, method)
+    with patch(f"waves.scons_extensions.{function}") as mock_function:
+        attribute()
+        mock_function.assert_called_once()

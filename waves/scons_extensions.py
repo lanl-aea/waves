@@ -11,6 +11,8 @@ import SCons.Builder
 import SCons.Environment
 import SCons.Node
 import SCons.Scanner
+import SCons.Script
+from SCons.Script.SConscript import SConsEnvironment
 
 from waves import _settings
 from waves import _utilities
@@ -21,9 +23,6 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def _print_failed_nodes_stdout() -> None:
-    # FIXME: The program_operations throw their usual fit when this is a module-wide import
-    # ``SCons.Errors.UserError: Calling Configure from Builders is not supported``
-    import SCons.Script
     """Query the SCons reported build failures and print the associated node's STDOUT file, if it exists"""
     build_failures = SCons.Script.GetBuildFailures()
     for failure in build_failures:
@@ -373,7 +372,6 @@ def default_targets_message(
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    from SCons.Script.SConscript import SConsEnvironment
     default_targets_help = "\nDefault Targets:\n"
     for target in SCons.Script.DEFAULT_TARGETS:
         default_targets_help += f"    {str(target)}\n"
@@ -405,7 +403,6 @@ def alias_list_message(
         overwritten if ``env.Help`` has not been previously called.
     :param keep_local: Limit help message to the project specific content when True. Only applies to SCons >=4.6.0
     """
-    from SCons.Script.SConscript import SConsEnvironment
     alias_help = "\nTarget Aliases:\n"
     for alias in SCons.Node.Alias.default_ans:
         alias_help += f"    {alias}\n"
@@ -3239,6 +3236,42 @@ def parameter_study(
         set_sources = _utilities.set_name_substitution(source, "", suffix="")
         return_targets.extend(builder(target=target, source=set_sources, *args, **kwargs))
     return return_targets
+
+
+class WAVESEnvironment(SConsEnvironment):
+    """Thin overload of SConsEnvironment with WAVES construction environment methods"""
+
+    def PrintBuildFailures(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.print_build_failures`"""
+        return print_build_failures(self, *args, **kwargs)
+
+    def CheckProgram(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.check_program`"""
+        return check_program(self, *args, **kwargs)
+
+    def FindProgram(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.find_program`"""
+        return find_program(self, *args, **kwargs)
+
+    def AddProgram(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.add_program`"""
+        return add_program(self, *args, **kwargs)
+
+    def AddCubit(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.add_cubit`"""
+        return add_cubit(self, *args, **kwargs)
+
+    def AddCubitPython(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.add_cubit_python`"""
+        return add_cubit_python(self, *args, **kwargs)
+
+    def CopySubstfile(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.copy_substfile`"""
+        return copy_substfile(self, *args, **kwargs)
+
+    def ParameterStudy(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.parameter_study`"""
+        return parameter_study(self, *args, **kwargs)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
