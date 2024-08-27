@@ -12,6 +12,8 @@ New Features
 ============
 - Add a check program function similar to SCons CheckProg, but without the SCons Configure object (:merge:`929`). By
   `Kyle Brindley`_.
+- Add a WAVES SCons environment class to provide common methods and reduce configuration boilerplate (:issue:`756`,
+  :merge:`929`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
