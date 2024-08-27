@@ -1,6 +1,7 @@
 import re
 import sys
 import atexit
+import shutil
 import typing
 import pathlib
 import functools
@@ -437,6 +438,30 @@ def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", suffix
     return {f"{prefix}{key}{suffix}": value for key, value in substitution_dictionary.items()}
 
 
+def check_program(
+    env: SCons.Environment.Environment,
+    prog_name: str
+) -> str:
+    """Replacement for `SCons CheckProg`_ like behavior without an SCons configure object
+
+    .. code-block::
+       :caption: Example search for an executable named "program"
+
+       import waves
+
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.check_program, "CheckProgram")
+       env["program"] = env.CheckProgram(["program"])
+
+    :param env: The SCons construction environment object to modify
+    :param prog_name: string program name to search in the construction environment path
+    """
+    absolute_path = shutil.which(prog_name, path=env["ENV"]["PATH"])
+    string_program = absolute_path if absolute_path is not None else "no"
+    print(f"Checking whether '{prog_name}' program exists...{string_program}")
+    return absolute_path
+
+
 def append_env_path(
     env: SCons.Environment.Environment,
     program: str
@@ -517,11 +542,9 @@ def find_program(
 
     if isinstance(names, str):
         names = [names]
-    conf = env.Configure()
     program_paths = []
     for name in names:
-        program_paths.append(conf.CheckProg(name))
-    conf.Finish()
+        program_paths.append(check_program(env, name))
     # Return first non-None path. Default to None if no program path was found.
     first_found_path = next((path for path in program_paths if path is not None), None)
     if first_found_path:

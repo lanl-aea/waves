@@ -53,25 +53,19 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
     env = SCons.Environment.Environment()
 
     # Test function style interface
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf):
+    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
         program = scons_extensions.find_program(env, names)
     assert program == first_found_path
 
     # Test SCons AddMethod style interface
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     env.AddMethod(scons_extensions.find_program, "FindProgram")
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf):
+    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect):
         program = env.FindProgram(names)
     assert program == first_found_path
 
     # TODO: Remove reversed arguments test after full deprecation of the older argument order
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
          patch("warnings.warn") as mock_warn:
         program = scons_extensions.find_program(names, env)
         mock_warn.assert_called_once()
@@ -90,9 +84,7 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
     # Test function style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
          patch("pathlib.Path.exists", return_value=True):
         program = scons_extensions.add_program(env, names)
     assert program == first_found_path
@@ -105,10 +97,8 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
     # Test SCons AddMethod style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     env.AddMethod(scons_extensions.add_program, "AddProgram")
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
          patch("pathlib.Path.exists", return_value=True):
         program = env.AddProgram(names)
     assert program == first_found_path
@@ -122,9 +112,7 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
-    with patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
          patch("pathlib.Path.exists", return_value=True), \
          patch("warnings.warn") as mock_warn:
         program = scons_extensions.add_program(names, env)
@@ -150,14 +138,12 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
     # Test function style interface
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     if first_found_path is not None:
         find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
     else:
         find_cubit_bin_return = None
     with patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return), \
-         patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
          patch("pathlib.Path.exists", return_value=True):
         program = scons_extensions.add_cubit(env, names)
     assert program == first_found_path
@@ -175,14 +161,12 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
     env = SCons.Environment.Environment()
     env.AddMethod(scons_extensions.add_cubit, "AddCubit")
     original_path = env["ENV"]["PATH"]
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     if first_found_path is not None:
         find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
     else:
         find_cubit_bin_return = None
     with patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return), \
-         patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
          patch("pathlib.Path.exists", return_value=True):
         program = env.AddCubit(names)
     assert program == first_found_path
@@ -200,14 +184,12 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
     env = SCons.Environment.Environment()
     original_path = env["ENV"]["PATH"]
-    mock_conf = unittest.mock.Mock()
-    mock_conf.CheckProg = unittest.mock.Mock(side_effect=checkprog_side_effect)
     if first_found_path is not None:
         find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
     else:
         find_cubit_bin_return = None
     with patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return), \
-         patch("SCons.SConf.SConfBase", return_value=mock_conf), \
+         patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
          patch("pathlib.Path.exists", return_value=True), \
          patch("warnings.warn") as mock_warn:
         program = scons_extensions.add_cubit(names, env)
