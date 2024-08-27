@@ -45,7 +45,7 @@ AddOption(
 )
 
 # Inherit user's full environment and set project options
-env = Environment(
+env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
     ignore_documentation=GetOption("ignore_documentation"),
@@ -103,11 +103,6 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 
 # Build path object for extension and re-use
 variant_dir_base = pathlib.Path(env["variant_dir_base"])
-
-# Add WAVES environment methods
-env.AddMethod(waves.scons_extensions.project_help_message, "ProjectHelp")
-env.AddMethod(waves.scons_extensions.copy_substfile, "CopySubstfile")
-env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["sphinx_build"] = env.AddProgram(["sphinx-build"])
