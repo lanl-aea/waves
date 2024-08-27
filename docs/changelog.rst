@@ -8,6 +8,16 @@ Changelog
 0.11.1 (unreleased)
 *******************
 
+New Features
+============
+- Add a check program function similar to SCons CheckProg, but without the SCons Configure object (:merge:`929`). By
+  `Kyle Brindley`_.
+
+Internal Changes
+================
+- Avoid SCons Configure() method when searching for programs in construction environments. Fixes the program operations
+  unit test interference with builder unit tests (:merge:`929`). By `Kyle Brindley`_.
+
 *******************
 0.11.0 (2024-08-26)
 *******************
