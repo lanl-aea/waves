@@ -15,7 +15,6 @@ References
 **********
 
 * Python style guide: `PEP-8`_ :cite:`pep-8`
-* `SCons AddMethod`_ :cite:`scons-user`
 
 .. _sconstruct_environment:
 
@@ -164,9 +163,9 @@ project is built may have different versions available. The project will build w
 without changes to the project configuration. If a program is found, it will also be added to the SCons environment
 ``PATH``.
 
-The :meth:`waves.scons_extensions.add_program` is added to the construction environment with `SCons AddMethod`_ for
-convenience. Anywhere the construction environment is available, we can use ``env.AddProgram``. It is also possible to
-use the :meth:`waves.scons_extensions.add_program` function directly. Most projects will search for more than one
+The ``env.AddProgram`` was added to the construction environment with :class:`waves.scons_extensions.WAVESEnvironment`
+for convenience. Anywhere the construction environment is available, we can use ``env.AddProgram``. It is also possible
+to use the :meth:`waves.scons_extensions.add_program` function directly.  Most projects will search for more than one
 third-party software, so the shortened ``env.AddProgram`` function call is also less to type.
 
 .. note::
@@ -209,10 +208,6 @@ The `WAVES`_ :ref:`waves_scons_api` API describes the available builders and the
 software will be supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own
 `SCons custom builders`_.
 
-Here we've also added the ``ProjectHelp`` method as a reference to :meth:`waves.scons_extensions.project_help_message`
-to the construction environment using `SCons AddMethod`_. The purpose of this method will be discussed at the end of the
-SConstruct file where the method is actually used.
-
 10. Add the content below to the ``SConstruct`` file to create a placeholder call to the hierarchical simulation configuration files.
 
 .. admonition:: waves-tutorials/SConstruct
@@ -252,23 +247,17 @@ with the `SCons Alias`_ feature. By convention, the `WAVES tutorials`_ match the
 name. :ref:`tutorial_geometry` will introduce the first target alias, which will then populate the project help
 message displayed by the ``scons -h`` command option.
 
-For convenience and to match the style of vanilla SCons configuration files, we previously added the ``ProjectHelp``
-method to the construction environment using `SCons AddMethod`_. This new method points to the
-:meth:`waves.scons_extensions.project_help_message` function, which wraps two common calls to `SCons Help`_ that will
-append the following to the project help message accessed by ``scons -h``:
+We previously added the ``ProjectHelp`` method to the construction environment using
+:class:`waves.scons_extensions.WAVESEnvironment`. This method points to which wraps two common calls to `SCons Help`_
+that will append the following to the project help message accessed by ``scons -h``:
 
 * the command-line build options
 * the default target list
 * the project alias list
 
-The help message recovers targets and aliases from the construction environment, so the
-:meth:`waves.scons_extensions.project_help_message` call must come after all ``SConscript`` and ``Alias`` method calls.
-Generally, it's best to simply call :meth:`waves.scons_extensions.project_help_message` as the final line in your
-project configuration.
-
-:ref:`tutorial_solverprep` will introduce another method added to the construction environment with this same feature.
-For extensions to SCons that are not strictly builders, we will use the ``AddMethod`` style throughout the tutorials;
-however, it is still possible to call these functions directly.
+The help message recovers targets and aliases from the construction environment, so the ``env.ProjectHelp`` call must
+come after all ``SConscript`` and ``Alias`` method calls.  Generally, it's best to simply call this method as the final
+line in your project configuration.
 
 .. note::
 

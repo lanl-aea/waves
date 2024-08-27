@@ -10,7 +10,7 @@ References
 
 * Bash concepts used in this tutorial: `Bash Variables`_, `Bash Arrays`_, `Bash Parameter Expansion`_ :cite:`gnu-bash`
 * `Abaqus *INCLUDE`_ keyword documentation :cite:`ABAQUS`
-* `SCons Pseudo-Builder`_, `SCons AddMethod`_, and `SCons Copy`_ :cite:`scons-user`
+* `SCons Pseudo-Builder`_ and `SCons Copy`_ :cite:`scons-user`
 
 ***********
 Environment
@@ -167,7 +167,8 @@ changes made in this tutorial.
       :diff: tutorials_tutorial_02_partition_mesh_SConstruct
 
 Note that while an `SCons Pseudo-Builder`_ is accessed with the same syntax as a normal builder in the ``SConscript``
-file, it must be added to the construction environment with the `SCons AddMethod`_ function in the ``SConstruct`` file.
+file, it was added to the construction environment as the overloaded :class:`waves.scons_extensions.WAVESEnvironment`
+SCons environment class in the ``SConstruct`` file.
 
 *************
 Build Targets
