@@ -1,0 +1,82 @@
+#! /usr/bin/env python
+import os
+import pathlib
+
+import waves
+
+env = waves.scons_extensions.WAVESEnvironment(
+    ENV=os.environ.copy()
+)
+parameter_study_directory = pathlib.Path("build_parameter_studies")
+
+# =========================================================================================== COMMON BUILD DIRECTORY ===
+for variant_dir in [None, "build"]:
+    # Call without a study
+    study = None
+    simulation_variables = {"workflow": "no study"}
+    simulation_constants = {"cat_options": "-n", "tail_options": "--verbose"}
+    env.ParameterStudySConscript(
+        "SConscript",
+        variant_dir=variant_dir,
+        exports={"env": env, "simulation_constants": simulation_constants},
+        duplicate=True,
+        study=study,
+        set_name="no_study",
+        parameters=simulation_variables
+    )
+
+    # Call with a study dictionary
+    study = {"workflow": "dictionary"}
+    simulation_variables = {}
+    simulation_constants = {"cat_options": "-n", "tail_options": "--verbose"}
+    env.ParameterStudySConscript(
+        "SConscript",
+        variant_dir=variant_dir,
+        exports={"env": env, "simulation_constants": simulation_constants},
+        duplicate=True,
+        study=study,
+        set_name="dictionary"
+    )
+
+    # Call with a study parameter generator
+    study_file = parameter_study_directory / "hat_study.h5"
+    previous_study_file = study_file if study_file.exists() else None
+    study = waves.parameter_generators.CartesianProduct(
+        {"workflow": ["thing 1", "thing 2"]},
+        set_name_template=f"{study_file.stem}@number",
+        output_file=study_file,
+        previous_parameter_study=previous_study_file
+    )
+    study.write()
+    simulation_variables = {}
+    simulation_constants = {"cat_options": "-n", "tail_options": "--verbose"}
+    env.ParameterStudySConscript(
+        "SConscript",
+        variant_dir=variant_dir,
+        exports={"env": env, "simulation_constants": simulation_constants},
+        duplicate=True,
+        study=study,
+    )
+
+# ============================================================================================ SET BUILD DIRECTORIES ===
+study_file = parameter_study_directory / "subdir_hat_study.h5"
+previous_study_file = study_file if study_file.exists() else None
+study = waves.parameter_generators.CartesianProduct(
+    {"workflow": ["thing 3", "thing 4"]},
+    set_name_template=f"{study_file.stem}@number",
+    output_file=study_file,
+    previous_parameter_study=previous_study_file
+)
+study.write()
+simulation_variables = {}
+simulation_constants = {"cat_options": "-n", "tail_options": "--verbose"}
+env.ParameterStudySConscript(
+    "SConscript",
+    variant_dir="build_with_subdirs",
+    exports={"env": env, "simulation_constants": simulation_constants},
+    duplicate=True,
+    study=study,
+    subdirectories=True
+)
+
+env.ProjectHelp()
