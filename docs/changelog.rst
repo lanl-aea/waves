@@ -8,6 +8,12 @@ Changelog
 0.11.1 (unreleased)
 *******************
 
+Breaking changes
+================
+- Add a construction environment argument to the ``substitution_syntax`` method for compatibility with SCons
+  ``AddMethod``. Backward compatibility is maintained with a syntax warning and instructions for what to change for v1
+  (:issue:`759`, :merge:`932`). By `Kyle Brindley`_.
+
 New Features
 ============
 - Add a check program function similar to SCons CheckProg, but without the SCons Configure object (:merge:`929`). By
@@ -16,6 +22,7 @@ New Features
   :merge:`929`). By `Kyle Brindley`_.
 - Add a ParameterStudySConscript wrapper to unpack parameter generators into SConscript calls (:issue:`761`,
   :merge:`930`). By `Kyle Brindley`_.
+- Add ``SubstitutionSyntax`` method to WAVES SCons environment class (:issue:`759`, :merge:`932`). By `Kyle Brindley`_.
 
 Documentation
 =============
