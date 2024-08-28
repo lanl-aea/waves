@@ -1,4 +1,30 @@
 #! /usr/bin/env python
+"""Demonstration project for :meth:`waves.scons_extensions.parameter_study_sconcript` wrapped SConscript calls.
+
+Contains examples of calling SConscript without a study, with a study dictionary, and with a study parameter generator.
+Constains an example of using parameter set names as build subdirectories and as direct variant directories.
+
+.. code-block::
+
+   $ scons .
+   $ find . -name "*.h5"
+   ./build_parameter_studies/build_hat_study.h5
+   ./build_parameter_studies/hat_study.h5
+   ./build_parameter_studies/subdir_hat_study.h5
+   $ find . -name "cat*.txt"
+   ./cat_no_study.txt
+   ./build_with_subdirs/subdir_hat_study0/cat_subdir_hat_study0.txt
+   ./build_with_subdirs/subdir_hat_study1/cat_subdir_hat_study1.txt
+   ./cat_hat_study1.txt
+   ./cat_hat_study0.txt
+   ./build_hat_study0/cat_build_hat_study0.txt
+   ./build/cat_no_study.txt
+   ./build/cat_hat_study1.txt
+   ./build/cat_hat_study0.txt
+   ./build/cat_dictionary.txt
+   ./build_hat_study1/cat_build_hat_study1.txt
+   ./cat_dictionary.txt
+"""
 import os
 import pathlib
 
@@ -10,8 +36,13 @@ env = waves.scons_extensions.WAVESEnvironment(
 parameter_study_directory = pathlib.Path("build_parameter_studies")
 
 # =========================================================================================== COMMON BUILD DIRECTORY ===
+# Call with and without a variant directory
 for variant_dir in [None, "build"]:
     # Call without a study
+    #
+    # Produces
+    # ./cat_no_study.txt
+    # ./build/cat_no_study.txt
     study = None
     simulation_variables = {"workflow": "no study"}
     simulation_constants = {"cat_options": "-n", "tail_options": "--verbose"}
@@ -26,6 +57,10 @@ for variant_dir in [None, "build"]:
     )
 
     # Call with a study dictionary
+    #
+    # Produces
+    # ./cat_dictionary.txt
+    # ./build/cat_dictionary.txt
     study = {"workflow": "dictionary"}
     simulation_variables = {}
     simulation_constants = {"cat_options": "-n", "tail_options": "--verbose"}
@@ -39,6 +74,12 @@ for variant_dir in [None, "build"]:
     )
 
     # Call with a study parameter generator
+    #
+    # Produces
+    # ./cat_hat_study0.txt
+    # ./cat_hat_study1.txt
+    # ./build/cat_hat_study0.txt
+    # ./build/cat_hat_study1.txt
     study_file = parameter_study_directory / "hat_study.h5"
     previous_study_file = study_file if study_file.exists() else None
     study = waves.parameter_generators.CartesianProduct(
@@ -58,7 +99,12 @@ for variant_dir in [None, "build"]:
         study=study,
     )
 
-# ============================================================================================ SET BUILD DIRECTORIES ===
+# ===================================================================================== PARAMETER SET SUBDIRECTORIES ===
+# Call with a variant directory and parameter set named subdirectories
+#
+# Produces
+# ./build_with_subdirs/subdir_hat_study0/cat_subdir_hat_study0.txt
+# ./build_with_subdirs/subdir_hat_study1/cat_subdir_hat_study1.txt
 study_file = parameter_study_directory / "subdir_hat_study.h5"
 previous_study_file = study_file if study_file.exists() else None
 study = waves.parameter_generators.CartesianProduct(
@@ -72,7 +118,33 @@ simulation_variables = {}
 simulation_constants = {"cat_options": "-n", "tail_options": "--verbose"}
 env.ParameterStudySConscript(
     "SConscript",
-    variant_dir="build_with_subdirs",
+    variant_dir=f"build_with_subdirs",
+    exports={"env": env, "simulation_constants": simulation_constants},
+    duplicate=True,
+    study=study,
+    subdirectories=True
+)
+
+# ================================================================================== PARAMETER SET BUILD DIRECTORIES ===
+# Call without a variant directory and parameter set named subdirectories
+#
+# Produces
+# ./build_hat_study0/cat_build_hat_study0.txt
+# ./build_hat_study1/cat_build_hat_study1.txt
+study_file = parameter_study_directory / "build_hat_study.h5"
+previous_study_file = study_file if study_file.exists() else None
+study = waves.parameter_generators.CartesianProduct(
+    {"workflow": ["thing 5", "thing 6"]},
+    set_name_template=f"{study_file.stem}@number",
+    output_file=study_file,
+    previous_parameter_study=previous_study_file,
+)
+study.write()
+simulation_variables = {}
+simulation_constants = {"cat_options": "-n", "tail_options": "--verbose"}
+env.ParameterStudySConscript(
+    "SConscript",
+    variant_dir=None,
     exports={"env": env, "simulation_constants": simulation_constants},
     duplicate=True,
     study=study,
