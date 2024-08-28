@@ -412,12 +412,26 @@ def alias_list_message(
         SConsEnvironment.Help(env, alias_help, append=append)
 
 
-def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", suffix: str = "@", postfix: str = "") -> dict:
+def substitution_syntax(
+    env: SCons.Environment.Environment,
+    substitution_dictionary: dict = {},
+    prefix: str = "@",
+    suffix: str = "@",
+    postfix: str = ""
+) -> dict:
     """Return a dictionary copy with the pre/suffix added to the key strings
 
     Assumes a flat dictionary with keys of type str. Keys that aren't strings will be converted to their string
     representation. Nested dictionaries can be supplied, but only the first layer keys will be modified. Dictionary
     values are unchanged.
+
+    .. code-block::
+       :caption: SConstruct
+
+       env = Environment()
+       env.AddMethod(waves.scons_extensions.substitution_syntax, "SubstitutionSyntax")
+       original_dictionary = {"key": "value"}
+       substitution_dictionary = env.SubstitutionSyntax(original_dictionary)
 
     :param dict substitution_dictionary: Original dictionary to copy
     :param string prefix: String to prepend to all dictionary keys
@@ -425,6 +439,15 @@ def substitution_syntax(substitution_dictionary: dict, prefix: str = "@", suffix
 
     :return: Copy of the dictionary with key strings modified by the pre/suffix
     """
+    # TODO: Remove if-structure after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/758
+    if isinstance(env, dict):
+        import warnings
+        message = "The substitution_syntax function gained a positional argument from '(substitution_dictionary)' to " \
+                  "'(env, substitution_dictionary)' to enable use with SCons AddMethod. Please add the environment " \
+                  "positional argument or convert to AddMethod function call prior to the version 1.0 release."
+        warnings.warn(message)
+        substitution_dictionary = env
     # TODO: Remove when the 'postfix' kwarg is removed
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
     if postfix:
