@@ -101,7 +101,7 @@ workflow_configurations = [
 ]
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
-    SConscript(workflow, variant_dir=build_dir, exports='env', duplicate=False)
+    SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
 

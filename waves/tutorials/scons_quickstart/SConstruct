@@ -35,4 +35,4 @@ if env['abaqus']:
     env.PrependENVPath("PATH", pathlib.Path(env['abaqus']).parent)
 
 # Call SConscript file
-SConscript('SConscript', variant_dir=env['build_dir'], exports='env', duplicate=True)
+SConscript('SConscript', variant_dir=env['build_dir'], exports={"env": env}, duplicate=True)

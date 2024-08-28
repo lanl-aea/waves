@@ -34,7 +34,7 @@ env.Append(BUILDERS={
 })
 
 # Call SConscript file
-SConscript("SConscript", variant_dir=env["build_dir"], exports="env", duplicate=True)
+SConscript("SConscript", variant_dir=env["build_dir"], exports={"env": env}, duplicate=True)
 
 # List all aliases in help message.
 # This must come *after* all expected Alias definitions and SConscript files.

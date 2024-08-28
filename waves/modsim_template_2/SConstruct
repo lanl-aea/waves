@@ -155,12 +155,12 @@ workflow_configurations = [
 for workflow in workflow_configurations:
     build_dir = variant_dir_base / workflow
     workflow_file = modsim_package_dir / workflow
-    SConscript(workflow_file, variant_dir=build_dir, exports="env", duplicate=True)
+    SConscript(workflow_file, variant_dir=build_dir, exports={"env": env}, duplicate=True)
 
 # Add unit test target
 test_workflow = 'unit_testing'
 test_build_dir = variant_dir_base / test_workflow
-SConscript(test_workflow, variant_dir=test_build_dir, exports='env', duplicate=False)
+SConscript(test_workflow, variant_dir=test_build_dir, exports={"env": env}, duplicate=False)
 
 # Add default target list to help message
 # Add aliases to help message so users know what build target options are available
