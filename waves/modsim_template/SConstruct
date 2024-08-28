@@ -132,7 +132,7 @@ Default(environment_target)
 if not env["ignore_documentation"]:
     # Project documentation
     build_dir = variant_dir_base / documentation_source_dir
-    SConscript(documentation_source_dir / "SConscript", variant_dir=build_dir, exports=["env", "project_variables"])
+    SConscript(documentation_source_dir / "SConscript", variant_dir=build_dir, exports={"env": env, "project_variables": project_variables})
 
     # Analysis report
     report_dir = pathlib.Path("report")
