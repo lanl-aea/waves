@@ -3249,7 +3249,7 @@ def parameter_study_sconscript(
     subdirectories: bool = False,
     **kwargs
 ):
-    """Overload the SCons SConscript call to unpack WAVES parameter generators
+    """Wrap the SCons SConscript call to unpack parameter generators
 
     Always overrides the exports with the ``export_dictionary`` keys and appends ``set_name`` and ``parameters``
     variables. When ``study`` is a dictionary or parameter generator, the ``parameters`` are overridden. When ``study``
@@ -3440,6 +3440,13 @@ class WAVESEnvironment(SConsEnvironment):
         When using this environment builder, do not provide the first ``env`` argument
         """
         return parameter_study(self, *args, **kwargs)
+
+    def ParameterStudySConscript(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.parameter_study_sconscript`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
+        return parameter_study_sconscript(self, *args, **kwargs)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
