@@ -100,7 +100,8 @@ for variant_dir in [None, "build"]:
     )
 
 # ===================================================================================== PARAMETER SET SUBDIRECTORIES ===
-# Call with a variant directory and parameter set named subdirectories
+# Call with a variant directory and parameter set named subdirectories. Probably if you knew you were going to use the
+# SConscript file this way, you would remove the ``set_name`` variable in the target file name construction.
 #
 # Produces
 # ./build_with_subdirs/subdir_hat_study0/cat_subdir_hat_study0.txt
@@ -126,7 +127,8 @@ env.ParameterStudySConscript(
 )
 
 # ================================================================================== PARAMETER SET BUILD DIRECTORIES ===
-# Call without a variant directory and parameter set named subdirectories
+# Call without a variant directory and parameter set named subdirectories. Probably if you knew you were going to use
+# the SConscript file this way, you would remove the ``set_name`` variable in the target file name construction.
 #
 # Produces
 # ./build_hat_study0/cat_build_hat_study0.txt
