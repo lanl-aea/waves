@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 """Rectangle compression workflow: Sierra solve
 
-Requires the following ``SConscript(..., exports=[])``
+Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
