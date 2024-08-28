@@ -35,7 +35,7 @@ artifacts = []
 workflow = []
 
 # Rectangle part
-artifacts.extend(SConscript("rectangle", exports=["env", "simulation_variables"]))
+artifacts.extend(SConscript("rectangle", exports={"env": env, "simulation_variables": simulation_variables}))
 
 # Rectangle compression simulation
 artifacts.extend(SConscript("rectangle_compression", exports=["env", "simulation_variables", "workflow_name"]))
