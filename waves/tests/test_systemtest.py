@@ -89,6 +89,7 @@ system_tests = [
     ([fetch_template, "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, f"{waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4"], "tutorials"),
     ([fetch_template, "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
+    ([fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript"),
 ]
 if installed:
     system_tests.append(
