@@ -3168,7 +3168,7 @@ def parameter_study(
        previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
        parameter_generator = waves.parameter_generators.CartesianProduct(
            {"parameter_one": [1, 2, 3]},
-           output_file="parameter_study.h5",
+           output_file=parameter_study_file,
            previous_parameter_study=previous_parameter_study
        )
 
@@ -3186,9 +3186,9 @@ def parameter_study(
 
        env.ParameterStudy(
            env.AbaqusJournal,
-           target=["job.inp"],
+           target=["@{set_name}job.inp"],
            source=["journal.py"],
-           job="job",
+           journal_options="--input=${SOURCE.abspath} --output=${TARGET.abspath} --option ${parameter_one}"
            study=study
        )
 
