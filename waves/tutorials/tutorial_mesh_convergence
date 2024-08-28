@@ -118,7 +118,7 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
     workflow.extend(env.CopySubstfile(
         abaqus_source_list,
-        substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables),
+        substitution_dictionary=env.SubstitutionSyntax(simulation_variables),
         build_subdirectory=set_name
     ))
 

@@ -26,7 +26,7 @@ report = []
 # Perform variable substitution on Sphinx configuration file
 report.extend(env.Substfile(
     "conf.py.in",
-    SUBST_DICT=waves.scons_extensions.substitution_syntax(project_variables)
+    SUBST_DICT=env.SubstitutionSyntax(project_variables)
 ))
 
 # Copy project root files required by the documentation
@@ -64,7 +64,7 @@ report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_lis
 report.extend(waves.scons_extensions.copy_substfile(
     Environment(),
     report_copy_list,
-    substitution_dictionary=waves.scons_extensions.substitution_syntax(project_variables)
+    substitution_dictionary=env.SubstitutionSyntax(project_variables)
 ))
 
 # PDF Report build task

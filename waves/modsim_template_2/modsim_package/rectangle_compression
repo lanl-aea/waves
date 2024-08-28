@@ -30,7 +30,7 @@ images = []
 # SolverPrep
 artifacts.extend(env.CopySubstfile(
     [modsim_package_abspath / "rectangle_compression.inp.in"],
-    substitution_dictionary=waves.scons_extensions.substitution_syntax(simulation_variables)
+    substitution_dictionary=env.SubstitutionSyntax(simulation_variables)
 ))
 
 # Part images
