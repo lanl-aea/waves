@@ -3467,6 +3467,13 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return project_help_message(self, *args, **kwargs)
 
+    def SubstitutionSyntax(self, *args, **kwargs):
+        """:meth:`waves.scons_extensions.substitution_syntax`
+
+        When using this environment method, do not provide the first ``env`` argument
+        """
+        return substitution_syntax(self, *args, **kwargs)
+
     def ParameterStudy(self, *args, **kwargs):
         """:meth:`waves.scons_extensions.parameter_study`
 

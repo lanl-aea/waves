@@ -770,10 +770,11 @@ def test_substitution_syntax(substitution_dictionary, keyword_arguments, expecte
 # TODO: Remove when the 'postfix' kwarg is removed
 # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
 def test_substitution_syntax_warning():
+    env = SCons.Environment.Environment()
     substitution_dictionary = {"thing1": 1, "thing_two": "two"}
     expected_dictionary = {"@thing1%": 1, "@thing_two%": "two"}
     with patch("warnings.warn") as mock_warn:
-        output_dictionary = scons_extensions.substitution_syntax(substitution_dictionary, postfix="%")
+        output_dictionary = scons_extensions.substitution_syntax(env, substitution_dictionary, postfix="%")
         mock_warn.assert_called_once_with(
             "The 'postfix' keyword will be replaced by 'suffix' in version 1.0",
             DeprecationWarning
@@ -2154,6 +2155,7 @@ waves_environment = {
     "AddCubitPython": ("AddCubitPython", "add_cubit_python"),
     "CopySubstfile": ("CopySubstfile", "copy_substfile"),
     "ProjectHelp": ("ProjectHelp", "project_help_message"),
+    "SubstitutionSyntax": ("SubstitutionSyntax", "substitution_syntax"),
     "ParameterStudy": ("ParameterStudy", "parameter_study"),
     "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
 }
