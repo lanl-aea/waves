@@ -17,6 +17,12 @@ New Features
 - Add a ParameterStudySConscript wrapper to unpack parameter generators into SConscript calls (:issue:`761`,
   :merge:`930`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Convert all SConscript ``exports=`` arguments to dictionary style for more explicit control over exports
+  and greater consistency with ParameterStudySConscript interface requirements (:issue:`763`, :merge:`931`). By `Kyle
+  Brindley`_.
+
 Internal Changes
 ================
 - Avoid SCons Configure() method when searching for programs in construction environments. Fixes the program operations
