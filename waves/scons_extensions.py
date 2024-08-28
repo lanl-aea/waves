@@ -3238,6 +3238,143 @@ def parameter_study(
     return return_targets
 
 
+def parameter_study_sconscript(
+    env: SCons.Environment.Environment,
+    *args,
+    variant_dir=None,
+    exports: dict = dict(),
+    study=None,
+    set_name: str = "",
+    parameters: dict = dict(),
+    subdirectories: bool = False,
+    **kwargs
+):
+    """Overload the SCons SConscript call to unpack WAVES parameter generators
+
+    Always overrides the exports with the ``export_dictionary`` keys and appends ``set_name`` and ``parameters``
+    variables. When ``study`` is a dictionary or parameter generator, the ``parameters`` are overridden. When ``study``
+    is a parameter generator, the ``set_name`` is overridden.
+
+    * If the study is a WAVES parameter generator object, call SConscript once per ``set_name`` and ``parameters`` in
+      the genrator's parameter study dictionary.
+    * If the study is a ``dict``, call SConscript with the study as ``parameters`` and use the ``set_name`` from the
+      method API.
+    * In all other cases, the SConscript call is given the ``set_name`` and ``parameters`` from the method API.
+
+    .. code-block::
+       :caption: SConstruct
+
+       import pathlib
+       import waves
+
+       env = Environment()
+       env.Append(BUILDERS={
+           "AbaqusJournal": waves.scons_extensions.abaqus_journal(),
+           "AbaqusSolver": waves.scons_extensions.abaqus_solver()
+       })
+       env.AddMethod(waves.scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
+
+       parameter_study_file = pathlib.Path("parameter_study.h5")
+       previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
+       parameter_generator = waves.parameter_generators.CartesianProduct(
+           {"parameter_one": [1, 2, 3]},
+           output_file=parameter_study_file,
+           previous_parameter_study=previous_parameter_study
+       )
+
+       studies = (
+           ("SConscript", parameter_generator),
+           ("SConscript", {"parameter_one": 1})
+       )
+       for workflow, study in studies:
+           env.ParameterStudySConscript(workflow, variant_dir="build", study=study, subdirectories=True)
+
+    .. code-block::
+       :caption: SConscript
+
+       Import("env", "set_name", "parameters")
+
+       env.AbaqusJournal(
+           target=["job.inp"],
+           source=["journal.py"],
+           journal_options="--input=${SOURCE.abspath} --output=${TARGET.abspath} --option ${parameter_one}"
+           **parameters
+       )
+
+       env.AbaqusSolver(
+           target=["job.odb"],
+           source=["job.inp"],
+           job="job",
+           **parameters
+       )
+
+    :param env: SCons construction environment. Do not provide when using this function as a construction environment
+        method, e.g. ``env.ParameterStudySConscript``.
+    :param args: All positional arguments are passed through to the SConscript call directly
+    :param variant_dir: The SConscript API variant directory argument
+    :param exports: Dictionary of key: value pairs for the ``exports`` variables. *Must* use the dictionary style
+        because the calling script's namespace is not available to the function namespace.
+    :param study: Parameter generator or dictionary simulation parameters
+    :param set_name: Set name to use when not provided a ``study``. Overridden by the ``study`` set names when ``study``
+        is a parameter generator.
+    :param parameters: Parameters dictionary to use when not provided a ``study``.  Overriden by ``study`` when
+        ``study`` is a parameter generator or a dictionary.
+    :param kwargs: All other keyword arguments are passed through to the SConscript call directly
+    :param subdirectories: Switch to use a parameter generator ``study`` set names as subdirectories. Ignored when
+        ``study`` is not a parameter generator.
+
+    :returns: SConscript ``Export()`` variables. When called with a parameter generator study, the ``Export()``
+        variables are returned as a list with one entry per parameter set.
+
+    :raises TypeError: if ``exports`` is not a dictionary
+    """
+    if not isinstance(exports, dict):
+        import warnings
+        message = f"``exports`` keyword argument {exports} *must* be a dictionary of '{{key: value}}' pairs because " \
+                  "this function does not have access to the calling script's namespace."
+        raise TypeError(message)
+    exports.update({"set_name": set_name, "parameters": parameters})
+
+    sconscript_output = list()
+
+    if variant_dir is not None:
+        variant_dir = pathlib.Path(variant_dir)
+
+    def variant_subdirectory(
+        variant_directory: typing.Optional[pathlib.Path],
+        subdirectory: str,
+        subdirectories: bool = subdirectories
+        ) -> typing.Union[pathlib.Path, None]:
+        """Determine the variant subdirectory
+
+        :param variant_directory: The requested root ``variant_dir``
+        :param subdirectory: The requested subdirectory
+        :param subdirectories: Boolean to request subdirectory creation
+
+        :returns: variant directory
+        """
+        if subdirectories:
+            if variant_dir is not None:
+                build_directory = variant_dir / subdirectory
+            else:
+                build_directory = pathlib.Path(subdirectory)
+        else:
+            build_directory = variant_dir
+        return build_directory
+
+    if isinstance(study, waves.parameter_generators._ParameterGenerator):
+        for set_name, parameters in study.parameter_study_to_dict().items():
+            exports.update({"set_name": set_name, "parameters": parameters})
+            build_directory = variant_subdirectory(variant_dir, set_name)
+            sconscript_output.append(env.SConscript(*args, variant_dir=build_directory, exports=exports, **kwargs))
+    elif isinstance(study, dict):
+        exports.update({"parameters": study})
+        sconscript_output = env.SConscript(*args, variant_dir=variant_dir, exports=exports, **kwargs)
+    else:
+        sconscript_output = env.SConscript(*args, variant_dir=variant_dir, exports=exports, **kwargs)
+    return sconscript_output
+
+
 class WAVESEnvironment(SConsEnvironment):
     """Thin overload of SConsEnvironment with WAVES construction environment methods"""
 
