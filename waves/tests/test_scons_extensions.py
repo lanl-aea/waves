@@ -747,8 +747,24 @@ substitution_syntax_input = {
                          substitution_syntax_input.values(),
                          ids=substitution_syntax_input.keys())
 def test_substitution_syntax(substitution_dictionary, keyword_arguments, expected_dictionary):
-    output_dictionary = scons_extensions.substitution_syntax(substitution_dictionary, **keyword_arguments)
+    env = SCons.Environment.Environment()
+
+    # Test function style interface
+    output_dictionary = scons_extensions.substitution_syntax(env, substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
+
+    # Test AddMethod style interface
+    env.AddMethod(scons_extensions.substitution_syntax, "SubstitutionSyntax")
+    output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
+    assert output_dictionary == expected_dictionary
+
+    # TODO: Remove after full deprecation of the older argument order
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/764
+    # Test function style interface
+    with patch("warnings.warn") as mock_warn:
+        output_dictionary = scons_extensions.substitution_syntax(substitution_dictionary, **keyword_arguments)
+        assert output_dictionary == expected_dictionary
+        mock_warn.assert_called_once()
 
 
 # TODO: Remove when the 'postfix' kwarg is removed
