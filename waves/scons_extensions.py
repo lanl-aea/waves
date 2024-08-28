@@ -414,6 +414,8 @@ def alias_list_message(
 
 def substitution_syntax(
     env: SCons.Environment.Environment,
+    # TODO: Return to a positional argument 
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/764
     substitution_dictionary: dict = {},
     prefix: str = "@",
     suffix: str = "@",
@@ -440,7 +442,7 @@ def substitution_syntax(
     :return: Copy of the dictionary with key strings modified by the pre/suffix
     """
     # TODO: Remove if-structure after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/758
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/764
     if isinstance(env, dict):
         import warnings
         message = "The substitution_syntax function gained a positional argument from '(substitution_dictionary)' to " \
