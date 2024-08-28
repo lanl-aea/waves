@@ -11,10 +11,8 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``project_variables`` - The project variables for use in Sphinx documentation parameters
 """
-
 import pathlib
 
-import waves
 
 # Inherit the parent construction environment
 Import(["env", "project_variables"])

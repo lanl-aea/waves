@@ -10,12 +10,12 @@ Requires the following ``SConscript(..., exports={})``
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
-
 import pathlib
 
 import waves
 
 from modsim_package.python.rectangle_compression_latin_hypercube import parameter_schema
+
 
 # Inherit the parent construction environment
 Import('env')

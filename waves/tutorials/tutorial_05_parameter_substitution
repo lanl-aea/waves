@@ -9,10 +9,8 @@ Requires the following ``SConscript(..., exports={})``
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``abaqus`` - String path for the Abaqus executable
 """
-
 import pathlib
 
-import waves
 
 # Inherit the parent construction environment
 Import('env')
