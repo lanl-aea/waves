@@ -121,7 +121,7 @@ envQuinoa.Append(BUILDERS={
 # Comments used in tutorial code snippets: marker-6
 
 # Add simulation targets
-SConscript("SConscript", variant_dir=variant_dir_base, exports=["env", "envQuinoa"], duplicate=True)
+SConscript("SConscript", variant_dir=variant_dir_base, exports={"env": env, "envQuinoa": envQuinoa}, duplicate=True)
 
 # Comments used in tutorial code snippets: marker-7
 

@@ -52,7 +52,11 @@ for set_name, simulation_variables in parameter_generator.parameter_study_to_dic
     artifacts.extend(SConscript("rectangle", variant_dir=set_name, exports={"env": env, "simulation_variables": simulation_variables}))
 
     # Rectangle compression simulation
-    artifacts.extend(SConscript("rectangle_compression", variant_dir=set_name, exports=["env", "simulation_variables", "workflow_name"]))
+    artifacts.extend(SConscript(
+        "rectangle_compression",
+        variant_dir=set_name,
+        exports={"env": env, "simulation_variables": simulation_variables, "workflow_name": workflow_name}
+    ))
 
 # Post-processing
 plot_name = "stress_strain_comparison"

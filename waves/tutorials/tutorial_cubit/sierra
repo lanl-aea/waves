@@ -28,7 +28,7 @@ workflow = []
 
 element_type = "SHELL"
 solver = "sierra"
-SConscript("cubit", exports=["env", "element_type", "solver"], duplicate=False)
+SConscript("cubit", exports={"env": env, "element_type": element_type, "solver": solver}, duplicate=False)
 
 # SolverPrep
 sierra_source_list = [

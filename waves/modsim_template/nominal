@@ -38,7 +38,10 @@ workflow = []
 artifacts.extend(SConscript("rectangle", exports={"env": env, "simulation_variables": simulation_variables}))
 
 # Rectangle compression simulation
-artifacts.extend(SConscript("rectangle_compression", exports=["env", "simulation_variables", "workflow_name"]))
+artifacts.extend(SConscript(
+    "rectangle_compression",
+    exports={"env": env, "simulation_variables": simulation_variables, "workflow_name": workflow_name}
+))
 
 # Post-processing
 plot_name = "stress_strain_comparison"

@@ -34,7 +34,11 @@ datacheck = []
 
 element_type = "QUAD"
 solver = "abaqus"
-SConscript("cubit", exports=["env", "envCubit", "element_type", "solver"], duplicate=False)
+SConscript(
+    "cubit",
+    exports={"env": env, "envCubit": envCubit, "element_type": element_type, "solver": solver},
+    duplicate=False
+)
 
 # Modify mesh target(s) element type.
 # Linux style sed command options must be modified for macOS. Command must be modified if on Windows.

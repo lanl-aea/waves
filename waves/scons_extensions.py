@@ -3177,7 +3177,7 @@ def parameter_study(
            ("SConscript", {"parameter_one": 1})
        )
        for workflow, study in studies:
-           SConscript(workflow, exports=["env", "study"])
+           SConscript(workflow, exports={"env": env, "study": study})
 
     .. code-block::
        :caption: SConscript
