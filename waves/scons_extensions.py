@@ -74,7 +74,7 @@ def print_build_failures(
                   "'(env, print_stdout)' to enable use with SCons AddMethod. " \
                   "Please provide keyword arguments or update the function call arguments " \
                   "prior to the version 1.0 release."
-        warnings.warn(message)
+        warnings.warn(message, SyntaxWarning)
         print_stdout = env
     if print_stdout:
         atexit.register(_print_failed_nodes_stdout)
@@ -414,7 +414,7 @@ def alias_list_message(
 
 def substitution_syntax(
     env: SCons.Environment.Environment,
-    # TODO: Return to a positional argument 
+    # TODO: Return to a positional argument
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/764
     substitution_dictionary: dict = {},
     prefix: str = "@",
@@ -448,7 +448,7 @@ def substitution_syntax(
         message = "The substitution_syntax function gained a positional argument from '(substitution_dictionary)' to " \
                   "'(env, substitution_dictionary)' to enable use with SCons AddMethod. Please add the environment " \
                   "positional argument or convert to AddMethod function call prior to the version 1.0 release."
-        warnings.warn(message)
+        warnings.warn(message, SyntaxWarning)
         substitution_dictionary = env
     # TODO: Remove when the 'postfix' kwarg is removed
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
