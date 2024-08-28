@@ -34,8 +34,8 @@ env = waves.scons_extensions.WAVESEnvironment(
     solve_cpus=GetOption("solve_cpus"),
 )
 
-# Conditionally print failed task *.stdout files
-waves.scons_extensions.print_build_failures()
+# Print failed task *.stdout files
+env.PrintBuildFailures()
 
 # Empty defaults list to avoid building all simulation targets by default
 env.Default()
