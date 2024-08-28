@@ -140,7 +140,7 @@ if not env["ignore_documentation"]:
     SConscript(
         report_dir / "SConscript",
         variant_dir=build_dir,
-        exports=["env", "project_variables"],
+        exports={"env": env, "project_variables": project_variables},
         duplicate=True
     )
 else:

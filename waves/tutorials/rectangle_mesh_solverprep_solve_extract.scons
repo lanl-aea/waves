@@ -36,7 +36,12 @@ Example usage:
 
    nominal_workflow, nominal_datacheck = SConscript(
        "rectangle_mesh_solverpep_solve_extract.scons",
-       exports=["env", "simulation_variables", "workflow", "datacheck",
+       exports={
+           "env": env,
+           "simulation_variables": simulation_variables,
+           "workflow": workflow,
+           "datacheck": datacheck
+       },
        duplicate=False)
 
    for set_name in [f"parmameter_set{number}" for number in range(4)]

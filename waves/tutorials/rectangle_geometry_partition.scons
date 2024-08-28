@@ -36,14 +36,24 @@ Example usage:
 
    nominal_workflow, nominal_datacheck = SConscript(
        "rectangle_geometry_partition.scons",
-       exports=["env", "simulation_variables", "workflow", "datacheck",
+       exports={
+           "env": env,
+           "simulation_variables": simulation_variables,
+           "workflow": workflow,
+           "datacheck": datacheck
+       },
        duplicate=False)
 
    for set_name in [f"parmameter_set{number}" for number in range(4)]
        parameters_workflow, parameter_datacheck = SConscript(
            "rectangle_geometry_partition.scons",
            variant_dir=set_name,
-           exports=["env", "simulation_variables", "workflow", "datacheck")
+           exports={
+               "env": env,
+               "simulation_variables": simulation_variables,
+               "workflow": workflow,
+               "datacheck": datacheck
+           },
            duplicate=False)
 """
 

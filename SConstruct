@@ -98,7 +98,7 @@ if not env['ignore_documentation']:
     SConscript(
         dirs=documentation_source_dir,
         variant_dir=str(build_dir),
-        exports=['env', 'project_substitution_dictionary']
+        exports={'env': env, 'project_substitution_dictionary': project_substitution_dictionary}
     )
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")

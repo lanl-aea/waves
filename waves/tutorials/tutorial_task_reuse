@@ -66,7 +66,12 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     workflow, datacheck = env.SConscript(
         geometry_configuration,
         variant_dir=set_name.name,
-        exports=["env", "simulation_variables", "workflow", "datacheck"],
+        exports={
+            "env": env,
+            "simulation_variables": simulation_variables,
+            "workflow": workflow,
+            "datacheck": datacheck
+        },
         duplicate=False
     )
 
@@ -74,7 +79,12 @@ for set_name, parameters in parameter_generator.parameter_study_to_dict().items(
     workflow, datacheck = env.SConscript(
         simulation_configuration,
         variant_dir=set_name.name,
-        exports=["env", "simulation_variables", "workflow", "datacheck"],
+        exports={
+            "env": env,
+            "simulation_variables": simulation_variables,
+            "workflow": workflow,
+            "datacheck": datacheck
+        },
         duplicate=False
     )
 
