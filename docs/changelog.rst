@@ -14,6 +14,8 @@ New Features
   `Kyle Brindley`_.
 - Add a WAVES SCons environment class to provide common methods and reduce configuration boilerplate (:issue:`756`,
   :merge:`929`). By `Kyle Brindley`_.
+- Add a ParameterStudySConscript wrapper to unpack parameter generators into SConscript calls (:issue:`761`,
+  :merge:`930`). By `Kyle Brindley`_.
 
 Internal Changes
 ================

@@ -3251,6 +3251,11 @@ def parameter_study_sconscript(
 ):
     """Wrap the SCons SConscript call to unpack parameter generators
 
+    .. warning::
+
+       Experimental solution to improved parameter study SConscript re-use. The function name and interface are subject
+       to change without notice until this warning is removed.
+
     Always overrides the exports with the ``export_dictionary`` keys and appends ``set_name`` and ``parameters``
     variables. When ``study`` is a dictionary or parameter generator, the ``parameters`` are overridden. When ``study``
     is a parameter generator, the ``set_name`` is overridden.
