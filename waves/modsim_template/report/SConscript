@@ -14,6 +14,8 @@ Requires the following ``SConscript(..., exports={})``
 """
 import pathlib
 
+import waves
+
 
 # Inherit the parent construction environment
 Import(["env", "project_variables"])
@@ -60,7 +62,7 @@ report_copy_list = [pathlib.Path(source_file) for source_file in report_copy_lis
 # Call waves copy_substfile directly as a function instead of a pseudo-builder.  Required to help the Sphinx scanner and
 # SCons find ``build/report/README.txt`` instead of looking for ``docs/README.txt``.
 report.extend(waves.scons_extensions.copy_substfile(
-    env=Environment(),
+    Environment(),
     report_copy_list,
     substitution_dictionary=env.SubstitutionSyntax(project_variables)
 ))
