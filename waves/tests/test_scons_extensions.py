@@ -9,6 +9,7 @@ import subprocess
 import pytest
 import SCons.Node.FS
 
+from waves import parameter_generators
 from waves import scons_extensions
 from waves import parameter_generators
 from waves._settings import _cd_action_prefix
@@ -2045,6 +2046,89 @@ def test_parameter_study(node_count, action_count, target_list, study):
     check_action_string(nodes, node_count, action_count, expected_string)
 
 
+cartesian_product = parameter_generators.CartesianProduct(
+    {"parameter_one": [1]},
+    set_name_template="set@number"
+)
+parameter_study_sconscript = {
+    "exports not a dictionary": ([], {"exports": list()}, {}, pytest.raises(TypeError)),
+    "default kwargs": (
+        ["SConscript"],
+        {},
+        {"variant_dir": None, "exports": {"set_name": "", "parameters": dict()}},
+        does_not_raise()
+    ),
+    "added kwarg": (
+        ["SConscript"],
+        {"extra kwarg": "value"},
+        {"extra kwarg": "value", "variant_dir": None, "exports": {"set_name": "", "parameters": dict()}},
+        does_not_raise()
+    ),
+    "variant_dir": (
+        ["SConscript"],
+        {"variant_dir": "build"},
+        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": dict()}},
+        does_not_raise()
+    ),
+    "variant_dir subdirectories": (
+        ["SConscript"],
+        {"variant_dir": "build", "subdirectories": True},
+        {"variant_dir": pathlib.Path("build"), "exports": {"set_name": "", "parameters": dict()}},
+        does_not_raise()
+    ),
+    "dictionary study": (
+        ["SConscript"],
+        {"study": {"parameter_one": 1}},
+        {"variant_dir": None, "exports": {"set_name": "", "parameters": {"parameter_one": 1}}},
+        does_not_raise()
+    ),
+    "parameter generator study": (
+        ["SConscript"],
+        {"study": cartesian_product},
+        {"variant_dir": None, "exports": {"set_name": "set0", "parameters": {"parameter_one": 1}}},
+        does_not_raise()
+    ),
+    "parameter generator variant_dir subdirectories": (
+        ["SConscript"],
+        {"variant_dir": "build", "subdirectories": True, "study": cartesian_product},
+        {"variant_dir": pathlib.Path("build/set0"), "exports": {"set_name": "set0", "parameters": {"parameter_one": 1}}},
+        does_not_raise()
+    ),
+    "parameter generator no variant_dir subdirectories": (
+        ["SConscript"],
+        {"variant_dir": None, "subdirectories": True, "study": cartesian_product},
+        {"variant_dir": pathlib.Path("set0"), "exports": {"set_name": "set0", "parameters": {"parameter_one": 1}}},
+        does_not_raise()
+    ),
+}
+
+
+@pytest.mark.parametrize("args, kwargs, expected, outcome",
+                         parameter_study_sconscript.values(),
+                         ids=parameter_study_sconscript.keys())
+def test_parameter_study_sconscript(args, kwargs, expected, outcome):
+    env = SCons.Environment.Environment()
+
+    # Test function style call
+    with patch("SCons.Script.SConscript.SConsEnvironment.SConscript") as mock_SConscript, \
+         outcome:
+        try:
+            scons_extensions.parameter_study_sconscript(env, *args, **kwargs)
+            mock_SConscript.assert_called_once_with(*args, **expected)
+        finally:
+            pass
+
+    # Test AddMethod style call
+    env.AddMethod(scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
+    with patch("SCons.Script.SConscript.SConsEnvironment.SConscript") as mock_SConscript, \
+         outcome:
+        try:
+            env.ParameterStudySConscript(*args, **kwargs)
+            mock_SConscript.assert_called_once_with(*args, **expected)
+        finally:
+            pass
+
+
 waves_environment = {
     "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures"),
     "CheckProgram": ("CheckProgram", "check_program"),
@@ -2055,6 +2139,7 @@ waves_environment = {
     "CopySubstfile": ("CopySubstfile", "copy_substfile"),
     "ProjectHelp": ("ProjectHelp", "project_help_message"),
     "ParameterStudy": ("ParameterStudy", "parameter_study"),
+    "ParameterStudySConscript": ("ParameterStudySConscript", "parameter_study_sconscript"),
 }
 
 

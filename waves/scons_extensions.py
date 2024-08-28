@@ -3328,6 +3328,9 @@ def parameter_study_sconscript(
 
     :raises TypeError: if ``exports`` is not a dictionary
     """
+    # Avoid importing parameter generator module (heavy) unless necessary
+    from waves import parameter_generators
+
     if not isinstance(exports, dict):
         import warnings
         message = f"``exports`` keyword argument {exports} *must* be a dictionary of '{{key: value}}' pairs because " \
@@ -3340,7 +3343,7 @@ def parameter_study_sconscript(
     if variant_dir is not None:
         variant_dir = pathlib.Path(variant_dir)
 
-    def variant_subdirectory(
+    def _variant_subdirectory(
         variant_directory: typing.Optional[pathlib.Path],
         subdirectory: str,
         subdirectories: bool = subdirectories
@@ -3362,10 +3365,10 @@ def parameter_study_sconscript(
             build_directory = variant_dir
         return build_directory
 
-    if isinstance(study, waves.parameter_generators._ParameterGenerator):
+    if isinstance(study, parameter_generators._ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             exports.update({"set_name": set_name, "parameters": parameters})
-            build_directory = variant_subdirectory(variant_dir, set_name)
+            build_directory = _variant_subdirectory(variant_dir, set_name)
             sconscript_output.append(env.SConscript(*args, variant_dir=build_directory, exports=exports, **kwargs))
     elif isinstance(study, dict):
         exports.update({"parameters": study})
