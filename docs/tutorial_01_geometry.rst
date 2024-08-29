@@ -82,7 +82,7 @@ repository, such as Abaqus journal files. Actions define how to process source f
 command. Targets are the output artifacts created by the action, such as an Abaqus model file. It is also worth noting
 that the ``SConscript`` file naming convention is case sensitive. In this tutorial, we will build the geometry for a
 rectangle part using the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder from the
-:clas:`waves.scons_extensions.WAVESEnvironment` construction environment (click the builder's name to link to the
+:class:`waves.scons_extensions.WAVESEnvironment` construction environment (click the builder's name to link to the
 |PROJECT| :ref:`waves_scons_api` API).
 
 6. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
