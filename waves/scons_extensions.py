@@ -635,7 +635,7 @@ def add_cubit(
 
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_cubit, "AddCubit")
-       env["cubit"] = env.AddCubit(["cubit"])
+       env["CUBIT_PROGRAM"] = env.AddCubit(["cubit"])
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names for the main Cubit executable. May include an absolute path.
@@ -682,7 +682,7 @@ def add_cubit_python(
 
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_cubit_python, "AddCubitPython")
-       env["cubit"] = env.AddCubitPython(["cubit"])
+       env["CUBIT_PROGRAM"] = env.AddCubitPython(["cubit"])
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names for the main Cubit executable. May include an absolute path.

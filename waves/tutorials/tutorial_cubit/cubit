@@ -108,6 +108,6 @@ workflow.extend(env.PythonScript(
 # Collector alias based on parent directory name
 env.Alias(f"{workflow_name}_cubit", workflow)
 
-if not env['unconditional_build'] and not env['cubit']:
+if not env['unconditional_build'] and not env["CUBIT_PROGRAM"]:
     print(f"Program 'cubit' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore(['.', workflow_name], workflow)
