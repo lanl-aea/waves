@@ -40,7 +40,6 @@ AddOption(
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     variant_dir_base=GetOption("variant_dir_base"),
-    ignore_documentation=GetOption("ignore_documentation"),
     solve_cpus=GetOption("solve_cpus"),
     print_build_failures=GetOption("print_build_failures"),
     TARFLAGS="-c -j",
@@ -120,22 +119,19 @@ env.AlwaysBuild(environment_target)
 Default(environment_target)
 
 # Add documentation target(s)
-if not env["ignore_documentation"]:
-    # Project documentation
-    build_dir = variant_dir_base / documentation_source_dir
-    SConscript(documentation_source_dir / "SConscript", variant_dir=build_dir, exports={"env": env, "project_variables": project_variables})
+# Project documentation
+build_dir = variant_dir_base / documentation_source_dir
+SConscript(documentation_source_dir / "SConscript", variant_dir=build_dir, exports={"env": env, "project_variables": project_variables})
 
-    # Analysis report
-    report_dir = pathlib.Path("report")
-    build_dir = variant_dir_base / report_dir
-    SConscript(
-        report_dir / "SConscript",
-        variant_dir=build_dir,
-        exports={"env": env, "project_variables": project_variables},
-        duplicate=True
-    )
-else:
-    print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
+# Analysis report
+report_dir = pathlib.Path("report")
+build_dir = variant_dir_base / report_dir
+SConscript(
+    report_dir / "SConscript",
+    variant_dir=build_dir,
+    exports={"env": env, "project_variables": project_variables},
+    duplicate=True
+)
 
 # Add simulation targets
 workflow_configurations = [
