@@ -56,7 +56,7 @@ env.SetOption("duplicate", "copy")
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["CUBIT_PROGRAM"] = env.AddCubit(["/apps/Cubit-16.12/cubit", "cubit"])
-env["sbatch"] = env.AddProgram(["sbatch"])
+env["SBATCH_PROGRAM"] = env.AddProgram(["sbatch"])
 env["user"] = getpass.getuser()
 # TODO: Ask Quinoa devs to provide a shell script or module file on HPC snow, then remove this variable
 env["quinoa_installation"] = pathlib.Path("/users/cclong/QUINOA/quinoa/buildOS/Main")
@@ -111,7 +111,7 @@ envQuinoa["charmrun"] = envQuinoa.AddProgram(["charmrun", quinoa_installation / 
 # Add WAVES builders. If sbatch is found, use it.
 # Should allow the same scons alias to run directly on sstbigbird, but submit as an sbatch job on HPC
 quinoa_builder_factory = waves.scons_extensions.quinoa_builder_factory
-if env["sbatch"] is not None:
+if env["SBATCH_PROGRAM"] is not None:
     quinoa_builder_factory = waves.scons_extensions.sbatch_quinoa_builder_factory
 envQuinoa.Append(BUILDERS={
     "QuinoaSolver": quinoa_builder_factory(program=envQuinoa["charmrun"], subcommand=envQuinoa["inciter"])

@@ -51,7 +51,7 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["ABAQUS_PROGRAM"] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq2023"])
-env['sbatch'] = env.AddProgram(["sbatch"])
+env["SBATCH_PROGRAM"] = env.AddProgram(["sbatch"])
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -81,7 +81,7 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 # Add builders and pseudo-builders
 def solve_builder_select():
     """Run the SLURM sbatch builder if available. Fall back to AbaqusSolver builder in not."""
-    if env["sbatch"]:
+    if env["SBATCH_PROGRAM"]:
         return waves.scons_extensions.sbatch_abaqus_solver(program=env["ABAQUS_PROGRAM"])
     else:
         return waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"])
