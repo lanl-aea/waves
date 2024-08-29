@@ -152,7 +152,7 @@ that each of these scripts is called using a command-line interface that has def
 :ref:`waves_tutorial_cli` to see what the default values are. As mentioned in :ref:`tutorial_geometry`, the argument
 parser for each of these scripts will supply a default value for each command-line argument that is not specified
 (assuming a defualt value was specified in the argument parser definition).  This allowed us to simplify the command
-passed to the :meth:`waves.scons_extensions.abaqus_journal` builder. The advantage to coding this behavior ahead of time is that
+passed to the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder. The advantage to coding this behavior ahead of time is that
 we get parameter substitution into our journal files when we need it. The ``width``, ``height``, and ``global_seed``
 keys of the ``simulation_variables`` dictionary will be used later in this tutorial to specify the values passed to the
 journal files via the CLI.

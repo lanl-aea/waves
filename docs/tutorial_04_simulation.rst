@@ -127,7 +127,7 @@ the ``abaqus_source_list``. This tutorial would behave identically if the ``solv
 
 Next, ``{journal_file}.inp`` needs to be appended to the list of simulation source files. Recall from
 :ref:`tutorial_partition_mesh` that this file is one of the targets that is generated from
-:meth:`waves.scons_extensions.abaqus_journal` builder in the code pertaining to ``# Mesh``.
+:meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder in the code pertaining to ``# Mesh``.
 
 The first set of highlighted lines will define an optional task called a *datacheck*. You can read the `Abaqus
 Standard/Explicit Execution`_ documentation :cite:`ABAQUS` for more details on running a datacheck. The primary purpose

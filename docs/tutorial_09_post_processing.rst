@@ -69,7 +69,7 @@ changes made in this tutorial.
       :diff: tutorials_tutorial_08_data_extraction
 
 The Python 3 post-processing script is executed with the :meth:`waves.scons_extensions.python_builder_factory`. This
-builder behaves similarly to the :meth:`waves.scons_extensions.abaqus_journal` builders introduced in earlier tutorials.
+builder behaves similarly to the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builders introduced in earlier tutorials.
 By default, the builder uses the same Python interpreter as the launching `Conda`_ environment where `SCons`_ and WAVES
 are installed. So unlike Abaqus Python, the user has full control over the Python execution environment.
 

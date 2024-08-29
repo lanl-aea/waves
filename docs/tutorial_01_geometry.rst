@@ -77,13 +77,12 @@ Directory Structure
 SConscript File
 ***************
 
-The ``SConscript`` file defines the sources, actions, and targets. Sources are
-files that exist in the source repository, such as Abaqus journal files. Actions define
-how to process source files, for example executing the Abaqus command. Targets are the
-output artifacts created by the action, such as an Abaqus model file. It is also worth
-noting that the ``SConscript`` file naming convention is case sensitive.
-In this tutorial, we will build the geometry for a rectangle part using the
-:meth:`waves.scons_extensions.abaqus_journal` builder (click the builder's name to link to the
+The ``SConscript`` file defines the sources, actions, and targets. Sources are files that exist in the source
+repository, such as Abaqus journal files. Actions define how to process source files, for example executing the Abaqus
+command. Targets are the output artifacts created by the action, such as an Abaqus model file. It is also worth noting
+that the ``SConscript`` file naming convention is case sensitive. In this tutorial, we will build the geometry for a
+rectangle part using the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder from the
+:clas:`waves.scons_extensions.WAVESEnvironment` construction environment (click the builder's name to link to the
 |PROJECT| :ref:`waves_scons_api` API).
 
 6. Create an ``SConscript`` file with the non-default name ``tutorial_01_geometry`` using the contents below.
@@ -134,10 +133,10 @@ command-line arguments to the journal file. Using the journal file's command-lin
 interface with the ``journal_options`` string will be discussed in
 :ref:`tutorial_parameter_substitution`.
 
-Next, the ``workflow`` list is extended to include the action to use the :meth:`waves.scons_extensions.abaqus_journal` builder,
+Next, the ``workflow`` list is extended to include the action to use the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder,
 as discussed in :ref:`tutorialsconstruct`. For more information about the behavior of the
-:meth:`waves.scons_extensions.abaqus_journal` builder, click the builder's link or see the |PROJECT| :ref:`waves_scons_api`
-API. The ``target`` list specifies the files created by the :meth:`waves.scons_extensions.abaqus_journal` task's action, which
+:meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder, click the builder's link or see the |PROJECT| :ref:`waves_scons_api`
+API. The ``target`` list specifies the files created by the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` task's action, which
 is defined in the :ref:`waves_scons_api` API.
 
 8. Continue editing the file ``tutorial_01_geometry`` using contents below.

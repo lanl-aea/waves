@@ -51,7 +51,7 @@ setup boilerplate. :ref:`tutorialsconstruct` has a more complete discussion abou
 The ``SConscript`` file below contains the workflow task definitions. Review the source and target
 files defining the workflow tasks. As discussed in :ref:`build_system`, a task definition also requires an action.
 For convenience, WAVES provides builders for common engineering software with pre-defined task actions.
-See the :meth:`waves.scons_extensions.abaqus_journal` and :meth:`waves.scons_extensions.abaqus_solver` for more
+See the :meth:`waves.scons_extensions.abaqus_journal_builder_factory` and :meth:`waves.scons_extensions.abaqus_solver` for more
 complete descriptions of the builder actions.
 
 .. admonition:: waves_quickstart/SConscript

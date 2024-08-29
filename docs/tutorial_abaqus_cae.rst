@@ -73,7 +73,7 @@ produce a job submission ready ``beam.cae`` file. See the Abaqus manual for a tu
 
 The tutorial task is a single Abaqus journal file execution. It should look similar to the journal file tasks introduced
 in the core tutorials: :ref:`tutorial_geometry` and :ref:`tutorial_partition_mesh`. You can read more about the behavior
-of the ``AbaqusJournal`` builder in the function API :meth:`waves.scons_extensions.abaqus_journal` and the core
+of the ``AbaqusJournal`` builder in the function API :meth:`waves.scons_extensions.abaqus_journal_builder_factory` and the core
 tutorials.
 
 .. admonition:: tutorial_abaqus_cae/SConscript

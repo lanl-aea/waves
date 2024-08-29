@@ -100,7 +100,7 @@ SConscript
 The first few lines of the ``SConscript`` file should look very familiar with exception to
 the single highlighted line. In this tutorial, we need to import the ``waves`` module, as
 we will require a custom builder that functions differently than the previously used
-:meth:`waves.scons_extensions.abaqus_journal` builder.
+:meth:`waves.scons_extensions.abaqus_journal_builder_factory` builder.
 
 .. note::
 
