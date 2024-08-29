@@ -3411,6 +3411,35 @@ def parameter_study_sconscript(
 class WAVESEnvironment(SConsEnvironment):
     """Thin overload of SConsEnvironment with WAVES construction environment methods"""
 
+    def __init__(
+        self,
+        *args,
+        ABAQUS_PROGRAM: str = "abaqus",
+        PYTHON_PROGRAM: str = "python",
+        CHARMRUN_PROGRAM: str = "charmrun",
+        INCITER_PROGRAM: str = "inciter",
+        MPIRUN_PROGRAM: str = "mpirun",
+        FIERRO_EXPLICIT_PROGRAM: str = "fierro-parallel-explicit",
+        FIERRO_IMPLICIT_PROGRAM: str = "fierro-parallel-implicit",
+        SIERRA_PROGRAM: str = "sierra",
+        ANSYS_PROGRAM: str = "ansys",
+        **kwargs
+    ):
+        super().__init__(
+            *args,
+            ABAQUS_PROGRAM=ABAQUS_PROGRAM,
+            PYTHON_PROGRAM=PYTHON_PROGRAM,
+            CHARMRUN_PROGRAM=CHARMRUN_PROGRAM,
+            INCITER_PROGRAM=INCITER_PROGRAM,
+            MPIRUN_PROGRAM=MPIRUN_PROGRAM,
+            FIERRO_EXPLICIT_PROGRAM=FIERRO_EXPLICIT_PROGRAM,
+            FIERRO_IMPLICIT_PROGRAM=FIERRO_IMPLICIT_PROGRAM,
+            SIERRA_PROGRAM=SIERRA_PROGRAM,
+            ANSYS_PROGRAM=ANSYS_PROGRAM,
+            **kwargs
+        )
+
+
     def PrintBuildFailures(self, *args, **kwargs):
         """:meth:`waves.scons_extensions.print_build_failures`
 
