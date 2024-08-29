@@ -2219,4 +2219,4 @@ def test_waves_environment_builders(builder, factory, factory_kwargs):
     with patch(f"waves.scons_extensions.{factory}", return_value=mock_builder) as mock_factory:
         attribute(target, source, *args, **kwargs)
         mock_factory.assert_called_once_with(**factory_kwargs)
-        mock_builder.assert_called_once_with(target, source, *args, **kwargs)
+        mock_builder.assert_called_once_with(ANY, *args, target=target, source=source, **kwargs)

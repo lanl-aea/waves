@@ -3497,7 +3497,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = first_target_builder_factory()
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def AbaqusJournal(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
@@ -3510,7 +3510,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = abaqus_journal_builder_factory(program="${ABAQUS_PROGRAM}")
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def AbaqusSolver(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.abaqus_solver_builder_factory`
@@ -3523,7 +3523,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def PythonScript(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.python_builder_factory`
@@ -3536,7 +3536,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = python_builder_factory(program="${PYTHON_PROGRAM}")
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def QuinoaSolver(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.quinoa_builder_factory`
@@ -3550,7 +3550,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = quinoa_builder_factory(program="${CHARMRUN_PROGRAM}", subcommand="${INCITER_PROGRAM}")
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def FierroExplicit(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.fierro_explicit_builder_factory`
@@ -3564,7 +3564,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = fierro_explicit_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${FIERRO_EXPLICIT_PROGRAM}")
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def FierroImplicit(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.fierro_implicit_builder_factory`
@@ -3578,7 +3578,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = fierro_implicit_builder_factory(program="${MPIRUN_PROGRAM}", subcommand="${FIERRO_IMPLICIT_PROGRAM}")
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def Sierra(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.sierra_builder_factory`
@@ -3591,7 +3591,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = sierra_builder_factory(program="${SIERRA_PROGRAM}")
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
     def AnsysAPDL(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.ansys_apdl_builder_factory`
@@ -3604,7 +3604,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = ansys_apdl_builder_factory(program="${ANSYS_PROGRAM}")
-        return builder(target, source, *args, **kwargs)
+        return builder(self, *args, target=target, source=source, **kwargs)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
