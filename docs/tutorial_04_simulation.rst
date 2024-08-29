@@ -87,7 +87,6 @@ SConscript
        :emphasize-lines: 3,8
        :start-after: marker-6
 
-
 Running a Datacheck
 ===================
 
@@ -153,6 +152,11 @@ datacheck from the full simulation workflow. The ``target`` list is formed by ad
 ``datacheck_name``. The ``source`` list was created in the first portions of the new code for this tutorial.
 ``job_name`` is used in the Abaqus solver call. See the :meth:`waves.scons_extensions.abaqus_solver` API for information about
 default behavior. Lastly, the ``abaqus_options`` are passed to the builder to be appended to the Abaqus solver call.
+
+While :class:`waves.scons_extensions.WAVESEnvironment` includes an ``AbaqusSolver`` builder that behaves similarly to
+the ``AbaqusJournal`` builder, in these tutorials we use the :meth:`waves.scons_extensions.abaqus_solver` builder for
+improved emitted target control and because the builder action creates a copy of the Abaqus environment file for compute
+environment reproducibility.
 
 .. _tutorial_simulation_waves_running_analysis:
 
