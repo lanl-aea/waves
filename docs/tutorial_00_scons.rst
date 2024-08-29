@@ -190,7 +190,8 @@ of project meta data, the project meta data variables are added to the construct
 around to all `SCons`_ configuration files. The implementation that passes the construction environment around is
 introduced in :ref:`tutorial_geometry`.
 
-9. Add the content below to the ``SConstruct`` file to add `WAVES`_ builders to the project configuration.
+9. Add the content below to the ``SConstruct`` file to add a placeholder for `WAVES`_ builders to the project
+   configuration.
 
 .. admonition:: waves-tutorials/SConstruct
 
@@ -201,9 +202,11 @@ introduced in :ref:`tutorial_geometry`.
       :end-before: marker-6
 
 Although it is possible to re-create the `WAVES tutorials`_ entirely in native `SCons`_ code, the builder extensions
-provided by `WAVES`_ reduce the requisite background knowledge to begin creating :term:`modsim` repositories. The
-construction environment ``BUILDERS`` variable must be updated to include these custom `SCons`_ builders and make them
-available to the simulation configuration starting in :ref:`tutorial_geometry`.
+provided by `WAVES`_ reduce the requisite background knowledge to begin creating :term:`modsim` repositories. While the
+:class:`waves.scons_extensions.WAVESEnvironment` construction environment provides some useful default builders, it is
+possible and often valuable to add project custom-tailored builders, as well. The construction environment ``BUILDERS``
+variable must be updated to include these custom `SCons`_ builders and make them available to the simulation
+configuration starting in :ref:`tutorial_simulation`.
 
 The `WAVES`_ :ref:`waves_scons_api` API describes the available builders and their usage. As `WAVES`_ matures, more
 software will be supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own
