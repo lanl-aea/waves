@@ -8,6 +8,20 @@ Changelog
 0.11.2 (unreleased)
 *******************
 
+New Features
+============
+- Add first target builder factory style builders to the WAVES SCons environment class (:issue:`762`, :merge:`933`). By
+  `Kyle Brindley`_.
+
+Bug fixes
+=========
+- Fix the Abaqus journal builder factory CAE options syntax (:issue:`762`, :merge:`933`). By `Kyle Brindley`_.
+
+Documentation
+=============
+- Use the WAVES SCons environment in the tutorials and modsim template (:issue:`762`, :merge:`933`). By `Kyle
+  Brindley`_.
+
 *******************
 0.11.1 (2024-08-28)
 *******************
