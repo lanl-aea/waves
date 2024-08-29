@@ -96,8 +96,8 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 variant_dir_base = pathlib.Path(env["variant_dir_base"])
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env["sphinx_build"] = env.AddProgram(["sphinx-build"])
-env["abaqus"] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq2023"])
+env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
+env["ABAQUS_PROGRAM"] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq2023"])
 
 # Add WAVES builders and scanners
 env.Append(BUILDERS={
@@ -105,8 +105,6 @@ env.Append(BUILDERS={
     "AbaqusSolver": waves.scons_extensions.abaqus_solver(program=env["abaqus"]),
     "AbaqusExtract": waves.scons_extensions.abaqus_extract(program=env["abaqus"]),
     "CondaEnvironment": waves.scons_extensions.conda_environment(),
-    "SphinxBuild": waves.scons_extensions.sphinx_build(program=env["sphinx_build"], options="-W"),
-    "SphinxPDF": waves.scons_extensions.sphinx_latexpdf(program=env["sphinx_build"], options="-W")
 })
 env.Append(SCANNERS=waves.scons_extensions.sphinx_scanner())
 

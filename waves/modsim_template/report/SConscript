@@ -6,7 +6,7 @@ Requires the following ``SConscript(..., exports={})``
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``project_dir`` - String absolute path to the modsim project root directory
-  * ``sphinx_build`` - String path for the Sphinx build executable
+  * ``SPHINX_BUILD`` - String path for the Sphinx build executable
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
   * ``documentation_abspath`` - String absolute path to the modsim HTML documentation source files
 
