@@ -208,9 +208,9 @@ possible and often valuable to add project custom-tailored builders, as well. Th
 variable must be updated to include these custom `SCons`_ builders and make them available to the simulation
 configuration starting in :ref:`tutorial_simulation`.
 
-The `WAVES`_ :ref:`waves_scons_api` API describes the available builders and their usage. As `WAVES`_ matures, more
-software will be supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own
-`SCons custom builders`_.
+The `WAVES`_ :ref:`waves_scons_api` API describes the available builder factories and their usage. As `WAVES`_ matures,
+more software will be supported with build wrappers. Prior to a `WAVES`_ builder, modsim developers can create their own
+`SCons custom builders`_ or start from a `WAVES`_ template builder factory in :ref:`tutorial_writing_builders`.
 
 10. Add the content below to the ``SConstruct`` file to create a placeholder call to the hierarchical simulation configuration files.
 
