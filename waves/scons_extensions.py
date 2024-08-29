@@ -1119,7 +1119,7 @@ def abaqus_journal(
        import waves
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["abaqus"] = env.AddProgram(["abaqus"])
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={"AbaqusJournal": waves.scons_extensions.abaqus_journal()})
        env.AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"], journal_options="")
 
@@ -1214,10 +1214,10 @@ def abaqus_journal_builder_factory(
        import waves
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["abaqus"] = env.AddProgram(["abaqus"])
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={
            "AbaqusJournal": waves.scons_extensions.abaqus_journal_builder_factory(
-               program=env["abaqus"]
+               program=env["ABAQUS_PROGRAM"]
            )
        })
        env.AbaqusJournal(target=["my_journal.cae"], source=["my_journal.py"])
@@ -1403,7 +1403,7 @@ def abaqus_solver(
        import waves
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["abaqus"] = env.AddProgram(["abaqus"])
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={
            "AbaqusSolver": waves.scons_extensions.abaqus_solver(),
            "AbaqusStandard": waves.scons_extensions.abaqus_solver(emitter='standard'),
@@ -1511,10 +1511,10 @@ def abaqus_solver_builder_factory(
        import waves
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["abaqus"] = env.AddProgram(["abaqus"])
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={
            "AbaqusSolver": waves.scons_extensions.abaqus_solver_builder_factory(
-               program=env["abaqus"]
+               program=env["ABAQUS_PROGRAM"]
            )
        })
        env.AbaqusSolver(target=["job.odb"], source=["input.inp"], program_options="-job job")
@@ -2207,7 +2207,7 @@ def abaqus_extract(program: str = "abaqus") -> SCons.Builder.Builder:
        import waves
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["abaqus"] = env.AddProgram(["abaqus"])
+       env["ABAQUS_PROGRAM"] = env.AddProgram(["abaqus"])
        env.Append(BUILDERS={"AbaqusExtract": waves.scons_extensions.abaqus_extract()})
        env.AbaqusExtract(target=["my_job.h5", "my_job.csv"], source=["my_job.odb"])
 

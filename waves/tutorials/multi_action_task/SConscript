@@ -29,7 +29,7 @@ env.Command(
         "cd ${TARGET.dir.abspath} && ${abaqus_program} cae -noGui ${SOURCES[2].abspath} " \
             "${abaqus_options} -- --input-file ${TARGET.abspath} --output-file ${TARGET.abspath}"
     ],
-    abaqus_program=env['abaqus']
+    abaqus_program=env["ABAQUS_PROGRAM"]
 )
 
 # SolverPrep
@@ -56,7 +56,7 @@ solve_targets = [
 target = env.AbaqusSolver(
     target=solve_targets,
     source=abaqus_source_list,
-    abaqus_program=env['abaqus'],
+    abaqus_program=env["ABAQUS_PROGRAM"],
     job_name="rectangle_compression",
     abaqus_options="-double both"
 )

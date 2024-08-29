@@ -51,7 +51,7 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env['abaqus'] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq2023"])
+env["ABAQUS_PROGRAM"] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq2023"])
 
 # Comments used in tutorial code snippets: marker-4
 
@@ -82,9 +82,9 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add builders and pseudo-builders
 env.Append(BUILDERS={
-    'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
-    'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
-    'AbaqusExtract': waves.scons_extensions.abaqus_extract(program=env['abaqus']),
+    'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env["ABAQUS_PROGRAM"]),
+    'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
+    'AbaqusExtract': waves.scons_extensions.abaqus_extract(program=env["ABAQUS_PROGRAM"]),
 })
 
 # Comments used in tutorial code snippets: marker-6

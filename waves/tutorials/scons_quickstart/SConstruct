@@ -29,10 +29,10 @@ env.Default()
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 conf = env.Configure()
-env['abaqus'] = conf.CheckProg('/apps/abaqus/Commands/abq2023')
+env["ABAQUS_PROGRAM"] = conf.CheckProg('/apps/abaqus/Commands/abq2023')
 conf.Finish()
-if env['abaqus']:
-    env.PrependENVPath("PATH", pathlib.Path(env['abaqus']).parent)
+if env["ABAQUS_PROGRAM"]:
+    env.PrependENVPath("PATH", pathlib.Path(env["ABAQUS_PROGRAM"]).parent)
 
 # Call SConscript file
 SConscript('SConscript', variant_dir=env['build_dir'], exports={"env": env}, duplicate=True)

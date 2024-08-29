@@ -62,6 +62,6 @@ workflow.extend(env.AbaqusJournal(
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 
-if not env['unconditional_build'] and not env['abaqus']:
+if not env['unconditional_build'] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore(['.', workflow_name], workflow)

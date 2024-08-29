@@ -21,21 +21,21 @@ env.Append(BUILDERS={
 env.AbaqusJournal(
     target="rectangle_geometry.cae",
     source="rectangle_geometry.py",
-    abaqus_program=env['abaqus']
+    abaqus_program=env["ABAQUS_PROGRAM"]
 )
 
 # Partition
 env.AbaqusJournal(
     target="rectangle_partition.cae",
     source=["rectangle_partition.py", "rectangle_geometry.cae"],
-    abaqus_program=env['abaqus']
+    abaqus_program=env["ABAQUS_PROGRAM"]
 )
 
 # Mesh
 env.AbaqusJournal(
     target=["rectangle_mesh.inp", "rectangle_mesh.cae"],
     source=["rectangle_mesh.py", "rectangle_partition.cae", "abaqus_utilities.py"],
-    abaqus_program=env['abaqus']
+    abaqus_program=env["ABAQUS_PROGRAM"]
 )
 
 # SolverPrep
@@ -62,7 +62,7 @@ solve_targets = [
 target = env.AbaqusSolver(
     target=solve_targets,
     source=abaqus_source_list,
-    abaqus_program=env['abaqus'],
+    abaqus_program=env["ABAQUS_PROGRAM"],
     job_name="rectangle_compression",
     abaqus_options="-double both"
 )
