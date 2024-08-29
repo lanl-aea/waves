@@ -1,4 +1,4 @@
-.. tutorial_writing_builders:
+.. _tutorial_writing_builders:
 
 ##########################
 Tutorial: Writing Builders
