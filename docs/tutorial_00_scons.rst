@@ -112,7 +112,8 @@ tasks at the end of SCons execution.
 
 At the end of this tutorial, you will see how to explore the project specific command-line options help and usage.
 
-6. Add the content below to the ``SConstruct`` file to initialize the `SCons construction environment`_.
+6. Add the content below to the ``SConstruct`` file to initialize the :class:`waves.scons_extensions.WAVESEnvironment`
+   `SCons construction environment`_.
 
 .. admonition:: waves-tutorials/SConstruct
 
