@@ -3441,77 +3441,77 @@ class WAVESEnvironment(SConsEnvironment):
 
 
     def PrintBuildFailures(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.print_build_failures`
+        """Construction environment method from :meth:`waves.scons_extensions.print_build_failures`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return print_build_failures(self, *args, **kwargs)
 
     def CheckProgram(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.check_program`
+        """Construction environment method from :meth:`waves.scons_extensions.check_program`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return check_program(self, *args, **kwargs)
 
     def FindProgram(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.find_program`
+        """Construction environment method from :meth:`waves.scons_extensions.find_program`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return find_program(self, *args, **kwargs)
 
     def AddProgram(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.add_program`
+        """Construction environment method from :meth:`waves.scons_extensions.add_program`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_program(self, *args, **kwargs)
 
     def AddCubit(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.add_cubit`
+        """Construction environment method from :meth:`waves.scons_extensions.add_cubit`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_cubit(self, *args, **kwargs)
 
     def AddCubitPython(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.add_cubit_python`
+        """Construction environment method from :meth:`waves.scons_extensions.add_cubit_python`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return add_cubit_python(self, *args, **kwargs)
 
     def CopySubstfile(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.copy_substfile`
+        """Construction environment method from :meth:`waves.scons_extensions.copy_substfile`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return copy_substfile(self, *args, **kwargs)
 
     def ProjectHelp(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.project_help`
+        """Construction environment method from :meth:`waves.scons_extensions.project_help`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return project_help_message(self, *args, **kwargs)
 
     def SubstitutionSyntax(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.substitution_syntax`
+        """Construction environment method from :meth:`waves.scons_extensions.substitution_syntax`
 
         When using this environment method, do not provide the first ``env`` argument
         """
         return substitution_syntax(self, *args, **kwargs)
 
     def ParameterStudy(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.parameter_study`
+        """Construction environment pseudo-builder from :meth:`waves.scons_extensions.parameter_study`
 
-        When using this environment builder, do not provide the first ``env`` argument
+        When using this environment pseudo-builder, do not provide the first ``env`` argument
         """
         return parameter_study(self, *args, **kwargs)
 
     def ParameterStudySConscript(self, *args, **kwargs):
-        """:meth:`waves.scons_extensions.parameter_study_sconscript`
+        """Construction environment method from :meth:`waves.scons_extensions.parameter_study_sconscript`
 
         When using this environment method, do not provide the first ``env`` argument
         """
