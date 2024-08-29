@@ -103,6 +103,7 @@ env.Append(BUILDERS={
 })
 
 envCubit.Append(BUILDERS={
+    "PythonScript": waves.scons_extensions.python_builder_factory(program=envCubit["python"])
 })
 
 envSierra.Append(BUILDERS={
