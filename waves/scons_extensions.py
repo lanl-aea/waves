@@ -1172,7 +1172,7 @@ def abaqus_journal_builder_factory(
     environment: str = "",
     action_prefix: str = _settings._cd_action_prefix,
     program: str = "abaqus",
-    program_required: str = "cae -noGUI=${SOURCES[0].abspath}",
+    program_required: str = "cae -noGUI ${SOURCES[0].abspath}",
     program_options: str = "",
     subcommand: str = "--",
     subcommand_required: str = "",

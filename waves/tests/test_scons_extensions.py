@@ -1290,7 +1290,7 @@ builder_factory_tests.update(first_target_builder_factory_test_cases(
         "environment": "",
         "action_prefix": _cd_action_prefix,
         "program": "abaqus",
-        "program_required": "cae -noGUI=${SOURCES[0].abspath}",
+        "program_required": "cae -noGUI ${SOURCES[0].abspath}",
         "program_options": "",
         "subcommand": "--",
         "subcommand_required": "",
