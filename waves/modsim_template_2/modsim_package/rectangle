@@ -24,7 +24,7 @@ journal_options = "--width ${width} --height ${height}"
 artifacts.extend(env.AbaqusJournal(
     target=["rectangle_geometry.cae", "rectangle_geometry.jnl"],
     source=["rectangle_geometry.py"],
-    journal_options=journal_options,
+    subcommand_options=journal_options,
     **simulation_variables
 ))
 
@@ -33,7 +33,7 @@ journal_options = "--width ${width} --height ${height}"
 artifacts.extend(env.AbaqusJournal(
     target=["rectangle_partition.cae", "rectangle_partition.jnl"],
     source=["rectangle_partition.py", "rectangle_geometry.cae"],
-    journal_options=journal_options,
+    subcommand_options=journal_options,
     **simulation_variables
 ))
 
@@ -42,7 +42,7 @@ journal_options = "--global-seed ${global_seed}"
 artifacts.extend(env.AbaqusJournal(
     target=["rectangle_mesh.inp", "rectangle_mesh.cae", "rectangle_mesh.jnl"],
     source=["rectangle_mesh.py", "rectangle_partition.cae"],
-    journal_options=journal_options,
+    subcommand_options=journal_options,
     **simulation_variables
 ))
 

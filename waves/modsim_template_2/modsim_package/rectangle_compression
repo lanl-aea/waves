@@ -35,8 +35,8 @@ artifacts.extend(env.CopySubstfile(
 images.extend(env.AbaqusJournal(
     target=["rectangle_compression.png"],
     source=["export_abaqus_image.py", "rectangle_compression.inp"],
-    journal_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
-                    "--model-name ${model} --part-name ${model}",
+    subcommand_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
+                       "--model-name ${model} --part-name ${model}",
     model="rectangle"
 ))
 
