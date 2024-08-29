@@ -2158,6 +2158,7 @@ waves_environment_attributes = {
         "FIERRO_IMPLICIT_PROGRAM": "different fierro-parallel-implicit",
         "SIERRA_PROGRAM": "different sierra",
         "ANSYS_PROGRAM": "different ansys",
+        "SPHINX_BUILD_PROGRAM": "different sphinx-build",
     }),
 }
 
@@ -2176,6 +2177,7 @@ def test_waves_environment_attributes(kwargs):
         "FIERRO_IMPLICIT_PROGRAM": "fierro-parallel-implicit",
         "SIERRA_PROGRAM": "sierra",
         "ANSYS_PROGRAM": "ansys",
+        "SPHINX_BUILD_PROGRAM": "sphinx-build",
     }
     expected_attributes.update(**kwargs)
     env = scons_extensions.WAVESEnvironment(**kwargs)
@@ -2237,6 +2239,8 @@ waves_environment_builders = {
         {"program": "${SIERRA_PROGRAM}"}
     ),
     "AnsysAPDL": ("AnsysAPDL", "ansys_apdl_builder_factory", {"program": "${ANSYS_PROGRAM}"}),
+    "SphinxBuild": ("SphinxBuild", "sphinx_build", {"program": "${SPHINX_BUILD_PROGRAM}"}),
+    "SphinxPDF": ("SphinxPDF", "sphinx_latexpdf", {"program": "${SPHINX_BUILD_PROGRAM}"}),
 }
 
 

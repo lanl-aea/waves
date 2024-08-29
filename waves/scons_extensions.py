@@ -3423,6 +3423,7 @@ class WAVESEnvironment(SConsEnvironment):
         FIERRO_IMPLICIT_PROGRAM: str = "fierro-parallel-implicit",
         SIERRA_PROGRAM: str = "sierra",
         ANSYS_PROGRAM: str = "ansys",
+        SPHINX_BUILD_PROGRAM: str = "sphinx-build",
         **kwargs
     ):
         super().__init__(
@@ -3436,6 +3437,7 @@ class WAVESEnvironment(SConsEnvironment):
             FIERRO_IMPLICIT_PROGRAM=FIERRO_IMPLICIT_PROGRAM,
             SIERRA_PROGRAM=SIERRA_PROGRAM,
             ANSYS_PROGRAM=ANSYS_PROGRAM,
+            SPHINX_BUILD_PROGRAM=SPHINX_BUILD_PROGRAM,
             **kwargs
         )
 
@@ -3632,6 +3634,32 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
         """
         builder = ansys_apdl_builder_factory(program="${ANSYS_PROGRAM}")
+        return builder(self, *args, target=target, source=source, **kwargs)
+
+    def SphinxBuild(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.sphinx_build`
+
+        * ``program``: ``${SPHINX_BUILD_PROGRAM}``
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = sphinx_build(program="${SPHINX_BUILD_PROGRAM}")
+        return builder(self, *args, target=target, source=source, **kwargs)
+
+    def SphinxPDF(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.sphinx_latexpdf`
+
+        * ``program``: ``${SPHINX_BUILD_PROGRAM}``
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = sphinx_latexpdf(program="${SPHINX_BUILD_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
 
