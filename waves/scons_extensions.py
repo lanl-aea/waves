@@ -3409,7 +3409,7 @@ def parameter_study_sconscript(
 
 
 class WAVESEnvironment(SConsEnvironment):
-    """Thin overload of SConsEnvironment with WAVES construction environment methods"""
+    """Thin overload of SConsEnvironment with WAVES construction environment methods and builders"""
 
     def __init__(
         self,
