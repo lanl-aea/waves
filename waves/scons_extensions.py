@@ -3439,7 +3439,6 @@ class WAVESEnvironment(SConsEnvironment):
             **kwargs
         )
 
-
     def PrintBuildFailures(self, *args, **kwargs):
         """Construction environment method from :meth:`waves.scons_extensions.print_build_failures`
 
