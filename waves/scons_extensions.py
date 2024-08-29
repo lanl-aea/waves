@@ -473,7 +473,7 @@ def check_program(
 
        env = Environment()
        env.AddMethod(waves.scons_extensions.check_program, "CheckProgram")
-       env["program"] = env.CheckProgram(["program"])
+       env["PROGRAM"] = env.CheckProgram(["program"])
 
     :param env: The SCons construction environment object to modify
     :param prog_name: string program name to search in the construction environment path
@@ -499,9 +499,9 @@ def append_env_path(
        import waves
 
        env = Environment()
-       env["program"] = waves.scons_extensions.find_program(env, ["program"])
-       if env["program"]:
-           waves.append_env_path(env, env["program"])
+       env["PROGRAM"] = waves.scons_extensions.find_program(env, ["program"])
+       if env["PROGRAM"]:
+           waves.append_env_path(env, env["PROGRAM"])
 
     :param env: The SCons construction environment object to modify
     :param program: An absolute path for the program to add to SCons construction environment ``PATH``
@@ -543,7 +543,7 @@ def find_program(
 
        env = Environment()
        env.AddMethod(waves.scons_extensions.find_program, "FindProgram")
-       env["program"] = env.FindProgram(["program"])
+       env["PROGRAM"] = env.FindProgram(["program"])
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names. May include an absolute path.
@@ -591,7 +591,7 @@ def add_program(
 
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["program"] = env.AddProgram(["program"])
+       env["PROGRAM"] = env.AddProgram(["program"])
 
     :param env: The SCons construction environment object to modify
     :param names: list of string program names. May include an absolute path.
