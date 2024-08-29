@@ -2185,7 +2185,15 @@ waves_environment_builders = {
                          ids=waves_environment_builders.keys())
 def test_waves_environment_builders(builder, factory, factory_kwargs):
     env = scons_extensions.WAVESEnvironment()
+
+    args = ["arg1"]
+    kwargs = {"kwarg1": "value1"}
+    target = [f"{builder}.target"]
+    source = [ f"{builder}.source"]
+    mock_builder = unittest.mock.Mock()
+
     attribute = getattr(env, builder)
-    with patch(f"waves.scons_extensions.{factory}") as mock_factory:
-        attribute(f"{builder}.target", f"{builder}.source")
+    with patch(f"waves.scons_extensions.{factory}", return_value=mock_builder) as mock_factory:
+        attribute(target, source, *args, **kwargs)
         mock_factory.assert_called_once_with(**factory_kwargs)
+        mock_builder.assert_called_once_with(target, source, *args, **kwargs)

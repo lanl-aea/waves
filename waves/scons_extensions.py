@@ -3499,7 +3499,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the buidler (*not* to the builder factory)
         """
         builder = abaqus_journal_builder_factory(program="${ABAQUS_PROGRAM}")
-        return builder(*args, **kwargs)
+        return builder(target, source, *args, **kwargs)
 
     def AbaqusSolver(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
@@ -3512,7 +3512,7 @@ class WAVESEnvironment(SConsEnvironment):
         :param kwargs: All keyword arguments are passed through to the buidler (*not* to the builder factory)
         """
         builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
-        return builder(*args, **kwargs)
+        return builder(target, source, *args, **kwargs)
 
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
