@@ -36,7 +36,7 @@ cae_prep.extend(env.AbaqusJournal(
 workflow.extend(env.AbaqusJournal(
     target=["beam.odb"],
     source=["submit_cae.py", "beam.cae"],
-    journal_options="--input-file ${SOURCES[1].abspath} --job-name beam --model-name Beam"
+    subcommand_options="--input-file ${SOURCES[1].abspath} --job-name beam --model-name Beam"
 ))
 
 # Comment used in tutorial code snippets: marker-3

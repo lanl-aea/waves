@@ -30,7 +30,6 @@ env["ABAQUS_PROGRAM"] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq202
 
 # Add WAVES builders
 env.Append(BUILDERS={
-    "AbaqusJournal": waves.scons_extensions.abaqus_journal(program=env["ABAQUS_PROGRAM"])
 })
 
 # Call SConscript file

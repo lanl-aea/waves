@@ -88,7 +88,6 @@ def solve_builder_select():
 
 
 env.Append(BUILDERS={
-    'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env["ABAQUS_PROGRAM"]),
     'AbaqusSolver': solve_builder_select()
 })
 

@@ -74,7 +74,6 @@ for key, value in project_variables.items():
 variant_dir_base = pathlib.Path(env['variant_dir_base'])
 
 # Add builders and pseudo-builders
-env.Append(BUILDERS={'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env["ABAQUS_PROGRAM"])})
 
 # Comments used in tutorial code snippets: marker-6
 

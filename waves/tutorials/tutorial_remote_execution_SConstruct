@@ -80,7 +80,6 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 # Add builders and pseudo-builders
 user = getpass.getuser()
 env.Append(BUILDERS={
-    'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env["ABAQUS_PROGRAM"]),
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),
     'SSHAbaqusSolver': waves.scons_extensions.ssh_builder_actions(
         waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"]),

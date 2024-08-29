@@ -50,7 +50,7 @@ solve_source_list.append("rectangle_mesh.inp")
 images.extend(env.AbaqusJournal(
     target=["rectangle_compression.png"],
     source=[modsim_package_abspath / "export_abaqus_image.py"] + solve_source_list,
-    journal_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
+    subcommand_options="--input-file ${SOURCES[1].abspath} --output-file ${TARGET.file} "
                     "--model-name ${model} --part-name ${model}",
     model="rectangle"
 ))

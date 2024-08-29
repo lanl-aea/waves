@@ -169,16 +169,16 @@ Build Targets
    scons: done building targets.
 
 The build process, targets, and output files should be identical to that of :ref:`tutorial_partition_mesh`. You
-can explore changes in behavior by modifying the ``journal_options`` of both ``tutorial_02_partition_mesh`` and
+can explore changes in behavior by modifying the ``subcommand_options`` of both ``tutorial_02_partition_mesh`` and
 ``tutorial_argparse_types`` to include negative floats and re-running both workflows. For instance, by adding the
 following to the Geometry task definition.
 
 .. code-block:: Python
 
-   journal_options="--width '-1.0'"
+   subcommand_options="--width '-1.0'"
 
 See :ref:`tutorial_parameter_substitution` for more details about using the command-line interface and
-``journal_options`` task argument.
+``subcommand_options`` task argument.
 
 ************
 Output Files

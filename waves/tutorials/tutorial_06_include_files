@@ -42,7 +42,7 @@ journal_options = "--width ${width} --height ${height}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py"],
-    journal_options=journal_options,
+    subcommand_options=journal_options,
     **simulation_variables
 ))
 
@@ -54,7 +54,7 @@ journal_options = "--width ${width} --height ${height}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_geometry.cae"],
-    journal_options=journal_options,
+    subcommand_options=journal_options,
     **simulation_variables
 ))
 
@@ -64,7 +64,7 @@ journal_options = "--global-seed ${global_seed}"
 workflow.extend(env.AbaqusJournal(
     target=[f"{journal_file}.inp", f"{journal_file}.cae", f"{journal_file}.jnl"],
     source=[f"{abaqus_source_abspath / journal_file}.py", f"{model}_partition.cae"],
-    journal_options=journal_options,
+    subcommand_options=journal_options,
     **simulation_variables
 ))
 
