@@ -3,7 +3,7 @@ import os
 import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
-from unittest.mock import patch, call, ANY
+from unittest.mock import patch, call
 import subprocess
 
 import pytest
@@ -2171,7 +2171,7 @@ def test_waves_environment_methods(method, function):
     attribute = getattr(env, method)
     with patch(f"waves.scons_extensions.{function}") as mock_function:
         attribute(*args, **kwargs)
-        mock_function.assert_called_once_with(ANY, *args, **kwargs)
+        mock_function.assert_called_once_with(env, *args, **kwargs)
 
 
 waves_environment_builders = {
@@ -2219,4 +2219,4 @@ def test_waves_environment_builders(builder, factory, factory_kwargs):
     with patch(f"waves.scons_extensions.{factory}", return_value=mock_builder) as mock_factory:
         attribute(target, source, *args, **kwargs)
         mock_factory.assert_called_once_with(**factory_kwargs)
-        mock_builder.assert_called_once_with(ANY, *args, target=target, source=source, **kwargs)
+        mock_builder.assert_called_once_with(env, *args, target=target, source=source, **kwargs)
