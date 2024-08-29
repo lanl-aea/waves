@@ -158,11 +158,11 @@ local computers without cluttering their test builds with tasks that cannot succ
 :ref:`tutorial_geometry` will introduce the use of these variables for build control.
 
 The `SCons`_ native solution for finding a program is the `CheckProg`_ configuration method. The
-:meth:`waves.scons_extensions.add_program` method wraps `CheckProg`_ to search for a list of possible program names. This is
-most useful when multiple versions of a program can be used to build the project and the various servers where the
-project is built may have different versions available. The project will build with the first available program name
-without changes to the project configuration. If a program is found, it will also be added to the SCons environment
-``PATH``.
+:meth:`waves.scons_extensions.add_program` method wraps `CheckProg`_ like behavior to search for a list of possible
+program names. This is most useful when multiple versions of a program can be used to build the project and the various
+servers where the project is built may have different versions available. The project will build with the first
+available program name without changes to the project configuration. If a program is found, it will also be added to the
+SCons environment ``PATH``.
 
 The ``env.AddProgram`` was added to the construction environment with :class:`waves.scons_extensions.WAVESEnvironment`
 for convenience. Anywhere the construction environment is available, we can use ``env.AddProgram``. It is also possible
