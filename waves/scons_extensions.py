@@ -3488,6 +3488,32 @@ class WAVESEnvironment(SConsEnvironment):
         """
         return parameter_study_sconscript(self, *args, **kwargs)
 
+    def AbaqusJournal(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
+
+        * ``program``: ``${ABAQUS_PROGRAM}``
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the buidler (*not* to the builder factory)
+        """
+        builder = abaqus_journal_builder_factory(program="${ABAQUS_PROGRAM}")
+        return builder(*args, **kwargs)
+
+    def AbaqusSolver(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.abaqus_journal_builder_factory`
+
+        * ``program``: ``${ABAQUS_PROGRAM}``
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the buidler (*not* to the builder factory)
+        """
+        builder = abaqus_solver_builder_factory(program="${ABAQUS_PROGRAM}")
+        return builder(*args, **kwargs)
+
 
 _module_objects = set(globals().keys()) - _exclude_from_namespace
 __all__ = [name for name in _module_objects if not name.startswith("_")]
