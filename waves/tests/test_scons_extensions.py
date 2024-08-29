@@ -3,7 +3,7 @@ import os
 import pathlib
 from contextlib import nullcontext as does_not_raise
 import unittest
-from unittest.mock import patch, call
+from unittest.mock import patch, call, ANY
 import subprocess
 
 import pytest
@@ -2161,13 +2161,17 @@ waves_environment_methods = {
 }
 
 
-@pytest.mark.parametrize("method, function", waves_environment_methods.values(), ids=waves_environment_methods.keys())
+@pytest.mark.parametrize("method, function",
+                         waves_environment_methods.values(),
+                         ids=waves_environment_methods.keys())
 def test_waves_environment_methods(method, function):
+    args = ["arg1"]
+    kwargs = {"kwarg1": "value1"}
     env = scons_extensions.WAVESEnvironment()
     attribute = getattr(env, method)
     with patch(f"waves.scons_extensions.{function}") as mock_function:
-        attribute()
-        mock_function.assert_called_once()
+        attribute(*args, **kwargs)
+        mock_function.assert_called_once_with(ANY, *args, **kwargs)
 
 
 waves_environment_builders = {
