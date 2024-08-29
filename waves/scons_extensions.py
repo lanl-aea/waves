@@ -2794,8 +2794,12 @@ def fierro_explicit_builder_factory(
        import waves
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["fierro"] = env.AddProgram(["fierro-parallel-explicit"])
-       env.Append(BUILDERS={"FierroExplicit": waves.scons_extensions.fierro_explicit_builder_factory()})
+       env["FIERRO_EXPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-explicit"])
+       env.Append(BUILDERS={
+           "FierroExplicit": waves.scons_extensions.fierro_explicit_builder_factory(
+               subcommand=env["FIERRO_EXPLICIT_PROGRAM"]
+           )
+       })
        env.FierroExplicit(
            target=["target.stdout"],
            source=["source.yaml"],
@@ -2886,8 +2890,12 @@ def fierro_implicit_builder_factory(
        import waves
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["fierro"] = env.AddProgram(["fierro-parallel-implicit"])
-       env.Append(BUILDERS={"FierroImplicit": waves.scons_extensions.fierro_implicit_builder_factory()})
+       env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
+       env.Append(BUILDERS={
+           "FierroImplicit": waves.scons_extensions.fierro_implicit_builder_factory(
+               subcommand=env["FIERRO_IMPLICIT_PROGRAM"]
+           )
+       })
        env.FierroImplicit(
            target=["target.stdout"],
            source=["source.yaml"],
@@ -3085,10 +3093,10 @@ def ansys_apdl_builder_factory(
        import waves
        env = Environment()
        env.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-       env["ansys"] = env.AddProgram(["ansys232"])
+       env["ANSYS_PROGRAM"] = env.AddProgram(["ansys232"])
        env.Append(BUILDERS={
             "AnsysAPDL": waves.scons_extensions.ansys_apdl_builder_factory(
-                program=env["ansys]
+                program=env["ANSYS_PROGRAM"]
             )
        })
        env.AnsysAPDL(
