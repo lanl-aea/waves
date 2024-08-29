@@ -58,12 +58,14 @@ documentation_files = [
     "_static/custom.css"
 ]
 
+sphinx_options = "-W"
+
 targets = [f"html/{pathlib.Path(source).with_suffix('.html')}" for source in documentation_files if source.endswith(".rst")]
 sources = documentation_files
-sphinx_options = "-W"
 html = env.SphinxBuild(
     target=targets,
     source=sources
+    options=sphinx_options
 )
 env.Clean(html, [Dir("html")] + sources)
 env.Alias("html", html)
@@ -73,6 +75,7 @@ sources = documentation_files
 latexpdf = env.SphinxPDF(
     target=targets,
     source=sources
+    options=sphinx_options
 )
 env.Clean(latexpdf, [Dir("latex")] + sources)
 env.Alias("latexpdf", latexpdf)
