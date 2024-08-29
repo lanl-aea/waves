@@ -2175,8 +2175,31 @@ def test_waves_environment_methods(method, function):
 
 
 waves_environment_builders = {
+    "FirstTargetBuilder": ("FirstTargetBuilder", "first_target_builder_factory", {}),
     "AbaqusJournal": ("AbaqusJournal", "abaqus_journal_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
     "AbaqusSolver": ("AbaqusSolver", "abaqus_solver_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
+    "PythonScript": ("PythonScript", "python_builder_factory", {"program": "${PYTHON_PROGRAM}"}),
+    "QuinoaSolver": (
+        "QuinoaSolver",
+        "quinoa_builder_factory",
+        {"program": "${CHARMRUN_PROGRAM}", "subcommand": "${INCITER_PROGRAM}"}
+    ),
+    "FierroExplicit": (
+        "FierroExplicit",
+        "fierro_explicit_builder_factory",
+        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${FIERRO_EXPLICIT_PROGRAM}"}
+    ),
+    "FierroImplicit": (
+        "FierroImplicit",
+        "fierro_implicit_builder_factory",
+        {"program": "${MPIRUN_PROGRAM}", "subcommand": "${FIERRO_IMPLICIT_PROGRAM}"}
+    ),
+    "Sierra": (
+        "Sierra",
+        "sierra_builder_factory",
+        {"program": "${SIERRA_PROGRAM}"}
+    ),
+    "AnsysAPDL": ("AnsysAPDL", "ansys_apdl_builder_factory", {"program": "${ANSYS_PROGRAM}"}),
 }
 
 
