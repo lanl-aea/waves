@@ -2146,7 +2146,7 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
             pass
 
 
-waves_environment = {
+waves_environment_methods = {
     "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures"),
     "CheckProgram": ("CheckProgram", "check_program"),
     "FindProgram": ("FindProgram", "find_program"),
@@ -2161,10 +2161,27 @@ waves_environment = {
 }
 
 
-@pytest.mark.parametrize("method, function", waves_environment.values(), ids=waves_environment.keys())
-def test_waves_environment(method, function):
+@pytest.mark.parametrize("method, function", waves_environment_methods.values(), ids=waves_environment_methods.keys())
+def test_waves_environment_methods(method, function):
     env = scons_extensions.WAVESEnvironment()
     attribute = getattr(env, method)
     with patch(f"waves.scons_extensions.{function}") as mock_function:
         attribute()
         mock_function.assert_called_once()
+
+
+waves_environment_builders = {
+    "AbaqusJournal": ("AbaqusJournal", "abaqus_journal_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
+    "AbaqusSolver": ("AbaqusSolver", "abaqus_solver_builder_factory", {"program": "${ABAQUS_PROGRAM}"}),
+}
+
+
+@pytest.mark.parametrize("builder, factory, factory_kwargs",
+                         waves_environment_builders.values(),
+                         ids=waves_environment_builders.keys())
+def test_waves_environment_builders(builder, factory, factory_kwargs):
+    env = scons_extensions.WAVESEnvironment()
+    attribute = getattr(env, builder)
+    with patch(f"waves.scons_extensions.{factory}") as mock_factory:
+        attribute(f"{builder}.target", f"{builder}.source")
+        mock_factory.assert_called_once_with(**factory_kwargs)
