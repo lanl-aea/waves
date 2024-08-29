@@ -64,7 +64,7 @@ targets = [f"html/{pathlib.Path(source).with_suffix('.html')}" for source in doc
 sources = documentation_files
 html = env.SphinxBuild(
     target=targets,
-    source=sources
+    source=sources,
     options=sphinx_options
 )
 env.Clean(html, [Dir("html")] + sources)
@@ -74,7 +74,7 @@ targets = [f"latex/{project_variables['documentation_pdf']}"]
 sources = documentation_files
 latexpdf = env.SphinxPDF(
     target=targets,
-    source=sources
+    source=sources,
     options=sphinx_options
 )
 env.Clean(latexpdf, [Dir("latex")] + sources)
