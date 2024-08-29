@@ -85,7 +85,6 @@ env.Append(BUILDERS={
     'AbaqusJournal': waves.scons_extensions.abaqus_journal(program=env['abaqus']),
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env['abaqus']),
     'AbaqusExtract': waves.scons_extensions.abaqus_extract(program=env['abaqus']),
-    'PythonScript': waves.scons_extensions.python_builder_factory()
 })
 
 # Comments used in tutorial code snippets: marker-6
