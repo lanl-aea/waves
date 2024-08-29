@@ -2146,6 +2146,43 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
             pass
 
 
+waves_environment_attributes = {
+    "default": ({}),
+    "no defaults": ({
+        "ABAQUS_PROGRAM": "different abaqus",
+        "PYTHON_PROGRAM": "different python",
+        "CHARMRUN_PROGRAM": "different charmrun",
+        "INCITER_PROGRAM": "different inciter",
+        "MPIRUN_PROGRAM": "different mpirun",
+        "FIERRO_EXPLICIT_PROGRAM": "different fierro-parallel-explicit",
+        "FIERRO_IMPLICIT_PROGRAM": "different fierro-parallel-implicit",
+        "SIERRA_PROGRAM": "different sierra",
+        "ANSYS_PROGRAM": "different ansys",
+    }),
+}
+
+
+@pytest.mark.parametrize("kwargs",
+                         waves_environment_attributes.values(),
+                         ids=waves_environment_attributes.keys())
+def test_waves_environment_attributes(kwargs):
+    expected_attributes = {
+        "ABAQUS_PROGRAM": "abaqus",
+        "PYTHON_PROGRAM": "python",
+        "CHARMRUN_PROGRAM": "charmrun",
+        "INCITER_PROGRAM": "inciter",
+        "MPIRUN_PROGRAM": "mpirun",
+        "FIERRO_EXPLICIT_PROGRAM": "fierro-parallel-explicit",
+        "FIERRO_IMPLICIT_PROGRAM": "fierro-parallel-implicit",
+        "SIERRA_PROGRAM": "sierra",
+        "ANSYS_PROGRAM": "ansys",
+    }
+    expected_attributes.update(**kwargs)
+    env = scons_extensions.WAVESEnvironment(**kwargs)
+    for key, value in expected_attributes.items():
+        assert env[key] == value
+
+
 waves_environment_methods = {
     "PrintBuildFailures": ("PrintBuildFailures", "print_build_failures"),
     "CheckProgram": ("CheckProgram", "check_program"),
