@@ -19,14 +19,6 @@ AddOption(
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
 AddOption(
-    "--ignore-documentation",
-    dest="ignore_documentation",
-    default=False,
-    action="store_true",
-    help="Boolean to ignore the documentation build, e.g. during Conda package build and testing. Unaffected by the " \
-         "'--unconditional-build' option. (default: '%default')"
-)
-AddOption(
     "--solve-cpus",
     dest="solve_cpus",
     default=1,
