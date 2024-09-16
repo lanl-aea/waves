@@ -8,6 +8,11 @@ Changelog
 0.11.3 (unreleased)
 *******************
 
+Internal Changes
+================
+- Use a single type of string substitution in system test command construction (:issue:`768`, :merge:`935`). By `Kyle
+  Brindley`_.
+
 *******************
 0.11.2 (2024-08-29)
 *******************
