@@ -40,7 +40,7 @@ env.Alias("pytest", pytest_node)
 env.AlwaysBuild(pytest_node)
 
 target = ["systemtest_results.xml"]
-source = pytest_source_list + [str(pathlib.Path("waves/tests/test_systemtest.py"))]
+source = pytest_source_list + [str(pathlib.Path("waves/tests/test_system.py"))]
 systemtest_node = env.Command(
     target=target,
     source=source,
