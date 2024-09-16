@@ -90,6 +90,9 @@ system_tests = [
     ([fetch_template, "${waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4"], "tutorials"),
     ([fetch_template, "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript"),
+    # ModSim templates
+    ([fetch_template, "scons . --jobs=4", string.Template("${waves_command} visualize nominal --output-file nominal.png")], "modsim_template"),
+    ([fetch_template, "scons . --jobs=4", string.Template("${waves_command} visualize nominal --output-file nominal.png")], "modsim_template_2")
 ]
 if installed:
     system_tests.append(
@@ -125,22 +128,3 @@ def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Opti
                 command = command.substitute(template_substitution)
             command = shlex.split(command)
             subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
-
-
-@pytest.mark.parametrize("template_name", ["modsim_template", "modsim_template_2"])
-@pytest.mark.systemtest
-def test_modsim_templates(template_name) -> None:
-    """Fetch and run the modsim template as a system test in a temporary directory"""
-    with tempfile.TemporaryDirectory() as temp_directory:
-        command = f"{waves_command} fetch {template_name} --destination {temp_directory}"
-        command = shlex.split(command)
-        subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
-
-        command = "scons . --jobs=4"
-        command = shlex.split(command)
-        subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
-
-        output_file = pathlib.Path(temp_directory) / "nominal.svg"
-        command = f"{waves_command} visualize nominal --output-file {output_file}"
-        command = shlex.split(command)
-        subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
