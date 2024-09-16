@@ -97,7 +97,7 @@ system_tests = [
 if installed:
     system_tests.append(
         # The HTML docs path doesn't exist in the repository. Can only system test from an installed package.
-        ([fetch_template, "${waves_command} docs --print-local-path"], "tutorials"),
+        ([fetch_template, string.Template("${waves_command} docs --print-local-path")], "tutorials"),
     )
 
 
