@@ -87,7 +87,7 @@ system_tests = [
     ([fetch_template, "chmod +x solver.py", "scons ."], "tutorials/tutorial_writing_builders"),
     ([fetch_template, "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, "${waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4"], "tutorials"),
+    ([fetch_template, string.Template("${waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4")], "tutorials"),
     ([fetch_template, "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript"),
     # ModSim templates
