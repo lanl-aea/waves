@@ -58,10 +58,9 @@ env.SetOption("duplicate", "copy")
 env["CUBIT_PROGRAM"] = env.AddCubit(["/apps/Cubit-16.12/cubit", "cubit"])
 env["SBATCH_PROGRAM"] = env.AddProgram(["sbatch"])
 env["user"] = getpass.getuser()
-# FIXME: Not sure why HPC doesn't provide the module function to *all* shells. Sourcing the modules.sh script works for
-# now, but explore shell initiation in HPC docs.
-# FIXME: The remote ssh command launches a non-interactive shell. Sourcing the module shell script is not sufficient, we
-# also have to add the appropriate modulefile path(s). Probably these problems are related.
+# TODO: Ask Quinoa devs to provide a shell script or module file on HPC, then remove this variable
+env["quinoa_installation"] = pathlib.Path("/users/cclong/QUINOA/quinoa/buildOS/Main")
+# FIXME: The remote ssh command launches a non-interactive shell. We have to add the appropriate modulefile path(s).
 quinoa_hpc_environment  = \
     "module use /opt/cray/pe/lmod/modulefiles/mpi/gnu/12.0/ofi/1.0/cray-mpich/8.0 /opt/modules/modulefiles && " \
     "module load cmake cray-hdf5-parallel cray-netcdf-hdf5parallel lua53_gcc4x_icn/5.3.6"
@@ -101,8 +100,9 @@ try:  # sstelmo/sstbigbird
 except subprocess.CalledProcessError:  # HPC
     envQuinoa = waves.scons_extensions.shell_environment(quinoa_hpc_environment)
 envQuinoa.AddMethod(waves.scons_extensions.add_program, "AddProgram")
-envQuinoa["inciter"] = envQuinoa.AddProgram(["inciter"])
-envQuinoa["charmrun"] = envQuinoa.AddProgram(["charmrun"])
+quinoa_installation = pathlib.Path(env["quinoa_installation"])
+envQuinoa["inciter"] = envQuinoa.AddProgram(["inciter", quinoa_installation / "inciter"])
+envQuinoa["charmrun"] = envQuinoa.AddProgram(["charmrun", quinoa_installation / "charmrun"])
 
 # Add WAVES builders. If sbatch is found, use it.
 # Should allow the same scons alias to run directly on sstbigbird, but submit as an sbatch job on HPC

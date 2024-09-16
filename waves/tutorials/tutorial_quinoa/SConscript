@@ -29,12 +29,13 @@ workflow.extend(mesh)
 env.Alias("mesh", mesh)
 
 # SSH remote build on HPC
+quinoa_installation = env["quinoa_installation"]
 remote_directory = remote_directory_prefix / "remote"
 target = env.SSHQuinoaSolver(
     target=["remote.stdout"],
     source=["flow.lua", "box.exo"],
-    charmrun="charmrun",
-    inciter="inciter",
+    charmrun=quinoa_installation / "charmrun",
+    inciter=quinoa_installation / "inciter",
     remote_directory=remote_directory
 )
 env.Alias("quinoa-remote", target)
