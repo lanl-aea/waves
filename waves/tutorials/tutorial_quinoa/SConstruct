@@ -58,15 +58,15 @@ env.SetOption("duplicate", "copy")
 env["CUBIT_PROGRAM"] = env.AddCubit(["/apps/Cubit-16.12/cubit", "cubit"])
 env["SBATCH_PROGRAM"] = env.AddProgram(["sbatch"])
 env["user"] = getpass.getuser()
-# TODO: Ask Quinoa devs to provide a shell script or module file on HPC snow, then remove this variable
+# TODO: Ask Quinoa devs to provide a shell script or module file on HPC, then remove this variable
 env["quinoa_installation"] = pathlib.Path("/users/cclong/QUINOA/quinoa/buildOS/Main")
-# FIXME: Not sure why snow doesn't provide the module function to *all* shells. Sourcing the modules.sh script works for
+# FIXME: Not sure why HPC doesn't provide the module function to *all* shells. Sourcing the modules.sh script works for
 # now, but explore shell initiation in HPC docs.
 # FIXME: The remote ssh command launches a non-interactive shell. Sourcing the module shell script is not sufficient, we
 # also have to add the appropriate modulefile path(s). Probably these problems are related.
-quinoa_snow_environment  = "source /etc/profile.d/modules.sh && " \
-                           "module use /usr/projects/hpcsoft/modulefiles/toss3/snow/compiler " \
-                                      "/usr/projects/hpcsoft/modulefiles/toss3/snow/mpi && " \
+quinoa_hpc_environment  = "source /etc/profile.d/modules.sh && " \
+                           "module use /usr/projects/hpcsoft/modulefiles/cos2/rocinante/compiler " \
+                                      "/usr/projects/hpcsoft/modulefiles/cos2/rocinante/mpi && " \
                            "module load gcc/9.3.0 openmpi/2.1.2"
 quinoa_aea_environment = "module use /projects/aea_compute/modulefiles && module load aea-quinoa"
 
@@ -93,7 +93,7 @@ variant_dir_base = pathlib.Path(env['variant_dir_base'])
 # Add builders and pseudo-builders
 env.Append(BUILDERS={
     "SSHQuinoaSolver": waves.scons_extensions.ssh_builder_actions(
-        waves.scons_extensions.sbatch_quinoa_builder_factory(environment=f"{quinoa_snow_environment} &&"),
+        waves.scons_extensions.sbatch_quinoa_builder_factory(environment=f"{quinoa_hpc_environment} &&"),
         remote_server="ro-rfe.lanl.gov"
     )
 })
@@ -101,8 +101,8 @@ env.Append(BUILDERS={
 # Source the Quinoa environment and store it separately from the Conda/Cubit environment to avoid PATH interference
 try:  # sstelmo/sstbigbird
     envQuinoa = waves.scons_extensions.shell_environment(quinoa_aea_environment)
-except subprocess.CalledProcessError:  # HPC snow
-    envQuinoa = waves.scons_extensions.shell_environment(quinoa_snow_environment)
+except subprocess.CalledProcessError:  # HPC
+    envQuinoa = waves.scons_extensions.shell_environment(quinoa_hpc_environment)
 envQuinoa.AddMethod(waves.scons_extensions.add_program, "AddProgram")
 quinoa_installation = pathlib.Path(env["quinoa_installation"])
 envQuinoa["inciter"] = envQuinoa.AddProgram(["inciter", quinoa_installation / "inciter"])

@@ -28,7 +28,7 @@ mesh = env.PythonScript(
 workflow.extend(mesh)
 env.Alias("mesh", mesh)
 
-# SSH remote build on snow
+# SSH remote build on HPC
 quinoa_installation = env["quinoa_installation"]
 remote_directory = remote_directory_prefix / "remote"
 target = env.SSHQuinoaSolver(
