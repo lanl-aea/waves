@@ -108,10 +108,10 @@ def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Opti
 
     Iterates on the command strings in the commands list. Performs string template substitution using keys:
 
-    * ``waves_command``
-    * ``odb_extract_command``
-    * ``fetch_options``
-    * ``temp_directory``
+    * ``waves_command``: module namespace variable selected to match installation status
+    * ``odb_extract_command``: module namespace variable selected to match installation status
+    * ``fetch_options``: test API variable
+    * ``temp_directory``: temporary directory created one per test with ``tempfile``
 
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
