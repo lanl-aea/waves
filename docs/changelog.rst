@@ -12,6 +12,7 @@ Internal Changes
 ================
 - Use a single type of string substitution in system test command construction (:issue:`768`, :merge:`935`). By `Kyle
   Brindley`_.
+- Update the Fierro FE solver Conda package name (:issue:`766`, :merge:`936`). By `Kyle Brindley`_.
 
 *******************
 0.11.2 (2024-08-29)

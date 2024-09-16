@@ -24,7 +24,7 @@ Environment
 
    The Fierro tutorial requires a different compute environment than the other tutorials. The following commands create
    a dedicated environment for the use of this tutorial. You can also use your existing tutorial environment
-   environment if you add the `FierroMechanics`_ channel and install the ``fierro-cpu`` and ``meshio`` packages.
+   environment if you add the `FierroMechanics`_ channel and install the ``fierro-fe-cpu`` and ``meshio`` packages.
 
 `SCons`_, `WAVES`_, and `Fierro`_ can be installed in a `Conda`_ environment with the `Conda`_ package manager. See the
 `Conda installation`_ and `Conda environment management`_ documentation for more details about using `Conda`_.
@@ -33,7 +33,7 @@ Environment
 
    .. code-block::
 
-      $ conda create --name waves-fierro-env --channel fierromechanics --channel conda-forge waves 'scons>=4.6' fierro-cpu meshio
+      $ conda create --name waves-fierro-env --channel fierromechanics --channel conda-forge waves 'scons>=4.6' fierro-fe-cpu meshio
 
 2. Activate the environment
 

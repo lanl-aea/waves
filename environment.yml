@@ -4,7 +4,7 @@ channels:
 
 dependencies:
   - boa
-  - fierro-cpu
+  - fierro-fe-cpu
   - flake8
   - h5netcdf
   - h5py
