@@ -123,7 +123,7 @@ def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Opti
         for command in commands:
             if isinstance(command, string.Template):
                 command = command.substitute(template_substitution)
-            command = command.split(" ")
+            command = shlex.split(command)
             subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
 
 
