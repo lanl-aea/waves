@@ -37,16 +37,16 @@ if not installed:
 fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temp_directory}")
 system_tests = [
     # CLI sign-of-life and help/usage
-    (["${waves_command} --help"], None),
-    (["${waves_command} docs --help"], None),
-    (["${waves_command} fetch --help"], None),
-    (["${waves_command} visualize --help"], None),
-    (["${waves_command} build --help"], None),
-    (["${waves_command} cartesian_product --help"], None),
-    (["${waves_command} custom_study --help"], None),
-    (["${waves_command} latin_hypercube --help"], None),
-    (["${waves_command} sobol_sequence --help"], None),
-    (["${odb_extract_command} --help"], None),
+    ([string.Template("${waves_command} --help")], None),
+    ([string.Template("${waves_command} docs --help")], None),
+    ([string.Template("${waves_command} fetch --help")], None),
+    ([string.Template("${waves_command} visualize --help")], None),
+    ([string.Template("${waves_command} build --help")], None),
+    ([string.Template("${waves_command} cartesian_product --help")], None),
+    ([string.Template("${waves_command} custom_study --help")], None),
+    ([string.Template("${waves_command} latin_hypercube --help")], None),
+    ([string.Template("${waves_command} sobol_sequence --help")], None),
+    ([string.Template("${odb_extract_command} --help")], None),
     # Tutorials
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/scons_quickstart"),
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/multi_action_task"),
