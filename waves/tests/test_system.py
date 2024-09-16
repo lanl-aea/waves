@@ -37,16 +37,16 @@ if not installed:
 fetch_template = string.Template("${waves_command} fetch ${fetch_options} --destination ${temp_directory}")
 system_tests = [
     # CLI sign-of-life and help/usage
-    ([f"{waves_command} --help"], None),
-    ([f"{waves_command} docs --help"], None),
-    ([f"{waves_command} fetch --help"], None),
-    ([f"{waves_command} visualize --help"], None),
-    ([f"{waves_command} build --help"], None),
-    ([f"{waves_command} cartesian_product --help"], None),
-    ([f"{waves_command} custom_study --help"], None),
-    ([f"{waves_command} latin_hypercube --help"], None),
-    ([f"{waves_command} sobol_sequence --help"], None),
-    ([f"{odb_extract_command} --help"], None),
+    (["${waves_command} --help"], None),
+    (["${waves_command} docs --help"], None),
+    (["${waves_command} fetch --help"], None),
+    (["${waves_command} visualize --help"], None),
+    (["${waves_command} build --help"], None),
+    (["${waves_command} cartesian_product --help"], None),
+    (["${waves_command} custom_study --help"], None),
+    (["${waves_command} latin_hypercube --help"], None),
+    (["${waves_command} sobol_sequence --help"], None),
+    (["${odb_extract_command} --help"], None),
     # Tutorials
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/scons_quickstart"),
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/multi_action_task"),
@@ -87,14 +87,14 @@ system_tests = [
     ([fetch_template, "chmod +x solver.py", "scons ."], "tutorials/tutorial_writing_builders"),
     ([fetch_template, "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, f"{waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4"], "tutorials"),
+    ([fetch_template, "${waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4"], "tutorials"),
     ([fetch_template, "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript"),
 ]
 if installed:
     system_tests.append(
         # The HTML docs path doesn't exist in the repository. Can only system test from an installed package.
-        ([fetch_template, f"{waves_command} docs --print-local-path"], "tutorials"),
+        ([fetch_template, "${waves_command} docs --print-local-path"], "tutorials"),
     )
 
 
@@ -106,6 +106,7 @@ def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Opti
     Iterates on the command strings in the commands list. Performs string template substitution using keys:
 
     * ``waves_command``
+    * ``odb_extract_command``
     * ``fetch_options``
     * ``temp_directory``
 
@@ -115,6 +116,7 @@ def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Opti
     with tempfile.TemporaryDirectory() as temp_directory:
         template_substitution = {
             "waves_command": waves_command,
+            "odb_extract_command": odb_extract_command,
             "fetch_options": fetch_options,
             "temp_directory": temp_directory
         }
