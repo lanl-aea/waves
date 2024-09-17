@@ -153,9 +153,6 @@ conda-build-matrix:
   dependencies: []
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
-    # TODO: Remove MR builds prior to merge to main
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/merge_requests/939
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
   script:
     # Set the LANL internal proxies
     - export ALL_PROXY="proxyout.lanl.gov:8080"
