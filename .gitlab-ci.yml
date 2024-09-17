@@ -190,6 +190,8 @@ pypi-deploy:
     GIT_STRATEGY: clone
   dependencies: []
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH == "main"
   script:
     # Only deploy to Gitlab PyPI registry for clean version tags
