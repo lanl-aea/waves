@@ -18,6 +18,8 @@ Internal Changes
   recipe builds (:issue:`769`, :merge:`937`, :merge:`938`). By `Kyle Brindley`_.
 - Remove conda-verify from GitHub workflows because it appears to cause CI environment errors (:merge:`940`). By `Kyle
   Brindley`_.
+- Run a full matrix of Python and SCons version tests during scheduled CI testing, patch unit test construction for
+  Python <=3.10, fix Python 3.8 type hint compatibility (:issue:`771`, :merge:`939`). By `Kyle Brindley`_.
 
 *******************
 0.11.2 (2024-08-29)
