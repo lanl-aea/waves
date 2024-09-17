@@ -14,6 +14,8 @@ Internal Changes
   Brindley`_.
 - Update the Fierro FE solver Conda package name (:issue:`766`, :merge:`936`). By `Kyle Brindley`_.
 - Update LANL HPC server references (:issue:`767`, :merge:`934`). By `Kyle Brindley`_.
+- Provide finer grained system test controls to allow running WAVES-only system tests, e.g. WAVES CLI tests, in external
+  recipe builds (:issue:`769`, :merge:`937`). By `Kyle Brindley`_.
 
 *******************
 0.11.2 (2024-08-29)
