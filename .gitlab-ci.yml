@@ -147,6 +147,7 @@ conda-build-external:
     - shell-aea
 
 conda-build-matrix:
+  timeout: 4h
   stage: test
   variables:
     GIT_STRATEGY: clone
