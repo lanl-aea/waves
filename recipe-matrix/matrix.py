@@ -19,7 +19,7 @@ command_template = string.Template(
     "--python ${PYTHON_VERSION} --variants {'scons':['${SCONS_VERSION}']}"
 )
 
-python_versions = ["3.11", "3.12"]
+python_versions = ["3.8", "3.9", "3.10", "3.11", "3.12"]
 scons_versions = ["4.6", "4.7"]
 conda_build_test_matrix = list(itertools.product(python_versions, scons_versions))
 
