@@ -16,7 +16,7 @@ command_template = string.Template(
     "VERSION=$(python -m setuptools_scm) conda mambabuild recipe-matrix --channel fierromechanics " \
     "--channel conda-forge --no-anaconda-upload " \
     "${CROOT} ${OUTPUT_FOLDER} " \
-    "--python ${PYTHON_VERSION} --variants {'scons':['${SCONS_VERSION}']}"
+    "--python ${PYTHON_VERSION} --variants \"{'scons':['${SCONS_VERSION}']}\""
 )
 
 python_versions = ["3.8", "3.9", "3.10", "3.11", "3.12"]
