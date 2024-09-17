@@ -25,14 +25,6 @@ build:
   entry_points:
     - odb_extract = waves._abaqus.odb_extract:main
     - waves = waves._main:main
-  script:
-    # Build and install Conda package
-    - $PYTHON -m build --no-isolation
-    - $PYTHON -m pip install dist/$PKG_NAME-$PKG_VERSION.tar.gz --no-deps --ignore-installed -v --no-build-isolation
-    - $PYTHON -m pip show $PKG_NAME
-    # Build man page and HTML documentation to bundle in Conda package
-    - scons man html-internal
-    - $PYTHON package_documentation.py
   ignore_run_exports:
     - python_abi
 
@@ -87,8 +79,3 @@ test:
     - xarray
   imports:
     - waves
-  commands:
-    # Test as-installed project regression tests
-    - cd $SP_DIR/$PKG_NAME
-    - pytest -vvv -n 4 -m "not systemtest"
-    - pytest -v -n 4 -m "systemtest" --tb=short

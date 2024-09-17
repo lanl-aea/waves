@@ -1,1 +1,1 @@
-../recipe/build.sh
+../recipe-internal/build.sh
