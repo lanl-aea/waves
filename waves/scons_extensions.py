@@ -91,7 +91,7 @@ def action_list_scons(actions: typing.Iterable[str]) -> SCons.Action.ListAction:
     return SCons.Action.ListAction(command_actions)
 
 
-def action_list_strings(builder: SCons.Builder.Builder) -> list[str]:
+def action_list_strings(builder: SCons.Builder.Builder) -> typing.List[str]:
     """Return a builder's action list as a list of str
 
     :param builder: The builder to extract the action list from
