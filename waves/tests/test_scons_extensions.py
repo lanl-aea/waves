@@ -2127,6 +2127,8 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
     env = SCons.Environment.Environment()
 
     # Test function style call
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_SConscript, \
          outcome:
         try:
@@ -2137,6 +2139,8 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
 
     # Test AddMethod style call
     env.AddMethod(scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
+    # Git commit 7a95cef7: Normally you expect something like ``patch("SCons.Script.SConscript.SConsEnvironment...")``
+    # but Python <=3.10 chokes on the expected patch, so patch the WAVES module itself instead.
     with patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_SConscript, \
          outcome:
         try:
