@@ -48,14 +48,14 @@ system_tests = [
     ([string.Template("${waves_command} sobol_sequence --help")], None),
     ([string.Template("${odb_extract_command} --help")], None),
     # Real fetch operations (on tutorials directory)
-    ([string.Template("${waves_command} fetch tutorials")], None),
+    ([fetch_template], "tutorials"),
     # Real visualize operations (on modsim template)
-    ([string.Template("${waves_command} fetch modsim_template"), "scons -h", string.Template("${waves_command} visualize nominal --output-file nominal.png")], None),
+    ([fetch_template, "scons -h", string.Template("${waves_command} visualize nominal --output-file nominal.png")], "modsim_template"),
 ]
 if installed:
     system_tests.append(
         # The HTML docs path doesn't exist in the repository. Can only system test from an installed package.
-        ([fetch_template, string.Template("${waves_command} docs --print-local-path")], "tutorials"),
+        ([fetch_template, string.Template("${waves_command} docs --print-local-path")], None),
     )
 
 require_third_party_tests = [
