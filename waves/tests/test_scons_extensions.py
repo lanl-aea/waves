@@ -2127,7 +2127,7 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
     env = SCons.Environment.Environment()
 
     # Test function style call
-    with patch("SCons.Script.SConscript.SConsEnvironment.SConscript") as mock_SConscript, \
+    with patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_SConscript, \
          outcome:
         try:
             scons_extensions.parameter_study_sconscript(env, *args, **kwargs)
@@ -2137,7 +2137,7 @@ def test_parameter_study_sconscript(args, kwargs, expected, outcome):
 
     # Test AddMethod style call
     env.AddMethod(scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
-    with patch("SCons.Script.SConscript.SConsEnvironment.SConscript") as mock_SConscript, \
+    with patch("waves.scons_extensions.SConsEnvironment.SConscript") as mock_SConscript, \
          outcome:
         try:
             env.ParameterStudySConscript(*args, **kwargs)
