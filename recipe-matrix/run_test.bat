@@ -1,1 +1,1 @@
-../recipe-internal/run_test.bat
+../recipe/run_test.bat

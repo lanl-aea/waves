@@ -65,24 +65,7 @@ test:
   requires:
     # Force a Python variant package test
     - python {{ python }}
-    - fierro-fe-cpu
-    - h5netcdf
-    - h5py
-    - matplotlib-base
-    - meshio
-    # Required to satisfy undocumented SALib dependencies on numpy version for the senstivity study tutorial
-    - numpy >=2
-    - pandas
     - pytest
     - pytest-xdist
-    - pyyaml
-    # Required to satisfy undocumented SALib dependencies on numpy version for the senstivity study tutorial
-    - salib >=1.5.1
-    - scipy >=1.7
-    - scons
-    - seaborn
-    - sed
-    - setuptools_scm
-    - xarray
   imports:
     - waves

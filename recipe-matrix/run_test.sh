@@ -1,1 +1,1 @@
-../recipe-internal/run_test.sh
+../recipe/run_test.sh
