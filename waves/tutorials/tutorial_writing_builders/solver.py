@@ -28,6 +28,7 @@ Exit codes:
 4. reached max log file integer before finding a free file name
 """
 import sys
+import typing
 import pathlib
 import argparse
 
@@ -131,7 +132,7 @@ def configure(args: argparse.Namespace) -> dict:
     return configuration
 
 
-def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> list[pathlib.Path]:
+def solve_output_files(output_file: pathlib.Path, solve_cpus: int) -> typing.List[pathlib.Path]:
     """Return the solve output file list to match the number of solve cpus
 
     :param output_file: base name for the output file
