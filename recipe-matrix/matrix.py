@@ -33,4 +33,4 @@ def test_matrix(PYTHON_VERSION: str, SCONS_VERSION: str) -> None:
         "PYTHON_VERSION": PYTHON_VERSION,
         "SCONS_VERSION": SCONS_VERSION
     })
-    subprocess.check_output(command, env=env, cwd=repository_directory, text=True, shell=True)
+    subprocess.check_output(command, env=env, cwd=repository_directory, text=True, shell=True, stdin=subprocess.DEVNULL, start_new_session=True)
