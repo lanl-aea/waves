@@ -47,6 +47,18 @@ system_tests = [
     ([string.Template("${waves_command} latin_hypercube --help")], None),
     ([string.Template("${waves_command} sobol_sequence --help")], None),
     ([string.Template("${odb_extract_command} --help")], None),
+    # Real fetch operations (on tutorials directory)
+    ([string.Template("${waves_command} fetch tutorials")], None),
+    # Real visualize operations (on modsim template)
+    ([string.Template("${waves_command} fetch modsim_template"), "scons -h", string.Template("${waves_command} visualize nominal --output-file nominal.png")], None),
+]
+if installed:
+    system_tests.append(
+        # The HTML docs path doesn't exist in the repository. Can only system test from an installed package.
+        ([fetch_template, string.Template("${waves_command} docs --print-local-path")], "tutorials"),
+    )
+
+require_third_party_tests = [
     # Tutorials
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/scons_quickstart"),
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/multi_action_task"),
@@ -94,16 +106,11 @@ system_tests = [
     ([fetch_template, "scons . --jobs=4", string.Template("${waves_command} visualize nominal --output-file nominal.png")], "modsim_template"),
     ([fetch_template, "scons . --jobs=4", string.Template("${waves_command} visualize nominal --output-file nominal.png")], "modsim_template_2")
 ]
-if installed:
-    system_tests.append(
-        # The HTML docs path doesn't exist in the repository. Can only system test from an installed package.
-        ([fetch_template, string.Template("${waves_command} docs --print-local-path")], "tutorials"),
-    )
 
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("commands, fetch_options", system_tests)
-def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
+def test_system(commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
     """Fetch and run the tutorial configuration file(s) as system tests in a temporary directory
 
     Iterates on the command strings in the commands list. Performs string template substitution using keys:
@@ -128,3 +135,11 @@ def test_run_tutorial(commands: typing.Iterable[str], fetch_options: typing.Opti
                 command = command.substitute(template_substitution)
             command = shlex.split(command)
             subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
+
+
+@pytest.mark.systemtest
+@pytest.mark.require_third_party
+@pytest.mark.parametrize("commands, fetch_options", require_third_party_tests)
+def test_system_requiring_third_party_software(commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
+    """Pass through wrapper of :meth:`test_system` to allow variations in bulk pytest markers"""
+    test_system(commands, fetch_options)
