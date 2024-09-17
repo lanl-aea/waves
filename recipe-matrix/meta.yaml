@@ -1,0 +1,65 @@
+package:
+  name: waves
+  # TODO: Figure out how to use pyproject.toml and a Conda build Jinja template
+  version: {{ VERSION }}
+
+about:
+  home: https://github.com/lanl-aea/waves
+  license: BSD-3-Clause
+  license_file: LICENSE.txt
+  summary: 'Parameteric study computational engineering workflow tool'
+  description: |
+    WAVES (LANL code C23004) is a computational engineering workflow tool that integrates parametric studies with
+    traditional software build systems.
+  doc_url: https://lanl-aea.github.io/waves/index.html
+  dev_url: https://github.com/lanl-aea/waves
+
+source:
+  path: '..'
+
+build:
+  number: 0
+  script_env:
+    - SETUPTOOLS_SCM_PRETEND_VERSION={{ VERSION }}
+  entry_points:
+    - odb_extract = waves._abaqus.odb_extract:main
+    - waves = waves._main:main
+  ignore_run_exports:
+    - python_abi
+
+requirements:
+  build:
+    - python {{ python }}
+    - scons {{ scons }}
+    - sphinx >=7.1
+    - sphinx-argparse
+    - sphinx-copybutton >=0.5.1
+    - sphinx_rtd_theme >=1
+    - sphinxcontrib-bibtex
+    - setuptools_scm[toml] >=6.2
+  host:
+    - python {{ python }}
+    - python-build
+    - pip
+    - setuptools >=62
+    - setuptools_scm[toml] >=6.2
+  run:
+    - python {{ python }}
+    - h5netcdf
+    - h5py
+    - matplotlib-base
+    - networkx
+    - numpy
+    - pyyaml
+    - salib >=1
+    - scipy >=1.7
+    - scons {{ scons }}
+    - xarray
+
+test:
+  requires:
+    - python {{ python }}
+    - pytest
+    - pytest-xdist
+  imports:
+    - waves
