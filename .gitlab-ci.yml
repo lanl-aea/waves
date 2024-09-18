@@ -6,6 +6,7 @@ workflow:
 
 stages:
   - child-pipelines
+  - scheduled
 
 aea:
   stage: child-pipelines
@@ -27,3 +28,24 @@ deploy:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
+
+conda-build-matrix:
+  timeout: 4h
+  stage: scheduled
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    # Set the LANL internal proxies
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    - mkdir ${conda_artifacts_directory}
+    - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
+    - conda build purge --croot ${croot}/recipe-matrix
+  tags:
+    - shell-aea
