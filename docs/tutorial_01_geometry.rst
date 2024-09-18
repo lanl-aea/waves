@@ -68,7 +68,7 @@ Directory Structure
 
       $ pwd
       /home/roppenheimer/waves-tutorials
-      $ touch modsim_package/__init__.py modsim_package/abaqus/__init__.py
+      $ waves fetch tutorials/modsim_package/__init__.py tutorials/modsim_package/abaqus/__init__.py --destination modsim_package
       $ find . -name "__init__.py"
       ./modsim_package/__init__.py
       ./modsim_package/abaqus/__init__.py
