@@ -86,7 +86,7 @@ as shown in the :ref:`waves_tutorial_api` for :ref:`python_rectangle_compression
 
       $ pwd
       /home/roppenheimer/waves-tutorials
-      $ touch modsim_package/python/__init__.py
+      $ waves fetch tutorials/modsim_package/python/__init__.py --destination modsim_package/python
       $ find . -name "__init__.py"
       ./waves-tutorials/modsim_package/abaqus/__init__.py
       ./waves-tutorials/modsim_package/python/__init__.py
