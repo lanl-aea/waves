@@ -33,7 +33,7 @@ before_script:
     - module load ${environment}
     # Don't rebuild environment for merge request pipelines unless the environment is missing
     - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
-    - if [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]] && ${exists}; then exit 0; fi
+    - if [[ $CI_MERGE_REQUEST_ID ]] && ${exists}; then exit 0; fi
     # Don't rebuild environment for main unless the environment file has changed or the environment doesn't exist
     - files=$(git diff --name-only ${CI_COMMIT_SHA} ${CI_COMMIT_BEFORE_SHA}) || true
     - if [[ $CI_COMMIT_BRANCH == "main" ]]; then production=true; else production=false; fi
