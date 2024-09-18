@@ -3,7 +3,6 @@ include: ".pipeline-common.yml"
 stages:
   - environment
   - test
-  - deploy
 
 environment:
   extends: .environment
