@@ -18,6 +18,15 @@ aea:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
+hpc:
+  stage: child-pipelines
+  trigger:
+    include:
+      - local: .pipeline-hpc.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 deploy:
   stage: child-pipelines
   trigger:

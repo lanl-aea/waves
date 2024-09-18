@@ -1,0 +1,48 @@
+# Required for HPC Jacamar Runner
+default:
+  id_tokens:
+    SITE_ID_TOKEN:
+      aud: https://re-git.lanl.gov
+
+stages:
+  - environment
+  - test
+
+include: ".pipeline-common.yml"
+
+environment:
+  extends: .environment
+  stage: environment
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  tags:
+    - rocinante
+    - shell
+
+fast-test:
+  extends: .fast-test
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  tags:
+    - rocinante
+    - shell
+
+flake8:
+  extends: .flake8
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  tags:
+    - rocinante
+    - shell
+
+conda-build:
+  extends: .conda-build
+  stage: test
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  tags:
+    - rocinante
+    - shell
