@@ -8,6 +8,11 @@ Changelog
 0.11.3 (unreleased)
 *******************
 
+Documentation
+=============
+- Replace ``touch`` commands with ``waves fetch`` commands in tutorials for better Windows Powershell compatibility
+  (:issue:`772`, :merge:`942`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Use a single type of string substitution in system test command construction (:issue:`768`, :merge:`935`). By `Kyle
