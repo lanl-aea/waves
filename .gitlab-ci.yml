@@ -4,151 +4,26 @@ workflow:
       when: never
     - when: always
 
-include: ".pipeline-common.yml"
-
 stages:
-  - environment
-  - test
-  - deploy
+  - child-pipelines
 
-environment:
-  extends: .environment
-  stage: environment
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
-  tags:
-    - shell-aea
-
-fast-test:
-  extends: .fast-test
-  stage: test
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  tags:
-    - shell-aea
-
-flake8:
-  extends: .flake8
-  stage: test
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  tags:
-    - shell-aea
-
-conda-build:
-  extends: .conda-build
-  stage: test
-  dependencies: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
-  tags:
-    - shell-aea
-
-conda-build-external:
-  stage: test
-  variables:
-    GIT_STRATEGY: clone
-  dependencies: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-  script:
-    # Set the LANL internal proxies
-    - export ALL_PROXY="proxyout.lanl.gov:8080"
-    - export HTTP_PROXY="http://$ALL_PROXY"
-    - export HTTPS_PROXY=$HTTP_PROXY
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
-    - mkdir ${conda_artifacts_directory}
-    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot}/recipe-external --output-folder ${conda_artifacts_directory}
-    - conda build purge --croot ${croot}/recipe-external
-  tags:
-    - shell-aea
-
-conda-build-matrix:
-  timeout: 4h
-  stage: test
-  variables:
-    GIT_STRATEGY: clone
-  dependencies: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-  script:
-    # Set the LANL internal proxies
-    - export ALL_PROXY="proxyout.lanl.gov:8080"
-    - export HTTP_PROXY="http://$ALL_PROXY"
-    - export HTTPS_PROXY=$HTTP_PROXY
-    # Override default permissions. Set group to rx with no write permissions.
-    - umask 0022
-    - mkdir ${conda_artifacts_directory}
-    - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
-    - conda build purge --croot ${croot}/recipe-matrix
-  tags:
-    - shell-aea
-
-# https://re-git.lanl.gov/aea/developer-operations/aea-conda
-aea-conda-deploy:
-  stage: deploy
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-  variables:
-    PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
-    PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
-    AEA_CONDA_PACKAGE_JOB: conda-build
-    AEA_CONDA_PACKAGE_ARTIFACTS: conda-bld/noarch/waves-*-*.tar.bz2
+aea:
+  stage: child-pipelines
   trigger:
-    project: aea/developer-operations/aea-conda
-    branch: main
+    include:
+      - local: .pipeline-aea.yml
     strategy: depend
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-pypi-deploy:
-  stage: deploy
-  variables:
-    GIT_STRATEGY: clone
-  dependencies: []
+deploy:
+  stage: child-pipelines
+  trigger:
+    include:
+      - local: .pipeline-deploy.yml
+    strategy: depend
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
       when: never
     - if: $CI_COMMIT_BRANCH == "main"
-  script:
-    # Only deploy to Gitlab PyPI registry for clean version tags
-    - if [[ -z $(git tag --points-at HEAD) ]]; then exit 0; fi
-    - python -m build
-    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
-  tags:
-    - shell-aea
-
-# It MUST be called pages
-pages:
-  stage: deploy
-  variables:
-    GIT_STRATEGY: clone
-  dependencies: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
-  script:
-    - project_root=$PWD
-    - rm -rf public && mkdir -p public/modsim-template
-    # Ensure the ``_version.py`` file is created
-    - scons html-internal --clean && scons html-internal
-    - cp -r build/docs/html-internal/* public/
-    # Build modsim template documentation
-    - cd waves/modsim_template
-    - PYTHONPATH=${project_root} scons html
-    - cp -r build/docs/html/* ${project_root}/public/modsim-template
-  artifacts:
-    paths:
-      # It MUST be called public
-      - public
-  tags:
-    - shell-aea

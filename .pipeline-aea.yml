@@ -1,0 +1,87 @@
+include: ".pipeline-common.yml"
+
+stages:
+  - environment
+  - test
+  - deploy
+
+environment:
+  extends: .environment
+  stage: environment
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - shell-aea
+
+fast-test:
+  extends: .fast-test
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  tags:
+    - shell-aea
+
+flake8:
+  extends: .flake8
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  tags:
+    - shell-aea
+
+conda-build:
+  extends: .conda-build
+  stage: test
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+  tags:
+    - shell-aea
+
+conda-build-external:
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    # Set the LANL internal proxies
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    - mkdir ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot}/recipe-external --output-folder ${conda_artifacts_directory}
+    - conda build purge --croot ${croot}/recipe-external
+  tags:
+    - shell-aea
+
+conda-build-matrix:
+  timeout: 4h
+  stage: test
+  variables:
+    GIT_STRATEGY: clone
+  dependencies: []
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    # Set the LANL internal proxies
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    - mkdir ${conda_artifacts_directory}
+    - pytest recipe-matrix/matrix.py -v --no-showlocals --tb=short
+    - conda build purge --croot ${croot}/recipe-matrix
+  tags:
+    - shell-aea
