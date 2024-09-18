@@ -1,13 +1,14 @@
 before_script:
-  # Assumes CI executes on AEA compute servers
-  # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
-  # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/7
+  # Handle mixed AEA/HPC jobs
   - aea_compute_path="/projects/aea_compute"
+  - scratch_path="/scratch/${USER}"
+  - if [[ ! -d "${aea_compute_path}" ]]; then aea_compute_path="/usr/projects/ea/aea_compute"; fi
+  - if [[ ! -d "${scratch_path}" ]]; then scratch_path="/lustre/roscratch1/${USER}"; ci_environment_path=${scratch_path}; fi
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
   # Start with an AEA environment to put Conda on PATH
-  - environment_choices="aea-beta aea-quarterly aea-release"
+  - environment_choices="aea-nightly aea-beta aea-quarterly aea-release"
   - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then environment=${env}; break; fi; done
   - echo ${environment}
   - module load ${environment}
@@ -19,7 +20,7 @@ before_script:
   - if [[ -d ${environment_path} ]]; then module unload ${environment}; module load ${project_environment}; fi
   - conda info
   - conda_artifacts_directory='conda-bld'
-  - croot="/scratch/$USER/$(basename $PWD)/${conda_artifacts_directory}"
+  - croot="${scratch_path}/$(basename $PWD)/${conda_artifacts_directory}"
 
 .environment: &environment
   variables:
