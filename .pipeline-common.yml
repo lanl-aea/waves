@@ -1,0 +1,88 @@
+before_script:
+  # Assumes CI executes on AEA compute servers
+  # TODO: recover environment path from modulefile instead of assuming the sstelmo path(s)
+  # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/7
+  - aea_compute_path="/projects/aea_compute"
+  - aea_modulefiles="${aea_compute_path}/modulefiles"
+  - module use ${aea_modulefiles}
+  - module load texlive
+  # Start with an AEA environment to put Conda on PATH
+  - environment_choices="aea-beta aea-quarterly aea-release"
+  - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then environment=${env}; break; fi; done
+  - echo ${environment}
+  - module load ${environment}
+  # Activate CI environment if available. If not, rely on environment job running before other jobs.
+  - module use ${PWD}/modulefiles
+  - project_environment='waves-env'
+  - environment_path="${aea_compute_path}/${project_environment}"
+  - echo ${environment_path}
+  - if [[ -d ${environment_path} ]]; then module unload ${environment}; module load ${project_environment}; fi
+  - conda info
+  - conda_artifacts_directory='conda-bld'
+  - croot="/scratch/$USER/$(basename $PWD)/${conda_artifacts_directory}"
+
+.environment: &environment
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    # Always build from the base/aea compute environment with boa/libmamba
+    - module unload ${project_environment}
+    - module load ${environment}
+    # Don't rebuild environment for merge request pipelines unless the environment is missing
+    - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
+    - if [[ $CI_PIPELINE_SOURCE == "merge_request_event" ]] && ${exists}; then exit 0; fi
+    # Don't rebuild environment for main unless the environment file has changed or the environment doesn't exist
+    - files=$(git diff --name-only ${CI_COMMIT_SHA} ${CI_COMMIT_BEFORE_SHA}) || true
+    - if [[ $CI_COMMIT_BRANCH == "main" ]]; then production=true; else production=false; fi
+    - if [[ "${files}" == *"environment.yml"* ]]; then modified=true; else modified=false; fi
+    - if ${production} && ${exists} && ! ${modified}; then exit 0; fi
+    # Set LANL proxies
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Re-build the Conda environment on changes to environment files
+    - conda env create --prefix ${environment_path} --file environment.yml --solver=libmamba --force
+    # Remove write permissions from group to avoid accidental environment changes
+    - chmod -R 755 ${environment_path}
+    # place the common modulefiles in an accessible location
+    - cp ${PWD}/modulefiles/* ${aea_modulefiles}
+    # Link SCons man pages to the expected MANPATH location
+    - ln ${environment_path}/scons.1 ${environment_path}/man/man1/scons.1
+    - ln ${environment_path}/sconsign.1 ${environment_path}/man/man1/sconsign.1
+    - ln ${environment_path}/scons-time.1 ${environment_path}/man/man1/scons-time.1
+
+.fast-test: &fast-test
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - scons regression --keep-going --unconditional-build --cov-report
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: build/pytest/coverage.xml
+
+.flake8: &flake8
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - scons flake8
+
+.conda-build: &conda-build
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    # Set the LANL internal proxies
+    - export ALL_PROXY="proxyout.lanl.gov:8080"
+    - export HTTP_PROXY="http://$ALL_PROXY"
+    - export HTTPS_PROXY=$HTTP_PROXY
+    # Override default permissions. Set group to rx with no write permissions.
+    - umask 0022
+    - mkdir ${conda_artifacts_directory}
+    - VERSION=$(python -m setuptools_scm) conda mambabuild recipe-internal --channel fierromechanics --channel conda-forge --no-anaconda-upload --croot ${croot}/recipe-internal --output-folder ${conda_artifacts_directory}
+    - conda build purge --croot ${croot}/recipe-internal
+  artifacts:
+    expire_in: '2 hrs'
+    paths:
+      - conda-bld/noarch/waves-*-*.tar.bz2
