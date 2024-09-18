@@ -4,6 +4,8 @@ before_script:
   - scratch_path="/scratch/${USER}"
   - if [[ ! -d "${aea_compute_path}" ]]; then aea_compute_path="/usr/projects/ea/aea_compute"; fi
   - if [[ ! -d "${scratch_path}" ]]; then scratch_path="/lustre/roscratch1/${USER}"; ci_environment_path=${scratch_path}; fi
+  - echo ${aea_compute_path}
+  - echo ${scratch_path}
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
