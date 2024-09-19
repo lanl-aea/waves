@@ -99,7 +99,7 @@ variant_dir_base = pathlib.Path(env["variant_dir_base"])
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
 env["ABAQUS_PROGRAM"] = env.AddProgram([
     "/apps/abaqus/Commands/abq2023",
-    "/usr/projects/ea/aea_compute/abaqus/Commands/abq2023",
+    "/usr/projects/ea/abaqus/Commands/abq2023",
     "abq2023",
     "abaqus"
 ])
