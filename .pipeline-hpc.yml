@@ -36,13 +36,3 @@ flake8:
   tags:
     - rocinante
     - shell
-
-conda-build:
-  extends: .conda-build
-  stage: test
-  dependencies: []
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-  tags:
-    - rocinante
-    - shell
