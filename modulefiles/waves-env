@@ -12,6 +12,9 @@ set environment "waves-env"
 # Get current hostname
 set hostname [info hostname]
 
+# Get the current user
+set user $env(USER)
+
 # Set host specific environment information
 set projects ""
 set anaconda_path ""
@@ -20,14 +23,18 @@ if { [ string match "*.localdomain" $hostname ] ||
      [ string match "??-rfe?.lanl.gov" $hostname ] ||
      [ string match "??-fe?.lanl.gov" $hostname ] } {
     set projects "/usr/projects/ea"
+    set scratch "/lustre/roscratch1/$user"
+    set ci_environment_path "$scratch"
 # W-13 machine cases
 } elseif { [ string match "*.lanl.gov" $hostname ] } {
     set projects "/projects"
+    set scratch "/scratch/$user"
+    set ci_environment_path "$projects/aea_compute"
 # Error out
 } else {
     error "Unknown or unsupported host"
 }
-set environment_path "$projects/aea_compute/$environment"
+set environment_path "$ci_environment_path/$environment"
 set anaconda_source "$environment_path/etc/profile.d/conda.sh"
 set environment_bin "$environment_path/bin"
 set environment_man "$environment_path/share/man"
