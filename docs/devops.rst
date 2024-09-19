@@ -47,6 +47,23 @@ The Conda packages found in ``environment.yml`` are reproduced in the :ref:`mods
 HPC CI server environment
 =========================
 
+.. warning::
+
+   While the system tests are run with an HPC CI job, the machine and runner uptime and system test runtime are
+   considered too fragile for reliable use. The AEA RHEL system tests pass in less than 8 minutes, but the HPC system
+   test job has been observed to time out after an hour. The HPC CI system tests are always run for merge-requests and
+   schedule pipelines, but the pass/fail status is not used to mark CI jobs as failing. Developers are encourage to
+   check the HPC system test results, but not required to address failing HPC CI jobs.
+
+   There are four known HPC CI system test failures
+
+   * (2) Cubit tutorial and alternate (Sierra or HPC Sierra installation bug)
+   * (1) Quinoa tutorial (Reason unknown. Direct, manual tutorial execution performs as expected)
+   * (1) Abaqus Sbatch tutorial (Reason unknown. Direct, manual tutorial execution performs as expected)
+
+   Occasionally, running the HPC system tests manually will reproduce a superset of known failures. Most often, the
+   ModSim templates fail, despite performing as expected in direct, manual execution.
+
 For computing policy reasons, HPC CI jobs are owned by the launching user and launched with the user's account. The HPC
 CI server environment must be created in the launching user's scratch space. For merge request pipelines, this means a
 project development environment will be created in the submitting developer's scratch space, e.g.
