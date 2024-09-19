@@ -2,6 +2,7 @@
 
 import os
 import sys
+import typing
 import pathlib
 import subprocess
 
@@ -65,10 +66,18 @@ env["CUBIT_PROGRAM"] = env.AddCubit([
 ])
 env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
 
+
 # Sierra requires a separate construction environment
-sierra_modulefile_parent = pathlib.Path("/projects/aea_compute/modulefiles")
-if not sierra_modulefile_parent.is_dir():
-    sierra_modulefile_parent = pathlib.Path("/usr/projects/ea/modulefiles")
+def return_modulepath(modules: typing.Iterable[str]) -> pathlib.Path:
+    """Return parent path of first found module or the current working directory"""
+    return next((pathlib.Path(path).parent for path in modules if pathlib.Path(path).exists()), pathlib.Path("."))
+
+
+sierra_modules = [
+    "/projects/aea_compute/modulefiles/sierra",
+    "/usr/projects/ea/modulefiles/sierra"
+]
+sierra_modulefile_parent = return_modulepath(sierra_modules)
 try:
     envSierra = waves.scons_extensions.shell_environment(f"module use {sierra_modulefile_parent} && module load sierra")
 except subprocess.CalledProcessError:
