@@ -44,6 +44,31 @@ A minimal development environment for the waves project Gitlab-CI jobs is mainta
 
 The Conda packages found in ``environment.yml`` are reproduced in the :ref:`modsim_dependencies` section.
 
+HPC CI server environment
+=========================
+
+For computing policy reasons, HPC CI jobs are owned by the launching user and launched with the user's account. The HPC
+CI server environment must be created in the launching user's scratch space. For merge request pipelines, this means a
+project development environment will be created in the submitting developer's scratch space, e.g.
+``${system_scratch}/$USER/waves-env``.
+
+Because the CI job runs as the launching user, Conda will create a package and environment cache according to the user's
+HPC Conda configuration. By default, Conda creates ``~/.conda/pkgs`` for the package cache, which can grow quite
+large. If a user's home directory space is limited, developers are highly encouraged to configure Conda to use their
+scratch space for the package cache, e.g. with a ``~/.condarc`` file using the template below, where the text
+``${user_scratch}`` is replaced by the absolute path to the user's scratch directory.
+
+.. code-block::
+
+   envs_dirs:
+     - ${user_scratch}/conda/envs
+
+   pkgs_dirs:
+     - ${user_scratch}/conda/pkgs
+
+You can read more about managing the Conda package and environment cache configuration here:
+https://conda.io/projects/conda/en/latest/user-guide/configuration/custom-env-and-pkg-locations.html
+
 .. include:: contribution.txt
 
 .. _build:
