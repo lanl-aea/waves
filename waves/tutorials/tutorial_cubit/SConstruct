@@ -58,7 +58,11 @@ env["ABAQUS_PROGRAM"] = env.AddProgram([
     "abq2023",
     "abaqus"
 ])
-env["CUBIT_PROGRAM"] = env.AddCubit(["/apps/Cubit-16.12/cubit", "cubit"])
+env["CUBIT_PROGRAM"] = env.AddCubit([
+    "/apps/Cubit-16.12/cubit",
+    "/usr/projects/ea/Cubit/Cubit-16.12/cubit",
+    "cubit"
+])
 env["FIERRO_IMPLICIT_PROGRAM"] = env.AddProgram(["fierro-parallel-implicit"])
 
 # Sierra requires a separate construction environment
