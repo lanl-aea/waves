@@ -73,8 +73,11 @@ envCubit["python"] = waves.scons_extensions.add_cubit_python(
 )
 
 # Sierra requires a separate construction environment
+sierra_modulefile_parent = pathlib.Path("/projects/aea_compute/modulefiles")
+if not sierra_modulefile_parent.is_dir():
+    sierra_modulefile_parent = pathlib.Path("/usr/projects/ea/modulefiles")
 try:
-    envSierra = waves.scons_extensions.shell_environment("module use /projects/aea_compute/modulefiles && module load sierra")
+    envSierra = waves.scons_extensions.shell_environment(f"module use {sierra_modulefile_parent} && module load sierra")
 except subprocess.CalledProcessError:
     print("Failed to initialize the Sierra environment", file=sys.stderr)
     envSierra = Environment()
