@@ -12,6 +12,8 @@ Documentation
 =============
 - Replace ``touch`` commands with ``waves fetch`` commands in tutorials for better Windows Powershell compatibility
   (:issue:`772`, :merge:`942`). By `Kyle Brindley`_.
+- Add LANL HPC path options to tutorial third-party software installation paths (:issue:`596`, :merge:`943`). By `Kyle
+  Brindley`_.
 
 Internal Changes
 ================
@@ -25,6 +27,8 @@ Internal Changes
   Brindley`_.
 - Run a full matrix of Python and SCons version tests during scheduled CI testing, patch unit test construction for
   Python <=3.10, fix Python 3.8 type hint compatibility (:issue:`771`, :merge:`939`). By `Kyle Brindley`_.
+- Add HPC system tests, but do not depend on them for passing merge-requests (:issue:`596`, :merge:`943`). By `Kyle
+  Brindley`_.
 
 *******************
 0.11.2 (2024-08-29)
