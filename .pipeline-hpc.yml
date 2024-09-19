@@ -27,12 +27,3 @@ fast-test:
   tags:
     - rocinante
     - batch
-
-flake8:
-  extends: .flake8
-  stage: test
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-  tags:
-    - rocinante
-    - shell
