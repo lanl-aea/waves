@@ -5,7 +5,7 @@ before_script:
   - ci_environment_path="${aea_compute_path}"
   - hostname=$(hostname -f)
   - |
-     if [[ ${hostname} == *.localdomain ]] || [[ ${hostname} == ??-rfe?.lanl.gov ]] || [[ ${hostname} == ??-fe?.lanl.gov ]] ; then
+     if [[ ${hostname} == *.localdomain ]] || [[ ${hostname} == ??-rfe?.lanl.gov ]] || [[ ${hostname} == ??-fe?.lanl.gov ]]  || [[ "$hostname" == nid[0-9]* ]]; then
          aea_compute_path="/usr/projects/ea/aea_compute";
          scratch_path="/lustre/roscratch1/${USER}";
          ci_environment_path=${scratch_path};

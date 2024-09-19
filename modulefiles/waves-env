@@ -21,7 +21,8 @@ set anaconda_path ""
 # HPC case
 if { [ string match "*.localdomain" $hostname ] ||
      [ string match "??-rfe?.lanl.gov" $hostname ] ||
-     [ string match "??-fe?.lanl.gov" $hostname ] } {
+     [ string match "??-fe?.lanl.gov" $hostname ] ||
+     [ string match "nid??????" $hostname ] } {
     set projects "/usr/projects/ea"
     set scratch "/lustre/roscratch1/$user"
     set ci_environment_path "$scratch"
