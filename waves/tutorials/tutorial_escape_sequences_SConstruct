@@ -61,7 +61,12 @@ env.PrintBuildFailures(print_stdout=env["print_build_failures"])
 # Comments used in tutorial code snippets: marker-3
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
-env["ABAQUS_PROGRAM"] = env.AddProgram(["/apps/abaqus/Commands/abq2023", "abq2023"])
+env["ABAQUS_PROGRAM"] = env.AddProgram([
+    "/apps/abaqus/Commands/abq2023",
+    "/usr/projects/ea/aea_compute/abaqus/Commands/abq2023",
+    "abq2023",
+    "abaqus"
+])
 
 # Comments used in tutorial code snippets: marker-4
 
