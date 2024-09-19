@@ -75,7 +75,6 @@ def return_modulepath(modules: typing.Iterable[str]) -> pathlib.Path:
 
 sierra_modules = [
     "/projects/aea_compute/modulefiles/sierra",
-    "/usr/projects/ea/modulefiles/sierra"
 ]
 sierra_modulefile_parent = return_modulepath(sierra_modules)
 try:
