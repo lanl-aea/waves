@@ -2,24 +2,36 @@ before_script:
   # Handle mixed AEA/HPC jobs
   - aea_compute_path="/projects/aea_compute"
   - scratch_path="/scratch/${USER}"
-  - if [[ ! -d "${aea_compute_path}" ]]; then aea_compute_path="/usr/projects/ea/aea_compute"; fi
-  - if [[ ! -d "${scratch_path}" ]]; then scratch_path="/lustre/roscratch1/${USER}"; ci_environment_path=${scratch_path}; fi
+  - ci_environment_path="${aea_compute_path}"
+  - hostname=$(hostname -f)
+  - |
+     if [[ ${hostname} == *.localdomain ]] || [[ ${hostname} == ??-rfe?.lanl.gov ]] || [[ ${hostname} == ??-fe?.lanl.gov ]] ; then
+         aea_compute_path="/usr/projects/ea/aea_compute";
+         scratch_path="/lustre/roscratch1/${USER}";
+         ci_environment_path=${scratch_path};
+     fi
   - echo ${aea_compute_path}
   - echo ${scratch_path}
+  - echo ${ci_environment_path}
+  - if [[ ! -d ${aea_compute_path} ]]; then exit 1; fi
+  - if [[ ! -d ${scratch_path} ]]; then exit 1; fi
+  - if [[ ! -d ${ci_environment_path} ]]; then exit 1; fi
+  # Prep module command and load system module(s)
   - aea_modulefiles="${aea_compute_path}/modulefiles"
   - module use ${aea_modulefiles}
   - module load texlive
   # Start with an AEA environment to put Conda on PATH
   - environment_choices="aea-nightly aea-beta aea-quarterly aea-release"
-  - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then environment=${env}; break; fi; done
-  - echo ${environment}
-  - module load ${environment}
+  - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then base_environment=${env}; break; fi; done
+  - echo ${base_environment}
+  - if [[ -z ${base_environment} ]]; exit 1; fi
+  - module load ${base_environment}
   # Activate CI environment if available. If not, rely on environment job running before other jobs.
   - module use ${PWD}/modulefiles
   - project_environment='waves-env'
-  - environment_path="${aea_compute_path}/${project_environment}"
+  - environment_path="${ci_environment_path}/${project_environment}"
   - echo ${environment_path}
-  - if [[ -d ${environment_path} ]]; then module unload ${environment}; module load ${project_environment}; fi
+  - if [[ -d ${environment_path} ]]; then module unload ${base_environment}; module load ${project_environment}; fi
   - conda info
   - conda_artifacts_directory='conda-bld'
   - croot="${scratch_path}/$(basename $PWD)/${conda_artifacts_directory}"
@@ -30,7 +42,7 @@ before_script:
   script:
     # Always build from the base/aea compute environment with boa/libmamba
     - module unload ${project_environment}
-    - module load ${environment}
+    - module load ${base_environment}
     # Don't rebuild environment for merge request pipelines unless the environment is missing
     - if [[ -d "${environment_path}" ]]; then exists=true; else exists=false; fi
     - if [[ $CI_MERGE_REQUEST_ID ]] && ${exists}; then exit 0; fi
