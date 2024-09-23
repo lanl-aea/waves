@@ -8,6 +8,10 @@ Requires the following ``SConscript(..., exports={})``
   * ``sierra_source_abspath`` - String absolute path to the project's Sierra journal files
   * ``unconditional_build`` - Boolean flag to force building of conditionally ignored targets
   * ``cubit`` - String path for the Cubit executable
+
+* ``envSierra`` - The Sierra SCons construction environment with the following required keys
+
+  * ``sierra`` - String path for the Sierra executable
 """
 
 import pathlib
@@ -28,7 +32,11 @@ workflow = []
 
 element_type = "SHELL"
 solver = "sierra"
-SConscript("cubit", exports={"env": env, "element_type": element_type, "solver": solver}, duplicate=False)
+SConscript(
+    "cubit",
+    exports={"env": env, "element_type": element_type, "solver": solver},
+    duplicate=False
+)
 
 # SolverPrep
 sierra_source_list = [
@@ -48,6 +56,7 @@ workflow.extend(envSierra.Sierra(
 # Collector alias based on parent directory name
 env.Alias(workflow_name, workflow)
 
-if not env['unconditional_build'] and not envSierra['sierra']:
+# Developer note: CI system configuration for Sierra is inconsistent. Do not force with ``unconditional build`` option.
+if not envSierra['sierra']:
     print(f"Program 'sierra' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore(['.', workflow_name], workflow)
