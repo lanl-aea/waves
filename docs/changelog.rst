@@ -29,6 +29,9 @@ Internal Changes
   Python <=3.10, fix Python 3.8 type hint compatibility (:issue:`771`, :merge:`939`). By `Kyle Brindley`_.
 - Add HPC system tests, but do not depend on them for passing merge-requests (:issue:`596`, :merge:`943`). By `Kyle
   Brindley`_.
+- Remove unconditional build from Cubit+Sierra tutorial system tests because they can not pass on HPC CI pipelines.
+  Partial system test on HPC is more valuable than strictly enforced test of fragile third-party installation
+  (:issue:`773`, :merge:`944`). By `Kyle Brindley`_.
 
 *******************
 0.11.2 (2024-08-29)
