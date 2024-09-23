@@ -4,6 +4,8 @@ workflow:
       when: never
     - when: always
 
+include: ".pipeline-common.yml"
+
 stages:
   - child-pipelines
   - scheduled
