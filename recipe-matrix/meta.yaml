@@ -38,14 +38,14 @@ requirements:
     - sphinx-copybutton >=0.5.1
     - sphinx_rtd_theme >=1
     - sphinxcontrib-bibtex
-    - setuptools_scm[toml] >=6.2
+    - setuptools_scm >=8
   host:
     # Force consistency in the Python build version
     - python {{ python }}
     - python-build
     - pip
-    - setuptools >=62
-    - setuptools_scm[toml] >=6.2
+    - setuptools >=64
+    - setuptools_scm >=8
   run:
     # Force a Python variant package build
     - python {{ python }}

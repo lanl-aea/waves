@@ -32,6 +32,8 @@ Internal Changes
 - Remove unconditional build from Cubit+Sierra tutorial system tests because they can not pass on HPC CI pipelines.
   Partial system test on HPC is more valuable than strictly enforced test of fragile third-party installation
   (:issue:`773`, :merge:`944`). By `Kyle Brindley`_.
+- Update setuptools version specs to match current setuptools_scm documentation (:issue:`777`, :merge:`946`). By `Kyle
+  Brindley`_.
 
 *******************
 0.11.2 (2024-08-29)
