@@ -70,6 +70,7 @@ latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
+variant_dir_base = pathlib.Path(env["variant_dir_base"])
 project_variables = {
     "project_configuration": project_configuration,
     "project_dir": project_dir,
@@ -81,7 +82,8 @@ project_variables = {
     "report_pdf": f"{latex_project_name}-{version}-report.pdf",
     "documentation_abspath": project_dir / documentation_source_dir,
     "modsim_package_abspath": project_dir / modsim_package_dir,
-    'test_source_abspath': project_dir / test_source_dir,
+    "test_source_abspath": project_dir / test_source_dir,
+    "parameter_study_build_abspath": project_dir / variant_dir_base / "parameter_studies",
     "datacheck_alias": "datacheck",
     "regression_alias": "regression"
 }
@@ -91,9 +93,6 @@ for key, value in project_variables.items():
 # Make the modsim package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
 sys.path.insert(0, str(project_dir))
 env.PrependENVPath("PYTHONPATH", project_dir)
-
-# Build path object for extension and re-use
-variant_dir_base = pathlib.Path(env["variant_dir_base"])
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
@@ -147,7 +146,7 @@ for workflow in workflow_configurations:
     SConscript(workflow_file, variant_dir=build_dir, exports={"env": env}, duplicate=True)
 
 # Add unit test target
-test_workflow = 'unit_testing'
+test_workflow = "unit_testing"
 test_build_dir = variant_dir_base / test_workflow
 SConscript(test_workflow, variant_dir=test_build_dir, exports={"env": env}, duplicate=False)
 

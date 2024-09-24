@@ -23,13 +23,14 @@ Import("env")
 
 # Set project-wide paths with os-agnostic path separators
 modsim_package_abspath = env["modsim_package_abspath"]
+parameter_study_build_abspath = env["parameter_study_build_abspath"]
 
 # Simulation variables
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_configuration = [env["project_configuration"], workflow_name]
 parameter_schema = rectangle_compression.mesh_convergence()
-parameter_study_file = modsim_package_abspath / "mesh_convergence.h5"
+parameter_study_file = parameter_study_build_abspath / "mesh_convergence.h5"
 previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
 
 # Collect the target nodes to build concise target alias(es)
