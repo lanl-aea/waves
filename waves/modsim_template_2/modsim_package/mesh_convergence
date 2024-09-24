@@ -5,7 +5,8 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``modsim_package_abspath`` - String absolute path to the project package
+  * ``modsim_package_abspath`` - Absolute path to the project package
+  * ``parameter_study_build_abspath`` - Absolute path to the Parameter study configuration/build artifacts
   * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
