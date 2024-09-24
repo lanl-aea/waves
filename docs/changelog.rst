@@ -14,6 +14,8 @@ Documentation
   (:issue:`772`, :merge:`942`). By `Kyle Brindley`_.
 - Add LANL HPC path options to tutorial third-party software installation paths (:issue:`596`, :merge:`943`). By `Kyle
   Brindley`_.
+- Move the ``modsim_template_2`` the parameter study configuration artifacts from the source tree to the build tree
+  (:merge:`947`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
