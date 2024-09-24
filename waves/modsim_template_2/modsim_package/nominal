@@ -14,8 +14,6 @@ Requires the following ``SConscript(..., exports={})``
 
 import pathlib
 
-import waves
-
 from modsim_package import rectangle_compression
 
 # Inherit the parent construction environment
