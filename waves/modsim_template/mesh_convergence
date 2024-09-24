@@ -49,7 +49,11 @@ for set_name, simulation_variables in parameter_generator.parameter_study_to_dic
     set_name = pathlib.Path(set_name)
 
     # Rectangle part
-    artifacts.extend(SConscript("rectangle", variant_dir=set_name, exports={"env": env, "simulation_variables": simulation_variables}))
+    artifacts.extend(SConscript(
+        "rectangle",
+        variant_dir=set_name,
+        exports={"env": env, "simulation_variables": simulation_variables}
+    ))
 
     # Rectangle compression simulation
     artifacts.extend(SConscript(
