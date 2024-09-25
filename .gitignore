@@ -8,6 +8,8 @@ test_modsim_template/
 *.zip
 *.h5
 .scons_autocomplete
+# Generated dynamically during some CI packaging opertions, e.g. PyPI style package
+waves/docs
 
 # SCons files
 .sconsign.dblite
@@ -41,6 +43,7 @@ conda-bld/
 
 # Cubit output file
 *.cub
+*.jou
 
 # parameter study utility output templates
 parameter_study_meta.txt

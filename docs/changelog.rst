@@ -14,6 +14,11 @@ Internal Changes
 - Clean up PIP and Conda package builds to exclude project build files for all package builds and system test artifacts
   for working repository package builds (:merge:`950`). By `Kyle Brindley`_.
 
+Enhancements
+============
+- Bundle built HTML and man page documentation with Gitlab PyPI registry package (:issue:`780`, :merge:`951`). By `Kyle
+  Brindley`_.
+
 *******************
 0.11.3 (2024-09-24)
 *******************
