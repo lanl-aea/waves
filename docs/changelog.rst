@@ -11,6 +11,8 @@ Changelog
 Internal Changes
 ================
 - Recipe maintenance to address feedback from conda-forge reviewers (:issue:`779`, :merge:`949`). By `Kyle Brindley`_.
+- Clean up PIP and Conda package builds to exclude project build files for all package builds and system test artifacts
+  for working repository package builds (:merge:`950`). By `Kyle Brindley`_.
 
 *******************
 0.11.3 (2024-09-24)
