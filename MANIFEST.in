@@ -3,7 +3,7 @@ recursive-include waves/modsim_template *
 recursive-include waves/modsim_template_2 *
 recursive-exclude build *
 recursive-exclude */*/build *
-recursive-exclude */*/*/build *
+recursive-exclude */*/*/build* *
 recursive-exclude docs *
 recursive-exclude recipe* *
 recursive-exclude modulefiles *
