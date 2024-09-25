@@ -8,6 +8,10 @@ Changelog
 0.11.4 (unreleased)
 *******************
 
+Internal Changes
+================
+- Recipe maintenance to address feedback from conda-forge reviewers (:issue:`779`, :merge:`949`). By `Kyle Brindley`_.
+
 *******************
 0.11.3 (2024-09-24)
 *******************

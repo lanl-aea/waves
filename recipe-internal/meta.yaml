@@ -25,24 +25,20 @@ build:
   entry_points:
     - odb_extract = waves._abaqus.odb_extract:main
     - waves = waves._main:main
-  ignore_run_exports:
-    - python_abi
 
 requirements:
-  build:
+  host:
+    - python
+    - python-build
+    - pip
     - scons >=4
+    - setuptools >=64
+    - setuptools_scm >=8
     - sphinx >=7.1
     - sphinx-argparse
     - sphinx-copybutton >=0.5.1
     - sphinx_rtd_theme >=1
     - sphinxcontrib-bibtex
-    - setuptools_scm >=8
-  host:
-    - python
-    - python-build
-    - pip
-    - setuptools >=64
-    - setuptools_scm >=8
   run:
     - python >=3.8
     - h5netcdf
@@ -66,6 +62,7 @@ test:
     # Required to satisfy undocumented SALib dependencies on numpy version for the senstivity study tutorial
     - numpy >=2
     - pandas
+    - pip
     - pytest
     - pytest-xdist
     - pyyaml

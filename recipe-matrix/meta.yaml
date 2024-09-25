@@ -25,27 +25,22 @@ build:
   entry_points:
     - odb_extract = waves._abaqus.odb_extract:main
     - waves = waves._main:main
-  ignore_run_exports:
-    - python_abi
 
 requirements:
-  build:
-    # Force consistency in the Python and SCons build versions
+  host:
+    # Force consistency in the Python build version
     - python {{ python }}
     - scons {{ scons }}
+    - python-build
+    - pip
+    - setuptools >=64
+    - setuptools_scm >=8
+    - setuptools_scm >=8
     - sphinx >=7.1
     - sphinx-argparse
     - sphinx-copybutton >=0.5.1
     - sphinx_rtd_theme >=1
     - sphinxcontrib-bibtex
-    - setuptools_scm >=8
-  host:
-    # Force consistency in the Python build version
-    - python {{ python }}
-    - python-build
-    - pip
-    - setuptools >=64
-    - setuptools_scm >=8
   run:
     # Force a Python variant package build
     - python {{ python }}
@@ -65,6 +60,7 @@ test:
   requires:
     # Force a Python variant package test
     - python {{ python }}
+    - pip
     - pytest
     - pytest-xdist
   imports:
