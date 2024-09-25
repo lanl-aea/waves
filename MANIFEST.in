@@ -1,7 +1,19 @@
-recursive-include waves/modsim_template *
 recursive-include waves/tutorials *
+recursive-include waves/modsim_template *
+recursive-include waves/modsim_template_2 *
+recursive-exclude build *
+recursive-exclude */*/build *
+recursive-exclude */*/*/build *
 recursive-exclude docs *
 recursive-exclude recipe* *
 recursive-exclude modulefiles *
 recursive-exclude .github *
-exclude .gitlab-ci.yml
+global-exclude *.pyc
+exclude package_documentation.py
+exclude .git*
+exclude .pipeline*.yml
+exclude SConstruct
+exclude flake8
+exclude mypy
+exclude pytest
+exclude */config.log
