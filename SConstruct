@@ -67,7 +67,7 @@ AddOption(
 # Inherit user's full environment and set project options
 env = Environment(
     ENV=os.environ.copy(),
-    variant_dir_base=GetOption("variant_dir_base"),
+    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     ignore_documentation=GetOption("ignore_documentation"),
     unconditional_build=GetOption("unconditional_build"),
     coverage_report=GetOption("coverage_report")
@@ -86,14 +86,10 @@ for key, value in project_variables.items():
     env[key] = value
     project_substitution_dictionary[f"@{key}@"] = value
 
-# ======================================================================================= SCONSTRUCT LOCAL VARIABLES ===
-# Build path object for extension and re-use
-variant_dir_base = pathlib.Path(env['variant_dir_base'])
-
 # ========================================================================================================== TARGETS ===
 # Add documentation target
 if not env['ignore_documentation']:
-    build_dir = variant_dir_base / documentation_source_dir
+    build_dir = env["variant_dir_base"] / documentation_source_dir
     source_dir = documentation_source_dir
     SConscript(
         dirs=documentation_source_dir,
@@ -106,7 +102,7 @@ else:
 # Add pytests, style checks, and static type checking
 workflow_configurations = ["pytest", "flake8", "mypy"]
 for workflow in workflow_configurations:
-    build_dir = variant_dir_base / workflow
+    build_dir = env["variant_dir_base"] / workflow
     SConscript(build_dir.name, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # ============================================================================================= PROJECT HELP MESSAGE ===
