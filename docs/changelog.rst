@@ -8,6 +8,11 @@ Changelog
 0.11.4 (unreleased)
 *******************
 
+Documentation
+=============
+- Add the writing builders solver script API/CLI to the tutorial API/CLI HTML documentation (:merge:`953`). By `Kyle
+  Brindley`_.
+
 Internal Changes
 ================
 - Recipe maintenance to address feedback from conda-forge reviewers (:issue:`779`, :merge:`949`). By `Kyle Brindley`_.
