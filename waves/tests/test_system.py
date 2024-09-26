@@ -136,8 +136,10 @@ def test_system(
     """
     if system_test_directory is not None:
         system_test_directory.mkdir(parents=True, exist_ok=True)
+
     kwargs = {}
-    if "ignore_cleanup_errors" in inspect.getfullargspec(tempfile.TemporaryDirectory).args:
+    temporary_directory_arguments = inspect.getfullargspec(tempfile.TemporaryDirectory).args
+    if "ignore_cleanup_errors" in temporary_directory_arguments and system_test_directory is not None:
         kwargs.update({"ignore_cleanup_errors": True})
     with tempfile.TemporaryDirectory(dir=system_test_directory, **kwargs) as temp_directory:
         template_substitution = {
