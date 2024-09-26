@@ -225,7 +225,7 @@ following grep command will show the pytest commands and options.
 
 .. code-block::
 
-   $ grep "pytest " recipe-internal/meta.yaml
+   $ grep "pytest " recipe-internal/*
 
 Test Local Module
 =================
