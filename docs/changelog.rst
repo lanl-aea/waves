@@ -15,6 +15,9 @@ Internal Changes
   for working repository package builds (:merge:`950`). By `Kyle Brindley`_.
 - Reduce usage of ``/tmp`` and ``$TMPDIR`` for system testing because some tests require executable permissions in the
   test working directory (:merge:`953`). By `Kyle Brindley`_.
+- Set package runtime minimum version of SCons to match major version ``>=4`` (:merge:`953`). By `Kyle Brindley`_.
+- Use pathlib objects in project build scripts. Update minimum build requirement for SCons to match ``>=4.6``
+  (:merge:`953`). By `Kyle Brindley`_.
 
 Enhancements
 ============
