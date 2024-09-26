@@ -13,6 +13,8 @@ Internal Changes
 - Recipe maintenance to address feedback from conda-forge reviewers (:issue:`779`, :merge:`949`). By `Kyle Brindley`_.
 - Clean up PIP and Conda package builds to exclude project build files for all package builds and system test artifacts
   for working repository package builds (:merge:`950`). By `Kyle Brindley`_.
+- Reduce usage of ``/tmp`` and ``$TMPDIR`` for system testing because some tests require executable permissions in the
+  test working directory (:merge:`953`). By `Kyle Brindley`_.
 
 Enhancements
 ============
