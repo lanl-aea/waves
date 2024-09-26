@@ -5,7 +5,6 @@ import pathlib
 
 # Inherit the parent construction environment
 Import(['env', 'project_substitution_dictionary'])
-project_dir = pathlib.Path(env['project_dir'])
 
 # VVV Sphinx prototypes
 # TODO: boostrap from waves.scons_extensions.sphinx_scanner *after* the function is deployed on conda-forge
