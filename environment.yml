@@ -26,7 +26,7 @@ dependencies:
   # Required to satisfy undocumented SALib dependencies on numpy version
   - salib >=1.5.1
   - scipy >=1
-  - scons >=4
+  - scons >=4.6
   - seaborn
   - setuptools >=64
   - setuptools_scm >=8
