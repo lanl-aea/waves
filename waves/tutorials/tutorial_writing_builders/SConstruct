@@ -49,8 +49,6 @@ env.Append(BUILDERS={
     )
 })
 
-# Build path object for extension and re-use
-variant_dir_base = env["variant_dir_base"]
 
 # Add simulation targets
 workflow_configurations = [
@@ -58,7 +56,7 @@ workflow_configurations = [
     "implicit_workflow"
 ]
 for workflow in workflow_configurations:
-    build_dir = variant_dir_base / workflow
+    build_dir = env["variant_dir_base"] / workflow
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Print project local help

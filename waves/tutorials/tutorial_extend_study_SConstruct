@@ -82,9 +82,6 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 
 # Comments used in tutorial code snippets: marker-5
 
-# Build path object for extension and re-use
-variant_dir_base = env['variant_dir_base']
-
 # Add builders and pseudo-builders
 env.Append(BUILDERS={
     'AbaqusSolver': waves.scons_extensions.abaqus_solver(program=env["ABAQUS_PROGRAM"])
@@ -105,7 +102,7 @@ workflow_configurations = [
     'tutorial_extend_study'
 ]
 for workflow in workflow_configurations:
-    build_dir = variant_dir_base / workflow
+    build_dir = env["variant_dir_base"] / workflow
     SConscript(workflow, variant_dir=build_dir, exports={"env": env}, duplicate=False)
 
 # Comments used in tutorial code snippets: marker-7
