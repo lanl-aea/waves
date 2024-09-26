@@ -11,12 +11,14 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
+project_dir = pathlib.Path(Dir('.').abspath)
 documentation_source_dir = 'docs'
 package_source_dir = 'waves'
 project_name = 'waves'
 version = setuptools_scm.get_version()
 project_variables = {
-    'project_dir': Dir('.').abspath,
+    'project_dir': project_dir,
+    'package_dir': project_dir / package_source_dir,
     'version': version,
     'documentation_pdf': f"{project_name}-{version}.pdf",
     'tutorials_dir': 'waves/tutorials',

@@ -5,6 +5,8 @@ import pathlib
 # Inherit the parent construction environment
 Import("env")
 
+build_directory = pathlib.Path(Dir(".").abspath)
+
 # Limit list of source files to allow Conda build-test to test off the installed package
 pytest_source_list = [
     "pyproject.toml",
@@ -16,7 +18,7 @@ target = ["test_results.xml"]
 # TODO: Remove the "program_operations" logic when the race conditions on test_program_operations are fixed
 coverage = ""
 program_operations_coverage = ""
-coverage_command = ""
+coverage_command = "true"
 if env["coverage_report"]:
     coverage = "--cov"
     program_operations_coverage = "--cov --cov-append"
@@ -27,9 +29,10 @@ pytest_node = env.Command(
     target=target,
     source=pytest_source_list,
     action=[
-        "${pytest_command} -vvv -m 'not systemtest' ${coverage}",
-        "${coverage_command}"
+        "cd ${package_dir} && ${pytest_command} -vvv -m 'not systemtest' ${coverage}",
+        "cd ${package_dir} && ${coverage_command}"
     ],
+    package_dir=env["package_dir"],
     pytest_command=pytest_command,
     coverage=coverage,
     program_operations_coverage=program_operations_coverage,
@@ -45,13 +48,15 @@ systemtest_node = env.Command(
     target=target,
     source=source,
     action=[
-        "${pytest_command} -v --no-showlocals -m systemtest --tb=short --cache-clear"
+        "cd ${package_dir} && ${pytest_command} -v --no-showlocals -m systemtest --tb=short --cache-clear --system-test-dir=${system_test_directory}"
     ],
+    package_dir=env["package_dir"],
     pytest_command=pytest_command,
+    system_test_directory=build_directory
 )
 env.Alias("systemtest", systemtest_node)
 env.AlwaysBuild(systemtest_node)
-env.Clean(systemtest_node, [Dir("systemtests")])
+env.Clean(systemtest_node, [build_directory])
 
 # Collector alias to build all regression tasks
 env.Alias('regression', pytest_node + systemtest_node)

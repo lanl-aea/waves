@@ -14,9 +14,6 @@ from waves import _settings
 
 
 tutorial_directory = _settings._tutorials_directory
-# TODO: accept a pytest ``--build-dir`` pass through and sync with SConstruct in pytest task actions
-system_test_relative_path = pathlib.Path("build/pytest/systemtests")
-build_directory = None
 env = os.environ.copy()
 waves_command = "waves"
 odb_extract_command = "odb_extract"
@@ -32,8 +29,6 @@ if not installed:
     waves_command = "python -m waves._main"
     odb_extract_command = "python -m waves._abaqus.odb_extract"
     package_parent_path = _settings._project_root_abspath.parent
-    build_directory = package_parent_path / system_test_relative_path
-    build_directory.mkdir(parents=True, exist_ok=True)
     key = "PYTHONPATH"
     if key in env:
         env[key] = f"{package_parent_path}:{env[key]}"
@@ -116,7 +111,7 @@ require_third_party_tests = [
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("commands, fetch_options", system_tests)
-def test_system(commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
+def test_system(system_test_directory, commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
     """Fetch and run the tutorial configuration file(s) as system tests in a temporary directory
 
     Iterates on the command strings in the commands list. Performs string template substitution using keys:
@@ -129,10 +124,12 @@ def test_system(commands: typing.Iterable[str], fetch_options: typing.Optional[s
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
     """
+    if system_test_directory is not None:
+        system_test_directory.mkdir(parents=True, exist_ok=True)
     kwargs = {}
     if "ignore_cleanup_errors" in inspect.getfullargspec(tempfile.TemporaryDirectory).args:
         kwargs.update({"ignore_cleanup_errors": True})
-    with tempfile.TemporaryDirectory(dir=build_directory, **kwargs) as temp_directory:
+    with tempfile.TemporaryDirectory(dir=system_test_directory, **kwargs) as temp_directory:
         template_substitution = {
             "waves_command": waves_command,
             "odb_extract_command": odb_extract_command,
@@ -149,6 +146,6 @@ def test_system(commands: typing.Iterable[str], fetch_options: typing.Optional[s
 @pytest.mark.systemtest
 @pytest.mark.require_third_party
 @pytest.mark.parametrize("commands, fetch_options", require_third_party_tests)
-def test_system_requiring_third_party_software(commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
+def test_system_requiring_third_party_software(system_test_directory, commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
     """Pass through wrapper of :meth:`test_system` to allow variations in bulk pytest markers"""
-    test_system(commands, fetch_options)
+    test_system(system_test_directory, commands, fetch_options)
