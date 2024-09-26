@@ -5,7 +5,6 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``project_dir`` - String absolute path to the modsim project root directory
   * ``SPHINX_BUILD`` - String path for the Sphinx build executable
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
   * ``documentation_abspath`` - String absolute path to the modsim HTML documentation source files
@@ -30,8 +29,7 @@ report.extend(env.Substfile(
 ))
 
 # Copy project root files required by the documentation
-project_dir = env["project_dir"]
-root_files = [("README.txt", project_dir / "README.rst")]
+root_files = [("README.txt", "#/README.rst")]
 for target, source in root_files:
     report.extend(env.Command(
         target=[target],
