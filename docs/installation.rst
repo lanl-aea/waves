@@ -23,6 +23,8 @@ Installation
    during active development cycles, often with several releases per day. Users can access the internal release through
    several mechanisms.
 
+   For up-to-date AEA Conda channel instructions see the `AEA Conda channel`_ documentation.
+
    W-13/AEA RHEL servers
    =====================
 

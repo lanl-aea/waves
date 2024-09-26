@@ -16,8 +16,8 @@ Internal Changes
 
 Enhancements
 ============
-- Bundle built HTML and man page documentation with Gitlab PyPI registry package (:issue:`780`, :merge:`951`). By `Kyle
-  Brindley`_.
+- Bundle built HTML and man page documentation with Gitlab PyPI registry package (:issue:`780`, :merge:`951`,
+  :merge:`952`). By `Kyle Brindley`_.
 
 *******************
 0.11.3 (2024-09-24)

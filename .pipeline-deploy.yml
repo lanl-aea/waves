@@ -55,8 +55,8 @@ pypi-deploy:
   script:
     # Only deploy to Gitlab PyPI registry for clean version tags
     - if [[ -z $(git tag --points-at HEAD) ]]; then exit 0; fi
-    - scons html man
-    - cp -r build/docs/html waves/docs
+    - scons html-internal man
+    - cp -r build/docs/html-internal waves/docs
     - cp build/docs/man/*.1 waves/docs
     - python -m build
     - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
