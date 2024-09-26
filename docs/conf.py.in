@@ -9,8 +9,8 @@ sys.dont_write_bytecode = True
 
 # -- Project information -----------------------------------------------------
 project_dir = pathlib.Path(r'@project_dir@').resolve()
-tutorials_dir = project_dir / pathlib.Path(r'@tutorials_dir@')
-tutorial_writing_builders_dir = project_dir / pathlib.Path(r'@tutorials_dir@') / "tutorial_writing_builders"
+tutorials_dir = pathlib.Path(r'@tutorials_dir@')
+tutorial_writing_builders_dir = pathlib.Path(r'@tutorials_dir@') / "tutorial_writing_builders"
 
 # Name, Group, Email
 authors = [('Kyle Brindley', '<kbrindley@lanl.gov>'),
