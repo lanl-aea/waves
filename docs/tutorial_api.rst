@@ -145,3 +145,11 @@ argparse_types.py
     :noindex:
     :members:
     :show-inheritance:
+
+solver.py
+=========
+
+.. automodule:: solver 
+    :noindex:
+    :members:
+    :show-inheritance:

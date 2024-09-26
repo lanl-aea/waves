@@ -87,3 +87,9 @@ post_processing.py
 
 .. argparse::
     :ref: modsim_package.python.post_processing.get_parser
+
+solver.py
+=========
+
+.. argparse::
+    :ref: solver.get_parser
