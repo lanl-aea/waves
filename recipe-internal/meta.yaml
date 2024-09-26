@@ -31,7 +31,7 @@ requirements:
     - python
     - python-build
     - pip
-    - scons >=4
+    - scons >=4.6
     - setuptools >=64
     - setuptools_scm >=8
     - sphinx >=7.1
@@ -49,7 +49,7 @@ requirements:
     - pyyaml
     - salib >=1
     - scipy >=1.7
-    - scons
+    - scons >=4
     - xarray
 
 test:
