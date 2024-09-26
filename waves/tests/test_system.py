@@ -111,8 +111,12 @@ require_third_party_tests = [
 
 @pytest.mark.systemtest
 @pytest.mark.parametrize("commands, fetch_options", system_tests)
-def test_system(system_test_directory, commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
-    """Fetch and run the tutorial configuration file(s) as system tests in a temporary directory
+def test_system(
+    system_test_directory,
+    commands: typing.Iterable[str],
+    fetch_options: typing.Optional[str]
+) -> None:
+    """Run shell commands as system tests in a temporary directory
 
     Iterates on the command strings in the commands list. Performs string template substitution using keys:
 
@@ -120,6 +124,12 @@ def test_system(system_test_directory, commands: typing.Iterable[str], fetch_opt
     * ``odb_extract_command``: module namespace variable selected to match installation status
     * ``fetch_options``: test API variable
     * ``temp_directory``: temporary directory created one per test with ``tempfile``
+
+    Accepts a custom pytest CLI option to re-direct the temporary system test root directory away from ``$TMPDIR`` as
+
+    .. code-block::
+
+       pytest --system-test-dir=/my/systemtest/output
 
     :param commands: list of command strings for the system test
     :param fetch_options: the fetch arguments for replacement in string templates
@@ -146,6 +156,10 @@ def test_system(system_test_directory, commands: typing.Iterable[str], fetch_opt
 @pytest.mark.systemtest
 @pytest.mark.require_third_party
 @pytest.mark.parametrize("commands, fetch_options", require_third_party_tests)
-def test_system_requiring_third_party_software(system_test_directory, commands: typing.Iterable[str], fetch_options: typing.Optional[str]) -> None:
+def test_system_requiring_third_party_software(
+    system_test_directory,
+    commands: typing.Iterable[str],
+    fetch_options: typing.Optional[str]
+) -> None:
     """Pass through wrapper of :meth:`test_system` to allow variations in bulk pytest markers"""
     test_system(system_test_directory, commands, fetch_options)
