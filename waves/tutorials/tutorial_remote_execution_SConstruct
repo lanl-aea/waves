@@ -40,7 +40,7 @@ AddOption(
 # Inherit user's full environment and set project variables
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    variant_dir_base=GetOption("variant_dir_base"),
+    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     unconditional_build=GetOption("unconditional_build"),
     print_build_failures=GetOption("print_build_failures")
 )
@@ -80,7 +80,7 @@ env.PrependENVPath("PYTHONPATH", project_dir)
 # Comments used in tutorial code snippets: marker-5
 
 # Build path object for extension and re-use
-variant_dir_base = pathlib.Path(env['variant_dir_base'])
+variant_dir_base = env['variant_dir_base']
 
 # Add builders and pseudo-builders
 user = getpass.getuser()

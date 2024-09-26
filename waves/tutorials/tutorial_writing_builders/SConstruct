@@ -30,7 +30,7 @@ AddOption(
 
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    variant_dir_base=GetOption("variant_dir_base"),
+    variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     solve_cpus=GetOption("solve_cpus"),
 )
 
@@ -50,7 +50,7 @@ env.Append(BUILDERS={
 })
 
 # Build path object for extension and re-use
-variant_dir_base = pathlib.Path(env["variant_dir_base"])
+variant_dir_base = env["variant_dir_base"]
 
 # Add simulation targets
 workflow_configurations = [
