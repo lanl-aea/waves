@@ -21,7 +21,7 @@ project_variables = {
     'package_dir': project_dir / package_source_dir,
     'version': version,
     'documentation_pdf': f"{project_name}-{version}.pdf",
-    'tutorials_dir': 'waves/tutorials',
+    'tutorials_dir': project_dir / 'waves/tutorials',
     'modsim_dir': 'modsim_package',
     'abaqus_dir': 'modsim_package/abaqus',
     'argparse_types_dir': 'modsim_package/argparse_types',
