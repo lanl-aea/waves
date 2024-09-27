@@ -21,7 +21,7 @@ before_script:
   - module use ${aea_modulefiles}
   - module load texlive
   # Start with an AEA environment to put Conda on PATH
-  - environment_choices="aea-nightly aea-beta aea-quarterly aea-release"
+  - environment_choices="aea-nightly aea-quarterly aea-release"
   - for env in ${environment_choices}; do if [[ -d "${aea_compute_path}/${env}" ]]; then base_environment=${env}; break; fi; done
   - echo ${base_environment}
   - if [[ -z ${base_environment} ]]; then exit 1; fi

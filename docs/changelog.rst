@@ -26,6 +26,8 @@ Internal Changes
 - Add gmsh to CI environment (:issue:`783`, :merge:`955`). By `Kyle Brindley`_.
 - Add the source files for a WIP Gmsh tutorial matching the WAVES quickstart (:issue:`782`, :merge:`954`). By `Kyle
   Brindley`_.
+- Update to the newest AEA shared compute environment naming convention. Remove outdated environment discussion
+  (:issue:`778`, :merge:`956`). By `Kyle Brindley`_.
 
 Enhancements
 ============

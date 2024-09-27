@@ -6,10 +6,6 @@ Release Philosophy
 
 This section discusses topics related to |project| releases and version numbering.
 
-.. only:: aea
-
-   .. include:: aea_release_discussion.txt
-
 ***************
 Version Numbers
 ***************

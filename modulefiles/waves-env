@@ -3,7 +3,6 @@
 # Prereqs and conflicts
 conflict aea-release
 conflict aea-quarterly
-conflict aea-beta
 conflict aea-nightly
 
 # Set AEA standard software version and environment names
