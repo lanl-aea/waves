@@ -24,6 +24,8 @@ Internal Changes
 - Use pathlib objects in project build scripts. Update minimum build requirement for SCons to match ``>=4.6``
   (:merge:`953`). By `Kyle Brindley`_.
 - Add gmsh to CI environment (:issue:`783`, :merge:`955`). By `Kyle Brindley`_.
+- Add the source files for a WIP Gmsh tutorial matching the WAVES quickstart (:issue:`782`, :merge:`954`). By `Kyle
+  Brindley`_.
 
 Enhancements
 ============

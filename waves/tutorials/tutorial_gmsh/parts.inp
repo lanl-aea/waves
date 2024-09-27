@@ -1,0 +1,6 @@
+**
+*PART, NAME=rectangle
+*INCLUDE, INPUT=rectangle_mesh.inp
+*SOLID SECTION, ELSET=RECTANGLE, MATERIAL=mock
+*END PART
+**

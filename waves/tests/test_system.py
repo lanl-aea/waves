@@ -64,6 +64,7 @@ require_third_party_tests = [
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/scons_quickstart"),
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/multi_action_task"),
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/waves_quickstart"),
+    ([fetch_template, "scons rectangle --keep-going"], "tutorials/tutorial_gmsh"),
     ([fetch_template, "scons submit_beam_cae --keep-going"], "tutorials/tutorial_abaqus_cae"),
     ([fetch_template, "scons . --sconstruct=tutorial_00_SConstruct --unconditional-build --print-build-failures"], "--tutorial 0"),
     ([fetch_template, "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct --unconditional-build --print-build-failures"], "--tutorial 1"),

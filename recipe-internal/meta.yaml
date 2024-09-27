@@ -55,6 +55,7 @@ requirements:
 test:
   requires:
     - fierro-fe-cpu
+    - gmsh
     - h5netcdf
     - h5py
     - matplotlib-base
@@ -65,6 +66,7 @@ test:
     - pip
     - pytest
     - pytest-xdist
+    - python-gmsh
     - pyyaml
     # Required to satisfy undocumented SALib dependencies on numpy version for the senstivity study tutorial
     - salib >=1.5.1

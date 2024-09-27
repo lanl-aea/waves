@@ -1,0 +1,4 @@
+*element OUTPUT, elset=RECTANGLE.RECTANGLE, directions=YES
+E, S
+*node OUTPUT, nset=RECTANGLE.RECTANGLE
+U

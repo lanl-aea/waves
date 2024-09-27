@@ -1,0 +1,9 @@
+channels:
+  - conda-forge
+
+dependencies:
+  - gmsh
+  - ipython
+  - python-gmsh
+  - scons >=4
+  - waves >=0.11.0
