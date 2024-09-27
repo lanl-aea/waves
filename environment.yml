@@ -6,6 +6,7 @@ dependencies:
   - boa
   - fierro-fe-cpu
   - flake8
+  - gmsh
   - h5netcdf
   - h5py
   - ipython
@@ -22,6 +23,7 @@ dependencies:
   - pytest-cov
   - pytest-xdist
   - python-build
+  - python-gmsh
   - pyyaml
   # Required to satisfy undocumented SALib dependencies on numpy version
   - salib >=1.5.1

@@ -23,6 +23,7 @@ Internal Changes
 - Set package runtime minimum version of SCons to match major version ``>=4`` (:merge:`953`). By `Kyle Brindley`_.
 - Use pathlib objects in project build scripts. Update minimum build requirement for SCons to match ``>=4.6``
   (:merge:`953`). By `Kyle Brindley`_.
+- Add gmsh to CI environment (:issue:`783`, :merge:`955`). By `Kyle Brindley`_.
 
 Enhancements
 ============
