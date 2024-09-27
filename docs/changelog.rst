@@ -28,6 +28,8 @@ Internal Changes
   Brindley`_.
 - Update to the newest AEA shared compute environment naming convention. Remove outdated environment discussion
   (:issue:`778`, :merge:`956`). By `Kyle Brindley`_.
+- Allow Abaqus CAE tutorial workflow to ignore all Abaqus tasks when Abaqus is missing (:issue:`781`, :merge:`957`). By
+  `Kyle Brindley`_.
 
 Enhancements
 ============

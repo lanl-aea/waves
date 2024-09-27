@@ -48,3 +48,4 @@ env.Alias(workflow_name, workflow)
 if not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore([".", workflow_name], workflow)
+    Ignore([".", workflow_name], cae_prep)
