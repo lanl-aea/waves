@@ -6,7 +6,20 @@ import numpy
 import gmsh
 
 
-def main(output_file: pathlib.Path, width: float, height: float) -> None:
+script_name = pathlib.Path(__file__)
+# Set default parameter values
+default_output_file = pathlib.Path(script_name.with_suffix(".msh").name)
+default_width = 1.0
+default_height = 1.0
+default_global_seed = 1.0
+
+
+def main(
+    output_file: pathlib.Path = default_output_file,
+    width: float = default_width,
+    height: float = default_height,
+    global_seed: float = default_global_seed
+) -> None:
     """Create a simple rectangle geometry.
 
     This script creates a simple Gmsh model with a single rectangle part.
@@ -14,6 +27,7 @@ def main(output_file: pathlib.Path, width: float, height: float) -> None:
     :param output_file: The output file for the Gmsh model. Extension must match a supported Gmsh file type.
     :param width: The rectangle width
     :param height: The rectangle height
+    :param global_seed: The global mesh seed size
 
     :returns: writes ``output_file``.msh
     """
@@ -67,7 +81,6 @@ def main(output_file: pathlib.Path, width: float, height: float) -> None:
 
     # Mesh
     # TODO: Move to separate function/script
-    global_seed = 1.0
     points = gmsh.model.getEntities(0)
     gmsh.model.mesh.setSize(points, global_seed)
     gmsh.model.mesh.generate(2)
@@ -114,11 +127,6 @@ def get_entities_at_coordinates(
 
 
 def get_parser():
-    script_name = pathlib.Path(__file__)
-    # Set default parameter values
-    default_output_file = script_name.with_suffix(".msh").name
-    default_width = 1.0
-    default_height = 1.0
 
     prog = f"python {script_name.name} "
     cli_description = "Create a simple rectangle geometry and write an ``output_file``.msh Gmsh model file."
@@ -131,6 +139,8 @@ def get_parser():
                         help="The rectangle width")
     parser.add_argument('--height', type=float, default=default_height,
                         help="The rectangle height")
+    parser.add_argument('--global-seed', type=float, default=default_global_seed,
+                        help="The global mesh seed size (default: %(default)s)")
     return parser
 
 
@@ -140,5 +150,6 @@ if __name__ == '__main__':
     main(
         output_file=args.output_file,
         width=args.width,
-        height=args.height
+        height=args.height,
+        global_seed=args.global_seed
     )
