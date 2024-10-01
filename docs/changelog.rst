@@ -41,6 +41,8 @@ Enhancements
 - Bundle built HTML and man page documentation with Gitlab PyPI registry package (:issue:`780`, :merge:`951`,
   :merge:`952`). By `Kyle Brindley`_.
 - Add unit tests for the modsim template's parameter sets module (:issue:`785`, :merge:`958`). By `Kyle Brindley`_.
+- Add type hints and re-usable entity recovery by coordinates function to Gmsh tutorial files (:merge:`959`). By `Kyle
+  Brindley`_.
 
 *******************
 0.11.3 (2024-09-24)

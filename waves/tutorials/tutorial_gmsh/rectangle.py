@@ -1,6 +1,8 @@
+import typing
 import pathlib
 import argparse
 
+import numpy
 import gmsh
 
 
@@ -28,24 +30,8 @@ def main(output_file: pathlib.Path, width: float, height: float) -> None:
     rectangle_group_tag = gmsh.model.addPhysicalGroup(2, [rectangle_tag], name="rectangle")
 
     tolerance = 0.01 * min(width, height)
-    bottom_left = gmsh.model.getEntitiesInBoundingBox(
-        0.0 - tolerance,  # noqa: E221 X-min
-        0.0 - tolerance,  # noqa: E221 Y-min
-        0.0 - tolerance,  # noqa: E221 Z-min
-        0.0 + tolerance,  # noqa: E221 X-max
-        0.0 + tolerance,  # noqa: E221 Y-max
-        0.0 + tolerance,  # noqa: E221 Z-max
-        0  # Entity dimension: points
-    )
-    top_right = gmsh.model.getEntitiesInBoundingBox(
-        width  - tolerance,  # noqa: E221 X-min
-        height - tolerance,  # noqa: E221 Y-min
-        0.0    - tolerance,  # noqa: E221 Z-min
-        width  + tolerance,  # noqa: E221 X-max
-        height + tolerance,  # noqa: E221 Y-max
-        0.0    + tolerance,  # noqa: E221 Z-max
-        0  # Entity dimension: points
-    )
+    bottom_left = get_entities_at_coordinates((0., 0., 0.), 0)
+    top_right = get_entities_at_coordinates((width, height, 0.0), 0)
     top = gmsh.model.getEntitiesInBoundingBox(
         0.0    - tolerance,  # noqa: E221 X-min
         height - tolerance,  # noqa: E221 Y-min
@@ -95,8 +81,36 @@ def main(output_file: pathlib.Path, width: float, height: float) -> None:
     gmsh.finalize()
 
 
-def tags_from_dimTags(dimTags: list) -> list:
+def tags_from_dimTags(
+    dimTags: typing.List[typing.Tuple[int, int]]
+) -> typing.List[int]:
+    """Return tags from Gmsh entity ``dimTags`` list of tuples
+
+    :returns: list of tags
+    """
     return [dimTag[1] for dimTag in dimTags]
+
+
+def get_entities_at_coordinates(
+    coordinates: typing.Tuple[float, float, float],
+    dimension: int,
+    tolerance: float = 1.0e-6
+) -> typing.List[typing.Tuple[int, int]]:
+    """Return Gmsh ``dimTags`` of entities of dimension within bounding box determined by coordinates and tolerance
+
+    :param coordinates: 3D coordinates (X, Y, Z) for center of bounding box
+    :param dimension: Return entities matching dimension
+    :param tolerance: Distance from center of bounding box to edges of bounding box
+
+    :returns: Gmsh entity ``dimTags``
+    """
+    if len(coordinates) != 3:
+        raise RuntimeError("coordinates must have length 3")
+    center = numpy.array(coordinates)
+    tolerance_array = numpy.array([tolerance, tolerance, tolerance])
+    min_coordinate = center - tolerance_array
+    max_coordinate = center + tolerance_array
+    return gmsh.model.getEntitiesInBoundingBox(*min_coordinate, *max_coordinate, dimension)
 
 
 def get_parser():
