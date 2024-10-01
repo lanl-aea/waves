@@ -6,7 +6,6 @@ dependencies:
   - boa
   - fierro-fe-cpu
   - flake8
-  - gmsh
   - h5netcdf
   - h5py
   - ipython

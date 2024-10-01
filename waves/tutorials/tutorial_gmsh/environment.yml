@@ -2,7 +2,6 @@ channels:
   - conda-forge
 
 dependencies:
-  - gmsh
   - ipython
   - python-gmsh
   - scons >=4
