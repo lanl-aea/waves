@@ -13,9 +13,9 @@ def parameter_schema(width=1.0, height=1.0, global_seed=1.0, displacement=-0.01)
     :rtype: dict
     """
     simulation_variables = {
-        'width': 1.0,
-        'height': 1.0,
-        'global_seed': 1.0,
-        'displacement': -0.01
+        'width': width,
+        'height': height,
+        'global_seed': global_seed,
+        'displacement': displacement
     }
     return simulation_variables

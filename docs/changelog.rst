@@ -8,6 +8,11 @@ Changelog
 0.11.4 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Remove duplicate parameter value definitions in tutorials nominal parameter set definition (:issue:`785`,
+  :merge:`958`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Add the writing builders solver script API/CLI to the tutorial API/CLI HTML documentation (:merge:`953`). By `Kyle
