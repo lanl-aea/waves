@@ -29,7 +29,7 @@ def main(
     :param height: The rectangle height
     :param global_seed: The global mesh seed size
 
-    :returns: writes ``output_file``.msh
+    :returns: writes ``output_file``
     """
     gmsh.initialize()
     gmsh.logger.start()
@@ -133,7 +133,7 @@ def get_parser():
     parser = argparse.ArgumentParser(description=cli_description, prog=prog)
     parser.add_argument('--output-file', type=pathlib.Path, default=default_output_file,
                         help="The output file for the Gmsh model. " \
-                             "Will be stripped of the extension and ``.msh`` will be used, e.g. ``output_file``.msh " \
+                             "Extension must match a supported Gmsh file type, .e.g. ``output_file``.msh " \
                              "(default: %(default)s")
     parser.add_argument('--width', type=float, default=default_width,
                         help="The rectangle width")
