@@ -6,8 +6,8 @@ include: ".pipeline-common.yml"
 
 environment:
   extends:
-    - .environment
     - .linux_before_script
+    - .environment
   stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -16,8 +16,8 @@ environment:
 
 fast-test:
   extends:
-    - .fast-test
     - .linux_before_script
+    - .fast-test
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -26,8 +26,8 @@ fast-test:
 
 flake8:
   extends:
-    - .flake8
     - .linux_before_script
+    - .flake8
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -36,8 +36,8 @@ flake8:
 
 conda-build:
   extends:
-    - .conda-build
     - .linux_before_script
+    - .conda-build
   stage: test
   dependencies: []
   rules:

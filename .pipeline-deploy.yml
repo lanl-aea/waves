@@ -7,8 +7,8 @@ stages:
 
 environment:
   extends:
-    - .environment
     - .linux_before_script
+    - .environment
   stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -19,8 +19,8 @@ environment:
 
 conda-build:
   extends:
-    - .conda-build
     - .linux_before_script
+    - .conda-build
   stage: test
   dependencies: []
   rules:
