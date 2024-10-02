@@ -7,6 +7,19 @@ import pandas
 import yaml
 
 
+def sort_dataframe(dataframe, index_column="time", sort_columns=["time", "parameter_sets"]):
+    """Return a sorted dataframe and set an index
+
+    1. sort columns by column name
+    2. sort rows by column values ``sort_columns``
+    3. set an index
+
+    :returns: sorted and indexed dataframe
+    :rtype: pandas.DataFrame
+    """
+    return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(sort_columns).set_index(index_column)
+
+
 def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns=["time", "parameter_sets"]):
     """Compare two pandas DataFrame objects and determine if they match.
 
@@ -20,13 +33,12 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
     expected = sort_dataframe(expected_csv, index_column=index_column, sort_columns=sort_columns)
     try:
         pandas.testing.assert_frame_equal(current, expected)
-    except AssertionError:
+    except AssertionError as err:
+        print(f"The CSV regression test failed. Data in expected CSV file and current CSV file do not match.\n{err}",
+              file=sys.stderr)
         equal = False
     else:
         equal = True
-    if not equal:
-        print("The CSV regression test failed. Data in expected CSV file and current CSV file do not match.",
-              file=sys.stderr)
     return equal
 
 

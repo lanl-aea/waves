@@ -50,19 +50,6 @@ def merge_parameter_study(parameter_study_file, combined_data):
     return combined_data
 
 
-def sort_dataframe(dataframe, index_column="time", sort_columns=["time", "parameter_sets"]):
-    """Return a sorted dataframe and set an index
-
-    1. sort columns by column name
-    2. sort rows by column values ``sort_columns``
-    3. set an index
-
-    :returns: sorted and indexed dataframe
-    :rtype: pandas.DataFrame
-    """
-    return dataframe.reindex(sorted(dataframe.columns), axis=1).sort_values(sort_columns).set_index(index_column)
-
-
 def save_plot(combined_data, x_var, y_var, selection_dict, concat_coord, output_file):
     """Save scatter plot with given x and y labels
 
