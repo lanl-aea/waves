@@ -3255,7 +3255,7 @@ def parameter_study(
         source = [source]
 
     return_targets = list()
-    if isinstance(study, parameter_generators._ParameterGenerator):
+    if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             subdirectory = pathlib.Path(set_name)
             set_sources = _utilities.set_name_substitution(source, set_name)
@@ -3403,7 +3403,7 @@ def parameter_study_sconscript(
             build_directory = variant_dir
         return build_directory
 
-    if isinstance(study, parameter_generators._ParameterGenerator):
+    if isinstance(study, parameter_generators.ParameterGenerator):
         for set_name, parameters in study.parameter_study_to_dict().items():
             exports.update({"set_name": set_name, "parameters": parameters})
             build_directory = _variant_subdirectory(variant_dir, set_name)
