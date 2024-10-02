@@ -8,6 +8,11 @@ Changelog
 0.11.4 (unreleased)
 *******************
 
+New Features
+============
+- Expose the WAVES ParameterGenerator abstract base class (ABC) to the public API for officially supported type checking
+  (:issue:`789`, :merge:`961`). By `Kyle Brindley`_.
+
 Bug fixes
 =========
 - Remove duplicate parameter value definitions in tutorials nominal parameter set definition (:issue:`785`,

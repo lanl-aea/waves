@@ -30,7 +30,7 @@ from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidat
 _exclude_from_namespace = set(globals().keys())
 
 
-class _ParameterGenerator(ABC):
+class ParameterGenerator(ABC):
     """Abstract base class for internal parameter study generators
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
@@ -225,7 +225,7 @@ class _ParameterGenerator(ABC):
     def _write_dataset(self) -> None:
         """Write Xarray Dataset formatted output to STDOUT, separate set files, or a single file
 
-        Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
+        Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
         """
         if self.output_file:
             if self.dry_run:
@@ -267,7 +267,7 @@ class _ParameterGenerator(ABC):
     def _write_yaml(self, parameter_set_files: typing.Iterable[pathlib.Path]) -> None:
         """Write YAML formatted output to STDOUT, separate set files, or a single file
 
-        Behavior as specified in :meth:`waves.parameter_generators._ParameterGenerator.write`
+        Behavior as specified in :meth:`waves.parameter_generators.ParameterGenerator.write`
 
         :param parameter_set_files: List of pathlib.Path parameter set file paths
         """
@@ -554,7 +554,11 @@ class _ParameterGenerator(ABC):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
-class _ScipyGenerator(_ParameterGenerator, ABC):
+# TODO: Remove semi-private naming convention for v1
+_ParameterGenerator = ParameterGenerator
+
+
+class _ScipyGenerator(ParameterGenerator, ABC):
 
     def _validate(self) -> None:
         """Validate the parameter distribution schema. Executed by class initiation.
@@ -658,7 +662,7 @@ class _ScipyGenerator(_ParameterGenerator, ABC):
         self._parameter_names = [key for key in self.parameter_schema.keys() if key != 'num_simulations']
 
 
-class CartesianProduct(_ParameterGenerator):
+class CartesianProduct(ParameterGenerator):
     """Builds a cartesian product parameter study
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
@@ -812,7 +816,7 @@ class LatinHypercube(_ScipyGenerator):
         super()._generate(**kwargs)
 
 
-class CustomStudy(_ParameterGenerator):
+class CustomStudy(ParameterGenerator):
     """Builds a custom parameter study from user-specified values
 
     :param parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
@@ -1067,7 +1071,7 @@ class ScipySampler(_ScipyGenerator):
         super()._generate(**kwargs)
 
 
-class SALibSampler(_ParameterGenerator, ABC):
+class SALibSampler(ParameterGenerator, ABC):
     """Builds a SALib sampler parameter study from a `SALib.sample`_ ``sampler_class``
 
     Samplers must use the ``N`` sample count argument. Note that in `SALib.sample`_ ``N`` is *not* always equivalent to
