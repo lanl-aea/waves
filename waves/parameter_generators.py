@@ -555,6 +555,7 @@ class ParameterGenerator(ABC):
 
 
 # TODO: Remove semi-private naming convention for v1
+# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/791
 _ParameterGenerator = ParameterGenerator
 
 
