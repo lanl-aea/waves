@@ -11,7 +11,7 @@ include: ".pipeline-common.yml"
 
 fast-test:
   before_script:
-    - conda create --name waves-dev --file environment.yml --yes --force
+    - conda env create --name waves-dev --file environment.yml --yes --force
     - conda activate waves-dev
   extends:
     - .fast-test
