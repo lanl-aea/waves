@@ -11,7 +11,9 @@ stages:
 include: ".pipeline-common.yml"
 
 environment:
-  extends: .environment
+  extends:
+    - .environment
+    - .linux_before_script
   stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -20,7 +22,9 @@ environment:
     - shell
 
 fast-test:
-  extends: .fast-test
+  extends:
+    - .fast-test
+    - .linux_before_script
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"

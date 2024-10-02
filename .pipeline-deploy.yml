@@ -6,7 +6,9 @@ stages:
   - deploy
 
 environment:
-  extends: .environment
+  extends:
+    - .environment
+    - .linux_before_script
   stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -16,7 +18,9 @@ environment:
     - shell-aea
 
 conda-build:
-  extends: .conda-build
+  extends:
+    - .conda-build
+    - .linux_before_script
   stage: test
   dependencies: []
   rules:
@@ -28,6 +32,8 @@ conda-build:
 
 # https://re-git.lanl.gov/aea/developer-operations/aea-conda
 aea-conda-deploy:
+  extends:
+    - .linux_before_script
   stage: deploy
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
@@ -44,6 +50,8 @@ aea-conda-deploy:
     strategy: depend
 
 pypi-deploy:
+  extends:
+    - .linux_before_script
   stage: deploy
   variables:
     GIT_STRATEGY: clone
@@ -65,6 +73,8 @@ pypi-deploy:
 
 # It MUST be called pages
 pages:
+  extends:
+    - .linux_before_script
   stage: deploy
   variables:
     GIT_STRATEGY: clone

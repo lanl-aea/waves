@@ -5,7 +5,9 @@ stages:
 include: ".pipeline-common.yml"
 
 environment:
-  extends: .environment
+  extends:
+    - .environment
+    - .linux_before_script
   stage: environment
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -13,7 +15,9 @@ environment:
     - shell-aea
 
 fast-test:
-  extends: .fast-test
+  extends:
+    - .fast-test
+    - .linux_before_script
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -21,7 +25,9 @@ fast-test:
     - shell-aea
 
 flake8:
-  extends: .flake8
+  extends:
+    - .flake8
+    - .linux_before_script
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
@@ -29,7 +35,9 @@ flake8:
     - shell-aea
 
 conda-build:
-  extends: .conda-build
+  extends:
+    - .conda-build
+    - .linux_before_script
   stage: test
   dependencies: []
   rules:
@@ -38,6 +46,8 @@ conda-build:
     - shell-aea
 
 conda-build-external:
+  extends:
+    - .linux_before_script
   stage: test
   variables:
     GIT_STRATEGY: clone
