@@ -23,12 +23,6 @@ Parameter Generators
    :inherited-members:
    :show-inheritance:
 
-   .. autoclass:: waves.parameter_generators._ParameterGenerator
-      :noindex:
-      :members:
-      :private-members:
-      :show-inheritance:
-
    .. autoclass:: waves.parameter_generators._ScipyGenerator
       :noindex:
       :members:

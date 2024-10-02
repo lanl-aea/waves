@@ -7,7 +7,7 @@ import pytest
 import numpy
 import xarray
 
-from waves.parameter_generators import _ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
+from waves.parameter_generators import ParameterGenerator, _ScipyGenerator, LatinHypercube, SobolSequence
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
@@ -38,7 +38,7 @@ class TestParameterGenerator:
 
     def test_scons_write(self):
         sconsWrite = NoQuantilesGenerator({})
-        with patch("waves.parameter_generators._ParameterGenerator.write") as mock_write:
+        with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
             sconsWrite.scons_write([], [], {})
         mock_write.assert_called_once()
 
@@ -127,7 +127,7 @@ class TestParameterGenerator:
         kwargs = {"sets": sets}
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
                                                        overwrite=overwrite, dry_run=dry_run, **kwargs)
-        with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
@@ -165,8 +165,8 @@ class TestParameterGenerator:
         kwargs = {"sets": sets}
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
                                                        overwrite=overwrite, dry_run=dry_run, **kwargs)
-        with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
-             patch('waves.parameter_generators._ParameterGenerator._conditionally_write_yaml') as mock_file, \
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+             patch('waves.parameter_generators.ParameterGenerator._conditionally_write_yaml') as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
              patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file):
@@ -179,7 +179,7 @@ class TestParameterGenerator:
                                  init_write_files.values(),
                              ids=init_write_files.keys())
     def test_write_dataset(self, schema, template, overwrite, dry_run, is_file, sets, files):
-        """Check for conditions that should result in calls to _ParameterGenerator._write_netcdf
+        """Check for conditions that should result in calls to ParameterGenerator._write_netcdf
 
         :param str schema: placeholder string standing in for the schema read from an input file
         :param str template: user supplied string to be used as a template for output file names
@@ -193,10 +193,10 @@ class TestParameterGenerator:
         WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='h5',
                                                        overwrite=overwrite, dry_run=dry_run, **kwargs)
 
-        with patch('waves.parameter_generators._ParameterGenerator._write_meta'), \
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
-             patch('waves.parameter_generators._ParameterGenerator._conditionally_write_dataset') as write_netcdf, \
+             patch('waves.parameter_generators.ParameterGenerator._conditionally_write_dataset') as write_netcdf, \
              patch('pathlib.Path.is_file', side_effect=is_file), \
              patch('pathlib.Path.mkdir'):
             WriteParameterGenerator.write()
@@ -404,7 +404,7 @@ class TestParameterDistributions:
             assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
 
 
-class NoQuantilesGenerator(_ParameterGenerator):
+class NoQuantilesGenerator(ParameterGenerator):
 
     def _validate(self):
         self._parameter_names = ['parameter_1']
