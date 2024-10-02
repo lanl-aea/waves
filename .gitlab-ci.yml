@@ -29,6 +29,15 @@ hpc:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
+win:
+  stage: child-pipelines
+  trigger:
+    include:
+      - local: .pipeline-win.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 deploy:
   stage: child-pipelines
   trigger:
