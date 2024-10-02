@@ -1,0 +1,22 @@
+# Required for HPC Jacamar Runner
+default:
+  id_tokens:
+    SITE_ID_TOKEN:
+      aud: https://re-git.lanl.gov
+
+stages:
+  - test
+
+include: ".pipeline-common.yml"
+
+fast-test:
+  before_script:
+    - conda create --name waves-dev --file environment.yml --yes --force
+    - conda activate waves-dev
+  extends:
+    - .fast-test
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  tags:
+    - powershell-aea
