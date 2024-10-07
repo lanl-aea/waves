@@ -22,6 +22,7 @@ Documentation
 =============
 - Add the writing builders solver script API/CLI to the tutorial API/CLI HTML documentation (:merge:`953`). By `Kyle
   Brindley`_.
+- Dedicated regression test script in tutorials and modsim templates (:issue:`790`, :merge:`963`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
