@@ -1,18 +1,14 @@
 #! /usr/bin/env python
-"""Rectangle mesh convergence collective post-processing workflow
+"""Rectangle compression mesh convergence collective post-processing workflow
 
 Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
   * ``modsim_package_abspath`` - Absolute path to the project package
-  * ``parameter_study_build_abspath`` - Absolute path to the Parameter study configuration/build artifacts
-  * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
-  * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
-  * ``regression_alias`` - String for the alias collecting the regression workflow targets
-  * ``abaqus`` - String path for the Abaqus executable
 
 * ``alias`` - The workflow name alias root
+* ``parameter_generator`` - The mesh convergence parameter generator class
 """
 import pathlib
 
@@ -50,9 +46,9 @@ workflow.extend(env.PythonScript(
     subcommand_options=script_options,
     post_processing_source=post_processing_source
 ))
+artifacts.extend(workflow)
 
 # Collector alias(es)
 env.Alias(alias, workflow)
 
-artifacts.extend(workflow)
-Return("workflow")
+Return("artifacts")
