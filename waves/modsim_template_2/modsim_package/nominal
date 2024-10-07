@@ -45,17 +45,25 @@ artifacts.extend(SConscript(
 ))
 
 # Post-processing
+script = modsim_package_abspath / "post_processing.py"
 plot_name = "stress_strain_comparison"
-regression_file = modsim_package_abspath / f"{workflow_name}_{plot_name}.csv"
 post_processing_source = ["rectangle_compression_datasets.h5"]
-script_options = "--input-file ${post_processing_source}"
-script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
-script_options += f" --csv-regression-file {regression_file}"
+script_options = "--input-file ${SOURCES[1:].abspath}"
+script_options += " --output-file ${TARGET.file} --x-units mm/mm --y-units MPa"
 workflow.extend(env.PythonScript(
     target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
-    source=[modsim_package_abspath / "post_processing.py", regression_file] + post_processing_source,
-    subcommand_options=script_options,
-    post_processing_source=post_processing_source
+    source=[script] + post_processing_source,
+    subcommand_options=script_options
+))
+
+# Regression test
+script = modsim_package_abspath / "regression.py"
+regression_file = modsim_package_abspath / f"nominal_{plot_name}.csv"
+current_file = f"{plot_name}.csv"
+workflow.extend(env.PythonScript(
+    target=["regression.yaml"],
+    source=[script, current_file, regression_file],
+    subcommand_options="${SOURCES[1:].abspath} --output-file ${TARGET.abspath}"
 ))
 
 # Data archival
