@@ -44,22 +44,22 @@ parameter_generator = waves.parameter_generators.CartesianProduct(
 )
 parameter_generator.write()
 
-# Parameterized targets must live inside current simulation_variables for loop
-for set_name, simulation_variables in parameter_generator.parameter_study_to_dict().items():
+# Parameterized targets must live inside current parameters for loop
+for set_name, parameters in parameter_generator.parameter_study_to_dict().items():
     set_name = pathlib.Path(set_name)
 
     # Rectangle part
     artifacts.extend(SConscript(
         "rectangle",
         variant_dir=set_name,
-        exports={"env": env, "simulation_variables": simulation_variables}
+        exports={"env": env, "parameters": parameters}
     ))
 
     # Rectangle compression simulation
     artifacts.extend(SConscript(
         "rectangle_compression",
         variant_dir=set_name,
-        exports={"env": env, "simulation_variables": simulation_variables, "workflow_name": workflow_name}
+        exports={"env": env, "parameters": parameters, "workflow_name": workflow_name}
     ))
 
 # Post-processing

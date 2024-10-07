@@ -11,13 +11,13 @@ Requires the following ``SConscript(..., exports={})``
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
   * ``abaqus`` - String path for the Abaqus executable
 
-* ``simulation_variables`` - The current simulation parameter set
+* ``parameters`` - The current simulation parameter set
 """
 import pathlib
 
 
 # Inherit the parent construction environment
-Import("env", "simulation_variables", "workflow_name")
+Import("env", "parameters", "workflow_name")
 
 # Set project-wide paths with os-agnostic path separators
 modsim_package_abspath = env["modsim_package_abspath"]
@@ -40,7 +40,7 @@ abaqus_source_list = [
 abaqus_source_list = [pathlib.Path(source_file) for source_file in abaqus_source_list]
 artifacts.extend(env.CopySubstfile(
     abaqus_source_list,
-    substitution_dictionary=env.SubstitutionSyntax(simulation_variables)
+    substitution_dictionary=env.SubstitutionSyntax(parameters)
 ))
 
 solve_source_list = [source_file.name.rstrip(".in") for source_file in abaqus_source_list]

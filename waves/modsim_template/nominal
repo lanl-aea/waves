@@ -26,7 +26,7 @@ modsim_package_abspath = env["modsim_package_abspath"]
 build_directory = pathlib.Path(Dir(".").abspath)
 workflow_name = build_directory.name
 workflow_configuration = [env["project_configuration"], workflow_name]
-simulation_variables = rectangle_compression.nominal()
+parameters = rectangle_compression.nominal()
 
 # Collect the target nodes to build concise target alias(es)
 artifacts = []
@@ -35,13 +35,13 @@ workflow = []
 # Rectangle part
 artifacts.extend(SConscript(
     "rectangle",
-    exports={"env": env, "simulation_variables": simulation_variables}
+    exports={"env": env, "parameters": parameters}
 ))
 
 # Rectangle compression simulation
 artifacts.extend(SConscript(
     "rectangle_compression",
-    exports={"env": env, "simulation_variables": simulation_variables, "workflow_name": workflow_name}
+    exports={"env": env, "parameters": parameters, "workflow_name": workflow_name}
 ))
 
 # Post-processing

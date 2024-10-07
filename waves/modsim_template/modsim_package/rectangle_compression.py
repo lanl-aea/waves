@@ -12,13 +12,13 @@ def nominal(width=1.0, height=1.0, global_seed=1.0, displacement=-0.01):
     :returns: nominal simulation variables
     :rtype: dict
     """
-    simulation_variables = {
+    parameters = {
         'width': width,
         'height': height,
         'global_seed': global_seed,
         'displacement': displacement
     }
-    return simulation_variables
+    return parameters
 
 
 def mesh_convergence(

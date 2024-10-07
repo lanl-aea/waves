@@ -24,8 +24,8 @@ def test_nominal(kwargs, expected):
     # Update expected arguments to match test case
     expected_kwargs.update(kwargs)
 
-    simulation_variables = rectangle_compression.nominal(**kwargs)
-    assert simulation_variables == expected
+    parameters = rectangle_compression.nominal(**kwargs)
+    assert parameters == expected
 
 
 mesh_convergence_tests = {
@@ -51,5 +51,5 @@ def test_mesh_convergence(kwargs, expected):
     # Update expected arguments to match test case
     expected_kwargs.update(kwargs)
 
-    simulation_variables = rectangle_compression.mesh_convergence(**kwargs)
-    assert simulation_variables == expected
+    parameters = rectangle_compression.mesh_convergence(**kwargs)
+    assert parameters == expected
