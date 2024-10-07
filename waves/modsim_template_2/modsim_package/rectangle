@@ -9,6 +9,8 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``parameters`` - The current simulation parameter set
 """
+import inspect
+import pathlib
 
 # Inherit the parent construction environment
 Import("env", "parameters")
@@ -17,7 +19,8 @@ Import("env", "parameters")
 modsim_package_abspath = env["modsim_package_abspath"]
 
 # Collect the target nodes to build concise target alias(es)
-artifacts = []
+workflow_file = pathlib.Path(inspect.getfile(lambda: None))
+artifacts = [str(workflow_file)]
 
 # Geometry
 journal_options = "--width ${width} --height ${height}"
