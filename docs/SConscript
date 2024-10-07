@@ -245,7 +245,7 @@ tutorial_files_list = [
     env["tutorials_dir"] / env['python_dir'] / 'post_processing.py',
     env["tutorials_dir"] / env['python_dir'] / 'regression.py',
     env["tutorials_dir"] / env['python_dir'] / 'sensitivity_study.py',
-    env["tutorials_dir"] / env['tests_dir'] / 'test_post_processing.py',
+    env["tutorials_dir"] / env['tests_dir'] / 'test_regression.py',
     env["tutorials_dir"] / "tutorial_cubit/cubit",
     env["tutorials_dir"] / "tutorial_cubit/abaqus",
     env["tutorials_dir"] / "tutorial_cubit/sierra",

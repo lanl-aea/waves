@@ -87,8 +87,8 @@ Directory Structure
 Regression Script
 *****************
 
-5. In the ``waves-tutorials/modsim_package/python`` directory, create a new file named ``regression.py`` from the
-   contents below
+5. In the ``waves-tutorials/modsim_package/python`` directory, review the file named ``regression.py`` introduced in
+   :ref:`tutorial_unit_testing`.
 
 .. admonition:: waves-tutorials/modsim_package/python/regression.py
 
