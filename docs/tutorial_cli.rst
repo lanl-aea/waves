@@ -88,6 +88,14 @@ post_processing.py
 .. argparse::
     :ref: modsim_package.python.post_processing.get_parser
 
+.. _regression_cli:
+
+regression.py
+=============
+
+.. argparse::
+    :ref: modsim_package.python.regression.get_parser
+
 solver.py
 =========
 

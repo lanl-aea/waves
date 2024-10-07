@@ -243,6 +243,7 @@ tutorial_files_list = [
     env["tutorials_dir"] / env['python_dir'] / 'rectangle_compression_mesh_convergence.py',
     env["tutorials_dir"] / env['python_dir'] / 'mesh_convergence_stress.yaml',
     env["tutorials_dir"] / env['python_dir'] / 'post_processing.py',
+    env["tutorials_dir"] / env['python_dir'] / 'regression.py',
     env["tutorials_dir"] / env['python_dir'] / 'sensitivity_study.py',
     env["tutorials_dir"] / env['tests_dir'] / 'test_post_processing.py',
     env["tutorials_dir"] / "tutorial_cubit/cubit",

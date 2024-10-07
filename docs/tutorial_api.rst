@@ -138,6 +138,16 @@ post_processing.py
     :members:
     :show-inheritance:
 
+.. _regression_api:
+
+regression.py
+=============
+
+.. automodule:: modsim_package.python.regression
+    :noindex:
+    :members:
+    :show-inheritance:
+
 argparse_types.py
 =================
 
@@ -149,7 +159,7 @@ argparse_types.py
 solver.py
 =========
 
-.. automodule:: solver 
+.. automodule:: solver
     :noindex:
     :members:
     :show-inheritance:

@@ -21,6 +21,18 @@ propagated a tutorial specific datacheck alias. This tutorial will add a project
 to a copy of the :ref:`tutorial_post_processing` configuration files. The user may also go back to previous
 tutorials to include the full suite of datacheck tasks in the project wide datacheck regression test alias.
 
+In addition to the datachecks, this tutorial will introduce a full simulation results regression test script and task.
+The regression test task will be added to the regular workflow alias to run everytime the full workflow is run. This
+test compares the actual simulation results within a float tolerance. Comprehensive results regression testing is
+valuable to evaluate changes to important quantities of interest when software versions change, e.g. when installing a
+new version of Abaqus.
+
+After this tutorial, the workflow will have three sets of tests: fast running unit tests introduced in
+:ref:`tutorial_unit_testing`, relatively fast running simulation preparation checks with the ``datacheck`` alias, and
+full simulation results regression tests. The tutorial simulations run fast enough that performing the full suite of
+tests for every change in the project is tractable. However, in practice, projects may choose to run only the unit tests
+and datachecks on a per-change basis and reserve the comprehensive results testing for a scheduled regression suite.
+
 **********
 References
 **********
@@ -71,20 +83,34 @@ Directory Structure
    WAVES fetch
    Destination directory: '/home/roppenheimer/waves-tutorials'
 
+*****************
+Regression Script
+*****************
+
+5. In the ``waves-tutorials/modsim_package/python`` directory, create a new file named ``regression.py`` from the
+   contents below
+
+.. admonition:: waves-tutorials/modsim_package/python/regression.py
+
+   .. literalinclude:: python_regression.py
+      :lineno-match:
+
 ********
 CSV file
 ********
 
-5. In the ``waves-tutorials/modsim_package/python`` directory, Create a new file named ``rectangle_compression_cartesian_product.csv`` from the contents below
+6. In the ``waves-tutorials/modsim_package/python`` directory, create a new file named
+   ``rectangle_compression_cartesian_product.csv`` from the contents below
 
 .. admonition:: waves-tutorials/modsim_package/python/rectangle_compression_cartesian_product.csv
 
    .. literalinclude:: python_rectangle_compression_cartesian_product.csv
       :lineno-match:
 
-This file will be used with the :ref:`post_processing_cli` file introduced in :ref:`tutorial_post_processing`. The CLI
-option ``--csv-regression-file`` allows us to compare the expected simulation output, created above as
-``rectangle_compression_cartesian_product.csv`` with the output of the current simulation workflow.
+This file represents a copy of previous simulation results that the project has stored as the reviewed and approved
+simulation results. The regression task will compare these "past" results with the current simulation results produced
+during the post-processing task introduced in :ref:`tutorial_post_processing`
+``rectangle_compression_cartesian_product.csv`` using the :ref:`regression_cli` CLI.
 
 **********
 SConscript
@@ -100,10 +126,9 @@ changes made in this tutorial.
       :diff: tutorials_tutorial_09_post_processing
 
 There are two changes made in this tutorial. The first is to compare the expected simulation results to the current
-simulation's output. The source list is updated to include the expected results as the CSV file created above and the
-:ref:`post_processing_cli` option ``--csv-regression-file`` is given this CSV file for comparison against the current
-simulation output. See the :ref:`post_processing_cli` CLI documentation for a description of the post-processing
-script's behavior.
+simulation's output. A new task compares the expected results as the CSV file created above against the current
+simulation output with the new Python script, :ref:`regression_cli`. See the :ref:`regression_cli` CLI documentation for
+a description of the post-processing script's behavior.
 
 The second change adds a dedicated alias for the datacheck targets to allow partial workflow execution. This is useful
 when a full simulation may take a long time, but the simulation preparation is worth testing on a regular basis. We've
@@ -135,7 +160,7 @@ changes made in this tutorial.
 Build Targets
 *************
 
-6. Build the datacheck targets without executing the full simulation workflow
+7. Build the datacheck targets without executing the full simulation workflow
 
 .. code-block:: bash
 
@@ -149,7 +174,7 @@ Build Targets
    user 0m21.537s
    sys  0m15.664s
 
-7. Run the full workflow and verify that the CSV regression test passes
+8. Run the full workflow and verify that the CSV regression test passes
 
 .. code-block:: bash
 
@@ -163,6 +188,8 @@ Build Targets
    real 0m29.031s
    user 0m25.712s
    sys  0m25.622s
+   $ cat build/tutorial_11_regression_testing/regression.yaml
+   CSV comparison: true
 
 If you haven't added the project-wide datacheck alias to the previous tutorials, you should expect the ``datacheck``
 alias to run faster than the ``tutorial_11_regression_testing`` alias because the datacheck excludes the solve, extract,
@@ -231,11 +258,13 @@ Output Files
    |-- parameter_set2
    |-- parameter_set3
    |-- parameter_study.h5
+   |-- regression.yaml
+   |-- regression.yaml.stdout
    |-- stress_strain_comparison.csv
    |-- stress_strain_comparison.pdf
    `-- stress_strain_comparison.stdout
 
-   4 directories, 4 files
+   4 directories, 6 files
 
 **********************
 Workflow Visualization
