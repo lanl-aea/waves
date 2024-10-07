@@ -111,7 +111,7 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
 
 
 def write_study_definition(
-    study_definition: typing.Union[waves.parameter_generators._ParameterGenerator, dict],
+    study_definition: typing.Union[waves.parameter_generators.ParameterGenerator, dict],
     path: pathlib.Path,
     alias: str
 ) -> None:
