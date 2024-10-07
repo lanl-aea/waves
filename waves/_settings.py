@@ -148,7 +148,8 @@ _tutorial_paths = {
         pathlib.Path("tutorials/tutorial_09_post_processing_SConstruct"),
     ],
     10: [
-        pathlib.Path("tutorials/modsim_package/python/tests/test_post_processing.py"),
+        pathlib.Path("tutorials/modsim_package/python/post_processing.py"),
+        pathlib.Path("tutorials/modsim_package/python/tests/test_regression.py"),
         pathlib.Path("tutorials/unit_testing"),
         pathlib.Path("tutorials/tutorial_10_unit_testing_SConstruct"),
     ],
