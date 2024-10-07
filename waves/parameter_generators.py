@@ -70,7 +70,7 @@ class ParameterGenerator(ABC):
         output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
         set_name_template: str = _settings._default_set_name_template,
         previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
-        require_previous_parameter_study: _settings._default_require_previous_parameter_study,
+        require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
         overwrite: bool = _settings._default_overwrite,
         dry_run: bool = _settings._default_dry_run,
         write_meta: bool = _settings._default_write_meta,
@@ -188,7 +188,7 @@ class ParameterGenerator(ABC):
         self._create_parameter_set_hashes()
         self._create_parameter_set_names()
         self._create_parameter_study()
-        if self.previous_parameter_study is not None:
+        if self.previous_parameter_study is not None and self.previous_parameter_study.is_file():
             self._merge_parameter_studies()
 
     def write(self) -> None:

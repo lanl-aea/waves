@@ -30,9 +30,25 @@ class TestParameterGenerator:
                 pass
 
     def test_missing_previous_parameter_study_file(self):
-        with patch("pathlib.Path.is_file", return_value=False), pytest.raises(RuntimeError):
+        with patch("pathlib.Path.is_file", return_value=False), \
+             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge, \
+             pytest.raises(RuntimeError):
             try:
-                MissingPreviousStudy = NoQuantilesGenerator({}, previous_parameter_study="doesnotexist.h5")
+                MissingPreviousStudy = NoQuantilesGenerator({}, previous_parameter_study="doesnotexist.h5",
+                                                            require_previous_parameter_study=True)
+                mock_merge.assert_not_called()
+            finally:
+                pass
+
+        with patch("pathlib.Path.is_file", return_value=False), \
+             patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge, \
+             patch("warnings.warn") as mock_warn, \
+             does_not_raise():
+            try:
+                MissingPreviousStudy = NoQuantilesGenerator({}, previous_parameter_study="doesnotexist.h5",
+                                                            require_previous_parameter_study=False)
+                mock_merge.assert_not_called()
+                mock_warn.assert_called_once()
             finally:
                 pass
 
