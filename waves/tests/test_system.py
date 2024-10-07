@@ -105,7 +105,7 @@ require_third_party_tests = [
     ([fetch_template, "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
     ([fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript"),
     # ModSim templates
-    ([fetch_template, "scons . --jobs=4", string.Template("${waves_command} visualize nominal --output-file nominal.png")], "modsim_template"),
+    ([fetch_template, "scons . --jobs=4", string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template"),
     ([fetch_template, "scons . --jobs=4", string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template_2")
 ]
 
