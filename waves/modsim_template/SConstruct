@@ -115,7 +115,7 @@ environment_target = env.CondaEnvironment(
     source=[]
 )
 env.AlwaysBuild(environment_target)
-Default(environment_target)
+env.Alias("environment", environment_target)
 
 # Add documentation target(s)
 # Project documentation
@@ -134,8 +134,8 @@ SConscript(
 
 # Add simulation targets
 workflow_configurations = [
-    "nominal",
-    "mesh_convergence"
+    "rectangle_compression-nominal",
+    "rectangle_compression-mesh_convergence"
 ]
 for workflow in workflow_configurations:
     build_dir = env["variant_dir_base"] / workflow

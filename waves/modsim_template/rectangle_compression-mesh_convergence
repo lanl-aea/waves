@@ -99,7 +99,7 @@ archive_target = env.Tar(
 
 # Collector alias based on build directory name
 env.Alias(workflow_name, workflow)
-env.Alias(f"{workflow_name}_archive", archive_target)
+env.Alias(f"{workflow_name}-archive", archive_target)
 
 if not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
