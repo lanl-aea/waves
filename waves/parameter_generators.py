@@ -701,6 +701,18 @@ class CartesianProduct(ParameterGenerator):
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
+    :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.SchemaValidationError:
+
+        * Parameter schema is not a dictionary
+        * Parameter key is not a supported iterable: set, tuple, list
+
     Example
 
     .. code-block::
@@ -721,18 +733,6 @@ class CartesianProduct(ParameterGenerator):
        Data variables:
            parameter_1         (data_type, parameter_set_hash) object 1 1 2 2
            parameter_2         (data_type, parameter_set_hash) object 'a' 'b' 'a' 'b'
-
-    :var self.parameter_study: The final parameter study XArray Dataset object
-
-    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
-        options are both specified
-    :raises waves.exceptions.APIError: If an unknown output file type is requested
-    :raises RuntimeError: If a previous parameter study file is specified and missing, and
-        ``require_previous_parameter_study`` is ``True``
-    :raises waves.exceptions.SchemaValidationError:
-
-        * Parameter schema is not a dictionary
-        * Parameter key is not a supported iterable: set, tuple, list
     """
 
     def _validate(self) -> None:
@@ -786,6 +786,15 @@ class LatinHypercube(_ScipyGenerator):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
+    :var self.parameter_distributions: A dictionary mapping parameter names to the `scipy.stats`_ distribution
+    :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+
     To produce consistent Latin Hypercubes on repeat instantiations, the ``**kwargs`` must include ``{'seed': <int>}``.
     See the `scipy Latin Hypercube`_ ``scipy.stats.qmc.LatinHypercube`` class documentation for details The ``d``
     keyword argument is internally managed and will be overwritten to match the number of parameters defined in the
@@ -821,15 +830,6 @@ class LatinHypercube(_ScipyGenerator):
        Data variables:
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
-
-    :var self.parameter_distributions: A dictionary mapping parameter names to the `scipy.stats`_ distribution
-    :var self.parameter_study: The final parameter study XArray Dataset object
-
-    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
-        options are both specified
-    :raises waves.exceptions.APIError: If an unknown output file type is requested
-    :raises RuntimeError: If a previous parameter study file is specified and missing, and
-        ``require_previous_parameter_study`` is ``True``
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -868,6 +868,20 @@ class CustomStudy(ParameterGenerator):
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
         Useful for command line execution with build systems that require an explicit file list for target creation.
 
+    :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.SchemaValidationError:
+
+        * Parameter schema is not a dictionary
+        * Parameter schema does not contain the ``parameter_names`` key
+        * Parameter schema does not contain the ``parameter_samples`` key
+        * The ``parameter_samples`` value is an improperly shaped array
+
     Example
 
     .. code-block::
@@ -889,20 +903,6 @@ class CustomStudy(ParameterGenerator):
            height              (data_type, parameter_set_hash) object 1.0 2.0
            prefix              (data_type, parameter_set_hash) object 'a' 'b'
            index               (data_type, parameter_set_hash) object 5 6
-
-    :var self.parameter_study: The final parameter study XArray Dataset object
-
-    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
-        options are both specified
-    :raises waves.exceptions.APIError: If an unknown output file type is requested
-    :raises RuntimeError: If a previous parameter study file is specified and missing, and
-        ``require_previous_parameter_study`` is ``True``
-    :raises waves.exceptions.SchemaValidationError:
-
-        * Parameter schema is not a dictionary
-        * Parameter schema does not contain the ``parameter_names`` key
-        * Parameter schema does not contain the ``parameter_samples`` key
-        * The ``parameter_samples`` value is an improperly shaped array
     """
 
     def _validate(self) -> None:
@@ -966,6 +966,12 @@ class SobolSequence(_ScipyGenerator):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+
     To produce consistent Sobol sequences on repeat instantiations, the ``**kwargs`` must include either
     ``scramble=False`` or ``seed=<int>``. See the `scipy Sobol`_ ``scipy.stats.qmc.Sobol`` class documentation for
     details.  The ``d`` keyword argument is internally managed and will be overwritten to match the number of parameters
@@ -1000,12 +1006,6 @@ class SobolSequence(_ScipyGenerator):
        Data variables:
            parameter_1         (data_type, parameter_sets) float64 0.0 0.5 ... 7.5 2.5
            parameter_2         (data_type, parameter_sets) float64 0.0 0.5 ... 4.25
-
-    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
-        options are both specified
-    :raises waves.exceptions.APIError: If an unknown output file type is requested
-    :raises RuntimeError: If a previous parameter study file is specified and missing, and
-        ``require_previous_parameter_study`` is ``True``
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -1060,6 +1060,15 @@ class ScipySampler(_ScipyGenerator):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
+    :var self.parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
+    :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+
     Keyword arguments for the ``scipy.stats.qmc`` ``sampler_class``. The ``d`` keyword argument is internally managed
     and will be overwritten to match the number of parameters defined in the parameter schema.
 
@@ -1093,15 +1102,6 @@ class ScipySampler(_ScipyGenerator):
        Data variables:
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
-
-    :var self.parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
-    :var self.parameter_study: The final parameter study XArray Dataset object
-
-    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
-        options are both specified
-    :raises waves.exceptions.APIError: If an unknown output file type is requested
-    :raises RuntimeError: If a previous parameter study file is specified and missing, and
-        ``require_previous_parameter_study`` is ``True``
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
@@ -1161,6 +1161,24 @@ class SALibSampler(ParameterGenerator, ABC):
         Useful for command line execution with build systems that require an explicit file list for target creation.
     :param kwargs: Any additional keyword arguments are passed through to the sampler method
 
+    :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
+    :raises waves.exceptions.SchemaValidationError:
+
+        * If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
+        * ``N`` is not a key of ``parameter_schema``
+        * ``problem`` is not a key of ``parameter_schema``
+        * ``names`` is not a key of ``parameter_schema['problem']``
+        * ``parameter_schema`` is not a dictionary
+        * ``parameter_schema['N']`` is not an integer
+        * ``parameter_schema['problem']`` is not a dictionary
+        * ``parameter_schema['problem']['names']`` is not a YAML compliant iterable (list, set, tuple)
+
     Keyword arguments for the `SALib.sample`_ ``sampler_class`` ``sample`` method.
 
     *Example*
@@ -1188,24 +1206,6 @@ class SALibSampler(ParameterGenerator, ABC):
            parameter_1         (data_type, parameter_sets) float64 -0.2029 ... 0.187
            parameter_2         (data_type, parameter_sets) float64 -0.801 ... 0.6682
            parameter_3         (data_type, parameter_sets) float64 0.4287 ... -2.871
-
-    :var self.parameter_study: The final parameter study XArray Dataset object
-
-    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
-        options are both specified
-    :raises waves.exceptions.APIError: If an unknown output file type is requested
-    :raises RuntimeError: If a previous parameter study file is specified and missing, and
-        ``require_previous_parameter_study`` is ``True``
-    :raises waves.exceptions.SchemaValidationError:
-
-        * If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
-        * ``N`` is not a key of ``parameter_schema``
-        * ``problem`` is not a key of ``parameter_schema``
-        * ``names`` is not a key of ``parameter_schema['problem']``
-        * ``parameter_schema`` is not a dictionary
-        * ``parameter_schema['N']`` is not an integer
-        * ``parameter_schema['problem']`` is not a dictionary
-        * ``parameter_schema['problem']['names']`` is not a YAML compliant iterable (list, set, tuple)
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
