@@ -69,6 +69,7 @@ def main() -> None:
                 output_file_type=args.output_file_type,
                 set_name_template=args.SET_NAME_TEMPLATE,
                 previous_parameter_study=args.PREVIOUS_PARAMETER_STUDY,
+                require_previous_parameter_study=args.require_previous_parameter_study,
                 overwrite=args.overwrite,
                 dry_run=args.dry_run,
                 write_meta=args.write_meta
