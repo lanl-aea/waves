@@ -48,6 +48,9 @@ Enhancements
 - Dedicated regression test script in tutorials and modsim templates (:issue:`790`, :merge:`963`). By `Kyle Brindley`_.
 - Use the ``ParameterStudySConscript`` feature in modsim template 2 for reduced task duplication (:issue:`787`,
   :merge:`964`). By `Kyle Brindley`_.
+- Handle missing previous parameter study files gracefully with a warning. Users relying on the ``RuntimeError``
+  behavior may re-enable this behavior with the ``require_previous_parameter_study=True`` API or
+  ``--require-previous-parameter-study`` CLI options.
 
 *******************
 0.11.3 (2024-09-24)
