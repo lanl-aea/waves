@@ -137,7 +137,6 @@ SConscript(
 )
 
 # Define parameter generators
-# TODO: Find a better place to construct this or allow missing previous study files in WAVES
 mesh_convergence_parameter_study_file = env["parameter_study_build_abspath"] / "rectangle_compression-mesh_convergence.h5"
 mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
      modsim_package.rectangle_compression.mesh_convergence(),
