@@ -5,17 +5,19 @@ Requires the following ``SConscript(..., exports={})``
 
 * ``env`` - The SCons construction environment with the following required keys
 
-  * ``modsim_package_abspath`` - String absolute path to the project package
-  * ``solve_cpus`` - Number of cpus to use in Abaqus solve task
+  * ``modsim_package_abspath`` - Absolute path to the project package
+  * ``solve_cpus`` - Integer number of cpus to use in the Abaqus solve task
   * ``datacheck_alias`` - String for the alias collecting the datacheck workflow targets
   * ``regression_alias`` - String for the alias collecting the regression workflow targets
   * ``abaqus`` - String path for the Abaqus executable
 
-* ``simulation_variables`` - The current simulation parameter set
+* ``alias`` - The workflow name alias root
+* ``parameters`` - The current simulation parameter set
 """
+import pathlib
 
 # Inherit the parent construction environment
-Import("env", "simulation_variables", "workflow_name")
+Import("env", "alias", "parameters")
 
 # Set project-wide paths with os-agnostic path separators
 modsim_package_abspath = env["modsim_package_abspath"]
@@ -24,11 +26,18 @@ modsim_package_abspath = env["modsim_package_abspath"]
 artifacts = []
 datacheck = []
 images = []
+workflow = []
+
+# Rectangle part
+artifacts.extend(SConscript(
+    "rectangle",
+    exports={"env": env, "parameters": parameters}
+))
 
 # SolverPrep
 artifacts.extend(env.CopySubstfile(
     [modsim_package_abspath / "rectangle_compression.inp.in"],
-    substitution_dictionary=env.SubstitutionSyntax(simulation_variables)
+    substitution_dictionary=env.SubstitutionSyntax(parameters)
 ))
 
 # Part images
@@ -67,14 +76,27 @@ artifacts.extend(env.AbaqusExtract(
     source=extract_source_list
 ))
 
-# Collector alias based on build directory name
+# Post-processing
+plot_name = "stress_strain_comparison"
+post_processing_source = ["rectangle_compression_datasets.h5"]
+script_options = "--input-file ${post_processing_source}"
+script_options += f" --output-file ${{TARGET.file}} --x-units 'mm/mm' --y-units 'MPa'"
+workflow.extend(env.PythonScript(
+    target=[f"{plot_name}.pdf", f"{plot_name}.csv"],
+    source=[modsim_package_abspath / "post_processing.py"] + post_processing_source,
+    subcommand_options=script_options,
+    post_processing_source=post_processing_source
+))
+
+# Collector alias(es)
 env.Alias(env["regression_alias"], datacheck)
 env.Alias(env["datacheck_alias"], datacheck)
-env.Alias(f"{workflow_name}_datacheck", datacheck)
-env.Alias("images", images)
+env.Alias(f"{alias}-datacheck", datacheck)
+env.Alias(f"{alias}-images", images)
+env.Alias(alias, workflow)
 
 if not env["ABAQUS_PROGRAM"]:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
-    Ignore([".", workflow_name], datacheck)
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
+    Ignore([".", alias], workflow)
 
 Return("artifacts")

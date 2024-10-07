@@ -1,5 +1,4 @@
 #! /usr/bin/env python
-
 import os
 import sys
 import pathlib
@@ -70,6 +69,7 @@ latex_project_name = project_name.replace("_", "-")
 documentation_source_dir = pathlib.Path("docs")
 modsim_package_dir = pathlib.Path("modsim_package")
 test_source_dir = "modsim_package/tests"
+parameter_study_build_dir = env["variant_dir_base"] / "parameter_studies"
 project_variables = {
     "project_configuration": project_configuration,
     "project_dir": project_dir,
@@ -82,7 +82,7 @@ project_variables = {
     "documentation_abspath": project_dir / documentation_source_dir,
     "modsim_package_abspath": project_dir / modsim_package_dir,
     "test_source_abspath": project_dir / test_source_dir,
-    "parameter_study_build_abspath": project_dir / env["variant_dir_base"] / "parameter_studies",
+    "parameter_study_build_abspath": parameter_study_build_dir.resolve(),
     "datacheck_alias": "datacheck",
     "regression_alias": "regression"
 }
@@ -92,6 +92,8 @@ for key, value in project_variables.items():
 # Make the modsim package importable for: (1) SConscript files and (2) Python and Abaqus Python environments
 sys.path.insert(0, str(project_dir))
 env.PrependENVPath("PYTHONPATH", project_dir)
+import modsim_package.rectangle_compression
+import modsim_package.utilities
 
 # Find required programs for conditional target ignoring and absolute path for use in target actions
 env["SPHINX_BUILD"] = env.AddProgram(["sphinx-build"])
@@ -117,7 +119,7 @@ environment_target = env.CondaEnvironment(
     source=[]
 )
 env.AlwaysBuild(environment_target)
-Default(environment_target)
+env.Alias("environment", environment_target)
 
 # Add documentation target(s)
 # Project documentation
@@ -134,15 +136,60 @@ SConscript(
     duplicate=True
 )
 
+# Define parameter generators
+# TODO: Find a better place to construct this or allow missing previous study files in WAVES
+mesh_convergence_parameter_study_file = env["parameter_study_build_abspath"] / "rectangle_compression-mesh_convergence.h5"
+mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
+     modsim_package.rectangle_compression.mesh_convergence(),
+     output_file=mesh_convergence_parameter_study_file,
+     previous_parameter_study=mesh_convergence_parameter_study_file if mesh_convergence_parameter_study_file.exists() else None
+)
+
 # Add simulation targets
 workflow_configurations = [
-    "nominal",
-    "mesh_convergence"
+    ("rectangle_compression", "nominal", modsim_package.rectangle_compression.nominal()),
+    ("rectangle_compression", "mesh_convergence", mesh_convergence_parameter_generator)
 ]
-for workflow in workflow_configurations:
-    build_dir = env["variant_dir_base"] / workflow
+for workflow, study_name, study_definition in workflow_configurations:
+    # Project naming conventions
+    alias = f"{workflow}-{study_name}"
+    build_dir = env["variant_dir_base"] / alias
     workflow_file = modsim_package_dir / workflow
-    SConscript(workflow_file, variant_dir=build_dir, exports={"env": env}, duplicate=True)
+
+    # Write workflow parameter file
+    modsim_package.utilities.write_study_definition(
+        study_definition,
+        env["parameter_study_build_abspath"],
+        alias
+    )
+
+    # Call workflow configuration
+    env.ParameterStudySConscript(
+        workflow_file,
+        variant_dir=build_dir,
+        exports={"env": env, "alias": alias},
+        study=study_definition,
+        subdirectories=True,
+        duplicate=True
+    )
+
+# Post-processing: rectangle compression nominal regression testing
+SConscript(
+    modsim_package_dir / "rectangle_compression-nominal-regression",
+    variant_dir=env["variant_dir_base"] / "rectangle_compression-nominal",
+    exports={"env": env, "alias": "rectangle_compression-nominal"}
+)
+
+# Post-processing: rectangle compression mesh convergence collective
+SConscript(
+    modsim_package_dir / "rectangle_compression-mesh_convergence-post_processing",
+    variant_dir=env["variant_dir_base"] / "rectangle_compression-mesh_convergence",
+    exports={
+        "env": env,
+        "alias": "rectangle_compression-mesh_convergence",
+        "parameter_generator": mesh_convergence_parameter_generator
+    }
+)
 
 # Add unit test target
 test_workflow = "unit_testing"

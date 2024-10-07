@@ -1,7 +1,10 @@
 """Python 3 utilities not compatible with Abaqus Python 2"""
 import sys
+import typing
 import pathlib
 
+import yaml
+import waves
 import pandas
 import xarray
 import matplotlib.pyplot
@@ -97,10 +100,33 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
     expected = sort_dataframe(expected_csv, index_column=index_column, sort_columns=sort_columns)
     try:
         pandas.testing.assert_frame_equal(current, expected)
-    except AssertionError as err:
-        print(f"The CSV regression test failed. Data in expected CSV file and current CSV file do not match.\n{err}",
-              file=sys.stderr)
+    except AssertionError:
         equal = False
     else:
         equal = True
+    if not equal:
+        print("The CSV regression test failed. Data in expected CSV file and current CSV file do not match.",
+              file=sys.stderr)
     return equal
+
+
+def write_study_definition(
+    study_definition: typing.Union[waves.parameter_generators._ParameterGenerator, dict],
+    path: pathlib.Path,
+    alias: str
+) -> None:
+    """Write parameter study definition files to path
+
+    Calls parameter generator write function or writes a YAML dictionary
+
+    :param study_definition: Parameter study definition. WAVES parameter generator or dictionary.
+    :param path: Output directory
+    :param alias: Parameter study dictionary file name
+    """
+    if isinstance(study_definition, waves.parameter_generators._ParameterGenerator):
+        study_definition.write()
+    elif isinstance(study_definition, dict):
+        study_path = path / f"{alias}.yaml"
+        study_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(study_path, "w") as study_file:
+            study_file.write(yaml.safe_dump(study_definition))

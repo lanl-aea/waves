@@ -1,0 +1,27 @@
+#! /usr/bin/env python
+import pathlib
+
+# Inherit the parent construction environment
+Import("env", "alias")
+
+# Collect the target nodes to build concise target alias(es)
+artifacts = []
+workflow = []
+
+# Post-processing
+build_file = pathlib.Path("stress_strain_comparison.csv")
+workflow.extend(env.PythonScript(
+    target=[f"regression.yaml"],
+    source=[
+        env["modsim_package_abspath"] / "regression.py",
+        env["modsim_package_abspath"] / f"{alias}-{build_file.stem}.csv",
+        build_file
+    ],
+    subcommand_options="${SOURCES[1:].abspath}",
+))
+
+# Collector alias(es)
+env.Alias(alias, workflow)
+
+artifacts.extend(workflow)
+Return("artifacts")
