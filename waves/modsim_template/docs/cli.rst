@@ -33,3 +33,9 @@ post_processing.py
 
 .. argparse::
     :ref: modsim_package.post_processing.get_parser
+
+regression.py
+=============
+
+.. argparse::
+    :ref: modsim_package.regression.get_parser
