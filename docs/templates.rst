@@ -29,24 +29,36 @@ should look familiar to SCons users but may require some translation from the Sp
 Template comparisons
 ********************
 
-There are currently two template projects available: ``modsim_template`` and ``modsim_template_2``. The former is most
-similar to the tutorials and will be the easiest starting point for novice SCons and WAVES users. It allows for a great
-deal of flexibility in both source and build tree structure. The latter has advantages for advanced SCons and WAVES
-users but places restrictions on the source and build tree structures and may be difficult for novice command line users
-to navigate.
+There are currently two template projects available: ``modsim_template`` and ``modsim_template_2``. The first
+``modsim_template`` is most similar to the tutorials and will be the easiest starting point for novice SCons and WAVES
+users. It allows for a great deal of flexibility in both source and build tree structure. The second
+``modsim_template_2`` has advantages for advanced SCons and WAVES users but places restrictions on the source and build
+tree structures and may be difficult for novice command line users to navigate.
 
 ``modsim_template_2`` uses the `SCons SConscript`_ ``duplicate=True`` default behavior :cite:`SCons,scons-user` to
 reduce the number of explicit file copy operations with :meth:`waves.scons_extensions.copy_substfile` and the Abaqus
 input file scanner, :meth:`waves.scons_extensions.abaqus_input_scanner`, to reduce the size of Abaqus solver source file
-lists. Both features help reduce SConstruct and SConscript verbosity and aid in automated source list construction.
+lists. This template also uses the :meth:`waves.scons_extensions.parameter_study_sconscript`` call to further reduce
+task duplication. These features help reduce SConstruct and SConscript verbosity and aid in automated source list
+construction.
 
-However, these features restrict source and/or build tree structure. Both features require that the SConscript files
-must be co-located with the source files they describe, so the part and simulation SConscript files (``rectangle`` and
-``rectangle_compression``) are found in the ``modsim_package`` directory in ``modsim_template_2``. To preserve the build
-tree structure with nested SConscript calls, all SConscript files must be found in the same parent directory, so the
-calling workflow SConscript files (``nominal`` and ``mesh_convergence``) must also be located in the ``modsim_package``
-directory. This template requires a totally flat ``modsim_package`` structure, which may be cumbersome for large
-projects, particularly if users tend to rely on graphical file browsers.
+However, these advanced features restrict source and/or build tree structure. The ``duplicate=True`` and
+:meth:`waves.scons_extensions.abaqus_input_scanner` features require that the SConscript files must be co-located with
+the source files they describe. Therefore, the part and simulation SConscript files (``rectangle`` and
+``rectangle_compression``) are found in the ``modsim_package`` directory in ``modsim_template_2``.
+
+The :meth:`scons_extensions.parameter_study_sconscript` feature allows projects to unpack parameter studies during an
+SConscript call. This removes the need for separate ``nominal`` and ``mesh_convergence`` simulation workflow files,
+which are replaced by a single ``rectangle_compression`` workflow file. Combining these simulation workflows reduces new
+simulation definitions to an entry in SConstruct, but does require that workflow specific post-processing tasks be moved
+to dedicated SConscript files: ``rectangle_compression-nominal-regression`` and
+``rectangle_compression-mesh_convergence-post_processing``.
+
+To preserve the build tree structure with nested SConscript calls, all SConscript files must be found in the same parent
+directory, so the downstream workflow SConscript files (``rectangle_compression-nominal-regression`` and
+``rectangle_compression-mesh_convergence-post_processing``) must also be located in the ``modsim_package`` directory.
+This template requires a totally flat ``modsim_package`` structure, which may be cumbersome for large projects,
+particularly if users tend to rely on graphical file browsers.
 
 ********************
 Fetch Template Files
