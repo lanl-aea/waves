@@ -87,6 +87,7 @@ workflow.extend(env.PythonScript(
     subcommand_options=script_options,
     post_processing_source=post_processing_source
 ))
+artifacts.extend(workflow)
 
 # Collector alias(es)
 env.Alias(env["regression_alias"], datacheck)
