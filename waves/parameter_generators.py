@@ -59,7 +59,7 @@ class ParameterGenerator(ABC):
     :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
         options are both specified
     :raises waves.exceptions.APIError: If an unknown output file type is requested
-    :raises RuntimError: If a previous parameter study file is specified and missing, and
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
         ``require_previous_parameter_study`` is ``True``
     """
     def __init__(
@@ -724,6 +724,11 @@ class CartesianProduct(ParameterGenerator):
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -819,6 +824,12 @@ class LatinHypercube(_ScipyGenerator):
 
     :var self.parameter_distributions: A dictionary mapping parameter names to the `scipy.stats`_ distribution
     :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -881,6 +892,11 @@ class CustomStudy(ParameterGenerator):
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
     :raises waves.exceptions.SchemaValidationError:
 
         * Parameter schema is not a dictionary
@@ -984,6 +1000,12 @@ class SobolSequence(_ScipyGenerator):
        Data variables:
            parameter_1         (data_type, parameter_sets) float64 0.0 0.5 ... 7.5 2.5
            parameter_2         (data_type, parameter_sets) float64 0.0 0.5 ... 4.25
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -1072,8 +1094,14 @@ class ScipySampler(_ScipyGenerator):
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
            parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
 
-    :var parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
+    :var self.parameter_distributions: A dictionary mapping parameter names to the ``scipy.stats`` distribution
     :var self.parameter_study: The final parameter study XArray Dataset object
+
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
@@ -1163,6 +1191,11 @@ class SALibSampler(ParameterGenerator, ABC):
 
     :var self.parameter_study: The final parameter study XArray Dataset object
 
+    :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
+        options are both specified
+    :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimeError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
     :raises waves.exceptions.SchemaValidationError:
 
         * If the `SALib sobol`_ or `SALib morris`_ sampler is specified and there are fewer than 2 parameters.
