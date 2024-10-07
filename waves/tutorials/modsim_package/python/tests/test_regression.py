@@ -1,6 +1,6 @@
 import pandas
 
-from modsim_package.python import post_processing
+from modsim_package.python import regression
 
 
 def test_sort_dataframe():
@@ -12,8 +12,8 @@ def test_sort_dataframe():
     control = pandas.DataFrame.from_dict(data)
     unsorted_copy = control[["Column2", "Column1", "time"]]
 
-    sorted_control = post_processing.sort_dataframe(control, sort_columns=["time"])
-    sorted_copy = post_processing.sort_dataframe(unsorted_copy, sort_columns=["time"])
+    sorted_control = regression.sort_dataframe(control, sort_columns=["time"])
+    sorted_copy = regression.sort_dataframe(unsorted_copy, sort_columns=["time"])
 
     pandas.testing.assert_frame_equal(sorted_control, sorted_copy)
 
@@ -36,10 +36,10 @@ def test_csv_files_match():
     different_copy.loc[0, 'Column1'] = 999
 
     # Assert that the function returns False when the DataFrames differ
-    assert post_processing.csv_files_match(control, different_copy, sort_columns=["time"]) is False
+    assert regression.csv_files_match(control, different_copy, sort_columns=["time"]) is False
 
     # Assert that the function returns True when the DataFrames are identical
-    assert post_processing.csv_files_match(control, identical_copy, sort_columns=["time"]) is True
+    assert regression.csv_files_match(control, identical_copy, sort_columns=["time"]) is True
 
     # Assert that the function returns True when the sorted DataFrames are identical
-    assert post_processing.csv_files_match(control, unsorted_copy, sort_columns=["time"]) is True
+    assert regression.csv_files_match(control, unsorted_copy, sort_columns=["time"]) is True
