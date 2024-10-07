@@ -178,7 +178,10 @@ alias = "rectangle_compression-nominal"
 workflow_artifacts[alias].extend(SConscript(
     modsim_package_dir / f"{alias}-regression",
     variant_dir=env["variant_dir_base"] / alias,
-    exports={"env": env, "alias": alias}
+    exports={
+        "env": env,
+        "alias": alias
+    }
 ))
 
 # Post-processing: rectangle compression mesh convergence collective
@@ -198,7 +201,11 @@ for alias, artifacts in workflow_artifacts.items():
     SConscript(
         modsim_package_dir / "archive",
         variant_dir=env["variant_dir_base"] / alias,
-        exports={"env": env, "alias": alias, "artifacts": artifacts + [str(project_configuration)]}
+        exports={
+            "env": env,
+            "alias": alias,
+            "artifacts": artifacts + [str(project_configuration)]
+        }
     )
 
 # Add unit test target
