@@ -8,11 +8,6 @@ Changelog
 0.11.4 (unreleased)
 *******************
 
-New Features
-============
-- Expose the WAVES ParameterGenerator abstract base class (ABC) to the public API for officially supported type checking
-  (:issue:`789`, :merge:`961`). By `Kyle Brindley`_.
-
 Bug fixes
 =========
 - Remove duplicate parameter value definitions in tutorials nominal parameter set definition (:issue:`785`,
@@ -48,6 +43,8 @@ Enhancements
 - Add unit tests for the modsim template's parameter sets module (:issue:`785`, :merge:`958`). By `Kyle Brindley`_.
 - Add type hints, re-usable entity recovery by coordinates function, and global seed API/CLI to Gmsh tutorial files
   (:merge:`959`, :merge:`960`). By `Kyle Brindley`_.
+- Expose the WAVES ParameterGenerator abstract base class (ABC) to the public API for officially supported type checking
+  (:issue:`789`, :merge:`961`). By `Kyle Brindley`_.
 - Dedicated regression test script in tutorials and modsim templates (:issue:`790`, :merge:`963`). By `Kyle Brindley`_.
 - Use the ``ParameterStudySConscript`` feature in modsim template 2 for reduced task duplication (:issue:`787`,
   :merge:`964`). By `Kyle Brindley`_.
