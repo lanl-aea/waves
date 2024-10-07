@@ -81,12 +81,11 @@ for variant_dir in [None, "build"]:
     # ./build/cat_hat_study0.txt
     # ./build/cat_hat_study1.txt
     study_file = parameter_study_directory / "hat_study.h5"
-    previous_study_file = study_file if study_file.exists() else None
     study = waves.parameter_generators.CartesianProduct(
         {"workflow": ["thing 1", "thing 2"]},
         set_name_template=f"{study_file.stem}@number",
         output_file=study_file,
-        previous_parameter_study=previous_study_file
+        previous_parameter_study=study_file
     )
     study.write()
     simulation_variables = {}
@@ -107,12 +106,11 @@ for variant_dir in [None, "build"]:
 # ./build_with_subdirs/subdir_hat_study0/cat_subdir_hat_study0.txt
 # ./build_with_subdirs/subdir_hat_study1/cat_subdir_hat_study1.txt
 study_file = parameter_study_directory / "subdir_hat_study.h5"
-previous_study_file = study_file if study_file.exists() else None
 study = waves.parameter_generators.CartesianProduct(
     {"workflow": ["thing 3", "thing 4"]},
     set_name_template=f"{study_file.stem}@number",
     output_file=study_file,
-    previous_parameter_study=previous_study_file
+    previous_parameter_study=study_file
 )
 study.write()
 simulation_variables = {}
@@ -134,12 +132,11 @@ env.ParameterStudySConscript(
 # ./build_hat_study0/cat_build_hat_study0.txt
 # ./build_hat_study1/cat_build_hat_study1.txt
 study_file = parameter_study_directory / "build_hat_study.h5"
-previous_study_file = study_file if study_file.exists() else None
 study = waves.parameter_generators.CartesianProduct(
     {"workflow": ["thing 5", "thing 6"]},
     set_name_template=f"{study_file.stem}@number",
     output_file=study_file,
-    previous_parameter_study=previous_study_file,
+    previous_parameter_study=study_file,
 )
 study.write()
 simulation_variables = {}

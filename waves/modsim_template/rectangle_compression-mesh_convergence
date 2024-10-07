@@ -30,7 +30,6 @@ workflow_name = build_directory.name
 workflow_configuration = [env["project_configuration"], workflow_name]
 parameter_schema = rectangle_compression.mesh_convergence()
 parameter_study_file = build_directory / "mesh_convergence.h5"
-previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
 
 # Collect the target nodes to build concise target alias(es)
 artifacts = []
@@ -40,7 +39,7 @@ workflow = []
 parameter_generator = waves.parameter_generators.CartesianProduct(
     parameter_schema,
     output_file=parameter_study_file,
-    previous_parameter_study=previous_parameter_study
+    previous_parameter_study=parameter_study_file
 )
 parameter_generator.write()
 

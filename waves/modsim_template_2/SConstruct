@@ -141,7 +141,7 @@ mesh_convergence_parameter_study_file = env["parameter_study_build_abspath"] / "
 mesh_convergence_parameter_generator = waves.parameter_generators.CartesianProduct(
      modsim_package.rectangle_compression.mesh_convergence(),
      output_file=mesh_convergence_parameter_study_file,
-     previous_parameter_study=mesh_convergence_parameter_study_file if mesh_convergence_parameter_study_file.exists() else None
+     previous_parameter_study=mesh_convergence_parameter_study_file
 )
 
 # Add simulation targets

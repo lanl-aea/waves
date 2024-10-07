@@ -3198,11 +3198,10 @@ def parameter_study(
        env.AddMethod(waves.scons_extensions.parameter_study, "ParameterStudy")
 
        parameter_study_file = pathlib.Path("parameter_study.h5")
-       previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
        parameter_generator = waves.parameter_generators.CartesianProduct(
            {"parameter_one": [1, 2, 3]},
            output_file=parameter_study_file,
-           previous_parameter_study=previous_parameter_study
+           previous_parameter_study=parameter_study_file
        )
 
        studies = (
@@ -3313,11 +3312,10 @@ def parameter_study_sconscript(
        env.AddMethod(waves.scons_extensions.parameter_study_sconscript, "ParameterStudySConscript")
 
        parameter_study_file = pathlib.Path("parameter_study.h5")
-       previous_parameter_study = parameter_study_file if parameter_study_file.exists() else None
        parameter_generator = waves.parameter_generators.CartesianProduct(
            {"parameter_one": [1, 2, 3]},
            output_file=parameter_study_file,
-           previous_parameter_study=previous_parameter_study
+           previous_parameter_study=parameter_study_file
        )
 
        studies = (
