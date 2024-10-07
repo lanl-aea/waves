@@ -97,11 +97,10 @@ def csv_files_match(current_csv, expected_csv, index_column="time", sort_columns
     expected = sort_dataframe(expected_csv, index_column=index_column, sort_columns=sort_columns)
     try:
         pandas.testing.assert_frame_equal(current, expected)
-    except AssertionError:
+    except AssertionError as err:
+        print(f"The CSV regression test failed. Data in expected CSV file and current CSV file do not match.\n{err}",
+              file=sys.stderr)
         equal = False
     else:
         equal = True
-    if not equal:
-        print("The CSV regression test failed. Data in expected CSV file and current CSV file do not match.",
-              file=sys.stderr)
     return equal
