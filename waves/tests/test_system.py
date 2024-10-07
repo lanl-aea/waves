@@ -51,7 +51,7 @@ system_tests = [
     # Real fetch operations (on tutorials directory)
     ([fetch_template], "tutorials"),
     # Real visualize operations (on modsim template)
-    ([fetch_template, "scons -h", string.Template("${waves_command} visualize nominal --output-file nominal.png")], "modsim_template"),
+    ([fetch_template, "scons -h", string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template"),
 ]
 if installed:
     system_tests.append(
