@@ -169,6 +169,7 @@ def main(
             output_file_type=output_file_type,
             set_name_template=set_name_template,
             previous_parameter_study=previous_parameter_study,
+            require_previous_parameter_study=require_previous_parameter_study,
             overwrite=overwrite,
             dry_run=dry_run,
             write_meta=write_meta
