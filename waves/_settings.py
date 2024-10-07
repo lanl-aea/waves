@@ -41,6 +41,7 @@ _template_delimiter = "@"
 _template_placeholder = f"{_template_delimiter}number"
 _default_set_name_template = f"parameter_set{_template_placeholder}"
 _default_previous_parameter_study = None
+_default_require_previous_parameter_study = False
 _default_overwrite = False
 _default_dry_run = False
 _default_write_meta = False

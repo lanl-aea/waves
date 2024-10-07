@@ -4,12 +4,13 @@ Will raise ``RuntimeError`` or a derived class of :class:`waves.exceptions.WAVES
 to convert stack-trace/exceptions into STDERR message and non-zero exit codes.
 """
 from abc import ABC, abstractmethod
-import pathlib
 import sys
-import itertools
 import copy
-import hashlib
 import typing
+import hashlib
+import pathlib
+import warnings
+import itertools
 
 import yaml
 import numpy
@@ -49,6 +50,7 @@ class ParameterGenerator(ABC):
     :param set_name_template: Parameter set name template. Overridden by ``output_file_template``, if provided.
     :param previous_parameter_study: A relative or absolute file path to a previously created parameter
         study Xarray Dataset
+    :param require_previous_parameter_study: Raise a ``RuntimeError`` if the previous parameter study file is missing.
     :param overwrite: Overwrite existing output files
     :param dry_run: Print contents of new parameter study output files to STDOUT and exit
     :param write_meta: Write a meta file named "parameter_study_meta.txt" containing the parameter set file names.
@@ -57,23 +59,30 @@ class ParameterGenerator(ABC):
     :raises waves.exceptions.MutuallyExclusiveError: If the mutually exclusive output file template and output file
         options are both specified
     :raises waves.exceptions.APIError: If an unknown output file type is requested
+    :raises RuntimError: If a previous parameter study file is specified and missing, and
+        ``require_previous_parameter_study`` is ``True``
     """
-    def __init__(self, parameter_schema: dict,
-                 output_file_template: typing.Optional[str] = _settings._default_output_file_template,
-                 output_file: typing.Optional[str] = _settings._default_output_file,
-                 output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
-                 set_name_template: str = _settings._default_set_name_template,
-                 previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
-                 overwrite: bool = _settings._default_overwrite,
-                 dry_run: bool = _settings._default_dry_run,
-                 write_meta: bool = _settings._default_write_meta,
-                 **kwargs) -> None:
+    def __init__(
+        self,
+        parameter_schema: dict,
+        output_file_template: typing.Optional[str] = _settings._default_output_file_template,
+        output_file: typing.Optional[str] = _settings._default_output_file,
+        output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_api,
+        set_name_template: str = _settings._default_set_name_template,
+        previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+        require_previous_parameter_study: _settings._default_require_previous_parameter_study,
+        overwrite: bool = _settings._default_overwrite,
+        dry_run: bool = _settings._default_dry_run,
+        write_meta: bool = _settings._default_write_meta,
+        **kwargs
+    ) -> None:
         self.parameter_schema = parameter_schema
         self.output_file_template = output_file_template
         self.output_file = output_file
         self.output_file_type = output_file_type
         self.set_name_template = _utilities._AtSignTemplate(set_name_template)
         self.previous_parameter_study = previous_parameter_study
+        self.require_previous_parameter_study = require_previous_parameter_study
         self.overwrite = overwrite
         self.dry_run = dry_run
         self.write_meta = write_meta
@@ -96,7 +105,11 @@ class ParameterGenerator(ABC):
         if self.previous_parameter_study:
             self.previous_parameter_study = pathlib.Path(self.previous_parameter_study)
             if not self.previous_parameter_study.is_file():
-                raise RuntimeError(f"Previous parameter study '{self.previous_parameter_study}' does not exist.")
+                message = f"Previous parameter study file '{self.previous_parameter_study}' does not exist."
+                if self.require_previous_parameter_study:
+                    raise RuntimeError(message)
+                else:
+                    warnings.warn(message)
 
         # Override set name template if output name template is provided.
         self.provided_output_file_template = False

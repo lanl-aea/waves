@@ -77,7 +77,13 @@ def get_parser() -> argparse.ArgumentParser:
              "Dataset (default: %(default)s)"
     )
     parser.add_argument(
-        '--overwrite', action='store_true',
+        '--require-previous-parameter-study',
+        action='store_true',
+        help=f"Raise a ``RuntimeError`` if the previous parameter study file is missing (default: %(default)s)"
+    )
+    parser.add_argument(
+        '--overwrite',
+        action='store_true',
         help=f"Overwrite existing output files (default: %(default)s)"
     )
     parser.add_argument(
@@ -117,17 +123,19 @@ def read_parameter_schema(input_file: typing.Union[str, pathlib.Path, io.TextIOW
     return parameter_schema
 
 
-def main(subcommand: str,
-         input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None],
-         output_file_template: typing.Optional[str] = _settings._default_output_file_template,
-         output_file: typing.Optional[str] = _settings._default_output_file,
-         output_file_type: _settings._allowable_output_file_typing = \
-                           _settings._default_output_file_type_cli,
-         set_name_template: str = _settings._default_set_name_template,
-         previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
-         overwrite: bool = _settings._default_overwrite,
-         dry_run: bool = _settings._default_dry_run,
-         write_meta: bool = _settings._default_write_meta) -> None:
+def main(
+    subcommand: str,
+    input_file: typing.Union[str, pathlib.Path, io.TextIOWrapper, None],
+    output_file_template: typing.Optional[str] = _settings._default_output_file_template,
+    output_file: typing.Optional[str] = _settings._default_output_file,
+    output_file_type: _settings._allowable_output_file_typing = _settings._default_output_file_type_cli,
+    set_name_template: str = _settings._default_set_name_template,
+    previous_parameter_study: typing.Optional[str] = _settings._default_previous_parameter_study,
+    require_previous_parameter_study: bool = _settings._default_require_previous_parameter_study,
+    overwrite: bool = _settings._default_overwrite,
+    dry_run: bool = _settings._default_dry_run,
+    write_meta: bool = _settings._default_write_meta
+) -> None:
     """Build parameter studies
 
     :param str subcommand: parameter study type to build
