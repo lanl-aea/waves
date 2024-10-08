@@ -16,11 +16,11 @@ fast-test:
     - conda config --set proxy_servers.https http://proxyout.lanl.gov:8080
     - conda env create --name waves-dev --file environment-win.yml --yes
     - conda activate waves-dev
+  script:
+    - pytest -vvv -n 4 -m "not require_third_party"
   after_script:
     - conda config --remove proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --remove proxy_servers.https http://proxyout.lanl.gov:8080
-  extends:
-    - .fast-test
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
