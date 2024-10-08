@@ -11,9 +11,7 @@ environment:
     - .environment
   stage: environment
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   tags:
     - shell-aea
 
@@ -24,9 +22,7 @@ conda-build:
   stage: test
   dependencies: []
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   tags:
     - shell-aea
 
@@ -36,9 +32,7 @@ aea-conda-deploy:
     - .linux_before_script
   stage: deploy
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   variables:
     PARENT_CI_PROJECT_PATH: $CI_PROJECT_PATH
     PARENT_CI_COMMIT_BRANCH: $CI_COMMIT_BRANCH
@@ -57,9 +51,7 @@ pypi-deploy:
     GIT_STRATEGY: clone
   dependencies: []
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   script:
     # Only deploy to Gitlab PyPI registry for clean version tags
     - if [[ -z $(git tag --points-at HEAD) ]]; then exit 0; fi
@@ -80,9 +72,7 @@ pages:
     GIT_STRATEGY: clone
   dependencies: []
   rules:
-    - if: $CI_PIPELINE_SOURCE == "schedule"
-      when: never
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   script:
     - project_root=$PWD
     - rm -rf public && mkdir -p public/modsim-template
