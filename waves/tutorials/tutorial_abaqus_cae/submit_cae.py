@@ -112,6 +112,7 @@ class AbaqusNamedTemporaryFile:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         abaqus.mdb.close()
+        self.temporary_file.close()
         os.remove(self.temporary_file.name)
 
 
