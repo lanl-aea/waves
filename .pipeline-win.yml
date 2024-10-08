@@ -20,7 +20,7 @@ fast-test:
     - conda env create --name waves-dev --file environment-win.yml --yes
     - conda activate waves-dev
     # Tests
-    - scons html html-internal
+    - scons html html-internal flake8
     - pytest -vvv -n 4 -m "not systemtest"
     - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
     # Environment cleanup. Usually an ``after_script``.

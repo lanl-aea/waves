@@ -6,7 +6,7 @@ Import("env")
 target = env.Command(
     target=["flake8.txt"],
     source=["flake8"],
-    action=["flake8 --tee --output-file=${TARGET.abspath}"]
+    action=["flake8 --jobs=4 --tee --output-file=${TARGET.abspath}"]
 )
 env.AlwaysBuild(target)
 env.Alias("flake8", target)
