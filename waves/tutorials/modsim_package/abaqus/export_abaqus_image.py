@@ -60,16 +60,9 @@ def main(input_file, output_file,
     """
     input_file_extension = os.path.splitext(input_file)[1]
     if input_file_extension.lower() == ".cae":
-        # Windows requires either the ``delete_on_close=Flase`` or ``delete=False`` option to allow the ``shutil.copyfile``
-        # operation. First is preferred because it allows close on context manager exit. Context management with
-        # ``delete_on_close=False`` is not available until Python 3.12 and is not available in Abaqus Python.
-        copy_file = tempfile.NamedTemporaryFile(suffix=".cae", dir=".", delete_on_close=False)
-        shutil.copyfile(input_file, copy_file.name)
-        abaqus.openMdb(pathName=copy_file.name)
-        image(output_file, x_angle=x_angle, y_angle=y_angle, z_angle=z_angle, image_size=image_size,
-              model_name=model_name, part_name=part_name, color_map=color_map)
-        abaqus.mdb.close()
-        os.remove(copy_file.name)
+        with AbaqusNamedTemporaryFile(input_file=input_file, suffix=".cae", dir="."):
+            image(output_file, x_angle=x_angle, y_angle=y_angle, z_angle=z_angle, image_size=image_size,
+                  model_name=model_name, part_name=part_name, color_map=color_map)
     elif input_file_extension.lower() == ".inp":
         abaqus.mdb.ModelFromInputFile(name=model_name, inputFileName=input_file)
         image(output_file, x_angle=x_angle, y_angle=y_angle, z_angle=z_angle, image_size=image_size,
@@ -133,6 +126,27 @@ def image(output_file,
 
     output_format = abaqus_utilities.return_abaqus_constant(output_file_extension)
     abaqus.session.printToFile(fileName=output_file_stem, format=output_format, canvasObjects=(viewport,))
+
+
+class AbaqusNamedTemporaryFile:
+    """Thin wrapper of ``tempfile.NamedTemporaryFile`` to provide Windows compatible close on context manager exit for
+    Abaqus Python.
+
+    Required until Python 3.12 ``delete_on_close=False`` option is available in Abaqus Python.
+
+    :param str input_file: The input file to copy before open
+    """
+    def __init__(self, input_file, *args, **kwargs):
+        self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
+        shutil.copyfile(input_file, self.temporary_file.name)
+        abaqus.openMdb(pathName=self.temporary_file.name)
+
+    def __enter__(self):
+        return self.temporary_file
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        abaqus.mdb.close()
+        os.remove(self.temporary_file.name)
 
 
 def get_parser():
