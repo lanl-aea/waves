@@ -8,6 +8,11 @@ Changelog
 0.11.5 (unreleased)
 *******************
 
+Bug fixes
+=========
+- Handle carriage returns in visualize line split. Fixes visualize graph node names on Windows (:issue:`788`,
+  :merge:`962`). By `Kyle Brindley`_.
+
 *******************
 0.11.4 (2024-10-07)
 *******************
@@ -39,6 +44,10 @@ Internal Changes
   (:issue:`778`, :merge:`956`). By `Kyle Brindley`_.
 - Allow Abaqus CAE tutorial workflow to ignore all Abaqus tasks when Abaqus is missing (:issue:`781`, :merge:`957`). By
   `Kyle Brindley`_.
+- Set build environment variable ``PYTHONDONTWRITEBYTECODE`` in construction environment instead of pytest task
+  commands. Fixes pytest task for Windows development and execution (:issue:`788`, :merge:`962`). By `Kyle Brindley`_.
+- Add Windows CI environment file, removing non-Windows compatible packages. Add Windows CI pipeline (:issue:`788`,
+  :merge:`962`). By `Kyle Brindley`_.
 
 Enhancements
 ============
