@@ -1,7 +1,10 @@
 """Abaqus utilities to be re-used in multiple places"""
 import os
 import re
+import shutil
+import tempfile
 
+import abaqus
 import abaqusConstants
 
 
@@ -46,3 +49,24 @@ def return_abaqus_constant(search):
     else:
         raise ValueError("The abaqusConstants module does not have a matching '{}' object".format(search))
     return attribute
+
+
+class AbaqusNamedTemporaryFile:
+    """Thin wrapper of ``tempfile.NamedTemporaryFile`` to provide Windows compatible close on context manager exit for
+    Abaqus Python.
+
+    Required until Python 3.12 ``delete_on_close=False`` option is available in Abaqus Python.
+
+    :param str input_file: The input file to copy before open
+    """
+    def __init__(self, input_file, *args, **kwargs):
+        self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
+        shutil.copyfile(input_file, self.temporary_file.name)
+        abaqus.openMdb(pathName=self.temporary_file.name)
+
+    def __enter__(self):
+        return self.temporary_file
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        abaqus.mdb.close()
+        os.remove(self.temporary_file.name)
