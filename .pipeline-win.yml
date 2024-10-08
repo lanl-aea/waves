@@ -17,7 +17,8 @@ fast-test:
     - conda env create --name waves-dev --file environment-win.yml --yes
     - conda activate waves-dev
   script:
-    - scons html html-internal pytest
+    - scons html html-internal
+    - pytest -vvv -n 4 -m "not systemtest"
     - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
   after_script:
     - conda config --remove proxy_servers.http http://proxyout.lanl.gov:8080
