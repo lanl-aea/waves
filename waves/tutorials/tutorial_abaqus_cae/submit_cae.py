@@ -36,34 +36,23 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
     if cpus is not None:
         kwargs.update({"numCpus": cpus})
 
-    # Windows requires either the ``delete_on_close=Flase`` or ``delete=False`` option to allow the ``shutil.copyfile``
-    # operation. First is preferred because it allows close on context manager exit. Context management with
-    # ``delete_on_close=False`` is not available until Python 3.12 and is not available in Abaqus Python.
-    copy_file = tempfile.NamedTemporaryFile(suffix=".cae", dir=".", delete=False)
-    shutil.copyfile(input_file, copy_file.name)
+    with AbaqusNamedTemporaryFile(input_file=input_file, suffix=".cae", dir="."):
 
-    abaqus.openMdb(pathName=copy_file.name)
+        if job in abaqus.mdb.jobs.keys():
+            script_job = abaqus.mdb.jobs[job]
+            script_job.setValues(**kwargs)
+            model_name = script_job.model
 
-    if job in abaqus.mdb.jobs.keys():
-        script_job = abaqus.mdb.jobs[job]
-        script_job.setValues(**kwargs)
-        model_name = script_job.model
+        if model_name in abaqus.mdb.models.keys():
+            script_job = abaqus.mdb.Job(name=job_name, model=model_name, **kwargs)
+        else:
+            raise RuntimeError("Could not find model name '{}' in file '{}'\n".format(model_name, input_file))
 
-    if model_name in abaqus.mdb.models.keys():
-        script_job = abaqus.mdb.Job(name=job_name, model=model_name, **kwargs)
-    else:
-        raise RuntimeError("Could not find model name '{}' in file '{}'\n".format(model_name, input_file))
-
-    if write_inp:
-        script_job.writeInput(consistencyChecking=abaqusConstants.OFF)
-    else:
-        script_job.submit()
-        script_job.waitForCompletion()
-
-    # Manual file close and delete because context management with ``delete_on_close=False`` is not available until
-    # Python 3.12 and is not available in Abaqus Python
-    abaqus.mdb.close()
-    os.remove(copy_file.name)
+        if write_inp:
+            script_job.writeInput(consistencyChecking=abaqusConstants.OFF)
+        else:
+            script_job.submit()
+            script_job.waitForCompletion()
 
 
 def get_parser():
@@ -103,6 +92,27 @@ def get_parser():
                         help="Write an Abaqus ``job.inp`` file and exit without submitting the job "
                              "(default %(default)s)")
     return parser
+
+
+class AbaqusNamedTemporaryFile:
+    """Thin wrapper of ``tempfile.NamedTemporaryFile`` to provide Windows compatible close on context manager exit for
+    Abaqus Python.
+
+    Required until Python 3.12 ``delete_on_close=False`` option is available in Abaqus Python.
+
+    :param str input_file: The input file to copy before open
+    """
+    def __init__(self, input_file, *args, **kwargs):
+        self.temporary_file = tempfile.NamedTemporaryFile(*args, delete=False, **kwargs)
+        shutil.copyfile(input_file, self.temporary_file.name)
+        abaqus.openMdb(pathName=self.temporary_file.name)
+
+    def __enter__(self):
+        return self.temporary_file
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        abaqus.mdb.close()
+        os.remove(self.temporary_file.name)
 
 
 def return_json_dictionary(json_file):
