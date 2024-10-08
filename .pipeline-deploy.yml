@@ -28,8 +28,6 @@ conda-build:
 
 # https://re-git.lanl.gov/aea/developer-operations/aea-conda
 aea-conda-deploy:
-  extends:
-    - .linux_before_script
   stage: deploy
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
