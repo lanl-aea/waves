@@ -159,7 +159,7 @@ def main(
     # TODO: Wrap all graph handling into a parent function for unit testing
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/677
     graph = parse_output(
-        tree_output.split('\n'),
+        tree_output.splitlines(),
         exclude_list=exclude_list,
         exclude_regex=exclude_regex,
         no_labels=no_labels,
