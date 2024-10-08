@@ -74,6 +74,7 @@ env = Environment(
     unconditional_build=GetOption("unconditional_build"),
     coverage_report=GetOption("coverage_report")
 )
+env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
 # Find required programs for conditional target ignoring
 required_programs = ['sphinx-build']
