@@ -11,7 +11,7 @@ include: ".pipeline-common.yml"
 
 fast-test:
   before_script:
-    - C:\ProgramData\anaconda3\Scripts\activate base
+    - (& "C:\ProgramData\anaconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
     - conda env create --name waves-dev --file environment-win.yml --yes --force
     - conda activate waves-dev
   extends:
