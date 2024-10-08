@@ -11,7 +11,10 @@ from importlib.metadata import version, PackageNotFoundError
 import pytest
 
 from waves import _settings
+from common import platform_check
 
+
+testing_windows, root_fs = platform_check()
 
 tutorial_directory = _settings._tutorials_directory
 env = os.environ.copy()
@@ -51,7 +54,12 @@ system_tests = [
     # Real fetch operations (on tutorials directory)
     ([fetch_template], "tutorials"),
     # Real visualize operations (on modsim template)
-    ([fetch_template, "scons -h", string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template"),
+    # TODO: Fix the Windows execution of this system test
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/796
+    pytest.param(
+        [fetch_template, "scons -h", string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template",
+        marks=pytest.mark.skipif(testing_windows, reason="System test fails on Windows when run with pytest, but succeeds when run manually.")
+    )
 ]
 if installed:
     system_tests.append(
