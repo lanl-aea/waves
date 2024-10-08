@@ -60,7 +60,7 @@ def main(input_file, output_file,
     """
     input_file_extension = os.path.splitext(input_file)[1]
     if input_file_extension.lower() == ".cae":
-        with AbaqusNamedTemporaryFile(input_file=input_file, suffix=".cae", dir="."):
+        with modsim_package.abaqus_utilities.AbaqusNamedTemporaryFile(input_file=input_file, suffix=".cae", dir="."):
             image(output_file, x_angle=x_angle, y_angle=y_angle, z_angle=z_angle, image_size=image_size,
                   model_name=model_name, part_name=part_name, color_map=color_map)
     elif input_file_extension.lower() == ".inp":
