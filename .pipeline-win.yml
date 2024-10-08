@@ -11,8 +11,8 @@ include: ".pipeline-common.yml"
 
 fast-test:
   before_script:
-    - set http_proxy=http://proxyout.lanl.gov:8080
-    - set https_proxy=http://proxyout.lanl.gov:8080
+    - set HTTP_PROXY=http://proxyout.lanl.gov:8080
+    - set HTTPS_PROXY=http://proxyout.lanl.gov:8080
     - (& "C:\ProgramData\anaconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
     - conda env create --name waves-dev --file environment-win.yml --yes
     - conda activate waves-dev
