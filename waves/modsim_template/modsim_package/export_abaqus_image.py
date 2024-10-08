@@ -60,7 +60,7 @@ def main(input_file, output_file,
     """
     input_file_extension = os.path.splitext(input_file)[1]
     if input_file_extension.lower() == ".cae":
-        with tempfile.NamedTemporaryFile(suffix=".cae", dir=".") as copy_file:
+        with tempfile.NamedTemporaryFile(suffix=".cae", dir=".", delete_on_close=False) as copy_file:
             shutil.copyfile(input_file, copy_file.name)
             abaqus.openMdb(pathName=copy_file.name)
             image(output_file, x_angle=x_angle, y_angle=y_angle, z_angle=z_angle, image_size=image_size,
