@@ -10,18 +10,18 @@ stages:
 include: ".pipeline-common.yml"
 
 fast-test:
-  before_script:
+  script:
+    # Environment creation/setup. Usually a ``before_script``.
     - (& "C:\ProgramData\anaconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
     - conda config --set proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --set proxy_servers.https http://proxyout.lanl.gov:8080
     - conda env create --name waves-dev --file environment-win.yml --yes
     - conda activate waves-dev
-  script:
+    # Tests
     - scons html html-internal
     - pytest -vvv -n 4 -m "not systemtest"
     - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
-  after_script:
-    - (& "C:\ProgramData\anaconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
+    # Environment cleanup. Usually an ``after_script``.
     - conda config --remove proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --remove proxy_servers.https http://proxyout.lanl.gov:8080
   stage: test
