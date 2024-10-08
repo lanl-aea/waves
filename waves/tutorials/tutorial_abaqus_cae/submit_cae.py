@@ -1,4 +1,5 @@
 import os
+import sys
 import shutil
 import inspect
 import tempfile
@@ -35,7 +36,7 @@ def main(input_file, job_name, model_name=default_model_name, cpus=default_cpus,
     if cpus is not None:
         kwargs.update({"numCpus": cpus})
 
-    with tempfile.NamedTemporaryFile(suffix=".cae", dir=".") as copy_file:
+    with tempfile.NamedTemporaryFile(suffix=".cae", dir=".", delete_on_close=False) as copy_file:
         shutil.copyfile(input_file, copy_file.name)
 
         abaqus.openMdb(pathName=copy_file.name)
