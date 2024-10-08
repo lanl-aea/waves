@@ -12,6 +12,8 @@ Bug fixes
 =========
 - Handle carriage returns in visualize line split. Fixes visualize graph node names on Windows (:issue:`788`,
   :merge:`962`). By `Kyle Brindley`_.
+- Handle Windows caveats to opening temporary files. Fixes the Abaqus CAE and modsim template Abaqus Python scripts that
+  use ``tempfile`` and ``shutil.copy`` together (:issue:`798`, :merge:`969`). By `Kyle Brindley`_.
 
 Internal Changes
 ================
