@@ -1,0 +1,38 @@
+channels:
+  - conda-forge
+
+dependencies:
+  - boa
+  - flake8
+  - h5netcdf
+  - h5py
+  - ipython
+  - lazy_loader >=0.4
+  - matplotlib-base
+  - meshio
+  - mypy
+  - networkx
+  # Required to satisfy undocumented SALib dependencies on numpy version
+  - numpy >=2
+  - pandas
+  - pip
+  - pytest
+  - pytest-cov
+  - pytest-xdist
+  - python-build
+  - python-gmsh
+  - pyyaml
+  # Required to satisfy undocumented SALib dependencies on numpy version
+  - salib >=1.5.1
+  - scipy >=1
+  - scons >=4.6
+  - seaborn
+  - setuptools >=64
+  - setuptools_scm >=8
+  - sphinx >=7.1
+  - sphinx-argparse
+  - sphinx-copybutton >=0.5.1
+  - sphinx_rtd_theme >=1
+  - sphinxcontrib-bibtex
+  - twine >=5
+  - xarray
