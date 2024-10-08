@@ -95,10 +95,10 @@ def get_parser():
 
 
 class AbaqusNamedTemporaryFile:
-    """Thin wrapper of ``tempfile.NamedTemporaryFile`` to provide Windows compatible close on context manager exit for
-    Abaqus Python.
+    """Open an Abaqus CAE ``input_file`` as a temporary file. Close and delete on exit of context manager.
 
-    Required until Python 3.12 ``delete_on_close=False`` option is available in Abaqus Python.
+    Provides Windows compatible temporary file handling. Required until Python 3.12 ``delete_on_close=False`` option is
+    available in Abaqus Python.
 
     :param str input_file: The input file to copy before open
     """
