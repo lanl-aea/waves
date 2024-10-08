@@ -10,6 +10,8 @@ stages:
 include: ".pipeline-common.yml"
 
 fast-test:
+  variables:
+    GIT_STRATEGY: clone
   script:
     # Environment creation/setup. Usually a ``before_script``.
     - (& "C:\ProgramData\anaconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
