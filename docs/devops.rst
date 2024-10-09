@@ -28,14 +28,6 @@ Local development environments
 AEA CI server environment
 =========================
 
-.. warning::
-
-   There are several known AEA RHEL CI fragile false-negative failure mechanisms. If one of these failures is observed,
-   try re-running the CI job without change.
-
-   * Conda environment creation fails in ``conda-build`` jobs. The shared conda command sometimes interferes with itself
-     while running simultaneous ``conda-build`` jobs.
-
 A minimal development environment for the waves project Gitlab-CI pipelines is maintained on AEA servers.
 
 1. Add the AEA modulefiles directory
@@ -54,22 +46,6 @@ The Conda packages found in ``environment.yml`` are reproduced in the :ref:`mods
 
 HPC CI server environment
 =========================
-
-.. warning::
-
-   While the system tests are run with an HPC CI pipeline, the machine and runner uptime and system test runtime are
-   considered too fragile for reliable use. The AEA RHEL system tests pass in less than 8 minutes, but the HPC system
-   test job has been observed to complete in under 15 minutes or time out after an hour. The HPC CI system tests are
-   always run for merge-requests and scheduled pipelines, but the pass/fail status is not used to mark CI tests as
-   failing. Developers are encouraged to check the HPC system test results, but not required to address failing HPC CI
-   pipelines.
-
-   The HPC CI jobs usually run in 15-25 minutes when it runs successfully.
-
-   There are several known HPC CI fragile false-negative failure mechanisms. If one of these failures is observed, try
-   re-running the CI job without change.
-
-   * Timeout at 1 hour
 
 For computing policy reasons, HPC CI pipelines are owned by the launching user and launched with the user's account. The
 HPC CI server environment must be created in the launching user's scratch space. For merge request pipelines, this means
@@ -96,38 +72,12 @@ https://conda.io/projects/conda/en/latest/user-guide/configuration/custom-env-an
 Windows CI environment
 ======================
 
-.. warning::
-
-   While the system tests are run with a Windows CI pipeline, the Windows CI server does not have the full suite of
-   third-party software required to run the full system tests. The pipeline is always run for merge-requests and
-   scheduled pipelines, but it is considered experimental and the pass/fail status is not used to mark CI tests as
-   failing. Developers are encouraged to check the Windows test results, but not required to address failing Windows CI
-   pipelines.
-
-   The Windows CI jobs usually run in under 6 minutes.
-
-   There are several known Windows CI fragile false-negative failure mechanisms. If one of these failures is observed,
-   try re-running the CI job without change.
-
-   * Incorrect or imcomplete CI environment build:
-     ``Script file 'C:\ProgramData\anaconda3\envs\waves-dev\Scripts\sphinx-build-script.py' is not present.``
-
 The Windows CI server environment is created under the default Gitlab-Runner user and may not be available for
 developers. There is an ``environment-win.yml`` file maintained under version control for the Windows CI job. Windows
 developers may use this to create a local development environment that closely mirrors the linux CI environment.
 
 MacOS CI environment
 ====================
-
-.. warning::
-
-   While the system tests are run with a MacOS CI pipeline, the MacOS CI server does not have the full suite of
-   third-party software required to run the full system tests. The pipeline is always run for merge-requests and
-   scheduled pipelines, but it is considered experimental and the pass/fail status is not used to mark CI tests as
-   failing. Developers are encouraged to check the MacOS test results, but not required to address failing MacOS CI
-   pipelines.
-
-   The MacOS CI jobs usually run in under 3 minutes.
 
 The MacOS CI server environment is created under the default Gitlab-Runner user and is not be available for developers.
 The MacOS CI server uses the full ``environment.yml`` file maintained under version control. MacOS developers may use
@@ -274,8 +224,8 @@ following grep command will show the pytest commands and options.
 
    $ grep "pytest " recipe-internal/*
 
-Test Local Module
-=================
+Test Local Package
+==================
 
 When testing CLI changes locally, the waves module must be run as a script. We must also set the ``PYTHONPATH``
 in order to include the current waves module when operating on a configuration that imports waves.
@@ -338,3 +288,61 @@ they are encouraged to
 
       # Local configuration. Run from repository root directory after cloning.
       > git config core.autocrlf true
+
+*********
+Gitlab-CI
+*********
+
+AEA RHEL
+========
+
+There are several known AEA RHEL CI fragile false-negative failure mechanisms. If one of these failures is observed,
+try re-running the CI job without change.
+
+* Conda environment creation fails in ``conda-build`` jobs. The shared conda command sometimes interferes with itself
+  while running simultaneous ``conda-build`` jobs.
+
+HPC
+===
+
+While the system tests are run with an HPC CI pipeline, the machine and runner uptime and system test runtime are
+considered too fragile for reliable use. The AEA RHEL system tests pass in less than 8 minutes, but the HPC system
+test job has been observed to complete in under 15 minutes or time out after an hour. The HPC CI system tests are
+always run for merge-requests and scheduled pipelines, but the pass/fail status is not used to mark CI tests as
+failing. Developers are encouraged to check the HPC system test results, but not required to address failing HPC CI
+pipelines.
+
+The HPC CI jobs usually run in 15-25 minutes when it runs successfully.
+
+There are several known HPC CI fragile false-negative failure mechanisms. If one of these failures is observed, try
+re-running the CI job without change.
+
+* Timeout at 1 hour
+
+Windows
+=======
+
+While the system tests are run with a Windows CI pipeline, the Windows CI server does not have the full suite of
+third-party software required to run the full system tests. The pipeline is always run for merge-requests and
+scheduled pipelines, but it is considered experimental and the pass/fail status is not used to mark CI tests as
+failing. Developers are encouraged to check the Windows test results, but not required to address failing Windows CI
+pipelines.
+
+The Windows CI jobs usually run in under 6 minutes.
+
+There are several known Windows CI fragile false-negative failure mechanisms. If one of these failures is observed,
+try re-running the CI job without change.
+
+* Incorrect or imcomplete CI environment build:
+  ``Script file 'C:\ProgramData\anaconda3\envs\waves-dev\Scripts\sphinx-build-script.py' is not present.``
+
+MacOS
+=====
+
+While the system tests are run with a MacOS CI pipeline, the MacOS CI server does not have the full suite of
+third-party software required to run the full system tests. The pipeline is always run for merge-requests and
+scheduled pipelines, but it is considered experimental and the pass/fail status is not used to mark CI tests as
+failing. Developers are encouraged to check the MacOS test results, but not required to address failing MacOS CI
+pipelines.
+
+The MacOS CI jobs usually run in under 3 minutes.
