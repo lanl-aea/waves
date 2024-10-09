@@ -4,7 +4,7 @@ stages:
 
 include: ".pipeline-common.yml"
 
-environment:
+aea-environment:
   extends:
     - .linux_before_script
     - .environment
@@ -14,7 +14,7 @@ environment:
   tags:
     - shell-aea
 
-fast-test:
+aea-fast-test:
   extends:
     - .linux_before_script
     - .fast-test
@@ -24,7 +24,7 @@ fast-test:
   tags:
     - shell-aea
 
-flake8:
+aea-flake8:
   extends:
     - .linux_before_script
     - .flake8
@@ -34,7 +34,7 @@ flake8:
   tags:
     - shell-aea
 
-conda-build:
+aea-conda-build:
   extends:
     - .linux_before_script
     - .conda-build
@@ -45,7 +45,7 @@ conda-build:
   tags:
     - shell-aea
 
-conda-build-external:
+aea-conda-build-external:
   extends:
     - .linux_before_script
   stage: test

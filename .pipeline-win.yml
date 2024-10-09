@@ -3,7 +3,7 @@ stages:
 
 include: ".pipeline-common.yml"
 
-fast-test:
+win-fast-test:
   stage: test
   rules:
     - if: $CI_PIPELINE_SOURCE == "parent_pipeline"

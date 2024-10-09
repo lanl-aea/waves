@@ -10,7 +10,7 @@ stages:
 
 include: ".pipeline-common.yml"
 
-environment:
+hpc-environment:
   extends:
     - .linux_before_script
     - .environment
@@ -21,7 +21,7 @@ environment:
     - rocinante
     - shell
 
-fast-test:
+hpc-fast-test:
   extends:
     - .linux_before_script
     - .fast-test
