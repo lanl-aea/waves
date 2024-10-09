@@ -75,7 +75,7 @@ require_third_party_tests = [
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/tutorial_gmsh"),
     ([fetch_template, "scons submit_beam_cae --keep-going"], "tutorials/tutorial_abaqus_cae"),
     ([fetch_template, string.Template("scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 0"),
-    ([fetch_template, string.Template(string.Template("scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 1")),
+    ([fetch_template, string.Template("scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 1"),
     pytest.param(
         [fetch_template, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"], "tutorials",
         marks=pytest.mark.skip("Too few licenses to reliably pass")
@@ -156,7 +156,7 @@ def test_system(
             "waves_command": waves_command,
             "odb_extract_command": odb_extract_command,
             "fetch_options": fetch_options,
-            "temp_directory": temp_directory
+            "temp_directory": temp_directory,
             "unconditional_build": "--unconditional-build" if unconditional_build else ""
         }
         for command in commands:
@@ -171,8 +171,9 @@ def test_system(
 @pytest.mark.parametrize("commands, fetch_options", require_third_party_tests)
 def test_system_requiring_third_party_software(
     system_test_directory,
+    unconditional_build,
     commands: typing.Iterable[str],
     fetch_options: typing.Optional[str]
 ) -> None:
     """Pass through wrapper of :meth:`test_system` to allow variations in bulk pytest markers"""
-    test_system(system_test_directory, commands, fetch_options)
+    test_system(system_test_directory, unconditional_build, commands, fetch_options)
