@@ -14,7 +14,7 @@ from waves import _settings
 from common import platform_check
 
 
-testing_windows, root_fs = platform_check()
+testing_windows, root_fs, testing_macos = platform_check()
 
 tutorial_directory = _settings._tutorials_directory
 env = os.environ.copy()
@@ -84,7 +84,10 @@ require_third_party_tests = [
     ([fetch_template, string.Template("scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct ${unconditional_build} --print-build-failures")], "tutorials"),
     ([fetch_template, string.Template("scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 3"),
     ([fetch_template, string.Template("scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 4"),
-    ([fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")], "tutorials/tutorial_cubit"),
+    pytest.param(
+        [fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")], "tutorials/tutorial_cubit",
+        marks=pytest.mark.skipif(testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit")
+    ),
     ([fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")], "tutorials/tutorial_cubit_alternate"),
     ([fetch_template, string.Template("scons quinoa-local ${unconditional_build} --print-build-failures")], "tutorials/tutorial_quinoa"),
     ([fetch_template, string.Template("scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 ${unconditional_build} --print-build-failures")], "tutorials"),
@@ -113,8 +116,14 @@ require_third_party_tests = [
     ([fetch_template, string.Template("scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
     ([fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript"),
     # ModSim templates
-    ([fetch_template, string.Template("scons . ${unconditional_build} --jobs=4"), string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template"),
-    ([fetch_template, string.Template("scons . ${unconditional_build} --jobs=4"), string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template_2")
+    pytest.param(
+        [fetch_template, string.Template("scons . ${unconditional_build} --jobs=4"), string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template",
+        marks=pytest.mark.skipif(testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus")
+    ),
+    pytest.param(
+        [fetch_template, string.Template("scons . ${unconditional_build} --jobs=4"), string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template_2",
+        marks=pytest.mark.skipif(testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Abaqus")
+    )
 ]
 
 

@@ -16,7 +16,10 @@ def platform_check():
     else:
         root_fs = "/"
         testing_windows = False
-    return testing_windows, root_fs
+    testing_macos = False
+    if platform.system().lower() == "darwin":
+        testing_macos = True
+    return testing_windows, root_fs, testing_macos
 
 
 def consistent_hash_parameter_check(original_study, merged_study):

@@ -28,7 +28,7 @@ from common import platform_check
 # Test setup and helper functions
 fs = SCons.Node.FS.FS()
 
-testing_windows, root_fs = platform_check()
+testing_windows, root_fs, testing_macos = platform_check()
 
 
 check_program = {

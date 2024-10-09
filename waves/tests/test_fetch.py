@@ -11,7 +11,7 @@ from waves.exceptions import ChoicesError
 from common import platform_check
 
 
-testing_windows, root_fs = platform_check()
+testing_windows, root_fs, testing_macos = platform_check()
 
 if testing_windows:
     root_directory = pathlib.Path("C:/path/to/source")
