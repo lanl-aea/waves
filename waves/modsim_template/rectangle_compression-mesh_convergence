@@ -100,7 +100,7 @@ archive_target = env.Tar(
 env.Alias(workflow_name, workflow)
 env.Alias(f"{workflow_name}-archive", archive_target)
 
-if not env["ABAQUS_PROGRAM"]:
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{workflow_name}' target(s)")
     Ignore([".", workflow_name], workflow)
     Ignore([".", f"{workflow_name}-archive"], archive_target)
