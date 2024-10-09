@@ -97,9 +97,10 @@ Windows CI environment
 .. warning::
 
    While the system tests are run with a Windows CI pipeline, the Windows CI server does not have the full suite of
-   third-party software required to run the full system tests. The pipeline is considered experimental and is always run
-   for merge-requests and scheduled pipelines, but the pass/fail status is not used to mark CI tests as failing.
-   Developers are encouraged to check the Windows test results, but not required to address failing Windows CI pipelines.
+   third-party software required to run the full system tests. The pipeline is always run for merge-requests and
+   scheduled pipelines, but it is considered experimental and the pass/fail status is not used to mark CI tests as
+   failing. Developers are encouraged to check the Windows test results, but not required to address failing Windows CI
+   pipelines.
 
    The Windows CI jobs usually run in under 6 minutes.
 
