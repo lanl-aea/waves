@@ -64,6 +64,8 @@ HPC CI server environment
    failing. Developers are encouraged to check the HPC system test results, but not required to address failing HPC CI
    pipelines.
 
+   The HPC CI jobs usually run in 15-25 minutes when it runs successfully.
+
    There are several known HPC CI fragile false-negative failure mechanisms. If one of these failures is observed, try
    re-running the CI job without change.
 
@@ -113,6 +115,23 @@ Windows CI environment
 The Windows CI server environment is created under the default Gitlab-Runner user and may not be available for
 developers. There is an ``environment-win.yml`` file maintained under version control for the Windows CI job. Windows
 developers may use this to create a local development environment that closely mirrors the linux CI environment.
+
+MacOS CI environment
+====================
+
+.. warning::
+
+   While the system tests are run with a MacOS CI pipeline, the MacOS CI server does not have the full suite of
+   third-party software required to run the full system tests. The pipeline is always run for merge-requests and
+   scheduled pipelines, but it is considered experimental and the pass/fail status is not used to mark CI tests as
+   failing. Developers are encouraged to check the MacOS test results, but not required to address failing MacOS CI
+   pipelines.
+
+   The MacOS CI jobs usually run in under 3 minutes.
+
+The MacOS CI server environment is created under the default Gitlab-Runner user and is not be available for developers.
+The MacOS CI server uses the full ``environment.yml`` file maintained under version control. MacOS developers may use
+this to create a local development environment that closely mirrors the linux CI environment.
 
 .. include:: contribution.txt
 
