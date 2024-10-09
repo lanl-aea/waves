@@ -74,43 +74,43 @@ require_third_party_tests = [
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/waves_quickstart"),
     ([fetch_template, "scons rectangle --keep-going"], "tutorials/tutorial_gmsh"),
     ([fetch_template, "scons submit_beam_cae --keep-going"], "tutorials/tutorial_abaqus_cae"),
-    ([fetch_template, "scons . --sconstruct=tutorial_00_SConstruct --unconditional-build --print-build-failures"], "--tutorial 0"),
-    ([fetch_template, "scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct --unconditional-build --print-build-failures"], "--tutorial 1"),
+    ([fetch_template, string.Template("scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 0"),
+    ([fetch_template, string.Template(string.Template("scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 1")),
     pytest.param(
         [fetch_template, "scons tutorial_matlab --sconstruct=tutorial_matlab_SConstruct"], "tutorials",
         marks=pytest.mark.skip("Too few licenses to reliably pass")
     ),
-    ([fetch_template, "scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct --unconditional-build --print-build-failures"], "--tutorial 2"),
-    ([fetch_template, "scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, "scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct --unconditional-build --print-build-failures"], "--tutorial 3"),
-    ([fetch_template, "scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct --unconditional-build --print-build-failures"], "--tutorial 4"),
-    ([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_cubit"),
-    ([fetch_template, "scons . --unconditional-build --print-build-failures"], "tutorials/tutorial_cubit_alternate"),
-    ([fetch_template, "scons quinoa-local --unconditional-build --print-build-failures"], "tutorials/tutorial_quinoa"),
-    ([fetch_template, "scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 --unconditional-build --print-build-failures"], "tutorials"),
+    ([fetch_template, string.Template("scons tutorial_02_partition_mesh --sconstruct=tutorial_02_partition_mesh_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 2"),
+    ([fetch_template, string.Template("scons tutorial_argparse_types --sconstruct=tutorial_argparse_types_SConstruct ${unconditional_build} --print-build-failures")], "tutorials"),
+    ([fetch_template, string.Template("scons tutorial_03_solverprep --sconstruct=tutorial_03_solverprep_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 3"),
+    ([fetch_template, string.Template("scons tutorial_04_simulation --sconstruct=tutorial_04_simulation_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 4"),
+    ([fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")], "tutorials/tutorial_cubit"),
+    ([fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")], "tutorials/tutorial_cubit_alternate"),
+    ([fetch_template, string.Template("scons quinoa-local ${unconditional_build} --print-build-failures")], "tutorials/tutorial_quinoa"),
+    ([fetch_template, string.Template("scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 ${unconditional_build} --print-build-failures")], "tutorials"),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
     # AEA Gitlab group members. Until then, the SSH remote execution can't be integration/regression tested.
     pytest.param(
-        [fetch_template, "scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct --unconditional-build --print-build-failures"], "tutorials",
+        [fetch_template, string.Template("scons tutorial_remote_execution --sconstruct=tutorial_remote_execution_SConstruct ${unconditional_build} --print-build-failures")], "tutorials",
         marks=pytest.mark.skip("Can't reliably authenticate to the remote server")
     ),
-    ([fetch_template, "scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, "scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct --unconditional-build --print-build-failures"], "--tutorial 5"),
-    ([fetch_template, "scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct --unconditional-build --print-build-failures"], "--tutorial 6"),
-    ([fetch_template, "scons tutorial_07_cartesian_product --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "--tutorial 7"),
-    ([fetch_template, "scons tutorial_07_latin_hypercube --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, "scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, "scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "--tutorial 8"),
-    ([fetch_template, "scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "--tutorial 9"),
-    ([fetch_template, "scons unit_testing --sconstruct=tutorial_10_unit_testing_SConstruct --unconditional-build --print-build-failures"], "--tutorial 10"),
-    ([fetch_template, "scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, "scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "--tutorial 11"),
-    ([fetch_template, "scons tutorial_12_archival --sconstruct=tutorial_12_archival_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "--tutorial 12"),
+    ([fetch_template, string.Template("scons tutorial_sbatch --sconstruct=tutorial_sbatch_SConstruct ${unconditional_build} --print-build-failures")], "tutorials"),
+    ([fetch_template, string.Template("scons tutorial_05_parameter_substitution --sconstruct=tutorial_05_parameter_substitution_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 5"),
+    ([fetch_template, string.Template("scons tutorial_06_include_files --sconstruct=tutorial_06_include_files_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 6"),
+    ([fetch_template, string.Template("scons tutorial_07_cartesian_product --sconstruct=tutorial_07_cartesian_product_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "--tutorial 7"),
+    ([fetch_template, string.Template("scons tutorial_07_latin_hypercube --sconstruct=tutorial_07_latin_hypercube_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
+    ([fetch_template, string.Template("scons tutorial_07_sobol_sequence --sconstruct=tutorial_07_sobol_sequence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
+    ([fetch_template, string.Template("scons tutorial_08_data_extraction --sconstruct=tutorial_08_data_extraction_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "--tutorial 8"),
+    ([fetch_template, string.Template("scons tutorial_09_post_processing --sconstruct=tutorial_09_post_processing_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "--tutorial 9"),
+    ([fetch_template, string.Template("scons unit_testing --sconstruct=tutorial_10_unit_testing_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 10"),
+    ([fetch_template, string.Template("scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
+    ([fetch_template, string.Template("scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "--tutorial 11"),
+    ([fetch_template, string.Template("scons tutorial_12_archival --sconstruct=tutorial_12_archival_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "--tutorial 12"),
     ([fetch_template, "chmod +x solver.py", "scons ."], "tutorials/tutorial_writing_builders"),
-    ([fetch_template, "scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
-    ([fetch_template, "scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
+    ([fetch_template, string.Template("scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
+    ([fetch_template, string.Template("scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
     ([fetch_template, string.Template("${waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4")], "tutorials"),
-    ([fetch_template, "scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 --unconditional-build --print-build-failures"], "tutorials"),
+    ([fetch_template, string.Template("scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
     ([fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript"),
     # ModSim templates
     ([fetch_template, "scons . --jobs=4", string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template"),
@@ -122,6 +122,7 @@ require_third_party_tests = [
 @pytest.mark.parametrize("commands, fetch_options", system_tests)
 def test_system(
     system_test_directory,
+    unconditional_build,
     commands: typing.Iterable[str],
     fetch_options: typing.Optional[str]
 ) -> None:
@@ -156,6 +157,7 @@ def test_system(
             "odb_extract_command": odb_extract_command,
             "fetch_options": fetch_options,
             "temp_directory": temp_directory
+            "unconditional_build": "--unconditional-build" if unconditional_build else ""
         }
         for command in commands:
             if isinstance(command, string.Template):
