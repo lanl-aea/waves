@@ -10,6 +10,11 @@ stages:
 include: ".pipeline-common.yml"
 
 fast-test:
+  stage: test
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
+  tags:
+    - powershell-aea
   variables:
     GIT_STRATEGY: clone
   script:
@@ -20,14 +25,14 @@ fast-test:
     - conda env create --name waves-dev --file environment-win.yml --yes
     - conda activate waves-dev
     # Tests
-    - scons html html-internal flake8
-    - pytest -vvv -n 4 -m "not systemtest"
+    - scons html html-internal flake8 pytest --unconditional-build --cov-report
     - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
     # Environment cleanup. Usually an ``after_script``.
     - conda config --remove proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --remove proxy_servers.https http://proxyout.lanl.gov:8080
-  stage: test
-  rules:
-    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
-  tags:
-    - powershell-aea
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: build/pytest/coverage.xml

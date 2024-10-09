@@ -8,6 +8,10 @@ Changelog
 0.11.6 (unreleased)
 *******************
 
+Internal Changes
+================
+- Run the pytest alias during Windows CI ``pwsh`` job (:issue:`799`, :merge:`971`). By `Kyle Brindley`_.
+
 *******************
 0.11.5 (2024-10-08)
 *******************
