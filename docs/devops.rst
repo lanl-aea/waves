@@ -28,7 +28,15 @@ Local development environments
 AEA CI server environment
 =========================
 
-A minimal development environment for the waves project Gitlab-CI jobs is maintained on AEA servers.
+.. warning::
+
+   There are several known AEA RHEL CI fragile false-negative failure mechanisms. If one of these failures is observed,
+   try re-running the CI job without change.
+
+   * Conda environment creation fails in ``conda-build`` jobs. The shared conda command sometimes interferes with itself
+     while running simultaneous ``conda-build`` jobs.
+
+A minimal development environment for the waves project Gitlab-CI pipelines is maintained on AEA servers.
 
 1. Add the AEA modulefiles directory
 
@@ -49,28 +57,25 @@ HPC CI server environment
 
 .. warning::
 
-   While the system tests are run with an HPC CI job, the machine and runner uptime and system test runtime are
+   While the system tests are run with an HPC CI pipeline, the machine and runner uptime and system test runtime are
    considered too fragile for reliable use. The AEA RHEL system tests pass in less than 8 minutes, but the HPC system
-   test job has been observed to time out after an hour. The HPC CI system tests are always run for merge-requests and
-   schedule pipelines, but the pass/fail status is not used to mark CI jobs as failing. Developers are encourage to
-   check the HPC system test results, but not required to address failing HPC CI jobs.
+   test job has been observed to complete in under 15 minutes or time out after an hour. The HPC CI system tests are
+   always run for merge-requests and scheduled pipelines, but the pass/fail status is not used to mark CI tests as
+   failing. Developers are encouraged to check the HPC system test results, but not required to address failing HPC CI
+   pipelines.
 
-   There are four known HPC CI system test failures
+   There are several known HPC CI fragile false-negative failure mechanisms. If one of these failures is observed, try
+   re-running the CI job without change.
 
-   * (2) Cubit tutorial and alternate (Sierra or HPC Sierra installation bug)
-   * (1) Quinoa tutorial (Reason unknown. Direct, manual tutorial execution performs as expected)
-   * (1) Abaqus Sbatch tutorial (Reason unknown. Direct, manual tutorial execution performs as expected)
+   * Timeout at 1 hour
 
-   Occasionally, running the HPC system tests manually will reproduce a superset of known failures. Most often, the
-   ModSim templates fail, despite performing as expected in direct, manual execution.
-
-For computing policy reasons, HPC CI jobs are owned by the launching user and launched with the user's account. The HPC
-CI server environment must be created in the launching user's scratch space. For merge request pipelines, this means a
-project development environment will be created in the submitting developer's scratch space, e.g.
+For computing policy reasons, HPC CI pipelines are owned by the launching user and launched with the user's account. The
+HPC CI server environment must be created in the launching user's scratch space. For merge request pipelines, this means
+a project development environment will be created in the submitting developer's scratch space, e.g.
 ``${system_scratch}/$USER/waves-env``.
 
-Because the CI job runs as the launching user, Conda will create a package and environment cache according to the user's
-HPC Conda configuration. By default, Conda creates ``~/.conda/pkgs`` for the package cache, which can grow quite
+Because the CI pipeline runs as the launching user, Conda will create a package and environment cache according to the
+user's HPC Conda configuration. By default, Conda creates ``~/.conda/pkgs`` for the package cache, which can grow quite
 large. If a user's home directory space is limited, developers are highly encouraged to configure Conda to use their
 scratch space for the package cache, e.g. with a ``~/.condarc`` file using the template below, where the text
 ``${user_scratch}`` is replaced by the absolute path to the user's scratch directory.
@@ -85,6 +90,28 @@ scratch space for the package cache, e.g. with a ``~/.condarc`` file using the t
 
 You can read more about managing the Conda package and environment cache configuration here:
 https://conda.io/projects/conda/en/latest/user-guide/configuration/custom-env-and-pkg-locations.html
+
+Windows CI environment
+======================
+
+.. warning::
+
+   While the system tests are run with a Windows CI pipeline, the Windows CI server does not have the full suite of
+   third-party software required to run the full system tests. The pipeline is considered experimental and is always run
+   for merge-requests and scheduled pipelines, but the pass/fail status is not used to mark CI tests as failing.
+   Developers are encouraged to check the Windows test results, but not required to address failing Windows CI pipelines.
+
+   The Windows CI jobs usually run in under 6 minutes.
+
+   There are several known Windows CI fragile false-negative failure mechanisms. If one of these failures is observed,
+   try re-running the CI job without change.
+
+   * Incorrect or imcomplete CI environment build:
+     ``Script file 'C:\ProgramData\anaconda3\envs\waves-dev\Scripts\sphinx-build-script.py' is not present.``
+
+The Windows CI server environment is created under the default Gitlab-Runner user and may not be available for
+developers. There is an ``environment-win.yml`` file maintained under version control for the Windows CI job. Windows
+developers may use this to create a local development environment that closely mirrors the linux CI environment.
 
 .. include:: contribution.txt
 
