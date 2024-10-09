@@ -23,7 +23,7 @@ fast-test:
     - scons html html-internal flake8 pytest --unconditional-build --cov-report
     - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
     # Environment cleanup. Usually an ``after_script``.
-    - conda env remove --name waves-dev
+    - conda env remove --name waves-dev --yes
     - conda config --remove proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --remove proxy_servers.https http://proxyout.lanl.gov:8080
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
