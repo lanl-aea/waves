@@ -16,12 +16,14 @@ fast-test:
     - (& "C:\ProgramData\anaconda3\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
     - conda config --set proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --set proxy_servers.https http://proxyout.lanl.gov:8080
+    - conda env remove --name waves-dev
     - conda env create --name waves-dev --file environment-win.yml --yes
     - conda activate waves-dev
     # Tests
     - scons html html-internal flake8 pytest --unconditional-build --cov-report
     - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
     # Environment cleanup. Usually an ``after_script``.
+    - conda env remove --name waves-dev
     - conda config --remove proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --remove proxy_servers.https http://proxyout.lanl.gov:8080
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
