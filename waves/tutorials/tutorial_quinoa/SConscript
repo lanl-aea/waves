@@ -30,20 +30,24 @@ env.Alias("mesh", mesh)
 
 # SSH remote build on HPC
 remote_directory = remote_directory_prefix / "remote"
-target = env.SSHQuinoaSolver(
+remote_target = env.SSHQuinoaSolver(
     target=["remote.stdout"],
     source=["flow.lua", "box.exo"],
     charmrun="charmrun",
     inciter="inciter",
     remote_directory=remote_directory
 )
-env.Alias("quinoa-remote", target)
+env.Alias("quinoa-remote", remote_target)
 
 # Local build on local server
-target = envQuinoa.QuinoaSolver(
+local_target = envQuinoa.QuinoaSolver(
     target=["local.stdout"],
     source=["flow.lua", "box.exo"],
     charmrun=envQuinoa["charmrun"],
     inciter=envQuinoa["inciter"]
 )
-envQuinoa.Alias("quinoa-local", target)
+envQuinoa.Alias("quinoa-local", local_target)
+
+if not env["unconditional_build"] and not envQuinoa["inciter"]:
+    print(f"Program 'inciter' was not found in construction environment. Ignoring 'quinoa-local' target(s)")
+    Ignore([".", "quinoa-local"], target)
