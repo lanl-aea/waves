@@ -72,12 +72,26 @@ https://conda.io/projects/conda/en/latest/user-guide/configuration/custom-env-an
 Windows CI environment
 ======================
 
+The Windows CI server must have a system (or Gitlab-Runner user) installation of the following software separately from
+the Conda environment.
+
+* Git
+* Git-LFS
+* Anaconda/Miniconda/Miniforge
+
 The Windows CI server environment is created under the default Gitlab-Runner user and may not be available for
 developers. There is an ``environment-win.yml`` file maintained under version control for the Windows CI job. Windows
 developers may use this to create a local development environment that closely mirrors the linux CI environment.
 
 MacOS CI environment
 ====================
+
+The MacOS CI server must have a system (or Gitlab-Runner user) installation of the following software separately from
+the Conda environment.
+
+* Git
+* Git-LFS
+* Anaconda/Miniconda/Miniforge
 
 The MacOS CI server environment is created under the default Gitlab-Runner user and is not be available for developers.
 The MacOS CI server uses the full ``environment.yml`` file maintained under version control. MacOS developers may use
