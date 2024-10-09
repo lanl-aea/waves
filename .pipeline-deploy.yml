@@ -53,7 +53,7 @@ pypi-deploy:
   script:
     # Only deploy to Gitlab PyPI registry for clean version tags
     - if [[ -z $(git tag --points-at HEAD) ]]; then exit 0; fi
-    - scons html-internal man
+    - scons html-internal man --unconditional-build
     - cp -r build/docs/html-internal waves/docs
     - cp build/docs/man/*.1 waves/docs
     - python -m build
@@ -75,7 +75,7 @@ pages:
     - project_root=$PWD
     - rm -rf public && mkdir -p public/modsim-template
     # Ensure the ``_version.py`` file is created
-    - scons html-internal --clean && scons html-internal
+    - scons html-internal --clean && scons html-internal --unconditional-build
     - cp -r build/docs/html-internal/* public/
     # Build modsim template documentation
     - cd waves/modsim_template
