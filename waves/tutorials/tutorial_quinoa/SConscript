@@ -50,4 +50,4 @@ envQuinoa.Alias("quinoa-local", local_target)
 
 if not env["unconditional_build"] and not envQuinoa["inciter"]:
     print(f"Program 'inciter' was not found in construction environment. Ignoring 'quinoa-local' target(s)")
-    Ignore([".", "quinoa-local"], target)
+    Ignore([".", "quinoa-local"], local_target)

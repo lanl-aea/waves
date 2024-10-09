@@ -94,7 +94,10 @@ env.Append(BUILDERS={
 try:  # sstelmo/sstbigbird
     envQuinoa = waves.scons_extensions.shell_environment(quinoa_aea_environment)
 except subprocess.CalledProcessError:  # HPC
-    envQuinoa = waves.scons_extensions.shell_environment(quinoa_hpc_environment)
+    try:
+        envQuinoa = waves.scons_extensions.shell_environment(quinoa_hpc_environment)
+    except subprocess.CalledProcessError:  # Give up
+        envQuinoa = Environment()
 envQuinoa.AddMethod(waves.scons_extensions.add_program, "AddProgram")
 envQuinoa["inciter"] = envQuinoa.AddProgram(["inciter"])
 envQuinoa["charmrun"] = envQuinoa.AddProgram(["charmrun"])
