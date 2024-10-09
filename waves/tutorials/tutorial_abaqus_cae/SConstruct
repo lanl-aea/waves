@@ -15,11 +15,20 @@ AddOption(
     metavar="DIR",
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
+AddOption(
+    "--unconditional-build",
+    dest="unconditional_build",
+    default=False,
+    action="store_true",
+    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+            " and it would normally be ignored. (default: '%default')"
+)
 
 # Inherit user's full environment
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
-    build_dir=GetOption("build_dir")
+    build_dir=GetOption("build_dir"),
+    unconditional_build=GetOption("unconditional_build")
 )
 
 # Empty defaults list to avoid building all simulation targets by default

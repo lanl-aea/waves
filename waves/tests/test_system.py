@@ -69,11 +69,11 @@ if installed:
 
 require_third_party_tests = [
     # Tutorials
-    ([fetch_template, "scons rectangle --keep-going"], "tutorials/scons_quickstart"),
-    ([fetch_template, "scons rectangle --keep-going"], "tutorials/multi_action_task"),
-    ([fetch_template, "scons rectangle --keep-going"], "tutorials/waves_quickstart"),
-    ([fetch_template, "scons rectangle --keep-going"], "tutorials/tutorial_gmsh"),
-    ([fetch_template, "scons submit_beam_cae --keep-going"], "tutorials/tutorial_abaqus_cae"),
+    ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/scons_quickstart"),
+    ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/multi_action_task"),
+    ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/waves_quickstart"),
+    ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/tutorial_gmsh"),
+    ([fetch_template, string.Template("scons submit_beam_cae ${unconditional_build}")], "tutorials/tutorial_abaqus_cae"),
     ([fetch_template, string.Template("scons . --sconstruct=tutorial_00_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 0"),
     ([fetch_template, string.Template("scons tutorial_01_geometry --sconstruct=tutorial_01_geometry_SConstruct ${unconditional_build} --print-build-failures")], "--tutorial 1"),
     pytest.param(
