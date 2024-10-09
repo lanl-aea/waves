@@ -38,6 +38,15 @@ win:
     - if: $CI_PIPELINE_SOURCE == "schedule"
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
+mac:
+  stage: child-pipelines
+  trigger:
+    include:
+      - local: .pipeline-mac.yml
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
 deploy:
   stage: child-pipelines
   trigger:

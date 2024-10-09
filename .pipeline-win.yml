@@ -1,9 +1,3 @@
-# Required for HPC Jacamar Runner
-default:
-  id_tokens:
-    SITE_ID_TOKEN:
-      aud: https://re-git.lanl.gov
-
 stages:
   - test
 
