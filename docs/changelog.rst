@@ -12,6 +12,10 @@ Internal Changes
 ================
 - Run the pytest alias during Windows CI ``pwsh`` job (:issue:`799`, :merge:`971`). By `Kyle Brindley`_.
 - Run an experimental MacOS CI pipeline (:issue:`800`, :merge:`972`). By `Kyle Brindley`_.
+- Make the system tests more graceful when testing on systems without necessary third-party software, while still
+  allowing unconditional forced builds for internal Linux CI servers that must have all third-party software installed
+  for complete testing. Accomplished by passing through the WAVES ``--unconditional-build`` option to the
+  tutorial/system test configurations via pytest (:issue:`737`, :merge:`973`). By `Kyle Brindley`
 
 *******************
 0.11.5 (2024-10-08)
