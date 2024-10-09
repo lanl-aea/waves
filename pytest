@@ -13,6 +13,8 @@ pytest_source_list = [
 ]
 
 pytest_command = "cd ${package_dir} && pytest --junitxml=${TARGETS[0].abspath} -n 4 "
+if env["unconditional_build"]:
+    pytest_command += " --unconditional-build"
 target = ["test_results.xml"]
 
 # TODO: Remove the "program_operations" logic when the race conditions on test_program_operations are fixed
