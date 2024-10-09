@@ -12,25 +12,25 @@ pytest_source_list = [
     "pyproject.toml",
 ]
 
-pytest_command = "pytest --junitxml=${TARGETS[0].abspath} -n 4 "
+pytest_command = "cd ${package_dir} && pytest --junitxml=${TARGETS[0].abspath} -n 4 "
 target = ["test_results.xml"]
 
 # TODO: Remove the "program_operations" logic when the race conditions on test_program_operations are fixed
 coverage = ""
 program_operations_coverage = ""
-coverage_command = "true"
+coverage_command = ""
 if env["coverage_report"]:
     coverage = "--cov"
     program_operations_coverage = "--cov --cov-append"
     target.append("coverage.xml")
-    coverage_command = "coverage xml -o ${TARGETS[1].abspath}"
+    coverage_command = "cd ${package_dir} && coverage xml -o ${TARGETS[1].abspath}"
 
 pytest_node = env.Command(
     target=target,
     source=pytest_source_list,
     action=[
-        "cd ${package_dir} && ${pytest_command} -vvv -m 'not systemtest' ${coverage}",
-        "cd ${package_dir} && ${coverage_command}"
+        "${pytest_command} -vvv -m \"not systemtest\" ${coverage}",
+        "${coverage_command}"
     ],
     package_dir=env["package_dir"],
     pytest_command=pytest_command,
@@ -48,7 +48,7 @@ systemtest_node = env.Command(
     target=target,
     source=source,
     action=[
-        "cd ${package_dir} && ${pytest_command} -v --no-showlocals -m systemtest --tb=short --cache-clear --system-test-dir=${system_test_directory}"
+        "${pytest_command} -v --no-showlocals -m systemtest --tb=short --cache-clear --system-test-dir=${system_test_directory}"
     ],
     package_dir=env["package_dir"],
     pytest_command=pytest_command,
