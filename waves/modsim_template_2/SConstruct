@@ -18,6 +18,14 @@ AddOption(
     help="SCons build (variant) root directory. Relative or absolute path. (default: '%default')"
 )
 AddOption(
+    "--unconditional-build",
+    dest="unconditional_build",
+    default=False,
+    action="store_true",
+    help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
+            " and it would normally be ignored. (default: '%default')"
+)
+AddOption(
     "--solve-cpus",
     dest="solve_cpus",
     default=1,
@@ -39,6 +47,7 @@ AddOption(
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
+    unconditional_build=GetOption("unconditional_build"),
     solve_cpus=GetOption("solve_cpus"),
     print_build_failures=GetOption("print_build_failures"),
     TARFLAGS="-c -j",

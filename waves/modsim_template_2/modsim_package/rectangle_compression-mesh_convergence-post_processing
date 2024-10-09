@@ -51,4 +51,8 @@ artifacts.extend(workflow)
 # Collector alias(es)
 env.Alias(alias, workflow)
 
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
+    Ignore([".", alias], workflow)
+
 Return("artifacts")

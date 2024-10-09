@@ -11,4 +11,8 @@ archive = env.Tar(
 # Collector alias(es)
 env.Alias(f"{alias}-archive", archive)
 
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
+    print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
+    Ignore([".", f"{alias}-archive"], archive)
+
 Return("archive")

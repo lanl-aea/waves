@@ -98,7 +98,7 @@ env.Alias(f"{alias}-datacheck", datacheck)
 env.Alias(f"{alias}-images", images)
 env.Alias(alias, workflow)
 
-if not env["ABAQUS_PROGRAM"]:
+if not env["unconditional_build"] and not env["ABAQUS_PROGRAM"]:
     print(f"Program 'abaqus' was not found in construction environment. Ignoring '{alias}' target(s)")
     Ignore([".", alias], workflow)
     Ignore([".", f"{alias}-images"], images)
