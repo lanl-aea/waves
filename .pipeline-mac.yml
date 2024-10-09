@@ -14,6 +14,7 @@ fast-test:
     GIT_STRATEGY: clone
   script:
     # Environment creation/setup. Usually a ``before_script``.
+    - source $HOME/anaconda3/etc/profile.d/conda.sh
     - conda config --set proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --set proxy_servers.https http://proxyout.lanl.gov:8080
     - conda env create --name waves-dev --file environment.yml --yes
