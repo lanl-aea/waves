@@ -19,7 +19,6 @@ mac-fast-test:
     - conda activate waves-dev
     # Tests
     - scons html html-internal flake8 pytest systemtest --cov-report
-    - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:

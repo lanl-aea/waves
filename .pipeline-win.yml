@@ -21,7 +21,6 @@ win-fast-test:
     - conda activate waves-dev
     # Tests
     - scons html html-internal flake8 pytest systemtest --cov-report
-    - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
     # Environment cleanup. Usually an ``after_script``.
     - conda env remove --name waves-dev --yes
     - conda config --remove proxy_servers.http http://proxyout.lanl.gov:8080
