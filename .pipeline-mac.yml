@@ -15,16 +15,11 @@ fast-test:
   script:
     # Environment creation/setup. Usually a ``before_script``.
     - source $HOME/anaconda3/etc/profile.d/conda.sh
-    - conda config --set proxy_servers.http http://proxyout.lanl.gov:8080
-    - conda config --set proxy_servers.https http://proxyout.lanl.gov:8080
     - conda env create --name waves-dev --file environment.yml --yes
     - conda activate waves-dev
     # Tests
     - scons html html-internal flake8 pytest --unconditional-build --cov-report
     - pytest -v -n 4 -m "systemtest and not require_third_party" --tb=short
-    # Environment cleanup. Usually an ``after_script``.
-    - conda config --remove-key proxy_servers.http
-    - conda config --remove-key proxy_servers.https
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
