@@ -11,6 +11,7 @@ Changelog
 Internal Changes
 ================
 - Run the pytest alias during Windows CI ``pwsh`` job (:issue:`799`, :merge:`971`). By `Kyle Brindley`_.
+- Run an experimental MacOS CI pipeline (:issue:`800`, :merge:`972`). By `Kyle Brindley`_.
 
 *******************
 0.11.5 (2024-10-08)
