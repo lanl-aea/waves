@@ -14,6 +14,8 @@ Internal Changes
 - Run an experimental MacOS CI pipeline (:issue:`800`, :merge:`972`). By `Kyle Brindley`_.
 - Make the system tests more graceful when testing on systems without necessary third-party software, while still
   allowing unconditional forced builds for internal Linux CI servers (:issue:`737`, :merge:`973`). By `Kyle Brindley`
+- Skip documentation PDF build when ``latexmk`` is not found. Allow override to force build on appropriate CI servers
+  (:issue:`795`, :merge:`974`). By `Kyle Brindley`_.
 
 *******************
 0.11.5 (2024-10-08)
