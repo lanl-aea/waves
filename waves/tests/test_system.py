@@ -109,7 +109,12 @@ require_third_party_tests = [
     ([fetch_template, string.Template("scons tutorial_sensitivity_study --sconstruct=tutorial_sensitivity_study_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
     ([fetch_template, string.Template("scons datacheck --sconstruct=tutorial_11_regression_testing_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "--tutorial 11"),
     ([fetch_template, string.Template("scons tutorial_12_archival --sconstruct=tutorial_12_archival_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "--tutorial 12"),
-    ([fetch_template, "chmod +x solver.py", "scons ."], "tutorials/tutorial_writing_builders"),
+    # TODO: Windows compatible writing builders tutorial
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/803
+    pytest.param(
+        [fetch_template, "chmod +x solver.py", "scons ."], "tutorials/tutorial_writing_builders",
+        marks=pytest.mark.skipif(testing_windows, reason="Tutorial not yet Windows compatible")
+    ),
     ([fetch_template, string.Template("scons tutorial_task_reuse --sconstruct=tutorial_task_reuse_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
     ([fetch_template, string.Template("scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
     ([fetch_template, string.Template("${waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4")], "tutorials"),
