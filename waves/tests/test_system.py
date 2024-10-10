@@ -171,7 +171,7 @@ def test_system(
         for command in commands:
             if isinstance(command, string.Template):
                 command = command.substitute(template_substitution)
-            command = shlex.split(command)
+            command = shlex.split(command, posix=not testing_windows)
             subprocess.check_output(command, env=env, cwd=temp_directory, text=True)
 
 
