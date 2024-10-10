@@ -18,7 +18,7 @@ mac-fast-test:
     - conda env create --name waves-dev --file environment.yml --yes
     - conda activate waves-dev
     # Tests
-    - scons html html-internal flake8 pytest systemtest --cov-report
+    - scons regression --keep-going --cov-report
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
