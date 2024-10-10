@@ -33,6 +33,7 @@ env = waves.scons_extensions.WAVESEnvironment(
     variant_dir_base=pathlib.Path(GetOption("variant_dir_base")),
     solve_cpus=GetOption("solve_cpus"),
 )
+env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
 # Print failed task *.stdout files
 env.PrintBuildFailures()
