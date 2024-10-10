@@ -114,7 +114,12 @@ require_third_party_tests = [
     ([fetch_template, string.Template("scons tutorial_mesh_convergence --sconstruct=tutorial_mesh_convergence_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
     ([fetch_template, string.Template("${waves_command} build tutorial_extend_study --max-iterations=4 --sconstruct=tutorial_extend_study_SConstruct --jobs=4")], "tutorials"),
     ([fetch_template, string.Template("scons tutorial_part_image --sconstruct=tutorial_part_image_SConstruct --jobs=4 ${unconditional_build} --print-build-failures")], "tutorials"),
-    ([fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript"),
+    # TODO: Write a Windows friendly "cat" like command
+    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/802
+    pytest.param(
+        [fetch_template, "scons . --jobs=4"], "tutorials/tutorial_ParameterStudySConscript",
+        marks=pytest.mark.skipif(testing_windows, reason="Windows CI server doesn't like the cat command"),
+    ),
     # ModSim templates
     pytest.param(
         [fetch_template, string.Template("scons . ${unconditional_build} --jobs=4"), string.Template("${waves_command} visualize rectangle_compression-nominal --output-file nominal.png")], "modsim_template",
