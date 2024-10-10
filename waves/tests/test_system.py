@@ -70,7 +70,10 @@ if installed:
 require_third_party_tests = [
     # Tutorials
     ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/scons_quickstart"),
-    ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/multi_action_task"),
+    pytest.param(
+        [fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/multi_action_task",
+        marks=pytest.mark.skipif(testing_windows and not installed, reason="Windows handles symlinks in repository poorly")
+    ),
     ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/waves_quickstart"),
     ([fetch_template, string.Template("scons rectangle ${unconditional_build}")], "tutorials/tutorial_gmsh"),
     ([fetch_template, string.Template("scons submit_beam_cae ${unconditional_build}")], "tutorials/tutorial_abaqus_cae"),
