@@ -200,6 +200,16 @@ The project regression suite is collected under the ``regression`` alias and can
 
    $ scons regression
 
+By default, the system tests are configured to run with permissive skips for missing third-party software. To force the
+full execution of the system tests, a pass-through ``--unconditional-build`` flag may be added. This forces the
+documentation build, even if ``sphinx-build`` is missing, and passes through pytest to the system tests and tutorials as
+an SCons CLI option of the same name. The AEA RHEL CI server contains all necessary third-party software, so the CI
+tests on this server require the full build as
+
+.. code-block::
+
+   $ scons regression --unconditional-build
+
 The continuous integration server also performs a separate style guide check using ``flake8`` and associated alias
 
 .. code-block::
