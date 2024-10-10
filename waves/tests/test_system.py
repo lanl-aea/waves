@@ -88,7 +88,10 @@ require_third_party_tests = [
         [fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")], "tutorials/tutorial_cubit",
         marks=pytest.mark.skipif(testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit")
     ),
-    ([fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")], "tutorials/tutorial_cubit_alternate"),
+    pytest.param(
+        [fetch_template, string.Template("scons . ${unconditional_build} --print-build-failures")], "tutorials/tutorial_cubit_alternate",
+        marks=pytest.mark.skipif(testing_macos or testing_windows, reason="Cannot reliably skip '.' target on CI servers missing Cubit")
+    ),
     ([fetch_template, string.Template("scons quinoa-local ${unconditional_build} --print-build-failures")], "tutorials/tutorial_quinoa"),
     ([fetch_template, string.Template("scons tutorial_escape_sequences --sconstruct=tutorial_escape_sequences_SConstruct --solve-cpus=1 ${unconditional_build} --print-build-failures")], "tutorials"),
     # TODO: Figure out how to authenticate the institutional account without expanding the user credential exposure to
