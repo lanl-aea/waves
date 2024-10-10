@@ -11,23 +11,23 @@ warnings.filterwarnings(action="ignore", message="tag", category=UserWarning, mo
 
 # ========================================================================================================= SETTINGS ===
 # Set project meta variables
-project_dir = pathlib.Path(Dir('.').abspath)
-documentation_source_dir = 'docs'
-package_source_dir = 'waves'
-project_name = 'waves'
+project_dir = pathlib.Path(Dir(".").abspath)
+documentation_source_dir = "docs"
+package_source_dir = "waves"
+project_name = "waves"
 version = setuptools_scm.get_version()
 project_variables = {
-    'project_dir': project_dir,
-    'package_dir': project_dir / package_source_dir,
-    'version': version,
-    'documentation_pdf': f"{project_name}-{version}.pdf",
-    'tutorials_dir': project_dir / 'waves/tutorials',
-    'modsim_dir': 'modsim_package',
-    'abaqus_dir': 'modsim_package/abaqus',
-    'argparse_types_dir': 'modsim_package/argparse_types',
-    'cubit_dir': 'modsim_package/cubit',
-    'python_dir': 'modsim_package/python',
-    'tests_dir': 'modsim_package/python/tests'
+    "project_dir": project_dir,
+    "package_dir": project_dir / package_source_dir,
+    "version": version,
+    "documentation_pdf": f"{project_name}-{version}.pdf",
+    "tutorials_dir": project_dir / "waves/tutorials",
+    "modsim_dir": "modsim_package",
+    "abaqus_dir": "modsim_package/abaqus",
+    "argparse_types_dir": "modsim_package/argparse_types",
+    "cubit_dir": "modsim_package/cubit",
+    "python_dir": "modsim_package/python",
+    "tests_dir": "modsim_package/python/tests"
 }
 
 # ============================================================================================= COMMAND LINE OPTIONS ===
@@ -77,10 +77,10 @@ env = Environment(
 env["ENV"]["PYTHONDONTWRITEBYTECODE"] = 1
 
 # Find required programs for conditional target ignoring
-required_programs = ['sphinx-build']
+required_programs = ["sphinx-build", "latexmk"]
 conf = env.Configure()
 for program in required_programs:
-    env[program.replace('-', '_')] = conf.CheckProg(program)
+    env[program.replace("-", "_")] = conf.CheckProg(program)
 conf.Finish()
 
 # Build variable substitution dictionary
@@ -91,13 +91,13 @@ for key, value in project_variables.items():
 
 # ========================================================================================================== TARGETS ===
 # Add documentation target
-if not env['ignore_documentation']:
+if not env["ignore_documentation"]:
     build_dir = env["variant_dir_base"] / documentation_source_dir
     source_dir = documentation_source_dir
     SConscript(
         dirs=documentation_source_dir,
         variant_dir=str(build_dir),
-        exports={'env': env, 'project_substitution_dictionary': project_substitution_dictionary}
+        exports={"env": env, "project_substitution_dictionary": project_substitution_dictionary}
     )
 else:
     print(f"The 'ignore_documentation' option was set to 'True'. Skipping documentation SConscript file(s)")
