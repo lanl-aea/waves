@@ -40,7 +40,6 @@ class TestScipySampler:
         for sampler in _supported_scipy_samplers:
             TestGenerate = ScipySampler(sampler, parameter_schema, **kwargs)
             samples_array = TestGenerate._samples
-            quantiles_array = TestGenerate._quantiles
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
             assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
@@ -75,6 +74,5 @@ class TestScipySampler:
         for sampler in _supported_scipy_samplers:
             original_study, merged_study = merge_samplers(ScipySampler, first_schema, second_schema, kwargs, sampler)
             merged_study._samples.astype(float)
-            merged_study._quantiles.astype(float)
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
