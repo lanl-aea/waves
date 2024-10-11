@@ -42,6 +42,7 @@ artifacts.extend(workflow)
 # Collector alias named after the model simulation
 env.Alias('rectangle', workflow)
 
-if not env['unconditional_build'] and not env["CCX_PROGRAM"]:
-    print(f"Program 'CalculiX (ccx)' was not found in construction environment. Ignoring 'rectangle' target(s)")
+if not env['unconditional_build'] and (not env["CCX_PROGRAM"] or not env["ccx2paraview"]):
+    print("Program 'CalculiX (ccx)' or 'ccx2paraview' was not found in construction environment. " \
+          "Ignoring 'rectangle' target(s)")
     Ignore([".", "rectangle"], workflow + artifacts)
