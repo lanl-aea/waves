@@ -634,8 +634,9 @@ class _ScipyGenerator(ParameterGenerator, ABC):
             number of parameters).
         """
         self._samples = numpy.zeros((set_count, parameter_count))
+        quantiles = sampler.random(set_count)
         for i, distribution in enumerate(self.parameter_distributions.values()):
-            self._samples[:, i] = distribution.ppf(sampler.random(set_count)[:, i])
+            self._samples[:, i] = distribution.ppf(quantiles[:, i])
 
     def _create_parameter_names(self) -> None:
         """Construct the parameter names from a distribution parameter schema"""

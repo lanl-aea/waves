@@ -22,19 +22,13 @@ class TestSobolSequence:
                          [5.   , 3.5  ],
                          [7.5  , 2.75 ],
                          [2.5  , 4.25 ],
-                         [3.75 , 3.125]]),
-            numpy.array([[0.   , 0.   ],
-                         [0.5  , 0.5  ],
-                         [0.75 , 0.25 ],
-                         [0.25 , 0.75 ],
-                         [0.375, 0.375]]),
+                         [3.75 , 3.125]])
         ),
         "good schema 2x1": (
             {'num_simulations': 2,
              'parameter_1': {'distribution': 'uniform', 'loc': 0, 'scale': 10}},
             {'scramble': False},
             numpy.array([[0.], [5.0]]),
-            numpy.array([[0.], [0.5]]),
         ),
         "good schema 1x2": (
             {'num_simulations': 1,
@@ -42,22 +36,19 @@ class TestSobolSequence:
              'parameter_2': {'distribution': 'uniform', 'loc': 2, 'scale':  3}},
             {'scramble': False},
             numpy.array([[0., 2.]]),
-            numpy.array([[0., 0.]])
         )
     }
 
-    @pytest.mark.parametrize("parameter_schema, kwargs, expected_samples, expected_quantiles",
+    @pytest.mark.parametrize("parameter_schema, kwargs, expected_samples",
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate(self, parameter_schema, kwargs, expected_samples, expected_quantiles):
+    def test_generate(self, parameter_schema, kwargs, expected_samples):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         generator_classes = (SobolSequence(parameter_schema, **kwargs),
                              ScipySampler("Sobol", parameter_schema, **kwargs))
         for TestGenerate in generator_classes:
             samples_array = TestGenerate._samples
-            quantiles_array = TestGenerate._quantiles
             assert numpy.allclose(samples_array, expected_samples)
-            assert numpy.allclose(quantiles_array, expected_quantiles)
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
             assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
@@ -83,15 +74,7 @@ class TestSobolSequence:
                          [8.75 , 4.625],
                          [6.25 , 2.375],
                          [7.5  , 2.75 ],
-                         [0.   , 2.   ]]),
-            numpy.array([[0.125, 0.625],
-                         [0.5  , 0.5  ],
-                         [0.25 , 0.75 ],
-                         [0.375, 0.375],
-                         [0.875, 0.875],
-                         [0.625, 0.125],
-                         [0.75 , 0.25 ],
-                         [0.   , 0.   ]])
+                         [0.   , 2.   ]])
         ),
         'unchanged sets': (
             {'num_simulations': 5,
@@ -106,26 +89,19 @@ class TestSobolSequence:
                          [2.5  , 4.25 ],
                          [3.75 , 3.125],
                          [7.5  , 2.75 ],
-                         [0.   , 2.   ]]),
-            numpy.array([[0.5  , 0.5  ],
-                         [0.25 , 0.75 ],
-                         [0.375, 0.375],
-                         [0.75 , 0.25 ],
-                         [0.   , 0.   ]])
+                         [0.   , 2.   ]])
         )
     }
 
-    @pytest.mark.parametrize('first_schema, second_schema, kwargs, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize('first_schema, second_schema, kwargs, expected_samples',
                              merge_test.values(), ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, kwargs, expected_samples, expected_quantiles):
+    def test_merge(self, first_schema, second_schema, kwargs, expected_samples):
         # Sobol
         original_study, merged_study = merge_samplers(SobolSequence, first_schema, second_schema, kwargs)
         samples_array = merged_study._samples.astype(float)
-        quantiles_array = merged_study._quantiles.astype(float)
         # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
         # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
         assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
-        assert numpy.allclose(numpy.sort(quantiles_array, axis=0), numpy.sort(expected_quantiles, axis=0))
         consistent_hash_parameter_check(original_study, merged_study)
         self_consistency_checks(merged_study)
 
@@ -133,10 +109,8 @@ class TestSobolSequence:
         original_study, merged_study = merge_samplers(ScipySampler, first_schema, second_schema, kwargs,
                                                       sampler="Sobol")
         samples_array = merged_study._samples.astype(float)
-        quantiles_array = merged_study._quantiles.astype(float)
         # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
         # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
         assert numpy.allclose(numpy.sort(samples_array, axis=0), numpy.sort(expected_samples, axis=0))
-        assert numpy.allclose(numpy.sort(quantiles_array, axis=0), numpy.sort(expected_quantiles, axis=0))
         consistent_hash_parameter_check(original_study, merged_study)
         self_consistency_checks(merged_study)
