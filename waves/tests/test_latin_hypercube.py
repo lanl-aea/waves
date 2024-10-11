@@ -14,8 +14,7 @@ from common import merge_samplers
 class TestLatinHypercube:
     """Class for testing LatinHypercube parameter study generator class"""
 
-    generate_input_interface = "parameter_schema, seed, expected_samples, expected_quantiles, " \
-                               "expected_scipy_kwds"
+    generate_input_interface = "parameter_schema, seed, expected_samples, expected_scipy_kwds"
     generate_input = {
         "good schema 5x2": (
             {'num_simulations': 5,
@@ -27,11 +26,6 @@ class TestLatinHypercube:
                          [ 50.20487353, -49.140834  ],
                          [ 50.37931242, -50.14390653],
                          [ 49.67971797, -50.49606915]]),
-            numpy.array([[  0.84520879,   0.11222431],
-                         [  0.02828042,   0.66052639],
-                         [  0.58116453,   0.80487553],
-                         [  0.64777206,   0.44278714],
-                         [  0.37437727,   0.30992281]]),
             [{"loc":  50, "scale": 1},
              {"loc": -50, "scale": 1}]
         ),
@@ -40,7 +34,6 @@ class TestLatinHypercube:
             'parameter_1': {'distribution': 'norm', 'loc': 50, 'scale': 1}},
             42,
             numpy.array([[50.2872041 ], [49.41882358]]),
-            numpy.array([[ 0.61302198], [ 0.28056078]]),
             [{"loc":  50, "scale": 1}]
         ),
         "good schema 1x2": (
@@ -49,7 +42,6 @@ class TestLatinHypercube:
              'parameter_2': {'distribution': 'norm', 'loc': -50, 'scale': 1}},
             42,
             numpy.array([[49.24806127, -49.84618661]]),
-            numpy.array([[ 0.22604395,   0.56112156]]),
             [{"loc":  50, "scale": 1},
              {"loc": -50, "scale": 1}]
         )
@@ -58,17 +50,14 @@ class TestLatinHypercube:
     @pytest.mark.parametrize(generate_input_interface,
                              generate_input.values(),
                              ids=generate_input.keys())
-    def test_generate(self, parameter_schema, seed,
-                      expected_samples, expected_quantiles, expected_scipy_kwds):
+    def test_generate(self, parameter_schema, seed, expected_samples, expected_scipy_kwds):
         parameter_names = [key for key in parameter_schema.keys() if key != 'num_simulations']
         kwargs={'seed': seed}
         generator_classes = (LatinHypercube(parameter_schema, **kwargs),
                              ScipySampler("LatinHypercube", parameter_schema, **kwargs))
         for TestGenerate in generator_classes:
             samples_array = TestGenerate._samples
-            quantiles_array = TestGenerate._quantiles
             assert numpy.allclose(samples_array, expected_samples)
-            assert numpy.allclose(quantiles_array, expected_quantiles)
             # Verify that the parameter set name creation method was called
             expected_set_names = [f"parameter_set{num}" for num in range(parameter_schema['num_simulations'])]
             assert list(TestGenerate._parameter_set_names.values()) == expected_set_names
@@ -88,26 +77,21 @@ class TestLatinHypercube:
             42,
             numpy.array([[49.24806127, -49.84618661],
                          [50.17815924, -49.61112421],
-                         [48.7893875 , -50.58117642]]),
-            numpy.array([[ 0.22604395,   0.56112156],
-                         [ 0.57070104,   0.65131599],
-                         [ 0.11302198,   0.28056078]])
+                         [48.7893875 , -50.58117642]])
         )
     }
 
-    @pytest.mark.parametrize('first_schema, second_schema, seed, expected_samples, expected_quantiles',
+    @pytest.mark.parametrize('first_schema, second_schema, seed, expected_samples',
                                  merge_test.values(),
                              ids=merge_test.keys())
-    def test_merge(self, first_schema, second_schema, seed, expected_samples, expected_quantiles):
+    def test_merge(self, first_schema, second_schema, seed, expected_samples):
         # LatinHypercube
         kwargs={'seed': seed}
         TestMerge1, TestMerge2 = merge_samplers(LatinHypercube, first_schema, second_schema, kwargs)
         samples = TestMerge2._samples.astype(float)
-        quantiles = TestMerge2._quantiles.astype(float)
         # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
         # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
         assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
-        assert numpy.allclose(numpy.sort(quantiles, axis=0), numpy.sort(expected_quantiles, axis=0))
         # Check for consistent hash-parameter set relationships
         for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
             assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
@@ -119,11 +103,9 @@ class TestLatinHypercube:
         TestMerge1, TestMerge2 = merge_samplers(ScipySampler, first_schema, second_schema, kwargs,
                                                 sampler="LatinHypercube")
         samples = TestMerge2._samples.astype(float)
-        quantiles = TestMerge2._quantiles.astype(float)
         # Sort flattens the array if no axis is provided. We must preserve set contents (rows), so must sort on columns.
         # The unindexed set order doesn't matter, so sorting on columns doesn't impact these assertions
         assert numpy.allclose(numpy.sort(samples, axis=0), numpy.sort(expected_samples, axis=0))
-        assert numpy.allclose(numpy.sort(quantiles, axis=0), numpy.sort(expected_quantiles, axis=0))
         # Check for consistent hash-parameter set relationships
         for set_name, parameter_set in TestMerge1.parameter_study.groupby(_set_coordinate_key):
             assert parameter_set == TestMerge2.parameter_study.sel(parameter_sets=set_name)
