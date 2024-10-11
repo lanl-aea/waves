@@ -2,31 +2,33 @@ Import('env')
 
 # Geometry, Partition, Mesh
 env.PythonScript(
-    target="rectangle_gmsh.inp",
-    source="rectangle.py",
+    target=["rectangle_gmsh.inp"],
+    source=["rectangle.py"],
     subcommand_options="--output-file=${TARGET.abspath}",
     action_suffix="2>&1 | tee ${TARGETS[-1].abspath}"
 )
 
 env.PythonScript(
-    target="rectangle_mesh.inp",
+    target=["rectangle_mesh.inp"],
     source=["strip_heading.py", "rectangle_gmsh.inp"],
     subcommand_options="--input-file=${SOURCES[1].abspath} --output-file=${TARGET.abspath}",
     action_suffix="2>&1 | tee ${TARGETS[-1].abspath}"
 )
 
-# Abaqus Solve
-target = env.AbaqusSolver(
-    target="rectangle_compression.odb",
-    source="rectangle_compression.inp",
+# CalculiX Solve
+target = env.Command(
+    target=[f"rectangle_compression.{suffix}" for suffix in ("frd", "dat", "sta", "cvg", "12d")],
+    source=["rectangle_compression.inp"],
+    action=["cd ${TARGET.dir.abspath} && ${CCX_PROGRAM} ${program_required} ${program_options} ${action_suffix}"],
     job_name="rectangle_compression",
-    program_options="-double both -job ${job_name}",
+    program_required="-i ${SOURCE.filebase}",
+    program_options="-job ${job_name}",
     action_suffix="2>&1 | tee ${TARGETS[-1].abspath}"
 )
 
 # Collector alias named after the model simulation
 env.Alias('rectangle', target)
 
-if not env['unconditional_build'] and not env["ABAQUS_PROGRAM"]:
-    print(f"Program 'abaqus' was not found in construction environment. Ignoring 'rectangle' target(s)")
+if not env['unconditional_build'] and not env["CCX_PROGRAM"]:
+    print(f"Program 'CalculiX (ccx)' was not found in construction environment. Ignoring 'rectangle' target(s)")
     Ignore([".", "rectangle"], target)
