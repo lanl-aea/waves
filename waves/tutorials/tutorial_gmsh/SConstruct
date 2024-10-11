@@ -1,6 +1,6 @@
 #! /usr/bin/env python
-
 import os
+import platform 
 
 import waves
 
@@ -23,13 +23,32 @@ AddOption(
     help="Boolean to force building of conditionally ignored targets, e.g. if the target's action program is missing" \
             " and it would normally be ignored. (default: '%default')"
 )
+AddOption(
+    "--verbose-tasks",
+    dest="verbose_tasks",
+    default=False,
+    action="store_true",
+    help="Boolean to 'tee' output for interactive and verbose task execution. (default: '%default')"
+)
 
 # Inherit user's full environment
 env = waves.scons_extensions.WAVESEnvironment(
     ENV=os.environ.copy(),
     build_dir=GetOption("build_dir"),
-    unconditional_build=GetOption("unconditional_build")
+    unconditional_build=GetOption("unconditional_build"),
+    verbose_tasks=GetOption("verbose_tasks")
 )
+
+# Action suffix
+system = platform.system().lower()
+if env["verbose_tasks"]:
+    if system == "windows":  # Assume PowerShell
+        env["action_suffix"] = "| Tee-Object -FilePath ${TARGETS[-1].abspath}"
+    else:  # *Nix style tee
+        env["action_suffix"] = "2>&1 | tee ${TARGETS[-1].abspath}"
+else:
+    # Default WAVES action suffix
+    env["action_suffix"] = "> ${TARGETS[-1].abspath} 2>&1"
 
 # Always copy (no sym-links) when duplicating
 env.SetOption("duplicate", "copy")
