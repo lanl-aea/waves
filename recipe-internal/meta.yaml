@@ -54,6 +54,8 @@ requirements:
 
 test:
   requires:
+    - calculix
+    - ccx2paraview
     - fierro-fe-cpu
     - gmsh
     - h5netcdf
