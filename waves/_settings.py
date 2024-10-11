@@ -55,11 +55,9 @@ _default_output_file_type_cli = _allowable_output_file_types[1]
 _hash_coordinate_key = "parameter_set_hash"
 _parameter_coordinate_key = "parameters"
 _set_coordinate_key = "parameter_sets"
-_allowable_data_type_typing = typing.Literal["samples", "quantiles"]
+_allowable_data_type_typing = typing.Literal["samples"]
 _allowable_data_type = typing.get_args(_allowable_data_type_typing)
 _samples_data_variable = _allowable_data_type[0]
-_quantiles_data_variable = _allowable_data_type[1]
-_quantiles_attribute_key = "_quantiles"
 _installed_docs_index = _project_root_abspath / "docs/index.html"
 _modsim_template_directory = _project_root_abspath / "modsim_template"
 _tutorials_directory = _project_root_abspath / "tutorials"
@@ -83,9 +81,7 @@ _parameter_study_description = \
     "Generates parameter studies in various output formats. Writes parameter study to STDOUT by default. If an " \
     "output file template is specified, output one file per parameter set. Output file(s) are written if the file " \
     "doesn't exist and overwritten when the file contents have changed. The overwrite option will always overwrite " \
-    "all files. The dry run option will print a list of files and contents that would have been  written. " \
-    "The 'h5' output is the only output type that contains both the parameter " \
-    "samples and quantiles."
+    "all files. The dry run option will print a list of files and contents that would have been  written."
 
 # Fetch
 _allowable_tutorial_numbers_typing = typing.Literal[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
