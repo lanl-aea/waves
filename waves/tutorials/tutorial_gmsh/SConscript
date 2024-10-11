@@ -1,4 +1,6 @@
 #! /usr/bin/env python
+import waves
+
 Import('env')
 
 # Collect the target nodes to build concise target alias(es)
@@ -22,7 +24,7 @@ artifacts.extend(env.PythonScript(
 
 # CalculiX Solve
 artifacts.extend(env.Command(
-    target=[f"rectangle_compression.{suffix}" for suffix in ("frd", "dat", "sta", "cvg", "12d")],
+    target=[f"rectangle_compression.{suffix}" for suffix in ("frd", "dat", "sta", "cvg", "12d", "frd.stdout")],
     source=["rectangle_compression.inp"],
     action=["cd ${TARGET.dir.abspath} && ${CCX_PROGRAM} ${program_required} ${program_options} ${action_suffix}"],
     job_name="rectangle_compression",
