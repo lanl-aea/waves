@@ -41,3 +41,6 @@ dependencies:
   - sphinxcontrib-bibtex
   - twine >=5
   - xarray
+  # TODO: Remove explicit dependency when ccx2paraview-feedstock patches the conda-forge runtime dependency list
+  # https://github.com/conda-forge/ccx2paraview-feedstock/issues/4
+  - vtk
