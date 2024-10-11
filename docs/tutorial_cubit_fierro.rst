@@ -155,16 +155,6 @@ Fierro Input File(s)
    .. literalinclude:: fierro_cube_compression.yaml
       :lineno-match:
 
-The current version of the `Fierro`_ implicit solver requires an XML formatted input file to provide Trilinos solver
-controls. A future version of `Fierro`_ will consolidate the Trilinos controls directly into the input file. Until then,
-the following XML file must be present in the same directory as the input file when executing
-``fierro-parallel-implicit``.
-
-.. admonition:: waves-tutorials/tutorial_cubit_fierro/modsim_package/fierro/elasticity3D.xml
-
-   .. literalinclude:: fierro_elasticity3D.xml
-      :lineno-match:
-
 **********
 SConstruct
 **********

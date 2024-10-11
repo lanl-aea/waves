@@ -46,8 +46,7 @@ env.PythonScript(
 
 # SolverPrep
 fierro_source_list = [
-    fierro_source_abspath / "cube_compression.yaml",
-    fierro_source_abspath / "elasticity3D.xml"
+    fierro_source_abspath / "cube_compression.yaml"
 ]
 fierro_source_list = [pathlib.Path(source_file) for source_file in fierro_source_list]
 workflow.extend(env.CopySubstfile(fierro_source_list))

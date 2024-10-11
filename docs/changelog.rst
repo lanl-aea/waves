@@ -16,6 +16,7 @@ Internal Changes
   allowing unconditional forced builds for internal Linux CI servers (:issue:`737`, :merge:`973`). By `Kyle Brindley`
 - Skip documentation PDF build when ``latexmk`` is not found. Allow override to force build on appropriate CI servers
   (:issue:`795`, :merge:`974`). By `Kyle Brindley`_.
+- Remove deprecated ``elasticity3D.xml`` file from Fierro tutorials (:issue:`804`, :merge:`976`). By `Kyle Brindley`_.
 
 *******************
 0.11.5 (2024-10-08)

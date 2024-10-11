@@ -254,7 +254,6 @@ tutorial_files_list = [
     env["tutorials_dir"] / "tutorial_cubit/modsim_package/sierra/rectangle_compression.i",
     env["tutorials_dir"] / "tutorial_cubit/modsim_package/fierro/cube_compression.yaml",
     env["tutorials_dir"] / "tutorial_cubit/modsim_package/fierro/convert_to_vtk2ascii.py",
-    env["tutorials_dir"] / "tutorial_cubit/modsim_package/fierro/elasticity3D.xml",
     env["tutorials_dir"] / "tutorial_quinoa/SConstruct",
     env["tutorials_dir"] / "tutorial_quinoa/SConscript",
     env["tutorials_dir"] / "tutorial_quinoa/box.py",
