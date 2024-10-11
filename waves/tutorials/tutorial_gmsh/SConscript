@@ -1,22 +1,26 @@
 Import('env')
 
+# Collect the target nodes to build concise target alias(es)
+artifacts = []
+workflow = []
+
 # Geometry, Partition, Mesh
-env.PythonScript(
+artifacts.extend(env.PythonScript(
     target=["rectangle_gmsh.inp"],
     source=["rectangle.py"],
     subcommand_options="--output-file=${TARGET.abspath}",
     action_suffix="2>&1 | tee ${TARGETS[-1].abspath}"
-)
+))
 
-env.PythonScript(
+artifacts.extend(env.PythonScript(
     target=["rectangle_mesh.inp"],
     source=["strip_heading.py", "rectangle_gmsh.inp"],
     subcommand_options="--input-file=${SOURCES[1].abspath} --output-file=${TARGET.abspath}",
     action_suffix="2>&1 | tee ${TARGETS[-1].abspath}"
-)
+))
 
 # CalculiX Solve
-target = env.Command(
+artifacts.extend(env.Command(
     target=[f"rectangle_compression.{suffix}" for suffix in ("frd", "dat", "sta", "cvg", "12d")],
     source=["rectangle_compression.inp"],
     action=["cd ${TARGET.dir.abspath} && ${CCX_PROGRAM} ${program_required} ${program_options} ${action_suffix}"],
@@ -24,11 +28,20 @@ target = env.Command(
     program_required="-i ${SOURCE.filebase}",
     program_options="-job ${job_name}",
     action_suffix="2>&1 | tee ${TARGETS[-1].abspath}"
-)
+))
+
+# Extract
+workflow.extend(env.PythonScript(
+    target=["rectangle_compression.vtu"],
+    source=["extract.py", "rectangle_compression.frd"],
+    subcommand_options="--input-file ${SOURCES[1].abspath} --output-formats=vtu",
+    action_suffix="2>&1 | tee ${TARGETS[-1].abspath}"
+))
+artifacts.extend(workflow)
 
 # Collector alias named after the model simulation
-env.Alias('rectangle', target)
+env.Alias('rectangle', workflow)
 
 if not env['unconditional_build'] and not env["CCX_PROGRAM"]:
     print(f"Program 'CalculiX (ccx)' was not found in construction environment. Ignoring 'rectangle' target(s)")
-    Ignore([".", "rectangle"], target)
+    Ignore([".", "rectangle"], workflow + artifacts)
