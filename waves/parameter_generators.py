@@ -24,7 +24,6 @@ from waves._settings import _hash_coordinate_key
 from waves._settings import _parameter_coordinate_key
 from waves._settings import _set_coordinate_key
 from waves._settings import _samples_data_variable
-from waves._settings import _quantiles_data_variable
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
@@ -165,13 +164,7 @@ class ParameterGenerator(ABC):
         * ``self._parameter_set_names``: Dictionary mapping parameter set hash to parameter set name strings created by
             calling ``self._create_parameter_set_names`` after populating ``self._parameter_set_hashes``.
         * ``self.parameter_study``: The Xarray Dataset parameter study object, created by calling
-          ``self._create_parameter_study()`` after defining ``self._samples`` and the optional ``self._quantiles`` class
-          attribute.
-
-        May set the class attributes:
-
-        * ``self._quantiles``: The parameter study sample quantiles, if applicable. A 2D numpy array in the shape
-            (number of parameter sets, number of parameters)
+          ``self._create_parameter_study()`` after defining ``self._samples``.
 
         Minimum necessary work example:
 
@@ -362,28 +355,16 @@ class ParameterGenerator(ABC):
 
         * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
-        uses optional if defined:
-
-        * ``self._quantiles``: The quantiles associated with the paramter study sampling distributions
-
         creates attribute:
 
         * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
         """
         self._parameter_set_hashes = []
-        if hasattr(self, _settings._quantiles_attribute_key):
-            for sample_row, quantile_row in zip(self._samples, self._quantiles):
-                sorted_contents = sorted(zip(self._parameter_names, sample_row, quantile_row))
-                set_catenation = \
-                    "\n".join(f"{name}:{repr(sample)}-{repr(quantile)}" for name, sample, quantile in sorted_contents)
-                set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
-                self._parameter_set_hashes.append(set_hash)
-        else:
-            for sample_row in self._samples:
-                sorted_contents = sorted(zip(self._parameter_names, sample_row))
-                set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
-                set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
-                self._parameter_set_hashes.append(set_hash)
+        for sample_row in self._samples:
+            sorted_contents = sorted(zip(self._parameter_names, sample_row))
+            set_catenation = "\n".join(f"{name}:{repr(sample)}" for name, sample in sorted_contents)
+            set_hash = hashlib.md5(set_catenation.encode('utf-8')).hexdigest()
+            self._parameter_set_hashes.append(set_hash)
 
     def _create_parameter_set_names(self) -> None:
         """Construct parameter set names from the set name template and number of parameter sets in ``self._samples``
@@ -467,31 +448,20 @@ class ParameterGenerator(ABC):
         * ``self._parameter_names``: parameter names used as columns of parameter study
         * ``self._samples``: The parameter study samples. Rows are sets. Columns are parameters.
 
-        optional:
-
-        * ``self._quantiles``: The quantiles associated with the paramter study sampling distributions
-
         creates attribute:
 
         * ``self.parameter_study``
         """
         samples = self._create_parameter_array(self._samples, name=_samples_data_variable)
-        if hasattr(self, _settings._quantiles_attribute_key):
-            quantiles = self._create_parameter_array(self._quantiles, name=_quantiles_data_variable)
-            self.parameter_study = xarray.concat(
-                    [quantiles, samples],
-                    xarray.DataArray([_quantiles_data_variable, _samples_data_variable], dims="data_type")
-            ).to_dataset(_parameter_coordinate_key)
-        else:
-            self.parameter_study = \
-                samples.to_dataset(_parameter_coordinate_key).expand_dims(data_type=[_samples_data_variable])
+        self.parameter_study = \
+            samples.to_dataset(_parameter_coordinate_key).expand_dims(data_type=[_samples_data_variable])
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
     def _parameter_study_to_numpy(self, data_type: _settings._allowable_data_type_typing) -> numpy.ndarray:
         """Return the parameter study data as a 2D numpy array
 
-        :param data_type: The data_type selection to return - samples or quantiles
+        :param data_type: The data_type selection to return - samples
 
         :return: data
         """
@@ -518,7 +488,7 @@ class ParameterGenerator(ABC):
            parameter_set2: {'parameter_1': 2, 'parameter_2': 'a'}
            parameter_set3: {'parameter_1': 2, 'parameter_2': 'b'}
 
-        :param data_type: The data_type selection to return - samples or quantiles
+        :param data_type: The data_type selection to return - samples
 
         :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
         """
@@ -536,7 +506,6 @@ class ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         * ``self._samples``
-        * ``self._quantiles``: if it exists
         * ``self._parameter_set_hashes``
         * ``self._parameter_set_names``
 
@@ -558,8 +527,6 @@ class ParameterGenerator(ABC):
 
         # Recover parameter study numpy array(s) to match merged study
         self._samples = self._parameter_study_to_numpy('samples')
-        if hasattr(self, _settings._quantiles_attribute_key):
-            self._quantiles = self._parameter_study_to_numpy('quantiles')
 
         # Recalculate attributes with lengths matching the number of parameter sets
         self._parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
@@ -637,8 +604,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
         else:
             kwargs = override_kwargs
         sampler = getattr(scipy.stats.qmc, self.sampler_class)(**kwargs)
-        self._quantiles = sampler.random(set_count)
-        self._generate_distribution_samples(set_count, parameter_count)
+        self._generate_distribution_samples(sampler, set_count, parameter_count)
         super()._generate()
 
     def _generate_parameter_distributions(self) -> dict:
@@ -653,8 +619,8 @@ class _ScipyGenerator(ParameterGenerator, ABC):
             parameter_distributions[parameter] = getattr(scipy.stats, distribution_name)(**attributes)
         return parameter_distributions
 
-    def _generate_distribution_samples(self, set_count, parameter_count) -> None:
-        """Convert quantiles to parameter distribution samples
+    def _generate_distribution_samples(self, sampler, set_count, parameter_count) -> None:
+        """Create parameter distribution samples
 
         Requires attibrutes:
 
@@ -669,7 +635,7 @@ class _ScipyGenerator(ParameterGenerator, ABC):
         """
         self._samples = numpy.zeros((set_count, parameter_count))
         for i, distribution in enumerate(self.parameter_distributions.values()):
-            self._samples[:, i] = distribution.ppf(self._quantiles[:, i])
+            self._samples[:, i] = distribution.ppf(sampler.random(set_count)[:, i])
 
     def _create_parameter_names(self) -> None:
         """Construct the parameter names from a distribution parameter schema"""
@@ -755,13 +721,11 @@ class CartesianProduct(ParameterGenerator):
 class LatinHypercube(_ScipyGenerator):
     """Builds a Latin-Hypercube parameter study from the `scipy Latin Hypercube`_ class
 
-    The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
-
     .. warning::
 
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
-       parameters and the parameter study samples and quantiles.
+       parameters and the parameter study samples.
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
@@ -825,7 +789,7 @@ class LatinHypercube(_ScipyGenerator):
        Dimensions:             (data_type: 2, parameter_set_hash: 4)
        Coordinates:
            parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
-         * data_type           (data_type) <U9 'quantiles' 'samples'
+         * data_type           (data_type) <U9 'samples'
          * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
@@ -935,13 +899,11 @@ class CustomStudy(ParameterGenerator):
 class SobolSequence(_ScipyGenerator):
     """Builds a Sobol sequence parameter study from the `scipy Sobol`_ class ``random`` method.
 
-    The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
-
     .. warning::
 
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
-       parameters and the parameter study samples and quantiles.
+       parameters and the parameter study samples.
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         SobolSequence expects "schema value" to be a dictionary with a strict structure and several required keys.
@@ -1001,7 +963,7 @@ class SobolSequence(_ScipyGenerator):
        Dimensions:             (data_type: 2, parameter_sets: 4)
        Coordinates:
            parameter_set_hash  (parameter_sets) <U32 'c1fa74da12c0991379d1df6541c421...
-         * data_type           (data_type) <U9 'quantiles' 'samples'
+         * data_type           (data_type) <U9 'samples'
          * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
        Data variables:
            parameter_1         (data_type, parameter_sets) float64 0.0 0.5 ... 7.5 2.5
@@ -1028,13 +990,11 @@ class ScipySampler(_ScipyGenerator):
     * LatinHypercube
     * PoissonDisk
 
-    The ``h5`` ``output_file_type`` is the only output type that contains both the parameter samples *and* quantiles.
-
     .. warning::
 
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
-       parameters and the parameter study samples and quantiles.
+       parameters and the parameter study samples.
 
     :param sampler_class: The `scipy.stats.qmc`_ sampler class name. Case sensitive.
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
@@ -1097,7 +1057,7 @@ class ScipySampler(_ScipyGenerator):
        Dimensions:             (data_type: 2, parameter_set_hash: 4)
        Coordinates:
            parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
-         * data_type           (data_type) <U9 'quantiles' 'samples'
+         * data_type           (data_type) <U9 'samples'
          * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
            parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
