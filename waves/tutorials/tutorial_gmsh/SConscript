@@ -34,7 +34,7 @@ artifacts.extend(env.Command(
 workflow.extend(env.PythonScript(
     target=["rectangle_compression.vtu"],
     source=["extract.py", "rectangle_compression.frd"],
-    subcommand_options="--input-file ${SOURCES[1].abspath} --output-formats=vtu",
+    subcommand_options="--input-file ${SOURCES[1].abspath}",
     action_suffix="2>&1 | tee ${TARGETS[-1].abspath}"
 ))
 artifacts.extend(workflow)
