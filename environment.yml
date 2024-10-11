@@ -4,6 +4,8 @@ channels:
 
 dependencies:
   - boa
+  - calculix
+  - ccx2paraview
   - fierro-fe-cpu
   - flake8
   - h5netcdf
@@ -17,6 +19,7 @@ dependencies:
   # Required to satisfy undocumented SALib dependencies on numpy version
   - numpy >=2
   - pandas
+  - paraview
   - pip
   - pytest
   - pytest-cov

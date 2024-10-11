@@ -17,6 +17,8 @@ Internal Changes
 - Skip documentation PDF build when ``latexmk`` is not found. Allow override to force build on appropriate CI servers
   (:issue:`795`, :merge:`974`). By `Kyle Brindley`_.
 - Remove deprecated ``elasticity3D.xml`` file from Fierro tutorials (:issue:`804`, :merge:`976`). By `Kyle Brindley`_.
+- Add CalculiX, ccx2paraview, and ParaView conda-forge packages to CI environment (:issue:`806`, :merge:`977`). By `Kyle
+  Brindley`_.
 
 *******************
 0.11.5 (2024-10-08)
