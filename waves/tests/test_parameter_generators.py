@@ -17,15 +17,15 @@ class TestParameterGenerator:
     def test_output_file_conflict(self):
         with pytest.raises(MutuallyExclusiveError):
             try:
-                OutputFileConflict = NoQuantilesGenerator({}, output_file_template='out@number',
-                                                          output_file='single_output_file')
+                OutputFileConflict = DummyGenerator({}, output_file_template='out@number',
+                                                    output_file='single_output_file')
             finally:
                 pass
 
     def test_output_file_type(self):
         with pytest.raises(ChoicesError):
             try:
-                OutputTypeError = NoQuantilesGenerator({}, output_file_type='notsupported')
+                OutputTypeError = DummyGenerator({}, output_file_type='notsupported')
             finally:
                 pass
 
@@ -34,8 +34,8 @@ class TestParameterGenerator:
              patch("waves.parameter_generators.ParameterGenerator._merge_parameter_studies") as mock_merge, \
              pytest.raises(RuntimeError):
             try:
-                MissingPreviousStudy = NoQuantilesGenerator({}, previous_parameter_study="doesnotexist.h5",
-                                                            require_previous_parameter_study=True)
+                MissingPreviousStudy = DummyGenerator({}, previous_parameter_study="doesnotexist.h5",
+                                                      require_previous_parameter_study=True)
                 mock_merge.assert_not_called()
             finally:
                 pass
@@ -45,15 +45,15 @@ class TestParameterGenerator:
              patch("warnings.warn") as mock_warn, \
              does_not_raise():
             try:
-                MissingPreviousStudy = NoQuantilesGenerator({}, previous_parameter_study="doesnotexist.h5",
-                                                            require_previous_parameter_study=False)
+                MissingPreviousStudy = DummyGenerator({}, previous_parameter_study="doesnotexist.h5",
+                                                      require_previous_parameter_study=False)
                 mock_merge.assert_not_called()
                 mock_warn.assert_called_once()
             finally:
                 pass
 
     def test_scons_write(self):
-        sconsWrite = NoQuantilesGenerator({})
+        sconsWrite = DummyGenerator({})
         with patch("waves.parameter_generators.ParameterGenerator.write") as mock_write:
             sconsWrite.scons_write([], [], {})
         mock_write.assert_called_once()
@@ -68,7 +68,7 @@ class TestParameterGenerator:
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
         kwargs = {"sets": length}
-        sconsIterator = NoQuantilesGenerator({}, **kwargs)
+        sconsIterator = DummyGenerator({}, **kwargs)
         set_samples = sconsIterator.parameter_study_to_dict()
         assert set_samples == {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
 
@@ -85,9 +85,9 @@ class TestParameterGenerator:
         """
         kwargs = {"sets": 1}
         if not set_template:
-            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template, **kwargs)
+            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
         else:
-            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template,
+            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template,
                                                      set_name_template=set_template, **kwargs)
         assert list(TemplateGenerator._parameter_set_names.values()) == expected
 
@@ -104,10 +104,10 @@ class TestParameterGenerator:
         """
         kwargs = {"sets": 1}
         if not set_template:
-            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template, **kwargs)
+            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template, **kwargs)
         else:
-            TemplateGenerator = NoQuantilesGenerator(schema, output_file_template=file_template,
-                                                     set_name_template=set_template, **kwargs)
+            TemplateGenerator = DummyGenerator(schema, output_file_template=file_template,
+                                               set_name_template=set_template, **kwargs)
         assert list(TemplateGenerator._parameter_set_names.values()) == expected
 
         # Test that the update function runs with only a single set. Check that the names don't change.
@@ -141,8 +141,8 @@ class TestParameterGenerator:
             provides. Should always be 1 when no template is provided.
         """
         kwargs = {"sets": sets}
-        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
-                                                       overwrite=overwrite, dry_run=dry_run, **kwargs)
+        WriteParameterGenerator = DummyGenerator(schema, output_file_template=template, output_file_type='yaml',
+                                                 overwrite=overwrite, dry_run=dry_run, **kwargs)
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
@@ -179,8 +179,8 @@ class TestParameterGenerator:
         :param int files: integer number of files that should be written
         """
         kwargs = {"sets": sets}
-        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='yaml',
-                                                       overwrite=overwrite, dry_run=dry_run, **kwargs)
+        WriteParameterGenerator = DummyGenerator(schema, output_file_template=template, output_file_type='yaml',
+                                                 overwrite=overwrite, dry_run=dry_run, **kwargs)
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('waves.parameter_generators.ParameterGenerator._conditionally_write_yaml') as mock_file, \
              patch('sys.stdout.write') as stdout_write, \
@@ -206,8 +206,8 @@ class TestParameterGenerator:
         :param int files: integer number of files that should be written
         """
         kwargs = {"sets": sets}
-        WriteParameterGenerator = NoQuantilesGenerator(schema, output_file_template=template, output_file_type='h5',
-                                                       overwrite=overwrite, dry_run=dry_run, **kwargs)
+        WriteParameterGenerator = DummyGenerator(schema, output_file_template=template, output_file_type='h5',
+                                                 overwrite=overwrite, dry_run=dry_run, **kwargs)
 
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
              patch('builtins.open', mock_open()) as mock_file, \
@@ -239,7 +239,7 @@ class TestParameterGenerator:
         :param bool overwrite: parameter that identifies when the file should always be overwritten
         :param int expected_call_count: amount of times that the xarray.Dataset.to_netcdf function should be called
         """
-        WriteParameterGenerator = NoQuantilesGenerator({}, overwrite=overwrite)
+        WriteParameterGenerator = DummyGenerator({}, overwrite=overwrite)
 
         with patch('xarray.Dataset.to_netcdf') as xarray_to_netcdf, \
              patch('xarray.open_dataset', mock_open()), \
@@ -259,7 +259,7 @@ class TestParameterGenerator:
         :param bool overwrite: parameter that identifies when the file should always be overwritten
         :param int expected_call_count: amount of times that the open.write function should be called
         """
-        WriteParameterGenerator = NoQuantilesGenerator({}, overwrite=overwrite)
+        WriteParameterGenerator = DummyGenerator({}, overwrite=overwrite)
         existing_dict = {'dummy': 'dict'} if equals else {'smart': 'dict'}
 
         with patch('builtins.open', mock_open()) as write_yaml_file, \
@@ -297,7 +297,7 @@ class TestParameterGenerator:
                                  set_hashes.values(),
                              ids=set_hashes.keys())
     def test_create_parameter_set_hashes(self, parameter_names, samples, expected_hashes):
-        HashesParameterGenerator = NoQuantilesGenerator({})
+        HashesParameterGenerator = DummyGenerator({})
         HashesParameterGenerator._parameter_names = parameter_names
         HashesParameterGenerator._samples = samples
         HashesParameterGenerator._create_parameter_set_hashes()
@@ -305,7 +305,7 @@ class TestParameterGenerator:
 
     def test_create_parameter_set_names(self):
         """Test the parmater set name generation"""
-        SetNamesParameterGenerator = NoQuantilesGenerator({}, output_file_template='out')
+        SetNamesParameterGenerator = DummyGenerator({}, output_file_template='out')
         SetNamesParameterGenerator._samples = numpy.array([[1], [2]])
         SetNamesParameterGenerator._create_parameter_set_hashes()
         SetNamesParameterGenerator._create_parameter_set_names()
@@ -314,7 +314,7 @@ class TestParameterGenerator:
     def test_parameter_study_to_numpy(self):
         """Test the self-consistency of the parameter study dataset construction and deconstruction"""
         # Setup
-        DataParameterGenerator = NoQuantilesGenerator({})
+        DataParameterGenerator = DummyGenerator({})
         DataParameterGenerator._parameter_names = ['ints', 'floats', 'strings']
         DataParameterGenerator._samples = numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)
         DataParameterGenerator._create_parameter_set_hashes()
@@ -408,7 +408,7 @@ class TestParameterDistributions:
             assert TestDistributions.parameter_distributions[parameter_name].kwds == expected_kwds
 
 
-class NoQuantilesGenerator(ParameterGenerator):
+class DummyGenerator(ParameterGenerator):
 
     def _validate(self):
         self._parameter_names = ['parameter_1']
