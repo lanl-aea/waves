@@ -726,7 +726,7 @@ class LatinHypercube(_ScipyGenerator):
 
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
-       parameters and the parameter study samples.
+       parameter schema and the parameter study samples.
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         LatinHypercube expects "schema value" to be a dictionary with a strict structure and several required keys.
@@ -904,7 +904,7 @@ class SobolSequence(_ScipyGenerator):
 
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
-       parameters and the parameter study samples.
+       parameter schema and the parameter study samples.
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         SobolSequence expects "schema value" to be a dictionary with a strict structure and several required keys.
@@ -995,7 +995,7 @@ class ScipySampler(_ScipyGenerator):
 
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
-       parameters and the parameter study samples.
+       parameter schema and the parameter study samples.
 
     :param sampler_class: The `scipy.stats.qmc`_ sampler class name. Case sensitive.
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
@@ -1096,7 +1096,7 @@ class SALibSampler(ParameterGenerator, ABC):
 
        The merged parameter study feature does *not* check for consistent parameter distributions. Changing the
        parameter definitions and merging with a previous parameter study will result in incorrect relationships between
-       parameters and the parameter study samples.
+       parameter schema and the parameter study samples.
 
     :param sampler_class: The `SALib.sample`_ sampler class name. Case sensitive.
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
