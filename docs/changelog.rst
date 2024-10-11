@@ -19,6 +19,8 @@ Internal Changes
 - Remove deprecated ``elasticity3D.xml`` file from Fierro tutorials (:issue:`804`, :merge:`976`). By `Kyle Brindley`_.
 - Add CalculiX, ccx2paraview, and ParaView conda-forge packages to CI environment (:issue:`806`, :merge:`977`). By `Kyle
   Brindley`_.
+- Convert Gmsh tutorial to a Gmsh+CalculiX tutorial in pursuit of a fully open-source, conda-forge workflow
+  (:issue:`805`, :merge:`979`). By `Kyle Brindley`_.
 
 *******************
 0.11.5 (2024-10-08)
