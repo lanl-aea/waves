@@ -2,7 +2,10 @@ channels:
   - conda-forge
 
 dependencies:
+  - calculix
+  - ccx2paraview
   - ipython
   - python-gmsh
   - scons >=4
+  - vtk
   - waves >=0.11.0
