@@ -5,6 +5,22 @@ Changelog
 #########
 
 *******************
+0.12.0 (unreleased)
+*******************
+.. warning::
+
+   The ``quantiles`` removal from parameter generator objects will cause parameter set index changes for stochastically
+   sampled parameter generators, e.g. ``SALib`` and ``SciPy`` based generators. Parameter studies generated with this
+   version may not merge correctly with parameter studies from older versions of WAVES even if the parameter sets have
+   not changed. It is strongly recommended that users re-generate their parameter study files.
+
+Breaking changes
+================
+- Remove the ``quantiles`` data from parameter generators and parameter study objects. Required to allow typed parameter
+  data arrays and greater type flexibility when writing parameter studies to H5 files (:issue:`794`, :merge:`975`). By
+  `Kyle Brindley`_.
+
+*******************
 0.11.6 (2024-10-15)
 *******************
 
