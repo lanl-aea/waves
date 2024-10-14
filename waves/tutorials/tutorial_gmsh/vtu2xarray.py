@@ -1,4 +1,5 @@
 import sys
+import typing
 import pathlib
 import argparse
 
@@ -6,18 +7,33 @@ import meshio
 import xarray
 
 
-def main(input_file: pathlib.Path, output_file: pathlib.Path) -> None:
-    mesh = meshio.read(input_file)
+def main(
+    input_file: pathlib.Path,
+    output_file: pathlib.Path,
+    mesh_file: typing.Optional[pathlib.Path] = None,
+) -> None:
+    """Read VTU file provided by ``extract.py`` and write an Xarray H5 file
+
+    Assumes
+
+    1. Nodes are numbered sequentially from one in the CalculiX input file
+    2. Nodes will be converted to zero index by ``meshio``
+
+    :param input_file: VTU file created by ``extract.py``
+    :param output_file: Xarray H5 output file
+    :param mesh_file: CalculiX input file containing node sets
+    """
+    results = meshio.read(input_file)
     coordinate = ["x", "y", "z"]
     components = ["11", "22", "33", "12", "13", "23"]
-    point_numbers = list(range(0, len(mesh.points)))
+    point_numbers = list(range(0, len(results.points)))
     data_arrays = [xarray.DataArray(
-        data=mesh.points,
+        data=results.points,
         dims=["point", "coordinate"],
         coords={"point": point_numbers, "coordinate": coordinate},
         name="original_location"
     )]
-    for key, value in mesh.point_data.items():
+    for key, value in results.point_data.items():
         if len(value.shape) == 1:
             data_arrays.append(xarray.DataArray(
                 data=value,
@@ -41,6 +57,17 @@ def main(input_file: pathlib.Path, output_file: pathlib.Path) -> None:
             ))
         else:
             raise RuntimeError(f"Do not know how to handle '{key}' data '{value}'")
+
+    # TODO: Find a better way to add the node set information
+    if mesh_file is not None and mesh_file.is_file():
+        mesh = meshio.read(mesh_file)
+        for key, value in mesh.point_sets.items():
+            data_arrays.append(xarray.DataArray(
+                data=value,
+                dims=[f"{key}_nodes"],
+                name=key
+            ))
+
     data = xarray.merge(data_arrays)
     data.to_netcdf(output_file)
 
@@ -69,6 +96,11 @@ def get_parser():
         required=True,
         help="Xarray output file"
     )
+    parser.add_argument(
+        "--mesh-file",
+        type=existing_file,
+        help="CalculiX input file. When provided, try to merge the point/node sets with the results VTU file."
+    )
     return parser
 
 
@@ -77,5 +109,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
     main(
         input_file=args.input_file,
-        output_file=args.output_file
+        output_file=args.output_file,
+        mesh_file=args.mesh_file
     )
