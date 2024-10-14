@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 import os
-import platform 
+import platform
 
 import waves
 
@@ -43,12 +43,12 @@ env = waves.scons_extensions.WAVESEnvironment(
 system = platform.system().lower()
 if env["verbose_tasks"]:
     if system == "windows":  # Assume PowerShell
-        env["action_suffix"] = "| Tee-Object -FilePath ${TARGETS[-1].abspath}"
+        env["action_suffix"] = "$(| Tee-Object -FilePath ${TARGETS[-1].abspath}$)"
     else:  # *Nix style tee
-        env["action_suffix"] = "2>&1 | tee ${TARGETS[-1].abspath}"
+        env["action_suffix"] = "$(2>&1 | tee ${TARGETS[-1].abspath}$)"
 else:
     # Default WAVES action suffix
-    env["action_suffix"] = "> ${TARGETS[-1].abspath} 2>&1"
+    env["action_suffix"] = "$(> ${TARGETS[-1].abspath} 2>&1$)"
 
 # Always copy (no sym-links) when duplicating
 env.SetOption("duplicate", "copy")
