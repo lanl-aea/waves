@@ -21,6 +21,8 @@ Internal Changes
   Brindley`_.
 - Convert Gmsh tutorial to a Gmsh+CalculiX tutorial in pursuit of a fully open-source, conda-forge workflow
   (:issue:`805`, :merge:`979`). By `Kyle Brindley`_.
+- Create unique, temporary Windows CI environments for clean environments in every pipeline (:merge:`982`). By `Kyle
+  Brindley`_.
 
 *******************
 0.11.5 (2024-10-08)
