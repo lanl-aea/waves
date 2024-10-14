@@ -3696,6 +3696,19 @@ class WAVESEnvironment(SConsEnvironment):
         builder = quinoa_builder_factory(program="${CHARMRUN_PROGRAM}", subcommand="${INCITER_PROGRAM}")
         return builder(self, *args, target=target, source=source, **kwargs)
 
+    def CalculiX(self, target, source, *args, **kwargs):
+        """Builder from factory :meth:`waves.scons_extensions.calculix_builder_factory`
+
+        * ``program``: ``${CCX_PROGRAM}``
+
+        :param target: The task target list
+        :param source: The task source list
+        :param args: All positional arguments are passed through to the builder (*not* to the builder factory)
+        :param kwargs: All keyword arguments are passed through to the builder (*not* to the builder factory)
+        """
+        builder = calculix_builder_factory(program="${CCX_PROGRAM}")
+        return builder(self, *args, target=target, source=source, **kwargs)
+
     def FierroExplicit(self, target, source, *args, **kwargs):
         """Builder from factory :meth:`waves.scons_extensions.fierro_explicit_builder_factory`
 
