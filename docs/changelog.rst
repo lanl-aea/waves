@@ -23,6 +23,8 @@ Internal Changes
   (:issue:`805`, :merge:`979`). By `Kyle Brindley`_.
 - Create unique, temporary Windows CI environments for clean environments in every pipeline (:merge:`982`). By `Kyle
   Brindley`_.
+- Add simple post-processing to Gmsh+CalculiX tutorial. Now using ccx2paraview and meshio packages to convert to xarray
+  (:merge:`983`). By `Kyle Brindley`_.
 
 *******************
 0.11.5 (2024-10-08)
