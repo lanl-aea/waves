@@ -16,6 +16,9 @@ win-fast-test:
     - $conda_installation="C:\ProgramData\anaconda3"
     - $conda_environments="$conda_installation\envs"
     - $prefix=python -c 'import tempfile; print(tempfile.mkdtemp(prefix=r"C:\ProgramData\anaconda3\envs\waves-dev-"))'
+    - echo $conda_installation
+    - echo $conda_environments
+    - echo $prefix
     - (& "$conda_installation\Scripts\conda.exe" "shell.powershell" "hook") | Out-String | ?{$_} | Invoke-Expression
     - conda config --set proxy_servers.http http://proxyout.lanl.gov:8080
     - conda config --set proxy_servers.https http://proxyout.lanl.gov:8080
