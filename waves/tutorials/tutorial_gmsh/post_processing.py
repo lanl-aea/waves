@@ -10,7 +10,7 @@ import pandas
 import xarray
 import matplotlib.pyplot
 
-default_selection_dict = {"component": "22", "point": 0}
+default_selection_dict = {"component": "22", "point": 0, "coordinate": "y"}
 
 
 def combine_data(input_files, group_path, concat_coord):
