@@ -24,6 +24,7 @@ win-fast-test:
     # Tests
     - scons regression --keep-going --cov-report
     # Cleanup. Usually an ``after_script``
+    - conda deactivate
     - conda env remove --prefix $prefix --yes
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
