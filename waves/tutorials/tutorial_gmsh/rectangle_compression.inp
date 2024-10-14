@@ -22,7 +22,7 @@ Compressing a rectangle
 *************************************************************************
 *STEP, NLGEOM=NO, INC=100, AMPLITUDE=RAMP
 *STATIC
-.005, 1.00, 0.000001, 0.5
+.1, 1.0, 0.01, 0.5
 **
 *BOUNDARY
 bottom_left, 1,3
