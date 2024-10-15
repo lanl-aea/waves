@@ -429,7 +429,10 @@ class ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         """
-        sample_arrays = [xarray.DataArray(list(values), name=name) for name, values in zip(self._parameter_names, self._samples.T)]
+        sample_arrays = [
+            xarray.DataArray(list(values), name=name, dims=[_hash_coordinate_key], coords={_hash_coordinate_key: self._parameter_set_hashes}) \
+            for name, values in zip(self._parameter_names, self._samples.T)
+        ]
         self.parameter_study = xarray.merge(sample_arrays)
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
