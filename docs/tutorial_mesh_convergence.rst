@@ -228,7 +228,7 @@ Output Files
 
     <xarray.Dataset>
     Dimensions:              (E values: 4, S values: 4, elements: 64, step: 1,
-                             time: 5, parameter_sets: 4, data_type: 1)
+                             time: 5, parameter_sets: 4)
     Coordinates:
       * E values            (E values) object 'E11' 'E22' 'E33' 'E12'
       * S values            (S values) object 'S11' 'S22' 'S33' 'S12'
@@ -237,9 +237,8 @@ Output Files
       * time                (time) float64 0.0175 0.07094 0.2513 0.86 1.0
         integrationPoint    (parameter_sets, elements) float64 1.0 nan ... 1.0 1.0
       * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
-      * data_type           (data_type) object 'samples'
         parameter_set_hash  (parameter_sets) object ...
     Data variables:
         E                  (parameter_sets, step, time, elements, E values) float32 ...
         S                   (parameter_sets, step, time, elements, S values) float32 ...
-        global_seed         (data_type, parameter_sets) float64 ...
+        global_seed         (parameter_sets) float64 ...

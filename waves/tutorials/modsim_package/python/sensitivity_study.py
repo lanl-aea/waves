@@ -17,7 +17,7 @@ from modsim_package.python.rectangle_compression_sensitivity_study import parame
 
 
 default_selection_dict = {'E values': 'E22', 'S values': 'S22', 'elements': 1, 'step': 'Step-1', 'time': 1.0,
-                          'integration point': 0, 'data_type': 'samples'}
+                          'integration point': 0}
 
 
 def combine_data(input_files, group_path, concat_coord):
