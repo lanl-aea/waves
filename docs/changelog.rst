@@ -12,6 +12,10 @@ New Features
 ============
 - Add a CalculiX builder factory (:merge:`984`). By `Kyle Brindley`_.
 
+Documentation
+=============
+- Add a WIP Gmsh+CalculiX tutorial outline (:issue:`807`, :merge:`985`). By `Kyle Brindley`_.
+
 Internal Changes
 ================
 - Run the pytest alias during Windows CI ``pwsh`` job (:issue:`799`, :merge:`971`). By `Kyle Brindley`_.
