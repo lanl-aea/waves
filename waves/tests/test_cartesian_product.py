@@ -136,7 +136,7 @@ class TestCartesianProduct:
         consistent_hash_parameter_check(original_study, merged_study)
         self_consistency_checks(merged_study)
 
-    generate_io = {
+    write_yaml = {
         'one parameter yaml':
             ({"parameter_1": [1, 2]},
              'out',
@@ -207,8 +207,8 @@ class TestCartesianProduct:
 
     @pytest.mark.parametrize('parameter_schema, output_file_template, output_file, output_type, file_count, ' \
                              'expected_calls',
-                                 generate_io.values(),
-                             ids=generate_io.keys())
+                                 write_yaml.values(),
+                             ids=write_yaml.keys())
     def test_write_yaml(self, parameter_schema, output_file_template, output_file, output_type, file_count,
                         expected_calls):
         with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
@@ -225,3 +225,41 @@ class TestCartesianProduct:
             xarray_to_netcdf.assert_not_called()
             assert mock_file.call_count == file_count
             mock_file().write.assert_has_calls(expected_calls, any_order=False)
+
+    parameter_study_to_dict = {
+        "ints": (
+            {"ints": [1, 2]},
+            {"parameter_set0": {"ints": 1}, "parameter_set1": {"ints": 2}}
+        ),
+        "floats": (
+            {"floats": [10., 20.]},
+            {"parameter_set0": {"floats": 10.}, "parameter_set1": {"floats": 20.}}
+        ),
+        "strings": (
+            {"strings": ["a", "b"]},
+            {"parameter_set0": {"strings": "a"}, "parameter_set1": {"strings": "b"}}
+        ),
+        "bools": (
+            {"bools": [False, True]},
+            {"parameter_set0": {"bools": False}, "parameter_set1": {"bools": True}}
+        ),
+        "mixed ints, float": (
+            {"ints": [1], "floats": [10.]},
+            {"parameter_set0": {"ints": 1, "floats": 10.}}
+        ),
+    }
+
+    @pytest.mark.parametrize(
+        "parameter_schema, expected_dictionary",
+        parameter_study_to_dict.values(),
+        ids=parameter_study_to_dict.keys()
+    )
+    def test_parameter_study_to_dict(
+        self,
+        parameter_schema,
+        expected_dictionary
+    ) -> None:
+        """Test parameter study dictionary conversion"""
+        TestParameterStudyDict = CartesianProduct(parameter_schema)
+        returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
+        assert expected_dictionary == returned_dictionary
