@@ -13,8 +13,8 @@ References
 * `Cubit`_: Python Interface :cite:`cubit`
 * `Cubit`_: Importing Cubit into Python :cite:`cubit`
 * `Fierro`_ documentation :cite:`fierro,fierro-docs`
-* `meshio`_
-* `vtk`_
+* `meshio`_ :cite:`meshio`
+* `vtk`_ :cite:`vtk`
 
 ***********
 Environment
