@@ -417,28 +417,6 @@ class ParameterGenerator(ABC):
         self.parameter_study = xarray.merge(
             [self.parameter_study.reset_coords(), parameter_set_names_array]).set_coords(_set_coordinate_key)
 
-    def _create_parameter_array(self, data: numpy.ndarray, name: str) -> xarray.DataArray:
-        """Create the standard structure for a parameter_study array
-
-        requires:
-
-        * ``self._parameter_set_hashes``: parameter set content hashes identifying rows of parameter study
-        * ``self._parameter_names``: parameter names used as columns of parameter study
-
-        :param numpy.array data: 2D array of parameter study samples with shape (number of parameter sets, number of
-            parameters).
-        :param name: Name of the array. Used as a data variable name when converting to parameter study dataset.
-
-        :returns: parameter study array
-        """
-        array = xarray.DataArray(
-            data,
-            coords=[self._parameter_set_hashes, self._parameter_names],
-            dims=[_hash_coordinate_key, _parameter_coordinate_key],
-            name=name
-        )
-        return array
-
     def _create_parameter_study(self) -> None:
         """Create the standard structure for the parameter study dataset
 
@@ -453,8 +431,8 @@ class ParameterGenerator(ABC):
         * ``self.parameter_study``
         """
         samples = self._create_parameter_array(self._samples, name=_samples_data_variable)
-        self.parameter_study = \
-            samples.to_dataset(_parameter_coordinate_key).expand_dims(data_type=[_samples_data_variable])
+        sample_arrays = [xarray.DataArray(list(values), name=name) for name, values in zip(parameter_names, self._samples.T)]
+        self.parameter_study = xarray.merge(sample_arrays)
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
