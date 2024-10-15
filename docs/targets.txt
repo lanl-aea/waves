@@ -19,10 +19,12 @@
 .. _`Bash Parameter Expansion`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Shell-Parameter-Expansion
 .. _`Bash Variables`: https://www.gnu.org/savannah-checkouts/gnu/bash/manual/bash.html#Bash-Variables
 .. _`CMake`: https://cmake.org/cmake/help/latest/
+.. _`CalculiX`: http://www.dhondt.de/
 .. _`Cartesian Product`: https://en.wikipedia.org/wiki/Cartesian_product
 .. _`CheckProg`: https://scons.org/doc/production/HTML/scons-user/ch21s07.html
 .. _`Confluence`: https://www.atlassian.com/software/confluence
 .. _`Cubit`: https://cubit.sandia.gov/public/documentation.html
+.. _`ccx2paraview`: https://github.com/calculix/ccx2paraview
 .. _`Sierra`: https://www.osti.gov/biblio/1886996
 .. _`Quinoa`: https://quinoacomputing.github.io/index.html
 .. _`Fierro`: https://lanl-aea.github.io/Fierro/index.html
@@ -36,6 +38,7 @@
 .. _`Gitlab Flow`: https://docs.gitlab.com/ee/topics/gitlab_flow.html
 .. _`GitHub`: https://github.com/
 .. _`Bitbucket`: https://www.atlassian.com/software/bitbucket
+.. _`Gmsh`: https://gmsh.info/
 .. _`Granta STK`: https://int.lanl.gov/projects/W13docs/GrantaSTK/#t=streamlined%2Fwelcome_to_v2.htm
 .. _`Granta/MIMS`: http://grantami.lanl.gov/mi
 .. _`pytest JUnit XML output`: https://docs.pytest.org/en/7.1.x/how-to/output.html#creating-junitxml-format-files
