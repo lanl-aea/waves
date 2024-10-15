@@ -1327,6 +1327,20 @@ builder_factory_tests.update(first_target_builder_factory_test_cases(
     }
 ))
 builder_factory_tests.update(first_target_builder_factory_test_cases(
+    "calculix_builder_factory",
+    {
+        "environment": "",
+        "action_prefix": _cd_action_prefix,
+        "program": "ccx",
+        "program_required": "-i ${SOURCE.filebase}",
+        "program_options": "",
+        "subcommand": "",
+        "subcommand_required": "",
+        "subcommand_options": "",
+        "action_suffix": _redirect_action_suffix
+    }
+))
+builder_factory_tests.update(first_target_builder_factory_test_cases(
     "fierro_explicit_builder_factory",
     {
         "environment": "",
@@ -2226,6 +2240,11 @@ waves_environment_builders = {
         "QuinoaSolver",
         "quinoa_builder_factory",
         {"program": "${CHARMRUN_PROGRAM}", "subcommand": "${INCITER_PROGRAM}"}
+    ),
+    "CalculiX": (
+        "CalculiX",
+        "calculix_builder_factory",
+        {"program": "${CCX_PROGRAM}"}
     ),
     "FierroExplicit": (
         "FierroExplicit",
