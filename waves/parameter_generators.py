@@ -470,8 +470,8 @@ class ParameterGenerator(ABC):
         :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
         """
         parameter_study_dictionary = {}
-        for set_name, parameters in self.parameter_study.groupby(_set_coordinate_key):
-            parameter_dict = parameters.squeeze().to_array().to_series().to_dict()
+        for set_name, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
+            parameter_dict = {key: array.values[0].item() for key, array in parameter_set.items()}
             parameter_study_dictionary[set_name] = parameter_dict
         return parameter_study_dictionary
 
