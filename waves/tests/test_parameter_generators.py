@@ -320,7 +320,7 @@ class TestParameterGenerator:
         assert HashesParameterGenerator._parameter_set_hashes == expected_hashes
 
     def test_create_parameter_set_names(self):
-        """Test the parmater set name generation"""
+        """Test the parameter set name generation"""
         SetNamesParameterGenerator = DummyGenerator({}, output_file_template='out')
         SetNamesParameterGenerator._samples = numpy.array([[1], [2]])
         SetNamesParameterGenerator._create_parameter_set_hashes()
