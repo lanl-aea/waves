@@ -76,3 +76,35 @@ class TestScipySampler:
             merged_study._samples.astype(float)
             consistent_hash_parameter_check(original_study, merged_study)
             self_consistency_checks(merged_study)
+
+    parameter_study_to_dict = {
+        "good schema 1x2": (
+            "LatinHypercube",
+            {"num_simulations": 1,
+             "parameter_1": {"distribution": "uniform", "loc": 0, "scale": 10},
+             "parameter_2": {"distribution": "uniform", "loc": 2, "scale":  3}},
+            {"seed": 42},
+            {"parameter_set0": {"parameter_1": 2.2604395144403666, "parameter_2": 3.683364680743843}}
+        )
+    }
+
+    @pytest.mark.parametrize(
+        "sampler, parameter_schema, kwargs, expected_dictionary",
+        parameter_study_to_dict.values(),
+        ids=parameter_study_to_dict.keys()
+    )
+    def test_parameter_study_to_dict(
+        self,
+        sampler,
+        parameter_schema,
+        kwargs,
+        expected_dictionary
+    ) -> None:
+        """Test parameter study dictionary conversion"""
+        TestParameterStudyDict = ScipySampler(sampler, parameter_schema, **kwargs)
+        returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
+        assert expected_dictionary.keys() == returned_dictionary.keys()
+        for parameter_set in expected_dictionary.keys():
+            assert expected_dictionary[parameter_set] == returned_dictionary[parameter_set]
+            for parameter in expected_dictionary[parameter_set]:
+                assert type(expected_dictionary[parameter_set][parameter]) == type(returned_dictionary[parameter_set][parameter])
