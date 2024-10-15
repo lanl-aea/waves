@@ -107,6 +107,7 @@ Work-in-progress Lessons
 ======================== ============================================ ==================================================
 Time to complete (HH:MM) Tutorial                                     Summary
 ------------------------ -------------------------------------------- --------------------------------------------------
+                   01:00 :ref:`tutorial_writing_builders`             Writing custom builders and design considerations
                    00:30 :ref:`tutorial_remote_execution`             Run the simulation on a remote server via SSH
                    00:30 :ref:`tutorial_sbatch`                       Run the simulation with the SLURM workload manager
                    00:30 :ref:`tutorial_extend_study`                 Automatically extending and re-executing a
