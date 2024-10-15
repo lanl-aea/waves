@@ -149,6 +149,16 @@ class TestCartesianProduct:
               call("parameter_1: 1\nparameter_2: 4.0\n"),
               call("parameter_1: 2\nparameter_2: 3.0\n"),
               call("parameter_1: 2\nparameter_2: 4.0\n")]),
+        'two parameter yaml: bools and ints':
+            ({"parameter_1": [1, 2], "parameter_2": [True, False]},
+             'out',
+             None,
+             'yaml',
+             4,
+             [call("parameter_1: 1\nparameter_2: true\n"),
+              call("parameter_1: 1\nparameter_2: false\n"),
+              call("parameter_1: 2\nparameter_2: true\n"),
+              call("parameter_1: 2\nparameter_2: false\n")]),
         'one parameter one file yaml':
             ({"parameter_1": [1, 2]},
              None,
@@ -166,7 +176,17 @@ class TestCartesianProduct:
              [call("parameter_set0:\n  parameter_1: 1\n  parameter_2: a\n" \
                    "parameter_set1:\n  parameter_1: 1\n  parameter_2: b\n" \
                    "parameter_set2:\n  parameter_1: 2\n  parameter_2: a\n" \
-                   "parameter_set3:\n  parameter_1: 2\n  parameter_2: b\n")])
+                   "parameter_set3:\n  parameter_1: 2\n  parameter_2: b\n")]),
+        'two parameter one file yaml: bools':
+            ({"parameter_1": [1, 2], "parameter_2": [True, False]},
+             None,
+             'parameter_study.yaml',
+             'yaml',
+             1,
+             [call("parameter_set0:\n  parameter_1: 1\n  parameter_2: true\n" \
+                   "parameter_set1:\n  parameter_1: 1\n  parameter_2: false\n" \
+                   "parameter_set2:\n  parameter_1: 2\n  parameter_2: true\n" \
+                   "parameter_set3:\n  parameter_1: 2\n  parameter_2: false\n")])
     }
 
     @pytest.mark.parametrize('parameter_schema, output_file_template, output_file, output_type, file_count, ' \
