@@ -290,7 +290,23 @@ class TestParameterGenerator:
             ['732411987fea3ae4a1e0bd7ea6a8841a',
              '6dfcf74620c998f3ef7ab4cc9fb2d510',
              '57af5a35970eb8a1a93c1ed62ff3ff37']
-        )
+        ),
+        # Set3 hashes should all be different if types are preserved correctly
+        "set3: ints": (
+            ["number1", "number2"],
+            numpy.array([[1, 2]], dtype=object),
+            ['f1c28a9674481e365269ced217197221']
+        ),
+        "set3: floats": (
+            ["number1", "number2"],
+            numpy.array([[1., 2.]], dtype=object),
+            ['f94ff85af046704aff100133c958ad1e']
+        ),
+        "set3: mixed ints and floats": (
+            ["number1", "number2"],
+            numpy.array([[1, 2.]], dtype=object),
+            ['3d0f2e8a9a15239b28cee90d331e69e8']
+        ),
     }
 
     @pytest.mark.parametrize('parameter_names, samples, expected_hashes',
