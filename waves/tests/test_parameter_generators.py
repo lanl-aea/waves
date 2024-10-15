@@ -315,8 +315,8 @@ class TestParameterGenerator:
         """Test the self-consistency of the parameter study dataset construction and deconstruction"""
         # Setup
         DataParameterGenerator = DummyGenerator({})
-        DataParameterGenerator._parameter_names = ['ints', 'floats', 'strings']
-        DataParameterGenerator._samples = numpy.array([[1, 10.1, 'a'], [2, 20.2, 'b']], dtype=object)
+        DataParameterGenerator._parameter_names = ['ints', 'floats', 'strings', 'bools']
+        DataParameterGenerator._samples = numpy.array([[1, 10.1, 'a', True], [2, 20.2, 'b', False]], dtype=object)
         DataParameterGenerator._create_parameter_set_hashes()
         DataParameterGenerator._create_parameter_set_names()
         DataParameterGenerator._create_parameter_study()
