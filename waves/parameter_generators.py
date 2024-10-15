@@ -23,7 +23,6 @@ from waves import _utilities
 from waves._settings import _hash_coordinate_key
 from waves._settings import _parameter_coordinate_key
 from waves._settings import _set_coordinate_key
-from waves._settings import _samples_data_variable
 from waves.exceptions import ChoicesError, MutuallyExclusiveError, SchemaValidationError
 
 
@@ -430,7 +429,6 @@ class ParameterGenerator(ABC):
 
         * ``self.parameter_study``
         """
-        samples = self._create_parameter_array(self._samples, name=_samples_data_variable)
         sample_arrays = [xarray.DataArray(list(values), name=name) for name, values in zip(parameter_names, self._samples.T)]
         self.parameter_study = xarray.merge(sample_arrays)
         self._merge_parameter_set_names_array()
