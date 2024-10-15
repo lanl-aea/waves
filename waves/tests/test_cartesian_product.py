@@ -103,6 +103,15 @@ class TestCartesianProduct:
                   [1, 3.0, "a"],
                   [1, 4.0, "a"],
                   [2, 3.0, "a"]], dtype=object)),
+        'new set: bools':
+            ({'parameter_1': [1, 2], 'parameter_2': [True], 'parameter_3': ['a']},
+             {'parameter_1': [1, 2], 'parameter_2': [True, False], 'parameter_3': ['a']},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[2, True, "a"],
+                  [2, False, "a"],
+                  [1, False, "a"],
+                  [1, True, "a"]], dtype=object)),
         'unchanged sets':
             ({'parameter_1': [1, 2], 'parameter_2': [3.0], 'parameter_3': ['a']},
              {'parameter_1': [1, 2], 'parameter_2': [3.0], 'parameter_3': ['a']},
@@ -110,6 +119,13 @@ class TestCartesianProduct:
              numpy.array(
                  [[1, 3.0, "a"],
                   [2, 3.0, "a"]], dtype=object)),
+        'unchanged sets: bools':
+            ({'parameter_1': [1, 2], 'parameter_2': [True], 'parameter_3': ['a']},
+             {'parameter_1': [1, 2], 'parameter_2': [True], 'parameter_3': ['a']},
+             # Ordered by md5 hash during Xarray merge operation. New tests must verify hash ordering.
+             numpy.array(
+                 [[1, True, "a"],
+                  [2, True, "a"]], dtype=object)),
     }
 
     @pytest.mark.parametrize('first_schema, second_schema, expected_array', merge_test.values(), ids=merge_test.keys())
