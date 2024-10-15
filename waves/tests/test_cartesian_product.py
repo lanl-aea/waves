@@ -262,4 +262,8 @@ class TestCartesianProduct:
         """Test parameter study dictionary conversion"""
         TestParameterStudyDict = CartesianProduct(parameter_schema)
         returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
-        assert expected_dictionary == returned_dictionary
+        assert expected_dictionary.keys() == returned_dictionary.keys()
+        for parameter_set in expected_dictionary.keys():
+            assert expected_dictionary[parameter_set] == returned_dictionary[parameter_set]
+            for parameter in expected_dictionary[parameter_set]:
+                assert type(expected_dictionary[parameter_set][parameter]) == type(returned_dictionary[parameter_set][parameter])
