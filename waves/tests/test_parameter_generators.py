@@ -321,7 +321,7 @@ class TestParameterGenerator:
         DataParameterGenerator._create_parameter_set_names()
         DataParameterGenerator._create_parameter_study()
         # Test
-        returned_samples = DataParameterGenerator._parameter_study_to_numpy('samples')
+        returned_samples = DataParameterGenerator._parameter_study_to_numpy()
         assert numpy.all(returned_samples == DataParameterGenerator._samples)
 
 
