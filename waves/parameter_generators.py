@@ -436,22 +436,17 @@ class ParameterGenerator(ABC):
         self._merge_parameter_set_names_array()
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
-    def _parameter_study_to_numpy(self, data_type: _settings._allowable_data_type_typing) -> numpy.ndarray:
+    def _parameter_study_to_numpy(self) -> numpy.ndarray:
         """Return the parameter study data as a 2D numpy array
-
-        :param data_type: The data_type selection to return - samples
 
         :return: data
         """
         data = []
-        for set_hash, data_row in self.parameter_study.sel(data_type=data_type).groupby(_hash_coordinate_key):
+        for set_hash, data_row in self.parameter_study.groupby(_hash_coordinate_key):
             data.append(data_row.squeeze().to_array().to_numpy())
         return numpy.array(data, dtype=object)
 
-    def parameter_study_to_dict(
-        self,
-        data_type: _settings._allowable_data_type_typing = _samples_data_variable
-    ) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
+    def parameter_study_to_dict(self) -> typing.Dict[str, typing.Dict[str, typing.Any]]:
         """Return parameter study as a dictionary
 
         Used for iterating on parameter sets in an SCons workflow with parameter substitution dictionaries, e.g.
@@ -466,12 +461,10 @@ class ParameterGenerator(ABC):
            parameter_set2: {'parameter_1': 2, 'parameter_2': 'a'}
            parameter_set3: {'parameter_1': 2, 'parameter_2': 'b'}
 
-        :param data_type: The data_type selection to return - samples
-
         :return: parameter study sets and samples as a dictionary: {set_name: {parameter: value}, ...}
         """
         parameter_study_dictionary = {}
-        for set_name, parameters in self.parameter_study.sel(data_type=data_type).groupby(_set_coordinate_key):
+        for set_name, parameters in self.parameter_study.groupby(_set_coordinate_key):
             parameter_dict = parameters.squeeze().to_array().to_series().to_dict()
             parameter_study_dictionary[set_name] = parameter_dict
         return parameter_study_dictionary
@@ -504,7 +497,7 @@ class ParameterGenerator(ABC):
         previous_parameter_study.close()
 
         # Recover parameter study numpy array(s) to match merged study
-        self._samples = self._parameter_study_to_numpy('samples')
+        self._samples = self._parameter_study_to_numpy()
 
         # Recalculate attributes with lengths matching the number of parameter sets
         self._parameter_set_hashes = list(self.parameter_study.coords[_hash_coordinate_key].values)
@@ -670,14 +663,13 @@ class CartesianProduct(ParameterGenerator):
        >>> parameter_generator = waves.parameter_generators.CartesianProduct(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (data_type: 1, parameter_set_hash: 4)
+       Dimensions:             (parameter_set_hash: 4)
        Coordinates:
-         * data_type           (data_type) object 'samples'
            parameter_set_hash  (parameter_set_hash) <U32 'de3cb3eaecb767ff63973820b2...
          * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (data_type, parameter_set_hash) object 1 1 2 2
-           parameter_2         (data_type, parameter_set_hash) object 'a' 'b' 'a' 'b'
+           parameter_1         (parameter_set_hash) object 1 1 2 2
+           parameter_2         (parameter_set_hash) object 'a' 'b' 'a' 'b'
     """
 
     def _validate(self) -> None:
@@ -765,14 +757,13 @@ class LatinHypercube(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.LatinHypercube(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (data_type: 2, parameter_set_hash: 4)
+       Dimensions:             (parameter_set_hash: 4)
        Coordinates:
            parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
-         * data_type           (data_type) <U9 'samples'
          * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
-           parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
+           parameter_1         (parameter_set_hash) float64 0.125 ... 51.15
+           parameter_2         (parameter_set_hash) float64 0.625 ... 30.97
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -837,15 +828,14 @@ class CustomStudy(ParameterGenerator):
        >>> parameter_generator = waves.parameter_generators.CustomStudy(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (data_type: 1, parameter_set_hash: 2)
+       Dimensions:             (parameter_set_hash: 2)
        Coordinates:
-         * data_type           (data_type) object 'samples'
            parameter_set_hash  (parameter_set_hash) <U32 '50ba1a2716e42f8c4fcc34a90a...
         *  parameter_sets      (parameter_set_hash) <U14 'parameter_set0' 'parameter...
        Data variables:
-           height              (data_type, parameter_set_hash) object 1.0 2.0
-           prefix              (data_type, parameter_set_hash) object 'a' 'b'
-           index               (data_type, parameter_set_hash) object 5 6
+           height              (parameter_set_hash) object 1.0 2.0
+           prefix              (parameter_set_hash) object 'a' 'b'
+           index               (parameter_set_hash) object 5 6
     """
 
     def _validate(self) -> None:
@@ -939,14 +929,13 @@ class SobolSequence(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.SobolSequence(parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (data_type: 2, parameter_sets: 4)
+       Dimensions:             (parameter_sets: 4)
        Coordinates:
            parameter_set_hash  (parameter_sets) <U32 'c1fa74da12c0991379d1df6541c421...
-         * data_type           (data_type) <U9 'samples'
          * parameter_sets      (parameter_sets) <U14 'parameter_set0' ... 'parameter...
        Data variables:
-           parameter_1         (data_type, parameter_sets) float64 0.0 0.5 ... 7.5 2.5
-           parameter_2         (data_type, parameter_sets) float64 0.0 0.5 ... 4.25
+           parameter_1         (parameter_sets) float64 0.0 0.5 ... 7.5 2.5
+           parameter_2         (parameter_sets) float64 0.0 0.5 ... 4.25
     """
 
     def __init__(self, *args, **kwargs) -> None:
@@ -1033,14 +1022,13 @@ class ScipySampler(_ScipyGenerator):
        >>> parameter_generator = waves.parameter_generators.ScipySampler("LatinHypercube", parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (data_type: 2, parameter_set_hash: 4)
+       Dimensions:             (parameter_set_hash: 4)
        Coordinates:
            parameter_set_hash  (parameter_set_hash) <U32 '1e8219dae27faa5388328e225a...
-         * data_type           (data_type) <U9 'samples'
          * parameter_sets      (parameter_set_hash) <U14 'parameter_set0' ... 'param...
        Data variables:
-           parameter_1         (data_type, parameter_set_hash) float64 0.125 ... 51.15
-           parameter_2         (data_type, parameter_set_hash) float64 0.625 ... 30.97
+           parameter_1         (parameter_set_hash) float64 0.125 ... 51.15
+           parameter_2         (parameter_set_hash) float64 0.625 ... 30.97
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
@@ -1136,15 +1124,14 @@ class SALibSampler(ParameterGenerator, ABC):
        >>> parameter_generator = waves.parameter_generators.SALibSampler("sobol", parameter_schema)
        >>> print(parameter_generator.parameter_study)
        <xarray.Dataset>
-       Dimensions:             (data_type: 1, parameter_sets: 32)
+       Dimensions:             (parameter_sets: 32)
        Coordinates:
-         * data_type           (data_type) object 'samples'
            parameter_set_hash  (parameter_sets) <U32 'e0cb1990f9d70070eaf5638101dcaf...
          * parameter_sets      (parameter_sets) <U15 'parameter_set0' ... 'parameter...
        Data variables:
-           parameter_1         (data_type, parameter_sets) float64 -0.2029 ... 0.187
-           parameter_2         (data_type, parameter_sets) float64 -0.801 ... 0.6682
-           parameter_3         (data_type, parameter_sets) float64 0.4287 ... -2.871
+           parameter_1         (parameter_sets) float64 -0.2029 ... 0.187
+           parameter_2         (parameter_sets) float64 -0.801 ... 0.6682
+           parameter_3         (parameter_sets) float64 0.4287 ... -2.871
     """
 
     def __init__(self, sampler_class, *args, **kwargs) -> None:
