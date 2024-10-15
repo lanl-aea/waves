@@ -105,7 +105,7 @@ conditions.
 
 7. Review the following journal files in the ``waves-tutorials/modsim_package/cubit`` directory.
 
-The Cubit journal files include as similar CLI as introduced in :ref:`tutorial_partition_mesh` for the Abaqus journal
+The Cubit journal files include a similar CLI to the Abaqus journal files introduced in :ref:`tutorial_partition_mesh`
 files. Besides the differences in Abaqus and Cubit commands, the major difference between the Abaqus and Cubit journal
 files is the opportunity to use Python 3 with Cubit, where Abaqus journal files must use the Abaqus controlled
 installation of Python 2. The API and CLI built from the Cubit journal files' docstrings may be found in the
