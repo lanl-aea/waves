@@ -280,7 +280,7 @@ class ParameterGenerator(ABC):
         # Construct the output text
         for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
             text = yaml.safe_dump(
-                parameter_set.squeeze().to_array().to_series().to_dict()
+                {key: array.values[0].item() for key, array in parameter_set.items()}
             )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
