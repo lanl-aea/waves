@@ -280,7 +280,7 @@ class ParameterGenerator(ABC):
         # Construct the output text
         for parameter_set_file, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
             text = yaml.safe_dump(
-                {key: array.values[0].item() for key, array in parameter_set.items()}
+                {key: array.values.item() for key, array in parameter_set.items()}
             )
             text_list.append(text)
         # If no output file template is provided, printing to stdout or single file. Prepend set names.
@@ -471,10 +471,7 @@ class ParameterGenerator(ABC):
         """
         parameter_study_dictionary = {}
         for set_name, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
-            try:
-                parameter_dict = {key: array.values[0].item() for key, array in parameter_set.items()}
-            except AttributeError:
-                parameter_dict = {key: array.values[0] for key, array in parameter_set.items()}
+            parameter_dict = {key: array.values.item() for key, array in parameter_set.items()}
             parameter_study_dictionary[set_name] = parameter_dict
         return parameter_study_dictionary
 
@@ -496,7 +493,7 @@ class ParameterGenerator(ABC):
 
         # Swap dimensions from the set name to the set hash to merge identical sets
         swap_to_hash_index = {_set_coordinate_key: _hash_coordinate_key}
-        previous_parameter_study = xarray.open_dataset(self.previous_parameter_study).astype(object)
+        previous_parameter_study = xarray.open_dataset(self.previous_parameter_study)
         previous_parameter_study = previous_parameter_study.swap_dims(swap_to_hash_index)
         self.parameter_study = self.parameter_study.swap_dims(swap_to_hash_index)
 
