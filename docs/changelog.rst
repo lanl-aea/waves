@@ -26,7 +26,8 @@ Breaking changes
 
 Enhancements
 ============
-- Handle booleans when writing parameter study objects to disk (:issue:`765`, :merge:`986`). By `Kyle Brindley`_.
+- Preserve parameter types and handle booleans when writing parameter study objects to disk (:issue:`765`,
+  :merge:`986`). By `Kyle Brindley`_.
 
 *******************
 0.11.6 (2024-10-15)
