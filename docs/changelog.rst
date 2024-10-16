@@ -7,6 +7,7 @@ Changelog
 *******************
 0.12.0 (unreleased)
 *******************
+
 .. warning::
 
    The ``quantiles`` removal from parameter generator objects will cause parameter set index changes for stochastically
@@ -19,6 +20,13 @@ Breaking changes
 - Remove the ``quantiles`` data from parameter generators and parameter study objects. Required to allow typed parameter
   data arrays and greater type flexibility when writing parameter studies to H5 files (:issue:`794`, :merge:`975`). By
   `Kyle Brindley`_.
+- Remove the ``data_type`` coordinate from parameter generators and parameter study objects. Required to allow typed
+  parameter data arrays and greater type flexibility when writing parameter studies to H5 files (:issue:`765`,
+  :merge:`986`). By `Kyle Brindley`_.
+
+Enhancements
+============
+- Handle booleans when writing parameter study objects to disk (:issue:`765`, :merge:`986`). By `Kyle Brindley`_.
 
 *******************
 0.11.6 (2024-10-15)
