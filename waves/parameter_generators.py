@@ -30,7 +30,9 @@ _exclude_from_namespace = set(globals().keys())
 
 
 class ParameterGenerator(ABC):
-    """Abstract base class for internal parameter study generators
+    """Abstract base class for parameter study generators
+
+    Parameters must be scalar valued integers, floats, strings, or booleans
 
     :param parameter_schema: The YAML loaded parameter study schema dictionary, e.g.
         ``{parameter_name: schema_value}``.  Validated on class instantiation.
@@ -623,6 +625,8 @@ class _ScipyGenerator(ParameterGenerator, ABC):
 class CartesianProduct(ParameterGenerator):
     """Builds a cartesian product parameter study
 
+    Parameters must be scalar valued integers, floats, strings, or booleans
+
     :param parameter_schema: The YAML loaded parameter study schema dictionary - {parameter_name: schema value}
         CartesianProduct expects "schema value" to be an iterable. For example, when read from a YAML file "schema
         value" will be a Python list.
@@ -783,6 +787,8 @@ class LatinHypercube(_ScipyGenerator):
 
 class CustomStudy(ParameterGenerator):
     """Builds a custom parameter study from user-specified values
+
+    Parameters must be scalar valued integers, floats, strings, or booleans
 
     :param parameter_schema: Dictionary with two keys: ``parameter_samples`` and ``parameter_names``.
         Parameter samples in the form of a 2D array with shape M x N, where M is the number of parameter sets and N is
