@@ -67,10 +67,16 @@ class TestParameterGenerator:
 
     @pytest.mark.parametrize("length", range(1, 20, 5))
     def test_parameter_study_to_dict(self, length):
+        expected = {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
         kwargs = {"sets": length}
         sconsIterator = DummyGenerator({}, **kwargs)
         set_samples = sconsIterator.parameter_study_to_dict()
-        assert set_samples == {f"parameter_set{index}": {"parameter_1": float(index)} for index in range(length)}
+        assert set_samples == expected
+        assert all(isinstance(key, str) for key in set_samples.keys())
+        for parameter_set in expected.keys():
+            assert expected[parameter_set] == set_samples[parameter_set]
+            for parameter in expected[parameter_set].keys():
+                assert type(set_samples[parameter_set][parameter]) == type(expected[parameter_set][parameter])
 
     @pytest.mark.parametrize('schema, file_template, set_template, expected',
                                  templates.values(),

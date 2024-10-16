@@ -472,7 +472,7 @@ class ParameterGenerator(ABC):
         parameter_study_dictionary = {}
         for set_name, parameter_set in self.parameter_study.groupby(_set_coordinate_key):
             parameter_dict = {key: array.values.item() for key, array in parameter_set.items()}
-            parameter_study_dictionary[set_name] = parameter_dict
+            parameter_study_dictionary[str(set_name)] = parameter_dict
         return parameter_study_dictionary
 
     def _merge_parameter_studies(self) -> None:

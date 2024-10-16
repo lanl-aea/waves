@@ -104,6 +104,7 @@ class TestScipySampler:
         TestParameterStudyDict = ScipySampler(sampler, parameter_schema, **kwargs)
         returned_dictionary = TestParameterStudyDict.parameter_study_to_dict()
         assert expected_dictionary.keys() == returned_dictionary.keys()
+        assert all(isinstance(key, str) for key in returned_dictionary.keys())
         for parameter_set in expected_dictionary.keys():
             assert expected_dictionary[parameter_set] == returned_dictionary[parameter_set]
             for parameter in expected_dictionary[parameter_set]:
