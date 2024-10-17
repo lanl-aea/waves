@@ -26,6 +26,9 @@ Breaking changes
 - Remove semi-private ``_ParameterGenerator`` class. ``ParameterGenerator`` class is now part of the public API
   (:issue:`791`, :merge:`988`). By `Kyle Brindley`_.
 - Deprecate the ``postfix`` key word argument across all functions (:issue:`724`, :merge:`989`). By `Kyle Brindley`_.
+- Deprecate the substitution dictionary first positional argument interface for ``substitution_syntax`` function. New
+  argument order is ``(env, substitution_dictionary, **kwargs)``. The ``env`` positional argument may be omitted when
+  using the function as an SCons method. See the API and examples (:issue:`764`, :merge:`992`). By `Kyle Brindley`_.
 
 Enhancements
 ============
