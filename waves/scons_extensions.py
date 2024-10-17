@@ -489,19 +489,6 @@ def append_env_path(
 
     :raises FileNotFoundError: if the ``program`` absolute path does not exist.
     """
-    # TODO: Remove if-structure after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    if not isinstance(env, SCons.Environment.Base) and isinstance(program, SCons.Environment.Base):
-        import warnings
-        message = "The append_env_path function arguments were reversed in v0.11 from " \
-                  "'(program, env)' to '(env, program)' to enable use with SCons AddMethod. " \
-                  "Please reverse the argument order in this function call " \
-                  "prior to the version 1.0 release."
-        warnings.warn(message, SyntaxWarning)
-        swap_env = program
-        swap_program = env
-        return append_env_path(swap_env, swap_program)
-
     program = pathlib.Path(program).resolve()
     if not program.exists():
         raise FileNotFoundError(f"The program '{program}' does not exist.")
@@ -531,18 +518,6 @@ def find_program(
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
-    # TODO: Remove if-structure after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
-        import warnings
-        message = "The find_program function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' " \
-                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call " \
-                  "prior to the version 1.0 release."
-        warnings.warn(message, SyntaxWarning)
-        swap_env = names
-        swap_names = env
-        return find_program(swap_env, swap_names)
-
     if isinstance(names, str):
         names = [names]
     program_paths = []
@@ -579,18 +554,6 @@ def add_program(
 
     :return: Absolute path of the found program. None if none of the names are found.
     """
-    # TODO: Remove if-structure after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
-        import warnings
-        message = "The add_program arguments were reversed in v0.11 from '(names, env)' to '(env, names)' " \
-                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call " \
-                  "prior to the version 1.0 release."
-        warnings.warn(message, SyntaxWarning)
-        swap_env = names
-        swap_names = env
-        return add_program(swap_env, swap_names)
-
     first_found_path = find_program(env, names)
     if first_found_path:
         append_env_path(env, first_found_path)
@@ -623,18 +586,6 @@ def add_cubit(
 
     :return: Absolute path of the Cubit executable. None if none of the names are found.
     """
-    # TODO: Remove if-structure after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
-        import warnings
-        message = "The add_cubit function arguments were reversed in v0.11 from '(names, env)' to '(env, names)' "\
-                  "to enable use with SCons AddMethod. Please reverse the argument order in this function call " \
-                  "prior to the version 1.0 release."
-        warnings.warn(message, SyntaxWarning)
-        swap_env = names
-        swap_names = env
-        return add_cubit(swap_env, swap_names)
-
     first_found_path = add_program(env, names)
     if first_found_path:
         cubit_bin = _utilities.find_cubit_bin([first_found_path])
@@ -670,19 +621,6 @@ def add_cubit_python(
 
     :return: Absolute path of the Cubit Python intepreter. None if none of the names are found.
     """
-    # TODO: Remove if-structure after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    if not isinstance(env, SCons.Environment.Base) and isinstance(names, SCons.Environment.Base):
-        import warnings
-        message = "The add_cubit_python function arguments were reversed in v0.11 from " \
-                  "'(names, env)' to '(env, names)' to enable use with SCons AddMethod. " \
-                  "Please reverse the argument order in this function call " \
-                  "prior to the version 1.0 release."
-        warnings.warn(message, SyntaxWarning)
-        swap_env = names
-        swap_names = env
-        return add_cubit_python(swap_env, swap_names)
-
     first_found_path = find_program(env, names)
     cubit_python = _utilities.find_cubit_python([first_found_path])
     cubit_python = add_program(env, [cubit_python])

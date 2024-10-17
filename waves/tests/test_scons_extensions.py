@@ -106,14 +106,6 @@ def test_find_program(names, checkprog_side_effect, first_found_path):
         program = env.FindProgram(names)
     assert program == first_found_path
 
-    # TODO: Remove reversed arguments test after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
-         patch("warnings.warn") as mock_warn:
-        program = scons_extensions.find_program(names, env)
-        mock_warn.assert_called_once()
-    assert program == first_found_path
-
 
 @pytest.mark.skipif(testing_windows, reason="Tests trigger 'SCons user error' on Windows. Believed to be a test construction error, not a test failure.")
 @pytest.mark.parametrize("names, checkprog_side_effect, first_found_path",
@@ -140,22 +132,6 @@ def test_add_program(names, checkprog_side_effect, first_found_path):
     with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
          patch("pathlib.Path.exists", return_value=True):
         program = env.AddProgram(names)
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = str(pathlib.Path(first_found_path).parent)
-        assert parent_path == env["ENV"]["PATH"].split(os.pathsep)[-1]
-    else:
-        assert original_path == env["ENV"]["PATH"]
-
-    # TODO: Remove reversed arguments test after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    with patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
-         patch("pathlib.Path.exists", return_value=True), \
-         patch("warnings.warn") as mock_warn:
-        program = scons_extensions.add_program(names, env)
-        mock_warn.assert_called_once()
     assert program == first_found_path
     if first_found_path is not None:
         parent_path = str(pathlib.Path(first_found_path).parent)
@@ -215,31 +191,6 @@ def test_add_cubit(names, checkprog_side_effect, first_found_path):
     else:
         assert original_path == env["ENV"]["PATH"]
 
-    # TODO: Remove reversed arguments test after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    env = SCons.Environment.Environment()
-    original_path = env["ENV"]["PATH"]
-    if first_found_path is not None:
-        find_cubit_bin_return = pathlib.Path(first_found_path).parent / "bin"
-    else:
-        find_cubit_bin_return = None
-    with patch("waves._utilities.find_cubit_bin", return_value=find_cubit_bin_return), \
-         patch("waves.scons_extensions.check_program", side_effect=checkprog_side_effect), \
-         patch("pathlib.Path.exists", return_value=True), \
-         patch("warnings.warn") as mock_warn:
-        program = scons_extensions.add_cubit(names, env)
-        mock_warn.assert_called_once()
-    assert program == first_found_path
-    if first_found_path is not None:
-        parent_path = pathlib.Path(first_found_path).parent
-        cubit_bin = parent_path / "bin"
-        cubit_library_path = cubit_bin / "python3"
-        assert str(parent_path) == env["ENV"]["PATH"].split(os.pathsep)[-1]
-        assert str(cubit_bin) == env["ENV"]["PYTHONPATH"].split(os.pathsep)[0]
-        assert str(cubit_library_path) == env["ENV"]["LD_LIBRARY_PATH"].split(os.pathsep)[0]
-    else:
-        assert original_path == env["ENV"]["PATH"]
-
 
 def test_add_cubit_python():
 
@@ -281,31 +232,6 @@ def test_add_cubit_python():
          patch("waves.scons_extensions.add_program", return_value=cubit_python), \
          patch("waves._utilities.find_cubit_bin", return_value=cubit_bin):
         program = scons_extensions.add_cubit_python(env, "dummy_cubit_executable")
-    assert program == cubit_python
-    assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
-
-    # TODO: Remove reversed arguments test after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    env = SCons.Environment.Environment()
-    cubit_bin = "/path/to/cubit/bin/"
-    cubit_python = "/path/to/cubit/bin/python"
-    # Cubit Python not found mocked by add_program
-    with patch("waves._utilities.find_cubit_python"), \
-         patch("waves.scons_extensions.find_program"), \
-         patch("waves.scons_extensions.add_program", return_value=None), \
-         patch("warnings.warn") as mock_warn:
-        program = scons_extensions.add_cubit_python("dummy_cubit_executable", env)
-        mock_warn.assert_called_once()
-    assert program == None
-    assert "PYTHONPATH" not in env["ENV"]
-    # Cubit Python found mocked by add_program
-    with patch("waves._utilities.find_cubit_python"), \
-         patch("waves.scons_extensions.find_program"), \
-         patch("waves.scons_extensions.add_program", return_value=cubit_python), \
-         patch("waves._utilities.find_cubit_bin", return_value=cubit_bin), \
-         patch("warnings.warn") as mock_warn:
-        program = scons_extensions.add_cubit_python("dummy_cubit_executable", env)
-        mock_warn.assert_called_once()
     assert program == cubit_python
     assert env["ENV"]["PYTHONPATH"].split(os.pathsep)[0] == str(cubit_bin)
 
@@ -717,18 +643,6 @@ def test_append_env_path(program, mock_exists, outcome):
             assert "LD_LIBRARY_PATH" not in env["ENV"]
         finally:
             pass
-
-    # TODO: Remove reversed arguments test after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/755
-    with patch("pathlib.Path.exists", return_value=mock_exists), \
-         patch("warnings.warn") as mock_warn, outcome:
-        try:
-            scons_extensions.append_env_path(program, env)
-            assert root_fs == env["ENV"]["PATH"].split(os.pathsep)[-1]
-            assert "PYTHONPATH" not in env["ENV"]
-            assert "LD_LIBRARY_PATH" not in env["ENV"]
-        finally:
-            mock_warn.assert_called_once()
 
 
 substitution_dictionary = {"thing1": 1, "thing_two": "two"}

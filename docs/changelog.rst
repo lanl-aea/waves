@@ -37,6 +37,8 @@ Breaking changes
   :merge:`991`). By `Kyle Brindley`_.
 - Deprecate the ``quinoa_solver`` builders in favor of the ``quinoa_builder_factory`` (:issue:`745`, :merge:`991`). By
   `Kyle Brindley`_.
+- Deprecate the ``(names, env)`` argument order in program finding functions. New argument order is ``(env, names)`` for
+  SCons ``AddMethod`` compatibility (:issue:`755`, :merge:`994`). By `Kyle Brindley`_.
 
 Enhancements
 ============
