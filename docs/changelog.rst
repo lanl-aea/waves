@@ -25,6 +25,7 @@ Breaking changes
   :merge:`986`). By `Kyle Brindley`_.
 - Remove semi-private ``_ParameterGenerator`` class. ``ParameterGenerator`` class is now part of the public API
   (:issue:`791`, :merge:`988`). By `Kyle Brindley`_.
+- Deprecate the ``postfix`` key word argument across all functions (:issue:`724`, :merge:`989`). By `Kyle Brindley`_.
 
 Enhancements
 ============

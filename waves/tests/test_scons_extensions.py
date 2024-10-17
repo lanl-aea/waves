@@ -767,21 +767,6 @@ def test_substitution_syntax(substitution_dictionary, keyword_arguments, expecte
         mock_warn.assert_called_once()
 
 
-# TODO: Remove when the 'postfix' kwarg is removed
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
-def test_substitution_syntax_warning():
-    env = SCons.Environment.Environment()
-    substitution_dictionary = {"thing1": 1, "thing_two": "two"}
-    expected_dictionary = {"@thing1%": 1, "@thing_two%": "two"}
-    with patch("warnings.warn") as mock_warn:
-        output_dictionary = scons_extensions.substitution_syntax(env, substitution_dictionary, postfix="%")
-        mock_warn.assert_called_once_with(
-            "The 'postfix' keyword will be replaced by 'suffix' in version 1.0",
-            DeprecationWarning
-        )
-    assert output_dictionary == expected_dictionary
-
-
 shell_environment = {
     "default kwargs": (
         {}, {"thing1": "a"}
@@ -839,20 +824,6 @@ construct_action_list = {
                          ids=construct_action_list.keys())
 def test_construct_action_list(actions, prefix, suffix, expected):
     output = scons_extensions.construct_action_list(actions, prefix=prefix, suffix=suffix)
-    assert output == expected
-
-
-# TODO: Remove when the 'postfix' kwarg is removed
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
-def test_construct_action_list_warning():
-    original = ["thing1"]
-    expected = ["prefix thing1 suffix"]
-    with patch("warnings.warn") as mock_warn:
-        output = scons_extensions.construct_action_list(original, prefix="prefix", postfix="suffix")
-        mock_warn.assert_called_once_with(
-            "The 'postfix' keyword will be replaced by 'suffix' in version 1.0",
-            DeprecationWarning
-        )
     assert output == expected
 
 

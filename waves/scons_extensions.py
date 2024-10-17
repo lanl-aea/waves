@@ -418,8 +418,7 @@ def substitution_syntax(
     # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/764
     substitution_dictionary: dict = {},
     prefix: str = "@",
-    suffix: str = "@",
-    postfix: str = ""
+    suffix: str = "@"
 ) -> dict:
     """Return a dictionary copy with the pre/suffix added to the key strings
 
@@ -450,13 +449,6 @@ def substitution_syntax(
                   "positional argument or convert to AddMethod function call prior to the version 1.0 release."
         warnings.warn(message, SyntaxWarning)
         substitution_dictionary = env
-    # TODO: Remove when the 'postfix' kwarg is removed
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
-    if postfix:
-        import warnings
-        message = "The 'postfix' keyword will be replaced by 'suffix' in version 1.0"
-        warnings.warn(message, DeprecationWarning)
-        suffix = postfix
     return {f"{prefix}{key}{suffix}": value for key, value in substitution_dictionary.items()}
 
 
@@ -764,8 +756,7 @@ def shell_environment(
 def construct_action_list(
     actions: typing.Iterable[str],
     prefix: str = "${action_prefix}",
-    suffix: str = "",
-    postfix: str = ""
+    suffix: str = ""
 ) -> typing.Iterable[str]:
     """Return an action list with a common pre/post-fix
 
@@ -792,13 +783,6 @@ def construct_action_list(
         iterator = iter([actions])
     if prefix:
         prefix = prefix + " "
-    # TODO: Remove when the 'postfix' kwarg is removed
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/724
-    if postfix:
-        import warnings
-        message = "The 'postfix' keyword will be replaced by 'suffix' in version 1.0"
-        warnings.warn(message, DeprecationWarning)
-        suffix = postfix
     if suffix:
         suffix = " " + suffix
     new_actions = [f"{prefix}{action}{suffix}" for action in iterator]
