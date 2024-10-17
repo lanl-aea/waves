@@ -30,6 +30,7 @@ Breaking changes
   argument order is ``(env, substitution_dictionary, **kwargs)``. The ``env`` positional argument may be omitted when
   using the function as an SCons method. See the API and examples (:issue:`764`, :merge:`992`). By `Kyle Brindley`_.
 - Deprecate the ``copy_substitute`` function in favor or ``copy_substfile`` (:issue:`665`, :merge:`990`). `Kyle
+- Deprecate the ``python_script`` builder in favor of ``python_builder_factory`` (:issue:`747`, :merge:`993`). By `Kyle
   Brindley`_.
 - Deprecate the ``quinoa_solver`` builders in favor of the ``quinoa_solver_builder_factory`` (:issue:`745`,
   :merge:`991`). By `Kyle Brindley`_.
