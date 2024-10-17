@@ -31,6 +31,8 @@ Breaking changes
   using the function as an SCons method. See the API and examples (:issue:`764`, :merge:`992`). By `Kyle Brindley`_.
 - Deprecate the ``copy_substitute`` function in favor or ``copy_substfile`` (:issue:`665`, :merge:`990`). `Kyle
   Brindley`_.
+- Deprecate the ``quinoa_solver`` builders in favor of the ``quinoa_solver_builder_factory`` (:issue:`745`,
+  :merge:`991`). By `Kyle Brindley`_.
 
 Enhancements
 ============
