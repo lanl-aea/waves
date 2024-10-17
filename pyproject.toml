@@ -14,7 +14,7 @@ authors = [
 ]
 description = "WAVES Analysis for Verified Engineering Simulations"
 readme = "README.rst"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = {text = "BSD-3-Clause"}
 classifiers = [
     "Development Status :: 4 - Beta",

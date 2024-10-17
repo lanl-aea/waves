@@ -40,7 +40,7 @@ requirements:
     - sphinx_rtd_theme >=1
     - sphinxcontrib-bibtex
   run:
-    - python >=3.8
+    - python >=3.9
     - h5netcdf
     - h5py
     - matplotlib-base

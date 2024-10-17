@@ -29,6 +29,11 @@ Enhancements
 - Preserve parameter types and handle booleans when writing parameter study objects to disk (:issue:`765`,
   :merge:`986`). By `Kyle Brindley`_.
 
+Internal Changes
+================
+- Drop Python 3.8 support and testing for end-of-life support. New minimum supported version of Python is 3.9
+  (:issue:`770`, :merge:`987`). By `Kyle Brindley`_.
+
 *******************
 0.11.6 (2024-10-15)
 *******************
