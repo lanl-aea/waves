@@ -1856,8 +1856,8 @@ python_script_input = {
                          python_script_input.values(),
                          ids=python_script_input.keys())
 def test_parameter_study(node_count, action_count, target_list, study):
-    expected_string = '${action_prefix} ${program} ${python_options} ${SOURCE.abspath} ${script_options} ' \
-                          '${action_suffix}'
+    expected_string = "${environment} ${action_prefix} ${program} ${program_required} ${program_options} " \
+                      "${subcommand} ${subcommand_required} ${subcommand_options} ${action_suffix}"
 
     env = SCons.Environment.Environment()
     env.Append(BUILDERS={"PythonScript": scons_extensions.python_builder_factory()})
