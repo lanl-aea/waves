@@ -1860,7 +1860,7 @@ def test_parameter_study(node_count, action_count, target_list, study):
                           '${action_suffix}'
 
     env = SCons.Environment.Environment()
-    env.Append(BUILDERS={"PythonScript": scons_extensions.python_script()})
+    env.Append(BUILDERS={"PythonScript": scons_extensions.python_builder_factory()})
     env.AddMethod(scons_extensions.parameter_study, "ParameterStudy")
     nodes = env.ParameterStudy(
         env.PythonScript,
