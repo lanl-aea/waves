@@ -23,6 +23,8 @@ Breaking changes
 - Remove the ``data_type`` coordinate from parameter generators and parameter study objects. Required to allow typed
   parameter data arrays and greater type flexibility when writing parameter studies to H5 files (:issue:`765`,
   :merge:`986`). By `Kyle Brindley`_.
+- Remove semi-private ``_ParameterGenerator`` class. ``ParameterGenerator`` class is now part of the public API
+  (:issue:`791`, :merge:`988`). By `Kyle Brindley`_.
 
 Enhancements
 ============

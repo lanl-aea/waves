@@ -513,11 +513,6 @@ class ParameterGenerator(ABC):
         self.parameter_study = self.parameter_study.swap_dims({_hash_coordinate_key: _set_coordinate_key})
 
 
-# TODO: Remove semi-private naming convention for v1
-# https://re-git.lanl.gov/aea/python-projects/waves/-/issues/791
-_ParameterGenerator = ParameterGenerator
-
-
 class _ScipyGenerator(ParameterGenerator, ABC):
 
     def _validate(self) -> None:
