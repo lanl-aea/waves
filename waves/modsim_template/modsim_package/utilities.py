@@ -122,7 +122,7 @@ def write_study_definition(
     :param path: Output directory
     :param alias: Parameter study dictionary file name
     """
-    if isinstance(study_definition, waves.parameter_generators._ParameterGenerator):
+    if isinstance(study_definition, waves.parameter_generators.ParameterGenerator):
         study_definition.write()
     elif isinstance(study_definition, dict):
         study_path = path / f"{alias}.yaml"
