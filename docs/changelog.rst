@@ -45,6 +45,8 @@ Internal Changes
 ================
 - Drop Python 3.8 support and testing for end-of-life support. New minimum supported version of Python is 3.9
   (:issue:`770`, :merge:`987`). By `Kyle Brindley`_.
+- Temporary CI environments for MacOS CI pipelines to avoid simultaneous pipelines clobbering a common environment
+  (:issue:`809`, :merge:`996`). By `Kyle Brindley`_.
 
 *******************
 0.11.6 (2024-10-15)

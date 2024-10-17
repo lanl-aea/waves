@@ -14,11 +14,21 @@ mac-fast-test:
     GIT_STRATEGY: clone
   script:
     # Environment creation/setup. Usually a ``before_script``.
-    - source $HOME/anaconda3/etc/profile.d/conda.sh
-    - conda env create --name waves-dev --file environment.yml --yes
-    - conda activate waves-dev
+    - conda_installation="${HOME}/anaconda3"
+    - conda_environments="${conda_installation}/envs"
+    - prefix=$(mktemp --directory --tmpdir=${conda_environments} waves-dev-XXXXXX)
+    - echo ${conda_installation}
+    - echo ${conda_environments}
+    - echo ${prefix}
+    - source ${conda_installation}/etc/profile.d/conda.sh
+    - conda env create --prefix ${prefix} --file environment.yml --yes
+    - conda activate ${prefix}
     # Tests
     - scons regression --keep-going --cov-report
+    # Cleanup. Usually an ``after_script``
+    - conda deactivate
+    - conda env remove --prefix ${prefix} --yes
+    - rm -r ${prefix} || true
   coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
   artifacts:
     reports:
