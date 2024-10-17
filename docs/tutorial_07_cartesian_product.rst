@@ -198,7 +198,7 @@ build directory name from the filenames that would be written by
 Next, the ``parameters`` `xarray dataset`_ is converted to a dictionary. At first declaration, ``simulation_variables``
 is a dictionary whose keys are the names of the parameters and whose values are the parameter values for a particular
 ``set_name``. The same substitution syntax key modification introduced by :ref:`tutorial_parameter_substitution`
-is used again when passing the simulation variables dictionary to the :meth:`waves.scons_extensions.copy_substitute` method for
+is used again when passing the simulation variables dictionary to the :meth:`waves.scons_extensions.copy_substfile` method for
 text file parameter substitution.
 
 .. admonition:: waves-tutorials/tutorial_07_cartesian_product
@@ -218,7 +218,7 @@ Note the following two important aspects of the code above:
   simulation build directory. Any targets that are later used as source must also include the parameter set directory as
   part of their relative path.
 * The usage of the ``simulation_variables`` dictionary in the ``journal_options`` for Geometry, Partition, and Mesh and
-  the :meth:`waves.scons_extensions.copy_substitute` method for SolverPrep. Remember to use the
+  the :meth:`waves.scons_extensions.copy_substfile` method for SolverPrep. Remember to use the
   :meth:`waves.scons_extensions.substitution_syntax` method to modify the parameter name keys for parameter substitution in text
   files.
 

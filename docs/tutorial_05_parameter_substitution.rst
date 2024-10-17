@@ -107,8 +107,8 @@ Solver Input Files
 In this tutorial, we will be modifying several files from :ref:`tutorial_simulation`, the first of which is
 ``rectangle_compression.inp``. We copy this file and all of its contents to a new file with the same basename and
 the ``.in`` extension for the purposes of *parameter substitution*. This change is made so it is easy for the
-:meth:`waves.scons_extensions.copy_substitute` method to identify which files should be searched for parameters. Any files with
-the ``.in`` extension that are passed to the :meth:`waves.scons_extensions.copy_substitute` method will be parsed for
+:meth:`waves.scons_extensions.copy_substfile` method to identify which files should be searched for parameters. Any files with
+the ``.in`` extension that are passed to the :meth:`waves.scons_extensions.copy_substfile` method will be parsed for
 characters matching the parameter definitions using substitution with `SCons Substfile`_. This is discussed in
 more detail later in this tutorial.
 
@@ -162,7 +162,7 @@ used in a slightly different way than the others, as the script that utilizes th
 command-line interface. Recall from earlier in this tutorial, we created a new file called
 ``rectangle_compression.inp.in`` and added the ``@displacement@`` key.  This text file parameter substitution is
 the primary reason the ``@`` characters are required in the ``simulation_variables`` keys.  Disussion of exactly how
-this is implemented with the :meth:`waves.scons_extensions.copy_substitute` method will come later in this tutorial.
+this is implemented with the :meth:`waves.scons_extensions.copy_substfile` method will come later in this tutorial.
 
 8. Modify your ``tutorial_05_parameter_substitution`` file by using the highlighed lines below to modify the
    ``journal_options`` for the code pertaining to ``# Geometry``, ``# Partition``, and ``# Mesh``.
@@ -212,10 +212,10 @@ Per the changes you made earlier in this tutorial, the ``abaqus_source_list`` mu
 of ``rectangle_compression.inp`` with the parameterized ``rectangle_compression.inp.in`` file.
 
 The final change to be made in the ``tutorial_05_parameter_substitution`` file is to utilize the
-``substitution_dictionary`` parameter in the usage of the :meth:`waves.scons_extensions.copy_substitute` method.
+``substitution_dictionary`` parameter in the usage of the :meth:`waves.scons_extensions.copy_substfile` method.
 
 In this tutorial, we leverage two different builder behaviors when defining sources and targets for the
-:meth:`waves.scons_extensions.copy_substitute` method. We are already familiar with one behavior, where the builder
+:meth:`waves.scons_extensions.copy_substfile` method. We are already familiar with one behavior, where the builder
 simply copies the source file to the build directory.
 
 The second behavior is to apply template substitution on files with the ``*.in`` extension in the ``abaqus_source_list``
@@ -265,7 +265,7 @@ A previous tutorial constructed the ``simulation_variables`` and the ``substitut
 ``simulation_variables`` dictionary is used to define simulation parameters for SCons project configuration and script
 command-line interfaces. The ``substitution_dictionary`` is constructed from the ``simulation_variables`` dictionary to
 apply the parameter substitution syntax (leading and trailing ``@`` character) to each variable name for use with the
-``copy_substitute`` method as introduced in the current tutorial.
+``copy_substfile`` method as introduced in the current tutorial.
 
 *************
 Build Targets
@@ -385,7 +385,7 @@ the file we created earlier in this tutorial. There is also a file named ``recta
    A.rectangle.top,2,2,-0.01
    **
 
-With the use of the :meth:`waves.scons_extensions.copy_substitute` method, we used the ``rectangle_compression.inp.in``
+With the use of the :meth:`waves.scons_extensions.copy_substfile` method, we used the ``rectangle_compression.inp.in``
 file as the source and the ``rectangle_compression.inp`` file was the target. The builder acted by substituting the
 parameter key ``@displacement@`` with the parameter value ``-1.0``, and then generated the target with this information
 in the text, as shown above.

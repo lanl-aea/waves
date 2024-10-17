@@ -29,6 +29,8 @@ Breaking changes
 - Deprecate the substitution dictionary first positional argument interface for ``substitution_syntax`` function. New
   argument order is ``(env, substitution_dictionary, **kwargs)``. The ``env`` positional argument may be omitted when
   using the function as an SCons method. See the API and examples (:issue:`764`, :merge:`992`). By `Kyle Brindley`_.
+- Deprecate the ``copy_substitute`` function in favor or ``copy_substfile`` (:issue:`665`, :merge:`990`). `Kyle
+  Brindley`_.
 
 Enhancements
 ============
