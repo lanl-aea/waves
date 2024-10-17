@@ -33,6 +33,8 @@ Breaking changes
   Brindley`_.
 - Deprecate the ``quinoa_solver`` builders in favor of the ``quinoa_solver_builder_factory`` (:issue:`745`,
   :merge:`991`). By `Kyle Brindley`_.
+- Deprecate the ``quinoa_solver`` builders in favor of the ``quinoa_builder_factory`` (:issue:`745`, :merge:`991`). By
+  `Kyle Brindley`_.
 
 Enhancements
 ============
