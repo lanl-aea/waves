@@ -758,14 +758,6 @@ def test_substitution_syntax(substitution_dictionary, keyword_arguments, expecte
     output_dictionary = env.SubstitutionSyntax(substitution_dictionary, **keyword_arguments)
     assert output_dictionary == expected_dictionary
 
-    # TODO: Remove after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/764
-    # Test function style interface
-    with patch("warnings.warn") as mock_warn:
-        output_dictionary = scons_extensions.substitution_syntax(substitution_dictionary, **keyword_arguments)
-        assert output_dictionary == expected_dictionary
-        mock_warn.assert_called_once()
-
 
 shell_environment = {
     "default kwargs": (

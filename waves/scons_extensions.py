@@ -414,9 +414,7 @@ def alias_list_message(
 
 def substitution_syntax(
     env: SCons.Environment.Environment,
-    # TODO: Return to a positional argument
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/764
-    substitution_dictionary: dict = {},
+    substitution_dictionary: dict,
     prefix: str = "@",
     suffix: str = "@"
 ) -> dict:
@@ -440,15 +438,6 @@ def substitution_syntax(
 
     :return: Copy of the dictionary with key strings modified by the pre/suffix
     """
-    # TODO: Remove if-structure after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/764
-    if isinstance(env, dict):
-        import warnings
-        message = "The substitution_syntax function gained a positional argument from '(substitution_dictionary)' to " \
-                  "'(env, substitution_dictionary)' to enable use with SCons AddMethod. Please add the environment " \
-                  "positional argument or convert to AddMethod function call prior to the version 1.0 release."
-        warnings.warn(message, SyntaxWarning)
-        substitution_dictionary = env
     return {f"{prefix}{key}{suffix}": value for key, value in substitution_dictionary.items()}
 
 
