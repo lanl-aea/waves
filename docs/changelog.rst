@@ -39,6 +39,8 @@ Breaking changes
   `Kyle Brindley`_.
 - Deprecate the ``(names, env)`` argument order in program finding functions. New argument order is ``(env, names)`` for
   SCons ``AddMethod`` compatibility (:issue:`755`, :merge:`994`). By `Kyle Brindley`_.
+- Deprecate the ``(print_stdout)`` interface of ``print_build_failures`` in favor of the SCons ``AddMethod`` compatible
+  ``(env, print_stdout)`` interface (:issue:`758`, :merge:`995`). By `Kyle Brindley`_.
 
 Enhancements
 ============

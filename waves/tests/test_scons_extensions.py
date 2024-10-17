@@ -424,19 +424,6 @@ def test_print_build_failures():
         env.PrintBuildFailures(False)
         mock_atexit.assert_not_called()
 
-    # TODO: Remove if-structure after full deprecation of the older argument order
-    # https://re-git.lanl.gov/aea/python-projects/waves/-/issues/758
-    with patch("atexit.register") as mock_atexit, \
-         patch("warnings.warn") as mock_warn:
-        scons_extensions.print_build_failures(True)
-        mock_atexit.assert_called_once_with(scons_extensions._print_failed_nodes_stdout)
-        mock_warn.assert_called_once()
-    with patch("atexit.register") as mock_atexit, \
-         patch("warnings.warn") as mock_warn:
-        scons_extensions.print_build_failures(False)
-        mock_atexit.assert_not_called()
-        mock_warn.assert_called_once()
-
 
 action_list_scons = {
     "one action": (
