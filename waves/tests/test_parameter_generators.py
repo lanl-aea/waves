@@ -313,6 +313,15 @@ class TestParameterGenerator:
             mock_write_yaml.assert_called_once()
             mock_write_dataset.assert_not_called()
 
+    def test_write_exception(self):
+        """Calling a non-supported format string should raise an exception"""
+        WriteParameterGenerator = DummyGenerator({})
+        with patch('waves.parameter_generators.ParameterGenerator._write_meta'), \
+             patch('waves.parameter_generators.ParameterGenerator._write_dataset') as mock_write_dataset, \
+             patch('waves.parameter_generators.ParameterGenerator._write_yaml') as mock_write_yaml, \
+             pytest.raises(ChoicesError):
+            WriteParameterGenerator.write(output_file_type="unsupported")
+
     set_hashes = {
         'set1': (
             ["name1", "name2", "name3"],
