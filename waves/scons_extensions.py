@@ -23,6 +23,34 @@ _exclude_from_namespace = set(globals().keys())
 
 
 def print_action_signature_string(s, target, source, env) -> None:
+    """Print the action string used to calculate the action signature
+
+    Designed to behave similarly to SCons ``--debug=presub`` option using ``PRINT_CMD_LINE_FUNC`` feature:
+    https://scons.org/doc/production/HTML/scons-man.html#cv-PRINT_CMD_LINE_FUNC
+
+    .. code-block::
+       :caption: SConstruct
+
+       import waves
+       env = Environment(PRINT_CMD_LINE_FUNC=waves.scons_extensions.print_action_signature_string)
+       env.Command(
+           target=["target.txt"],
+           source=["SConstruct"],
+           action=["echo 'Hello World!' > ${TARGET.relpath}"]
+       )
+
+       .. code-block::
+          :caption: shell
+
+          $ scons target.txt
+          scons: Reading SConscript files ...
+          scons: done reading SConscript files.
+          scons: Building targets ...
+          Building target.txt with action signature string:
+            echo 'Hello World!' > target.txt_relpath
+          echo 'Hello World!' > target.txt
+          scons: done building targets.
+    """
     try:
         action_signature_string = target[0].get_executor().get_contents().decode()
     except UnicodeDecodeError:
