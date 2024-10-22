@@ -8,9 +8,19 @@ Changelog
 0.12.1 (unreleased)
 *******************
 
+New Features
+============
+- Add function for printing the action signature string for targets (:issue:`810`, :merge:`999`). By `Kyle Brindley`_.
+
 Documentation
 =============
 - Hyperlink specific portions of the SCons man page instead of quoting (:merge:`998`). By `Kyle Brindley`_.
+
+Internal Changes
+================
+- Refactor the parameter study write functions for greater consistency with the parameter study to dictionary function
+  and greater consistency between write method output file name lists (:issue:`811`, :merge:`1000`). By `Kyle
+  Brindley`_.
 
 *******************
 0.12.0 (2024-10-17)
